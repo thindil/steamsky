@@ -758,7 +758,9 @@ package body Game.SaveLoad is
          exit when not Exists(To_String(SaveName));
       end loop;
       if RenameSave then
-         Rename(OldSaveName, To_String(SaveName));
+         if Exists(OldSaveName) then
+            Rename(OldSaveName, To_String(SaveName));
+         end if;
       end if;
    end GenerateSaveName;
 
