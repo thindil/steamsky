@@ -21,7 +21,7 @@ All notable changes to this project will be documented in this file.
 - Showing current unarmed skill name in help
 - Separated player starting character for each faction
 - Starting player character data for undead and drones factions
-- Starting crew data for undead
+- Starting crew data for undead and drones factions
 - Separated player starting ship for each faction
 
 ### Changed
