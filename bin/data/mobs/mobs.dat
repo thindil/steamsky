@@ -1716,5 +1716,37 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <equipment index="3" slot="Arms"/>
   <equipment index="4" slot="Legs"/>
  </mobile>
+ <mobile index="80" order="PILOT">
+  <skill level="5" name="Piloting"/>
+  <skill level="5" name="Perception"/>
+  <skill level="5" name="Brawling"/>
+  <skill level="5" name="Dodge"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <priority name="Piloting" value="Normal"/>
+ </mobile>
+ <mobile index="81" order="ENGINEER">
+  <skill level="5" name="Engineering"/>
+  <skill level="5" name="Brawling"/>
+  <skill level="5" name="Dodge"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <priority name="Engineering" value="Normal"/>
+ </mobile>
+ <mobile index="82" order="GUNNER">
+  <skill level="5" name="Gunnery"/>
+  <skill level="5" name="Perception"/>
+  <skill level="5" name="Brawling"/>
+  <skill level="5" name="Dodge"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <priority name="Operating guns" value="Normal"/>
+ </mobile>
 </mobiles>
 
