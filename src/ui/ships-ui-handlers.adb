@@ -410,23 +410,16 @@ package body Ships.UI.Handlers is
    end ShowModuleInfo;
 
    procedure ChangeShipName(Object: access Gtkada_Builder_Record'Class) is
-      NewName: Unbounded_String :=
-        To_Unbounded_String
-          (Get_Text(Gtk_Entry(Get_Object(Object, "edtname"))));
-      SemicolonIndex: Natural;
+      NewName: constant String :=
+        Get_Text(Gtk_Entry(Get_Object(Object, "edtname")));
    begin
-      if Length(NewName) = 0 then
+      if NewName'Length = 0 then
          ShowDialog
            ("You must enter new ship name",
             Gtk_Window(Get_Object(Builder, "skymapwindow")));
          return;
       end if;
-      SemicolonIndex := Index(NewName, ";");
-      while SemicolonIndex > 0 loop
-         Delete(NewName, SemicolonIndex, SemicolonIndex);
-         SemicolonIndex := Index(NewName, ";");
-      end loop;
-      PlayerShip.Name := NewName;
+      PlayerShip.Name := To_Unbounded_String(NewName);
       GenerateSaveName(True);
    end ChangeShipName;
 
@@ -437,26 +430,15 @@ package body Ships.UI.Handlers is
       pragma Unreferenced(Self);
       ModulesList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "moduleslist"));
-      NewName: Unbounded_String := To_Unbounded_String(New_Text);
-      SemicolonIndex: Natural;
    begin
-      if Length(NewName) = 0 then
+      if New_Text'Length = 0 then
          ShowDialog
            ("You must enter new module name",
             Gtk_Window(Get_Object(Builder, "skymapwindow")));
          return;
       end if;
-      SemicolonIndex := Index(NewName, ";");
-      while SemicolonIndex > 0 loop
-         Delete(NewName, SemicolonIndex, SemicolonIndex);
-         SemicolonIndex := Index(NewName, ";");
-      end loop;
-      PlayerShip.Modules(ModuleIndex).Name := NewName;
-      Set
-        (ModulesList,
-         Get_Iter_From_String(ModulesList, Path),
-         0,
-         To_String(NewName));
+      PlayerShip.Modules(ModuleIndex).Name := To_Unbounded_String(New_Text);
+      Set(ModulesList, Get_Iter_From_String(ModulesList, Path), 0, New_Text);
    end ChangeModuleName;
 
    procedure SetUpgrade(User_Data: access GObject_Record'Class) is
