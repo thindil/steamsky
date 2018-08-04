@@ -12,7 +12,8 @@ All notable changes to this project will be documented in this file.
 - New enemy ships: large clockwork drone mk V, large pirate ship mk V, large
   undead ship mk V, large inquisition ship mk V, large attacking drone mk V,
   huge pirate ship mk V, advanced huge pirate ship mk V, huge undead ship mk V,
-  advanced huge undead ship mk V and huge attacking drone mk V
+  advanced huge undead ship mk V, huge attacking drone mk V and advanced huge
+  attacking drone mk V
 - More text formatting options to help
 - Option to stories to set which factions are not allowed to start selected 
   story
