@@ -2787,5 +2787,18 @@ during combat. -->
   <cargo index="131" maxamount="750" minamount="500"/>
   <description>Huge, well armored and upgraded version of attacking clockwork drone.</description>
  </ship>
+ <ship combatai="BERSERKER" index="160" maxaccuracy="90" maxevasion="90" maxloot="1000" maxperception="90" minaccuracy="75" minevasion="75" minloot="600" minperception="75" name="Advanced huge attacking drone mk V" owner="DRONES">
+  <module index="187"/>
+  <module index="177"/>
+  <module index="189"/>
+  <module amount="12" index="171"/>
+  <module index="185"/>
+  <module amount="3" index="184"/>
+  <module amount="3" index="193"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="154" maxamount="1000" minamount="600"/>
+  <cargo index="131" maxamount="800" minamount="600"/>
+  <description>Advanced and upgraded version of huge, well armored attacking clockwork drone.</description>
+ </ship>
 </ships>
 
