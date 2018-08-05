@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -202,7 +202,10 @@ package body Crew.UI.Keys is
             elsif OrderName /= "Close" then
                if Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                    .MType =
-                 GUN then
+                 GUN or
+                 Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                     .MType =
+                   HARPOON_GUN then
                   GiveOrders(PlayerShip, MemberIndex, Gunner, ModuleIndex);
                else
                   GiveOrders(PlayerShip, MemberIndex, Craft, ModuleIndex);
