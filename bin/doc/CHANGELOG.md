@@ -45,6 +45,7 @@ All notable changes to this project will be documented in this file.
 - Crash on start game
 - Renaming ship in game not change save game file name
 - Showing upgrade button when upgrade is unavailable for that ship module
+- Showing operate harpoon gun in crew members orders list
 
 ### Removed
 - HealingTool variable from help
