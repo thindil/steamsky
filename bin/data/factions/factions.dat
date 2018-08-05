@@ -59,7 +59,7 @@ enemy ships.
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="-50" friendly="N" />
  </faction>
- <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" spawn="97" minpopulation="0" maxpopulation="500" playerindex="1">
+ <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" spawn="97" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="161">
   <relation faction="POLEIS" reputation="-10" friendly="N" />
   <relation faction="INDEPENDENT" minreputation="-20" maxreputation="-5" friendly="N" />
   <relation faction="PIRATES" reputation="0" friendly="Y" />
