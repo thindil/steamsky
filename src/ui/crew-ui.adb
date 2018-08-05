@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -487,7 +487,7 @@ package body Crew.UI is
          for Module of PlayerShip.Modules loop
             if Module.Durability > 0 then
                case Modules_List(Module.ProtoIndex).MType is
-                  when GUN =>
+                  when GUN | HARPOON_GUN =>
                      if Module.Owner /= MemberIndex then
                         OrdersAmount := OrdersAmount + 1;
                      end if;
@@ -542,7 +542,7 @@ package body Crew.UI is
          for I in PlayerShip.Modules.Iterate loop
             if PlayerShip.Modules(I).Durability > 0 then
                case Modules_List(PlayerShip.Modules(I).ProtoIndex).MType is
-                  when GUN =>
+                  when GUN | HARPOON_GUN =>
                      if PlayerShip.Modules(I).Owner /= MemberIndex then
                         Orders_Items.all(MenuIndex) :=
                           New_Item
