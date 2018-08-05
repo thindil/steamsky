@@ -33,7 +33,7 @@ ship should be random, add attribute "minperception" for minimum value and
 - Attribute "owner": Which fraction own ship. Possible values are: Poleis, 
 Independent, Pirates, Undead, Drones, Inquisition.
 -->
- <ship index="1" name="Player Ship">
+ <ship index="1" name="Player Ship" owner="POLEIS">
 <!-- Tag "module": Ship module installed on selected ship. 
 - Attribute "index" is module index from files from *shipmodules* directory. 
 - Attribute"amount" is optional: if ship should have more than one that module,
@@ -2800,7 +2800,7 @@ during combat. -->
   <cargo index="131" maxamount="800" minamount="600"/>
   <description>Advanced and upgraded version of huge, well armored attacking clockwork drone.</description>
  </ship>
- <ship index="161" name="Pirate Player Ship">
+ <ship index="161" name="Pirate Player Ship" owner="PIRATES">
   <module index="1"/>
   <module index="2"/>
   <module index="3"/>
