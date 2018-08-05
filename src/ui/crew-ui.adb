@@ -74,7 +74,7 @@ package body Crew.UI is
          for I in PlayerShip.Modules.Iterate loop
             if PlayerShip.Modules(I).Durability > 0 then
                case Modules_List(PlayerShip.Modules(I).ProtoIndex).MType is
-                  when GUN =>
+                  when GUN | HARPOON_GUN =>
                      if PlayerShip.Modules(I).Owner /= MemberIndex then
                         AddOrder
                           ("Operate " & To_String(PlayerShip.Modules(I).Name),
