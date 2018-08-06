@@ -549,6 +549,7 @@ To change which faction is player faction, edit `value` attribute of tag
 - Attribute `friendly`: did selected faction is friendly to this faction.
   Value `Y` means `Yes`, value `N` means `No`. Used mostly to generate 
   enemy ships.
+- Tag `description`: In game description of item. Can have any value.
 
 ## Stories
 
