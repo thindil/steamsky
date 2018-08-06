@@ -50,6 +50,9 @@ enemy ships.
   <relation faction="UNDEAD" reputation="-100" friendly="N" />
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="-50" friendly="N" />
+<!--
+- Tag "description": In game description of item. Can have any value.
+-->
  </faction>
  <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" spawn="96" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="1">
   <relation faction="POLEIS" reputation="0" friendly="Y" />
