@@ -66,7 +66,8 @@ package body Factions is
             NamesType => To_Unbounded_String("standard"),
             Relations => TmpRelations,
             PlayerIndex => Null_Unbounded_String,
-            PlayerShipIndex => Null_Unbounded_String);
+            PlayerShipIndex => Null_Unbounded_String,
+            Description => Null_Unbounded_String);
          LogMessage
            ("Loading factions file: " & Full_Name(FoundFile),
             Everything);
@@ -158,6 +159,15 @@ package body Factions is
                end if;
                TempRecord.Relations.Append(New_Item => TmpRelation);
             end loop;
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I),
+                 "description");
+            if Length(ChildNodes) > 0 then
+               TempRecord.Description :=
+                 To_Unbounded_String
+                   (Node_Value(First_Child(Item(ChildNodes, 0))));
+            end if;
             Factions_List.Append(New_Item => TempRecord);
             LogMessage
               ("Faction added: " & To_String(TempRecord.Name),
@@ -172,7 +182,8 @@ package body Factions is
                NamesType => To_Unbounded_String("standard"),
                Relations => TmpRelations,
                PlayerIndex => Null_Unbounded_String,
-               PlayerShipIndex => Null_Unbounded_String);
+               PlayerShipIndex => Null_Unbounded_String,
+               Description => Null_Unbounded_String);
          end loop;
          Free(Reader);
       end loop;
