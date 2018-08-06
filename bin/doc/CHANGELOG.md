@@ -24,7 +24,7 @@ All notable changes to this project will be documented in this file.
 - Starting player character data for undead and drones factions
 - Starting crew data for undead and drones factions
 - Separated player starting ship for each faction
-- New ship: player starting ship for pirates faction
+- New ship: player starting ship for pirates and undead factions
 - Description to factions
 
 ### Changed
