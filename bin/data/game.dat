@@ -674,6 +674,7 @@ selected item type name as `value` attribute. -->
  <itemtype value="OrichalcumOre"/>
  <itemtype value="Orichalcum"/>
  <itemtype value="StoryItem"/>
+ <itemtype value="AdamantiumOre"/>
 <!-- To change which item type is used for repair/upgrading tools, `value` 
 attribue of tag `repairtools`. Value must be existing item type. -->
  <repairtools value="RepairTools"/>
