@@ -87,7 +87,8 @@ package body Crew is
    end GainExp;
 
    function GenerateMemberName
-     (Gender: Character)
+     (Gender: Character;
+      FactionIndex: Unbounded_String)
      return Unbounded_String is -- based on name generator from libtcod
       NewName, NameType: Unbounded_String;
       LettersAmount, NumbersAmount: Positive;
@@ -96,7 +97,7 @@ package body Crew is
    begin
       for Faction of Factions_List loop
          if To_Lower(To_String(Faction.Index)) =
-           To_Lower(To_String(PlayerFaction)) then
+           To_Lower(To_String(FactionIndex)) then
             NameType := Faction.NamesType;
             exit;
          end if;
