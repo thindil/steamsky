@@ -77,7 +77,7 @@ package body MainMenu is
       Gtk.Main.Main_Quit;
    end Quit;
 
-   function LoadGameData(NewGame: Boolean := True) return Boolean is
+   function LoadGameData return Boolean is
       Parent: constant Gtk_Window :=
         Gtk_Window(Get_Object(Builder, "mainmenuwindow"));
    begin
@@ -91,9 +91,6 @@ package body MainMenu is
       LoadGoals;
       LoadStories;
       SetToolsList;
-      if not NewGame then
-         LoadGame;
-      end if;
       return True;
    exception
       when Help_Directory_Not_Found =>
@@ -249,25 +246,19 @@ package body MainMenu is
    procedure ShowPage(User_Data: access GObject_Record'Class) is
    begin
       if User_Data = Get_Object(Builder, "btnnewgame") then
-         if LoadGameData then
-            if Get_Text
-                (Gtk_GEntry(Get_Object(Builder, "entrycharactername"))) =
-              "" then
-               Set_Text
-                 (Gtk_Entry(Get_Object(Builder, "entrycharactername")),
-                  To_String(NewGameSettings.PlayerName));
-            end if;
-            if Get_Text(Gtk_GEntry(Get_Object(Builder, "entryshipname"))) =
-              "" then
-               Set_Text
-                 (Gtk_Entry(Get_Object(Builder, "entryshipname")),
-                  To_String(NewGameSettings.ShipName));
-            end if;
-            CreateGoalsMenu;
-         else
-            Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
-            Hide(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
+         if Get_Text(Gtk_GEntry(Get_Object(Builder, "entrycharactername"))) =
+           "" then
+            Set_Text
+              (Gtk_Entry(Get_Object(Builder, "entrycharactername")),
+               To_String(NewGameSettings.PlayerName));
          end if;
+         if Get_Text(Gtk_GEntry(Get_Object(Builder, "entryshipname"))) =
+           "" then
+            Set_Text
+              (Gtk_Entry(Get_Object(Builder, "entryshipname")),
+               To_String(NewGameSettings.ShipName));
+         end if;
+         CreateGoalsMenu;
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
             "page1");
@@ -385,17 +376,26 @@ package body MainMenu is
    end ShowAllNews;
 
    procedure RandomName(User_Data: access GObject_Record'Class) is
+      FactionIndex: constant Natural :=
+        Integer(Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbfaction")))) +
+        1;
    begin
       if User_Data = Get_Object(Builder, "entryshipname") then
          Set_Text
            (Gtk_Entry(User_Data),
-            To_String(GenerateShipName(PlayerFaction)));
+            To_String(GenerateShipName(Factions_List(FactionIndex).Index)));
       else
          if Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbgender"))) =
            0 then
-            Set_Text(Gtk_Entry(User_Data), To_String(GenerateMemberName('M')));
+            Set_Text
+              (Gtk_Entry(User_Data),
+               To_String
+                 (GenerateMemberName('M', Factions_List(FactionIndex).Index)));
          else
-            Set_Text(Gtk_Entry(User_Data), To_String(GenerateMemberName('F')));
+            Set_Text
+              (Gtk_Entry(User_Data),
+               To_String
+                 (GenerateMemberName('F', Factions_List(FactionIndex).Index)));
          end if;
       end if;
    end RandomName;
@@ -426,9 +426,8 @@ package body MainMenu is
          return;
       end if;
       SaveName := To_Unbounded_String(Get_String(SavesModel, SavesIter, 3));
-      if LoadGameData(False) then
-         StartGame;
-      end if;
+      LoadGame;
+      StartGame;
    end LoadGame;
 
    procedure NewGame(Object: access Gtkada_Builder_Record'Class) is
@@ -446,7 +445,9 @@ package body MainMenu is
       NewGame
         (To_Unbounded_String(CharacterName),
          To_Unbounded_String(ShipName),
-         Gender);
+         Gender,
+         Positive
+           (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbfaction"))) + 1));
       StartGame;
    end NewGame;
 
@@ -503,9 +504,25 @@ package body MainMenu is
       end if;
    end DeleteGame;
 
+   procedure ShowFactionDescription
+     (Object: access Gtkada_Builder_Record'Class) is
+      FactionIndex: constant Natural :=
+        Integer(Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbfaction")))) +
+        1;
+   begin
+      if FactionIndex = 0 then
+         return;
+      end if;
+      Set_Label
+        (Gtk_Label(Get_Object(Builder, "lblfactioninfo")),
+         To_String(Factions_List(FactionIndex).Description));
+   end ShowFactionDescription;
+
    procedure CreateMainMenu is
       Error: aliased GError;
       CssProvider: Gtk_Css_Provider;
+      FactionsIter: Gtk_Tree_Iter;
+      FactionsList: Gtk_List_Store;
    begin
       Gtk_New(CssProvider);
       if not Load_From_Path
@@ -537,6 +554,10 @@ package body MainMenu is
       Register_Handler(Builder, "New_Game", NewGame'Access);
       Register_Handler(Builder, "Show_Page", ShowPage'Access);
       Register_Handler(Builder, "Delete_Game", DeleteGame'Access);
+      Register_Handler
+        (Builder,
+         "Show_Faction_Description",
+         ShowFactionDescription'Access);
       Do_Connect(Builder);
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
       if HallOfFame_Array(1).Name = Null_Unbounded_String then
@@ -558,6 +579,17 @@ package body MainMenu is
          "images" &
          Dir_Separator &
          "logo.png");
+      if not LoadGameData then
+         Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
+      end if;
+      FactionsList := Gtk_List_Store(Get_Object(Builder, "factionslist"));
+      Clear(FactionsList);
+      for Faction of Factions_List loop
+         Append(FactionsList, FactionsIter);
+         Set(FactionsList, FactionsIter, 0, To_String(Faction.Name));
+      end loop;
+      Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbfaction")), 0);
       ShowMainMenu;
    end CreateMainMenu;
 

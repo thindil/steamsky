@@ -96,7 +96,8 @@ package Game is
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
-      Gender: Character); -- Start new game: create map, place ship, crew, etc
+      Gender: Character;
+      FactionIndex: Positive); -- Start new game: create map, place ship, crew, etc
    procedure UpdateGame
      (Minutes: Positive); -- Game ticks (update time, crew, ship, etc)
    function LoadData

@@ -164,7 +164,7 @@ package body Ships is
             else
                Gender := 'F';
             end if;
-            MemberName := GenerateMemberName(Gender);
+            MemberName := GenerateMemberName(Gender, PlayerFaction);
             Member := ProtoMobs_List.Element(ProtoMember(1));
             for Skill of Member.Skills loop
                if Skill(3) = 0 then

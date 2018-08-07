@@ -305,7 +305,7 @@ package body Missions is
             end if;
             PlayerShip.Crew.Append
             (New_Item =>
-               (Name => GenerateMemberName(Gender),
+               (Name => GenerateMemberName(Gender, PlayerFaction),
                 Gender => Gender,
                 Health => 100,
                 Tired => 0,

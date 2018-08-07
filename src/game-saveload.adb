@@ -40,6 +40,7 @@ with Stories; use Stories;
 with Log; use Log;
 with Missions; use Missions;
 with Utils; use Utils;
+with Factions; use Factions;
 
 package body Game.SaveLoad is
 
@@ -409,6 +410,12 @@ package body Game.SaveLoad is
             Set_Attribute(CategoryNode, "finished", "N");
          end if;
       end loop;
+      -- Save player faction
+      LogMessage("Saving player faction...", Everything, False);
+      CategoryNode := Create_Element(SaveData, "playerfaction");
+      CategoryNode := Append_Child(MainNode, CategoryNode);
+      Set_Attribute(CategoryNode, "index", To_String(PlayerFaction));
+      LogMessage("done.", Everything, True, False);
       Create(SaveFile, Out_File, To_String(SaveName));
       Write(Stream => Stream(SaveFile), N => SaveData, Pretty_Print => False);
       Close(SaveFile);
@@ -735,6 +742,17 @@ package body Game.SaveLoad is
             end if;
          end loop;
       end;
+      -- Load player faction
+      LogMessage("Loading player faction...", Everything, False);
+      NodesList :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "playerfaction");
+      if Length(NodesList) > 0 then
+         PlayerFaction :=
+           To_Unbounded_String(Get_Attribute(Item(NodesList, 0), "index"));
+      else
+         PlayerFaction := Factions_List(1).Index;
+      end if;
+      LogMessage("done.", Everything, True, False);
       Free(Reader);
       LogMessage("Finished loading game.", Everything);
    exception

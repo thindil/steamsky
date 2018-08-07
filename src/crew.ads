@@ -81,7 +81,8 @@ package Crew is
      (Amount: Natural;
       SkillNumber, CrewIndex: Positive); -- Gain experience in selected skill.
    function GenerateMemberName
-     (Gender: Character)
+     (Gender: Character;
+      FactionIndex: Unbounded_String)
      return Unbounded_String; -- Generate random name for crew member
    procedure UpdateCrew
      (Minutes: Positive;

@@ -301,7 +301,7 @@ package body Bases is
          Price := Price * 100;
          BaseRecruits.Append
          (New_Item =>
-            (Name => GenerateMemberName(Gender),
+            (Name => GenerateMemberName(Gender, PlayerFaction),
              Gender => Gender,
              Price => Price,
              Skills => Skills,

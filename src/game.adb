@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Directories; use Ada.Directories;
-with Ada.Characters.Handling; use Ada.Characters.Handling;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
@@ -49,7 +48,8 @@ package body Game is
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
-      Gender: Character) is
+      Gender: Character;
+      FactionIndex: Positive) is
       PosX, PosY, RandomBase, ShipIndex, Amount, FactionRoll: Positive;
       ValidLocation: Boolean;
       TempX, TempY, BaseReputation: Integer;
@@ -61,7 +61,6 @@ package body Game is
       TmpCargo: BaseCargo_Container.Vector;
       TmpInventory: Inventory_Container.Vector;
       PlayerIndex2: Positive;
-      PlayerFactionIndex: Positive;
    begin
       -- Save new game configuration
       NewGameSettings :=
@@ -73,13 +72,7 @@ package body Game is
       GameDate :=
         (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 0);
       -- Get player faction index
-      for I in Factions_List.Iterate loop
-         if To_Lower(To_String(Factions_List(I).Index)) =
-           To_Lower(To_String(PlayerFaction)) then
-            PlayerFactionIndex := Factions_Container.To_Index(I);
-            exit;
-         end if;
-      end loop;
+      PlayerFaction := Factions_List(FactionIndex).Index;
       -- Generate world
       SkyMap :=
         (others =>
@@ -169,12 +162,12 @@ package body Game is
       loop
          RandomBase := GetRandom(1, 1024);
          exit when SkyBases(RandomBase).Population > 299 and
-           SkyBases(RandomBase).Owner = PlayerFactionIndex;
+           SkyBases(RandomBase).Owner = FactionIndex;
       end loop;
       -- Create player ship
       for I in ProtoShips_List.Iterate loop
          if ProtoShips_List(I).Index =
-           Factions_List(PlayerFactionIndex).PlayerShipIndex then
+           Factions_List(FactionIndex).PlayerShipIndex then
             ShipIndex := ProtoShips_Container.To_Index(I);
             exit;
          end if;
@@ -188,8 +181,7 @@ package body Game is
            DOCKED,
            False);
       -- Add player to ship
-      PlayerIndex2 :=
-        FindProtoMob(Factions_List(PlayerFactionIndex).PlayerIndex);
+      PlayerIndex2 := FindProtoMob(Factions_List(FactionIndex).PlayerIndex);
       for Item of ProtoMobs_List(PlayerIndex2).Inventory loop
          if Item(3) > 0 then
             Amount := GetRandom(Item(2), Item(3));
@@ -586,9 +578,6 @@ package body Game is
               FindSkillIndex
                 (To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "playerfaction" then
-            PlayerFaction :=
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
          end if;
       end loop;
       Free(Reader);
