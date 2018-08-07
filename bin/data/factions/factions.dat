@@ -53,6 +53,7 @@ enemy ships.
 <!--
 - Tag "description": In game description of item. Can have any value.
 -->
+  <description>Federation of independents sky bases. This is biggest faction from all, almost all bases belongs to this faction. Easiest to play, recommended especially for new players.</description>
  </faction>
  <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" spawn="96" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="1">
   <relation faction="POLEIS" reputation="0" friendly="Y" />
