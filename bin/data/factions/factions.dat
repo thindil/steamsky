@@ -79,7 +79,7 @@ enemy ships.
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="-100" friendly="N" />
  </faction>
- <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" spawn="99" minpopulation="0" maxpopulation="500" namestype="robotic" playerindex="76">
+ <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" spawn="99" minpopulation="0" maxpopulation="500" namestype="robotic" playerindex="76" playershipindex="165">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
   <relation faction="INDEPENDENT" reputation="-100" friendly="N" />
   <relation faction="PIRATES" reputation="-100" friendly="N" />
