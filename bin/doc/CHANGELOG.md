@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - New ship: player starting ship for pirates and undead factions
 - Description to factions
 - New item type: adamantiumore
+- Option to select player faction at starting new game
 
 ### Changed
 - Updated interface
