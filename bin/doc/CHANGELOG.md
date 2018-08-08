@@ -24,7 +24,8 @@ All notable changes to this project will be documented in this file.
 - Starting player character data for undead and drones factions
 - Starting crew data for undead, drones and inquisition factions
 - Separated player starting ship for each faction
-- New ship: player starting ship for pirates, undead and drones factions
+- New ship: player starting ship for pirates, undead, drones and inquisition 
+  factions
 - Description to factions
 - New item type: adamantiumore
 - Option to select player faction at starting new game
