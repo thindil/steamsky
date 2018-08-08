@@ -1579,5 +1579,13 @@ Fifth value for weapon is damage type (1 - cutting damage, 2 - impaling damage,
   <trade buyable="N" price="0"/>
   <description>Scrap of strange shining metal. Very similiar to medalion which you found ealier.</description>
  </item>
+ <item index="166" name="Adamantium ore" showtype="Ore" type="AdamantiumOre" weight="20">
+  <trade buyable="N" price="30"/>
+  <trade buyable="N" price="30"/>
+  <trade buyable="Y" price="28"/>
+  <trade buyable="N" price="30"/>
+  <trade buyable="N" price="30"/>
+  <description>Unrefined adamanantium ore.</description>
+ </item>
 </items>
 
