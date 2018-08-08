@@ -19,7 +19,7 @@ and "maxspawn" for maximum roll.
 population of base owned by that faction. If it should be constant value, use
 attribute "population". If it should be random value, use attribute 
 "minpopulation" for minimum population and "maxpopulation" for maximum 
-population. Minumum value is 0.
+population. Miniumum value is 0.
 - Optional attribute "namestype": Used in generating ship names of that faction
 and names of all bases. Can be "standard" (default value) or "robotic".
 - Attribute "playerindex": index of mobile used for starting player character.
@@ -38,7 +38,7 @@ must have this tags for each faction (even for self).
 reputation with selected faction. If it should have random reputation, use 
 attribute "minreputation" for minimum level of reputation and 
 "maxreputation" for maximum level of reputation. If it should be constant
-reputation, use attribute "reputation". Minumum value is -100 and maximum
+reputation, use attribute "reputation". Minimum value is -100 and maximum
 is 100.
 - Attribute "friendly": did selected faction is friendly to this faction.
 Value "Y" means "Yes", value "N" means "No". Used mostly to generate 
@@ -62,6 +62,7 @@ enemy ships.
   <relation faction="UNDEAD" reputation="-100" friendly="N" />
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="-50" friendly="N" />
+  <description>Group of independent from each other sky bases, not connected in any way with self. Bases of this faction are much less common than Poleis. Gameplay is harder than Poleis due to less sky bases but generally it is very similar.</description>
  </faction>
  <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" spawn="97" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="161">
   <relation faction="POLEIS" reputation="-10" friendly="N" />
