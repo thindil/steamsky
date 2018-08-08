@@ -810,9 +810,5 @@ Value must be existing skill name. -->
 combat when character don't have weapon, edit `value` attribute of tag 
 `unarmedskill`. Value must be existing skill name. -->
  <unarmedskill value="Brawling"/>
-<!-- To change which faction is player faction, edit `value` attribute of tag
-`playerfaction`. Value must be existing faction index from factions files from
-*data/factions* directory.-->
- <playerfaction value="poleis"/>
 </data>
 
