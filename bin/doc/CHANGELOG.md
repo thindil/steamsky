@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - Description to factions
 - New item type: adamantiumore
 - Option to select player faction at starting new game
+- New item: adamantium ore
 
 ### Changed
 - Updated interface
