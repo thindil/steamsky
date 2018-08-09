@@ -71,6 +71,7 @@ enemy ships.
   <relation faction="UNDEAD" reputation="-100" friendly="N" />
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="-50" friendly="N" />
+  <description>Group of independent bases which inhabitants lives from attacking other ships and stealing their cargo. Bases of this faction are much less common than Poleis. Gameplay is much harder than Poleis due to less sky bases and negative reputation of Pirates with other factions.</description>
  </faction>
  <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" spawn="98" minpopulation="0" maxpopulation="500" playerindex="75" playershipindex="164">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
