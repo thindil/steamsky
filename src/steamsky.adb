@@ -35,8 +35,6 @@ with MainMenu; use MainMenu;
 
 procedure SteamSky is
 
-   LibraryDirectory: Unbounded_String :=
-     To_Unbounded_String("../lib" & Dir_Separator);
    ConfigDirectory: Unbounded_String :=
      To_Unbounded_String
        (Full_Name(Dir_Name(Command_Name)) &
@@ -49,11 +47,26 @@ procedure SteamSky is
         Dir_Separator &
         "../share" &
         Dir_Separator);
-   procedure UpdatePath(Path: in out Unbounded_String) is
+   function UpdatePath
+     (Path: in out Unbounded_String;
+      PathName: String) return Boolean is
    begin
       if Element(Path, Length(Path)) /= Dir_Separator then
          Append(Path, Dir_Separator);
       end if;
+      if not Ada.Directories.Exists(To_String(Path)) then
+         Put_Line
+           ("Directory " &
+            To_String(Path) &
+            " not exists. You must use existing directory as " &
+            To_Lower(PathName) &
+            " directory.");
+         return False;
+      end if;
+      LogMessage
+        (PathName & " directory sets to: " & To_String(Path),
+         Everything);
+      return True;
    end UpdatePath;
 
 begin
@@ -73,90 +86,31 @@ begin
          elsif Argument(I)(1 .. 8) = "--datadi" then
             DataDirectory :=
               To_Unbounded_String(Argument(I)(11 .. (Argument(I)'Last)));
-            UpdatePath(DataDirectory);
-            LogMessage
-              ("Data directory sets to: " & To_String(DataDirectory),
-               Everything);
-            if not Ada.Directories.Exists(To_String(DataDirectory)) then
-               Put_Line
-                 ("Directory " &
-                  To_String(DataDirectory) &
-                  " not exists. You must use existing directory as data directory.");
+            if not UpdatePath(DataDirectory, "Data") then
                return;
             end if;
          elsif Argument(I)(1 .. 8) = "--savedi" then
             SaveDirectory :=
               To_Unbounded_String(Argument(I)(11 .. (Argument(I)'Last)));
-            UpdatePath(SaveDirectory);
-            LogMessage
-              ("Save directory sets to: " & To_String(SaveDirectory),
-               Everything);
-            if not Ada.Directories.Exists(To_String(SaveDirectory)) then
-               Put_Line
-                 ("Directory " &
-                  To_String(SaveDirectory) &
-                  " not exists. You must use existing directory as save directory.");
+            if not UpdatePath(SaveDirectory, "Save") then
                return;
             end if;
          elsif Argument(I)(1 .. 8) = "--docdir" then
             DocDirectory :=
               To_Unbounded_String(Argument(I)(10 .. (Argument(I)'Last)));
-            UpdatePath(SaveDirectory);
-            if Element(DocDirectory, Length(DocDirectory)) /=
-              Dir_Separator then
-               Append(DocDirectory, Dir_Separator);
-            end if;
-            LogMessage
-              ("Documentation directory sets to: " & To_String(DocDirectory),
-               Everything);
-            if not Ada.Directories.Exists(To_String(DocDirectory)) then
-               Put_Line
-                 ("Directory " &
-                  To_String(DocDirectory) &
-                  " not exists. You must use existing directory as documentation directory.");
-               return;
-            end if;
-         elsif Argument(I)(1 .. 8) = "--libdir" then
-            LibraryDirectory :=
-              To_Unbounded_String(Argument(I)(10 .. (Argument(I)'Last)));
-            UpdatePath(LibraryDirectory);
-            LogMessage
-              ("Library directory sets to: " & To_String(LibraryDirectory),
-               Everything);
-            if not Ada.Directories.Exists(To_String(LibraryDirectory)) then
-               Put_Line
-                 ("Directory " &
-                  To_String(LibraryDirectory) &
-                  " not exists. You must use existing directory as library directory.");
+            if not UpdatePath(DocDirectory, "Documentation") then
                return;
             end if;
          elsif Argument(I)(1 .. 8) = "--etcdir" then
             ConfigDirectory :=
               To_Unbounded_String(Argument(I)(10 .. (Argument(I)'Last)));
-            UpdatePath(ConfigDirectory);
-            LogMessage
-              ("Configuration directory sets to: " &
-               To_String(ConfigDirectory),
-               Everything);
-            if not Ada.Directories.Exists(To_String(ConfigDirectory)) then
-               Put_Line
-                 ("Directory " &
-                  To_String(ConfigDirectory) &
-                  " not exists. You must use existing directory as configuration directory.");
+            if not UpdatePath(ConfigDirectory, "Configuration") then
                return;
             end if;
          elsif Argument(I)(1 .. 8) = "--shared" then
             ShareDirectory :=
               To_Unbounded_String(Argument(I)(12 .. (Argument(I)'Last)));
-            UpdatePath(ShareDirectory);
-            LogMessage
-              ("Share directory sets to: " & To_String(ShareDirectory),
-               Everything);
-            if not Ada.Directories.Exists(To_String(ShareDirectory)) then
-               Put_Line
-                 ("Directory " &
-                  To_String(ShareDirectory) &
-                  " not exists. You must use existing directory as share directory.");
+            if not UpdatePath(ShareDirectory, "Share") then
                return;
             end if;
          end if;
@@ -177,26 +131,32 @@ begin
    -- Initializes environment variables (Linux only)
    if Dir_Separator = '/' then
       declare
-         VariablesNames: constant array(1 .. 5) of Unbounded_String :=
-           (To_Unbounded_String("LD_LIBRARY_PATH"),
-            To_Unbounded_String("GDK_PIXBUF_MODULE_FILE"),
+         VariablesNames: constant array(1 .. 4) of Unbounded_String :=
+           (To_Unbounded_String("GDK_PIXBUF_MODULE_FILE"),
             To_Unbounded_String("GDK_PIXBUF_MODULEDIR"),
             To_Unbounded_String("FONTCONFIG_FILE"),
             To_Unbounded_String("XDG_DATA_DIRS"));
-         VariablesValues: array(1 .. 5) of Unbounded_String;
+         VariablesValues: array(1 .. 4) of Unbounded_String;
+         LibraryDirectory: Unbounded_String;
       begin
-         if Ada.Directories.Exists(To_String(LibraryDirectory)) then
-            VariablesValues(1) := LibraryDirectory;
-            VariablesValues(2) :=
-              LibraryDirectory &
-              To_Unbounded_String("gdk-pixbuf-2.0/2.10.0/loaders.cache");
-            VariablesValues(3) :=
-              LibraryDirectory &
-              To_Unbounded_String("gdk-pixbuf-2.0/2.10.0/loaders/");
-            VariablesValues(4) :=
-              To_Unbounded_String
-                (To_String(ConfigDirectory) & "fonts/fonts.conf");
-            VariablesValues(5) := ShareDirectory;
+         if Ada.Environment_Variables.Exists("LD_LIBRARY_PATH") then
+            LibraryDirectory := To_Unbounded_String(Value("LD_LIBRARY_PATH"));
+            if Ada.Directories.Exists(To_String(LibraryDirectory)) then
+               VariablesValues(1) :=
+                 LibraryDirectory &
+                 To_Unbounded_String("/gdk-pixbuf-2.0/2.10.0/loaders.cache");
+               VariablesValues(2) :=
+                 LibraryDirectory &
+                 To_Unbounded_String("/gdk-pixbuf-2.0/2.10.0/loaders/");
+               VariablesValues(3) :=
+                 To_Unbounded_String
+                   (To_String(ConfigDirectory) & "fonts/fonts.conf");
+               VariablesValues(4) := ShareDirectory;
+            else
+               Put_Line
+                 ("Can't set GTK environment, library directory not exists, terminating.");
+               return;
+            end if;
          else
             declare
                function Sys(Arg: char_array) return Integer;
