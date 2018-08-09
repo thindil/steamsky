@@ -89,7 +89,7 @@ enemy ships.
   <relation faction="DRONES" reputation="0" friendly="Y" />
   <relation faction="INQUISITION" reputation="-100" friendly="N" />
  </faction>
- <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" spawn="100" minpopulation="0" maxpopulation="500" playerindex="1">
+ <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" spawn="100" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="166">
   <relation faction="POLEIS" reputation="-50" friendly="N" />
   <relation faction="INDEPENDENT" minreputation="-40" maxreputation="-25" friendly="N" />
   <relation faction="PIRATES" reputation="-10" friendly="N" />
