@@ -27,7 +27,7 @@ All notable changes to this project will be documented in this file.
 - New ship: player starting ship for pirates, undead, drones and inquisition 
   factions
 - Description to factions
-- New item type: adamantiumore
+- New item types: adamantiumore and adamantium
 - Option to select player faction at starting new game
 - New item: adamantium ore
 
