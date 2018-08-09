@@ -51,7 +51,7 @@ this file is) to compile:
 
 ### Linux
 If you use downloaded binaries, you don't need any additional libraries. Just
-run `steamsky` program to start game.
+run `./steamsky.sh` script to start game.
 
 ### Windows
 If you compiled the game just clicking on `steamsky.exe` should run it.
@@ -60,36 +60,32 @@ If you compiled the game just clicking on `steamsky.exe` should run it.
 You can set game directories by starting parameters. Possible options are:
 
 * --datadir=[directory] set directory where all game data files (and
-  directories like ships, items, etc.) are. Example: `./steamsky
+  directories like ships, items, etc.) are. Example: `./steamsky.sh
   --datadir=/home/user/game/tmp`. Default value is *data/*
 
 * --savedir=[directory] set directory where game (or logs) will be saved. Game
-  must have write permission to this directory. Example: `./steamsky
+  must have write permission to this directory. Example: `./steamsky.sh
   --savedir=/home/user/.saves`. Default value is *data/saves/*
 
 * --docdir=[directory] set directory where game documentation is (at this
-  moment important only for license and changelog files). Example `./steamsky
+  moment important only for license and changelog files). Example `./steamsky.sh
   --docdir=/usr/share/steamsky/doc`. Default value is *doc/*.
 
-* --libdir=[directory] set directory where libraries needed for game are (this
-  works only on Linux). Example `./steamsky --libdir=/lib`. Default value is 
-  *../lib/*.
-
 * --etcdir=[directory] set directory where are GTK config files are (this works
-  only on Linux). Path must be absolute to file `steamsky`. Example `./steamsky
+  only on Linux). Path must be absolute to file `steamsky`. Example `./steamsky.sh
   --etcdir=/home/user/tmp/etc`. Default value is 
   *[path to game directory]/etc/*.
 
 * --sharedir=[directory] set directory where are GTK icons files are (this works
-  only on Linux). Path must be absolute to file `steamsky`. Example `./steamsky
+  only on Linux). Path must be absolute to file `steamsky`. Example `./steamsky.sh
   --sharedir=/home/user/tmp/share`. Default value is 
   *[path to game directory]/share/*.
 
-Of course, you can set all parameters together: `./steamsky --datadir=somedir/
+Of course, you can set all parameters together: `./steamsky.sh --datadir=somedir/
 --savedir=otherdir/ --docdir=anotherdir/`
 
 Paths to directories can be absolute or relative where file `steamsky` is. For
-Windows, use `steamsky.exe` instead `./steamsky`.
+Windows, use `steamsky.exe` instead `./steamsky.sh`.
 
 ## Modding Support
 For detailed informations about modifying various game elements or debugging
