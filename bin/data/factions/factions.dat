@@ -54,6 +54,14 @@ enemy ships.
 - Tag "description": In game description of item. Can have any value.
 -->
   <description>Federation of independents sky bases. This is biggest faction from all, almost all bases belongs to this faction. Easiest to play, recommended especially for new players.</description>
+<!--
+- Tags "foodtype": Types of items used as food by this faction members. If
+no "foodtype" tags inside faction, that faction members can't be hungry.
+- Attribute "name": name of item type used as food. Must be valid item type
+from *data/game.dat* file.
+-->
+  <foodtype name="Food" />
+  <foodtype name="RawFood" />
  </faction>
  <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" spawn="96" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="1">
   <relation faction="POLEIS" reputation="0" friendly="Y" />
@@ -63,6 +71,8 @@ enemy ships.
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="-50" friendly="N" />
   <description>Group of independent from each other sky bases, not connected in any way with self. Bases of this faction are much less common than Poleis. Gameplay is harder than Poleis due to less sky bases but generally it is very similar.</description>
+  <foodtype name="Food" />
+  <foodtype name="RawFood" />
  </faction>
  <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" spawn="97" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="161">
   <relation faction="POLEIS" reputation="-10" friendly="N" />
@@ -72,6 +82,8 @@ enemy ships.
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="-50" friendly="N" />
   <description>Group of independent bases which inhabitants lives from attacking other ships and stealing their cargo. Bases of this faction are much less common than Poleis. Gameplay is much harder than Poleis due to less sky bases and negative reputation of Pirates with other factions.</description>
+  <foodtype name="Food" />
+  <foodtype name="RawFood" />
  </faction>
  <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" spawn="98" minpopulation="0" maxpopulation="500" playerindex="75" playershipindex="164">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
@@ -88,6 +100,7 @@ enemy ships.
   <relation faction="UNDEAD" reputation="-100" friendly="N" />
   <relation faction="DRONES" reputation="0" friendly="Y" />
   <relation faction="INQUISITION" reputation="-100" friendly="N" />
+  <foodtype name="Fuel" />
  </faction>
  <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" spawn="100" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="166">
   <relation faction="POLEIS" reputation="-50" friendly="N" />
@@ -96,6 +109,8 @@ enemy ships.
   <relation faction="UNDEAD" reputation="-100" friendly="N" />
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="0" friendly="Y" />
+  <foodtype name="Food" />
+  <foodtype name="RawFood" />
  </faction>
 </factions>
 

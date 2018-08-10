@@ -2882,7 +2882,6 @@ during combat. -->
   <module amount="2" index="7"/>
   <module index="12"/>
   <cargo amount="2000" index="1"/>
-  <cargo amount="100" index="2"/>
   <cargo amount="200" index="3"/>
   <cargo amount="100" index="5"/>
   <cargo amount="20" index="13"/>
@@ -2910,9 +2909,7 @@ during combat. -->
   <module amount="2" index="7"/>
   <module index="8"/>
   <module index="9"/>
-  <cargo amount="2000" index="1"/>
-  <cargo amount="100" index="2"/>
-  <cargo amount="200" index="3"/>
+  <cargo amount="2300" index="1"/>
   <cargo amount="500" index="4"/>
   <cargo amount="100" index="5"/>
   <cargo amount="20" index="13"/>
