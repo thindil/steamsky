@@ -55,13 +55,16 @@ procedure SteamSky is
          Append(Path, Dir_Separator);
       end if;
       if not Ada.Directories.Exists(To_String(Path)) then
-         Put_Line
-           ("Directory " &
-            To_String(Path) &
-            " not exists. You must use existing directory as " &
-            To_Lower(PathName) &
-            " directory.");
-         return False;
+         if PathName /= "Save" then
+            Put_Line
+              ("Directory " &
+               To_String(Path) &
+               " not exists. You must use existing directory as " &
+               To_Lower(PathName) &
+               " directory.");
+            return False;
+         end if;
+         Create_Path(To_String(Path));
       end if;
       LogMessage
         (PathName & " directory sets to: " & To_String(Path),
