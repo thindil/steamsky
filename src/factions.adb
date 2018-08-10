@@ -25,7 +25,6 @@ with DOM.Core.Elements; use DOM.Core.Elements;
 with DOM.Readers; use DOM.Readers;
 with Input_Sources.File; use Input_Sources.File;
 with Log; use Log;
-with Game; use Game;
 with Utils; use Utils;
 
 package body Factions is
@@ -40,6 +39,7 @@ package body Factions is
       FactionsData: Document;
       TmpRelations: Relations_Container.Vector;
       TmpRelation: RelationsRecord;
+      TmpFood: UnboundedString_Container.Vector;
    begin
       if Factions_List.Length > 0 then
          return;
@@ -67,7 +67,8 @@ package body Factions is
             Relations => TmpRelations,
             PlayerIndex => Null_Unbounded_String,
             PlayerShipIndex => Null_Unbounded_String,
-            Description => Null_Unbounded_String);
+            Description => Null_Unbounded_String,
+            FoodTypes => TmpFood);
          LogMessage
            ("Loading factions file: " & Full_Name(FoundFile),
             Everything);
@@ -168,6 +169,16 @@ package body Factions is
                  To_Unbounded_String
                    (Node_Value(First_Child(Item(ChildNodes, 0))));
             end if;
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I),
+                 "foodtype");
+            for J in 0 .. Length(ChildNodes) - 1 loop
+               TempRecord.FoodTypes.Append
+               (New_Item =>
+                  To_Unbounded_String
+                    (Get_Attribute(Item(ChildNodes, J), "name")));
+            end loop;
             Factions_List.Append(New_Item => TempRecord);
             LogMessage
               ("Faction added: " & To_String(TempRecord.Name),
@@ -183,7 +194,8 @@ package body Factions is
                Relations => TmpRelations,
                PlayerIndex => Null_Unbounded_String,
                PlayerShipIndex => Null_Unbounded_String,
-               Description => Null_Unbounded_String);
+               Description => Null_Unbounded_String,
+               FoodTypes => TmpFood);
          end loop;
          Free(Reader);
       end loop;

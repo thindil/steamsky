@@ -198,6 +198,7 @@ package body Crew is
       type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
       NeedCleaning, HaveMedicalRoom: Boolean := False;
+      PlayerFactionIndex: Positive;
       function Consume(ItemType: Unbounded_String) return Natural is
          ConsumeValue, ItemIndex: Natural;
       begin
@@ -305,7 +306,7 @@ package body Crew is
             end;
          end if;
          if HungerLevel > 80 then
-            for FoodType of FoodTypes loop
+            for FoodType of Factions_List(PlayerFactionIndex).FoodTypes loop
                ConsumeResult := Consume(FoodType);
                exit when ConsumeResult > 0;
             end loop;
@@ -358,6 +359,12 @@ package body Crew is
          end if;
       end UpdateMember;
    begin
+      for I in Factions_List.Iterate loop
+         if Factions_List(I).Index = PlayerFaction then
+            PlayerFactionIndex := Factions_Container.To_Index(I);
+            exit;
+         end if;
+      end loop;
       I := PlayerShip.Crew.First_Index;
       while I <= PlayerShip.Crew.Last_Index loop
          CurrentMinutes := Minutes;
@@ -617,15 +624,17 @@ package body Crew is
             end if;
          end if;
          if TiredPoints > 0 then
-            HungerLevel := HungerLevel + TiredPoints;
-            if HungerLevel > 100 then
-               HungerLevel := 100;
-            end if;
-            if PlayerShip.Crew(I).Hunger = 100 then
-               HealthLevel := HealthLevel - TiredPoints;
-               if HealthLevel < 1 then
-                  HealthLevel := 0;
-                  DeathReason := To_Unbounded_String("starvation");
+            if Factions_List(PlayerFactionIndex).FoodTypes.Length > 0 then
+               HungerLevel := HungerLevel + TiredPoints;
+               if HungerLevel > 100 then
+                  HungerLevel := 100;
+               end if;
+               if PlayerShip.Crew(I).Hunger = 100 then
+                  HealthLevel := HealthLevel - TiredPoints;
+                  if HealthLevel < 1 then
+                     HealthLevel := 0;
+                     DeathReason := To_Unbounded_String("starvation");
+                  end if;
                end if;
             end if;
             ThirstLevel := ThirstLevel + TiredPoints;
