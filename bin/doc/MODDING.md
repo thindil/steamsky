@@ -62,14 +62,6 @@ To change which item type is used for delivery missions, open file *game.dat*
 in *data* directory and edit `value` attribute of tag `missionitemstype`. Value
 must be existing item type.
 
-## Food items types
-Open file *game.dat* in *data* directory. Each food type is one line entry
-with tag `foodtype`. To change name of existing food type, edit `value`
-attribute for selected type. To add new food type, just append new line 
-with tag `itemtype` and it name as `value` attribute. Value must be existing
-item type. To remove food type, just remove line with tag `foodtype` and 
-selected food type name as `value` attribute.
-
 ## Fuel item type
 To change which item type is used as a fuel for ship, open file *game.dat* in 
 *data* directory and edit `value` attribute of tag `fueltype`. Value must be 
@@ -239,7 +231,7 @@ To change which faction is player faction, edit `value` attribute of tag
 - Attribute `showtype`: optional attribute. If you want to show item type in 
   game (for example in cargo or in trade screen) different than item type 
   from *game.dat* file, you can set this parameter to any text value.
-- Data: optional tags. Each tag is one value. For 'Food' or 'Raw Food' it is
+- Data: optional tags. Each tag is one value. For items used as food it is
   value of hunger reduced by one portion. For 'Drink', value of thirst reduced
   by one portion. For ammunition it is damage done by that ammunition. For 
   working tools it is chance for item to be damaged during work. For harpoon 
@@ -550,6 +542,10 @@ To change which faction is player faction, edit `value` attribute of tag
   Value `Y` means `Yes`, value `N` means `No`. Used mostly to generate 
   enemy ships.
 - Tag `description`: In game description of item. Can have any value.
+- Tags `foodtype`: Types of items used as food by this faction members. If
+  no `foodtype` tags inside faction, that faction members can't be hungry.
+- Attribute `name`: name of item type used as food. Must be valid item type
+  from *data/game.dat* file.
 
 ## Stories
 
