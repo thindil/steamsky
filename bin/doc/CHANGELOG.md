@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - New item types: adamantiumore and adamantium
 - Option to select player faction at starting new game
 - New items: adamantium ore and adamantium plates
+- Separated food types for each faction
 
 ### Changed
 - Updated interface
