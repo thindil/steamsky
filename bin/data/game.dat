@@ -699,13 +699,6 @@ from *data/items* directory. -->
 <!-- To change which item type is used for delivery missions, edit `value` 
 attribute of tag `missionitemstype`. Value must be existing item type. -->
  <missionitemstype value="MissionItem"/>
-<!-- Each food type is one line entry with tag `foodtype`. To change name of
-existing food type, edit `value` attribute for selected type. To add new food
-type, just append new line with tag `itemtype` and it name as `value` 
-attribute. Value must be existing item type. To remove food type, just remove 
-line with tag `foodtype` and selected food type name as `value` attribute. -->
- <foodtype value="Food"/>
- <foodtype value="RawFood"/>
 <!-- To change which item type is used as a fuel for ship, edit `value` 
 attribute of tag `fueltype`. Value must be existing item type. -->
  <fueltype value="Fuel"/>
