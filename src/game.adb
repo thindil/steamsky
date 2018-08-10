@@ -459,11 +459,6 @@ package body Game is
          elsif Node_Name(Item(NodesList, I)) = "missionitemstype" then
             MissionItemsType :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
-         elsif Node_Name(Item(NodesList, I)) = "foodtype" then
-            FoodTypes.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(NodesList, I), "value")));
          elsif Node_Name(Item(NodesList, I)) = "fueltype" then
             FuelType :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));

@@ -57,7 +57,6 @@ package Game is
    DrinksType: Unbounded_String; -- Name of item type used as drinks
    CorpseIndex: Unbounded_String; -- Index of item used to create mobs corpses
    MissionItemsType: Unbounded_String; -- Name of item type used for delivery missions
-   FoodTypes: UnboundedString_Container.Vector; -- Contains food types names
    FuelType: Unbounded_String; -- Name of item type used as fuel for ships
    MoneyIndex: Unbounded_String; -- Index of item used as money
    MoneyName: Unbounded_String; -- Name of money (taken from MoneyIndex)

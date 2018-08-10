@@ -18,6 +18,7 @@
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Crew; use Crew;
+with Game; use Game;
 
 package Factions is
 
@@ -43,6 +44,8 @@ package Factions is
       PlayerIndex: Unbounded_String; -- Index of mobile which will be used as starting character for player
       PlayerShipIndex: Unbounded_String; -- Index of proto ship which will be used as starting ship for player
       Description: Unbounded_String; -- Description on faction, displayed to player
+      FoodTypes: UnboundedString_Container
+        .Vector; -- Types of items used as food for members of this faction
    end record;
    package Factions_Container is new Vectors(Positive, FactionRecord);
    Factions_List: Factions_Container.Vector;

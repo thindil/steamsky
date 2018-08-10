@@ -18,6 +18,7 @@
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Containers; use Ada.Containers;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Label; use Gtk.Label;
@@ -109,6 +110,7 @@ package body Maps.UI is
       HaveRepairman: Boolean :=
         False;
       ItemIndex, ItemAmount: Natural := 0;
+      PlayerFactionIndex: Positive;
    begin
       if PlayerShip.Crew(1).Health = 0 then
          DeathConfirm;
@@ -151,6 +153,12 @@ package body Maps.UI is
             "You can't travel anymore.");
          Show_All(Gtk_Widget(Get_Object(Builder, "lblnofuel")));
       end if;
+      for I in Factions_List.Iterate loop
+         if Factions_List(I).Index = PlayerFaction then
+            PlayerFactionIndex := Factions_Container.To_Index(I);
+            exit;
+         end if;
+      end loop;
       ItemIndex :=
         FindItem(Inventory => PlayerShip.Cargo, ItemType => DrinksType);
       if ItemIndex = 0 then
@@ -179,11 +187,15 @@ package body Maps.UI is
             Show_All(Gtk_Widget(Get_Object(Builder, "lblnodrink")));
          end if;
       end if;
-      for FoodType of FoodTypes loop
-         ItemIndex :=
-           FindItem(Inventory => PlayerShip.Cargo, ItemType => FoodType);
-         exit when ItemIndex > 0;
-      end loop;
+      if Factions_List(PlayerFactionIndex).FoodTypes.Length = 0 then
+         ItemIndex := 1;
+      else
+         for FoodType of Factions_List(PlayerFactionIndex).FoodTypes loop
+            ItemIndex :=
+              FindItem(Inventory => PlayerShip.Cargo, ItemType => FoodType);
+            exit when ItemIndex > 0;
+         end loop;
+      end if;
       if ItemIndex = 0 then
          Set_Markup
            (Gtk_Label(Get_Object(Builder, "lblnofood")),
@@ -195,12 +207,17 @@ package body Maps.UI is
       else
          ItemAmount := 0;
          for Item of PlayerShip.Cargo loop
-            if FoodTypes.Find_Index
-              (Item => Items_List(Item.ProtoIndex).IType) /=
-              UnboundedString_Container.No_Index then
-               ItemAmount := ItemAmount + Item.Amount;
+            if Factions_List(PlayerFactionIndex).FoodTypes.Length = 0 then
+               ItemAmount := GameSettings.LowFood + 1;
+               exit;
+            else
+               if Factions_List(PlayerFactionIndex).FoodTypes.Find_Index
+                 (Item => Items_List(Item.ProtoIndex).IType) /=
+                 UnboundedString_Container.No_Index then
+                  ItemAmount := ItemAmount + Item.Amount;
+               end if;
+               exit when ItemAmount > GameSettings.LowFood;
             end if;
-            exit when ItemAmount > GameSettings.LowFood;
          end loop;
          if ItemAmount < GameSettings.LowFood then
             Set_Markup
