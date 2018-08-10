@@ -27,16 +27,7 @@ set it price to 0.
   <trade buyable="N" price="0"/>
   <trade buyable="N" price="0"/>
   <trade buyable="N" price="0"/>
-<!-- In game description of item. Can have any value. -->
-  <description>Standard ship fuel. Used as moneys in bases trades too.</description>
- </item>
- <item index="2" name="Basic Rations" type="Food" weight="1">
-  <trade buyable="N" price="3"/>
-  <trade buyable="Y" price="2"/>
-  <trade buyable="N" price="3"/>
-  <trade buyable="N" price="3"/>
-  <trade buyable="N" price="3"/>
-<!-- Optional tags "data". For 'Food' or 'Raw Food' it is value of hunger
+<!-- Optional tags "data". For items used as food it is value of hunger
 reduced by one portion. For 'Drink', value of thirst reduced by one portion. 
 For ammunition it is damage done by that ammunition. For working tools it is
 chance for item to be damaged during work. For harpoon guns ammunition it is
@@ -50,7 +41,17 @@ weapon is amount of hands used (1 for one-handed, 2 for two-handed weapons).
 Fifth value for weapon is damage type (1 - cutting damage, 2 - impaling damage,
 3 - blunt damage). -->
   <data value="60"/>
-  <description>Standard food rations for crew members.</description>
+<!-- In game description of item. Can have any value. -->
+  <description>Standard ship fuel. Used as moneys in bases trades too.</description>
+ </item>
+ <item index="2" name="Basic Rations" type="Food" weight="1">
+  <trade buyable="N" price="3"/>
+  <trade buyable="Y" price="2"/>
+  <trade buyable="N" price="3"/>
+  <trade buyable="N" price="3"/>
+  <trade buyable="N" price="3"/>
+  <data value="60"/>
+  <description>Standard food rations.</description>
  </item>
  <item index="3" name="Water" type="Drink" weight="1">
   <trade buyable="N" price="2"/>
@@ -59,7 +60,7 @@ Fifth value for weapon is damage type (1 - cutting damage, 2 - impaling damage,
   <trade buyable="N" price="2"/>
   <trade buyable="N" price="2"/>
   <data value="30"/>
-  <description>Clean water, needed by crew members.</description>
+  <description>Clean water, used as drinks.</description>
  </item>
  <item index="4" name="Iron 20mm ammo" showtype="Ammunition" type="Ammo20" weight="1">
   <trade buyable="N" price="5"/>
@@ -128,7 +129,7 @@ Fifth value for weapon is damage type (1 - cutting damage, 2 - impaling damage,
   <trade buyable="N" price="5"/>
   <trade buyable="N" price="5"/>
   <data value="80"/>
-  <description>Better food rations for crew members.</description>
+  <description>Better food rations.</description>
  </item>
  <item index="12" name="Gunpowder" type="Gunpowder" weight="1">
   <trade buyable="Y" price="1"/>
@@ -406,7 +407,7 @@ Fifth value for weapon is damage type (1 - cutting damage, 2 - impaling damage,
   <trade buyable="N" price="3"/>
   <trade buyable="N" price="3"/>
   <data value="40"/>
-  <description>Standard beer, needed by crew members.</description>
+  <description>Standard beer, used as drink.</description>
  </item>
  <item index="45" name="Wine" type="Drink" weight="1">
   <trade buyable="N" price="4"/>
@@ -415,7 +416,7 @@ Fifth value for weapon is damage type (1 - cutting damage, 2 - impaling damage,
   <trade buyable="N" price="4"/>
   <trade buyable="N" price="4"/>
   <data value="50"/>
-  <description>Good quality wine, needed by crew members.</description>
+  <description>Good quality wine, used as drink.</description>
  </item>
  <item index="46" name="Lavish Rations" type="Food" weight="1">
   <trade buyable="N" price="7"/>
@@ -424,7 +425,7 @@ Fifth value for weapon is damage type (1 - cutting damage, 2 - impaling damage,
   <trade buyable="N" price="7"/>
   <trade buyable="N" price="7"/>
   <data value="100"/>
-  <description>Best food rations for crew members.</description>
+  <description>Best food rations.</description>
  </item>
  <item index="47" name="Alchemy set" showtype="Tool" type="AlchemySet" weight="5">
   <trade buyable="Y" price="5"/>
@@ -1586,6 +1587,14 @@ Fifth value for weapon is damage type (1 - cutting damage, 2 - impaling damage,
   <trade buyable="N" price="30"/>
   <trade buyable="N" price="30"/>
   <description>Unrefined adamanantium ore.</description>
+ </item>
+ <item index="167" name="Adamantium plates" showtype="Repair material" type="Adamantium" weight="18">
+  <trade buyable="Y" price="42"/>
+  <trade buyable="N" price="44"/>
+  <trade buyable="N" price="44"/>
+  <trade buyable="N" price="44"/>
+  <trade buyable="N" price="44"/>
+  <description>Heavy, large, adamantium plates used to repair or upgrade ship modules.</description>
  </item>
 </items>
 
