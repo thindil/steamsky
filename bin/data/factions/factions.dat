@@ -62,6 +62,13 @@ from *data/game.dat* file.
 -->
   <foodtype name="Food" />
   <foodtype name="RawFood" />
+<!--
+- Tags "drinktype": Types of items used as drink by this faction members. If
+no "drinktype" tags inside faction, that faction members can't be hungry.
+- Attribute "name": name of item type used as food. Must be valid item type
+from *data/game.dat* file.
+-->
+  <drinktype name="Drink" />
  </faction>
  <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" spawn="96" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="1">
   <relation faction="POLEIS" reputation="0" friendly="Y" />
@@ -73,6 +80,7 @@ from *data/game.dat* file.
   <description>Group of independent from each other sky bases, not connected in any way with self. Bases of this faction are much less common than Poleis. Gameplay is harder than Poleis due to less sky bases but generally it is very similar.</description>
   <foodtype name="Food" />
   <foodtype name="RawFood" />
+  <drinktype name="Drink" />
  </faction>
  <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" spawn="97" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="161">
   <relation faction="POLEIS" reputation="-10" friendly="N" />
@@ -84,6 +92,7 @@ from *data/game.dat* file.
   <description>Group of independent bases which inhabitants lives from attacking other ships and stealing their cargo. Bases of this faction are much less common than Poleis. Gameplay is much harder than Poleis due to less sky bases and negative reputation of Pirates with other factions.</description>
   <foodtype name="Food" />
   <foodtype name="RawFood" />
+  <drinktype name="Drink" />
  </faction>
  <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" spawn="98" minpopulation="0" maxpopulation="500" playerindex="75" playershipindex="164">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
@@ -112,6 +121,7 @@ from *data/game.dat* file.
   <relation faction="INQUISITION" reputation="0" friendly="Y" />
   <foodtype name="Food" />
   <foodtype name="RawFood" />
+  <drinktype name="Drink" />
  </faction>
 </factions>
 
