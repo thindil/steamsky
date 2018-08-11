@@ -47,11 +47,6 @@ To change which item type is used for deconstruct items, open file *game.dat*
 in *data* directory and edit `value` attribute of tag `alchemytools`. Value 
 must be existing item type.
 
-## Drinks type
-To change which item type is used for reduce thirst, open file *game.dat* 
-in *data* directory and edit `value` attribute of tag `drinkstype`. Value must
-be existing item type.
-
 ## Corpse index
 To change which item is used as a body for dead, open file *game.dat* in *data*
 directory and edit `value` attribute of tag `corpseindex`. Value must be 
@@ -232,13 +227,13 @@ To change which faction is player faction, edit `value` attribute of tag
   game (for example in cargo or in trade screen) different than item type 
   from *game.dat* file, you can set this parameter to any text value.
 - Data: optional tags. Each tag is one value. For items used as food it is
-  value of hunger reduced by one portion. For 'Drink', value of thirst reduced
-  by one portion. For ammunition it is damage done by that ammunition. For 
-  working tools it is chance for item to be damaged during work. For harpoon 
-  guns ammunition it is how long (in combat turns) item will be stuck in enemy
-  ship. For weapons and armor pieces first value is change for item to be 
-  damaged during combat, second entry for weapons is damage done by weapon 
-  and for armor piece it is amount of damage reduced by this armor.
+  value of hunger reduced by one portion. For item used as drinks, value of 
+  thirst reduced by one portion. For ammunition it is damage done by that
+  ammunition. For working tools it is chance for item to be damaged during 
+  work. For harpoon guns ammunition it is how long (in combat turns) item will
+  be stuck in enemy ship. For weapons and armor pieces first value is change 
+  for item to be damaged during combat, second entry for weapons is damage 
+  done by weapon and for armor piece it is amount of damage reduced by this armor.
   Third entry for weapons is number of skill used by this weapon (from 
   *game.dat* file, entry *Skills*) and for armor is amount of levels of dodge 
   skill which this armor reduce when weared. Forth entry for weapon is amount
@@ -544,6 +539,10 @@ To change which faction is player faction, edit `value` attribute of tag
 - Tag `description`: In game description of item. Can have any value.
 - Tags `foodtype`: Types of items used as food by this faction members. If
   no `foodtype` tags inside faction, that faction members can't be hungry.
+- Attribute `name`: name of item type used as food. Must be valid item type
+  from *data/game.dat* file.
+- Tags `drinktype`: Types of items used as drink by this faction members. If
+  no `drinktype` tags inside faction, that faction members can't be hungry.
 - Attribute `name`: name of item type used as food. Must be valid item type
   from *data/game.dat* file.
 
