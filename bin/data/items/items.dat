@@ -27,19 +27,21 @@ set it price to 0.
   <trade buyable="N" price="0"/>
   <trade buyable="N" price="0"/>
   <trade buyable="N" price="0"/>
-<!-- Optional tags "data". For items used as food it is value of hunger
-reduced by one portion. For 'Drink', value of thirst reduced by one portion. 
-For ammunition it is damage done by that ammunition. For working tools it is
-chance for item to be damaged during work. For harpoon guns ammunition it is
-how long (in combat turns) item will be stuck in enemy ship. For weapons and
-armor pieces first value is change for item to be damaged during combat, second
-entry for weapons is damage done by weapon and for armor piece it is amount of
-damage reduced by this armor. Third entry for weapons is number of skill used
-by this weapon (from *game.dat* file, entry *Skills*) and for armor is amount
-of levels of dodge skill which this armor reduce when weared. Forth entry for
-weapon is amount of hands used (1 for one-handed, 2 for two-handed weapons). 
-Fifth value for weapon is damage type (1 - cutting damage, 2 - impaling damage,
-3 - blunt damage). -->
+<!-- 
+Optional tags "data". For items used as food it is value of hunger
+reduced by one portion. For items used as drinks, value of thirst reduced by 
+one portion. For ammunition it is damage done by that ammunition. For 
+working tools it is chance for item to be damaged during work. For harpoon
+guns ammunition it is how long (in combat turns) item will be stuck in enemy
+ship. For weapons and armor pieces first value is change for item to be 
+damaged during combat, second entry for weapons is damage done by weapon and 
+for armor piece it is amount of damage reduced by this armor. Third entry for
+weapons is number of skill used by this weapon (from *game.dat* file, 
+entry *Skills*) and for armor is amount of levels of dodge skill which this
+armor reduce when weared. Forth entry for weapon is amount of hands used (1
+for one-handed, 2 for two-handed weapons). Fifth value for weapon is damage 
+type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage). 
+-->
   <data value="60"/>
 <!-- In game description of item. Can have any value. -->
   <description>Standard ship fuel. Used as moneys in bases trades too.</description>
