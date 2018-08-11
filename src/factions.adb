@@ -68,7 +68,8 @@ package body Factions is
             PlayerIndex => Null_Unbounded_String,
             PlayerShipIndex => Null_Unbounded_String,
             Description => Null_Unbounded_String,
-            FoodTypes => TmpFood);
+            FoodTypes => TmpFood,
+            DrinksTypes => TmpFood);
          LogMessage
            ("Loading factions file: " & Full_Name(FoundFile),
             Everything);
@@ -179,6 +180,16 @@ package body Factions is
                   To_Unbounded_String
                     (Get_Attribute(Item(ChildNodes, J), "name")));
             end loop;
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I),
+                 "drinktype");
+            for J in 0 .. Length(ChildNodes) - 1 loop
+               TempRecord.DrinksTypes.Append
+               (New_Item =>
+                  To_Unbounded_String
+                    (Get_Attribute(Item(ChildNodes, J), "name")));
+            end loop;
             Factions_List.Append(New_Item => TempRecord);
             LogMessage
               ("Faction added: " & To_String(TempRecord.Name),
@@ -195,7 +206,8 @@ package body Factions is
                PlayerIndex => Null_Unbounded_String,
                PlayerShipIndex => Null_Unbounded_String,
                Description => Null_Unbounded_String,
-               FoodTypes => TmpFood);
+               FoodTypes => TmpFood,
+               DrinksTypes => TmpFood);
          end loop;
          Free(Reader);
       end loop;
