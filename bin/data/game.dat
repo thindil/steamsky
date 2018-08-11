@@ -689,9 +689,6 @@ Value must be existing item type. -->
 <!-- To change which item type is used for deconstruct items, edit `value` 
 attribute of tag `alchemytools`. Value must be existing item type. -->
  <alchemytools value="AlchemySet"/>
-<!-- To change which item type is used for reduce thirst, edit `value` 
-attribute of tag `drinkstype`. Value must be existing item type. -->
- <drinkstype value="Drink"/>
 <!-- To change which item is used as a body for dead, edit `value` attribute 
 of tag `corpseindex`. Value must be existing item index from any items file 
 from *data/items* directory. -->
