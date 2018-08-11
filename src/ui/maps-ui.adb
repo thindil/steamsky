@@ -159,8 +159,15 @@ package body Maps.UI is
             exit;
          end if;
       end loop;
-      ItemIndex :=
-        FindItem(Inventory => PlayerShip.Cargo, ItemType => DrinksType);
+      if Factions_List(PlayerFactionIndex).FoodTypes.Length = 0 then
+         ItemIndex := 1;
+      else
+         for DrinkType of Factions_List(PlayerFactionIndex).DrinksTypes loop
+            ItemIndex :=
+              FindItem(Inventory => PlayerShip.Cargo, ItemType => DrinkType);
+            exit when ItemIndex > 0;
+         end loop;
+      end if;
       if ItemIndex = 0 then
          Set_Markup
            (Gtk_Label(Get_Object(Builder, "lblnodrink")),
@@ -172,7 +179,13 @@ package body Maps.UI is
       else
          ItemAmount := 0;
          for Item of PlayerShip.Cargo loop
-            if Items_List(Item.ProtoIndex).IType = DrinksType then
+            if Factions_List(PlayerFactionIndex).DrinksTypes.Length = 0 then
+               ItemAmount := GameSettings.LowDrinks + 1;
+               exit;
+            end if;
+            if Factions_List(PlayerFactionIndex).DrinksTypes.Find_Index
+              (Item => Items_List(Item.ProtoIndex).IType) /=
+              UnboundedString_Container.No_Index then
                ItemAmount := ItemAmount + Item.Amount;
             end if;
             exit when ItemAmount > GameSettings.LowDrinks;
@@ -210,14 +223,13 @@ package body Maps.UI is
             if Factions_List(PlayerFactionIndex).FoodTypes.Length = 0 then
                ItemAmount := GameSettings.LowFood + 1;
                exit;
-            else
-               if Factions_List(PlayerFactionIndex).FoodTypes.Find_Index
-                 (Item => Items_List(Item.ProtoIndex).IType) /=
-                 UnboundedString_Container.No_Index then
-                  ItemAmount := ItemAmount + Item.Amount;
-               end if;
-               exit when ItemAmount > GameSettings.LowFood;
             end if;
+            if Factions_List(PlayerFactionIndex).FoodTypes.Find_Index
+              (Item => Items_List(Item.ProtoIndex).IType) /=
+              UnboundedString_Container.No_Index then
+               ItemAmount := ItemAmount + Item.Amount;
+            end if;
+            exit when ItemAmount > GameSettings.LowFood;
          end loop;
          if ItemAmount < GameSettings.LowFood then
             Set_Markup

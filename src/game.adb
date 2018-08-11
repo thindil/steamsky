@@ -450,9 +450,6 @@ package body Game is
          elsif Node_Name(Item(NodesList, I)) = "alchemytools" then
             AlchemyTools :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
-         elsif Node_Name(Item(NodesList, I)) = "drinkstype" then
-            DrinksType :=
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
          elsif Node_Name(Item(NodesList, I)) = "corpseindex" then
             CorpseIndex :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));

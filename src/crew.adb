@@ -324,7 +324,11 @@ package body Crew is
          end if;
          Member.Hunger := HungerLevel;
          if ThirstLevel > 40 then
-            ConsumeResult := Consume(DrinksType);
+            for DrinksType of
+              Factions_List(PlayerFactionIndex).DrinksTypes loop
+               ConsumeResult := Consume(DrinksType);
+               exit when ConsumeResult > 0;
+            end loop;
             ThirstLevel := ThirstLevel - ConsumeResult;
             if ThirstLevel < 0 then
                ThirstLevel := 0;
@@ -637,15 +641,17 @@ package body Crew is
                   end if;
                end if;
             end if;
-            ThirstLevel := ThirstLevel + TiredPoints;
-            if ThirstLevel > 100 then
-               ThirstLevel := 100;
-            end if;
-            if PlayerShip.Crew(I).Thirst = 100 then
-               HealthLevel := HealthLevel - TiredPoints;
-               if HealthLevel < 1 then
-                  HealthLevel := 0;
-                  DeathReason := To_Unbounded_String("dehydration");
+            if Factions_List(PlayerFactionIndex).DrinksTypes.Length > 0 then
+               ThirstLevel := ThirstLevel + TiredPoints;
+               if ThirstLevel > 100 then
+                  ThirstLevel := 100;
+               end if;
+               if PlayerShip.Crew(I).Thirst = 100 then
+                  HealthLevel := HealthLevel - TiredPoints;
+                  if HealthLevel < 1 then
+                     HealthLevel := 0;
+                     DeathReason := To_Unbounded_String("dehydration");
+                  end if;
                end if;
             end if;
             if HealthLevel = 0 then
