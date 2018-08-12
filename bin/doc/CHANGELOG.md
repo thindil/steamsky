@@ -29,7 +29,7 @@ All notable changes to this project will be documented in this file.
 - Description to factions
 - New item types: adamantiumore and adamantium
 - Option to select player faction at starting new game
-- New items: adamantium ore and adamantium plates
+- New items: adamantium ore, adamantium plates and adamantium mold
 - Separated food and drinks types for each faction
 - New crafting recipe: adamantium plates
 
