@@ -43,6 +43,7 @@ All notable changes to this project will be documented in this file.
 - Separated friendly/enemy relations between factions
 - Updated game data
 - Final enemy for story with undead
+- Raised chance for sky bases from factions other than Poleis
 
 ### Fixed
 - Keyboard shortcuts for some orders
