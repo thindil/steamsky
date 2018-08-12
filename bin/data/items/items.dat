@@ -1598,5 +1598,14 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="44"/>
   <description>Heavy, large, adamantium plates used to repair or upgrade ship modules.</description>
  </item>
+ <item index="168" name="Adamantium mold" showtype="Tool" type="Mold" weight="30">
+  <trade buyable="Y" price="70"/>
+  <trade buyable="N" price="72"/>
+  <trade buyable="N" price="72"/>
+  <trade buyable="N" price="72"/>
+  <trade buyable="N" price="72"/>
+  <data value="1"/>
+  <description>Adamantium tool used in metalsmith recipes.</description>
+ </item>
 </items>
 
