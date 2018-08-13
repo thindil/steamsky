@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Recipe for adamantium plates
+
 ## [2.7] - 2018-08-12
 
 ### Added
