@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updated interface
+
 ### Fixed
 - Recipe for adamantium plates
 
