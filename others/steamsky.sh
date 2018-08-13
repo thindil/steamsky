@@ -1,3 +1,4 @@
 #!/bin/sh
 
-LD_LIBRARY_PATH=lib bin/steamsky "$@"
+cd bin
+LD_LIBRARY_PATH=../lib ./steamsky "$@"
