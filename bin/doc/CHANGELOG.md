@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated interface
+- Updated MODDING.md
 
 ### Fixed
 - Recipe for adamantium plates
