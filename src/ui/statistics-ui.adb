@@ -278,7 +278,6 @@ package body Statistics.UI is
          Set_Label
            (Gtk_Label(Get_Object(Builder, "lblfinishedgoals")),
             "_Finished goals (Total:" & Natural'Image(TotalFinished) & ")");
-         Show_All(Gtk_Widget(Get_Object(Builder, "scrollgoals")));
       else
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expgoals")), False);
          Set_Label
