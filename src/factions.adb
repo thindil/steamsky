@@ -69,7 +69,8 @@ package body Factions is
             PlayerShipIndex => Null_Unbounded_String,
             Description => Null_Unbounded_String,
             FoodTypes => TmpFood,
-            DrinksTypes => TmpFood);
+            DrinksTypes => TmpFood,
+            HealingTools => Null_Unbounded_String);
          LogMessage
            ("Loading factions file: " & Full_Name(FoundFile),
             Everything);
@@ -133,6 +134,11 @@ package body Factions is
                TempRecord.PlayerShipIndex :=
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "playershipindex"));
+            end if;
+            if Get_Attribute(Item(NodesList, I), "healingtools") /= "" then
+               TempRecord.HealingTools :=
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "healingtools"));
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
@@ -207,7 +213,8 @@ package body Factions is
                PlayerShipIndex => Null_Unbounded_String,
                Description => Null_Unbounded_String,
                FoodTypes => TmpFood,
-               DrinksTypes => TmpFood);
+               DrinksTypes => TmpFood,
+               HealingTools => Null_Unbounded_String);
          end loop;
          Free(Reader);
       end loop;

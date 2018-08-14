@@ -52,7 +52,6 @@ package Game is
    Skills_List: SkillsData_Container.Vector; -- Contains data for all skills
    RepairTools: Unbounded_String; -- Name of item type used as tool in repairing/upgrading ship
    CleaningTools: Unbounded_String; -- Name of item type used as tool in cleaning ship
-   HealingTools: Unbounded_String; -- Name of item type used as tool in healing crew members
    AlchemyTools: Unbounded_String; -- Name of item type used as alchemy tools (mainly in deconstructing orders)
    CorpseIndex: Unbounded_String; -- Index of item used to create mobs corpses
    MissionItemsType: Unbounded_String; -- Name of item type used for delivery missions

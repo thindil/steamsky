@@ -25,6 +25,7 @@ with Crafts; use Crafts;
 with Trades; use Trades;
 with Utils; use Utils;
 with Bases.Cargo; use Bases.Cargo;
+with Factions; use Factions;
 
 package body Bases.Trade is
 
@@ -226,7 +227,14 @@ package body Bases.Trade is
           (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
              .BaseType) +
         1;
+      PlayerFactionIndex: Positive;
    begin
+      for I in Factions_List.Iterate loop
+         if Factions_List(I).Index = PlayerFaction then
+            PlayerFactionIndex := Factions_Container.To_Index(I);
+            exit;
+         end if;
+      end loop;
       if MemberIndex > 0 then
          Time := 5 * (100 - PlayerShip.Crew(MemberIndex).Health);
       else
@@ -238,7 +246,11 @@ package body Bases.Trade is
       end if;
       Cost :=
         Time *
-        Items_List(FindProtoItem(ItemType => HealingTools)).Prices(BaseType);
+        Items_List
+          (FindProtoItem
+             (ItemType => Factions_List(PlayerFactionIndex).HealingTools))
+          .Prices
+          (BaseType);
       CountPrice(Cost, FindMember(Talk));
       if Time = 0 then
          Time := 1;
