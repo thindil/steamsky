@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Recipe for adamantium plates
+- Crash when opening game stats with finished goal
 
 ## [2.7] - 2018-08-12
 
