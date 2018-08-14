@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New crafting recipe: adamantium mold
+- New item: adamantium gunsmith set
 
 ### Changed
 - Updated interface
