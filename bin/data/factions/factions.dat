@@ -28,8 +28,11 @@ directory.
 - Attribute "playershipindex": index of ship used for starting player ship.
 Value must be existing ship index from any ships file form *data/ships*
 directory.
+- Attribute "healingtools": name of item type used to healing members of that
+faction and in diseased bases events. Must be valid item type from 
+*data/game.dat* file.
 -->
- <faction index="POLEIS" name="Poleis" membername="member of Poleis" pluralmembername="members of Poleis" minspawn="1" maxspawn="70" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="1">
+ <faction index="POLEIS" name="Poleis" membername="member of Poleis" pluralmembername="members of Poleis" minspawn="1" maxspawn="70" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="1" healingtools="Medicines">
 <!--
 - Tags "relation": Relation of this faction with other faction. All factions
 must have this tags for each faction (even for self).
@@ -70,7 +73,7 @@ from *data/game.dat* file.
 -->
   <drinktype name="Drink" />
  </faction>
- <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" minspawn="71" maxspawn="80" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="1">
+ <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" minspawn="71" maxspawn="80" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="1" healingtools="Medicines">
   <relation faction="POLEIS" reputation="0" friendly="Y" />
   <relation faction="INDEPENDENT" minreputation="-3" maxreputation="2" friendly="Y" />
   <relation faction="PIRATES" reputation="-10" friendly="N" />
@@ -82,7 +85,7 @@ from *data/game.dat* file.
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
  </faction>
- <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" minspawn="81" maxspawn="83" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="161">
+ <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" minspawn="81" maxspawn="83" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="161" healingtools="Medicines">
   <relation faction="POLEIS" reputation="-10" friendly="N" />
   <relation faction="INDEPENDENT" minreputation="-20" maxreputation="-5" friendly="N" />
   <relation faction="PIRATES" reputation="0" friendly="Y" />
@@ -94,7 +97,7 @@ from *data/game.dat* file.
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
  </faction>
- <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" minspawn="84" maxspawn="90" minpopulation="0" maxpopulation="500" playerindex="75" playershipindex="164">
+ <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" minspawn="84" maxspawn="90" minpopulation="0" maxpopulation="500" playerindex="75" playershipindex="164" healingtools="Medicines">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
   <relation faction="INDEPENDENT" reputation="-100" friendly="N" />
   <relation faction="PIRATES" reputation="-100" friendly="N" />
@@ -103,17 +106,17 @@ from *data/game.dat* file.
   <relation faction="INQUISITION" reputation="-100" friendly="N" />
   <description>Small group of connected together bases which are settled by undead beings. Members of this factions attacks everything what not belongs to it. They main advantage is that they don't need food or drinks to survive. Bases of this faction are much less common than Poleis. Gameplay is harder than Poleis due to less sky bases and negative reputation of Undead with other factions.</description>
  </faction>
- <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" minspawn="91" maxspawn="95" minpopulation="0" maxpopulation="500" namestype="robotic" playerindex="76" playershipindex="165">
+ <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" minspawn="91" maxspawn="95" minpopulation="0" maxpopulation="500" namestype="robotic" playerindex="76" playershipindex="165" healingtools="Bronze">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
   <relation faction="INDEPENDENT" reputation="-100" friendly="N" />
   <relation faction="PIRATES" reputation="-100" friendly="N" />
   <relation faction="UNDEAD" reputation="-100" friendly="N" />
   <relation faction="DRONES" reputation="0" friendly="Y" />
   <relation faction="INQUISITION" reputation="-100" friendly="N" />
-  <description>Small group of connected together bases which are settled by sentient, mechanical drones. Members of this faction attacks everything except their confreres. They use ships fuel as food but don't need to drink to survive. They have different names than other factions for everything too. Bases of this faction are much less common than Poleis. Gameplay is harder than Poleis due to less sky bases and negative reputation of Drones with other factions.</description>
+  <description>Small group of connected together bases which are settled by sentient, mechanical drones. Members of this faction attacks everything except their confreres. They use ships fuel as food but don't need to drink to survive. They use bronze plates for healing self. They have different names than other factions for everything too. Bases of this faction are much less common than Poleis. Gameplay is harder than Poleis due to less sky bases and negative reputation of Drones with other factions.</description>
   <foodtype name="Fuel" />
  </faction>
- <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" minspawn="96" maxspawn="100" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="166">
+ <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" minspawn="96" maxspawn="100" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="166" healingtools="Medicines">
   <relation faction="POLEIS" reputation="-50" friendly="N" />
   <relation faction="INDEPENDENT" minreputation="-40" maxreputation="-25" friendly="N" />
   <relation faction="PIRATES" reputation="-10" friendly="N" />

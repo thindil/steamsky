@@ -682,10 +682,6 @@ attribue of tag `repairtools`. Value must be existing item type. -->
 <!-- To change which item type is used for cleaning ship, edit `value` 
 attribute of tag `cleaningrools`. Value must be existing item type. -->
  <cleaningtools value="Bucket"/>
-<!-- To change which item type is used for healing crew members and for 
-deliver medicines to bases, edit `value` attribute of tag `healingtools`. 
-Value must be existing item type. -->
- <healingtools value="Medicines"/>
 <!-- To change which item type is used for deconstruct items, edit `value` 
 attribute of tag `alchemytools`. Value must be existing item type. -->
  <alchemytools value="AlchemySet"/>
