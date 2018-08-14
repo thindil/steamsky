@@ -37,11 +37,6 @@ To change which item type is used for cleaning ship, open file *game.dat* in
 *data* directory and edit `value` attribute of tag `cleaningrools`. Value must
 be existing item type.
 
-## Healing tools type
-To change which item type is used for healing crew members and for deliver
-medicines to bases, open file *game.dat* in *data* directory and edit `value`
-attribute of tag `healingtools`. Value must be existing item type.
-
 ## Alchemy tools type
 To change which item type is used for deconstruct items, open file *game.dat* 
 in *data* directory and edit `value` attribute of tag `alchemytools`. Value 
@@ -524,6 +519,9 @@ To change which faction is player faction, edit `value` attribute of tag
 - Attribute `playershipindex`: index of ship used for starting player ship.
   Value must be existing ship index from any ships file form *data/ships*
   directory.
+- Attribute `healingtools`: name of item type used to healing members of that
+  faction and in diseased bases events. Must be valid item type from 
+  *data/game.dat* file.
 - Tags `relation`: Relation of this faction with other faction. All factions
   must have this tags for each faction (even for self).
 - Attribute `faction` is faction index to which relation will be set. 
