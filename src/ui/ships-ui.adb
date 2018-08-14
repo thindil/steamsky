@@ -35,6 +35,7 @@ with ShipModules; use ShipModules;
 with Ships.UI.Handlers; use Ships.UI.Handlers;
 with Bases; use Bases;
 with Missions; use Missions;
+with Factions; use Factions;
 
 package body Ships.UI is
 
@@ -107,6 +108,7 @@ package body Ships.UI is
    procedure ShowModuleOptions is
       MaxValue: Positive;
       IsPassenger: Boolean := False;
+      PlayerFactionIndex: Positive;
       procedure ShowAssignSkill is
          AssignIter: Gtk_Tree_Iter;
          AssignList: Gtk_List_Store;
@@ -123,6 +125,12 @@ package body Ships.UI is
          Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbassignskill")), 0);
       end ShowAssignSkill;
    begin
+      for I in Factions_List.Iterate loop
+         if Factions_List(I).Index = PlayerFaction then
+            PlayerFactionIndex := Factions_Container.To_Index(I);
+            exit;
+         end if;
+      end loop;
       Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
       Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade2")));
       Hide(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
@@ -316,7 +324,8 @@ package body Ships.UI is
                if Member.Health < 100 and
                  FindItem
                      (Inventory => PlayerShip.Cargo,
-                      ItemType => HealingTools) >
+                      ItemType =>
+                        Factions_List(PlayerFactionIndex).HealingTools) >
                    0 then
                   Set_Label
                     (Gtk_Button(Get_Object(Builder, "btnassigncrew")),

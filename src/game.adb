@@ -441,9 +441,6 @@ package body Game is
          elsif Node_Name(Item(NodesList, I)) = "repairtools" then
             RepairTools :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
-         elsif Node_Name(Item(NodesList, I)) = "healingtools" then
-            HealingTools :=
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
          elsif Node_Name(Item(NodesList, I)) = "cleaningtools" then
             CleaningTools :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));

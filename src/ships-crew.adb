@@ -25,6 +25,7 @@ with Events; use Events;
 with Crew.Inventory; use Crew.Inventory;
 with Utils; use Utils;
 with Missions; use Missions;
+with Factions; use Factions;
 
 package body Ships.Crew is
 
@@ -453,6 +454,7 @@ package body Ships.Crew is
       NeedTrader: Boolean :=
         False;
       EventIndex: constant Natural := SkyMap(Ship.SkyX, Ship.SkyY).EventIndex;
+      PlayerFactionIndex: Positive;
       function UpdatePosition
         (Order: Crew_Orders;
          MaxPriority: Boolean := True) return Boolean is
@@ -552,6 +554,12 @@ package body Ships.Crew is
             return False;
       end UpdatePosition;
    begin
+      for I in Factions_List.Iterate loop
+         if Factions_List(I).Index = PlayerFaction then
+            PlayerFactionIndex := Factions_Container.To_Index(I);
+            exit;
+         end if;
+      end loop;
       for Member of Ship.Crew loop
          case Member.Order is
             when Pilot =>
@@ -592,7 +600,10 @@ package body Ships.Crew is
             when MEDICAL_ROOM =>
                if NeedHealer and
                  Module.Durability > 0 and
-                 FindItem(Inventory => Ship.Cargo, ItemType => HealingTools) >
+                 FindItem
+                     (Inventory => Ship.Cargo,
+                      ItemType =>
+                        Factions_List(PlayerFactionIndex).HealingTools) >
                    0 then
                   CanHeal := True;
                end if;

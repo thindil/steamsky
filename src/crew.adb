@@ -474,7 +474,8 @@ package body Crew is
                         ToolIndex :=
                           FindItem
                             (Inventory => PlayerShip.Cargo,
-                             ItemType => HealingTools);
+                             ItemType =>
+                               Factions_List(PlayerFactionIndex).HealingTools);
                         if ToolIndex > 0 then
                            if PlayerShip.Cargo(ToolIndex).Amount <
                              abs (HealAmount) then
@@ -490,7 +491,9 @@ package body Crew is
                            ToolIndex :=
                              FindItem
                                (Inventory => PlayerShip.Crew(I).Inventory,
-                                ItemType => HealingTools);
+                                ItemType =>
+                                  Factions_List(PlayerFactionIndex)
+                                    .HealingTools);
                            if ToolIndex > 0 then
                               if PlayerShip.Crew(I).Inventory(ToolIndex)
                                   .Amount <
@@ -544,7 +547,8 @@ package body Crew is
                      else
                         AddMessage
                           ("You don't have any " &
-                           To_String(HealingTools) &
+                           To_String
+                             (Factions_List(PlayerFactionIndex).HealingTools) &
                            " to continue healing wounded crew members.",
                            OrderMessage,
                            3);
