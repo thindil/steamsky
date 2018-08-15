@@ -174,6 +174,22 @@ package body Crew is
                PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
                -1);
             return ConsumeValue;
+         else
+            ItemIndex :=
+              FindItem
+                (Inventory => PlayerShip.Crew(I).Inventory,
+                 ItemType => ItemType);
+            if ItemIndex > 0 then
+               ConsumeValue :=
+                 Items_List(PlayerShip.Crew(I).Inventory(ItemIndex).ProtoIndex)
+                   .Value
+                   (1);
+               UpdateInventory
+                 (MemberIndex => I,
+                  Amount => -1,
+                  InventoryIndex => ItemIndex);
+               return ConsumeValue;
+            end if;
          end if;
          return 0;
       end Consume;
