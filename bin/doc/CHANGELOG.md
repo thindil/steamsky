@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Showing operate harpoon guns order in crew orders menu
+- Searching for food and drinks in crew members inventory too
 
 ## [2.0.8] - 2018-07-01
 
