@@ -110,7 +110,6 @@ package body Maps.UI is
       HaveRepairman: Boolean :=
         False;
       ItemIndex, ItemAmount: Natural := 0;
-      PlayerFactionIndex: Positive;
    begin
       if PlayerShip.Crew(1).Health = 0 then
          DeathConfirm;
@@ -153,16 +152,10 @@ package body Maps.UI is
             "You can't travel anymore.");
          Show_All(Gtk_Widget(Get_Object(Builder, "lblnofuel")));
       end if;
-      for I in Factions_List.Iterate loop
-         if Factions_List(I).Index = PlayerFaction then
-            PlayerFactionIndex := Factions_Container.To_Index(I);
-            exit;
-         end if;
-      end loop;
-      if Factions_List(PlayerFactionIndex).FoodTypes.Length = 0 then
+      if Factions_List(PlayerFaction).FoodTypes.Length = 0 then
          ItemIndex := 1;
       else
-         for DrinkType of Factions_List(PlayerFactionIndex).DrinksTypes loop
+         for DrinkType of Factions_List(PlayerFaction).DrinksTypes loop
             ItemIndex :=
               FindItem(Inventory => PlayerShip.Cargo, ItemType => DrinkType);
             exit when ItemIndex > 0;
@@ -179,11 +172,11 @@ package body Maps.UI is
       else
          ItemAmount := 0;
          for Item of PlayerShip.Cargo loop
-            if Factions_List(PlayerFactionIndex).DrinksTypes.Length = 0 then
+            if Factions_List(PlayerFaction).DrinksTypes.Length = 0 then
                ItemAmount := GameSettings.LowDrinks + 1;
                exit;
             end if;
-            if Factions_List(PlayerFactionIndex).DrinksTypes.Find_Index
+            if Factions_List(PlayerFaction).DrinksTypes.Find_Index
               (Item => Items_List(Item.ProtoIndex).IType) /=
               UnboundedString_Container.No_Index then
                ItemAmount := ItemAmount + Item.Amount;
@@ -200,10 +193,10 @@ package body Maps.UI is
             Show_All(Gtk_Widget(Get_Object(Builder, "lblnodrink")));
          end if;
       end if;
-      if Factions_List(PlayerFactionIndex).FoodTypes.Length = 0 then
+      if Factions_List(PlayerFaction).FoodTypes.Length = 0 then
          ItemIndex := 1;
       else
-         for FoodType of Factions_List(PlayerFactionIndex).FoodTypes loop
+         for FoodType of Factions_List(PlayerFaction).FoodTypes loop
             ItemIndex :=
               FindItem(Inventory => PlayerShip.Cargo, ItemType => FoodType);
             exit when ItemIndex > 0;
@@ -220,11 +213,11 @@ package body Maps.UI is
       else
          ItemAmount := 0;
          for Item of PlayerShip.Cargo loop
-            if Factions_List(PlayerFactionIndex).FoodTypes.Length = 0 then
+            if Factions_List(PlayerFaction).FoodTypes.Length = 0 then
                ItemAmount := GameSettings.LowFood + 1;
                exit;
             end if;
-            if Factions_List(PlayerFactionIndex).FoodTypes.Find_Index
+            if Factions_List(PlayerFaction).FoodTypes.Find_Index
               (Item => Items_List(Item.ProtoIndex).IType) /=
               UnboundedString_Container.No_Index then
                ItemAmount := ItemAmount + Item.Amount;

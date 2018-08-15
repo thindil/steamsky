@@ -427,7 +427,6 @@ package body Maps.UI.Handlers is
       MissionsLimit: Integer;
       Event: Events_Types := None;
       ItemIndex: Natural;
-      PlayerFactionIndex: Positive;
    begin
       UpdateMapInfo(True);
       Foreach
@@ -436,12 +435,6 @@ package body Maps.UI.Handlers is
       if FindMember(Talk) > 0 then
          HaveTrader := True;
       end if;
-      for I in Factions_List.Iterate loop
-         if Factions_List(I).Index = PlayerFaction then
-            PlayerFactionIndex := Factions_Container.To_Index(I);
-            exit;
-         end if;
-      end loop;
       Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btncloseorders")), False);
       if CurrentStory.Index > 0 then
          declare
@@ -680,8 +673,7 @@ package body Maps.UI.Handlers is
                   ItemIndex :=
                     FindItem
                       (Inventory => PlayerShip.Cargo,
-                       ItemType =>
-                         Factions_List(PlayerFactionIndex).HealingTools);
+                       ItemType => Factions_List(PlayerFaction).HealingTools);
                   if ItemIndex > 0 then
                      Set_No_Show_All
                        (Gtk_Widget(Get_Object(Object, "btnfreemedicines")),
@@ -1201,19 +1193,12 @@ package body Maps.UI.Handlers is
    procedure DeliverMedicines(User_Data: access GObject_Record'Class) is
       EventIndex, ItemIndex: Natural := 0;
       NewTime: Integer;
-      PlayerFactionIndex: Positive;
    begin
-      for I in Factions_List.Iterate loop
-         if Factions_List(I).Index = PlayerFaction then
-            PlayerFactionIndex := Factions_Container.To_Index(I);
-            exit;
-         end if;
-      end loop;
       EventIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       ItemIndex :=
         FindItem
           (Inventory => PlayerShip.Cargo,
-           ItemType => Factions_List(PlayerFactionIndex).HealingTools);
+           ItemType => Factions_List(PlayerFaction).HealingTools);
       NewTime :=
         Events_List(EventIndex).Time - PlayerShip.Cargo(ItemIndex).Amount;
       if NewTime < 1 then
