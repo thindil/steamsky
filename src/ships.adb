@@ -28,7 +28,6 @@ with ShipModules; use ShipModules;
 with Utils; use Utils;
 with Log; use Log;
 with Crafts; use Crafts;
-with Events; use Events;
 with Maps; use Maps;
 with Mobs; use Mobs;
 with Factions; use Factions;
@@ -164,7 +163,8 @@ package body Ships is
             else
                Gender := 'F';
             end if;
-            MemberName := GenerateMemberName(Gender, PlayerFaction);
+            MemberName :=
+              GenerateMemberName(Gender, Factions_List(PlayerFaction).Index);
             Member := ProtoMobs_List.Element(ProtoMember(1));
             for Skill of Member.Skills loop
                if Skill(3) = 0 then
@@ -642,7 +642,6 @@ package body Ships is
          Free(Reader);
       end loop;
       End_Search(Files);
-      GenerateTraders;
    end LoadShips;
 
    function CountShipWeight(Ship: ShipRecord) return Positive is

@@ -72,7 +72,7 @@ package body Game is
       GameDate :=
         (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 0);
       -- Get player faction index
-      PlayerFaction := Factions_List(FactionIndex).Index;
+      PlayerFaction := FactionIndex;
       -- Generate world
       SkyMap :=
         (others =>
@@ -136,7 +136,9 @@ package body Game is
                        Factions_List(J).Population(2));
                end if;
                BaseReputation :=
-                 GetReputation(PlayerFaction, Factions_List(J).Index);
+                 GetReputation
+                   (Factions_List(PlayerFaction).Index,
+                    Factions_List(J).Index);
                exit;
             end if;
          end loop;
