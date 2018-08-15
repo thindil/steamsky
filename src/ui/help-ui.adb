@@ -33,6 +33,7 @@ with Glib.Error; use Glib.Error;
 with Game; use Game;
 with Utils.UI; use Utils.UI;
 with Items; use Items;
+with Factions; use Factions;
 
 package body Help.UI is
 
@@ -124,7 +125,10 @@ package body Help.UI is
             Value => Skills_List(DodgeSkill).Name),
          12 =>
            (Name => To_Unbounded_String("UnarmedSkill"),
-            Value => Skills_List(UnarmedSkill).Name));
+            Value => Skills_List(UnarmedSkill).Name),
+         13 =>
+           (Name => To_Unbounded_String("HealingTools"),
+            Value => Items_List(FindProtoItem(ItemType => Factions_List(PlayerFaction).HealingTools)).Name));
       AccelNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("<skymapwindow>/btnupleft"),
          To_Unbounded_String("<skymapwindow>/btnup"),
