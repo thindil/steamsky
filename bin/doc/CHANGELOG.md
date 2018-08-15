@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New crafting recipes: adamantium mold and adamantium gunsmith set
 - New item: adamantium gunsmith set
+- Separated healing tools for each faction
 
 ### Changed
 - Updated interface
