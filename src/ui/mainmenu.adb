@@ -65,6 +65,7 @@ with Log; use Log;
 with Help.UI; use Help.UI;
 with Factions; use Factions;
 with Stories; use Stories;
+with Events; use Events;
 
 package body MainMenu is
 
@@ -408,6 +409,7 @@ package body MainMenu is
 
    procedure StartGame is
    begin
+      GenerateTraders;
       Hide(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
       CreateHelpUI;
       CreateGoalsMenu;

@@ -227,14 +227,7 @@ package body Bases.Trade is
           (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
              .BaseType) +
         1;
-      PlayerFactionIndex: Positive;
    begin
-      for I in Factions_List.Iterate loop
-         if Factions_List(I).Index = PlayerFaction then
-            PlayerFactionIndex := Factions_Container.To_Index(I);
-            exit;
-         end if;
-      end loop;
       if MemberIndex > 0 then
          Time := 5 * (100 - PlayerShip.Crew(MemberIndex).Health);
       else
@@ -248,7 +241,7 @@ package body Bases.Trade is
         Time *
         Items_List
           (FindProtoItem
-             (ItemType => Factions_List(PlayerFactionIndex).HealingTools))
+             (ItemType => Factions_List(PlayerFaction).HealingTools))
           .Prices
           (BaseType);
       CountPrice(Cost, FindMember(Talk));

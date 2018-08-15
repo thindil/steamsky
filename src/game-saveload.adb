@@ -414,7 +414,10 @@ package body Game.SaveLoad is
       LogMessage("Saving player faction...", Everything, False);
       CategoryNode := Create_Element(SaveData, "playerfaction");
       CategoryNode := Append_Child(MainNode, CategoryNode);
-      Set_Attribute(CategoryNode, "index", To_String(PlayerFaction));
+      Set_Attribute
+        (CategoryNode,
+         "index",
+         To_String(Factions_List(PlayerFaction).Index));
       LogMessage("done.", Everything, True, False);
       Create(SaveFile, Out_File, To_String(SaveName));
       Write(Stream => Stream(SaveFile), N => SaveData, Pretty_Print => False);
@@ -747,10 +750,20 @@ package body Game.SaveLoad is
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "playerfaction");
       if Length(NodesList) > 0 then
-         PlayerFaction :=
-           To_Unbounded_String(Get_Attribute(Item(NodesList, 0), "index"));
+         declare
+            FactionIndex: Unbounded_String;
+         begin
+            FactionIndex :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, 0), "index"));
+            for I in Factions_List.Iterate loop
+               if Factions_List(I).Index = FactionIndex then
+                  PlayerFaction := Factions_Container.To_Index(I);
+                  exit;
+               end if;
+            end loop;
+         end;
       else
-         PlayerFaction := Factions_List(1).Index;
+         PlayerFaction := 1;
       end if;
       LogMessage("done.", Everything, True, False);
       Free(Reader);

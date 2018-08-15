@@ -116,13 +116,7 @@ package body Bases is
       subtype Letters is Character range 'A' .. 'Z';
       subtype Numbers is Character range '0' .. '9';
    begin
-      for Faction of Factions_List loop
-         if To_Lower(To_String(Faction.Index)) =
-           To_Lower(To_String(PlayerFaction)) then
-            NameType := Faction.NamesType;
-            exit;
-         end if;
-      end loop;
+      NameType := Factions_List(PlayerFaction).NamesType;
       NewName := Null_Unbounded_String;
       if To_Lower(To_String(NameType)) = "standard" then
          if GetRandom(1, 100) < 16 then
@@ -301,7 +295,8 @@ package body Bases is
          Price := Price * 100;
          BaseRecruits.Append
          (New_Item =>
-            (Name => GenerateMemberName(Gender, PlayerFaction),
+            (Name =>
+               GenerateMemberName(Gender, Factions_List(PlayerFaction).Index),
              Gender => Gender,
              Price => Price,
              Skills => Skills,
@@ -524,7 +519,7 @@ package body Bases is
       for C in ProtoShips_List.Iterate loop
          if ProtoShips_List(C).CombatValue <= PlayerValue and
            not IsFriendly
-             (PlayerFaction,
+             (Factions_List(PlayerFaction).Index,
               Factions_List(ProtoShips_List(C).Owner).Index) and
            ProtoShips_List(C).Index /=
              Factions_List(ProtoShips_List(C).Owner).PlayerShipIndex then
@@ -570,7 +565,7 @@ package body Bases is
                   end if;
                   if (Event = Disease or Event = DoublePrice) and
                     IsFriendly
-                      (PlayerFaction,
+                      (Factions_List(PlayerFaction).Index,
                        Factions_List
                          (SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner)
                          .Index) then
