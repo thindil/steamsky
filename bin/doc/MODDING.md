@@ -409,7 +409,8 @@ To change which faction is player faction, edit `value` attribute of tag
   member condition, `{DodgeSkill}` which later will be replaced with name of
   skill used to dodge enemy attacks in character's combat, `{UnarmedSkill}`
   which later will be replaced with name of skill used when character fight
-  without weapon.
+  without weapon, `{HealingTools}` which later will be replaced by name
+  of item used to heal members of player faction.
 - Inside help text you can use some tags for formatting text: 
   `{u}some text{/u}` for add underline for text, `{b}some text{/b}` to made
   bold characters and `{i}some text{/i}` for italic font.
