@@ -201,7 +201,7 @@ package body Crew.UI.Handlers is
       Set_Fraction
         (Gtk_Progress_Bar(Get_Object(Object, "progresstired")),
          Gdouble(TiredPoints) / 100.0);
-      if TiredPoints > 20 and TiredPoints < 41 then
+      if TiredPoints > 0 and TiredPoints < 41 then
          Set_Text
            (Gtk_Progress_Bar(Get_Object(Object, "progresstired")),
             "Bit tired");
@@ -224,7 +224,7 @@ package body Crew.UI.Handlers is
       Set_Fraction
         (Gtk_Progress_Bar(Get_Object(Object, "progressthirst")),
          Gdouble(Member.Thirst) / 100.0);
-      if Member.Thirst > 20 and Member.Thirst < 41 then
+      if Member.Thirst > 0 and Member.Thirst < 41 then
          Set_Text
            (Gtk_Progress_Bar(Get_Object(Object, "progressthirst")),
             "Bit thirsty");
@@ -247,7 +247,7 @@ package body Crew.UI.Handlers is
       Set_Fraction
         (Gtk_Progress_Bar(Get_Object(Object, "progresshunger")),
          Gdouble(Member.Hunger) / 100.0);
-      if Member.Hunger > 20 and Member.Hunger < 41 then
+      if Member.Hunger > 0 and Member.Hunger < 41 then
          Set_Text
            (Gtk_Progress_Bar(Get_Object(Object, "progresshunger")),
             "Bit hungry");
