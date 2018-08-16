@@ -1616,5 +1616,14 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Adamantium tool used in gunsmith recipes.</description>
  </item>
+ <item index="170" name="Adamantium cooking set" showtype="Tool" type="CookingSet" weight="30">
+  <trade buyable="Y" price="66"/>
+  <trade buyable="N" price="68"/>
+  <trade buyable="N" price="68"/>
+  <trade buyable="N" price="68"/>
+  <trade buyable="N" price="68"/>
+  <data value="1"/>
+  <description>Set of tools made of adamantium, used to cook items.</description>
+ </item>
 </items>
 
