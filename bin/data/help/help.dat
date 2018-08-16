@@ -33,7 +33,8 @@
   member condition, `{DodgeSkill}` which later will be replaced with name of
   skill used to dodge enemy attacks in character's combat, `{UnarmedSkill}`
   which later will be replaced with name of skill used when character fight
-  without weapon.
+  without weapon, `{HealingTools}` which later will be replaced by name
+  of item used to heal members of player faction.
 - Inside help text you can use some tags for formatting text: {u}some text{/u}
   for add underline for text, {b}some text{/b} to made bold characters and
   {i}some text{/i} for italic font.
@@ -167,7 +168,7 @@ When your crew member die, you will stay with his/her body in your ship cargo. A
 To assign selected crew member to position, select it from list by left click and then left click again on member order to select other.
 
 {u}Health{/b}
-   Crew members can regenerate health over time but only when they are on break and have assigned cabin. Additionally, if you have {b}medical supplies{/b} in cargo, you can assign other crew member to heal wounded. It can greatly speed up recovering (speed of healing depends on {HealingSkill} skill of healer). Having installed {b}medical room{/b} on ship speed up healing too. Only fully healed members can be healer. If you don't have any {b}medical supplies{/b} on ship, you can heal wounded crew members in bases. Cost of healing depends mostly on price of {b}medical supplies{/b} in selected base.
+Crew members can regenerate health over time but only when they are on break and have assigned cabin. Additionally, if you have {HealingTools} in cargo, you can assign other crew member to heal wounded. It can greatly speed up recovering (speed of healing depends on {HealingSkill} skill of healer). Having installed {b}medical room{/b} on ship speed up healing too. Only fully healed members can be healer. If you don't have any {HealingTools} on ship, you can heal wounded crew members in bases. Cost of healing depends mostly on price of {HealingTools} in selected base.
 
 {u}Training skills{/u}
 You may train selected crew member in any skill in bases. Each training session takes 60 minutes and gives some experience in trained skill and associated attribute. Cost of training depends on skill level. Gained experience depends on associated attribute. Additionally, if you have installed any training room module on your ship, you can train skills there. First, you must set which skill you want to train in this training room in {b}Ship Info{/b} screen. Then give selected crew member order to train.
@@ -220,7 +221,7 @@ If you successfully finish mission, your character gain some morale, if you fail
 * If you want travel faster (for example, for escape from fight), you can drop some items from your cargo. Go to cargo information screen, select desired item and select proper option from item options menu.
 * Each crew member need proper module for work. If that module is destroyed, member cannot start selected work (for example, can't start piloting when cockpit is destroyed).
 * You can assign crew members to selected module (cabins, guns, workplaces) on ship info screen. All workplaces first must have set crafting order, before you can assign someone.
-* You can reduce how long disease affect selected base by delivering medical supplies to it. If you choice deliver supplies for free, you can gain some reputation otherwise, you gain {MoneyName} and may lose some reputation.
+* You can reduce how long disease affect selected base by delivering {HealingTools} to it. If you choice deliver supplies for free, you can gain some reputation otherwise, you gain {MoneyName} and may lose some reputation.
 * What enemy you meet depends on how much upgraded ship you have - especially on upgrades of hull, armor, weapons and type of ammo. At beginning of game you can meet weakest enemies, with every ship upgrade you meet stronger. Of course, there is always small chance that you encounter enemy stronger than you.
 * Each enemy can be different: very often enemy ships have some modules upgrades installed (stronger version of weapon, more durability, etc).
 * Which orders are available for crew members, depends on orders prerequisites. For example, if you don't have set any crafting order set, you can't assign crew member to manufacturing.
