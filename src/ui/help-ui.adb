@@ -128,7 +128,11 @@ package body Help.UI is
             Value => Skills_List(UnarmedSkill).Name),
          13 =>
            (Name => To_Unbounded_String("HealingTools"),
-            Value => Items_List(FindProtoItem(ItemType => Factions_List(PlayerFaction).HealingTools)).Name));
+            Value =>
+              Items_List
+                (FindProtoItem
+                   (ItemType => Factions_List(PlayerFaction).HealingTools))
+                .Name));
       AccelNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("<skymapwindow>/btnupleft"),
          To_Unbounded_String("<skymapwindow>/btnup"),
