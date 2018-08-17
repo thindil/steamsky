@@ -753,9 +753,6 @@ name. -->
 edit attribute `value` of tag `strenghtname`. Value must be existing attribute 
 name. -->
  <strengthname value="Strength"/>
-<!-- To change which skill is used for healing wounded crew members, edit 
-`value` attribute of tag `healingskill`. Value must be existing skill name. -->
- <healingskill value="Medicine"/>
 <!-- To change which skill is used for piloting ship, edit `value` attribute of
 tag `pilotingskill`. Value must be existing skill name. -->
  <pilotingskill value="Piloting"/>
