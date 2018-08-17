@@ -72,7 +72,6 @@ package Game is
      .Vector; -- Contains data for all characters attributes
    ConditionIndex: Positive; -- Index of attribute used as bonus to character condition
    StrengthIndex: Positive; -- Index of attribute used to count max character encumbrance
-   HealingSkill: Positive; -- Index of skill used to heal wounded crew members
    PilotingSkill: Positive; -- Index of skill used to piloting ship
    EngineeringSkill: Positive; -- Index of skill used by engineer on ship
    GunnerySkill: Positive; -- Index of skill used by gunners
