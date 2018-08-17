@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Crash when opening game stats with finished goal
 - Searching for food and drinks in crew members inventory too
 - Showing info about thirst/hunger/tiredness of crew members
+- Showing info about lack of workshop in crafting menu
 
 ## [2.7] - 2018-08-12
 
