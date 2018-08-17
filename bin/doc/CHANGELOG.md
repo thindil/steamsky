@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - New items: adamantium gunsmith set and adamantium cooking set
 - Separated healing tools for each faction
 - Variable with healing tool name to help
+- Separated healing skill for each faction
 
 ### Changed
 - Updated interface
