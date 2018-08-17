@@ -122,11 +122,6 @@ To change which attribute is used to count character maximum encumbrance, open
 file *game.dat* in *data* directory and edit attribute `value` of tag 
 `strenghtname`. Value must be existing attribute name.
 
-## Healing skill name
-To change which skill is used for healing wounded crew members, open file 
-*game.dat* in *data* directory and edit `value` attribute of tag 
-`healingskill`. Value must be existing skill name.
-
 ## Piloting skill name
 To change which skill is used for piloting ship, open file *game.dat* in 
 *data* directory and edit `value` attribute of tag `pilotingskill`. Value must 
@@ -523,6 +518,8 @@ To change which faction is player faction, edit `value` attribute of tag
 - Attribute `healingtools`: name of item type used to healing members of that
   faction and in diseased bases events. Must be valid item type from 
   *data/game.dat* file.
+- Attribute `healingskill`: name of skill used to healing members of that
+  faction. Must be valid skill name from *data/game.dat* file
 - Tags `relation`: Relation of this faction with other faction. All factions
   must have this tags for each faction (even for self).
 - Attribute `faction` is faction index to which relation will be set. 
