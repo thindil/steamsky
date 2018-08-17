@@ -223,6 +223,7 @@ package body Crafts.UI is
          HaveTool := True;
       end if;
       Append(RecipeInfo, ASCII.LF & "Workplace: ");
+      HaveWorkplace := False;
       for Module of PlayerShip.Modules loop
          if Modules_List(Module.ProtoIndex).MType = Recipe.Workplace then
             WorkplaceName := Module.Name;
