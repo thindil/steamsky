@@ -101,7 +101,8 @@ package body Help.UI is
             Value => Attributes_List(StrengthIndex).Name),
          4 =>
            (Name => To_Unbounded_String("HealingSkill"),
-            Value => Skills_List(HealingSkill).Name),
+            Value =>
+              Skills_List(Factions_List(PlayerFaction).HealingSkill).Name),
          5 =>
            (Name => To_Unbounded_String("PilotingSkill"),
             Value => Skills_List(PilotingSkill).Name),

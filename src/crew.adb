@@ -461,7 +461,10 @@ package body Crew is
                   when Heal =>
                      HealAmount :=
                        Times *
-                       (GetSkillLevel(PlayerShip.Crew(I), HealingSkill) / 20);
+                       (GetSkillLevel
+                          (PlayerShip.Crew(I),
+                           Factions_List(PlayerFaction).HealingSkill) /
+                        20);
                      if HealAmount < Times then
                         HealAmount := Times;
                      end if;
@@ -533,7 +536,10 @@ package body Crew is
                                  To_String(PlayerShip.Crew(J).Name) &
                                  " a bit.",
                                  OrderMessage);
-                              GainExp(Times, HealingSkill, I);
+                              GainExp
+                                (Times,
+                                 Factions_List(PlayerFaction).HealingSkill,
+                                 I);
                               exit;
                            end if;
                         end loop;

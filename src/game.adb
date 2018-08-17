@@ -511,11 +511,6 @@ package body Game is
                   exit;
                end if;
             end loop;
-         elsif Node_Name(Item(NodesList, I)) = "healingskill" then
-            HealingSkill :=
-              FindSkillIndex
-                (To_Unbounded_String
-                   (Get_Attribute(Item(NodesList, I), "value")));
          elsif Node_Name(Item(NodesList, I)) = "pilotingskill" then
             PilotingSkill :=
               FindSkillIndex
