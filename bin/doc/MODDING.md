@@ -541,6 +541,9 @@ To change which faction is player faction, edit `value` attribute of tag
   no `drinktype` tags inside faction, that faction members can't be hungry.
 - Attribute `name`: name of item type used as food. Must be valid item type
   from *data/game.dat* file.
+- Tags `flags`: Various info about faction (optional tag).
+- Attribute `name`: name of flag. Possible values: `nogender` faction don't
+  have genders and use male names as default
 
 ## Stories
 
