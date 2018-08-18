@@ -188,6 +188,7 @@ package body Bases is
       Attributes: Attributes_Container.Vector;
       Inventory, TempTools: Positive_Container.Vector;
       Equipment: Equipment_Array;
+      NoGender: Boolean := False;
       procedure AddInventory
         (ItemsIndexes: Positive_Container.Vector;
          EquipIndex: Positive) is
@@ -220,6 +221,11 @@ package body Bases is
          MaxRecruits := (SkyBases(BaseIndex).Population / 10) + 1;
       end if;
       RecruitsAmount := GetRandom(1, MaxRecruits);
+      if Factions_List(PlayerFaction).Flags.Find_Index
+        (To_Unbounded_String("nogender")) /=
+        Factions_Container.No_Index then
+         NoGender := True;
+      end if;
       for I in 1 .. RecruitsAmount loop
          Skills.Clear;
          Attributes.Clear;
@@ -228,10 +234,14 @@ package body Bases is
          TempTools.Clear;
          Equipment := (others => 0);
          Payment := 0;
-         if GetRandom(1, 2) = 1 then
-            Gender := 'M';
+         if not NoGender then
+            if GetRandom(1, 2) = 1 then
+               Gender := 'M';
+            else
+               Gender := 'F';
+            end if;
          else
-            Gender := 'F';
+            Gender := 'M';
          end if;
          SkillsAmount :=
            GetRandom(Skills_List.First_Index, Skills_List.Last_Index);

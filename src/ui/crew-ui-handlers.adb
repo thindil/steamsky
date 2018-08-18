@@ -38,6 +38,7 @@ with Messages; use Messages;
 with Crew.Inventory; use Crew.Inventory;
 with Bases; use Bases;
 with Utils; use Utils;
+with Factions; use Factions;
 
 package body Crew.UI.Handlers is
 
@@ -79,10 +80,14 @@ package body Crew.UI.Handlers is
       end if;
       MemberIndex := Positive(Get_Int(CrewModel, CrewIter, 2));
       Member := PlayerShip.Crew(MemberIndex);
-      if Member.Gender = 'M' then
-         MemberInfo := To_Unbounded_String("Gender: Male");
-      else
-         MemberInfo := To_Unbounded_String("Gender: Female");
+      if Factions_List(PlayerFaction).Flags.Find_Index
+        (To_Unbounded_String("nogender")) =
+        Factions_Container.No_Index then
+         if Member.Gender = 'M' then
+            MemberInfo := To_Unbounded_String("Gender: Male");
+         else
+            MemberInfo := To_Unbounded_String("Gender: Female");
+         end if;
       end if;
       Foreach
         (Gtk_List_Store(Get_Object(Builder, "prioritieslist")),

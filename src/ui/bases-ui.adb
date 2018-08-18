@@ -38,6 +38,7 @@ with Bases.Ship; use Bases.Ship;
 with Bases.Trade; use Bases.Trade;
 with Crafts; use Crafts;
 with Utils.UI; use Utils.UI;
+with Factions; use Factions;
 
 package body Bases.UI is
 
@@ -65,10 +66,14 @@ package body Bases.UI is
       end if;
       RecruitIndex := Positive(Get_Int(RecruitModel, RecruitIter, 1));
       Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
-      if Recruit.Gender = 'M' then
-         RecruitInfo := To_Unbounded_String("Gender: Male");
-      else
-         RecruitInfo := To_Unbounded_String("Gender: Female");
+      if Factions_List(PlayerFaction).Flags.Find_Index
+        (To_Unbounded_String("nogender")) =
+        Factions_Container.No_Index then
+         if Recruit.Gender = 'M' then
+            RecruitInfo := To_Unbounded_String("Gender: Male");
+         else
+            RecruitInfo := To_Unbounded_String("Gender: Female");
+         end if;
       end if;
       Set_Markup
         (Gtk_Label(Get_Object(Object, "lblrecruitinfo")),

@@ -298,10 +298,16 @@ package body Missions is
             Append(AcceptMessage, "'Explore selected area'.");
          when Passenger =>
             Append(AcceptMessage, "'Transport passenger to base'.");
-            if GetRandom(1, 2) = 1 then
-               Gender := 'M';
+            if Factions_List(PlayerFaction).Flags.Find_Index
+              (To_Unbounded_String("nogender")) =
+              Factions_Container.No_Index then
+               if GetRandom(1, 2) = 1 then
+                  Gender := 'M';
+               else
+                  Gender := 'F';
+               end if;
             else
-               Gender := 'F';
+               Gender := 'M';
             end if;
             PlayerShip.Crew.Append
             (New_Item =>
