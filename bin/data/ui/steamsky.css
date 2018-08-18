@@ -5,6 +5,7 @@
    box-shadow:none;
    text-shadow:none;
    font-family:Z003;
+   font-style:italic;
    font-size:16px;
 }
 
@@ -123,11 +124,13 @@ GtkDialog, GtkMessageDialog {
 
 GtkTextView#mapview {
    font-family:Hack;
+   font-style:normal;
    font-size:10px;
 }
 
 *#normalfont {
    font-family:Roboto;
+   font-style:normal;
    font-size:12px;
 }
 
