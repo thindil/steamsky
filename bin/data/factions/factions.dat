@@ -117,6 +117,12 @@ from *data/game.dat* file.
   <relation faction="INQUISITION" reputation="-100" friendly="N" />
   <description>Small group of connected together bases which are settled by sentient, mechanical drones. Members of this faction attacks everything except their confreres. They use ships fuel as food but don't need to drink to survive. They use bronze plates and engineering skill for healing self. They have different names than other factions for everything too. Bases of this faction are much less common than Poleis. Gameplay is harder than Poleis due to less sky bases and negative reputation of Drones with other factions.</description>
   <foodtype name="Fuel" />
+<!--
+- Tags "flags": Various info about faction (optional tag).
+- Attribute "name": name of flag. Possible values: "nogender" faction don't
+have genders and use male names as default
+-->
+  <flag name="nogender" />
  </faction>
  <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" minspawn="96" maxspawn="100" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="166" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="-50" friendly="N" />
