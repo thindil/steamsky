@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Separated healing tools for each faction
 - Variable with healing tool name to help
 - Separated healing skill for each faction
+- Ability to disable genders for selected factions
 
 ### Changed
 - Updated interface
