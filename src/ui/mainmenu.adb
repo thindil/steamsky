@@ -518,6 +518,16 @@ package body MainMenu is
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblfactioninfo")),
          To_String(Factions_List(FactionIndex).Description));
+      if Factions_List(FactionIndex).Flags.Find_Index
+        (To_Unbounded_String("nogender")) /=
+        Factions_Container.No_Index then
+         Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbgender")), 0);
+         Hide(Gtk_Widget(Get_Object(Object, "cmbgender")));
+         Hide(Gtk_Widget(Get_Object(Object, "lblgender")));
+      else
+         Show_All(Gtk_Widget(Get_Object(Object, "cmbgender")));
+         Show_All(Gtk_Widget(Get_Object(Object, "lblgender")));
+      end if;
    end ShowFactionDescription;
 
    procedure CreateMainMenu is

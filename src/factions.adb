@@ -71,7 +71,8 @@ package body Factions is
             FoodTypes => TmpFood,
             DrinksTypes => TmpFood,
             HealingTools => Null_Unbounded_String,
-            HealingSkill => 1);
+            HealingSkill => 1,
+            Flags => TmpFood);
          LogMessage
            ("Loading factions file: " & Full_Name(FoundFile),
             Everything);
@@ -203,6 +204,16 @@ package body Factions is
                   To_Unbounded_String
                     (Get_Attribute(Item(ChildNodes, J), "name")));
             end loop;
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I),
+                 "flag");
+            for J in 0 .. Length(ChildNodes) - 1 loop
+               TempRecord.Flags.Append
+               (New_Item =>
+                  To_Unbounded_String
+                    (Get_Attribute(Item(ChildNodes, J), "name")));
+            end loop;
             Factions_List.Append(New_Item => TempRecord);
             LogMessage
               ("Faction added: " & To_String(TempRecord.Name),
@@ -222,7 +233,8 @@ package body Factions is
                FoodTypes => TmpFood,
                DrinksTypes => TmpFood,
                HealingTools => Null_Unbounded_String,
-               HealingSkill => 1);
+               HealingSkill => 1,
+               Flags => TmpFood);
          end loop;
          Free(Reader);
       end loop;

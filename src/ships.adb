@@ -62,6 +62,7 @@ package body Ships is
       StartX, StartY, EndX, EndY: Integer;
       TmpAttributes: Attributes_Container.Vector;
       Member: ProtoMobRecord;
+      NoGender: Boolean := False;
    begin
       if RandomUpgrades then
          UpgradesAmount := GetRandom(0, Positive(ProtoShip.Modules.Length));
@@ -151,6 +152,11 @@ package body Ships is
       else
          NewName := Name;
       end if;
+      if Factions_List(ProtoShip.Owner).Flags.Find_Index
+        (To_Unbounded_String("nogender")) /=
+        Factions_Container.No_Index then
+         NoGender := True;
+      end if;
       for ProtoMember of ProtoShip.Crew loop
          if ProtoMember(3) = 0 then
             Amount := ProtoMember(2);
@@ -158,10 +164,14 @@ package body Ships is
             Amount := GetRandom(ProtoMember(2), ProtoMember(3));
          end if;
          for I in 1 .. Amount loop
-            if GetRandom(1, 100) < 50 then
-               Gender := 'M';
+            if not NoGender then
+               if GetRandom(1, 100) < 50 then
+                  Gender := 'M';
+               else
+                  Gender := 'F';
+               end if;
             else
-               Gender := 'F';
+               Gender := 'M';
             end if;
             MemberName :=
               GenerateMemberName(Gender, Factions_List(PlayerFaction).Index);

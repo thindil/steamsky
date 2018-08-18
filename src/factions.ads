@@ -50,6 +50,8 @@ package Factions is
         .Vector; -- Types of items used as drinks for members of this faction
       HealingTools: Unbounded_String; -- Name of item type used as tool in healing members of this faction
       HealingSkill: Positive; -- Vector index of skill used in healing members of this faction
+      Flags: UnboundedString_Container
+        .Vector; -- Various flags for faction (no gender, etc)
    end record;
    package Factions_Container is new Vectors(Positive, FactionRecord);
    Factions_List: Factions_Container.Vector;
