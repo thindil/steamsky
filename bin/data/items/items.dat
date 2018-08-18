@@ -1625,5 +1625,14 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Set of tools made of adamantium, used to cook items.</description>
  </item>
+ <item index="171" name="Adamantium sickle" showtype="Tool" type="Sickle" weight="2">
+  <trade buyable="Y" price="48"/>
+  <trade buyable="N" price="50"/>
+  <trade buyable="N" price="50"/>
+  <trade buyable="N" price="50"/>
+  <trade buyable="N" price="50"/>
+  <data value="1"/>
+  <description>Adamantium tool used in cultivating plants.</description>
+ </item>
 </items>
 
