@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Showing info about thirst/hunger/tiredness of crew members
 - Showing info about lack of workshop in crafting menu
 - Finding fonts on Windows
+- Don't show Menu button in game statistics after player death
 
 ## [2.7] - 2018-08-12
 
