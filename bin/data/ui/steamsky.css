@@ -12,7 +12,7 @@
 .entry:selected,
    GtkButton:focus,
    GtkButton:focus * {
-   background:rgb(73,73,73);
+   background:rgb(57,57,57);
 }
 
 *:hover {
@@ -25,28 +25,32 @@ GtkButton:active,
    GtkButton:active *, 
    GtkTreeView:selected, 
    GtkTreeView:selected:focus {
-  background:rgb(204,87,93);
+  background:rgb(128,0,0);
+}
+
+.button:insensitive, .button:insensitive * {
+   color:black;
+}
+
+.button, .button * {
+   color:rgb(255,223,0);
 }
 
 .scrollbar.slider {
    border-style:dotted;
    border-width:1px;
-   border-color:rgb(73,73,73);
+   border-color:rgb(57,57,57);
 }
 
 .scrollbar.slider:prelight:active, 
    .scrollbar.slider:active {
-  background:rgb(204,87,93);
+  background:rgb(128,0,0);
   border-style:none;
 }
 
 .scrollbar.slider:hover {
-  background:rgb(73,73,73);
+  background:rgb(57,57,57);
   border-style:none;
-}
-
-.button:insensitive, .button:insensitive * {
-   color:black;
 }
 
 .progressbar, 
@@ -86,20 +90,20 @@ GtkSpinButton {
 .entry {
    border-style:solid;
    border-width:1px;
-   border-color:rgb(73,73,73);
+   border-color:rgb(57,57,57);
    border-radius:20px;
 }
 
 .entry:focus, .entry:active {
    border-style:solid;
    border-width:2px;
-   border-color:rgb(204,87,93);
+   border-color:rgb(128,0,0);
 }
 
 .tooltip {
    border-style:solid;
    border-width:1px;
-   border-color:rgb(73,73,73);
+   border-color:rgb(57,57,57);
    background:rgb(25,25,25);
 }
 

@@ -493,22 +493,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="guint"/>
     </columns>
   </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-  </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-  </object>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-  </object>
-  <object class="GtkImage" id="image4">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-  </object>
   <object class="GtkListStore" id="installmoduleslist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -1894,12 +1878,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkButton" id="btnmapup">
+                    <property name="label" translatable="yes">⬆</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes">Move map up</property>
-                    <property name="image">image1</property>
-                    <property name="always_show_image">True</property>
                     <signal name="clicked" handler="Move_Map" object="btnmapup" swapped="no"/>
                   </object>
                   <packing>
@@ -1914,12 +1897,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkButton" id="btnmapleft">
+                        <property name="label" translatable="yes">⬅</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes">Move map left</property>
-                        <property name="image">image3</property>
-                        <property name="always_show_image">True</property>
                         <signal name="clicked" handler="Move_Map" object="btnmapleft" swapped="no"/>
                       </object>
                       <packing>
@@ -1961,12 +1943,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                     <child>
                       <object class="GtkButton" id="btnmapright">
+                        <property name="label" translatable="yes">➡</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes">Move map right</property>
-                        <property name="image">image4</property>
-                        <property name="always_show_image">True</property>
                         <signal name="clicked" handler="Move_Map" object="btnmapright" swapped="no"/>
                       </object>
                       <packing>
@@ -1984,12 +1965,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 </child>
                 <child>
                   <object class="GtkButton" id="btnmapdown">
+                    <property name="label" translatable="yes">⬇</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes">Move map down</property>
-                    <property name="image">image2</property>
-                    <property name="always_show_image">True</property>
                     <signal name="clicked" handler="Move_Map" object="btnmapdown" swapped="no"/>
                   </object>
                   <packing>
