@@ -290,6 +290,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkComboBox" id="cmbgender">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Select gender of your character. </property>
                     <property name="model">liststore1</property>
                     <property name="active">0</property>
                     <property name="id_column">0</property>
@@ -322,6 +323,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes">Select starting goal for your character. You can change it later in game.</property>
                     <signal name="clicked" handler="Show_Goals" swapped="no"/>
                   </object>
                   <packing>
@@ -344,6 +346,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkComboBox" id="cmbfaction">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Select faction to which your character belongs. Below you can see description of selected faction.</property>
                     <property name="model">factionslist</property>
                     <property name="active">0</property>
                     <property name="id_column">0</property>
@@ -409,6 +412,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes">Start new game</property>
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
                     <signal name="clicked" handler="New_Game" swapped="no"/>
@@ -425,6 +429,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes">Back to game main menu</property>
                     <property name="use_underline">True</property>
                     <signal name="clicked" handler="Show_Page" object="btnback" swapped="no"/>
                     <accelerator key="Escape" signal="clicked"/>
