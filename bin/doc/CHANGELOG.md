@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [2.0.9] - 2018-08-19
 
 ### Fixed
 - Showing operate harpoon guns order in crew orders menu
