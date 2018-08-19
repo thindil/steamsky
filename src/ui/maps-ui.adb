@@ -33,7 +33,6 @@ with Gtk.Enums; use Gtk.Enums;
 with Gtk.Container; use Gtk.Container;
 with Gtk.Accel_Map; use Gtk.Accel_Map;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
-with Gtk.Image; use Gtk.Image;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Overlay; use Gtk.Overlay;
 with Glib; use Glib;
@@ -89,6 +88,7 @@ package body Maps.UI is
           ("You are dead. Would you like to see your game statistics?",
            Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
          Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnmenu")));
          ShowStatsUI(Main_Menu);
       else
          Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
@@ -1267,38 +1267,6 @@ package body Maps.UI is
       On_Key_Press_Event
         (Gtk_Widget(Get_Object(Builder, "skymapwindow")),
          MapKeyPressed'Access);
-      Set
-        (Gtk_Image(Get_Object(Builder, "image1")),
-         To_String(DataDirectory) &
-         "ui" &
-         Dir_Separator &
-         "images" &
-         Dir_Separator &
-         "up.png");
-      Set
-        (Gtk_Image(Get_Object(Builder, "image2")),
-         To_String(DataDirectory) &
-         "ui" &
-         Dir_Separator &
-         "images" &
-         Dir_Separator &
-         "down.png");
-      Set
-        (Gtk_Image(Get_Object(Builder, "image3")),
-         To_String(DataDirectory) &
-         "ui" &
-         Dir_Separator &
-         "images" &
-         Dir_Separator &
-         "left.png");
-      Set
-        (Gtk_Image(Get_Object(Builder, "image4")),
-         To_String(DataDirectory) &
-         "ui" &
-         Dir_Separator &
-         "images" &
-         Dir_Separator &
-         "right.png");
       Set_Transition_Type
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
