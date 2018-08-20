@@ -198,6 +198,11 @@ package body Events is
                  SkyBases(BaseIndex).Reputation(1) = -100 then
                   Roll := 31;
                end if;
+               if not Factions_List(SkyBases(BaseIndex).Owner).Flags.Contains
+                 (To_Unbounded_String("diseaseimmune")) and
+                 Roll = 21 then
+                  Roll := 20;
+               end if;
                case Roll is
                   when 1 .. 20 => -- Base is attacked
                      GenerateEnemies(Enemies);
