@@ -543,7 +543,8 @@ To change which faction is player faction, edit `value` attribute of tag
   from *data/game.dat* file.
 - Tags `flags`: Various info about faction (optional tag).
 - Attribute `name`: name of flag. Possible values: `nogender` faction don't
-  have genders and use male names as default
+  have genders and use male names as default, "diseaseimmune" faction members
+  cannot become ill, no disease event for this faction
 
 ## Stories
 
