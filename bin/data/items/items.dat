@@ -1634,5 +1634,14 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Adamantium tool used in cultivating plants.</description>
  </item>
+ <item index="172" name="Adamantium saw" showtype="Tool" type="Saw" weight="2">
+  <trade buyable="Y" price="52"/>
+  <trade buyable="N" price="54"/>
+  <trade buyable="N" price="54"/>
+  <trade buyable="N" price="54"/>
+  <trade buyable="N" price="54"/>
+  <data value="1"/>
+  <description>Adamantium tool used to cut wood.</description>
+ </item>
 </items>
 
