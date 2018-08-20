@@ -838,7 +838,7 @@ package body Maps.UI.Handlers is
       TimeNeeded: Natural := 0;
    begin
       Hide(Gtk_Widget(Get_Object(Builder, "waitwindow")));
-      if User_Data = Get_Object(Builder, "btn1min") then
+      if User_Data = Get_Object(Builder, "btnwait1min") then
          UpdateGame(1);
       elsif User_Data = Get_Object(Builder, "btnwait5min") then
          UpdateGame(5);
