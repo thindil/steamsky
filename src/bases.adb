@@ -573,7 +573,19 @@ package body Bases is
                       0 then
                      exit;
                   end if;
-                  if (Event = Disease or Event = DoublePrice) and
+                  if Event = DoublePrice and
+                    IsFriendly
+                      (Factions_List(PlayerFaction).Index,
+                       Factions_List
+                         (SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner)
+                         .Index) then
+                     exit;
+                  end if;
+                  if Event = Disease and
+                    not Factions_List
+                      (SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner)
+                      .Flags.Contains
+                    (To_Unbounded_String("diseaseimmune")) and
                     IsFriendly
                       (Factions_List(PlayerFaction).Index,
                        Factions_List
