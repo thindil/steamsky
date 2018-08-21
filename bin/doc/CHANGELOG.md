@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Separated healing skill for each faction
 - Ability to disable genders for selected factions
 - Ability to made selected factions immune to diseases
+- Ability to disable tiredness for selected factions
 
 ### Changed
 - Updated interface
