@@ -106,14 +106,16 @@ from *data/game.dat* file.
   <relation faction="UNDEAD" reputation="0" friendly="Y" />
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="-100" friendly="N" />
-  <description>Small group of connected together bases which are settled by undead beings. Members of this factions attacks everything what not belongs to it. They main advantage is that they don't need food or drinks to survive and they are immune to diseases. Bases of this faction are much less common than Poleis. Gameplay is harder than Poleis due to less sky bases and negative reputation of Undead with other factions.</description>
+  <description>Small group of connected together bases which are settled by undead beings. Members of this factions attacks everything what not belongs to it. They main advantages are that they don't need food or drinks to survive, they are immune to diseases and they don't need rest but they can't self regenerate health. Bases of this faction are much less common than Poleis. Gameplay is harder than Poleis due to less sky bases and negative reputation of Undead with other factions.</description>
 <!--
 - Tags "flags": Various info about faction (optional tag).
 - Attribute "name": name of flag. Possible values: "nogender" faction don't
 have genders and use male names as default, "diseaseimmune" faction members
-cannot become ill, no disease event for this faction
+cannot become ill, no disease event for this faction, "nofatigue" faction
+members don't get tired so, they can't rest and regenerate health
 -->
   <flag name="diseaseimmune" />
+  <flag name="nofatigue" />
  </faction>
  <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" minspawn="91" maxspawn="95" minpopulation="0" maxpopulation="500" namestype="robotic" playerindex="76" playershipindex="165" healingtools="Bronze" healingskill="Engineering">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
@@ -122,10 +124,11 @@ cannot become ill, no disease event for this faction
   <relation faction="UNDEAD" reputation="-100" friendly="N" />
   <relation faction="DRONES" reputation="0" friendly="Y" />
   <relation faction="INQUISITION" reputation="-100" friendly="N" />
-  <description>Small group of connected together bases which are settled by sentient, mechanical drones. Members of this faction attacks everything except their confreres. They use ships fuel as food but don't need to drink to survive. Additionally, they are immune to diseases. They use bronze plates and engineering skill for healing self. They have different names than other factions for everything too. Bases of this faction are much less common than Poleis. Gameplay is harder than Poleis due to less sky bases and negative reputation of Drones with other factions.</description>
+  <description>Small group of connected together bases which are settled by sentient, mechanical drones. Members of this faction attacks everything except their confreres. They use ships fuel as food but don't need to drink to survive and they don't need rest but they can't self regenerate health. Additionally, they are immune to diseases. They use bronze plates and engineering skill for healing self. They have different names than other factions for everything too. Bases of this faction are much less common than Poleis. Gameplay is harder than Poleis due to less sky bases and negative reputation of Drones with other factions.</description>
   <foodtype name="Fuel" />
   <flag name="nogender" />
   <flag name="diseaseimmune" />
+  <flag name="nofatigue" />
  </faction>
  <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" minspawn="96" maxspawn="100" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="166" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="-50" friendly="N" />
