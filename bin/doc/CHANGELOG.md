@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - Finding fonts on Windows
 - Don't show Menu button in game statistics after player death
 - Waiting 1 minute button
+- Possible crash when reporting error
 
 ## [2.7] - 2018-08-12
 
