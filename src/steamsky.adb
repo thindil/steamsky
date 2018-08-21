@@ -220,5 +220,5 @@ begin
    EndLogging;
 exception
    when An_Exception : others =>
-      On_Exception(An_Exception);
+      SaveException(An_Exception, True);
 end SteamSky;

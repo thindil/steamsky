@@ -645,7 +645,9 @@ package body MainMenu is
       end if;
    end ShowMainMenu;
 
-   procedure On_Exception(An_Exception: Exception_Occurrence) is
+   procedure SaveException
+     (An_Exception: Exception_Occurrence;
+      PrintToTerminal: Boolean) is
       ErrorFile: File_Type;
       ErrorText: Unbounded_String;
    begin
@@ -675,8 +677,17 @@ package body MainMenu is
       Append(ErrorText, "-------------------------------------------------");
       Put_Line(ErrorFile, To_String(ErrorText));
       Close(ErrorFile);
-      ShowErrorInfo(ErrorText);
+      if PrintToTerminal then
+         Put_Line(To_String(ErrorText));
+      else
+         ShowErrorInfo(ErrorText);
+      end if;
       EndLogging;
+   end SaveException;
+
+   procedure On_Exception(An_Exception: Exception_Occurrence) is
+   begin
+      SaveException(An_Exception, False);
    end On_Exception;
 
 end MainMenu;
