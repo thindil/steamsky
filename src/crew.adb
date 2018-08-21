@@ -234,6 +234,10 @@ package body Crew is
          BackToWork: Boolean := True;
          ConsumeResult: Natural := 0;
       begin
+         if Factions_List(PlayerFaction).Flags.Contains
+           (To_Unbounded_String("nofatigue")) then
+            TiredLevel := 0;
+         end if;
          Member.Tired := TiredLevel;
          if TiredLevel = 0 and
            Member.Order = Rest and
@@ -432,7 +436,11 @@ package body Crew is
                      TiredLevel := 0;
                   end if;
                end if;
-               if HealthLevel > 0 and HealthLevel < 100 and CabinIndex > 0 then
+               if not Factions_List(PlayerFaction).Flags.Contains
+                 (To_Unbounded_String("nofatigue")) and
+                 HealthLevel > 0 and
+                 HealthLevel < 100 and
+                 CabinIndex > 0 then
                   HealthLevel := HealthLevel + Times;
                   if HealthLevel > 100 then
                      HealthLevel := 100;
