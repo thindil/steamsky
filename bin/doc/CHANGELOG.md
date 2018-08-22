@@ -14,11 +14,15 @@ All notable changes to this project will be documented in this file.
 - Ability to disable genders for selected factions
 - Ability to made selected factions immune to diseases
 - Ability to disable tiredness for selected factions
+- Ability to disable morale for selected factions
 
 ### Changed
 - Updated interface
 - Updated MODDING.md
 - Updated help
+- Drones faction don't have morale, tiredness, genders and is immune to 
+  diseases
+- Undead faction don't have morale, tiredness and is immune to diseases
 
 ### Fixed
 - Recipe for adamantium plates
