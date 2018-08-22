@@ -545,7 +545,8 @@ To change which faction is player faction, edit `value` attribute of tag
 - Attribute `name`: name of flag. Possible values: `nogender` faction don't
   have genders and use male names as default, `diseaseimmune` faction members
   cannot become ill, no disease event for this faction, `nofatigue` faction
-  members don't get tired so, they can't rest and regenerate health
+  members don't get tired so, they can't rest and regenerate health, `nomorale`
+  faction members don't have morale (and bonuses from it)
 
 ## Stories
 
