@@ -799,6 +799,7 @@ Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WAR
                 <property name="valign">end</property>
                 <property name="use_underline">True</property>
                 <signal name="clicked" handler="Show_Page" object="btnabout" swapped="no"/>
+                <accelerator key="Escape" signal="clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
