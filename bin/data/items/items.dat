@@ -1643,5 +1643,14 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Adamantium tool used to cut wood.</description>
  </item>
+ <item index="173" name="Adamantium bucket" showtype="Tool" type="Bucket" weight="16">
+  <trade buyable="Y" price="58"/>
+  <trade buyable="N" price="60"/>
+  <trade buyable="N" price="60"/>
+  <trade buyable="N" price="60"/>
+  <trade buyable="N" price="60"/>
+  <data value="1"/>
+  <description>Simple bucket made of adamantium.</description>
+ </item>
 </items>
 
