@@ -756,7 +756,22 @@ package body Ships.Crew is
       MemberIndex: Positive;
       Value: Integer) is
       NewMorale, NewLoyalty: Integer;
+      FactionIndex: Positive;
    begin
+      if Ship = PlayerShip then
+         FactionIndex := PlayerFaction;
+      else
+         for ProtoShip of ProtoShips_List loop
+            if ProtoShip.Name = Ship.Name then
+               FactionIndex := ProtoShip.Owner;
+               exit;
+            end if;
+         end loop;
+      end if;
+      if Factions_List(FactionIndex).Flags.Contains
+        (To_Unbounded_String("nomorale")) then
+         return;
+      end if;
       NewMorale := Ship.Crew(MemberIndex).Morale + Value;
       if NewMorale > 100 then
          NewMorale := 100;
