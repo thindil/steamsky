@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - Don't show Menu button in game statistics after player death
 - Waiting 1 minute button
 - Possible crash when reporting error
+- Lack of keyboard shortcut for back button in license window
 
 ## [2.7] - 2018-08-12
 
