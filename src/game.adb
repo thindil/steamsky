@@ -50,17 +50,23 @@ package body Game is
      (CharName, ShipName: Unbounded_String;
       Gender: Character;
       FactionIndex: Positive) is
-      PosX, PosY, RandomBase, ShipIndex, Amount, FactionRoll: Positive;
+      PosX,
+      PosY,
+      RandomBase,
+      ShipIndex,
+      Amount,
+      FactionRoll,
+      BaseOwner,
+      PlayerIndex2,
+      PlayerMorale: Positive;
       ValidLocation: Boolean;
       TempX, TempY, BaseReputation: Integer;
       TmpRecruits: Recruit_Container.Vector;
       TmpMissions: Mission_Container.Vector;
       CabinAssigned: Boolean := False;
-      BaseOwner: Positive;
       BasePopulation: Natural;
       TmpCargo: BaseCargo_Container.Vector;
       TmpInventory: Inventory_Container.Vector;
-      PlayerIndex2: Positive;
    begin
       -- Save new game configuration
       NewGameSettings :=
@@ -197,6 +203,12 @@ package body Game is
              Name => Null_Unbounded_String,
              Durability => 100));
       end loop;
+      if Factions_List(FactionIndex).Flags.Contains
+        (To_Unbounded_String("nomorale")) then
+         PlayerMorale := 50;
+      else
+         PlayerMorale := 100;
+      end if;
       PlayerShip.Crew.Prepend
       (New_Item =>
          (Name => CharName,
@@ -215,7 +227,7 @@ package body Game is
           Equipment => ProtoMobs_List(PlayerIndex2).Equipment,
           Payment => (others => 0),
           ContractLength => -1,
-          Morale => 100,
+          Morale => PlayerMorale,
           Loyalty => 100));
       for Module of PlayerShip.Modules loop
          if Module.Owner > 0 then
