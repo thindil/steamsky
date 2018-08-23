@@ -673,7 +673,9 @@ package body Maps.UI.Handlers is
                   ItemIndex :=
                     FindItem
                       (Inventory => PlayerShip.Cargo,
-                       ItemType => Factions_List(PlayerFaction).HealingTools);
+                       ItemType =>
+                         Factions_List(SkyBases(BaseIndex).Owner)
+                           .HealingTools);
                   if ItemIndex > 0 then
                      Set_No_Show_All
                        (Gtk_Widget(Get_Object(Object, "btnfreemedicines")),
@@ -1193,12 +1195,14 @@ package body Maps.UI.Handlers is
    procedure DeliverMedicines(User_Data: access GObject_Record'Class) is
       EventIndex, ItemIndex: Natural := 0;
       NewTime: Integer;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
       EventIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       ItemIndex :=
         FindItem
           (Inventory => PlayerShip.Cargo,
-           ItemType => Factions_List(PlayerFaction).HealingTools);
+           ItemType => Factions_List(SkyBases(BaseIndex).Owner).HealingTools);
       NewTime :=
         Events_List(EventIndex).Time - PlayerShip.Cargo(ItemIndex).Amount;
       if NewTime < 1 then
@@ -1207,9 +1211,7 @@ package body Maps.UI.Handlers is
          Events_List(EventIndex).Time := NewTime;
       end if;
       if User_Data = Get_Object(Builder, "btnfreemedicines") then
-         GainRep
-           (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex,
-            (PlayerShip.Cargo(ItemIndex).Amount / 10));
+         GainRep(BaseIndex, (PlayerShip.Cargo(ItemIndex).Amount / 10));
          UpdateCargo
            (PlayerShip,
             PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
@@ -1225,7 +1227,7 @@ package body Maps.UI.Handlers is
            (ItemIndex,
             Integer'Image(PlayerShip.Cargo.Element(ItemIndex).Amount));
          GainRep
-           (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex,
+           (BaseIndex,
             ((PlayerShip.Cargo(ItemIndex).Amount / 20) * (-1)));
       end if;
    end DeliverMedicines;
