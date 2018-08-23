@@ -152,9 +152,8 @@ package body Ships is
       else
          NewName := Name;
       end if;
-      if Factions_List(ProtoShip.Owner).Flags.Find_Index
-        (To_Unbounded_String("nogender")) /=
-        Factions_Container.No_Index then
+      if Factions_List(ProtoShip.Owner).Flags.Contains
+        (To_Unbounded_String("nogender")) then
          NoGender := True;
       end if;
       for ProtoMember of ProtoShip.Crew loop

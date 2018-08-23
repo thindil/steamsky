@@ -221,9 +221,8 @@ package body Bases is
          MaxRecruits := (SkyBases(BaseIndex).Population / 10) + 1;
       end if;
       RecruitsAmount := GetRandom(1, MaxRecruits);
-      if Factions_List(PlayerFaction).Flags.Find_Index
-        (To_Unbounded_String("nogender")) /=
-        Factions_Container.No_Index then
+      if Factions_List(PlayerFaction).Flags.Contains
+        (To_Unbounded_String("nogender")) then
          NoGender := True;
       end if;
       for I in 1 .. RecruitsAmount loop

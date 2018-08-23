@@ -298,9 +298,8 @@ package body Missions is
             Append(AcceptMessage, "'Explore selected area'.");
          when Passenger =>
             Append(AcceptMessage, "'Transport passenger to base'.");
-            if Factions_List(PlayerFaction).Flags.Find_Index
-              (To_Unbounded_String("nogender")) =
-              Factions_Container.No_Index then
+            if not Factions_List(PlayerFaction).Flags.Contains
+              (To_Unbounded_String("nogender")) then
                if GetRandom(1, 2) = 1 then
                   Gender := 'M';
                else
