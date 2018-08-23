@@ -18,7 +18,7 @@
 *:hover {
    border-style:dotted;
    border-width:1px;
-   border-color:red;
+   border-color:rgb(255,223,0);
 }
 
 GtkButton:active,
@@ -96,8 +96,9 @@ GtkSpinButton {
 
 .entry:focus, .entry:active {
    border-style:solid;
-   border-width:2px;
-   border-color:rgb(128,0,0);
+   border-width:1px;
+   border-color:rgb(255,223,0);
+   border-radius:20px;
 }
 
 .tooltip {
