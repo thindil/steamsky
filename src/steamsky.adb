@@ -20,8 +20,6 @@ with Ada.Directories; use Ada.Directories;
 with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Environment_Variables; use Ada.Environment_Variables;
-with Interfaces.C; use Interfaces.C;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtk.Main; use Gtk.Main;
 with Gtk.Settings; use Gtk.Settings;
@@ -130,81 +128,6 @@ begin
 
    LoadConfig;
    LoadHallOfFame;
-
-   -- Initializes environment variables (Linux only)
-   if Dir_Separator = '/' then
-      declare
-         VariablesNames: constant array(1 .. 4) of Unbounded_String :=
-           (To_Unbounded_String("GDK_PIXBUF_MODULE_FILE"),
-            To_Unbounded_String("GDK_PIXBUF_MODULEDIR"),
-            To_Unbounded_String("FONTCONFIG_FILE"),
-            To_Unbounded_String("XDG_DATA_DIRS"));
-         VariablesValues: array(1 .. 4) of Unbounded_String;
-         LibraryDirectory: Unbounded_String;
-      begin
-         if Ada.Environment_Variables.Exists("LD_LIBRARY_PATH") then
-            LibraryDirectory := To_Unbounded_String(Value("LD_LIBRARY_PATH"));
-            if Ada.Directories.Exists(To_String(LibraryDirectory)) then
-               VariablesValues(1) :=
-                 LibraryDirectory &
-                 To_Unbounded_String("/gdk-pixbuf-2.0/2.10.0/loaders.cache");
-               VariablesValues(2) :=
-                 LibraryDirectory &
-                 To_Unbounded_String("/gdk-pixbuf-2.0/2.10.0/loaders/");
-               VariablesValues(3) :=
-                 To_Unbounded_String
-                   (To_String(ConfigDirectory) & "fonts/fonts.conf");
-               VariablesValues(4) := ShareDirectory;
-            else
-               Put_Line
-                 ("Can't set GTK environment, library directory not exists, terminating.");
-               return;
-            end if;
-         else
-            declare
-               function Sys(Arg: char_array) return Integer;
-               pragma Import(C, Sys, "system");
-               RunResult: Integer;
-               FileName: constant String :=
-                 To_String(SaveDirectory) & "gtkada.env";
-               TempFile: File_Type;
-               FileText: Unbounded_String;
-               StartIndex: Natural;
-            begin
-               RunResult :=
-                 Sys(To_C("gtkada-env.sh --print-only > " & FileName));
-               if RunResult /= 0 then
-                  Put_Line("Can't set GTK environment, terminating.");
-                  return;
-               end if;
-               Open(TempFile, In_File, FileName);
-               while not End_Of_File(TempFile) loop
-                  FileText := To_Unbounded_String(Get_Line(TempFile));
-                  for I in VariablesNames'Range loop
-                     if Index(FileText, To_String(VariablesNames(I))) > 0 then
-                        StartIndex := Index(FileText, "=");
-                        if StartIndex > 0 then
-                           VariablesValues(I) :=
-                             Unbounded_Slice
-                               (FileText,
-                                StartIndex + 2,
-                                Length(FileText) - 2);
-                           exit;
-                        end if;
-                     end if;
-                  end loop;
-               end loop;
-               Close(TempFile);
-               Delete_File(FileName);
-            end;
-         end if;
-         for I in VariablesNames'Range loop
-            Set(To_String(VariablesNames(I)), To_String(VariablesValues(I)));
-         end loop;
-         Set("GSETTINGS_BACKEND", "memory");
-      end;
-   end if;
-   Set("XDG_DATA_HOME", To_String(ShareDirectory));
 
    --  Initializes GtkAda
    Init;
