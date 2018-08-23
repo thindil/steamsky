@@ -714,6 +714,21 @@ Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WAR
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
                 <child>
+                  <object class="GtkButton" id="btnlicense">
+                    <property name="label" translatable="yes">_Show full license</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_underline">True</property>
+                    <signal name="clicked" handler="Show_Page" object="btnlicense" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkButton" id="btnback4">
                     <property name="label" translatable="yes">_Back to menu</property>
                     <property name="visible">True</property>
@@ -724,21 +739,6 @@ Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WAR
                     <property name="use_underline">True</property>
                     <signal name="clicked" handler="Show_Page" object="btnback" swapped="no"/>
                     <accelerator key="Escape" signal="clicked"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="btnlicense">
-                    <property name="label" translatable="yes">_Show full license</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="use_underline">True</property>
-                    <signal name="clicked" handler="Show_Page" object="btnlicense" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
