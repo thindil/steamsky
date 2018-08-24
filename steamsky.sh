@@ -15,4 +15,5 @@ else
    eval `gtkada-env.sh --print-only`
 fi
 
-bin/steamsky "$@"
+cd bin
+./steamsky "$@"
