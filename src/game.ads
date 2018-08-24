@@ -89,6 +89,12 @@ package Game is
      To_Unbounded_String
        ("doc" & Dir_Separator); -- Path to directory where documentation is
    PlayerFaction: Positive; -- Vector index of faction to which player belongs
+   ModsDirectory: Unbounded_String :=
+     To_Unbounded_String
+       ("data" &
+        Dir_Separator &
+        "mods" &
+        Dir_Separator); -- Path to directory where are game modifications
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;

@@ -640,39 +640,45 @@ package body Game is
          (To_Unbounded_String("ships"), To_Unbounded_String("ships.dat")),
          (To_Unbounded_String("goals"), To_Unbounded_String("goals.dat")),
          (To_Unbounded_String("stories"), To_Unbounded_String("stories.dat")));
+      Directories: Search_Type;
+      FoundDirectory: Directory_Entry_Type;
       procedure LoadSelectedData(DataName, FileName: String) is
          Files: Search_Type;
          FoundFile: Directory_Entry_Type;
          DataFile: File_Input;
          Reader: Tree_Reader;
          LocalFileName: Unbounded_String;
-         procedure LoadDataFile is
+         procedure LoadDataFile(LocalDataName: String) is
             DataType: Unbounded_String;
          begin
             Parse(Reader, DataFile);
             DataType :=
               To_Unbounded_String(Node_Name(Get_Element(Get_Tree(Reader))));
-            if DataType = To_Unbounded_String(DataName) then
+            if DataType = To_Unbounded_String(LocalDataName) or
+              LocalDataName = "" then
                LogMessage
-                 ("Loading " & DataName & " file: " & To_String(LocalFileName),
+                 ("Loading " &
+                  To_String(DataType) &
+                  " file: " &
+                  To_String(LocalFileName),
                   Everything);
-               if DataName = "factions" then
+               if To_String(DataType) = "factions" then
                   LoadFactions(Reader);
-               elsif DataName = "goals" then
+               elsif To_String(DataType) = "goals" then
                   LoadGoals(Reader);
-               elsif DataName = "help" then
+               elsif To_String(DataType) = "help" then
                   LoadHelp(Reader);
-               elsif DataName = "items" then
+               elsif To_String(DataType) = "items" then
                   LoadItems(Reader);
-               elsif DataName = "mobiles" then
+               elsif To_String(DataType) = "mobiles" then
                   LoadMobs(Reader);
-               elsif DataName = "recipes" then
+               elsif To_String(DataType) = "recipes" then
                   LoadRecipes(Reader);
-               elsif DataName = "modules" then
+               elsif To_String(DataType) = "modules" then
                   LoadShipModules(Reader);
-               elsif DataName = "ships" then
+               elsif To_String(DataType) = "ships" then
                   LoadShips(Reader);
-               elsif DataName = "stories" then
+               elsif To_String(DataType) = "stories" then
                   LoadStories(Reader);
                end if;
             end if;
@@ -680,18 +686,18 @@ package body Game is
          end LoadDataFile;
       begin
          if FileName = "" then
-            Start_Search(Files, To_String(DataDirectory), "*.dat");
+            Start_Search(Files, DataName, "*.dat");
             while More_Entries(Files) loop
                Get_Next_Entry(Files, FoundFile);
                Open(Full_Name(FoundFile), DataFile);
                LocalFileName := To_Unbounded_String(Full_Name(FoundFile));
-               LoadDataFile;
+               LoadDataFile("");
                Close(DataFile);
             end loop;
          else
             Open(To_String(DataDirectory) & FileName, DataFile);
             LocalFileName := To_Unbounded_String(FileName);
-            LoadDataFile;
+            LoadDataFile(DataName);
             Close(DataFile);
          end if;
       end LoadSelectedData;
@@ -699,10 +705,24 @@ package body Game is
       if Factions_List.Length > 0 then
          return "";
       end if;
+      -- Load standard game data
       for I in DataTypes'Range loop
          LoadSelectedData
            (To_String(DataTypes(I).Name),
             To_String(DataTypes(I).FileName));
+      end loop;
+      -- Load modifications
+      Start_Search
+        (Directories,
+         To_String(ModsDirectory),
+         "",
+         (Directory => True, others => False));
+      while More_Entries(Directories) loop
+         Get_Next_Entry(Directories, FoundDirectory);
+         if Simple_Name(FoundDirectory) /= "." and
+           Simple_Name(FoundDirectory) /= ".." then
+            LoadSelectedData(Full_Name(FoundDirectory), "");
+         end if;
       end loop;
       SetToolsList;
       return "";
