@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -17,6 +17,7 @@
 
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with DOM.Readers; use DOM.Readers;
 with ShipModules; use ShipModules;
 with Game; use Game;
 
@@ -42,14 +43,12 @@ package Crafts is
    Recipes_List: Recipes_Container.Vector; -- List of recipes available in game
    Known_Recipes: Positive_Container
      .Vector; -- List of all know by player recipes
-   Recipes_Directory_Not_Found: exception;
-   Recipes_Files_Not_Found: exception;
-   Recipes_Invalid_Data: exception;
+   Recipes_Invalid_Data: exception; -- Raised when invalid data found in recipe file
    Crafting_No_Materials: exception; -- Raised when no materials needed for selected recipe
    Crafting_No_Tools: exception; -- Raised when no tool needed for selected recipe
    Crafting_No_Workshop: exception; -- Raised when no workshop needed for selected recipe
 
-   procedure LoadRecipes; -- Load recipes from files
+   procedure LoadRecipes(Reader: Tree_Reader); -- Load recipes from files
    procedure Manufacturing(Minutes: Positive); -- Craft selected items
    function CheckRecipe
      (RecipeIndex: Integer)

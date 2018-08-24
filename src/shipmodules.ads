@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
+with DOM.Readers; use DOM.Readers;
 
 package ShipModules is
 
@@ -59,10 +60,8 @@ package ShipModules is
    package BaseModules_Container is new Vectors(Positive, BaseModule_Data);
    Modules_List: BaseModules_Container
      .Vector; -- List of ship modules available in game
-   Modules_Directory_Not_Found: exception; -- Raised when no directory with modules files
-   Modules_Files_Not_Found: exception; -- Raised when no files with modules
 
-   procedure LoadShipModules; -- Load modules from files
+   procedure LoadShipModules(Reader: Tree_Reader); -- Load modules from files
    function FindProtoModule
      (Index: Unbounded_String)
      return Natural; -- Return vector index of module or zero if module not found

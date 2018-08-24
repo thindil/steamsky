@@ -15,15 +15,11 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Directories; use Ada.Directories;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
-with DOM.Readers; use DOM.Readers;
-with Input_Sources.File; use Input_Sources.File;
 with ShipModules; use ShipModules;
 with Utils; use Utils;
 with Log; use Log;
@@ -348,11 +344,7 @@ package body Ships is
       return TmpShip;
    end CreateShip;
 
-   procedure LoadShips is
-      Files: Search_Type;
-      FoundFile: Directory_Entry_Type;
-      ShipsFile: File_Input;
-      Reader: Tree_Reader;
+   procedure LoadShips(Reader: Tree_Reader) is
       NodesList, ChildNodes: Node_List;
       ShipsData: Document;
       TempRecord: ProtoShipData;
@@ -371,21 +363,230 @@ package body Ships is
          end loop;
       end CountAmmoValue;
    begin
-      if ProtoShips_List.Length > 0 then
-         return;
-      end if;
-      if not Exists(To_String(DataDirectory) & "ships" & Dir_Separator) then
-         raise Ships_Directory_Not_Found;
-      end if;
-      Start_Search
-        (Files,
-         To_String(DataDirectory) & "ships" & Dir_Separator,
-         "*.dat");
-      if not More_Entries(Files) then
-         raise Ships_Files_Not_Found;
-      end if;
-      while More_Entries(Files) loop
-         Get_Next_Entry(Files, FoundFile);
+      TempRecord :=
+        (Name => Null_Unbounded_String,
+         Modules => TempModules,
+         Accuracy => (0, 0),
+         CombatAI => NONE,
+         Evasion => (0, 0),
+         Loot => (0, 0),
+         Perception => (0, 0),
+         Cargo => TempCargo,
+         CombatValue => 1,
+         Crew => TempCrew,
+         Description => Null_Unbounded_String,
+         Owner => 1,
+         Index => Null_Unbounded_String,
+         KnownRecipes => TempRecipes);
+      ShipsData := Get_Tree(Reader);
+      NodesList :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(ShipsData, "ship");
+      for I in 0 .. Length(NodesList) - 1 loop
+         TempRecord.Index :=
+           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
+         TempRecord.Name :=
+           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name"));
+         ChildNodes :=
+           DOM.Core.Elements.Get_Elements_By_Tag_Name
+             (Item(NodesList, I),
+              "module");
+         for J in 0 .. Length(ChildNodes) - 1 loop
+            if Get_Attribute(Item(ChildNodes, J), "amount") /= "" then
+               ModuleAmount :=
+                 Positive'Value(Get_Attribute(Item(ChildNodes, J), "amount"));
+            else
+               ModuleAmount := 1;
+            end if;
+            Index :=
+              FindProtoModule
+                (To_Unbounded_String
+                   (Get_Attribute(Item(ChildNodes, J), "index")));
+            if Index = 0 then
+               raise Ships_Invalid_Data
+                 with "Invalid module index: |" &
+                 Get_Attribute(Item(ChildNodes, J), "index") &
+                 "| in " &
+                 To_String(TempRecord.Name) &
+                 ".";
+            end if;
+            TempRecord.Modules.Append
+            (New_Item => Index, Count => Count_Type(ModuleAmount));
+         end loop;
+         if Get_Attribute(Item(NodesList, I), "accuracy") /= "" then
+            TempRecord.Accuracy(1) :=
+              Integer'Value(Get_Attribute(Item(NodesList, I), "accuracy"));
+         elsif Get_Attribute(Item(NodesList, I), "minaccuracy") /= "" then
+            TempRecord.Accuracy(1) :=
+              Integer'Value(Get_Attribute(Item(NodesList, I), "minaccuracy"));
+            TempRecord.Accuracy(2) :=
+              Integer'Value(Get_Attribute(Item(NodesList, I), "maxaccuracy"));
+         end if;
+         if Get_Attribute(Item(NodesList, I), "combatai") /= "" then
+            TempRecord.CombatAI :=
+              ShipCombatAi'Value
+                (Get_Attribute(Item(NodesList, I), "combatai"));
+         end if;
+         if Get_Attribute(Item(NodesList, I), "evasion") /= "" then
+            TempRecord.Evasion(1) :=
+              Integer'Value(Get_Attribute(Item(NodesList, I), "evasion"));
+         elsif Get_Attribute(Item(NodesList, I), "minevasion") /= "" then
+            TempRecord.Evasion(1) :=
+              Integer'Value(Get_Attribute(Item(NodesList, I), "minevasion"));
+            TempRecord.Evasion(2) :=
+              Integer'Value(Get_Attribute(Item(NodesList, I), "maxevasion"));
+         end if;
+         if Get_Attribute(Item(NodesList, I), "loot") /= "" then
+            TempRecord.Loot(1) :=
+              Integer'Value(Get_Attribute(Item(NodesList, I), "loot"));
+         elsif Get_Attribute(Item(NodesList, I), "minloot") /= "" then
+            TempRecord.Loot(1) :=
+              Integer'Value(Get_Attribute(Item(NodesList, I), "minloot"));
+            TempRecord.Loot(2) :=
+              Integer'Value(Get_Attribute(Item(NodesList, I), "maxloot"));
+         end if;
+         if Get_Attribute(Item(NodesList, I), "perception") /= "" then
+            TempRecord.Perception(1) :=
+              Integer'Value(Get_Attribute(Item(NodesList, I), "perception"));
+         elsif Get_Attribute(Item(NodesList, I), "minperception") /= "" then
+            TempRecord.Perception(1) :=
+              Integer'Value
+                (Get_Attribute(Item(NodesList, I), "minperception"));
+            TempRecord.Perception(2) :=
+              Integer'Value
+                (Get_Attribute(Item(NodesList, I), "maxperception"));
+         end if;
+         ChildNodes :=
+           DOM.Core.Elements.Get_Elements_By_Tag_Name
+             (Item(NodesList, I),
+              "cargo");
+         for J in 0 .. Length(ChildNodes) - 1 loop
+            Index :=
+              FindProtoItem
+                (To_Unbounded_String
+                   (Get_Attribute(Item(ChildNodes, J), "index")));
+            if Index = 0 then
+               raise Ships_Invalid_Data
+                 with "Invalid item index: |" &
+                 Get_Attribute(Item(ChildNodes, J), "index") &
+                 "| in " &
+                 To_String(TempRecord.Name) &
+                 ".";
+            end if;
+            if Get_Attribute(Item(ChildNodes, J), "amount") /= "" then
+               TempRecord.Cargo.Append
+               (New_Item =>
+                  (Index,
+                   Integer'Value(Get_Attribute(Item(ChildNodes, J), "amount")),
+                   0));
+            elsif Get_Attribute(Item(ChildNodes, J), "minamount") /= "" then
+               TempRecord.Cargo.Append
+               (New_Item =>
+                  (Index,
+                   Integer'Value
+                     (Get_Attribute(Item(ChildNodes, J), "minamount")),
+                   Integer'Value
+                     (Get_Attribute(Item(ChildNodes, J), "maxamount"))));
+            end if;
+         end loop;
+         if Get_Attribute(Item(NodesList, I), "owner") /= "" then
+            for J in Factions_List.Iterate loop
+               if To_Lower(To_String(Factions_List(J).Index)) =
+                 To_Lower(Get_Attribute(Item(NodesList, I), "owner")) then
+                  TempRecord.Owner := Factions_Container.To_Index(J);
+                  exit;
+               end if;
+            end loop;
+         end if;
+         ChildNodes :=
+           DOM.Core.Elements.Get_Elements_By_Tag_Name
+             (Item(NodesList, I),
+              "recipe");
+         for J in 0 .. Length(ChildNodes) - 1 loop
+            Index :=
+              FindRecipe
+                (To_Unbounded_String
+                   (Get_Attribute(Item(ChildNodes, J), "index")));
+            if Index = 0 then
+               raise Ships_Invalid_Data
+                 with "Invalid recipe index: |" &
+                 Get_Attribute(Item(ChildNodes, J), "index") &
+                 "| in " &
+                 To_String(TempRecord.Name) &
+                 ".";
+            end if;
+            TempRecord.KnownRecipes.Append(New_Item => Index);
+         end loop;
+         ChildNodes :=
+           DOM.Core.Elements.Get_Elements_By_Tag_Name
+             (Item(NodesList, I),
+              "member");
+         for J in 0 .. Length(ChildNodes) - 1 loop
+            Index :=
+              FindProtoMob
+                (To_Unbounded_String
+                   (Get_Attribute(Item(ChildNodes, J), "index")));
+            if Index = 0 then
+               raise Ships_Invalid_Data
+                 with "Invalid mob index: |" &
+                 Get_Attribute(Item(ChildNodes, J), "index") &
+                 "| in " &
+                 To_String(TempRecord.Name) &
+                 ".";
+            end if;
+            if Get_Attribute(Item(ChildNodes, J), "amount") /= "" then
+               TempRecord.Crew.Append
+               (New_Item =>
+                  (Index,
+                   Integer'Value(Get_Attribute(Item(ChildNodes, J), "amount")),
+                   0));
+            elsif Get_Attribute(Item(ChildNodes, J), "minamount") /= "" then
+               TempRecord.Crew.Append
+               (New_Item =>
+                  (Index,
+                   Integer'Value
+                     (Get_Attribute(Item(ChildNodes, J), "minamount")),
+                   Integer'Value
+                     (Get_Attribute(Item(ChildNodes, J), "maxamount"))));
+            else
+               TempRecord.Crew.Append(New_Item => (Index, 1, 0));
+            end if;
+         end loop;
+         ChildNodes :=
+           DOM.Core.Elements.Get_Elements_By_Tag_Name
+             (Item(NodesList, I),
+              "description");
+         if Length(ChildNodes) > 0 then
+            TempRecord.Description :=
+              To_Unbounded_String
+                (Node_Value(First_Child(Item(ChildNodes, 0))));
+         end if;
+         for ModuleIndex of TempRecord.Modules loop
+            case Modules_List(ModuleIndex).MType is
+               when HULL | GUN | BATTERING_RAM =>
+                  TempRecord.CombatValue :=
+                    TempRecord.CombatValue +
+                    Modules_List(ModuleIndex).Durability +
+                    (Modules_List(ModuleIndex).MaxValue * 10);
+                  if Modules_List(ModuleIndex).MType = GUN then
+                     CountAmmoValue(Modules_List(ModuleIndex).Value, 10);
+                  end if;
+               when ARMOR =>
+                  TempRecord.CombatValue :=
+                    TempRecord.CombatValue +
+                    Modules_List(ModuleIndex).Durability;
+               when HARPOON_GUN =>
+                  TempRecord.CombatValue :=
+                    TempRecord.CombatValue +
+                    Modules_List(ModuleIndex).Durability +
+                    (Modules_List(ModuleIndex).MaxValue * 5);
+                  CountAmmoValue(Modules_List(ModuleIndex).Value, 5);
+               when others =>
+                  null;
+            end case;
+         end loop;
+         TempRecord.CombatValue := TempRecord.CombatValue - 1;
+         ProtoShips_List.Append(New_Item => TempRecord);
+         LogMessage("Ship added: " & To_String(TempRecord.Name), Everything);
          TempRecord :=
            (Name => Null_Unbounded_String,
             Modules => TempModules,
@@ -401,256 +602,7 @@ package body Ships is
             Owner => 1,
             Index => Null_Unbounded_String,
             KnownRecipes => TempRecipes);
-         LogMessage("Loading ships file: " & Full_Name(FoundFile), Everything);
-         Open(Full_Name(FoundFile), ShipsFile);
-         Parse(Reader, ShipsFile);
-         Close(ShipsFile);
-         ShipsData := Get_Tree(Reader);
-         NodesList :=
-           DOM.Core.Documents.Get_Elements_By_Tag_Name(ShipsData, "ship");
-         for I in 0 .. Length(NodesList) - 1 loop
-            TempRecord.Index :=
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
-            TempRecord.Name :=
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name"));
-            ChildNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I),
-                 "module");
-            for J in 0 .. Length(ChildNodes) - 1 loop
-               if Get_Attribute(Item(ChildNodes, J), "amount") /= "" then
-                  ModuleAmount :=
-                    Positive'Value
-                      (Get_Attribute(Item(ChildNodes, J), "amount"));
-               else
-                  ModuleAmount := 1;
-               end if;
-               Index :=
-                 FindProtoModule
-                   (To_Unbounded_String
-                      (Get_Attribute(Item(ChildNodes, J), "index")));
-               if Index = 0 then
-                  Free(Reader);
-                  End_Search(Files);
-                  raise Ships_Invalid_Data
-                    with "Invalid module index: |" &
-                    Get_Attribute(Item(ChildNodes, J), "index") &
-                    "| in " &
-                    To_String(TempRecord.Name) &
-                    ".";
-               end if;
-               TempRecord.Modules.Append
-               (New_Item => Index, Count => Count_Type(ModuleAmount));
-            end loop;
-            if Get_Attribute(Item(NodesList, I), "accuracy") /= "" then
-               TempRecord.Accuracy(1) :=
-                 Integer'Value(Get_Attribute(Item(NodesList, I), "accuracy"));
-            elsif Get_Attribute(Item(NodesList, I), "minaccuracy") /= "" then
-               TempRecord.Accuracy(1) :=
-                 Integer'Value
-                   (Get_Attribute(Item(NodesList, I), "minaccuracy"));
-               TempRecord.Accuracy(2) :=
-                 Integer'Value
-                   (Get_Attribute(Item(NodesList, I), "maxaccuracy"));
-            end if;
-            if Get_Attribute(Item(NodesList, I), "combatai") /= "" then
-               TempRecord.CombatAI :=
-                 ShipCombatAi'Value
-                   (Get_Attribute(Item(NodesList, I), "combatai"));
-            end if;
-            if Get_Attribute(Item(NodesList, I), "evasion") /= "" then
-               TempRecord.Evasion(1) :=
-                 Integer'Value(Get_Attribute(Item(NodesList, I), "evasion"));
-            elsif Get_Attribute(Item(NodesList, I), "minevasion") /= "" then
-               TempRecord.Evasion(1) :=
-                 Integer'Value
-                   (Get_Attribute(Item(NodesList, I), "minevasion"));
-               TempRecord.Evasion(2) :=
-                 Integer'Value
-                   (Get_Attribute(Item(NodesList, I), "maxevasion"));
-            end if;
-            if Get_Attribute(Item(NodesList, I), "loot") /= "" then
-               TempRecord.Loot(1) :=
-                 Integer'Value(Get_Attribute(Item(NodesList, I), "loot"));
-            elsif Get_Attribute(Item(NodesList, I), "minloot") /= "" then
-               TempRecord.Loot(1) :=
-                 Integer'Value(Get_Attribute(Item(NodesList, I), "minloot"));
-               TempRecord.Loot(2) :=
-                 Integer'Value(Get_Attribute(Item(NodesList, I), "maxloot"));
-            end if;
-            if Get_Attribute(Item(NodesList, I), "perception") /= "" then
-               TempRecord.Perception(1) :=
-                 Integer'Value
-                   (Get_Attribute(Item(NodesList, I), "perception"));
-            elsif Get_Attribute(Item(NodesList, I), "minperception") /= "" then
-               TempRecord.Perception(1) :=
-                 Integer'Value
-                   (Get_Attribute(Item(NodesList, I), "minperception"));
-               TempRecord.Perception(2) :=
-                 Integer'Value
-                   (Get_Attribute(Item(NodesList, I), "maxperception"));
-            end if;
-            ChildNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I),
-                 "cargo");
-            for J in 0 .. Length(ChildNodes) - 1 loop
-               Index :=
-                 FindProtoItem
-                   (To_Unbounded_String
-                      (Get_Attribute(Item(ChildNodes, J), "index")));
-               if Index = 0 then
-                  Free(Reader);
-                  End_Search(Files);
-                  raise Ships_Invalid_Data
-                    with "Invalid item index: |" &
-                    Get_Attribute(Item(ChildNodes, J), "index") &
-                    "| in " &
-                    To_String(TempRecord.Name) &
-                    ".";
-               end if;
-               if Get_Attribute(Item(ChildNodes, J), "amount") /= "" then
-                  TempRecord.Cargo.Append
-                  (New_Item =>
-                     (Index,
-                      Integer'Value
-                        (Get_Attribute(Item(ChildNodes, J), "amount")),
-                      0));
-               elsif Get_Attribute(Item(ChildNodes, J), "minamount") /= "" then
-                  TempRecord.Cargo.Append
-                  (New_Item =>
-                     (Index,
-                      Integer'Value
-                        (Get_Attribute(Item(ChildNodes, J), "minamount")),
-                      Integer'Value
-                        (Get_Attribute(Item(ChildNodes, J), "maxamount"))));
-               end if;
-            end loop;
-            if Get_Attribute(Item(NodesList, I), "owner") /= "" then
-               for J in Factions_List.Iterate loop
-                  if To_Lower(To_String(Factions_List(J).Index)) =
-                    To_Lower(Get_Attribute(Item(NodesList, I), "owner")) then
-                     TempRecord.Owner := Factions_Container.To_Index(J);
-                     exit;
-                  end if;
-               end loop;
-            end if;
-            ChildNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I),
-                 "recipe");
-            for J in 0 .. Length(ChildNodes) - 1 loop
-               Index :=
-                 FindRecipe
-                   (To_Unbounded_String
-                      (Get_Attribute(Item(ChildNodes, J), "index")));
-               if Index = 0 then
-                  Free(Reader);
-                  End_Search(Files);
-                  raise Ships_Invalid_Data
-                    with "Invalid recipe index: |" &
-                    Get_Attribute(Item(ChildNodes, J), "index") &
-                    "| in " &
-                    To_String(TempRecord.Name) &
-                    ".";
-               end if;
-               TempRecord.KnownRecipes.Append(New_Item => Index);
-            end loop;
-            ChildNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I),
-                 "member");
-            for J in 0 .. Length(ChildNodes) - 1 loop
-               Index :=
-                 FindProtoMob
-                   (To_Unbounded_String
-                      (Get_Attribute(Item(ChildNodes, J), "index")));
-               if Index = 0 then
-                  Free(Reader);
-                  End_Search(Files);
-                  raise Ships_Invalid_Data
-                    with "Invalid mob index: |" &
-                    Get_Attribute(Item(ChildNodes, J), "index") &
-                    "| in " &
-                    To_String(TempRecord.Name) &
-                    ".";
-               end if;
-               if Get_Attribute(Item(ChildNodes, J), "amount") /= "" then
-                  TempRecord.Crew.Append
-                  (New_Item =>
-                     (Index,
-                      Integer'Value
-                        (Get_Attribute(Item(ChildNodes, J), "amount")),
-                      0));
-               elsif Get_Attribute(Item(ChildNodes, J), "minamount") /= "" then
-                  TempRecord.Crew.Append
-                  (New_Item =>
-                     (Index,
-                      Integer'Value
-                        (Get_Attribute(Item(ChildNodes, J), "minamount")),
-                      Integer'Value
-                        (Get_Attribute(Item(ChildNodes, J), "maxamount"))));
-               else
-                  TempRecord.Crew.Append(New_Item => (Index, 1, 0));
-               end if;
-            end loop;
-            ChildNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I),
-                 "description");
-            if Length(ChildNodes) > 0 then
-               TempRecord.Description :=
-                 To_Unbounded_String
-                   (Node_Value(First_Child(Item(ChildNodes, 0))));
-            end if;
-            for ModuleIndex of TempRecord.Modules loop
-               case Modules_List(ModuleIndex).MType is
-                  when HULL | GUN | BATTERING_RAM =>
-                     TempRecord.CombatValue :=
-                       TempRecord.CombatValue +
-                       Modules_List(ModuleIndex).Durability +
-                       (Modules_List(ModuleIndex).MaxValue * 10);
-                     if Modules_List(ModuleIndex).MType = GUN then
-                        CountAmmoValue(Modules_List(ModuleIndex).Value, 10);
-                     end if;
-                  when ARMOR =>
-                     TempRecord.CombatValue :=
-                       TempRecord.CombatValue +
-                       Modules_List(ModuleIndex).Durability;
-                  when HARPOON_GUN =>
-                     TempRecord.CombatValue :=
-                       TempRecord.CombatValue +
-                       Modules_List(ModuleIndex).Durability +
-                       (Modules_List(ModuleIndex).MaxValue * 5);
-                     CountAmmoValue(Modules_List(ModuleIndex).Value, 5);
-                  when others =>
-                     null;
-               end case;
-            end loop;
-            TempRecord.CombatValue := TempRecord.CombatValue - 1;
-            ProtoShips_List.Append(New_Item => TempRecord);
-            LogMessage
-              ("Ship added: " & To_String(TempRecord.Name),
-               Everything);
-            TempRecord :=
-              (Name => Null_Unbounded_String,
-               Modules => TempModules,
-               Accuracy => (0, 0),
-               CombatAI => NONE,
-               Evasion => (0, 0),
-               Loot => (0, 0),
-               Perception => (0, 0),
-               Cargo => TempCargo,
-               CombatValue => 1,
-               Crew => TempCrew,
-               Description => Null_Unbounded_String,
-               Owner => 1,
-               Index => Null_Unbounded_String,
-               KnownRecipes => TempRecipes);
-         end loop;
-         Free(Reader);
       end loop;
-      End_Search(Files);
    end LoadShips;
 
    function CountShipWeight(Ship: ShipRecord) return Positive is

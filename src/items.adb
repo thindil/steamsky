@@ -15,14 +15,10 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Directories; use Ada.Directories;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
-with DOM.Readers; use DOM.Readers;
-with Input_Sources.File; use Input_Sources.File;
 with Log; use Log;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
@@ -33,31 +29,83 @@ with Crafts; use Crafts;
 
 package body Items is
 
-   procedure LoadItems is
+   procedure LoadItems(Reader: Tree_Reader) is
       TempRecord: Object_Data;
-      Files: Search_Type;
-      FoundFile: Directory_Entry_Type;
-      ItemsFile: File_Input;
-      Reader: Tree_Reader;
       NodesList, ChildNodes: Node_List;
       ItemsData: Document;
       TempValue: Natural_Container.Vector;
    begin
-      if Items_List.Length > 0 then
-         return;
-      end if;
-      if not Exists(To_String(DataDirectory) & "items" & Dir_Separator) then
-         raise Items_Directory_Not_Found;
-      end if;
-      Start_Search
-        (Files,
-         To_String(DataDirectory) & "items" & Dir_Separator,
-         "*.dat");
-      if not More_Entries(Files) then
-         raise Items_Files_Not_Found;
-      end if;
-      while More_Entries(Files) loop
-         Get_Next_Entry(Files, FoundFile);
+      TempRecord :=
+        (Name => Null_Unbounded_String,
+         Weight => 1,
+         IType => Null_Unbounded_String,
+         Prices => (0, 0, 0, 0, 0),
+         Buyable => (False, False, False, False, False),
+         Value => TempValue,
+         ShowType => Null_Unbounded_String,
+         Description => Null_Unbounded_String,
+         Index => Null_Unbounded_String);
+      ItemsData := Get_Tree(Reader);
+      NodesList :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(ItemsData, "item");
+      for I in 0 .. Length(NodesList) - 1 loop
+         TempRecord.Index :=
+           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
+         TempRecord.Name :=
+           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name"));
+         TempRecord.Weight :=
+           Natural'Value(Get_Attribute(Item(NodesList, I), "weight"));
+         TempRecord.IType :=
+           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "type"));
+         if Get_Attribute(Item(NodesList, I), "showtype") /= "" then
+            TempRecord.ShowType :=
+              To_Unbounded_String
+                (Get_Attribute(Item(NodesList, I), "showtype"));
+         end if;
+         ChildNodes :=
+           DOM.Core.Elements.Get_Elements_By_Tag_Name
+             (Item(NodesList, I),
+              "trade");
+         for J in 0 .. Length(ChildNodes) - 1 loop
+            TempRecord.Prices(J + 1) :=
+              Natural'Value(Get_Attribute(Item(ChildNodes, J), "price"));
+            if Get_Attribute(Item(ChildNodes, J), "buyable") = "Y" then
+               TempRecord.Buyable(J + 1) := True;
+            end if;
+         end loop;
+         ChildNodes :=
+           DOM.Core.Elements.Get_Elements_By_Tag_Name
+             (Item(NodesList, I),
+              "data");
+         for J in 0 .. Length(ChildNodes) - 1 loop
+            TempRecord.Value.Append
+            (New_Item =>
+               Natural'Value(Get_Attribute(Item(ChildNodes, J), "value")));
+         end loop;
+         ChildNodes :=
+           DOM.Core.Elements.Get_Elements_By_Tag_Name
+             (Item(NodesList, I),
+              "description");
+         TempRecord.Description :=
+           To_Unbounded_String(Node_Value(First_Child(Item(ChildNodes, 0))));
+         if TempRecord.Index = MoneyIndex then
+            MoneyName := TempRecord.Name;
+         end if;
+         Items_List.Append(New_Item => TempRecord);
+         if TempRecord.IType = WeaponType then
+            Weapons_List.Append(New_Item => Items_List.Last_Index);
+         elsif TempRecord.IType = ShieldType then
+            Shields_List.Append(New_Item => Items_List.Last_Index);
+         elsif TempRecord.IType = HeadArmor then
+            HeadArmors_List.Append(New_Item => Items_List.Last_Index);
+         elsif TempRecord.IType = ChestArmor then
+            ChestArmors_List.Append(New_Item => Items_List.Last_Index);
+         elsif TempRecord.IType = ArmsArmor then
+            ArmsArmors_List.Append(New_Item => Items_List.Last_Index);
+         elsif TempRecord.IType = LegsArmor then
+            LegsArmors_List.Append(New_Item => Items_List.Last_Index);
+         end if;
+         LogMessage("Item added: " & To_String(TempRecord.Name), Everything);
          TempRecord :=
            (Name => Null_Unbounded_String,
             Weight => 1,
@@ -68,88 +116,7 @@ package body Items is
             ShowType => Null_Unbounded_String,
             Description => Null_Unbounded_String,
             Index => Null_Unbounded_String);
-         LogMessage("Loading item file: " & Full_Name(FoundFile), Everything);
-         Open(Full_Name(FoundFile), ItemsFile);
-         Parse(Reader, ItemsFile);
-         Close(ItemsFile);
-         ItemsData := Get_Tree(Reader);
-         NodesList :=
-           DOM.Core.Documents.Get_Elements_By_Tag_Name(ItemsData, "item");
-         for I in 0 .. Length(NodesList) - 1 loop
-            TempRecord.Index :=
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
-            TempRecord.Name :=
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name"));
-            TempRecord.Weight :=
-              Natural'Value(Get_Attribute(Item(NodesList, I), "weight"));
-            TempRecord.IType :=
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "type"));
-            if Get_Attribute(Item(NodesList, I), "showtype") /= "" then
-               TempRecord.ShowType :=
-                 To_Unbounded_String
-                   (Get_Attribute(Item(NodesList, I), "showtype"));
-            end if;
-            ChildNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I),
-                 "trade");
-            for J in 0 .. Length(ChildNodes) - 1 loop
-               TempRecord.Prices(J + 1) :=
-                 Natural'Value(Get_Attribute(Item(ChildNodes, J), "price"));
-               if Get_Attribute(Item(ChildNodes, J), "buyable") = "Y" then
-                  TempRecord.Buyable(J + 1) := True;
-               end if;
-            end loop;
-            ChildNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I),
-                 "data");
-            for J in 0 .. Length(ChildNodes) - 1 loop
-               TempRecord.Value.Append
-               (New_Item =>
-                  Natural'Value(Get_Attribute(Item(ChildNodes, J), "value")));
-            end loop;
-            ChildNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I),
-                 "description");
-            TempRecord.Description :=
-              To_Unbounded_String
-                (Node_Value(First_Child(Item(ChildNodes, 0))));
-            if TempRecord.Index = MoneyIndex then
-               MoneyName := TempRecord.Name;
-            end if;
-            Items_List.Append(New_Item => TempRecord);
-            if TempRecord.IType = WeaponType then
-               Weapons_List.Append(New_Item => Items_List.Last_Index);
-            elsif TempRecord.IType = ShieldType then
-               Shields_List.Append(New_Item => Items_List.Last_Index);
-            elsif TempRecord.IType = HeadArmor then
-               HeadArmors_List.Append(New_Item => Items_List.Last_Index);
-            elsif TempRecord.IType = ChestArmor then
-               ChestArmors_List.Append(New_Item => Items_List.Last_Index);
-            elsif TempRecord.IType = ArmsArmor then
-               ArmsArmors_List.Append(New_Item => Items_List.Last_Index);
-            elsif TempRecord.IType = LegsArmor then
-               LegsArmors_List.Append(New_Item => Items_List.Last_Index);
-            end if;
-            LogMessage
-              ("Item added: " & To_String(TempRecord.Name),
-               Everything);
-            TempRecord :=
-              (Name => Null_Unbounded_String,
-               Weight => 1,
-               IType => Null_Unbounded_String,
-               Prices => (0, 0, 0, 0, 0),
-               Buyable => (False, False, False, False, False),
-               Value => TempValue,
-               ShowType => Null_Unbounded_String,
-               Description => Null_Unbounded_String,
-               Index => Null_Unbounded_String);
-         end loop;
-         Free(Reader);
       end loop;
-      End_Search(Files);
    end LoadItems;
 
    function FindProtoItem

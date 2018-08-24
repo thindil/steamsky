@@ -54,17 +54,12 @@ with Config; use Config;
 with Goals.UI; use Goals.UI;
 with Maps.UI; use Maps.UI;
 with Help; use Help;
-with Items; use Items;
-with ShipModules; use ShipModules;
-with Crafts; use Crafts;
-with Mobs; use Mobs;
 with Goals; use Goals;
 with Game.SaveLoad; use Game.SaveLoad;
 with Utils.UI; use Utils.UI;
 with Log; use Log;
 with Help.UI; use Help.UI;
 with Factions; use Factions;
-with Stories; use Stories;
 with Events; use Events;
 
 package body MainMenu is
@@ -77,140 +72,6 @@ package body MainMenu is
       Unref(Object);
       Gtk.Main.Main_Quit;
    end Quit;
-
-   function LoadGameData return Boolean is
-      Parent: constant Gtk_Window :=
-        Gtk_Window(Get_Object(Builder, "mainmenuwindow"));
-   begin
-      LoadHelp;
-      LoadItems;
-      LoadShipModules;
-      LoadRecipes;
-      LoadMobs;
-      LoadFactions;
-      LoadShips;
-      LoadGoals;
-      LoadStories;
-      SetToolsList;
-      return True;
-   exception
-      when Help_Directory_Not_Found =>
-         ShowDialog
-           ("Can't load help data. Directory with help files not found.",
-            Parent);
-         return False;
-      when Help_Files_Not_Found =>
-         ShowDialog
-           ("Can't load help data. Files with help data not found.",
-            Parent);
-         return False;
-      when Items_Directory_Not_Found =>
-         ShowDialog
-           ("Can't load items data. Directory with items data files not found.",
-            Parent);
-         return False;
-      when Items_Files_Not_Found =>
-         ShowDialog
-           ("Can't load items data. Files with items data not found.",
-            Parent);
-         return False;
-      when Modules_Directory_Not_Found =>
-         ShowDialog
-           ("Can't load ship modules data. Directory with modules data files not found.",
-            Parent);
-         return False;
-      when Modules_Files_Not_Found =>
-         ShowDialog
-           ("Can't load ship modules data. Files with modules data not found.",
-            Parent);
-         return False;
-      when Recipes_Directory_Not_Found =>
-         ShowDialog
-           ("Can't load recipes data. Directory with recipes data files not found.",
-            Parent);
-         return False;
-      when Recipes_Files_Not_Found =>
-         ShowDialog
-           ("Can't load recipes data. Files with recipes data not found.",
-            Parent);
-         return False;
-      when An_Exception : Recipes_Invalid_Data =>
-         LogMessage(Exception_Message(An_Exception), Everything);
-         ShowDialog
-           ("Can't load recipes data. Invalid value in file. Run game in debug mode to get more info.",
-            Parent);
-         return False;
-      when Mobs_Directory_Not_Found =>
-         ShowDialog
-           ("Can't load mobs data. Directory with mobs data files not found.",
-            Parent);
-         return False;
-      when Mobs_Files_Not_Found =>
-         ShowDialog
-           ("Can't load mobs data. Files with mobs data not found.",
-            Parent);
-         return False;
-      when An_Exception : Mobs_Invalid_Data =>
-         LogMessage(Exception_Message(An_Exception), Everything);
-         ShowDialog
-           ("Can't load mobs data. Invalid value in file. Run game in debug mode to get more info.",
-            Parent);
-         return False;
-      when Ships_Directory_Not_Found =>
-         ShowDialog
-           ("Can't load ships data. Directory with ships data files not found.",
-            Parent);
-         return False;
-      when Ships_Files_Not_Found =>
-         ShowDialog
-           ("Can't load ships data. Files with ships data not found.",
-            Parent);
-         return False;
-      when An_Exception : Ships_Invalid_Data =>
-         LogMessage(Exception_Message(An_Exception), Everything);
-         ShowDialog
-           ("Can't load ships data. Invalid value in file. Run game in debug mode to get more info.",
-            Parent);
-         return False;
-      when An_Exception : SaveGame_Invalid_Data =>
-         LogMessage
-           ("Invalid data in savegame: " & Exception_Message(An_Exception),
-            Everything);
-         ShowDialog
-           ("Can't load savegame file. Invalid data. Run game in debug mode to get more info.",
-            Parent);
-         return False;
-      when Goals_Directory_Not_Found =>
-         ShowDialog
-           ("Can't load goals data. Directory with goals files not found.",
-            Parent);
-         return False;
-      when Goals_Files_Not_Found =>
-         ShowDialog
-           ("Can't load goals data. Files with goals data not found.",
-            Parent);
-         return False;
-      when Factions_Directory_Not_Found =>
-         ShowDialog
-           ("Can't load NPC factions data. Directory with NPC factions data files not found.",
-            Parent);
-         return False;
-      when Factions_Files_Not_Found =>
-         ShowDialog
-           ("Can't load NPC factions data. Files with NPC factions data not found.",
-            Parent);
-         return False;
-      when Stories_Directory_Not_Found =>
-         ShowDialog
-           ("Can't load stories data. Directory with stories data files not found.",
-            Parent);
-         return False;
-      when Stories_Files_Not_Found =>
-         ShowDialog
-           ("Can't load stories data. Files with stories data not found.",
-            Parent);
-         return False;
-   end LoadGameData;
 
    procedure RefreshSavesList is
       SavesList: constant Gtk_List_Store :=
@@ -534,6 +395,7 @@ package body MainMenu is
       CssProvider: Gtk_Css_Provider;
       FactionsIter: Gtk_Tree_Iter;
       FactionsList: Gtk_List_Store;
+      DataError: Unbounded_String;
    begin
       Gtk_New(CssProvider);
       if not Load_From_Path
@@ -590,9 +452,13 @@ package body MainMenu is
          "images" &
          Dir_Separator &
          "logo.png");
-      if not LoadGameData then
+      DataError := To_Unbounded_String(LoadGameData);
+      if DataError /= Null_Unbounded_String then
          Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
          Hide(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
+         ShowDialog
+           ("Can't load game data files. Error: " & To_String(DataError),
+            Gtk_Window(Get_Object(Builder, "mainmenuwindow")));
       end if;
       FactionsList := Gtk_List_Store(Get_Object(Builder, "factionslist"));
       Clear(FactionsList);

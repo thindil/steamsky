@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -17,6 +17,7 @@
 
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with DOM.Readers; use DOM.Readers;
 with Crew; use Crew;
 
 package Mobs is
@@ -35,11 +36,9 @@ package Mobs is
    end record;
    package ProtoMobs_Container is new Vectors(Positive, ProtoMobRecord);
    ProtoMobs_List: ProtoMobs_Container.Vector;
-   Mobs_Directory_Not_Found: exception; -- Raised when no directory with mobs files
-   Mobs_Files_Not_Found: exception; -- Raised when no files with mobs
    Mobs_Invalid_Data: exception; -- Raised when invalid data found in mobs file
 
-   procedure LoadMobs; -- Load mobs from files
+   procedure LoadMobs(Reader: Tree_Reader); -- Load mobs from files
    function FindProtoMob
      (Index: Unbounded_String)
      return Natural; -- Return vector index of mobile or zero if mobile not found

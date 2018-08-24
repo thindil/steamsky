@@ -16,9 +16,11 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Directories; use Ada.Directories;
+with Ada.Exceptions; use Ada.Exceptions;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
+with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Readers; use DOM.Readers;
 with Input_Sources.File; use Input_Sources.File;
 with Bases; use Bases;
@@ -43,6 +45,9 @@ with Goals; use Goals;
 with Game.SaveLoad; use Game.SaveLoad;
 with Mobs; use Mobs;
 with Factions; use Factions;
+with Log; use Log;
+with Help; use Help;
+with Stories; use Stories;
 
 package body Game is
 
@@ -617,5 +622,94 @@ package body Game is
       end loop;
       return 1;
    end FindSkillIndex;
+
+   function LoadGameData return String is
+      type DataType_Record is record
+         Name: Unbounded_String;
+         FileName: Unbounded_String;
+      end record;
+      DataTypes: constant array(Positive range <>) of DataType_Record :=
+        ((To_Unbounded_String("help"), To_Unbounded_String("help.dat")),
+         (To_Unbounded_String("items"), To_Unbounded_String("items.dat")),
+         (To_Unbounded_String("modules"),
+          To_Unbounded_String("shipmodules.dat")),
+         (To_Unbounded_String("recipes"), To_Unbounded_String("recipes.dat")),
+         (To_Unbounded_String("mobiles"), To_Unbounded_String("mobs.dat")),
+         (To_Unbounded_String("factions"),
+          To_Unbounded_String("factions.dat")),
+         (To_Unbounded_String("ships"), To_Unbounded_String("ships.dat")),
+         (To_Unbounded_String("goals"), To_Unbounded_String("goals.dat")),
+         (To_Unbounded_String("stories"), To_Unbounded_String("stories.dat")));
+      procedure LoadSelectedData(DataName, FileName: String) is
+         Files: Search_Type;
+         FoundFile: Directory_Entry_Type;
+         DataFile: File_Input;
+         Reader: Tree_Reader;
+         LocalFileName: Unbounded_String;
+         procedure LoadDataFile is
+            DataType: Unbounded_String;
+         begin
+            Parse(Reader, DataFile);
+            DataType :=
+              To_Unbounded_String(Node_Name(Get_Element(Get_Tree(Reader))));
+            if DataType = To_Unbounded_String(DataName) then
+               LogMessage
+                 ("Loading " & DataName & " file: " & To_String(LocalFileName),
+                  Everything);
+               if DataName = "factions" then
+                  LoadFactions(Reader);
+               elsif DataName = "goals" then
+                  LoadGoals(Reader);
+               elsif DataName = "help" then
+                  LoadHelp(Reader);
+               elsif DataName = "items" then
+                  LoadItems(Reader);
+               elsif DataName = "mobiles" then
+                  LoadMobs(Reader);
+               elsif DataName = "recipes" then
+                  LoadRecipes(Reader);
+               elsif DataName = "modules" then
+                  LoadShipModules(Reader);
+               elsif DataName = "ships" then
+                  LoadShips(Reader);
+               elsif DataName = "stories" then
+                  LoadStories(Reader);
+               end if;
+            end if;
+            Free(Reader);
+         end LoadDataFile;
+      begin
+         if FileName = "" then
+            Start_Search(Files, To_String(DataDirectory), "*.dat");
+            while More_Entries(Files) loop
+               Get_Next_Entry(Files, FoundFile);
+               Open(Full_Name(FoundFile), DataFile);
+               LocalFileName := To_Unbounded_String(Full_Name(FoundFile));
+               LoadDataFile;
+               Close(DataFile);
+            end loop;
+         else
+            Open(To_String(DataDirectory) & FileName, DataFile);
+            LocalFileName := To_Unbounded_String(FileName);
+            LoadDataFile;
+            Close(DataFile);
+         end if;
+      end LoadSelectedData;
+   begin
+      if Factions_List.Length > 0 then
+         return "";
+      end if;
+      for I in DataTypes'Range loop
+         LoadSelectedData
+           (To_String(DataTypes(I).Name),
+            To_String(DataTypes(I).FileName));
+      end loop;
+      SetToolsList;
+      return "";
+   exception
+      when An_Exception : others =>
+         LogMessage(Exception_Message(An_Exception), Everything);
+         return Exception_Message(An_Exception);
+   end LoadGameData;
 
 end Game;

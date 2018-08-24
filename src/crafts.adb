@@ -15,15 +15,11 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Directories; use Ada.Directories;
 with Ada.Exceptions; use Ada.Exceptions;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
-with DOM.Readers; use DOM.Readers;
-with Input_Sources.File; use Input_Sources.File;
 with Messages; use Messages;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
@@ -38,33 +34,87 @@ with Trades; use Trades;
 
 package body Crafts is
 
-   procedure LoadRecipes is
-      Reader: Tree_Reader;
+   procedure LoadRecipes(Reader: Tree_Reader) is
       TempRecord: Craft_Data;
       TempMaterials: UnboundedString_Container.Vector;
       TempAmount: Positive_Container.Vector;
-      Files: Search_Type;
-      FoundFile: Directory_Entry_Type;
-      RecipesFile: File_Input;
       RecipesData: Document;
       NodesList, ChildNodes: Node_List;
       ItemIndex: Natural;
    begin
-      if Recipes_List.Length > 0 then
-         return;
-      end if;
-      if not Exists(To_String(DataDirectory) & "recipes" & Dir_Separator) then
-         raise Recipes_Directory_Not_Found;
-      end if;
-      Start_Search
-        (Files,
-         To_String(DataDirectory) & "recipes" & Dir_Separator,
-         "*.dat");
-      if not More_Entries(Files) then
-         raise Recipes_Files_Not_Found;
-      end if;
-      while More_Entries(Files) loop
-         Get_Next_Entry(Files, FoundFile);
+      TempRecord :=
+        (MaterialTypes => TempMaterials,
+         MaterialAmounts => TempAmount,
+         ResultIndex => 1,
+         ResultAmount => 10000,
+         Workplace => ALCHEMY_LAB,
+         Skill => 1,
+         Time => 15,
+         Difficulty => 1,
+         BaseType => 0,
+         Tool => To_Unbounded_String("None"),
+         Index => Null_Unbounded_String);
+      RecipesData := Get_Tree(Reader);
+      NodesList :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(RecipesData, "recipe");
+      for I in 0 .. Length(NodesList) - 1 loop
+         TempRecord.Index :=
+           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
+         ChildNodes :=
+           DOM.Core.Elements.Get_Elements_By_Tag_Name
+             (Item(NodesList, I),
+              "material");
+         for J in 0 .. Length(ChildNodes) - 1 loop
+            TempRecord.MaterialTypes.Append
+            (New_Item =>
+               To_Unbounded_String
+                 (Get_Attribute(Item(ChildNodes, J), "type")));
+            TempRecord.MaterialAmounts.Append
+            (New_Item =>
+               Positive'Value(Get_Attribute(Item(ChildNodes, J), "amount")));
+         end loop;
+         ItemIndex :=
+           FindProtoItem
+             (To_Unbounded_String
+                (Get_Attribute(Item(NodesList, I), "result")));
+         if ItemIndex = 0 then
+            raise Recipes_Invalid_Data
+              with "Invalid result item index: |" &
+              Get_Attribute(Item(NodesList, I), "result") &
+              "|.";
+         end if;
+         TempRecord.ResultIndex := ItemIndex;
+         TempRecord.ResultAmount :=
+           Positive'Value(Get_Attribute(Item(NodesList, I), "crafted"));
+         TempRecord.Workplace :=
+           ModuleType'Value(Get_Attribute(Item(NodesList, I), "workplace"));
+         for J in Skills_List.Iterate loop
+            if Skills_List(J).Name =
+              To_Unbounded_String
+                (Get_Attribute(Item(NodesList, I), "skill")) then
+               TempRecord.Skill := SkillsData_Container.To_Index(J);
+               exit;
+            end if;
+         end loop;
+         if Get_Attribute(Item(NodesList, I), "time") /= "" then
+            TempRecord.Time :=
+              Positive'Value(Get_Attribute(Item(NodesList, I), "time"));
+         end if;
+         if Get_Attribute(Item(NodesList, I), "difficulty") /= "" then
+            TempRecord.Difficulty :=
+              Positive'Value(Get_Attribute(Item(NodesList, I), "difficulty"));
+         end if;
+         TempRecord.BaseType :=
+           Natural'Value(Get_Attribute(Item(NodesList, I), "basetype"));
+         if Get_Attribute(Item(NodesList, I), "tool") /= "" then
+            TempRecord.Tool :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "tool"));
+         end if;
+         Recipes_List.Append(New_Item => TempRecord);
+         LogMessage
+           ("Recipe added: " &
+            To_String(Items_List(TempRecord.ResultIndex).Name),
+            Everything);
          TempRecord :=
            (MaterialTypes => TempMaterials,
             MaterialAmounts => TempAmount,
@@ -77,94 +127,7 @@ package body Crafts is
             BaseType => 0,
             Tool => To_Unbounded_String("None"),
             Index => Null_Unbounded_String);
-         LogMessage
-           ("Loading recipes file: " & Full_Name(FoundFile),
-            Everything);
-         Open(Full_Name(FoundFile), RecipesFile);
-         Parse(Reader, RecipesFile);
-         Close(RecipesFile);
-         RecipesData := Get_Tree(Reader);
-         NodesList :=
-           DOM.Core.Documents.Get_Elements_By_Tag_Name(RecipesData, "recipe");
-         for I in 0 .. Length(NodesList) - 1 loop
-            TempRecord.Index :=
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
-            ChildNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I),
-                 "material");
-            for J in 0 .. Length(ChildNodes) - 1 loop
-               TempRecord.MaterialTypes.Append
-               (New_Item =>
-                  To_Unbounded_String
-                    (Get_Attribute(Item(ChildNodes, J), "type")));
-               TempRecord.MaterialAmounts.Append
-               (New_Item =>
-                  Positive'Value
-                    (Get_Attribute(Item(ChildNodes, J), "amount")));
-            end loop;
-            ItemIndex :=
-              FindProtoItem
-                (To_Unbounded_String
-                   (Get_Attribute(Item(NodesList, I), "result")));
-            if ItemIndex = 0 then
-               Close(RecipesFile);
-               End_Search(Files);
-               raise Recipes_Invalid_Data
-                 with "Invalid result item index: |" &
-                 Get_Attribute(Item(NodesList, I), "result") &
-                 "|.";
-            end if;
-            TempRecord.ResultIndex := ItemIndex;
-            TempRecord.ResultAmount :=
-              Positive'Value(Get_Attribute(Item(NodesList, I), "crafted"));
-            TempRecord.Workplace :=
-              ModuleType'Value(Get_Attribute(Item(NodesList, I), "workplace"));
-            for J in Skills_List.Iterate loop
-               if Skills_List(J).Name =
-                 To_Unbounded_String
-                   (Get_Attribute(Item(NodesList, I), "skill")) then
-                  TempRecord.Skill := SkillsData_Container.To_Index(J);
-                  exit;
-               end if;
-            end loop;
-            if Get_Attribute(Item(NodesList, I), "time") /= "" then
-               TempRecord.Time :=
-                 Positive'Value(Get_Attribute(Item(NodesList, I), "time"));
-            end if;
-            if Get_Attribute(Item(NodesList, I), "difficulty") /= "" then
-               TempRecord.Difficulty :=
-                 Positive'Value
-                   (Get_Attribute(Item(NodesList, I), "difficulty"));
-            end if;
-            TempRecord.BaseType :=
-              Natural'Value(Get_Attribute(Item(NodesList, I), "basetype"));
-            if Get_Attribute(Item(NodesList, I), "tool") /= "" then
-               TempRecord.Tool :=
-                 To_Unbounded_String
-                   (Get_Attribute(Item(NodesList, I), "tool"));
-            end if;
-            Recipes_List.Append(New_Item => TempRecord);
-            LogMessage
-              ("Recipe added: " &
-               To_String(Items_List(TempRecord.ResultIndex).Name),
-               Everything);
-            TempRecord :=
-              (MaterialTypes => TempMaterials,
-               MaterialAmounts => TempAmount,
-               ResultIndex => 1,
-               ResultAmount => 10000,
-               Workplace => ALCHEMY_LAB,
-               Skill => 1,
-               Time => 15,
-               Difficulty => 1,
-               BaseType => 0,
-               Tool => To_Unbounded_String("None"),
-               Index => Null_Unbounded_String);
-         end loop;
-         Free(Reader);
       end loop;
-      End_Search(Files);
    end LoadRecipes;
 
    function CheckRecipe(RecipeIndex: Integer) return Positive is
