@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Drones faction don't have morale, tiredness, genders and is immune to 
   diseases
 - Undead faction don't have morale, tiredness and is immune to diseases
+- Moved all data files to one directory
 
 ### Fixed
 - Recipe for adamantium plates
