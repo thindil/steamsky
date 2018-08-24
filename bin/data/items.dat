@@ -1,0 +1,1665 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<items>
+<!-- 
+- Each item is between "item" tags. 
+- Attribute "index" must be unique for each item. This value is used in ships
+and recipes data entries. 
+- Attribute "name" is name of item displayed in various places (cargo info, 
+crafting, etc.). 
+- Attribute "type" is item type of item (from *game.dat* file, entry 
+*ItemsTypes*). 
+- Attribute "showtype" is optional. If you want to show item type in game 
+(for example in cargo or in trade screen) different than item type from 
+*game.dat* file, you can set this parameter to any text value.
+-->
+ <item index="1" name="Charcollum" showtype="Fuel/Moneys" type="Fuel" weight="1">
+<!-- 
+- Each trade entry is for selected type of bases: Industrial, Agricultural,
+Refinery, Shipyard, Military. 
+- Attribute "price" is price of item in selected base type. If you want that
+item will be not possible to buy/sellable in bases (or only selected base type)
+set it price to 0. 
+- Attribute "buyable" said did item can be bough in selected type of base. 
+"Y" mean Yes, "N" means No. 
+-->
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+<!-- 
+Optional tags "data". For items used as food it is value of hunger
+reduced by one portion. For items used as drinks, value of thirst reduced by 
+one portion. For ammunition it is damage done by that ammunition. For 
+working tools it is chance for item to be damaged during work. For harpoon
+guns ammunition it is how long (in combat turns) item will be stuck in enemy
+ship. For weapons and armor pieces first value is change for item to be 
+damaged during combat, second entry for weapons is damage done by weapon and 
+for armor piece it is amount of damage reduced by this armor. Third entry for
+weapons is number of skill used by this weapon (from *game.dat* file, 
+entry *Skills*) and for armor is amount of levels of dodge skill which this
+armor reduce when weared. Forth entry for weapon is amount of hands used (1
+for one-handed, 2 for two-handed weapons). Fifth value for weapon is damage 
+type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage). 
+-->
+  <data value="60"/>
+<!-- In game description of item. Can have any value. -->
+  <description>Standard ship fuel. Used as moneys in bases trades too.</description>
+ </item>
+ <item index="2" name="Basic Rations" type="Food" weight="1">
+  <trade buyable="N" price="3"/>
+  <trade buyable="Y" price="2"/>
+  <trade buyable="N" price="3"/>
+  <trade buyable="N" price="3"/>
+  <trade buyable="N" price="3"/>
+  <data value="60"/>
+  <description>Standard food rations.</description>
+ </item>
+ <item index="3" name="Water" type="Drink" weight="1">
+  <trade buyable="N" price="2"/>
+  <trade buyable="Y" price="1"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <data value="30"/>
+  <description>Clean water, used as drinks.</description>
+ </item>
+ <item index="4" name="Iron 20mm ammo" showtype="Ammunition" type="Ammo20" weight="1">
+  <trade buyable="N" price="5"/>
+  <trade buyable="N" price="5"/>
+  <trade buyable="N" price="5"/>
+  <trade buyable="N" price="5"/>
+  <trade buyable="Y" price="3"/>
+  <data value="2"/>
+  <description>Standard 20mm gun ammunition.</description>
+ </item>
+ <item index="5" name="Bronze plates" showtype="Repair material" type="Bronze" weight="5">
+  <trade buyable="Y" price="3"/>
+  <trade buyable="N" price="5"/>
+  <trade buyable="N" price="5"/>
+  <trade buyable="N" price="5"/>
+  <trade buyable="N" price="5"/>
+  <description>Heavy, large, bronze plates used to repair or upgrade ship modules.</description>
+ </item>
+ <item index="6" name="Fresh vegetables" showtype="Raw Food" type="RawFood" weight="1">
+  <trade buyable="N" price="2"/>
+  <trade buyable="Y" price="1"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <data value="30"/>
+  <description>Raw food used mainly for crafting rations.</description>
+ </item>
+ <item index="7" name="Fresh fruits" showtype="Raw Food" type="RawFood" weight="1">
+  <trade buyable="N" price="2"/>
+  <trade buyable="Y" price="1"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <data value="30"/>
+  <description>Raw food used mainly for crafting rations.</description>
+ </item>
+ <item index="8" name="Fresh meat" showtype="Raw Food" type="RawFood" weight="1">
+  <trade buyable="N" price="2"/>
+  <trade buyable="Y" price="1"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <data value="30"/>
+  <description>Raw food used mainly for crafting rations.</description>
+ </item>
+ <item index="9" name="Andrae logs" type="Wood" weight="5">
+  <trade buyable="N" price="5"/>
+  <trade buyable="N" price="5"/>
+  <trade buyable="Y" price="3"/>
+  <trade buyable="N" price="5"/>
+  <trade buyable="N" price="5"/>
+  <description>Wooden logs used in crafting items and Charcollum.</description>
+ </item>
+ <item index="10" name="Illandru logs" type="Wood" weight="3">
+  <trade buyable="N" price="6"/>
+  <trade buyable="N" price="6"/>
+  <trade buyable="Y" price="4"/>
+  <trade buyable="N" price="6"/>
+  <trade buyable="N" price="6"/>
+  <description>Wooden logs used in crafting items and Charcollum.</description>
+ </item>
+ <item index="11" name="Fine Rations" type="Food" weight="1">
+  <trade buyable="N" price="5"/>
+  <trade buyable="Y" price="3"/>
+  <trade buyable="N" price="5"/>
+  <trade buyable="N" price="5"/>
+  <trade buyable="N" price="5"/>
+  <data value="80"/>
+  <description>Better food rations.</description>
+ </item>
+ <item index="12" name="Gunpowder" type="Gunpowder" weight="1">
+  <trade buyable="Y" price="1"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <description>Used to produce ammunition.</description>
+ </item>
+ <item index="13" name="Iron plates" showtype="Repair material" type="Iron" weight="5">
+  <trade buyable="Y" price="4"/>
+  <trade buyable="N" price="6"/>
+  <trade buyable="N" price="6"/>
+  <trade buyable="N" price="6"/>
+  <trade buyable="N" price="6"/>
+  <description>Heavy, large, iron plates used to repair or upgrade ship modules.</description>
+ </item>
+ <item index="14" name="Iron 10mm ammo" showtype="Ammunition" type="Ammo10" weight="1">
+  <trade buyable="N" price="3"/>
+  <trade buyable="N" price="3"/>
+  <trade buyable="N" price="3"/>
+  <trade buyable="N" price="3"/>
+  <trade buyable="Y" price="1"/>
+  <data value="1"/>
+  <description>Standard 10mm gun ammunition.</description>
+ </item>
+ <item index="15" name="Copper ore" showtype="Ore" type="CopperOre" weight="7">
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="Y" price="1"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <description>Unrefined copper ore.</description>
+ </item>
+ <item index="16" name="Tin ore" showtype="Ore" type="TinOre" weight="7">
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="Y" price="1"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <description>Unrefined tin ore.</description>
+ </item>
+ <item index="17" name="Copper plates" type="Copper" weight="5">
+  <trade buyable="Y" price="2"/>
+  <trade buyable="N" price="4"/>
+  <trade buyable="N" price="4"/>
+  <trade buyable="N" price="4"/>
+  <trade buyable="N" price="4"/>
+  <description>Heavy, large, copper plates.</description>
+ </item>
+ <item index="18" name="Tin plates" type="Tin" weight="5">
+  <trade buyable="Y" price="2"/>
+  <trade buyable="N" price="4"/>
+  <trade buyable="N" price="4"/>
+  <trade buyable="N" price="4"/>
+  <trade buyable="N" price="4"/>
+  <description>Heavy, large, tin plates.</description>
+ </item>
+ <item index="19" name="Iron ore" showtype="Ore" type="IronOre" weight="8">
+  <trade buyable="N" price="5"/>
+  <trade buyable="N" price="5"/>
+  <trade buyable="Y" price="3"/>
+  <trade buyable="N" price="5"/>
+  <trade buyable="N" price="5"/>
+  <description>Unrefined iron ore.</description>
+ </item>
+ <item index="20" name="Iron 40mm ammo" showtype="Ammunition" type="Ammo40" weight="2">
+  <trade buyable="N" price="8"/>
+  <trade buyable="N" price="8"/>
+  <trade buyable="N" price="8"/>
+  <trade buyable="N" price="8"/>
+  <trade buyable="Y" price="6"/>
+  <data value="4"/>
+  <description>Standard 40mm gun ammunition.</description>
+ </item>
+ <item index="21" name="Steel plates" showtype="Repair material" type="Steel" weight="5">
+  <trade buyable="Y" price="6"/>
+  <trade buyable="N" price="8"/>
+  <trade buyable="N" price="8"/>
+  <trade buyable="N" price="8"/>
+  <trade buyable="N" price="8"/>
+  <description>Heavy, large, steel plates.</description>
+ </item>
+ <item index="22" name="Medical supplies" type="Medicines" weight="5">
+  <trade buyable="N" price="7"/>
+  <trade buyable="Y" price="5"/>
+  <trade buyable="Y" price="5"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <description>Bandages, disease and poison antidotes, all what is needed to cure patients.</description>
+ </item>
+ <item index="23" name="Steel 20mm ammo" showtype="Ammunition" type="Ammo20" weight="1">
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="Y" price="5"/>
+  <data value="4"/>
+  <description>Upgraded 20mm gun ammunition.</description>
+ </item>
+ <item index="24" name="Steel 10mm ammo" showtype="Ammunition" type="Ammo10" weight="1">
+  <trade buyable="N" price="5"/>
+  <trade buyable="N" price="5"/>
+  <trade buyable="N" price="5"/>
+  <trade buyable="N" price="5"/>
+  <trade buyable="Y" price="3"/>
+  <data value="2"/>
+  <description>Upgraded 10mm gun ammunition.</description>
+ </item>
+ <item index="25" name="Steel 40mm ammo" showtype="Ammunition" type="Ammo40" weight="2">
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="Y" price="8"/>
+  <data value="8"/>
+  <description>Upgraded 40mm gun ammunition.</description>
+ </item>
+ <item index="26" name="Iron 60mm ammo" showtype="Ammunition" type="Ammo60" weight="4">
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="Y" price="10"/>
+  <data value="8"/>
+  <description>Standard 60mm gun ammunition.</description>
+ </item>
+ <item index="27" name="Steel 60mm ammo" showtype="Ammunition" type="Ammo60" weight="4">
+  <trade buyable="N" price="14"/>
+  <trade buyable="N" price="14"/>
+  <trade buyable="N" price="14"/>
+  <trade buyable="N" price="14"/>
+  <trade buyable="Y" price="12"/>
+  <data value="16"/>
+  <description>Upgraded 60mm gun ammunition.</description>
+ </item>
+ <item index="28" name="Medical herbs" type="Herbs" weight="5">
+  <trade buyable="N" price="5"/>
+  <trade buyable="Y" price="3"/>
+  <trade buyable="N" price="5"/>
+  <trade buyable="N" price="5"/>
+  <trade buyable="N" price="5"/>
+  <description>Different herbs needed to create medical supplies.</description>
+ </item>
+ <item index="29" name="Medical herbs seeds" showtype="Seeds" type="HerbSeeds" weight="1">
+  <trade buyable="N" price="4"/>
+  <trade buyable="Y" price="2"/>
+  <trade buyable="N" price="4"/>
+  <trade buyable="N" price="4"/>
+  <trade buyable="N" price="4"/>
+  <description>Seeds to cultivate medical herbs.</description>
+ </item>
+ <item index="30" name="Vegetables seeds" showtype="Seeds" type="VegetableSeeds" weight="1">
+  <trade buyable="N" price="2"/>
+  <trade buyable="Y" price="1"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <description>Seeds to cultivate vegetables.</description>
+ </item>
+ <item index="31" name="Iron 80mm ammo" showtype="Ammunition" type="Ammo80" weight="8">
+  <trade buyable="N" price="18"/>
+  <trade buyable="N" price="18"/>
+  <trade buyable="N" price="18"/>
+  <trade buyable="N" price="18"/>
+  <trade buyable="Y" price="16"/>
+  <data value="16"/>
+  <description>Standard 80mm gun ammunition.</description>
+ </item>
+ <item index="32" name="Steel 80mm ammo" showtype="Ammunition" type="Ammo80" weight="8">
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="Y" price="20"/>
+  <data value="32"/>
+  <description>Upgraded 80mm gun ammunition.</description>
+ </item>
+ <item index="33" name="Iron 100mm ammo" showtype="Ammunition" type="Ammo100" weight="16">
+  <trade buyable="N" price="26"/>
+  <trade buyable="N" price="26"/>
+  <trade buyable="N" price="26"/>
+  <trade buyable="N" price="26"/>
+  <trade buyable="Y" price="24"/>
+  <data value="32"/>
+  <description>Standard 100mm gun ammunition.</description>
+ </item>
+ <item index="34" name="Steel 100mm ammo" showtype="Ammunition" type="Ammo100" weight="16">
+  <trade buyable="N" price="34"/>
+  <trade buyable="N" price="34"/>
+  <trade buyable="N" price="34"/>
+  <trade buyable="N" price="34"/>
+  <trade buyable="Y" price="32"/>
+  <data value="64"/>
+  <description>Upgraded 100mm gun ammunition.</description>
+ </item>
+ <item index="35" name="Iron 120mm ammo" showtype="Ammunition" type="Ammo120" weight="30">
+  <trade buyable="N" price="40"/>
+  <trade buyable="N" price="40"/>
+  <trade buyable="N" price="40"/>
+  <trade buyable="N" price="40"/>
+  <trade buyable="Y" price="38"/>
+  <data value="64"/>
+  <description>Standard 120mm gun ammunition.</description>
+ </item>
+ <item index="36" name="Steel 120mm ammo" showtype="Ammunition" type="Ammo120" weight="30">
+  <trade buyable="N" price="52"/>
+  <trade buyable="N" price="52"/>
+  <trade buyable="N" price="52"/>
+  <trade buyable="N" price="52"/>
+  <trade buyable="Y" price="50"/>
+  <data value="128"/>
+  <description>Upgraded 120mm gun ammunition.</description>
+ </item>
+ <item index="37" name="Andrae seeds" showtype="Seeds" type="AndraeSeeds" weight="1">
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="Y" price="1"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <description>Seeds to cultivate Andrae trees.</description>
+ </item>
+ <item index="38" name="Illandru seeds" showtype="Seeds" type="IllandruSeeds" weight="1">
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="Y" price="1"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <description>Seeds to cultivate Illandru trees.</description>
+ </item>
+ <item index="39" name="Small package" showtype="Special" type="MissionItem" weight="5">
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <description>Item needed for one of your missions. Deliver it to proper sky base for reward. Removing it from cargo automatically fail proper mission.</description>
+ </item>
+ <item index="40" name="Corpse" type="Body" weight="70">
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <description>Dead body.</description>
+ </item>
+ <item index="41" name="Package" showtype="Special" type="MissionItem" weight="10">
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <description>Item needed for one of your missions. Deliver it to proper sky base for reward. Removing it from cargo automatically fail proper mission.</description>
+ </item>
+ <item index="42" name="Large package" showtype="Special" type="MissionItem" weight="50">
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <description>Item needed for one of your missions. Deliver it to proper sky base for reward. Removing it from cargo automatically fail proper mission.</description>
+ </item>
+ <item index="43" name="Huge package" showtype="Special" type="MissionItem" weight="200">
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <description>Item needed for one of your missions. Deliver it to proper sky base for reward. Removing it from cargo automatically fail proper mission.</description>
+ </item>
+ <item index="44" name="Beer" type="Drink" weight="1">
+  <trade buyable="N" price="3"/>
+  <trade buyable="Y" price="2"/>
+  <trade buyable="N" price="3"/>
+  <trade buyable="N" price="3"/>
+  <trade buyable="N" price="3"/>
+  <data value="40"/>
+  <description>Standard beer, used as drink.</description>
+ </item>
+ <item index="45" name="Wine" type="Drink" weight="1">
+  <trade buyable="N" price="4"/>
+  <trade buyable="Y" price="3"/>
+  <trade buyable="N" price="4"/>
+  <trade buyable="N" price="4"/>
+  <trade buyable="N" price="4"/>
+  <data value="50"/>
+  <description>Good quality wine, used as drink.</description>
+ </item>
+ <item index="46" name="Lavish Rations" type="Food" weight="1">
+  <trade buyable="N" price="7"/>
+  <trade buyable="Y" price="5"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <data value="100"/>
+  <description>Best food rations.</description>
+ </item>
+ <item index="47" name="Alchemy set" showtype="Tool" type="AlchemySet" weight="5">
+  <trade buyable="Y" price="5"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <data value="10"/>
+  <description>Tool used in alchemical recipes.</description>
+ </item>
+ <item index="48" name="Bronze mold" showtype="Tool" type="Mold" weight="10">
+  <trade buyable="Y" price="10"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <data value="15"/>
+  <description>Bronze tool used in metalsmith recipes.</description>
+ </item>
+ <item index="49" name="Bronze gunsmith set" showtype="Tool" type="GunsmithSet" weight="10">
+  <trade buyable="Y" price="10"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <data value="15"/>
+  <description>Bronze tool used in gunsmith recipes.</description>
+ </item>
+ <item index="50" name="Wooden cooking set" showtype="Tool" type="CookingSet" weight="5">
+  <trade buyable="Y" price="7"/>
+  <trade buyable="N" price="9"/>
+  <trade buyable="N" price="9"/>
+  <trade buyable="N" price="9"/>
+  <trade buyable="N" price="9"/>
+  <data value="20"/>
+  <description>Wooden tool used to cook items.</description>
+ </item>
+ <item index="51" name="Bronze sickle" showtype="Tool" type="Sickle" weight="1">
+  <trade buyable="Y" price="5"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <data value="15"/>
+  <description>Bronze tool used in cultivating plants.</description>
+ </item>
+ <item index="52" name="Bronze saw" showtype="Tool" type="Saw" weight="1">
+  <trade buyable="Y" price="5"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <data value="15"/>
+  <description>Bronze tool used to cut wood.</description>
+ </item>
+ <item index="53" name="Wooden bucket" showtype="Tool" type="Bucket" weight="2">
+  <trade buyable="Y" price="7"/>
+  <trade buyable="N" price="9"/>
+  <trade buyable="N" price="9"/>
+  <trade buyable="N" price="9"/>
+  <trade buyable="N" price="9"/>
+  <data value="20"/>
+  <description>Simple wooden bucket.</description>
+ </item>
+ <item index="54" name="Barley seeds" showtype="Seeds" type="BarleySeeds" weight="1">
+  <trade buyable="N" price="2"/>
+  <trade buyable="Y" price="1"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <description>Seeds used to cultivate barley.</description>
+ </item>
+ <item index="55" name="Barley" showtype="Grain" type="Barley" weight="1">
+  <trade buyable="N" price="3"/>
+  <trade buyable="Y" price="2"/>
+  <trade buyable="N" price="3"/>
+  <trade buyable="N" price="3"/>
+  <trade buyable="N" price="3"/>
+  <description>Standard grain used in cooking or brewery.</description>
+ </item>
+ <item index="56" name="Grapes" type="Grapes" weight="1">
+  <trade buyable="N" price="3"/>
+  <trade buyable="Y" price="2"/>
+  <trade buyable="N" price="3"/>
+  <trade buyable="N" price="3"/>
+  <trade buyable="N" price="3"/>
+  <description>Vine grapes used to create wine.</description>
+ </item>
+ <item index="57" name="Grape Vine" type="GrapeVine" weight="20">
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <description>Vine plant, take grapes from it.</description>
+ </item>
+ <item index="58" name="Quartz sand" type="Sand" weight="5">
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="Y" price="1"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <description>Normal sand, used in creating glass.</description>
+ </item>
+ <item index="59" name="Bronze blacksmith set" showtype="Tool" type="BlacksmithSet" weight="100">
+  <trade buyable="Y" price="35"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="N" price="37"/>
+  <data value="15"/>
+  <description>Bronze set of tools used in blacksmith recipes.</description>
+ </item>
+ <item index="60" name="Bronze woodworker set" showtype="Tool" type="WoodworkerSet" weight="5">
+  <trade buyable="Y" price="5"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <data value="15"/>
+  <description>Bronze set of tools used in woodworker recipes.</description>
+ </item>
+ <item index="61" name="Bronze repair tools" showtype="Tool" type="RepairTools" weight="5">
+  <trade buyable="Y" price="5"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <data value="15"/>
+  <description>Bronze set of tools needed to repair or upgrade ship modules.</description>
+ </item>
+ <item index="62" name="Bronze harpoon" showtype="Ammunition" type="Harpoon" weight="10">
+  <trade buyable="Y" price="5"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <data value="2"/>
+  <description>Weakest type of harpoon with long rope. Used as ammunition for harpoon guns.</description>
+ </item>
+ <item index="63" name="Iron harpoon" showtype="Ammunition" type="Harpoon" weight="12">
+  <trade buyable="Y" price="7"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <data value="4"/>
+  <description>Harpoon made of iron with long rope. Used as ammunition for harpoon guns.</description>
+ </item>
+ <item index="64" name="Steel harpoon" showtype="Ammunition" type="Harpoon" weight="12">
+  <trade buyable="Y" price="10"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <data value="8"/>
+  <description>Harpoon made of steel with long rope. Used as ammunition for harpoon guns.</description>
+ </item>
+ <item index="65" name="Leather sheet" type="Leather" weight="5">
+  <trade buyable="N" price="3"/>
+  <trade buyable="Y" price="2"/>
+  <trade buyable="N" price="3"/>
+  <trade buyable="N" price="3"/>
+  <trade buyable="N" price="3"/>
+  <description>Large leather sheet used in crafting.</description>
+ </item>
+ <item index="66" name="Bronze sword" type="Weapon" weight="2">
+  <trade buyable="N" price="15"/>
+  <trade buyable="N" price="15"/>
+  <trade buyable="N" price="15"/>
+  <trade buyable="N" price="15"/>
+  <trade buyable="Y" price="10"/>
+  <data value="15"/>
+  <data value="20"/>
+  <data value="17"/>
+  <data value="1"/>
+  <data value="1"/>
+  <description>Simple sword made of bronze, used in melee combat.</description>
+ </item>
+ <item index="67" name="Leather jacket" showtype="Armor" type="ChestArmor" weight="5">
+  <trade buyable="N" price="15"/>
+  <trade buyable="N" price="15"/>
+  <trade buyable="N" price="15"/>
+  <trade buyable="N" price="15"/>
+  <trade buyable="Y" price="10"/>
+  <data value="20"/>
+  <data value="5"/>
+  <data value="0"/>
+  <description>Weakest type of armor, made of leather, weared on torso.</description>
+ </item>
+ <item index="68" name="Leather helmet" showtype="Armor" type="HeadArmor" weight="1">
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="Y" price="7"/>
+  <data value="20"/>
+  <data value="2"/>
+  <data value="0"/>
+  <description>Weakest type of armor, made of leather, weared on head.</description>
+ </item>
+ <item index="69" name="Leather armsguard" showtype="Armor" type="ArmsArmor" weight="1">
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="Y" price="8"/>
+  <data value="20"/>
+  <data value="3"/>
+  <data value="0"/>
+  <description>Weakest type of armor, made of leather, protects arms.</description>
+ </item>
+ <item index="70" name="Bronze sewing kit" showtype="Tool" type="SewingKit" weight="2">
+  <trade buyable="Y" price="5"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <data value="15"/>
+  <description>Bronze set of tools needed to sew items.</description>
+ </item>
+ <item index="71" name="Leather legsguard" showtype="Armor" type="LegsArmor" weight="1">
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="Y" price="9"/>
+  <data value="20"/>
+  <data value="4"/>
+  <data value="0"/>
+  <description>Weakest type of armor, made of leather, protects legs.</description>
+ </item>
+ <item index="72" name="Bronze shield" type="Shield" weight="4">
+  <trade buyable="N" price="13"/>
+  <trade buyable="N" price="13"/>
+  <trade buyable="N" price="13"/>
+  <trade buyable="N" price="13"/>
+  <trade buyable="Y" price="10"/>
+  <data value="15"/>
+  <data value="4"/>
+  <description>Standard shield made of bronze, used in melee combat.</description>
+ </item>
+ <item index="73" name="Wooden shield" type="Shield" weight="3">
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="Y" price="7"/>
+  <data value="20"/>
+  <data value="2"/>
+  <description>Standard shield made of wood, used in melee combat.</description>
+ </item>
+ <item index="74" name="Bronze short sword" type="Weapon" weight="1">
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="Y" price="7"/>
+  <data value="15"/>
+  <data value="15"/>
+  <data value="17"/>
+  <data value="1"/>
+  <data value="1"/>
+  <description>Simple short sword made of bronze, used in melee combat.</description>
+ </item>
+ <item index="75" name="Iron mold" showtype="Tool" type="Mold" weight="10">
+  <trade buyable="Y" price="15"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <data value="10"/>
+  <description>Iron tool used in metalsmith recipes.</description>
+ </item>
+ <item index="76" name="Iron sword" type="Weapon" weight="2">
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="Y" price="15"/>
+  <data value="10"/>
+  <data value="25"/>
+  <data value="17"/>
+  <data value="1"/>
+  <data value="1"/>
+  <description>Simple sword made of iron, used in melee combat.</description>
+ </item>
+ <item index="77" name="Iron short sword" type="Weapon" weight="1">
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="Y" price="10"/>
+  <data value="10"/>
+  <data value="20"/>
+  <data value="17"/>
+  <data value="1"/>
+  <data value="1"/>
+  <description>Simple short sword made of iron, used in melee combat.</description>
+ </item>
+ <item index="78" name="Bronze chestplate" showtype="Armor" type="ChestArmor" weight="10">
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="Y" price="15"/>
+  <data value="15"/>
+  <data value="10"/>
+  <data value="2"/>
+  <description>Standard type of armor, made of bronze, weared on torso.</description>
+ </item>
+ <item index="79" name="Bronze helmet" showtype="Armor" type="HeadArmor" weight="2">
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="Y" price="10"/>
+  <data value="15"/>
+  <data value="5"/>
+  <data value="1"/>
+  <description>Standard type of armor, made of bronze, weared on head.</description>
+ </item>
+ <item index="80" name="Bronze armsguard" showtype="Armor" type="ArmsArmor" weight="2">
+  <trade buyable="N" price="14"/>
+  <trade buyable="N" price="14"/>
+  <trade buyable="N" price="14"/>
+  <trade buyable="N" price="14"/>
+  <trade buyable="Y" price="12"/>
+  <data value="15"/>
+  <data value="6"/>
+  <data value="0"/>
+  <description>Standard type of armor, made of bronze, protects arms.</description>
+ </item>
+ <item index="81" name="Bronze legsguard" showtype="Armor" type="LegsArmor" weight="2">
+  <trade buyable="N" price="16"/>
+  <trade buyable="N" price="16"/>
+  <trade buyable="N" price="16"/>
+  <trade buyable="N" price="16"/>
+  <trade buyable="Y" price="14"/>
+  <data value="15"/>
+  <data value="8"/>
+  <data value="2"/>
+  <description>Standard type of armor, made of bronze, protects legs.</description>
+ </item>
+ <item index="82" name="Iron shield" type="Shield" weight="6">
+  <trade buyable="N" price="16"/>
+  <trade buyable="N" price="16"/>
+  <trade buyable="N" price="16"/>
+  <trade buyable="N" price="16"/>
+  <trade buyable="Y" price="14"/>
+  <data value="15"/>
+  <data value="8"/>
+  <description>Standard shield made of iron, used in melee combat.</description>
+ </item>
+ <item index="83" name="Iron chestplate" showtype="Armor" type="ChestArmor" weight="10">
+  <trade buyable="N" price="20"/>
+  <trade buyable="N" price="20"/>
+  <trade buyable="N" price="20"/>
+  <trade buyable="N" price="20"/>
+  <trade buyable="Y" price="18"/>
+  <data value="10"/>
+  <data value="15"/>
+  <data value="3"/>
+  <description>Standard type of armor, made of iron, weared on torso.</description>
+ </item>
+ <item index="84" name="Iron helmet" showtype="Armor" type="HeadArmor" weight="2">
+  <trade buyable="N" price="14"/>
+  <trade buyable="N" price="14"/>
+  <trade buyable="N" price="14"/>
+  <trade buyable="N" price="14"/>
+  <trade buyable="Y" price="12"/>
+  <data value="10"/>
+  <data value="7"/>
+  <data value="2"/>
+  <description>Standard type of armor, made of iron, weared on head.</description>
+ </item>
+ <item index="85" name="Iron armsguard" showtype="Armor" type="ArmsArmor" weight="2">
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="Y" price="15"/>
+  <data value="10"/>
+  <data value="9"/>
+  <data value="1"/>
+  <description>Standard type of armor, made of iron, protects arms.</description>
+ </item>
+ <item index="86" name="Iron legsguard" showtype="Armor" type="LegsArmor" weight="2">
+  <trade buyable="N" price="19"/>
+  <trade buyable="N" price="19"/>
+  <trade buyable="N" price="19"/>
+  <trade buyable="N" price="19"/>
+  <trade buyable="Y" price="17"/>
+  <data value="10"/>
+  <data value="12"/>
+  <data value="2"/>
+  <description>Standard type of armor, made of iron, protects legs.</description>
+ </item>
+ <item index="87" name="Steel short sword" type="Weapon" weight="1">
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="Y" price="15"/>
+  <data value="5"/>
+  <data value="25"/>
+  <data value="17"/>
+  <data value="1"/>
+  <data value="1"/>
+  <description>Simple short sword made of steel, used in melee combat.</description>
+ </item>
+ <item index="88" name="Steel sword" type="Weapon" weight="2">
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="Y" price="20"/>
+  <data value="5"/>
+  <data value="30"/>
+  <data value="17"/>
+  <data value="1"/>
+  <data value="1"/>
+  <description>Simple sword made of steel, used in melee combat.</description>
+ </item>
+ <item index="89" name="Steel shield" type="Shield" weight="6">
+  <trade buyable="N" price="26"/>
+  <trade buyable="N" price="26"/>
+  <trade buyable="N" price="26"/>
+  <trade buyable="N" price="26"/>
+  <trade buyable="Y" price="24"/>
+  <data value="5"/>
+  <data value="12"/>
+  <description>Standard shield made of steel, used in melee combat.</description>
+ </item>
+ <item index="90" name="Steel chestplate" showtype="Armor" type="ChestArmor" weight="12">
+  <trade buyable="N" price="30"/>
+  <trade buyable="N" price="30"/>
+  <trade buyable="N" price="30"/>
+  <trade buyable="N" price="30"/>
+  <trade buyable="Y" price="28"/>
+  <data value="5"/>
+  <data value="20"/>
+  <data value="5"/>
+  <description>Standard type of armor, made of steel, weared on torso.</description>
+ </item>
+ <item index="91" name="Steel helmet" showtype="Armor" type="HeadArmor" weight="3">
+  <trade buyable="N" price="20"/>
+  <trade buyable="N" price="20"/>
+  <trade buyable="N" price="20"/>
+  <trade buyable="N" price="20"/>
+  <trade buyable="Y" price="18"/>
+  <data value="5"/>
+  <data value="10"/>
+  <data value="2"/>
+  <description>Standard type of armor, made of steel, weared on head.</description>
+ </item>
+ <item index="92" name="Steel armsguard" showtype="Armor" type="ArmsArmor" weight="3">
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="Y" price="20"/>
+  <data value="5"/>
+  <data value="12"/>
+  <data value="2"/>
+  <description>Standard type of armor, made of steel, protects arms.</description>
+ </item>
+ <item index="93" name="Steel legsguard" showtype="Armor" type="LegsArmor" weight="3">
+  <trade buyable="N" price="26"/>
+  <trade buyable="N" price="26"/>
+  <trade buyable="N" price="26"/>
+  <trade buyable="N" price="26"/>
+  <trade buyable="Y" price="24"/>
+  <data value="5"/>
+  <data value="16"/>
+  <data value="3"/>
+  <description>Standard type of armor, made of steel, protects legs.</description>
+ </item>
+ <item index="94" name="Steel mold" showtype="Tool" type="Mold" weight="10">
+  <trade buyable="Y" price="20"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <data value="5"/>
+  <description>Steel tool used in metalsmith recipes.</description>
+ </item>
+ <item index="95" name="Iron gunsmith set" showtype="Tool" type="GunsmithSet" weight="10">
+  <trade buyable="Y" price="15"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <data value="10"/>
+  <description>Iron tool used in gunsmith recipes.</description>
+ </item>
+ <item index="96" name="Steel gunsmith set" showtype="Tool" type="GunsmithSet" weight="10">
+  <trade buyable="Y" price="20"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <data value="5"/>
+  <description>Steel tool used in gunsmith recipes.</description>
+ </item>
+ <item index="97" name="Bronze cooking set" showtype="Tool" type="CookingSet" weight="10">
+  <trade buyable="Y" price="10"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <data value="15"/>
+  <description>Set of tools made of bronze, used to cook items.</description>
+ </item>
+ <item index="98" name="Iron cooking set" showtype="Tool" type="CookingSet" weight="10">
+  <trade buyable="Y" price="15"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <data value="10"/>
+  <description>Set of tools made of iron, used to cook items.</description>
+ </item>
+ <item index="99" name="Steel cooking set" showtype="Tool" type="CookingSet" weight="10">
+  <trade buyable="Y" price="20"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <data value="5"/>
+  <description>Set of tools made of steel, used to cook items.</description>
+ </item>
+ <item index="100" name="Iron sickle" showtype="Tool" type="Sickle" weight="1">
+  <trade buyable="Y" price="10"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <data value="10"/>
+  <description>Iron tool used in cultivating plants.</description>
+ </item>
+ <item index="101" name="Steel sickle" showtype="Tool" type="Sickle" weight="1">
+  <trade buyable="Y" price="15"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <data value="5"/>
+  <description>Steel tool used in cultivating plants.</description>
+ </item>
+ <item index="102" name="Iron saw" showtype="Tool" type="Saw" weight="1">
+  <trade buyable="Y" price="10"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <data value="10"/>
+  <description>Iron tool used to cut wood.</description>
+ </item>
+ <item index="103" name="Steel saw" showtype="Tool" type="Saw" weight="1">
+  <trade buyable="Y" price="15"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <data value="5"/>
+  <description>Steel tool used to cut wood.</description>
+ </item>
+ <item index="104" name="Bronze bucket" showtype="Tool" type="Bucket" weight="4">
+  <trade buyable="Y" price="10"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <data value="15"/>
+  <description>Simple bucket made of bronze.</description>
+ </item>
+ <item index="105" name="Iron bucket" showtype="Tool" type="Bucket" weight="4">
+  <trade buyable="Y" price="15"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <data value="10"/>
+  <description>Simple bucket made of iron.</description>
+ </item>
+ <item index="106" name="Steel bucket" showtype="Tool" type="Bucket" weight="4">
+  <trade buyable="Y" price="20"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <data value="5"/>
+  <description>Simple bucket made of steel.</description>
+ </item>
+ <item index="107" name="Iron blacksmith set" showtype="Tool" type="BlacksmithSet" weight="100">
+  <trade buyable="Y" price="65"/>
+  <trade buyable="N" price="67"/>
+  <trade buyable="N" price="67"/>
+  <trade buyable="N" price="67"/>
+  <trade buyable="N" price="67"/>
+  <data value="10"/>
+  <description>Iron set of tools used in blacksmith recipes.</description>
+ </item>
+ <item index="108" name="Steel blacksmith set" showtype="Tool" type="BlacksmithSet" weight="100">
+  <trade buyable="Y" price="95"/>
+  <trade buyable="N" price="97"/>
+  <trade buyable="N" price="97"/>
+  <trade buyable="N" price="97"/>
+  <trade buyable="N" price="97"/>
+  <data value="5"/>
+  <description>Steel set of tools used in blacksmith recipes.</description>
+ </item>
+ <item index="109" name="Iron woodworker set" showtype="Tool" type="WoodworkerSet" weight="5">
+  <trade buyable="Y" price="10"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <data value="10"/>
+  <description>Iron set of tools used in woodworker recipes.</description>
+ </item>
+ <item index="110" name="Steel woodworker set" showtype="Tool" type="WoodworkerSet" weight="5">
+  <trade buyable="Y" price="15"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <data value="5"/>
+  <description>Steel set of tools used in woodworker recipes.</description>
+ </item>
+ <item index="111" name="Iron repair tools" showtype="Tool" type="RepairTools" weight="5">
+  <trade buyable="Y" price="10"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <data value="10"/>
+  <description>Iron set of tools needed to repair or upgrade ship modules.</description>
+ </item>
+ <item index="112" name="Steel repair tools" showtype="Tool" type="RepairTools" weight="5">
+  <trade buyable="Y" price="15"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <data value="5"/>
+  <description>Steel set of tools needed to repair or upgrade ship modules.</description>
+ </item>
+ <item index="113" name="Iron sewing kit" showtype="Tool" type="SewingKit" weight="2">
+  <trade buyable="Y" price="10"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <data value="10"/>
+  <description>Iron set of tools needed to sew items.</description>
+ </item>
+ <item index="114" name="Steel sewing kit" showtype="Tool" type="SewingKit" weight="2">
+  <trade buyable="Y" price="15"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <data value="5"/>
+  <description>Steel set of tools needed to sew items.</description>
+ </item>
+ <item index="115" name="Titianium ore" showtype="Ore" type="TitaniumOre" weight="15">
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="Y" price="8"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <description>Unrefined titanium ore.</description>
+ </item>
+ <item index="116" name="Titanium plates" showtype="Repair material" type="Titanium" weight="10">
+  <trade buyable="Y" price="14"/>
+  <trade buyable="N" price="16"/>
+  <trade buyable="N" price="16"/>
+  <trade buyable="N" price="16"/>
+  <trade buyable="N" price="16"/>
+  <description>Heavy, large, titanium plates used to repair or upgrade ship modules.</description>
+ </item>
+ <item index="117" name="Titanium 40mm ammo" showtype="Ammunition" type="Ammo40" weight="4">
+  <trade buyable="N" price="14"/>
+  <trade buyable="N" price="14"/>
+  <trade buyable="N" price="14"/>
+  <trade buyable="N" price="14"/>
+  <trade buyable="Y" price="12"/>
+  <data value="16"/>
+  <description>Upgraded 40mm gun ammunition, made of titanium.</description>
+ </item>
+ <item index="118" name="Titanium 60mm ammo" showtype="Ammunition" type="Ammo60" weight="8">
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="Y" price="20"/>
+  <data value="32"/>
+  <description>Upgraded 60mm gun ammunition, made of titanium.</description>
+ </item>
+ <item index="119" name="Titanium 80mm ammo" showtype="Ammunition" type="Ammo80" weight="16">
+  <trade buyable="N" price="26"/>
+  <trade buyable="N" price="26"/>
+  <trade buyable="N" price="26"/>
+  <trade buyable="N" price="26"/>
+  <trade buyable="Y" price="24"/>
+  <data value="64"/>
+  <description>Upgraded 80mm gun ammunition, made of titanium.</description>
+ </item>
+ <item index="120" name="Titanium 100mm ammo" showtype="Ammunition" type="Ammo100" weight="32">
+  <trade buyable="N" price="40"/>
+  <trade buyable="N" price="40"/>
+  <trade buyable="N" price="40"/>
+  <trade buyable="N" price="40"/>
+  <trade buyable="Y" price="38"/>
+  <data value="128"/>
+  <description>Upgraded 100mm gun ammunition, made of titanium.</description>
+ </item>
+ <item index="121" name="Titanium 120mm ammo" showtype="Ammunition" type="Ammo120" weight="60">
+  <trade buyable="N" price="72"/>
+  <trade buyable="N" price="72"/>
+  <trade buyable="N" price="72"/>
+  <trade buyable="N" price="72"/>
+  <trade buyable="Y" price="70"/>
+  <data value="256"/>
+  <description>Upgraded 120mm gun ammunition, made of titanium.</description>
+ </item>
+ <item index="122" name="Titanium harpoon" showtype="Ammunition" type="Harpoon" weight="20">
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="Y" price="15"/>
+  <data value="12"/>
+  <description>Harpoon made of titanium with long rope. Used as ammunition for harpoon guns.</description>
+ </item>
+ <item index="123" name="Titanium short sword" type="Weapon" weight="2">
+  <trade buyable="N" price="24"/>
+  <trade buyable="N" price="24"/>
+  <trade buyable="N" price="24"/>
+  <trade buyable="N" price="24"/>
+  <trade buyable="Y" price="22"/>
+  <data value="3"/>
+  <data value="30"/>
+  <data value="17"/>
+  <data value="1"/>
+  <data value="1"/>
+  <description>Simple short sword made of titanium, used in melee combat.</description>
+ </item>
+ <item index="124" name="Titanium sword" type="Weapon" weight="3">
+  <trade buyable="N" price="27"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="Y" price="25"/>
+  <data value="3"/>
+  <data value="35"/>
+  <data value="17"/>
+  <data value="1"/>
+  <data value="1"/>
+  <description>Simple sword made of titanium, used in melee combat.</description>
+ </item>
+ <item index="125" name="Titanium shield" type="Shield" weight="9">
+  <trade buyable="N" price="32"/>
+  <trade buyable="N" price="32"/>
+  <trade buyable="N" price="32"/>
+  <trade buyable="N" price="32"/>
+  <trade buyable="Y" price="30"/>
+  <data value="3"/>
+  <data value="16"/>
+  <description>Standard shield made of titanium, used in melee combat.</description>
+ </item>
+ <item index="126" name="Titanium chestplate" showtype="Armor" type="ChestArmor" weight="18">
+  <trade buyable="N" price="37"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="Y" price="35"/>
+  <data value="3"/>
+  <data value="25"/>
+  <data value="7"/>
+  <description>Standard type of armor, made of titanium, weared on torso.</description>
+ </item>
+ <item index="127" name="Titanium helmet" showtype="Armor" type="HeadArmor" weight="5">
+  <trade buyable="N" price="26"/>
+  <trade buyable="N" price="26"/>
+  <trade buyable="N" price="26"/>
+  <trade buyable="N" price="26"/>
+  <trade buyable="Y" price="24"/>
+  <data value="3"/>
+  <data value="13"/>
+  <data value="3"/>
+  <description>Standard type of armor, made of titanium, weared on head.</description>
+ </item>
+ <item index="128" name="Titanium armsguard" showtype="Armor" type="ArmsArmor" weight="4">
+  <trade buyable="N" price="28"/>
+  <trade buyable="N" price="28"/>
+  <trade buyable="N" price="28"/>
+  <trade buyable="N" price="28"/>
+  <trade buyable="Y" price="26"/>
+  <data value="3"/>
+  <data value="14"/>
+  <data value="3"/>
+  <description>Standard type of armor, made of titanium, protects arms.</description>
+ </item>
+ <item index="129" name="Titanium legsguard" showtype="Armor" type="LegsArmor" weight="5">
+  <trade buyable="N" price="32"/>
+  <trade buyable="N" price="32"/>
+  <trade buyable="N" price="32"/>
+  <trade buyable="N" price="32"/>
+  <trade buyable="Y" price="30"/>
+  <data value="3"/>
+  <data value="20"/>
+  <data value="4"/>
+  <description>Standard type of armor, made of titanium, protects legs.</description>
+ </item>
+ <item index="130" name="Orichalcum ore" showtype="Ore" type="OrichalcumOre" weight="12">
+  <trade buyable="N" price="15"/>
+  <trade buyable="N" price="15"/>
+  <trade buyable="Y" price="12"/>
+  <trade buyable="N" price="15"/>
+  <trade buyable="N" price="15"/>
+  <description>Unrefined orichalcum ore.</description>
+ </item>
+ <item index="131" name="Orichalcum plates" showtype="Repair material" type="Orichalcum" weight="10">
+  <trade buyable="Y" price="21"/>
+  <trade buyable="N" price="23"/>
+  <trade buyable="N" price="23"/>
+  <trade buyable="N" price="23"/>
+  <trade buyable="N" price="23"/>
+  <description>Heavy, large, orichalcum plates used to repair or upgrade ship modules.</description>
+ </item>
+ <item index="132" name="Titanium mold" showtype="Tool" type="Mold" weight="15">
+  <trade buyable="Y" price="27"/>
+  <trade buyable="N" price="29"/>
+  <trade buyable="N" price="29"/>
+  <trade buyable="N" price="29"/>
+  <trade buyable="N" price="29"/>
+  <data value="3"/>
+  <description>Titanium tool used in metalsmith recipes.</description>
+ </item>
+ <item index="133" name="Orichalcum mold" showtype="Tool" type="Mold" weight="15">
+  <trade buyable="Y" price="35"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="N" price="37"/>
+  <data value="2"/>
+  <description>Orichalcum tool used in metalsmith recipes.</description>
+ </item>
+ <item index="134" name="Titanium gunsmith set" showtype="Tool" type="GunsmithSet" weight="15">
+  <trade buyable="Y" price="26"/>
+  <trade buyable="N" price="28"/>
+  <trade buyable="N" price="28"/>
+  <trade buyable="N" price="28"/>
+  <trade buyable="N" price="28"/>
+  <data value="3"/>
+  <description>Titanium tool used in gunsmith recipes.</description>
+ </item>
+ <item index="135" name="Orichalcum gunsmith set" showtype="Tool" type="GunsmithSet" weight="15">
+  <trade buyable="Y" price="34"/>
+  <trade buyable="N" price="36"/>
+  <trade buyable="N" price="36"/>
+  <trade buyable="N" price="36"/>
+  <trade buyable="N" price="36"/>
+  <data value="2"/>
+  <description>Orichalcum tool used in gunsmith recipes.</description>
+ </item>
+ <item index="136" name="Titanium cooking set" showtype="Tool" type="CookingSet" weight="15">
+  <trade buyable="Y" price="25"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="N" price="27"/>
+  <data value="3"/>
+  <description>Set of tools made of titanium, used to cook items.</description>
+ </item>
+ <item index="137" name="Orichalcum cooking set" showtype="Tool" type="CookingSet" weight="15">
+  <trade buyable="Y" price="33"/>
+  <trade buyable="N" price="35"/>
+  <trade buyable="N" price="35"/>
+  <trade buyable="N" price="35"/>
+  <trade buyable="N" price="35"/>
+  <data value="2"/>
+  <description>Set of tools made of orichalcum, used to cook items.</description>
+ </item>
+ <item index="138" name="Titanium sickle" showtype="Tool" type="Sickle" weight="1">
+  <trade buyable="Y" price="20"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <data value="3"/>
+  <description>Titanium tool used in cultivating plants.</description>
+ </item>
+ <item index="139" name="Orichalcum sickle" showtype="Tool" type="Sickle" weight="1">
+  <trade buyable="Y" price="24"/>
+  <trade buyable="N" price="26"/>
+  <trade buyable="N" price="26"/>
+  <trade buyable="N" price="26"/>
+  <trade buyable="N" price="26"/>
+  <data value="2"/>
+  <description>Orichalcum tool used in cultivating plants.</description>
+ </item>
+ <item index="140" name="Titanium saw" showtype="Tool" type="Saw" weight="1">
+  <trade buyable="Y" price="20"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <data value="3"/>
+  <description>Titanium tool used to cut wood.</description>
+ </item>
+ <item index="141" name="Orichalcum saw" showtype="Tool" type="Saw" weight="1">
+  <trade buyable="Y" price="26"/>
+  <trade buyable="N" price="28"/>
+  <trade buyable="N" price="28"/>
+  <trade buyable="N" price="28"/>
+  <trade buyable="N" price="28"/>
+  <data value="2"/>
+  <description>Orichalcum tool used to cut wood.</description>
+ </item>
+ <item index="142" name="Titanium bucket" showtype="Tool" type="Bucket" weight="8">
+  <trade buyable="Y" price="24"/>
+  <trade buyable="N" price="26"/>
+  <trade buyable="N" price="26"/>
+  <trade buyable="N" price="26"/>
+  <trade buyable="N" price="26"/>
+  <data value="3"/>
+  <description>Simple bucket made of titanium.</description>
+ </item>
+ <item index="143" name="Orichalcum bucket" showtype="Tool" type="Bucket" weight="8">
+  <trade buyable="Y" price="29"/>
+  <trade buyable="N" price="31"/>
+  <trade buyable="N" price="31"/>
+  <trade buyable="N" price="31"/>
+  <trade buyable="N" price="31"/>
+  <data value="2"/>
+  <description>Simple bucket made of orichalcum.</description>
+ </item>
+ <item index="144" name="Titanium blacksmith set" showtype="Tool" type="BlacksmithSet" weight="140">
+  <trade buyable="Y" price="110"/>
+  <trade buyable="N" price="112"/>
+  <trade buyable="N" price="112"/>
+  <trade buyable="N" price="112"/>
+  <trade buyable="N" price="112"/>
+  <data value="3"/>
+  <description>Titanium set of tools used in blacksmith recipes.</description>
+ </item>
+ <item index="145" name="Orichalcum blacksmith set" showtype="Tool" type="BlacksmithSet" weight="140">
+  <trade buyable="Y" price="115"/>
+  <trade buyable="N" price="117"/>
+  <trade buyable="N" price="117"/>
+  <trade buyable="N" price="117"/>
+  <trade buyable="N" price="117"/>
+  <data value="2"/>
+  <description>Orichalcum set of tools used in blacksmith recipes.</description>
+ </item>
+ <item index="146" name="Titanium woodworker set" showtype="Tool" type="WoodworkerSet" weight="10">
+  <trade buyable="Y" price="20"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <data value="3"/>
+  <description>Titanium set of tools used in woodworker recipes.</description>
+ </item>
+ <item index="147" name="Orichalcum woodworker set" showtype="Tool" type="WoodworkerSet" weight="10">
+  <trade buyable="Y" price="26"/>
+  <trade buyable="N" price="28"/>
+  <trade buyable="N" price="28"/>
+  <trade buyable="N" price="28"/>
+  <trade buyable="N" price="28"/>
+  <data value="2"/>
+  <description>Orichalcum set of tools used in woodworker recipes.</description>
+ </item>
+ <item index="148" name="Titanium repair tools" showtype="Tool" type="RepairTools" weight="10">
+  <trade buyable="Y" price="20"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <data value="3"/>
+  <description>Titanium set of tools needed to repair or upgrade ship modules.</description>
+ </item>
+ <item index="149" name="Orichalcum repair tools" showtype="Tool" type="RepairTools" weight="10">
+  <trade buyable="Y" price="25"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="N" price="27"/>
+  <data value="2"/>
+  <description>Orichalcum set of tools needed to repair or upgrade ship modules.</description>
+ </item>
+ <item index="150" name="Titanium sewing kit" showtype="Tool" type="SewingKit" weight="4">
+  <trade buyable="Y" price="21"/>
+  <trade buyable="N" price="23"/>
+  <trade buyable="N" price="23"/>
+  <trade buyable="N" price="23"/>
+  <trade buyable="N" price="23"/>
+  <data value="3"/>
+  <description>Titanium set of tools needed to sew items.</description>
+ </item>
+ <item index="151" name="Orichalcum sewing kit" showtype="Tool" type="SewingKit" weight="4">
+  <trade buyable="Y" price="26"/>
+  <trade buyable="N" price="28"/>
+  <trade buyable="N" price="28"/>
+  <trade buyable="N" price="28"/>
+  <trade buyable="N" price="28"/>
+  <data value="2"/>
+  <description>Orichalcum set of tools needed to sew items.</description>
+ </item>
+ <item index="152" name="Orichalcum 60mm ammo" showtype="Ammunition" type="Ammo60" weight="8">
+  <trade buyable="N" price="30"/>
+  <trade buyable="N" price="30"/>
+  <trade buyable="N" price="30"/>
+  <trade buyable="N" price="30"/>
+  <trade buyable="Y" price="28"/>
+  <data value="64"/>
+  <description>Upgraded 60mm gun ammunition, made of orichalcum.</description>
+ </item>
+ <item index="153" name="Orichalcum 80mm ammo" showtype="Ammunition" type="Ammo80" weight="16">
+  <trade buyable="N" price="34"/>
+  <trade buyable="N" price="34"/>
+  <trade buyable="N" price="34"/>
+  <trade buyable="N" price="34"/>
+  <trade buyable="Y" price="32"/>
+  <data value="128"/>
+  <description>Upgraded 80mm gun ammunition, made of orichalcum.</description>
+ </item>
+ <item index="154" name="Orichalcum 100mm ammo" showtype="Ammunition" type="Ammo100" weight="32">
+  <trade buyable="N" price="60"/>
+  <trade buyable="N" price="60"/>
+  <trade buyable="N" price="60"/>
+  <trade buyable="N" price="60"/>
+  <trade buyable="Y" price="58"/>
+  <data value="256"/>
+  <description>Upgraded 100mm gun ammunition, made of orichalcum.</description>
+ </item>
+ <item index="155" name="Orichalcum 120mm ammo" showtype="Ammunition" type="Ammo120" weight="60">
+  <trade buyable="N" price="102"/>
+  <trade buyable="N" price="102"/>
+  <trade buyable="N" price="102"/>
+  <trade buyable="N" price="102"/>
+  <trade buyable="Y" price="100"/>
+  <data value="512"/>
+  <description>Upgraded 120mm gun ammunition, made of orichalcum.</description>
+ </item>
+ <item index="156" name="Orichalcum harpoon" showtype="Ammunition" type="Harpoon" weight="20">
+  <trade buyable="N" price="27"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="Y" price="25"/>
+  <data value="16"/>
+  <description>Harpoon made of orichalcum with long rope. Used as ammunition for harpoon guns.</description>
+ </item>
+ <item index="157" name="Orichalcum short sword" type="Weapon" weight="2">
+  <trade buyable="N" price="30"/>
+  <trade buyable="N" price="30"/>
+  <trade buyable="N" price="30"/>
+  <trade buyable="N" price="30"/>
+  <trade buyable="Y" price="28"/>
+  <data value="2"/>
+  <data value="35"/>
+  <data value="17"/>
+  <data value="1"/>
+  <data value="1"/>
+  <description>Simple short sword made of orichalcum, used in melee combat.</description>
+ </item>
+ <item index="158" name="Orichalcum sword" type="Weapon" weight="3">
+  <trade buyable="N" price="37"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="Y" price="35"/>
+  <data value="2"/>
+  <data value="40"/>
+  <data value="17"/>
+  <data value="1"/>
+  <data value="1"/>
+  <description>Simple sword made of orichalcum, used in melee combat.</description>
+ </item>
+ <item index="159" name="Orichalcum shield" type="Shield" weight="9">
+  <trade buyable="N" price="40"/>
+  <trade buyable="N" price="40"/>
+  <trade buyable="N" price="40"/>
+  <trade buyable="N" price="40"/>
+  <trade buyable="Y" price="38"/>
+  <data value="2"/>
+  <data value="16"/>
+  <description>Standard shield made of orichalcum, used in melee combat.</description>
+ </item>
+ <item index="160" name="Orichalcum chestplate" showtype="Armor" type="ChestArmor" weight="18">
+  <trade buyable="N" price="45"/>
+  <trade buyable="N" price="45"/>
+  <trade buyable="N" price="45"/>
+  <trade buyable="N" price="45"/>
+  <trade buyable="Y" price="43"/>
+  <data value="2"/>
+  <data value="30"/>
+  <data value="7"/>
+  <description>Standard type of armor, made of orichalcum, weared on torso.</description>
+ </item>
+ <item index="161" name="Orichalcum helmet" showtype="Armor" type="HeadArmor" weight="5">
+  <trade buyable="N" price="32"/>
+  <trade buyable="N" price="32"/>
+  <trade buyable="N" price="32"/>
+  <trade buyable="N" price="32"/>
+  <trade buyable="Y" price="30"/>
+  <data value="2"/>
+  <data value="15"/>
+  <data value="3"/>
+  <description>Standard type of armor, made of orichalcum, weared on head.</description>
+ </item>
+ <item index="162" name="Orichalcum armsguard" showtype="Armor" type="ArmsArmor" weight="4">
+  <trade buyable="N" price="35"/>
+  <trade buyable="N" price="35"/>
+  <trade buyable="N" price="35"/>
+  <trade buyable="N" price="35"/>
+  <trade buyable="Y" price="33"/>
+  <data value="2"/>
+  <data value="16"/>
+  <data value="3"/>
+  <description>Standard type of armor, made of orichalcum, protects arms.</description>
+ </item>
+ <item index="163" name="Orichalcum legsguard" showtype="Armor" type="LegsArmor" weight="5">
+  <trade buyable="N" price="38"/>
+  <trade buyable="N" price="38"/>
+  <trade buyable="N" price="38"/>
+  <trade buyable="N" price="38"/>
+  <trade buyable="Y" price="36"/>
+  <data value="2"/>
+  <data value="24"/>
+  <data value="4"/>
+  <description>Standard type of armor, made of orichalcum, protects legs.</description>
+ </item>
+ <item index="164" name="Strange medalion" showtype="Special" type="StoryItem" weight="1">
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <description>Weird looking medalion made from shining metal.</description>
+ </item>
+ <item index="165" name="Strange metal scrap" showtype="Special" type="StoryItem" weight="1">
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <trade buyable="N" price="0"/>
+  <description>Scrap of strange shining metal. Very similiar to medalion which you found ealier.</description>
+ </item>
+ <item index="166" name="Adamantium ore" showtype="Ore" type="AdamantiumOre" weight="20">
+  <trade buyable="N" price="30"/>
+  <trade buyable="N" price="30"/>
+  <trade buyable="Y" price="28"/>
+  <trade buyable="N" price="30"/>
+  <trade buyable="N" price="30"/>
+  <description>Unrefined adamanantium ore.</description>
+ </item>
+ <item index="167" name="Adamantium plates" showtype="Repair material" type="Adamantium" weight="18">
+  <trade buyable="Y" price="42"/>
+  <trade buyable="N" price="44"/>
+  <trade buyable="N" price="44"/>
+  <trade buyable="N" price="44"/>
+  <trade buyable="N" price="44"/>
+  <description>Heavy, large, adamantium plates used to repair or upgrade ship modules.</description>
+ </item>
+ <item index="168" name="Adamantium mold" showtype="Tool" type="Mold" weight="30">
+  <trade buyable="Y" price="70"/>
+  <trade buyable="N" price="72"/>
+  <trade buyable="N" price="72"/>
+  <trade buyable="N" price="72"/>
+  <trade buyable="N" price="72"/>
+  <data value="1"/>
+  <description>Adamantium tool used in metalsmith recipes.</description>
+ </item>
+ <item index="169" name="Adamantium gunsmith set" showtype="Tool" type="GunsmithSet" weight="30">
+  <trade buyable="Y" price="68"/>
+  <trade buyable="N" price="70"/>
+  <trade buyable="N" price="70"/>
+  <trade buyable="N" price="70"/>
+  <trade buyable="N" price="70"/>
+  <data value="1"/>
+  <description>Adamantium tool used in gunsmith recipes.</description>
+ </item>
+ <item index="170" name="Adamantium cooking set" showtype="Tool" type="CookingSet" weight="30">
+  <trade buyable="Y" price="66"/>
+  <trade buyable="N" price="68"/>
+  <trade buyable="N" price="68"/>
+  <trade buyable="N" price="68"/>
+  <trade buyable="N" price="68"/>
+  <data value="1"/>
+  <description>Set of tools made of adamantium, used to cook items.</description>
+ </item>
+ <item index="171" name="Adamantium sickle" showtype="Tool" type="Sickle" weight="2">
+  <trade buyable="Y" price="48"/>
+  <trade buyable="N" price="50"/>
+  <trade buyable="N" price="50"/>
+  <trade buyable="N" price="50"/>
+  <trade buyable="N" price="50"/>
+  <data value="1"/>
+  <description>Adamantium tool used in cultivating plants.</description>
+ </item>
+ <item index="172" name="Adamantium saw" showtype="Tool" type="Saw" weight="2">
+  <trade buyable="Y" price="52"/>
+  <trade buyable="N" price="54"/>
+  <trade buyable="N" price="54"/>
+  <trade buyable="N" price="54"/>
+  <trade buyable="N" price="54"/>
+  <data value="1"/>
+  <description>Adamantium tool used to cut wood.</description>
+ </item>
+ <item index="173" name="Adamantium bucket" showtype="Tool" type="Bucket" weight="16">
+  <trade buyable="Y" price="58"/>
+  <trade buyable="N" price="60"/>
+  <trade buyable="N" price="60"/>
+  <trade buyable="N" price="60"/>
+  <trade buyable="N" price="60"/>
+  <data value="1"/>
+  <description>Simple bucket made of adamantium.</description>
+ </item>
+ <item index="174" name="Adamantium blacksmith set" showtype="Tool" type="BlacksmithSet" weight="280">
+  <trade buyable="Y" price="230"/>
+  <trade buyable="N" price="232"/>
+  <trade buyable="N" price="232"/>
+  <trade buyable="N" price="232"/>
+  <trade buyable="N" price="232"/>
+  <data value="2"/>
+  <description>Adamantium set of tools used in blacksmith recipes.</description>
+ </item>
+</items>
+
