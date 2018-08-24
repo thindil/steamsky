@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
+with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 
 package Stories is
@@ -92,10 +93,8 @@ package Stories is
    Stories_List: Stories_Container.Vector; -- List of available stories in game
    FinishedStories: FinishedStories_Container
      .Vector; -- List of finished stories (or past data of current story)
-   Stories_Directory_Not_Found: exception; -- Raised when no directory with stories files
-   Stories_Files_Not_Found: exception; -- Raised when no files with stories
 
-   procedure LoadStories; -- Load stories data from files
+   procedure LoadStories(Reader: Tree_Reader); -- Load stories data from files
    procedure StartStory
      (FactionName: Unbounded_String;
       Condition: StartConditionType); -- Check if any story can starts

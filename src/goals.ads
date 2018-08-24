@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
+with DOM.Readers; use DOM.Readers;
 
 package Goals is
 
@@ -41,10 +42,8 @@ package Goals is
    Goals_List: Goals_Container
      .Vector; -- List of player goals available in game
    CurrentGoal: Goal_Data; -- Player current goal
-   Goals_Directory_Not_Found: exception; -- Raised when no directory with goals files
-   Goals_Files_Not_Found: exception; -- Raised when no files with goals
 
-   procedure LoadGoals; -- Load player goals from files
+   procedure LoadGoals(Reader: Tree_Reader); -- Load player goals from files
    function GoalText
      (Index: Natural)
      return String; -- Return info about selected goal or current goal if Index = 0

@@ -17,6 +17,7 @@
 
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with DOM.Readers; use DOM.Readers;
 with Crew; use Crew;
 with Game; use Game;
 
@@ -55,10 +56,8 @@ package Factions is
    end record;
    package Factions_Container is new Vectors(Positive, FactionRecord);
    Factions_List: Factions_Container.Vector;
-   Factions_Directory_Not_Found: exception; -- Raised when no directory with factions files
-   Factions_Files_Not_Found: exception; -- Raised when no files with factions
 
-   procedure LoadFactions; -- Load NPC factions from file
+   procedure LoadFactions(Reader: Tree_Reader); -- Load NPC factions from file
    function GetReputation
      (SourceFaction,
       TargetFaction: Unbounded_String)

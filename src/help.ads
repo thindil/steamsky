@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
+with DOM.Readers; use DOM.Readers;
 
 package Help is
 
@@ -27,9 +28,7 @@ package Help is
    end record;
    package Help_Container is new Vectors(Positive, Help_Data);
    Help_List: Help_Container.Vector; -- List of all help topics
-   Help_Directory_Not_Found: exception; -- Raised when no directory with help files
-   Help_Files_Not_Found: exception; -- Raised when no files with help
 
-   procedure LoadHelp; -- Load help text from file
+   procedure LoadHelp(Reader: Tree_Reader); -- Load help text from file
 
 end Help;
