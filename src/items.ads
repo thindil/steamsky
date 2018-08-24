@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
+with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 
 package Items is
@@ -62,10 +63,8 @@ package Items is
      .Vector; -- List of indexes of all arms armors in game
    LegsArmors_List: Positive_Container
      .Vector; -- List of indexes of all legs armors in game
-   Items_Directory_Not_Found: exception; -- Raised when no directory with items files
-   Items_Files_Not_Found: exception; -- Raised when no files with items
 
-   procedure LoadItems; -- Load items from files
+   procedure LoadItems(Reader: Tree_Reader); -- Load items from files
    function FindProtoItem
      (Index,
       ItemType: Unbounded_String :=

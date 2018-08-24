@@ -106,5 +106,6 @@ package Game is
    function FindSkillIndex
      (SkillName: Unbounded_String)
      return Positive; -- Return vector index of selected skill
+   function LoadGameData return String; -- Load game data from files
 
 end Game;

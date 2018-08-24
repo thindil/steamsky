@@ -17,6 +17,7 @@
 
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with DOM.Readers; use DOM.Readers;
 with Crew; use Crew;
 with Game; use Game;
 with Items; use Items;
@@ -81,8 +82,6 @@ package Ships is
    ShipSyllablesStart: UnboundedString_Container.Vector;
    ShipSyllablesMiddle: UnboundedString_Container.Vector;
    ShipSyllablesEnd: UnboundedString_Container.Vector;
-   Ships_Directory_Not_Found: exception; -- Raised when no directory with ships files
-   Ships_Files_Not_Found: exception; -- Raised when no files with ships
    Ships_Invalid_Data: exception; -- Raised when invalid data in ships file
 
    function CreateShip
@@ -91,7 +90,7 @@ package Ships is
       X, Y: Integer;
       Speed: ShipSpeed;
       RandomUpgrades: Boolean := True) return ShipRecord; -- Create new ship
-   procedure LoadShips; -- Load ships from files
+   procedure LoadShips(Reader: Tree_Reader); -- Load ships from files
    function CountShipWeight
      (Ship: ShipRecord)
      return Positive; -- Count weight of ship (with modules and cargo)
