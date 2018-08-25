@@ -1,6 +1,18 @@
 Some general informations about adding/editing some game elements (skills,
 ships, ships modules, etc.)
 
+## General informations about modifications
+To add new thing(item, ship, module, etc) to game, you must create first new
+directory inside game modifications directory (by default it is *data/mods*).
+For example, create directory *mymod* (full path then will be
+*data/mods/mymod*). Inside create file (or files) with extension *dat* which
+will have that same structure like file with things which you want to add to
+game (so, for adding new item to game, create file which will be looks like
+*items.dat* file from *data* directory). More detailed informations about
+selected data structures, you can find below.
+Of course, you can edit default files with data too, just remember that all
+modification there can be overwritten with new version of game.
+
 ## Items types
 
 ### General informations
@@ -195,8 +207,7 @@ To change which faction is player faction, edit `value` attribute of tag
 ## Items
 
 ### General informations
-- Open file *items.dat* in *data/items* directory or create new file with *dat*
-  extension in this directory (example: *myitems.dat*)
+- Default game items are in *items.dat* file which is in *data* directory.
 
 ### Item data structure
 - Each item starts with tag `item`.
@@ -235,8 +246,8 @@ To change which faction is player faction, edit `value` attribute of tag
 ## Recipes
 
 ### General informations
-- Open file *recipes.dat* in *data/recipes* directory or create new file with
-  *dat* extension in this directory (example: *myrecipes.dat*).
+- Default game crafting recipes are in *recipes.dat* file which is in *data* 
+  directory.
 
 ### Recipe data structure
 - Each recipe starts with tag `recipe`.
@@ -267,8 +278,8 @@ To change which faction is player faction, edit `value` attribute of tag
 ## Ship modules
 
 ### General informations
-- Open file *shipmodules.dat* in *data/shipmodules* directory or create new
-  file with *dat* extension in that directory (example: *myshipmodules.dat*).
+- Default game ship modules are in *shipmodules.dat* file which is in *data* 
+  directory.
 
 ### Ship module data structure
 - Each ship module starts with tag `module`.
@@ -310,8 +321,7 @@ To change which faction is player faction, edit `value` attribute of tag
 ## Ships
 
 ### General informations
-- Open file *ships.dat* in *data/ships* directory or create new file with *dat*
-  extension in that directory (example: *myships.dat*).
+- Default game ships are in *ships.dat* file which is in *data* directory.
 
 ### Ship data structure
 - Each ship is between `ship` tags. Attribute `index` is a index (it can be 
@@ -368,8 +378,7 @@ To change which faction is player faction, edit `value` attribute of tag
 ## Help
 
 ### General informations
-- Open file *help.dat* in *data/help* directory or create new file with *dat* 
-  extension in that directory (example: *myhelp.dat*).
+- Default game help entries are in *help.dat* file which is in *data* directory.
 
 ### Help data structure
 - Each help entry is between `entry` tags. 
@@ -413,8 +422,7 @@ To change which faction is player faction, edit `value` attribute of tag
 ## Goals
 
 ### General informations
-- Open file *goals.dat* in *data/goals* directory or create new file with *dat*
-  extension in that directory (example: *mygoals.dat*).
+- Default game goals are in *goals.dat* file which is in *data* directory.
 
 ### Goal data structure
 - Each goal starts with tag `goal`.
@@ -445,8 +453,7 @@ To change which faction is player faction, edit `value` attribute of tag
 ## Mobiles
 
 ### General informations
-- Open file *mobs.dat* in *data/mobs* directory or create new file with *dat*
-  extension in that directory (example: *mymobs.dat*).
+- Default game mobiles are in *mobs.dat* file which is in *data* directory.
 
 ### Mob data structure
 - Each mobile starts with tag `mobile`.
@@ -483,8 +490,7 @@ To change which faction is player faction, edit `value` attribute of tag
 ## Factions
 
 ### General informations
-- Open file *factions.dat* in *data/factions* directory or create new file 
-  with *dat* extension in that directory (example: *myfactions.dat*).
+- Default game factions are in *factions.dat* file which is in *data* directory.
 
 ### Faction data structure
 - Each faction is between `faction` tags.
@@ -551,8 +557,7 @@ To change which faction is player faction, edit `value` attribute of tag
 ## Stories
 
 ### General informations
-- Open file *stories.dat* in *data/stories* directory or create new file 
-  with *dat* extension in that directory (example: *mystories.dat*).
+- Default game stories are in *stories.dat* file which is in *data* directory.
 
 ### Story data structure
 -- Each story is between "story" tags.
