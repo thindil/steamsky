@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Undead faction don't have morale, tiredness and is immune to diseases
 - Moved all data files to one directory
 - Raised chance for sky bases from factions other than Poleis
+- Updated README.md
 
 ### Fixed
 - Recipe for adamantium plates
