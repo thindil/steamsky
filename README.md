@@ -71,16 +71,6 @@ You can set game directories by starting parameters. Possible options are:
   moment important only for license and changelog files). Example `./steamsky.sh
   --docdir=/usr/share/steamsky/doc`. Default value is *doc/*.
 
-* --etcdir=[directory] set directory where are GTK config files are (this works
-  only on Linux). Path must be absolute to file `steamsky`. Example `./steamsky.sh
-  --etcdir=/home/user/tmp/etc`. Default value is 
-  *[path to game directory]/etc/*.
-
-* --sharedir=[directory] set directory where are GTK icons files are (this works
-  only on Linux). Path must be absolute to file `steamsky`. Example `./steamsky.sh
-  --sharedir=/home/user/tmp/share`. Default value is 
-  *[path to game directory]/share/*.
-
 Of course, you can set all parameters together: `./steamsky.sh --datadir=somedir/
 --savedir=otherdir/ --docdir=anotherdir/`
 
