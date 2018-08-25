@@ -34,7 +34,7 @@ faction and in diseased bases events. Must be valid item type from
 - Attribute "healingskill": name of skill used to healing members of that
 faction. Must be valid skill name from *data/game.dat* file
 -->
- <faction index="POLEIS" name="Poleis" membername="member of Poleis" pluralmembername="members of Poleis" minspawn="1" maxspawn="70" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="1" healingtools="Medicines" healingskill="Medicine">
+ <faction index="POLEIS" name="Poleis" membername="member of Poleis" pluralmembername="members of Poleis" minspawn="1" maxspawn="50" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="1" healingtools="Medicines" healingskill="Medicine">
 <!--
 - Tags "relation": Relation of this faction with other faction. All factions
 must have this tags for each faction (even for self).
@@ -75,7 +75,7 @@ from *data/game.dat* file.
 -->
   <drinktype name="Drink" />
  </faction>
- <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" minspawn="71" maxspawn="80" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="1" healingtools="Medicines" healingskill="Medicine">
+ <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" minspawn="51" maxspawn="70" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="1" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="0" friendly="Y" />
   <relation faction="INDEPENDENT" minreputation="-3" maxreputation="2" friendly="Y" />
   <relation faction="PIRATES" reputation="-10" friendly="N" />
@@ -87,7 +87,7 @@ from *data/game.dat* file.
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
  </faction>
- <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" minspawn="81" maxspawn="83" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="161" healingtools="Medicines" healingskill="Medicine">
+ <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" minspawn="71" maxspawn="78" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="161" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="-10" friendly="N" />
   <relation faction="INDEPENDENT" minreputation="-20" maxreputation="-5" friendly="N" />
   <relation faction="PIRATES" reputation="0" friendly="Y" />
@@ -99,7 +99,7 @@ from *data/game.dat* file.
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
  </faction>
- <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" minspawn="84" maxspawn="90" minpopulation="0" maxpopulation="500" playerindex="75" playershipindex="164" healingtools="Medicines" healingskill="Medicine">
+ <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" minspawn="79" maxspawn="86" minpopulation="0" maxpopulation="500" playerindex="75" playershipindex="164" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
   <relation faction="INDEPENDENT" reputation="-100" friendly="N" />
   <relation faction="PIRATES" reputation="-100" friendly="N" />
@@ -119,7 +119,7 @@ faction members don't have morale (and bonuses from it)
   <flag name="nofatigue" />
   <flag name="nomorale" />
  </faction>
- <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" minspawn="91" maxspawn="95" minpopulation="0" maxpopulation="500" namestype="robotic" playerindex="76" playershipindex="165" healingtools="Bronze" healingskill="Engineering">
+ <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" minspawn="87" maxspawn="94" minpopulation="0" maxpopulation="500" namestype="robotic" playerindex="76" playershipindex="165" healingtools="Bronze" healingskill="Engineering">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
   <relation faction="INDEPENDENT" reputation="-100" friendly="N" />
   <relation faction="PIRATES" reputation="-100" friendly="N" />
@@ -133,7 +133,7 @@ faction members don't have morale (and bonuses from it)
   <flag name="nofatigue" />
   <flag name="nomorale" />
  </faction>
- <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" minspawn="96" maxspawn="100" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="166" healingtools="Medicines" healingskill="Medicine">
+ <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" minspawn="94" maxspawn="100" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="166" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="-50" friendly="N" />
   <relation faction="INDEPENDENT" minreputation="-40" maxreputation="-25" friendly="N" />
   <relation faction="PIRATES" reputation="-10" friendly="N" />
