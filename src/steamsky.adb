@@ -33,18 +33,6 @@ with MainMenu; use MainMenu;
 
 procedure SteamSky is
 
-   ConfigDirectory: Unbounded_String :=
-     To_Unbounded_String
-       (Full_Name(Dir_Name(Command_Name)) &
-        Dir_Separator &
-        "../etc" &
-        Dir_Separator);
-   ShareDirectory: Unbounded_String :=
-     To_Unbounded_String
-       (Full_Name(Dir_Name(Command_Name)) &
-        Dir_Separator &
-        "../share" &
-        Dir_Separator);
    function UpdatePath
      (Path: in out Unbounded_String;
       PathName: String) return Boolean is
@@ -100,18 +88,6 @@ begin
             DocDirectory :=
               To_Unbounded_String(Argument(I)(10 .. (Argument(I)'Last)));
             if not UpdatePath(DocDirectory, "Documentation") then
-               return;
-            end if;
-         elsif Argument(I)(1 .. 8) = "--etcdir" then
-            ConfigDirectory :=
-              To_Unbounded_String(Argument(I)(10 .. (Argument(I)'Last)));
-            if not UpdatePath(ConfigDirectory, "Configuration") then
-               return;
-            end if;
-         elsif Argument(I)(1 .. 8) = "--shared" then
-            ShareDirectory :=
-              To_Unbounded_String(Argument(I)(12 .. (Argument(I)'Last)));
-            if not UpdatePath(ShareDirectory, "Share") then
                return;
             end if;
          end if;
