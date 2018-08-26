@@ -17,7 +17,8 @@ All notable changes to this project will be documented in this file.
 - Ability to made selected factions immune to diseases
 - Ability to disable tiredness for selected factions
 - Ability to disable morale for selected factions
-- Separated directory for game modifications
+- Separated directory for game modifications and ability to set it by starting
+  arguments
 
 ### Changed
 - Updated interface
