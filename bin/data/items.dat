@@ -1658,8 +1658,17 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="232"/>
   <trade buyable="N" price="232"/>
   <trade buyable="N" price="232"/>
-  <data value="2"/>
+  <data value="1"/>
   <description>Adamantium set of tools used in blacksmith recipes.</description>
+ </item>
+ <item index="175" name="Adamantium woodworker set" showtype="Tool" type="WoodworkerSet" weight="20">
+  <trade buyable="Y" price="52"/>
+  <trade buyable="N" price="54"/>
+  <trade buyable="N" price="54"/>
+  <trade buyable="N" price="54"/>
+  <trade buyable="N" price="54"/>
+  <data value="1"/>
+  <description>Adamantium set of tools used in woodworker recipes.</description>
  </item>
 </items>
 
