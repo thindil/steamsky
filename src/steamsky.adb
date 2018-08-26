@@ -40,8 +40,8 @@ procedure SteamSky is
       if Element(Path, Length(Path)) /= Dir_Separator then
          Append(Path, Dir_Separator);
       end if;
-      if not Ada.Directories.Exists(To_String(Path)) then
-         if PathName /= "Save" then
+      if not Exists(To_String(Path)) then
+         if PathName /= "Save" and PathName /= "Modifications" then
             Put_Line
               ("Directory " &
                To_String(Path) &
@@ -50,7 +50,6 @@ procedure SteamSky is
                " directory.");
             return False;
          end if;
-         Create_Path(To_String(Path));
       end if;
       LogMessage
         (PathName & " directory sets to: " & To_String(Path),
@@ -99,6 +98,13 @@ begin
          end if;
       end if;
    end loop;
+
+   if not Exists(To_String(SaveDirectory)) then
+      Create_Path(To_String(SaveDirectory));
+   end if;
+   if not Exists(To_String(ModsDirectory)) then
+      Create_Path(To_String(ModsDirectory));
+   end if;
 
    if not LoadData then
       Put_Line
