@@ -90,6 +90,12 @@ begin
             if not UpdatePath(DocDirectory, "Documentation") then
                return;
             end if;
+         elsif Argument(I)(1 .. 8) = "--modsdi" then
+            ModsDirectory :=
+              To_Unbounded_String(Argument(I)(11 .. (Argument(I)'Last)));
+            if not UpdatePath(ModsDirectory, "Modifications") then
+               return;
+            end if;
          end if;
       end if;
    end loop;
