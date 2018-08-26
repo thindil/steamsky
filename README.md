@@ -71,6 +71,9 @@ You can set game directories by starting parameters. Possible options are:
   moment important only for license and changelog files). Example `./steamsky.sh
   --docdir=/usr/share/steamsky/doc`. Default value is *doc/*.
 
+* --modsdir=[directory] set directory where game modifications are. Example: 
+  `./steamsky.sh --modsdir=/home/user/.mods`. Default value is *data/mods/*
+
 Of course, you can set all parameters together: `./steamsky.sh --datadir=somedir/
 --savedir=otherdir/ --docdir=anotherdir/`
 
