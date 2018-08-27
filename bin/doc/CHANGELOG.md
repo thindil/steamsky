@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Ability to disable morale for selected factions
 - Separated directory for game modifications and ability to set it by starting
   arguments
+- Option to show help depending on player faction
 
 ### Changed
 - Updated interface
