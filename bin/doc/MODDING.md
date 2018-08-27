@@ -418,6 +418,10 @@ To change which faction is player faction, edit `value` attribute of tag
 - Inside help text you can use some tags for formatting text: 
   `{u}some text{/u}` for add underline for text, `{b}some text{/b}` to made
   bold characters and `{i}some text{/i}` for italic font.
+- Inside help text you can use some tags for hiding information based on 
+  player faction flags. Text between that tags will be invisible for player
+  who selected faction with that tag. Possible values are: `diseaseimmune`,
+  `nofatigue`, `nomorale`.
 
 ## Goals
 
