@@ -175,6 +175,10 @@ package body Help.UI is
         (1 => (Tag => "b", TextTag => Lookup(Tags, "bold")),
          2 => (Tag => "u", TextTag => Lookup(Tags, "underline")),
          3 => (Tag => "i", TextTag => Lookup(Tags, "italic")));
+      FlagsTags: constant array(Positive range <>) of Unbounded_String :=
+        (To_Unbounded_String("diseaseimmune"),
+         To_Unbounded_String("nofatigue"),
+         To_Unbounded_String("nomorale"));
    begin
       NewText := Help_List(Topic).Text;
       OldIndex := 1;
@@ -228,6 +232,17 @@ package body Help.UI is
                   FontTags(I).TextTag);
                EndIndex := Index(NewText, "}", StartIndex) - 1;
                exit;
+            end if;
+         end loop;
+         for I in FlagsTags'Range loop
+            if TagText = FlagsTags(I) then
+               if Factions_List(PlayerFaction).Flags.Contains(TagText) then
+                  EndIndex :=
+                    Index(NewText, "{/" & To_String(TagText), EndIndex) +
+                    Length(TagText) +
+                    1;
+                  exit;
+               end if;
             end if;
          end loop;
          OldIndex := EndIndex + 2;
