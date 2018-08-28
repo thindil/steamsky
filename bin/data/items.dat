@@ -532,7 +532,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="2"/>
   <description>Normal sand, used in creating glass.</description>
  </item>
- <item index="59" name="Bronze blacksmith set" showtype="Tool" type="BlacksmithSet" weight="100">
+ <item index="59" name="Bronze blacksmith set" showtype="Tool" type="BlacksmithSet" weight="50">
   <trade buyable="Y" price="35"/>
   <trade buyable="N" price="37"/>
   <trade buyable="N" price="37"/>
@@ -1023,7 +1023,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="5"/>
   <description>Simple bucket made of steel.</description>
  </item>
- <item index="107" name="Iron blacksmith set" showtype="Tool" type="BlacksmithSet" weight="100">
+ <item index="107" name="Iron blacksmith set" showtype="Tool" type="BlacksmithSet" weight="50">
   <trade buyable="Y" price="65"/>
   <trade buyable="N" price="67"/>
   <trade buyable="N" price="67"/>
@@ -1032,7 +1032,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="10"/>
   <description>Iron set of tools used in blacksmith recipes.</description>
  </item>
- <item index="108" name="Steel blacksmith set" showtype="Tool" type="BlacksmithSet" weight="100">
+ <item index="108" name="Steel blacksmith set" showtype="Tool" type="BlacksmithSet" weight="50">
   <trade buyable="Y" price="95"/>
   <trade buyable="N" price="97"/>
   <trade buyable="N" price="97"/>
@@ -1369,7 +1369,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple bucket made of orichalcum.</description>
  </item>
- <item index="144" name="Titanium blacksmith set" showtype="Tool" type="BlacksmithSet" weight="140">
+ <item index="144" name="Titanium blacksmith set" showtype="Tool" type="BlacksmithSet" weight="70">
   <trade buyable="Y" price="110"/>
   <trade buyable="N" price="112"/>
   <trade buyable="N" price="112"/>
@@ -1378,7 +1378,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Titanium set of tools used in blacksmith recipes.</description>
  </item>
- <item index="145" name="Orichalcum blacksmith set" showtype="Tool" type="BlacksmithSet" weight="140">
+ <item index="145" name="Orichalcum blacksmith set" showtype="Tool" type="BlacksmithSet" weight="70">
   <trade buyable="Y" price="115"/>
   <trade buyable="N" price="117"/>
   <trade buyable="N" price="117"/>
@@ -1652,7 +1652,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Simple bucket made of adamantium.</description>
  </item>
- <item index="174" name="Adamantium blacksmith set" showtype="Tool" type="BlacksmithSet" weight="280">
+ <item index="174" name="Adamantium blacksmith set" showtype="Tool" type="BlacksmithSet" weight="100">
   <trade buyable="Y" price="230"/>
   <trade buyable="N" price="232"/>
   <trade buyable="N" price="232"/>
