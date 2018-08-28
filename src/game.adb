@@ -354,21 +354,22 @@ package body Game is
       UpdateMissions(Minutes);
    end UpdateGame;
 
-   function LoadData return Boolean is
-      DataFile: File_Input;
-      Reader: Tree_Reader;
+   procedure LoadData(Reader: Tree_Reader) is
       GameData: Document;
       NodesList: Node_List;
+      DeleteIndex: Natural;
+      function FindAttributeIndex
+        (AttributeName: Unbounded_String) return Natural is
+      begin
+         for J in
+           Attributes_List.First_Index .. Attributes_List.Last_Index loop
+            if Attributes_List(J).Name = AttributeName then
+               return J;
+            end if;
+         end loop;
+         return 0;
+      end FindAttributeIndex;
    begin
-      if BaseSyllablesStart.Length > 0 then
-         return True;
-      end if;
-      if not Exists(To_String(DataDirectory) & "game.dat") then
-         return False;
-      end if;
-      Open(To_String(DataDirectory) & "game.dat", DataFile);
-      Parse(Reader, DataFile);
-      Close(DataFile);
       GameData := Get_Tree(Reader);
       NodesList := Child_Nodes(First_Child(GameData));
       for I in 0 .. Length(NodesList) - 1 loop
@@ -509,25 +510,15 @@ package body Game is
                end if;
             end loop;
          elsif Node_Name(Item(NodesList, I)) = "conditionname" then
-            for J in
-              Attributes_List.First_Index .. Attributes_List.Last_Index loop
-               if Attributes_List(J).Name =
-                 To_Unbounded_String
-                   (Get_Attribute(Item(NodesList, I), "value")) then
-                  ConditionIndex := J;
-                  exit;
-               end if;
-            end loop;
+            ConditionIndex :=
+              FindAttributeIndex
+                (To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
          elsif Node_Name(Item(NodesList, I)) = "strengthname" then
-            for J in
-              Attributes_List.First_Index .. Attributes_List.Last_Index loop
-               if Attributes_List(J).Name =
-                 To_Unbounded_String
-                   (Get_Attribute(Item(NodesList, I), "value")) then
-                  StrengthIndex := J;
-                  exit;
-               end if;
-            end loop;
+            StrengthIndex :=
+              FindAttributeIndex
+                (To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
          elsif Node_Name(Item(NodesList, I)) = "pilotingskill" then
             PilotingSkill :=
               FindSkillIndex
@@ -581,10 +572,39 @@ package body Game is
               FindSkillIndex
                 (To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
+         elsif Node_Name(Item(NodesList, I)) = "remove" then
+            if Get_Attribute(Item(NodesList, I), "name") = "skill" then
+               DeleteIndex :=
+                 FindSkillIndex
+                   (To_Unbounded_String
+                      (Get_Attribute(Item(NodesList, I), "value")));
+               if DeleteIndex > 0 then
+                  Skills_List.Delete(Index => DeleteIndex);
+               end if;
+            elsif Get_Attribute(Item(NodesList, I), "name") = "attribute" then
+               DeleteIndex :=
+                 FindAttributeIndex
+                   (To_Unbounded_String
+                      (Get_Attribute(Item(NodesList, I), "value")));
+               if DeleteIndex > 0 then
+                  Attributes_List.Delete(Index => DeleteIndex);
+               end if;
+            elsif Get_Attribute(Item(NodesList, I), "name") = "itemtype" then
+               DeleteIndex := 0;
+               for J in Items_Types.First_Index .. Items_Types.Last_Index loop
+                  if Items_Types(J) =
+                    To_Unbounded_String
+                      (Get_Attribute(Item(NodesList, I), "value")) then
+                     DeleteIndex := J;
+                     exit;
+                  end if;
+               end loop;
+               if DeleteIndex > 0 then
+                  Items_Types.Delete(Index => DeleteIndex);
+               end if;
+            end if;
          end if;
       end loop;
-      Free(Reader);
-      return True;
    end LoadData;
 
    function DaysDifference(DateToCompare: Date_Record) return Natural is
@@ -629,7 +649,8 @@ package body Game is
          FileName: Unbounded_String;
       end record;
       DataTypes: constant array(Positive range <>) of DataType_Record :=
-        ((To_Unbounded_String("help"), To_Unbounded_String("help.dat")),
+        ((To_Unbounded_String("data"), To_Unbounded_String("game.dat")),
+         (To_Unbounded_String("help"), To_Unbounded_String("help.dat")),
          (To_Unbounded_String("items"), To_Unbounded_String("items.dat")),
          (To_Unbounded_String("modules"),
           To_Unbounded_String("shipmodules.dat")),
@@ -680,6 +701,8 @@ package body Game is
                   LoadShips(Reader);
                elsif To_String(DataType) = "stories" then
                   LoadStories(Reader);
+               elsif To_String(DataType) = "data" then
+                  LoadData(Reader);
                end if;
             end if;
             Free(Reader);
