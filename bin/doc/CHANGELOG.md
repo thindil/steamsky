@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - Moved all data files to one directory
 - Raised chance for sky bases from factions other than Poleis
 - Updated README.md
+- Reduced weight of blacksmith sets
 
 ### Fixed
 - Recipe for adamantium plates
