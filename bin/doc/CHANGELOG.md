@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Separated directory for game modifications and ability to set it by starting
   arguments
 - Option to show help depending on player faction
+- Option to read game main data from different files than game.dat
 
 ### Changed
 - Updated interface
