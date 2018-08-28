@@ -1670,5 +1670,14 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Adamantium set of tools used in woodworker recipes.</description>
  </item>
+ <item index="176" name="Adamantium repair tools" showtype="Tool" type="RepairTools" weight="20">
+  <trade buyable="Y" price="50"/>
+  <trade buyable="N" price="52"/>
+  <trade buyable="N" price="52"/>
+  <trade buyable="N" price="52"/>
+  <trade buyable="N" price="52"/>
+  <data value="1"/>
+  <description>Adamantium set of tools needed to repair or upgrade ship modules.</description>
+ </item>
 </items>
 
