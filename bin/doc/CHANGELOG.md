@@ -8,8 +8,8 @@ All notable changes to this project will be documented in this file.
   cooking set, adamantium sickle, adamantium saw, adamantium bucket, adamantium
   blacksmith set and adamantium woodworker set
 - New items: adamantium gunsmith set, adamantium cooking set, adamantium
-  sickle, adamantium saw, adamantium bucket, adamantium blacksmith set and
-  adamantium woodworker set
+  sickle, adamantium saw, adamantium bucket, adamantium blacksmith set,
+  adamantium woodworker set and adamantium repair tools
 - Separated healing tools for each faction
 - Variable with healing tool name to help
 - Separated healing skill for each faction
