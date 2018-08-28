@@ -102,8 +102,6 @@ package Game is
       FactionIndex: Positive); -- Start new game: create map, place ship, crew, etc
    procedure UpdateGame
      (Minutes: Positive); -- Game ticks (update time, crew, ship, etc)
-   function LoadData
-     return Boolean; -- Load game data from file, return false if file not found
    function DaysDifference
      (DateToCompare: Date_Record)
      return Natural; -- Return days difference between selected date and current game date

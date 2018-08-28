@@ -106,14 +106,6 @@ begin
       Create_Path(To_String(ModsDirectory));
    end if;
 
-   if not LoadData then
-      Put_Line
-        ("Can't load game data. Probably missing file " &
-         To_String(DataDirectory) &
-         "game.dat");
-      return;
-   end if;
-
    LoadConfig;
    LoadHallOfFame;
 
