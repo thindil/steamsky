@@ -32,6 +32,8 @@ package body Factions is
       TmpRelations: Relations_Container.Vector;
       TmpRelation: RelationsRecord;
       TmpFood: UnboundedString_Container.Vector;
+      RemoveIndex: Unbounded_String;
+      DeleteIndex: Positive;
    begin
       TempRecord :=
         (Index => Null_Unbounded_String,
@@ -182,10 +184,25 @@ package body Factions is
                To_Unbounded_String
                  (Get_Attribute(Item(ChildNodes, J), "name")));
          end loop;
-         Factions_List.Append(New_Item => TempRecord);
-         LogMessage
-           ("Faction added: " & To_String(TempRecord.Name),
-            Everything);
+         if Get_Attribute(Item(NodesList, I), "remove") = "" then
+            Factions_List.Append(New_Item => TempRecord);
+            LogMessage
+              ("Faction added: " & To_String(TempRecord.Name),
+               Everything);
+         else
+            RemoveIndex :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "remove"));
+            for J in Factions_List.Iterate loop
+               if Factions_List(J).Index = RemoveIndex then
+                  DeleteIndex := Factions_Container.To_Index(J);
+                  exit;
+               end if;
+            end loop;
+            Factions_List.Delete(Index => DeleteIndex);
+            LogMessage
+              ("Faction removed: " & To_String(RemoveIndex),
+               Everything);
+         end if;
          TempRecord :=
            (Index => Null_Unbounded_String,
             Name => Null_Unbounded_String,

@@ -352,6 +352,7 @@ package body Ships is
       TempCargo, TempCrew: Skills_Container.Vector;
       ModuleAmount: Positive;
       Index: Natural;
+      RemoveIndex: Unbounded_String;
       procedure CountAmmoValue(ItemTypeIndex, Multiple: Positive) is
       begin
          for Item of TempRecord.Cargo loop
@@ -585,8 +586,23 @@ package body Ships is
             end case;
          end loop;
          TempRecord.CombatValue := TempRecord.CombatValue - 1;
-         ProtoShips_List.Append(New_Item => TempRecord);
-         LogMessage("Ship added: " & To_String(TempRecord.Name), Everything);
+         if Get_Attribute(Item(NodesList, I), "remove") = "" then
+            ProtoShips_List.Append(New_Item => TempRecord);
+            LogMessage
+              ("Ship added: " & To_String(TempRecord.Name),
+               Everything);
+         else
+            RemoveIndex :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "remove"));
+            for J in ProtoShips_List.Iterate loop
+               if ProtoShips_List(J).Index = RemoveIndex then
+                  Index := ProtoShips_Container.To_Index(J);
+                  exit;
+               end if;
+            end loop;
+            ProtoShips_List.Delete(Index => Index);
+            LogMessage("Ship removed: " & To_String(RemoveIndex), Everything);
+         end if;
          TempRecord :=
            (Name => Null_Unbounded_String,
             Modules => TempModules,

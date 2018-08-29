@@ -91,21 +91,34 @@ package body Items is
          if TempRecord.Index = MoneyIndex then
             MoneyName := TempRecord.Name;
          end if;
-         Items_List.Append(New_Item => TempRecord);
-         if TempRecord.IType = WeaponType then
-            Weapons_List.Append(New_Item => Items_List.Last_Index);
-         elsif TempRecord.IType = ShieldType then
-            Shields_List.Append(New_Item => Items_List.Last_Index);
-         elsif TempRecord.IType = HeadArmor then
-            HeadArmors_List.Append(New_Item => Items_List.Last_Index);
-         elsif TempRecord.IType = ChestArmor then
-            ChestArmors_List.Append(New_Item => Items_List.Last_Index);
-         elsif TempRecord.IType = ArmsArmor then
-            ArmsArmors_List.Append(New_Item => Items_List.Last_Index);
-         elsif TempRecord.IType = LegsArmor then
-            LegsArmors_List.Append(New_Item => Items_List.Last_Index);
+         if Get_Attribute(Item(NodesList, I), "remove") = "" then
+            Items_List.Append(New_Item => TempRecord);
+            if TempRecord.IType = WeaponType then
+               Weapons_List.Append(New_Item => Items_List.Last_Index);
+            elsif TempRecord.IType = ShieldType then
+               Shields_List.Append(New_Item => Items_List.Last_Index);
+            elsif TempRecord.IType = HeadArmor then
+               HeadArmors_List.Append(New_Item => Items_List.Last_Index);
+            elsif TempRecord.IType = ChestArmor then
+               ChestArmors_List.Append(New_Item => Items_List.Last_Index);
+            elsif TempRecord.IType = ArmsArmor then
+               ArmsArmors_List.Append(New_Item => Items_List.Last_Index);
+            elsif TempRecord.IType = LegsArmor then
+               LegsArmors_List.Append(New_Item => Items_List.Last_Index);
+            end if;
+            LogMessage
+              ("Item added: " & To_String(TempRecord.Name),
+               Everything);
+         else
+            Items_List.Delete
+            (Index =>
+               FindProtoItem
+                 (To_Unbounded_String
+                    (Get_Attribute(Item(NodesList, I), "remove"))));
+            LogMessage
+              ("Item removed: " & Get_Attribute(Item(NodesList, I), "remove"),
+               Everything);
          end if;
-         LogMessage("Item added: " & To_String(TempRecord.Name), Everything);
          TempRecord :=
            (Name => Null_Unbounded_String,
             Weight => 1,
