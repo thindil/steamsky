@@ -209,6 +209,9 @@ Value must be existing skill name.
 
 ### General informations
 - Default game items are in *items.dat* file which is in *data* directory.
+- To remove existing item from game, you can delete it from *items.dat* or in
+  modification file add tag `item` with attribute `remove` which value will be
+  index of item to remove.
 
 ### Item data structure
 - Each item starts with tag `item`.
@@ -249,6 +252,9 @@ Value must be existing skill name.
 ### General informations
 - Default game crafting recipes are in *recipes.dat* file which is in *data* 
   directory.
+- To remove existing recipe from game, you can delete it from *recipes.dat* or
+  in modification file add tag `recipe` with attribute `remove` which value 
+  will be index of recipe to remove.
 
 ### Recipe data structure
 - Each recipe starts with tag `recipe`.
@@ -281,6 +287,9 @@ Value must be existing skill name.
 ### General informations
 - Default game ship modules are in *shipmodules.dat* file which is in *data* 
   directory.
+- To remove existing ship module from game, you can delete it from 
+  *shipmodules.dat* or in modification file add tag `module` with attribute 
+  `remove` which value will be index of ship module to remove.
 
 ### Ship module data structure
 - Each ship module starts with tag `module`.
@@ -323,6 +332,9 @@ Value must be existing skill name.
 
 ### General informations
 - Default game ships are in *ships.dat* file which is in *data* directory.
+- To remove existing ship from game, you can delete it from *ships.dat* or in
+  modification file add tag `ship` with attribute `remove` which value will be
+  index of ship to remove.
 
 ### Ship data structure
 - Each ship is between `ship` tags. Attribute `index` is a index (it can be 
@@ -380,6 +392,9 @@ Value must be existing skill name.
 
 ### General informations
 - Default game help entries are in *help.dat* file which is in *data* directory.
+- To remove existing help topic from game, you can delete it from *help.dat* 
+  or in modification file add tag `entry` with attribute `remove` which value 
+  will be title of help to remove.
 
 ### Help data structure
 - Each help entry is between `entry` tags. 
@@ -428,6 +443,9 @@ Value must be existing skill name.
 
 ### General informations
 - Default game goals are in *goals.dat* file which is in *data* directory.
+- To remove existing goal from game, you can delete it from *goals.dat* or in
+  modification file add tag `goal` with attribute `remove` which value will be
+  index of goal to remove.
 
 ### Goal data structure
 - Each goal starts with tag `goal`.
@@ -459,6 +477,9 @@ Value must be existing skill name.
 
 ### General informations
 - Default game mobiles are in *mobs.dat* file which is in *data* directory.
+- To remove existing mobile from game, you can delete it from *mobs.dat* or in
+  modification file add tag `mobile` with attribute `remove` which value will
+  be index of mobile to remove.
 
 ### Mob data structure
 - Each mobile starts with tag `mobile`.
@@ -496,6 +517,9 @@ Value must be existing skill name.
 
 ### General informations
 - Default game factions are in *factions.dat* file which is in *data* directory.
+- To remove existing faction from game, you can delete it from *factions.dat*
+  or in modification file add tag `faction` with attribute `remove` which value
+  will be index of faction to remove.
 
 ### Faction data structure
 - Each faction is between `faction` tags.
@@ -563,6 +587,9 @@ Value must be existing skill name.
 
 ### General informations
 - Default game stories are in *stories.dat* file which is in *data* directory.
+- To remove existing story from game, you can delete it from *stories.dat* or
+  in modification file add tag `story` with attribute `remove` which value will
+  be index of story to remove.
 
 ### Story data structure
 -- Each story is between "story" tags.
