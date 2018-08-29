@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
   arguments
 - Option to show help depending on player faction
 - Option to read game main data from different files than game.dat
+- High morale adds small bonus to skills
 
 ### Changed
 - Updated interface
