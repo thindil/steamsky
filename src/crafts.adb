@@ -110,11 +110,23 @@ package body Crafts is
             TempRecord.Tool :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "tool"));
          end if;
-         Recipes_List.Append(New_Item => TempRecord);
-         LogMessage
-           ("Recipe added: " &
-            To_String(Items_List(TempRecord.ResultIndex).Name),
-            Everything);
+         if Get_Attribute(Item(NodesList, I), "remove") = "" then
+            Recipes_List.Append(New_Item => TempRecord);
+            LogMessage
+              ("Recipe added: " &
+               To_String(Items_List(TempRecord.ResultIndex).Name),
+               Everything);
+         else
+            Recipes_List.Delete
+            (Index =>
+               FindRecipe
+                 (To_Unbounded_String
+                    (Get_Attribute(Item(NodesList, I), "remove"))));
+            LogMessage
+              ("Recipe removed: " &
+               Get_Attribute(Item(NodesList, I), "remove"),
+               Everything);
+         end if;
          TempRecord :=
            (MaterialTypes => TempMaterials,
             MaterialAmounts => TempAmount,

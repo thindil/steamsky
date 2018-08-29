@@ -36,6 +36,8 @@ package body Goals is
       TempRecord: Goal_Data;
       NodesList: Node_List;
       GoalsData: Document;
+      RemoveIndex: Unbounded_String;
+      DeleteIndex: Positive;
    begin
       TempRecord :=
         (Index => Null_Unbounded_String,
@@ -61,8 +63,23 @@ package body Goals is
             TempRecord.Multiplier :=
               Natural'Value(Get_Attribute(Item(NodesList, I), "multiplier"));
          end if;
-         LogMessage("Goal added: " & To_String(TempRecord.Index), Everything);
-         Goals_List.Append(New_Item => TempRecord);
+         if Get_Attribute(Item(NodesList, I), "remove") = "" then
+            Goals_List.Append(New_Item => TempRecord);
+            LogMessage
+              ("Goal added: " & To_String(TempRecord.Index),
+               Everything);
+         else
+            RemoveIndex :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "remove"));
+            for J in Goals_List.Iterate loop
+               if Goals_List(J).Index = RemoveIndex then
+                  DeleteIndex := Goals_Container.To_Index(J);
+                  exit;
+               end if;
+            end loop;
+            Goals_List.Delete(Index => DeleteIndex);
+            LogMessage("Goal removed: " & To_String(RemoveIndex), Everything);
+         end if;
          TempRecord :=
            (Index => Null_Unbounded_String,
             GType => RANDOM,

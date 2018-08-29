@@ -84,8 +84,22 @@ package body ShipModules is
          end if;
          TempRecord.Description :=
            To_Unbounded_String(Node_Value(First_Child(Item(NodesList, I))));
-         LogMessage("Module added: " & To_String(TempRecord.Name), Everything);
-         Modules_List.Append(New_Item => TempRecord);
+         if Get_Attribute(Item(NodesList, I), "remove") = "" then
+            Modules_List.Append(New_Item => TempRecord);
+            LogMessage
+              ("Module added: " & To_String(TempRecord.Name),
+               Everything);
+         else
+            Modules_List.Delete
+            (Index =>
+               FindProtoModule
+                 (To_Unbounded_String
+                    (Get_Attribute(Item(NodesList, I), "remove"))));
+            LogMessage
+              ("Module removed: " &
+               Get_Attribute(Item(NodesList, I), "remove"),
+               Everything);
+         end if;
          TempRecord :=
            (Name => Null_Unbounded_String,
             MType => ENGINE,
