@@ -44,6 +44,8 @@ package body Stories is
       StartStep, FinalStep: Unbounded_String;
       TempTexts: StepTexts_Container.Vector;
       TempData: StepData_Container.Vector;
+      RemoveIndex: Unbounded_String;
+      DeleteIndex: Positive;
    begin
       ClearCurrentStory;
       TempStep :=
@@ -169,8 +171,23 @@ package body Stories is
               "endtext");
          TempRecord.EndText :=
            To_Unbounded_String(Node_Value(First_Child(Item(ChildNodes, 0))));
-         Stories_List.Append(New_Item => TempRecord);
-         LogMessage("Story added: " & To_String(TempRecord.Index), Everything);
+         if Get_Attribute(Item(NodesList, I), "remove") = "" then
+            Stories_List.Append(New_Item => TempRecord);
+            LogMessage
+              ("Story added: " & To_String(TempRecord.Index),
+               Everything);
+         else
+            RemoveIndex :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "remove"));
+            for J in Stories_List.Iterate loop
+               if Stories_List(J).Index = RemoveIndex then
+                  DeleteIndex := Stories_Container.To_Index(J);
+                  exit;
+               end if;
+            end loop;
+            Stories_List.Delete(Index => DeleteIndex);
+            LogMessage("Story removed: " & To_String(RemoveIndex), Everything);
+         end if;
          TempRecord :=
            (Index => Null_Unbounded_String,
             StartCondition => DROPITEM,
