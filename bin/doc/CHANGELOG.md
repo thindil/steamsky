@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 - Raised chance for sky bases from factions other than Poleis
 - Updated README.md
 - Reduced weight of blacksmith sets
+- How morale is gained and lost
 
 ### Fixed
 - Recipe for adamantium plates
