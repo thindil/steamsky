@@ -190,7 +190,7 @@ package body Crew is
    end GenerateMemberName;
 
    procedure UpdateCrew(Minutes: Positive; TiredPoints: Natural) is
-      TiredLevel, HungerLevel, ThirstLevel, MoraleLevel: Integer := 0;
+      TiredLevel, HungerLevel, ThirstLevel: Integer := 0;
       HealthLevel: Integer := 100;
       DeathReason: Unbounded_String;
       CabinIndex, Times, RestAmount, I, ToolIndex: Natural;
@@ -264,10 +264,7 @@ package body Crew is
                  (To_String(Member.Name) & " back to work, fully rested.",
                   OrderMessage,
                   1);
-               MoraleLevel := MoraleLevel - 1;
-               if MoraleLevel < 0 then
-                  MoraleLevel := 0;
-               end if;
+               UpdateMorale(PlayerShip, I, 1);
             end if;
             Member.PreviousOrder := Rest;
          end if;
@@ -320,7 +317,7 @@ package body Crew is
                      " is very tired but can't go to rest.",
                      OrderMessage,
                      3);
-                  MoraleLevel := MoraleLevel - GetRandom(1, 5);
+                  UpdateMorale(PlayerShip, I, GetRandom(1, 5));
                end if;
             end;
          end if;
@@ -372,13 +369,6 @@ package body Crew is
                Member.ContractLength := 0;
             end if;
          end if;
-         Member.Morale := MoraleLevel;
-         if MoraleLevel > 75 then
-            Member.Loyalty := Member.Loyalty + 1;
-            if Member.Loyalty > 100 then
-               Member.Loyalty := 100;
-            end if;
-         end if;
       end UpdateMember;
    begin
       I := PlayerShip.Crew.First_Index;
@@ -400,7 +390,6 @@ package body Crew is
          HungerLevel := PlayerShip.Crew(I).Hunger;
          ThirstLevel := PlayerShip.Crew(I).Thirst;
          TiredLevel := PlayerShip.Crew(I).Tired;
-         MoraleLevel := PlayerShip.Crew(I).Morale;
          if Times > 0 then
             if PlayerShip.Crew(I).Order = Rest then
                CabinIndex := 0;
@@ -446,10 +435,10 @@ package body Crew is
                      HealthLevel := 100;
                   end if;
                end if;
-               if MoraleLevel < 50 then
-                  MoraleLevel := MoraleLevel + Times + RestAmount;
-                  if MoraleLevel > 50 then
-                     MoraleLevel := 50;
+               if PlayerShip.Crew(I).Morale(1) < 50 then
+                  UpdateMorale(PlayerShip, I, (Times + RestAmount));
+                  if PlayerShip.Crew(I).Morale(1) > 50 then
+                     PlayerShip.Crew(I).Morale := (50, 0);
                   end if;
                end if;
             else

@@ -94,7 +94,7 @@ package body Bases.Trade is
           Equipment => Recruit.Equipment,
           Payment => (DailyPayment, TradePayment),
           ContractLength => ContractLenght,
-          Morale => 50 + SkyBases(BaseIndex).Reputation(1),
+          Morale => (50 + SkyBases(BaseIndex).Reputation(1), 0),
           Loyalty => 50 + SkyBases(BaseIndex).Reputation(1)));
       UpdateCargo
         (Ship => PlayerShip,
