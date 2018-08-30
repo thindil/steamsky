@@ -91,9 +91,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkImage" id="imglogo">
+              <object class="GtkLabel" id="lbllogo">
+                <property name="name">logofont</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="label" translatable="no">Steam Sky</property>
               </object>
               <packing>
                 <property name="expand">False</property>
