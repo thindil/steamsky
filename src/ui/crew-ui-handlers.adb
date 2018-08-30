@@ -274,22 +274,22 @@ package body Crew.UI.Handlers is
       Show_All(Gtk_Widget(Get_Object(Object, "progressmorale")));
       Set_Fraction
         (Gtk_Progress_Bar(Get_Object(Object, "progressmorale")),
-         Gdouble(Member.Morale) / 100.0);
-      if Member.Morale < 25 then
+         Gdouble(Member.Morale(1)) / 100.0);
+      if Member.Morale(1) < 25 then
          Set_Text
            (Gtk_Progress_Bar(Get_Object(Object, "progressmorale")),
             "Upset");
-      elsif Member.Morale > 24 and Member.Morale < 50 then
+      elsif Member.Morale(1) > 24 and Member.Morale(1) < 50 then
          Set_Text
            (Gtk_Progress_Bar(Get_Object(Object, "progressmorale")),
             "Unhappy");
-      elsif Member.Morale = 50 then
+      elsif Member.Morale(1) = 50 then
          Hide(Gtk_Widget(Get_Object(Object, "progressmorale")));
-      elsif Member.Morale > 50 and Member.Morale < 75 then
+      elsif Member.Morale(1) > 50 and Member.Morale(1) < 75 then
          Set_Text
            (Gtk_Progress_Bar(Get_Object(Object, "progressmorale")),
             "Happy");
-      elsif Member.Morale > 74 then
+      elsif Member.Morale(1) > 74 then
          Set_Text
            (Gtk_Progress_Bar(Get_Object(Object, "progressmorale")),
             "Excited");

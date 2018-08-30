@@ -161,7 +161,8 @@ package body Ships.SaveLoad is
             To_Unbounded_String("dailypay"),
             To_Unbounded_String("tradepay"),
             To_Unbounded_String("contractlength"),
-            To_Unbounded_String("morale"),
+            To_Unbounded_String("moralelevel"),
+            To_Unbounded_String("moralepoints"),
             To_Unbounded_String("loyalty"));
          AttributesValues: array(AttributesNames'Range) of Integer;
       begin
@@ -181,7 +182,8 @@ package body Ships.SaveLoad is
                Member.Payment(1),
                Member.Payment(2),
                Member.ContractLength,
-               Member.Morale,
+               Member.Morale(1),
+               Member.Morale(2),
                Member.Loyalty);
             for I in AttributesNames'Range loop
                RawValue :=
@@ -391,7 +393,6 @@ package body Ships.SaveLoad is
                Index,
                Level,
                Experience,
-               Morale,
                Loyalty: Natural;
                Skills: Skills_Container.Vector;
                Attributes: Attributes_Container.Vector;
@@ -401,7 +402,7 @@ package body Ships.SaveLoad is
                Equipment: Equipment_Array;
                OrderTime, ContractLength: Integer;
                Amount, Durability, EquipmentIndex, PriorityIndex: Positive;
-               Payment: Attributes_Array;
+               Payment, Morale: Attributes_Array;
             begin
                Skills.Clear;
                Attributes.Clear;
@@ -443,10 +444,21 @@ package body Ships.SaveLoad is
                    (Get_Attribute(Item(ChildNodes, I), "contractlength"));
                if Get_Attribute(Item(ChildNodes, I), "morale") /= "" then
                   Morale :=
-                    Natural'Value
-                      (Get_Attribute(Item(ChildNodes, I), "morale"));
+                    (Natural'Value
+                       (Get_Attribute(Item(ChildNodes, I), "morale")),
+                     0);
                else
-                  Morale := 50;
+                  Morale := (50, 0);
+               end if;
+               if Get_Attribute(Item(ChildNodes, I), "moralelevel") /= "" then
+                  Morale(1) :=
+                    Natural'Value
+                      (Get_Attribute(Item(ChildNodes, I), "moralelevel"));
+               end if;
+               if Get_Attribute(Item(ChildNodes, I), "moralepoints") /= "" then
+                  Morale(2) :=
+                    Natural'Value
+                      (Get_Attribute(Item(ChildNodes, I), "moralepoints"));
                end if;
                if Get_Attribute(Item(ChildNodes, I), "loyalty") /= "" then
                   Loyalty :=

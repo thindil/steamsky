@@ -56,12 +56,12 @@ package body Ships.Crew is
                SkillLevel :=
                  SkillLevel - (Integer(Float(BaseSkillLevel) * Float(Damage)));
             end if;
-            if Member.Morale < 25 then
-               Damage := DamageFactor(Float(Member.Morale) / 100.0);
+            if Member.Morale(1) < 25 then
+               Damage := DamageFactor(Float(Member.Morale(1)) / 100.0);
                SkillLevel :=
                  SkillLevel - (Integer(Float(BaseSkillLevel) * Float(Damage)));
             end if;
-            if Member.Morale > 90 then
+            if Member.Morale(1) > 90 then
                Damage := DamageFactor(Float(SkillLevel) / 100.0);
                SkillLevel :=
                  SkillLevel + (Integer(Float(BaseSkillLevel) * Float(Damage)));
@@ -184,7 +184,7 @@ package body Ships.Crew is
          end if;
       end if;
       if GivenOrder /= Rest and
-        ((Ship.Crew(MemberIndex).Morale < 11 and GetRandom(1, 100) < 50) or
+        ((Ship.Crew(MemberIndex).Morale(1) < 11 and GetRandom(1, 100) < 50) or
          Ship.Crew(MemberIndex).Loyalty < 20) then
          raise Crew_Order_Error with MemberName & " refuses to execute order.";
       end if;
@@ -763,7 +763,7 @@ package body Ships.Crew is
      (Ship: in out ShipRecord;
       MemberIndex: Positive;
       Value: Integer) is
-      NewMorale, NewLoyalty: Integer;
+      NewMorale, NewLoyalty, NewValue: Integer;
       FactionIndex: Positive;
    begin
       if Ship = PlayerShip then
@@ -780,13 +780,22 @@ package body Ships.Crew is
         (To_Unbounded_String("nomorale")) then
          return;
       end if;
-      NewMorale := Ship.Crew(MemberIndex).Morale + Value;
+      NewValue := Ship.Crew(MemberIndex).Morale(2) + Value;
+      NewMorale := Ship.Crew(MemberIndex).Morale(1);
+      while NewValue >= (NewMorale * 5) loop
+         NewValue := NewValue - (NewMorale * 5);
+         NewMorale := NewMorale + 1;
+      end loop;
+      while NewValue < 0 loop
+         NewValue := NewValue + (NewMorale * 5);
+         NewMorale := NewMorale - 1;
+      end loop;
       if NewMorale > 100 then
          NewMorale := 100;
       elsif NewMorale < 0 then
          NewMorale := 0;
       end if;
-      Ship.Crew(MemberIndex).Morale := NewMorale;
+      Ship.Crew(MemberIndex).Morale := (NewMorale, NewValue);
       if Ship = PlayerShip and MemberIndex = 1 then
          return;
       end if;
