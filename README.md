@@ -110,6 +110,10 @@ Font Z003 is under AGPL v3 license:
 
 https://github.com/ArtifexSoftware/urw-base35-fonts
 
+Font Rye is under Open Font License:
+
+https://fonts.google.com/specimen/Rye
+
 
 
 More documentation about game (changelog, license) you can find in
