@@ -1679,5 +1679,14 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Adamantium set of tools needed to repair or upgrade ship modules.</description>
  </item>
+ <item index="177" name="Adamantium sewing kit" showtype="Tool" type="SewingKit" weight="8">
+  <trade buyable="Y" price="52"/>
+  <trade buyable="N" price="54"/>
+  <trade buyable="N" price="54"/>
+  <trade buyable="N" price="54"/>
+  <trade buyable="N" price="54"/>
+  <data value="1"/>
+  <description>Adamantium set of tools needed to sew items.</description>
+ </item>
 </items>
 
