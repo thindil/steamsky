@@ -223,7 +223,7 @@ package body Missions is
       MissionsLimit: Integer;
       Mission: Mission_Data := SkyBases(BaseIndex).Missions(MissionIndex);
       AcceptMessage: Unbounded_String;
-      TraderIndex: Positive;
+      TraderIndex, Morale: Positive;
       HaveCabin: Boolean := False;
       Gender: Character;
       Skills: Skills_Container.Vector;
@@ -308,6 +308,12 @@ package body Missions is
             else
                Gender := 'M';
             end if;
+            if Factions_List(SkyBases(BaseIndex).Owner).Flags.Contains
+              (To_Unbounded_String("nomorale")) then
+               Morale := 50;
+            else
+               Morale := 50 + SkyBases(BaseIndex).Reputation(1);
+            end if;
             PlayerShip.Crew.Append
             (New_Item =>
                (Name =>
@@ -329,8 +335,8 @@ package body Missions is
                 Equipment => (others => 0),
                 Payment => (others => 0),
                 ContractLength => Mission.Time,
-                Morale => (50 + SkyBases(BaseIndex).Reputation(1), 0),
-                Loyalty => 50 + SkyBases(BaseIndex).Reputation(1)));
+                Morale => (Morale, 0),
+                Loyalty => Morale));
             for Module of PlayerShip.Modules loop
                if Module.ProtoIndex = Mission.Target and Module.Owner = 0 then
                   Module.Owner := PlayerShip.Crew.Last_Index;
