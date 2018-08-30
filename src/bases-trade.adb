@@ -61,7 +61,7 @@ package body Bases.Trade is
       MoneyIndex2, Price: Natural;
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
-      TraderIndex: Positive;
+      TraderIndex, Morale: Positive;
       Inventory: Inventory_Container.Vector;
    begin
       TraderIndex := FindMember(Talk);
@@ -76,6 +76,12 @@ package body Bases.Trade is
              Name => Null_Unbounded_String,
              Durability => 100));
       end loop;
+      if Factions_List(SkyBases(BaseIndex).Owner).Flags.Contains
+        (To_Unbounded_String("nomorale")) then
+         Morale := 50;
+      else
+         Morale := SkyBases(BaseIndex).Reputation(1);
+      end if;
       PlayerShip.Crew.Append
       (New_Item =>
          (Name => Recruit.Name,
@@ -94,8 +100,8 @@ package body Bases.Trade is
           Equipment => Recruit.Equipment,
           Payment => (DailyPayment, TradePayment),
           ContractLength => ContractLenght,
-          Morale => (50 + SkyBases(BaseIndex).Reputation(1), 0),
-          Loyalty => 50 + SkyBases(BaseIndex).Reputation(1)));
+          Morale => (Morale, 0),
+          Loyalty => Morale));
       UpdateCargo
         (Ship => PlayerShip,
          CargoIndex => MoneyIndex2,
