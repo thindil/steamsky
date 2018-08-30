@@ -139,6 +139,13 @@ GtkTextView#mapview {
    font-size:12px;
 }
 
+
+*#logofont {
+   font-family:Rye;
+   font-style:normal;
+   font-size:70px;
+}
+
 .progressbar#redbar, 
    .progressbar:selected#redbar, 
    .progressbar:selected#redbar:focus {

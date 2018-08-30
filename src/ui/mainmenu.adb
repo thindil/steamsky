@@ -37,7 +37,6 @@ with Gtk.Window; use Gtk.Window;
 with Gtk.Css_Provider; use Gtk.Css_Provider;
 with Gtk.Style_Context; use Gtk.Style_Context;
 with Gtk.Stack; use Gtk.Stack;
-with Gtk.Image; use Gtk.Image;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
@@ -444,14 +443,6 @@ package body MainMenu is
       Set_Text
         (Gtk_Entry(Get_Object(Builder, "entryshipname")),
          To_String(NewGameSettings.ShipName));
-      Set
-        (Gtk_Image(Get_Object(Builder, "imglogo")),
-         To_String(DataDirectory) &
-         "ui" &
-         Dir_Separator &
-         "images" &
-         Dir_Separator &
-         "logo.png");
       DataError := To_Unbounded_String(LoadGameData);
       if DataError /= Null_Unbounded_String then
          Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
