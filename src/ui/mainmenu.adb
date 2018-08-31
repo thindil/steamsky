@@ -33,6 +33,7 @@ with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
+with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Css_Provider; use Gtk.Css_Provider;
 with Gtk.Style_Context; use Gtk.Style_Context;
@@ -373,6 +374,8 @@ package body MainMenu is
       FactionIndex: constant Natural :=
         Integer(Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbfaction")))) +
         1;
+      CareerComboBox: constant Gtk_Combo_Box_Text :=
+        Gtk_Combo_Box_Text(Get_Object(Object, "cmbcareer"));
    begin
       if FactionIndex = 0 then
          return;
@@ -389,7 +392,30 @@ package body MainMenu is
          Show_All(Gtk_Widget(Get_Object(Object, "cmbgender")));
          Show_All(Gtk_Widget(Get_Object(Object, "lblgender")));
       end if;
+      Remove_All(CareerComboBox);
+      for Career of Factions_List(FactionIndex).Careers loop
+         Append_Text(CareerComboBox, To_String(Career.Name));
+      end loop;
+      Set_Active(Gtk_Combo_Box(CareerComboBox), 0);
    end ShowFactionDescription;
+
+   procedure ShowCareerDescription
+     (Object: access Gtkada_Builder_Record'Class) is
+      FactionIndex: constant Natural :=
+        Integer(Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbfaction")))) +
+        1;
+      CareerIndex: constant Natural :=
+        Integer(Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbcareer")))) +
+        1;
+   begin
+      if FactionIndex = 0 or CareerIndex = 0 then
+         return;
+      end if;
+      Set_Label
+        (Gtk_Label(Get_Object(Builder, "lblcareerinfo")),
+         To_String
+           (Factions_List(FactionIndex).Careers(CareerIndex).Description));
+   end ShowCareerDescription;
 
    procedure CreateMainMenu is
       Error: aliased GError;
@@ -432,6 +458,10 @@ package body MainMenu is
         (Builder,
          "Show_Faction_Description",
          ShowFactionDescription'Access);
+      Register_Handler
+        (Builder,
+         "Show_Career_Description",
+         ShowCareerDescription'Access);
       Do_Connect(Builder);
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
       if HallOfFame_Array(1).Name = Null_Unbounded_String then
