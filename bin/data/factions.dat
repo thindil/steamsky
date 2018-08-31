@@ -22,19 +22,13 @@ attribute "population". If it should be random value, use attribute
 population. Miniumum value is 0.
 - Optional attribute "namestype": Used in generating ship names of that faction
 and names of all bases. Can be "standard" (default value) or "robotic".
-- Attribute "playerindex": index of mobile used for starting player character.
-Value must be existing mobile index from any mobiles file from *data/mobs*
-directory.
-- Attribute "playershipindex": index of ship used for starting player ship.
-Value must be existing ship index from any ships file form *data/ships*
-directory.
 - Attribute "healingtools": name of item type used to healing members of that
 faction and in diseased bases events. Must be valid item type from 
 *data/game.dat* file.
 - Attribute "healingskill": name of skill used to healing members of that
 faction. Must be valid skill name from *data/game.dat* file
 -->
- <faction index="POLEIS" name="Poleis" membername="member of Poleis" pluralmembername="members of Poleis" minspawn="1" maxspawn="50" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="1" healingtools="Medicines" healingskill="Medicine">
+ <faction index="POLEIS" name="Poleis" membername="member of Poleis" pluralmembername="members of Poleis" minspawn="1" maxspawn="50" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine">
 <!--
 - Tags "relation": Relation of this faction with other faction. All factions
 must have this tags for each faction (even for self).
@@ -74,8 +68,19 @@ no "drinktype" tags inside faction, that faction members can't be hungry.
 from *data/game.dat* file.
 -->
   <drinktype name="Drink" />
+<!--
+- Tags "career": Available careers for player when choice this faction. Text
+between tags is description of career visible in new game setting.
+- Attribute "playerindex": index of mobile used for starting player character,
+when he/she choice this career. Value must be existing mobile index from any
+mobiles file.
+- Attribute "shipindex": index of ship used for starting player ship when
+he/she choice this career. Value must be existing ship index from any ships
+file.
+-->
+  <career name="General" playerindex="1" shipindex="1">Standard career for everyone. You get average equipped small ship with with crew. Good for any purpose.</career>
  </faction>
- <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" minspawn="51" maxspawn="70" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="1" healingtools="Medicines" healingskill="Medicine">
+ <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" minspawn="51" maxspawn="70" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="0" friendly="Y" />
   <relation faction="INDEPENDENT" minreputation="-3" maxreputation="2" friendly="Y" />
   <relation faction="PIRATES" reputation="-10" friendly="N" />
@@ -86,6 +91,7 @@ from *data/game.dat* file.
   <foodtype name="Food" />
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
+  <career name="General" playerindex="1" shipindex="1">Standard career for everyone. You get average equipped small ship with with crew. Good for any purpose.</career>
  </faction>
  <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" minspawn="71" maxspawn="78" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="161" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="-10" friendly="N" />
@@ -98,8 +104,9 @@ from *data/game.dat* file.
   <foodtype name="Food" />
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
+  <career name="General" playerindex="1" shipindex="1">Standard career for everyone. You get average equipped small ship with with crew. Good for any purpose.</career>
  </faction>
- <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" minspawn="79" maxspawn="86" minpopulation="0" maxpopulation="500" playerindex="75" playershipindex="164" healingtools="Medicines" healingskill="Medicine">
+ <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" minspawn="79" maxspawn="86" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
   <relation faction="INDEPENDENT" reputation="-100" friendly="N" />
   <relation faction="PIRATES" reputation="-100" friendly="N" />
@@ -118,8 +125,9 @@ faction members don't have morale (and bonuses from it)
   <flag name="diseaseimmune" />
   <flag name="nofatigue" />
   <flag name="nomorale" />
+  <career name="General" playerindex="75" shipindex="164">Standard career for everyone. You get average equipped small ship with with crew. Good for any purpose.</career>
  </faction>
- <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" minspawn="87" maxspawn="94" minpopulation="0" maxpopulation="500" namestype="robotic" playerindex="76" playershipindex="165" healingtools="Bronze" healingskill="Engineering">
+ <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" minspawn="87" maxspawn="94" minpopulation="0" maxpopulation="500" namestype="robotic" healingtools="Bronze" healingskill="Engineering">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
   <relation faction="INDEPENDENT" reputation="-100" friendly="N" />
   <relation faction="PIRATES" reputation="-100" friendly="N" />
@@ -132,8 +140,9 @@ faction members don't have morale (and bonuses from it)
   <flag name="diseaseimmune" />
   <flag name="nofatigue" />
   <flag name="nomorale" />
+  <career name="General" playerindex="76" shipindex="165">Standard career for everyone. You get average equipped small ship with with crew. Good for any purpose.</career>
  </faction>
- <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" minspawn="94" maxspawn="100" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="166" healingtools="Medicines" healingskill="Medicine">
+ <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" minspawn="94" maxspawn="100" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="-50" friendly="N" />
   <relation faction="INDEPENDENT" minreputation="-40" maxreputation="-25" friendly="N" />
   <relation faction="PIRATES" reputation="-10" friendly="N" />
@@ -144,6 +153,7 @@ faction members don't have morale (and bonuses from it)
   <foodtype name="Food" />
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
+  <career name="General" playerindex="1" shipindex="166">Standard career for everyone. You get average equipped small ship with with crew. Good for any purpose.</career>
  </faction>
 </factions>
 
