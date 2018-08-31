@@ -544,12 +544,6 @@ Value must be existing skill name.
   population. Minumum value is 0.
 - Optional attribute `namestype`: Used in generating ship names of that faction
   and names of all bases. Can be `standard` (default value) or `robotic`.
-- Attribute `playerindex`: index of mobile used for starting player character.
-  Value must be existing mobile index from any mobiles file from *data/mobs*
-  directory.
-- Attribute `playershipindex`: index of ship used for starting player ship.
-  Value must be existing ship index from any ships file form *data/ships*
-  directory.
 - Attribute `healingtools`: name of item type used to healing members of that
   faction and in diseased bases events. Must be valid item type from 
   *data/game.dat* file.
@@ -582,6 +576,14 @@ Value must be existing skill name.
   cannot become ill, no disease event for this faction, `nofatigue` faction
   members don't get tired so, they can't rest and regenerate health, `nomorale`
   faction members don't have morale (and bonuses from it)
+- Tags "career": Available careers for player when choice this faction. Text
+  between tags is description of career visible in new game setting.
+- Attribute "playerindex": index of mobile used for starting player character,
+  when he/she choice this career. Value must be existing mobile index from any
+  mobiles file.
+- Attribute "shipindex": index of ship used for starting player ship when
+  he/she choice this career. Value must be existing ship index from any ships
+  file.
 
 ## Stories
 
