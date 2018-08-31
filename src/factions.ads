@@ -31,6 +31,14 @@ package Factions is
       Friendly: Boolean; -- Did target faction is friendly or enemy to this faction
    end record;
    package Relations_Container is new Vectors(Positive, RelationsRecord);
+   type CareerRecord is -- Data structure for player career in faction
+   record
+      Name: Unbounded_String; -- Name of career
+      ShipIndex: Unbounded_String; -- Index of proto ship which will be used as starting ship for player
+      PlayerIndex: Unbounded_String; -- Index of mobile which will be used as starting character for player
+      Description: Unbounded_String; -- Description of career, displayed to player
+   end record;
+   package Careers_Container is new Vectors(Positive, CareerRecord);
    type FactionRecord is -- Data structure for faction
    record
       Index: Unbounded_String; -- Index of faction, used in code
@@ -42,8 +50,6 @@ package Factions is
       NamesType: Unbounded_String; -- Type of names of members of faction (used in generating names of ships)
       Relations: Relations_Container
         .Vector; -- Relations of this faction with others factions
-      PlayerIndex: Unbounded_String; -- Index of mobile which will be used as starting character for player
-      PlayerShipIndex: Unbounded_String; -- Index of proto ship which will be used as starting ship for player
       Description: Unbounded_String; -- Description on faction, displayed to player
       FoodTypes: UnboundedString_Container
         .Vector; -- Types of items used as food for members of this faction
@@ -53,6 +59,8 @@ package Factions is
       HealingSkill: Positive; -- Vector index of skill used in healing members of this faction
       Flags: UnboundedString_Container
         .Vector; -- Various flags for faction (no gender, etc)
+      Careers: Careers_Container
+        .Vector; -- List of possible careers for that faction
    end record;
    package Factions_Container is new Vectors(Positive, FactionRecord);
    Factions_List: Factions_Container.Vector;
