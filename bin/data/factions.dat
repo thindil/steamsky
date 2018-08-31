@@ -78,7 +78,7 @@ mobiles file.
 he/she choice this career. Value must be existing ship index from any ships
 file.
 -->
-  <career name="General" playerindex="1" shipindex="1">Standard career for everyone. You get average equipped small ship with with crew. Good for any purpose.</career>
+  <career name="General" playerindex="1" shipindex="1">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
  </faction>
  <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" minspawn="51" maxspawn="70" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="0" friendly="Y" />
@@ -91,7 +91,7 @@ file.
   <foodtype name="Food" />
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
-  <career name="General" playerindex="1" shipindex="1">Standard career for everyone. You get average equipped small ship with with crew. Good for any purpose.</career>
+  <career name="General" playerindex="1" shipindex="1">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
  </faction>
  <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" minspawn="71" maxspawn="78" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="161" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="-10" friendly="N" />
@@ -104,7 +104,7 @@ file.
   <foodtype name="Food" />
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
-  <career name="General" playerindex="1" shipindex="1">Standard career for everyone. You get average equipped small ship with with crew. Good for any purpose.</career>
+  <career name="General" playerindex="1" shipindex="1">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
  </faction>
  <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" minspawn="79" maxspawn="86" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
@@ -125,7 +125,7 @@ faction members don't have morale (and bonuses from it)
   <flag name="diseaseimmune" />
   <flag name="nofatigue" />
   <flag name="nomorale" />
-  <career name="General" playerindex="75" shipindex="164">Standard career for everyone. You get average equipped small ship with with crew. Good for any purpose.</career>
+  <career name="General" playerindex="75" shipindex="164">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
  </faction>
  <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" minspawn="87" maxspawn="94" minpopulation="0" maxpopulation="500" namestype="robotic" healingtools="Bronze" healingskill="Engineering">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
@@ -140,7 +140,7 @@ faction members don't have morale (and bonuses from it)
   <flag name="diseaseimmune" />
   <flag name="nofatigue" />
   <flag name="nomorale" />
-  <career name="General" playerindex="76" shipindex="165">Standard career for everyone. You get average equipped small ship with with crew. Good for any purpose.</career>
+  <career name="General" playerindex="76" shipindex="165">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
  </faction>
  <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" minspawn="94" maxspawn="100" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="-50" friendly="N" />
@@ -153,7 +153,7 @@ faction members don't have morale (and bonuses from it)
   <foodtype name="Food" />
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
-  <career name="General" playerindex="1" shipindex="166">Standard career for everyone. You get average equipped small ship with with crew. Good for any purpose.</career>
+  <career name="General" playerindex="1" shipindex="166">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
  </faction>
 </factions>
 
