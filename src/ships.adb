@@ -295,11 +295,9 @@ package body Ships is
          Amount := Amount + Modules_List(TmpShip.Modules(I).ProtoIndex).Size;
       end loop;
       TmpShip.Modules(HullIndex).Data(1) := Amount;
-      if ProtoShip.Index = Factions_List(ProtoShip.Owner).PlayerShipIndex then
-         for Recipe of ProtoShip.KnownRecipes loop
-            Known_Recipes.Append(New_Item => Recipe);
-         end loop;
-      end if;
+      for Recipe of ProtoShip.KnownRecipes loop
+         Known_Recipes.Append(New_Item => Recipe);
+      end loop;
       -- Set home base for ship
       if SkyMap(X, Y).BaseIndex > 0 then
          TmpShip.HomeBase := SkyMap(X, Y).BaseIndex;

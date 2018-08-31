@@ -462,6 +462,7 @@ package body Bases is
       Enemies: Positive_Container.Vector;
       PlayerValue: Natural := 0;
       Attempts: Natural;
+      PlayerShips: UnboundedString_Container.Vector;
    begin
       TraderIndex := FindMember(Talk);
       if BaseIndex > 0 then -- asking in base
@@ -525,13 +526,17 @@ package body Bases is
       else
          PlayerValue := Natural'Last;
       end if;
+      for Faction of Factions_List loop
+         for Career of Faction.Careers loop
+            PlayerShips.Append(New_Item => Career.ShipIndex);
+         end loop;
+      end loop;
       for C in ProtoShips_List.Iterate loop
          if ProtoShips_List(C).CombatValue <= PlayerValue and
            not IsFriendly
              (Factions_List(PlayerFaction).Index,
               Factions_List(ProtoShips_List(C).Owner).Index) and
-           ProtoShips_List(C).Index /=
-             Factions_List(ProtoShips_List(C).Owner).PlayerShipIndex then
+           not PlayerShips.Contains(ProtoShips_List(C).Index) then
             Enemies.Append(New_Item => ProtoShips_Container.To_Index(C));
          end if;
       end loop;

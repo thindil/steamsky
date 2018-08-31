@@ -34,6 +34,8 @@ package body Factions is
       TmpFood: UnboundedString_Container.Vector;
       RemoveIndex: Unbounded_String;
       DeleteIndex: Positive;
+      TmpCareers: Careers_Container.Vector;
+      TmpCareer: CareerRecord;
    begin
       TempRecord :=
         (Index => Null_Unbounded_String,
@@ -44,14 +46,13 @@ package body Factions is
          Population => (0, 0),
          NamesType => To_Unbounded_String("standard"),
          Relations => TmpRelations,
-         PlayerIndex => Null_Unbounded_String,
-         PlayerShipIndex => Null_Unbounded_String,
          Description => Null_Unbounded_String,
          FoodTypes => TmpFood,
          DrinksTypes => TmpFood,
          HealingTools => Null_Unbounded_String,
          HealingSkill => 1,
-         Flags => TmpFood);
+         Flags => TmpFood,
+         Careers => TmpCareers);
       FactionsData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(FactionsData, "faction");
@@ -96,16 +97,6 @@ package body Factions is
             TempRecord.NamesType :=
               To_Unbounded_String
                 (Get_Attribute(Item(NodesList, I), "namestype"));
-         end if;
-         if Get_Attribute(Item(NodesList, I), "playerindex") /= "" then
-            TempRecord.PlayerIndex :=
-              To_Unbounded_String
-                (Get_Attribute(Item(NodesList, I), "playerindex"));
-         end if;
-         if Get_Attribute(Item(NodesList, I), "playershipindex") /= "" then
-            TempRecord.PlayerShipIndex :=
-              To_Unbounded_String
-                (Get_Attribute(Item(NodesList, I), "playershipindex"));
          end if;
          if Get_Attribute(Item(NodesList, I), "healingtools") /= "" then
             TempRecord.HealingTools :=
@@ -184,6 +175,24 @@ package body Factions is
                To_Unbounded_String
                  (Get_Attribute(Item(ChildNodes, J), "name")));
          end loop;
+         ChildNodes :=
+           DOM.Core.Elements.Get_Elements_By_Tag_Name
+             (Item(NodesList, I),
+              "career");
+         for J in 0 .. Length(ChildNodes) - 1 loop
+            TmpCareer.Name :=
+              To_Unbounded_String(Get_Attribute(Item(ChildNodes, J), "name"));
+            TmpCareer.ShipIndex :=
+              To_Unbounded_String
+                (Get_Attribute(Item(ChildNodes, J), "shipindex"));
+            TmpCareer.PlayerIndex :=
+              To_Unbounded_String
+                (Get_Attribute(Item(ChildNodes, J), "playerindex"));
+            TmpCareer.Description :=
+              To_Unbounded_String
+                (Node_Value(First_Child(Item(ChildNodes, J))));
+            TempRecord.Careers.Append(New_Item => TmpCareer);
+         end loop;
          if Get_Attribute(Item(NodesList, I), "remove") = "" then
             Factions_List.Append(New_Item => TempRecord);
             LogMessage
@@ -212,14 +221,13 @@ package body Factions is
             Population => (0, 0),
             NamesType => To_Unbounded_String("standard"),
             Relations => TmpRelations,
-            PlayerIndex => Null_Unbounded_String,
-            PlayerShipIndex => Null_Unbounded_String,
             Description => Null_Unbounded_String,
             FoodTypes => TmpFood,
             DrinksTypes => TmpFood,
             HealingTools => Null_Unbounded_String,
             HealingSkill => 1,
-            Flags => TmpFood);
+            Flags => TmpFood,
+            Careers => TmpCareers);
       end loop;
    end LoadFactions;
 

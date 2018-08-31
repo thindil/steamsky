@@ -389,6 +389,7 @@ package body Events is
 
    procedure GenerateTraders is
       TraderIndex: Positive;
+      PlayerShips: UnboundedString_Container.Vector;
    begin
       TraderIndex := ProtoShips_List.First_Index;
       for Ship of ProtoShips_List loop
@@ -397,12 +398,17 @@ package body Events is
          end if;
          TraderIndex := TraderIndex + 1;
       end loop;
+      for Faction of Factions_List loop
+         for Career of Faction.Careers loop
+            PlayerShips.Append(New_Item => Career.ShipIndex);
+         end loop;
+      end loop;
       TraderIndex := ProtoShips_List.First_Index;
       for Ship of ProtoShips_List loop
          if IsFriendly
              (Factions_List(PlayerFaction).Index,
               Factions_List(Ship.Owner).Index) and
-           Ship.Index /= Factions_List(Ship.Owner).PlayerShipIndex then
+           not PlayerShips.Contains(Ship.Index) then
             FriendlyShips.Append(New_Item => TraderIndex);
          end if;
          TraderIndex := TraderIndex + 1;
@@ -439,6 +445,7 @@ package body Events is
       Owner: Unbounded_String := To_Unbounded_String("Any")) is
       EnemyIndex: Positive;
       PlayerValue: Natural := 0;
+      PlayerShips: UnboundedString_Container.Vector;
    begin
       EnemyIndex := ProtoShips_List.First_Index;
       if GetRandom(1, 100) < 99 then
@@ -446,6 +453,11 @@ package body Events is
       else
          PlayerValue := Natural'Last;
       end if;
+      for Faction of Factions_List loop
+         for Career of Faction.Careers loop
+            PlayerShips.Append(New_Item => Career.ShipIndex);
+         end loop;
+      end loop;
       for Ship of ProtoShips_List loop
          if Ship.CombatValue <= PlayerValue and
            (Owner = To_Unbounded_String("Any") or
@@ -454,7 +466,7 @@ package body Events is
            not IsFriendly
              (Factions_List(PlayerFaction).Index,
               Factions_List(Ship.Owner).Index) and
-           Ship.Index /= Factions_List(Ship.Owner).PlayerShipIndex then
+           not PlayerShips.Contains(Ship.Index) then
             Enemies.Append(New_Item => EnemyIndex);
          end if;
          EnemyIndex := EnemyIndex + 1;
