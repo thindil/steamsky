@@ -309,7 +309,9 @@ package body MainMenu is
          To_Unbounded_String(ShipName),
          Gender,
          Positive
-           (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbfaction"))) + 1));
+           (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbfaction"))) + 1),
+         Positive
+           (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbcareer"))) + 1));
       StartGame;
    end NewGame;
 

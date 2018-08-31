@@ -54,7 +54,7 @@ package body Game is
    procedure NewGame
      (CharName, ShipName: Unbounded_String;
       Gender: Character;
-      FactionIndex: Positive) is
+      FactionIndex, CareerIndex: Positive) is
       PosX,
       PosY,
       RandomBase,
@@ -180,7 +180,7 @@ package body Game is
       -- Create player ship
       for I in ProtoShips_List.Iterate loop
          if ProtoShips_List(I).Index =
-           Factions_List(FactionIndex).PlayerShipIndex then
+           Factions_List(FactionIndex).Careers(CareerIndex).ShipIndex then
             ShipIndex := ProtoShips_Container.To_Index(I);
             exit;
          end if;
@@ -194,7 +194,9 @@ package body Game is
            DOCKED,
            False);
       -- Add player to ship
-      PlayerIndex2 := FindProtoMob(Factions_List(FactionIndex).PlayerIndex);
+      PlayerIndex2 :=
+        FindProtoMob
+          (Factions_List(FactionIndex).Careers(CareerIndex).PlayerIndex);
       for Item of ProtoMobs_List(PlayerIndex2).Inventory loop
          if Item(3) > 0 then
             Amount := GetRandom(Item(2), Item(3));
