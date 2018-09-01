@@ -1688,5 +1688,14 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Adamantium set of tools needed to sew items.</description>
  </item>
+ <item index="178" name="Adamantium 80mm ammo" showtype="Ammunition" type="Ammo80" weight="32">
+  <trade buyable="N" price="66"/>
+  <trade buyable="N" price="66"/>
+  <trade buyable="N" price="66"/>
+  <trade buyable="N" price="66"/>
+  <trade buyable="Y" price="64"/>
+  <data value="256"/>
+  <description>Upgraded 80mm gun ammunition, made of adamantium.</description>
+ </item>
 </items>
 
