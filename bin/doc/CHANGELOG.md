@@ -26,6 +26,8 @@ All notable changes to this project will be documented in this file.
 - High morale adds small bonus to skills
 - Option to remove existing recipes, factions, goals, help entries, items,
   ship modules, ships and stories from modifications files
+- Ability to select player career which affect player starting ship and 
+  equipment
 
 ### Changed
 - Updated interface
