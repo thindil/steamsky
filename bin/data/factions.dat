@@ -80,6 +80,7 @@ file.
 -->
   <career name="General" playerindex="1" shipindex="1">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
   <career name="Merchant" playerindex="1" shipindex="167">Career focused on trading. You get unarmed small ship with larger cargo space and more moneys. Your crew will be bit smaller that General. At begining is better to avoid combat.</career>
+  <career name="Hunter" playerindex="1" shipindex="168">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
  </faction>
  <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" minspawn="51" maxspawn="70" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="0" friendly="Y" />
@@ -94,6 +95,7 @@ file.
   <drinktype name="Drink" />
   <career name="General" playerindex="1" shipindex="1">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
   <career name="Merchant" playerindex="1" shipindex="167">Career focused on trading. You get unarmed small ship with larger cargo space and more moneys. Your crew will be bit smaller that General. At begining is better to avoid combat.</career>
+  <career name="Hunter" playerindex="1" shipindex="168">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
  </faction>
  <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" minspawn="71" maxspawn="78" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="161" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="-10" friendly="N" />
@@ -108,6 +110,7 @@ file.
   <drinktype name="Drink" />
   <career name="General" playerindex="1" shipindex="1">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
   <career name="Merchant" playerindex="1" shipindex="167">Career focused on trading. You get unarmed small ship with larger cargo space and more moneys. Your crew will be bit smaller that General. At begining is better to avoid combat.</career>
+  <career name="Hunter" playerindex="1" shipindex="168">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
  </faction>
  <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" minspawn="79" maxspawn="86" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
@@ -157,6 +160,7 @@ faction members don't have morale (and bonuses from it)
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
   <career name="General" playerindex="1" shipindex="166">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
+  <career name="Hunter" playerindex="1" shipindex="168">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
  </faction>
 </factions>
 
