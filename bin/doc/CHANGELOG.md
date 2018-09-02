@@ -6,8 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New crafting recipes: adamantium mold, adamantium gunsmith set, adamantium
   cooking set, adamantium sickle, adamantium saw, adamantium bucket, adamantium
-  blacksmith set, adamantium woodworker set, adamantium repair tools and
-  adamantium sewing kit
+  blacksmith set, adamantium woodworker set, adamantium repair tools,
+  adamantium sewing kit and adamantium 80mm ammo
 - New items: adamantium gunsmith set, adamantium cooking set, adamantium
   sickle, adamantium saw, adamantium bucket, adamantium blacksmith set,
   adamantium woodworker set, adamantium repair tools, adamantium sewing kit and
