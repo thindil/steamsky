@@ -132,7 +132,7 @@ faction members don't have morale (and bonuses from it)
   <flag name="nofatigue" />
   <flag name="nomorale" />
   <career name="General" playerindex="75" shipindex="164">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
-  <career name="Hunter" playerindex="1" shipindex="169">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
+  <career name="Hunter" playerindex="75" shipindex="169">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
  </faction>
  <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" minspawn="87" maxspawn="94" minpopulation="0" maxpopulation="500" namestype="robotic" healingtools="Bronze" healingskill="Engineering">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
@@ -148,6 +148,7 @@ faction members don't have morale (and bonuses from it)
   <flag name="nofatigue" />
   <flag name="nomorale" />
   <career name="General" playerindex="76" shipindex="165">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
+  <career name="Hunter" playerindex="76" shipindex="170">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
  </faction>
  <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" minspawn="94" maxspawn="100" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="-50" friendly="N" />
