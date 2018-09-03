@@ -81,6 +81,7 @@ file.
   <career name="General" playerindex="1" shipindex="1">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
   <career name="Merchant" playerindex="1" shipindex="167">Career focused on trading. You get unarmed small ship with larger cargo space and more moneys. Your crew will be bit smaller that General. At begining is better to avoid combat.</career>
   <career name="Hunter" playerindex="1" shipindex="168">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
+  <career name="Explorer" playerindex="1" shipindex="171">Career focused on exploring. You get average equipped small ship, with smaller cargo space than general career's ship but with water collector installed on it.</career>
  </faction>
  <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" minspawn="51" maxspawn="70" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="0" friendly="Y" />
@@ -96,6 +97,7 @@ file.
   <career name="General" playerindex="1" shipindex="1">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
   <career name="Merchant" playerindex="1" shipindex="167">Career focused on trading. You get unarmed small ship with larger cargo space and more moneys. Your crew will be bit smaller that General. At begining is better to avoid combat.</career>
   <career name="Hunter" playerindex="1" shipindex="168">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
+  <career name="Explorer" playerindex="1" shipindex="171">Career focused on exploring. You get average equipped small ship, with smaller cargo space than general career's ship but with water collector installed on it.</career>
  </faction>
  <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" minspawn="71" maxspawn="78" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="161" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="-10" friendly="N" />
