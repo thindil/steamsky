@@ -28,7 +28,7 @@ All notable changes to this project will be documented in this file.
   ship modules, ships and stories from modifications files
 - Ability to select player career which affect player starting ship and 
   equipment
-- New ships: player starting ships for trader and hunter careers
+- New ships: player starting ships for trader, hunter and explorer careers
 
 ### Changed
 - Updated interface
