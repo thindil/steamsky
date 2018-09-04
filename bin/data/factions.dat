@@ -154,6 +154,7 @@ faction members don't have morale (and bonuses from it)
   <career name="General" playerindex="76" shipindex="165">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
   <career name="Hunter" playerindex="76" shipindex="170">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
   <career name="Explorer" playerindex="76" shipindex="172">Career focused on exploring. You get average equipped small ship, with smaller cargo space than general career's ship but with water collector installed on it.</career>
+  <career name="Crafter" playerindex="76" shipindex="174">Career focused on crafting. You get average equipped small ship, with smaller cargo space than general career's ship but with furnace installed on it. Additionally, you will know more crafting recipes at start.</career>
  </faction>
  <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" minspawn="94" maxspawn="100" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="-50" friendly="N" />
