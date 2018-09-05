@@ -263,6 +263,8 @@ package body Game is
       end if;
       -- Set name of savegame
       GenerateSaveName;
+      -- Set player career
+      PlayerCareer := Factions_List(FactionIndex).Careers(CareerIndex).Name;
    end NewGame;
 
    procedure UpdateGame(Minutes: Positive) is
@@ -507,7 +509,10 @@ package body Game is
                       Attribute => J,
                       Description =>
                         To_Unbounded_String
-                          (Node_Value(First_Child(Item(NodesList, I))))));
+                          (Node_Value(First_Child(Item(NodesList, I)))),
+                     Career =>
+                        To_Unbounded_String
+                          (Get_Attribute(Item(NodesList, I), "career"))));
                   exit;
                end if;
             end loop;
