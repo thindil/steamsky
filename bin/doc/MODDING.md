@@ -78,11 +78,12 @@ modification there can be overwritten with new version of game.
 ### General informations
 - Open file *game.dat* in *data* directory to add/remove/change skills, or
   better, create new file in modifications directory.
-- Each skill starts with tag `skill`. Attribute `name` is name of selected 
-  skill, attribute `attribute` is name of character attribute (must be defined
-  ealier in this same file). Value between `skills` tags is description of
-  skill. Example: *<skill name="Gunnery" attribute="Dexterity">Used by 
-  gunners, determine chance to hit enemy in ship combat.</skill>*.
+- Each skill starts with tag `skill`. 
+- Attribute `name` is name of selected skill.
+- Attribute `attribute` is name of character attribute (must be defined 
+ealier in this same file).
+- Attribute `career` is name of career (from factions files) which will be
+  gain more experience for use that skill.
 - After change/remove skill, you been need to made proper changes in other game
   data files (recipes, items and this same file) if needed.
 
@@ -94,13 +95,17 @@ modification there can be overwritten with new version of game.
   `attribute`. Name must be existing attribute name, defined ealier in this
   same file.
 - To change skill description, just edit text between `skill` tags.
+- To change which career gains more experience for using this skill, edit
+  value of `career` attribute. Value must be existing career name from any
+  factions file.
 
 ### Adding new skills
 - To add new skill, just append new line with tag `skill` with it name as
-  attribute `name`, assigned attribute to skill as attribute `attribute` and
-  description between tags `skill`. Same for *game.dat* file and own file.
+  attribute `name`, assigned attribute to skill as attribute `attribute`,
+  career which gain bonux experience for use this skill as attribute `career`
+  and description between tags `skill`. Same for *game.dat* file and own file.
 
-### Removing existing attribute
+### Removing existing skill
 - In *game.dat* file: Just delete selected skill entry.
 - In own file: Append new line with tag `remove` which have attribute `name`
   set to `skill` and value with name of skill which will be removed.
