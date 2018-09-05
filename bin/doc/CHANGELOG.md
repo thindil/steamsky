@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
   equipment
 - New ships: player starting ships for trader, hunter, explorer and crafter
   careers
+- Bonus to gained experience based on career selected by player
 
 ### Changed
 - Updated interface
