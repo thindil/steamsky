@@ -1706,5 +1706,14 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="512"/>
   <description>Upgraded 100mm gun ammunition, made of adamantium.</description>
  </item>
+ <item index="180" name="Adamantium 120mm ammo" showtype="Ammunition" type="Ammo120" weight="120">
+  <trade buyable="N" price="202"/>
+  <trade buyable="N" price="202"/>
+  <trade buyable="N" price="202"/>
+  <trade buyable="N" price="202"/>
+  <trade buyable="Y" price="200"/>
+  <data value="1024"/>
+  <description>Upgraded 120mm gun ammunition, made of adamantium.</description>
+ </item>
 </items>
 
