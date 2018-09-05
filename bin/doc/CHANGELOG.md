@@ -44,6 +44,8 @@ All notable changes to this project will be documented in this file.
 - Updated README.md
 - Reduced weight of blacksmith sets
 - How morale is gained and lost
+- Blocked gaining experience by pilot, engineer and gunner when ship is docked
+  to base
 
 ### Fixed
 - Recipe for adamantium plates
