@@ -35,7 +35,8 @@ package body Crew is
       SkillLevel,
       SkillIndex,
       AttributeExp,
-      AttributeLevel, NewAmount: Natural :=
+      AttributeLevel,
+      NewAmount: Natural :=
         0;
       AttributeIndex: constant Positive := Skills_List(SkillNumber).Attribute;
       procedure GainExpInAttribute(Attribute: Positive) is
@@ -76,7 +77,8 @@ package body Crew is
             return;
          end if;
          SkillLevel := PlayerShip.Crew(CrewIndex).Skills(SkillIndex)(2);
-         SkillExp := PlayerShip.Crew(CrewIndex).Skills(SkillIndex)(3) + NewAmount;
+         SkillExp :=
+           PlayerShip.Crew(CrewIndex).Skills(SkillIndex)(3) + NewAmount;
       end if;
       if SkillExp >= (SkillLevel * 50) then
          SkillExp := SkillExp - (SkillLevel * 50);

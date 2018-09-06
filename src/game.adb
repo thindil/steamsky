@@ -510,7 +510,7 @@ package body Game is
                       Description =>
                         To_Unbounded_String
                           (Node_Value(First_Child(Item(NodesList, I)))),
-                     Career =>
+                      Career =>
                         To_Unbounded_String
                           (Get_Attribute(Item(NodesList, I), "career"))));
                   exit;
