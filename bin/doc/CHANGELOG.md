@@ -47,6 +47,7 @@ All notable changes to this project will be documented in this file.
 - How morale is gained and lost
 - Blocked gaining experience by pilot, engineer and gunner when ship is docked
   to base
+- Only resting crew members can be wounded in bar brawl event
 
 ### Fixed
 - Recipe for adamantium plates
