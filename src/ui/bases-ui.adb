@@ -74,6 +74,8 @@ package body Bases.UI is
             RecruitInfo := To_Unbounded_String("Gender: Female");
          end if;
       end if;
+      Append(RecruitInfo, ASCII.LF & "Home base: ");
+      Append(RecruitInfo, SkyBases(Recruit.HomeBase).Name);
       Set_Markup
         (Gtk_Label(Get_Object(Object, "lblrecruitinfo")),
          To_String(RecruitInfo));
