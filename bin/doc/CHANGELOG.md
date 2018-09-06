@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - New ships: player starting ships for trader, hunter, explorer and crafter
   careers
 - Bonus to gained experience based on career selected by player
+- Each crew members, recruit, passenger have home skybase
 
 ### Changed
 - Updated interface
