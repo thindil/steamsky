@@ -206,6 +206,12 @@ package body Bases.SaveLoad is
                        (RecruitNode,
                         "payment",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
+                     RawValue :=
+                       To_Unbounded_String(Integer'Image(Recruit.HomeBase));
+                     Set_Attribute
+                       (RecruitNode,
+                        "homebase",
+                        To_String(Trim(RawValue, Ada.Strings.Left)));
                   end loop;
                end;
             end if;
@@ -440,7 +446,7 @@ package body Bases.SaveLoad is
                   RecruitData: Node_List;
                   RecruitName: Unbounded_String;
                   Gender: String(1 .. 1);
-                  Price, Payment: Positive;
+                  Price, Payment, HomeBase: Positive;
                   Skills: Skills_Container.Vector;
                   Attributes: Attributes_Container.Vector;
                   Index, Level, Experience: Natural;
@@ -500,6 +506,11 @@ package body Bases.SaveLoad is
                           Natural'Value
                             (Get_Attribute(Item(BaseData, J), "payment"));
                      end if;
+                     if Get_Attribute(Item(BaseData, J), "homebase") /= "" then
+                        HomeBase :=
+                          Positive'Value
+                            (Get_Attribute(Item(BaseData, J), "homebase"));
+                     end if;
                   end loop;
                   SkyBases(BaseIndex).Recruits.Append
                   (New_Item =>
@@ -510,7 +521,8 @@ package body Bases.SaveLoad is
                       Attributes => Attributes,
                       Inventory => Inventory,
                       Equipment => Equipment,
-                      Payment => Payment));
+                      Payment => Payment,
+                      HomeBase => HomeBase));
                end;
             elsif Node_Name(Item(BaseData, J)) = "askedforeventsdate" then
                SkyBases(BaseIndex).AskedForEvents.Year :=
