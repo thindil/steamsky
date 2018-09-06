@@ -101,7 +101,8 @@ package body Bases.Trade is
           Payment => (DailyPayment, TradePayment),
           ContractLength => ContractLenght,
           Morale => (Morale, 0),
-          Loyalty => Morale));
+          Loyalty => Morale,
+          HomeBase => Recruit.HomeBase));
       UpdateCargo
         (Ship => PlayerShip,
          CargoIndex => MoneyIndex2,
