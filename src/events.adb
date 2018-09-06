@@ -286,24 +286,43 @@ package body Events is
             else
                if Roll < 5 and
                  PlayerShip.Crew.Last_Index > 1 then -- Brawl in base
-                  Roll2 := GetRandom(2, PlayerShip.Crew.Last_Index);
-                  Injuries := GetRandom(1, 10);
-                  if Injuries > PlayerShip.Crew(Roll2).Health then
-                     Injuries := PlayerShip.Crew(Roll2).Health;
-                  end if;
-                  PlayerShip.Crew(Roll2).Health :=
-                    PlayerShip.Crew(Roll2).Health - Injuries;
-                  AddMessage
-                    (To_String(PlayerShip.Crew(Roll2).Name) &
-                     " was injured in brawl in base.",
-                     OtherMessage,
-                     3);
-                  if PlayerShip.Crew(Roll2).Health = 0 then
-                     Death
-                       (Roll2,
-                        To_Unbounded_String("injuries in brawl in base"),
-                        PlayerShip);
-                  end if;
+                  declare
+                     RestingCrew: Positive_Container.Vector;
+                  begin
+                     for I in PlayerShip.Crew.Iterate loop
+                        if PlayerShip.Crew(I).Order = Rest then
+                           RestingCrew.Append
+                           (New_Item => Crew_Container.To_Index(I));
+                        end if;
+                     end loop;
+                     if RestingCrew.Length > 0 then
+                        Roll2 :=
+                          GetRandom
+                            (RestingCrew.First_Index,
+                             RestingCrew.Last_Index);
+                        Injuries := GetRandom(1, 10);
+                        if Injuries >
+                          PlayerShip.Crew(RestingCrew(Roll2)).Health then
+                           Injuries :=
+                             PlayerShip.Crew(RestingCrew(Roll2)).Health;
+                        end if;
+                        PlayerShip.Crew(RestingCrew(Roll2)).Health :=
+                          PlayerShip.Crew(RestingCrew(Roll2)).Health -
+                          Injuries;
+                        AddMessage
+                          (To_String
+                             (PlayerShip.Crew(RestingCrew(Roll2)).Name) &
+                           " was injured in brawl in base.",
+                           OtherMessage,
+                           3);
+                        if PlayerShip.Crew(RestingCrew(Roll2)).Health = 0 then
+                           Death
+                             (RestingCrew(Roll2),
+                              To_Unbounded_String("injuries in brawl in base"),
+                              PlayerShip);
+                        end if;
+                     end if;
+                  end;
                elsif Roll > 4 and Roll < 10 then -- Lost cargo in base
                   Roll2 := GetRandom(1, PlayerShip.Cargo.Last_Index);
                   LostCargo := GetRandom(1, 10);
