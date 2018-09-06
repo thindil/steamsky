@@ -37,6 +37,7 @@ package Bases is
       Inventory: Positive_Container.Vector; -- Owned items by recruit
       Equipment: Equipment_Array; -- Items indexes from inventory used by recruit: 1 - weapon, 2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs, 7 - tool
       Payment: Positive; -- How much money recruit will take as payment each day.
+      HomeBase: Positive; -- Index of base from which recruit is
    end record;
    package Recruit_Container is new Vectors(Positive, Recruit_Data);
    type Reputation_Array is

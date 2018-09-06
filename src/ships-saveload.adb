@@ -401,7 +401,11 @@ package body Ships.SaveLoad is
                Inventory: Inventory_Container.Vector;
                Equipment: Equipment_Array;
                OrderTime, ContractLength: Integer;
-               Amount, Durability, EquipmentIndex, PriorityIndex: Positive;
+               Amount,
+               Durability,
+               EquipmentIndex,
+               PriorityIndex,
+               HomeBase: Positive;
                Payment, Morale: Attributes_Array;
             begin
                Skills.Clear;
@@ -519,6 +523,13 @@ package body Ships.SaveLoad is
                      EquipmentIndex := EquipmentIndex + 1;
                   end if;
                end loop;
+               if Get_Attribute(Item(ChildNodes, I), "homebase") /= "" then
+                  HomeBase :=
+                    Natural'Value
+                      (Get_Attribute(Item(ChildNodes, I), "homebase"));
+               else
+                  HomeBase := PlayerShip.HomeBase;
+               end if;
                PlayerShip.Crew.Append
                (New_Item =>
                   (Name => Name,
@@ -538,7 +549,8 @@ package body Ships.SaveLoad is
                    Payment => Payment,
                    ContractLength => ContractLength,
                    Morale => Morale,
-                   Loyalty => Loyalty));
+                   Loyalty => Loyalty,
+                   HomeBase => HomeBase));
             end;
          end if;
       end loop;

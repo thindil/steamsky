@@ -235,7 +235,8 @@ package body Game is
           Payment => (others => 0),
           ContractLength => -1,
           Morale => (PlayerMorale, 0),
-          Loyalty => 100));
+          Loyalty => 100,
+          HomeBase => RandomBase));
       for Module of PlayerShip.Modules loop
          if Module.Owner > 0 then
             Module.Owner := Module.Owner + 1;

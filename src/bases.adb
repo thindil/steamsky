@@ -179,7 +179,8 @@ package body Bases is
       SkillNumber,
       SkillLevel,
       HighestSkill,
-      HighestLevel: Positive;
+      HighestLevel,
+      RecruitBase: Positive;
       BaseRecruits: Recruit_Container.Vector;
       Skills: Skills_Container.Vector;
       Gender: Character;
@@ -302,6 +303,11 @@ package body Bases is
             end if;
          end loop;
          Price := Price * 100;
+         if GetRandom(1, 100) < 99 then
+            RecruitBase := BaseIndex;
+         else
+            RecruitBase := GetRandom(SkyBases'First, SkyBases'Last);
+         end if;
          BaseRecruits.Append
          (New_Item =>
             (Name =>
@@ -312,7 +318,8 @@ package body Bases is
              Attributes => Attributes,
              Inventory => Inventory,
              Equipment => Equipment,
-             Payment => Payment));
+             Payment => Payment,
+             HomeBase => RecruitBase));
       end loop;
       SkyBases(BaseIndex).RecruitDate := GameDate;
       SkyBases(BaseIndex).Recruits := BaseRecruits;

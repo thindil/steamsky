@@ -219,7 +219,8 @@ package body Ships is
                 Payment => (20, 0),
                 ContractLength => -1,
                 Morale => (50, 0),
-                Loyalty => 100));
+                Loyalty => 100,
+                HomeBase => 1));
             TmpSkills.Clear;
             TmpAttributes.Clear;
             TmpInventory.Clear;
@@ -339,6 +340,14 @@ package body Ships is
             end loop;
          end if;
       end if;
+      -- Set home base for crew members
+      for Member of TmpShip.Crew loop
+         if GetRandom(1, 100) < 99 then
+            Member.HomeBase := TmpShip.HomeBase;
+         else
+            Member.HomeBase := GetRandom(SkyBases'First, SkyBases'Last);
+         end if;
+      end loop;
       return TmpShip;
    end CreateShip;
 

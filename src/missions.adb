@@ -223,7 +223,7 @@ package body Missions is
       MissionsLimit: Integer;
       Mission: Mission_Data := SkyBases(BaseIndex).Missions(MissionIndex);
       AcceptMessage: Unbounded_String;
-      TraderIndex, Morale: Positive;
+      TraderIndex, Morale, PassengerBase: Positive;
       HaveCabin: Boolean := False;
       Gender: Character;
       Skills: Skills_Container.Vector;
@@ -314,6 +314,11 @@ package body Missions is
             else
                Morale := 50 + SkyBases(BaseIndex).Reputation(1);
             end if;
+            if GetRandom(1, 100) < 60 then
+               PassengerBase := BaseIndex;
+            else
+               PassengerBase := GetRandom(SkyBases'First, SkyBases'Last);
+            end if;
             PlayerShip.Crew.Append
             (New_Item =>
                (Name =>
@@ -336,7 +341,8 @@ package body Missions is
                 Payment => (others => 0),
                 ContractLength => Mission.Time,
                 Morale => (Morale, 0),
-                Loyalty => Morale));
+                Loyalty => Morale,
+                HomeBase => PassengerBase));
             for Module of PlayerShip.Modules loop
                if Module.ProtoIndex = Mission.Target and Module.Owner = 0 then
                   Module.Owner := PlayerShip.Crew.Last_Index;

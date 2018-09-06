@@ -64,6 +64,7 @@ package Crew is
       ContractLength: Integer; -- How many days crew member will be in crew. -1 mean pernament contract
       Morale: Attributes_Array; -- Morale of crew member, between 0 and 100, 1 - level, 2 - points to next level
       Loyalty: Natural; -- Loyalty of crew member, between 0 and 100
+      HomeBase: Positive; -- Index of base from which crew member is
    end record;
    MaleSyllablesStart: UnboundedString_Container.Vector;
    MaleSyllablesMiddle: UnboundedString_Container.Vector;
