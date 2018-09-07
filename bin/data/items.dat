@@ -1715,5 +1715,14 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1024"/>
   <description>Upgraded 120mm gun ammunition, made of adamantium.</description>
  </item>
+ <item index="181" name="Adamantium harpoon" showtype="Ammunition" type="Harpoon" weight="40">
+  <trade buyable="N" price="52"/>
+  <trade buyable="N" price="52"/>
+  <trade buyable="N" price="52"/>
+  <trade buyable="N" price="52"/>
+  <trade buyable="Y" price="50"/>
+  <data value="20"/>
+  <description>Harpoon made of adamantium with long rope. Used as ammunition for harpoon guns.</description>
+ </item>
 </items>
 
