@@ -25,12 +25,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
   <!-- interface-name Steam Sky -->
   <!-- interface-copyright 2018 Bartek thindil Jasicki -->
   <object class="GtkTextBuffer" id="errorbuffer"/>
-  <object class="GtkListStore" id="factionslist">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
   <object class="GtkListStore" id="hoflist">
     <columns>
       <!-- column-name guint -->
@@ -340,27 +334,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="cmbfaction">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Select faction to which your character belongs. Below you can see description of selected faction.</property>
-                        <property name="model">factionslist</property>
-                        <property name="active">0</property>
-                        <property name="id_column">0</property>
-                        <signal name="changed" handler="Show_Faction_Description" swapped="no"/>
-                        <child>
-                          <object class="GtkCellRendererText"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">4</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -391,6 +364,17 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="cmbfaction">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <signal name="changed" handler="Show_Faction_Description" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">4</property>
                       </packing>
                     </child>
                   </object>
