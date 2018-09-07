@@ -66,7 +66,7 @@ package body Bases.UI is
       end if;
       RecruitIndex := Positive(Get_Int(RecruitModel, RecruitIter, 1));
       Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
-      if not Factions_List(PlayerFaction).Flags.Contains
+      if not Factions_List(Recruit.Faction).Flags.Contains
         (To_Unbounded_String("nogender")) then
          if Recruit.Gender = 'M' then
             RecruitInfo := To_Unbounded_String("Gender: Male");

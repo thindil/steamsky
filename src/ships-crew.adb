@@ -603,7 +603,7 @@ package body Ships.Crew is
                  Module.Durability > 0 and
                  FindItem
                      (Inventory => Ship.Cargo,
-                      ItemType => Factions_List(PlayerFaction).HealingTools) >
+                      ItemType => Factions_List(PlayerShip.Crew(1).Faction).HealingTools) >
                    0 then
                   CanHeal := True;
                end if;
@@ -764,18 +764,8 @@ package body Ships.Crew is
       MemberIndex: Positive;
       Value: Integer) is
       NewMorale, NewLoyalty, NewValue: Integer;
-      FactionIndex: Positive;
+      FactionIndex: constant Positive := Ship.Crew(MemberIndex).Faction;
    begin
-      if Ship = PlayerShip then
-         FactionIndex := PlayerFaction;
-      else
-         for ProtoShip of ProtoShips_List loop
-            if ProtoShip.Name = Ship.Name then
-               FactionIndex := ProtoShip.Owner;
-               exit;
-            end if;
-         end loop;
-      end if;
       if Factions_List(FactionIndex).Flags.Contains
         (To_Unbounded_String("nomorale")) then
          return;
