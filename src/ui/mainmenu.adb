@@ -20,6 +20,7 @@ with Ada.Directories; use Ada.Directories;
 with Ada.Calendar; use Ada.Calendar;
 with Ada.Calendar.Formatting;
 with Ada.Calendar.Time_Zones; use Ada.Calendar.Time_Zones;
+with Ada.Containers; use Ada.Containers;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.Traceback.Symbolic; use GNAT.Traceback.Symbolic;
 with GNAT.String_Split; use GNAT.String_Split;
@@ -299,18 +300,27 @@ package body MainMenu is
       ShipName: constant String :=
         Get_Text(Gtk_Entry(Get_Object(Object, "entryshipname")));
       Gender: Character;
+      SelectedFaction: constant Unbounded_String :=
+        To_Unbounded_String
+          (Get_Active_Text(Gtk_Combo_Box(Get_Object(Object, "cmbfaction"))));
+      FactionIndex: Positive;
    begin
       if Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbgender"))) = 0 then
          Gender := 'M';
       else
          Gender := 'F';
       end if;
+      for I in Factions_List.Iterate loop
+         if Factions_List(I).Name = SelectedFaction then
+            FactionIndex := Factions_Container.To_Index(I);
+            exit;
+         end if;
+      end loop;
       NewGame
         (To_Unbounded_String(CharacterName),
          To_Unbounded_String(ShipName),
          Gender,
-         Positive
-           (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbfaction"))) + 1),
+         FactionIndex,
          Positive
            (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbcareer"))) + 1));
       StartGame;
@@ -420,8 +430,6 @@ package body MainMenu is
    procedure CreateMainMenu is
       Error: aliased GError;
       CssProvider: Gtk_Css_Provider;
-      FactionsIter: Gtk_Tree_Iter;
-      FactionsList: Gtk_List_Store;
       DataError: Unbounded_String;
    begin
       Gtk_New(CssProvider);
@@ -483,11 +491,13 @@ package body MainMenu is
            ("Can't load game data files. Error: " & To_String(DataError),
             Gtk_Window(Get_Object(Builder, "mainmenuwindow")));
       end if;
-      FactionsList := Gtk_List_Store(Get_Object(Builder, "factionslist"));
-      Clear(FactionsList);
+      Remove_All(Gtk_Combo_Box_Text(Get_Object(Builder, "cmbfaction")));
       for Faction of Factions_List loop
-         Append(FactionsList, FactionsIter);
-         Set(FactionsList, FactionsIter, 0, To_String(Faction.Name));
+         if Faction.Careers.Length > 0 then
+            Append_Text
+              (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbfaction")),
+               To_String(Faction.Name));
+         end if;
       end loop;
       Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbfaction")), 0);
       ShowMainMenu;
