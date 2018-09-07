@@ -89,6 +89,8 @@ package body Crew.UI.Handlers is
             MemberInfo := To_Unbounded_String("Gender: Female");
          end if;
       end if;
+      Append(MemberInfo, ASCII.LF & "Faction: ");
+      Append(MemberInfo, Factions_List(Member.Faction).Name);
       Append(MemberInfo, ASCII.LF & "Home base: ");
       Append(MemberInfo, SkyBases(Member.HomeBase).Name);
       Foreach
