@@ -582,7 +582,8 @@ Value must be existing skill name.
   members don't get tired so, they can't rest and regenerate health, `nomorale`
   faction members don't have morale (and bonuses from it)
 - Tags "career": Available careers for player when choice this faction. Text
-  between tags is description of career visible in new game setting.
+  between tags is description of career visible in new game setting. If faction
+  don't have any available career then it is unavailable for player.
 - Attribute "playerindex": index of mobile used for starting player character,
   when he/she choice this career. Value must be existing mobile index from any
   mobiles file.
