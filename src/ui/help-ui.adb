@@ -34,6 +34,7 @@ with Game; use Game;
 with Utils.UI; use Utils.UI;
 with Items; use Items;
 with Factions; use Factions;
+with Ships; use Ships;
 
 package body Help.UI is
 
@@ -102,7 +103,7 @@ package body Help.UI is
          4 =>
            (Name => To_Unbounded_String("HealingSkill"),
             Value =>
-              Skills_List(Factions_List(PlayerFaction).HealingSkill).Name),
+              Skills_List(Factions_List(PlayerShip.Crew(1).Faction).HealingSkill).Name),
          5 =>
            (Name => To_Unbounded_String("PilotingSkill"),
             Value => Skills_List(PilotingSkill).Name),
@@ -132,7 +133,7 @@ package body Help.UI is
             Value =>
               Items_List
                 (FindProtoItem
-                   (ItemType => Factions_List(PlayerFaction).HealingTools))
+                   (ItemType => Factions_List(PlayerShip.Crew(1).Faction).HealingTools))
                 .Name));
       AccelNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("<skymapwindow>/btnupleft"),
@@ -236,7 +237,7 @@ package body Help.UI is
          end loop;
          for I in FlagsTags'Range loop
             if TagText = FlagsTags(I) then
-               if Factions_List(PlayerFaction).Flags.Contains(TagText) then
+               if Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains(TagText) then
                   EndIndex :=
                     Index(NewText, "{/" & To_String(TagText), EndIndex) +
                     Length(TagText) +

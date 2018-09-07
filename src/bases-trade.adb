@@ -102,7 +102,8 @@ package body Bases.Trade is
           ContractLength => ContractLenght,
           Morale => (Morale, 0),
           Loyalty => Morale,
-          HomeBase => Recruit.HomeBase));
+          HomeBase => Recruit.HomeBase,
+          Faction => Recruit.Faction));
       UpdateCargo
         (Ship => PlayerShip,
          CargoIndex => MoneyIndex2,
@@ -248,7 +249,7 @@ package body Bases.Trade is
         Time *
         Items_List
           (FindProtoItem
-             (ItemType => Factions_List(PlayerFaction).HealingTools))
+             (ItemType => Factions_List(PlayerShip.Crew(1).Faction).HealingTools))
           .Prices
           (BaseType);
       CountPrice(Cost, FindMember(Talk));

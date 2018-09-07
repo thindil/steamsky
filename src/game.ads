@@ -89,7 +89,6 @@ package Game is
    DocDirectory: Unbounded_String :=
      To_Unbounded_String
        ("doc" & Dir_Separator); -- Path to directory where documentation is
-   PlayerFaction: Positive; -- Vector index of faction to which player belongs
    ModsDirectory: Unbounded_String :=
      To_Unbounded_String
        ("data" &

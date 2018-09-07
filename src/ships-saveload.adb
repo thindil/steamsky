@@ -19,6 +19,8 @@ with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
 with ShipModules; use ShipModules;
+with Factions; use Factions;
+with Bases; use Bases;
 
 package body Ships.SaveLoad is
 
@@ -405,7 +407,7 @@ package body Ships.SaveLoad is
                Durability,
                EquipmentIndex,
                PriorityIndex,
-               HomeBase: Positive;
+               HomeBase, FactionIndex: Positive;
                Payment, Morale: Attributes_Array;
             begin
                Skills.Clear;
@@ -530,6 +532,16 @@ package body Ships.SaveLoad is
                else
                   HomeBase := PlayerShip.HomeBase;
                end if;
+               if Get_Attribute(Item(ChildNodes, I), "faction") /= "" then
+                  for J in Factions_List.Iterate loop
+                     if Factions_List(J).Index = To_Unbounded_String(Get_Attribute(Item(ChildNodes, I), "faction")) then
+                        FactionIndex := Factions_Container.To_Index(J);
+                        exit;
+                     end if;
+                  end loop;
+               else
+                  FactionIndex := SkyBases(HomeBase).Owner;
+               end if;
                PlayerShip.Crew.Append
                (New_Item =>
                   (Name => Name,
@@ -550,7 +562,8 @@ package body Ships.SaveLoad is
                    ContractLength => ContractLength,
                    Morale => Morale,
                    Loyalty => Loyalty,
-                   HomeBase => HomeBase));
+                   HomeBase => HomeBase,
+                   Faction => FactionIndex));
             end;
          end if;
       end loop;

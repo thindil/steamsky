@@ -65,6 +65,7 @@ package Crew is
       Morale: Attributes_Array; -- Morale of crew member, between 0 and 100, 1 - level, 2 - points to next level
       Loyalty: Natural; -- Loyalty of crew member, between 0 and 100
       HomeBase: Positive; -- Index of base from which crew member is
+      Faction: Positive; -- Index of faction to which crew member belongs
    end record;
    MaleSyllablesStart: UnboundedString_Container.Vector;
    MaleSyllablesMiddle: UnboundedString_Container.Vector;

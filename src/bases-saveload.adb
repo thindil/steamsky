@@ -212,6 +212,10 @@ package body Bases.SaveLoad is
                        (RecruitNode,
                         "homebase",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
+                     Set_Attribute
+                       (RecruitNode,
+                        "faction",
+                        To_String(Factions_List(Recruit.Faction).Index));
                   end loop;
                end;
             end if;
@@ -446,7 +450,7 @@ package body Bases.SaveLoad is
                   RecruitData: Node_List;
                   RecruitName: Unbounded_String;
                   Gender: String(1 .. 1);
-                  Price, Payment, HomeBase: Positive;
+                  Price, Payment, HomeBase, RecruitFaction: Positive;
                   Skills: Skills_Container.Vector;
                   Attributes: Attributes_Container.Vector;
                   Index, Level, Experience: Natural;
@@ -511,6 +515,14 @@ package body Bases.SaveLoad is
                           Positive'Value
                             (Get_Attribute(Item(BaseData, J), "homebase"));
                      end if;
+                     if Get_Attribute(Item(BaseData, J), "faction") /= "" then
+                        for K in Factions_List.Iterate loop
+                           if Factions_List(K).Index = To_Unbounded_String(Get_Attribute(Item(BaseData, J), "faction")) then
+                              RecruitFaction := Factions_Container.To_Index(K);
+                              exit;
+                           end if;
+                        end loop;
+                     end if;
                   end loop;
                   SkyBases(BaseIndex).Recruits.Append
                   (New_Item =>
@@ -522,7 +534,8 @@ package body Bases.SaveLoad is
                       Inventory => Inventory,
                       Equipment => Equipment,
                       Payment => Payment,
-                      HomeBase => HomeBase));
+                      HomeBase => HomeBase,
+                      Faction => RecruitFaction));
                end;
             elsif Node_Name(Item(BaseData, J)) = "askedforeventsdate" then
                SkyBases(BaseIndex).AskedForEvents.Year :=

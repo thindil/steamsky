@@ -241,7 +241,7 @@ package body Crew is
          BackToWork: Boolean := True;
          ConsumeResult: Natural := 0;
       begin
-         if Factions_List(PlayerFaction).Flags.Contains
+         if Factions_List(Member.Faction).Flags.Contains
            (To_Unbounded_String("nofatigue")) then
             TiredLevel := 0;
          end if;
@@ -329,7 +329,7 @@ package body Crew is
             end;
          end if;
          if HungerLevel > 80 then
-            for FoodType of Factions_List(PlayerFaction).FoodTypes loop
+            for FoodType of Factions_List(Member.Faction).FoodTypes loop
                ConsumeResult := Consume(FoodType);
                exit when ConsumeResult > 0;
             end loop;
@@ -347,7 +347,7 @@ package body Crew is
          end if;
          Member.Hunger := HungerLevel;
          if ThirstLevel > 40 then
-            for DrinksType of Factions_List(PlayerFaction).DrinksTypes loop
+            for DrinksType of Factions_List(Member.Faction).DrinksTypes loop
                ConsumeResult := Consume(DrinksType);
                exit when ConsumeResult > 0;
             end loop;
@@ -432,7 +432,7 @@ package body Crew is
                      TiredLevel := 0;
                   end if;
                end if;
-               if not Factions_List(PlayerFaction).Flags.Contains
+               if not Factions_List(PlayerShip.Crew(I).Faction).Flags.Contains
                  (To_Unbounded_String("nofatigue")) and
                  HealthLevel > 0 and
                  HealthLevel < 100 and
@@ -479,7 +479,7 @@ package body Crew is
                        Times *
                        (GetSkillLevel
                           (PlayerShip.Crew(I),
-                           Factions_List(PlayerFaction).HealingSkill) /
+                           Factions_List(PlayerShip.Crew(I).Faction).HealingSkill) /
                         20);
                      if HealAmount < Times then
                         HealAmount := Times;
@@ -502,7 +502,7 @@ package body Crew is
                           FindItem
                             (Inventory => PlayerShip.Cargo,
                              ItemType =>
-                               Factions_List(PlayerFaction).HealingTools);
+                               Factions_List(PlayerShip.Crew(I).Faction).HealingTools);
                         if ToolIndex > 0 then
                            if PlayerShip.Cargo(ToolIndex).Amount <
                              abs (HealAmount) then
@@ -519,7 +519,7 @@ package body Crew is
                              FindItem
                                (Inventory => PlayerShip.Crew(I).Inventory,
                                 ItemType =>
-                                  Factions_List(PlayerFaction).HealingTools);
+                                  Factions_List(PlayerShip.Crew(I).Faction).HealingTools);
                            if ToolIndex > 0 then
                               if PlayerShip.Crew(I).Inventory(ToolIndex)
                                   .Amount <
@@ -554,7 +554,7 @@ package body Crew is
                                  OrderMessage);
                               GainExp
                                 (Times,
-                                 Factions_List(PlayerFaction).HealingSkill,
+                                 Factions_List(PlayerShip.Crew(I).Faction).HealingSkill,
                                  I);
                               exit;
                            end if;
@@ -577,7 +577,7 @@ package body Crew is
                         AddMessage
                           ("You don't have any " &
                            To_String
-                             (Factions_List(PlayerFaction).HealingTools) &
+                             (Factions_List(PlayerShip.Crew(I).Faction).HealingTools) &
                            " to continue healing wounded crew members.",
                            OrderMessage,
                            3);
@@ -661,7 +661,7 @@ package body Crew is
             end if;
          end if;
          if TiredPoints > 0 then
-            if Factions_List(PlayerFaction).FoodTypes.Length > 0 then
+            if Factions_List(PlayerShip.Crew(I).Faction).FoodTypes.Length > 0 then
                HungerLevel := HungerLevel + TiredPoints;
                if HungerLevel > 100 then
                   HungerLevel := 100;
@@ -674,7 +674,7 @@ package body Crew is
                   end if;
                end if;
             end if;
-            if Factions_List(PlayerFaction).DrinksTypes.Length > 0 then
+            if Factions_List(PlayerShip.Crew(I).Faction).DrinksTypes.Length > 0 then
                ThirstLevel := ThirstLevel + TiredPoints;
                if ThirstLevel > 100 then
                   ThirstLevel := 100;

@@ -54,11 +54,10 @@ package body Ships is
       ProtoShip: constant ProtoShipData := ProtoShips_List(ProtoIndex);
       ShipCargo, TmpInventory: Inventory_Container.Vector;
       TempModule: BaseModule_Data;
-      MaxValue, Roll: Positive;
+      MaxValue, Roll, MemberFaction: Positive;
       StartX, StartY, EndX, EndY: Integer;
       TmpAttributes: Attributes_Container.Vector;
       Member: ProtoMobRecord;
-      NoGender: Boolean := False;
    begin
       if RandomUpgrades then
          UpgradesAmount := GetRandom(0, Positive(ProtoShip.Modules.Length));
@@ -148,10 +147,6 @@ package body Ships is
       else
          NewName := Name;
       end if;
-      if Factions_List(ProtoShip.Owner).Flags.Contains
-        (To_Unbounded_String("nogender")) then
-         NoGender := True;
-      end if;
       for ProtoMember of ProtoShip.Crew loop
          if ProtoMember(3) = 0 then
             Amount := ProtoMember(2);
@@ -159,7 +154,12 @@ package body Ships is
             Amount := GetRandom(ProtoMember(2), ProtoMember(3));
          end if;
          for I in 1 .. Amount loop
-            if not NoGender then
+            if GetRandom(1, 100) < 99 then
+               MemberFaction := ProtoShip.Owner;
+            else
+               MemberFaction := GetRandom(Factions_List.First_Index, Factions_List.Last_Index);
+            end if;
+            if not Factions_List(MemberFaction).Flags.Contains(To_Unbounded_String("nogender")) then
                if GetRandom(1, 100) < 50 then
                   Gender := 'M';
                else
@@ -169,7 +169,7 @@ package body Ships is
                Gender := 'M';
             end if;
             MemberName :=
-              GenerateMemberName(Gender, Factions_List(PlayerFaction).Index);
+              GenerateMemberName(Gender, Factions_List(MemberFaction).Index);
             Member := ProtoMobs_List.Element(ProtoMember(1));
             for Skill of Member.Skills loop
                if Skill(3) = 0 then
@@ -220,7 +220,8 @@ package body Ships is
                 ContractLength => -1,
                 Morale => (50, 0),
                 Loyalty => 100,
-                HomeBase => 1));
+                HomeBase => 1,
+                Faction => MemberFaction));
             TmpSkills.Clear;
             TmpAttributes.Clear;
             TmpInventory.Clear;

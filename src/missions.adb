@@ -137,7 +137,7 @@ package body Missions is
       for I in ProtoShips_List.Iterate loop
          if ProtoShips_List(I).CombatValue <= PlayerValue and
            not IsFriendly
-             (Factions_List(PlayerFaction).Index,
+             (Factions_List(PlayerShip.Crew(1).Faction).Index,
               Factions_List(ProtoShips_List(I).Owner).Index) then
             Enemies.Append(New_Item => ProtoShips_Container.To_Index(I));
          end if;
@@ -298,7 +298,12 @@ package body Missions is
             Append(AcceptMessage, "'Explore selected area'.");
          when Passenger =>
             Append(AcceptMessage, "'Transport passenger to base'.");
-            if not Factions_List(PlayerFaction).Flags.Contains
+            if GetRandom(1, 100) < 60 then
+               PassengerBase := BaseIndex;
+            else
+               PassengerBase := GetRandom(SkyBases'First, SkyBases'Last);
+            end if;
+            if not Factions_List(SkyBases(PassengerBase).Owner).Flags.Contains
               (To_Unbounded_String("nogender")) then
                if GetRandom(1, 2) = 1 then
                   Gender := 'M';
@@ -308,23 +313,18 @@ package body Missions is
             else
                Gender := 'M';
             end if;
-            if Factions_List(SkyBases(BaseIndex).Owner).Flags.Contains
+            if Factions_List(SkyBases(PassengerBase).Owner).Flags.Contains
               (To_Unbounded_String("nomorale")) then
                Morale := 50;
             else
-               Morale := 50 + SkyBases(BaseIndex).Reputation(1);
-            end if;
-            if GetRandom(1, 100) < 60 then
-               PassengerBase := BaseIndex;
-            else
-               PassengerBase := GetRandom(SkyBases'First, SkyBases'Last);
+               Morale := 50 + SkyBases(PassengerBase).Reputation(1);
             end if;
             PlayerShip.Crew.Append
             (New_Item =>
                (Name =>
                   GenerateMemberName
                     (Gender,
-                     Factions_List(PlayerFaction).Index),
+                     Factions_List(SkyBases(PassengerBase).Owner).Index),
                 Gender => Gender,
                 Health => 100,
                 Tired => 0,
@@ -342,7 +342,8 @@ package body Missions is
                 ContractLength => Mission.Time,
                 Morale => (Morale, 0),
                 Loyalty => Morale,
-                HomeBase => PassengerBase));
+                HomeBase => PassengerBase,
+                Faction => SkyBases(PassengerBase).Owner));
             for Module of PlayerShip.Modules loop
                if Module.ProtoIndex = Mission.Target and Module.Owner = 0 then
                   Module.Owner := PlayerShip.Crew.Last_Index;
