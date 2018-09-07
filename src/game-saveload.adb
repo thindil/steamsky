@@ -40,7 +40,6 @@ with Stories; use Stories;
 with Log; use Log;
 with Missions; use Missions;
 with Utils; use Utils;
-with Factions; use Factions;
 
 package body Game.SaveLoad is
 
@@ -410,15 +409,6 @@ package body Game.SaveLoad is
             Set_Attribute(CategoryNode, "finished", "N");
          end if;
       end loop;
-      -- Save player faction
-      LogMessage("Saving player faction...", Everything, False);
-      CategoryNode := Create_Element(SaveData, "playerfaction");
-      CategoryNode := Append_Child(MainNode, CategoryNode);
-      Set_Attribute
-        (CategoryNode,
-         "index",
-         To_String(Factions_List(PlayerFaction).Index));
-      LogMessage("done.", Everything, True, False);
       -- Save player career
       LogMessage("Saving player career...", Everything, False);
       CategoryNode := Create_Element(SaveData, "playercareer");
@@ -751,28 +741,7 @@ package body Game.SaveLoad is
             end if;
          end loop;
       end;
-      -- Load player faction
-      LogMessage("Loading player faction...", Everything, False);
-      NodesList :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "playerfaction");
-      if Length(NodesList) > 0 then
-         declare
-            FactionIndex: Unbounded_String;
-         begin
-            FactionIndex :=
-              To_Unbounded_String(Get_Attribute(Item(NodesList, 0), "index"));
-            for I in Factions_List.Iterate loop
-               if Factions_List(I).Index = FactionIndex then
-                  PlayerFaction := Factions_Container.To_Index(I);
-                  exit;
-               end if;
-            end loop;
-         end;
-      else
-         PlayerFaction := 1;
-      end if;
-      LogMessage("done.", Everything, True, False);
-      -- Load player faction
+      -- Load player career
       LogMessage("Loading player career...", Everything, False);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "playercareer");

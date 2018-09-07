@@ -109,14 +109,14 @@ package body Bases is
       end if;
    end CountPrice;
 
-   function GenerateBaseName
+   function GenerateBaseName(FactionIndex: Positive)
      return Unbounded_String is -- based on name generator from libtcod
       NewName, NameType: Unbounded_String;
       LettersAmount, NumbersAmount: Positive;
       subtype Letters is Character range 'A' .. 'Z';
       subtype Numbers is Character range '0' .. '9';
    begin
-      NameType := Factions_List(PlayerFaction).NamesType;
+      NameType := Factions_List(FactionIndex).NamesType;
       NewName := Null_Unbounded_String;
       if To_Lower(To_String(NameType)) = "standard" then
          if GetRandom(1, 100) < 16 then
@@ -180,7 +180,7 @@ package body Bases is
       SkillLevel,
       HighestSkill,
       HighestLevel,
-      RecruitBase: Positive;
+      RecruitBase, RecruitFaction: Positive;
       BaseRecruits: Recruit_Container.Vector;
       Skills: Skills_Container.Vector;
       Gender: Character;
@@ -189,7 +189,6 @@ package body Bases is
       Attributes: Attributes_Container.Vector;
       Inventory, TempTools: Positive_Container.Vector;
       Equipment: Equipment_Array;
-      NoGender: Boolean := False;
       procedure AddInventory
         (ItemsIndexes: Positive_Container.Vector;
          EquipIndex: Positive) is
@@ -222,10 +221,6 @@ package body Bases is
          MaxRecruits := (SkyBases(BaseIndex).Population / 10) + 1;
       end if;
       RecruitsAmount := GetRandom(1, MaxRecruits);
-      if Factions_List(PlayerFaction).Flags.Contains
-        (To_Unbounded_String("nogender")) then
-         NoGender := True;
-      end if;
       for I in 1 .. RecruitsAmount loop
          Skills.Clear;
          Attributes.Clear;
@@ -234,7 +229,12 @@ package body Bases is
          TempTools.Clear;
          Equipment := (others => 0);
          Payment := 0;
-         if not NoGender then
+         if GetRandom(1, 100) < 99 then
+            RecruitFaction := SkyBases(BaseIndex).Owner;
+         else
+            RecruitFaction := GetRandom(Factions_List.First_Index, Factions_List.Last_Index);
+         end if;
+         if not Factions_List(RecruitFaction).Flags.Contains(To_Unbounded_String("nogender")) then
             if GetRandom(1, 2) = 1 then
                Gender := 'M';
             else
@@ -311,7 +311,7 @@ package body Bases is
          BaseRecruits.Append
          (New_Item =>
             (Name =>
-               GenerateMemberName(Gender, Factions_List(PlayerFaction).Index),
+               GenerateMemberName(Gender, Factions_List(RecruitFaction).Index),
              Gender => Gender,
              Price => Price,
              Skills => Skills,
@@ -319,7 +319,8 @@ package body Bases is
              Inventory => Inventory,
              Equipment => Equipment,
              Payment => Payment,
-             HomeBase => RecruitBase));
+             HomeBase => RecruitBase,
+             Faction => RecruitFaction));
       end loop;
       SkyBases(BaseIndex).RecruitDate := GameDate;
       SkyBases(BaseIndex).Recruits := BaseRecruits;
@@ -541,7 +542,7 @@ package body Bases is
       for C in ProtoShips_List.Iterate loop
          if ProtoShips_List(C).CombatValue <= PlayerValue and
            not IsFriendly
-             (Factions_List(PlayerFaction).Index,
+             (Factions_List(PlayerShip.Crew(1).Faction).Index,
               Factions_List(ProtoShips_List(C).Owner).Index) and
            not PlayerShips.Contains(ProtoShips_List(C).Index) then
             Enemies.Append(New_Item => ProtoShips_Container.To_Index(C));
@@ -586,7 +587,7 @@ package body Bases is
                   end if;
                   if Event = DoublePrice and
                     IsFriendly
-                      (Factions_List(PlayerFaction).Index,
+                      (Factions_List(PlayerShip.Crew(1).Faction).Index,
                        Factions_List
                          (SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner)
                          .Index) then
@@ -598,7 +599,7 @@ package body Bases is
                       .Flags.Contains
                     (To_Unbounded_String("diseaseimmune")) and
                     IsFriendly
-                      (Factions_List(PlayerFaction).Index,
+                      (Factions_List(PlayerShip.Crew(1).Faction).Index,
                        Factions_List
                          (SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner)
                          .Index) then

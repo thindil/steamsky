@@ -38,6 +38,7 @@ package Bases is
       Equipment: Equipment_Array; -- Items indexes from inventory used by recruit: 1 - weapon, 2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs, 7 - tool
       Payment: Positive; -- How much money recruit will take as payment each day.
       HomeBase: Positive; -- Index of base from which recruit is
+      Faction: Positive; -- Index of faction to which recruit belongs
    end record;
    package Recruit_Container is new Vectors(Positive, Recruit_Data);
    type Reputation_Array is
@@ -85,8 +86,8 @@ package Bases is
       TraderIndex: Natural;
       Reduce: Boolean :=
         True); -- Count price for actions with bases (buying/selling/docking/ect)
-   function GenerateBaseName
-     return Unbounded_String; -- Generate random name for base
+   function GenerateBaseName(FactionIndex: Positive)
+     return Unbounded_String; -- Generate random name for base based on faction
    procedure GenerateRecruits; -- Generate if needed new recruits in base
    procedure AskForBases; -- Ask in base for direction for other bases
    procedure AskForEvents; -- Ask in base for direction for random events

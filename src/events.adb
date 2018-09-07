@@ -250,7 +250,7 @@ package body Events is
                   when others => -- Full docks or enemy patrol
                      if Roll in 20 .. 40 and
                        not IsFriendly
-                         (Factions_List(PlayerFaction).Index,
+                         (Factions_List(PlayerShip.Crew(1).Faction).Index,
                           Factions_List(SkyBases(BaseIndex).Owner).Index) then
                         GenerateEnemies
                           (Enemies,
@@ -425,7 +425,7 @@ package body Events is
       TraderIndex := ProtoShips_List.First_Index;
       for Ship of ProtoShips_List loop
          if IsFriendly
-             (Factions_List(PlayerFaction).Index,
+             (Factions_List(PlayerShip.Crew(1).Faction).Index,
               Factions_List(Ship.Owner).Index) and
            not PlayerShips.Contains(Ship.Index) then
             FriendlyShips.Append(New_Item => TraderIndex);
@@ -444,7 +444,7 @@ package body Events is
             SkyBases(BaseIndex).Owner := Factions_Container.To_Index(I);
             SkyBases(BaseIndex).Reputation(1) :=
               GetReputation
-                (Factions_List(PlayerFaction).Index,
+                (Factions_List(PlayerShip.Crew(1).Faction).Index,
                  Factions_List(I).Index);
             exit;
          end if;
@@ -483,7 +483,7 @@ package body Events is
             To_Lower(To_String(Factions_List(Ship.Owner).Index)) =
               To_Lower(To_String(Owner))) and
            not IsFriendly
-             (Factions_List(PlayerFaction).Index,
+             (Factions_List(PlayerShip.Crew(1).Faction).Index,
               Factions_List(Ship.Owner).Index) and
            not PlayerShips.Contains(Ship.Index) then
             Enemies.Append(New_Item => EnemyIndex);

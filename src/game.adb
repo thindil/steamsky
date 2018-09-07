@@ -82,8 +82,6 @@ package body Game is
       -- Set Game time
       GameDate :=
         (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 0);
-      -- Get player faction index
-      PlayerFaction := FactionIndex;
       -- Generate world
       SkyMap :=
         (others =>
@@ -148,13 +146,13 @@ package body Game is
                end if;
                BaseReputation :=
                  GetReputation
-                   (Factions_List(PlayerFaction).Index,
+                   (Factions_List(FactionIndex).Index,
                     Factions_List(J).Index);
                exit;
             end if;
          end loop;
          SkyBases(I) :=
-           (Name => GenerateBaseName,
+           (Name => GenerateBaseName(BaseOwner),
             Visited => (0, 0, 0, 0, 0),
             SkyX => Integer(PosX),
             SkyY => Integer(PosY),
@@ -236,7 +234,8 @@ package body Game is
           ContractLength => -1,
           Morale => (PlayerMorale, 0),
           Loyalty => 100,
-          HomeBase => RandomBase));
+          HomeBase => RandomBase,
+          Faction => FactionIndex));
       for Module of PlayerShip.Modules loop
          if Module.Owner > 0 then
             Module.Owner := Module.Owner + 1;
