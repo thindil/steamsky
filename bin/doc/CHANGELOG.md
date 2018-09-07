@@ -12,7 +12,8 @@ All notable changes to this project will be documented in this file.
 - New items: adamantium gunsmith set, adamantium cooking set, adamantium
   sickle, adamantium saw, adamantium bucket, adamantium blacksmith set,
   adamantium woodworker set, adamantium repair tools, adamantium sewing kit,
-  adamantium 80mm ammo, adamantium 100mm ammo and adamantium 120mm ammo
+  adamantium 80mm ammo, adamantium 100mm ammo, adamantium 120mm ammo and
+  adamantium harpoon
 - Separated healing tools for each faction
 - Variable with healing tool name to help
 - Separated healing skill for each faction
