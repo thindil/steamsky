@@ -64,6 +64,9 @@ All notable changes to this project will be documented in this file.
 - Possible crash when reporting error
 - Lack of keyboard shortcut for back button in license window
 
+### Removed
+- HealingSkill variable from help
+
 ## [2.7] - 2018-08-12
 
 ### Added
