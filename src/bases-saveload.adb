@@ -517,7 +517,11 @@ package body Bases.SaveLoad is
                      end if;
                      if Get_Attribute(Item(BaseData, J), "faction") /= "" then
                         for K in Factions_List.Iterate loop
-                           if Factions_List(K).Index = To_Unbounded_String(Get_Attribute(Item(BaseData, J), "faction")) then
+                           if Factions_List(K).Index =
+                             To_Unbounded_String
+                               (Get_Attribute
+                                  (Item(BaseData, J),
+                                   "faction")) then
                               RecruitFaction := Factions_Container.To_Index(K);
                               exit;
                            end if;
