@@ -603,7 +603,9 @@ package body Ships.Crew is
                  Module.Durability > 0 and
                  FindItem
                      (Inventory => Ship.Cargo,
-                      ItemType => Factions_List(PlayerShip.Crew(1).Faction).HealingTools) >
+                      ItemType =>
+                        Factions_List(PlayerShip.Crew(1).Faction)
+                          .HealingTools) >
                    0 then
                   CanHeal := True;
                end if;

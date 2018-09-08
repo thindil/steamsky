@@ -407,7 +407,8 @@ package body Ships.SaveLoad is
                Durability,
                EquipmentIndex,
                PriorityIndex,
-               HomeBase, FactionIndex: Positive;
+               HomeBase,
+               FactionIndex: Positive;
                Payment, Morale: Attributes_Array;
             begin
                Skills.Clear;
@@ -534,7 +535,9 @@ package body Ships.SaveLoad is
                end if;
                if Get_Attribute(Item(ChildNodes, I), "faction") /= "" then
                   for J in Factions_List.Iterate loop
-                     if Factions_List(J).Index = To_Unbounded_String(Get_Attribute(Item(ChildNodes, I), "faction")) then
+                     if Factions_List(J).Index =
+                       To_Unbounded_String
+                         (Get_Attribute(Item(ChildNodes, I), "faction")) then
                         FactionIndex := Factions_Container.To_Index(J);
                         exit;
                      end if;

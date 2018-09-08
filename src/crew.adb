@@ -479,7 +479,8 @@ package body Crew is
                        Times *
                        (GetSkillLevel
                           (PlayerShip.Crew(I),
-                           Factions_List(PlayerShip.Crew(I).Faction).HealingSkill) /
+                           Factions_List(PlayerShip.Crew(I).Faction)
+                             .HealingSkill) /
                         20);
                      if HealAmount < Times then
                         HealAmount := Times;
@@ -502,7 +503,8 @@ package body Crew is
                           FindItem
                             (Inventory => PlayerShip.Cargo,
                              ItemType =>
-                               Factions_List(PlayerShip.Crew(I).Faction).HealingTools);
+                               Factions_List(PlayerShip.Crew(I).Faction)
+                                 .HealingTools);
                         if ToolIndex > 0 then
                            if PlayerShip.Cargo(ToolIndex).Amount <
                              abs (HealAmount) then
@@ -519,7 +521,8 @@ package body Crew is
                              FindItem
                                (Inventory => PlayerShip.Crew(I).Inventory,
                                 ItemType =>
-                                  Factions_List(PlayerShip.Crew(I).Faction).HealingTools);
+                                  Factions_List(PlayerShip.Crew(I).Faction)
+                                    .HealingTools);
                            if ToolIndex > 0 then
                               if PlayerShip.Crew(I).Inventory(ToolIndex)
                                   .Amount <
@@ -554,7 +557,8 @@ package body Crew is
                                  OrderMessage);
                               GainExp
                                 (Times,
-                                 Factions_List(PlayerShip.Crew(I).Faction).HealingSkill,
+                                 Factions_List(PlayerShip.Crew(I).Faction)
+                                   .HealingSkill,
                                  I);
                               exit;
                            end if;
@@ -577,7 +581,8 @@ package body Crew is
                         AddMessage
                           ("You don't have any " &
                            To_String
-                             (Factions_List(PlayerShip.Crew(I).Faction).HealingTools) &
+                             (Factions_List(PlayerShip.Crew(I).Faction)
+                                .HealingTools) &
                            " to continue healing wounded crew members.",
                            OrderMessage,
                            3);
@@ -661,7 +666,8 @@ package body Crew is
             end if;
          end if;
          if TiredPoints > 0 then
-            if Factions_List(PlayerShip.Crew(I).Faction).FoodTypes.Length > 0 then
+            if Factions_List(PlayerShip.Crew(I).Faction).FoodTypes.Length >
+              0 then
                HungerLevel := HungerLevel + TiredPoints;
                if HungerLevel > 100 then
                   HungerLevel := 100;
@@ -674,7 +680,8 @@ package body Crew is
                   end if;
                end if;
             end if;
-            if Factions_List(PlayerShip.Crew(I).Faction).DrinksTypes.Length > 0 then
+            if Factions_List(PlayerShip.Crew(I).Faction).DrinksTypes.Length >
+              0 then
                ThirstLevel := ThirstLevel + TiredPoints;
                if ThirstLevel > 100 then
                   ThirstLevel := 100;

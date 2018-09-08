@@ -155,7 +155,8 @@ package body Maps.UI is
       if Factions_List(PlayerShip.Crew(1).Faction).FoodTypes.Length = 0 then
          ItemIndex := 1;
       else
-         for DrinkType of Factions_List(PlayerShip.Crew(1).Faction).DrinksTypes loop
+         for DrinkType of
+           Factions_List(PlayerShip.Crew(1).Faction).DrinksTypes loop
             ItemIndex :=
               FindItem(Inventory => PlayerShip.Cargo, ItemType => DrinkType);
             exit when ItemIndex > 0;
@@ -172,7 +173,8 @@ package body Maps.UI is
       else
          ItemAmount := 0;
          for Item of PlayerShip.Cargo loop
-            if Factions_List(PlayerShip.Crew(1).Faction).DrinksTypes.Length = 0 then
+            if Factions_List(PlayerShip.Crew(1).Faction).DrinksTypes.Length =
+              0 then
                ItemAmount := GameSettings.LowDrinks + 1;
                exit;
             end if;
@@ -196,7 +198,8 @@ package body Maps.UI is
       if Factions_List(PlayerShip.Crew(1).Faction).FoodTypes.Length = 0 then
          ItemIndex := 1;
       else
-         for FoodType of Factions_List(PlayerShip.Crew(1).Faction).FoodTypes loop
+         for FoodType of
+           Factions_List(PlayerShip.Crew(1).Faction).FoodTypes loop
             ItemIndex :=
               FindItem(Inventory => PlayerShip.Cargo, ItemType => FoodType);
             exit when ItemIndex > 0;
@@ -213,7 +216,8 @@ package body Maps.UI is
       else
          ItemAmount := 0;
          for Item of PlayerShip.Cargo loop
-            if Factions_List(PlayerShip.Crew(1).Faction).FoodTypes.Length = 0 then
+            if Factions_List(PlayerShip.Crew(1).Faction).FoodTypes.Length =
+              0 then
                ItemAmount := GameSettings.LowFood + 1;
                exit;
             end if;

@@ -249,7 +249,8 @@ package body Bases.Trade is
         Time *
         Items_List
           (FindProtoItem
-             (ItemType => Factions_List(PlayerShip.Crew(1).Faction).HealingTools))
+             (ItemType =>
+                Factions_List(PlayerShip.Crew(1).Faction).HealingTools))
           .Prices
           (BaseType);
       CountPrice(Cost, FindMember(Talk));

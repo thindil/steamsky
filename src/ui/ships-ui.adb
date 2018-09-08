@@ -317,7 +317,9 @@ package body Ships.UI is
                if Member.Health < 100 and
                  FindItem
                      (Inventory => PlayerShip.Cargo,
-                      ItemType => Factions_List(PlayerShip.Crew(1).Faction).HealingTools) >
+                      ItemType =>
+                        Factions_List(PlayerShip.Crew(1).Faction)
+                          .HealingTools) >
                    0 then
                   Set_Label
                     (Gtk_Button(Get_Object(Builder, "btnassigncrew")),

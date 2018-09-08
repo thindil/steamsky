@@ -157,9 +157,13 @@ package body Ships is
             if GetRandom(1, 100) < 99 then
                MemberFaction := ProtoShip.Owner;
             else
-               MemberFaction := GetRandom(Factions_List.First_Index, Factions_List.Last_Index);
+               MemberFaction :=
+                 GetRandom
+                   (Factions_List.First_Index,
+                    Factions_List.Last_Index);
             end if;
-            if not Factions_List(MemberFaction).Flags.Contains(To_Unbounded_String("nogender")) then
+            if not Factions_List(MemberFaction).Flags.Contains
+              (To_Unbounded_String("nogender")) then
                if GetRandom(1, 100) < 50 then
                   Gender := 'M';
                else
