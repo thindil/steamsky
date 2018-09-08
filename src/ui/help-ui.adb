@@ -101,43 +101,29 @@ package body Help.UI is
            (Name => To_Unbounded_String("StrengthName"),
             Value => Attributes_List(StrengthIndex).Name),
          4 =>
-           (Name => To_Unbounded_String("HealingSkill"),
-            Value =>
-              Skills_List
-                (Factions_List(PlayerShip.Crew(1).Faction).HealingSkill)
-                .Name),
-         5 =>
            (Name => To_Unbounded_String("PilotingSkill"),
             Value => Skills_List(PilotingSkill).Name),
-         6 =>
+         5 =>
            (Name => To_Unbounded_String("EngineeringSkill"),
             Value => Skills_List(EngineeringSkill).Name),
-         7 =>
+         6 =>
            (Name => To_Unbounded_String("GunnerySkill"),
             Value => Skills_List(GunnerySkill).Name),
-         8 =>
+         7 =>
            (Name => To_Unbounded_String("TalkingSkill"),
             Value => Skills_List(TalkingSkill).Name),
-         9 =>
+         8 =>
            (Name => To_Unbounded_String("PerceptionSkill"),
             Value => Skills_List(PerceptionSkill).Name),
-         10 =>
+         9 =>
            (Name => To_Unbounded_String("ConditionName"),
             Value => Attributes_List(ConditionIndex).Name),
-         11 =>
+         10 =>
            (Name => To_Unbounded_String("DodgeSkill"),
             Value => Skills_List(DodgeSkill).Name),
-         12 =>
+         11 =>
            (Name => To_Unbounded_String("UnarmedSkill"),
-            Value => Skills_List(UnarmedSkill).Name),
-         13 =>
-           (Name => To_Unbounded_String("HealingTools"),
-            Value =>
-              Items_List
-                (FindProtoItem
-                   (ItemType =>
-                      Factions_List(PlayerShip.Crew(1).Faction).HealingTools))
-                .Name));
+            Value => Skills_List(UnarmedSkill).Name));
       AccelNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("<skymapwindow>/btnupleft"),
          To_Unbounded_String("<skymapwindow>/btnup"),
