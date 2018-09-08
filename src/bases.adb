@@ -109,7 +109,8 @@ package body Bases is
       end if;
    end CountPrice;
 
-   function GenerateBaseName(FactionIndex: Positive)
+   function GenerateBaseName
+     (FactionIndex: Positive)
      return Unbounded_String is -- based on name generator from libtcod
       NewName, NameType: Unbounded_String;
       LettersAmount, NumbersAmount: Positive;
@@ -180,7 +181,8 @@ package body Bases is
       SkillLevel,
       HighestSkill,
       HighestLevel,
-      RecruitBase, RecruitFaction: Positive;
+      RecruitBase,
+      RecruitFaction: Positive;
       BaseRecruits: Recruit_Container.Vector;
       Skills: Skills_Container.Vector;
       Gender: Character;
@@ -232,9 +234,11 @@ package body Bases is
          if GetRandom(1, 100) < 99 then
             RecruitFaction := SkyBases(BaseIndex).Owner;
          else
-            RecruitFaction := GetRandom(Factions_List.First_Index, Factions_List.Last_Index);
+            RecruitFaction :=
+              GetRandom(Factions_List.First_Index, Factions_List.Last_Index);
          end if;
-         if not Factions_List(RecruitFaction).Flags.Contains(To_Unbounded_String("nogender")) then
+         if not Factions_List(RecruitFaction).Flags.Contains
+           (To_Unbounded_String("nogender")) then
             if GetRandom(1, 2) = 1 then
                Gender := 'M';
             else

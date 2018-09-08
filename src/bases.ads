@@ -86,7 +86,8 @@ package Bases is
       TraderIndex: Natural;
       Reduce: Boolean :=
         True); -- Count price for actions with bases (buying/selling/docking/ect)
-   function GenerateBaseName(FactionIndex: Positive)
+   function GenerateBaseName
+     (FactionIndex: Positive)
      return Unbounded_String; -- Generate random name for base based on faction
    procedure GenerateRecruits; -- Generate if needed new recruits in base
    procedure AskForBases; -- Ask in base for direction for other bases

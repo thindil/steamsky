@@ -314,7 +314,9 @@ package body Stories is
          CanStart := True;
          for ForbiddenFaction of Stories_List(I).ForbiddenFactions loop
             if To_Lower(To_String(ForbiddenFaction)) =
-              To_Lower(To_String(Factions_List(PlayerShip.Crew(1).Faction).Index)) then
+              To_Lower
+                (To_String
+                   (Factions_List(PlayerShip.Crew(1).Faction).Index)) then
                CanStart := False;
                exit;
             end if;
