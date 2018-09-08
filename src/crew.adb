@@ -475,16 +475,6 @@ package body Crew is
                         TiredLevel := PlayerShip.Crew(I).Tired;
                      end if;
                   when Heal =>
-                     HealAmount :=
-                       Times *
-                       (GetSkillLevel
-                          (PlayerShip.Crew(I),
-                           Factions_List(PlayerShip.Crew(I).Faction)
-                             .HealingSkill) /
-                        20);
-                     if HealAmount < Times then
-                        HealAmount := Times;
-                     end if;
                      HaveMedicalRoom := False;
                      for Module of PlayerShip.Modules loop
                         if Modules_List(Module.ProtoIndex).MType =
@@ -494,98 +484,135 @@ package body Crew is
                            exit;
                         end if;
                      end loop;
-                     if not HaveMedicalRoom then
-                        HealAmount := HealAmount / 2;
-                     end if;
-                     if HealAmount > 0 then
-                        HealAmount := HealAmount * (-1);
-                        ToolIndex :=
-                          FindItem
-                            (Inventory => PlayerShip.Cargo,
-                             ItemType =>
-                               Factions_List(PlayerShip.Crew(I).Faction)
-                                 .HealingTools);
-                        if ToolIndex > 0 then
-                           if PlayerShip.Cargo(ToolIndex).Amount <
-                             abs (HealAmount) then
-                              HealAmount := PlayerShip.Cargo(ToolIndex).Amount;
-                           else
-                              HealAmount := abs (HealAmount);
+                     for Member of PlayerShip.Crew loop
+                        if Member.Name /= PlayerShip.Crew(I).Name and
+                          Member.Health < 100 then
+                           HealAmount :=
+                             Times *
+                             (GetSkillLevel
+                                (PlayerShip.Crew(I),
+                                 Factions_List(Member.Faction).HealingSkill) /
+                              20);
+                           if HealAmount < Times then
+                              HealAmount := Times;
                            end if;
-                           UpdateCargo
-                             (Ship => PlayerShip,
-                              Amount => (0 - HealAmount),
-                              CargoIndex => ToolIndex);
-                        else
+                           if not HaveMedicalRoom then
+                              HealAmount := HealAmount / 2;
+                           end if;
+                           if HealAmount > 0 then
+                              HealAmount := HealAmount * (-1);
+                              ToolIndex :=
+                                FindItem
+                                  (Inventory => PlayerShip.Cargo,
+                                   ItemType =>
+                                     Factions_List(Member.Faction)
+                                       .HealingTools);
+                              if ToolIndex > 0 then
+                                 if PlayerShip.Cargo(ToolIndex).Amount <
+                                   abs (HealAmount) then
+                                    HealAmount :=
+                                      PlayerShip.Cargo(ToolIndex).Amount;
+                                 else
+                                    HealAmount := abs (HealAmount);
+                                 end if;
+                                 UpdateCargo
+                                   (Ship => PlayerShip,
+                                    Amount => (0 - HealAmount),
+                                    CargoIndex => ToolIndex);
+                              else
+                                 ToolIndex :=
+                                   FindItem
+                                     (Inventory =>
+                                        PlayerShip.Crew(I).Inventory,
+                                      ItemType =>
+                                        Factions_List(Member.Faction)
+                                          .HealingTools);
+                                 if ToolIndex > 0 then
+                                    if PlayerShip.Crew(I).Inventory(ToolIndex)
+                                        .Amount <
+                                      abs (HealAmount) then
+                                       HealAmount :=
+                                         PlayerShip.Crew(I).Inventory
+                                           (ToolIndex)
+                                           .Amount;
+                                    else
+                                       HealAmount := abs (HealAmount);
+                                    end if;
+                                    UpdateInventory
+                                      (MemberIndex => I,
+                                       Amount => (0 - HealAmount),
+                                       InventoryIndex => ToolIndex);
+                                 end if;
+                              end if;
+                           end if;
+                           if HealAmount > 0 then
+                              for J in PlayerShip.Crew.Iterate loop
+                                 if PlayerShip.Crew(J).Health < 100 and
+                                   Crew_Container.To_Index(J) /= I then
+                                    PlayerShip.Crew(J).Health :=
+                                      PlayerShip.Crew(J).Health + HealAmount;
+                                    if PlayerShip.Crew(J).Health > 100 then
+                                       PlayerShip.Crew(J).Health := 100;
+                                    end if;
+                                    AddMessage
+                                      (To_String(PlayerShip.Crew(I).Name) &
+                                       " healed " &
+                                       To_String(PlayerShip.Crew(J).Name) &
+                                       " a bit.",
+                                       OrderMessage);
+                                    GainExp
+                                      (Times,
+                                       Factions_List(Member.Faction)
+                                         .HealingSkill,
+                                       I);
+                                    exit;
+                                 end if;
+                              end loop;
+                           else
+                              AddMessage
+                                ("You don't have any " &
+                                 To_String
+                                   (Factions_List(Member.Faction)
+                                      .HealingTools) &
+                                 " to continue healing wounded " &
+                                 To_String(Member.Name) &
+                                 ".",
+                                 OrderMessage,
+                                 3);
+                           end if;
+                        end if;
+                     end loop;
+                     HealAmount := 1;
+                     for J in PlayerShip.Crew.Iterate loop
+                        if PlayerShip.Crew(J).Health < 100 and
+                          Crew_Container.To_Index(J) /= I then
+                           HealAmount := 0;
                            ToolIndex :=
                              FindItem
-                               (Inventory => PlayerShip.Crew(I).Inventory,
+                               (Inventory => PlayerShip.Cargo,
                                 ItemType =>
-                                  Factions_List(PlayerShip.Crew(I).Faction)
+                                  Factions_List(PlayerShip.Crew(J).Faction)
                                     .HealingTools);
-                           if ToolIndex > 0 then
-                              if PlayerShip.Crew(I).Inventory(ToolIndex)
-                                  .Amount <
-                                abs (HealAmount) then
-                                 HealAmount :=
-                                   PlayerShip.Crew(I).Inventory(ToolIndex)
-                                     .Amount;
-                              else
-                                 HealAmount := abs (HealAmount);
+                           if ToolIndex = 0 then
+                              ToolIndex :=
+                                FindItem
+                                  (Inventory => PlayerShip.Crew(I).Inventory,
+                                   ItemType =>
+                                     Factions_List(PlayerShip.Crew(J).Faction)
+                                       .HealingTools);
+                              if ToolIndex = 0 then
+                                 HealAmount := -1;
                               end if;
-                              UpdateInventory
-                                (MemberIndex => I,
-                                 Amount => (0 - HealAmount),
-                                 InventoryIndex => ToolIndex);
                            end if;
+                           exit;
                         end if;
-                     end if;
+                     end loop;
                      if HealAmount > 0 then
-                        for J in PlayerShip.Crew.Iterate loop
-                           if PlayerShip.Crew(J).Health < 100 and
-                             Crew_Container.To_Index(J) /= I then
-                              PlayerShip.Crew(J).Health :=
-                                PlayerShip.Crew(J).Health + HealAmount;
-                              if PlayerShip.Crew(J).Health > 100 then
-                                 PlayerShip.Crew(J).Health := 100;
-                              end if;
-                              AddMessage
-                                (To_String(PlayerShip.Crew(I).Name) &
-                                 " healed " &
-                                 To_String(PlayerShip.Crew(J).Name) &
-                                 " a bit.",
-                                 OrderMessage);
-                              GainExp
-                                (Times,
-                                 Factions_List(PlayerShip.Crew(I).Faction)
-                                   .HealingSkill,
-                                 I);
-                              exit;
-                           end if;
-                        end loop;
-                        for J in PlayerShip.Crew.Iterate loop
-                           if PlayerShip.Crew(J).Health < 100 and
-                             Crew_Container.To_Index(J) /= I then
-                              HealAmount := 0;
-                              exit;
-                           end if;
-                        end loop;
-                        if HealAmount > 0 then
-                           AddMessage
-                             (To_String(PlayerShip.Crew(I).Name) &
-                              " finished healing wounded.",
-                              OrderMessage,
-                              2);
-                        end if;
-                     else
                         AddMessage
-                          ("You don't have any " &
-                           To_String
-                             (Factions_List(PlayerShip.Crew(I).Faction)
-                                .HealingTools) &
-                           " to continue healing wounded crew members.",
+                          (To_String(PlayerShip.Crew(I).Name) &
+                           " finished healing wounded.",
                            OrderMessage,
-                           3);
+                           2);
                      end if;
                      if HealAmount /= 0 then
                         GiveOrders(PlayerShip, I, Rest);
