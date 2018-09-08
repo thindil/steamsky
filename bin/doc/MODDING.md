@@ -422,8 +422,7 @@ Value must be existing skill name.
   will be replaced with name of game money, `{FuelName}` which later will be
   replaced with name of fuel for ship, `{StrengthName}` which later will be
   replaced with name of attribute used to count max character encumbrance,
-  `{HealingSkill}` which later will be replaced with name of skill
-  used for healing, `{PilotingSkill}` which later will be replaced with name
+   `{PilotingSkill}` which later will be replaced with name
   of skill used for piloting ship, `{EngineeringSkill}` which later will be
   replaced with name of skill used by ship engineer, `{GunnerySkill}` which
   later will be replaced with name of skill used to operate guns on ship,
@@ -434,8 +433,7 @@ Value must be existing skill name.
   member condition, `{DodgeSkill}` which later will be replaced with name of
   skill used to dodge enemy attacks in character's combat, `{UnarmedSkill}`
   which later will be replaced with name of skill used when character fight
-  without weapon, `{HealingTools}` which later will be replaced by name
-  of item used to heal members of player faction.
+  without weapon.
 - Inside help text you can use some tags for formatting text: 
   `{u}some text{/u}` for add underline for text, `{b}some text{/b}` to made
   bold characters and `{i}some text{/i}` for italic font.
