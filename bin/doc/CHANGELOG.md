@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [2.8] - 2018-09-09
 
 ### Added
 - New crafting recipes: adamantium mold, adamantium gunsmith set, adamantium
