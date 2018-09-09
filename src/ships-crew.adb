@@ -457,7 +457,6 @@ package body Ships.Crew is
       NeedRepairs,
       NeedGunners,
       NeedCrafters,
-      NeedHealer,
       CanHeal,
       NeedTrader: Boolean :=
         False;
@@ -575,7 +574,12 @@ package body Ships.Crew is
                null;
          end case;
          if Member.Health < 100 then
-            NeedHealer := True;
+            if FindItem
+                (Inventory => Ship.Cargo,
+                 ItemType => Factions_List(Member.Faction).HealingTools) >
+              0 then
+               CanHeal := True;
+            end if;
          end if;
       end loop;
       for Module of Ship.Modules loop
@@ -597,17 +601,6 @@ package body Ships.Crew is
                if Module.Data(1) < Module.Data(2) and
                  Module.Durability > 0 then
                   NeedClean := True;
-               end if;
-            when MEDICAL_ROOM =>
-               if NeedHealer and
-                 Module.Durability > 0 and
-                 FindItem
-                     (Inventory => Ship.Cargo,
-                      ItemType =>
-                        Factions_List(PlayerShip.Crew(1).Faction)
-                          .HealingTools) >
-                   0 then
-                  CanHeal := True;
                end if;
             when others =>
                null;
