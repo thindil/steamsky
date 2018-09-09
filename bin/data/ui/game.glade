@@ -1657,6 +1657,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             </child>
             <child>
               <object class="GtkLabel" id="lblnofuel">
+                <property name="name">normalfont</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">label</property>
                 <property name="use_markup">True</property>
@@ -1669,6 +1670,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             </child>
             <child>
               <object class="GtkLabel" id="lblnofood">
+                <property name="name">normalfont</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">label</property>
                 <property name="use_markup">True</property>
@@ -1681,6 +1683,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             </child>
             <child>
               <object class="GtkLabel" id="lblnodrink">
+                <property name="name">normalfont</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">label</property>
                 <property name="use_markup">True</property>
@@ -1933,6 +1936,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               </object>
                             </child>
                           </object>
+                          <packing>
+                            <property name="index">-1</property>
+                          </packing>
                         </child>
                       </object>
                       <packing>
