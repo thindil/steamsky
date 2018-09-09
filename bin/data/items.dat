@@ -1724,5 +1724,18 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="20"/>
   <description>Harpoon made of adamantium with long rope. Used as ammunition for harpoon guns.</description>
  </item>
+ <item index="182" name="Adamantium short sword" type="Weapon" weight="3">
+  <trade buyable="N" price="58"/>
+  <trade buyable="N" price="58"/>
+  <trade buyable="N" price="58"/>
+  <trade buyable="N" price="58"/>
+  <trade buyable="Y" price="56"/>
+  <data value="1"/>
+  <data value="40"/>
+  <data value="17"/>
+  <data value="1"/>
+  <data value="1"/>
+  <description>Simple short sword made of adamantium, used in melee combat.</description>
+ </item>
 </items>
 
