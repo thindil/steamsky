@@ -35,6 +35,7 @@ All notable changes to this project will be documented in this file.
 - Bonus to gained experience based on career selected by player
 - Each crew members, recruit, passenger have home skybase
 - Hide from player factions without careers
+- Separated faction for each mobile
 
 ### Changed
 - Updated interface
