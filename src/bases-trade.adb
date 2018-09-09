@@ -242,17 +242,18 @@ package body Bases.Trade is
          for Member of PlayerShip.Crew loop
             if Member.Health < 100 then
                Time := Time + (5 * (100 - Member.Health));
+               Cost :=
+                 Cost +
+                 ((5 * (100 - Member.Health)) *
+                  Items_List
+                    (FindProtoItem
+                       (ItemType =>
+                          Factions_List(Member.Faction).HealingTools))
+                    .Prices
+                    (BaseType));
             end if;
          end loop;
       end if;
-      Cost :=
-        Time *
-        Items_List
-          (FindProtoItem
-             (ItemType =>
-                Factions_List(PlayerShip.Crew(1).Faction).HealingTools))
-          .Prices
-          (BaseType);
       CountPrice(Cost, FindMember(Talk));
       if Time = 0 then
          Time := 1;
