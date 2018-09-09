@@ -109,7 +109,17 @@ package body Maps.UI is
       HaveCleaner,
       HaveRepairman: Boolean :=
         False;
-      ItemIndex, ItemAmount: Natural := 0;
+      ItemAmount: Natural := 0;
+      function GetItemAmount(ItemType: Unbounded_String) return Natural is
+         Amount: Natural := 0;
+      begin
+         for Item of PlayerShip.Cargo loop
+            if Items_List(Item.ProtoIndex).IType = ItemType then
+               Amount := Amount + Item.Amount;
+            end if;
+         end loop;
+         return Amount;
+      end GetItemAmount;
    begin
       if PlayerShip.Crew(1).Health = 0 then
          DeathConfirm;
@@ -125,25 +135,8 @@ package body Maps.UI is
       if Is_Visible(Gtk_Widget(Get_Object(Builder, "lblnofood"))) then
          Hide(Gtk_Widget(Get_Object(Builder, "lblnofood")));
       end if;
-      ItemIndex :=
-        FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
-      if ItemIndex > 0 then
-         for Item of PlayerShip.Cargo loop
-            if Items_List(Item.ProtoIndex).IType = FuelType then
-               ItemAmount := ItemAmount + Item.Amount;
-            end if;
-            exit when ItemAmount > GameSettings.LowFuel;
-         end loop;
-         if ItemAmount < GameSettings.LowFuel then
-            Set_Markup
-              (Gtk_Label(Get_Object(Builder, "lblnofuel")),
-               "[<span foreground=""yellow"">Low Fuel</span>]");
-            Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Builder, "lblnofuel")),
-               "Low level of fuel on ship.");
-            Show_All(Gtk_Widget(Get_Object(Builder, "lblnofuel")));
-         end if;
-      else
+      ItemAmount := GetItemAmount(FuelType);
+      if ItemAmount = 0 then
          Set_Markup
            (Gtk_Label(Get_Object(Builder, "lblnofuel")),
             "[<span foreground=""red"">No Fuel</span>]");
@@ -151,18 +144,27 @@ package body Maps.UI is
            (Gtk_Widget(Get_Object(Builder, "lblnofuel")),
             "You can't travel anymore.");
          Show_All(Gtk_Widget(Get_Object(Builder, "lblnofuel")));
+      elsif ItemAmount < GameSettings.LowFuel then
+         Set_Markup
+           (Gtk_Label(Get_Object(Builder, "lblnofuel")),
+            "[<span foreground=""yellow"">Low Fuel</span>]");
+         Set_Tooltip_Text
+           (Gtk_Widget(Get_Object(Builder, "lblnofuel")),
+            "Low level of fuel on ship.");
+         Show_All(Gtk_Widget(Get_Object(Builder, "lblnofuel")));
       end if;
-      if Factions_List(PlayerShip.Crew(1).Faction).FoodTypes.Length = 0 then
-         ItemIndex := 1;
-      else
-         for DrinkType of
-           Factions_List(PlayerShip.Crew(1).Faction).DrinksTypes loop
-            ItemIndex :=
-              FindItem(Inventory => PlayerShip.Cargo, ItemType => DrinkType);
-            exit when ItemIndex > 0;
-         end loop;
-      end if;
-      if ItemIndex = 0 then
+      for Member of PlayerShip.Crew loop
+         if Factions_List(Member.Faction).DrinksTypes.Length = 0 then
+            ItemAmount := GameSettings.LowDrinks + 1;
+         else
+            ItemAmount := 0;
+            for DrinkType of Factions_List(Member.Faction).DrinksTypes loop
+               ItemAmount := ItemAmount + GetItemAmount(DrinkType);
+            end loop;
+            exit when ItemAmount < GameSettings.LowDrinks;
+         end if;
+      end loop;
+      if ItemAmount = 0 then
          Set_Markup
            (Gtk_Label(Get_Object(Builder, "lblnodrink")),
             "[<span foreground=""red"">No Drinks</span>]");
@@ -170,42 +172,27 @@ package body Maps.UI is
            (Gtk_Widget(Get_Object(Builder, "lblnodrink")),
             "You don't have any drinks in ship.");
          Show_All(Gtk_Widget(Get_Object(Builder, "lblnodrink")));
-      else
-         ItemAmount := 0;
-         for Item of PlayerShip.Cargo loop
-            if Factions_List(PlayerShip.Crew(1).Faction).DrinksTypes.Length =
-              0 then
-               ItemAmount := GameSettings.LowDrinks + 1;
-               exit;
-            end if;
-            if Factions_List(PlayerShip.Crew(1).Faction).DrinksTypes.Find_Index
-              (Item => Items_List(Item.ProtoIndex).IType) /=
-              UnboundedString_Container.No_Index then
-               ItemAmount := ItemAmount + Item.Amount;
-            end if;
-            exit when ItemAmount > GameSettings.LowDrinks;
-         end loop;
-         if ItemAmount < GameSettings.LowDrinks then
-            Set_Markup
-              (Gtk_Label(Get_Object(Builder, "lblnodrink")),
-               "[<span foreground=""yellow"">Low Drinks</span>]");
-            Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Builder, "lblnodrink")),
-               "Low level of drinks on ship.");
-            Show_All(Gtk_Widget(Get_Object(Builder, "lblnodrink")));
+      elsif ItemAmount < GameSettings.LowDrinks then
+         Set_Markup
+           (Gtk_Label(Get_Object(Builder, "lblnodrink")),
+            "[<span foreground=""yellow"">Low Drinks</span>]");
+         Set_Tooltip_Text
+           (Gtk_Widget(Get_Object(Builder, "lblnodrink")),
+            "Low level of drinks on ship.");
+         Show_All(Gtk_Widget(Get_Object(Builder, "lblnodrink")));
+      end if;
+      for Member of PlayerShip.Crew loop
+         if Factions_List(Member.Faction).FoodTypes.Length = 0 then
+            ItemAmount := GameSettings.LowFood + 1;
+         else
+            ItemAmount := 0;
+            for FoodType of Factions_List(Member.Faction).FoodTypes loop
+               ItemAmount := ItemAmount + GetItemAmount(FoodType);
+            end loop;
+            exit when ItemAmount < GameSettings.LowFood;
          end if;
-      end if;
-      if Factions_List(PlayerShip.Crew(1).Faction).FoodTypes.Length = 0 then
-         ItemIndex := 1;
-      else
-         for FoodType of
-           Factions_List(PlayerShip.Crew(1).Faction).FoodTypes loop
-            ItemIndex :=
-              FindItem(Inventory => PlayerShip.Cargo, ItemType => FoodType);
-            exit when ItemIndex > 0;
-         end loop;
-      end if;
-      if ItemIndex = 0 then
+      end loop;
+      if ItemAmount = 0 then
          Set_Markup
            (Gtk_Label(Get_Object(Builder, "lblnofood")),
             "[<span foreground=""red"">No Food</span>]");
@@ -213,30 +200,14 @@ package body Maps.UI is
            (Gtk_Widget(Get_Object(Builder, "lblnofood")),
             "You don't have any food in ship.");
          Show_All(Gtk_Widget(Get_Object(Builder, "lblnofood")));
-      else
-         ItemAmount := 0;
-         for Item of PlayerShip.Cargo loop
-            if Factions_List(PlayerShip.Crew(1).Faction).FoodTypes.Length =
-              0 then
-               ItemAmount := GameSettings.LowFood + 1;
-               exit;
-            end if;
-            if Factions_List(PlayerShip.Crew(1).Faction).FoodTypes.Find_Index
-              (Item => Items_List(Item.ProtoIndex).IType) /=
-              UnboundedString_Container.No_Index then
-               ItemAmount := ItemAmount + Item.Amount;
-            end if;
-            exit when ItemAmount > GameSettings.LowFood;
-         end loop;
-         if ItemAmount < GameSettings.LowFood then
-            Set_Markup
-              (Gtk_Label(Get_Object(Builder, "lblnofood")),
-               "[<span foreground=""yellow"">Low Food</span>]");
-            Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Builder, "lblnofood")),
-               "Low level of food on ship.");
-            Show_All(Gtk_Widget(Get_Object(Builder, "lblnofood")));
-         end if;
+      elsif ItemAmount < GameSettings.LowFood then
+         Set_Markup
+           (Gtk_Label(Get_Object(Builder, "lblnofood")),
+            "[<span foreground=""yellow"">Low Food</span>]");
+         Set_Tooltip_Text
+           (Gtk_Widget(Get_Object(Builder, "lblnofood")),
+            "Low level of food on ship.");
+         Show_All(Gtk_Widget(Get_Object(Builder, "lblnofood")));
       end if;
       for Module of PlayerShip.Modules loop
          case Modules_List(Module.ProtoIndex).MType is
