@@ -36,10 +36,9 @@
 - Inside help text you can use some tags for formatting text: {u}some text{/u}
   for add underline for text, {b}some text{/b} to made bold characters and
   {i}some text{/i} for italic font.
-- Inside help text you can use some tags for hiding information based on 
-  player faction flags. Text between that tags will be invisible for player
-  who selected faction with that tag. Possible values are: "diseaseimmune",
-  "nofatigue", "nomorale".
+- Inside help text you can use special variables `diseaseimmune`, `nofatigue`
+  and `nomorale` which later will be replaced by list of factions which have
+  set selected flag.
 -->
  <entry title="General Informations">{u}Overview{/u}
     Steam Sky is a roguelike game where you are commandeer of a flying ship. You must take care of ship and crew. You can trade items between sky bases, fight with enemies or manufacture items. The game ends when your character dies. At this moment, help is under development (as whole game). To see other help topics, click on topic title (for example {b}&quot;General Informations&quot;{/b} for this screen) above help text. Some informations about game mechanics can depends on your character's faction.
@@ -159,16 +158,16 @@ How much you get {MoneyName} from removing module depends on damage of selected 
 Each ship hull have maximum module space, which limit what and how much modules can be installed on it. Armor and weapons don't count to this limit. Most of basic modules use only one module space, but this most expensive modules, may use a lot of space. You can check how much each module space use on {i}ship info{/i} screen or in {i}shipyard{/i} screen in bases.</entry>
  <entry title="Ship crew">{u}Hunger and thirst{/u}
     Depending on your character faction (selected at starting game), you and your crew must eat and drink. If you don't have food or drink on board, your crew will slowly die from dehydration or starvation. Amount of reduced hunger/thirst depends on consumables - more expensive consumables can restore more. 
-{nomorale}
+
 {u}Morale{/u}
-   Every crew member have morale. When he/she resting, he/she slowly gaining it (only when morale level is low), every time when he/she back to work, he/she losing a bit morale. Same with giving orders: giving new orders except resting, reduce morale a little. If member morale is very low, he/she may refuse to obey orders. Low morale reduces crew member loyalty too. If crew member loyalty will be low he/she stop obey orders and may left your crew anytime you dock to base. In other way, high morale raises crew member loyalty.
+   Every crew member (except this from {nomorale} factions) have morale. When he/she resting, he/she slowly gaining it (only when morale level is low), every time when he/she back to work, he/she losing a bit morale. Same with giving orders: giving new orders except resting, reduce morale a little. If member morale is very low, he/she may refuse to obey orders. Low morale reduces crew member loyalty too. If crew member loyalty will be low he/she stop obey orders and may left your crew anytime you dock to base. In other way, high morale raises crew member loyalty.
 Each crew member must be paid. It may be daily payment - constant value of {MoneyName} paid on new day or percent of profit from selling items in bases or to traders. If you don't have enough {MoneyName} to pay, unpaid crew member will lose morale.
 When your crew member die, you will stay with his/her body in your ship cargo. At this moment, you can only drop that body from cargo. Additionally, all other crew members lose some morale.
-How fast crew member gains or lose morale depends on level of morale too: with higher level it gain and lose slower than when his/her morale is low.{/nomorale}
-{nofatigue}
+How fast crew member gains or lose morale depends on level of morale too: with higher level it gain and lose slower than when his/her morale is low.
+
 {u}Tiredness{/u}
-   Every member of crew getting tired when have assigned order other than {b}On break{/b} or {b}Talking in bases{/b}. When member is too tired, he/she stops working and going rest. After rest, if his/her previous position is vacant (e.g. nobody piloting ship), he/she automatically back to work.
-To assign selected crew member to position, select it from list by left click and then left click again on member order to select other.{/nofatigue}
+   Every member of crew (except this from {nofatigue} factions) getting tired when have assigned order other than {b}On break{/b} or {b}Talking in bases{/b}. When member is too tired, he/she stops working and going rest. After rest, if his/her previous position is vacant (e.g. nobody piloting ship), he/she automatically back to work.
+To assign selected crew member to position, select it from list by left click and then left click again on member order to select other.
 
 {u}Health{/b}
 Crew members can regenerate health over time but only when they are on break and have assigned cabin. Additionally, if you have proper healing tools in cargo, you can assign other crew member to heal wounded. It can greatly speed up recovering (speed of healing depends on healing skill of healer). Having installed {b}medical room{/b} on ship speed up healing too. Only fully healed members can be healer. If you don't have any healing tools on ship, you can heal wounded crew members in bases. Cost of healing depends mostly on price of healing tools in selected base. Healing tools and healing skill needed for healing wounded, depends on faction of wounded crew member.
@@ -183,8 +182,8 @@ To set orders priorities, click button {b}'Set orders priorities'{/b} and select
 {u}Various info{/u}
 * If crew member cabin is destroyed (or don't have any) and he/she going on break, he/she will try find empty cabin as a new own to rest.
 * Speed of rest of crew members depends on quality, damage level and cleanliness of cabin which they owned. Without cabin, they rest very slow.
-* If your ship is docked to base, you can dismiss crew members. Go to crew info screen and use {b}Dismiss{/b} option on selected crew member. Dismissed crew members joins to base population. {nomorale}Dismissing crew member little reduces morale of rest of crew.{/nomorale}
-* Hunger, thirst, wounds{nomorale }, very low and very high morale{/nomorale} have impact on your crew members skills. Wounded or hungry crew members have penalties to their skills.
+* If your ship is docked to base, you can dismiss crew members. Go to crew info screen and use {b}Dismiss{/b} option on selected crew member. Dismissed crew members joins to base population. Dismissing crew member little reduces morale of rest of crew (if they are not from {nomorale} factions).
+* Hunger, thirst, wounds, very low and very high morale (except for members of {nomorale} factions) have impact on your crew members skills. Wounded or hungry crew members have penalties to their skills.
 * When crew member start working on duty which needs any tool (like crafting, cleaning, upgrading or repairing ship) he/she takes needed tool to own inventory and equipping it if he/she don't have proper tool equipped. You can manually set which tool he/she should use in inventory screen.
 * Each crew member have maximum encumbrance for inventory which depends on his/her {StrengthName}.
 * Crew members skills levels, starting from lowest: {i}Beginner, Novice, Apprentice, Practitioner, Competent, Respected, Renowned, Master, Grand-Master, Legendary, Ultimate{/i}.
@@ -219,19 +218,19 @@ If you successfully finish mission, your character gain some morale, if you fail
 {u}Tips{/u}
 * Here no limit how much crew members you can have on ship, just remember, all of them needs food, drinks, place to rest and payment. 
 * Hiring new crew members reduce population of base. New recruits are available every 30 days between visits of base.
-{nomorale}* Starting morale of recruit depends on player reputation in selected base.{/nomorale}</entry>
+* Starting morale of recruit depends on player reputation in selected base, except members of {nomorale} factions.</entry>
  <entry title="Tips">* All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press {GameKey 22} key on sky map (no need to press {GameKey 26} first to show menu).
 * If you want travel faster (for example, for escape from fight), you can drop some items from your cargo. Go to cargo information screen, select desired item and select proper option from item options menu.
 * Each crew member need proper module for work. If that module is destroyed, member cannot start selected work (for example, can't start piloting when cockpit is destroyed).
-* You can assign crew members to selected module (cabins, guns, workplaces) on ship info screen. All workplaces first must have set crafting order, before you can assign someone.{diseaseimmune}
-* You can reduce how long disease affect selected base by delivering medicines to it. Which exactly medical supplies are needed depends on faction which belongs base. If you choice deliver supplies for free, you can gain some reputation otherwise, you gain {MoneyName} and may lose some reputation.{/diseaseimmune}
+* You can assign crew members to selected module (cabins, guns, workplaces) on ship info screen. All workplaces first must have set crafting order, before you can assign someone.
+* You can reduce how long disease affect selected base by delivering medicines to it. Which exactly medical supplies are needed depends on faction which belongs base. If you choice deliver supplies for free, you can gain some reputation otherwise, you gain {MoneyName} and may lose some reputation. 
 * What enemy you meet depends on how much upgraded ship you have - especially on upgrades of hull, armor, weapons and type of ammo. At beginning of game you can meet weakest enemies, with every ship upgrade you meet stronger. Of course, there is always small chance that you encounter enemy stronger than you.
 * Each enemy can be different: very often enemy ships have some modules upgrades installed (stronger version of weapon, more durability, etc).
 * Which orders are available for crew members, depends on orders prerequisites. For example, if you don't have set any crafting order set, you can't assign crew member to manufacturing.
 * Your ship gets dirty at the start of every day. You can send as many crew members as you want to clean the ship or give an order to the whole crew. It is the only order which don't give any experience to assigned crew members. You need any type of bucket to execute this order.
 * A base's population may change with time. Don't be surprised when a small base may be abandoned after a successful attack on it or after disease. A base's population may grow with time.
-* You may set some game options during play by selecting 'Game Options' menu (key {GameKey 23}). Changes done to options are used in current and each next game.{diseaseimmune}
-* If you deliver proper medical supplies for free to diseased base, you gain some reputation in that base. If you sell medical supplies to diseased base, you earn some money but lose reputation. The amount of gained or lost reputation depends on how much medical supplies you gave or sold.{/diseaseimmune}
+* You may set some game options during play by selecting 'Game Options' menu (key {GameKey 23}). Changes done to options are used in current and each next game.
+* If you deliver proper medical supplies for free to diseased base, you gain some reputation in that base. If you sell medical supplies to diseased base, you earn some money but lose reputation. The amount of gained or lost reputation depends on how much medical supplies you gave or sold.
 * You can check the progress of your character goal in 'Game statistics' menu (key {GameKey 21}). There you can change it too, but if you do it, progress of old goal will be lost. If you finish your current goal, a new random goal will be given.
 * Abandoned bases may be recovered by someone. In that situation, they gain a small population and a new owner.
 * You may move most items (with exception of items needed for missions) between ship cargo and crew members inventory in cargo screen and from inventory to ship in selected crew member inventory screen.
