@@ -437,10 +437,9 @@ Value must be existing skill name.
 - Inside help text you can use some tags for formatting text: 
   `{u}some text{/u}` for add underline for text, `{b}some text{/b}` to made
   bold characters and `{i}some text{/i}` for italic font.
-- Inside help text you can use some tags for hiding information based on 
-  player faction flags. Text between that tags will be invisible for player
-  who selected faction with that tag. Possible values are: `diseaseimmune`,
-  `nofatigue`, `nomorale`.
+- Inside help text you can use special variables `diseaseimmune`, `nofatigue`
+  and `nomorale` which later will be replaced by list of factions which have
+  set selected flag.
 
 ## Goals
 
