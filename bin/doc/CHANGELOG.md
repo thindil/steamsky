@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New crafting recipe: adamantium short sword
 
+### Changed
+- Help factions flags variables now return list of factions which have that
+  flag enabled
+
 ## [2.8] - 2018-09-09
 
 ### Added
