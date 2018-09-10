@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- New crafting recipe: adamantium short sword
+
 ## [2.8] - 2018-09-09
 
 ### Added
