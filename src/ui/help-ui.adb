@@ -34,7 +34,6 @@ with Game; use Game;
 with Utils.UI; use Utils.UI;
 with Items; use Items;
 with Factions; use Factions;
-with Ships; use Ships;
 
 package body Help.UI is
 
@@ -169,6 +168,7 @@ package body Help.UI is
         (To_Unbounded_String("diseaseimmune"),
          To_Unbounded_String("nofatigue"),
          To_Unbounded_String("nomorale"));
+      FactionsWithFlag: Unbounded_String;
    begin
       NewText := Help_List(Topic).Text;
       OldIndex := 1;
@@ -226,14 +226,25 @@ package body Help.UI is
          end loop;
          for I in FlagsTags'Range loop
             if TagText = FlagsTags(I) then
-               if Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
-                 (TagText) then
-                  EndIndex :=
-                    Index(NewText, "{/" & To_String(TagText), EndIndex) +
-                    Length(TagText) +
-                    1;
-                  exit;
-               end if;
+               FactionsWithFlag := Null_Unbounded_String;
+               for Faction of Factions_List loop
+                  if Faction.Flags.Contains(TagText) then
+                     if FactionsWithFlag /= Null_Unbounded_String then
+                        Append(FactionsWithFlag, " and ");
+                     end if;
+                     Append(FactionsWithFlag, Faction.Name);
+                  end if;
+               end loop;
+               while Ada.Strings.Unbounded.Count(FactionsWithFlag, " and ") >
+                 1 loop
+                  Replace_Slice
+                    (FactionsWithFlag,
+                     Index(FactionsWithFlag, " and "),
+                     Index(FactionsWithFlag, " and ") + 5,
+                     ", ");
+               end loop;
+               Insert(HelpBuffer, Iter, To_String(FactionsWithFlag));
+               exit;
             end if;
          end loop;
          OldIndex := EndIndex + 2;
