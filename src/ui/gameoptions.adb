@@ -28,6 +28,7 @@ with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Settings; use Gtk.Settings;
 with Gtk.Button; use Gtk.Button;
+with Gtk.Label; use Gtk.Label;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Gdk.Event; use Gdk.Event;
@@ -245,6 +246,18 @@ package body GameOptions is
            (Gtk_Widget(Get_Object(Builder, To_String(EditNames(I)))),
             SetAccelerator'Access);
       end loop;
+      Set_Text
+        (Gtk_Label(Get_Object(Builder, "lbldatadir")),
+         To_String(DataDirectory));
+      Set_Text
+        (Gtk_Label(Get_Object(Builder, "lblsavedir")),
+         To_String(SaveDirectory));
+      Set_Text
+        (Gtk_Label(Get_Object(Builder, "lbldocdir")),
+         To_String(DocDirectory));
+      Set_Text
+        (Gtk_Label(Get_Object(Builder, "lblmodsdir")),
+         To_String(ModsDirectory));
    end CreateGameOptions;
 
    procedure ShowGameOptions is
