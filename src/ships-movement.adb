@@ -378,11 +378,15 @@ package body Ships.Movement is
 
    function CountFuelNeeded return Integer is
       FuelNeeded: Integer := 0;
+      Speed: ShipSpeed := PlayerShip.Speed;
    begin
+      if Speed = DOCKED or Speed = FULL_STOP then
+         Speed := GameSettings.UndockSpeed;
+      end if;
       for Module of PlayerShip.Modules loop
          if Modules_List(Module.ProtoIndex).MType = ENGINE and
            Module.Data(3) = 0 then
-            case PlayerShip.Speed is
+            case Speed is
                when QUARTER_SPEED =>
                   FuelNeeded := FuelNeeded - (Module.Data(1) / 4);
                when HALF_SPEED =>
@@ -394,9 +398,6 @@ package body Ships.Movement is
             end case;
          end if;
       end loop;
-      if FuelNeeded = 0 then
-         FuelNeeded := -1;
-      end if;
       return FuelNeeded;
    end CountFuelNeeded;
 

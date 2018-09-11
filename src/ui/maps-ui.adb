@@ -75,6 +75,7 @@ with GameOptions; use GameOptions;
 with Ships.Crew; use Ships.Crew;
 with Ships.UI; use Ships.UI;
 with Ships.Cargo.UI; use Ships.Cargo.UI;
+with Ships.Movement; use Ships.Movement;
 with Trades.UI; use Trades.UI;
 with Factions; use Factions;
 with Stories; use Stories;
@@ -788,17 +789,26 @@ package body Maps.UI is
       Append
         (MapInfoText,
          "X:" & Positive'Image(MapX) & " Y:" & Positive'Image(MapY));
-      Append
-        (MapInfoText,
-         ASCII.LF & "Distance:" & Positive'Image(CountDistance(MapX, MapY)));
+      if PlayerShip.SkyX /= MapX or PlayerShip.SkyY /= MapY then
+         declare
+            Distance: constant Positive := CountDistance(MapX, MapY);
+         begin
+            Append
+              (MapInfoText,
+               ASCII.LF & "Distance:" & Positive'Image(Distance));
+            Append
+              (MapInfoText,
+               ASCII.LF &
+               "Approx fuel usage:" &
+               Natural'Image(abs (Distance * CountFuelNeeded)));
+         end;
+      end if;
       if SkyMap(MapX, MapY).BaseIndex > 0 then
          declare
             BaseIndex: constant Positive := SkyMap(MapX, MapY).BaseIndex;
          begin
             if SkyBases(BaseIndex).Known then
-               if Length(MapInfoText) > 0 then
-                  Append(MapInfoText, ASCII.LF);
-               end if;
+               Append(MapInfoText, ASCII.LF);
                Append(MapInfoText, "Base info:");
                Append(MapInfoText, ASCII.LF);
                Append
@@ -866,9 +876,7 @@ package body Maps.UI is
          declare
             EventIndex: constant Positive := SkyMap(MapX, MapY).EventIndex;
          begin
-            if Length(MapInfoText) > 0 then
-               Append(MapInfoText, ASCII.LF);
-            end if;
+            Append(MapInfoText, ASCII.LF);
             if Events_List(EventIndex).EType /= BaseRecovery and
               SkyMap(MapX, MapY).BaseIndex > 0 then
                Append(MapInfoText, ASCII.LF);
@@ -900,9 +908,7 @@ package body Maps.UI is
          declare
             MissionIndex: constant Positive := SkyMap(MapX, MapY).MissionIndex;
          begin
-            if Length(MapInfoText) > 0 then
-               Append(MapInfoText, ASCII.LF);
-            end if;
+            Append(MapInfoText, ASCII.LF);
             if SkyMap(MapX, MapY).BaseIndex > 0 or
               SkyMap(MapX, MapY).EventIndex > 0 then
                Append(MapInfoText, ASCII.LF & ASCII.LF);
