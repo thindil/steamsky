@@ -325,6 +325,7 @@ package body Ships.Movement is
       type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
       Message: Unbounded_String;
+      ShipSetSpeed: ShipSpeed;
    begin
       if Ship = PlayerShip then
          Message := To_Unbounded_String(HaveOrderRequirements);
@@ -362,7 +363,13 @@ package body Ships.Movement is
                   300.0));
          end if;
       end loop;
-      case Ship.Speed is
+      if Ship = PlayerShip and
+        (Ship.Speed = DOCKED or Ship.Speed = FULL_STOP) then
+         ShipSetSpeed := GameSettings.UndockSpeed;
+      else
+         ShipSetSpeed := Ship.Speed;
+      end if;
+      case ShipSetSpeed is
          when QUARTER_SPEED =>
             Speed := Integer(Float(Speed) * 0.25);
          when HALF_SPEED =>
