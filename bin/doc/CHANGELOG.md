@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
   flag enabled
 - Update help
 - Updated MODDING.md
+- Updated interface
 
 ## [2.8] - 2018-09-09
 
