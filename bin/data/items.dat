@@ -1737,5 +1737,18 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Simple short sword made of adamantium, used in melee combat.</description>
  </item>
+ <item index="183" name="Adamantium sword" type="Weapon" weight="5">
+  <trade buyable="N" price="72"/>
+  <trade buyable="N" price="72"/>
+  <trade buyable="N" price="72"/>
+  <trade buyable="N" price="72"/>
+  <trade buyable="Y" price="70"/>
+  <data value="1"/>
+  <data value="45"/>
+  <data value="17"/>
+  <data value="1"/>
+  <data value="1"/>
+  <description>Simple sword made of adamantium, used in melee combat.</description>
+ </item>
 </items>
 
