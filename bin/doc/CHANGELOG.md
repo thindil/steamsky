@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New crafting recipe: adamantium short sword
 - New item: adamantium sword
+- Ability to show current game directories in options
 
 ### Changed
 - Help factions flags variables now return list of factions which have that
