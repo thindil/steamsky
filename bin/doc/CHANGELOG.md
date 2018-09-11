@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Help factions flags variables now return list of factions which have that
   flag enabled
 - Update help
+- Updated MODDING.md
 
 ## [2.8] - 2018-09-09
 
