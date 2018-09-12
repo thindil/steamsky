@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<careers>
+<!--Each career is between tag `career`.
+- Attribute `index` is index of career.
+- Attribute `name` is name of career visible to player.
+-->
+ <career index="general" name="General" />
+ <career index="merchant" name="Merchant">
+<!-- Each career can have bonuses to experience to certain skills. Each that
+skill is between `skill` tag. Attribute `name` is name of skill which will 
+be have bonuses to experience.-->
+  <skill name="Rhetoric" />
+ </career>
+ <career index="hunter" name="Hunter">
+  <skill name="Gunnery" />
+  <skill name="Perception" />
+  <skill name="Swords" />
+  <skill name="Dodge" />
+  <skill name="Brawling" />
+ </career>
+ <career index="explorer" name="Explorer">
+  <skill name="Piloting" />
+  <skill name="Medicine" />
+ </career>
+ <career index="crafter" name="Crafter">
+  <skill name="Engineering" />
+  <skill name="Alchemy" />
+  <skill name="Cooking" />
+  <skill name="Gunsmith" />
+  <skill name="Metalsmith" />
+  <skill name="Farming" />
+  <skill name="Woodcutting" />
+  <skill name="Brewery" />
+  <skill name="Blacksmith" />
+  <skill name="Woodworking" />
+  <skill name="Leatherworking" />
+ </career>
+</careers>
