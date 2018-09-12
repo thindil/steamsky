@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -27,7 +27,9 @@ package Ships.Movement is
      (SpeedValue: ShipSpeed)
      return String; -- Change speed of ship, returns empty string if all ok otherwise error message
    function RealSpeed
-     (Ship: ShipRecord)
+     (Ship: ShipRecord;
+      InfoOnly: Boolean :=
+        False)
      return Natural; -- Return real ship speed in meters per minute
    function CountFuelNeeded
      return Integer; -- Return fuel needed by player ship to travel
