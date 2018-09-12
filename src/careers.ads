@@ -23,13 +23,15 @@ with Game; use Game;
 package Careers is
 
    type CareerRecord is -- Data structure for player career
-      record
-         Index: Unbounded_String; -- Index of career, used in code
-         Name: Unbounded_String; -- Name of career, displayed to player
-         Skills: UnboundedString_Container.Vector; -- List of skills which have bonuses to experience if player select this career
-      end record;
+   record
+      Index: Unbounded_String; -- Index of career, used in code
+      Name: Unbounded_String; -- Name of career, displayed to player
+      Skills: UnboundedString_Container
+        .Vector; -- List of skills which have bonuses to experience if player select this career
+   end record;
    package Careers_Container is new Vectors(Positive, CareerRecord);
-   Careers_List: Careers_Container.Vector; -- List of all available careers for player
+   Careers_List: Careers_Container
+     .Vector; -- List of all available careers for player
 
    procedure LoadCareers(Reader: Tree_Reader); -- Load player careers from file
 

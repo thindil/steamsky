@@ -266,7 +266,8 @@ package body Game is
       GenerateSaveName;
       -- Set player career
       for I in Careers_List.Iterate loop
-         if Careers_List(I).Index = Factions_List(FactionIndex).Careers(CareerIndex).Index then
+         if Careers_List(I).Index =
+           Factions_List(FactionIndex).Careers(CareerIndex).Index then
             PlayerCareer := Careers.Careers_Container.To_Index(I);
             exit;
          end if;
