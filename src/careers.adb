@@ -48,8 +48,10 @@ package body Careers is
              (Item(NodesList, I),
               "skill");
          for J in 0 .. Length(ChildNodes) - 1 loop
-            TempRecord.Skills.Append(New_Item => To_Unbounded_String
-                (Get_Attribute(Item(ChildNodes, J), "name")));
+            TempRecord.Skills.Append
+            (New_Item =>
+               To_Unbounded_String
+                 (Get_Attribute(Item(ChildNodes, J), "name")));
          end loop;
          if Get_Attribute(Item(NodesList, I), "remove") = "" then
             Careers_List.Append(New_Item => TempRecord);

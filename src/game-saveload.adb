@@ -414,7 +414,10 @@ package body Game.SaveLoad is
       LogMessage("Saving player career...", Everything, False);
       CategoryNode := Create_Element(SaveData, "playercareer");
       CategoryNode := Append_Child(MainNode, CategoryNode);
-      Set_Attribute(CategoryNode, "index", To_String(Careers_List(PlayerCareer).Index);
+      Set_Attribute
+        (CategoryNode,
+         "index",
+         To_String(Careers_List(PlayerCareer).Index));
       LogMessage("done.", Everything, True, False);
       Create(SaveFile, Out_File, To_String(SaveName));
       Write(Stream => Stream(SaveFile), N => SaveData, Pretty_Print => False);
@@ -748,7 +751,9 @@ package body Game.SaveLoad is
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "playercareer");
       if Length(NodesList) > 0 then
          for I in Careers_List.Iterate loop
-            if Careers_List(I).Index = To_Unbounded_String(Get_Attribute(Item(NodesList, 0), "index")) then
+            if Careers_List(I).Index =
+              To_Unbounded_String
+                (Get_Attribute(Item(NodesList, 0), "index")) then
                PlayerCareer := Careers_Container.To_Index(I);
                exit;
             end if;
