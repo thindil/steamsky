@@ -795,7 +795,7 @@ package body Maps.UI is
             MinutesDiff: Integer;
             type SpeedType is digits 2;
             Speed: constant SpeedType :=
-              (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
+              (SpeedType(RealSpeed(PlayerShip, True)) / 1000.0);
             TravelTime: Date_Record :=
               (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
          begin

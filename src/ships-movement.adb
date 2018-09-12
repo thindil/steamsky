@@ -320,14 +320,16 @@ package body Ships.Movement is
       return "";
    end ChangeShipSpeed;
 
-   function RealSpeed(Ship: ShipRecord) return Natural is
+   function RealSpeed
+     (Ship: ShipRecord;
+      InfoOnly: Boolean := False) return Natural is
       BaseSpeed, Speed: Natural := 0;
       type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
       Message: Unbounded_String;
       ShipSetSpeed: ShipSpeed;
    begin
-      if Ship = PlayerShip then
+      if Ship = PlayerShip and not InfoOnly then
          Message := To_Unbounded_String(HaveOrderRequirements);
          if Length(Message) > 0 then
             return 0;
@@ -364,7 +366,8 @@ package body Ships.Movement is
          end if;
       end loop;
       if Ship = PlayerShip and
-        (Ship.Speed = DOCKED or Ship.Speed = FULL_STOP) then
+        (Ship.Speed = DOCKED or Ship.Speed = FULL_STOP) and
+        InfoOnly then
          ShipSetSpeed := GameSettings.UndockSpeed;
       else
          ShipSetSpeed := Ship.Speed;
