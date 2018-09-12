@@ -180,8 +180,8 @@ package body Factions is
              (Item(NodesList, I),
               "career");
          for J in 0 .. Length(ChildNodes) - 1 loop
-            TmpCareer.Name :=
-              To_Unbounded_String(Get_Attribute(Item(ChildNodes, J), "name"));
+            TmpCareer.Index :=
+              To_Unbounded_String(Get_Attribute(Item(ChildNodes, J), "index"));
             TmpCareer.ShipIndex :=
               To_Unbounded_String
                 (Get_Attribute(Item(ChildNodes, J), "shipindex"));
