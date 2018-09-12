@@ -196,6 +196,7 @@ package body Crew is
       procedure UpdateMember(Member: in out Member_Data) is
          BackToWork: Boolean := True;
          ConsumeResult: Natural := 0;
+         subtype Workplaces is ModuleType range ALCHEMY_LAB .. GREENHOUSE;
       begin
          Member.Tired := TiredLevel;
          if TiredLevel = 0 and
@@ -207,11 +208,22 @@ package body Crew is
                   BackToWork := False;
                end if;
             end if;
-            if Member.PreviousOrder = Gunner and not BackToWork then
+            if
+              (Member.PreviousOrder = Gunner or
+               Member.PreviousOrder = Craft) then
                for Module of PlayerShip.Modules loop
-                  if Modules_List(Module.ProtoIndex).MType = GUN and
-                    Module.Owner = I then
+                  if Member.PreviousOrder = Gunner and
+                    Modules_List(Module.ProtoIndex).MType = GUN and
+                    (Module.Owner = I or Module.Owner = 0) then
                      BackToWork := True;
+                     Module.Owner := I;
+                     exit;
+                  elsif Member.PreviousOrder = Craft and
+                    Modules_List(Module.ProtoIndex).MType in Workplaces and
+                    (Module.Owner = I or Module.Owner = 0) and
+                    Module.Data(1) /= 0 then
+                     BackToWork := True;
+                     Module.Owner := I;
                      exit;
                   end if;
                end loop;
