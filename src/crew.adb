@@ -27,6 +27,7 @@ with Crew.Inventory; use Crew.Inventory;
 with Combat; use Combat;
 with Factions; use Factions;
 with Bases; use Bases;
+with Careers; use Careers;
 
 package body Crew is
 
@@ -55,7 +56,8 @@ package body Crew is
          PlayerShip.Crew(CrewIndex).Attributes(Attribute)(2) := AttributeExp;
       end GainExpInAttribute;
    begin
-      if PlayerCareer = Skills_List(SkillNumber).Career then
+      if Careers_List(PlayerCareer).Skills.Contains
+        (Skills_List(SkillNumber).Name) then
          NewAmount := Amount + (Amount / 2);
       else
          NewAmount := Amount;
