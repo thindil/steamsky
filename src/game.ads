@@ -41,7 +41,6 @@ package Game is
       Name: Unbounded_String; -- Name of skill
       Attribute: Positive; -- Attribute used with that skill
       Description: Unbounded_String; -- Description of skill
-      Career: Unbounded_String; -- Career which gains more experience for using skill
    end record;
    package SkillsData_Container is new Vectors(Positive, Skill_Record);
    type Attribute_Record is -- Data for attributes
@@ -95,7 +94,7 @@ package Game is
         Dir_Separator &
         "mods" &
         Dir_Separator); -- Path to directory where are game modifications
-   PlayerCareer: Unbounded_String; -- Name of career selected by player during starting game
+   PlayerCareer: Positive; -- Index of career selected by player during starting game
 
    procedure NewGame
      (CharName, ShipName: Unbounded_String;

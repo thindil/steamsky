@@ -48,6 +48,7 @@ with Factions; use Factions;
 with Log; use Log;
 with Help; use Help;
 with Stories; use Stories;
+with Careers; use Careers;
 
 package body Game is
 
@@ -264,7 +265,12 @@ package body Game is
       -- Set name of savegame
       GenerateSaveName;
       -- Set player career
-      PlayerCareer := Factions_List(FactionIndex).Careers(CareerIndex).Name;
+      for I in Careers_List.Iterate loop
+         if Careers_List(I).Index = Factions_List(FactionIndex).Careers(CareerIndex).Index then
+            PlayerCareer := Careers.Careers_Container.To_Index(I);
+            exit;
+         end if;
+      end loop;
    end NewGame;
 
    procedure UpdateGame(Minutes: Positive) is
@@ -509,10 +515,7 @@ package body Game is
                       Attribute => J,
                       Description =>
                         To_Unbounded_String
-                          (Node_Value(First_Child(Item(NodesList, I)))),
-                      Career =>
-                        To_Unbounded_String
-                          (Get_Attribute(Item(NodesList, I), "career"))));
+                          (Node_Value(First_Child(Item(NodesList, I))))));
                   exit;
                end if;
             end loop;
@@ -663,6 +666,7 @@ package body Game is
           To_Unbounded_String("shipmodules.dat")),
          (To_Unbounded_String("recipes"), To_Unbounded_String("recipes.dat")),
          (To_Unbounded_String("mobiles"), To_Unbounded_String("mobs.dat")),
+         (To_Unbounded_String("careers"), To_Unbounded_String("careers.dat")),
          (To_Unbounded_String("factions"),
           To_Unbounded_String("factions.dat")),
          (To_Unbounded_String("ships"), To_Unbounded_String("ships.dat")),
@@ -710,6 +714,8 @@ package body Game is
                   LoadStories(Reader);
                elsif To_String(DataType) = "data" then
                   LoadData(Reader);
+               elsif To_String(DataType) = "careers" then
+                  LoadCareers(Reader);
                end if;
             end if;
             Free(Reader);

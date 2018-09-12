@@ -33,7 +33,7 @@ package Factions is
    package Relations_Container is new Vectors(Positive, RelationsRecord);
    type CareerRecord is -- Data structure for player career in faction
    record
-      Name: Unbounded_String; -- Name of career
+      Index: Unbounded_String; -- Index of career
       ShipIndex: Unbounded_String; -- Index of proto ship which will be used as starting ship for player
       PlayerIndex: Unbounded_String; -- Index of mobile which will be used as starting character for player
       Description: Unbounded_String; -- Description of career, displayed to player
