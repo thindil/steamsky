@@ -971,7 +971,7 @@ package body Maps.UI is
             Append(MapInfoText, ASCII.LF);
             if SkyMap(MapX, MapY).BaseIndex > 0 or
               SkyMap(MapX, MapY).EventIndex > 0 then
-               Append(MapInfoText, ASCII.LF & ASCII.LF);
+               Append(MapInfoText, ASCII.LF);
             end if;
             case AcceptedMissions(MissionIndex).MType is
                when Deliver =>
