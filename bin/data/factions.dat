@@ -80,6 +80,8 @@ mobiles file.
 - Attribute "shipindex": index of ship used for starting player ship when
 he/she choice this career. Value must be existing ship index from any ships
 file.
+- Attribute "name": optional attribute. Specific name of career for this
+faction. Will be show to player instead of default name.
 -->
   <career index="general" playerindex="1" shipindex="1">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
   <career index="merchant" playerindex="1" shipindex="167">Career focused on trading. You get unarmed small ship with larger cargo space and more moneys. Your crew will be bit smaller that General. At begining is better to avoid combat.</career>
