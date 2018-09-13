@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Update help
 - Updated MODDING.md
 - Updated interface
+- Moved player's careers to separated data file
 
 ### Fixed
 - Reclaiming turrets and workshops by crew members after back to work after
