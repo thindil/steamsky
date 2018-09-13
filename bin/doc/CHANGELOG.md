@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New crafting recipes: adamantium short sword and adamantium sword
-- New item: adamantium sword
+- New items: adamantium sword and adamantium shield
 - Ability to show current game directories in options
 
 ### Changed
