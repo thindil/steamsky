@@ -578,13 +578,15 @@ Value must be existing skill name.
   cannot become ill, no disease event for this faction, `nofatigue` faction
   members don't get tired so, they can't rest and regenerate health, `nomorale`
   faction members don't have morale (and bonuses from it)
-- Tags "career": Available careers for player when choice this faction. Text
+- Tags `career`: Available careers for player when choice this faction. Text
   between tags is description of career visible in new game setting. If faction
   don't have any available career then it is unavailable for player.
-- Attribute "playerindex": index of mobile used for starting player character,
+- Attribute `index`: index of career. Must be existing career index from
+  *data/careers.dat* file.
+- Attribute `playerindex`: index of mobile used for starting player character,
   when he/she choice this career. Value must be existing mobile index from any
   mobiles file.
-- Attribute "shipindex": index of ship used for starting player ship when
+- Attribute `shipindex`: index of ship used for starting player ship when
   he/she choice this career. Value must be existing ship index from any ships
   file.
 
@@ -597,7 +599,7 @@ Value must be existing skill name.
   be index of story to remove.
 
 ### Story data structure
--- Each story is between "story" tags.
+- Each story is between "story" tags.
 - Attribute `index`: index of story (it can be number or text) and must be
   unique. At this moment this value is used to manage current story in which
   player is involved.
@@ -642,6 +644,22 @@ story.
   Possible values: `any`, `askinbase` and `destroyship`.
 - Tag `failtext`: text which will be show to player if step not progress to 
   next.
+
+## Careers
+
+### General informations
+- Default game careers are in *careers.dat* file which is in *data* directory.
+- To remove existing career from game, you can delete it from *careers.dat* or
+  in modification file add tag `career` with attribute `remove` which value will
+  be index of career to remove.
+
+### Career data structure
+- Each career is between "career" tags.
+- Attribute `index` is index of career.
+- Attribute `name` is name of career visible to player.
+- Each career can have bonuses to experience to certain skills. Each that
+  skill is between `skill` tag. Attribute `name` is name of skill which will 
+  be have bonuses to experience.
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
