@@ -1750,5 +1750,15 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Simple sword made of adamantium, used in melee combat.</description>
  </item>
+ <item index="184" name="Adamantium shield" type="Shield" weight="15">
+  <trade buyable="N" price="78"/>
+  <trade buyable="N" price="78"/>
+  <trade buyable="N" price="78"/>
+  <trade buyable="N" price="78"/>
+  <trade buyable="Y" price="76"/>
+  <data value="1"/>
+  <data value="24"/>
+  <description>Standard shield made of adamantium, used in melee combat.</description>
+ </item>
 </items>
 
