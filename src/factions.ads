@@ -37,6 +37,7 @@ package Factions is
       ShipIndex: Unbounded_String; -- Index of proto ship which will be used as starting ship for player
       PlayerIndex: Unbounded_String; -- Index of mobile which will be used as starting character for player
       Description: Unbounded_String; -- Description of career, displayed to player
+      Name: Unbounded_String; -- Name of career, may be different for each faction
    end record;
    package Careers_Container is new Vectors(Positive, CareerRecord);
    type FactionRecord is -- Data structure for faction

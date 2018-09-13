@@ -62,7 +62,6 @@ with Log; use Log;
 with Help.UI; use Help.UI;
 with Factions; use Factions;
 with Events; use Events;
-with Careers; use Careers;
 
 package body MainMenu is
 
@@ -405,12 +404,7 @@ package body MainMenu is
       end if;
       Remove_All(CareerComboBox);
       for Career of Factions_List(FactionIndex).Careers loop
-         for ProtoCareer of Careers_List loop
-            if ProtoCareer.Index = Career.Index then
-               Append_Text(CareerComboBox, To_String(ProtoCareer.Name));
-               exit;
-            end if;
-         end loop;
+         Append_Text(CareerComboBox, To_String(Career.Name));
       end loop;
       Set_Active(Gtk_Combo_Box(CareerComboBox), 0);
    end ShowFactionDescription;

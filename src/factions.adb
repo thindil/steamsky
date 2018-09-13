@@ -22,6 +22,7 @@ with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
 with Log; use Log;
 with Utils; use Utils;
+with Careers; use Careers;
 
 package body Factions is
 
@@ -191,6 +192,18 @@ package body Factions is
             TmpCareer.Description :=
               To_Unbounded_String
                 (Node_Value(First_Child(Item(ChildNodes, J))));
+            if Get_Attribute(Item(ChildNodes, J), "name") /= "" then
+               TmpCareer.Name :=
+                 To_Unbounded_String
+                   (Get_Attribute(Item(ChildNodes, J), "name"));
+            else
+               for Career of Careers_List loop
+                  if Career.Index = TmpCareer.Index then
+                     TmpCareer.Name := Career.Name;
+                     exit;
+                  end if;
+               end loop;
+            end if;
             TempRecord.Careers.Append(New_Item => TmpCareer);
          end loop;
          if Get_Attribute(Item(NodesList, I), "remove") = "" then
