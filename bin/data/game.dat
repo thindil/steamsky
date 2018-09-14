@@ -719,36 +719,39 @@ it name as attribute `name` and description between tags `attribute`. -->
 - Attribute `name` is name of selected skill.
 - Attribute `attribute` is name of character attribute (must be defined 
 ealier in this same file).
+- Attribute `tool` is item type used as tool during training (must be defined
+ealier in this same file).
 - Value between `skills` tags is description of skill.
 After change skill name, you been need to made proper changes in other game 
 data files (recipes, items and this same file) if needed. To change skill name,
 just edit value of `name` attribute of selected skill. To change assigned 
 attribute to selected skill enter new name in attribute `attribute`. Name must 
 be existing attribute name, defined ealier in this same file. To change skill 
-description, just edit text between `skill` tags. To change related player
-career, just edit text between `carrer` tags.
+description, just edit text between `skill` tags. To change assigned tool,
+edit value of `tool` attribute of selected skill.
 To add new skill, just append new line with tag `skill` with it name as 
-attribute `name`, assigned attribute to skill as attribute `attribute` and 
-description between tags `skill`. -->
- <skill attribute="Dexterity" name="Piloting">Used by pilots, determine ship speed and chance to avoid damage in ship combat</skill>
- <skill attribute="Intelligence" name="Engineering">Used by engineers, determine ship speed and speed of ship upgrading/repairing</skill>
- <skill attribute="Dexterity" name="Gunnery">Used by gunners, determine chance to hit enemy in ship combat</skill>
- <skill attribute="Intelligence" name="Rhetoric">Used by traders, determine prices in bases</skill>
- <skill attribute="Intelligence" name="Perception">Used to spot enemy ships by pilots and gunners</skill>
- <skill attribute="Intelligence" name="Alchemy">Used in crafting</skill>
- <skill attribute="Dexterity" name="Cooking">Used to cook food</skill>
- <skill attribute="Dexterity" name="Gunsmith">Used to create ammo for guns and upgrade guns</skill>
- <skill attribute="Dexterity" name="Metalsmith">Used in crafting</skill>
- <skill attribute="Intelligence" name="Medicine">Used in healing</skill>
- <skill attribute="Strength" name="Farming">Used to grow plants</skill>
- <skill attribute="Strength" name="Woodcutting">Used to cut trees</skill>
- <skill attribute="Intelligence" name="Brewery">Used to brew drinks</skill>
- <skill attribute="Strength" name="Blacksmith">Used in crafting</skill>
- <skill attribute="Strength" name="Woodworking">Used in crafting</skill>
- <skill attribute="Dexterity" name="Leatherworking">Used in crafting</skill>
- <skill attribute="Strength" name="Swords">Used to dermine chance to hit with swords in combat</skill>
- <skill attribute="Dexterity" name="Dodge">Used to dodge enemy attacks in combat</skill>
- <skill attribute="Strength" name="Brawling">Used to determine chance to hit with bare hands in combat</skill>
+attribute `name`, assigned attribute to skill as attribute `attribute`,
+assigned item type as training tool as attribute `tool` and description between
+tags `skill`. -->
+ <skill attribute="Dexterity" name="Piloting" tool="CockpitSimulator">Used by pilots, determine ship speed and chance to avoid damage in ship combat</skill>
+ <skill attribute="Intelligence" name="Engineering" tool="EngineersBook">Used by engineers, determine ship speed and speed of ship upgrading/repairing</skill>
+ <skill attribute="Dexterity" name="Gunnery" tool="GunSimulator">Used by gunners, determine chance to hit enemy in ship combat</skill>
+ <skill attribute="Intelligence" name="Rhetoric" tool="RhetoricBook">Used by traders, determine prices in bases</skill>
+ <skill attribute="Intelligence" name="Perception" tool="SmallItems">Used to spot enemy ships by pilots and gunners</skill>
+ <skill attribute="Intelligence" name="Alchemy" tool="AlchemyBook">Used in crafting</skill>
+ <skill attribute="Dexterity" name="Cooking" tool="CookingBook">Used to cook food</skill>
+ <skill attribute="Dexterity" name="Gunsmith" tool="GunsmithBook">Used to create ammo for guns and upgrade guns</skill>
+ <skill attribute="Dexterity" name="Metalsmith" tool="MetalsmithBook">Used in crafting</skill>
+ <skill attribute="Intelligence" name="Medicine" tool="MedicineBook">Used in healing</skill>
+ <skill attribute="Strength" name="Farming" tool="FarmingBook">Used to grow plants</skill>
+ <skill attribute="Strength" name="Woodcutting" tool="WoodcuttingBook">Used to cut trees</skill>
+ <skill attribute="Intelligence" name="Brewery" tool="BrewingBook">Used to brew drinks</skill>
+ <skill attribute="Strength" name="Blacksmith" tool="BlacksmithBook">Used in crafting</skill>
+ <skill attribute="Strength" name="Woodworking" tool="WoodworkingBook">Used in crafting</skill>
+ <skill attribute="Dexterity" name="Leatherworking" tool="LeatherworkingBook">Used in crafting</skill>
+ <skill attribute="Strength" name="Swords" tool="TrainingDummy">Used to dermine chance to hit with swords in combat</skill>
+ <skill attribute="Dexterity" name="Dodge" tool="SmallTraps">Used to dodge enemy attacks in combat</skill>
+ <skill attribute="Strength" name="Brawling" tool="TrainingDummy">Used to determine chance to hit with bare hands in combat</skill>
 <!-- To change which attribute is used to raise character condition, edit 
 attribute `value` of tag `conditionname`. Value must be existing attribute 
 name. -->
