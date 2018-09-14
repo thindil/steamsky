@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Reclaiming turrets and workshops by crew members after back to work after
   rest
 - Info about returning mission in bases info
+- Armor stat of orichalcum shield
 
 ## [2.8] - 2018-09-09
 
