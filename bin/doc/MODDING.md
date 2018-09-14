@@ -589,6 +589,8 @@ Value must be existing skill name.
 - Attribute `shipindex`: index of ship used for starting player ship when
   he/she choice this career. Value must be existing ship index from any ships
   file.
+- Attribute `name`: optional attribute. Specific name of career for this
+  faction. Will be show to player instead of default name.
 
 ## Stories
 
