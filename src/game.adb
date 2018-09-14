@@ -516,7 +516,10 @@ package body Game is
                       Attribute => J,
                       Description =>
                         To_Unbounded_String
-                          (Node_Value(First_Child(Item(NodesList, I))))));
+                          (Node_Value(First_Child(Item(NodesList, I)))),
+                      Tool =>
+                        To_Unbounded_String
+                          (Get_Attribute(Item(NodesList, I), "tool"))));
                   exit;
                end if;
             end loop;

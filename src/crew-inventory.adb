@@ -189,6 +189,12 @@ package body Crew.Inventory is
                            " can't continue manufacturing because don't have space in inventory for proper tools.",
                            OrderMessage,
                            3);
+                     when Train =>
+                        AddMessage
+                          (To_String(PlayerShip.Crew(MemberIndex).Name) &
+                           " can't continue training because don't have space in inventory for proper tools.",
+                           OrderMessage,
+                           3);
                      when others =>
                         null;
                   end case;
