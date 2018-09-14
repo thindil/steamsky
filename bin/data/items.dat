@@ -1519,7 +1519,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="40"/>
   <trade buyable="Y" price="38"/>
   <data value="2"/>
-  <data value="16"/>
+  <data value="20"/>
   <description>Standard shield made of orichalcum, used in melee combat.</description>
  </item>
  <item index="160" name="Orichalcum chestplate" showtype="Armor" type="ChestArmor" weight="18">
