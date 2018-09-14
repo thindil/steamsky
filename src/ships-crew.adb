@@ -190,9 +190,22 @@ package body Ships.Crew is
       end if;
       if GivenOrder = Upgrading or
         GivenOrder = Repair or
-        GivenOrder = Clean then -- Check for tools
+        GivenOrder = Clean or
+        GivenOrder = Train then -- Check for tools
+         if GivenOrder = Train then
+            if Ship.Modules(ModuleIndex).Data(1) = 0 then
+               raise Crew_Order_Error
+                 with MemberName &
+                 " can't starts training because " &
+                 To_String(Ship.Modules(ModuleIndex).Name) &
+                 " isn't prepared.";
+            end if;
+         end if;
          if GivenOrder = Clean then
             RequiredTool := CleaningTools;
+         elsif GivenOrder = Train then
+            RequiredTool :=
+              Skills_List(Ship.Modules(ModuleIndex).Data(1)).Tool;
          else
             RequiredTool := RepairTools;
          end if;
@@ -234,18 +247,13 @@ package body Ships.Crew is
                   raise Crew_Order_Error
                     with MemberName &
                     " can't starts upgrading module because you don't have repair tools.";
+               when Train =>
+                  raise Crew_Order_Error
+                    with MemberName &
+                    " can't starts training because you don't have proper tools.";
                when others =>
                   return;
             end case;
-         end if;
-      end if;
-      if GivenOrder = Train then
-         if Ship.Modules(ModuleIndex).Data(1) = 0 then
-            raise Crew_Order_Error
-              with MemberName &
-              " can't starts training because " &
-              To_String(Ship.Modules(ModuleIndex).Name) &
-              " isn't prepared.";
          end if;
       end if;
       if GivenOrder = Pilot or

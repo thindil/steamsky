@@ -41,6 +41,7 @@ package Game is
       Name: Unbounded_String; -- Name of skill
       Attribute: Positive; -- Attribute used with that skill
       Description: Unbounded_String; -- Description of skill
+      Tool: Unbounded_String; -- Item type used as tool for training that skill
    end record;
    package SkillsData_Container is new Vectors(Positive, Skill_Record);
    type Attribute_Record is -- Data for attributes
