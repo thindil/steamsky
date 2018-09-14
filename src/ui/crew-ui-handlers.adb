@@ -320,20 +320,32 @@ package body Crew.UI.Handlers is
          end loop;
          List := Gtk_List_Store(Get_Object(Builder, "skillslist"));
          Clear(List);
-         for Skill of Member.Skills loop
-            Append(List, Iter);
-            Set(List, Iter, 0, To_String(Skills_List(Skill(1)).Name));
-            Set(List, Iter, 1, Gint(Skill(2)));
-            Set
-              (List,
-               Iter,
-               2,
-               "Related statistic: " &
-               To_String
-                 (Attributes_List(Skills_List(Skill(1)).Attribute).Name) &
-               ". " &
-               To_String(Skills_List(Skill(1)).Description));
-         end loop;
+         declare
+            ItemIndex: Positive;
+            TooltipText: Unbounded_String;
+         begin
+            for Skill of Member.Skills loop
+               Append(List, Iter);
+               Set(List, Iter, 0, To_String(Skills_List(Skill(1)).Name));
+               Set(List, Iter, 1, Gint(Skill(2)));
+               TooltipText := Null_Unbounded_String;
+               Append(TooltipText, "Related statistic: ");
+               Append
+                 (TooltipText,
+                  Attributes_List(Skills_List(Skill(1)).Attribute).Name);
+               Append(TooltipText, ". Training tool: ");
+               ItemIndex :=
+                 FindProtoItem(ItemType => Skills_List(Skill(1)).Tool);
+               if Items_List(ItemIndex).ShowType /= Null_Unbounded_String then
+                  Append(TooltipText, Items_List(ItemIndex).ShowType);
+               else
+                  Append(TooltipText, Items_List(ItemIndex).IType);
+               end if;
+               Append(TooltipText, ". ");
+               Append(TooltipText, Skills_List(Skill(1)).Description);
+               Set(List, Iter, 2, To_String(TooltipText));
+            end loop;
+         end;
       end if;
       SetOrdersList;
    end ShowMemberInfo;

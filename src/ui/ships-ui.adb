@@ -111,6 +111,8 @@ package body Ships.UI is
       procedure ShowAssignSkill is
          AssignIter: Gtk_Tree_Iter;
          AssignList: Gtk_List_Store;
+         SkillText: Unbounded_String;
+         ProtoIndex: Positive;
       begin
          AssignList := Gtk_List_Store(Get_Object(Builder, "assignskilllist"));
          if N_Children(AssignList) > 0 then
@@ -118,7 +120,15 @@ package body Ships.UI is
          end if;
          for I in Skills_List.First_Index .. Skills_List.Last_Index loop
             Append(AssignList, AssignIter);
-            Set(AssignList, AssignIter, 0, To_String(Skills_List(I).Name));
+            SkillText := Skills_List(I).Name;
+            Append(SkillText, " Tool: ");
+            ProtoIndex := FindProtoItem(ItemType => Skills_List(I).Tool);
+            if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
+               Append(SkillText, Items_List(ProtoIndex).ShowType);
+            else
+               Append(SkillText, Items_List(ProtoIndex).IType);
+            end if;
+            Set(AssignList, AssignIter, 0, To_String(SkillText));
             Set(AssignList, AssignIter, 1, Gint(I));
          end loop;
          Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbassignskill")), 0);
