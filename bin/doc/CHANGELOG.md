@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
   shield
 - New items: adamantium sword and adamantium shield
 - Ability to show current game directories in options
+- Optional names for careers in factions
 
 ### Changed
 - Help factions flags variables now return list of factions which have that
