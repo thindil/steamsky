@@ -1760,5 +1760,16 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="24"/>
   <description>Standard shield made of adamantium, used in melee combat.</description>
  </item>
+ <item index="185" name="Adamantium chestplate" showtype="Armor" type="ChestArmor" weight="27">
+  <trade buyable="N" price="88"/>
+  <trade buyable="N" price="88"/>
+  <trade buyable="N" price="88"/>
+  <trade buyable="N" price="88"/>
+  <trade buyable="Y" price="86"/>
+  <data value="1"/>
+  <data value="35"/>
+  <data value="10"/>
+  <description>Standard type of armor, made of adamantium, weared on torso.</description>
+ </item>
 </items>
 
