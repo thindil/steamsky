@@ -81,9 +81,9 @@ modification there can be overwritten with new version of game.
 - Each skill starts with tag `skill`. 
 - Attribute `name` is name of selected skill.
 - Attribute `attribute` is name of character attribute (must be defined 
-ealier in this same file).
-- Attribute `career` is name of career (from factions files) which will be
-  gain more experience for use that skill.
+  ealier in this same file).
+- Attribute `tool` is item type used as tool during training (must be defined
+  ealier in this same file).
 - After change/remove skill, you been need to made proper changes in other game
   data files (recipes, items and this same file) if needed.
 
@@ -95,15 +95,14 @@ ealier in this same file).
   `attribute`. Name must be existing attribute name, defined ealier in this
   same file.
 - To change skill description, just edit text between `skill` tags.
-- To change which career gains more experience for using this skill, edit
-  value of `career` attribute. Value must be existing career name from any
-  factions file.
+- To change assigned tool,
+  edit value of `tool` attribute of selected skill.
 
 ### Adding new skills
 - To add new skill, just append new line with tag `skill` with it name as
-  attribute `name`, assigned attribute to skill as attribute `attribute`,
-  career which gain bonux experience for use this skill as attribute `career`
-  and description between tags `skill`. Same for *game.dat* file and own file.
+  attribute `name`, assigned attribute to skill as attribute `attribute`, 
+  assigned item type as training tool as attribute `tool` and description between
+  tags `skill`.
 
 ### Removing existing skill
 - In *game.dat* file: Just delete selected skill entry.
