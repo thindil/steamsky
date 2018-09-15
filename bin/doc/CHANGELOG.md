@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - New items: adamantium sword, adamantium shield and adamantium chestplate
 - Ability to show current game directories in options
 - Optional names for careers in factions
+- New item type: cockpitsimulator
 
 ### Changed
 - Help factions flags variables now return list of factions which have that
