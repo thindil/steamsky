@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
   rest
 - Info about returning mission in bases info
 - Armor stat of orichalcum shield
+- Typos in careers descriptions
 
 ## [2.8] - 2018-09-09
 
