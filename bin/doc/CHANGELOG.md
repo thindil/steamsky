@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [2.0.10] - 2018-09-16
 
 ### Fixed
 - Reclaiming turrets and workshops by crew members after back to work after
