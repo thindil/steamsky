@@ -4,8 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New crafting recipes: adamantium short sword, adamantium sword and adamantium
-  shield
+- New crafting recipes: adamantium short sword, adamantium sword, adamantium
+  shield and adamantium chestplate
 - New items: adamantium sword, adamantium shield and adamantium chestplate
 - Ability to show current game directories in options
 - Optional names for careers in factions
