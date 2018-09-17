@@ -70,7 +70,7 @@ package body Game is
       TmpRecruits: Recruit_Container.Vector;
       TmpMissions: Mission_Container.Vector;
       CabinAssigned: Boolean := False;
-      BasePopulation: Natural;
+      BasePopulation, MaxSpawnRoll: Natural;
       TmpCargo: BaseCargo_Container.Vector;
       TmpInventory: Inventory_Container.Vector;
    begin
@@ -91,6 +91,10 @@ package body Game is
                Visited => False,
                EventIndex => 0,
                MissionIndex => 0)));
+      MaxSpawnRoll := 0;
+      for Faction of Factions_List loop
+         MaxSpawnRoll := MaxSpawnRoll + Faction.SpawnChance; 
+      end loop;
       for I in SkyBases'Range loop
          loop
             ValidLocation := True;
@@ -131,11 +135,11 @@ package body Game is
             Visited => False,
             EventIndex => 0,
             MissionIndex => 0);
-         FactionRoll := GetRandom(1, 100);
+         FactionRoll := GetRandom(1, MaxSpawnRoll);
          for J in Factions_List.Iterate loop
-            if (FactionRoll = Factions_List(J).SpawnChance(1)) or
-              (FactionRoll > Factions_List(J).SpawnChance(1) and
-               FactionRoll <= Factions_List(J).SpawnChance(2)) then
+            if FactionRoll > Factions_List(J).SpawnChance then
+               FactionRoll := FactionRoll - Factions_List(J).SpawnChance;
+            else
                BaseOwner := Factions_Container.To_Index(J);
                if Factions_List(J).Population(2) = 0 then
                   BasePopulation := Factions_List(J).Population(1);

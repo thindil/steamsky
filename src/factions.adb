@@ -43,7 +43,7 @@ package body Factions is
          Name => Null_Unbounded_String,
          MemberName => Null_Unbounded_String,
          PluralMemberName => Null_Unbounded_String,
-         SpawnChance => (0, 0),
+         SpawnChance => 0,
          Population => (0, 0),
          NamesType => To_Unbounded_String("standard"),
          Relations => TmpRelations,
@@ -73,14 +73,8 @@ package body Factions is
                 (Get_Attribute(Item(NodesList, I), "pluralmembername"));
          end if;
          if Get_Attribute(Item(NodesList, I), "spawn") /= "" then
-            TempRecord.SpawnChance(1) :=
+            TempRecord.SpawnChance :=
               Natural'Value(Get_Attribute(Item(NodesList, I), "spawn"));
-         end if;
-         if Get_Attribute(Item(NodesList, I), "minspawn") /= "" then
-            TempRecord.SpawnChance(1) :=
-              Natural'Value(Get_Attribute(Item(NodesList, I), "minspawn"));
-            TempRecord.SpawnChance(2) :=
-              Natural'Value(Get_Attribute(Item(NodesList, I), "maxspawn"));
          end if;
          if Get_Attribute(Item(NodesList, I), "population") /= "" then
             TempRecord.Population(1) :=
@@ -230,7 +224,7 @@ package body Factions is
             Name => Null_Unbounded_String,
             MemberName => Null_Unbounded_String,
             PluralMemberName => Null_Unbounded_String,
-            SpawnChance => (0, 0),
+            SpawnChance => 0,
             Population => (0, 0),
             NamesType => To_Unbounded_String("standard"),
             Relations => TmpRelations,

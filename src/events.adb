@@ -435,12 +435,17 @@ package body Events is
    end GenerateTraders;
 
    procedure RecoverBase(BaseIndex: Positive) is
-      FactionRoll: constant Positive := GetRandom(1, 100);
+      MaxSpawnChance: Natural := 0;
+      FactionRoll: Positive;
    begin
+      for Faction of Factions_List loop
+         MaxSpawnChance := MaxSpawnChance + Faction.SpawnChance;
+      end loop;
+      FactionRoll := GetRandom(1, MaxSpawnChance);
       for I in Factions_List.Iterate loop
-         if (FactionRoll = Factions_List(I).SpawnChance(1)) or
-           (FactionRoll > Factions_List(I).SpawnChance(1) and
-            FactionRoll <= Factions_List(I).SpawnChance(2)) then
+         if FactionRoll > Factions_List(I).SpawnChance then
+            FactionRoll := FactionRoll - Factions_List(I).SpawnChance;
+         else
             SkyBases(BaseIndex).Owner := Factions_Container.To_Index(I);
             SkyBases(BaseIndex).Reputation(1) :=
               GetReputation
