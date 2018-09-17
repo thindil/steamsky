@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
   wooden cockpit simulator, adamantium helmet and small book of engineering
 - Ability to show current game directories in options
 - Optional names for careers in factions
-- New items types: cockpitsimulator and engineersbook
+- New items types: cockpitsimulator, engineersbook and gunsimulator
 
 ### Changed
 - Help factions flags variables now return list of factions which have that
