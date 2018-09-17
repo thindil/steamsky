@@ -46,7 +46,7 @@ package Factions is
       Name: Unbounded_String; -- Name of faction, displayed to player
       MemberName: Unbounded_String; -- Name of single member of faction
       PluralMemberName: Unbounded_String; -- Plural name of members of faction
-      SpawnChance: Attributes_Array; -- Chance that created at new game base will be owned by this faction
+      SpawnChance: Natural; -- Chance that created at new game base will be owned by this faction
       Population: Attributes_Array; -- Min and max population for new bases with this faction as owner
       NamesType: Unbounded_String; -- Type of names of members of faction (used in generating names of ships)
       Relations: Relations_Container
