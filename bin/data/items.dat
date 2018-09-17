@@ -1780,5 +1780,16 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="20"/>
   <description>Wooden tool used in training skills.</description>
  </item>
+ <item index="187" name="Adamantium helmet" showtype="Armor" type="HeadArmor" weight="7">
+  <trade buyable="N" price="62"/>
+  <trade buyable="N" price="62"/>
+  <trade buyable="N" price="62"/>
+  <trade buyable="N" price="62"/>
+  <trade buyable="Y" price="60"/>
+  <data value="1"/>
+  <data value="17"/>
+  <data value="4"/>
+  <description>Standard type of armor, made of adamantiu, weared on head.</description>
+ </item>
 </items>
 
