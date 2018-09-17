@@ -10,37 +10,38 @@ unique.
 text.
 - Attribute "pluralmembername": plural of name of mobiles from this faction.
 Can be any text.
-- Attributes "minspawn", "maxspawn" and "spawn": chance to that newly created 
-sky base will be owned by that faction. Value of this attributes is roll on 
-dice 100 and must be unique for each faction. If it should be only one roll, 
-use attribute "spawn". If it should be range, use "minspawn" for minimum roll 
-and "maxspawn" for maximum roll.
-- Attributes "population", "minpopulation" and "maxpopulation": starting 
+- Attributes spawn": chance to that newly created sky base will be owned by
+that faction. Value of this attributes is roll on dice with sum of "spawn"
+attributes of all factions. For example if there will be 2 factions, one with
+"spawn" = 50 and second with "spawn" = 20 then if roll on dice 70 will be
+equal or lower to 50 it will be first faction base, when between 51 and 70 it
+will be second faction base.
+- Attributes "population", "minpopulation" and "maxpopulation": starting
 population of base owned by that faction. If it should be constant value, use
-attribute "population". If it should be random value, use attribute 
-"minpopulation" for minimum population and "maxpopulation" for maximum 
+attribute "population". If it should be random value, use attribute
+"minpopulation" for minimum population and "maxpopulation" for maximum
 population. Minimum value is 0.
 - Optional attribute "namestype": Used in generating ship names of that faction
 and names of all bases. Can be "standard" (default value) or "robotic".
 - Attribute "healingtools": name of item type used to healing members of that
-faction and in diseased bases events. Must be valid item type from 
+faction and in diseased bases events. Must be valid item type from
 *data/game.dat* file.
 - Attribute "healingskill": name of skill used to healing members of that
 faction. Must be valid skill name from *data/game.dat* file
 -->
- <faction index="POLEIS" name="Poleis" membername="member of Poleis" pluralmembername="members of Poleis" minspawn="1" maxspawn="50" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine">
+ <faction index="POLEIS" name="Poleis" membername="member of Poleis" pluralmembername="members of Poleis" spawn="50" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine">
 <!--
 - Tags "relation": Relation of this faction with other faction. All factions
 must have this tags for each faction (even for self).
-- Attribute "faction" is faction index to which relation will be set. 
-- Attributes "minreputation", "maxreputation", "reputation": starting 
-reputation with selected faction. If it should have random reputation, use 
-attribute "minreputation" for minimum level of reputation and 
+- Attribute "faction" is faction index to which relation will be set.
+- Attributes "minreputation", "maxreputation", "reputation": starting
+reputation with selected faction. If it should have random reputation, use
+attribute "minreputation" for minimum level of reputation and
 "maxreputation" for maximum level of reputation. If it should be constant
 reputation, use attribute "reputation". Minimum value is -100 and maximum
 is 100.
 - Attribute "friendly": did selected faction is friendly to this faction.
-Value "Y" means "Yes", value "N" means "No". Used mostly to generate 
+Value "Y" means "Yes", value "N" means "No". Used mostly to generate
 enemy ships.
 -->
   <relation faction="POLEIS" reputation="0" friendly="Y" />
@@ -89,7 +90,7 @@ faction. Will be show to player instead of default name.
   <career index="explorer" playerindex="1" shipindex="171">Career focused on exploring. You get average equipped small ship, with smaller cargo space than general career's ship but with water collector installed on it.</career>
   <career index="crafter" playerindex="1" shipindex="173">Career focused on crafting. You get average equipped small ship, with smaller cargo space than general career's ship but with furnace installed on it. Additionally, you will know more crafting recipes at start.</career>
  </faction>
- <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" minspawn="51" maxspawn="70" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine">
+ <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" spawn="20" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="0" friendly="Y" />
   <relation faction="INDEPENDENT" minreputation="-3" maxreputation="2" friendly="Y" />
   <relation faction="PIRATES" reputation="-10" friendly="N" />
@@ -106,7 +107,7 @@ faction. Will be show to player instead of default name.
   <career index="explorer" playerindex="1" shipindex="171">Career focused on exploring. You get average equipped small ship, with smaller cargo space than general career's ship but with water collector installed on it.</career>
   <career index="crafter" playerindex="1" shipindex="173">Career focused on crafting. You get average equipped small ship, with smaller cargo space than general career's ship but with furnace installed on it. Additionally, you will know more crafting recipes at start.</career>
  </faction>
- <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" minspawn="71" maxspawn="78" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="161" healingtools="Medicines" healingskill="Medicine">
+ <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" spawn="8" minpopulation="0" maxpopulation="500" playerindex="1" playershipindex="161" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="-10" friendly="N" />
   <relation faction="INDEPENDENT" minreputation="-20" maxreputation="-5" friendly="N" />
   <relation faction="PIRATES" reputation="0" friendly="Y" />
@@ -121,7 +122,7 @@ faction. Will be show to player instead of default name.
   <career index="merchant" playerindex="1" shipindex="167">Career focused on trading. You get unarmed small ship with larger cargo space and more moneys. Your crew will be bit smaller that General. At beginning is better to avoid combat.</career>
   <career index="hunter" playerindex="1" shipindex="168">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
  </faction>
- <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" minspawn="79" maxspawn="86" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine">
+ <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" spawn="8" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
   <relation faction="INDEPENDENT" reputation="-100" friendly="N" />
   <relation faction="PIRATES" reputation="-100" friendly="N" />
@@ -143,7 +144,7 @@ faction members don't have morale (and bonuses from it)
   <career index="general" playerindex="75" shipindex="164">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
   <career index="hunter" playerindex="75" shipindex="169">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
  </faction>
- <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" minspawn="87" maxspawn="94" minpopulation="0" maxpopulation="500" namestype="robotic" healingtools="Bronze" healingskill="Engineering">
+ <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" spawn="7" minpopulation="0" maxpopulation="500" namestype="robotic" healingtools="Bronze" healingskill="Engineering">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
   <relation faction="INDEPENDENT" reputation="-100" friendly="N" />
   <relation faction="PIRATES" reputation="-100" friendly="N" />
@@ -161,7 +162,7 @@ faction members don't have morale (and bonuses from it)
   <career index="explorer" playerindex="76" shipindex="172">Career focused on exploring. You get average equipped small ship, with smaller cargo space than general career's ship but with water collector installed on it.</career>
   <career index="crafter" playerindex="76" shipindex="174">Career focused on crafting. You get average equipped small ship, with smaller cargo space than general career's ship but with furnace installed on it. Additionally, you will know more crafting recipes at start.</career>
  </faction>
- <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" minspawn="94" maxspawn="100" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine">
+ <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" spawn="6" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine">
   <relation faction="POLEIS" reputation="-50" friendly="N" />
   <relation faction="INDEPENDENT" minreputation="-40" maxreputation="-25" friendly="N" />
   <relation faction="PIRATES" reputation="-10" friendly="N" />
