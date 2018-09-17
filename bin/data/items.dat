@@ -1791,5 +1791,14 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="4"/>
   <description>Standard type of armor, made of adamantiu, weared on head.</description>
  </item>
+ <item index="188" name="Small book of engineering" showtype="Book of Engineering" type="EngineerBook" weight="1">
+  <trade buyable="Y" price="10"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <data value="20"/>
+  <description>Small book with informations about basics of engineering. Used in training skills.</description>
+ </item>
 </items>
 
