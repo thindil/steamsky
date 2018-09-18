@@ -35,7 +35,7 @@ modification there can be overwritten with new version of game.
 - Ammunition for harpoon guns must be named `Harpoon`.
 
 ### Removing item types
-- If editing *game.dat* file: Just remove line with tag `itemtype` and 
+- If editing *game.dat* file: Just remove line with tag `itemtype` and
   selected item type name as `value` attribute.
 - If editing own file: append new line with tag `remove` which have attribute
   `name` set to `itemtype` and value with name of item type which will be
@@ -49,7 +49,7 @@ modification there can be overwritten with new version of game.
 ### General informations
 - To add/remove/change characters attributes, open file *game.dat* in
   *data* directory or better, create new file in modifications directory. New
-  file must starts with `data` tag. 
+  file must starts with `data` tag.
 - Each attribute starts with tag `attribute`. Attribute `name` is name of
   selected attribute. Value between `attribute` tags is description of
   attribute. Example *<attribute name="Dexterity">Nimbleness of character,
@@ -78,9 +78,9 @@ modification there can be overwritten with new version of game.
 ### General informations
 - Open file *game.dat* in *data* directory to add/remove/change skills, or
   better, create new file in modifications directory.
-- Each skill starts with tag `skill`. 
+- Each skill starts with tag `skill`.
 - Attribute `name` is name of selected skill.
-- Attribute `attribute` is name of character attribute (must be defined 
+- Attribute `attribute` is name of character attribute (must be defined
   ealier in this same file).
 - Attribute `tool` is item type used as tool during training (must be defined
   ealier in this same file).
@@ -100,7 +100,7 @@ modification there can be overwritten with new version of game.
 
 ### Adding new skills
 - To add new skill, just append new line with tag `skill` with it name as
-  attribute `name`, assigned attribute to skill as attribute `attribute`, 
+  attribute `name`, assigned attribute to skill as attribute `attribute`,
   assigned item type as training tool as attribute `tool` and description between
   tags `skill`.
 
@@ -115,7 +115,7 @@ overwrite default value in own file, just add new line with proper tag and
 attributes.
 
 ## Repair tools type
-To change which item type is used for repair/upgrading tools,  edit `value` 
+To change which item type is used for repair/upgrading tools,  edit `value`
 attribute of tag `repairtools`. Value must be existing item type.
 
 ## Cleaning tools type
@@ -139,12 +139,12 @@ To change which item type is used as a fuel for ship, edit `value` attribute of
 tag `fueltype`. Value must be existing item type.
 
 ## Money index
-To change which item is used as a money, edit `value` attribute of tag 
+To change which item is used as a money, edit `value` attribute of tag
 `moneyindex`. Value must be existing item index from any items file.
 
 ## Traders ships name
 To change which word in ship names is used to determine trader ship (needed for
-friendly trader random event), edit `value` attribute for tag `tradersname`. 
+friendly trader random event), edit `value` attribute for tag `tradersname`.
 Value can be any single word (but this word must be in trader ships names).
 
 ## Condition attribute name
@@ -152,7 +152,7 @@ To change which attribute is used to raise character condition, edit attribute
 `value` of tag `conditionname`. Value must be existing attribute name.
 
 ## Strength attribute name
-To change which attribute is used to count character maximum encumbrance, edit 
+To change which attribute is used to count character maximum encumbrance, edit
 attribute `value` of tag `strenghtname`. Value must be existing attribute name.
 
 ## Piloting skill name
@@ -169,7 +169,7 @@ attribute of tag `gunneryskill`. Value must be existing skill name.
 
 ## Talking skill name
 To change which skill is used for talking in bases or with other ships (trades,
-repairs, recruit, etc), edit `value` attribute of tag `talkingskill`. Value 
+repairs, recruit, etc), edit `value` attribute of tag `talkingskill`. Value
 must be existing skill name.
 
 ## Spotting skill name
@@ -201,7 +201,7 @@ To change which item type is used as a weapon by characters, edit `value`
 attribute of tag `weapontype`. Value must be existing item type.
 
 ## Dodging skill name
-To change which skill is used for dodges in character's combat, edit 
+To change which skill is used for dodges in character's combat, edit
 `value` attribute of tag `dodgeskill`. Value must be existing skill name.
 
 ## Unarmed skill name
@@ -219,32 +219,32 @@ Value must be existing skill name.
 
 ### Item data structure
 - Each item starts with tag `item`.
-- Attribute `index` is a item index (it can be number or text) and must be 
+- Attribute `index` is a item index (it can be number or text) and must be
   unique. This value is used in ships and recipes data entries.
-- `name` attribute: name of item displayed in various places (cargo info, 
+- `name` attribute: name of item displayed in various places (cargo info,
   crafting, etc.)
 - Attribute `weight`: weight of one item in kilograms
-- Attribute `type`: item type of item (from *game.dat* file, entry 
+- Attribute `type`: item type of item (from *game.dat* file, entry
   *ItemsTypes*)
-- Each `trade` tag is for selected type of bases: Industrial, Agricultural, 
+- Each `trade` tag is for selected type of bases: Industrial, Agricultural,
   Refinery, Shipyard, Military. Attribute `price` is price of item in selected
-  base type. If you want that item will be not possible to buy/sellable in 
+  base type. If you want that item will be not possible to buy/sellable in
   bases (or only selected base type) set it price to 0. Attribute `buyable`
   said did item can be bough in selected type of base. "Y" mean Yes, "N" means
   No.
-- Attribute `showtype`: optional attribute. If you want to show item type in 
-  game (for example in cargo or in trade screen) different than item type 
+- Attribute `showtype`: optional attribute. If you want to show item type in
+  game (for example in cargo or in trade screen) different than item type
   from *game.dat* file, you can set this parameter to any text value.
 - Data: optional tags. Each tag is one value. For items used as food it is
-  value of hunger reduced by one portion. For item used as drinks, value of 
+  value of hunger reduced by one portion. For item used as drinks, value of
   thirst reduced by one portion. For ammunition it is damage done by that
-  ammunition. For working tools it is chance for item to be damaged during 
+  ammunition. For working tools it is chance for item to be damaged during
   work. For harpoon guns ammunition it is how long (in combat turns) item will
-  be stuck in enemy ship. For weapons and armor pieces first value is change 
-  for item to be damaged during combat, second entry for weapons is damage 
+  be stuck in enemy ship. For weapons and armor pieces first value is change
+  for item to be damaged during combat, second entry for weapons is damage
   done by weapon and for armor piece it is amount of damage reduced by this armor.
-  Third entry for weapons is number of skill used by this weapon (from 
-  *game.dat* file, entry *Skills*) and for armor is amount of levels of dodge 
+  Third entry for weapons is number of skill used by this weapon (from
+  *game.dat* file, entry *Skills*) and for armor is amount of levels of dodge
   skill which this armor reduce when weared. Forth entry for weapon is amount
   of hands used (1 for one-handed, 2 for two-handed weapons). Fifth entry for
   weapon is damage type (1 - cutting damage, 2 - impaling damage, 3 - blunt
@@ -254,34 +254,34 @@ Value must be existing skill name.
 ## Recipes
 
 ### General informations
-- Default game crafting recipes are in *recipes.dat* file which is in *data* 
+- Default game crafting recipes are in *recipes.dat* file which is in *data*
   directory.
 - To remove existing recipe from game, you can delete it from *recipes.dat* or
-  in modification file add tag `recipe` with attribute `remove` which value 
+  in modification file add tag `recipe` with attribute `remove` which value
   will be index of recipe to remove.
 
 ### Recipe data structure
 - Each recipe starts with tag `recipe`.
 - Attribute `index` is a recipe index (it can be number or text) and must be
-  unique. This value is used at this moment for set starting recipes and in 
+  unique. This value is used at this moment for set starting recipes and in
   Craft types of goals.
 - Tag `material` contains data about material used to craft recipe. Attribute
-  `type` is item type of material need for recipe. Attribute `amount` is 
-  amount of crafting materials needed for recipe. If you want to add more 
+  `type` is item type of material need for recipe. Attribute `amount` is
+  amount of crafting materials needed for recipe. If you want to add more
   materials to recipe, just add new tag `material` with proper data.
-- Attribute `result`: Item index which will be produced by recipe (you can 
+- Attribute `result`: Item index which will be produced by recipe (you can
   check this index in *items* directory).
 - Attribute `crafted`: Amount of items crafted from one recipe.
 - Attribute `workplace`: Type of ship module in which recipe is made. Available
   options are: Alchemy\_Lab, Furnace, Water\_Collector, Workshop, Greenhouse
 - Attribute `skill`: Name of skill used during crafting selected recipe (skills
   names are in *game.dat* file).
-- Attribute `tool`: Type of item used as tool in crafting selected recipe 
+- Attribute `tool`: Type of item used as tool in crafting selected recipe
   (items types are in *game.dat* file).
 - Attribute `difficulty`: optional attribute. How complicated recipe is. Should
   be between 1 and 100.
-- Attribute `basetype`: In which bases type recipe can be bought. If not set, 
-  recipe will be know from beginning of game. Values: 1 for Industrial, 2 for 
+- Attribute `basetype`: In which bases type recipe can be bought. If not set,
+  recipe will be know from beginning of game. Values: 1 for Industrial, 2 for
   Agricultural, 3 for Refinery, 4 for Shipyard and 5 for Military.
 - Attribute `time`: optional attribute. How long in minutes take crafting selected
   recipe. If not set, it take 15 minutes.
@@ -289,45 +289,45 @@ Value must be existing skill name.
 ## Ship modules
 
 ### General informations
-- Default game ship modules are in *shipmodules.dat* file which is in *data* 
+- Default game ship modules are in *shipmodules.dat* file which is in *data*
   directory.
-- To remove existing ship module from game, you can delete it from 
-  *shipmodules.dat* or in modification file add tag `module` with attribute 
+- To remove existing ship module from game, you can delete it from
+  *shipmodules.dat* or in modification file add tag `module` with attribute
   `remove` which value will be index of ship module to remove.
 
 ### Ship module data structure
 - Each ship module starts with tag `module`.
-- Attribute `index` is a module index (it can be number or text) and must be 
+- Attribute `index` is a module index (it can be number or text) and must be
   unique. This value is used in ships data entries.
 - Attribute `name`: Standard name of module. Will be visible in ship info screen
   and in shipyards.
 - Attribute `type`: Type of module. Available options are: Engine, Cabin, Cockpit,
   Turret, Gun, Cargo, Hull, Armor, Battering\_ram, Alchemy\_Lab, Furnace,
-  Water\_Collector, Workshop, Greenhouse, Medical\_room, Harpoon\_Gun, 
+  Water\_Collector, Workshop, Greenhouse, Medical\_room, Harpoon\_Gun,
   Training\_Room
 - Attribute `weight`: Weight of module in kilograms.
-- Attribute `value`: Depends on type of module. For 'Engine' it is fuel usage 
-  for travel by one map field. For 'Cabin' it is value of reduced tiredness of 
-  owner who rest there. For 'Gun' or 'Harpoon\_Gun' it is index of item type 
-  used as ammunition (item types are in *game.dat* file). For any other type 
+- Attribute `value`: Depends on type of module. For 'Engine' it is fuel usage
+  for travel by one map field. For 'Cabin' it is value of reduced tiredness of
+  owner who rest there. For 'Gun' or 'Harpoon\_Gun' it is index of item type
+  used as ammunition (item types are in *game.dat* file). For any other type
   of modules should be 0 (zero).
-- Attribute `maxvalue`: Depends on type of module. For 'Hull' it is max free 
-  module space. For 'Engine' it is engine power. For 'Cabin' should be that 
-  same like attribuge `value` value. For 'Cargo' it is maximum capacity in 
+- Attribute `maxvalue`: Depends on type of module. For 'Hull' it is max free
+  module space. For 'Engine' it is engine power. For 'Cabin' should be that
+  same like attribuge `value` value. For 'Cargo' it is maximum capacity in
   kilograms for cargo for that module. For 'Gun', 'Battering\_ram' it is amount
   of damage done by selected weapon. For 'Harpoon\_Gun' it is amount of combat
-  rounds by how long harpoon is stuck in enemy ship. For any other type of 
+  rounds by how long harpoon is stuck in enemy ship. For any other type of
   modules should be 0 (zero).
 - Attribute `durability`: Base durability of module. How many damage module can
   take before will be destroyed.
-- Attribute `material`: Type of item which will be used to repair or upgrade 
+- Attribute `material`: Type of item which will be used to repair or upgrade
   module.
-- Attribute `skill`: Name of skill which will be used during repair or upgrading 
+- Attribute `skill`: Name of skill which will be used during repair or upgrading
   module.
 - Attribute `price`: Base buy or sell price of module in shipyard.
-- Attribute `installtime`: How long in minutes take install/remove selected 
+- Attribute `installtime`: How long in minutes take install/remove selected
   module from ship.
-- Optional attribute `unique`: If set to 'Y' then each ship can have only one 
+- Optional attribute `unique`: If set to 'Y' then each ship can have only one
   module of that type.
 - Optional attribute `size`: Amount of hull module space used by module.
 - Text between `module` tags is module description.
@@ -341,10 +341,10 @@ Value must be existing skill name.
   index of ship to remove.
 
 ### Ship data structure
-- Each ship is between `ship` tags. Attribute `index` is a index (it can be 
-  number or text) and must be unique. This value is used at this moment to 
+- Each ship is between `ship` tags. Attribute `index` is a index (it can be
+  number or text) and must be unique. This value is used at this moment to
   set player ship and in Destroy types of goals.
-- Attribute `name`: Type of ship. Will be visible during combat information. 
+- Attribute `name`: Type of ship. Will be visible during combat information.
   If you want that ship will be used in friendly trader random event, you must
   have word which you set in *game.dat* as *TraderNames* in ship name. Example:
   if you use *trader* word, ship name can be *small poleis trader*.
@@ -354,70 +354,70 @@ Value must be existing skill name.
   add attribute `amount` with number of modules.
 - Attribute `accuracy`: Bonus to accuracy for ship.
 - Attributes `minaccuracy` and `maxaccuracy`: If bonus to accuracy for ship
-  should be random, add attribute `minaccuracy` for minimum value and 
+  should be random, add attribute `minaccuracy` for minimum value and
   `maxaccuracy` for maximum value.
-- Attribute `combatai`: Behavior of ship in combat (NPC ships only). Possible 
-  values are: Berserker - attack to end, no matter how heavy damage take. 
-  Attacker - aggressive but will be run away from combat when lost all 
-  ammunition or weapons. Coward - try run from combat, attack only in 
-  self-defense. Disarmer - same as Attacker but first aim for player ship 
+- Attribute `combatai`: Behavior of ship in combat (NPC ships only). Possible
+  values are: Berserker - attack to end, no matter how heavy damage take.
+  Attacker - aggressive but will be run away from combat when lost all
+  ammunition or weapons. Coward - try run from combat, attack only in
+  self-defense. Disarmer - same as Attacker but first aim for player ship
   weapons before start destroying ship.
 - Attribute `evasion`: Bonus to evasion for ship.
 - Attributes `minevasion` and `maxevasion`: If bonus to evasion for ship should
-  be random, add attribute `minevasion` for minimum value and `maxevasion` for 
+  be random, add attribute `minevasion` for minimum value and `maxevasion` for
   maximum value.
 - Attribute `loot`: Amount of money earned for destroying that ship.
-- Attributes `minloot` and `maxloot`: If amount of earned money for destroying 
-  that ship should be random, add attribute `minloot` for minimum value and 
+- Attributes `minloot` and `maxloot`: If amount of earned money for destroying
+  that ship should be random, add attribute `minloot` for minimum value and
   `maxloot` for maximum value.
 - Attribute `perception`: Bonus to perception for ship.
-- Attributes `minperception` and `maxperception`: If bonus to perception for 
-  ship should be random, add attribute `minperception` for minimum value and 
+- Attributes `minperception` and `maxperception`: If bonus to perception for
+  ship should be random, add attribute `minperception` for minimum value and
   `maxperception` for maximum value.
 - Tags `cargo`: List of items in cargo of ship. Attribute `index` is index of
-  item from files from *items* directory. If amount of that item should be 
+  item from files from *items* directory. If amount of that item should be
   constant, add attribute `amount` with proper value. If amount of that item
   should be random, add attributes `minamount` with minimum amount and attribute
   `maxamount` with maximum amount of that item.
 - Tag `description`: Description of ship (NPC ships only). Will be displayed
   during combat.
-- Attribute `owner`: Which fraction own ship. Possible values are: Poleis, 
+- Attribute `owner`: Which fraction own ship. Possible values are: Poleis,
   Independent, Pirates, Undead, Drones, Inquisition.
 - Tags `recipes`: List of know recipes. Attribute `index` is recipe index from
   files from *recipes* directory (player ship only).
 - Tags `member`: List of crew members. Attribute `index` is mobile index from
-  files form *mobs* directory. If ship should have more than one that same 
-  mobile if crew, add attribute `amount`. If ship should have more than one 
-  that same mobile and amount should be random, add attributes `minamount` for 
-  minimum amount of that mobile and attribute `maxamount` for maximum amount of 
+  files form *mobs* directory. If ship should have more than one that same
+  mobile if crew, add attribute `amount`. If ship should have more than one
+  that same mobile and amount should be random, add attributes `minamount` for
+  minimum amount of that mobile and attribute `maxamount` for maximum amount of
   that mobile.
 
 ## Help
 
 ### General informations
 - Default game help entries are in *help.dat* file which is in *data* directory.
-- To remove existing help topic from game, you can delete it from *help.dat* 
-  or in modification file add tag `entry` with attribute `remove` which value 
+- To remove existing help topic from game, you can delete it from *help.dat*
+  or in modification file add tag `entry` with attribute `remove` which value
   will be title of help to remove.
 
 ### Help data structure
-- Each help entry is between `entry` tags. 
+- Each help entry is between `entry` tags.
 - Attribute `title` is help menu entry in main help menu. It can be number or
   text.
 - Text between tags `entry` is help entry text text visible when player select
   this option from help menu.
 - Inside help text you can use special variables which later will be replaced
   by proper keys names. All  that variables have name `{GameKey [number]}`
-  where `[number]` is between 1 and 27 (example: `{GameKey 9}`). Proper game 
+  where `[number]` is between 1 and 27 (example: `{GameKey 9}`). Proper game
   keys in order: move ship up/left, move ship up, move ship up/right, move
   ship left, move ship one field or wait 1 minute, move ship right, move ship
-  down/left, move ship down, move ship down/right, move ship to destination, 
-  show ship info, show cargo info, show crew info, show ship orders, show 
-  crafting menu, show last messages, show know bases, show known events, show 
-  accepted missions, move map position, show game statistics, show help, show 
+  down/left, move ship down, move ship down/right, move ship to destination,
+  show ship info, show cargo info, show crew info, show ship orders, show
+  crafting menu, show last messages, show know bases, show known events, show
+  accepted missions, move map position, show game statistics, show help, show
   game options, quit from game, resign from game, show menu, show wait orders.
   (example: `{GameKey 10}` will be translated to key used for auto move ship).
-- Inside help text you can use special variables: `{MoneyName}` which later 
+- Inside help text you can use special variables: `{MoneyName}` which later
   will be replaced with name of game money, `{FuelName}` which later will be
   replaced with name of fuel for ship, `{StrengthName}` which later will be
   replaced with name of attribute used to count max character encumbrance,
@@ -433,7 +433,7 @@ Value must be existing skill name.
   skill used to dodge enemy attacks in character's combat, `{UnarmedSkill}`
   which later will be replaced with name of skill used when character fight
   without weapon.
-- Inside help text you can use some tags for formatting text: 
+- Inside help text you can use some tags for formatting text:
   `{u}some text{/u}` for add underline for text, `{b}some text{/b}` to made
   bold characters and `{i}some text{/i}` for italic font.
 - Inside help text you can use special variables `diseaseimmune`, `nofatigue`
@@ -450,27 +450,27 @@ Value must be existing skill name.
 
 ### Goal data structure
 - Each goal starts with tag `goal`.
-- Attribute `index` is index of goal (it can be number or text) and must be 
+- Attribute `index` is index of goal (it can be number or text) and must be
   unique. At this moment this value is used to set/update goal in game.
 - Attribute `type`: Type/category of goal which define what is needed to do for
-  finish selected goal. Possible values: Reputation - gain max reputation in X 
-  bases, Destroy - destroy X ships, Discover - discover X fields of map, 
+  finish selected goal. Possible values: Reputation - gain max reputation in X
+  bases, Destroy - destroy X ships, Discover - discover X fields of map,
   Visit - visit (discover) X bases, Craft - craft X items, Mission - Finish X
   missions, Kill - Kill X enemies in melee combat.
 - Attribute `amount`: Amount of target for selected goal to do for finish it.
   For example 100 ships to destroy, etc.
-- Attribute `target`: Optional attribute, ignored for Discover type, exact 
-  target for goal, depends on type of goal. Possible values: for Reputation 
-  and Visit, bases owners names: Poleis, Independent, Pirates, Undead, Drones, 
+- Attribute `target`: Optional attribute, ignored for Discover type, exact
+  target for goal, depends on type of goal. Possible values: for Reputation
+  and Visit, bases owners names: Poleis, Independent, Pirates, Undead, Drones,
   Inquisition. For Destroy, any enemy ship index (from *ships* directory) or
   owners names: Poleis, Independent, Pirates, Undead, Drones, Inquisition. For
   Craft, recipe index (from *recipes* directory), Type or ShowType (from
-  *items* directory). For Mission, missions types: Deliver for deliver item to 
-  bases, Destroy for destroy enemy ship, Patrol for patrol missions, Explore 
+  *items* directory). For Mission, missions types: Deliver for deliver item to
+  bases, Destroy for destroy enemy ship, Patrol for patrol missions, Explore
   for explore missions, Passenger for transport passengers missions. For Kill,
-  enemy fraction name: Poleis, Independent, Pirates, Undead, Drones, 
+  enemy fraction name: Poleis, Independent, Pirates, Undead, Drones,
   Inquisition.
-- Attribute `multiplier`: Optional attribute, multiplier for amount of game 
+- Attribute `multiplier`: Optional attribute, multiplier for amount of game
   points earned by finishing this goal. Default value is 1, which mean goal
   give attribute `amount` of points for finish it.
 
@@ -490,9 +490,9 @@ Value must be existing skill name.
   Pilot, Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean, Rest,
   Defend, Boarding.
 - Tag `skill` define skill of mobile. Attribute `name` is name of skill (from
-  *game.dat* from *data* directory). If mobile should have constant level of 
-  skill, add attribute `level` with level of selected skill. If mobile should 
-  have random level of skill, add attribute `minlevel` with minimum level of 
+  *game.dat* from *data* directory). If mobile should have constant level of
+  skill, add attribute `level` with level of selected skill. If mobile should
+  have random level of skill, add attribute `minlevel` with minimum level of
   skill and attribute `maxlevel` with maximum level of skill.
 - Tag `attribute` define attribute of mobile. If mobile should have constant
   level of attribute, add attribute `level` with level of selected attribute.
@@ -504,9 +504,9 @@ Value must be existing skill name.
   Upgrading ship, Talking in bases, Healing wounded, Cleaning ship, Defend ship,
   Board enemy ship. Attribute `value` can have value Normal or High (only
   one High per mobile).
-- Tag `item` define item in mobile inventory. Attribute `index` is index of 
+- Tag `item` define item in mobile inventory. Attribute `index` is index of
   item from files from *items* directory. If mobile should have constant amount
-  of item, add attribute `amount` with amount of item. If mobile should have 
+  of item, add attribute `amount` with amount of item. If mobile should have
   random amount of item, add attribute `minamount` with minimum amount of item
   and attribute `maxamount` with maximum amount of item.
 - Tag `equipment` define which items are used by mobile. Attribute `index` is
@@ -533,34 +533,35 @@ Value must be existing skill name.
   text.
 - Attribute `pluralmembername`: plural of name of mobiles from this faction.
   Can be any text.
-- Attributes `minspawn`, `maxspawn` and `spawn`: chance to that newly created 
-  sky base will be owned by that faction. Value of this attributes is roll on 
-  dice 100 and must be unique for each faction. If it should be only one roll, 
-  use attribute `spawn`. If it should be range, use `minspawn` for minimum roll 
-  and `maxspawn` for maximum roll.
-- Attributes `population`, `minpopulation` and `maxpopulation`: starting 
+- Attributes `spawn`: chance to that newly created sky base will be owned by
+  that faction. Value of this attributes is roll on dice with sum of `spawn`
+  attributes of all factions. For example if there will be 2 factions, one with
+  `spawn` = 50 and second with `spawn` = 20 then if roll on dice 70 will be
+  equal or lower to 50 it will be first faction base, when between 51 and 70 it
+  will be second faction base.
+- Attributes `population`, `minpopulation` and `maxpopulation`: starting
   population of base owned by that faction. If it should be constant value, use
-  attribute `population`. If it should be random value, use attribute 
-  `minpopulation` for minimum population and `maxpopulation` for maximum 
+  attribute `population`. If it should be random value, use attribute
+  `minpopulation` for minimum population and `maxpopulation` for maximum
   population. Minumum value is 0.
 - Optional attribute `namestype`: Used in generating ship names of that faction
   and names of all bases. Can be `standard` (default value) or `robotic`.
 - Attribute `healingtools`: name of item type used to healing members of that
-  faction and in diseased bases events. Must be valid item type from 
+  faction and in diseased bases events. Must be valid item type from
   *data/game.dat* file.
 - Attribute `healingskill`: name of skill used to healing members of that
   faction. Must be valid skill name from *data/game.dat* file
 - Tags `relation`: Relation of this faction with other faction. All factions
   must have this tags for each faction (even for self).
-- Attribute `faction` is faction index to which relation will be set. 
-- Attributes `minreputation`, `maxreputation`, `reputation`: starting 
-  reputation with selected faction. If it should have random reputation, use 
-  attribute `minreputation` for minimum level of reputation and 
+- Attribute `faction` is faction index to which relation will be set.
+- Attributes `minreputation`, `maxreputation`, `reputation`: starting
+  reputation with selected faction. If it should have random reputation, use
+  attribute `minreputation` for minimum level of reputation and
   `maxreputation` for maximum level of reputation. If it should be constant
   reputation, use attribute `reputation`. Minumum value is -100 and maximum
   is 100.
 - Attribute `friendly`: did selected faction is friendly to this faction.
-  Value `Y` means `Yes`, value `N` means `No`. Used mostly to generate 
+  Value `Y` means `Yes`, value `N` means `No`. Used mostly to generate
   enemy ships.
 - Tag `description`: In game description of item. Can have any value.
 - Tags `foodtype`: Types of items used as food by this faction members. If
@@ -627,23 +628,23 @@ story.
   field.
 - Tags `finishdata`: contains data needed for finish selected step. Attribute
   `name` is name of data. Possible values: `item` - item index (for `askinbase`
-  and `loot` steps), `base` - ask in any base (value `any`) or randomly 
-  selected (value `selected`) needed for `askinbase` steps. Names `faction` - 
-  index of faction to which ship belongs, `ship` - index of ship which must be 
+  and `loot` steps), `base` - ask in any base (value `any`) or randomly
+  selected (value `selected`) needed for `askinbase` steps. Names `faction` -
+  index of faction to which ship belongs, `ship` - index of ship which must be
   destroyed (for `destroyship` and `loot` steps), `random` value if enemy ship
   should be selected randomly or `any` for any enemy ship (for `loot` step only).
-  Names `x` and `y` are location on map where player must go to progress in 
-  story. Value `random` mean randomly selected place on map or numeric 
-  coordinates of map field. Both used by `destroyship` and `explore` steps. 
+  Names `x` and `y` are location on map where player must go to progress in
+  story. Value `random` mean randomly selected place on map or numeric
+  coordinates of map field. Both used by `destroyship` and `explore` steps.
   Name `condition` is used by all steps and mean which skill should be used
   for check did step will progress to next, or value `random` for random
   chance. Name `chance` is used by all steps and mean chance (1 to that number
-  for `random` condition or Skill + roll from 1 to 100) that step will 
+  for `random` condition or Skill + roll from 1 to 100) that step will
   progress to next.
 - Tag `text`: text which will be show to player when step starts. Attribute
   `condition`: finish condition of previous step which was lead to this one.
   Possible values: `any`, `askinbase` and `destroyship`.
-- Tag `failtext`: text which will be show to player if step not progress to 
+- Tag `failtext`: text which will be show to player if step not progress to
   next.
 
 ## Careers
@@ -659,7 +660,7 @@ story.
 - Attribute `index` is index of career.
 - Attribute `name` is name of career visible to player.
 - Each career can have bonuses to experience to certain skills. Each that
-  skill is between `skill` tag. Attribute `name` is name of skill which will 
+  skill is between `skill` tag. Attribute `name` is name of skill which will
   be have bonuses to experience.
 
 ## Debugging
