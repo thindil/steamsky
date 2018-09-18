@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file.
 - New crafting recipes: adamantium short sword, adamantium sword, adamantium
   shield, adamantium chestplate and adamantium helmet
 - New items: adamantium sword, adamantium shield, adamantium chestplate,
-  wooden cockpit simulator, adamantium helmet and small book of engineering
+  wooden cockpit simulator, adamantium helmet, small book of engineering and
+  wooden gun simulator
 - Ability to show current game directories in options
 - Optional names for careers in factions
 - New items types: cockpitsimulator, engineersbook and gunsimulator
