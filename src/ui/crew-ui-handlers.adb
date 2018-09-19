@@ -333,13 +333,16 @@ package body Crew.UI.Handlers is
                Append
                  (TooltipText,
                   Attributes_List(Skills_List(Skill(1)).Attribute).Name);
-               Append(TooltipText, ". Training tool: ");
-               ItemIndex :=
-                 FindProtoItem(ItemType => Skills_List(Skill(1)).Tool);
-               if Items_List(ItemIndex).ShowType /= Null_Unbounded_String then
-                  Append(TooltipText, Items_List(ItemIndex).ShowType);
-               else
-                  Append(TooltipText, Items_List(ItemIndex).IType);
+               if Skills_List(Skill(1)).Tool /= Null_Unbounded_String then
+                  Append(TooltipText, ". Training tool: ");
+                  ItemIndex :=
+                    FindProtoItem(ItemType => Skills_List(Skill(1)).Tool);
+                  if Items_List(ItemIndex).ShowType /=
+                    Null_Unbounded_String then
+                     Append(TooltipText, Items_List(ItemIndex).ShowType);
+                  else
+                     Append(TooltipText, Items_List(ItemIndex).IType);
+                  end if;
                end if;
                Append(TooltipText, ". ");
                Append(TooltipText, Skills_List(Skill(1)).Description);

@@ -121,12 +121,14 @@ package body Ships.UI is
          for I in Skills_List.First_Index .. Skills_List.Last_Index loop
             Append(AssignList, AssignIter);
             SkillText := Skills_List(I).Name;
-            Append(SkillText, " Tool: ");
-            ProtoIndex := FindProtoItem(ItemType => Skills_List(I).Tool);
-            if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
-               Append(SkillText, Items_List(ProtoIndex).ShowType);
-            else
-               Append(SkillText, Items_List(ProtoIndex).IType);
+            if Skills_List(I).Tool /= Null_Unbounded_String then
+               Append(SkillText, " Tool: ");
+               ProtoIndex := FindProtoItem(ItemType => Skills_List(I).Tool);
+               if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
+                  Append(SkillText, Items_List(ProtoIndex).ShowType);
+               else
+                  Append(SkillText, Items_List(ProtoIndex).IType);
+               end if;
             end if;
             Set(AssignList, AssignIter, 0, To_String(SkillText));
             Set(AssignList, AssignIter, 1, Gint(I));

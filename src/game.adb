@@ -93,7 +93,7 @@ package body Game is
                MissionIndex => 0)));
       MaxSpawnRoll := 0;
       for Faction of Factions_List loop
-         MaxSpawnRoll := MaxSpawnRoll + Faction.SpawnChance; 
+         MaxSpawnRoll := MaxSpawnRoll + Faction.SpawnChance;
       end loop;
       for I in SkyBases'Range loop
          loop
@@ -373,6 +373,7 @@ package body Game is
       GameData: Document;
       NodesList: Node_List;
       DeleteIndex: Natural;
+      TmpSkill: Skill_Record;
       function FindAttributeIndex
         (AttributeName: Unbounded_String) return Natural is
       begin
@@ -507,26 +508,27 @@ package body Game is
                   To_Unbounded_String
                     (Node_Value(First_Child(Item(NodesList, I))))));
          elsif Node_Name(Item(NodesList, I)) = "skill" then
+            TmpSkill :=
+              (To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name")),
+               1,
+               To_Unbounded_String
+                 (Node_Value(First_Child(Item(NodesList, I)))),
+               Null_Unbounded_String);
             for J in
               Attributes_List.First_Index .. Attributes_List.Last_Index loop
                if Attributes_List(J).Name =
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "attribute")) then
-                  Skills_List.Append
-                  (New_Item =>
-                     (Name =>
-                        To_Unbounded_String
-                          (Get_Attribute(Item(NodesList, I), "name")),
-                      Attribute => J,
-                      Description =>
-                        To_Unbounded_String
-                          (Node_Value(First_Child(Item(NodesList, I)))),
-                      Tool =>
-                        To_Unbounded_String
-                          (Get_Attribute(Item(NodesList, I), "tool"))));
+                  TmpSkill.Attribute := J;
                   exit;
                end if;
             end loop;
+            if Get_Attribute(Item(NodesList, I), "tool") /= "" then
+               TmpSkill.Tool :=
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "tool"));
+            end if;
+            Skills_List.Append(New_Item => TmpSkill);
          elsif Node_Name(Item(NodesList, I)) = "conditionname" then
             ConditionIndex :=
               FindAttributeIndex
