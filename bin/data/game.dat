@@ -724,8 +724,8 @@ it name as attribute `name` and description between tags `attribute`. -->
 - Attribute `name` is name of selected skill.
 - Attribute `attribute` is name of character attribute (must be defined 
 ealier in this same file).
-- Attribute `tool` is item type used as tool during training (must be defined
-ealier in this same file).
+- Optional attribute `tool` is item type used as tool during training (must be
+defined ealier in this same file).
 - Value between `skills` tags is description of skill.
 After change skill name, you been need to made proper changes in other game 
 data files (recipes, items and this same file) if needed. To change skill name,
