@@ -1809,5 +1809,16 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="20"/>
   <description>Wooden tool used in training skills.</description>
  </item>
+ <item index="190" name="Adamantium armsguard" showtype="Armor" type="ArmsArmor" weight="5">
+  <trade buyable="N" price="68"/>
+  <trade buyable="N" price="68"/>
+  <trade buyable="N" price="68"/>
+  <trade buyable="N" price="68"/>
+  <trade buyable="Y" price="66"/>
+  <data value="1"/>
+  <data value="18"/>
+  <data value="4"/>
+  <description>Standard type of armor, made of adamantium, protects arms.</description>
+ </item>
 </items>
 
