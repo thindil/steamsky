@@ -691,36 +691,39 @@ package body Crew is
                               exit;
                            end if;
                         end loop;
-                        ToolIndex :=
-                          FindTools(I, Skills_List(SkillIndex).Tool, Train);
-                        if ToolIndex > 0 then
-                           for J in 1 .. Times loop
-                              GainExp(GetRandom(1, 5), SkillIndex, I);
-                              DamageItem
-                                (Inventory => PlayerShip.Crew(I).Inventory,
-                                 ItemIndex => ToolIndex,
-                                 MemberIndex => I);
-                              ToolIndex :=
-                                FindTools
-                                  (I,
-                                   Skills_List(SkillIndex).Tool,
-                                   Train);
-                              exit when ToolIndex = 0;
-                           end loop;
-                           AddMessage
-                             (To_String(PlayerShip.Crew(I).Name) &
-                              " trained a little " &
-                              To_String(Skills_List(SkillIndex).Name) &
-                              ".",
-                              OrderMessage);
-                        end if;
-                        if ToolIndex = 0 then
-                           AddMessage
-                             (To_String(PlayerShip.Crew(I).Name) &
-                              " can't continue training because you don't have proper tools.",
-                              OrderMessage,
-                              3);
-                           GiveOrders(PlayerShip, I, Rest);
+                        if Skills_List(SkillIndex).Tool /=
+                          Null_Unbounded_String then
+                           ToolIndex :=
+                             FindTools(I, Skills_List(SkillIndex).Tool, Train);
+                           if ToolIndex > 0 then
+                              for J in 1 .. Times loop
+                                 GainExp(GetRandom(1, 5), SkillIndex, I);
+                                 DamageItem
+                                   (Inventory => PlayerShip.Crew(I).Inventory,
+                                    ItemIndex => ToolIndex,
+                                    MemberIndex => I);
+                                 ToolIndex :=
+                                   FindTools
+                                     (I,
+                                      Skills_List(SkillIndex).Tool,
+                                      Train);
+                                 exit when ToolIndex = 0;
+                              end loop;
+                              AddMessage
+                                (To_String(PlayerShip.Crew(I).Name) &
+                                 " trained a little " &
+                                 To_String(Skills_List(SkillIndex).Name) &
+                                 ".",
+                                 OrderMessage);
+                           end if;
+                           if ToolIndex = 0 then
+                              AddMessage
+                                (To_String(PlayerShip.Crew(I).Name) &
+                                 " can't continue training because you don't have proper tools.",
+                                 OrderMessage,
+                                 3);
+                              GiveOrders(PlayerShip, I, Rest);
+                           end if;
                         end if;
                      end;
                   when others =>

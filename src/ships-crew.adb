@@ -209,51 +209,53 @@ package body Ships.Crew is
          else
             RequiredTool := RepairTools;
          end if;
-         ToolsIndex := Ship.Crew(MemberIndex).Equipment(7);
-         if ToolsIndex > 0 then
-            if Items_List
-                (Ship.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex)
-                .IType /=
-              RequiredTool then
-               ToolsIndex := 0;
+         if RequiredTool /= Null_Unbounded_String then
+            ToolsIndex := Ship.Crew(MemberIndex).Equipment(7);
+            if ToolsIndex > 0 then
+               if Items_List
+                   (Ship.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex)
+                   .IType /=
+                 RequiredTool then
+                  ToolsIndex := 0;
+               end if;
             end if;
-         end if;
-         if ToolsIndex = 0 then
-            ToolsIndex :=
-              FindItem(Inventory => Ship.Cargo, ItemType => RequiredTool);
             if ToolsIndex = 0 then
                ToolsIndex :=
-                 FindItem
-                   (Inventory => Ship.Crew(MemberIndex).Inventory,
-                    ItemType => RequiredTool);
-               if ToolsIndex > 0 then
-                  Ship.Crew(MemberIndex).Equipment(7) := ToolsIndex;
+                 FindItem(Inventory => Ship.Cargo, ItemType => RequiredTool);
+               if ToolsIndex = 0 then
+                  ToolsIndex :=
+                    FindItem
+                      (Inventory => Ship.Crew(MemberIndex).Inventory,
+                       ItemType => RequiredTool);
+                  if ToolsIndex > 0 then
+                     Ship.Crew(MemberIndex).Equipment(7) := ToolsIndex;
+                  end if;
+               else
+                  Ship.Crew(MemberIndex).Equipment(7) := 0;
                end if;
-            else
-               Ship.Crew(MemberIndex).Equipment(7) := 0;
             end if;
-         end if;
-         if ToolsIndex = 0 then
-            case GivenOrder is
-               when Repair =>
-                  raise Crew_Order_Error
-                    with MemberName &
-                    " can't starts repairing ship because you don't have repair tools.";
-               when Clean =>
-                  raise Crew_Order_Error
-                    with MemberName &
-                    " can't starts cleaning ship because you don't have any cleaning tools.";
-               when Upgrading =>
-                  raise Crew_Order_Error
-                    with MemberName &
-                    " can't starts upgrading module because you don't have repair tools.";
-               when Train =>
-                  raise Crew_Order_Error
-                    with MemberName &
-                    " can't starts training because you don't have proper tools.";
-               when others =>
-                  return;
-            end case;
+            if ToolsIndex = 0 then
+               case GivenOrder is
+                  when Repair =>
+                     raise Crew_Order_Error
+                       with MemberName &
+                       " can't starts repairing ship because you don't have repair tools.";
+                  when Clean =>
+                     raise Crew_Order_Error
+                       with MemberName &
+                       " can't starts cleaning ship because you don't have any cleaning tools.";
+                  when Upgrading =>
+                     raise Crew_Order_Error
+                       with MemberName &
+                       " can't starts upgrading module because you don't have repair tools.";
+                  when Train =>
+                     raise Crew_Order_Error
+                       with MemberName &
+                       " can't starts training because you don't have proper tools.";
+                  when others =>
+                     return;
+               end case;
+            end if;
          end if;
       end if;
       if GivenOrder = Pilot or
