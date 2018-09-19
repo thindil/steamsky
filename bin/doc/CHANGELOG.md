@@ -11,8 +11,8 @@ All notable changes to this project will be documented in this file.
   wooden gun simulator, adamantium armsguard and small book of rhetoric
 - Ability to show current game directories in options
 - Optional names for careers in factions
-- New items types: cockpitsimulator, engineersbook, gunsimulator and 
-  rhetoricbook
+- New items types: cockpitsimulator, engineersbook, gunsimulator,
+  rhetoricbook and smallitems
 
 ### Changed
 - Help factions flags variables now return list of factions which have that
