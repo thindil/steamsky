@@ -8,7 +8,8 @@ All notable changes to this project will be documented in this file.
   shield, adamantium chestplate, adamantium helmet and adamantium armsguard
 - New items: adamantium sword, adamantium shield, adamantium chestplate,
   wooden cockpit simulator, adamantium helmet, small book of engineering,
-  wooden gun simulator, adamantium armsguard and small book of rhetoric
+  wooden gun simulator, adamantium armsguard, small book of rhetoric and
+  wooden small toys
 - Ability to show current game directories in options
 - Optional names for careers in factions
 - New items types: cockpitsimulator, engineersbook, gunsimulator,
