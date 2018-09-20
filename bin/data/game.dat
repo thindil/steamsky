@@ -680,7 +680,8 @@ selected item type name as `value` attribute. -->
  <itemtype value="EngineersBook"/>
  <itemtype value="GunSimulator"/>
  <itemtype value="RhetoricBook"/>
- <itemtype value="SmallItems"/>
+ <itemtype value="SmallToys"/>
+ <itemtype value="AlchemyBook"/>
 <!-- To change which item type is used for repair/upgrading tools, `value` 
 attribue of tag `repairtools`. Value must be existing item type. -->
  <repairtools value="RepairTools"/>
@@ -742,7 +743,7 @@ tags `skill`. -->
  <skill attribute="Intelligence" name="Engineering" tool="EngineersBook">Used by engineers, determine ship speed and speed of ship upgrading/repairing</skill>
  <skill attribute="Dexterity" name="Gunnery" tool="GunSimulator">Used by gunners, determine chance to hit enemy in ship combat</skill>
  <skill attribute="Intelligence" name="Rhetoric" tool="RhetoricBook">Used by traders, determine prices in bases</skill>
- <skill attribute="Intelligence" name="Perception" tool="SmallItems">Used to spot enemy ships by pilots and gunners</skill>
+ <skill attribute="Intelligence" name="Perception" tool="SmallToys">Used to spot enemy ships by pilots and gunners</skill>
  <skill attribute="Intelligence" name="Alchemy" tool="AlchemyBook">Used in crafting</skill>
  <skill attribute="Dexterity" name="Cooking" tool="CookingBook">Used to cook food</skill>
  <skill attribute="Dexterity" name="Gunsmith" tool="GunsmithBook">Used to create ammo for guns and upgrade guns</skill>
