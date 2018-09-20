@@ -82,8 +82,8 @@ modification there can be overwritten with new version of game.
 - Attribute `name` is name of selected skill.
 - Attribute `attribute` is name of character attribute (must be defined
   ealier in this same file).
-- Attribute `tool` is item type used as tool during training (must be defined
-  ealier in this same file).
+- Optional attribute `tool` is item type used as tool during training (must be
+  defined ealier in this same file).
 - After change/remove skill, you been need to made proper changes in other game
   data files (recipes, items and this same file) if needed.
 
@@ -92,11 +92,11 @@ modification there can be overwritten with new version of game.
 - If editing own file: need to remove first selected skill then add new.
 - To change skill name, just edit value of `name` attribute of selected skill.
 - To change assigned attribute to selected skill enter new name in attribute
-  `attribute`. Name must be existing attribute name, defined ealier in this
-  same file.
+  `attribute`. Name must be existing attribute name, defined ealier in
+  *game.dat* file.
 - To change skill description, just edit text between `skill` tags.
-- To change assigned tool,
-  edit value of `tool` attribute of selected skill.
+- To change assigned tool, edit value of `tool` attribute of selected skill.
+  Tool must be existing item type, defined ealier in *game.dat* file.
 
 ### Adding new skills
 - To add new skill, just append new line with tag `skill` with it name as
