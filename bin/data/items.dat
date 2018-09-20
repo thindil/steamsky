@@ -1829,5 +1829,14 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="20"/>
   <description>Small book with informations about basics of rhetoric. Used in training skills.</description>
  </item>
+ <item index="192" name="Wooden small toys" showtype="Small toys" type="SmallToys" weight="1">
+  <trade buyable="Y" price="8"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <data value="20"/>
+  <description>Small wooden toys. Used to play or to train some skills.</description>
+ </item>
 </items>
 
