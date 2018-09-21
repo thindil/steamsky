@@ -31,7 +31,7 @@ with Gtk.Button; use Gtk.Button;
 with Gtk.Label; use Gtk.Label;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
-with Gdk.Event; use Gdk.Event;
+with Gdk.Event;
 with Gdk.Types; use Gdk.Types;
 with Game; use Game;
 with Maps.UI; use Maps.UI;

@@ -18,7 +18,7 @@
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with GNAT.String_Split; use GNAT.String_Split;
 with DOM.Core; use DOM.Core;
-with DOM.Core.Documents; use DOM.Core.Documents;
+with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
 with Log; use Log;
