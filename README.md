@@ -5,7 +5,7 @@ commander of a flying ship, as leader you will be traveling across floating
 bases, engaging in combat, trading goods etc... There is no mandatory ending
 to this game, you may freely play until your character die. The game is 
 currently under heavy development, but is in a playable state. Steam Sky is 
-available on Linux 64-bit and Windows (development version only) platforms.
+available on Linux and Windows (development version only) 64 bit platforms.
 
 ## Game versions
 There are currently 2 versions of the game:
@@ -24,7 +24,7 @@ To build(works on Linux and Windows too) you need:
   
   https://www.adacore.com/download/
 
-  It is recommended to use GNAT GPL 2017 to compile the game on Linux.
+  It is recommended to use GNAT GPL 2018 to compile the game on Linux.
   Game does not work with old compilers (like GCC 4.9) since it 
   lacks full support for Ada 2012
 
@@ -33,7 +33,7 @@ To build(works on Linux and Windows too) you need:
   
   https://www.adacore.com/download/more
 
-  At this moment tested version of GtkAda is 2017 and game require GTK library
+  At this moment tested version of GtkAda is 2018 and game require GTK library
   in version 3.14 (may not works with other versions).
 
 If you have all the required packages, navigate to the main directory(where 
