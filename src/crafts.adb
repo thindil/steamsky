@@ -17,7 +17,7 @@
 
 with Ada.Exceptions; use Ada.Exceptions;
 with DOM.Core; use DOM.Core;
-with DOM.Core.Documents; use DOM.Core.Documents;
+with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
 with Messages; use Messages;

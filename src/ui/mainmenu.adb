@@ -27,7 +27,7 @@ with GNAT.String_Split; use GNAT.String_Split;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
-with Gtk.Main; use Gtk.Main;
+with Gtk.Main;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
 with Gtk.Button; use Gtk.Button;
 with Gtk.List_Store; use Gtk.List_Store;
