@@ -1838,5 +1838,16 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="20"/>
   <description>Small wooden toys. Used to play or to train some skills.</description>
  </item>
+ <item index="193" name="Adamantium legsguard" showtype="Armor" type="LegsArmor" weight="6">
+  <trade buyable="N" price="74"/>
+  <trade buyable="N" price="74"/>
+  <trade buyable="N" price="74"/>
+  <trade buyable="N" price="74"/>
+  <trade buyable="Y" price="72"/>
+  <data value="1"/>
+  <data value="28"/>
+  <data value="5"/>
+  <description>Standard type of armor, made of adamantium, protects legs.</description>
+ </item>
 </items>
 
