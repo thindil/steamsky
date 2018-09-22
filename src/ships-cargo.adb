@@ -19,12 +19,8 @@ with ShipModules; use ShipModules;
 
 package body Ships.Cargo is
 
-   procedure UpdateCargo
-     (Ship: in out ShipRecord;
-      ProtoIndex: Natural := 0;
-      Amount: Integer;
-      Durability: Natural := 100;
-      CargoIndex: Natural := 0) is
+   procedure UpdateCargo(Ship: in out ShipRecord; ProtoIndex: Natural := 0;
+      Amount: Integer; Durability: Natural := 100; CargoIndex: Natural := 0) is
       ItemIndex: Natural := 0;
       NewAmount: Integer;
    begin
@@ -41,11 +37,9 @@ package body Ships.Cargo is
       end if;
       if ItemIndex = 0 then
          Ship.Cargo.Append
-         (New_Item =>
-            (ProtoIndex => ProtoIndex,
-             Amount => Amount,
-             Name => Null_Unbounded_String,
-             Durability => Durability));
+           (New_Item =>
+              (ProtoIndex => ProtoIndex, Amount => Amount,
+               Name => Null_Unbounded_String, Durability => Durability));
       else
          NewAmount := Ship.Cargo(ItemIndex).Amount + Amount;
          if NewAmount < 1 then
@@ -65,8 +59,7 @@ package body Ships.Cargo is
       end if;
    end UpdateCargo;
 
-   function FreeCargo
-     (Amount: Integer;
+   function FreeCargo(Amount: Integer;
       Ship: ShipRecord := PlayerShip) return Integer is
       FreeCargo: Integer := 0;
    begin

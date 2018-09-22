@@ -52,19 +52,10 @@ with Careers; use Careers;
 
 package body Game is
 
-   procedure NewGame
-     (CharName, ShipName: Unbounded_String;
-      Gender: Character;
+   procedure NewGame(CharName, ShipName: Unbounded_String; Gender: Character;
       FactionIndex, CareerIndex: Positive) is
-      PosX,
-      PosY,
-      RandomBase,
-      ShipIndex,
-      Amount,
-      FactionRoll,
-      BaseOwner,
-      PlayerIndex2,
-      PlayerMorale: Positive;
+      PosX, PosY, RandomBase, ShipIndex, Amount, FactionRoll, BaseOwner,
+      PlayerIndex2, PlayerMorale: Positive;
       ValidLocation: Boolean;
       TempX, TempY, BaseReputation: Integer;
       TmpRecruits: Recruit_Container.Vector;
@@ -87,9 +78,7 @@ package body Game is
       SkyMap :=
         (others =>
            (others =>
-              (BaseIndex => 0,
-               Visited => False,
-               EventIndex => 0,
+              (BaseIndex => 0, Visited => False, EventIndex => 0,
                MissionIndex => 0)));
       MaxSpawnRoll := 0;
       for Faction of Factions_List loop
@@ -131,9 +120,7 @@ package body Game is
             exit when ValidLocation;
          end loop;
          SkyMap(Integer(PosX), Integer(PosY)) :=
-           (BaseIndex => I,
-            Visited => False,
-            EventIndex => 0,
+           (BaseIndex => I, Visited => False, EventIndex => 0,
             MissionIndex => 0);
          FactionRoll := GetRandom(1, MaxSpawnRoll);
          for J in Factions_List.Iterate loop
@@ -151,28 +138,19 @@ package body Game is
                end if;
                BaseReputation :=
                  GetReputation
-                   (Factions_List(FactionIndex).Index,
-                    Factions_List(J).Index);
+                   (Factions_List(FactionIndex).Index, Factions_List(J).Index);
                exit;
             end if;
          end loop;
          SkyBases(I) :=
-           (Name => GenerateBaseName(BaseOwner),
-            Visited => (0, 0, 0, 0, 0),
-            SkyX => Integer(PosX),
-            SkyY => Integer(PosY),
+           (Name => GenerateBaseName(BaseOwner), Visited => (0, 0, 0, 0, 0),
+            SkyX => Integer(PosX), SkyY => Integer(PosY),
             BaseType => Bases_Types'Val(GetRandom(0, 4)),
-            Population => BasePopulation,
-            RecruitDate => (0, 0, 0, 0, 0),
-            Recruits => TmpRecruits,
-            Known => False,
-            AskedForBases => False,
+            Population => BasePopulation, RecruitDate => (0, 0, 0, 0, 0),
+            Recruits => TmpRecruits, Known => False, AskedForBases => False,
             AskedForEvents => (0, 0, 0, 0, 0),
-            Reputation => (BaseReputation, 0),
-            MissionsDate => (0, 0, 0, 0, 0),
-            Missions => TmpMissions,
-            Owner => BaseOwner,
-            Cargo => TmpCargo);
+            Reputation => (BaseReputation, 0), MissionsDate => (0, 0, 0, 0, 0),
+            Missions => TmpMissions, Owner => BaseOwner, Cargo => TmpCargo);
       end loop;
       -- Place player ship in random large base
       loop
@@ -190,12 +168,8 @@ package body Game is
       end loop;
       PlayerShip :=
         CreateShip
-          (ShipIndex,
-           ShipName,
-           SkyBases(Integer(RandomBase)).SkyX,
-           SkyBases(Integer(RandomBase)).SkyY,
-           DOCKED,
-           False);
+          (ShipIndex, ShipName, SkyBases(Integer(RandomBase)).SkyX,
+           SkyBases(Integer(RandomBase)).SkyY, DOCKED, False);
       -- Add player to ship
       PlayerIndex2 :=
         FindProtoMob
@@ -207,47 +181,35 @@ package body Game is
             Amount := Item(2);
          end if;
          TmpInventory.Append
-         (New_Item =>
-            (ProtoIndex => Item(1),
-             Amount => Amount,
-             Name => Null_Unbounded_String,
-             Durability => 100));
+           (New_Item =>
+              (ProtoIndex => Item(1), Amount => Amount,
+               Name => Null_Unbounded_String, Durability => 100));
       end loop;
       if Factions_List(FactionIndex).Flags.Contains
-        (To_Unbounded_String("nomorale")) then
+          (To_Unbounded_String("nomorale")) then
          PlayerMorale := 50;
       else
          PlayerMorale := 100;
       end if;
       PlayerShip.Crew.Prepend
-      (New_Item =>
-         (Name => CharName,
-          Gender => Gender,
-          Health => 100,
-          Tired => 0,
-          Skills => ProtoMobs_List(PlayerIndex2).Skills,
-          Hunger => 0,
-          Thirst => 0,
-          Order => ProtoMobs_List(PlayerIndex2).Order,
-          PreviousOrder => Rest,
-          OrderTime => 15,
-          Orders => ProtoMobs_List(PlayerIndex2).Priorities,
-          Attributes => ProtoMobs_List(PlayerIndex2).Attributes,
-          Inventory => TmpInventory,
-          Equipment => ProtoMobs_List(PlayerIndex2).Equipment,
-          Payment => (others => 0),
-          ContractLength => -1,
-          Morale => (PlayerMorale, 0),
-          Loyalty => 100,
-          HomeBase => RandomBase,
-          Faction => FactionIndex));
+        (New_Item =>
+           (Name => CharName, Gender => Gender, Health => 100, Tired => 0,
+            Skills => ProtoMobs_List(PlayerIndex2).Skills, Hunger => 0,
+            Thirst => 0, Order => ProtoMobs_List(PlayerIndex2).Order,
+            PreviousOrder => Rest, OrderTime => 15,
+            Orders => ProtoMobs_List(PlayerIndex2).Priorities,
+            Attributes => ProtoMobs_List(PlayerIndex2).Attributes,
+            Inventory => TmpInventory,
+            Equipment => ProtoMobs_List(PlayerIndex2).Equipment,
+            Payment => (others => 0), ContractLength => -1,
+            Morale => (PlayerMorale, 0), Loyalty => 100,
+            HomeBase => RandomBase, Faction => FactionIndex));
       for Module of PlayerShip.Modules loop
          if Module.Owner > 0 then
             Module.Owner := Module.Owner + 1;
          end if;
          if Modules_List(Module.ProtoIndex).MType = CABIN and
-           Module.Owner = 0 and
-           not CabinAssigned then
+           Module.Owner = 0 and not CabinAssigned then
             Module.Name := CharName & To_Unbounded_String("'s Cabin");
             Module.Owner := 1;
             CabinAssigned := True;
@@ -344,8 +306,7 @@ package body Game is
          if not SkyBases(BaseIndex).Known then
             SkyBases(BaseIndex).Known := True;
             AddMessage
-              ("You discovered base " &
-               To_String(SkyBases(BaseIndex).Name) &
+              ("You discovered base " & To_String(SkyBases(BaseIndex).Name) &
                ".",
                OtherMessage);
          end if;
@@ -391,89 +352,89 @@ package body Game is
       for I in 0 .. Length(NodesList) - 1 loop
          if Node_Name(Item(NodesList, I)) = "basessyllablepre" then
             BaseSyllablesPre.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(NodesList, I), "value")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
          elsif Node_Name(Item(NodesList, I)) = "basessyllablestart" then
             BaseSyllablesStart.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(NodesList, I), "value")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
          elsif Node_Name(Item(NodesList, I)) = "basessyllableend" then
             BaseSyllablesEnd.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(NodesList, I), "value")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
          elsif Node_Name(Item(NodesList, I)) = "basessyllablepost" then
             BaseSyllablesPost.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(NodesList, I), "value")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
          elsif Node_Name(Item(NodesList, I)) = "malessyllablestart" then
             MaleSyllablesStart.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(NodesList, I), "value")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
          elsif Node_Name(Item(NodesList, I)) = "malessyllablemiddle" then
             MaleSyllablesMiddle.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(NodesList, I), "value")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
          elsif Node_Name(Item(NodesList, I)) = "malessyllableend" then
             MaleSyllablesEnd.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(NodesList, I), "value")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
          elsif Node_Name(Item(NodesList, I)) = "malesvocal" then
             MaleVocals.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(NodesList, I), "value")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
          elsif Node_Name(Item(NodesList, I)) = "malesconsonant" then
             MaleConsonants.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(NodesList, I), "value")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
          elsif Node_Name(Item(NodesList, I)) = "femalessyllablestart" then
             FemaleSyllablesStart.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(NodesList, I), "value")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
          elsif Node_Name(Item(NodesList, I)) = "femalessyllablemiddle" then
             FemaleSyllablesMiddle.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(NodesList, I), "value")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
          elsif Node_Name(Item(NodesList, I)) = "femalessyllableend" then
             FemaleSyllablesEnd.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(NodesList, I), "value")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
          elsif Node_Name(Item(NodesList, I)) = "femalesvocal" then
             FemaleVocals.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(NodesList, I), "value")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
          elsif Node_Name(Item(NodesList, I)) = "shipssyllablestart" then
             ShipSyllablesStart.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(NodesList, I), "value")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
          elsif Node_Name(Item(NodesList, I)) = "shipssyllablemiddle" then
             ShipSyllablesMiddle.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(NodesList, I), "value")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
          elsif Node_Name(Item(NodesList, I)) = "shipssyllableend" then
             ShipSyllablesEnd.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(NodesList, I), "value")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
          elsif Node_Name(Item(NodesList, I)) = "itemtype" then
             Items_Types.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(NodesList, I), "value")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "value")));
          elsif Node_Name(Item(NodesList, I)) = "repairtools" then
             RepairTools :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
@@ -500,13 +461,13 @@ package body Game is
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
          elsif Node_Name(Item(NodesList, I)) = "attribute" then
             Attributes_List.Append
-            (New_Item =>
-               (Name =>
-                  To_Unbounded_String
-                    (Get_Attribute(Item(NodesList, I), "name")),
-                Description =>
-                  To_Unbounded_String
-                    (Node_Value(First_Child(Item(NodesList, I))))));
+              (New_Item =>
+                 (Name =>
+                    To_Unbounded_String
+                      (Get_Attribute(Item(NodesList, I), "name")),
+                  Description =>
+                    To_Unbounded_String
+                      (Node_Value(First_Child(Item(NodesList, I))))));
          elsif Node_Name(Item(NodesList, I)) = "skill" then
             TmpSkill :=
               (To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name")),
@@ -630,8 +591,7 @@ package body Game is
    function DaysDifference(DateToCompare: Date_Record) return Natural is
    begin
       return (GameDate.Day + (30 * GameDate.Month) + (GameDate.Year * 360)) -
-        (DateToCompare.Day +
-         (30 * DateToCompare.Month) +
+        (DateToCompare.Day + (30 * DateToCompare.Month) +
          (DateToCompare.Year * 360));
    end DaysDifference;
 
@@ -699,9 +659,7 @@ package body Game is
             if DataType = To_Unbounded_String(LocalDataName) or
               LocalDataName = "" then
                LogMessage
-                 ("Loading " &
-                  To_String(DataType) &
-                  " file: " &
+                 ("Loading " & To_String(DataType) & " file: " &
                   To_String(LocalFileName),
                   Everything);
                if To_String(DataType) = "factions" then
@@ -754,14 +712,11 @@ package body Game is
       -- Load standard game data
       for I in DataTypes'Range loop
          LoadSelectedData
-           (To_String(DataTypes(I).Name),
-            To_String(DataTypes(I).FileName));
+           (To_String(DataTypes(I).Name), To_String(DataTypes(I).FileName));
       end loop;
       -- Load modifications
       Start_Search
-        (Directories,
-         To_String(ModsDirectory),
-         "",
+        (Directories, To_String(ModsDirectory), "",
          (Directory => True, others => False));
       while More_Entries(Directories) loop
          Get_Next_Entry(Directories, FoundDirectory);

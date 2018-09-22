@@ -34,8 +34,7 @@ package body Messages is
                Result := Result & Trim(RawImage, Ada.Strings.Left);
             when 2 | 3 =>
                Result :=
-                 Result &
-                 To_Unbounded_String("-") &
+                 Result & To_Unbounded_String("-") &
                  Trim(RawImage, Ada.Strings.Left);
             when 4 =>
                Result := Result & RawImage;
@@ -50,9 +49,7 @@ package body Messages is
       return To_String(Result);
    end FormatedTime;
 
-   procedure AddMessage
-     (Message: String;
-      MType: Message_Type;
+   procedure AddMessage(Message: String; MType: Message_Type;
       Color: Natural := 0) is
    begin
       if Natural(Messages_List.Length) = GameSettings.MessagesLimit then
@@ -60,28 +57,21 @@ package body Messages is
       end if;
       LastIndex := LastIndex + 1;
       Messages_List.Append
-      (New_Item =>
-         (Message =>
-            To_Unbounded_String(FormatedTime) &
-            ": " &
-            To_Unbounded_String(Message),
-          MType => MType,
-          MessageIndex => LastIndex,
-          Color => Color));
+        (New_Item =>
+           (Message =>
+              To_Unbounded_String(FormatedTime) & ": " &
+              To_Unbounded_String(Message),
+            MType => MType, MessageIndex => LastIndex, Color => Color));
       LastMessage := To_Unbounded_String(Message);
    end AddMessage;
 
-   function GetMessage
-     (MessageIndex: Integer;
+   function GetMessage(MessageIndex: Integer;
       MType: Message_Type := Default) return Message_Data is
       Index: Integer;
    begin
       if MessageIndex > Integer(Messages_List.Length) then
-         return
-           (Message => Null_Unbounded_String,
-            MType => Default,
-            MessageIndex => 1,
-            Color => 0);
+         return (Message => Null_Unbounded_String, MType => Default,
+            MessageIndex => 1, Color => 0);
       end if;
       if MessageIndex < 1 then
          Index := 1;
@@ -95,11 +85,8 @@ package body Messages is
                end if;
             end loop;
          end if;
-         return
-           (Message => Null_Unbounded_String,
-            MType => Default,
-            MessageIndex => 1,
-            Color => 0);
+         return (Message => Null_Unbounded_String, MType => Default,
+            MessageIndex => 1, Color => 0);
       end if;
       Index := 0;
       for Message of Messages_List loop
@@ -110,11 +97,8 @@ package body Messages is
             return Message;
          end if;
       end loop;
-      return
-        (Message => Null_Unbounded_String,
-         MType => Default,
-         MessageIndex => 1,
-         Color => 0);
+      return (Message => Null_Unbounded_String, MType => Default,
+         MessageIndex => 1, Color => 0);
    end GetMessage;
 
    procedure ClearMessages is
@@ -138,18 +122,14 @@ package body Messages is
       end if;
    end MessagesAmount;
 
-   procedure RestoreMessage
-     (Message: Unbounded_String;
-      MType: Message_Type := Default;
-      Color: Natural := 0) is
+   procedure RestoreMessage(Message: Unbounded_String;
+      MType: Message_Type := Default; Color: Natural := 0) is
    begin
       LastIndex := LastIndex + 1;
       Messages_List.Append
-      (New_Item =>
-         (Message => Message,
-          MType => MType,
-          MessageIndex => LastIndex,
-          Color => Color));
+        (New_Item =>
+           (Message => Message, MType => MType, MessageIndex => LastIndex,
+            Color => Color));
    end RestoreMessage;
 
    function GetLastMessageIndex return Natural is

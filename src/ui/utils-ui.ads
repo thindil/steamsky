@@ -27,16 +27,14 @@ package Utils.UI is
    type GameStates is (SkyMap_View, Combat_View, Main_Menu); -- Game states
    PreviousGameState: GameStates; -- Current game state, needed for hide some windows
 
-   procedure ShowDialog
-     (Message: String;
+   procedure ShowDialog(Message: String;
       Parent: Gtk_Window); -- Show dialog with info
    function HideWindow
      (User_Data: access GObject_Record'Class)
      return Boolean; -- Hide window instead of destroying it
    procedure ShowWindow
      (User_Data: access GObject_Record'Class); -- Show selected window
-   function ShowConfirmDialog
-     (Message: String;
+   function ShowConfirmDialog(Message: String;
       Parent: Gtk_Window)
      return Boolean; -- Show confirmation dialog to player, return True, if player choice 'Yes' option
    function QuitGame
@@ -46,14 +44,12 @@ package Utils.UI is
      (Object: access Gtkada_Builder_Record'Class); -- Hide last message window
    procedure ShowLastMessage
      (Object: access Gtkada_Builder_Record'Class); -- Show last message window
-   function CloseWindow
-     (Self: access Gtk_Widget_Record'Class;
+   function CloseWindow(Self: access Gtk_Widget_Record'Class;
       Event: Gdk_Event_Key) return Boolean; -- Close window on press Escape key
    procedure CloseMessages
      (Object: access Gtkada_Builder_Record'
         Class); -- Switch back to skymap or combat from info
-   procedure ShowItemDamage
-     (ItemDurability: Natural;
+   procedure ShowItemDamage(ItemDurability: Natural;
       DamageBar: GObject); -- Show or hide info about item damage
 
 end Utils.UI;

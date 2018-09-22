@@ -42,9 +42,7 @@ with Factions; use Factions;
 
 package body Crew.UI.Handlers is
 
-   function UpdatePriorities
-     (Model: Gtk_Tree_Model;
-      Path: Gtk_Tree_Path;
+   function UpdatePriorities(Model: Gtk_Tree_Model; Path: Gtk_Tree_Path;
       Iter: Gtk_Tree_Iter) return Boolean is
    begin
       case PlayerShip.Crew(MemberIndex).Orders
@@ -73,15 +71,14 @@ package body Crew.UI.Handlers is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treecrew2"))),
-         CrewModel,
-         CrewIter);
+         CrewModel, CrewIter);
       if CrewIter = Null_Iter then
          return;
       end if;
       MemberIndex := Positive(Get_Int(CrewModel, CrewIter, 2));
       Member := PlayerShip.Crew(MemberIndex);
       if Factions_List(Member.Faction).Flags.Find_Index
-        (To_Unbounded_String("nogender")) =
+          (To_Unbounded_String("nogender")) =
         Factions_Container.No_Index then
          if Member.Gender = 'M' then
             MemberInfo := To_Unbounded_String("Gender: Male");
@@ -145,8 +142,7 @@ package body Crew.UI.Handlers is
                end if;
                if MissionTime.Minutes > 0 then
                   Append
-                    (MemberInfo,
-                     Positive'Image(MissionTime.Minutes) & "mins");
+                    (MemberInfo, Positive'Image(MissionTime.Minutes) & "mins");
                end if;
             end;
          end if;
@@ -161,26 +157,20 @@ package body Crew.UI.Handlers is
             Append(MemberInfo, ASCII.LF & "Contract length:");
             if Member.ContractLength > 0 then
                Append
-                 (MemberInfo,
-                  Integer'Image(Member.ContractLength) & " days.");
+                 (MemberInfo, Integer'Image(Member.ContractLength) & " days.");
             else
                Append(MemberInfo, " pernament.");
             end if;
             Append
               (MemberInfo,
-               ASCII.LF &
-               "Payment:" &
-               Natural'Image(Member.Payment(1)) &
-               " " &
-               To_String(MoneyName) &
-               " each day and " &
+               ASCII.LF & "Payment:" & Natural'Image(Member.Payment(1)) & " " &
+               To_String(MoneyName) & " each day and " &
                Natural'Image(Member.Payment(2)) &
                " percent of profit from each trade.");
          end if;
       end if;
       Set_Label
-        (Gtk_Label(Get_Object(Object, "lblcrewinfo")),
-         To_String(MemberInfo));
+        (Gtk_Label(Get_Object(Object, "lblcrewinfo")), To_String(MemberInfo));
       if PlayerShip.Speed = DOCKED and MemberIndex > 1 then
          Show_All(Gtk_Widget(Get_Object(Object, "btndismiss")));
       else
@@ -196,8 +186,7 @@ package body Crew.UI.Handlers is
             "Slightly wounded");
       elsif Member.Health < 81 and Member.Health > 50 then
          Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progresshealth")),
-            "Wounded");
+           (Gtk_Progress_Bar(Get_Object(Object, "progresshealth")), "Wounded");
       elsif Member.Health < 51 then
          Set_Text
            (Gtk_Progress_Bar(Get_Object(Object, "progresshealth")),
@@ -216,8 +205,7 @@ package body Crew.UI.Handlers is
             "Bit tired");
       elsif TiredPoints > 40 and TiredPoints < 81 then
          Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progresstired")),
-            "Tired");
+           (Gtk_Progress_Bar(Get_Object(Object, "progresstired")), "Tired");
       elsif TiredPoints > 80 and TiredPoints < 100 then
          Set_Text
            (Gtk_Progress_Bar(Get_Object(Object, "progresstired")),
@@ -239,8 +227,7 @@ package body Crew.UI.Handlers is
             "Bit thirsty");
       elsif Member.Thirst > 40 and Member.Thirst < 81 then
          Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progressthirst")),
-            "Thirsty");
+           (Gtk_Progress_Bar(Get_Object(Object, "progressthirst")), "Thirsty");
       elsif Member.Thirst > 80 and Member.Thirst < 100 then
          Set_Text
            (Gtk_Progress_Bar(Get_Object(Object, "progressthirst")),
@@ -262,8 +249,7 @@ package body Crew.UI.Handlers is
             "Bit hungry");
       elsif Member.Hunger > 40 and Member.Hunger < 81 then
          Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progresshunger")),
-            "Hungry");
+           (Gtk_Progress_Bar(Get_Object(Object, "progresshunger")), "Hungry");
       elsif Member.Hunger > 80 and Member.Hunger < 100 then
          Set_Text
            (Gtk_Progress_Bar(Get_Object(Object, "progresshunger")),
@@ -281,22 +267,18 @@ package body Crew.UI.Handlers is
          Gdouble(Member.Morale(1)) / 100.0);
       if Member.Morale(1) < 25 then
          Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progressmorale")),
-            "Upset");
+           (Gtk_Progress_Bar(Get_Object(Object, "progressmorale")), "Upset");
       elsif Member.Morale(1) > 24 and Member.Morale(1) < 50 then
          Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progressmorale")),
-            "Unhappy");
+           (Gtk_Progress_Bar(Get_Object(Object, "progressmorale")), "Unhappy");
       elsif Member.Morale(1) = 50 then
          Hide(Gtk_Widget(Get_Object(Object, "progressmorale")));
       elsif Member.Morale(1) > 50 and Member.Morale(1) < 75 then
          Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progressmorale")),
-            "Happy");
+           (Gtk_Progress_Bar(Get_Object(Object, "progressmorale")), "Happy");
       elsif Member.Morale(1) > 74 then
          Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progressmorale")),
-            "Excited");
+           (Gtk_Progress_Bar(Get_Object(Object, "progressmorale")), "Excited");
       end if;
       if Member.Skills.Length > 0 and Member.ContractLength /= 0 then
          List := Gtk_List_Store(Get_Object(Object, "statslist"));
@@ -304,16 +286,12 @@ package body Crew.UI.Handlers is
          for I in Member.Attributes.Iterate loop
             Append(List, Iter);
             Set
-              (List,
-               Iter,
-               0,
+              (List, Iter, 0,
                To_String
                  (Attributes_List(Attributes_Container.To_Index(I)).Name));
             Set(List, Iter, 1, Gint(Member.Attributes(I)(1) * 2));
             Set
-              (List,
-               Iter,
-               2,
+              (List, Iter, 2,
                To_String
                  (Attributes_List(Attributes_Container.To_Index(I))
                     .Description));
@@ -379,8 +357,7 @@ package body Crew.UI.Handlers is
    begin
       RefreshInventory;
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Object, "gamestack")),
-         "inventory");
+        (Gtk_Stack(Get_Object(Object, "gamestack")), "inventory");
       Hide(Gtk_Widget(Get_Object(Object, "btnshowhelp")));
       SetActiveItem;
    end ShowInventory;
@@ -396,8 +373,7 @@ package body Crew.UI.Handlers is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treeinventory"))),
-         InventoryModel,
-         InventoryIter);
+         InventoryModel, InventoryIter);
       if InventoryIter = Null_Iter then
          return;
       end if;
@@ -419,15 +395,12 @@ package body Crew.UI.Handlers is
       end if;
       Append
         (ItemInfo,
-         ASCII.LF &
-         "Amount:" &
+         ASCII.LF & "Amount:" &
          Positive'Image
            (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount));
       Append
         (ItemInfo,
-         ASCII.LF &
-         "Weight:" &
-         Positive'Image(Items_List(ProtoIndex).Weight) &
+         ASCII.LF & "Weight:" & Positive'Image(Items_List(ProtoIndex).Weight) &
          " kg");
       Append
         (ItemInfo,
@@ -435,10 +408,8 @@ package body Crew.UI.Handlers is
       if Items_List(ProtoIndex).IType = WeaponType then
          Append
            (ItemInfo,
-            ASCII.LF &
-            "Skill: " &
-            Skills_List(Items_List(ProtoIndex).Value(3)).Name &
-            "/" &
+            ASCII.LF & "Skill: " &
+            Skills_List(Items_List(ProtoIndex).Value(3)).Name & "/" &
             Attributes_List
               (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
               .Name);
@@ -465,8 +436,7 @@ package body Crew.UI.Handlers is
         (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Durability,
          Get_Object(Object, "itemdamagebar"));
       Set_Markup
-        (Gtk_Label(Get_Object(Object, "lbliteminfo")),
-         To_String(ItemInfo));
+        (Gtk_Label(Get_Object(Object, "lbliteminfo")), To_String(ItemInfo));
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
          Set_Label
            (Gtk_Label(Get_Object(Object, "lblitemdescription")),
@@ -478,8 +448,7 @@ package body Crew.UI.Handlers is
       Set_Value(AmountAdj, 1.0);
    end ShowItemInfo2;
 
-   procedure UseItem
-     (Self: access Gtk_Cell_Renderer_Toggle_Record'Class;
+   procedure UseItem(Self: access Gtk_Cell_Renderer_Toggle_Record'Class;
       Path: UTF8_String) is
       pragma Unreferenced(Path);
       Member: constant Member_Data := PlayerShip.Crew(MemberIndex);
@@ -547,8 +516,7 @@ package body Crew.UI.Handlers is
       end if;
       UpdateCargo(PlayerShip, Item.ProtoIndex, Amount, Item.Durability);
       UpdateInventory
-        (MemberIndex => MemberIndex,
-         Amount => (0 - Amount),
+        (MemberIndex => MemberIndex, Amount => (0 - Amount),
          InventoryIndex => ItemIndex);
       if
         (PlayerShip.Crew(MemberIndex).Order = Clean and
@@ -568,10 +536,8 @@ package body Crew.UI.Handlers is
       SetActiveItem;
    end MoveItem;
 
-   procedure GiveCrewOrders
-     (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
-      Path_String: UTF8_String;
-      New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
+   procedure GiveCrewOrders(Self: access Gtk_Cell_Renderer_Combo_Record'Class;
+      Path_String: UTF8_String; New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
       Model: Glib.Types.GType_Interface;
       List: Gtk_List_Store;
       OldMemberIndex: constant Positive := MemberIndex;
@@ -579,8 +545,7 @@ package body Crew.UI.Handlers is
       Model := Get_Property(Self, Gtk.Cell_Renderer_Combo.Model_Property);
       List := -(Gtk_Tree_Model(Model));
       GiveOrders
-        (PlayerShip,
-         (Natural'Value(Path_String) + 1),
+        (PlayerShip, (Natural'Value(Path_String) + 1),
          Crew_Orders'Val(Get_Int(List, New_Iter, 1)),
          Natural(Get_Int(List, New_Iter, 2)));
       RefreshCrewInfo;
@@ -593,9 +558,7 @@ package body Crew.UI.Handlers is
          ShowLastMessage(Builder);
    end GiveCrewOrders;
 
-   function ReducePriority
-     (Model: Gtk_Tree_Model;
-      Path: Gtk_Tree_Path;
+   function ReducePriority(Model: Gtk_Tree_Model; Path: Gtk_Tree_Path;
       Iter: Gtk_Tree_Iter) return Boolean is
    begin
       if Get_String(Model, Iter, 1) = "Highest" then
@@ -608,10 +571,8 @@ package body Crew.UI.Handlers is
       return False;
    end ReducePriority;
 
-   procedure SetPriority
-     (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
-      Path_String: UTF8_String;
-      New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
+   procedure SetPriority(Self: access Gtk_Cell_Renderer_Combo_Record'Class;
+      Path_String: UTF8_String; New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
       Model: Glib.Types.GType_Interface;
       PriorityLevel: Unbounded_String;
       PrioritiesList: constant Gtk_List_Store :=
@@ -622,9 +583,7 @@ package body Crew.UI.Handlers is
       PriorityLevel :=
         To_Unbounded_String(Get_String(Gtk_Tree_Model(Model), New_Iter, 0));
       Set
-        (PrioritiesList,
-         Get_Iter_From_String(PrioritiesList, Path_String),
-         1,
+        (PrioritiesList, Get_Iter_From_String(PrioritiesList, Path_String), 1,
          To_String(PriorityLevel));
       if PriorityLevel = "Highest" then
          Foreach(PrioritiesList, ReducePriority'Access);
@@ -655,17 +614,14 @@ package body Crew.UI.Handlers is
           ("Are you sure want to dismiss this crew member?",
            Gtk_Window(Get_Object(Object, "skymapwindow"))) then
          AddMessage
-           ("You dismissed " &
-            To_String(PlayerShip.Crew(MemberIndex).Name) &
+           ("You dismissed " & To_String(PlayerShip.Crew(MemberIndex).Name) &
             ".",
             OrderMessage);
          DeleteMember(MemberIndex, PlayerShip);
          SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population + 1;
          for I in PlayerShip.Crew.Iterate loop
             UpdateMorale
-              (PlayerShip,
-               Crew_Container.To_Index(I),
-               GetRandom(-5, -1));
+              (PlayerShip, Crew_Container.To_Index(I), GetRandom(-5, -1));
          end loop;
          RefreshCrewInfo;
          ShowLastMessage(Object);

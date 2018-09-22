@@ -38,56 +38,40 @@ package body Bases.SaveLoad is
             RawValue :=
               To_Unbounded_String(Integer'Image(SkyBases(I).Visited.Year));
             Set_Attribute
-              (SubNode,
-               "year",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
+              (SubNode, "year", To_String(Trim(RawValue, Ada.Strings.Left)));
             RawValue :=
               To_Unbounded_String(Integer'Image(SkyBases(I).Visited.Month));
             Set_Attribute
-              (SubNode,
-               "month",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
+              (SubNode, "month", To_String(Trim(RawValue, Ada.Strings.Left)));
             RawValue :=
               To_Unbounded_String(Integer'Image(SkyBases(I).Visited.Day));
             Set_Attribute
-              (SubNode,
-               "day",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
+              (SubNode, "day", To_String(Trim(RawValue, Ada.Strings.Left)));
             RawValue :=
               To_Unbounded_String(Integer'Image(SkyBases(I).Visited.Hour));
             Set_Attribute
-              (SubNode,
-               "hour",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
+              (SubNode, "hour", To_String(Trim(RawValue, Ada.Strings.Left)));
             RawValue :=
               To_Unbounded_String(Integer'Image(SkyBases(I).Visited.Minutes));
             Set_Attribute
-              (SubNode,
-               "minutes",
+              (SubNode, "minutes",
                To_String(Trim(RawValue, Ada.Strings.Left)));
          end if;
          RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).SkyX));
          Set_Attribute
-           (BaseNode,
-            "x",
-            To_String(Trim(RawValue, Ada.Strings.Left)));
+           (BaseNode, "x", To_String(Trim(RawValue, Ada.Strings.Left)));
          RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).SkyY));
          Set_Attribute
-           (BaseNode,
-            "y",
-            To_String(Trim(RawValue, Ada.Strings.Left)));
+           (BaseNode, "y", To_String(Trim(RawValue, Ada.Strings.Left)));
          RawValue :=
            To_Unbounded_String
              (Integer'Image(Bases_Types'Pos(SkyBases(I).BaseType)));
          Set_Attribute
-           (BaseNode,
-            "type",
-            To_String(Trim(RawValue, Ada.Strings.Left)));
+           (BaseNode, "type", To_String(Trim(RawValue, Ada.Strings.Left)));
          RawValue :=
            To_Unbounded_String(Integer'Image(SkyBases(I).Population));
          Set_Attribute
-           (BaseNode,
-            "population",
+           (BaseNode, "population",
             To_String(Trim(RawValue, Ada.Strings.Left)));
          if SkyBases(I).Visited.Year > 0 then
             SubNode := Create_Element(SaveData, "recruitdate");
@@ -95,22 +79,16 @@ package body Bases.SaveLoad is
             RawValue :=
               To_Unbounded_String(Integer'Image(SkyBases(I).RecruitDate.Year));
             Set_Attribute
-              (SubNode,
-               "year",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
+              (SubNode, "year", To_String(Trim(RawValue, Ada.Strings.Left)));
             RawValue :=
               To_Unbounded_String
                 (Integer'Image(SkyBases(I).RecruitDate.Month));
             Set_Attribute
-              (SubNode,
-               "month",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
+              (SubNode, "month", To_String(Trim(RawValue, Ada.Strings.Left)));
             RawValue :=
               To_Unbounded_String(Integer'Image(SkyBases(I).RecruitDate.Day));
             Set_Attribute
-              (SubNode,
-               "day",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
+              (SubNode, "day", To_String(Trim(RawValue, Ada.Strings.Left)));
             if SkyBases(I).Recruits.Length > 0 then
                declare
                   RecruitNode, RecruitDataNode: DOM.Core.Element;
@@ -119,15 +97,12 @@ package body Bases.SaveLoad is
                      RecruitNode := Create_Element(SaveData, "recruit");
                      RecruitNode := Append_Child(BaseNode, RecruitNode);
                      Set_Attribute
-                       (RecruitNode,
-                        "name",
-                        To_String(Recruit.Name));
+                       (RecruitNode, "name", To_String(Recruit.Name));
                      Set_Attribute(RecruitNode, "gender", Recruit.Gender & "");
                      RawValue :=
                        To_Unbounded_String(Integer'Image(Recruit.Price));
                      Set_Attribute
-                       (RecruitNode,
-                        "price",
+                       (RecruitNode, "price",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
                      for Skill of Recruit.Skills loop
                         RecruitDataNode := Create_Element(SaveData, "skill");
@@ -136,20 +111,17 @@ package body Bases.SaveLoad is
                         RawValue :=
                           To_Unbounded_String(Integer'Image(Skill(1)));
                         Set_Attribute
-                          (RecruitDataNode,
-                           "index",
+                          (RecruitDataNode, "index",
                            To_String(Trim(RawValue, Ada.Strings.Left)));
                         RawValue :=
                           To_Unbounded_String(Integer'Image(Skill(2)));
                         Set_Attribute
-                          (RecruitDataNode,
-                           "level",
+                          (RecruitDataNode, "level",
                            To_String(Trim(RawValue, Ada.Strings.Left)));
                         RawValue :=
                           To_Unbounded_String(Integer'Image(Skill(3)));
                         Set_Attribute
-                          (RecruitDataNode,
-                           "experience",
+                          (RecruitDataNode, "experience",
                            To_String(Trim(RawValue, Ada.Strings.Left)));
                      end loop;
                      for Attribute of Recruit.Attributes loop
@@ -160,14 +132,12 @@ package body Bases.SaveLoad is
                         RawValue :=
                           To_Unbounded_String(Integer'Image(Attribute(1)));
                         Set_Attribute
-                          (RecruitDataNode,
-                           "level",
+                          (RecruitDataNode, "level",
                            To_String(Trim(RawValue, Ada.Strings.Left)));
                         RawValue :=
                           To_Unbounded_String(Integer'Image(Attribute(2)));
                         Set_Attribute
-                          (RecruitDataNode,
-                           "experience",
+                          (RecruitDataNode, "experience",
                            To_String(Trim(RawValue, Ada.Strings.Left)));
                      end loop;
                      for Item of Recruit.Inventory loop
@@ -176,8 +146,7 @@ package body Bases.SaveLoad is
                           Append_Child(RecruitNode, RecruitDataNode);
                         RawValue := To_Unbounded_String(Integer'Image(Item));
                         Set_Attribute
-                          (RecruitDataNode,
-                           "index",
+                          (RecruitDataNode, "index",
                            To_String(Trim(RawValue, Ada.Strings.Left)));
                      end loop;
                      for J in Recruit.Equipment'Range loop
@@ -188,33 +157,28 @@ package body Bases.SaveLoad is
                              Append_Child(RecruitNode, RecruitDataNode);
                            RawValue := To_Unbounded_String(Integer'Image(J));
                            Set_Attribute
-                             (RecruitDataNode,
-                              "slot",
+                             (RecruitDataNode, "slot",
                               To_String(Trim(RawValue, Ada.Strings.Left)));
                            RawValue :=
                              To_Unbounded_String
                                (Integer'Image(Recruit.Equipment(J)));
                            Set_Attribute
-                             (RecruitDataNode,
-                              "index",
+                             (RecruitDataNode, "index",
                               To_String(Trim(RawValue, Ada.Strings.Left)));
                         end if;
                      end loop;
                      RawValue :=
                        To_Unbounded_String(Integer'Image(Recruit.Payment));
                      Set_Attribute
-                       (RecruitNode,
-                        "payment",
+                       (RecruitNode, "payment",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
                      RawValue :=
                        To_Unbounded_String(Integer'Image(Recruit.HomeBase));
                      Set_Attribute
-                       (RecruitNode,
-                        "homebase",
+                       (RecruitNode, "homebase",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
                      Set_Attribute
-                       (RecruitNode,
-                        "faction",
+                       (RecruitNode, "faction",
                         To_String(Factions_List(Recruit.Faction).Index));
                   end loop;
                end;
@@ -230,23 +194,17 @@ package body Bases.SaveLoad is
               To_Unbounded_String
                 (Integer'Image(SkyBases(I).AskedForEvents.Year));
             Set_Attribute
-              (SubNode,
-               "year",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
+              (SubNode, "year", To_String(Trim(RawValue, Ada.Strings.Left)));
             RawValue :=
               To_Unbounded_String
                 (Integer'Image(SkyBases(I).AskedForEvents.Month));
             Set_Attribute
-              (SubNode,
-               "month",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
+              (SubNode, "month", To_String(Trim(RawValue, Ada.Strings.Left)));
             RawValue :=
               To_Unbounded_String
                 (Integer'Image(SkyBases(I).AskedForEvents.Day));
             Set_Attribute
-              (SubNode,
-               "day",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
+              (SubNode, "day", To_String(Trim(RawValue, Ada.Strings.Left)));
          end if;
          if SkyBases(I).Reputation(1) /= 0 then
             SubNode := Create_Element(SaveData, "reputation");
@@ -254,14 +212,11 @@ package body Bases.SaveLoad is
             RawValue :=
               To_Unbounded_String(Integer'Image(SkyBases(I).Reputation(1)));
             Set_Attribute
-              (SubNode,
-               "level",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
+              (SubNode, "level", To_String(Trim(RawValue, Ada.Strings.Left)));
             RawValue :=
               To_Unbounded_String(Integer'Image(SkyBases(I).Reputation(2)));
             Set_Attribute
-              (SubNode,
-               "progress",
+              (SubNode, "progress",
                To_String(Trim(RawValue, Ada.Strings.Left)));
          end if;
          if SkyBases(I).Visited.Year > 0 then
@@ -271,22 +226,16 @@ package body Bases.SaveLoad is
               To_Unbounded_String
                 (Integer'Image(SkyBases(I).MissionsDate.Year));
             Set_Attribute
-              (SubNode,
-               "year",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
+              (SubNode, "year", To_String(Trim(RawValue, Ada.Strings.Left)));
             RawValue :=
               To_Unbounded_String
                 (Integer'Image(SkyBases(I).MissionsDate.Month));
             Set_Attribute
-              (SubNode,
-               "month",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
+              (SubNode, "month", To_String(Trim(RawValue, Ada.Strings.Left)));
             RawValue :=
               To_Unbounded_String(Integer'Image(SkyBases(I).MissionsDate.Day));
             Set_Attribute
-              (SubNode,
-               "day",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
+              (SubNode, "day", To_String(Trim(RawValue, Ada.Strings.Left)));
             if SkyBases(I).Missions.Length > 0 then
                declare
                   MissionNode: DOM.Core.Element;
@@ -298,38 +247,32 @@ package body Bases.SaveLoad is
                        To_Unbounded_String
                          (Integer'Image(Missions_Types'Pos(Mission.MType)));
                      Set_Attribute
-                       (MissionNode,
-                        "type",
+                       (MissionNode, "type",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
                      RawValue :=
                        To_Unbounded_String(Integer'Image(Mission.Target));
                      Set_Attribute
-                       (MissionNode,
-                        "target",
+                       (MissionNode, "target",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
                      RawValue :=
                        To_Unbounded_String(Integer'Image(Mission.Time));
                      Set_Attribute
-                       (MissionNode,
-                        "time",
+                       (MissionNode, "time",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
                      RawValue :=
                        To_Unbounded_String(Integer'Image(Mission.TargetX));
                      Set_Attribute
-                       (MissionNode,
-                        "targetx",
+                       (MissionNode, "targetx",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
                      RawValue :=
                        To_Unbounded_String(Integer'Image(Mission.TargetY));
                      Set_Attribute
-                       (MissionNode,
-                        "targety",
+                       (MissionNode, "targety",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
                      RawValue :=
                        To_Unbounded_String(Integer'Image(Mission.Reward));
                      Set_Attribute
-                       (MissionNode,
-                        "reward",
+                       (MissionNode, "reward",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
                   end loop;
                end;
@@ -342,26 +285,22 @@ package body Bases.SaveLoad is
                      ItemNode := Create_Element(SaveData, "item");
                      ItemNode := Append_Child(BaseNode, ItemNode);
                      Set_Attribute
-                       (ItemNode,
-                        "index",
+                       (ItemNode, "index",
                         To_String(Items_List(Item.ProtoIndex).Index));
                      RawValue :=
                        To_Unbounded_String(Integer'Image(Item.Amount));
                      Set_Attribute
-                       (ItemNode,
-                        "amount",
+                       (ItemNode, "amount",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
                      RawValue :=
                        To_Unbounded_String(Integer'Image(Item.Durability));
                      Set_Attribute
-                       (ItemNode,
-                        "durability",
+                       (ItemNode, "durability",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
                      RawValue :=
                        To_Unbounded_String(Integer'Image(Item.Price));
                      Set_Attribute
-                       (ItemNode,
-                        "price",
+                       (ItemNode, "price",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
                   end loop;
                end;
@@ -373,8 +312,7 @@ package body Bases.SaveLoad is
             Set_Attribute(BaseNode, "known", "N");
          end if;
          Set_Attribute
-           (BaseNode,
-            "owner",
+           (BaseNode, "owner",
             To_String(Factions_List(SkyBases(I).Owner).Index));
       end loop;
    end SaveBases;
@@ -401,16 +339,11 @@ package body Bases.SaveLoad is
                 (Integer'Value(Get_Attribute(Item(NodesList, I), "type"))),
             Population =>
               Integer'Value(Get_Attribute(Item(NodesList, I), "y")),
-            RecruitDate => (0, 0, 0, 0, 0),
-            Recruits => BaseRecruits,
-            Known => False,
-            AskedForBases => False,
-            AskedForEvents => (0, 0, 0, 0, 0),
-            Reputation => (0, 0),
-            MissionsDate => (0, 0, 0, 0, 0),
-            Missions => BaseMissions,
-            Owner => 1,
-            Cargo => BaseCargo);
+            RecruitDate => (0, 0, 0, 0, 0), Recruits => BaseRecruits,
+            Known => False, AskedForBases => False,
+            AskedForEvents => (0, 0, 0, 0, 0), Reputation => (0, 0),
+            MissionsDate => (0, 0, 0, 0, 0), Missions => BaseMissions,
+            Owner => 1, Cargo => BaseCargo);
          for J in Factions_List.Iterate loop
             if Factions_List(J).Index =
               To_Unbounded_String
@@ -480,8 +413,7 @@ package body Bases.SaveLoad is
                         Experience :=
                           Natural'Value
                             (Get_Attribute
-                               (Item(RecruitData, L),
-                                "experience"));
+                               (Item(RecruitData, L), "experience"));
                         Skills.Append(New_Item => (Index, Level, Experience));
                      elsif Node_Name(Item(RecruitData, L)) = "attribute" then
                         Level :=
@@ -490,14 +422,13 @@ package body Bases.SaveLoad is
                         Experience :=
                           Natural'Value
                             (Get_Attribute
-                               (Item(RecruitData, L),
-                                "experience"));
+                               (Item(RecruitData, L), "experience"));
                         Attributes.Append(New_Item => (Level, Experience));
                      elsif Node_Name(Item(RecruitData, L)) = "item" then
                         Inventory.Append
-                        (New_Item =>
-                           Positive'Value
-                             (Get_Attribute(Item(RecruitData, L), "index")));
+                          (New_Item =>
+                             Positive'Value
+                               (Get_Attribute(Item(RecruitData, L), "index")));
                      elsif Node_Name(Item(RecruitData, L)) = "equipment" then
                         Equipment
                           (Positive'Value
@@ -520,8 +451,7 @@ package body Bases.SaveLoad is
                            if Factions_List(K).Index =
                              To_Unbounded_String
                                (Get_Attribute
-                                  (Item(BaseData, J),
-                                   "faction")) then
+                                  (Item(BaseData, J), "faction")) then
                               RecruitFaction := Factions_Container.To_Index(K);
                               exit;
                            end if;
@@ -529,17 +459,12 @@ package body Bases.SaveLoad is
                      end if;
                   end loop;
                   SkyBases(BaseIndex).Recruits.Append
-                  (New_Item =>
-                     (Name => RecruitName,
-                      Gender => Gender(1),
-                      Price => Price,
-                      Skills => Skills,
-                      Attributes => Attributes,
-                      Inventory => Inventory,
-                      Equipment => Equipment,
-                      Payment => Payment,
-                      HomeBase => HomeBase,
-                      Faction => RecruitFaction));
+                    (New_Item =>
+                       (Name => RecruitName, Gender => Gender(1),
+                        Price => Price, Skills => Skills,
+                        Attributes => Attributes, Inventory => Inventory,
+                        Equipment => Equipment, Payment => Payment,
+                        HomeBase => HomeBase, Faction => RecruitFaction));
                end;
             elsif Node_Name(Item(BaseData, J)) = "askedforeventsdate" then
                SkyBases(BaseIndex).AskedForEvents.Year :=
@@ -581,15 +506,11 @@ package body Bases.SaveLoad is
                   Reward :=
                     Positive'Value(Get_Attribute(Item(BaseData, J), "reward"));
                   SkyBases(BaseIndex).Missions.Append
-                  (New_Item =>
-                     (MType => MType,
-                      Target => Target,
-                      Time => Time,
-                      TargetX => TargetX,
-                      TargetY => TargetY,
-                      Reward => Reward,
-                      StartBase => BaseIndex,
-                      Finished => False));
+                    (New_Item =>
+                       (MType => MType, Target => Target, Time => Time,
+                        TargetX => TargetX, TargetY => TargetY,
+                        Reward => Reward, StartBase => BaseIndex,
+                        Finished => False));
                end;
             elsif Node_Name(Item(BaseData, J)) = "item" then
                declare
@@ -606,11 +527,9 @@ package body Bases.SaveLoad is
                   Price :=
                     Natural'Value(Get_Attribute(Item(BaseData, J), "price"));
                   SkyBases(BaseIndex).Cargo.Append
-                  (New_Item =>
-                     (ProtoIndex => ProtoIndex,
-                      Amount => Amount,
-                      Durability => Durability,
-                      Price => Price));
+                    (New_Item =>
+                       (ProtoIndex => ProtoIndex, Amount => Amount,
+                        Durability => Durability, Price => Price));
                end;
             end if;
          end loop;

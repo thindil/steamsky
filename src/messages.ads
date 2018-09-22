@@ -22,13 +22,8 @@ with Game; use Game;
 package Messages is
 
    type Message_Type is
-     (Default,
-      CombatMessage,
-      TradeMessage,
-      OrderMessage,
-      CraftMessage,
-      OtherMessage,
-      MissionMessage); -- Types of messages
+     (Default, CombatMessage, TradeMessage, OrderMessage, CraftMessage,
+      OtherMessage, MissionMessage); -- Types of messages
    type Message_Data is -- Data structure for messages
    record
       Message: Unbounded_String; -- Text of message
@@ -43,22 +38,16 @@ package Messages is
      To_Unbounded_String(""); -- Last message received
    function FormatedTime
      (Time: Date_Record := GameDate) return String; -- Format game time
-   procedure AddMessage
-     (Message: String;
-      MType: Message_Type;
+   procedure AddMessage(Message: String; MType: Message_Type;
       Color: Natural := 0); -- Add new message to list
-   function GetMessage
-     (MessageIndex: Integer;
-      MType: Message_Type :=
-        Default)
+   function GetMessage(MessageIndex: Integer;
+      MType: Message_Type := Default)
      return Message_Data; -- Return selected message
    procedure ClearMessages; -- Remove all messages;
    function MessagesAmount
-     (MType: Message_Type :=
-        Default)
+     (MType: Message_Type := Default)
      return Natural; -- Return amount of selected type messages
-   procedure RestoreMessage
-     (Message: Unbounded_String;
+   procedure RestoreMessage(Message: Unbounded_String;
       MType: Message_Type := Default;
       Color: Natural := 0); -- Restore message from save file
    function GetLastMessageIndex return Natural; -- Return last message index

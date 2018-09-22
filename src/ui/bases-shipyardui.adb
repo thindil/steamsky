@@ -52,14 +52,10 @@ package body Bases.ShipyardUI is
             if Modules_List(I).Price > 0 and Modules_List(I).MType = MType then
                Append(ModulesList, ModulesIter);
                Set
-                 (ModulesList,
-                  ModulesIter,
-                  0,
+                 (ModulesList, ModulesIter, 0,
                   To_String(Modules_List(I).Name));
                Set
-                 (ModulesList,
-                  ModulesIter,
-                  1,
+                 (ModulesList, ModulesIter, 1,
                   Gint(BaseModules_Container.To_Index(I)));
             end if;
          end loop;
@@ -81,8 +77,7 @@ package body Bases.ShipyardUI is
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, TreeName)),
          Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, ColumnName)),
-         False);
+         Gtk_Tree_View_Column(Get_Object(Builder, ColumnName)), False);
    end SetActiveModule;
 
    procedure ChangeType(Object: access Gtkada_Builder_Record'Class) is
@@ -104,8 +99,7 @@ package body Bases.ShipyardUI is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treeinstall"))),
-         ModulesModel,
-         ModulesIter);
+         ModulesModel, ModulesIter);
       if ModulesIter = Null_Iter then
          return;
       end if;
@@ -116,36 +110,29 @@ package body Bases.ShipyardUI is
         To_Unbounded_String("Install cost:" & Positive'Image(Cost));
       Append
         (ModuleInfo,
-         ASCII.LF &
-         "Installation time:" &
-         Positive'Image(Modules_List(ModuleIndex).InstallTime) &
-         " minutes");
+         ASCII.LF & "Installation time:" &
+         Positive'Image(Modules_List(ModuleIndex).InstallTime) & " minutes");
       case Modules_List(ModuleIndex).MType is
          when HULL =>
             Append(ModuleInfo, ASCII.LF & "Ship hull can be only replaced.");
             Append
               (ModuleInfo,
-               ASCII.LF &
-               "Modules space:" &
+               ASCII.LF & "Modules space:" &
                Positive'Image(Modules_List(ModuleIndex).MaxValue));
          when ENGINE =>
             Append
               (ModuleInfo,
-               ASCII.LF &
-               "Max power:" &
+               ASCII.LF & "Max power:" &
                Positive'Image(Modules_List(ModuleIndex).MaxValue));
             Append
               (ModuleInfo,
-               ASCII.LF &
-               "Fuel usage:" &
+               ASCII.LF & "Fuel usage:" &
                Positive'Image(Modules_List(ModuleIndex).Value));
          when ShipModules.CARGO =>
             Append
               (ModuleInfo,
-               ASCII.LF &
-               "Max cargo:" &
-               Positive'Image(Modules_List(ModuleIndex).MaxValue) &
-               " kg");
+               ASCII.LF & "Max cargo:" &
+               Positive'Image(Modules_List(ModuleIndex).MaxValue) & " kg");
          when CABIN =>
             Append(ModuleInfo, ASCII.LF & "Quality: ");
             if Modules_List(ModuleIndex).MaxValue < 30 then
@@ -178,17 +165,14 @@ package body Bases.ShipyardUI is
       if Modules_List(ModuleIndex).Size > 0 then
          Append
            (ModuleInfo,
-            ASCII.LF &
-            "Size:" &
+            ASCII.LF & "Size:" &
             Natural'Image(Modules_List(ModuleIndex).Size));
       end if;
       if Modules_List(ModuleIndex).Weight > 0 then
          Append
            (ModuleInfo,
-            ASCII.LF &
-            "Weight:" &
-            Natural'Image(Modules_List(ModuleIndex).Weight) &
-            " kg");
+            ASCII.LF & "Weight:" &
+            Natural'Image(Modules_List(ModuleIndex).Weight) & " kg");
       end if;
       Append(ModuleInfo, ASCII.LF & "Repair/Upgrade material: ");
       MAmount := 0;
@@ -203,8 +187,7 @@ package body Bases.ShipyardUI is
       end loop;
       Append
         (ModuleInfo,
-         ASCII.LF &
-         "Repair/Upgrade skill: " &
+         ASCII.LF & "Repair/Upgrade skill: " &
          To_String(Skills_List(Modules_List(ModuleIndex).RepairSkill).Name) &
          "/" &
          To_String
@@ -223,18 +206,13 @@ package body Bases.ShipyardUI is
       if MoneyIndex2 > 0 then
          InstallInfo :=
            To_Unbounded_String
-             (ASCII.LF &
-              "You have" &
-              Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
-              " " &
-              To_String(MoneyName) &
-              ".");
+             (ASCII.LF & "You have" &
+              Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
+              To_String(MoneyName) & ".");
       else
          InstallInfo :=
            To_Unbounded_String
-             (ASCII.LF &
-              "You don't have any " &
-              To_String(MoneyName) &
+             (ASCII.LF & "You don't have any " & To_String(MoneyName) &
               " to install anything.");
       end if;
       for Module of PlayerShip.Modules loop
@@ -243,11 +221,8 @@ package body Bases.ShipyardUI is
             AllSpace := Module.Data(2);
             Append
               (InstallInfo,
-               ASCII.LF &
-               "You have used" &
-               Natural'Image(UsedSpace) &
-               " modules space from max" &
-               Natural'Image(AllSpace) &
+               ASCII.LF & "You have used" & Natural'Image(UsedSpace) &
+               " modules space from max" & Natural'Image(AllSpace) &
                " allowed.");
             exit;
          end if;
@@ -279,8 +254,7 @@ package body Bases.ShipyardUI is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treeremove"))),
-         ModulesModel,
-         ModulesIter);
+         ModulesModel, ModulesIter);
       if ModulesIter = Null_Iter then
          return;
       end if;
@@ -306,8 +280,7 @@ package body Bases.ShipyardUI is
       ModuleInfo := To_Unbounded_String("Remove gain:" & Positive'Image(Cost));
       Append
         (ModuleInfo,
-         ASCII.LF &
-         "Removing time:" &
+         ASCII.LF & "Removing time:" &
          Positive'Image
            (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
               .InstallTime) &
@@ -316,14 +289,12 @@ package body Bases.ShipyardUI is
          when ENGINE =>
             Append
               (ModuleInfo,
-               ASCII.LF &
-               "Max power:" &
+               ASCII.LF & "Max power:" &
                Positive'Image(PlayerShip.Modules(ModuleIndex).Data(2)));
          when ShipModules.CARGO =>
             Append
               (ModuleInfo,
-               ASCII.LF &
-               "Max cargo:" &
+               ASCII.LF & "Max cargo:" &
                Positive'Image(PlayerShip.Modules(ModuleIndex).Data(2)) &
                " kg");
          when CABIN =>
@@ -360,18 +331,15 @@ package body Bases.ShipyardUI is
       if Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Size > 0 then
          Append
            (ModuleInfo,
-            ASCII.LF &
-            "Size:" &
+            ASCII.LF & "Size:" &
             Natural'Image
               (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Size));
       end if;
       if PlayerShip.Modules(ModuleIndex).Weight > 0 then
          Append
            (ModuleInfo,
-            ASCII.LF &
-            "Weight:" &
-            Natural'Image(PlayerShip.Modules(ModuleIndex).Weight) &
-            " kg");
+            ASCII.LF & "Weight:" &
+            Natural'Image(PlayerShip.Modules(ModuleIndex).Weight) & " kg");
       end if;
       Set_Label
         (Gtk_Label(Get_Object(Object, "lblremoveinfo")),
@@ -407,18 +375,13 @@ package body Bases.ShipyardUI is
       if MoneyIndex2 > 0 then
          RemoveInfo :=
            To_Unbounded_String
-             (ASCII.LF &
-              "You have" &
-              Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
-              " " &
-              To_String(MoneyName) &
-              ".");
+             (ASCII.LF & "You have" &
+              Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
+              To_String(MoneyName) & ".");
       else
          RemoveInfo :=
            To_Unbounded_String
-             (ASCII.LF &
-              "You don't have any " &
-              To_String(MoneyName) &
+             (ASCII.LF & "You don't have any " & To_String(MoneyName) &
               " to install anything.");
       end if;
       for Module of PlayerShip.Modules loop
@@ -427,11 +390,8 @@ package body Bases.ShipyardUI is
             AllSpace := Module.Data(2);
             Append
               (RemoveInfo,
-               ASCII.LF &
-               "You have used" &
-               Natural'Image(UsedSpace) &
-               " modules space from max" &
-               Natural'Image(AllSpace) &
+               ASCII.LF & "You have used" & Natural'Image(UsedSpace) &
+               " modules space from max" & Natural'Image(AllSpace) &
                " allowed.");
             exit;
          end if;
@@ -451,14 +411,10 @@ package body Bases.ShipyardUI is
          if Modules_List(PlayerShip.Modules(I).ProtoIndex).MType /= HULL then
             Append(ModulesList, ModulesIter);
             Set
-              (ModulesList,
-               ModulesIter,
-               0,
+              (ModulesList, ModulesIter, 0,
                To_String(PlayerShip.Modules(I).Name));
             Set
-              (ModulesList,
-               ModulesIter,
-               1,
+              (ModulesList, ModulesIter, 1,
                Gint(Modules_Container.To_Index(I)));
          end if;
       end loop;
@@ -477,8 +433,7 @@ package body Bases.ShipyardUI is
          Get_Selected
            (Gtk.Tree_View.Get_Selection
               (Gtk_Tree_View(Get_Object(Builder, "treeremove"))),
-            ModulesModel,
-            ModulesIter);
+            ModulesModel, ModulesIter);
          Install := False;
       end if;
       Bases.Ship.UpgradeShip(Install, ModuleIndex);
@@ -492,16 +447,12 @@ package body Bases.ShipyardUI is
             ParentWindow);
       when An_Exception : Trade_Not_Enough_Money =>
          ShowDialog
-           ("You don't have enough " &
-            To_String(MoneyName) &
-            " to pay for " &
-            Exception_Message(An_Exception) &
-            ".",
+           ("You don't have enough " & To_String(MoneyName) & " to pay for " &
+            Exception_Message(An_Exception) & ".",
             ParentWindow);
       when An_Exception : BasesShip_Unique_Module =>
          ShowDialog
-           ("You can't install another " &
-            Exception_Message(An_Exception) &
+           ("You can't install another " & Exception_Message(An_Exception) &
             " because you have installed one module that type. Remove old first.",
             ParentWindow);
       when An_Exception : BasesShip_Installation_Error |
@@ -509,14 +460,12 @@ package body Bases.ShipyardUI is
          ShowDialog(Exception_Message(An_Exception), ParentWindow);
       when Trade_No_Free_Cargo =>
          ShowDialog
-           ("You don't have enough free space for " &
-            To_String(MoneyName) &
+           ("You don't have enough free space for " & To_String(MoneyName) &
             " in ship cargo.",
             ParentWindow);
       when Trade_No_Money_In_Base =>
          ShowDialog
-           ("Base don't have enough " &
-            To_String(MoneyName) &
+           ("Base don't have enough " & To_String(MoneyName) &
             " for buy this module.",
             ParentWindow);
    end ManipulateModule;
@@ -536,8 +485,7 @@ package body Bases.ShipyardUI is
       SetInstallModulesList(ANY);
       Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbtypes")), 0);
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "shipyard");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "shipyard");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       ShowLastMessage(Builder);
       SetActiveModule("treeinstall", "columnnames3");

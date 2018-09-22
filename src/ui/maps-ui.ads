@@ -23,21 +23,14 @@ with Ships; use Ships;
 package Maps.UI is
 
    procedure CreateSkyMap; -- Create sky map
-   procedure ShowSkyMap
-     (X: Integer := PlayerShip.SkyX;
+   procedure ShowSkyMap(X: Integer := PlayerShip.SkyX;
       Y: Integer := PlayerShip.SkyY); -- Show sky map
    procedure UpdateHeader; -- Update game header informations
 
 private
 
    Builder: Gtkada_Builder; -- Gtk builder for user interface
-   MapWidth,
-   MapHeight,
-   CenterX,
-   CenterY,
-   MapCellWidth,
-   MapCellHeight,
-   MapX,
+   MapWidth, MapHeight, CenterX, CenterY, MapCellWidth, MapCellHeight, MapX,
    MapY: Positive;
    StartX, StartY: Integer;
    ButtonsVisible: Boolean := False;

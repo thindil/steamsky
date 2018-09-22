@@ -94,13 +94,9 @@ package body MainMenu is
          Set(SavesList, Iter, 0, Slice(Tokens, 1));
          Set(SavesList, Iter, 1, Slice(Tokens, 2));
          Set
-           (SavesList,
-            Iter,
-            2,
+           (SavesList, Iter, 2,
             Ada.Calendar.Formatting.Image
-              (Modification_Time(FoundFile),
-               False,
-               UTC_Time_Offset));
+              (Modification_Time(FoundFile), False, UTC_Time_Offset));
          Set(SavesList, Iter, 3, Full_Name(FoundFile));
       end loop;
       End_Search(Files);
@@ -123,8 +119,7 @@ package body MainMenu is
          end if;
          CreateGoalsMenu;
          Set_Visible_Child_Name
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
-            "page1");
+           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page1");
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "entrycharactername")));
       elsif User_Data = Get_Object(Builder, "btnback") then
          declare
@@ -138,8 +133,7 @@ package body MainMenu is
             end if;
          end;
          Set_Visible_Child_Name
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
-            "page0");
+           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page0");
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
       elsif User_Data = Get_Object(Builder, "btnhalloffame") then
          declare
@@ -155,36 +149,29 @@ package body MainMenu is
                Set(HofList, Iter, 1, To_String(HallOfFame_Array(I).Name));
                Set(HofList, Iter, 2, Gint(HallOfFame_Array(I).Points));
                Set
-                 (HofList,
-                  Iter,
-                  3,
+                 (HofList, Iter, 3,
                   To_String(HallOfFame_Array(I).DeathReason));
             end loop;
          end;
          Set_Visible_Child_Name
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
-            "page2");
+           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page2");
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback2")));
       elsif User_Data = Get_Object(Builder, "btnnews") then
          Set_Visible_Child_Name
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
-            "page3");
+           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page3");
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnfull")));
       elsif User_Data = Get_Object(Builder, "btnabout") then
          Set_Visible_Child_Name
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
-            "page4");
+           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page4");
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback4")));
       elsif User_Data = Get_Object(Builder, "btnlicense") then
          Set_Visible_Child_Name
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
-            "page5");
+           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback5")));
       elsif User_Data = Get_Object(Builder, "btnloadgame") then
          RefreshSavesList;
          Set_Visible_Child_Name
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
-            "page6");
+           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page6");
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnload")));
          Set_Cursor
            (Gtk_Tree_View(Get_Object(Builder, "treesaves")),
@@ -203,8 +190,7 @@ package body MainMenu is
          NewsText :=
            To_Unbounded_String
              ("Can't find changelog file. Did 'CHANGELOG.md' file is in '" &
-              To_String(DocDirectory) &
-              "' directory?");
+              To_String(DocDirectory) & "' directory?");
       else
          Open(ChangesFile, In_File, To_String(DocDirectory) & "CHANGELOG.md");
          Set_Line(ChangesFile, 6);
@@ -233,8 +219,7 @@ package body MainMenu is
             "Show only newest changes");
       else
          Set_Label
-           (Gtk_Button(Get_Object(Object, "btnfull")),
-            "Show all changes");
+           (Gtk_Button(Get_Object(Object, "btnfull")), "Show all changes");
       end if;
    end ShowAllNews;
 
@@ -284,8 +269,7 @@ package body MainMenu is
    begin
       Get_Selected
         (Get_Selection(Gtk_Tree_View(Get_Object(Object, "treesaves"))),
-         SavesModel,
-         SavesIter);
+         SavesModel, SavesIter);
       if SavesIter = Null_Iter then
          return;
       end if;
@@ -317,10 +301,8 @@ package body MainMenu is
          end if;
       end loop;
       NewGame
-        (To_Unbounded_String(CharacterName),
-         To_Unbounded_String(ShipName),
-         Gender,
-         FactionIndex,
+        (To_Unbounded_String(CharacterName), To_Unbounded_String(ShipName),
+         Gender, FactionIndex,
          Positive
            (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbcareer"))) + 1));
       StartGame;
@@ -334,8 +316,7 @@ package body MainMenu is
          LicenseText :=
            To_Unbounded_String
              ("Can't find license file. Did 'COPYING' file is in '" &
-              To_String(DocDirectory) &
-              "' directory?");
+              To_String(DocDirectory) & "' directory?");
       else
          Open(LicenseFile, In_File, To_String(DocDirectory) & "COPYING");
          while not End_Of_File(LicenseFile) loop
@@ -360,8 +341,7 @@ package body MainMenu is
       end if;
       Get_Selected
         (Get_Selection(Gtk_Tree_View(Get_Object(Object, "treesaves"))),
-         SavesModel,
-         SavesIter);
+         SavesModel, SavesIter);
       if SavesIter = Null_Iter then
          return;
       end if;
@@ -394,7 +374,7 @@ package body MainMenu is
         (Gtk_Label(Get_Object(Builder, "lblfactioninfo")),
          To_String(Factions_List(FactionIndex).Description));
       if Factions_List(FactionIndex).Flags.Contains
-        (To_Unbounded_String("nogender")) then
+          (To_Unbounded_String("nogender")) then
          Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbgender")), 0);
          Hide(Gtk_Widget(Get_Object(Object, "cmbgender")));
          Hide(Gtk_Widget(Get_Object(Object, "lblgender")));
@@ -441,9 +421,7 @@ package body MainMenu is
          return;
       end if;
       Add_Provider_For_Screen
-        (Get_Default_Screen(Get_Default),
-         +(CssProvider),
-         Guint'Last);
+        (Get_Default_Screen(Get_Default), +(CssProvider), Guint'Last);
       Gtk_New(Builder);
       if Add_From_File
           (Builder,
@@ -463,13 +441,9 @@ package body MainMenu is
       Register_Handler(Builder, "Show_Page", ShowPage'Access);
       Register_Handler(Builder, "Delete_Game", DeleteGame'Access);
       Register_Handler
-        (Builder,
-         "Show_Faction_Description",
-         ShowFactionDescription'Access);
+        (Builder, "Show_Faction_Description", ShowFactionDescription'Access);
       Register_Handler
-        (Builder,
-         "Show_Career_Description",
-         ShowCareerDescription'Access);
+        (Builder, "Show_Career_Description", ShowCareerDescription'Access);
       Do_Connect(Builder);
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
       if HallOfFame_Array(1).Name = Null_Unbounded_String then
@@ -508,9 +482,7 @@ package body MainMenu is
    begin
       Set_Label
         (Label,
-         Get_Label(Label) &
-         " from '" &
-         To_String(DataDirectory) &
+         Get_Label(Label) & " from '" & To_String(DataDirectory) &
          "' directory.");
       Set_Text
         (Gtk_Text_Buffer(Get_Object(Builder, "errorbuffer")),
@@ -528,8 +500,7 @@ package body MainMenu is
    begin
       Show_All(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
-         "page0");
+        (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page0");
       Start_Search(Files, To_String(SaveDirectory), "*.sav");
       if not More_Entries(Files) then
          Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
@@ -543,8 +514,7 @@ package body MainMenu is
       end if;
    end ShowMainMenu;
 
-   procedure SaveException
-     (An_Exception: Exception_Occurrence;
+   procedure SaveException(An_Exception: Exception_Occurrence;
       PrintToTerminal: Boolean) is
       ErrorFile: File_Type;
       ErrorText: Unbounded_String;
@@ -556,9 +526,7 @@ package body MainMenu is
          Open(ErrorFile, Append_File, To_String(SaveDirectory) & "error.log");
       else
          Create
-           (ErrorFile,
-            Append_File,
-            To_String(SaveDirectory) & "error.log");
+           (ErrorFile, Append_File, To_String(SaveDirectory) & "error.log");
       end if;
       Append(ErrorText, Ada.Calendar.Formatting.Image(Clock));
       Append(ErrorText, ASCII.LF);

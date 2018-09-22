@@ -25,19 +25,8 @@ package Crew is
    type Skill_Array is array(1 .. 3) of Natural;
    package Skills_Container is new Vectors(Positive, Skill_Array);
    type Crew_Orders is
-     (Pilot,
-      Engineer,
-      Gunner,
-      Repair,
-      Craft,
-      Upgrading,
-      Talk,
-      Heal,
-      Clean,
-      Rest,
-      Defend,
-      Boarding,
-      Train);
+     (Pilot, Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean,
+      Rest, Defend, Boarding, Train);
    type Orders_Array is array(1 .. 11) of Natural;
    type Attributes_Array is array(1 .. 2) of Natural;
    type Equipment_Array is array(1 .. 7) of Natural;
@@ -79,15 +68,12 @@ package Crew is
    Crew_Order_Error: exception; -- Raised when new order can't be set for selected crew member
    Crew_No_Space_Error: exception; -- Raised when no space for new item in crew member inventory
 
-   procedure GainExp
-     (Amount: Natural;
+   procedure GainExp(Amount: Natural;
       SkillNumber, CrewIndex: Positive); -- Gain experience in selected skill.
-   function GenerateMemberName
-     (Gender: Character;
+   function GenerateMemberName(Gender: Character;
       FactionIndex: Unbounded_String)
      return Unbounded_String; -- Generate random name for crew member
-   procedure UpdateCrew
-     (Minutes: Positive;
+   procedure UpdateCrew(Minutes: Positive;
       TiredPoints: Natural); -- Update ship crew
    procedure WaitForRest; -- Wait until whole crew is rested
    function GetSkillLevelName

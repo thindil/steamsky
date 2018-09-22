@@ -31,23 +31,15 @@ with Bases; use Bases;
 
 package body Ships is
 
-   function CreateShip
-     (ProtoIndex: Positive;
-      Name: Unbounded_String;
-      X, Y: Integer;
-      Speed: ShipSpeed;
+   function CreateShip(ProtoIndex: Positive; Name: Unbounded_String;
+      X, Y: Integer; Speed: ShipSpeed;
       RandomUpgrades: Boolean := True) return ShipRecord is
       TmpShip: ShipRecord;
       ShipModules: Modules_Container.Vector;
       ShipCrew: Crew_Container.Vector;
       NewName: Unbounded_String;
-      TurretIndex,
-      GunIndex,
-      HullIndex,
-      Amount,
-      UpgradesAmount,
-      WeightGain: Natural :=
-        0;
+      TurretIndex, GunIndex, HullIndex, Amount, UpgradesAmount,
+      WeightGain: Natural := 0;
       Gender: Character;
       MemberName: Unbounded_String;
       TmpSkills: Skills_Container.Vector;
@@ -83,8 +75,7 @@ package body Ships is
                        (WeightGain *
                         (TempModule.Durability -
                          Modules_List(Module).Durability));
-                  when
-                      51 ..
+                  when 51 ..
                         75 => -- Upgrade value (depends on module) of module
                      if Modules_List(Module).MType = ENGINE then
                         WeightGain := WeightGain * 10;
@@ -97,8 +88,7 @@ package body Ships is
                           (WeightGain *
                            (Modules_List(Module).Value - TempModule.Value));
                      end if;
-                  when
-                      76 ..
+                  when 76 ..
                         100 => -- Upgrade max_value (depends on module) of module
                      case Modules_List(Module).MType is
                         when HULL =>
@@ -109,8 +99,7 @@ package body Ships is
                            null;
                      end case;
                      if TempModule.MType = ENGINE or
-                       TempModule.MType = CABIN or
-                       TempModule.MType = GUN or
+                       TempModule.MType = CABIN or TempModule.MType = GUN or
                        TempModule.MType = BATTERING_RAM or
                        TempModule.MType = HULL or
                        TempModule.MType = HARPOON_GUN then
@@ -131,16 +120,13 @@ package body Ships is
             end if;
          end if;
          ShipModules.Append
-         (New_Item =>
-            (Name => Modules_List(Module).Name,
-             ProtoIndex => Module,
-             Weight => TempModule.Weight,
-             Durability => TempModule.Durability,
-             MaxDurability => TempModule.Durability,
-             Owner => 0,
-             UpgradeProgress => 0,
-             UpgradeAction => NONE,
-             Data => (TempModule.Value, TempModule.MaxValue, 0)));
+           (New_Item =>
+              (Name => Modules_List(Module).Name, ProtoIndex => Module,
+               Weight => TempModule.Weight,
+               Durability => TempModule.Durability,
+               MaxDurability => TempModule.Durability, Owner => 0,
+               UpgradeProgress => 0, UpgradeAction => NONE,
+               Data => (TempModule.Value, TempModule.MaxValue, 0)));
       end loop;
       if Name = Null_Unbounded_String then
          NewName := ProtoShip.Name;
@@ -159,11 +145,10 @@ package body Ships is
             else
                MemberFaction :=
                  GetRandom
-                   (Factions_List.First_Index,
-                    Factions_List.Last_Index);
+                   (Factions_List.First_Index, Factions_List.Last_Index);
             end if;
             if not Factions_List(MemberFaction).Flags.Contains
-              (To_Unbounded_String("nogender")) then
+                (To_Unbounded_String("nogender")) then
                if GetRandom(1, 100) < 50 then
                   Gender := 'M';
                else
@@ -180,7 +165,7 @@ package body Ships is
                   TmpSkills.Append(New_Item => Skill);
                else
                   TmpSkills.Append
-                  (New_Item => (Skill(1), GetRandom(Skill(2), Skill(3)), 0));
+                    (New_Item => (Skill(1), GetRandom(Skill(2), Skill(3)), 0));
                end if;
             end loop;
             for Attribute of Member.Attributes loop
@@ -188,7 +173,7 @@ package body Ships is
                   TmpAttributes.Append(New_Item => Attribute);
                else
                   TmpAttributes.Append
-                  (New_Item => (GetRandom(Attribute(1), Attribute(2)), 0));
+                    (New_Item => (GetRandom(Attribute(1), Attribute(2)), 0));
                end if;
             end loop;
             for Item of Member.Inventory loop
@@ -198,34 +183,20 @@ package body Ships is
                   Amount := Item(2);
                end if;
                TmpInventory.Append
-               (New_Item =>
-                  (ProtoIndex => Item(1),
-                   Amount => Amount,
-                   Name => Null_Unbounded_String,
-                   Durability => 100));
+                 (New_Item =>
+                    (ProtoIndex => Item(1), Amount => Amount,
+                     Name => Null_Unbounded_String, Durability => 100));
             end loop;
             ShipCrew.Append
-            (New_Item =>
-               (Name => MemberName,
-                Gender => Gender,
-                Health => 100,
-                Tired => 0,
-                Skills => TmpSkills,
-                Hunger => 0,
-                Thirst => 0,
-                Order => Member.Order,
-                PreviousOrder => Rest,
-                OrderTime => 15,
-                Orders => Member.Priorities,
-                Attributes => TmpAttributes,
-                Inventory => TmpInventory,
-                Equipment => Member.Equipment,
-                Payment => (20, 0),
-                ContractLength => -1,
-                Morale => (50, 0),
-                Loyalty => 100,
-                HomeBase => 1,
-                Faction => MemberFaction));
+              (New_Item =>
+                 (Name => MemberName, Gender => Gender, Health => 100,
+                  Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0,
+                  Order => Member.Order, PreviousOrder => Rest,
+                  OrderTime => 15, Orders => Member.Priorities,
+                  Attributes => TmpAttributes, Inventory => TmpInventory,
+                  Equipment => Member.Equipment, Payment => (20, 0),
+                  ContractLength => -1, Morale => (50, 0), Loyalty => 100,
+                  HomeBase => 1, Faction => MemberFaction));
             TmpSkills.Clear;
             TmpAttributes.Clear;
             TmpInventory.Clear;
@@ -261,25 +232,15 @@ package body Ships is
             Amount := Item(2);
          end if;
          ShipCargo.Append
-         (New_Item =>
-            (ProtoIndex => Item(1),
-             Amount => Amount,
-             Name => Null_Unbounded_String,
-             Durability => 100));
+           (New_Item =>
+              (ProtoIndex => Item(1), Amount => Amount,
+               Name => Null_Unbounded_String, Durability => 100));
       end loop;
       TmpShip :=
-        (Name => NewName,
-         SkyX => X,
-         SkyY => Y,
-         Speed => Speed,
-         Modules => ShipModules,
-         Cargo => ShipCargo,
-         Crew => ShipCrew,
-         UpgradeModule => 0,
-         DestinationX => 0,
-         DestinationY => 0,
-         RepairModule => 0,
-         Description => ProtoShip.Description,
+        (Name => NewName, SkyX => X, SkyY => Y, Speed => Speed,
+         Modules => ShipModules, Cargo => ShipCargo, Crew => ShipCrew,
+         UpgradeModule => 0, DestinationX => 0, DestinationY => 0,
+         RepairModule => 0, Description => ProtoShip.Description,
          HomeBase => 0);
       Amount := 0;
       for I in TmpShip.Modules.Iterate loop
@@ -324,7 +285,7 @@ package body Ships is
          if EndY > 1024 then
             EndY := 1024;
          end if;
-         Bases_Loop:
+         Bases_Loop :
          for SkyX in StartX .. EndX loop
             for SkyY in StartY .. EndY loop
                if SkyMap(SkyX, SkyY).BaseIndex > 0 then
@@ -377,20 +338,12 @@ package body Ships is
       end CountAmmoValue;
    begin
       TempRecord :=
-        (Name => Null_Unbounded_String,
-         Modules => TempModules,
-         Accuracy => (0, 0),
-         CombatAI => NONE,
-         Evasion => (0, 0),
-         Loot => (0, 0),
-         Perception => (0, 0),
-         Cargo => TempCargo,
-         CombatValue => 1,
-         Crew => TempCrew,
-         Description => Null_Unbounded_String,
-         Owner => 1,
-         Index => Null_Unbounded_String,
-         KnownRecipes => TempRecipes);
+        (Name => Null_Unbounded_String, Modules => TempModules,
+         Accuracy => (0, 0), CombatAI => NONE, Evasion => (0, 0),
+         Loot => (0, 0), Perception => (0, 0), Cargo => TempCargo,
+         CombatValue => 1, Crew => TempCrew,
+         Description => Null_Unbounded_String, Owner => 1,
+         Index => Null_Unbounded_String, KnownRecipes => TempRecipes);
       ShipsData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(ShipsData, "ship");
@@ -401,8 +354,7 @@ package body Ships is
            To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name"));
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I),
-              "module");
+             (Item(NodesList, I), "module");
          for J in 0 .. Length(ChildNodes) - 1 loop
             if Get_Attribute(Item(ChildNodes, J), "amount") /= "" then
                ModuleAmount :=
@@ -417,13 +369,11 @@ package body Ships is
             if Index = 0 then
                raise Ships_Invalid_Data
                  with "Invalid module index: |" &
-                 Get_Attribute(Item(ChildNodes, J), "index") &
-                 "| in " &
-                 To_String(TempRecord.Name) &
-                 ".";
+                 Get_Attribute(Item(ChildNodes, J), "index") & "| in " &
+                 To_String(TempRecord.Name) & ".";
             end if;
             TempRecord.Modules.Append
-            (New_Item => Index, Count => Count_Type(ModuleAmount));
+              (New_Item => Index, Count => Count_Type(ModuleAmount));
          end loop;
          if Get_Attribute(Item(NodesList, I), "accuracy") /= "" then
             TempRecord.Accuracy(1) :=
@@ -470,8 +420,7 @@ package body Ships is
          end if;
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I),
-              "cargo");
+             (Item(NodesList, I), "cargo");
          for J in 0 .. Length(ChildNodes) - 1 loop
             Index :=
               FindProtoItem
@@ -480,25 +429,24 @@ package body Ships is
             if Index = 0 then
                raise Ships_Invalid_Data
                  with "Invalid item index: |" &
-                 Get_Attribute(Item(ChildNodes, J), "index") &
-                 "| in " &
-                 To_String(TempRecord.Name) &
-                 ".";
+                 Get_Attribute(Item(ChildNodes, J), "index") & "| in " &
+                 To_String(TempRecord.Name) & ".";
             end if;
             if Get_Attribute(Item(ChildNodes, J), "amount") /= "" then
                TempRecord.Cargo.Append
-               (New_Item =>
-                  (Index,
-                   Integer'Value(Get_Attribute(Item(ChildNodes, J), "amount")),
-                   0));
+                 (New_Item =>
+                    (Index,
+                     Integer'Value
+                       (Get_Attribute(Item(ChildNodes, J), "amount")),
+                     0));
             elsif Get_Attribute(Item(ChildNodes, J), "minamount") /= "" then
                TempRecord.Cargo.Append
-               (New_Item =>
-                  (Index,
-                   Integer'Value
-                     (Get_Attribute(Item(ChildNodes, J), "minamount")),
-                   Integer'Value
-                     (Get_Attribute(Item(ChildNodes, J), "maxamount"))));
+                 (New_Item =>
+                    (Index,
+                     Integer'Value
+                       (Get_Attribute(Item(ChildNodes, J), "minamount")),
+                     Integer'Value
+                       (Get_Attribute(Item(ChildNodes, J), "maxamount"))));
             end if;
          end loop;
          if Get_Attribute(Item(NodesList, I), "owner") /= "" then
@@ -512,8 +460,7 @@ package body Ships is
          end if;
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I),
-              "recipe");
+             (Item(NodesList, I), "recipe");
          for J in 0 .. Length(ChildNodes) - 1 loop
             Index :=
               FindRecipe
@@ -522,17 +469,14 @@ package body Ships is
             if Index = 0 then
                raise Ships_Invalid_Data
                  with "Invalid recipe index: |" &
-                 Get_Attribute(Item(ChildNodes, J), "index") &
-                 "| in " &
-                 To_String(TempRecord.Name) &
-                 ".";
+                 Get_Attribute(Item(ChildNodes, J), "index") & "| in " &
+                 To_String(TempRecord.Name) & ".";
             end if;
             TempRecord.KnownRecipes.Append(New_Item => Index);
          end loop;
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I),
-              "member");
+             (Item(NodesList, I), "member");
          for J in 0 .. Length(ChildNodes) - 1 loop
             Index :=
               FindProtoMob
@@ -541,33 +485,31 @@ package body Ships is
             if Index = 0 then
                raise Ships_Invalid_Data
                  with "Invalid mob index: |" &
-                 Get_Attribute(Item(ChildNodes, J), "index") &
-                 "| in " &
-                 To_String(TempRecord.Name) &
-                 ".";
+                 Get_Attribute(Item(ChildNodes, J), "index") & "| in " &
+                 To_String(TempRecord.Name) & ".";
             end if;
             if Get_Attribute(Item(ChildNodes, J), "amount") /= "" then
                TempRecord.Crew.Append
-               (New_Item =>
-                  (Index,
-                   Integer'Value(Get_Attribute(Item(ChildNodes, J), "amount")),
-                   0));
+                 (New_Item =>
+                    (Index,
+                     Integer'Value
+                       (Get_Attribute(Item(ChildNodes, J), "amount")),
+                     0));
             elsif Get_Attribute(Item(ChildNodes, J), "minamount") /= "" then
                TempRecord.Crew.Append
-               (New_Item =>
-                  (Index,
-                   Integer'Value
-                     (Get_Attribute(Item(ChildNodes, J), "minamount")),
-                   Integer'Value
-                     (Get_Attribute(Item(ChildNodes, J), "maxamount"))));
+                 (New_Item =>
+                    (Index,
+                     Integer'Value
+                       (Get_Attribute(Item(ChildNodes, J), "minamount")),
+                     Integer'Value
+                       (Get_Attribute(Item(ChildNodes, J), "maxamount"))));
             else
                TempRecord.Crew.Append(New_Item => (Index, 1, 0));
             end if;
          end loop;
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I),
-              "description");
+             (Item(NodesList, I), "description");
          if Length(ChildNodes) > 0 then
             TempRecord.Description :=
               To_Unbounded_String
@@ -601,8 +543,7 @@ package body Ships is
          if Get_Attribute(Item(NodesList, I), "remove") = "" then
             ProtoShips_List.Append(New_Item => TempRecord);
             LogMessage
-              ("Ship added: " & To_String(TempRecord.Name),
-               Everything);
+              ("Ship added: " & To_String(TempRecord.Name), Everything);
          else
             RemoveIndex :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "remove"));
@@ -616,20 +557,12 @@ package body Ships is
             LogMessage("Ship removed: " & To_String(RemoveIndex), Everything);
          end if;
          TempRecord :=
-           (Name => Null_Unbounded_String,
-            Modules => TempModules,
-            Accuracy => (0, 0),
-            CombatAI => NONE,
-            Evasion => (0, 0),
-            Loot => (0, 0),
-            Perception => (0, 0),
-            Cargo => TempCargo,
-            CombatValue => 1,
-            Crew => TempCrew,
-            Description => Null_Unbounded_String,
-            Owner => 1,
-            Index => Null_Unbounded_String,
-            KnownRecipes => TempRecipes);
+           (Name => Null_Unbounded_String, Modules => TempModules,
+            Accuracy => (0, 0), CombatAI => NONE, Evasion => (0, 0),
+            Loot => (0, 0), Perception => (0, 0), Cargo => TempCargo,
+            CombatValue => 1, Crew => TempCrew,
+            Description => Null_Unbounded_String, Owner => 1,
+            Index => Null_Unbounded_String, KnownRecipes => TempRecipes);
       end loop;
    end LoadShips;
 
