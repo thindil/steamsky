@@ -23,7 +23,7 @@ with Bases.Cargo; use Bases.Cargo;
 with Maps; use Maps;
 with Ships; use Ships;
 with Ships.Upgrade; use Ships.Upgrade;
-with Ships.Repairs; use Ships.Repairs;
+with Ships.Repairs;
 with Ships.Crew; use Ships.Crew;
 with Crew; use Crew;
 with Messages; use Messages;
