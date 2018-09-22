@@ -18,15 +18,11 @@
 package Bases.Cargo is
 
    procedure GenerateCargo; -- Generate base cargo
-   procedure UpdateBaseCargo
-     (ProtoIndex: Natural := 0;
-      Amount: Integer;
+   procedure UpdateBaseCargo(ProtoIndex: Natural := 0; Amount: Integer;
       Durability: Natural := 100;
       CargoIndex: Natural := 0); -- Update cargo in base
-   function FindBaseCargo
-     (ProtoIndex: Positive;
-      Durability: Natural :=
-        101)
+   function FindBaseCargo(ProtoIndex: Positive;
+      Durability: Natural := 101)
      return Natural; -- Find index of item in base cargo, return 0 if no item found
 
 end Bases.Cargo;

@@ -47,8 +47,7 @@ package body Statistics.UI is
       if GameState = SkyMap_View then
          ShowSkyMap;
          Set_Visible_Child_Name
-           (Gtk_Stack(Get_Object(Builder, "gamestack")),
-            "skymap");
+           (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
          Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), True);
       else
          Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
@@ -90,11 +89,8 @@ package body Statistics.UI is
    begin
       GameState := OldState;
       MinutesDiff :=
-        (GameDate.Minutes +
-         (GameDate.Hour * 60) +
-         (GameDate.Day * 1440) +
-         (GameDate.Month * 43200) +
-         (GameDate.Year * 518400)) -
+        (GameDate.Minutes + (GameDate.Hour * 60) + (GameDate.Day * 1440) +
+         (GameDate.Month * 43200) + (GameDate.Year * 518400)) -
         829571520;
       while MinutesDiff > 0 loop
          if MinutesDiff >= 518400 then
@@ -118,52 +114,35 @@ package body Statistics.UI is
         To_Unbounded_String("Points:" & Natural'Image(GameStats.Points));
       Append
         (StatsText,
-         ASCII.LF &
-         "Time passed:" &
-         Natural'Image(TimePassed.Year) &
-         "y," &
-         Natural'Image(TimePassed.Month) &
-         "m," &
-         Natural'Image(TimePassed.Day) &
-         "d," &
-         Natural'Image(TimePassed.Hour) &
-         "h," &
-         Natural'Image(TimePassed.Minutes) &
-         "mins");
+         ASCII.LF & "Time passed:" & Natural'Image(TimePassed.Year) & "y," &
+         Natural'Image(TimePassed.Month) & "m," &
+         Natural'Image(TimePassed.Day) & "d," &
+         Natural'Image(TimePassed.Hour) & "h," &
+         Natural'Image(TimePassed.Minutes) & "mins");
       VisitedPercent :=
         (VisitedFactor(GameStats.BasesVisited) / 1024.0) * 100.0;
       Put
-        (To => VisitedString,
-         Item => Float(VisitedPercent),
-         Aft => 3,
+        (To => VisitedString, Item => Float(VisitedPercent), Aft => 3,
          Exp => 0);
       Append
         (StatsText,
-         ASCII.LF &
-         "Bases visited:" &
-         Positive'Image(GameStats.BasesVisited) &
-         " (" &
-         VisitedString &
-         "%)");
+         ASCII.LF & "Bases visited:" & Positive'Image(GameStats.BasesVisited) &
+         " (" & VisitedString & "%)");
       VisitedPercent :=
         VisitedFactor(Float(GameStats.MapVisited) / (1024.0 * 1024.0)) * 100.0;
       if VisitedPercent < 0.001 then
          VisitedPercent := 0.001;
       end if;
       Put
-        (To => VisitedString,
-         Item => Float(VisitedPercent),
-         Aft => 3,
+        (To => VisitedString, Item => Float(VisitedPercent), Aft => 3,
          Exp => 0);
       Append(StatsText, ASCII.LF & "Map discovered: " & VisitedString & "%");
       Append
         (StatsText,
-         ASCII.LF &
-         "Distance traveled:" &
+         ASCII.LF & "Distance traveled:" &
          Natural'Image(GameStats.DistanceTraveled));
       Set_Label
-        (Gtk_Label(Get_Object(Builder, "lblstats")),
-         To_String(StatsText));
+        (Gtk_Label(Get_Object(Builder, "lblstats")), To_String(StatsText));
       TotalFinished := 0;
       for CraftingOrder of GameStats.CraftingOrders loop
          TotalFinished := TotalFinished + CraftingOrder.Amount;
@@ -195,9 +174,7 @@ package body Statistics.UI is
       end if;
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblmissions")),
-         "_Missions completed:" &
-         Natural'Image(TotalFinished) &
-         " (" &
+         "_Missions completed:" & Natural'Image(TotalFinished) & " (" &
          To_String
            (Trim
               (To_Unbounded_String(Natural'Image(MissionsPercent)),
@@ -229,8 +206,7 @@ package body Statistics.UI is
         (Gtk_Button(Get_Object(Builder, "btngoals")),
          "Current _goal: " & GoalText(0));
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "gamestats");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "gamestats");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Hide(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       if GameStats.DestroyedShips.Length > 0 then
@@ -315,8 +291,7 @@ package body Statistics.UI is
             "_Killed enemies (Total:" & Natural'Image(TotalDestroyed) & ")");
       else
          Set_Sensitive
-           (Gtk_Widget(Get_Object(Builder, "expkilledmobs")),
-            False);
+           (Gtk_Widget(Get_Object(Builder, "expkilledmobs")), False);
          Set_Label
            (Gtk_Label(Get_Object(Builder, "lblkilledstat")),
             "Killed enemies: none");

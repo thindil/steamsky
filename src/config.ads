@@ -27,9 +27,7 @@ package Config is
       ShipName: Unbounded_String; -- Default ship name
    end record;
    type AutoMoveBreak is
-     (NEVER,
-      ANY,
-      FRIENDLY,
+     (NEVER, ANY, FRIENDLY,
       ENEMY); -- Options when stop auto move of player ship
    type GameSettingsRecord is -- Data for game settings
    record

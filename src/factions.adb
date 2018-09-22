@@ -39,21 +39,14 @@ package body Factions is
       TmpCareer: CareerRecord;
    begin
       TempRecord :=
-        (Index => Null_Unbounded_String,
-         Name => Null_Unbounded_String,
+        (Index => Null_Unbounded_String, Name => Null_Unbounded_String,
          MemberName => Null_Unbounded_String,
-         PluralMemberName => Null_Unbounded_String,
-         SpawnChance => 0,
-         Population => (0, 0),
-         NamesType => To_Unbounded_String("standard"),
-         Relations => TmpRelations,
-         Description => Null_Unbounded_String,
-         FoodTypes => TmpFood,
-         DrinksTypes => TmpFood,
-         HealingTools => Null_Unbounded_String,
-         HealingSkill => 1,
-         Flags => TmpFood,
-         Careers => TmpCareers);
+         PluralMemberName => Null_Unbounded_String, SpawnChance => 0,
+         Population => (0, 0), NamesType => To_Unbounded_String("standard"),
+         Relations => TmpRelations, Description => Null_Unbounded_String,
+         FoodTypes => TmpFood, DrinksTypes => TmpFood,
+         HealingTools => Null_Unbounded_String, HealingSkill => 1,
+         Flags => TmpFood, Careers => TmpCareers);
       FactionsData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(FactionsData, "faction");
@@ -106,8 +99,7 @@ package body Factions is
          end if;
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I),
-              "relation");
+             (Item(NodesList, I), "relation");
          for J in 0 .. Length(ChildNodes) - 1 loop
             TmpRelation.TargetFaction :=
               To_Unbounded_String
@@ -133,8 +125,7 @@ package body Factions is
          end loop;
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I),
-              "description");
+             (Item(NodesList, I), "description");
          if Length(ChildNodes) > 0 then
             TempRecord.Description :=
               To_Unbounded_String
@@ -142,38 +133,34 @@ package body Factions is
          end if;
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I),
-              "foodtype");
+             (Item(NodesList, I), "foodtype");
          for J in 0 .. Length(ChildNodes) - 1 loop
             TempRecord.FoodTypes.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(ChildNodes, J), "name")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(ChildNodes, J), "name")));
          end loop;
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I),
-              "drinktype");
+             (Item(NodesList, I), "drinktype");
          for J in 0 .. Length(ChildNodes) - 1 loop
             TempRecord.DrinksTypes.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(ChildNodes, J), "name")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(ChildNodes, J), "name")));
          end loop;
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I),
-              "flag");
+             (Item(NodesList, I), "flag");
          for J in 0 .. Length(ChildNodes) - 1 loop
             TempRecord.Flags.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(ChildNodes, J), "name")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(ChildNodes, J), "name")));
          end loop;
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I),
-              "career");
+             (Item(NodesList, I), "career");
          for J in 0 .. Length(ChildNodes) - 1 loop
             TmpCareer.Index :=
               To_Unbounded_String(Get_Attribute(Item(ChildNodes, J), "index"));
@@ -203,8 +190,7 @@ package body Factions is
          if Get_Attribute(Item(NodesList, I), "remove") = "" then
             Factions_List.Append(New_Item => TempRecord);
             LogMessage
-              ("Faction added: " & To_String(TempRecord.Name),
-               Everything);
+              ("Faction added: " & To_String(TempRecord.Name), Everything);
          else
             RemoveIndex :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "remove"));
@@ -216,25 +202,17 @@ package body Factions is
             end loop;
             Factions_List.Delete(Index => DeleteIndex);
             LogMessage
-              ("Faction removed: " & To_String(RemoveIndex),
-               Everything);
+              ("Faction removed: " & To_String(RemoveIndex), Everything);
          end if;
          TempRecord :=
-           (Index => Null_Unbounded_String,
-            Name => Null_Unbounded_String,
+           (Index => Null_Unbounded_String, Name => Null_Unbounded_String,
             MemberName => Null_Unbounded_String,
-            PluralMemberName => Null_Unbounded_String,
-            SpawnChance => 0,
-            Population => (0, 0),
-            NamesType => To_Unbounded_String("standard"),
-            Relations => TmpRelations,
-            Description => Null_Unbounded_String,
-            FoodTypes => TmpFood,
-            DrinksTypes => TmpFood,
-            HealingTools => Null_Unbounded_String,
-            HealingSkill => 1,
-            Flags => TmpFood,
-            Careers => TmpCareers);
+            PluralMemberName => Null_Unbounded_String, SpawnChance => 0,
+            Population => (0, 0), NamesType => To_Unbounded_String("standard"),
+            Relations => TmpRelations, Description => Null_Unbounded_String,
+            FoodTypes => TmpFood, DrinksTypes => TmpFood,
+            HealingTools => Null_Unbounded_String, HealingSkill => 1,
+            Flags => TmpFood, Careers => TmpCareers);
       end loop;
    end LoadFactions;
 
@@ -251,8 +229,7 @@ package body Factions is
                      return Target.Reputation(1);
                   else
                      return GetRandom
-                         (Target.Reputation(1),
-                          Target.Reputation(2));
+                         (Target.Reputation(1), Target.Reputation(2));
                   end if;
                end if;
             end loop;

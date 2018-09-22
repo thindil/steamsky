@@ -30,20 +30,11 @@ package body ShipModules is
       TempRecord: BaseModule_Data;
    begin
       TempRecord :=
-        (Name => Null_Unbounded_String,
-         MType => ENGINE,
-         Weight => 0,
-         Value => 0,
-         MaxValue => 0,
-         Durability => 0,
-         RepairMaterial => Null_Unbounded_String,
-         RepairSkill => 2,
-         Price => 0,
-         InstallTime => 60,
-         Unique => False,
-         Size => 0,
-         Description => Null_Unbounded_String,
-         Index => Null_Unbounded_String);
+        (Name => Null_Unbounded_String, MType => ENGINE, Weight => 0,
+         Value => 0, MaxValue => 0, Durability => 0,
+         RepairMaterial => Null_Unbounded_String, RepairSkill => 2, Price => 0,
+         InstallTime => 60, Unique => False, Size => 0,
+         Description => Null_Unbounded_String, Index => Null_Unbounded_String);
       ModulesData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(ModulesData, "module");
@@ -87,32 +78,23 @@ package body ShipModules is
          if Get_Attribute(Item(NodesList, I), "remove") = "" then
             Modules_List.Append(New_Item => TempRecord);
             LogMessage
-              ("Module added: " & To_String(TempRecord.Name),
-               Everything);
+              ("Module added: " & To_String(TempRecord.Name), Everything);
          else
             Modules_List.Delete
-            (Index =>
-               FindProtoModule
-                 (To_Unbounded_String
-                    (Get_Attribute(Item(NodesList, I), "remove"))));
+              (Index =>
+                 FindProtoModule
+                   (To_Unbounded_String
+                      (Get_Attribute(Item(NodesList, I), "remove"))));
             LogMessage
               ("Module removed: " &
                Get_Attribute(Item(NodesList, I), "remove"),
                Everything);
          end if;
          TempRecord :=
-           (Name => Null_Unbounded_String,
-            MType => ENGINE,
-            Weight => 0,
-            Value => 0,
-            MaxValue => 0,
-            Durability => 0,
-            RepairMaterial => Null_Unbounded_String,
-            RepairSkill => 2,
-            Price => 0,
-            InstallTime => 60,
-            Unique => False,
-            Size => 0,
+           (Name => Null_Unbounded_String, MType => ENGINE, Weight => 0,
+            Value => 0, MaxValue => 0, Durability => 0,
+            RepairMaterial => Null_Unbounded_String, RepairSkill => 2,
+            Price => 0, InstallTime => 60, Unique => False, Size => 0,
             Description => Null_Unbounded_String,
             Index => Null_Unbounded_String);
       end loop;

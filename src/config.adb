@@ -27,25 +27,14 @@ package body Config is
       EqualIndex: Natural;
    begin
       NewGameSettings :=
-        (PlayerName => To_Unbounded_String("Laeran"),
-         PlayerGender => 'M',
+        (PlayerName => To_Unbounded_String("Laeran"), PlayerGender => 'M',
          ShipName => To_Unbounded_String("Anaria"));
       GameSettings :=
-        (AutoRest => True,
-         UndockSpeed => FULL_SPEED,
-         AutoCenter => True,
-         AutoReturn => True,
-         AutoFinish => True,
-         LowFuel => 100,
-         LowDrinks => 50,
-         LowFood => 25,
-         AutoMoveStop => NEVER,
-         WindowWidth => 800,
-         WindowHeight => 600,
-         AnimationsEnabled => 1,
-         AnimationType => 1,
-         MessagesLimit => 500,
-         SavedMessages => 10);
+        (AutoRest => True, UndockSpeed => FULL_SPEED, AutoCenter => True,
+         AutoReturn => True, AutoFinish => True, LowFuel => 100,
+         LowDrinks => 50, LowFood => 25, AutoMoveStop => NEVER,
+         WindowWidth => 800, WindowHeight => 600, AnimationsEnabled => 1,
+         AnimationType => 1, MessagesLimit => 500, SavedMessages => 10);
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
@@ -124,12 +113,10 @@ package body Config is
    begin
       Create(ConfigFile, Append_File, To_String(SaveDirectory) & "game.cfg");
       Put_Line
-        (ConfigFile,
-         "PlayerName = " & To_String(NewGameSettings.PlayerName));
+        (ConfigFile, "PlayerName = " & To_String(NewGameSettings.PlayerName));
       Put_Line(ConfigFile, "PlayerGender = " & NewGameSettings.PlayerGender);
       Put_Line
-        (ConfigFile,
-         "ShipName = " & To_String(NewGameSettings.ShipName));
+        (ConfigFile, "ShipName = " & To_String(NewGameSettings.ShipName));
       if GameSettings.AutoRest then
          Put_Line(ConfigFile, "AutoRest = Yes");
       else
@@ -155,8 +142,7 @@ package body Config is
       end if;
       Put_Line(ConfigFile, "LowFuel =" & Positive'Image(GameSettings.LowFuel));
       Put_Line
-        (ConfigFile,
-         "LowDrinks =" & Positive'Image(GameSettings.LowDrinks));
+        (ConfigFile, "LowDrinks =" & Positive'Image(GameSettings.LowDrinks));
       Put_Line(ConfigFile, "LowFood =" & Positive'Image(GameSettings.LowFood));
       Put_Line
         (ConfigFile,

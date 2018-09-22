@@ -78,14 +78,12 @@ package body Crafts.UI is
       when An_Exception : Crafting_No_Materials =>
          ShowDialog
            ("You don't have enough materials to start manufacturing " &
-            Exception_Message(An_Exception) &
-            ".",
+            Exception_Message(An_Exception) & ".",
             Gtk_Window(Get_Object(Object, "skymapwindow")));
       when An_Exception : Crafting_No_Tools =>
          ShowDialog
            ("You don't have the proper tool to start manufacturing " &
-            Exception_Message(An_Exception) &
-            ".",
+            Exception_Message(An_Exception) & ".",
             Gtk_Window(Get_Object(Object, "skymapwindow")));
       when Trade_No_Free_Cargo =>
          ShowDialog
@@ -94,8 +92,7 @@ package body Crafts.UI is
       when An_Exception : Crafting_No_Workshop =>
          ShowDialog
            ("You don't have proper a workplace to start manufacturing " &
-            Exception_Message(An_Exception) &
-            ".",
+            Exception_Message(An_Exception) & ".",
             Gtk_Window(Get_Object(Object, "skymapwindow")));
    end ShowSetRecipe;
 
@@ -112,8 +109,7 @@ package body Crafts.UI is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treerecipes"))),
-         RecipesModel,
-         RecipesIter);
+         RecipesModel, RecipesIter);
       if RecipesIter = Null_Iter then
          return;
       end if;
@@ -122,7 +118,7 @@ package body Crafts.UI is
          Recipe := Recipes_List(RecipeIndex);
       else
          Recipe.MaterialTypes.Append
-         (New_Item => Items_List(abs (RecipeIndex)).IType);
+           (New_Item => Items_List(abs (RecipeIndex)).IType);
          Recipe.MaterialAmounts.Append(New_Item => 1);
          Recipe.ResultIndex := abs (RecipeIndex);
          Recipe.ResultAmount := 0;
@@ -146,7 +142,7 @@ package body Crafts.UI is
       Append(RecipeInfo, "Materials needed: ");
       for I in
         Recipe.MaterialTypes.First_Index ..
-            Recipe.MaterialTypes.Last_Index loop
+          Recipe.MaterialTypes.Last_Index loop
          Append(RecipeInfo, ASCII.LF & "-");
          MAmount := 0;
          HaveMaterials := False;
@@ -174,8 +170,7 @@ package body Crafts.UI is
                end if;
                Append
                  (RecipeInfo,
-                  Integer'Image(Recipe.MaterialAmounts(I)) &
-                  "x" &
+                  Integer'Image(Recipe.MaterialAmounts(I)) & "x" &
                   To_String(Items_List(J).Name));
                if CargoIndex > 0 then
                   TextLength :=
@@ -250,9 +245,7 @@ package body Crafts.UI is
       end if;
       Append
         (RecipeInfo,
-         ASCII.LF &
-         "Skill: " &
-         To_String(Skills_List(Recipe.Skill).Name) &
+         ASCII.LF & "Skill: " & To_String(Skills_List(Recipe.Skill).Name) &
          "/" &
          To_String(Attributes_List(Skills_List(Recipe.Skill).Attribute).Name));
       Append
@@ -334,9 +327,7 @@ package body Crafts.UI is
       for I in Known_Recipes.First_Index .. Known_Recipes.Last_Index loop
          Append(RecipesList, RecipesIter);
          Set
-           (RecipesList,
-            RecipesIter,
-            0,
+           (RecipesList, RecipesIter, 0,
             To_String
               (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex).Name));
          Set(RecipesList, RecipesIter, 1, Gint(Known_Recipes.Element(I)));
@@ -344,22 +335,18 @@ package body Crafts.UI is
       for I in Deconstructs.First_Index .. Deconstructs.Last_Index loop
          Append(RecipesList, RecipesIter);
          Set
-           (RecipesList,
-            RecipesIter,
-            0,
+           (RecipesList, RecipesIter, 0,
             "Deconstruct " & To_String(Items_List(Deconstructs(I)).Name));
          Set(RecipesList, RecipesIter, 1, Gint(0 - Deconstructs(I)));
       end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "crafts");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "crafts");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treerecipes")),
          Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columnname2")),
-         False);
+         Gtk_Tree_View_Column(Get_Object(Builder, "columnname2")), False);
       ShowLastMessage(Builder);
    end ShowCraftsUI;
 

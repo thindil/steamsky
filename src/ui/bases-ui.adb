@@ -59,15 +59,14 @@ package body Bases.UI is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treerecruits"))),
-         RecruitModel,
-         RecruitIter);
+         RecruitModel, RecruitIter);
       if RecruitIter = Null_Iter then
          return;
       end if;
       RecruitIndex := Positive(Get_Int(RecruitModel, RecruitIter, 1));
       Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
       if not Factions_List(Recruit.Faction).Flags.Contains
-        (To_Unbounded_String("nogender")) then
+          (To_Unbounded_String("nogender")) then
          if Recruit.Gender = 'M' then
             RecruitInfo := To_Unbounded_String("Gender: Male");
          else
@@ -86,15 +85,11 @@ package body Bases.UI is
       for I in Recruit.Attributes.Iterate loop
          Append(List, Iter);
          Set
-           (List,
-            Iter,
-            0,
+           (List, Iter, 0,
             To_String(Attributes_List(Attributes_Container.To_Index(I)).Name));
          Set(List, Iter, 1, Gint(Recruit.Attributes(I)(1) * 2));
          Set
-           (List,
-            Iter,
-            2,
+           (List, Iter, 2,
             To_String
               (Attributes_List(Attributes_Container.To_Index(I)).Description));
       end loop;
@@ -105,13 +100,10 @@ package body Bases.UI is
          Set(List, Iter, 0, To_String(Skills_List(Skill(1)).Name));
          Set(List, Iter, 1, Gint(Skill(2)));
          Set
-           (List,
-            Iter,
-            2,
+           (List, Iter, 2,
             "Related statistic: " &
             To_String(Attributes_List(Skills_List(Skill(1)).Attribute).Name) &
-            ". " &
-            To_String(Skills_List(Skill(1)).Description));
+            ". " & To_String(Skills_List(Skill(1)).Description));
       end loop;
       List := Gtk_List_Store(Get_Object(Object, "equipmentlist"));
       Clear(List);
@@ -122,25 +114,16 @@ package body Bases.UI is
       RecruitInfo := To_Unbounded_String("Starting offer:");
       Append
         (RecruitInfo,
-         ASCII.LF &
-         "Payment:" &
-         Natural'Image(Recruit.Payment) &
-         " " &
-         To_String(MoneyName) &
-         " each day.");
+         ASCII.LF & "Payment:" & Natural'Image(Recruit.Payment) & " " &
+         To_String(MoneyName) & " each day.");
       Cost := Recruit.Price;
       CountPrice(Cost, FindMember(Talk));
       Append
         (RecruitInfo,
-         ASCII.LF &
-         "One time fee:" &
-         Positive'Image(Cost) &
-         " " &
-         To_String(MoneyName) &
-         ".");
+         ASCII.LF & "One time fee:" & Positive'Image(Cost) & " " &
+         To_String(MoneyName) & ".");
       Set_Label
-        (Gtk_Label(Get_Object(Object, "lblpayment")),
-         To_String(RecruitInfo));
+        (Gtk_Label(Get_Object(Object, "lblpayment")), To_String(RecruitInfo));
    end ShowRecruitInfo;
 
    procedure SetActiveRow(TreeViewName, ColumnName: String) is
@@ -148,8 +131,7 @@ package body Bases.UI is
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, TreeViewName)),
          Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, ColumnName)),
-         False);
+         Gtk_Tree_View_Column(Get_Object(Builder, ColumnName)), False);
    end SetActiveRow;
 
    procedure Hire(Object: access Gtkada_Builder_Record'Class) is
@@ -172,14 +154,12 @@ package body Bases.UI is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treerecruits"))),
-         RecruitModel,
-         RecruitIter);
+         RecruitModel, RecruitIter);
       RecruitIndex :=
         Natural'Value(To_String(Get_Path(RecruitModel, RecruitIter))) + 1;
       Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
       Cost :=
-        Recruit.Price -
-        ((DailyPayment - Recruit.Payment) * 50) -
+        Recruit.Price - ((DailyPayment - Recruit.Payment) * 50) -
         (TradePayment * 5000);
       case ContractLength is
          when 1 =>
@@ -202,11 +182,7 @@ package body Bases.UI is
       end if;
       Hide(Gtk_Widget(Get_Object(Object, "negotiatewindow")));
       HireRecruit
-        (RecruitIndex,
-         Cost,
-         DailyPayment,
-         TradePayment,
-         ContractLength2);
+        (RecruitIndex, Cost, DailyPayment, TradePayment, ContractLength2);
       Remove(-(RecruitModel), RecruitIter);
       SetActiveRow("treerecruits", "columnname");
       ShowLastMessage(Object);
@@ -228,8 +204,7 @@ package body Bases.UI is
       begin
          ShowSkyMap;
          Set_Visible_Child_Name
-           (Gtk_Stack(Get_Object(Builder, "gamestack")),
-            "skymap");
+           (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
          Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), True);
       end ShowMap;
       procedure FormatTime is
@@ -263,8 +238,7 @@ package body Bases.UI is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treebases1"))),
-         Model,
-         Iter);
+         Model, Iter);
       case CurrentState is
          when RECIPES =>
             if N_Children(Model, Null_Iter) = 0 then
@@ -304,17 +278,14 @@ package body Bases.UI is
                Cost :=
                  Items_List(Recipes_List(ObjectIndex).ResultIndex).Prices
                    (BaseType) *
-                 Recipes_List(ObjectIndex).Difficulty *
-                 100;
+                 Recipes_List(ObjectIndex).Difficulty * 100;
             else
                Cost := Recipes_List(ObjectIndex).Difficulty * 100;
             end if;
             CountPrice(Cost, FindMember(Talk));
             Set_Label
               (Gtk_Label(Get_Object(Object, "lblbaseinfo2")),
-               "Base price:" &
-               Positive'Image(Cost) &
-               " " &
+               "Base price:" & Positive'Image(Cost) & " " &
                To_String(MoneyName));
          when REPAIRS =>
             RepairCost(Cost, Time, ObjectIndex);
@@ -322,24 +293,16 @@ package body Bases.UI is
             FormatTime;
             Set_Label
               (Gtk_Label(Get_Object(Object, "lblbaseinfo2")),
-               "Repair cost:" &
-               Natural'Image(Cost) &
-               " " &
-               To_String(MoneyName) &
-               ASCII.LF &
-               "Repair time:" &
+               "Repair cost:" & Natural'Image(Cost) & " " &
+               To_String(MoneyName) & ASCII.LF & "Repair time:" &
                To_String(FormattedTime));
          when HEAL =>
             HealCost(Cost, Time, ObjectIndex);
             FormatTime;
             Set_Label
               (Gtk_Label(Get_Object(Object, "lblbaseinfo2")),
-               "Heal cost:" &
-               Natural'Image(Cost) &
-               " " &
-               To_String(MoneyName) &
-               ASCII.LF &
-               "Heal time:" &
+               "Heal cost:" & Natural'Image(Cost) & " " &
+               To_String(MoneyName) & ASCII.LF & "Heal time:" &
                To_String(FormattedTime));
          when CLEARING =>
             null;
@@ -348,19 +311,14 @@ package body Bases.UI is
       if MoneyIndex2 > 0 then
          Set_Label
            (Gtk_Label(Get_Object(Object, "lblmoneyamount")),
-            "You have" &
-            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
-            " " &
-            To_String(MoneyName) &
-            ".");
+            "You have" & Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
+            " " & To_String(MoneyName) & ".");
          if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
             Set_Sensitive
-              (Gtk_Widget(Get_Object(Object, "btnacceptbase")),
-               False);
+              (Gtk_Widget(Get_Object(Object, "btnacceptbase")), False);
          else
             Set_Sensitive
-              (Gtk_Widget(Get_Object(Object, "btnacceptbase")),
-               True);
+              (Gtk_Widget(Get_Object(Object, "btnacceptbase")), True);
          end if;
       else
          Set_Sensitive(Gtk_Widget(Get_Object(Object, "btnacceptbase")), False);
@@ -377,8 +335,7 @@ package body Bases.UI is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treebases1"))),
-         Model,
-         Iter);
+         Model, Iter);
       if Iter = Null_Iter then
          return;
       end if;
@@ -410,8 +367,7 @@ package body Bases.UI is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treerecruits"))),
-         RecruitModel,
-         RecruitIter);
+         RecruitModel, RecruitIter);
       if RecruitIter = Null_Iter then
          return;
       end if;
@@ -431,27 +387,21 @@ package body Bases.UI is
       if MoneyIndex2 > 0 then
          Set_Label
            (Gtk_Label(Get_Object(Object, "lblrecruitmoney")),
-            "You have" &
-            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
-            " " &
-            To_String(MoneyName) &
-            ".");
+            "You have" & Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
+            " " & To_String(MoneyName) & ".");
          if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
             Set_Sensitive
-              (Gtk_Widget(Get_Object(Object, "btnhirerecruit")),
-               False);
+              (Gtk_Widget(Get_Object(Object, "btnhirerecruit")), False);
          else
             Set_Sensitive
-              (Gtk_Widget(Get_Object(Object, "btnhirerecruit")),
-               True);
+              (Gtk_Widget(Get_Object(Object, "btnhirerecruit")), True);
          end if;
       else
          Set_Label
            (Gtk_Label(Get_Object(Object, "lblrecruitmoney")),
             "You don't have enough money to recruit anyone");
          Set_Sensitive
-           (Gtk_Widget(Get_Object(Object, "btnhirerecruit")),
-            False);
+           (Gtk_Widget(Get_Object(Object, "btnhirerecruit")), False);
       end if;
       Show_All(Gtk_Widget(Get_Object(Object, "negotiatewindow")));
    end StartNegotiations;
@@ -478,16 +428,14 @@ package body Bases.UI is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treerecruits"))),
-         RecruitModel,
-         RecruitIter);
+         RecruitModel, RecruitIter);
       if RecruitIter = Null_Iter then
          return;
       end if;
       RecruitIndex := Positive(Get_Int(RecruitModel, RecruitIter, 1));
       Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
       Cost :=
-        Recruit.Price -
-        ((DailyPayment - Recruit.Payment) * 50) -
+        Recruit.Price - ((DailyPayment - Recruit.Payment) * 50) -
         (TradePayment * 5000);
       case ContractLength is
          when 1 =>
@@ -511,12 +459,10 @@ package body Bases.UI is
       if MoneyIndex2 > 0 then
          if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
             Set_Sensitive
-              (Gtk_Widget(Get_Object(Object, "btnhirerecruit")),
-               False);
+              (Gtk_Widget(Get_Object(Object, "btnhirerecruit")), False);
          else
             Set_Sensitive
-              (Gtk_Widget(Get_Object(Object, "btnhirerecruit")),
-               True);
+              (Gtk_Widget(Get_Object(Object, "btnhirerecruit")), True);
          end if;
       end if;
    end NegotiateHire;
@@ -529,9 +475,7 @@ package body Bases.UI is
       Register_Handler(Builder, "Object_Selected", ObjectSelected'Access);
       Register_Handler(Builder, "Accept_Action", AcceptAction'Access);
       Register_Handler
-        (Builder,
-         "Start_Negotiations",
-         StartNegotiations'Access);
+        (Builder, "Start_Negotiations", StartNegotiations'Access);
       Register_Handler(Builder, "Negotiate_Hire", NegotiateHire'Access);
    end CreateBasesUI;
 
@@ -546,16 +490,13 @@ package body Bases.UI is
       for I in SkyBases(BaseIndex).Recruits.Iterate loop
          Append(RecruitList, RecruitIter);
          Set
-           (RecruitList,
-            RecruitIter,
-            0,
+           (RecruitList, RecruitIter, 0,
             To_String(SkyBases(BaseIndex).Recruits(I).Name));
          Set(RecruitList, RecruitIter, 1, Gint(Recruit_Container.To_Index(I)));
       end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "recruit");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "recruit");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       SetActiveRow("treerecruits", "columnname");
       ShowLastMessage(Builder);
@@ -579,23 +520,17 @@ package body Bases.UI is
              Positive_Container.No_Index then
             Append(RecipesList, RecipesIter);
             Set
-              (RecipesList,
-               RecipesIter,
-               0,
+              (RecipesList, RecipesIter, 0,
                To_String(Items_List(Recipes_List(I).ResultIndex).Name));
             Set
-              (RecipesList,
-               RecipesIter,
-               1,
+              (RecipesList, RecipesIter, 1,
                Gint(Recipes_Container.To_Index(I)));
          end if;
       end loop;
       Set_Label
-        (Gtk_Button(Get_Object(Builder, "btnacceptbase")),
-         "_Buy recipe");
+        (Gtk_Button(Get_Object(Builder, "btnacceptbase")), "_Buy recipe");
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "base");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "base");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       SetActiveRow("treebases1", "columnbases");
       ShowLastMessage(Builder);
@@ -616,14 +551,10 @@ package body Bases.UI is
            PlayerShip.Modules(I).MaxDurability then
             Append(RepairsList, RepairsIter);
             Set
-              (RepairsList,
-               RepairsIter,
-               0,
+              (RepairsList, RepairsIter, 0,
                To_String(PlayerShip.Modules(I).Name));
             Set
-              (RepairsList,
-               RepairsIter,
-               1,
+              (RepairsList, RepairsIter, 1,
                Gint(Modules_Container.To_Index(I)));
          end if;
       end loop;
@@ -641,11 +572,9 @@ package body Bases.UI is
          Set(RepairsList, RepairsIter, 1, -2);
       end if;
       Set_Label
-        (Gtk_Button(Get_Object(Builder, "btnacceptbase")),
-         "_Buy repairs");
+        (Gtk_Button(Get_Object(Builder, "btnacceptbase")), "_Buy repairs");
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "base");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "base");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       SetActiveRow("treebases1", "columnbases");
       ShowLastMessage(Builder);
@@ -670,11 +599,9 @@ package body Bases.UI is
       Set(HealsList, HealsIter, 0, "Heal all wounded crew members");
       Set(HealsList, HealsIter, 1, 0);
       Set_Label
-        (Gtk_Button(Get_Object(Builder, "btnacceptbase")),
-         "_Buy healing");
+        (Gtk_Button(Get_Object(Builder, "btnacceptbase")), "_Buy healing");
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "base");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "base");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       SetActiveRow("treebases1", "columnbases");
       ShowLastMessage(Builder);

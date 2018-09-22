@@ -52,19 +52,18 @@ package body Bases.Cargo is
       end if;
       if SkyBases(BaseIndex).Cargo.Length = 0 then
          SkyBases(BaseIndex).Cargo.Append
-         (New_Item =>
-            (ProtoIndex => FindProtoItem(MoneyIndex),
-             Amount => (GetRandom(50, 200) * Population),
-             Durability => 100,
-             Price => 0));
+           (New_Item =>
+              (ProtoIndex => FindProtoItem(MoneyIndex),
+               Amount => (GetRandom(50, 200) * Population), Durability => 100,
+               Price => 0));
          for I in Items_List.Iterate loop
             if Items_List(I).Buyable(BaseType) then
                SkyBases(BaseIndex).Cargo.Append
-               (New_Item =>
-                  (ProtoIndex => Objects_Container.To_Index(I),
-                   Amount => (GetRandom(0, 100) * Population),
-                   Durability => 100,
-                   Price => Items_List(I).Prices(BaseType)));
+                 (New_Item =>
+                    (ProtoIndex => Objects_Container.To_Index(I),
+                     Amount => (GetRandom(0, 100) * Population),
+                     Durability => 100,
+                     Price => Items_List(I).Prices(BaseType)));
             end if;
          end loop;
       else
@@ -91,11 +90,8 @@ package body Bases.Cargo is
       end if;
    end GenerateCargo;
 
-   procedure UpdateBaseCargo
-     (ProtoIndex: Natural := 0;
-      Amount: Integer;
-      Durability: Natural := 100;
-      CargoIndex: Natural := 0) is
+   procedure UpdateBaseCargo(ProtoIndex: Natural := 0; Amount: Integer;
+      Durability: Natural := 100; CargoIndex: Natural := 0) is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=
@@ -110,11 +106,10 @@ package body Bases.Cargo is
       if Amount > 0 then
          if ItemIndex = 0 then
             SkyBases(BaseIndex).Cargo.Append
-            (New_Item =>
-               (ProtoIndex => ProtoIndex,
-                Amount => Amount,
-                Durability => Durability,
-                Price => Items_List(ProtoIndex).Prices(BaseType)));
+              (New_Item =>
+                 (ProtoIndex => ProtoIndex, Amount => Amount,
+                  Durability => Durability,
+                  Price => Items_List(ProtoIndex).Prices(BaseType)));
          else
             SkyBases(BaseIndex).Cargo(ItemIndex).Amount :=
               SkyBases(BaseIndex).Cargo(ItemIndex).Amount + Amount;
@@ -132,8 +127,7 @@ package body Bases.Cargo is
       end if;
    end UpdateBaseCargo;
 
-   function FindBaseCargo
-     (ProtoIndex: Positive;
+   function FindBaseCargo(ProtoIndex: Positive;
       Durability: Natural := 101) return Natural is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;

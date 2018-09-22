@@ -18,8 +18,7 @@
 package Utils is
 
    function GetRandom
-     (Min,
-      Max: Integer)
+     (Min, Max: Integer)
      return Integer; -- Return random number from Min to Max range
 
 end Utils;

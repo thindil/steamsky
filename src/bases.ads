@@ -43,8 +43,8 @@ package Bases is
    package Recruit_Container is new Vectors(Positive, Recruit_Data);
    type Reputation_Array is
      array
-     (1 ..
-          2) of Integer; -- Data structure for reputation, 1 = level, 2 = points to next level
+       (1 ..
+            2) of Integer; -- Data structure for reputation, 1 = level, 2 = points to next level
    type Base_Cargo is -- Data structure for bases cargo
    record
       ProtoIndex: Positive; -- Index of item prototype
@@ -78,12 +78,9 @@ package Bases is
    BaseSyllablesEnd: UnboundedString_Container.Vector;
    BaseSyllablesPost: UnboundedString_Container.Vector;
 
-   procedure GainRep
-     (BaseIndex: Positive;
+   procedure GainRep(BaseIndex: Positive;
       Points: Integer); -- Gain reputation in selected base
-   procedure CountPrice
-     (Price: in out Positive;
-      TraderIndex: Natural;
+   procedure CountPrice(Price: in out Positive; TraderIndex: Natural;
       Reduce: Boolean :=
         True); -- Count price for actions with bases (buying/selling/docking/ect)
    function GenerateBaseName

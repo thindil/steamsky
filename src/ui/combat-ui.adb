@@ -54,18 +54,13 @@ package body Combat.UI is
 
    Builder: Gtkada_Builder;
    PilotOrders: constant array(1 .. 4) of Unbounded_String :=
-     (To_Unbounded_String("Go closer"),
-      To_Unbounded_String("Keep distance"),
-      To_Unbounded_String("Evade"),
-      To_Unbounded_String("Escape"));
+     (To_Unbounded_String("Go closer"), To_Unbounded_String("Keep distance"),
+      To_Unbounded_String("Evade"), To_Unbounded_String("Escape"));
    EngineerOrders: constant array(1 .. 4) of Unbounded_String :=
-     (To_Unbounded_String("All stop"),
-      To_Unbounded_String("Quarter speed"),
-      To_Unbounded_String("Half speed"),
-      To_Unbounded_String("Full speed"));
+     (To_Unbounded_String("All stop"), To_Unbounded_String("Quarter speed"),
+      To_Unbounded_String("Half speed"), To_Unbounded_String("Full speed"));
    GunnerOrders: constant array(1 .. 6) of Unbounded_String :=
-     (To_Unbounded_String("Don't shoot"),
-      To_Unbounded_String("Precise fire"),
+     (To_Unbounded_String("Don't shoot"), To_Unbounded_String("Precise fire"),
       To_Unbounded_String("Fire at will"),
       To_Unbounded_String("Aim for their engine"),
       To_Unbounded_String("Aim for their weapon"),
@@ -124,10 +119,8 @@ package body Combat.UI is
       Message: Message_Data;
       MessagesIter: Gtk_Text_Iter;
       TagNames: constant array(1 .. 5) of Unbounded_String :=
-        (To_Unbounded_String("yellow"),
-         To_Unbounded_String("green"),
-         To_Unbounded_String("red"),
-         To_Unbounded_String("blue"),
+        (To_Unbounded_String("yellow"), To_Unbounded_String("green"),
+         To_Unbounded_String("red"), To_Unbounded_String("blue"),
          To_Unbounded_String("cyan"));
    begin
       Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmessages")), "");
@@ -145,9 +138,7 @@ package body Combat.UI is
             Insert(MessagesBuffer, MessagesIter, To_String(Message.Message));
          else
             Insert_With_Tags
-              (MessagesBuffer,
-               MessagesIter,
-               To_String(Message.Message),
+              (MessagesBuffer, MessagesIter, To_String(Message.Message),
                Lookup
                  (Get_Tag_Table(MessagesBuffer),
                   To_String(TagNames(Message.Color))));
@@ -200,18 +191,14 @@ package body Combat.UI is
       for I in Guns.First_Index .. Guns.Last_Index loop
          Append(List, Iter);
          Set
-           (List,
-            Iter,
-            0,
+           (List, Iter, 0,
             To_String(PlayerShip.Modules(Guns(I)(1)).Name) & ": ");
          if PlayerShip.Modules(Guns(I)(1)).Owner /= 0 then
             if PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner).Order =
               Gunner then
                Set(List, Iter, 1, To_String(GunnerOrders(Guns(I)(2))));
                Set
-                 (List,
-                  Iter,
-                  2,
+                 (List, Iter, 2,
                   To_String
                     (PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner)
                        .Name));
@@ -319,8 +306,7 @@ package body Combat.UI is
          Append(EnemyInfo, "Unknown");
       end if;
       Set_Text
-        (Gtk_Label(Get_Object(Builder, "lblenemyinfo")),
-         To_String(EnemyInfo));
+        (Gtk_Label(Get_Object(Builder, "lblenemyinfo")), To_String(EnemyInfo));
       List := Gtk_List_Store(Get_Object(Builder, "enemyinfolist"));
       Iter := Get_Iter_First(List);
       for I in Enemy.Ship.Modules.Iterate loop
@@ -330,9 +316,7 @@ package body Combat.UI is
                 (ModuleType'Image
                    (Modules_List(Enemy.Ship.Modules(I).ProtoIndex).MType));
             Replace_Slice
-              (ModuleName,
-               2,
-               Length(ModuleName),
+              (ModuleName, 2, Length(ModuleName),
                To_Lower(Slice(ModuleName, 2, Length(ModuleName))));
             SpaceIndex := Index(ModuleName, "_");
             while SpaceIndex > 0 loop
@@ -406,9 +390,7 @@ package body Combat.UI is
                 (ModuleType'Image
                    (Modules_List(Enemy.Ship.Modules(I).ProtoIndex).MType));
             Replace_Slice
-              (ModuleName,
-               2,
-               Length(ModuleName),
+              (ModuleName, 2, Length(ModuleName),
                To_Lower(Slice(ModuleName, 2, Length(ModuleName))));
             SpaceIndex := Index(ModuleName, "_");
             while SpaceIndex > 0 loop
@@ -429,8 +411,7 @@ package body Combat.UI is
       Hide(Gtk_Widget(Get_Object(Builder, "btnmenu")));
       Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "combat");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "combat");
       HideLastMessage(Builder);
       if (HarpoonDuration = 0 and Enemy.HarpoonDuration = 0) or
         ProtoShips_List(EnemyShipIndex).Crew.Length = 0 then
@@ -452,8 +433,7 @@ package body Combat.UI is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treecrew1"))),
-         CrewModel,
-         CrewIter);
+         CrewModel, CrewIter);
       if CrewIter = Null_Iter then
          return;
       end if;
@@ -513,9 +493,7 @@ package body Combat.UI is
             end if;
             Append(CrewList, NamesIter);
             Set
-              (CrewList,
-               NamesIter,
-               0,
+              (CrewList, NamesIter, 0,
                To_String(PlayerShip.Crew(I).Name & SkillString));
             Set(CrewList, NamesIter, 1, Gint(I));
          end if;
@@ -559,8 +537,7 @@ package body Combat.UI is
 
    procedure GiveCombatOrders
      (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
-      Path_String: UTF8_String;
-      New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
+      Path_String: UTF8_String; New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
       Model: Glib.Types.GType_Interface;
       List: Gtk_List_Store;
       ModuleIndex: Natural := 0;
@@ -570,22 +547,16 @@ package body Combat.UI is
       if Self = Gtk_Cell_Renderer_Combo(Get_Object(Builder, "rendercrew")) then
          if Path_String = "0" then
             GiveOrders
-              (PlayerShip,
-               Positive(Get_Int(List, New_Iter, 1)),
-               Pilot,
+              (PlayerShip, Positive(Get_Int(List, New_Iter, 1)), Pilot,
                ModuleIndex);
          elsif Path_String = "1" then
             GiveOrders
-              (PlayerShip,
-               Positive(Get_Int(List, New_Iter, 1)),
-               Engineer,
+              (PlayerShip, Positive(Get_Int(List, New_Iter, 1)), Engineer,
                ModuleIndex);
          else
             ModuleIndex := Guns(Positive'Value(Path_String) - 1)(1);
             GiveOrders
-              (PlayerShip,
-               Positive(Get_Int(List, New_Iter, 1)),
-               Gunner,
+              (PlayerShip, Positive(Get_Int(List, New_Iter, 1)), Gunner,
                ModuleIndex);
          end if;
       else
@@ -594,16 +565,14 @@ package body Combat.UI is
             AddMessage
               ("Order for " &
                To_String(PlayerShip.Crew(FindMember(Pilot)).Name) &
-               " was set on: " &
-               To_String(PilotOrders(PilotOrder)),
+               " was set on: " & To_String(PilotOrders(PilotOrder)),
                CombatMessage);
          elsif Path_String = "1" then
             EngineerOrder := Positive(Get_Int(List, New_Iter, 1));
             AddMessage
               ("Order for " &
                To_String(PlayerShip.Crew(FindMember(Engineer)).Name) &
-               " was set on: " &
-               To_String(EngineerOrders(EngineerOrder)),
+               " was set on: " & To_String(EngineerOrders(EngineerOrder)),
                CombatMessage);
          else
             Guns(Positive'Value(Path_String) - 1)(2) :=
@@ -646,16 +615,12 @@ package body Combat.UI is
          OrderName :=
            To_Unbounded_String(Crew_Orders'Image(Enemy.Ship.Crew(I).Order));
          Replace_Slice
-           (OrderName,
-            2,
-            Length(OrderName),
+           (OrderName, 2, Length(OrderName),
             To_Lower(Slice(OrderName, 2, Length(OrderName))));
          Set(List, Iter, 3, To_String(OrderName));
          Append(OrdersList, OrdersIter);
          Set
-           (OrdersList,
-            OrdersIter,
-            0,
+           (OrdersList, OrdersIter, 0,
             "Attack " & To_String(Enemy.Ship.Crew(I).Name));
       end loop;
       if HarpoonDuration > 0 or Enemy.HarpoonDuration > 0 then
@@ -672,8 +637,7 @@ package body Combat.UI is
             Set(List, Iter, 2, Gint(Crew_Container.To_Index(I)));
             OrdersIter :=
               Get_Iter_From_String
-                (OrdersList,
-                 Natural'Image(BoardingOrders(OrderIndex)));
+                (OrdersList, Natural'Image(BoardingOrders(OrderIndex)));
             Set(List, Iter, 3, Get_String(OrdersList, OrdersIter, 0));
             OrderIndex := OrderIndex + 1;
          end if;
@@ -727,8 +691,7 @@ package body Combat.UI is
 
    procedure GiveBoardingOrders
      (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
-      Path_String: UTF8_String;
-      New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
+      Path_String: UTF8_String; New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
       List, OrdersList: Gtk_List_Store;
       Model: Glib.Types.GType_Interface;
       NewOrder: Integer;
@@ -737,9 +700,7 @@ package body Combat.UI is
       OrdersList := -(Gtk_Tree_Model(Model));
       List := Gtk_List_Store(Get_Object(Builder, "crewlist3"));
       Set
-        (List,
-         Get_Iter_From_String(List, Path_String),
-         3,
+        (List, Get_Iter_From_String(List, Path_String), 3,
          Get_String(OrdersList, New_Iter, 0));
       NewOrder := Natural'Value(To_String(Get_Path(OrdersList, New_Iter)));
       if NewOrder > Integer(Enemy.Ship.Crew.Length) then

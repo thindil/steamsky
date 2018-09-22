@@ -34,8 +34,7 @@ package body Mobs is
       TempPriorities: constant Orders_Array := (others => 0);
       TempEquipment: constant Equipment_Array := (others => 0);
       OrdersNames: constant array(Positive range <>) of Unbounded_String :=
-        (To_Unbounded_String("Piloting"),
-         To_Unbounded_String("Engineering"),
+        (To_Unbounded_String("Piloting"), To_Unbounded_String("Engineering"),
          To_Unbounded_String("Operating guns"),
          To_Unbounded_String("Repair ship"),
          To_Unbounded_String("Manufacturing"),
@@ -46,21 +45,15 @@ package body Mobs is
          To_Unbounded_String("Defend ship"),
          To_Unbounded_String("Board enemy ship"));
       EquipmentNames: constant array(Positive range <>) of Unbounded_String :=
-        (To_Unbounded_String("Weapon"),
-         To_Unbounded_String("Shield"),
-         To_Unbounded_String("Head"),
-         To_Unbounded_String("Torso"),
-         To_Unbounded_String("Arms"),
-         To_Unbounded_String("Legs"),
+        (To_Unbounded_String("Weapon"), To_Unbounded_String("Shield"),
+         To_Unbounded_String("Head"), To_Unbounded_String("Torso"),
+         To_Unbounded_String("Arms"), To_Unbounded_String("Legs"),
          To_Unbounded_String("Tool"));
    begin
       TempRecord :=
-        (Index => Null_Unbounded_String,
-         Skills => TempSkills,
-         Attributes => TempAttributes,
-         Order => Rest,
-         Priorities => TempPriorities,
-         Inventory => TempInventory,
+        (Index => Null_Unbounded_String, Skills => TempSkills,
+         Attributes => TempAttributes, Order => Rest,
+         Priorities => TempPriorities, Inventory => TempInventory,
          Equipment => TempEquipment);
       MobsData := Get_Tree(Reader);
       NodesList :=
@@ -70,52 +63,51 @@ package body Mobs is
            To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I),
-              "skill");
+             (Item(NodesList, I), "skill");
          for J in 0 .. Length(ChildNodes) - 1 loop
             if Get_Attribute(Item(ChildNodes, J), "level") /= "" then
                TempRecord.Skills.Append
-               (New_Item =>
-                  (FindSkillIndex
-                     (To_Unbounded_String
-                        (Get_Attribute(Item(ChildNodes, J), "name"))),
-                   Integer'Value(Get_Attribute(Item(ChildNodes, J), "level")),
-                   0));
+                 (New_Item =>
+                    (FindSkillIndex
+                       (To_Unbounded_String
+                          (Get_Attribute(Item(ChildNodes, J), "name"))),
+                     Integer'Value
+                       (Get_Attribute(Item(ChildNodes, J), "level")),
+                     0));
             else
                TempRecord.Skills.Append
-               (New_Item =>
-                  (FindSkillIndex
-                     (To_Unbounded_String
-                        (Get_Attribute(Item(ChildNodes, J), "name"))),
-                   Integer'Value
-                     (Get_Attribute(Item(ChildNodes, J), "minlevel")),
-                   Integer'Value
-                     (Get_Attribute(Item(ChildNodes, J), "maxlevel"))));
+                 (New_Item =>
+                    (FindSkillIndex
+                       (To_Unbounded_String
+                          (Get_Attribute(Item(ChildNodes, J), "name"))),
+                     Integer'Value
+                       (Get_Attribute(Item(ChildNodes, J), "minlevel")),
+                     Integer'Value
+                       (Get_Attribute(Item(ChildNodes, J), "maxlevel"))));
             end if;
          end loop;
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I),
-              "attribute");
+             (Item(NodesList, I), "attribute");
          for J in 0 .. Length(ChildNodes) - 1 loop
             if Get_Attribute(Item(ChildNodes, J), "level") /= "" then
                TempRecord.Attributes.Append
-               (New_Item =>
-                  (Integer'Value(Get_Attribute(Item(ChildNodes, J), "level")),
-                   0));
+                 (New_Item =>
+                    (Integer'Value
+                       (Get_Attribute(Item(ChildNodes, J), "level")),
+                     0));
             else
                TempRecord.Attributes.Append
-               (New_Item =>
-                  (Integer'Value
-                     (Get_Attribute(Item(ChildNodes, J), "minlevel")),
-                   Integer'Value
-                     (Get_Attribute(Item(ChildNodes, J), "maxlevel"))));
+                 (New_Item =>
+                    (Integer'Value
+                       (Get_Attribute(Item(ChildNodes, J), "minlevel")),
+                     Integer'Value
+                       (Get_Attribute(Item(ChildNodes, J), "maxlevel"))));
             end if;
          end loop;
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I),
-              "priority");
+             (Item(NodesList, I), "priority");
          for J in 0 .. Length(ChildNodes) - 1 loop
             for K in OrdersNames'Range loop
                if OrdersNames(K) =
@@ -135,33 +127,32 @@ package body Mobs is
            Crew_Orders'Value(Get_Attribute(Item(NodesList, I), "order"));
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I),
-              "item");
+             (Item(NodesList, I), "item");
          for J in 0 .. Length(ChildNodes) - 1 loop
             if Get_Attribute(Item(ChildNodes, J), "amount") /= "" then
                TempRecord.Inventory.Append
-               (New_Item =>
-                  (FindProtoItem
-                     (To_Unbounded_String
-                        (Get_Attribute(Item(ChildNodes, J), "index"))),
-                   Integer'Value(Get_Attribute(Item(ChildNodes, J), "amount")),
-                   0));
+                 (New_Item =>
+                    (FindProtoItem
+                       (To_Unbounded_String
+                          (Get_Attribute(Item(ChildNodes, J), "index"))),
+                     Integer'Value
+                       (Get_Attribute(Item(ChildNodes, J), "amount")),
+                     0));
             else
                TempRecord.Inventory.Append
-               (New_Item =>
-                  (FindProtoItem
-                     (To_Unbounded_String
-                        (Get_Attribute(Item(ChildNodes, J), "index"))),
-                   Integer'Value
-                     (Get_Attribute(Item(ChildNodes, J), "minamount")),
-                   Integer'Value
-                     (Get_Attribute(Item(ChildNodes, J), "maxamount"))));
+                 (New_Item =>
+                    (FindProtoItem
+                       (To_Unbounded_String
+                          (Get_Attribute(Item(ChildNodes, J), "index"))),
+                     Integer'Value
+                       (Get_Attribute(Item(ChildNodes, J), "minamount")),
+                     Integer'Value
+                       (Get_Attribute(Item(ChildNodes, J), "maxamount"))));
             end if;
          end loop;
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I),
-              "equipment");
+             (Item(NodesList, I), "equipment");
          for J in 0 .. Length(ChildNodes) - 1 loop
             for K in EquipmentNames'Range loop
                if EquipmentNames(K) =
@@ -177,12 +168,9 @@ package body Mobs is
          ProtoMobs_List.Append(New_Item => TempRecord);
          LogMessage("Mob added: " & To_String(TempRecord.Index), Everything);
          TempRecord :=
-           (Index => Null_Unbounded_String,
-            Skills => TempSkills,
-            Attributes => TempAttributes,
-            Order => Rest,
-            Priorities => TempPriorities,
-            Inventory => TempInventory,
+           (Index => Null_Unbounded_String, Skills => TempSkills,
+            Attributes => TempAttributes, Order => Rest,
+            Priorities => TempPriorities, Inventory => TempInventory,
             Equipment => TempEquipment);
       end loop;
    end LoadMobs;

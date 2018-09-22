@@ -39,11 +39,7 @@ package body Utils.UI is
    procedure ShowDialog(Message: String; Parent: Gtk_Window) is
       MessageDialog: constant Gtk_Message_Dialog :=
         Gtk_Message_Dialog_New
-          (Parent,
-           Modal,
-           Message_Error,
-           Buttons_Close,
-           Message);
+          (Parent, Modal, Message_Error, Buttons_Close, Message);
    begin
       if Run(MessageDialog) /= Gtk_Response_None then
          Destroy(MessageDialog);
@@ -61,16 +57,11 @@ package body Utils.UI is
       Show_All(Gtk_Widget(User_Data));
    end ShowWindow;
 
-   function ShowConfirmDialog
-     (Message: String;
+   function ShowConfirmDialog(Message: String;
       Parent: Gtk_Window) return Boolean is
       MessageDialog: constant Gtk_Message_Dialog :=
         Gtk_Message_Dialog_New
-          (Parent,
-           Modal,
-           Message_Question,
-           Buttons_Yes_No,
-           Message);
+          (Parent, Modal, Message_Question, Buttons_Yes_No, Message);
    begin
       if Run(MessageDialog) = Gtk_Response_Yes then
          Destroy(MessageDialog);
@@ -83,8 +74,7 @@ package body Utils.UI is
    function QuitGame(User_Data: access GObject_Record'Class) return Boolean is
    begin
       if ShowConfirmDialog
-          ("Are you sure want to quit?",
-           Gtk_Window(User_Data)) then
+          ("Are you sure want to quit?", Gtk_Window(User_Data)) then
          EndGame(True);
          ShowMainMenu;
          return Hide_On_Delete(Gtk_Widget(User_Data));
@@ -112,8 +102,7 @@ package body Utils.UI is
       UpdateHeader;
    end ShowLastMessage;
 
-   function CloseWindow
-     (Self: access Gtk_Widget_Record'Class;
+   function CloseWindow(Self: access Gtk_Widget_Record'Class;
       Event: Gdk_Event_Key) return Boolean is
       KeyMods: constant Gdk_Modifier_Type :=
         Event.State and Get_Default_Mod_Mask;
@@ -136,8 +125,7 @@ package body Utils.UI is
       if VisibleChildName = "inventory" then
          Show_All(Gtk_Widget(Get_Object(Object, "btnshowhelp")));
          Set_Visible_Child_Name
-           (Gtk_Stack(Get_Object(Object, "gamestack")),
-            "crew");
+           (Gtk_Stack(Get_Object(Object, "gamestack")), "crew");
          return;
       end if;
       if VisibleChildName = "gamestats" then

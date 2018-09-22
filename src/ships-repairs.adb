@@ -28,10 +28,7 @@ package body Ships.Repairs is
       RepairNeeded, RepairStopped: Boolean := False;
       CrewRepairPoints: Natural_Container.Vector;
       procedure RepairModule(ModuleIndex: Positive) is
-         PointsIndex,
-         PointsBonus,
-         RepairMaterial,
-         ToolsIndex,
+         PointsIndex, PointsBonus, RepairMaterial, ToolsIndex,
          RepairValue: Natural;
       begin
          PointsIndex := 0;
@@ -67,10 +64,8 @@ package body Ships.Repairs is
                   if RepairMaterial = 0 then
                      AddMessage
                        ("You don't have repair materials to continue repairs of " &
-                        To_String(PlayerShip.Modules(ModuleIndex).Name) &
-                        ".",
-                        OrderMessage,
-                        3);
+                        To_String(PlayerShip.Modules(ModuleIndex).Name) & ".",
+                        OrderMessage, 3);
                      RepairStopped := True;
                      return;
                   end if;
@@ -82,14 +77,12 @@ package body Ships.Repairs is
                           ("You don't have repair tools to continue repairs of " &
                            To_String(PlayerShip.Modules(ModuleIndex).Name) &
                            ".",
-                           OrderMessage,
-                           3);
+                           OrderMessage, 3);
                      else
                         AddMessage
                           (To_String(PlayerShip.Crew(J).Name) &
                            " can't continue repairs due to lack of repair tools.",
-                           OrderMessage,
-                           3);
+                           OrderMessage, 3);
                      end if;
                      RepairStopped := True;
                      return;
@@ -110,8 +103,7 @@ package body Ships.Repairs is
                      ToolsIndex := ToolsIndex - 1;
                   end if;
                   UpdateCargo
-                    (Ship => PlayerShip,
-                     CargoIndex => RepairMaterial,
+                    (Ship => PlayerShip, CargoIndex => RepairMaterial,
                      Amount => (0 - RepairValue));
                   PlayerShip.Modules(ModuleIndex).Durability :=
                     PlayerShip.Modules(ModuleIndex).Durability + RepairValue;
@@ -129,8 +121,7 @@ package body Ships.Repairs is
                      Crew_Container.To_Index(J));
                   CrewRepairPoints(PointsIndex) := RepairPoints;
                   DamageItem
-                    (PlayerShip.Crew(J).Inventory,
-                     ToolsIndex,
+                    (PlayerShip.Crew(J).Inventory, ToolsIndex,
                      GetSkillLevel
                        (PlayerShip.Crew(J),
                         Modules_List
@@ -171,7 +162,7 @@ package body Ships.Repairs is
             RepairModule(PlayerShip.RepairModule);
          end if;
       end if;
-      Repair_Loop:
+      Repair_Loop :
       for I in PlayerShip.Modules.Iterate loop
          if PlayerShip.Modules(I).Durability <
            PlayerShip.Modules(I).MaxDurability then

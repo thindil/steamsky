@@ -55,18 +55,14 @@ package body Ships.UI is
                   if PlayerShip.Crew(I).Health = 100 then
                      Append(AssignList, AssignIter);
                      Set
-                       (AssignList,
-                        AssignIter,
-                        0,
+                       (AssignList, AssignIter, 0,
                         To_String(PlayerShip.Crew(I).Name));
                      Set(AssignList, AssignIter, 1, Gint(I));
                   end if;
                when others =>
                   Append(AssignList, AssignIter);
                   Set
-                    (AssignList,
-                     AssignIter,
-                     0,
+                    (AssignList, AssignIter, 0,
                      To_String(PlayerShip.Crew(I).Name));
                   Set(AssignList, AssignIter, 1, Gint(I));
             end case;
@@ -90,9 +86,7 @@ package body Ships.UI is
            I /= PlayerShip.Modules(ModuleIndex).Data(1) then
             Append(AssignList, AssignIter);
             Set
-              (AssignList,
-               AssignIter,
-               0,
+              (AssignList, AssignIter, 0,
                To_String(Items_List(PlayerShip.Cargo(I).ProtoIndex).Name));
             Set(AssignList, AssignIter, 1, Gint(I));
             HaveAmmo := True;
@@ -484,21 +478,16 @@ package body Ships.UI is
          else
             Append
               (ShipInfo,
-               "X:" &
-               Positive'Image(PlayerShip.DestinationX) &
-               " Y:" &
+               "X:" & Positive'Image(PlayerShip.DestinationX) & " Y:" &
                Positive'Image(PlayerShip.DestinationY));
          end if;
       end if;
       Append
         (ShipInfo,
-         ASCII.LF &
-         "Weight:" &
-         Integer'Image(CountShipWeight(PlayerShip)) &
+         ASCII.LF & "Weight:" & Integer'Image(CountShipWeight(PlayerShip)) &
          "kg");
       Set_Label
-        (Gtk_Label(Get_Object(Builder, "lblshipinfo")),
-         To_String(ShipInfo));
+        (Gtk_Label(Get_Object(Builder, "lblshipinfo")), To_String(ShipInfo));
    end ShowShipInfo;
 
    procedure CreateShipUI(NewBuilder: Gtkada_Builder) is
@@ -529,14 +518,12 @@ package body Ships.UI is
       end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "ship");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "ship");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treemodules")),
          Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columnmodule")),
-         False);
+         Gtk_Tree_View_Column(Get_Object(Builder, "columnmodule")), False);
       ShowLastMessage(Builder);
       ShowShipInfo;
    end ShowShipUI;

@@ -33,44 +33,33 @@ package body Ships.SaveLoad is
       Set_Attribute(CategoryNode, "name", To_String(PlayerShip.Name));
       RawValue := To_Unbounded_String(Integer'Image(PlayerShip.SkyX));
       Set_Attribute
-        (CategoryNode,
-         "x",
-         To_String(Trim(RawValue, Ada.Strings.Left)));
+        (CategoryNode, "x", To_String(Trim(RawValue, Ada.Strings.Left)));
       RawValue := To_Unbounded_String(Integer'Image(PlayerShip.SkyY));
       Set_Attribute
-        (CategoryNode,
-         "y",
-         To_String(Trim(RawValue, Ada.Strings.Left)));
+        (CategoryNode, "y", To_String(Trim(RawValue, Ada.Strings.Left)));
       RawValue :=
         To_Unbounded_String(Integer'Image(ShipSpeed'Pos(PlayerShip.Speed)));
       Set_Attribute
-        (CategoryNode,
-         "speed",
-         To_String(Trim(RawValue, Ada.Strings.Left)));
+        (CategoryNode, "speed", To_String(Trim(RawValue, Ada.Strings.Left)));
       RawValue := To_Unbounded_String(Integer'Image(PlayerShip.UpgradeModule));
       Set_Attribute
-        (CategoryNode,
-         "upgrademodule",
+        (CategoryNode, "upgrademodule",
          To_String(Trim(RawValue, Ada.Strings.Left)));
       RawValue := To_Unbounded_String(Integer'Image(PlayerShip.DestinationX));
       Set_Attribute
-        (CategoryNode,
-         "destinationx",
+        (CategoryNode, "destinationx",
          To_String(Trim(RawValue, Ada.Strings.Left)));
       RawValue := To_Unbounded_String(Integer'Image(PlayerShip.DestinationY));
       Set_Attribute
-        (CategoryNode,
-         "destinationy",
+        (CategoryNode, "destinationy",
          To_String(Trim(RawValue, Ada.Strings.Left)));
       RawValue := To_Unbounded_String(Integer'Image(PlayerShip.RepairModule));
       Set_Attribute
-        (CategoryNode,
-         "repairpriority",
+        (CategoryNode, "repairpriority",
          To_String(Trim(RawValue, Ada.Strings.Left)));
       RawValue := To_Unbounded_String(Integer'Image(PlayerShip.HomeBase));
       Set_Attribute
-        (CategoryNode,
-         "homebase",
+        (CategoryNode, "homebase",
          To_String(Trim(RawValue, Ada.Strings.Left)));
       declare
          ModuleDataNode: DOM.Core.Element;
@@ -80,50 +69,41 @@ package body Ships.SaveLoad is
             DataNode := Append_Child(CategoryNode, DataNode);
             Set_Attribute(DataNode, "name", To_String(Module.Name));
             Set_Attribute
-              (DataNode,
-               "index",
+              (DataNode, "index",
                To_String(Modules_List(Module.ProtoIndex).Index));
             RawValue := To_Unbounded_String(Integer'Image(Module.Weight));
             Set_Attribute
-              (DataNode,
-               "weight",
+              (DataNode, "weight",
                To_String(Trim(RawValue, Ada.Strings.Left)));
             RawValue := To_Unbounded_String(Integer'Image(Module.Durability));
             Set_Attribute
-              (DataNode,
-               "durability",
+              (DataNode, "durability",
                To_String(Trim(RawValue, Ada.Strings.Left)));
             RawValue :=
               To_Unbounded_String(Integer'Image(Module.MaxDurability));
             Set_Attribute
-              (DataNode,
-               "maxdurability",
+              (DataNode, "maxdurability",
                To_String(Trim(RawValue, Ada.Strings.Left)));
             RawValue := To_Unbounded_String(Integer'Image(Module.Owner));
             Set_Attribute
-              (DataNode,
-               "owner",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
+              (DataNode, "owner", To_String(Trim(RawValue, Ada.Strings.Left)));
             RawValue :=
               To_Unbounded_String(Integer'Image(Module.UpgradeProgress));
             Set_Attribute
-              (DataNode,
-               "upgradeprogress",
+              (DataNode, "upgradeprogress",
                To_String(Trim(RawValue, Ada.Strings.Left)));
             RawValue :=
               To_Unbounded_String
                 (Integer'Image(ShipUpgrade'Pos(Module.UpgradeAction)));
             Set_Attribute
-              (DataNode,
-               "upgradeaction",
+              (DataNode, "upgradeaction",
                To_String(Trim(RawValue, Ada.Strings.Left)));
             for I in Module.Data'Range loop
                ModuleDataNode := Create_Element(SaveData, "data");
                ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                RawValue := To_Unbounded_String(Integer'Image(Module.Data(I)));
                Set_Attribute
-                 (ModuleDataNode,
-                  "value",
+                 (ModuleDataNode, "value",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
             end loop;
          end loop;
@@ -132,35 +112,26 @@ package body Ships.SaveLoad is
          DataNode := Create_Element(SaveData, "cargo");
          DataNode := Append_Child(CategoryNode, DataNode);
          Set_Attribute
-           (DataNode,
-            "index",
-            To_String(Items_List(Item.ProtoIndex).Index));
+           (DataNode, "index", To_String(Items_List(Item.ProtoIndex).Index));
          RawValue := To_Unbounded_String(Integer'Image(Item.Amount));
          Set_Attribute
-           (DataNode,
-            "amount",
-            To_String(Trim(RawValue, Ada.Strings.Left)));
+           (DataNode, "amount", To_String(Trim(RawValue, Ada.Strings.Left)));
          if Item.Name /= Null_Unbounded_String then
             Set_Attribute(DataNode, "name", To_String(Item.Name));
          end if;
          RawValue := To_Unbounded_String(Integer'Image(Item.Durability));
          Set_Attribute
-           (DataNode,
-            "durability",
+           (DataNode, "durability",
             To_String(Trim(RawValue, Ada.Strings.Left)));
       end loop;
       declare
          StatNode: DOM.Core.Element;
          AttributesNames: constant array
            (Positive range <>) of Unbounded_String :=
-           (To_Unbounded_String("health"),
-            To_Unbounded_String("tired"),
-            To_Unbounded_String("hunger"),
-            To_Unbounded_String("thirst"),
-            To_Unbounded_String("order"),
-            To_Unbounded_String("previousorder"),
-            To_Unbounded_String("ordertime"),
-            To_Unbounded_String("dailypay"),
+           (To_Unbounded_String("health"), To_Unbounded_String("tired"),
+            To_Unbounded_String("hunger"), To_Unbounded_String("thirst"),
+            To_Unbounded_String("order"), To_Unbounded_String("previousorder"),
+            To_Unbounded_String("ordertime"), To_Unbounded_String("dailypay"),
             To_Unbounded_String("tradepay"),
             To_Unbounded_String("contractlength"),
             To_Unbounded_String("moralelevel"),
@@ -174,25 +145,16 @@ package body Ships.SaveLoad is
             Set_Attribute(DataNode, "name", To_String(Member.Name));
             Set_Attribute(DataNode, "gender", Member.Gender & "");
             AttributesValues :=
-              (Member.Health,
-               Member.Tired,
-               Member.Hunger,
-               Member.Thirst,
+              (Member.Health, Member.Tired, Member.Hunger, Member.Thirst,
                Crew_Orders'Pos(Member.Order),
-               Crew_Orders'Pos(Member.PreviousOrder),
-               Member.OrderTime,
-               Member.Payment(1),
-               Member.Payment(2),
-               Member.ContractLength,
-               Member.Morale(1),
-               Member.Morale(2),
-               Member.Loyalty);
+               Crew_Orders'Pos(Member.PreviousOrder), Member.OrderTime,
+               Member.Payment(1), Member.Payment(2), Member.ContractLength,
+               Member.Morale(1), Member.Morale(2), Member.Loyalty);
             for I in AttributesNames'Range loop
                RawValue :=
                  To_Unbounded_String(Integer'Image(AttributesValues(I)));
                Set_Attribute
-                 (DataNode,
-                  To_String(AttributesNames(I)),
+                 (DataNode, To_String(AttributesNames(I)),
                   To_String(Trim(RawValue, Ada.Strings.Left)));
             end loop;
             for Skill of Member.Skills loop
@@ -200,18 +162,15 @@ package body Ships.SaveLoad is
                StatNode := Append_Child(DataNode, StatNode);
                RawValue := To_Unbounded_String(Integer'Image(Skill(1)));
                Set_Attribute
-                 (StatNode,
-                  "index",
+                 (StatNode, "index",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
                RawValue := To_Unbounded_String(Integer'Image(Skill(2)));
                Set_Attribute
-                 (StatNode,
-                  "level",
+                 (StatNode, "level",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
                RawValue := To_Unbounded_String(Integer'Image(Skill(3)));
                Set_Attribute
-                 (StatNode,
-                  "experience",
+                 (StatNode, "experience",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
             end loop;
             for J in Member.Orders'Range loop
@@ -220,8 +179,7 @@ package body Ships.SaveLoad is
                RawValue :=
                  To_Unbounded_String(Integer'Image(Member.Orders(J)));
                Set_Attribute
-                 (StatNode,
-                  "value",
+                 (StatNode, "value",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
             end loop;
             for Attribute of Member.Attributes loop
@@ -229,34 +187,29 @@ package body Ships.SaveLoad is
                StatNode := Append_Child(DataNode, StatNode);
                RawValue := To_Unbounded_String(Integer'Image(Attribute(1)));
                Set_Attribute
-                 (StatNode,
-                  "level",
+                 (StatNode, "level",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
                RawValue := To_Unbounded_String(Integer'Image(Attribute(2)));
                Set_Attribute
-                 (StatNode,
-                  "experience",
+                 (StatNode, "experience",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
             end loop;
             for Item of Member.Inventory loop
                StatNode := Create_Element(SaveData, "item");
                StatNode := Append_Child(DataNode, StatNode);
                Set_Attribute
-                 (StatNode,
-                  "index",
+                 (StatNode, "index",
                   To_String(Items_List(Item.ProtoIndex).Index));
                RawValue := To_Unbounded_String(Integer'Image(Item.Amount));
                Set_Attribute
-                 (StatNode,
-                  "amount",
+                 (StatNode, "amount",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
                if Item.Name /= Null_Unbounded_String then
                   Set_Attribute(StatNode, "name", To_String(Item.Name));
                end if;
                RawValue := To_Unbounded_String(Integer'Image(Item.Durability));
                Set_Attribute
-                 (StatNode,
-                  "durability",
+                 (StatNode, "durability",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
             end loop;
             for I in Member.Equipment'Range loop
@@ -265,8 +218,7 @@ package body Ships.SaveLoad is
                RawValue :=
                  To_Unbounded_String(Integer'Image(Member.Equipment(I)));
                Set_Attribute
-                 (StatNode,
-                  "index",
+                 (StatNode, "index",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
             end loop;
          end loop;
@@ -347,16 +299,11 @@ package body Ships.SaveLoad is
                   end if;
                end loop;
                PlayerShip.Modules.Append
-               (New_Item =>
-                  (Name => Name,
-                   ProtoIndex => ProtoIndex,
-                   Weight => Weight,
-                   Durability => Durability,
-                   MaxDurability => MaxDurability,
-                   Owner => Owner,
-                   UpgradeProgress => UpgradeProgress,
-                   UpgradeAction => UpgradeAction,
-                   Data => Data));
+                 (New_Item =>
+                    (Name => Name, ProtoIndex => ProtoIndex, Weight => Weight,
+                     Durability => Durability, MaxDurability => MaxDurability,
+                     Owner => Owner, UpgradeProgress => UpgradeProgress,
+                     UpgradeAction => UpgradeAction, Data => Data));
             end;
          elsif Node_Name(Item(ChildNodes, I)) = "cargo" then
             declare
@@ -377,24 +324,16 @@ package body Ships.SaveLoad is
                  Natural'Value
                    (Get_Attribute(Item(ChildNodes, I), "durability"));
                PlayerShip.Cargo.Append
-               (New_Item =>
-                  (ProtoIndex => ProtoIndex,
-                   Amount => Amount,
-                   Name => Name,
-                   Durability => Durability));
+                 (New_Item =>
+                    (ProtoIndex => ProtoIndex, Amount => Amount, Name => Name,
+                     Durability => Durability));
             end;
          elsif Node_Name(Item(ChildNodes, I)) = "member" then
             declare
                MemberData: Node_List;
                Name, ItemName: Unbounded_String;
                Gender: String(1 .. 1);
-               Health,
-               Tired,
-               Hunger,
-               Thirst,
-               Index,
-               Level,
-               Experience,
+               Health, Tired, Hunger, Thirst, Index, Level, Experience,
                Loyalty: Natural;
                Skills: Skills_Container.Vector;
                Attributes: Attributes_Container.Vector;
@@ -403,11 +342,7 @@ package body Ships.SaveLoad is
                Inventory: Inventory_Container.Vector;
                Equipment: Equipment_Array;
                OrderTime, ContractLength: Integer;
-               Amount,
-               Durability,
-               EquipmentIndex,
-               PriorityIndex,
-               HomeBase,
+               Amount, Durability, EquipmentIndex, PriorityIndex, HomeBase,
                FactionIndex: Positive;
                Payment, Morale: Attributes_Array;
             begin
@@ -514,11 +449,9 @@ package body Ships.SaveLoad is
                        Integer'Value
                          (Get_Attribute(Item(MemberData, K), "durability"));
                      Inventory.Append
-                     (New_Item =>
-                        (ProtoIndex => Index,
-                         Amount => Amount,
-                         Name => ItemName,
-                         Durability => Durability));
+                       (New_Item =>
+                          (ProtoIndex => Index, Amount => Amount,
+                           Name => ItemName, Durability => Durability));
                   elsif Node_Name(Item(MemberData, K)) = "equipment" then
                      Equipment(EquipmentIndex) :=
                        Natural'Value
@@ -546,27 +479,16 @@ package body Ships.SaveLoad is
                   FactionIndex := SkyBases(HomeBase).Owner;
                end if;
                PlayerShip.Crew.Append
-               (New_Item =>
-                  (Name => Name,
-                   Gender => Gender(1),
-                   Health => Health,
-                   Tired => Tired,
-                   Skills => Skills,
-                   Hunger => Hunger,
-                   Thirst => Thirst,
-                   Order => Order,
-                   PreviousOrder => PreviousOrder,
-                   OrderTime => OrderTime,
-                   Orders => Orders,
-                   Attributes => Attributes,
-                   Inventory => Inventory,
-                   Equipment => Equipment,
-                   Payment => Payment,
-                   ContractLength => ContractLength,
-                   Morale => Morale,
-                   Loyalty => Loyalty,
-                   HomeBase => HomeBase,
-                   Faction => FactionIndex));
+                 (New_Item =>
+                    (Name => Name, Gender => Gender(1), Health => Health,
+                     Tired => Tired, Skills => Skills, Hunger => Hunger,
+                     Thirst => Thirst, Order => Order,
+                     PreviousOrder => PreviousOrder, OrderTime => OrderTime,
+                     Orders => Orders, Attributes => Attributes,
+                     Inventory => Inventory, Equipment => Equipment,
+                     Payment => Payment, ContractLength => ContractLength,
+                     Morale => Morale, Loyalty => Loyalty,
+                     HomeBase => HomeBase, Faction => FactionIndex));
             end;
          end if;
       end loop;

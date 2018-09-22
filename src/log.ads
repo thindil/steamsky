@@ -20,18 +20,14 @@ with Ada.Text_IO; use Ada.Text_IO;
 package Log is
 
    type Debug_Types is
-     (None,
-      Everything,
+     (None, Everything,
       Combat); -- Types of debug mode, which messages log to file
    DebugMode: Debug_Types := None; -- Did game is run in debug mode
    LogFile: File_Type; -- Debug log file
 
    procedure StartLogging; -- Open/create debug.log file
-   procedure LogMessage
-     (Message: String;
-      MessageType: Debug_Types;
-      NewLine,
-      TimeStamp: Boolean :=
+   procedure LogMessage(Message: String; MessageType: Debug_Types;
+      NewLine, TimeStamp: Boolean :=
         True); -- Log message (if proper type) to file in debug mode
    procedure EndLogging; -- Close debug.file
 

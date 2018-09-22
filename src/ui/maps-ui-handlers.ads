@@ -77,12 +77,10 @@ package Maps.UI.Handlers is
    function UpdateTooltip
      (Object: access Gtkada_Builder_Record'Class)
      return Boolean; -- Update map tooltip with information about cell on mouse movement
-   function MapKeyReleased
-     (Self: access Gtk_Widget_Record'Class;
+   function MapKeyReleased(Self: access Gtk_Widget_Record'Class;
       Event: Gdk.Event.Gdk_Event_Key)
      return Boolean; -- Center map on player ship
-   function MapKeyPressed
-     (Self: access Gtk_Widget_Record'Class;
+   function MapKeyPressed(Self: access Gtk_Widget_Record'Class;
       Event: Gdk.Event.Gdk_Event_Key)
      return Boolean; -- Move mouse cursor on map by keyboard
 

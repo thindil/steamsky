@@ -80,8 +80,7 @@ package body HallOfFame is
          HallOfFame_Array(I + 1) := HallOfFame_Array(I);
       end loop;
       HallOfFame_Array(NewIndex) :=
-        (Name => PlayerName,
-         Points => GameStats.Points,
+        (Name => PlayerName, Points => GameStats.Points,
          DeathReason => DeathReason);
       HoFData := Create_Document(HoF);
       MainNode := Create_Element(HoFData, "halloffame");
@@ -96,12 +95,9 @@ package body HallOfFame is
          RawValue :=
            To_Unbounded_String(Integer'Image(HallOfFame_Array(I).Points));
          Set_Attribute
-           (EntryNode,
-            "points",
-            To_String(Trim(RawValue, Ada.Strings.Left)));
+           (EntryNode, "points", To_String(Trim(RawValue, Ada.Strings.Left)));
          Set_Attribute
-           (EntryNode,
-            "deathreason",
+           (EntryNode, "deathreason",
             To_String(HallOfFame_Array(I).DeathReason));
       end loop;
       Create(HoFFile, Out_File, To_String(SaveDirectory) & "halloffame.dat");

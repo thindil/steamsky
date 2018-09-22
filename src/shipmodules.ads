@@ -22,24 +22,9 @@ with DOM.Readers; use DOM.Readers;
 package ShipModules is
 
    type ModuleType is
-     (ANY,
-      ENGINE,
-      CABIN,
-      COCKPIT,
-      TURRET,
-      GUN,
-      CARGO,
-      HULL,
-      ARMOR,
-      BATTERING_RAM,
-      ALCHEMY_LAB,
-      FURNACE,
-      WATER_COLLECTOR,
-      WORKSHOP,
-      GREENHOUSE,
-      MEDICAL_ROOM,
-      HARPOON_GUN,
-      TRAINING_ROOM);
+     (ANY, ENGINE, CABIN, COCKPIT, TURRET, GUN, CARGO, HULL, ARMOR,
+      BATTERING_RAM, ALCHEMY_LAB, FURNACE, WATER_COLLECTOR, WORKSHOP,
+      GREENHOUSE, MEDICAL_ROOM, HARPOON_GUN, TRAINING_ROOM);
    type BaseModule_Data is -- Data structure for prototypes of ship modules
    record
       Name: Unbounded_String; -- Name of module

@@ -124,8 +124,7 @@ package body Maps.UI.Handlers is
       DrawMap;
       Get_Size
         (Gtk_Window(Get_Object(Object, "skymapwindow")),
-         Gint(GameSettings.WindowWidth),
-         Gint(GameSettings.WindowHeight));
+         Gint(GameSettings.WindowWidth), Gint(GameSettings.WindowHeight));
    end GetMapSize;
 
    function SetDestination
@@ -270,8 +269,7 @@ package body Maps.UI.Handlers is
             if PlayerShip.DestinationX = PlayerShip.SkyX and
               PlayerShip.DestinationY = PlayerShip.SkyY then
                AddMessage
-                 ("You reached your travel destination.",
-                  OrderMessage);
+                 ("You reached your travel destination.", OrderMessage);
                PlayerShip.DestinationX := 0;
                PlayerShip.DestinationY := 0;
                if GameSettings.AutoFinish then
@@ -349,8 +347,7 @@ package body Maps.UI.Handlers is
             if PlayerShip.DestinationX = PlayerShip.SkyX and
               PlayerShip.DestinationY = PlayerShip.SkyY then
                AddMessage
-                 ("You reached your travel destination.",
-                  OrderMessage);
+                 ("You reached your travel destination.", OrderMessage);
                PlayerShip.DestinationX := 0;
                PlayerShip.DestinationY := 0;
                if GameSettings.AutoFinish then
@@ -464,8 +461,7 @@ package body Maps.UI.Handlers is
                                       (GetStepData(Step.FinishData, "item"))))
                                 .Name));
                         Set_No_Show_All
-                          (Gtk_Widget(Get_Object(Object, "btnstory")),
-                           False);
+                          (Gtk_Widget(Get_Object(Object, "btnstory")), False);
                      end if;
                   end if;
                when DESTROYSHIP =>
@@ -482,8 +478,7 @@ package body Maps.UI.Handlers is
                              (ProtoShips_List(Positive'Value(Slice(Tokens, 3)))
                                 .Name));
                         Set_No_Show_All
-                          (Gtk_Widget(Get_Object(Object, "btnstory")),
-                           False);
+                          (Gtk_Widget(Get_Object(Object, "btnstory")), False);
                      end if;
                   end;
                when EXPLORE =>
@@ -497,8 +492,7 @@ package body Maps.UI.Handlers is
                           (Gtk_Button(Get_Object(Builder, "btnstory")),
                            "_Search area");
                         Set_No_Show_All
-                          (Gtk_Widget(Get_Object(Object, "btnstory")),
-                           False);
+                          (Gtk_Widget(Get_Object(Object, "btnstory")), False);
                      end if;
                   end;
                when ANY | LOOT =>
@@ -512,43 +506,36 @@ package body Maps.UI.Handlers is
          if HaveTrader and SkyBases(BaseIndex).Population > 0 then
             Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btntrade")), False);
             Set_No_Show_All
-              (Gtk_Widget(Get_Object(Object, "btnschool")),
-               False);
+              (Gtk_Widget(Get_Object(Object, "btnschool")), False);
             if SkyBases(BaseIndex).Recruits.Length > 0 then
                Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btnrecruit")),
-                  False);
+                 (Gtk_Widget(Get_Object(Object, "btnrecruit")), False);
             end if;
             if DaysDifference(SkyBases(BaseIndex).AskedForEvents) > 6 then
                Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btnaskevents")),
-                  False);
+                 (Gtk_Widget(Get_Object(Object, "btnaskevents")), False);
             end if;
             if not SkyBases(BaseIndex).AskedForBases then
                Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btnaskbases")),
-                  False);
+                 (Gtk_Widget(Get_Object(Object, "btnaskbases")), False);
             end if;
             for Member of PlayerShip.Crew loop
                if Member.Health < 100 then
                   Set_No_Show_All
-                    (Gtk_Widget(Get_Object(Object, "btnheal")),
-                     False);
+                    (Gtk_Widget(Get_Object(Object, "btnheal")), False);
                   exit;
                end if;
             end loop;
             for Module of PlayerShip.Modules loop
                if Module.Durability < Module.MaxDurability then
                   Set_No_Show_All
-                    (Gtk_Widget(Get_Object(Object, "btnrepair")),
-                     False);
+                    (Gtk_Widget(Get_Object(Object, "btnrepair")), False);
                   exit;
                end if;
             end loop;
             if SkyBases(BaseIndex).BaseType = Shipyard then
                Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btnshipyard")),
-                  False);
+                 (Gtk_Widget(Get_Object(Object, "btnshipyard")), False);
             end if;
             for I in Recipes_List.First_Index .. Recipes_List.Last_Index loop
                if Known_Recipes.Find_Index(Item => I) =
@@ -556,8 +543,7 @@ package body Maps.UI.Handlers is
                  Recipes_List(I).BaseType =
                    Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1 then
                   Set_No_Show_All
-                    (Gtk_Widget(Get_Object(Object, "btnrecipes")),
-                     False);
+                    (Gtk_Widget(Get_Object(Object, "btnrecipes")), False);
                   exit;
                end if;
             end loop;
@@ -626,14 +612,12 @@ package body Maps.UI.Handlers is
                end loop;
                if MissionsLimit > 0 then
                   Set_No_Show_All
-                    (Gtk_Widget(Get_Object(Object, "btnmissions")),
-                     False);
+                    (Gtk_Widget(Get_Object(Object, "btnmissions")), False);
                end if;
             end if;
             if PlayerShip.HomeBase /= BaseIndex then
                Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btnsethome")),
-                  False);
+                 (Gtk_Widget(Get_Object(Object, "btnsethome")), False);
             end if;
          end if;
          if SkyBases(BaseIndex).Population = 0 then
@@ -649,25 +633,20 @@ package body Maps.UI.Handlers is
          case Event is
             when EnemyShip | EnemyPatrol =>
                Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btnattack")),
-                  False);
+                 (Gtk_Widget(Get_Object(Object, "btnattack")), False);
                Set_Label
-                 (Gtk_Button(Get_Object(Object, "btnattack")),
-                  "_Attack");
+                 (Gtk_Button(Get_Object(Object, "btnattack")), "_Attack");
             when FullDocks =>
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btndock")),
                   "_Wait (full docks)");
                Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btndock")),
-                  False);
+                 (Gtk_Widget(Get_Object(Object, "btndock")), False);
             when AttackOnBase =>
                Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btnattack")),
-                  False);
+                 (Gtk_Widget(Get_Object(Object, "btnattack")), False);
                Set_Label
-                 (Gtk_Button(Get_Object(Object, "btnattack")),
-                  "_Defend");
+                 (Gtk_Button(Get_Object(Object, "btnattack")), "_Defend");
             when Disease =>
                if HaveTrader then
                   ItemIndex :=
@@ -689,15 +668,12 @@ package body Maps.UI.Handlers is
                if BaseIndex > 0 then
                   if SkyBases(BaseIndex).Reputation(1) > -25 then
                      Set_Label
-                       (Gtk_Button(Get_Object(Builder, "btndock")),
-                        "_Dock");
+                       (Gtk_Button(Get_Object(Builder, "btndock")), "_Dock");
                      Set_No_Show_All
-                       (Gtk_Widget(Get_Object(Object, "btndock")),
-                        False);
+                       (Gtk_Widget(Get_Object(Object, "btndock")), False);
                   end if;
                   for Mission of AcceptedMissions loop
-                     if HaveTrader and
-                       Mission.TargetX = PlayerShip.SkyX and
+                     if HaveTrader and Mission.TargetX = PlayerShip.SkyX and
                        Mission.TargetY = PlayerShip.SkyY and
                        Mission.Finished then
                         case Mission.MType is
@@ -778,21 +754,16 @@ package body Maps.UI.Handlers is
             when Trader =>
                if HaveTrader then
                   Set_No_Show_All
-                    (Gtk_Widget(Get_Object(Object, "btntrade")),
-                     False);
+                    (Gtk_Widget(Get_Object(Object, "btntrade")), False);
                   Set_No_Show_All
-                    (Gtk_Widget(Get_Object(Object, "btnaskevents")),
-                     False);
+                    (Gtk_Widget(Get_Object(Object, "btnaskevents")), False);
                   Set_No_Show_All
-                    (Gtk_Widget(Get_Object(Object, "btnaskbases")),
-                     False);
+                    (Gtk_Widget(Get_Object(Object, "btnaskbases")), False);
                end if;
                Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btnattack")),
-                  False);
+                 (Gtk_Widget(Get_Object(Object, "btnattack")), False);
                Set_Label
-                 (Gtk_Button(Get_Object(Object, "btnattack")),
-                  "Attack");
+                 (Gtk_Button(Get_Object(Object, "btnattack")), "Attack");
             when FriendlyShip =>
                if HaveTrader then
                   if Index
@@ -805,22 +776,17 @@ package body Maps.UI.Handlers is
                        To_String(TradersName)) >
                     0 then
                      Set_No_Show_All
-                       (Gtk_Widget(Get_Object(Object, "btntrade")),
-                        False);
+                       (Gtk_Widget(Get_Object(Object, "btntrade")), False);
                      Set_No_Show_All
-                       (Gtk_Widget(Get_Object(Object, "btnaskbases")),
-                        False);
+                       (Gtk_Widget(Get_Object(Object, "btnaskbases")), False);
                   end if;
                   Set_No_Show_All
-                    (Gtk_Widget(Get_Object(Object, "btnaskevents")),
-                     False);
+                    (Gtk_Widget(Get_Object(Object, "btnaskevents")), False);
                end if;
                Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btnattack")),
-                  False);
+                 (Gtk_Widget(Get_Object(Object, "btnattack")), False);
                Set_Label
-                 (Gtk_Button(Get_Object(Object, "btnattack")),
-                  "Attack");
+                 (Gtk_Button(Get_Object(Object, "btnattack")), "Attack");
          end case;
       end if;
       ButtonsVisible := False;
@@ -1012,8 +978,7 @@ package body Maps.UI.Handlers is
       Hide(Gtk_Widget(Get_Object(Object, "orderswindow")));
       for Mission of AcceptedMissions loop
          if Mission.TargetX = PlayerShip.SkyX and
-           Mission.TargetY = PlayerShip.SkyY and
-           not Mission.Finished then
+           Mission.TargetY = PlayerShip.SkyY and not Mission.Finished then
             case Mission.MType is
                when Deliver | Passenger =>
                   null;
@@ -1110,8 +1075,7 @@ package body Maps.UI.Handlers is
                   case Step.FinishCondition is
                      when DESTROYSHIP =>
                         if StartCombat
-                            (Positive'Value(Slice(Tokens, 3)),
-                             False) then
+                            (Positive'Value(Slice(Tokens, 3)), False) then
                            ShowCombatUI;
                            return;
                         end if;
@@ -1150,15 +1114,11 @@ package body Maps.UI.Handlers is
          CountPrice(Price, TraderIndex);
          if ShowConfirmDialog
              ("Are you sure want to change your home base (it cost" &
-              Positive'Image(Price) &
-              " " &
-              To_String(MoneyName) &
-              ")?",
+              Positive'Image(Price) & " " & To_String(MoneyName) & ")?",
               Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
             if MoneyIndex2 = 0 then
                ShowDialog
-                 ("You don't have any " &
-                  To_String(MoneyName) &
+                 ("You don't have any " & To_String(MoneyName) &
                   " for change ship home base.",
                   Gtk_Window(Get_Object(Builder, "skymapwindow")));
                return;
@@ -1166,8 +1126,7 @@ package body Maps.UI.Handlers is
             CountPrice(Price, TraderIndex);
             if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
                ShowDialog
-                 ("You don't have enough " &
-                  To_String(MoneyName) &
+                 ("You don't have enough " & To_String(MoneyName) &
                   " for change ship home base.",
                   Gtk_Window(Get_Object(Builder, "skymapwindow")));
                return;
@@ -1175,8 +1134,7 @@ package body Maps.UI.Handlers is
             PlayerShip.HomeBase :=
               SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
             UpdateCargo
-              (Ship => PlayerShip,
-               CargoIndex => MoneyIndex2,
+              (Ship => PlayerShip, CargoIndex => MoneyIndex2,
                Amount => (0 - Price));
             AddMessage
               ("You changed your ship home base to: " &
@@ -1213,8 +1171,7 @@ package body Maps.UI.Handlers is
       if User_Data = Get_Object(Builder, "btnfreemedicines") then
          GainRep(BaseIndex, (PlayerShip.Cargo(ItemIndex).Amount / 10));
          UpdateCargo
-           (PlayerShip,
-            PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
+           (PlayerShip, PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
             (0 - PlayerShip.Cargo.Element(ItemIndex).Amount));
          AddMessage
            ("You gave " &
@@ -1227,8 +1184,7 @@ package body Maps.UI.Handlers is
            (ItemIndex,
             Integer'Image(PlayerShip.Cargo.Element(ItemIndex).Amount));
          GainRep
-           (BaseIndex,
-            ((PlayerShip.Cargo(ItemIndex).Amount / 20) * (-1)));
+           (BaseIndex, ((PlayerShip.Cargo(ItemIndex).Amount / 20) * (-1)));
       end if;
    end DeliverMedicines;
 
@@ -1265,8 +1221,7 @@ package body Maps.UI.Handlers is
       return False;
    end UpdateTooltip;
 
-   function MapKeyReleased
-     (Self: access Gtk_Widget_Record'Class;
+   function MapKeyReleased(Self: access Gtk_Widget_Record'Class;
       Event: Gdk.Event.Gdk_Event_Key) return Boolean is
       pragma Unreferenced(Self);
       KeyMods: constant Gdk_Modifier_Type :=
@@ -1296,8 +1251,7 @@ package body Maps.UI.Handlers is
       return True;
    end MapKeyReleased;
 
-   function MapKeyPressed
-     (Self: access Gtk_Widget_Record'Class;
+   function MapKeyPressed(Self: access Gtk_Widget_Record'Class;
       Event: Gdk.Event.Gdk_Event_Key) return Boolean is
       pragma Unreferenced(Self);
       KeyMods: constant Gdk_Modifier_Type :=

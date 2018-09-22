@@ -25,10 +25,7 @@ package Stories is
    type StartConditionType is
      (DROPITEM); -- Types of conditions to start stories
    type StepConditionType is
-     (ASKINBASE,
-      DESTROYSHIP,
-      EXPLORE,
-      ANY,
+     (ASKINBASE, DESTROYSHIP, EXPLORE, ANY,
       LOOT); -- Types of conditions to finish story step
    type StepText_Data is -- Data structure for stories steps texts
    record
@@ -86,8 +83,7 @@ package Stories is
       StepsTexts: UnboundedString_Container
         .Vector; -- Texts of steps done in this story. If less than StepsAmount then it is current story.
    end record;
-   package FinishedStories_Container is new Vectors
-     (Positive,
+   package FinishedStories_Container is new Vectors(Positive,
       FinishedStory_Data);
    CurrentStory: CurrentStory_Data; -- Contains data about current story on which player is
    Stories_List: Stories_Container.Vector; -- List of available stories in game
@@ -95,18 +91,15 @@ package Stories is
      .Vector; -- List of finished stories (or past data of current story)
 
    procedure LoadStories(Reader: Tree_Reader); -- Load stories data from files
-   procedure StartStory
-     (FactionName: Unbounded_String;
+   procedure StartStory(FactionName: Unbounded_String;
       Condition: StartConditionType); -- Check if any story can starts
    procedure ClearCurrentStory; -- Resets current story
    function ProgressStory
-     (NextStep: Boolean :=
-        False)
+     (NextStep: Boolean := False)
      return Boolean; -- Returns true if story goes to next step, otherwise false
    function GetCurrentStoryText
      return Unbounded_String; -- Get text of current step in story
-   function GetStepData
-     (FinishData: StepData_Container.Vector;
+   function GetStepData(FinishData: StepData_Container.Vector;
       Name: String)
      return Unbounded_String; -- Get step finish data with selected name
    procedure GetStoryLocation

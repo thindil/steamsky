@@ -22,13 +22,7 @@ with DOM.Readers; use DOM.Readers;
 package Goals is
 
    type GoalTypes is
-     (RANDOM,
-      REPUTATION,
-      DESTROY,
-      DISCOVER,
-      VISIT,
-      CRAFT,
-      MISSION,
+     (RANDOM, REPUTATION, DESTROY, DISCOVER, VISIT, CRAFT, MISSION,
       KILL); -- Types of goals
    type Goal_Data is -- Data structure for each goal
    record
@@ -48,9 +42,7 @@ package Goals is
      (Index: Natural)
      return String; -- Return info about selected goal or current goal if Index = 0
    procedure ClearCurrentGoal; -- Reset current goal
-   procedure UpdateGoal
-     (GType: GoalTypes;
-      TargetIndex: Unbounded_String;
+   procedure UpdateGoal(GType: GoalTypes; TargetIndex: Unbounded_String;
       Amount: Positive := 1); -- Update current goal
 
 end Goals;

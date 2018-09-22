@@ -68,12 +68,10 @@ package Factions is
 
    procedure LoadFactions(Reader: Tree_Reader); -- Load NPC factions from file
    function GetReputation
-     (SourceFaction,
-      TargetFaction: Unbounded_String)
+     (SourceFaction, TargetFaction: Unbounded_String)
      return Integer; -- Get reputation between SourceFaction and TargetFaction
    function IsFriendly
-     (SourceFaction,
-      TargetFaction: Unbounded_String)
+     (SourceFaction, TargetFaction: Unbounded_String)
      return Boolean; -- Check if TargetFaction is friendly for SourceFaction. Returns true if yes, otherwise false.
 
 end Factions;

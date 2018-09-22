@@ -111,9 +111,7 @@ package body Goals.UI is
             if Goals_List(I).GType = GType then
                Append(GoalsList, GoalsIter, CategoryIter);
                Set
-                 (GoalsList,
-                  GoalsIter,
-                  0,
+                 (GoalsList, GoalsIter, 0,
                   GoalText(Goals_Container.To_Index(I)));
                Set(GoalsList, GoalsIter, 1, Gint(Goals_Container.To_Index(I)));
             end if;
@@ -152,8 +150,7 @@ package body Goals.UI is
       AddGoals("Finish missions", MISSION);
       AddGoals("Kill enemies in melee combat", KILL);
       On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "goalswindow")),
-         CloseWindow'Access);
+        (Gtk_Widget(Get_Object(Builder, "goalswindow")), CloseWindow'Access);
    end CreateGoalsMenu;
 
 end Goals.UI;

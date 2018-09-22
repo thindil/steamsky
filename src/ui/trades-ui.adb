@@ -54,8 +54,7 @@ package body Trades.UI is
       end if;
       ShowSkyMap;
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Object, "gamestack")),
-         "skymap");
+        (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
       Set_Deletable(Gtk_Window(Get_Object(Object, "skymapwindow")), True);
    end CloseTrade;
 
@@ -80,8 +79,7 @@ package body Trades.UI is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treeitems1"))),
-         ItemsModel,
-         ItemsIter);
+         ItemsModel, ItemsIter);
       if ItemsIter = Null_Iter then
          return;
       end if;
@@ -156,15 +154,12 @@ package body Trades.UI is
       Append(ItemInfo, Natural'Image(Price) & " " & To_String(MoneyName));
       Append
         (ItemInfo,
-         ASCII.LF &
-         "Weight:" &
-         Integer'Image(Items_List(ProtoIndex).Weight) &
+         ASCII.LF & "Weight:" & Integer'Image(Items_List(ProtoIndex).Weight) &
          " kg");
       if Items_List(ProtoIndex).IType = WeaponType then
          Append
            (ItemInfo,
-            ASCII.LF &
-            "Skill: " &
+            ASCII.LF & "Skill: " &
             To_String(Skills_List(Items_List(ProtoIndex).Value(3)).Name) &
             "/" &
             To_String
@@ -193,8 +188,7 @@ package body Trades.UI is
       if CargoIndex > 0 then
          Append
            (ItemInfo,
-            ASCII.LF &
-            "Owned:" &
+            ASCII.LF & "Owned:" &
             Positive'Image(PlayerShip.Cargo(CargoIndex).Amount));
          ShowItemDamage
            (PlayerShip.Cargo(CargoIndex).Durability,
@@ -209,8 +203,7 @@ package body Trades.UI is
          Append(ItemInfo, Positive'Image(Amount));
       end if;
       Set_Label
-        (Gtk_Label(Get_Object(Object, "lbltradeinfo")),
-         To_String(ItemInfo));
+        (Gtk_Label(Get_Object(Object, "lbltradeinfo")), To_String(ItemInfo));
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
          Set_Label
            (Gtk_Label(Get_Object(Object, "lbltradedescription")),
@@ -237,8 +230,7 @@ package body Trades.UI is
             "(max" & Natural'Image(MaxAmount) & "):");
       end if;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
-      if BaseCargoIndex = 0 or
-        MoneyIndex2 = 0 or
+      if BaseCargoIndex = 0 or MoneyIndex2 = 0 or
         not Items_List(ProtoIndex).Buyable(BaseType) then
          Hide(Gtk_Widget(Get_Object(Object, "buybox")));
       else
@@ -278,16 +270,12 @@ package body Trades.UI is
       if MoneyIndex2 > 0 then
          Set_Label
            (Gtk_Label(Get_Object(Object, "lblshipmoney")),
-            "You have" &
-            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
-            " " &
-            To_String(MoneyName) &
-            ".");
+            "You have" & Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
+            " " & To_String(MoneyName) & ".");
       else
          Set_Label
            (Gtk_Label(Get_Object(Object, "lblshipmoney")),
-            "You don't have any " &
-            To_String(MoneyName) &
+            "You don't have any " & To_String(MoneyName) &
             " to buy anything.");
       end if;
       FreeSpace := FreeCargo(0);
@@ -301,33 +289,26 @@ package body Trades.UI is
          if SkyBases(BaseIndex).Cargo(1).Amount = 0 then
             Set_Label
               (Gtk_Label(Get_Object(Object, "lblbasemoney")),
-               "Base don't have any " &
-               To_String(MoneyName) &
+               "Base don't have any " & To_String(MoneyName) &
                "to buy anything.");
          else
             Set_Label
               (Gtk_Label(Get_Object(Object, "lblbasemoney")),
                "Base have" &
-               Positive'Image(SkyBases(BaseIndex).Cargo(1).Amount) &
-               " " &
-               To_String(MoneyName) &
-               ".");
+               Positive'Image(SkyBases(BaseIndex).Cargo(1).Amount) & " " &
+               To_String(MoneyName) & ".");
          end if;
       else
          if TraderCargo(1).Amount = 0 then
             Set_Label
               (Gtk_Label(Get_Object(Object, "lblbasemoney")),
-               "Ship don't have any " &
-               To_String(MoneyName) &
+               "Ship don't have any " & To_String(MoneyName) &
                "to buy anything.");
          else
             Set_Label
               (Gtk_Label(Get_Object(Object, "lblbasemoney")),
-               "Ship have" &
-               Positive'Image(TraderCargo(1).Amount) &
-               " " &
-               To_String(MoneyName) &
-               ".");
+               "Ship have" & Positive'Image(TraderCargo(1).Amount) & " " &
+               To_String(MoneyName) & ".");
          end if;
       end if;
    end ShowItemTradeInfo;
@@ -344,8 +325,7 @@ package body Trades.UI is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Builder, "treeitems1"))),
-         ItemsModel,
-         ItemsIter);
+         ItemsModel, ItemsIter);
       if ItemsIter = Null_Iter then
          return;
       end if;
@@ -377,24 +357,18 @@ package body Trades.UI is
    exception
       when An_Exception : Trade_Cant_Buy =>
          ShowDialog
-           ("You can't buy " &
-            Exception_Message(An_Exception) &
-            " in this " &
-            Trader &
-            ".",
+           ("You can't buy " & Exception_Message(An_Exception) & " in this " &
+            Trader & ".",
             Gtk_Window(Get_Object(Builder, "skymapwindow")));
       when An_Exception : Trade_Not_For_Sale_Now =>
          ShowDialog
-           ("You can't buy " &
-            Exception_Message(An_Exception) &
+           ("You can't buy " & Exception_Message(An_Exception) &
             " in this base at this moment.",
             Gtk_Window(Get_Object(Builder, "skymapwindow")));
       when An_Exception : Trade_Buying_Too_Much =>
          ShowDialog
-           (Trader &
-            " don't have that much " &
-            Exception_Message(An_Exception) &
-            " for sale.",
+           (Trader & " don't have that much " &
+            Exception_Message(An_Exception) & " for sale.",
             Gtk_Window(Get_Object(Builder, "skymapwindow")));
       when Trade_No_Free_Cargo =>
          ShowDialog
@@ -402,19 +376,13 @@ package body Trades.UI is
             Gtk_Window(Get_Object(Builder, "skymapwindow")));
       when An_Exception : Trade_No_Money =>
          ShowDialog
-           ("You don't have any " &
-            To_String(MoneyName) &
-            " to buy " &
-            Exception_Message(An_Exception) &
-            ".",
+           ("You don't have any " & To_String(MoneyName) & " to buy " &
+            Exception_Message(An_Exception) & ".",
             Gtk_Window(Get_Object(Builder, "skymapwindow")));
       when An_Exception : Trade_Not_Enough_Money =>
          ShowDialog
-           ("You don't have enough " &
-            To_String(MoneyName) &
-            " to buy so much " &
-            Exception_Message(An_Exception) &
-            ".",
+           ("You don't have enough " & To_String(MoneyName) &
+            " to buy so much " & Exception_Message(An_Exception) & ".",
             Gtk_Window(Get_Object(Builder, "skymapwindow")));
       when Trade_Invalid_Amount =>
          if User_Data = Get_Object(Builder, "btnbuyitem") then
@@ -428,19 +396,14 @@ package body Trades.UI is
          end if;
       when An_Exception : Trade_Too_Much_For_Sale =>
          ShowDialog
-           ("You dont have that much " &
-            Exception_Message(An_Exception) &
+           ("You dont have that much " & Exception_Message(An_Exception) &
             " in ship cargo.",
             Gtk_Window(Get_Object(Builder, "skymapwindow")));
       when An_Exception : Trade_No_Money_In_Base =>
          ShowDialog
-           ("You can't sell so much " &
-            Exception_Message(An_Exception) &
-            " because " &
-            Trader &
-            " don't have that much " &
-            To_String(MoneyName) &
-            " to buy it.",
+           ("You can't sell so much " & Exception_Message(An_Exception) &
+            " because " & Trader & " don't have that much " &
+            To_String(MoneyName) & " to buy it.",
             Gtk_Window(Get_Object(Builder, "skymapwindow")));
       when Trade_No_Trader =>
          ShowDialog
@@ -452,9 +415,7 @@ package body Trades.UI is
    begin
       Builder := NewBuilder;
       Register_Handler
-        (Builder,
-         "Show_Item_Trade_Info",
-         ShowItemTradeInfo'Access);
+        (Builder, "Show_Item_Trade_Info", ShowItemTradeInfo'Access);
       Register_Handler(Builder, "Trade_Item", TradeItem'Access);
       Register_Handler(Builder, "Close_Trade", CloseTrade'Access);
    end CreateTradeUI;
@@ -484,10 +445,7 @@ package body Trades.UI is
             Append(ItemsList, ItemsIter);
             Set(ItemsList, ItemsIter, 0, GetItemName(PlayerShip.Cargo(I)));
             Set
-              (ItemsList,
-               ItemsIter,
-               1,
-               Gint(Inventory_Container.To_Index(I)));
+              (ItemsList, ItemsIter, 1, Gint(Inventory_Container.To_Index(I)));
             BaseCargoIndex :=
               FindBaseCargo
                 (PlayerShip.Cargo(I).ProtoIndex,
@@ -503,9 +461,7 @@ package body Trades.UI is
            Items_List(BaseCargo(I).ProtoIndex).Buyable(BaseType) then
             Append(ItemsList, ItemsIter);
             Set
-              (ItemsList,
-               ItemsIter,
-               0,
+              (ItemsList, ItemsIter, 0,
                To_String(Items_List(BaseCargo(I).ProtoIndex).Name));
             Set(ItemsList, ItemsIter, 1, 0);
             Set(ItemsList, ItemsIter, 2, Gint(I));
@@ -513,14 +469,12 @@ package body Trades.UI is
       end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "trade");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "trade");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treeitems1")),
          Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columnname3")),
-         False);
+         Gtk_Tree_View_Column(Get_Object(Builder, "columnname3")), False);
       ShowLastMessage(Builder);
    end ShowTradeUI;
 

@@ -42,8 +42,7 @@ package Missions is
      (MissionIndex: Positive); -- Accept selected mission from base
    procedure UpdateMissions(Minutes: Positive); -- Update accepted missions
    procedure FinishMission(MissionIndex: Positive); -- Finish selected mission
-   procedure DeleteMission
-     (MissionIndex: Positive;
+   procedure DeleteMission(MissionIndex: Positive;
       Failed: Boolean := True); -- Delete selected mission
    procedure UpdateMission(MissionIndex: Positive); -- Update status of mission
    function AutoFinishMissions

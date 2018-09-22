@@ -31,8 +31,7 @@ package Game is
    end record;
    GameDate: Date_Record;
    GameVersion: constant String := "Version: 2.9";
-   package UnboundedString_Container is new Vectors
-     (Positive,
+   package UnboundedString_Container is new Vectors(Positive,
       Unbounded_String);
    package Positive_Container is new Vectors(Positive, Positive);
    package Natural_Container is new Vectors(Positive, Natural);
@@ -61,9 +60,7 @@ package Game is
    MoneyName: Unbounded_String; -- Name of money (taken from MoneyIndex)
    SaveDirectory: Unbounded_String :=
      To_Unbounded_String
-       ("data" &
-        Dir_Separator &
-        "saves" &
+       ("data" & Dir_Separator & "saves" &
         Dir_Separator); -- Path to directory where are savegame and logs
    DataDirectory: Unbounded_String :=
      To_Unbounded_String
@@ -91,15 +88,11 @@ package Game is
        ("doc" & Dir_Separator); -- Path to directory where documentation is
    ModsDirectory: Unbounded_String :=
      To_Unbounded_String
-       ("data" &
-        Dir_Separator &
-        "mods" &
+       ("data" & Dir_Separator & "mods" &
         Dir_Separator); -- Path to directory where are game modifications
    PlayerCareer: Positive; -- Index of career selected by player during starting game
 
-   procedure NewGame
-     (CharName, ShipName: Unbounded_String;
-      Gender: Character;
+   procedure NewGame(CharName, ShipName: Unbounded_String; Gender: Character;
       FactionIndex,
       CareerIndex: Positive); -- Start new game: create map, place ship, crew, etc
    procedure UpdateGame

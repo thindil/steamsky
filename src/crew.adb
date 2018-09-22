@@ -32,13 +32,8 @@ with Careers; use Careers;
 package body Crew is
 
    procedure GainExp(Amount: Natural; SkillNumber, CrewIndex: Positive) is
-      SkillExp,
-      SkillLevel,
-      SkillIndex,
-      AttributeExp,
-      AttributeLevel,
-      NewAmount: Natural :=
-        0;
+      SkillExp, SkillLevel, SkillIndex, AttributeExp, AttributeLevel,
+      NewAmount: Natural := 0;
       AttributeIndex: constant Positive := Skills_List(SkillNumber).Attribute;
       procedure GainExpInAttribute(Attribute: Positive) is
       begin
@@ -57,7 +52,7 @@ package body Crew is
       end GainExpInAttribute;
    begin
       if Careers_List(PlayerCareer).Skills.Contains
-        (Skills_List(SkillNumber).Name) then
+          (Skills_List(SkillNumber).Name) then
          NewAmount := Amount + (Amount / 2);
       else
          NewAmount := Amount;
@@ -69,7 +64,7 @@ package body Crew is
       -- Gain experience in skill
       for I in
         PlayerShip.Crew(CrewIndex).Skills.First_Index ..
-            PlayerShip.Crew(CrewIndex).Skills.Last_Index loop
+          PlayerShip.Crew(CrewIndex).Skills.Last_Index loop
          if PlayerShip.Crew(CrewIndex).Skills(I)(1) = SkillNumber then
             SkillIndex := I;
          end if;
@@ -91,12 +86,11 @@ package body Crew is
          PlayerShip.Crew(CrewIndex).Skills(SkillIndex)(3) := SkillExp;
       else
          PlayerShip.Crew(CrewIndex).Skills.Append
-         (New_Item => (SkillNumber, SkillLevel, SkillExp));
+           (New_Item => (SkillNumber, SkillLevel, SkillExp));
       end if;
    end GainExp;
 
-   function GenerateMemberName
-     (Gender: Character;
+   function GenerateMemberName(Gender: Character;
       FactionIndex: Unbounded_String)
      return Unbounded_String is -- based on name generator from libtcod
       NewName, NameType: Unbounded_String;
@@ -181,8 +175,7 @@ package body Crew is
               (NewName,
                Letters'Val
                  (GetRandom
-                    (Letters'Pos(Letters'First),
-                     Letters'Pos(Letters'Last))));
+                    (Letters'Pos(Letters'First), Letters'Pos(Letters'Last))));
          end loop;
          Append(NewName, '-');
          NumbersAmount := GetRandom(2, 4);
@@ -191,8 +184,7 @@ package body Crew is
               (NewName,
                Numbers'Val
                  (GetRandom
-                    (Numbers'Pos(Numbers'First),
-                     Numbers'Pos(Numbers'Last))));
+                    (Numbers'Pos(Numbers'First), Numbers'Pos(Numbers'Last))));
          end loop;
       end if;
       return NewName;
@@ -216,9 +208,7 @@ package body Crew is
             ConsumeValue :=
               Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Value(1);
             UpdateCargo
-              (PlayerShip,
-               PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
-               -1);
+              (PlayerShip, PlayerShip.Cargo.Element(ItemIndex).ProtoIndex, -1);
             return ConsumeValue;
          else
             ItemIndex :=
@@ -231,9 +221,7 @@ package body Crew is
                    .Value
                    (1);
                UpdateInventory
-                 (MemberIndex => I,
-                  Amount => -1,
-                  InventoryIndex => ItemIndex);
+                 (MemberIndex => I, Amount => -1, InventoryIndex => ItemIndex);
                return ConsumeValue;
             end if;
          end if;
@@ -245,12 +233,11 @@ package body Crew is
          subtype Workplaces is ModuleType range ALCHEMY_LAB .. GREENHOUSE;
       begin
          if Factions_List(Member.Faction).Flags.Contains
-           (To_Unbounded_String("nofatigue")) then
+             (To_Unbounded_String("nofatigue")) then
             TiredLevel := 0;
          end if;
          Member.Tired := TiredLevel;
-         if TiredLevel = 0 and
-           Member.Order = Rest and
+         if TiredLevel = 0 and Member.Order = Rest and
            Member.PreviousOrder /= Rest then
             if Member.PreviousOrder /= Repair and
               Member.PreviousOrder /= Clean then
@@ -283,8 +270,7 @@ package body Crew is
                Member.OrderTime := 15;
                AddMessage
                  (To_String(Member.Name) & " back to work, fully rested.",
-                  OrderMessage,
-                  1);
+                  OrderMessage, 1);
                UpdateMorale(PlayerShip, I, 1);
             end if;
             Member.PreviousOrder := Rest;
@@ -295,8 +281,7 @@ package body Crew is
                HaveCabin: Boolean := False;
                CanRest: Boolean := True;
             begin
-               if Member.Order = Boarding and
-                 HarpoonDuration = 0 and
+               if Member.Order = Boarding and HarpoonDuration = 0 and
                  Enemy.HarpoonDuration = 0 then
                   CanRest := False;
                end if;
@@ -307,8 +292,7 @@ package body Crew is
                   AddMessage
                     (To_String(Member.Name) &
                      " is too tired to work, going rest.",
-                     OrderMessage,
-                     1);
+                     OrderMessage, 1);
                   for Module of PlayerShip.Modules loop
                      if Module.Owner = I and
                        Modules_List(Module.ProtoIndex).MType = CABIN then
@@ -319,14 +303,11 @@ package body Crew is
                   if not HaveCabin then
                      for Module of PlayerShip.Modules loop
                         if Modules_List(Module.ProtoIndex).MType = CABIN and
-                          Module.Durability > 0 and
-                          Module.Owner = 0 then
+                          Module.Durability > 0 and Module.Owner = 0 then
                            Module.Owner := I;
                            AddMessage
-                             (To_String(Member.Name) &
-                              " take " &
-                              To_String(Module.Name) &
-                              " as own cabin.",
+                             (To_String(Member.Name) & " take " &
+                              To_String(Module.Name) & " as own cabin.",
                               OtherMessage);
                            exit;
                         end if;
@@ -336,8 +317,7 @@ package body Crew is
                   AddMessage
                     (To_String(Member.Name) &
                      " is very tired but can't go to rest.",
-                     OrderMessage,
-                     3);
+                     OrderMessage, 3);
                   UpdateMorale(PlayerShip, I, GetRandom(1, 5));
                end if;
             end;
@@ -355,8 +335,7 @@ package body Crew is
                AddMessage
                  (To_String(Member.Name) &
                   " is hungry, but can't find anything to eat.",
-                  OtherMessage,
-                  3);
+                  OtherMessage, 3);
             end if;
          end if;
          Member.Hunger := HungerLevel;
@@ -373,14 +352,12 @@ package body Crew is
                AddMessage
                  (To_String(Member.Name) &
                   " is thirsty, but can't find anything to drink.",
-                  OtherMessage,
-                  3);
+                  OtherMessage, 3);
             end if;
          end if;
          Member.Thirst := ThirstLevel;
          Member.Health := HealthLevel;
-         if Member.Order /= Repair and
-           Member.Order /= Craft and
+         if Member.Order /= Repair and Member.Order /= Craft and
            Member.Order /= Upgrading then
             Member.OrderTime := OrderTime;
          end if;
@@ -447,10 +424,8 @@ package body Crew is
                   end if;
                end if;
                if not Factions_List(PlayerShip.Crew(I).Faction).Flags.Contains
-                 (To_Unbounded_String("nofatigue")) and
-                 HealthLevel > 0 and
-                 HealthLevel < 100 and
-                 CabinIndex > 0 then
+                   (To_Unbounded_String("nofatigue")) and
+                 HealthLevel > 0 and HealthLevel < 100 and CabinIndex > 0 then
                   HealthLevel := HealthLevel + Times;
                   if HealthLevel > 100 then
                      HealthLevel := 100;
@@ -589,10 +564,8 @@ package body Crew is
                                    (Factions_List(Member.Faction)
                                       .HealingTools) &
                                  " to continue healing wounded " &
-                                 To_String(Member.Name) &
-                                 ".",
-                                 OrderMessage,
-                                 3);
+                                 To_String(Member.Name) & ".",
+                                 OrderMessage, 3);
                            end if;
                         end if;
                      end loop;
@@ -625,8 +598,7 @@ package body Crew is
                         AddMessage
                           (To_String(PlayerShip.Crew(I).Name) &
                            " finished healing wounded.",
-                           OrderMessage,
-                           2);
+                           OrderMessage, 2);
                      end if;
                      if HealAmount /= 0 then
                         GiveOrders(PlayerShip, I, Rest);
@@ -645,8 +617,7 @@ package body Crew is
                               end if;
                               DamageItem
                                 (Inventory => PlayerShip.Crew(I).Inventory,
-                                 ItemIndex => ToolIndex,
-                                 MemberIndex => I);
+                                 ItemIndex => ToolIndex, MemberIndex => I);
                               exit;
                            end if;
                         end loop;
@@ -662,15 +633,12 @@ package body Crew is
                         if ToolIndex = 0 then
                            AddMessage
                              ("You can't continue cleaning ship because you don't have any cleaning tools.",
-                              OrderMessage,
-                              3);
+                              OrderMessage, 3);
                         end if;
                         for J in PlayerShip.Crew.Iterate loop
                            if PlayerShip.Crew(J).Order = Clean then
                               GiveOrders
-                                (PlayerShip,
-                                 Crew_Container.To_Index(J),
-                                 Rest);
+                                (PlayerShip, Crew_Container.To_Index(J), Rest);
                            end if;
                         end loop;
                      end if;
@@ -700,28 +668,23 @@ package body Crew is
                                  GainExp(GetRandom(1, 5), SkillIndex, I);
                                  DamageItem
                                    (Inventory => PlayerShip.Crew(I).Inventory,
-                                    ItemIndex => ToolIndex,
-                                    MemberIndex => I);
+                                    ItemIndex => ToolIndex, MemberIndex => I);
                                  ToolIndex :=
                                    FindTools
-                                     (I,
-                                      Skills_List(SkillIndex).Tool,
-                                      Train);
+                                     (I, Skills_List(SkillIndex).Tool, Train);
                                  exit when ToolIndex = 0;
                               end loop;
                               AddMessage
                                 (To_String(PlayerShip.Crew(I).Name) &
                                  " trained a little " &
-                                 To_String(Skills_List(SkillIndex).Name) &
-                                 ".",
+                                 To_String(Skills_List(SkillIndex).Name) & ".",
                                  OrderMessage);
                            end if;
                            if ToolIndex = 0 then
                               AddMessage
                                 (To_String(PlayerShip.Crew(I).Name) &
                                  " can't continue training because you don't have proper tools.",
-                                 OrderMessage,
-                                 3);
+                                 OrderMessage, 3);
                               GiveOrders(PlayerShip, I, Rest);
                            end if;
                         end if;
@@ -767,7 +730,7 @@ package body Crew is
          end if;
          if HealthLevel > 0 then
             PlayerShip.Crew.Update_Element
-            (Index => I, Process => UpdateMember'Access);
+              (Index => I, Process => UpdateMember'Access);
             I := I + 1;
          end if;
       end loop;
@@ -886,31 +849,25 @@ package body Crew is
          if Member.Payment(1) > 0 then
             if MoneyIndex2 = 0 and HaveMoney then
                AddMessage
-                 ("You don't have " &
-                  To_String(MoneyName) &
+                 ("You don't have " & To_String(MoneyName) &
                   " to pay your crew members.",
-                  TradeMessage,
-                  3);
+                  TradeMessage, 3);
                HaveMoney := False;
             end if;
             if HaveMoney then
                if PlayerShip.Cargo(MoneyIndex2).Amount < Member.Payment(1) then
                   UpdateCargo
-                    (Ship => PlayerShip,
-                     CargoIndex => MoneyIndex2,
+                    (Ship => PlayerShip, CargoIndex => MoneyIndex2,
                      Amount => (0 - PlayerShip.Cargo(MoneyIndex2).Amount));
                   AddMessage
-                    ("You don't have enough " &
-                     To_String(MoneyName) &
+                    ("You don't have enough " & To_String(MoneyName) &
                      " to pay your crew members.",
-                     TradeMessage,
-                     3);
+                     TradeMessage, 3);
                   HaveMoney := False;
                end if;
                if HaveMoney then
                   UpdateCargo
-                    (Ship => PlayerShip,
-                     CargoIndex => MoneyIndex2,
+                    (Ship => PlayerShip, CargoIndex => MoneyIndex2,
                      Amount => (0 - Member.Payment(1)));
                   PayMessage := To_Unbounded_String("You pay ") & Member.Name;
                   if Member.Gender = 'M' then
@@ -937,10 +894,8 @@ package body Crew is
             if PlayerShip.Crew(MemberIndex).ContractLength = 0 then
                AddMessage
                  ("Your contract with " &
-                  To_String(PlayerShip.Crew(MemberIndex).Name) &
-                  " has ended.",
-                  TradeMessage,
-                  3);
+                  To_String(PlayerShip.Crew(MemberIndex).Name) & " has ended.",
+                  TradeMessage, 3);
                if PlayerShip.Speed /= DOCKED then
                   PlayerShip.Crew(MemberIndex).Orders := (others => 0);
                   GiveOrders(PlayerShip, MemberIndex, Rest);

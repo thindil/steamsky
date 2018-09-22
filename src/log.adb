@@ -38,9 +38,7 @@ package body Log is
          DebugMode);
    end StartLogging;
 
-   procedure LogMessage
-     (Message: String;
-      MessageType: Debug_Types;
+   procedure LogMessage(Message: String; MessageType: Debug_Types;
       NewLine, TimeStamp: Boolean := True) is
       NewMessage: Unbounded_String;
    begin
@@ -51,8 +49,7 @@ package body Log is
       if TimeStamp then
          NewMessage := To_Unbounded_String("[");
          Append
-           (NewMessage,
-            Ada.Calendar.Formatting.Image(Clock) & "]:" & Message);
+           (NewMessage, Ada.Calendar.Formatting.Image(Clock) & "]:" & Message);
       else
          NewMessage := To_Unbounded_String(Message);
       end if;

@@ -27,8 +27,7 @@ package Maps is
    SkyMap: array(1 .. 1024, 1 .. 1024) of SkyCell; -- Game map
 
    function CountDistance
-     (DestinationX,
-      DestinationY: Positive)
+     (DestinationX, DestinationY: Positive)
      return Natural; -- Return distance between player ship and destination point
 
 end Maps;

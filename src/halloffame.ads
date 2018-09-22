@@ -27,8 +27,7 @@ package HallOfFame is
    end record;
    HallOfFame_Array: array(1 .. 10) of HallOfFame_Data :=
      (others =>
-        (Name => Null_Unbounded_String,
-         Points => 0,
+        (Name => Null_Unbounded_String, Points => 0,
          DeathReason =>
            Null_Unbounded_String)); -- Store all hall of fame entries
 

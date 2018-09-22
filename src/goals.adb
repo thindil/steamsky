@@ -40,11 +40,8 @@ package body Goals is
       DeleteIndex: Positive;
    begin
       TempRecord :=
-        (Index => Null_Unbounded_String,
-         GType => RANDOM,
-         Amount => 0,
-         TargetIndex => Null_Unbounded_String,
-         Multiplier => 1);
+        (Index => Null_Unbounded_String, GType => RANDOM, Amount => 0,
+         TargetIndex => Null_Unbounded_String, Multiplier => 1);
       GoalsData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(GoalsData, "goal");
@@ -66,8 +63,7 @@ package body Goals is
          if Get_Attribute(Item(NodesList, I), "remove") = "" then
             Goals_List.Append(New_Item => TempRecord);
             LogMessage
-              ("Goal added: " & To_String(TempRecord.Index),
-               Everything);
+              ("Goal added: " & To_String(TempRecord.Index), Everything);
          else
             RemoveIndex :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "remove"));
@@ -81,11 +77,8 @@ package body Goals is
             LogMessage("Goal removed: " & To_String(RemoveIndex), Everything);
          end if;
          TempRecord :=
-           (Index => Null_Unbounded_String,
-            GType => RANDOM,
-            Amount => 0,
-            TargetIndex => Null_Unbounded_String,
-            Multiplier => 1);
+           (Index => Null_Unbounded_String, GType => RANDOM, Amount => 0,
+            TargetIndex => Null_Unbounded_String, Multiplier => 1);
       end loop;
    end LoadGoals;
 
@@ -95,8 +88,7 @@ package body Goals is
       Goal: Goal_Data;
       InsertPosition: Positive;
       Added: Boolean := False;
-      function GetFactionName
-        (FactionIndex: Unbounded_String;
+      function GetFactionName(FactionIndex: Unbounded_String;
          FType: String) return String is
       begin
          for Faction of Factions_List loop
@@ -178,8 +170,7 @@ package body Goals is
                   InsertPosition := InsertPosition - 1;
                end if;
                Insert
-                 (Text,
-                  InsertPosition,
+                 (Text, InsertPosition,
                   GetFactionName(Goal.TargetIndex, "name") & " ");
             when DESTROY =>
                for I in ProtoShips_List.Iterate loop
@@ -195,9 +186,7 @@ package body Goals is
                      InsertPosition := InsertPosition - 1;
                   end if;
                   Insert
-                    (Text,
-                     InsertPosition,
-                     To_String(Goal.TargetIndex) & " ");
+                    (Text, InsertPosition, To_String(Goal.TargetIndex) & " ");
                end if;
             when CRAFT =>
                if FindRecipe(Goal.TargetIndex) > 0 then
@@ -231,15 +220,11 @@ package body Goals is
                   if Goal.Amount > 1 then
                      StopPosition := StopPosition + 2;
                      Replace_Slice
-                       (Text,
-                        InsertPosition,
-                        StopPosition,
+                       (Text, InsertPosition, StopPosition,
                         GetFactionName(Goal.TargetIndex, "pluralmembername"));
                   else
                      Replace_Slice
-                       (Text,
-                        InsertPosition,
-                        StopPosition,
+                       (Text, InsertPosition, StopPosition,
                         GetFactionName(Goal.TargetIndex, "membername"));
                   end if;
                end;
@@ -253,16 +238,11 @@ package body Goals is
    procedure ClearCurrentGoal is
    begin
       CurrentGoal :=
-        (Index => Null_Unbounded_String,
-         GType => RANDOM,
-         Amount => 0,
-         TargetIndex => Null_Unbounded_String,
-         Multiplier => 1);
+        (Index => Null_Unbounded_String, GType => RANDOM, Amount => 0,
+         TargetIndex => Null_Unbounded_String, Multiplier => 1);
    end ClearCurrentGoal;
 
-   procedure UpdateGoal
-     (GType: GoalTypes;
-      TargetIndex: Unbounded_String;
+   procedure UpdateGoal(GType: GoalTypes; TargetIndex: Unbounded_String;
       Amount: Positive := 1) is
    begin
       if GType /= CurrentGoal.GType then
@@ -281,9 +261,7 @@ package body Goals is
       if CurrentGoal.Amount = 0 then
          UpdateFinishedGoals(CurrentGoal.Index);
          AddMessage
-           ("You finished your goal. New goal is set.",
-            OtherMessage,
-            4);
+           ("You finished your goal. New goal is set.", OtherMessage, 4);
          CurrentGoal :=
            Goals_List
              (GetRandom(Goals_List.First_Index, Goals_List.Last_Index));

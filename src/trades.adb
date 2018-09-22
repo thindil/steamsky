@@ -87,9 +87,7 @@ package body Trades is
          raise Trade_Not_Enough_Money with To_String(ItemName);
       end if;
       UpdateCargo
-        (Ship => PlayerShip,
-         CargoIndex => MoneyIndex2,
-         Amount => (0 - Cost));
+        (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => (0 - Cost));
       if BaseIndex > 0 then
          UpdateBaseCargo(ProtoMoneyIndex, Cost);
       else
@@ -97,21 +95,16 @@ package body Trades is
       end if;
       if BaseIndex > 0 then
          UpdateCargo
-           (PlayerShip,
-            ItemIndex,
-            BuyAmount,
+           (PlayerShip, ItemIndex, BuyAmount,
             SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
          UpdateBaseCargo
-           (CargoIndex => BaseItemIndex,
-            Amount => (0 - BuyAmount),
+           (CargoIndex => BaseItemIndex, Amount => (0 - BuyAmount),
             Durability =>
               SkyBases(BaseIndex).Cargo.Element(BaseItemIndex).Durability);
          GainRep(BaseIndex, 1);
       else
          UpdateCargo
-           (PlayerShip,
-            ItemIndex,
-            BuyAmount,
+           (PlayerShip, ItemIndex, BuyAmount,
             TraderCargo(BaseItemIndex).Durability);
          TraderCargo(BaseItemIndex).Amount :=
            TraderCargo(BaseItemIndex).Amount - BuyAmount;
@@ -121,15 +114,8 @@ package body Trades is
       end if;
       GainExp(1, TalkingSkill, TraderIndex);
       AddMessage
-        ("You bought" &
-         Positive'Image(BuyAmount) &
-         " " &
-         To_String(ItemName) &
-         " for" &
-         Positive'Image(Cost) &
-         " " &
-         To_String(MoneyName) &
-         ".",
+        ("You bought" & Positive'Image(BuyAmount) & " " & To_String(ItemName) &
+         " for" & Positive'Image(Cost) & " " & To_String(MoneyName) & ".",
          TradeMessage);
       if BaseIndex = 0 and EventIndex > 0 then
          Events_List(EventIndex).Time := Events_List(EventIndex).Time + 5;
@@ -215,8 +201,7 @@ package body Trades is
             raise Trade_No_Money_In_Base with ItemName;
          end if;
          UpdateBaseCargo
-           (ProtoIndex,
-            SellAmount,
+           (ProtoIndex, SellAmount,
             PlayerShip.Cargo.Element(ItemIndex).Durability);
       else
          if Profit > TraderCargo(1).Amount then
@@ -234,16 +219,14 @@ package body Trades is
          if not CargoAdded then
             BaseType := GetRandom(1, 4);
             TraderCargo.Append
-            (New_Item =>
-               (ProtoIndex => ProtoIndex,
-                Amount => SellAmount,
-                Durability => PlayerShip.Cargo(ItemIndex).Durability,
-                Price => Items_List(ItemIndex).Prices(BaseType)));
+              (New_Item =>
+                 (ProtoIndex => ProtoIndex, Amount => SellAmount,
+                  Durability => PlayerShip.Cargo(ItemIndex).Durability,
+                  Price => Items_List(ItemIndex).Prices(BaseType)));
          end if;
       end if;
       UpdateCargo
-        (Ship => PlayerShip,
-         CargoIndex => ItemIndex,
+        (Ship => PlayerShip, CargoIndex => ItemIndex,
          Amount => (0 - SellAmount),
          Durability => PlayerShip.Cargo.Element(ItemIndex).Durability);
       UpdateCargo(PlayerShip, MoneyIndex2, Profit);
@@ -255,15 +238,8 @@ package body Trades is
       end if;
       GainExp(1, TalkingSkill, TraderIndex);
       AddMessage
-        ("You sold" &
-         Positive'Image(SellAmount) &
-         " " &
-         ItemName &
-         " for" &
-         Positive'Image(Profit) &
-         " " &
-         To_String(MoneyName) &
-         ".",
+        ("You sold" & Positive'Image(SellAmount) & " " & ItemName & " for" &
+         Positive'Image(Profit) & " " & To_String(MoneyName) & ".",
          TradeMessage);
       if BaseIndex = 0 and EventIndex > 0 then
          Events_List(EventIndex).Time := Events_List(EventIndex).Time + 5;
@@ -277,10 +253,7 @@ package body Trades is
    procedure GenerateTraderCargo(ProtoIndex: Positive) is
       TraderShip: ShipRecord :=
         CreateShip
-          (ProtoIndex,
-           Null_Unbounded_String,
-           PlayerShip.SkyX,
-           PlayerShip.SkyY,
+          (ProtoIndex, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY,
            FULL_STOP);
       BaseType, CargoAmount, CargoItemIndex: Natural;
       ItemIndex, ItemAmount: Positive;
@@ -289,11 +262,10 @@ package body Trades is
       for Item of TraderShip.Cargo loop
          BaseType := GetRandom(1, 4);
          TraderCargo.Append
-         (New_Item =>
-            (ProtoIndex => Item.ProtoIndex,
-             Amount => Item.Amount,
-             Durability => 100,
-             Price => Items_List(Item.ProtoIndex).Prices(BaseType)));
+           (New_Item =>
+              (ProtoIndex => Item.ProtoIndex, Amount => Item.Amount,
+               Durability => 100,
+               Price => Items_List(Item.ProtoIndex).Prices(BaseType)));
       end loop;
       if TraderShip.Crew.Length < 5 then
          CargoAmount := GetRandom(1, 3);
@@ -322,17 +294,14 @@ package body Trades is
               -1 then
                BaseType := GetRandom(1, 4);
                TraderCargo.Append
-               (New_Item =>
-                  (ProtoIndex => ItemIndex,
-                   Amount => ItemAmount,
-                   Durability => 100,
-                   Price => Items_List(ItemIndex).Prices(BaseType)));
+                 (New_Item =>
+                    (ProtoIndex => ItemIndex, Amount => ItemAmount,
+                     Durability => 100,
+                     Price => Items_List(ItemIndex).Prices(BaseType)));
                TraderShip.Cargo.Append
-               (New_Item =>
-                  (ProtoIndex => ItemIndex,
-                   Amount => ItemAmount,
-                   Durability => 100,
-                   Name => Null_Unbounded_String));
+                 (New_Item =>
+                    (ProtoIndex => ItemIndex, Amount => ItemAmount,
+                     Durability => 100, Name => Null_Unbounded_String));
             else
                CargoAmount := 1;
             end if;

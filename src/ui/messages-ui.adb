@@ -39,9 +39,7 @@ package body Messages.UI is
       if MessagesAmount(MessagesType) = 0 then
          Append(MessagesList, MessagesIter);
          Set
-           (MessagesList,
-            MessagesIter,
-            0,
+           (MessagesList, MessagesIter, 0,
             "There are no messages of that type.");
       else
          for Message of reverse Messages_List loop
@@ -50,49 +48,32 @@ package body Messages.UI is
                case Message.Color is
                   when 1 =>
                      Set
-                       (MessagesList,
-                        MessagesIter,
-                        0,
+                       (MessagesList, MessagesIter, 0,
                         "<span foreground=""yellow"">" &
-                        To_String(Message.Message) &
-                        "</span>");
+                        To_String(Message.Message) & "</span>");
                   when 2 =>
                      Set
-                       (MessagesList,
-                        MessagesIter,
-                        0,
+                       (MessagesList, MessagesIter, 0,
                         "<span foreground=""#4E9A06"">" &
-                        To_String(Message.Message) &
-                        "</span>");
+                        To_String(Message.Message) & "</span>");
                   when 3 =>
                      Set
-                       (MessagesList,
-                        MessagesIter,
-                        0,
+                       (MessagesList, MessagesIter, 0,
                         "<span foreground=""red"">" &
-                        To_String(Message.Message) &
-                        "</span>");
+                        To_String(Message.Message) & "</span>");
                   when 4 =>
                      Set
-                       (MessagesList,
-                        MessagesIter,
-                        0,
+                       (MessagesList, MessagesIter, 0,
                         "<span foreground=""#3465A4"">" &
-                        To_String(Message.Message) &
-                        "</span>");
+                        To_String(Message.Message) & "</span>");
                   when 5 =>
                      Set
-                       (MessagesList,
-                        MessagesIter,
-                        0,
+                       (MessagesList, MessagesIter, 0,
                         "<span foreground=""cyan"">" &
-                        To_String(Message.Message) &
-                        "</span>");
+                        To_String(Message.Message) & "</span>");
                   when others =>
                      Set
-                       (MessagesList,
-                        MessagesIter,
-                        0,
+                       (MessagesList, MessagesIter, 0,
                         To_String(Message.Message));
                end case;
             end if;
@@ -122,8 +103,7 @@ package body Messages.UI is
       Refilter(Gtk_Tree_Model_Filter(Get_Object(Object, "messagesfilter")));
    end SearchMessages;
 
-   function VisibleMessages
-     (Model: Gtk_Tree_Model;
+   function VisibleMessages(Model: Gtk_Tree_Model;
       Iter: Gtk_Tree_Iter) return Boolean is
       SearchEntry: constant Gtk_GEntry :=
         Gtk_GEntry(Get_Object(Builder, "entrysearch"));
@@ -161,8 +141,7 @@ package body Messages.UI is
       ShowMessages(Default);
       Set_Text(Gtk_GEntry(Get_Object(Builder, "entrysearch")), "");
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "lastmessages");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "lastmessages");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Grab_Focus(Gtk_Widget(Get_Object(Builder, "cmbmessages")));
    end ShowMessagesUI;

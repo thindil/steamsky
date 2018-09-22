@@ -60,8 +60,7 @@ package body Ships.Cargo.UI is
          Set_Cursor
            (Gtk_Tree_View(Get_Object(Builder, "treecargo")),
             Gtk_Tree_Path_New_From_String("0"),
-            Gtk_Tree_View_Column(Get_Object(Builder, "columncargo")),
-            False);
+            Gtk_Tree_View_Column(Get_Object(Builder, "columncargo")), False);
       end if;
    end SetActiveItem;
 
@@ -78,8 +77,7 @@ package body Ships.Cargo.UI is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treecargo"))),
-         CargoModel,
-         CargoIter);
+         CargoModel, CargoIter);
       if CargoIter = Null_Iter then
          return;
       end if;
@@ -98,14 +96,11 @@ package body Ships.Cargo.UI is
       end if;
       Append
         (ItemInfo,
-         ASCII.LF &
-         "Amount:" &
+         ASCII.LF & "Amount:" &
          Positive'Image(PlayerShip.Cargo(ItemIndex).Amount));
       Append
         (ItemInfo,
-         ASCII.LF &
-         "Weight:" &
-         Positive'Image(Items_List(ProtoIndex).Weight) &
+         ASCII.LF & "Weight:" & Positive'Image(Items_List(ProtoIndex).Weight) &
          " kg");
       Append
         (ItemInfo,
@@ -113,10 +108,8 @@ package body Ships.Cargo.UI is
       if Items_List(ProtoIndex).IType = WeaponType then
          Append
            (ItemInfo,
-            ASCII.LF &
-            "Skill: " &
-            Skills_List(Items_List(ProtoIndex).Value(3)).Name &
-            "/" &
+            ASCII.LF & "Skill: " &
+            Skills_List(Items_List(ProtoIndex).Value(3)).Name & "/" &
             Attributes_List
               (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
               .Name);
@@ -140,8 +133,7 @@ package body Ships.Cargo.UI is
          end case;
       end if;
       Set_Markup
-        (Gtk_Label(Get_Object(Object, "lbliteminfo2")),
-         To_String(ItemInfo));
+        (Gtk_Label(Get_Object(Object, "lbliteminfo2")), To_String(ItemInfo));
       ShowItemDamage
         (PlayerShip.Cargo(ItemIndex).Durability,
          Get_Object(Object, "itemdamagebar2"));
@@ -191,17 +183,12 @@ package body Ships.Cargo.UI is
       end if;
       if DropAmount > 0 then
          AddMessage
-           ("You dropped" &
-            Positive'Image(DropAmount) &
-            " " &
-            GetItemName(PlayerShip.Cargo(ItemIndex)) &
-            ".",
+           ("You dropped" & Positive'Image(DropAmount) & " " &
+            GetItemName(PlayerShip.Cargo(ItemIndex)) & ".",
             OtherMessage);
          UpdateCargo
-           (PlayerShip,
-            PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
-            (0 - DropAmount),
-            PlayerShip.Cargo.Element(ItemIndex).Durability);
+           (PlayerShip, PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
+            (0 - DropAmount), PlayerShip.Cargo.Element(ItemIndex).Durability);
       end if;
       RefreshCargoInfo;
       ShowLastMessage(Object);
@@ -217,22 +204,18 @@ package body Ships.Cargo.UI is
       Item: constant InventoryData := PlayerShip.Cargo(ItemIndex);
    begin
       if FreeInventory
-          (MemberIndex,
-           0 - (Items_List(Item.ProtoIndex).Weight * Amount)) <
+          (MemberIndex, 0 - (Items_List(Item.ProtoIndex).Weight * Amount)) <
         0 then
          ShowDialog
            ("No free space in " &
             To_String(PlayerShip.Crew(MemberIndex).Name) &
-            "'s inventory for that amount of " &
-            GetItemName(Item),
+            "'s inventory for that amount of " & GetItemName(Item),
             Gtk_Window(Get_Object(Object, "giveitemwindow")));
          return;
       end if;
       UpdateInventory(MemberIndex, Amount, Item.ProtoIndex, Item.Durability);
       UpdateCargo
-        (Ship => PlayerShip,
-         Amount => (0 - Amount),
-         CargoIndex => ItemIndex);
+        (Ship => PlayerShip, Amount => (0 - Amount), CargoIndex => ItemIndex);
       RefreshCargoInfo;
       ShowLastMessage(Object);
       SetActiveItem;
@@ -242,9 +225,7 @@ package body Ships.Cargo.UI is
    begin
       Builder := NewBuilder;
       Register_Handler
-        (Builder,
-         "Show_Item_Cargo_Info",
-         ShowItemCargoInfo'Access);
+        (Builder, "Show_Item_Cargo_Info", ShowItemCargoInfo'Access);
       Register_Handler(Builder, "Drop_Item", DropItem'Access);
       Register_Handler(Builder, "Give_Item", GiveItem'Access);
    end CreateCargoUI;
@@ -262,8 +243,7 @@ package body Ships.Cargo.UI is
       RefreshCargoInfo;
       PreviousGameState := OldState;
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "cargo");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "cargo");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       ShowLastMessage(Builder);
       SetActiveItem;

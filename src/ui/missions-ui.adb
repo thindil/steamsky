@@ -61,8 +61,7 @@ package body Missions.UI is
          return;
       end if;
       Get_Selected
-        (Gtk.Tree_View.Get_Selection(Gtk_Tree_View(User_Data)),
-         MissionsModel,
+        (Gtk.Tree_View.Get_Selection(Gtk_Tree_View(User_Data)), MissionsModel,
          MissionsIter);
       if MissionsIter = Null_Iter then
          return;
@@ -72,7 +71,8 @@ package body Missions.UI is
          if MissionIndex >
            Positive
              (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-                .Missions.Length) then
+                .Missions
+                .Length) then
             return;
          end if;
          Mission :=
@@ -91,14 +91,11 @@ package body Missions.UI is
               To_Unbounded_String("Item: ") & Items_List(Mission.Target).Name;
             Append
               (MissionInfo,
-               ASCII.LF &
-               "Weight:" &
-               Positive'Image(Items_List(Mission.Target).Weight) &
-               " kg");
+               ASCII.LF & "Weight:" &
+               Positive'Image(Items_List(Mission.Target).Weight) & " kg");
             Append
               (MissionInfo,
-               ASCII.LF &
-               "To base: " &
+               ASCII.LF & "To base: " &
                To_String
                  (SkyBases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
                     .Name));
@@ -144,8 +141,7 @@ package body Missions.UI is
             end if;
             Append
               (MissionInfo,
-               ASCII.LF &
-               "To base: " &
+               ASCII.LF & "To base: " &
                To_String
                  (SkyBases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
                     .Name));
@@ -187,10 +183,7 @@ package body Missions.UI is
       end if;
       Append
         (MissionInfo,
-         ASCII.LF &
-         "Reward:" &
-         Positive'Image(Mission.Reward) &
-         " " &
+         ASCII.LF & "Reward:" & Positive'Image(Mission.Reward) & " " &
          To_String(MoneyName));
       if User_Data = Get_Object(Builder, "treemissions") then
          Set_Markup
@@ -219,8 +212,7 @@ package body Missions.UI is
          if MissionsLimit > 0 then
             Set_Label
               (Gtk_Label(Get_Object(Builder, "lblavailablemissions")),
-               "You can take" &
-               Natural'Image(MissionsLimit) &
+               "You can take" & Natural'Image(MissionsLimit) &
                " more missions in from base.");
          else
             Set_Label
@@ -230,12 +222,10 @@ package body Missions.UI is
          end if;
          if not CanAccept then
             Set_Sensitive
-              (Gtk_Widget(Get_Object(Builder, "btnacceptmission")),
-               False);
+              (Gtk_Widget(Get_Object(Builder, "btnacceptmission")), False);
          else
             Set_Sensitive
-              (Gtk_Widget(Get_Object(Builder, "btnacceptmission")),
-               True);
+              (Gtk_Widget(Get_Object(Builder, "btnacceptmission")), True);
          end if;
       else
          Set_Markup
@@ -264,13 +254,12 @@ package body Missions.UI is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treemissions"))),
-         MissionsModel,
-         MissionsIter);
+         MissionsModel, MissionsIter);
       if MissionsIter = Null_Iter then
          return;
       end if;
-      if SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-          .Missions.Length =
+      if SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Missions
+          .Length =
         0 then
          CloseMessages(Object);
          return;
@@ -279,8 +268,7 @@ package body Missions.UI is
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treemissions")),
          Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columnmission")),
-         False);
+         Gtk_Tree_View_Column(Get_Object(Builder, "columnmission")), False);
       ShowLastMessage(Object);
    exception
       when An_Exception : Missions_Accepting_Error =>
@@ -313,13 +301,11 @@ package body Missions.UI is
          PlayerShip.DestinationX := X;
          PlayerShip.DestinationY := Y;
          AddMessage
-           ("You set the travel destination for your ship.",
-            OrderMessage);
+           ("You set the travel destination for your ship.", OrderMessage);
          ShowSkyMap;
       end if;
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "skymap");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), True);
    end ButtonMission;
 
@@ -329,9 +315,7 @@ package body Missions.UI is
       Register_Handler(Builder, "Show_Mission_Info", ShowMissionInfo'Access);
       Register_Handler(Builder, "Button_Mission", ButtonMission'Access);
       Register_Handler
-        (Builder,
-         "Accept_Mission",
-         AcceptSelectedMission'Access);
+        (Builder, "Accept_Mission", AcceptSelectedMission'Access);
    end CreateMissionsUI;
 
    procedure ShowMissionsUI is
@@ -357,20 +341,14 @@ package body Missions.UI is
                Set(MissionsList, MissionsIter, 0, "Explore area");
             when Passenger =>
                Set
-                 (MissionsList,
-                  MissionsIter,
-                  0,
+                 (MissionsList, MissionsIter, 0,
                   "Transport passenger to base");
          end case;
          Set
-           (MissionsList,
-            MissionsIter,
-            1,
+           (MissionsList, MissionsIter, 1,
             Gint(Mission_Container.To_Index(I)));
          Set
-           (MissionsList,
-            MissionsIter,
-            2,
+           (MissionsList, MissionsIter, 2,
             Gint
               (CountDistance
                  (SkyBases(BaseIndex).Missions(I).TargetX,
@@ -378,14 +356,12 @@ package body Missions.UI is
       end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "availablemissions");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "availablemissions");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treemissions")),
          Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columnmission")),
-         False);
+         Gtk_Tree_View_Column(Get_Object(Builder, "columnmission")), False);
       ShowLastMessage(Builder);
    end ShowMissionsUI;
 
@@ -410,35 +386,26 @@ package body Missions.UI is
                Set(MissionsList, MissionsIter, 0, "Explore area");
             when Passenger =>
                Set
-                 (MissionsList,
-                  MissionsIter,
-                  0,
+                 (MissionsList, MissionsIter, 0,
                   "Transport passenger to base");
          end case;
          Set
-           (MissionsList,
-            MissionsIter,
-            1,
+           (MissionsList, MissionsIter, 1,
             Gint(Mission_Container.To_Index(I)));
          Set
-           (MissionsList,
-            MissionsIter,
-            2,
+           (MissionsList, MissionsIter, 2,
             Gint
               (CountDistance
-                 (AcceptedMissions(I).TargetX,
-                  AcceptedMissions(I).TargetY)));
+                 (AcceptedMissions(I).TargetX, AcceptedMissions(I).TargetY)));
       end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "acceptedmissions");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "acceptedmissions");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treemissions1")),
          Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columnmission1")),
-         False);
+         Gtk_Tree_View_Column(Get_Object(Builder, "columnmission1")), False);
    end ShowAcceptedMissions;
 
 end Missions.UI;

@@ -17,8 +17,7 @@
 
 package Ships.Movement is
 
-   function MoveShip
-     (ShipIndex, X, Y: Integer;
+   function MoveShip(ShipIndex, X, Y: Integer;
       Message: in out Unbounded_String) return Natural; -- Move selected ship
    function DockShip
      (Docking: Boolean)
@@ -26,10 +25,8 @@ package Ships.Movement is
    function ChangeShipSpeed
      (SpeedValue: ShipSpeed)
      return String; -- Change speed of ship, returns empty string if all ok otherwise error message
-   function RealSpeed
-     (Ship: ShipRecord;
-      InfoOnly: Boolean :=
-        False)
+   function RealSpeed(Ship: ShipRecord;
+      InfoOnly: Boolean := False)
      return Natural; -- Return real ship speed in meters per minute
    function CountFuelNeeded
      return Integer; -- Return fuel needed by player ship to travel

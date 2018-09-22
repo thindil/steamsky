@@ -56,8 +56,7 @@ package Crafts is
    function FindRecipe
      (Index: Unbounded_String)
      return Natural; -- Return vector index of recipe or zero if recipe not found
-   procedure SetRecipe
-     (Workshop, Amount: Positive;
+   procedure SetRecipe(Workshop, Amount: Positive;
       RecipeIndex: Integer); -- Set crafting recipe for selected workshop
 
 end Crafts;

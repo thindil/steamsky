@@ -54,8 +54,7 @@ package body Ships.UI.Handlers is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treemodules"))),
-         ModulesModel,
-         ModulesIter);
+         ModulesModel, ModulesIter);
       if ModulesIter = Null_Iter then
          return;
       end if;
@@ -94,13 +93,11 @@ package body Ships.UI.Handlers is
                Append(ModuleInfo, " or ");
             end if;
             if FindItem
-                (Inventory => PlayerShip.Cargo,
-                 ItemType => Item.IType) =
+                (Inventory => PlayerShip.Cargo, ItemType => Item.IType) =
               0 then
                Append
                  (ModuleInfo,
-                  "<span foreground=""red"">" &
-                  To_String(Item.Name) &
+                  "<span foreground=""red"">" & To_String(Item.Name) &
                   "</span>");
             else
                Append(ModuleInfo, To_String(Item.Name));
@@ -110,8 +107,7 @@ package body Ships.UI.Handlers is
       end loop;
       Append
         (ModuleInfo,
-         ASCII.LF &
-         "Repair/Upgrade skill: " &
+         ASCII.LF & "Repair/Upgrade skill: " &
          To_String
            (Skills_List(Modules_List(Module.ProtoIndex).RepairSkill).Name) &
          "/" &
@@ -156,9 +152,7 @@ package body Ships.UI.Handlers is
             Set_Fraction(Gtk_Progress_Bar(CleanBar), DamagePercent);
             Set_Text
               (Gtk_Progress_Bar(CleanBar),
-               "Modules installed:" &
-               Integer'Image(Module.Data(1)) &
-               " /" &
+               "Modules installed:" & Integer'Image(Module.Data(1)) & " /" &
                Integer'Image(Module.Data(2)));
             MaxValue :=
               Positive(Float(Modules_List(Module.ProtoIndex).MaxValue) * 1.5);
@@ -177,8 +171,7 @@ package body Ships.UI.Handlers is
             end if;
             Show_All(Gtk_Widget(QualityBar));
             Set_Fraction
-              (Gtk_Progress_Bar(QualityBar),
-               Gdouble(Module.Data(2)) / 100.0);
+              (Gtk_Progress_Bar(QualityBar), Gdouble(Module.Data(2)) / 100.0);
             if Module.Data(2) < 30 then
                Set_Text(Gtk_Progress_Bar(QualityBar), "Minimal quality");
             elsif Module.Data(2) > 29 and Module.Data(2) < 60 then
@@ -237,16 +230,14 @@ package body Ships.UI.Handlers is
                         Append(ModuleInfo, " or ");
                      end if;
                      if FindItem
-                         (PlayerShip.Cargo,
-                          Objects_Container.To_Index(I)) >
+                         (PlayerShip.Cargo, Objects_Container.To_Index(I)) >
                        0 then
                         Append(ModuleInfo, To_String(Items_List(I).Name));
                      else
                         Append
                           (ModuleInfo,
                            "<span foreground=""red"">" &
-                           To_String(Items_List(I).Name) &
-                           "</span>");
+                           To_String(Items_List(I).Name) & "</span>");
                      end if;
                      Mamount := Mamount + 1;
                   end if;
@@ -282,9 +273,7 @@ package body Ships.UI.Handlers is
                if Module.Data(1) > 0 then
                   Append
                     (ModuleInfo,
-                     "Manufacturing:" &
-                     Positive'Image(Module.Data(3)) &
-                     "x " &
+                     "Manufacturing:" & Positive'Image(Module.Data(3)) & "x " &
                      To_String
                        (Items_List(Recipes_List(Module.Data(1)).ResultIndex)
                           .Name));
@@ -296,10 +285,8 @@ package body Ships.UI.Handlers is
                end if;
                Append
                  (ModuleInfo,
-                  ASCII.LF &
-                  "Time to complete current:" &
-                  Positive'Image(Module.Data(2)) &
-                  " mins");
+                  ASCII.LF & "Time to complete current:" &
+                  Positive'Image(Module.Data(2)) & " mins");
             else
                Append(ModuleInfo, "Manufacturing: nothing");
             end if;
@@ -316,16 +303,14 @@ package body Ships.UI.Handlers is
                Append
                  (ModuleInfo,
                   "Set for training " &
-                  To_String(Skills_List(Module.Data(1)).Name) &
-                  ".");
+                  To_String(Skills_List(Module.Data(1)).Name) & ".");
             else
                Append(ModuleInfo, "Must be set for training.");
             end if;
             if Module.Owner > 0 then
                Append
                  (ModuleInfo,
-                  ASCII.LF &
-                  "Trainee: " &
+                  ASCII.LF & "Trainee: " &
                   To_String(PlayerShip.Crew(Module.Owner).Name));
             else
                Append(ModuleInfo, ASCII.LF & "Trainee: none");
@@ -423,10 +408,8 @@ package body Ships.UI.Handlers is
       GenerateSaveName(True);
    end ChangeShipName;
 
-   procedure ChangeModuleName
-     (Self: access Gtk_Cell_Renderer_Text_Record'Class;
-      Path: UTF8_String;
-      New_Text: UTF8_String) is
+   procedure ChangeModuleName(Self: access Gtk_Cell_Renderer_Text_Record'Class;
+      Path: UTF8_String; New_Text: UTF8_String) is
       pragma Unreferenced(Self);
       ModulesList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "moduleslist"));
@@ -486,8 +469,7 @@ package body Ships.UI.Handlers is
       if User_Data = Get_Object(Builder, "btnrepairfirst") then
          PlayerShip.RepairModule := ModuleIndex;
          AddMessage
-           ("You assigned " &
-            To_String(PlayerShip.Modules(ModuleIndex).Name) &
+           ("You assigned " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
             " as repair priority.",
             OrderMessage);
       else
@@ -540,10 +522,8 @@ package body Ships.UI.Handlers is
                PlayerShip.Modules(ModuleIndex).Owner := AssignIndex;
                AddMessage
                  ("You assigned " &
-                  To_String(PlayerShip.Modules(ModuleIndex).Name) &
-                  " to " &
-                  To_String(PlayerShip.Crew(AssignIndex).Name) &
-                  ".",
+                  To_String(PlayerShip.Modules(ModuleIndex).Name) & " to " &
+                  To_String(PlayerShip.Crew(AssignIndex).Name) & ".",
                   OrderMessage);
             when GUN =>
                GiveOrders(PlayerShip, AssignIndex, Gunner, ModuleIndex);
@@ -560,18 +540,13 @@ package body Ships.UI.Handlers is
            ("You assigned " &
             To_String
               (Items_List(PlayerShip.Cargo(AssignIndex).ProtoIndex).Name) &
-            " to " &
-            To_String(PlayerShip.Modules(ModuleIndex).Name) &
-            ".",
+            " to " & To_String(PlayerShip.Modules(ModuleIndex).Name) & ".",
             OrderMessage);
       elsif User_Data = Get_Object(Builder, "btnassignskill") then
          PlayerShip.Modules(ModuleIndex).Data(1) := AssignIndex;
          AddMessage
-           ("You prepared " &
-            To_String(PlayerShip.Modules(ModuleIndex).Name) &
-            " for training " &
-            To_String(Skills_List(AssignIndex).Name) &
-            ".",
+           ("You prepared " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
+            " for training " & To_String(Skills_List(AssignIndex).Name) & ".",
             OrderMessage);
       end if;
       ShowLastMessage(Builder);
@@ -604,15 +579,13 @@ package body Ships.UI.Handlers is
          end if;
          PlayerShip.Modules(ModuleIndex).Data(3) := 1;
          AddMessage
-           ("You disabled " &
-            To_String(PlayerShip.Modules(ModuleIndex).Name) &
+           ("You disabled " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
             ".",
             OrderMessage);
       else
          PlayerShip.Modules(ModuleIndex).Data(3) := 0;
          AddMessage
-           ("You enabled " &
-            To_String(PlayerShip.Modules(ModuleIndex).Name) &
+           ("You enabled " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
             ".",
             OrderMessage);
       end if;
