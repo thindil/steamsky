@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Moved player's careers to separated data file
 - Training skills on ship require tools
 - How chance for base owner is calculated
+- Updated README.md
 
 ### Fixed
 - Reclaiming turrets and workshops by crew members after back to work after
