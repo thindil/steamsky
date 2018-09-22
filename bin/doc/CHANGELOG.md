@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash when trying to change colors on terminal emulator which don't support
+  it (issue #28)
+
 ## [2.0.10] - 2018-09-16
 
 ### Fixed
