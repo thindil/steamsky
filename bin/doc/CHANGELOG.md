@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
 - Ability to show current game directories in options
 - Optional names for careers in factions
 - New items types: cockpitsimulator, engineersbook, gunsimulator,
-  rhetoricbook, smalltoys, alchemybook and cookingbook
+  rhetoricbook, smalltoys, alchemybook, cookingbook and gunsmithbook
 
 ### Changed
 - Help factions flags variables now return list of factions which have that
