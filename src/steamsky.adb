@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -96,14 +96,15 @@ begin
    Init_Pair(3, COLOR_RED, COLOR_BLACK);
    Init_Pair(4, COLOR_BLUE, COLOR_BLACK);
    Init_Pair(5, COLOR_CYAN, COLOR_BLACK);
-   if Can_Change_Color then
+   begin
       Init_Color(8, 80, 80, 80);
       Init_Pair(6, 8, 8);
       Init_Pair(7, COLOR_WHITE, 8);
-   else
-      Init_Pair(6, COLOR_BLACK, COLOR_BLACK);
-      Init_Pair(7, COLOR_WHITE, COLOR_BLACK);
-   end if;
+   exception
+      when CURSES_EXCEPTION =>
+         Init_Pair(6, COLOR_BLACK, COLOR_BLACK);
+         Init_Pair(7, COLOR_WHITE, COLOR_BLACK);
+   end;
    Init_Pair(8, COLOR_WHITE, COLOR_RED);
    Init_Pair(9, COLOR_WHITE, COLOR_YELLOW);
    Init_Pair(10, COLOR_BLACK, COLOR_WHITE);
