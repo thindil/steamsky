@@ -36,15 +36,11 @@ package body Items is
       TempValue: Natural_Container.Vector;
    begin
       TempRecord :=
-        (Name => Null_Unbounded_String,
-         Weight => 1,
-         IType => Null_Unbounded_String,
-         Prices => (0, 0, 0, 0, 0),
-         Buyable => (False, False, False, False, False),
-         Value => TempValue,
+        (Name => Null_Unbounded_String, Weight => 1,
+         IType => Null_Unbounded_String, Prices => (0, 0, 0, 0, 0),
+         Buyable => (False, False, False, False, False), Value => TempValue,
          ShowType => Null_Unbounded_String,
-         Description => Null_Unbounded_String,
-         Index => Null_Unbounded_String);
+         Description => Null_Unbounded_String, Index => Null_Unbounded_String);
       ItemsData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(ItemsData, "item");
@@ -64,8 +60,7 @@ package body Items is
          end if;
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I),
-              "trade");
+             (Item(NodesList, I), "trade");
          for J in 0 .. Length(ChildNodes) - 1 loop
             TempRecord.Prices(J + 1) :=
               Natural'Value(Get_Attribute(Item(ChildNodes, J), "price"));
@@ -75,17 +70,15 @@ package body Items is
          end loop;
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I),
-              "data");
+             (Item(NodesList, I), "data");
          for J in 0 .. Length(ChildNodes) - 1 loop
             TempRecord.Value.Append
-            (New_Item =>
-               Natural'Value(Get_Attribute(Item(ChildNodes, J), "value")));
+              (New_Item =>
+                 Natural'Value(Get_Attribute(Item(ChildNodes, J), "value")));
          end loop;
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I),
-              "description");
+             (Item(NodesList, I), "description");
          TempRecord.Description :=
            To_Unbounded_String(Node_Value(First_Child(Item(ChildNodes, 0))));
          if TempRecord.Index = MoneyIndex then
@@ -107,25 +100,21 @@ package body Items is
                LegsArmors_List.Append(New_Item => Items_List.Last_Index);
             end if;
             LogMessage
-              ("Item added: " & To_String(TempRecord.Name),
-               Everything);
+              ("Item added: " & To_String(TempRecord.Name), Everything);
          else
             Items_List.Delete
-            (Index =>
-               FindProtoItem
-                 (To_Unbounded_String
-                    (Get_Attribute(Item(NodesList, I), "remove"))));
+              (Index =>
+                 FindProtoItem
+                   (To_Unbounded_String
+                      (Get_Attribute(Item(NodesList, I), "remove"))));
             LogMessage
               ("Item removed: " & Get_Attribute(Item(NodesList, I), "remove"),
                Everything);
          end if;
          TempRecord :=
-           (Name => Null_Unbounded_String,
-            Weight => 1,
-            IType => Null_Unbounded_String,
-            Prices => (0, 0, 0, 0, 0),
-            Buyable => (False, False, False, False, False),
-            Value => TempValue,
+           (Name => Null_Unbounded_String, Weight => 1,
+            IType => Null_Unbounded_String, Prices => (0, 0, 0, 0, 0),
+            Buyable => (False, False, False, False, False), Value => TempValue,
             ShowType => Null_Unbounded_String,
             Description => Null_Unbounded_String,
             Index => Null_Unbounded_String);
@@ -133,9 +122,7 @@ package body Items is
    end LoadItems;
 
    function FindProtoItem
-     (Index,
-      ItemType: Unbounded_String :=
-        Null_Unbounded_String)
+     (Index, ItemType: Unbounded_String := Null_Unbounded_String)
       return Natural is
    begin
       if Index /= Null_Unbounded_String then
@@ -178,10 +165,8 @@ package body Items is
       return To_String(ItemName);
    end GetItemName;
 
-   procedure DamageItem
-     (Inventory: in out Inventory_Container.Vector;
-      ItemIndex: Positive;
-      SkillLevel, MemberIndex: Natural := 0) is
+   procedure DamageItem(Inventory: in out Inventory_Container.Vector;
+      ItemIndex: Positive; SkillLevel, MemberIndex: Natural := 0) is
       DamageChance: Integer :=
         Items_List(Inventory(ItemIndex).ProtoIndex).Value(1);
       I: Natural := Inventory.First_Index;
@@ -197,24 +182,21 @@ package body Items is
       end if;
       if Inventory(ItemIndex).Amount > 1 then
          Inventory.Append
-         (New_Item =>
-            (ProtoIndex => Inventory(ItemIndex).ProtoIndex,
-             Amount => (Inventory(ItemIndex).Amount - 1),
-             Name => Inventory(ItemIndex).Name,
-             Durability => Inventory(ItemIndex).Durability));
+           (New_Item =>
+              (ProtoIndex => Inventory(ItemIndex).ProtoIndex,
+               Amount => (Inventory(ItemIndex).Amount - 1),
+               Name => Inventory(ItemIndex).Name,
+               Durability => Inventory(ItemIndex).Durability));
          Inventory(ItemIndex).Amount := 1;
       end if;
       Inventory(ItemIndex).Durability := Inventory(ItemIndex).Durability - 1;
       if Inventory(ItemIndex).Durability = 0 then -- Item destroyed
          if MemberIndex = 0 then
             UpdateCargo
-              (Ship => PlayerShip,
-               CargoIndex => ItemIndex,
-               Amount => -1);
+              (Ship => PlayerShip, CargoIndex => ItemIndex, Amount => -1);
          else
             UpdateInventory
-              (MemberIndex => MemberIndex,
-               Amount => -1,
+              (MemberIndex => MemberIndex, Amount => -1,
                InventoryIndex => ItemIndex);
          end if;
          return;
@@ -222,16 +204,13 @@ package body Items is
       while I <= Inventory.Last_Index loop
          for J in Inventory.First_Index .. Inventory.Last_Index loop
             if Inventory(I).ProtoIndex = Inventory(J).ProtoIndex and
-              Inventory(I).Durability = Inventory(J).Durability and
-              I /= J then
+              Inventory(I).Durability = Inventory(J).Durability and I /= J then
                if MemberIndex = 0 then
                   UpdateCargo
-                    (Ship => PlayerShip,
-                     CargoIndex => J,
+                    (Ship => PlayerShip, CargoIndex => J,
                      Amount => (0 - Inventory.Element(J).Amount));
                   UpdateCargo
-                    (Ship => PlayerShip,
-                     CargoIndex => I,
+                    (Ship => PlayerShip, CargoIndex => I,
                      Amount => Inventory.Element(J).Amount);
                else
                   UpdateInventory
@@ -251,8 +230,7 @@ package body Items is
       end loop;
    end DamageItem;
 
-   function FindItem
-     (Inventory: Inventory_Container.Vector;
+   function FindItem(Inventory: Inventory_Container.Vector;
       ProtoIndex: Natural := 0;
       ItemType: Unbounded_String := Null_Unbounded_String;
       Durability: Natural := 101) return Natural is

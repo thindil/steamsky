@@ -77,17 +77,14 @@ package body Stories.UI is
                   if Slice_Count(Tokens) < 2 then
                      TargetText :=
                        To_Unbounded_String(" You must travel to base ") &
-                       CurrentStory.Data &
-                       To_Unbounded_String(" at X:");
+                       CurrentStory.Data & To_Unbounded_String(" at X:");
                      for I in SkyBases'Range loop
                         if SkyBases(I).Name = CurrentStory.Data then
                            Append
-                             (TargetText,
-                              Positive'Image(SkyBases(I).SkyX));
+                             (TargetText, Positive'Image(SkyBases(I).SkyX));
                            Append(TargetText, " Y:");
                            Append
-                             (TargetText,
-                              Positive'Image(SkyBases(I).SkyY));
+                             (TargetText, Positive'Image(SkyBases(I).SkyY));
                            exit;
                         end if;
                      end loop;
@@ -161,12 +158,10 @@ package body Stories.UI is
       PlayerShip.DestinationX := NewX;
       PlayerShip.DestinationY := NewY;
       AddMessage
-        ("You set the travel destination for your ship.",
-         OrderMessage);
+        ("You set the travel destination for your ship.", OrderMessage);
       ShowSkyMap;
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Object, "gamestack")),
-         "skymap");
+        (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
       Set_Deletable(Gtk_Window(Get_Object(Object, "skymapwindow")), True);
    end SetStoryAsDestination;
 
@@ -176,8 +171,7 @@ package body Stories.UI is
       GetStoryLocation(NewX, NewY);
       ShowSkyMap(NewX, NewY);
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Object, "gamestack")),
-         "skymap");
+        (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
       Set_Deletable(Gtk_Window(Get_Object(Object, "skymapwindow")), True);
    end ShowStory;
 
@@ -186,9 +180,7 @@ package body Stories.UI is
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Story_Info", ShowStoryInfo'Access);
       Register_Handler
-        (Builder,
-         "Set_Story_As_Destination",
-         SetStoryAsDestination'Access);
+        (Builder, "Set_Story_As_Destination", SetStoryAsDestination'Access);
       Register_Handler(Builder, "Show_Story", ShowStory'Access);
    end CreateStoriesUI;
 
@@ -210,9 +202,7 @@ package body Stories.UI is
       for FinishedStory of FinishedStories loop
          Append(StoriesList, StoriesIter);
          Set
-           (StoriesList,
-            StoriesIter,
-            0,
+           (StoriesList, StoriesIter, 0,
             To_String(Stories_List(FinishedStory.Index).Name));
       end loop;
       Setting := False;
@@ -220,8 +210,7 @@ package body Stories.UI is
         (Gtk_Combo_Box(Get_Object(Builder, "cmbstories")),
          Gint(FinishedStories.Length - 1));
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "stories");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "stories");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       ShowLastMessage(Builder);
    end ShowStoriesUI;

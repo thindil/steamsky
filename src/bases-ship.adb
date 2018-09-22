@@ -54,12 +54,8 @@ package body Bases.Ship is
          PlayerShip.Modules(ModuleIndex).Durability :=
            PlayerShip.Modules(ModuleIndex).MaxDurability;
          AddMessage
-           ("You bought " &
-            To_String(PlayerShip.Modules(ModuleIndex).Name) &
-            " repair for" &
-            Positive'Image(Cost) &
-            " " &
-            To_String(MoneyName) &
+           ("You bought " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
+            " repair for" & Positive'Image(Cost) & " " & To_String(MoneyName) &
             ".",
             TradeMessage);
       else
@@ -69,17 +65,12 @@ package body Bases.Ship is
             end if;
          end loop;
          AddMessage
-           ("You bought whole ship repair for" &
-            Positive'Image(Cost) &
-            " " &
-            To_String(MoneyName) &
-            ".",
+           ("You bought whole ship repair for" & Positive'Image(Cost) & " " &
+            To_String(MoneyName) & ".",
             TradeMessage);
       end if;
       UpdateCargo
-        (Ship => PlayerShip,
-         CargoIndex => MoneyIndex2,
-         Amount => (0 - Cost));
+        (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => (0 - Cost));
       UpdateBaseCargo(ProtoMoneyIndex, Cost);
       GainExp(1, TalkingSkill, TraderIndex);
       GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
@@ -153,43 +144,36 @@ package body Bases.Ship is
          end if;
          UpdateGame(Modules_List(ModuleIndex).InstallTime);
          UpdateCargo
-           (Ship => PlayerShip,
-            CargoIndex => MoneyIndex2,
+           (Ship => PlayerShip, CargoIndex => MoneyIndex2,
             Amount => (0 - Price));
          UpdateBaseCargo(ProtoMoneyIndex, Price);
          GainExp(1, TalkingSkill, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
          if Modules_List(ModuleIndex).MType /= HULL then
             PlayerShip.Modules.Append
-            (New_Item =>
-               (Name => Modules_List(ModuleIndex).Name,
-                ProtoIndex => ModuleIndex,
-                Weight => Modules_List(ModuleIndex).Weight,
-                Durability => Modules_List(ModuleIndex).Durability,
-                MaxDurability => Modules_List(ModuleIndex).Durability,
-                Owner => 0,
-                UpgradeProgress => 0,
-                UpgradeAction => NONE,
-                Data =>
-                  (Modules_List(ModuleIndex).Value,
-                   Modules_List(ModuleIndex).MaxValue,
-                   0)));
+              (New_Item =>
+                 (Name => Modules_List(ModuleIndex).Name,
+                  ProtoIndex => ModuleIndex,
+                  Weight => Modules_List(ModuleIndex).Weight,
+                  Durability => Modules_List(ModuleIndex).Durability,
+                  MaxDurability => Modules_List(ModuleIndex).Durability,
+                  Owner => 0, UpgradeProgress => 0, UpgradeAction => NONE,
+                  Data =>
+                    (Modules_List(ModuleIndex).Value,
+                     Modules_List(ModuleIndex).MaxValue, 0)));
          else
             PlayerShip.Modules.Insert
-            (Before =>
-               HullIndex, New_Item =>
-               (Name => Modules_List(ModuleIndex).Name,
-                ProtoIndex => ModuleIndex,
-                Weight => Modules_List(ModuleIndex).Weight,
-                Durability => Modules_List(ModuleIndex).Durability,
-                MaxDurability => Modules_List(ModuleIndex).Durability,
-                Owner => 0,
-                UpgradeProgress => 0,
-                UpgradeAction => NONE,
-                Data =>
-                  (Modules_List(ModuleIndex).Value,
-                   Modules_List(ModuleIndex).MaxValue,
-                   0)));
+              (Before => HullIndex,
+               New_Item =>
+                 (Name => Modules_List(ModuleIndex).Name,
+                  ProtoIndex => ModuleIndex,
+                  Weight => Modules_List(ModuleIndex).Weight,
+                  Durability => Modules_List(ModuleIndex).Durability,
+                  MaxDurability => Modules_List(ModuleIndex).Durability,
+                  Owner => 0, UpgradeProgress => 0, UpgradeAction => NONE,
+                  Data =>
+                    (Modules_List(ModuleIndex).Value,
+                     Modules_List(ModuleIndex).MaxValue, 0)));
          end if;
          case Modules_List(ModuleIndex).MType is
             when GUN | HARPOON_GUN =>
@@ -199,13 +183,9 @@ package body Bases.Ship is
                PlayerShip.Modules(HullIndex).Data(1) := ModulesAmount;
          end case;
          AddMessage
-           ("You installed " &
-            To_String(Modules_List(ModuleIndex).Name) &
-            " on your ship for" &
-            Positive'Image(Price) &
-            " " &
-            To_String(MoneyName) &
-            ".",
+           ("You installed " & To_String(Modules_List(ModuleIndex).Name) &
+            " on your ship for" & Positive'Image(Price) & " " &
+            To_String(MoneyName) & ".",
             TradeMessage);
       else
          Damage :=
@@ -272,24 +252,17 @@ package body Bases.Ship is
             GiveOrders
               (Ship => PlayerShip,
                MemberIndex => PlayerShip.Modules(ModuleIndex).Owner,
-               GivenOrder => Rest,
-               CheckPriorities => False);
+               GivenOrder => Rest, CheckPriorities => False);
          end if;
          UpdateCargo
-           (Ship => PlayerShip,
-            CargoIndex => MoneyIndex2,
-            Amount => Price);
+           (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => Price);
          UpdateBaseCargo(ProtoMoneyIndex, Price);
          GainExp(1, TalkingSkill, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
          AddMessage
-           ("You removed " &
-            To_String(PlayerShip.Modules(ModuleIndex).Name) &
-            " from your ship and earned" &
-            Positive'Image(Price) &
-            " " &
-            To_String(MoneyName) &
-            ".",
+           ("You removed " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
+            " from your ship and earned" & Positive'Image(Price) & " " &
+            To_String(MoneyName) & ".",
             TradeMessage);
          PlayerShip.Modules.Delete(ModuleIndex);
          if PlayerShip.RepairModule > ModuleIndex then
@@ -340,15 +313,11 @@ package body Bases.Ship is
          DockingCost := PlayerShip.Cargo(MoneyIndex2).Amount;
       end if;
       UpdateCargo
-        (Ship => PlayerShip,
-         CargoIndex => MoneyIndex2,
+        (Ship => PlayerShip, CargoIndex => MoneyIndex2,
          Amount => (0 - DockingCost));
       UpdateBaseCargo(ProtoMoneyIndex, DockingCost);
       AddMessage
-        ("You pay" &
-         Positive'Image(DockingCost) &
-         " " &
-         To_String(MoneyName) &
+        ("You pay" & Positive'Image(DockingCost) & " " & To_String(MoneyName) &
          " docking fee.",
          OtherMessage);
       if TraderIndex > 0 then

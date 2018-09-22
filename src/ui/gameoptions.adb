@@ -87,32 +87,19 @@ package body GameOptions is
       To_Unbounded_String("<skymapwindow>/mouseclick"),
       To_Unbounded_String("<skymapwindow>/Menu/Stories"));
    EditNames: constant array(AccelNames'Range) of Unbounded_String :=
-     (To_Unbounded_String("edtupleft"),
-      To_Unbounded_String("edtup"),
-      To_Unbounded_String("edtupright"),
-      To_Unbounded_String("edtleft"),
-      To_Unbounded_String("edtmovewait"),
-      To_Unbounded_String("edtright"),
-      To_Unbounded_String("edtdownleft"),
-      To_Unbounded_String("edtdown"),
-      To_Unbounded_String("edtdownright"),
-      To_Unbounded_String("edtmoveto"),
-      To_Unbounded_String("edtshipinfo"),
-      To_Unbounded_String("edtcargo"),
-      To_Unbounded_String("edtcrew"),
-      To_Unbounded_String("edtorders"),
-      To_Unbounded_String("edtcrafts"),
-      To_Unbounded_String("edtmessages"),
-      To_Unbounded_String("edtbases"),
-      To_Unbounded_String("edtevents"),
-      To_Unbounded_String("edtmissions"),
-      To_Unbounded_String("edtmap"),
-      To_Unbounded_String("edtgamestats"),
-      To_Unbounded_String("edthelp"),
-      To_Unbounded_String("edtgameoptions"),
-      To_Unbounded_String("edtquit"),
-      To_Unbounded_String("edtresign"),
-      To_Unbounded_String("edtmenu"),
+     (To_Unbounded_String("edtupleft"), To_Unbounded_String("edtup"),
+      To_Unbounded_String("edtupright"), To_Unbounded_String("edtleft"),
+      To_Unbounded_String("edtmovewait"), To_Unbounded_String("edtright"),
+      To_Unbounded_String("edtdownleft"), To_Unbounded_String("edtdown"),
+      To_Unbounded_String("edtdownright"), To_Unbounded_String("edtmoveto"),
+      To_Unbounded_String("edtshipinfo"), To_Unbounded_String("edtcargo"),
+      To_Unbounded_String("edtcrew"), To_Unbounded_String("edtorders"),
+      To_Unbounded_String("edtcrafts"), To_Unbounded_String("edtmessages"),
+      To_Unbounded_String("edtbases"), To_Unbounded_String("edtevents"),
+      To_Unbounded_String("edtmissions"), To_Unbounded_String("edtmap"),
+      To_Unbounded_String("edtgamestats"), To_Unbounded_String("edthelp"),
+      To_Unbounded_String("edtgameoptions"), To_Unbounded_String("edtquit"),
+      To_Unbounded_String("edtresign"), To_Unbounded_String("edtmenu"),
       To_Unbounded_String("edtwaitorders"),
       To_Unbounded_String("edtcentermap"),
       To_Unbounded_String("edtmovemapleft"),
@@ -127,8 +114,7 @@ package body GameOptions is
       To_Unbounded_String("edtmovecursordownleft"),
       To_Unbounded_String("edtmovecursordown"),
       To_Unbounded_String("edtmovecursordownright"),
-      To_Unbounded_String("edtclickmouse"),
-      To_Unbounded_String("edtstories"));
+      To_Unbounded_String("edtclickmouse"), To_Unbounded_String("edtstories"));
 
    procedure CloseOptions(Object: access Gtkada_Builder_Record'Class) is
    begin
@@ -158,10 +144,8 @@ package body GameOptions is
          GameSettings.AnimationsEnabled := 0;
       end if;
       Set_Long_Property
-        (Get_Default,
-         "gtk-enable-animations",
-         Glong(GameSettings.AnimationsEnabled),
-         "");
+        (Get_Default, "gtk-enable-animations",
+         Glong(GameSettings.AnimationsEnabled), "");
       GameSettings.AnimationType :=
         Positive
           (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbanimations"))) + 1);
@@ -185,8 +169,8 @@ package body GameOptions is
           (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjmessageslimit"))));
       if Natural(Messages_List.Length) > GameSettings.MessagesLimit then
          Messages_List.Delete_First
-         (Count =>
-            (Messages_List.Length - Count_Type(GameSettings.MessagesLimit)));
+           (Count =>
+              (Messages_List.Length - Count_Type(GameSettings.MessagesLimit)));
       end if;
       GameSettings.SavedMessages :=
         Positive
@@ -195,13 +179,11 @@ package body GameOptions is
       Save(To_String(SaveDirectory) & "keys.cfg");
       ShowSkyMap;
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "skymap");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), True);
    end CloseOptions;
 
-   function SetAccelerator
-     (Self: access Gtk_Widget_Record'Class;
+   function SetAccelerator(Self: access Gtk_Widget_Record'Class;
       Event: Gdk.Event.Gdk_Event_Key) return Boolean is
       KeyMods: constant Gdk_Modifier_Type :=
         Event.State and Get_Default_Mod_Mask;
@@ -222,17 +204,13 @@ package body GameOptions is
            Gtk_Widget(Get_Object(Builder, To_String(EditNames(I)))) then
             Changed :=
               Change_Entry
-                (To_String(AccelNames(I)),
-                 Event.Keyval,
-                 KeyMods,
-                 True);
+                (To_String(AccelNames(I)), Event.Keyval, KeyMods, True);
             exit;
          end if;
       end loop;
       if Changed then
          Set_Text
-           (Gtk_Entry(Self),
-            Accelerator_Get_Label(Event.Keyval, KeyMods));
+           (Gtk_Entry(Self), Accelerator_Get_Label(Event.Keyval, KeyMods));
       end if;
       return False;
    end SetAccelerator;
@@ -253,8 +231,7 @@ package body GameOptions is
         (Gtk_Label(Get_Object(Builder, "lblsavedir")),
          To_String(SaveDirectory));
       Set_Text
-        (Gtk_Label(Get_Object(Builder, "lbldocdir")),
-         To_String(DocDirectory));
+        (Gtk_Label(Get_Object(Builder, "lbldocdir")), To_String(DocDirectory));
       Set_Text
         (Gtk_Label(Get_Object(Builder, "lblmodsdir")),
          To_String(ModsDirectory));
@@ -312,8 +289,7 @@ package body GameOptions is
         (Gtk_Adjustment(Get_Object(Builder, "adjsavedmessages")),
          Gdouble(GameSettings.SavedMessages));
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "options");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "options");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
    end ShowGameOptions;
 

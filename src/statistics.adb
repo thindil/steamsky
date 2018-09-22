@@ -42,7 +42,7 @@ package body Statistics is
       end loop;
       if not Updated then
          GameStats.DestroyedShips.Append
-         (New_Item => (Index => ShipIndex, Amount => 1));
+           (New_Item => (Index => ShipIndex, Amount => 1));
       end if;
    end UpdateDestroyedShips;
 
@@ -81,7 +81,7 @@ package body Statistics is
          for Goal of Goals_List loop
             if Goal.Index = Index then
                GameStats.FinishedGoals.Append
-               (New_Item => (Index => Goal.Index, Amount => 1));
+                 (New_Item => (Index => Goal.Index, Amount => 1));
                exit;
             end if;
          end loop;
@@ -100,7 +100,7 @@ package body Statistics is
       end loop;
       if not Updated then
          GameStats.FinishedMissions.Append
-         (New_Item => (Index => MType, Amount => 1));
+           (New_Item => (Index => MType, Amount => 1));
       end if;
       GameStats.Points := GameStats.Points + 50;
    end UpdateFinishedMissions;
@@ -117,13 +117,12 @@ package body Statistics is
       end loop;
       if not Updated then
          GameStats.CraftingOrders.Append
-         (New_Item => (Index => Index, Amount => 1));
+           (New_Item => (Index => Index, Amount => 1));
       end if;
       GameStats.Points := GameStats.Points + 5;
    end UpdateCraftingOrders;
 
-   procedure UpdateKilledMobs
-     (Mob: Member_Data;
+   procedure UpdateKilledMobs(Mob: Member_Data;
       FractionName: Unbounded_String) is
       Updated: Boolean := False;
    begin
@@ -142,12 +141,12 @@ package body Statistics is
       end loop;
       if not Updated then
          GameStats.KilledMobs.Append
-         (New_Item =>
-            (Index =>
-               To_Unbounded_String
-                 (To_Upper(Slice(FractionName, 1, 1)) &
-                  Slice(FractionName, 2, Length(FractionName))),
-             Amount => 1));
+           (New_Item =>
+              (Index =>
+                 To_Unbounded_String
+                   (To_Upper(Slice(FractionName, 1, 1)) &
+                    Slice(FractionName, 2, Length(FractionName))),
+               Amount => 1));
       end if;
    end UpdateKilledMobs;
 

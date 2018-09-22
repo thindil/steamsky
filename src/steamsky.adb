@@ -33,8 +33,7 @@ with MainMenu; use MainMenu;
 
 procedure SteamSky is
 
-   function UpdatePath
-     (Path: in out Unbounded_String;
+   function UpdatePath(Path: in out Unbounded_String;
       PathName: String) return Boolean is
    begin
       if Element(Path, Length(Path)) /= Dir_Separator then
@@ -43,17 +42,14 @@ procedure SteamSky is
       if not Exists(To_String(Path)) then
          if PathName /= "Save" and PathName /= "Modifications" then
             Put_Line
-              ("Directory " &
-               To_String(Path) &
+              ("Directory " & To_String(Path) &
                " not exists. You must use existing directory as " &
-               To_Lower(PathName) &
-               " directory.");
+               To_Lower(PathName) & " directory.");
             return False;
          end if;
       end if;
       LogMessage
-        (PathName & " directory sets to: " & To_String(Path),
-         Everything);
+        (PathName & " directory sets to: " & To_String(Path), Everything);
       return True;
    end UpdatePath;
 
@@ -113,10 +109,8 @@ begin
    Init;
    Set_On_Exception(On_Exception'Access);
    Set_Long_Property
-     (Get_Default,
-      "gtk-enable-animations",
-      Glong(GameSettings.AnimationsEnabled),
-      "");
+     (Get_Default, "gtk-enable-animations",
+      Glong(GameSettings.AnimationsEnabled), "");
    CreateMainMenu;
    Main;
 

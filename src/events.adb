@@ -85,15 +85,13 @@ package body Events is
                      end case;
                      if Roll2 >
                        GetSkillLevel
-                         (PlayerShip.Crew(CrewIndex),
-                          EngineeringSkill) then
+                         (PlayerShip.Crew(CrewIndex), EngineeringSkill) then
                         AddMessage
                           ("One of your engines is taking damage.",
-                           OtherMessage,
-                           3);
+                           OtherMessage, 3);
                         for I in
                           PlayerShip.Modules.First_Index ..
-                              PlayerShip.Modules.Last_Index loop
+                            PlayerShip.Modules.Last_Index loop
                            if Modules_List(PlayerShip.Modules(I).ProtoIndex)
                                .MType =
                              ENGINE and
@@ -104,8 +102,7 @@ package body Events is
                         EngineIndex :=
                           Engines
                             (GetRandom
-                               (Engines.First_Index,
-                                Engines.Last_Index));
+                               (Engines.First_Index, Engines.Last_Index));
                         PlayerShip.Modules(EngineIndex).Durability :=
                           PlayerShip.Modules(EngineIndex).Durability - 1;
                         UpdateOrders(PlayerShip);
@@ -113,8 +110,7 @@ package body Events is
                         AddMessage
                           (To_String(PlayerShip.Crew(CrewIndex).Name) &
                            " has prevented engine damage.",
-                           OtherMessage,
-                           2);
+                           OtherMessage, 2);
                      end if;
                      GainExp(1, EngineeringSkill, CrewIndex);
                   end if;
@@ -123,32 +119,28 @@ package body Events is
                   if CrewIndex > 0 then
                      AddMessage
                        ("Sudden bad weather makes your travel takes longer.",
-                        OtherMessage,
-                        3);
+                        OtherMessage, 3);
                      TimePassed :=
                        60 -
                        GetSkillLevel
-                         (PlayerShip.Crew(CrewIndex),
-                          PilotingSkill);
+                         (PlayerShip.Crew(CrewIndex), PilotingSkill);
                      if TimePassed < 1 then
                         TimePassed := 1;
                      end if;
                      GainExp(1, PilotingSkill, CrewIndex);
                      UpdateCargo
-                       (PlayerShip,
-                        FindProtoItem(ItemType => FuelType),
+                       (PlayerShip, FindProtoItem(ItemType => FuelType),
                         CountFuelNeeded);
                      UpdateGame(TimePassed);
                   end if;
                when 21 .. 23 => -- Friendly trader
                   Events_List.Append
-                  (New_Item =>
-                     (Trader,
-                      PlayerShip.SkyX,
-                      PlayerShip.SkyY,
-                      GetRandom(30, 45),
-                      Traders
-                        (GetRandom(Traders.First_Index, Traders.Last_Index))));
+                    (New_Item =>
+                       (Trader, PlayerShip.SkyX, PlayerShip.SkyY,
+                        GetRandom(30, 45),
+                        Traders
+                          (GetRandom
+                             (Traders.First_Index, Traders.Last_Index))));
                   SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                     Events_List.Last_Index;
                   AddMessage("You meet friendly trader.", OtherMessage);
@@ -156,15 +148,13 @@ package body Events is
                   UpdateOrders(PlayerShip);
                when 24 .. 30 => -- Friendly ship
                   Events_List.Append
-                  (New_Item =>
-                     (FriendlyShip,
-                      PlayerShip.SkyX,
-                      PlayerShip.SkyY,
-                      GetRandom(30, 45),
-                      FriendlyShips
-                        (GetRandom
-                           (FriendlyShips.First_Index,
-                            FriendlyShips.Last_Index))));
+                    (New_Item =>
+                       (FriendlyShip, PlayerShip.SkyX, PlayerShip.SkyY,
+                        GetRandom(30, 45),
+                        FriendlyShips
+                          (GetRandom
+                             (FriendlyShips.First_Index,
+                              FriendlyShips.Last_Index))));
                   SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                     Events_List.Last_Index;
                   AddMessage("You spotted friendly ship.", OtherMessage);
@@ -173,13 +163,12 @@ package body Events is
                when others => -- Combat
                   GenerateEnemies(Enemies);
                   Events_List.Append
-                  (New_Item =>
-                     (EnemyShip,
-                      PlayerShip.SkyX,
-                      PlayerShip.SkyY,
-                      GetRandom(30, 45),
-                      Enemies
-                        (GetRandom(Enemies.First_Index, Enemies.Last_Index))));
+                    (New_Item =>
+                       (EnemyShip, PlayerShip.SkyX, PlayerShip.SkyY,
+                        GetRandom(30, 45),
+                        Enemies
+                          (GetRandom
+                             (Enemies.First_Index, Enemies.Last_Index))));
                   SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                     Events_List.Last_Index;
                   return StartCombat(Events_List(Events_List.Last_Index).Data);
@@ -199,7 +188,7 @@ package body Events is
                   Roll := 31;
                end if;
                if not Factions_List(SkyBases(BaseIndex).Owner).Flags.Contains
-                 (To_Unbounded_String("diseaseimmune")) and
+                   (To_Unbounded_String("diseaseimmune")) and
                  Roll = 21 then
                   Roll := 20;
                end if;
@@ -207,15 +196,12 @@ package body Events is
                   when 1 .. 20 => -- Base is attacked
                      GenerateEnemies(Enemies);
                      Events_List.Append
-                     (New_Item =>
-                        (AttackOnBase,
-                         PlayerShip.SkyX,
-                         PlayerShip.SkyY,
-                         GetRandom(60, 90),
-                         Enemies
-                           (GetRandom
-                              (Enemies.First_Index,
-                               Enemies.Last_Index))));
+                       (New_Item =>
+                          (AttackOnBase, PlayerShip.SkyX, PlayerShip.SkyY,
+                           GetRandom(60, 90),
+                           Enemies
+                             (GetRandom
+                                (Enemies.First_Index, Enemies.Last_Index))));
                      AddMessage
                        ("You can't dock to base now, because base is under attack. You can help defend it.",
                         OtherMessage);
@@ -223,12 +209,9 @@ package body Events is
                          (Events_List(Events_List.Last_Index).Data);
                   when 21 => -- Disease in base
                      Events_List.Append
-                     (New_Item =>
-                        (Disease,
-                         PlayerShip.SkyX,
-                         PlayerShip.SkyY,
-                         GetRandom(10080, 12000),
-                         1));
+                       (New_Item =>
+                          (Disease, PlayerShip.SkyX, PlayerShip.SkyY,
+                           GetRandom(10080, 12000), 1));
                      AddMessage
                        ("You can't dock to base now, it is closed due to disease.",
                         OtherMessage);
@@ -236,17 +219,13 @@ package body Events is
                      loop
                         ItemIndex :=
                           GetRandom
-                            (Items_List.First_Index,
-                             Items_List.Last_Index);
+                            (Items_List.First_Index, Items_List.Last_Index);
                         exit when Items_List(ItemIndex).Prices(1) > 0;
                      end loop;
                      Events_List.Append
-                     (New_Item =>
-                        (DoublePrice,
-                         PlayerShip.SkyX,
-                         PlayerShip.SkyY,
-                         GetRandom(1440, 2880),
-                         ItemIndex));
+                       (New_Item =>
+                          (DoublePrice, PlayerShip.SkyX, PlayerShip.SkyY,
+                           GetRandom(1440, 2880), ItemIndex));
                   when others => -- Full docks or enemy patrol
                      if Roll in 20 .. 40 and
                        not IsFriendly
@@ -256,27 +235,22 @@ package body Events is
                           (Enemies,
                            Factions_List(SkyBases(BaseIndex).Owner).Index);
                         Events_List.Append
-                        (New_Item =>
-                           (EnemyPatrol,
-                            PlayerShip.SkyX,
-                            PlayerShip.SkyY,
-                            GetRandom(30, 45),
-                            Enemies
-                              (GetRandom
-                                 (Enemies.First_Index,
-                                  Enemies.Last_Index))));
+                          (New_Item =>
+                             (EnemyPatrol, PlayerShip.SkyX, PlayerShip.SkyY,
+                              GetRandom(30, 45),
+                              Enemies
+                                (GetRandom
+                                   (Enemies.First_Index,
+                                    Enemies.Last_Index))));
                         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                           Events_List.Last_Index;
                         return StartCombat
                             (Events_List(Events_List.Last_Index).Data);
                      end if;
                      Events_List.Append
-                     (New_Item =>
-                        (FullDocks,
-                         PlayerShip.SkyX,
-                         PlayerShip.SkyY,
-                         GetRandom(15, 30),
-                         1));
+                       (New_Item =>
+                          (FullDocks, PlayerShip.SkyX, PlayerShip.SkyY,
+                           GetRandom(15, 30), 1));
                      AddMessage
                        ("You can't dock to base now, because its docks are full.",
                         OtherMessage);
@@ -292,14 +266,13 @@ package body Events is
                      for I in PlayerShip.Crew.Iterate loop
                         if PlayerShip.Crew(I).Order = Rest then
                            RestingCrew.Append
-                           (New_Item => Crew_Container.To_Index(I));
+                             (New_Item => Crew_Container.To_Index(I));
                         end if;
                      end loop;
                      if RestingCrew.Length > 0 then
                         Roll2 :=
                           GetRandom
-                            (RestingCrew.First_Index,
-                             RestingCrew.Last_Index);
+                            (RestingCrew.First_Index, RestingCrew.Last_Index);
                         Injuries := GetRandom(1, 10);
                         if Injuries >
                           PlayerShip.Crew(RestingCrew(Roll2)).Health then
@@ -313,8 +286,7 @@ package body Events is
                           (To_String
                              (PlayerShip.Crew(RestingCrew(Roll2)).Name) &
                            " was injured in brawl in base.",
-                           OtherMessage,
-                           3);
+                           OtherMessage, 3);
                         if PlayerShip.Crew(RestingCrew(Roll2)).Health = 0 then
                            Death
                              (RestingCrew(Roll2),
@@ -331,15 +303,11 @@ package body Events is
                   end if;
                   AddMessage
                     ("During checking ship cargo, you noticed that you lost" &
-                     Positive'Image(LostCargo) &
-                     " " &
-                     GetItemName(PlayerShip.Cargo(Roll2)) &
-                     ".",
-                     OtherMessage,
-                     3);
+                     Positive'Image(LostCargo) & " " &
+                     GetItemName(PlayerShip.Cargo(Roll2)) & ".",
+                     OtherMessage, 3);
                   UpdateCargo
-                    (Ship => PlayerShip,
-                     Amount => (0 - LostCargo),
+                    (Ship => PlayerShip, Amount => (0 - LostCargo),
                      CargoIndex => Roll2);
                end if;
             end if;
@@ -378,8 +346,7 @@ package body Events is
                  SkyBases(BaseIndex).Population - PopulationLost;
             end if;
             SkyMap
-              (Events_List(CurrentIndex).SkyX,
-               Events_List(CurrentIndex).SkyY)
+              (Events_List(CurrentIndex).SkyX, Events_List(CurrentIndex).SkyY)
               .EventIndex :=
               0;
             Events_List.Delete(Index => CurrentIndex);
@@ -460,12 +427,10 @@ package body Events is
       SkyBases(BaseIndex).MissionsDate := (0, 0, 0, 0, 0);
       AddMessage
         ("Base " & To_String(SkyBases(BaseIndex).Name) & " have new owner.",
-         OtherMessage,
-         5);
+         OtherMessage, 5);
    end RecoverBase;
 
-   procedure GenerateEnemies
-     (Enemies: in out Positive_Container.Vector;
+   procedure GenerateEnemies(Enemies: in out Positive_Container.Vector;
       Owner: Unbounded_String := To_Unbounded_String("Any")) is
       EnemyIndex: Positive;
       PlayerValue: Natural := 0;

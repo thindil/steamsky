@@ -46,8 +46,7 @@ package body Bases.SchoolUI is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treecrew"))),
-         CrewModel,
-         CrewIter);
+         CrewModel, CrewIter);
       if CrewIter = Null_Iter then
          return;
       end if;
@@ -61,37 +60,29 @@ package body Bases.SchoolUI is
             Set(SkillsList, SkillsIter, 0, To_String(Skills_List(I).Name));
             Set(SkillsList, SkillsIter, 1, Cost);
             Set
-              (SkillsList,
-               SkillsIter,
-               2,
+              (SkillsList, SkillsIter, 2,
                "Related statistic: " &
                To_String(Attributes_List(Skills_List(I).Attribute).Name) &
-               ". " &
-               To_String(Skills_List(I).Description));
+               ". " & To_String(Skills_List(I).Description));
          end if;
       end loop;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       if MoneyIndex2 > 0 then
          Set_Label
            (Gtk_Label(Get_Object(Object, "lblmoney")),
-            "You have" &
-            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
-            " " &
-            To_String(MoneyName) &
-            ".");
+            "You have" & Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
+            " " & To_String(MoneyName) & ".");
       else
          Set_Label
            (Gtk_Label(Get_Object(Object, "lblmoney")),
-            "You don't have any " &
-            To_String(MoneyName) &
+            "You don't have any " & To_String(MoneyName) &
             " to pay for learning.");
       end if;
       if N_Children(SkillsList, Null_Iter) > 0 then
          Set_Cursor
            (Gtk_Tree_View(Get_Object(Builder, "treeskills")),
             Gtk_Tree_Path_New_From_String("0"),
-            Gtk_Tree_View_Column(Get_Object(Builder, "columnskill")),
-            False);
+            Gtk_Tree_View_Column(Get_Object(Builder, "columnskill")), False);
          Set_Sensitive(Gtk_Widget(Get_Object(Object, "btntrain")), True);
       else
          Set_Sensitive(Gtk_Widget(Get_Object(Object, "btntrain")), False);
@@ -109,8 +100,7 @@ package body Bases.SchoolUI is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treeskills"))),
-         SkillsModel,
-         SkillsIter);
+         SkillsModel, SkillsIter);
       if SkillsIter = Null_Iter then
          return;
       end if;
@@ -127,14 +117,12 @@ package body Bases.SchoolUI is
    exception
       when Trade_No_Money =>
          ShowDialog
-           ("You don't have any " &
-            To_String(MoneyName) &
+           ("You don't have any " & To_String(MoneyName) &
             " to pay for learning.",
             ParentWindow);
       when Trade_Not_Enough_Money =>
          ShowDialog
-           ("You don't have enough " &
-            To_String(MoneyName) &
+           ("You don't have enough " & To_String(MoneyName) &
             " to pay for learning this skill.",
             ParentWindow);
       when Trade_Cant_Train =>
@@ -146,9 +134,7 @@ package body Bases.SchoolUI is
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Train_Info", ShowTrainInfo'Access);
       Register_Handler
-        (Builder,
-         "Train_Selected_Skill",
-         TrainSelectedSkill'Access);
+        (Builder, "Train_Selected_Skill", TrainSelectedSkill'Access);
    end CreateBasesSchoolUI;
 
    procedure ShowSchoolUI is
@@ -162,15 +148,13 @@ package body Bases.SchoolUI is
          Set(CrewList, CrewIter, 0, To_String(Member.Name));
       end loop;
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "school");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "school");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       ShowLastMessage(Builder);
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treecrew")),
          Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columnnames2")),
-         False);
+         Gtk_Tree_View_Column(Get_Object(Builder, "columnnames2")), False);
    end ShowSchoolUI;
 
 end Bases.SchoolUI;

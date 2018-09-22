@@ -32,8 +32,7 @@ package body Careers is
       TmpSkills: UnboundedString_Container.Vector;
    begin
       TempRecord :=
-        (Index => Null_Unbounded_String,
-         Name => Null_Unbounded_String,
+        (Index => Null_Unbounded_String, Name => Null_Unbounded_String,
          Skills => TmpSkills);
       CareersData := Get_Tree(Reader);
       NodesList :=
@@ -45,19 +44,17 @@ package body Careers is
            To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name"));
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I),
-              "skill");
+             (Item(NodesList, I), "skill");
          for J in 0 .. Length(ChildNodes) - 1 loop
             TempRecord.Skills.Append
-            (New_Item =>
-               To_Unbounded_String
-                 (Get_Attribute(Item(ChildNodes, J), "name")));
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(ChildNodes, J), "name")));
          end loop;
          if Get_Attribute(Item(NodesList, I), "remove") = "" then
             Careers_List.Append(New_Item => TempRecord);
             LogMessage
-              ("Career added: " & To_String(TempRecord.Name),
-               Everything);
+              ("Career added: " & To_String(TempRecord.Name), Everything);
          else
             RemoveIndex :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "remove"));
@@ -69,12 +66,10 @@ package body Careers is
             end loop;
             Careers_List.Delete(Index => DeleteIndex);
             LogMessage
-              ("Career removed: " & To_String(RemoveIndex),
-               Everything);
+              ("Career removed: " & To_String(RemoveIndex), Everything);
          end if;
          TempRecord :=
-           (Index => Null_Unbounded_String,
-            Name => Null_Unbounded_String,
+           (Index => Null_Unbounded_String, Name => Null_Unbounded_String,
             Skills => TmpSkills);
       end loop;
    end LoadCareers;

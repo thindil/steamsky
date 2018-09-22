@@ -48,8 +48,7 @@ package body Events.UI is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treeevents"))),
-         EventsModel,
-         EventsIter);
+         EventsModel, EventsIter);
       if EventsIter = Null_Iter then
          return;
       end if;
@@ -59,16 +58,13 @@ package body Events.UI is
           .BaseIndex;
       EventInfo :=
         To_Unbounded_String
-          ("X:" &
-           Positive'Image(Events_List(EventIndex).SkyX) &
-           " Y:" &
+          ("X:" & Positive'Image(Events_List(EventIndex).SkyX) & " Y:" &
            Positive'Image(Events_List(EventIndex).SkyY));
       case Events_List(EventIndex).EType is
          when EnemyShip | EnemyPatrol | Trader | FriendlyShip =>
             Append
               (EventInfo,
-               ASCII.LF &
-               "Ship type: " &
+               ASCII.LF & "Ship type: " &
                To_String(ProtoShips_List(Events_List(EventIndex).Data).Name));
          when FullDocks | AttackOnBase | Disease =>
             Append
@@ -80,15 +76,13 @@ package body Events.UI is
                ASCII.LF & "Base name: " & To_String(SkyBases(BaseIndex).Name));
             Append
               (EventInfo,
-               ASCII.LF &
-               "Item: " &
+               ASCII.LF & "Item: " &
                To_String(Items_List(Events_List(EventIndex).Data).Name));
          when None | BaseRecovery =>
             null;
       end case;
       Set_Label
-        (Gtk_Label(Get_Object(Object, "lbleventinfo")),
-         To_String(EventInfo));
+        (Gtk_Label(Get_Object(Object, "lbleventinfo")), To_String(EventInfo));
    end ShowEventInfo;
 
    procedure SetEventAsDestination
@@ -104,12 +98,10 @@ package body Events.UI is
       PlayerShip.DestinationX := Events_List(EventIndex).SkyX;
       PlayerShip.DestinationY := Events_List(EventIndex).SkyY;
       AddMessage
-        ("You set the travel destination for your ship.",
-         OrderMessage);
+        ("You set the travel destination for your ship.", OrderMessage);
       ShowSkyMap;
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Object, "gamestack")),
-         "skymap");
+        (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
       Set_Deletable(Gtk_Window(Get_Object(Object, "skymapwindow")), True);
    end SetEventAsDestination;
 
@@ -117,8 +109,7 @@ package body Events.UI is
    begin
       ShowSkyMap(Events_List(EventIndex).SkyX, Events_List(EventIndex).SkyY);
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Object, "gamestack")),
-         "skymap");
+        (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
       Set_Deletable(Gtk_Window(Get_Object(Object, "skymapwindow")), True);
    end ShowEvent;
 
@@ -127,9 +118,7 @@ package body Events.UI is
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Event_Info", ShowEventInfo'Access);
       Register_Handler
-        (Builder,
-         "Set_Event_As_Destination",
-         SetEventAsDestination'Access);
+        (Builder, "Set_Event_As_Destination", SetEventAsDestination'Access);
       Register_Handler(Builder, "Show_Event", ShowEvent'Access);
    end CreateEventsUI;
 
@@ -163,20 +152,16 @@ package body Events.UI is
          end case;
          Set(EventsList, EventsIter, 1, Gint(I));
          Set
-           (EventsList,
-            EventsIter,
-            2,
+           (EventsList, EventsIter, 2,
             Gint(CountDistance(Events_List(I).SkyX, Events_List(I).SkyY)));
       end loop;
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "eventslist");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "eventslist");
       if N_Children(EventsList, Null_Iter) > 0 then
          Set_Cursor
            (Gtk_Tree_View(Get_Object(Builder, "treeevents")),
             Gtk_Tree_Path_New_From_String("0"),
-            Gtk_Tree_View_Column(Get_Object(Builder, "columnnames")),
-            False);
+            Gtk_Tree_View_Column(Get_Object(Builder, "columnnames")), False);
       end if;
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
    end ShowEventsUI;

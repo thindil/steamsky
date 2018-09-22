@@ -35,8 +35,7 @@ package body Ships.Movement is
            Module.Durability > 0 then
             HaveCockpit := True;
          elsif Modules_List(Module.ProtoIndex).MType = ENGINE and
-           Module.Durability > 1 and
-           Module.Data(3) = 0 then
+           Module.Durability > 1 and Module.Data(3) = 0 then
             HaveEngine := True;
          end if;
          exit when HaveEngine and HaveCockpit;
@@ -64,8 +63,7 @@ package body Ships.Movement is
       return "";
    end HaveOrderRequirements;
 
-   function MoveShip
-     (ShipIndex, X, Y: Integer;
+   function MoveShip(ShipIndex, X, Y: Integer;
       Message: in out Unbounded_String) return Natural is
       NewX, NewY: Integer;
       TimePassed, FuelNeeded: Integer := 0;
@@ -136,8 +134,7 @@ package body Ships.Movement is
          PlayerShip.SkyX := NewX;
          PlayerShip.SkyY := NewY;
          UpdateCargo
-           (PlayerShip,
-            PlayerShip.Cargo.Element(FuelIndex).ProtoIndex,
+           (PlayerShip, PlayerShip.Cargo.Element(FuelIndex).ProtoIndex,
             FuelNeeded);
          TimePassed := Integer(100.0 / Speed);
          if TimePassed > 0 then
@@ -163,9 +160,7 @@ package body Ships.Movement is
               FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
             if FuelIndex = 0 then
                AddMessage
-                 ("Ship fall from sky due to lack of fuel.",
-                  OtherMessage,
-                  3);
+                 ("Ship fall from sky due to lack of fuel.", OtherMessage, 3);
                Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
                return 0;
             end if;
@@ -214,8 +209,7 @@ package body Ships.Movement is
          if SkyBases(BaseIndex).Population > 0 then
             if MoneyIndex2 = 0 then
                return "You can't dock to base because you don't have " &
-                 To_String(MoneyName) &
-                 " to pay for docking.";
+                 To_String(MoneyName) & " to pay for docking.";
             end if;
             for Module of PlayerShip.Modules loop
                if Modules_List(Module.ProtoIndex).MType = HULL then
@@ -227,21 +221,15 @@ package body Ships.Movement is
             CountPrice(DockingCost, TraderIndex);
             if DockingCost > PlayerShip.Cargo(MoneyIndex2).Amount then
                return "You can't dock to base because you don't have enough " &
-                 To_String(MoneyName) &
-                 " to pay for docking.";
+                 To_String(MoneyName) & " to pay for docking.";
             end if;
             UpdateCargo
-              (Ship => PlayerShip,
-               CargoIndex => MoneyIndex2,
+              (Ship => PlayerShip, CargoIndex => MoneyIndex2,
                Amount => (0 - DockingCost));
             AddMessage
-              ("Ship docked to base " &
-               To_String(SkyBases(BaseIndex).Name) &
-               ". It costs" &
-               Positive'Image(DockingCost) &
-               " " &
-               To_String(MoneyName) &
-               ".",
+              ("Ship docked to base " & To_String(SkyBases(BaseIndex).Name) &
+               ". It costs" & Positive'Image(DockingCost) & " " &
+               To_String(MoneyName) & ".",
                OrderMessage);
             if TraderIndex > 0 then
                GainExp(1, TalkingSkill, TraderIndex);
@@ -266,8 +254,7 @@ package body Ships.Movement is
                        SkyBases(BaseIndex).Population + 1;
                      for I in PlayerShip.Crew.Iterate loop
                         UpdateMorale
-                          (PlayerShip,
-                           Crew_Container.To_Index(I),
+                          (PlayerShip, Crew_Container.To_Index(I),
                            GetRandom(-5, -1));
                      end loop;
                   else
@@ -277,8 +264,7 @@ package body Ships.Movement is
             end;
          else
             AddMessage
-              ("Ship docked to base " &
-               To_String(SkyBases(BaseIndex).Name) &
+              ("Ship docked to base " & To_String(SkyBases(BaseIndex).Name) &
                ".",
                OrderMessage);
          end if;
@@ -320,8 +306,7 @@ package body Ships.Movement is
       return "";
    end ChangeShipSpeed;
 
-   function RealSpeed
-     (Ship: ShipRecord;
+   function RealSpeed(Ship: ShipRecord;
       InfoOnly: Boolean := False) return Natural is
       BaseSpeed, Speed: Natural := 0;
       type DamageFactor is digits 2 range 0.0 .. 1.0;
@@ -366,8 +351,7 @@ package body Ships.Movement is
          end if;
       end loop;
       if Ship = PlayerShip and
-        (Ship.Speed = DOCKED or Ship.Speed = FULL_STOP) and
-        InfoOnly then
+        (Ship.Speed = DOCKED or Ship.Speed = FULL_STOP) and InfoOnly then
          ShipSetSpeed := GameSettings.UndockSpeed;
       else
          ShipSetSpeed := Ship.Speed;

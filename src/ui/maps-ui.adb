@@ -100,16 +100,8 @@ package body Maps.UI is
 
    procedure UpdateHeader is
       HaveWorker, HaveGunner: Boolean := True;
-      NeedCleaning,
-      NeedRepairs,
-      NeedWorker,
-      HavePilot,
-      HaveEngineer,
-      HaveTrader,
-      HaveUpgrader,
-      HaveCleaner,
-      HaveRepairman: Boolean :=
-        False;
+      NeedCleaning, NeedRepairs, NeedWorker, HavePilot, HaveEngineer,
+      HaveTrader, HaveUpgrader, HaveCleaner, HaveRepairman: Boolean := False;
       ItemAmount: Natural := 0;
       function GetItemAmount(ItemType: Unbounded_String) return Natural is
          Amount: Natural := 0;
@@ -400,8 +392,7 @@ package body Maps.UI is
       else
          Set_Text(Gtk_Label(Get_Object(Builder, "lbltalk")), "[T]");
          Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lbltalk")),
-            "No trader needed.");
+           (Gtk_Widget(Get_Object(Builder, "lbltalk")), "No trader needed.");
       end if;
       if NeedCleaning then
          if HaveCleaner then
@@ -430,16 +421,13 @@ package body Maps.UI is
    procedure UpdateMoveButtons is
       MoveButtonsNames: constant array
         (Positive range <>) of Unbounded_String :=
-        (To_Unbounded_String("btnupleft"),
-         To_Unbounded_String("btnup"),
-         To_Unbounded_String("btnupright"),
-         To_Unbounded_String("btnleft"),
-         To_Unbounded_String("btnright"),
-         To_Unbounded_String("btnbottomleft"),
+        (To_Unbounded_String("btnupleft"), To_Unbounded_String("btnup"),
+         To_Unbounded_String("btnupright"), To_Unbounded_String("btnleft"),
+         To_Unbounded_String("btnright"), To_Unbounded_String("btnbottomleft"),
          To_Unbounded_String("btnbottom"),
          To_Unbounded_String("btnbottomright"));
       MoveButtonsTooltips: constant array
-      (MoveButtonsNames'Range) of Unbounded_String :=
+        (MoveButtonsNames'Range) of Unbounded_String :=
         (To_Unbounded_String("Move ship north and west"),
          To_Unbounded_String("Move ship north"),
          To_Unbounded_String("Move ship north and east"),
@@ -454,8 +442,7 @@ package body Maps.UI is
          Hide(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
          Set_Label(Gtk_Label(Get_Object(Builder, "lblmovewait")), "Wait");
          Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lblmovewait")),
-            "Wait 1 minute.");
+           (Gtk_Widget(Get_Object(Builder, "lblmovewait")), "Wait 1 minute.");
          for I in MoveButtonsNames'Range loop
             Set_Sensitive
               (Gtk_Widget(Get_Object(Builder, To_String(MoveButtonsNames(I)))),
@@ -521,8 +508,7 @@ package body Maps.UI is
       MapColor: Gtk_Text_Tag;
       TextWindow: constant Gdk_Window :=
         Get_Window
-          (Gtk_Text_View(Get_Object(Builder, "mapview")),
-           Text_Window_Text);
+          (Gtk_Text_View(Get_Object(Builder, "mapview")), Text_Window_Text);
    begin
       StartY := CenterY - (MapHeight / 2);
       StartX := CenterX - (MapWidth / 2);
@@ -684,10 +670,8 @@ package body Maps.UI is
       Message: Message_Data;
       Iter: Gtk_Text_Iter;
       TagNames: constant array(1 .. 5) of Unbounded_String :=
-        (To_Unbounded_String("yellow"),
-         To_Unbounded_String("green"),
-         To_Unbounded_String("red"),
-         To_Unbounded_String("blue"),
+        (To_Unbounded_String("yellow"), To_Unbounded_String("green"),
+         To_Unbounded_String("red"), To_Unbounded_String("blue"),
          To_Unbounded_String("cyan"));
    begin
       Set_Text(MessagesBuffer, "");
@@ -704,9 +688,7 @@ package body Maps.UI is
             Insert(MessagesBuffer, Iter, To_String(Message.Message));
          else
             Insert_With_Tags
-              (MessagesBuffer,
-               Iter,
-               To_String(Message.Message),
+              (MessagesBuffer, Iter, To_String(Message.Message),
                Lookup
                  (Get_Tag_Table(MessagesBuffer),
                   To_String(TagNames(Message.Color))));
@@ -753,12 +735,8 @@ package body Maps.UI is
       Window: Gdk_Window;
    begin
       Get_Device_Position
-        (Get_Window(Gtk_Widget(Get_Object(Builder, "mapview"))),
-         Mouse,
-         MouseX,
-         MouseY,
-         Mask,
-         Window);
+        (Get_Window(Gtk_Widget(Get_Object(Builder, "mapview"))), Mouse, MouseX,
+         MouseY, Mask, Window);
       if MouseX < 0 then
          MapX := StartX;
       else
@@ -800,12 +778,10 @@ package body Maps.UI is
               (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
          begin
             Append
-              (MapInfoText,
-               ASCII.LF & "Distance:" & Positive'Image(Distance));
+              (MapInfoText, ASCII.LF & "Distance:" & Positive'Image(Distance));
             Append
               (MapInfoText,
-               ASCII.LF &
-               "Approx fuel usage:" &
+               ASCII.LF & "Approx fuel usage:" &
                Natural'Image(abs (Distance * CountFuelNeeded)));
             MinutesDiff := Integer(100.0 / Speed);
             case PlayerShip.Speed is
@@ -858,8 +834,7 @@ package body Maps.UI is
             end if;
             if TravelTime.Minutes > 0 then
                Append
-                 (MapInfoText,
-                  Positive'Image(TravelTime.Minutes) & "mins");
+                 (MapInfoText, Positive'Image(TravelTime.Minutes) & "mins");
             end if;
          end;
       end if;
@@ -1148,140 +1123,106 @@ package body Maps.UI is
       Accelerators := Gtk_Accel_Group(Get_Object(Builder, "movementaccels"));
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btnupleft")),
-         "<skymapwindow>/btnupleft",
-         Accelerators);
+         "<skymapwindow>/btnupleft", Accelerators);
       Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btnup")),
-         "<skymapwindow>/btnup",
+        (Gtk_Widget(Get_Object(Builder, "btnup")), "<skymapwindow>/btnup",
          Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btnupright")),
-         "<skymapwindow>/btnupright",
-         Accelerators);
+         "<skymapwindow>/btnupright", Accelerators);
       Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btnleft")),
-         "<skymapwindow>/btnleft",
+        (Gtk_Widget(Get_Object(Builder, "btnleft")), "<skymapwindow>/btnleft",
          Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btnmovewait")),
-         "<skymapwindow>/btnmovewait",
-         Accelerators);
+         "<skymapwindow>/btnmovewait", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btnright")),
-         "<skymapwindow>/btnright",
-         Accelerators);
+         "<skymapwindow>/btnright", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btnbottomleft")),
-         "<skymapwindow>/btnbottomleft",
-         Accelerators);
+         "<skymapwindow>/btnbottomleft", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btnbottom")),
-         "<skymapwindow>/btnbottom",
-         Accelerators);
+         "<skymapwindow>/btnbottom", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btnbottomright")),
-         "<skymapwindow>/btnbottomright",
-         Accelerators);
+         "<skymapwindow>/btnbottomright", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btnmoveto")),
-         "<skymapwindow>/btnmoveto",
-         Accelerators);
+         "<skymapwindow>/btnmoveto", Accelerators);
       Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btnmenu")),
-         "<skymapwindow>/Menu",
+        (Gtk_Widget(Get_Object(Builder, "btnmenu")), "<skymapwindow>/Menu",
          Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "menuship")),
-         "<skymapwindow>/Menu/ShipInfo",
-         Accelerators);
+         "<skymapwindow>/Menu/ShipInfo", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "menucargo")),
-         "<skymapwindow>/Menu/ShipCargoInfo",
-         Accelerators);
+         "<skymapwindow>/Menu/ShipCargoInfo", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "menucrew")),
-         "<skymapwindow>/Menu/CrewInfo",
-         Accelerators);
+         "<skymapwindow>/Menu/CrewInfo", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "menuorders")),
-         "<skymapwindow>/Menu/ShipOrders",
-         Accelerators);
+         "<skymapwindow>/Menu/ShipOrders", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "menucrafting")),
-         "<skymapwindow>/Menu/CraftInfo",
-         Accelerators);
+         "<skymapwindow>/Menu/CraftInfo", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "menumessages")),
-         "<skymapwindow>/Menu/MessagesInfo",
-         Accelerators);
+         "<skymapwindow>/Menu/MessagesInfo", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "menubaseslist")),
-         "<skymapwindow>/Menu/BasesInfo",
-         Accelerators);
+         "<skymapwindow>/Menu/BasesInfo", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "menuevents")),
-         "<skymapwindow>/Menu/EventsInfo",
-         Accelerators);
+         "<skymapwindow>/Menu/EventsInfo", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "menumissions")),
-         "<skymapwindow>/Menu/MissionsInfo",
-         Accelerators);
+         "<skymapwindow>/Menu/MissionsInfo", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "menumovemap")),
-         "<skymapwindow>/Menu/MoveMap",
-         Accelerators);
+         "<skymapwindow>/Menu/MoveMap", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "menustats")),
-         "<skymapwindow>/Menu/GameStats",
-         Accelerators);
+         "<skymapwindow>/Menu/GameStats", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "menuhelp")),
-         "<skymapwindow>/Menu/Help",
-         Accelerators);
+         "<skymapwindow>/Menu/Help", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "menuoptions")),
-         "<skymapwindow>/Menu/GameOptions",
-         Accelerators);
+         "<skymapwindow>/Menu/GameOptions", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "menuquit")),
-         "<skymapwindow>/Menu/QuitGame",
-         Accelerators);
+         "<skymapwindow>/Menu/QuitGame", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "menuresign")),
-         "<skymapwindow>/Menu/ResignFromGame",
-         Accelerators);
+         "<skymapwindow>/Menu/ResignFromGame", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "menuwait")),
-         "<skymapwindow>/Menu/WaitOrders",
-         Accelerators);
+         "<skymapwindow>/Menu/WaitOrders", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btnshowhelp")),
-         "<skymapwindow>/Menu/Help",
-         Accelerators);
+         "<skymapwindow>/Menu/Help", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btncenter")),
-         "<movemapwindow>/btncenter",
-         Accelerators);
+         "<movemapwindow>/btncenter", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btnmapleft")),
-         "<skymapwindow>/btnmapleft",
-         Accelerators);
+         "<skymapwindow>/btnmapleft", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btnmapright")),
-         "<skymapwindow>/btnmapright",
-         Accelerators);
+         "<skymapwindow>/btnmapright", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btnmapup")),
-         "<skymapwindow>/btnmapup",
-         Accelerators);
+         "<skymapwindow>/btnmapup", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btnmapdown")),
-         "<skymapwindow>/btnmapdown",
-         Accelerators);
+         "<skymapwindow>/btnmapdown", Accelerators);
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "menustory")),
-         "<skymapwindow>/Menu/Stories",
-         Accelerators);
+         "<skymapwindow>/Menu/Stories", Accelerators);
       declare
          Key: Gtk_Accel_Key;
          Found: Boolean;
@@ -1289,19 +1230,15 @@ package body Maps.UI is
          Lookup_Entry("<skymapwindow>/Menu/Help", Key, Found);
          Set_Label
            (Gtk_Button(Get_Object(Builder, "btnshowhelp")),
-            "Help [" &
-            Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods) &
+            "Help [" & Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods) &
             "]");
       end;
       On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "movemapwindow")),
-         CloseWindow'Access);
+        (Gtk_Widget(Get_Object(Builder, "movemapwindow")), CloseWindow'Access);
       On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "orderswindow")),
-         CloseWindow'Access);
+        (Gtk_Widget(Get_Object(Builder, "orderswindow")), CloseWindow'Access);
       On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "waitwindow")),
-         CloseWindow'Access);
+        (Gtk_Widget(Get_Object(Builder, "waitwindow")), CloseWindow'Access);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "skymapwindow")),
          MapKeyReleased'Access);
@@ -1322,21 +1259,18 @@ package body Maps.UI is
          Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
       Set_Default_Size
         (Gtk_Window(Get_Object(Builder, "skymapwindow")),
-         Gint(GameSettings.WindowWidth),
-         Gint(GameSettings.WindowHeight));
+         Gint(GameSettings.WindowWidth), Gint(GameSettings.WindowHeight));
       ShowSkyMap;
    end CreateSkyMap;
 
-   procedure ShowSkyMap
-     (X: Integer := PlayerShip.SkyX;
+   procedure ShowSkyMap(X: Integer := PlayerShip.SkyX;
       Y: Integer := PlayerShip.SkyY) is
    begin
       CenterX := X;
       CenterY := Y;
       UpdateMessages;
       Set_Text
-        (Gtk_Text_Buffer(Get_Object(Builder, "txtmap")),
-         "X" & ASCII.LF & "X");
+        (Gtk_Text_Buffer(Get_Object(Builder, "txtmap")), "X" & ASCII.LF & "X");
       Show_All(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
       UpdateHeader;
       UpdateMoveButtons;
@@ -1345,8 +1279,7 @@ package body Maps.UI is
       Hide(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), True);
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "skymap");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
       Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));
       UpdateMapInfo;
       if CurrentStory.Index > 0 and CurrentStory.ShowText then
@@ -1372,11 +1305,9 @@ package body Maps.UI is
       GameStats.Points := GameStats.Points + (10000 * CurrentStory.MaxSteps);
       ClearCurrentStory;
       if ShowConfirmDialog
-          (Message,
-           Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
+          (Message, Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
          Death
-           (1,
-            To_Unbounded_String("retired after finished the game"),
+           (1, To_Unbounded_String("retired after finished the game"),
             PlayerShip);
       end if;
    end FinishStory;

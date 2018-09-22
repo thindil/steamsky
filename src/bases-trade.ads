@@ -17,19 +17,16 @@
 
 package Bases.Trade is
 
-   procedure HireRecruit
-     (RecruitIndex, Cost: Positive;
+   procedure HireRecruit(RecruitIndex, Cost: Positive;
       DailyPayment, TradePayment: Natural;
       ContractLenght: Integer); -- Hire selected recruit from bases
    procedure BuyRecipe(RecipeIndex: Positive); -- Buy new crafting recipe
    procedure HealWounded
      (MemberIndex: Natural); -- Heals wounded crew members in bases
-   procedure HealCost
-     (Cost, Time: in out Natural;
+   procedure HealCost(Cost, Time: in out Natural;
       MemberIndex: Natural); -- Count cost of healing action
    function TrainCost
-     (MemberIndex,
-      SkillIndex: Positive)
+     (MemberIndex, SkillIndex: Positive)
      return Natural; -- Count cost of training action
    procedure TrainSkill
      (MemberIndex, SkillIndex: Positive); -- Train selected skill

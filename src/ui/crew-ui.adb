@@ -42,8 +42,7 @@ package body Crew.UI is
       OrdersList: Gtk_List_Store;
       OrdersIter: Gtk_Tree_Iter;
       NeedClean, NeedRepair: Boolean := True;
-      procedure AddOrder
-        (OrderText: String;
+      procedure AddOrder(OrderText: String;
          OrderIndex, ModuleIndex: Natural) is
       begin
          Append(OrdersList, OrdersIter);
@@ -78,16 +77,14 @@ package body Crew.UI is
                      if PlayerShip.Modules(I).Owner /= MemberIndex then
                         AddOrder
                           ("Operate " & To_String(PlayerShip.Modules(I).Name),
-                           2,
-                           Modules_Container.To_Index(I));
+                           2, Modules_Container.To_Index(I));
                      end if;
                   when ALCHEMY_LAB .. GREENHOUSE =>
                      if PlayerShip.Modules(I).Owner /= MemberIndex and
                        PlayerShip.Modules(I).Data(1) /= 0 then
                         AddOrder
                           ("Work in " & To_String(PlayerShip.Modules(I).Name),
-                           4,
-                           Modules_Container.To_Index(I));
+                           4, Modules_Container.To_Index(I));
                      end if;
                   when CABIN =>
                      if PlayerShip.Modules(I).Data(1) <
@@ -103,8 +100,7 @@ package body Crew.UI is
                         AddOrder
                           ("Go on training in " &
                            To_String(PlayerShip.Modules(I).Name),
-                           12,
-                           Modules_Container.To_Index(I));
+                           12, Modules_Container.To_Index(I));
                      end if;
                   when others =>
                      null;
@@ -173,12 +169,10 @@ package body Crew.UI is
       Clear(InventoryList);
       for I in
         PlayerShip.Crew(MemberIndex).Inventory.First_Index ..
-            PlayerShip.Crew(MemberIndex).Inventory.Last_Index loop
+          PlayerShip.Crew(MemberIndex).Inventory.Last_Index loop
          Append(InventoryList, InventoryIter);
          Set
-           (InventoryList,
-            InventoryIter,
-            0,
+           (InventoryList, InventoryIter, 0,
             GetItemName(PlayerShip.Crew(MemberIndex).Inventory(I)));
          Set(InventoryList, InventoryIter, 1, Gint(I));
          if ItemIsUsed(MemberIndex, I) then
@@ -189,12 +183,9 @@ package body Crew.UI is
          ItemType :=
            Items_List(PlayerShip.Crew(MemberIndex).Inventory(I).ProtoIndex)
              .IType;
-         if ItemType = WeaponType or
-           ItemType = ShieldType or
-           ItemType = HeadArmor or
-           ItemType = ChestArmor or
-           ItemType = ArmsArmor or
-           ItemType = LegsArmor or
+         if ItemType = WeaponType or ItemType = ShieldType or
+           ItemType = HeadArmor or ItemType = ChestArmor or
+           ItemType = ArmsArmor or ItemType = LegsArmor or
            Tools_List.Find_Index(Item => ItemType) /=
              UnboundedString_Container.No_Index then
             Set(InventoryList, InventoryIter, 3, True);
@@ -205,8 +196,7 @@ package body Crew.UI is
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblinventoryfreespace")),
          "Free inventory space:" &
-         Integer'Image(FreeInventory(MemberIndex, 0)) &
-         " kg");
+         Integer'Image(FreeInventory(MemberIndex, 0)) & " kg");
    end RefreshInventory;
 
    procedure SetActiveItem is
@@ -224,18 +214,14 @@ package body Crew.UI is
       CrewIter: Gtk_Tree_Iter;
       CrewList: Gtk_List_Store;
       OrdersNames: constant array(Positive range <>) of Unbounded_String :=
-        (To_Unbounded_String("Piloting"),
-         To_Unbounded_String("Engineering"),
-         To_Unbounded_String("Gunner"),
-         To_Unbounded_String("Repair ship"),
+        (To_Unbounded_String("Piloting"), To_Unbounded_String("Engineering"),
+         To_Unbounded_String("Gunner"), To_Unbounded_String("Repair ship"),
          To_Unbounded_String("Manufacturing"),
          To_Unbounded_String("Upgrading module"),
          To_Unbounded_String("Talking in bases"),
          To_Unbounded_String("Healing wounded"),
-         To_Unbounded_String("Cleans ship"),
-         To_Unbounded_String("On break"),
-         To_Unbounded_String("Defends ship"),
-         To_Unbounded_String("Boarding"),
+         To_Unbounded_String("Cleans ship"), To_Unbounded_String("On break"),
+         To_Unbounded_String("Defends ship"), To_Unbounded_String("Boarding"),
          To_Unbounded_String("Trains"));
    begin
       CrewList := Gtk_List_Store(Get_Object(Builder, "crewlist2"));
@@ -244,9 +230,7 @@ package body Crew.UI is
          Append(CrewList, CrewIter);
          Set(CrewList, CrewIter, 0, To_String(PlayerShip.Crew(I).Name));
          Set
-           (CrewList,
-            CrewIter,
-            1,
+           (CrewList, CrewIter, 1,
             To_String
               (OrdersNames(Crew_Orders'Pos(PlayerShip.Crew(I).Order) + 1)));
          Set(CrewList, CrewIter, 2, Gint(Crew_Container.To_Index(I)));
@@ -259,8 +243,7 @@ package body Crew.UI is
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treecrew2")),
          Gtk_Tree_Path_New_From_String(Natural'Image(NewMemberIndex)),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columncrew")),
-         False);
+         Gtk_Tree_View_Column(Get_Object(Builder, "columncrew")), False);
    end SetActiveMember;
 
    procedure CreateCrewUI(NewBuilder: Gtkada_Builder) is
@@ -289,8 +272,7 @@ package body Crew.UI is
       PreviousGameState := OldState;
       Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "crew");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "crew");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       ShowLastMessage(Builder);
       SetActiveMember;

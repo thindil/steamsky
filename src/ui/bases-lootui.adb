@@ -53,8 +53,7 @@ package body Bases.LootUI is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treeitems"))),
-         ItemsModel,
-         ItemsIter);
+         ItemsModel, ItemsIter);
       if ItemsIter = Null_Iter then
          return;
       end if;
@@ -82,15 +81,12 @@ package body Bases.LootUI is
       end if;
       Append
         (ItemInfo,
-         ASCII.LF &
-         "Weight:" &
-         Integer'Image(Items_List(ProtoIndex).Weight) &
+         ASCII.LF & "Weight:" & Integer'Image(Items_List(ProtoIndex).Weight) &
          " kg");
       if Items_List(ProtoIndex).IType = WeaponType then
          Append
            (ItemInfo,
-            ASCII.LF &
-            "Skill: " &
+            ASCII.LF & "Skill: " &
             To_String(Skills_List(Items_List(ProtoIndex).Value(3)).Name) &
             "/" &
             To_String
@@ -119,8 +115,7 @@ package body Bases.LootUI is
       if CargoIndex > 0 then
          Append
            (ItemInfo,
-            ASCII.LF &
-            "Owned:" &
+            ASCII.LF & "Owned:" &
             Positive'Image(PlayerShip.Cargo(CargoIndex).Amount));
          ShowItemDamage
            (PlayerShip.Cargo(CargoIndex).Durability,
@@ -137,8 +132,7 @@ package body Bases.LootUI is
             ASCII.LF & To_String(Items_List(ProtoIndex).Description));
       end if;
       Set_Label
-        (Gtk_Label(Get_Object(Object, "lbllootinfo")),
-         To_String(ItemInfo));
+        (Gtk_Label(Get_Object(Object, "lbllootinfo")), To_String(ItemInfo));
       if CargoIndex = 0 then
          Set_Visible(Gtk_Widget(Get_Object(Object, "dropbox")), False);
       else
@@ -175,8 +169,7 @@ package body Bases.LootUI is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Builder, "treeitems"))),
-         ItemsModel,
-         ItemsIter);
+         ItemsModel, ItemsIter);
       if ItemsIter = Null_Iter then
          return;
       end if;
@@ -204,61 +197,46 @@ package body Bases.LootUI is
         User_Data = Get_Object(Builder, "btndrop") then
          if BaseCargoIndex > 0 then
             UpdateBaseCargo
-              (CargoIndex => BaseCargoIndex,
-               Amount => Amount,
+              (CargoIndex => BaseCargoIndex, Amount => Amount,
                Durability => PlayerShip.Cargo.Element(CargoIndex).Durability);
          else
             UpdateBaseCargo
-              (ProtoIndex,
-               Amount,
+              (ProtoIndex, Amount,
                PlayerShip.Cargo.Element(CargoIndex).Durability);
          end if;
          UpdateCargo
-           (Ship => PlayerShip,
-            CargoIndex => CargoIndex,
+           (Ship => PlayerShip, CargoIndex => CargoIndex,
             Amount => (0 - Amount),
             Durability => PlayerShip.Cargo.Element(CargoIndex).Durability);
          AddMessage
-           ("You drop" &
-            Positive'Image(Amount) &
-            " " &
-            To_String(Items_List(ProtoIndex).Name) &
-            ".",
+           ("You drop" & Positive'Image(Amount) & " " &
+            To_String(Items_List(ProtoIndex).Name) & ".",
             OrderMessage);
       else
          if FreeCargo(0 - (Amount * Items_List(ProtoIndex).Weight)) < 0 then
             ShowDialog
               ("You can't take that much " &
-               To_String(Items_List(ProtoIndex).Name) &
-               ".",
+               To_String(Items_List(ProtoIndex).Name) & ".",
                Gtk_Window(Get_Object(Builder, "skymapwindow")));
             return;
          end if;
          if CargoIndex > 0 then
             UpdateCargo
-              (Ship => PlayerShip,
-               CargoIndex => CargoIndex,
-               Amount => Amount,
+              (Ship => PlayerShip, CargoIndex => CargoIndex, Amount => Amount,
                Durability =>
                  SkyBases(BaseIndex).Cargo(BaseCargoIndex).Durability);
          else
             UpdateCargo
-              (PlayerShip,
-               ProtoIndex,
-               Amount,
+              (PlayerShip, ProtoIndex, Amount,
                SkyBases(BaseIndex).Cargo(BaseCargoIndex).Durability);
          end if;
          UpdateBaseCargo
-           (CargoIndex => BaseCargoIndex,
-            Amount => (0 - Amount),
+           (CargoIndex => BaseCargoIndex, Amount => (0 - Amount),
             Durability =>
               SkyBases(BaseIndex).Cargo.Element(BaseCargoIndex).Durability);
          AddMessage
-           ("You took" &
-            Positive'Image(Amount) &
-            " " &
-            To_String(Items_List(ProtoIndex).Name) &
-            ".",
+           ("You took" & Positive'Image(Amount) & " " &
+            To_String(Items_List(ProtoIndex).Name) & ".",
             OrderMessage);
       end if;
       UpdateGame(10);
@@ -290,10 +268,7 @@ package body Bases.LootUI is
             Append(ItemsList, ItemsIter);
             Set(ItemsList, ItemsIter, 0, GetItemName(PlayerShip.Cargo(I)));
             Set
-              (ItemsList,
-               ItemsIter,
-               1,
-               Gint(Inventory_Container.To_Index(I)));
+              (ItemsList, ItemsIter, 1, Gint(Inventory_Container.To_Index(I)));
             BaseCargoIndex :=
               FindBaseCargo
                 (PlayerShip.Cargo(I).ProtoIndex,
@@ -306,13 +281,11 @@ package body Bases.LootUI is
       end loop;
       for I in
         SkyBases(BaseIndex).Cargo.First_Index ..
-            SkyBases(BaseIndex).Cargo.Last_Index loop
+          SkyBases(BaseIndex).Cargo.Last_Index loop
          if IndexesList.Find_Index(Item => I) = 0 then
             Append(ItemsList, ItemsIter);
             Set
-              (ItemsList,
-               ItemsIter,
-               0,
+              (ItemsList, ItemsIter, 0,
                To_String
                  (Items_List(SkyBases(BaseIndex).Cargo(I).ProtoIndex).Name));
             Set(ItemsList, ItemsIter, 1, 0);
@@ -320,16 +293,14 @@ package body Bases.LootUI is
          end if;
       end loop;
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "loot");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "loot");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Hide(Gtk_Widget(Get_Object(Builder, "dropbox")));
       Hide(Gtk_Widget(Get_Object(Builder, "takebox")));
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treeitems")),
          Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columnname1")),
-         False);
+         Gtk_Tree_View_Column(Get_Object(Builder, "columnname1")), False);
       ShowLastMessage(Builder);
    end ShowLootUI;
 

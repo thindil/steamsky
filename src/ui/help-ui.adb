@@ -78,8 +78,7 @@ package body Help.UI is
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Do_Connect(Builder);
       On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "helpwindow")),
-         CloseWindow'Access);
+        (Gtk_Widget(Get_Object(Builder, "helpwindow")), CloseWindow'Access);
    end CreateHelpUI;
 
    procedure ShowHelpUI(Topic: Positive) is
@@ -166,8 +165,7 @@ package body Help.UI is
          3 => (Tag => "i", TextTag => Lookup(Tags, "italic")));
       FlagsTags: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("diseaseimmune"),
-         To_Unbounded_String("nofatigue"),
-         To_Unbounded_String("nomorale"));
+         To_Unbounded_String("nofatigue"), To_Unbounded_String("nomorale"));
       FactionsWithFlag: Unbounded_String;
    begin
       NewText := Help_List(Topic).Text;
@@ -180,9 +178,7 @@ package body Help.UI is
             Insert(HelpBuffer, Iter, Slice(NewText, OldIndex, StartIndex - 1));
          else
             Insert
-              (HelpBuffer,
-               Iter,
-               Slice(NewText, OldIndex, Length(NewText)));
+              (HelpBuffer, Iter, Slice(NewText, OldIndex, Length(NewText)));
             exit;
          end if;
          EndIndex := Index(NewText, "}", StartIndex) - 1;
@@ -190,9 +186,7 @@ package body Help.UI is
          for I in Variables'Range loop
             if TagText = Variables(I).Name then
                Insert_With_Tags
-                 (HelpBuffer,
-                  Iter,
-                  To_String(Variables(I).Value),
+                 (HelpBuffer, Iter, To_String(Variables(I).Value),
                   SpecialText);
                exit;
             end if;
@@ -203,10 +197,8 @@ package body Help.UI is
                 To_Unbounded_String(Positive'Image(I)) then
                Lookup_Entry(To_String(AccelNames(I)), Key, Found);
                Insert_With_Tags
-                 (HelpBuffer,
-                  Iter,
-                  "'" &
-                  Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods) &
+                 (HelpBuffer, Iter,
+                  "'" & Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods) &
                   "'",
                   SpecialText);
                exit;
@@ -216,9 +208,7 @@ package body Help.UI is
             if TagText = To_Unbounded_String(FontTags(I).Tag) then
                StartIndex := Index(NewText, "{", EndIndex) - 1;
                Insert_With_Tags
-                 (HelpBuffer,
-                  Iter,
-                  Slice(NewText, EndIndex + 2, StartIndex),
+                 (HelpBuffer, Iter, Slice(NewText, EndIndex + 2, StartIndex),
                   FontTags(I).TextTag);
                EndIndex := Index(NewText, "}", StartIndex) - 1;
                exit;
@@ -238,10 +228,8 @@ package body Help.UI is
                while Ada.Strings.Unbounded.Count(FactionsWithFlag, " and ") >
                  1 loop
                   Replace_Slice
-                    (FactionsWithFlag,
-                     Index(FactionsWithFlag, " and "),
-                     Index(FactionsWithFlag, " and ") + 5,
-                     ", ");
+                    (FactionsWithFlag, Index(FactionsWithFlag, " and "),
+                     Index(FactionsWithFlag, " and ") + 5, ", ");
                end loop;
                Insert(HelpBuffer, Iter, To_String(FactionsWithFlag));
                exit;

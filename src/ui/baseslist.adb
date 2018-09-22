@@ -55,14 +55,12 @@ package body BasesList is
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treebases"))),
-         BasesModel,
-         BasesIter);
+         BasesModel, BasesIter);
       if BasesIter = Null_Iter then
          Set_Visible(Gtk_Widget(Get_Object(Object, "baseinfoframe")), False);
          Set_Visible(Gtk_Widget(Get_Object(Object, "btnshowbase")), False);
          Set_Visible
-           (Gtk_Widget(Get_Object(Object, "btndestinationbase")),
-            False);
+           (Gtk_Widget(Get_Object(Object, "btndestinationbase")), False);
          return;
       end if;
       Set_Visible(Gtk_Widget(Get_Object(Object, "baseinfoframe")), True);
@@ -72,19 +70,15 @@ package body BasesList is
       if SkyBases(BaseIndex).Visited.Year > 0 then
          BaseInfo :=
            To_Unbounded_String
-             ("X:" &
-              Positive'Image(SkyBases(BaseIndex).SkyX) &
-              " Y:" &
+             ("X:" & Positive'Image(SkyBases(BaseIndex).SkyX) & " Y:" &
               Positive'Image(SkyBases(BaseIndex).SkyY));
          Append
            (BaseInfo,
-            ASCII.LF &
-            "Type: " &
+            ASCII.LF & "Type: " &
             To_Lower(Bases_Types'Image(SkyBases(BaseIndex).BaseType)));
          Append
            (BaseInfo,
-            ASCII.LF &
-            "Owner: " &
+            ASCII.LF & "Owner: " &
             To_String(Factions_List(SkyBases(BaseIndex).Owner).Name));
          Append(BaseInfo, ASCII.LF & "Size: ");
          if SkyBases(BaseIndex).Population < 150 then
@@ -97,8 +91,7 @@ package body BasesList is
          end if;
          Append
            (BaseInfo,
-            ASCII.LF &
-            "Last visited: " &
+            ASCII.LF & "Last visited: " &
             FormatedTime(SkyBases(BaseIndex).Visited));
          if SkyBases(BaseIndex).Population > 0 and
            SkyBases(BaseIndex).Reputation(1) > -25 then
@@ -106,10 +99,8 @@ package body BasesList is
             if TimeDiff > 0 then
                Append
                  (BaseInfo,
-                  ASCII.LF &
-                  "New recruits available in" &
-                  Natural'Image(TimeDiff) &
-                  " days.");
+                  ASCII.LF & "New recruits available in" &
+                  Natural'Image(TimeDiff) & " days.");
             else
                Append(BaseInfo, ASCII.LF & "New recruits available now.");
             end if;
@@ -124,17 +115,14 @@ package body BasesList is
             if TimeDiff < 7 then
                Append
                  (BaseInfo,
-                  ASCII.LF &
-                  "You asked for events" &
-                  Natural'Image(TimeDiff) &
+                  ASCII.LF & "You asked for events" & Natural'Image(TimeDiff) &
                   " days ago.");
             else
                Append(BaseInfo, ASCII.LF & "You can ask for events again.");
             end if;
          else
             Append
-              (BaseInfo,
-               ASCII.LF & "You can't ask for events at this base.");
+              (BaseInfo, ASCII.LF & "You can't ask for events at this base.");
          end if;
          if SkyBases(BaseIndex).Population > 0 and
            SkyBases(BaseIndex).Reputation(1) > -1 then
@@ -142,17 +130,14 @@ package body BasesList is
             if TimeDiff > 0 then
                Append
                  (BaseInfo,
-                  ASCII.LF &
-                  "New missions available in" &
-                  Natural'Image(TimeDiff) &
-                  " days.");
+                  ASCII.LF & "New missions available in" &
+                  Natural'Image(TimeDiff) & " days.");
             else
                Append(BaseInfo, ASCII.LF & "New missions available now.");
             end if;
          else
             Append
-              (BaseInfo,
-               ASCII.LF & "You can't take missions at this base.");
+              (BaseInfo, ASCII.LF & "You can't take missions at this base.");
          end if;
          Append(BaseInfo, ASCII.LF & "Reputation: ");
          case SkyBases(BaseIndex).Reputation(1) is
@@ -184,8 +169,7 @@ package body BasesList is
          BaseInfo := To_Unbounded_String("Not visited yet.");
       end if;
       Set_Label
-        (Gtk_Label(Get_Object(Object, "lblbaseinfo")),
-         To_String(BaseInfo));
+        (Gtk_Label(Get_Object(Object, "lblbaseinfo")), To_String(BaseInfo));
    end ShowBaseInfo;
 
    procedure SetDestinationBase(Object: access Gtkada_Builder_Record'Class) is
@@ -200,14 +184,12 @@ package body BasesList is
       PlayerShip.DestinationX := SkyBases(BaseIndex).SkyX;
       PlayerShip.DestinationY := SkyBases(BaseIndex).SkyY;
       AddMessage
-        ("You set base " &
-         To_String(SkyBases(BaseIndex).Name) &
+        ("You set base " & To_String(SkyBases(BaseIndex).Name) &
          " as a destination for your ship.",
          OrderMessage);
       ShowSkyMap;
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "skymap");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), True);
    end SetDestinationBase;
 
@@ -215,8 +197,7 @@ package body BasesList is
    begin
       ShowSkyMap(SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY);
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Object, "gamestack")),
-         "skymap");
+        (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
       Set_Deletable(Gtk_Window(Get_Object(Object, "skymapwindow")), True);
    end ShowBase;
 
@@ -224,19 +205,16 @@ package body BasesList is
    begin
       Refilter(Gtk_Tree_Model_Filter(Get_Object(Object, "basesfilter")));
       if N_Children
-          (Gtk_List_Store(Get_Object(Builder, "baseslist")),
-           Null_Iter) >
+          (Gtk_List_Store(Get_Object(Builder, "baseslist")), Null_Iter) >
         0 then
          Set_Cursor
            (Gtk_Tree_View(Get_Object(Builder, "treebases")),
             Gtk_Tree_Path_New_From_String("0"),
-            Gtk_Tree_View_Column(Get_Object(Builder, "columnnames1")),
-            False);
+            Gtk_Tree_View_Column(Get_Object(Builder, "columnnames1")), False);
       end if;
    end SearchBases;
 
-   function VisibleBases
-     (Model: Gtk_Tree_Model;
+   function VisibleBases(Model: Gtk_Tree_Model;
       Iter: Gtk_Tree_Iter) return Boolean is
       SearchEntry: constant Gtk_GEntry :=
         Gtk_GEntry(Get_Object(Builder, "entrysearchbases"));
@@ -307,8 +285,7 @@ package body BasesList is
       end if;
       if Index
           (To_Lower(Get_String(Model, Iter, 0)),
-           To_Lower(Get_Text(SearchEntry)),
-           1) >
+           To_Lower(Get_Text(SearchEntry)), 1) >
         0 then
          return True;
       end if;
@@ -322,18 +299,14 @@ package body BasesList is
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Base_Info", ShowBaseInfo'Access);
       Register_Handler
-        (Builder,
-         "Set_Destination_Base",
-         SetDestinationBase'Access);
+        (Builder, "Set_Destination_Base", SetDestinationBase'Access);
       Register_Handler(Builder, "Show_Base", ShowBase'Access);
       Register_Handler(Builder, "Search_Bases", SearchBases'Access);
       List := Gtk_List_Store(Get_Object(Builder, "typeslist1"));
       for I in Bases_Types loop
          Append(List, Iter);
          Set
-           (List,
-            Iter,
-            0,
+           (List, Iter, 0,
             Bases_Types'Image(I)(1) &
             To_Lower(Bases_Types'Image(I)(2 .. Bases_Types'Image(I)'Last)));
       end loop;
@@ -361,8 +334,7 @@ package body BasesList is
         (Gtk_Combo_Box(Get_Object(Builder, "cmbowner")),
          Gint(Factions_List.Last_Index));
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         "baseslist");
+        (Gtk_Stack(Get_Object(Builder, "gamestack")), "baseslist");
       SettingTime := True;
       BaseList := Gtk_List_Store(Get_Object(Builder, "baseslist"));
       Clear(BaseList);
@@ -372,9 +344,7 @@ package body BasesList is
             Set(BaseList, BaseIter, 0, To_String(SkyBases(I).Name));
             Set(BaseList, BaseIter, 1, Gint(I));
             Set
-              (BaseList,
-               BaseIter,
-               2,
+              (BaseList, BaseIter, 2,
                Gint(CountDistance(SkyBases(I).SkyX, SkyBases(I).SkyY)));
          end if;
       end loop;
@@ -382,8 +352,7 @@ package body BasesList is
          Set_Cursor
            (Gtk_Tree_View(Get_Object(Builder, "treebases")),
             Gtk_Tree_Path_New_From_String("0"),
-            Gtk_Tree_View_Column(Get_Object(Builder, "columnnames1")),
-            False);
+            Gtk_Tree_View_Column(Get_Object(Builder, "columnnames1")), False);
       end if;
       Set_Text(Gtk_GEntry(Get_Object(Builder, "entrysearchbases")), "");
       SettingTime := False;

@@ -22,16 +22,8 @@ with Game; use Game;
 package Events is
 
    type Events_Types is
-     (None,
-      EnemyShip,
-      AttackOnBase,
-      Disease,
-      DoublePrice,
-      BaseRecovery,
-      FullDocks,
-      EnemyPatrol,
-      Trader,
-      FriendlyShip); -- Types of events
+     (None, EnemyShip, AttackOnBase, Disease, DoublePrice, BaseRecovery,
+      FullDocks, EnemyPatrol, Trader, FriendlyShip); -- Types of events
    type EventData is -- Data structure for random events
    record
       EType: Events_Types; -- Type of event
@@ -49,8 +41,7 @@ package Events is
    procedure DeleteEvent(EventIndex: Positive); -- Delete selected event
    procedure GenerateTraders; -- Create list of traders needed for trader event
    procedure RecoverBase(BaseIndex: Positive); -- Recover abandoned base
-   procedure GenerateEnemies
-     (Enemies: in out Positive_Container.Vector;
+   procedure GenerateEnemies(Enemies: in out Positive_Container.Vector;
       Owner: Unbounded_String :=
         To_Unbounded_String("Any")); -- Create list of enemies ships
 
