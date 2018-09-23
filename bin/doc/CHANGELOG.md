@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Updated
+- Updated README.md with info about some common problems with the game
+
 ### Fixed
 - Crash when trying to change colors on terminal emulator which don't support
   it (issue #28)
