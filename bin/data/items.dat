@@ -1867,5 +1867,14 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="20"/>
   <description>Small book with informations about basics of cooking. Used in training skills.</description>
  </item>
+ <item index="196" name="Small book of gunsmithing" showtype="Book of Gunsmithing" type="GunsmithBook" weight="1">
+  <trade buyable="Y" price="10"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <data value="20"/>
+  <description>Small book with informations about basics of gunsmithing. Used in training skills.</description>
+ </item>
 </items>
 
