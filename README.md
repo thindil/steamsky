@@ -82,6 +82,22 @@ Of course, you can set all parameters together: `./steamsky --datadir=somedir/
 
 Paths to directories can be absolute or relative where file `steamsky` is. 
 
+### Troubleshooting
+
+#### One background color for whole map
+If you have whole game map in one color (no difference between discovered and
+unknown parts of map) you may try to run the game with changed environmental
+variable TERM: `TERM=xterm-256color ./steamsky`. Some Linux distributions set
+this variable for each terminal emulator what can cause problems. More info
+about this you can find at: https://github.com/thindil/steamsky/issues/28
+
+#### Different colors in game
+If you have different colors in game that this which are on screenshots: if you
+changed default colors for terminal emulator, the game will be used them
+instead of standard. This is limitation of terminal applications. More info
+about this you can find at: https://github.com/thindil/steamsky/issues/28 and
+https://github.com/thindil/steamsky/issues/15
+
 ## Modding Support
 For detailed informations about modifying various game elements or debugging
 the game, see [MODDING.md](bin/doc/MODDING.md)
