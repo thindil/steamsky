@@ -113,7 +113,7 @@ GtkSpinButton {
 }
 
 GtkLabel#overlaylabel {
-   border-style:none none solid solid;
+   border-style:solid;
    border-width:2px;
    border-color:darkgreen;
    background:rgb(25,25,25);
