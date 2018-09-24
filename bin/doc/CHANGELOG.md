@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file.
 - Optional names for careers in factions
 - New items types: cockpitsimulator, engineersbook, gunsimulator,
   rhetoricbook, smalltoys, alchemybook, cookingbook, gunsmithbook,
-  metalsmithbook and medicinebook
+  metalsmithbook, medicinebook and farmingbook
 
 ### Changed
 - Help factions flags variables now return list of factions which have that
