@@ -1894,5 +1894,14 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="20"/>
   <description>Small book with informations about basics of medicine. Used in training skills.</description>
  </item>
+ <item index="199" name="Small book of farming" showtype="Book of Farming" type="FarmingBook" weight="1">
+  <trade buyable="Y" price="10"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <data value="20"/>
+  <description>Small book with informations about basics of farming. Used in training skills.</description>
+ </item>
 </items>
 
