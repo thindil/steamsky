@@ -67,6 +67,7 @@ package body MainMenu is
 
    Builder: Gtkada_Builder;
    AllNews: Boolean := False;
+   CssProvider: Gtk_Css_Provider;
 
    procedure Quit(Object: access Gtkada_Builder_Record'Class) is
    begin
@@ -407,9 +408,13 @@ package body MainMenu is
            (Factions_List(FactionIndex).Careers(CareerIndex).Description));
    end ShowCareerDescription;
 
+   procedure SetFontSize(FontName: String) is
+   begin
+      null;
+   end SetFontSize;
+
    procedure CreateMainMenu is
       Error: aliased GError;
-      CssProvider: Gtk_Css_Provider;
       DataError: Unbounded_String;
    begin
       Gtk_New(CssProvider);

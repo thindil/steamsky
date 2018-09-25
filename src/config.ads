@@ -46,6 +46,9 @@ package Config is
       AnimationType: Positive; -- Type of animation used to move between views
       MessagesLimit: Positive; -- Max amount of messages showed in game
       SavedMessages: Positive; -- Max amount fo messages saved to file
+      HelpFontSize: Positive; -- Size of font used in help
+      MapFontSize: Positive; -- Size of font used in map
+      InterfaceFontSize: Positive; -- Size of font used in interface
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;
