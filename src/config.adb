@@ -34,7 +34,8 @@ package body Config is
          AutoReturn => True, AutoFinish => True, LowFuel => 100,
          LowDrinks => 50, LowFood => 25, AutoMoveStop => NEVER,
          WindowWidth => 800, WindowHeight => 600, AnimationsEnabled => 1,
-         AnimationType => 1, MessagesLimit => 500, SavedMessages => 10);
+         AnimationType => 1, MessagesLimit => 500, SavedMessages => 10,
+         HelpFontSize => 12, MapFontSize => 10, InterfaceFontSize => 16);
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
@@ -102,6 +103,12 @@ package body Config is
                GameSettings.MessagesLimit := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("SavedMessages") then
                GameSettings.SavedMessages := Positive'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("HelpFontSize") then
+               GameSettings.HelpFontSize := Positive'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("MapFontSize") then
+               GameSettings.MapFontSize := Positive'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("InterfaceFontSize") then
+               GameSettings.InterfaceFontSize := Positive'Value(To_String(Value));
             end if;
          end if;
       end loop;
@@ -167,6 +174,15 @@ package body Config is
       Put_Line
         (ConfigFile,
          "SavedMessages =" & Positive'Image(GameSettings.SavedMessages));
+      Put_Line
+        (ConfigFile,
+         "HelpFontSize =" & Positive'Image(GameSettings.HelpFontSize));
+      Put_Line
+        (ConfigFile,
+         "MapFontSize =" & Positive'Image(GameSettings.MapFontSize));
+      Put_Line
+        (ConfigFile,
+         "InterfaceFontSize =" & Positive'Image(GameSettings.InterfaceFontSize));
       Close(ConfigFile);
    end SaveConfig;
 

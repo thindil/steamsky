@@ -39,6 +39,7 @@ with Config; use Config;
 with Ships; use Ships;
 with Utils.UI; use Utils.UI;
 with Messages; use Messages;
+with MainMenu; use MainMenu;
 
 package body GameOptions is
 
@@ -215,10 +216,31 @@ package body GameOptions is
       return False;
    end SetAccelerator;
 
+   procedure ResizeFont(User_Data: access GObject_Record'Class) is
+   begin
+      if User_Data = Get_Object(Builder, "adjhelpfont") then
+         GameSettings.HelpFontSize :=
+            Positive
+               (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjhelpfont"))));
+         SetFontSize("help");
+      elsif User_Data = Get_Object(Builder, "adjmapfont") then
+         GameSettings.MapFontSize :=
+            Positive
+               (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjmapfont"))));
+         SetFontSize("map");
+      else
+         GameSettings.InterfaceFontSize :=
+            Positive
+               (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjinterfacefont"))));
+         SetFontSize("interface");
+      end if;
+   end ResizeFont;
+
    procedure CreateGameOptions(NewBuilder: Gtkada_Builder) is
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Close_Options", CloseOptions'Access);
+      Register_Handler(Builder, "Resize_Font", ResizeFont'Access);
       for I in EditNames'Range loop
          On_Key_Press_Event
            (Gtk_Widget(Get_Object(Builder, To_String(EditNames(I)))),
@@ -288,6 +310,15 @@ package body GameOptions is
       Set_Value
         (Gtk_Adjustment(Get_Object(Builder, "adjsavedmessages")),
          Gdouble(GameSettings.SavedMessages));
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Builder, "adjhelpfont")),
+         Gdouble(GameSettings.HelpFontSize));
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Builder, "adjmapfont")),
+         Gdouble(GameSettings.MapFontSize));
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Builder, "adjinterfacefont")),
+         Gdouble(GameSettings.InterfaceFontSize));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "options");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
