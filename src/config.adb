@@ -108,7 +108,8 @@ package body Config is
             elsif FieldName = To_Unbounded_String("MapFontSize") then
                GameSettings.MapFontSize := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("InterfaceFontSize") then
-               GameSettings.InterfaceFontSize := Positive'Value(To_String(Value));
+               GameSettings.InterfaceFontSize :=
+                 Positive'Value(To_String(Value));
             end if;
          end if;
       end loop;
@@ -182,7 +183,8 @@ package body Config is
          "MapFontSize =" & Positive'Image(GameSettings.MapFontSize));
       Put_Line
         (ConfigFile,
-         "InterfaceFontSize =" & Positive'Image(GameSettings.InterfaceFontSize));
+         "InterfaceFontSize =" &
+         Positive'Image(GameSettings.InterfaceFontSize));
       Close(ConfigFile);
    end SaveConfig;
 

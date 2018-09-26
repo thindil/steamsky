@@ -409,8 +409,39 @@ package body MainMenu is
    end ShowCareerDescription;
 
    procedure SetFontSize(FontName: String) is
+      CssText: Unbounded_String := To_Unbounded_String(To_String(CssProvider));
+      StartIndex, EndIndex: Positive;
+      Error: aliased GError;
    begin
-      null;
+      if FontName = "help" or FontName = "" then
+         StartIndex := Index(CssText, "*#normalfont", 1);
+         StartIndex := Index(CssText, "font-size", StartIndex);
+         EndIndex := Index(CssText, ";", StartIndex);
+         Replace_Slice
+           (CssText, StartIndex, EndIndex,
+            "font-size:" & Positive'Image(GameSettings.HelpFontSize) & "px;");
+      end if;
+      if FontName = "map" or FontName = "" then
+         StartIndex := Index(CssText, "#mapview", 1);
+         StartIndex := Index(CssText, "font-size", StartIndex);
+         EndIndex := Index(CssText, ";", StartIndex);
+         Replace_Slice
+           (CssText, StartIndex, EndIndex,
+            "font-size:" & Positive'Image(GameSettings.MapFontSize) & "px;");
+      end if;
+      if FontName = "interface" or FontName = "" then
+         StartIndex := 1;
+         StartIndex := Index(CssText, "font-size", StartIndex);
+         EndIndex := Index(CssText, ";", StartIndex);
+         Replace_Slice
+           (CssText, StartIndex, EndIndex,
+            "font-size:" & Positive'Image(GameSettings.InterfaceFontSize) &
+            "px;");
+      end if;
+      if not Load_From_Data(CssProvider, To_String(CssText), Error'Access) then
+         Put_Line("Error: " & Get_Message(Error));
+         return;
+      end if;
    end SetFontSize;
 
    procedure CreateMainMenu is
