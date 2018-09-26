@@ -12,7 +12,8 @@ All notable changes to this project will be documented in this file.
   wooden gun simulator, adamantium armsguard, small book of rhetoric, wooden
   small toys, adamantium legsguard, small book of alchemy, small book of
   cooking, small book of gunsmithing, small book of metalsmithing, small book
-  of medicine, small book of farming and small books of woodcutting
+  of medicine, small book of farming, small books of woodcutting and small
+  book of brewing
 - Ability to show current game directories in options
 - Optional names for careers in factions
 - New items types: cockpitsimulator, engineersbook, gunsimulator,
