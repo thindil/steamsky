@@ -112,13 +112,6 @@ GtkSpinButton {
    background:rgb(25,25,25);
 }
 
-GtkLabel#overlaylabel {
-   border-style:solid;
-   border-width:2px;
-   border-color:darkgreen;
-   background:rgb(25,25,25);
-}
-
 GtkScale, GtkScale:hover {
    background:grey;
 }
