@@ -28,6 +28,7 @@ package MainMenu is
       PrintToTerminal: Boolean); -- Save data exception to file
    procedure On_Exception
      (An_Exception: Exception_Occurrence); -- Handle GUI exceptions
-   procedure SetFontSize(FontName: String); -- Set size of selected font (or all if FontName is empty string)
+   procedure SetFontSize
+     (FontName: String); -- Set size of selected font (or all if FontName is empty string)
 
 end MainMenu;
