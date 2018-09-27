@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
   rhetoricbook, smalltoys, alchemybook, cookingbook, gunsmithbook,
   metalsmithbook, medicinebook, farmingbook, woodcuttingbook, brewingbook,
   blacksmithbook and woodworkingbook
+- Option to set fonts size in game
 
 ### Changed
 - Help factions flags variables now return list of factions which have that
