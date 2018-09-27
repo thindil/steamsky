@@ -7124,6 +7124,30 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="top_attach">4</property>
                           </packing>
                         </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Select UI theme.</property>
+                            <property name="label" translatable="yes">Interface theme:</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">5</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="cmbtheme">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Select UI theme.</property>
+                            <signal name="changed" handler="Apply_Theme" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">5</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="name">page3</property>

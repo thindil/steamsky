@@ -49,6 +49,7 @@ package Config is
       HelpFontSize: Positive; -- Size of font used in help
       MapFontSize: Positive; -- Size of font used in map
       InterfaceFontSize: Positive; -- Size of font used in interface
+      InterfaceTheme: Unbounded_String; -- Name of current user interface theme
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;

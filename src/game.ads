@@ -91,6 +91,10 @@ package Game is
        ("data" & Dir_Separator & "mods" &
         Dir_Separator); -- Path to directory where are game modifications
    PlayerCareer: Positive; -- Index of career selected by player during starting game
+   ThemesDirectory: Unbounded_String :=
+     To_Unbounded_String
+       ("data" & Dir_Separator & "themes" &
+        Dir_Separator); -- Path to directory where are ui themes
 
    procedure NewGame(CharName, ShipName: Unbounded_String; Gender: Character;
       FactionIndex,

@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers; use Ada.Containers;
+with Ada.Directories; use Ada.Directories;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Switch; use Gtk.Switch;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
@@ -29,6 +30,7 @@ with Gtk.Stack; use Gtk.Stack;
 with Gtk.Settings; use Gtk.Settings;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Label; use Gtk.Label;
+with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Gdk.Event;
@@ -237,11 +239,24 @@ package body GameOptions is
       end if;
    end ResizeFont;
 
+   procedure ApplyTheme(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      GameSettings.InterfaceTheme :=
+        To_Unbounded_String
+          (Get_Active_Text
+             (Gtk_Combo_Box_Text(Get_Object(Object, "cmbtheme"))));
+      LoadTheme;
+   end ApplyTheme;
+
    procedure CreateGameOptions(NewBuilder: Gtkada_Builder) is
+      ThemeIndex, FileIndex: Natural := 0;
+      Files: Search_Type;
+      FoundFile: Directory_Entry_Type;
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Close_Options", CloseOptions'Access);
       Register_Handler(Builder, "Resize_Font", ResizeFont'Access);
+      Register_Handler(Builder, "Apply_Theme", ApplyTheme'Access);
       for I in EditNames'Range loop
          On_Key_Press_Event
            (Gtk_Widget(Get_Object(Builder, To_String(EditNames(I)))),
@@ -258,6 +273,23 @@ package body GameOptions is
       Set_Text
         (Gtk_Label(Get_Object(Builder, "lblmodsdir")),
          To_String(ModsDirectory));
+      Append_Text
+        (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbtheme")), "default");
+      Start_Search(Files, To_String(ThemesDirectory), "*.css");
+      while More_Entries(Files) loop
+         Get_Next_Entry(Files, FoundFile);
+         Append_Text
+           (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbtheme")),
+            Base_Name(Simple_Name(FoundFile)));
+         if Base_Name(Simple_Name(FoundFile)) =
+           To_String(GameSettings.InterfaceTheme) then
+            ThemeIndex := FileIndex;
+         end if;
+         FileIndex := FileIndex + 1;
+      end loop;
+      Set_Active
+        (Gtk_Combo_Box(Get_Object(Builder, "cmbtheme")), Gint(ThemeIndex));
+      End_Search(Files);
    end CreateGameOptions;
 
    procedure ShowGameOptions is
