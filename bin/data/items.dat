@@ -1921,5 +1921,14 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="20"/>
   <description>Small book with informations about basics of brewing. Used in training skills.</description>
  </item>
+ <item index="202" name="Small book of blacksmithing" showtype="Book of Blacksmithing" type="BlacksmithBook" weight="1">
+  <trade buyable="Y" price="10"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <data value="20"/>
+  <description>Small book with informations about basics of blacksmithing. Used in training skills.</description>
+ </item>
 </items>
 
