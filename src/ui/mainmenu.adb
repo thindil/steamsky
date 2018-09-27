@@ -444,20 +444,34 @@ package body MainMenu is
       end if;
    end SetFontSize;
 
-   procedure CreateMainMenu is
+   procedure LoadTheme is
       Error: aliased GError;
-      DataError: Unbounded_String;
+      FileName: Unbounded_String;
    begin
+      if GameSettings.InterfaceTheme = To_Unbounded_String("default") then
+         FileName :=
+           DataDirectory &
+           To_Unbounded_String("ui" & Dir_Separator & "steamsky.css");
+      else
+         FileName :=
+           ThemesDirectory & GameSettings.InterfaceTheme &
+           To_Unbounded_String(".css");
+      end if;
       Gtk_New(CssProvider);
       if not Load_From_Path
-          (CssProvider,
-           To_String(DataDirectory) & "ui" & Dir_Separator & "steamsky.css",
-           Error'Access) then
+          (CssProvider, To_String(FileName), Error'Access) then
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
       Add_Provider_For_Screen
         (Get_Default_Screen(Get_Default), +(CssProvider), Guint'Last);
+   end LoadTheme;
+
+   procedure CreateMainMenu is
+      Error: aliased GError;
+      DataError: Unbounded_String;
+   begin
+      LoadTheme;
       Gtk_New(Builder);
       if Add_From_File
           (Builder,

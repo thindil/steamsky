@@ -35,7 +35,8 @@ package body Config is
          LowDrinks => 50, LowFood => 25, AutoMoveStop => NEVER,
          WindowWidth => 800, WindowHeight => 600, AnimationsEnabled => 1,
          AnimationType => 1, MessagesLimit => 500, SavedMessages => 10,
-         HelpFontSize => 12, MapFontSize => 10, InterfaceFontSize => 16);
+         HelpFontSize => 12, MapFontSize => 10, InterfaceFontSize => 16,
+         InterfaceTheme => To_Unbounded_String("default"));
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
@@ -110,6 +111,8 @@ package body Config is
             elsif FieldName = To_Unbounded_String("InterfaceFontSize") then
                GameSettings.InterfaceFontSize :=
                  Positive'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("InterfaceTheme") then
+               GameSettings.InterfaceTheme := Value;
             end if;
          end if;
       end loop;
@@ -185,6 +188,9 @@ package body Config is
         (ConfigFile,
          "InterfaceFontSize =" &
          Positive'Image(GameSettings.InterfaceFontSize));
+      Put_Line
+        (ConfigFile,
+         "InterfaceTheme = " & To_String(GameSettings.InterfaceTheme));
       Close(ConfigFile);
    end SaveConfig;
 
