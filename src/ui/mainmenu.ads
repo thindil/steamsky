@@ -30,5 +30,6 @@ package MainMenu is
      (An_Exception: Exception_Occurrence); -- Handle GUI exceptions
    procedure SetFontSize
      (FontName: String); -- Set size of selected font (or all if FontName is empty string)
+   procedure LoadTheme; -- Load selected UI theme
 
 end MainMenu;
