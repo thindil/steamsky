@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
   metalsmithbook, medicinebook, farmingbook, woodcuttingbook, brewingbook,
   blacksmithbook, woodworkingbook, leatherworkingbook and trainingdummy
 - Option to set fonts size in game
+- User Interface themes
 
 ### Changed
 - Help factions flags variables now return list of factions which have that
