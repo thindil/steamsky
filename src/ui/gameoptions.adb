@@ -248,6 +248,26 @@ package body GameOptions is
       LoadTheme;
    end ApplyTheme;
 
+   procedure SetFontsSizes is
+   begin
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Builder, "adjhelpfont")),
+         Gdouble(GameSettings.HelpFontSize));
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Builder, "adjmapfont")),
+         Gdouble(GameSettings.MapFontSize));
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Builder, "adjinterfacefont")),
+         Gdouble(GameSettings.InterfaceFontSize));
+   end SetFontsSizes;
+
+   procedure SetDefaultFontSize(Object: access Gtkada_Builder_Record'Class) is
+      pragma Unreferenced(Object);
+   begin
+      ResetFontsSizes;
+      SetFontsSizes;
+   end SetDefaultFontSize;
+
    procedure CreateGameOptions(NewBuilder: Gtkada_Builder) is
       ThemeIndex, FileIndex: Natural := 0;
       Files: Search_Type;
@@ -257,6 +277,8 @@ package body GameOptions is
       Register_Handler(Builder, "Close_Options", CloseOptions'Access);
       Register_Handler(Builder, "Resize_Font", ResizeFont'Access);
       Register_Handler(Builder, "Apply_Theme", ApplyTheme'Access);
+      Register_Handler
+        (Builder, "Set_Default_Font_Size", SetDefaultFontSize'Access);
       for I in EditNames'Range loop
          On_Key_Press_Event
            (Gtk_Widget(Get_Object(Builder, To_String(EditNames(I)))),
@@ -280,8 +302,8 @@ package body GameOptions is
          Get_Next_Entry(Files, FoundFile);
          Append_Text
            (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbtheme")),
-            Base_Name(Simple_Name(FoundFile)));
-         if Base_Name(Simple_Name(FoundFile)) =
+            Ada.Directories.Base_Name(Simple_Name(FoundFile)));
+         if Ada.Directories.Base_Name(Simple_Name(FoundFile)) =
            To_String(GameSettings.InterfaceTheme) then
             ThemeIndex := FileIndex;
          end if;
@@ -343,15 +365,7 @@ package body GameOptions is
       Set_Value
         (Gtk_Adjustment(Get_Object(Builder, "adjsavedmessages")),
          Gdouble(GameSettings.SavedMessages));
-      Set_Value
-        (Gtk_Adjustment(Get_Object(Builder, "adjhelpfont")),
-         Gdouble(GameSettings.HelpFontSize));
-      Set_Value
-        (Gtk_Adjustment(Get_Object(Builder, "adjmapfont")),
-         Gdouble(GameSettings.MapFontSize));
-      Set_Value
-        (Gtk_Adjustment(Get_Object(Builder, "adjinterfacefont")),
-         Gdouble(GameSettings.InterfaceFontSize));
+      SetFontsSizes;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "options");
       Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
