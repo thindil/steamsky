@@ -467,6 +467,39 @@ package body MainMenu is
         (Get_Default_Screen(Get_Default), +(CssProvider), Guint'Last);
    end LoadTheme;
 
+   procedure ResetFontsSizes is
+      FileName: Unbounded_String;
+      CssText: Unbounded_String := Null_Unbounded_String;
+      CssFile: File_Type;
+      function GetFontSize(FontName: String) return Positive is
+         StartIndex, EndIndex: Positive;
+      begin
+         StartIndex := Index(CssText, FontName, 1);
+         StartIndex := Index(CssText, "font-size", StartIndex);
+         StartIndex := Index(CssText, ":", StartIndex) + 1;
+         EndIndex := Index(CssText, "p", StartIndex) - 1;
+         return Positive'Value(Slice(CssText, StartIndex, EndIndex));
+      end GetFontSize;
+   begin
+      if GameSettings.InterfaceTheme = To_Unbounded_String("default") then
+         FileName :=
+           DataDirectory &
+           To_Unbounded_String("ui" & Dir_Separator & "steamsky.css");
+      else
+         FileName :=
+           ThemesDirectory & GameSettings.InterfaceTheme &
+           To_Unbounded_String(".css");
+      end if;
+      Open(CssFile, In_File, To_String(FileName));
+      while not End_Of_File(CssFile) loop
+         Append(CssText, Get_Line(CssFile));
+      end loop;
+      Close(CssFile);
+      GameSettings.HelpFontSize := GetFontSize("*#normalfont");
+      GameSettings.MapFontSize := GetFontSize("#mapview");
+      GameSettings.InterfaceFontSize := GetFontSize("* {");
+   end ResetFontsSizes;
+
    procedure CreateMainMenu is
       Error: aliased GError;
       DataError: Unbounded_String;
