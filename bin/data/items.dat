@@ -1939,5 +1939,14 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="20"/>
   <description>Small book with informations about basics of woodworking. Used in training skills.</description>
  </item>
+ <item index="204" name="Small book of leatherworking" showtype="Book of Leatherworking" type="LeatherworkingBook" weight="1">
+  <trade buyable="Y" price="10"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <data value="20"/>
+  <description>Small book with informations about basics of leatherworking. Used in training skills.</description>
+ </item>
 </items>
 
