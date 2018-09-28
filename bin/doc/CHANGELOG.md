@@ -13,7 +13,8 @@ All notable changes to this project will be documented in this file.
   small toys, adamantium legsguard, small book of alchemy, small book of
   cooking, small book of gunsmithing, small book of metalsmithing, small book
   of medicine, small book of farming, small books of woodcutting, small book
-  of brewing, small book of blacksmithing and small book of woodworking
+  of brewing, small book of blacksmithing, small book of woodworking and small
+  book of leatherworking
 - Ability to show current game directories in options
 - Optional names for careers in factions
 - New items types: cockpitsimulator, engineersbook, gunsimulator,
