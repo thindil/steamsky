@@ -1948,5 +1948,14 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="20"/>
   <description>Small book with informations about basics of leatherworking. Used in training skills.</description>
  </item>
+ <item index="205" name="Wooden training dummy" showtype="Training Dummy" type="TrainingDummy" weight="12">
+  <trade buyable="Y" price="12"/>
+  <trade buyable="N" price="14"/>
+  <trade buyable="N" price="14"/>
+  <trade buyable="N" price="14"/>
+  <trade buyable="N" price="14"/>
+  <data value="20"/>
+  <description>Wooden tool used in training skills.</description>
+ </item>
 </items>
 
