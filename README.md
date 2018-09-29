@@ -74,6 +74,9 @@ You can set game directories by starting parameters. Possible options are:
 * --modsdir=[directory] set directory where game modifications are. Example: 
   `./steamsky.sh --modsdir=/home/user/.mods`. Default value is *data/mods/*
 
+* --themesdir=[directory] set directory where game themes are. Example: 
+  `./steamsky.sh --themesdir=/home/user/.mods`. Default value is *data/themes/*
+
 Of course, you can set all parameters together: `./steamsky.sh --datadir=somedir/
 --savedir=otherdir/ --docdir=anotherdir/`
 
