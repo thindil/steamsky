@@ -1957,5 +1957,14 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="20"/>
   <description>Wooden tool used in training skills.</description>
  </item>
+ <item index="206" name="Wooden small traps" showtype="Small traps" type="SmallTraps" weight="1">
+  <trade buyable="Y" price="8"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <data value="20"/>
+  <description>Small wooden traps. Used to train some skills.</description>
+ </item>
 </items>
 
