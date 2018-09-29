@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
   cooking, small book of gunsmithing, small book of metalsmithing, small book
   of medicine, small book of farming, small books of woodcutting, small book
   of brewing, small book of blacksmithing, small book of woodworking, small
-  book of leatherworking and wooden training dummy
+  book of leatherworking, wooden training dummy and small wooden traps
 - Ability to show current game directories in options
 - Optional names for careers in factions
 - New items types: cockpitsimulator, engineersbook, gunsimulator,
