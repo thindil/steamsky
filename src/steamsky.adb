@@ -40,7 +40,8 @@ procedure SteamSky is
          Append(Path, Dir_Separator);
       end if;
       if not Exists(To_String(Path)) then
-         if PathName /= "Save" and PathName /= "Modifications" then
+         if PathName /= "Save" and PathName /= "Modifications" and
+           PathName /= "Themes" then
             Put_Line
               ("Directory " & To_String(Path) &
                " not exists. You must use existing directory as " &
@@ -91,6 +92,12 @@ begin
             if not UpdatePath(ModsDirectory, "Modifications") then
                return;
             end if;
+         elsif Argument(I)(1 .. 8) = "--themes" then
+            ModsDirectory :=
+              To_Unbounded_String(Argument(I)(11 .. (Argument(I)'Last)));
+            if not UpdatePath(ModsDirectory, "Themes") then
+               return;
+            end if;
          end if;
       end if;
    end loop;
@@ -100,6 +107,9 @@ begin
    end if;
    if not Exists(To_String(ModsDirectory)) then
       Create_Path(To_String(ModsDirectory));
+   end if;
+   if not Exists(To_String(ThemesDirectory)) then
+      Create_Path(To_String(ThemesDirectory));
    end if;
 
    LoadConfig;
