@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [2.0.11] - 2018-09-30
 
 ### Updated
 - Updated README.md with info about some common problems with the game
