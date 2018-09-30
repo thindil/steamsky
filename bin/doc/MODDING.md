@@ -663,6 +663,13 @@ story.
   skill is between `skill` tag. Attribute `name` is name of skill which will
   be have bonuses to experience.
 
+## Themes
+All themes files are standard CSS files. To edit default game theme, open file
+*steamsky.css* in *data/ui* directory. But best option is create new file in
+themes directory (by default it is *data/themes* but you can change it with
+game starting parameter, see [README.md](../README.md) for more info about it).
+To remove theme just delete theme file from themes directory.
+
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
 game create file *debug.log* in *data* directory. To start game in debug mode
