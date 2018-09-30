@@ -22,8 +22,8 @@
 }
 
 GtkButton:active,
-   GtkButton:active *, 
-   GtkTreeView:selected, 
+   GtkButton:active *,
+   GtkTreeView:selected,
    GtkTreeView:selected:focus {
   background:rgb(128,0,0);
 }
@@ -42,7 +42,7 @@ GtkButton:active,
    border-color:rgb(57,57,57);
 }
 
-.scrollbar.slider:prelight:active, 
+.scrollbar.slider:prelight:active,
    .scrollbar.slider:active {
   background:rgb(128,0,0);
   border-style:none;
@@ -53,19 +53,19 @@ GtkButton:active,
   border-style:none;
 }
 
-.progressbar, 
-   .progressbar:selected, 
+.progressbar,
+   .progressbar:selected,
    .progressbar:selected:focus {
    background:linear-gradient(to bottom, blue, black);
    border-radius:10px;
 }
 
-GtkProgressBar.trough, 
-   GtkTreeView.view.trough, 
-   GtkTreeView.view.trough:selected, 
+GtkProgressBar.trough,
+   GtkTreeView.view.trough,
+   GtkTreeView.view.trough:selected,
    GtkTreeView.view.trough:selected:focus {
   border-radius: 10px;
-  background:linear-gradient(to bottom, rgb(73,73,73), rgb(35,41,51)); 
+  background:linear-gradient(to bottom, rgb(73,73,73), rgb(35,41,51));
 }
 
 GtkFrame {
@@ -132,29 +132,22 @@ GtkTextView#mapview {
    font-size:12px;
 }
 
-
-*#logofont {
-   font-family:Rye;
-   font-style:normal;
-   font-size:70px;
-}
-
-.progressbar#redbar, 
-   .progressbar:selected#redbar, 
+.progressbar#redbar,
+   .progressbar:selected#redbar,
    .progressbar:selected#redbar:focus {
    background:linear-gradient(to bottom, red, black);
    border-radius:10px;
 }
 
-.progressbar#greenbar, 
-   .progressbar:selected#greenbar, 
+.progressbar#greenbar,
+   .progressbar:selected#greenbar,
    .progressbar:selected#greenbar:focus {
    background:linear-gradient(to bottom, darkgreen, black);
    border-radius:10px;
 }
 
-.progressbar#yellowbar, 
-   .progressbar:selected#yellowbar, 
+.progressbar#yellowbar,
+   .progressbar:selected#yellowbar,
    .progressbar:selected#yellowbar:focus {
    background:linear-gradient(to bottom, rgb(232, 179, 0), black);
    border-radius:10px;
