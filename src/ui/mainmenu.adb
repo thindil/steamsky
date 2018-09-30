@@ -456,6 +456,12 @@ package body MainMenu is
          FileName :=
            ThemesDirectory & GameSettings.InterfaceTheme &
            To_Unbounded_String(".css");
+         if not Exists(To_String(FileName)) then
+            FileName :=
+              DataDirectory &
+              To_Unbounded_String("ui" & Dir_Separator & "steamsky.css");
+            GameSettings.InterfaceTheme := To_Unbounded_String("default");
+         end if;
       end if;
       Gtk_New(CssProvider);
       if not Load_From_Path
