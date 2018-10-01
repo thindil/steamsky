@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
   smalltraps
 - Option to set fonts size in game
 - User Interface themes
+- New skill: printing
 
 ### Changed
 - Help factions flags variables now return list of factions which have that
