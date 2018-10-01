@@ -1,3 +1,6 @@
+/* Information about available CSS options you can find at https://developer.gnome.org/gtk3/stable/chap-css-overview.html */
+
+/* General setting of ui */
 * {
    background:rgb(28,28,28);
    color:rgb(238,232,170);
@@ -9,18 +12,21 @@
    font-size:16px;
 }
 
+/* Currently selected text entry fields and buttons */
 .entry:selected,
    GtkButton:focus,
    GtkButton:focus * {
    background:rgb(57,57,57);
 }
 
+/* Mouse hovering over UI element */
 *:hover {
    border-style:dotted;
    border-width:1px;
    border-color:rgb(255,223,0);
 }
 
+/* Button pressed and selected item in lists (like modules list, etc) */
 GtkButton:active,
    GtkButton:active *,
    GtkTreeView:selected,
@@ -28,31 +34,37 @@ GtkButton:active,
   background:rgb(128,0,0);
 }
 
+/* Blocked buttons */
 .button:insensitive, .button:insensitive * {
    color:black;
 }
 
+/* Default all buttons settings */
 .button, .button * {
    color:rgb(255,223,0);
 }
 
+/* Setting for all sliders */
 .scrollbar.slider {
    border-style:dotted;
    border-width:1px;
    border-color:rgb(57,57,57);
 }
 
+/* Setting for currently used slider */
 .scrollbar.slider:prelight:active,
    .scrollbar.slider:active {
   background:rgb(128,0,0);
   border-style:none;
 }
 
+/* Mouse hover over slider */
 .scrollbar.slider:hover {
   background:rgb(57,57,57);
   border-style:none;
 }
 
+/* Settings for progress bars */
 .progressbar,
    .progressbar:selected,
    .progressbar:selected:focus {
@@ -60,6 +72,7 @@ GtkButton:active,
    border-radius:10px;
 }
 
+/* Settings for progress bars background */
 GtkProgressBar.trough,
    GtkTreeView.view.trough,
    GtkTreeView.view.trough:selected,
@@ -68,6 +81,7 @@ GtkProgressBar.trough,
   background:linear-gradient(to bottom, rgb(73,73,73), rgb(35,41,51));
 }
 
+/* Settings for frames */
 GtkFrame {
    border-radius:5px;
    border-style:solid;
@@ -75,6 +89,7 @@ GtkFrame {
    border-color:darkgreen;
 }
 
+/* Settings for frames title */
 GtkFrame > GtkLabel {
    border-radius:5px;
    border-style:dashed;
@@ -83,10 +98,12 @@ GtkFrame > GtkLabel {
    padding:4px;
 }
 
+/* Settings for numeric entry fields (like amount of buying/selling items in bases, etc) */
 GtkSpinButton {
    border-radius:20px;
 }
 
+/* Default settings for text entry fields (like player and ship name) */
 .entry {
    border-style:solid;
    border-width:1px;
@@ -94,6 +111,7 @@ GtkSpinButton {
    border-radius:20px;
 }
 
+/* Settings for currently active text entry fields (like player and ship name) */
 .entry:focus, .entry:active {
    border-style:solid;
    border-width:1px;
@@ -101,6 +119,7 @@ GtkSpinButton {
    border-radius:20px;
 }
 
+/* Settings for tooltip popups */
 .tooltip {
    border-style:solid;
    border-width:1px;
@@ -108,30 +127,31 @@ GtkSpinButton {
    background:rgb(25,25,25);
 }
 
+/* Setting for text inside tooltip popups */
 .tooltip * {
    background:rgb(25,25,25);
 }
 
+/* Settings for scales (like in negotiating with recruits) */
 GtkScale, GtkScale:hover {
    background:grey;
 }
 
-GtkDialog, GtkMessageDialog {
-   box-shadow:5px 5px rgba(0, 0, 0, 0.1);
-}
-
+/* Sky map settings */
 GtkTextView#mapview {
    font-family:Hack;
    font-style:normal;
    font-size:10px;
 }
 
+/* Font used mostly in help, but in ship info in corner too */
 *#normalfont {
    font-family:Roboto;
    font-style:normal;
    font-size:12px;
 }
 
+/* Red progress bars settings */
 .progressbar#redbar,
    .progressbar:selected#redbar,
    .progressbar:selected#redbar:focus {
@@ -139,6 +159,7 @@ GtkTextView#mapview {
    border-radius:10px;
 }
 
+/* Green progress bars settings */
 .progressbar#greenbar,
    .progressbar:selected#greenbar,
    .progressbar:selected#greenbar:focus {
@@ -146,6 +167,7 @@ GtkTextView#mapview {
    border-radius:10px;
 }
 
+/* Yellow progress bars settings */
 .progressbar#yellowbar,
    .progressbar:selected#yellowbar,
    .progressbar:selected#yellowbar:focus {
