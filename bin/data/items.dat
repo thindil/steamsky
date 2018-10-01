@@ -1966,5 +1966,14 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="20"/>
   <description>Small wooden traps. Used to train some skills.</description>
  </item>
+ <item index="207" name="Small book of printing" showtype="Book of printing" type="PrintingBook" weight="1">
+  <trade buyable="Y" price="10"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <data value="20"/>
+  <description>Small book with informations about basics of printing. Used in training skills.</description>
+ </item>
 </items>
 
