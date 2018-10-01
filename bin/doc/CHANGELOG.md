@@ -20,8 +20,8 @@ All notable changes to this project will be documented in this file.
 - New items types: cockpitsimulator, engineersbook, gunsimulator,
   rhetoricbook, smalltoys, alchemybook, cookingbook, gunsmithbook,
   metalsmithbook, medicinebook, farmingbook, woodcuttingbook, brewingbook,
-  blacksmithbook, woodworkingbook, leatherworkingbook, trainingdummy and
-  smalltraps
+  blacksmithbook, woodworkingbook, leatherworkingbook, trainingdummy,
+  smalltraps and printingbook
 - Option to set fonts size in game
 - User Interface themes
 - New skill: printing
