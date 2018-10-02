@@ -695,6 +695,7 @@ selected item type name as `value` attribute. -->
  <itemtype value="TrainingDummy"/>
  <itemtype value="SmallTraps"/>
  <itemtype value="PrintingBook"/>
+ <itemtype value="PrintingSet"/>
 <!-- To change which item type is used for repair/upgrading tools, `value` 
 attribue of tag `repairtools`. Value must be existing item type. -->
  <repairtools value="RepairTools"/>
