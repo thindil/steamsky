@@ -1984,5 +1984,13 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="20"/>
   <description>Wooden set of tools used in crafting paper and books.</description>
  </item>
+ <item index="209" name="Sheet of paper" type="Paper" weight="1">
+  <trade buyable="N" price="1"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="Y" price="2"/>
+  <trade buyable="N" price="2"/>
+  <trade buyable="N" price="2"/>
+  <description>Large piece of paper. Used mostly in crafting books.</description>
+ </item>
 </items>
 
