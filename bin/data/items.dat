@@ -1992,5 +1992,13 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="2"/>
   <description>Large piece of paper. Used mostly in crafting books.</description>
  </item>
+ <item index="210" name="Empty book" showtype="Tool" type="EmptyBook" weight="1">
+  <trade buyable="Y" price="7"/>
+  <trade buyable="N" price="9"/>
+  <trade buyable="N" price="9"/>
+  <trade buyable="N" price="9"/>
+  <trade buyable="N" price="9"/>
+  <description>Empty, ready to print book.</description>
+ </item>
 </items>
 
