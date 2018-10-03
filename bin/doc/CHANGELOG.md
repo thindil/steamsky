@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file.
   rhetoricbook, smalltoys, alchemybook, cookingbook, gunsmithbook,
   metalsmithbook, medicinebook, farmingbook, woodcuttingbook, brewingbook,
   blacksmithbook, woodworkingbook, leatherworkingbook, trainingdummy,
-  smalltraps, printingbook, printingset and paper
+  smalltraps, printingbook, printingset, paper and emptybook
 - Option to set fonts size in game
 - User Interface themes
 - New skill: printing
