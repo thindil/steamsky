@@ -4168,7 +4168,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton">
+                              <object class="GtkSpinButton" id="spinloottake">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="text" translatable="yes">1</property>
@@ -4260,7 +4260,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton">
+                              <object class="GtkSpinButton" id="spinlootdrop">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="text" translatable="yes">1</property>
@@ -7941,7 +7941,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="GtkSpinButton" id="spininventorymove">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="adjustment">amountadj</property>
@@ -8699,7 +8699,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="GtkSpinButton" id="spincargodrop">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="adjustment">amountadj</property>
@@ -8739,7 +8739,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="GtkSpinButton" id="spincargogive">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="adjustment">amountadj1</property>
@@ -8996,7 +8996,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="GtkSpinButton" id="spintradebuy">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="adjustment">amountadj1</property>
@@ -9051,7 +9051,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="GtkSpinButton" id="spintradesell">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="text" translatable="yes">1</property>

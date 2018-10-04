@@ -51,5 +51,8 @@ package Utils.UI is
         Class); -- Switch back to skymap or combat from info
    procedure ShowItemDamage(ItemDurability: Natural;
       DamageBar: GObject); -- Show or hide info about item damage
+   function SelectElement(Self: access GObject_Record'Class;
+      Event: Gdk_Event_Key)
+     return Boolean; -- Select other element on press Return key
 
 end Utils.UI;

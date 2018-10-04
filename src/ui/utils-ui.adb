@@ -169,4 +169,16 @@ package body Utils.UI is
       end if;
    end ShowItemDamage;
 
+   function SelectElement(Self: access GObject_Record'Class;
+      Event: Gdk_Event_Key) return Boolean is
+      KeyMods: constant Gdk_Modifier_Type :=
+        Event.State and Get_Default_Mod_Mask;
+   begin
+      if KeyMods = 0 and Event.Keyval = GDK_Return then
+         Grab_Focus(Gtk_Widget(Self));
+         return True;
+      end if;
+      return False;
+   end SelectElement;
+
 end Utils.UI;
