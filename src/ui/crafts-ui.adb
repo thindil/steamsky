@@ -177,7 +177,7 @@ package body Crafts.UI is
                     Positive'Image(PlayerShip.Cargo(CargoIndex).Amount)'Length;
                   Append
                     (RecipeInfo,
-                     "(" &
+                     "(owned: " &
                      Positive'Image(PlayerShip.Cargo(CargoIndex).Amount)
                        (2 .. TextLength) &
                      ")");
