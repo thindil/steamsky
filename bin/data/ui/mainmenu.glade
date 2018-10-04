@@ -362,6 +362,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkComboBoxText" id="cmbcareer">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Select your career from list. Careers have some impact on gameplay (each have bonus to gaining experience in some fields plus they determine your starting ship and crew). More info about each career you may find after selecting it. You can't change career later.</property>
                         <signal name="changed" handler="Show_Career_Description" swapped="no"/>
                       </object>
                       <packing>
@@ -373,6 +374,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkComboBoxText" id="cmbfaction">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Select your faction from list. Factions have biggest impact on game. They determine amount of bases and some playing style. More information about each faction you will see after selecting it. You can't change it later.</property>
                         <signal name="changed" handler="Show_Faction_Description" swapped="no"/>
                       </object>
                       <packing>
