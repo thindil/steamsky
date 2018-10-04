@@ -53,7 +53,7 @@ All notable changes to this project will be documented in this file.
 - New crafting recipes: adamantium mold, adamantium gunsmith set, adamantium
   cooking set, adamantium sickle, adamantium saw, adamantium bucket, adamantium
   blacksmith set, adamantium woodworker set, adamantium repair tools,
-  adamantium sewing kit, adamantium 80mm ammo, adamantium 100mm ammo, 
+  adamantium sewing kit, adamantium 80mm ammo, adamantium 100mm ammo,
   adamantium 120mm ammo and adamantium harpoon
 - New items: adamantium gunsmith set, adamantium cooking set, adamantium
   sickle, adamantium saw, adamantium bucket, adamantium blacksmith set,
@@ -74,7 +74,7 @@ All notable changes to this project will be documented in this file.
 - High morale adds small bonus to skills
 - Option to remove existing recipes, factions, goals, help entries, items,
   ship modules, ships and stories from modifications files
-- Ability to select player career which affect player starting ship and 
+- Ability to select player career which affect player starting ship and
   equipment
 - New ships: player starting ships for trader, hunter, explorer and crafter
   careers
@@ -87,7 +87,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Updated MODDING.md
 - Updated help
-- Drones faction don't have morale, tiredness, genders and is immune to 
+- Drones faction don't have morale, tiredness, genders and is immune to
   diseases
 - Undead faction don't have morale, tiredness and is immune to diseases
 - Moved all data files to one directory
@@ -126,10 +126,10 @@ All notable changes to this project will be documented in this file.
   undead ship mk V, large inquisition ship mk V, large attacking drone mk V,
   huge pirate ship mk V, advanced huge pirate ship mk V, huge undead ship mk V,
   advanced huge undead ship mk V, huge attacking drone mk V, advanced huge
-  attacking drone mk V, huge inquisition ship mk V and advanced huge 
+  attacking drone mk V, huge inquisition ship mk V and advanced huge
   inquisition ship mk V
 - More text formatting options to help
-- Option to stories to set which factions are not allowed to start selected 
+- Option to stories to set which factions are not allowed to start selected
   story
 - Option to enable or disable ship engines
 - Showing current unarmed skill name in help
@@ -137,7 +137,7 @@ All notable changes to this project will be documented in this file.
 - Starting player character data for undead and drones factions
 - Starting crew data for undead, drones and inquisition factions
 - Separated player starting ship for each faction
-- New ship: player starting ship for pirates, undead, drones and inquisition 
+- New ship: player starting ship for pirates, undead, drones and inquisition
   factions
 - Description to factions
 - New item types: adamantiumore and adamantium
@@ -230,7 +230,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New items: orichalcum chestplate, orichalcum helmet, orichalcum armsguard and
   orichalcum legsguard
-- New crafting recipes: orichalcum chestplate, orichalcum helmet, orichalcum 
+- New crafting recipes: orichalcum chestplate, orichalcum helmet, orichalcum
   armsguard and orichalcum legsguard
 - Option to set GTK directories via console parameters (Linux only)
 - New goals: kill 1000 enemies in melee combat, kill 2000 enemies in melee
@@ -317,7 +317,7 @@ All notable changes to this project will be documented in this file.
 - More info about player death in melee combat
 - Option to set max amount of stored messages in game
 - Option to set max amount of saved messages
-- Statistics for killed enemies in melee combat 
+- Statistics for killed enemies in melee combat
 - New type of goal: kill X enemies in melee combat
 - New goal: kill 800 enemies in melee combat
 
@@ -403,7 +403,7 @@ All notable changes to this project will be documented in this file.
   advanced undead ship mk IV, advanced inquisition ship mk IV, huge pirate ship
   mk IV, advanced huge pirate ship mk IV, huge undead ship mk IV, huge
   attacking drone mk IV, advanced huge undead ship mk IV, advanced huge
-  attacking drone mk IV, huge inquisition ship mk IV and advanced huge 
+  attacking drone mk IV, huge inquisition ship mk IV and advanced huge
   inquisition ship mk IV
 - Keyboard shortcuts for ship movement and menu
 - Option to set keyboard shortcuts for ship movement and menu
