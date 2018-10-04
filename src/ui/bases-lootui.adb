@@ -248,6 +248,12 @@ package body Bases.LootUI is
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
       Register_Handler(Builder, "Loot_Item", LootItem'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "spinloottake")), SelectElement'Access,
+         Get_Object(Builder, "btntake"));
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "spinlootdrop")), SelectElement'Access,
+         Get_Object(Builder, "btndrop"));
    end CreateBasesLootUI;
 
    procedure ShowLootUI is

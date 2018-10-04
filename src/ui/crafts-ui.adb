@@ -302,6 +302,9 @@ package body Crafts.UI is
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Recipe_Info", ShowRecipeInfo'Access);
       Register_Handler(Builder, "Set_Crafting", SetCrafting'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "spincraftamount")),
+         SelectElement'Access, Get_Object(Builder, "btnsetcrafting"));
    end CreateCraftsUI;
 
    procedure ShowCraftsUI is

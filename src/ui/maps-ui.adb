@@ -1245,6 +1245,15 @@ package body Maps.UI is
       On_Key_Press_Event
         (Gtk_Widget(Get_Object(Builder, "skymapwindow")),
          MapKeyPressed'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "spinx")), SelectElement'Access,
+         Get_Object(Builder, "spiny"));
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "spiny")), SelectElement'Access,
+         Get_Object(Builder, "btnmovemapok"));
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "spinminutes")), SelectElement'Access,
+         Get_Object(Builder, "btnwaitx"));
       Set_Transition_Type
         (Gtk_Stack(Get_Object(Builder, "gamestack")),
          Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
