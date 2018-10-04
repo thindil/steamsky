@@ -698,6 +698,7 @@ package body Game is
                LoadDataFile("");
                Close(DataFile);
             end loop;
+            End_Search(Files);
          else
             Open(To_String(DataDirectory) & FileName, DataFile);
             LocalFileName := To_Unbounded_String(FileName);
@@ -725,6 +726,7 @@ package body Game is
             LoadSelectedData(Full_Name(FoundDirectory), "");
          end if;
       end loop;
+      End_Search(Directories);
       SetToolsList;
       return "";
    exception
