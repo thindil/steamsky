@@ -264,6 +264,9 @@ package body Crew.UI is
       On_Toggled
         (Gtk_Cell_Renderer_Toggle(Get_Object(Builder, "renderused")),
          UseItem'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "spininventorymove")),
+         SelectElement'Access, Get_Object(Builder, "btnmove"));
    end CreateCrewUI;
 
    procedure ShowCrewUI(OldState: GameStates) is

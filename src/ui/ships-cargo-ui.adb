@@ -228,6 +228,12 @@ package body Ships.Cargo.UI is
         (Builder, "Show_Item_Cargo_Info", ShowItemCargoInfo'Access);
       Register_Handler(Builder, "Drop_Item", DropItem'Access);
       Register_Handler(Builder, "Give_Item", GiveItem'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "spincargodrop")),
+         SelectElement'Access, Get_Object(Builder, "btndropitem"));
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "spincargogive")),
+         SelectElement'Access, Get_Object(Builder, "cmbmember"));
    end CreateCargoUI;
 
    procedure ShowCargoUI(OldState: GameStates) is

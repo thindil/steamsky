@@ -418,6 +418,12 @@ package body Trades.UI is
         (Builder, "Show_Item_Trade_Info", ShowItemTradeInfo'Access);
       Register_Handler(Builder, "Trade_Item", TradeItem'Access);
       Register_Handler(Builder, "Close_Trade", CloseTrade'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "spintradebuy")), SelectElement'Access,
+         Get_Object(Builder, "btnbuyitem"));
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "spintradesell")),
+         SelectElement'Access, Get_Object(Builder, "btnsellitem"));
    end CreateTradeUI;
 
    procedure ShowTradeUI is
