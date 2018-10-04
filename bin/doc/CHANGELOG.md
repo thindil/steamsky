@@ -45,6 +45,7 @@ All notable changes to this project will be documented in this file.
 - Info about returning mission in bases info
 - Armor stat of orichalcum shield
 - Typos in careers descriptions
+- Possible memory leaks during loading game data
 
 ## [2.8] - 2018-09-09
 
