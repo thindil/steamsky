@@ -848,6 +848,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">5</property>
+        <property name="margin_right">5</property>
+        <property name="margin_top">5</property>
+        <property name="margin_bottom">5</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkBox">
@@ -1032,6 +1036,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <object class="GtkButtonBox" id="btnboxorders">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">5</property>
+        <property name="margin_right">5</property>
+        <property name="margin_top">5</property>
+        <property name="margin_bottom">5</property>
         <property name="orientation">vertical</property>
         <property name="layout_style">center</property>
         <child>
@@ -1629,6 +1637,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">5</property>
+        <property name="margin_right">5</property>
+        <property name="margin_top">5</property>
+        <property name="margin_bottom">5</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkBox">
@@ -9241,6 +9253,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">5</property>
+        <property name="margin_right">5</property>
+        <property name="margin_top">5</property>
+        <property name="margin_bottom">5</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkBox">
@@ -9447,6 +9463,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <object class="GtkButtonBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="margin_left">5</property>
+        <property name="margin_right">5</property>
+        <property name="margin_top">5</property>
+        <property name="margin_bottom">5</property>
         <property name="orientation">vertical</property>
         <property name="layout_style">start</property>
         <child>
