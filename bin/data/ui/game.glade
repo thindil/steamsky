@@ -827,7 +827,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkAccelGroup" id="movementaccels"/>
+  <object class="GtkAccelGroup" id="movemapaccels"/>
   <object class="GtkWindow" id="movemapwindow">
     <property name="can_focus">False</property>
     <property name="resizable">False</property>
@@ -838,7 +838,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="type_hint">dialog</property>
     <property name="decorated">False</property>
     <accel-groups>
-      <group name="movementaccels"/>
+      <group name="movemapaccels"/>
     </accel-groups>
     <signal name="delete-event" handler="Hide_Window" object="movemapwindow" swapped="no"/>
     <child type="titlebar">
@@ -991,6 +991,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       </object>
     </child>
   </object>
+  <object class="GtkAccelGroup" id="movementaccels"/>
   <object class="GtkListStore" id="orders">
     <columns>
       <!-- column-name gchararray1 -->

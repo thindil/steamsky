@@ -1206,9 +1206,6 @@ package body Maps.UI is
         (Gtk_Widget(Get_Object(Builder, "btnshowhelp")),
          "<skymapwindow>/Menu/Help", Accelerators);
       Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btncenter")),
-         "<movemapwindow>/btncenter", Accelerators);
-      Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btnmapleft")),
          "<skymapwindow>/btnmapleft", Accelerators);
       Set_Accel_Path
@@ -1223,6 +1220,13 @@ package body Maps.UI is
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "menustory")),
          "<skymapwindow>/Menu/Stories", Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "btncenter")),
+         "<movemapwindow>/btncenter", Accelerators);
+      Accelerators := Gtk_Accel_Group(Get_Object(Builder, "movemapaccels"));
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "btncenter")),
+         "<movemapwindow>/btncenter", Accelerators);
       declare
          Key: Gtk_Accel_Key;
          Found: Boolean;
