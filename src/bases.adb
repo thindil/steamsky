@@ -176,6 +176,7 @@ package body Bases is
       Attributes: Attributes_Container.Vector;
       Inventory, TempTools: Positive_Container.Vector;
       Equipment: Equipment_Array;
+      MaxSkillLevel: Integer;
       procedure AddInventory(ItemsIndexes: Positive_Container.Vector;
          EquipIndex: Positive) is
          ItemIndex: Positive;
@@ -235,10 +236,17 @@ package body Bases is
            GetRandom(Skills_List.First_Index, Skills_List.Last_Index);
          HighestLevel := 1;
          HighestSkill := 1;
+         MaxSkillLevel := SkyBases(BaseIndex).Reputation(1);
+         if MaxSkillLevel < 20 then
+            MaxSkillLevel := 20;
+         end if;
+         if GetRandom(1, 100) > 90 then
+            MaxSkillLevel := GetRandom(MaxSkillLevel, 100);
+         end if;
          for J in 1 .. SkillsAmount loop
             SkillNumber :=
               GetRandom(Skills_List.First_Index, Skills_List.Last_Index);
-            SkillLevel := GetRandom(1, 100);
+            SkillLevel := GetRandom(1, MaxSkillLevel);
             if SkillLevel > HighestLevel then
                HighestLevel := SkillLevel;
                HighestSkill := SkillNumber;
@@ -263,7 +271,8 @@ package body Bases is
             end if;
          end loop;
          for J in Attributes_List.Iterate loop
-            Attributes.Append(New_Item => (GetRandom(3, 50), 0));
+            Attributes.Append
+              (New_Item => (GetRandom(3, (MaxSkillLevel / 2)), 0));
          end loop;
          for Skill of Skills loop
             Price := Price + Skill(2);
