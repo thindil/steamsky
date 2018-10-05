@@ -47,6 +47,7 @@ All notable changes to this project will be documented in this file.
 - Armor stat of orichalcum shield
 - Typos in careers descriptions
 - Possible memory leaks during loading game data
+- Keyboard shortcuts for moving map
 
 ## [2.8] - 2018-09-09
 
