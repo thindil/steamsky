@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - New skill: printing
 - Recruits skills and attributes depends on player reputation in base
 - Size to bases
+- Ability to sort bases in bases list by population
 
 ### Changed
 - Help factions flags variables now return list of factions which have that
