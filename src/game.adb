@@ -64,6 +64,7 @@ package body Game is
       BasePopulation, MaxSpawnRoll: Natural;
       TmpCargo: BaseCargo_Container.Vector;
       TmpInventory: Inventory_Container.Vector;
+      BaseSize: Bases_Size;
    begin
       -- Save new game configuration
       NewGameSettings :=
@@ -142,6 +143,15 @@ package body Game is
                exit;
             end if;
          end loop;
+         if BasePopulation = 0 then
+            BaseSize := Bases_Size'Val(GetRandom(0, 2));
+         elsif BasePopulation < 150 then
+            BaseSize := Small;
+         elsif BasePopulation < 300 then
+            BaseSize := Medium;
+         else
+            BaseSize := Big;
+         end if;
          SkyBases(I) :=
            (Name => GenerateBaseName(BaseOwner), Visited => (0, 0, 0, 0, 0),
             SkyX => Integer(PosX), SkyY => Integer(PosY),
@@ -150,7 +160,8 @@ package body Game is
             Recruits => TmpRecruits, Known => False, AskedForBases => False,
             AskedForEvents => (0, 0, 0, 0, 0),
             Reputation => (BaseReputation, 0), MissionsDate => (0, 0, 0, 0, 0),
-            Missions => TmpMissions, Owner => BaseOwner, Cargo => TmpCargo);
+            Missions => TmpMissions, Owner => BaseOwner, Cargo => TmpCargo,
+            Size => BaseSize);
       end loop;
       -- Place player ship in random large base
       loop
