@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - Recruits skills and attributes depends on player reputation in base
 - Size to bases
 - Ability to sort bases in bases list by population
+- Waiting outside skybases uses fuel too
 
 ### Changed
 - Help factions flags variables now return list of factions which have that
