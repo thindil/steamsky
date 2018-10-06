@@ -80,15 +80,10 @@ package body BasesList is
            (BaseInfo,
             ASCII.LF & "Owner: " &
             To_String(Factions_List(SkyBases(BaseIndex).Owner).Name));
-         Append(BaseInfo, ASCII.LF & "Size: ");
-         if SkyBases(BaseIndex).Population < 150 then
-            Append(BaseInfo, "small");
-         elsif SkyBases(BaseIndex).Population > 149 and
-           SkyBases(BaseIndex).Population < 300 then
-            Append(BaseInfo, "medium");
-         else
-            Append(BaseInfo, "large");
-         end if;
+         Append
+           (BaseInfo,
+            ASCII.LF & "Size: " &
+            To_Lower(Bases_Size'Image(SkyBases(BaseIndex).Size)));
          Append
            (BaseInfo,
             ASCII.LF & "Last visited: " &
@@ -346,6 +341,21 @@ package body BasesList is
             Set
               (BaseList, BaseIter, 2,
                Gint(CountDistance(SkyBases(I).SkyX, SkyBases(I).SkyY)));
+            if SkyBases(I).Visited.Year /= 0 then
+               if SkyBases(I).Population = 0 then
+                  Set(BaseList, BaseIter, 3, "empty");
+               elsif SkyBases(I).Population < 150 then
+                  Set(BaseList, BaseIter, 3, "small");
+               elsif SkyBases(I).Population < 300 then
+                  Set(BaseList, BaseIter, 3, "medium");
+               else
+                  Set(BaseList, BaseIter, 3, "large");
+               end if;
+               Set(BaseList, BaseIter, 4, Gint(SkyBases(I).Population));
+            else
+               Set(BaseList, BaseIter, 3, "unknown");
+               Set(BaseList, BaseIter, 4, -1);
+            end if;
          end if;
       end loop;
       if N_Children(BaseList, Null_Iter) > 0 then
