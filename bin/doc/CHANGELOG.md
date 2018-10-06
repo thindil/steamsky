@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - User Interface themes
 - New skill: printing
 - Recruits skills and attributes depends on player reputation in base
+- Size to bases
 
 ### Changed
 - Help factions flags variables now return list of factions which have that
