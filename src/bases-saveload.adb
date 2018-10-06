@@ -314,6 +314,7 @@ package body Bases.SaveLoad is
          Set_Attribute
            (BaseNode, "owner",
             To_String(Factions_List(SkyBases(I).Owner).Index));
+         Set_Attribute(BaseNode, "size", Bases_Size'Image(SkyBases(I).Size));
       end loop;
    end SaveBases;
 
@@ -343,7 +344,9 @@ package body Bases.SaveLoad is
             Known => False, AskedForBases => False,
             AskedForEvents => (0, 0, 0, 0, 0), Reputation => (0, 0),
             MissionsDate => (0, 0, 0, 0, 0), Missions => BaseMissions,
-            Owner => 1, Cargo => BaseCargo);
+            Owner => 1, Cargo => BaseCargo,
+            Size =>
+              Bases_Size'Value(Get_Attribute(Item(NodesList, I), "size")));
          for J in Factions_List.Iterate loop
             if Factions_List(J).Index =
               To_Unbounded_String

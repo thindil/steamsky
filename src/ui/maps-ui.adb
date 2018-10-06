@@ -866,6 +866,10 @@ package body Maps.UI is
                elsif SkyBases(BaseIndex).Population > 299 then
                   Append(MapInfoText, "Population: large");
                end if;
+               Append
+                 (MapInfoText,
+                  ASCII.LF & "Size: " &
+                  To_Lower(Bases_Size'Image(SkyBases(BaseIndex).Size)));
                if SkyBases(BaseIndex).Population > 0 then
                   Append(MapInfoText, ASCII.LF);
                   Append
