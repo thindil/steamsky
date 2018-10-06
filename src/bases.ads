@@ -53,6 +53,7 @@ package Bases is
       Price: Natural; -- Current price of item
    end record;
    package BaseCargo_Container is new Vectors(Positive, Base_Cargo);
+   type Bases_Size is (Small, Medium, Big);
    type BaseRecord is -- Data structure for bases
    record
       Name: Unbounded_String; -- Base name
@@ -71,6 +72,7 @@ package Bases is
       Missions: Mission_Container.Vector; -- List of available missions
       Owner: Positive; -- Index of faction which own base
       Cargo: BaseCargo_Container.Vector; -- List of all cargo in base
+      Size: Bases_Size; -- Size of base
    end record;
    SkyBases: array(1 .. 1024) of BaseRecord; -- List of sky bases
    BaseSyllablesPre: UnboundedString_Container.Vector;
