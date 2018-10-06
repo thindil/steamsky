@@ -22,6 +22,7 @@ with ShipModules; use ShipModules;
 with Utils; use Utils;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
+with Ships.Movement; use Ships.Movement;
 with Maps; use Maps;
 with Crew.Inventory; use Crew.Inventory;
 with Combat; use Combat;
@@ -784,6 +785,7 @@ package body Crew is
       end loop;
       if TimeNeeded > 0 then
          UpdateGame(TimeNeeded);
+         WaitInPlace(TimeNeeded);
       end if;
    end WaitForRest;
 

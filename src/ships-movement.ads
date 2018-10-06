@@ -30,5 +30,7 @@ package Ships.Movement is
      return Natural; -- Return real ship speed in meters per minute
    function CountFuelNeeded
      return Integer; -- Return fuel needed by player ship to travel
+   procedure WaitInPlace
+     (Minutes: Positive); -- Use fuel when ship wait in place
 
 end Ships.Movement;

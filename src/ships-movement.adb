@@ -395,4 +395,37 @@ package body Ships.Movement is
       return FuelNeeded;
    end CountFuelNeeded;
 
+   procedure WaitInPlace(Minutes: Positive) is
+      FuelNeeded: Integer := 0;
+      FuelIndex: Natural;
+   begin
+      if PlayerShip.Speed = DOCKED then
+         return;
+      end if;
+      for Module of PlayerShip.Modules loop
+         if Modules_List(Module.ProtoIndex).MType = ENGINE and
+           Module.Data(3) = 0 then
+            FuelNeeded := FuelNeeded - 1;
+         end if;
+      end loop;
+      FuelNeeded := FuelNeeded * Minutes;
+      FuelIndex :=
+        FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
+      if FuelIndex = 0 then
+         AddMessage
+           ("Ship fall from sky due to lack of fuel.", OtherMessage, 3);
+         Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
+         return;
+      end if;
+      if PlayerShip.Cargo(FuelIndex).Amount <= abs(FuelNeeded) then
+         AddMessage
+           ("Ship fall from sky due to lack of fuel.", OtherMessage, 3);
+         Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
+         return;
+      end if;
+      UpdateCargo
+        (PlayerShip, PlayerShip.Cargo.Element(FuelIndex).ProtoIndex,
+         FuelNeeded);
+   end WaitInPlace;
+
 end Ships.Movement;
