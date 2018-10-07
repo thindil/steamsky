@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file.
 - New crafting recipes: adamantium short sword, adamantium sword, adamantium
   shield, adamantium chestplate, adamantium helmet, adamantium armsguard,
   adamantium legsguard, wooden cockpit simulator, sheet of paper, empty book,
-  small book of engineering, wooden gun simulator and small book of rethoric
+  small book of engineering, wooden gun simulator, small book of rethoric and
+  wooden small toys
 - New items: adamantium sword, adamantium shield, adamantium chestplate,
   wooden cockpit simulator, adamantium helmet, small book of engineering,
   wooden gun simulator, adamantium armsguard, small book of rhetoric, wooden
