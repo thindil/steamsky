@@ -179,3 +179,35 @@ GtkTextView#mapview {
    background:linear-gradient(to bottom, rgb(232, 179, 0), black);
    border-radius:10px;
 }
+
+/* Negative values bar settings (for example, negative reputation) */
+.progressbar#negativebar,
+   .progressbar:selected#negativebar,
+   .progressbar:selected#negativebar:focus {
+   background:linear-gradient(to bottom, red, black);
+   border-radius:10px 10px 0px 0px;
+}
+
+GtkProgressBar.trough#negativebar,
+   GtkTreeView.view.trough#negativebar,
+   GtkTreeView.view.trough#negativebar:selected,
+   GtkTreeView.view.trough#negativebar:selected:focus {
+  border-radius:10px 0px 0px 10px;
+  background:linear-gradient(to bottom, rgb(73,73,73), rgb(35,41,51));
+}
+
+/* Positive values bar settings (for example, positive reputation) */
+.progressbar#positivebar,
+   .progressbar:selected#positivebar,
+   .progressbar:selected#positivebar:focus {
+   background:linear-gradient(to bottom, darkgreen, black);
+   border-radius:10px 10px 0px 0px;
+}
+
+GtkProgressBar.trough#positivebar,
+   GtkTreeView.view.trough#positivebar,
+   GtkTreeView.view.trough#positivebar:selected,
+   GtkTreeView.view.trough#positivebar:selected:focus {
+  border-radius:0px 10px 10px 0px;
+  background:linear-gradient(to bottom, rgb(73,73,73), rgb(35,41,51));
+}

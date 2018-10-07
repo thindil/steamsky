@@ -30,6 +30,7 @@ with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Tree_Model_Filter; use Gtk.Tree_Model_Filter;
 with Gtk.GEntry; use Gtk.GEntry;
+with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Glib; use Glib;
 with Game; use Game;
 with Bases; use Bases;
@@ -134,26 +135,87 @@ package body BasesList is
             Append
               (BaseInfo, ASCII.LF & "You can't take missions at this base.");
          end if;
-         Append(BaseInfo, ASCII.LF & "Reputation: ");
+         Set_Visible
+           (Gtk_Widget(Get_Object(Object, "basereputationbox")), True);
+         Set_Fraction
+           (Gtk_Progress_Bar(Get_Object(Object, "negativereputationbar")),
+            0.0);
+         Set_Fraction
+           (Gtk_Progress_Bar(Get_Object(Object, "positivereputationbar")),
+            0.0);
+         if SkyBases(BaseIndex).Reputation(1) < 0 then
+            Set_Fraction
+              (Gtk_Progress_Bar(Get_Object(Object, "negativereputationbar")),
+               Gdouble(abs (SkyBases(BaseIndex).Reputation(1))) / 100.0);
+         elsif SkyBases(BaseIndex).Reputation(1) > 0 then
+            Set_Fraction
+              (Gtk_Progress_Bar(Get_Object(Object, "positivereputationbar")),
+               Gdouble(abs (SkyBases(BaseIndex).Reputation(1))) / 100.0);
+         end if;
          case SkyBases(BaseIndex).Reputation(1) is
             when -100 .. -75 =>
-               Append(BaseInfo, "Hated");
+               Set_ToolTip_Text
+                 (Gtk_Widget(Get_Object(Object, "negativereputationbar")),
+                  "Hated");
+               Set_ToolTip_Text
+                 (Gtk_Widget(Get_Object(Object, "positivereputationbar")),
+                  "Hated");
             when -74 .. -50 =>
-               Append(BaseInfo, "Outlaw");
+               Set_ToolTip_Text
+                 (Gtk_Widget(Get_Object(Object, "negativereputationbar")),
+                  "Outlaw");
+               Set_ToolTip_Text
+                 (Gtk_Widget(Get_Object(Object, "positivereputationbar")),
+                  "Outlaw");
             when -49 .. -25 =>
-               Append(BaseInfo, "Hostile");
+               Set_ToolTip_Text
+                 (Gtk_Widget(Get_Object(Object, "negativereputationbar")),
+                  "Hostile");
+               Set_ToolTip_Text
+                 (Gtk_Widget(Get_Object(Object, "positivereputationbar")),
+                  "Hostile");
             when -24 .. -1 =>
-               Append(BaseInfo, "Unfriendly");
+               Set_ToolTip_Text
+                 (Gtk_Widget(Get_Object(Object, "negativereputationbar")),
+                  "Unfriendly");
+               Set_ToolTip_Text
+                 (Gtk_Widget(Get_Object(Object, "positivereputationbar")),
+                  "Unfriendly");
             when 0 =>
-               Append(BaseInfo, "Unknown");
+               Set_ToolTip_Text
+                 (Gtk_Widget(Get_Object(Object, "negativereputationbar")),
+                  "Unknown");
+               Set_ToolTip_Text
+                 (Gtk_Widget(Get_Object(Object, "positivereputationbar")),
+                  "Unknown");
             when 1 .. 25 =>
-               Append(BaseInfo, "Visitor");
+               Set_ToolTip_Text
+                 (Gtk_Widget(Get_Object(Object, "negativereputationbar")),
+                  "Visitor");
+               Set_ToolTip_Text
+                 (Gtk_Widget(Get_Object(Object, "positivereputationbar")),
+                  "Visitor");
             when 26 .. 50 =>
-               Append(BaseInfo, "Trader");
+               Set_ToolTip_Text
+                 (Gtk_Widget(Get_Object(Object, "negativereputationbar")),
+                  "Trader");
+               Set_ToolTip_Text
+                 (Gtk_Widget(Get_Object(Object, "positivereputationbar")),
+                  "Trader");
             when 51 .. 75 =>
-               Append(BaseInfo, "Friend");
+               Set_ToolTip_Text
+                 (Gtk_Widget(Get_Object(Object, "negativereputationbar")),
+                  "Friend");
+               Set_ToolTip_Text
+                 (Gtk_Widget(Get_Object(Object, "positivereputationbar")),
+                  "Friend");
             when 76 .. 100 =>
-               Append(BaseInfo, "Well known");
+               Set_ToolTip_Text
+                 (Gtk_Widget(Get_Object(Object, "negativereputationbar")),
+                  "Well known");
+               Set_ToolTip_Text
+                 (Gtk_Widget(Get_Object(Object, "positivereputationbar")),
+                  "Well known");
             when others =>
                null;
          end case;
@@ -162,6 +224,8 @@ package body BasesList is
          end if;
       else
          BaseInfo := To_Unbounded_String("Not visited yet.");
+         Set_Visible
+           (Gtk_Widget(Get_Object(Object, "basereputationbox")), False);
       end if;
       Set_Label
         (Gtk_Label(Get_Object(Object, "lblbaseinfo")), To_String(BaseInfo));
