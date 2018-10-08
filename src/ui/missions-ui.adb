@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Exceptions; use Ada.Exceptions;
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.List_Store; use Gtk.List_Store;
@@ -91,11 +92,11 @@ package body Missions.UI is
               To_Unbounded_String("Item: ") & Items_List(Mission.Target).Name;
             Append
               (MissionInfo,
-               ASCII.LF & "Weight:" &
+               LF & "Weight:" &
                Positive'Image(Items_List(Mission.Target).Weight) & " kg");
             Append
               (MissionInfo,
-               ASCII.LF & "To base: " &
+               LF & "To base: " &
                To_String
                  (SkyBases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
                     .Name));
@@ -141,7 +142,7 @@ package body Missions.UI is
             end if;
             Append
               (MissionInfo,
-               ASCII.LF & "To base: " &
+               LF & "To base: " &
                To_String
                  (SkyBases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
                     .Name));
@@ -165,7 +166,7 @@ package body Missions.UI is
             MinutesDiff := 0;
          end if;
       end loop;
-      Append(MissionInfo, ASCII.LF & "Time limit:");
+      Append(MissionInfo, LF & "Time limit:");
       if MissionTime.Year > 0 then
          Append(MissionInfo, Positive'Image(MissionTime.Year) & "y");
       end if;
@@ -183,7 +184,7 @@ package body Missions.UI is
       end if;
       Append
         (MissionInfo,
-         ASCII.LF & "Reward:" & Positive'Image(Mission.Reward) & " " &
+         LF & "Reward:" & Positive'Image(Mission.Reward) & " " &
          To_String(MoneyName));
       if User_Data = Get_Object(Builder, "treemissions") then
          Set_Markup

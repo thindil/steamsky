@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.List_Store; use Gtk.List_Store;
@@ -453,7 +454,7 @@ package body Ships.UI is
          Set_Text(Gtk_Progress_Bar(UpgradeBar), To_String(UpgradeInfo));
          Show_All(Gtk_Widget(UpgradeBar));
       end if;
-      Append(ShipInfo, ASCII.LF & "Repair first: ");
+      Append(ShipInfo, LF & "Repair first: ");
       if PlayerShip.RepairModule = 0 then
          Append(ShipInfo, "Any module");
       else
@@ -461,7 +462,7 @@ package body Ships.UI is
            (ShipInfo,
             To_String(PlayerShip.Modules(PlayerShip.RepairModule).Name));
       end if;
-      Append(ShipInfo, ASCII.LF & "Destination: ");
+      Append(ShipInfo, LF & "Destination: ");
       if PlayerShip.DestinationX = 0 and PlayerShip.DestinationY = 0 then
          Append(ShipInfo, "None");
       else
@@ -484,7 +485,7 @@ package body Ships.UI is
       end if;
       Append
         (ShipInfo,
-         ASCII.LF & "Weight:" & Integer'Image(CountShipWeight(PlayerShip)) &
+         LF & "Weight:" & Integer'Image(CountShipWeight(PlayerShip)) &
          "kg");
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblshipinfo")), To_String(ShipInfo));
