@@ -15,18 +15,11 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Exceptions; use Ada.Exceptions;
+package CSS is
 
-package MainMenu is
+   procedure SetFontSize
+     (FontName: String); -- Set size of selected font (or all if FontName is empty string)
+   procedure LoadTheme; -- Load selected UI theme
+   procedure ResetFontsSizes; -- Reset size of fonts to theme default values
 
-   procedure CreateMainMenu; -- Create main menu and show it
-   procedure UpdateGoalButton
-     (Message: String); -- Update label on character goal button
-   procedure ShowMainMenu; -- Show main menu window
-   procedure SaveException(An_Exception: Exception_Occurrence;
-      PrintToTerminal: Boolean); -- Save data exception to file
-   procedure On_Exception
-     (An_Exception: Exception_Occurrence); -- Handle GUI exceptions
-
-end MainMenu;
+end CSS;

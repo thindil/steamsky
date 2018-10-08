@@ -37,8 +37,6 @@ with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Gtk.Window; use Gtk.Window;
-with Gtk.Css_Provider; use Gtk.Css_Provider;
-with Gtk.Style_Context; use Gtk.Style_Context;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Tree_View; use Gtk.Tree_View;
@@ -46,8 +44,6 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
-with Gdk.Screen; use Gdk.Screen;
-with Gdk.Display; use Gdk.Display;
 with Game; use Game;
 with HallOfFame; use HallOfFame;
 with Ships; use Ships;
@@ -63,12 +59,12 @@ with Log; use Log;
 with Help.UI; use Help.UI;
 with Factions; use Factions;
 with Events; use Events;
+with CSS; use CSS;
 
 package body MainMenu is
 
    Builder: Gtkada_Builder;
    AllNews: Boolean := False;
-   CssProvider: Gtk_Css_Provider;
 
    procedure Quit(Object: access Gtkada_Builder_Record'Class) is
    begin
@@ -408,104 +404,6 @@ package body MainMenu is
          To_String
            (Factions_List(FactionIndex).Careers(CareerIndex).Description));
    end ShowCareerDescription;
-
-   procedure SetFontSize(FontName: String) is
-      CssText: Unbounded_String := To_Unbounded_String(To_String(CssProvider));
-      StartIndex, EndIndex: Positive;
-      Error: aliased GError;
-   begin
-      if FontName = "help" or FontName = "" then
-         StartIndex := Index(CssText, "*#normalfont", 1);
-         StartIndex := Index(CssText, "font-size", StartIndex);
-         EndIndex := Index(CssText, ";", StartIndex);
-         Replace_Slice
-           (CssText, StartIndex, EndIndex,
-            "font-size:" & Positive'Image(GameSettings.HelpFontSize) & "px;");
-      end if;
-      if FontName = "map" or FontName = "" then
-         StartIndex := Index(CssText, "#mapview", 1);
-         StartIndex := Index(CssText, "font-size", StartIndex);
-         EndIndex := Index(CssText, ";", StartIndex);
-         Replace_Slice
-           (CssText, StartIndex, EndIndex,
-            "font-size:" & Positive'Image(GameSettings.MapFontSize) & "px;");
-      end if;
-      if FontName = "interface" or FontName = "" then
-         StartIndex := 1;
-         StartIndex := Index(CssText, "font-size", StartIndex);
-         EndIndex := Index(CssText, ";", StartIndex);
-         Replace_Slice
-           (CssText, StartIndex, EndIndex,
-            "font-size:" & Positive'Image(GameSettings.InterfaceFontSize) &
-            "px;");
-      end if;
-      if not Load_From_Data(CssProvider, To_String(CssText), Error'Access) then
-         Put_Line("Error: " & Get_Message(Error));
-         return;
-      end if;
-   end SetFontSize;
-
-   procedure LoadTheme is
-      Error: aliased GError;
-      FileName: Unbounded_String;
-   begin
-      if GameSettings.InterfaceTheme = To_Unbounded_String("default") then
-         FileName :=
-           DataDirectory &
-           To_Unbounded_String("ui" & Dir_Separator & "steamsky.css");
-      else
-         FileName :=
-           ThemesDirectory & GameSettings.InterfaceTheme &
-           To_Unbounded_String(".css");
-         if not Exists(To_String(FileName)) then
-            FileName :=
-              DataDirectory &
-              To_Unbounded_String("ui" & Dir_Separator & "steamsky.css");
-            GameSettings.InterfaceTheme := To_Unbounded_String("default");
-         end if;
-      end if;
-      Gtk_New(CssProvider);
-      if not Load_From_Path
-          (CssProvider, To_String(FileName), Error'Access) then
-         Put_Line("Error : " & Get_Message(Error));
-         return;
-      end if;
-      Add_Provider_For_Screen
-        (Get_Default_Screen(Get_Default), +(CssProvider), Guint'Last);
-   end LoadTheme;
-
-   procedure ResetFontsSizes is
-      FileName: Unbounded_String;
-      CssText: Unbounded_String := Null_Unbounded_String;
-      CssFile: File_Type;
-      function GetFontSize(FontName: String) return Positive is
-         StartIndex, EndIndex: Positive;
-      begin
-         StartIndex := Index(CssText, FontName, 1);
-         StartIndex := Index(CssText, "font-size", StartIndex);
-         StartIndex := Index(CssText, ":", StartIndex) + 1;
-         EndIndex := Index(CssText, "p", StartIndex) - 1;
-         return Positive'Value(Slice(CssText, StartIndex, EndIndex));
-      end GetFontSize;
-   begin
-      if GameSettings.InterfaceTheme = To_Unbounded_String("default") then
-         FileName :=
-           DataDirectory &
-           To_Unbounded_String("ui" & Dir_Separator & "steamsky.css");
-      else
-         FileName :=
-           ThemesDirectory & GameSettings.InterfaceTheme &
-           To_Unbounded_String(".css");
-      end if;
-      Open(CssFile, In_File, To_String(FileName));
-      while not End_Of_File(CssFile) loop
-         Append(CssText, Get_Line(CssFile));
-      end loop;
-      Close(CssFile);
-      GameSettings.HelpFontSize := GetFontSize("*#normalfont");
-      GameSettings.MapFontSize := GetFontSize("#mapview");
-      GameSettings.InterfaceFontSize := GetFontSize("* {");
-   end ResetFontsSizes;
 
    procedure CreateMainMenu is
       Error: aliased GError;
