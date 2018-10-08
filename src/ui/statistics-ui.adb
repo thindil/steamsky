@@ -17,6 +17,7 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Float_Text_IO; use Ada.Float_Text_IO;
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Button; use Gtk.Button;
@@ -114,7 +115,7 @@ package body Statistics.UI is
         To_Unbounded_String("Points:" & Natural'Image(GameStats.Points));
       Append
         (StatsText,
-         ASCII.LF & "Time passed:" & Natural'Image(TimePassed.Year) & "y," &
+         LF & "Time passed:" & Natural'Image(TimePassed.Year) & "y," &
          Natural'Image(TimePassed.Month) & "m," &
          Natural'Image(TimePassed.Day) & "d," &
          Natural'Image(TimePassed.Hour) & "h," &
@@ -126,7 +127,7 @@ package body Statistics.UI is
          Exp => 0);
       Append
         (StatsText,
-         ASCII.LF & "Bases visited:" & Positive'Image(GameStats.BasesVisited) &
+         LF & "Bases visited:" & Positive'Image(GameStats.BasesVisited) &
          " (" & VisitedString & "%)");
       VisitedPercent :=
         VisitedFactor(Float(GameStats.MapVisited) / (1024.0 * 1024.0)) * 100.0;
@@ -136,10 +137,10 @@ package body Statistics.UI is
       Put
         (To => VisitedString, Item => Float(VisitedPercent), Aft => 3,
          Exp => 0);
-      Append(StatsText, ASCII.LF & "Map discovered: " & VisitedString & "%");
+      Append(StatsText, LF & "Map discovered: " & VisitedString & "%");
       Append
         (StatsText,
-         ASCII.LF & "Distance traveled:" &
+         LF & "Distance traveled:" &
          Natural'Image(GameStats.DistanceTraveled));
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblstats")), To_String(StatsText));

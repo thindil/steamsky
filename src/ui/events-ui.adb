@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.List_Store; use Gtk.List_Store;
@@ -64,19 +65,19 @@ package body Events.UI is
          when EnemyShip | EnemyPatrol | Trader | FriendlyShip =>
             Append
               (EventInfo,
-               ASCII.LF & "Ship type: " &
+               LF & "Ship type: " &
                To_String(ProtoShips_List(Events_List(EventIndex).Data).Name));
          when FullDocks | AttackOnBase | Disease =>
             Append
               (EventInfo,
-               ASCII.LF & "Base name: " & To_String(SkyBases(BaseIndex).Name));
+               LF & "Base name: " & To_String(SkyBases(BaseIndex).Name));
          when DoublePrice =>
             Append
               (EventInfo,
-               ASCII.LF & "Base name: " & To_String(SkyBases(BaseIndex).Name));
+               LF & "Base name: " & To_String(SkyBases(BaseIndex).Name));
             Append
               (EventInfo,
-               ASCII.LF & "Item: " &
+               LF & "Item: " &
                To_String(Items_List(Events_List(EventIndex).Data).Name));
          when None | BaseRecovery =>
             null;

@@ -19,6 +19,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Containers; use Ada.Containers;
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Label; use Gtk.Label;
@@ -655,7 +656,7 @@ package body Maps.UI is
             Insert_With_Tags(MapBuffer, Iter, "" & MapChar, MapColor);
          end loop;
          if Y < EndY then
-            Insert(MapBuffer, Iter, "" & ASCII.LF);
+            Insert(MapBuffer, Iter, "" & LF);
          end if;
       end loop;
       if TextWindow /= null then
@@ -694,7 +695,7 @@ package body Maps.UI is
                   To_String(TagNames(Message.Color))));
          end if;
          if I > LoopStart then
-            Insert(MessagesBuffer, Iter, "" & ASCII.LF);
+            Insert(MessagesBuffer, Iter, "" & LF);
          end if;
       end loop;
       if LastMessage = Null_Unbounded_String then
@@ -778,10 +779,10 @@ package body Maps.UI is
               (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
          begin
             Append
-              (MapInfoText, ASCII.LF & "Distance:" & Positive'Image(Distance));
+              (MapInfoText, LF & "Distance:" & Positive'Image(Distance));
             Append
               (MapInfoText,
-               ASCII.LF & "Approx fuel usage:" &
+               LF & "Approx fuel usage:" &
                Natural'Image(abs (Distance * CountFuelNeeded)));
             MinutesDiff := Integer(100.0 / Speed);
             case PlayerShip.Speed is
@@ -819,7 +820,7 @@ package body Maps.UI is
                   MinutesDiff := 0;
                end if;
             end loop;
-            Append(MapInfoText, ASCII.LF & "ETA:");
+            Append(MapInfoText, LF & "ETA:");
             if TravelTime.Year > 0 then
                Append(MapInfoText, Positive'Image(TravelTime.Year) & "y");
             end if;
@@ -843,20 +844,20 @@ package body Maps.UI is
             BaseIndex: constant Positive := SkyMap(MapX, MapY).BaseIndex;
          begin
             if SkyBases(BaseIndex).Known then
-               Append(MapInfoText, ASCII.LF);
+               Append(MapInfoText, LF);
                Append(MapInfoText, "Base info:");
-               Append(MapInfoText, ASCII.LF);
+               Append(MapInfoText, LF);
                Append
                  (MapInfoText,
                   To_Unbounded_String("Name: ") & SkyBases(BaseIndex).Name);
             end if;
             if SkyBases(BaseIndex).Visited.Year > 0 then
-               Append(MapInfoText, ASCII.LF);
+               Append(MapInfoText, LF);
                Append
                  (MapInfoText,
                   "Type: " &
                   To_Lower(Bases_Types'Image(SkyBases(BaseIndex).BaseType)));
-               Append(MapInfoText, ASCII.LF);
+               Append(MapInfoText, LF);
                if SkyBases(BaseIndex).Population > 0 and
                  SkyBases(BaseIndex).Population < 150 then
                   Append(MapInfoText, "Population: small");
@@ -868,10 +869,10 @@ package body Maps.UI is
                end if;
                Append
                  (MapInfoText,
-                  ASCII.LF & "Size: " &
+                  LF & "Size: " &
                   To_Lower(Bases_Size'Image(SkyBases(BaseIndex).Size)));
                if SkyBases(BaseIndex).Population > 0 then
-                  Append(MapInfoText, ASCII.LF);
+                  Append(MapInfoText, LF);
                   Append
                     (MapInfoText,
                      "Owner: " &
@@ -880,7 +881,7 @@ package body Maps.UI is
                   Append(MapInfoText, "Base is abandoned");
                end if;
                if SkyBases(BaseIndex).Population > 0 then
-                  Append(MapInfoText, ASCII.LF);
+                  Append(MapInfoText, LF);
                   case SkyBases(BaseIndex).Reputation(1) is
                      when -100 .. -75 =>
                         Append(MapInfoText, "You are hated here");
@@ -905,7 +906,7 @@ package body Maps.UI is
                   end case;
                end if;
                if BaseIndex = PlayerShip.HomeBase then
-                  Append(MapInfoText, ASCII.LF);
+                  Append(MapInfoText, LF);
                   Append(MapInfoText, "It is your home base");
                end if;
             end if;
@@ -915,10 +916,10 @@ package body Maps.UI is
          declare
             EventIndex: constant Positive := SkyMap(MapX, MapY).EventIndex;
          begin
-            Append(MapInfoText, ASCII.LF);
+            Append(MapInfoText, LF);
             if Events_List(EventIndex).EType /= BaseRecovery and
               SkyMap(MapX, MapY).BaseIndex > 0 then
-               Append(MapInfoText, ASCII.LF);
+               Append(MapInfoText, LF);
             end if;
             case Events_List(EventIndex).EType is
                when EnemyShip | Trader | FriendlyShip =>
@@ -947,10 +948,10 @@ package body Maps.UI is
          declare
             MissionIndex: constant Positive := SkyMap(MapX, MapY).MissionIndex;
          begin
-            Append(MapInfoText, ASCII.LF);
+            Append(MapInfoText, LF);
             if SkyMap(MapX, MapY).BaseIndex > 0 or
               SkyMap(MapX, MapY).EventIndex > 0 then
-               Append(MapInfoText, ASCII.LF);
+               Append(MapInfoText, LF);
             end if;
             case AcceptedMissions(MissionIndex).MType is
                when Deliver =>
@@ -1003,13 +1004,13 @@ package body Maps.UI is
                if FinishCondition = ASKINBASE or
                  FinishCondition = DESTROYSHIP or
                  FinishCondition = EXPLORE then
-                  Append(MapInfoText, ASCII.LF & "Story leads you here");
+                  Append(MapInfoText, LF & "Story leads you here");
                end if;
             end if;
          end;
       end if;
       if MapX = PlayerShip.SkyX and MapY = PlayerShip.SkyY then
-         Append(MapInfoText, ASCII.LF & "You are here");
+         Append(MapInfoText, LF & "You are here");
       end if;
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblmaptooltip")),
@@ -1287,7 +1288,7 @@ package body Maps.UI is
       CenterY := Y;
       UpdateMessages;
       Set_Text
-        (Gtk_Text_Buffer(Get_Object(Builder, "txtmap")), "X" & ASCII.LF & "X");
+        (Gtk_Text_Buffer(Get_Object(Builder, "txtmap")), "X" & LF & "X");
       Show_All(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
       UpdateHeader;
       UpdateMoveButtons;

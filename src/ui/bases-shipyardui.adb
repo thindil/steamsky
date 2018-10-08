@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Exceptions; use Ada.Exceptions;
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
@@ -110,31 +111,31 @@ package body Bases.ShipyardUI is
         To_Unbounded_String("Install cost:" & Positive'Image(Cost));
       Append
         (ModuleInfo,
-         ASCII.LF & "Installation time:" &
+         LF & "Installation time:" &
          Positive'Image(Modules_List(ModuleIndex).InstallTime) & " minutes");
       case Modules_List(ModuleIndex).MType is
          when HULL =>
-            Append(ModuleInfo, ASCII.LF & "Ship hull can be only replaced.");
+            Append(ModuleInfo, LF & "Ship hull can be only replaced.");
             Append
               (ModuleInfo,
-               ASCII.LF & "Modules space:" &
+               LF & "Modules space:" &
                Positive'Image(Modules_List(ModuleIndex).MaxValue));
          when ENGINE =>
             Append
               (ModuleInfo,
-               ASCII.LF & "Max power:" &
+               LF & "Max power:" &
                Positive'Image(Modules_List(ModuleIndex).MaxValue));
             Append
               (ModuleInfo,
-               ASCII.LF & "Fuel usage:" &
+               LF & "Fuel usage:" &
                Positive'Image(Modules_List(ModuleIndex).Value));
          when ShipModules.CARGO =>
             Append
               (ModuleInfo,
-               ASCII.LF & "Max cargo:" &
+               LF & "Max cargo:" &
                Positive'Image(Modules_List(ModuleIndex).MaxValue) & " kg");
          when CABIN =>
-            Append(ModuleInfo, ASCII.LF & "Quality: ");
+            Append(ModuleInfo, LF & "Quality: ");
             if Modules_List(ModuleIndex).MaxValue < 30 then
                Append(ModuleInfo, "minimal");
             elsif Modules_List(ModuleIndex).MaxValue > 29 and
@@ -147,7 +148,7 @@ package body Bases.ShipyardUI is
                Append(ModuleInfo, "luxury");
             end if;
          when GUN | HARPOON_GUN =>
-            Append(ModuleInfo, ASCII.LF & "Ammunition: ");
+            Append(ModuleInfo, LF & "Ammunition: ");
             MAmount := 0;
             for Item of Items_List loop
                if Item.IType =
@@ -165,16 +166,16 @@ package body Bases.ShipyardUI is
       if Modules_List(ModuleIndex).Size > 0 then
          Append
            (ModuleInfo,
-            ASCII.LF & "Size:" &
+            LF & "Size:" &
             Natural'Image(Modules_List(ModuleIndex).Size));
       end if;
       if Modules_List(ModuleIndex).Weight > 0 then
          Append
            (ModuleInfo,
-            ASCII.LF & "Weight:" &
+            LF & "Weight:" &
             Natural'Image(Modules_List(ModuleIndex).Weight) & " kg");
       end if;
-      Append(ModuleInfo, ASCII.LF & "Repair/Upgrade material: ");
+      Append(ModuleInfo, LF & "Repair/Upgrade material: ");
       MAmount := 0;
       for Item of Items_List loop
          if Item.IType = Modules_List(ModuleIndex).RepairMaterial then
@@ -187,7 +188,7 @@ package body Bases.ShipyardUI is
       end loop;
       Append
         (ModuleInfo,
-         ASCII.LF & "Repair/Upgrade skill: " &
+         LF & "Repair/Upgrade skill: " &
          To_String(Skills_List(Modules_List(ModuleIndex).RepairSkill).Name) &
          "/" &
          To_String
@@ -197,7 +198,7 @@ package body Bases.ShipyardUI is
       if Modules_List(ModuleIndex).Description /= Null_Unbounded_String then
          Append
            (ModuleInfo,
-            ASCII.LF & ASCII.LF & Modules_List(ModuleIndex).Description);
+            LF & LF & Modules_List(ModuleIndex).Description);
       end if;
       Set_Label
         (Gtk_Label(Get_Object(Object, "lblinstallinfo")),
@@ -206,13 +207,13 @@ package body Bases.ShipyardUI is
       if MoneyIndex2 > 0 then
          InstallInfo :=
            To_Unbounded_String
-             (ASCII.LF & "You have" &
+             (LF & "You have" &
               Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
               To_String(MoneyName) & ".");
       else
          InstallInfo :=
            To_Unbounded_String
-             (ASCII.LF & "You don't have any " & To_String(MoneyName) &
+             (LF & "You don't have any " & To_String(MoneyName) &
               " to install anything.");
       end if;
       for Module of PlayerShip.Modules loop
@@ -221,7 +222,7 @@ package body Bases.ShipyardUI is
             AllSpace := Module.Data(2);
             Append
               (InstallInfo,
-               ASCII.LF & "You have used" & Natural'Image(UsedSpace) &
+               LF & "You have used" & Natural'Image(UsedSpace) &
                " modules space from max" & Natural'Image(AllSpace) &
                " allowed.");
             exit;
@@ -280,7 +281,7 @@ package body Bases.ShipyardUI is
       ModuleInfo := To_Unbounded_String("Remove gain:" & Positive'Image(Cost));
       Append
         (ModuleInfo,
-         ASCII.LF & "Removing time:" &
+         LF & "Removing time:" &
          Positive'Image
            (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
               .InstallTime) &
@@ -289,16 +290,16 @@ package body Bases.ShipyardUI is
          when ENGINE =>
             Append
               (ModuleInfo,
-               ASCII.LF & "Max power:" &
+               LF & "Max power:" &
                Positive'Image(PlayerShip.Modules(ModuleIndex).Data(2)));
          when ShipModules.CARGO =>
             Append
               (ModuleInfo,
-               ASCII.LF & "Max cargo:" &
+               LF & "Max cargo:" &
                Positive'Image(PlayerShip.Modules(ModuleIndex).Data(2)) &
                " kg");
          when CABIN =>
-            Append(ModuleInfo, ASCII.LF & "Quality: ");
+            Append(ModuleInfo, LF & "Quality: ");
             if PlayerShip.Modules(ModuleIndex).Data(2) < 30 then
                Append(ModuleInfo, "minimal");
             elsif PlayerShip.Modules(ModuleIndex).Data(2) > 29 and
@@ -311,7 +312,7 @@ package body Bases.ShipyardUI is
                Append(ModuleInfo, "luxury");
             end if;
          when GUN | HARPOON_GUN =>
-            Append(ModuleInfo, ASCII.LF & "Ammunition: ");
+            Append(ModuleInfo, LF & "Ammunition: ");
             MAmount := 0;
             for I in Items_List.First_Index .. Items_List.Last_Index loop
                if Items_List(I).IType =
@@ -331,14 +332,14 @@ package body Bases.ShipyardUI is
       if Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Size > 0 then
          Append
            (ModuleInfo,
-            ASCII.LF & "Size:" &
+            LF & "Size:" &
             Natural'Image
               (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Size));
       end if;
       if PlayerShip.Modules(ModuleIndex).Weight > 0 then
          Append
            (ModuleInfo,
-            ASCII.LF & "Weight:" &
+            LF & "Weight:" &
             Natural'Image(PlayerShip.Modules(ModuleIndex).Weight) & " kg");
       end if;
       Set_Label
@@ -366,7 +367,7 @@ package body Bases.ShipyardUI is
         Null_Unbounded_String then
          Set_Label
            (Gtk_Label(Get_Object(Object, "lblremovedescription")),
-            ASCII.LF &
+            LF &
             To_String
               (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                  .Description));
@@ -375,13 +376,13 @@ package body Bases.ShipyardUI is
       if MoneyIndex2 > 0 then
          RemoveInfo :=
            To_Unbounded_String
-             (ASCII.LF & "You have" &
+             (LF & "You have" &
               Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
               To_String(MoneyName) & ".");
       else
          RemoveInfo :=
            To_Unbounded_String
-             (ASCII.LF & "You don't have any " & To_String(MoneyName) &
+             (LF & "You don't have any " & To_String(MoneyName) &
               " to install anything.");
       end if;
       for Module of PlayerShip.Modules loop
@@ -390,7 +391,7 @@ package body Bases.ShipyardUI is
             AllSpace := Module.Data(2);
             Append
               (RemoveInfo,
-               ASCII.LF & "You have used" & Natural'Image(UsedSpace) &
+               LF & "You have used" & Natural'Image(UsedSpace) &
                " modules space from max" & Natural'Image(AllSpace) &
                " allowed.");
             exit;

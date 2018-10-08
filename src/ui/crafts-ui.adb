@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Exceptions; use Ada.Exceptions;
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
@@ -137,13 +138,13 @@ package body Crafts.UI is
       if RecipeIndex > 0 then
          Append
            (RecipeInfo,
-            "Amount:" & Integer'Image(Recipe.ResultAmount) & ASCII.LF);
+            "Amount:" & Integer'Image(Recipe.ResultAmount) & LF);
       end if;
       Append(RecipeInfo, "Materials needed: ");
       for I in
         Recipe.MaterialTypes.First_Index ..
           Recipe.MaterialTypes.Last_Index loop
-         Append(RecipeInfo, ASCII.LF & "-");
+         Append(RecipeInfo, LF & "-");
          MAmount := 0;
          HaveMaterials := False;
          for J in Items_List.Iterate loop
@@ -189,7 +190,7 @@ package body Crafts.UI is
          end loop;
       end loop;
       if Recipe.Tool /= To_Unbounded_String("None") then
-         Append(RecipeInfo, ASCII.LF & "Tool: ");
+         Append(RecipeInfo, LF & "Tool: ");
          MAmount := 0;
          for I in Items_List.Iterate loop
             IsTool := False;
@@ -217,7 +218,7 @@ package body Crafts.UI is
       else
          HaveTool := True;
       end if;
-      Append(RecipeInfo, ASCII.LF & "Workplace: ");
+      Append(RecipeInfo, LF & "Workplace: ");
       HaveWorkplace := False;
       for Module of PlayerShip.Modules loop
          if Modules_List(Module.ProtoIndex).MType = Recipe.Workplace then
@@ -245,12 +246,12 @@ package body Crafts.UI is
       end if;
       Append
         (RecipeInfo,
-         ASCII.LF & "Skill: " & To_String(Skills_List(Recipe.Skill).Name) &
+         LF & "Skill: " & To_String(Skills_List(Recipe.Skill).Name) &
          "/" &
          To_String(Attributes_List(Skills_List(Recipe.Skill).Attribute).Name));
       Append
         (RecipeInfo,
-         ASCII.LF & "Time needed:" & Positive'Image(Recipe.Time) & " minutes");
+         LF & "Time needed:" & Positive'Image(Recipe.Time) & " minutes");
       Set_Markup
         (Gtk_Label(Get_Object(Object, "lblrecipeinfo")),
          To_String(RecipeInfo));

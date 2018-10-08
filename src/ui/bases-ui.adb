@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
@@ -73,9 +74,9 @@ package body Bases.UI is
             RecruitInfo := To_Unbounded_String("Gender: Female");
          end if;
       end if;
-      Append(RecruitInfo, ASCII.LF & "Faction: ");
+      Append(RecruitInfo, LF & "Faction: ");
       Append(RecruitInfo, Factions_List(Recruit.Faction).Name);
-      Append(RecruitInfo, ASCII.LF & "Home base: ");
+      Append(RecruitInfo, LF & "Home base: ");
       Append(RecruitInfo, SkyBases(Recruit.HomeBase).Name);
       Set_Markup
         (Gtk_Label(Get_Object(Object, "lblrecruitinfo")),
@@ -114,13 +115,13 @@ package body Bases.UI is
       RecruitInfo := To_Unbounded_String("Starting offer:");
       Append
         (RecruitInfo,
-         ASCII.LF & "Payment:" & Natural'Image(Recruit.Payment) & " " &
+         LF & "Payment:" & Natural'Image(Recruit.Payment) & " " &
          To_String(MoneyName) & " each day.");
       Cost := Recruit.Price;
       CountPrice(Cost, FindMember(Talk));
       Append
         (RecruitInfo,
-         ASCII.LF & "One time fee:" & Positive'Image(Cost) & " " &
+         LF & "One time fee:" & Positive'Image(Cost) & " " &
          To_String(MoneyName) & ".");
       Set_Label
         (Gtk_Label(Get_Object(Object, "lblpayment")), To_String(RecruitInfo));
@@ -294,7 +295,7 @@ package body Bases.UI is
             Set_Label
               (Gtk_Label(Get_Object(Object, "lblbaseinfo2")),
                "Repair cost:" & Natural'Image(Cost) & " " &
-               To_String(MoneyName) & ASCII.LF & "Repair time:" &
+               To_String(MoneyName) & LF & "Repair time:" &
                To_String(FormattedTime));
          when HEAL =>
             HealCost(Cost, Time, ObjectIndex);
@@ -302,7 +303,7 @@ package body Bases.UI is
             Set_Label
               (Gtk_Label(Get_Object(Object, "lblbaseinfo2")),
                "Heal cost:" & Natural'Image(Cost) & " " &
-               To_String(MoneyName) & ASCII.LF & "Heal time:" &
+               To_String(MoneyName) & LF & "Heal time:" &
                To_String(FormattedTime));
          when CLEARING =>
             null;

@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Exceptions; use Ada.Exceptions;
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
@@ -124,9 +125,9 @@ package body Trades.UI is
          Append(ItemInfo, Items_List(ProtoIndex).ShowType);
       end if;
       if Items_List(ProtoIndex).Buyable(BaseType) then
-         Append(ItemInfo, ASCII.LF & "Base buy/sell price:");
+         Append(ItemInfo, LF & "Base buy/sell price:");
       else
-         Append(ItemInfo, ASCII.LF & "Base sell price:");
+         Append(ItemInfo, LF & "Base sell price:");
       end if;
       if BaseCargoIndex = 0 then
          if BaseCargoIndex2 > 0 then
@@ -154,12 +155,12 @@ package body Trades.UI is
       Append(ItemInfo, Natural'Image(Price) & " " & To_String(MoneyName));
       Append
         (ItemInfo,
-         ASCII.LF & "Weight:" & Integer'Image(Items_List(ProtoIndex).Weight) &
+         LF & "Weight:" & Integer'Image(Items_List(ProtoIndex).Weight) &
          " kg");
       if Items_List(ProtoIndex).IType = WeaponType then
          Append
            (ItemInfo,
-            ASCII.LF & "Skill: " &
+            LF & "Skill: " &
             To_String(Skills_List(Items_List(ProtoIndex).Value(3)).Name) &
             "/" &
             To_String
@@ -167,13 +168,13 @@ package body Trades.UI is
                  (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
                  .Name));
          if Items_List(ProtoIndex).Value(4) = 1 then
-            Append(ItemInfo, ASCII.LF & "Can be used with shield.");
+            Append(ItemInfo, LF & "Can be used with shield.");
          else
             Append
               (ItemInfo,
-               ASCII.LF & "Can't be used with shield (two-handed weapon).");
+               LF & "Can't be used with shield (two-handed weapon).");
          end if;
-         Append(ItemInfo, ASCII.LF & "Damage type: ");
+         Append(ItemInfo, LF & "Damage type: ");
          case Items_List(ProtoIndex).Value(5) is
             when 1 =>
                Append(ItemInfo, "cutting");
@@ -188,7 +189,7 @@ package body Trades.UI is
       if CargoIndex > 0 then
          Append
            (ItemInfo,
-            ASCII.LF & "Owned:" &
+            LF & "Owned:" &
             Positive'Image(PlayerShip.Cargo(CargoIndex).Amount));
          ShowItemDamage
            (PlayerShip.Cargo(CargoIndex).Durability,
@@ -196,9 +197,9 @@ package body Trades.UI is
       end if;
       if BaseCargoIndex > 0 and Items_List(ProtoIndex).Buyable(BaseType) then
          if BaseIndex > 0 then
-            Append(ItemInfo, ASCII.LF & "In base:");
+            Append(ItemInfo, LF & "In base:");
          else
-            Append(ItemInfo, ASCII.LF & "In ship:");
+            Append(ItemInfo, LF & "In ship:");
          end if;
          Append(ItemInfo, Positive'Image(Amount));
       end if;
@@ -207,7 +208,7 @@ package body Trades.UI is
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
          Set_Label
            (Gtk_Label(Get_Object(Object, "lbltradedescription")),
-            ASCII.LF & To_String(Items_List(ProtoIndex).Description));
+            LF & To_String(Items_List(ProtoIndex).Description));
       end if;
       if CargoIndex = 0 then
          Hide(Gtk_Widget(Get_Object(Object, "sellbox")));

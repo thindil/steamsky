@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
@@ -75,19 +76,19 @@ package body BasesList is
               Positive'Image(SkyBases(BaseIndex).SkyY));
          Append
            (BaseInfo,
-            ASCII.LF & "Type: " &
+            LF & "Type: " &
             To_Lower(Bases_Types'Image(SkyBases(BaseIndex).BaseType)));
          Append
            (BaseInfo,
-            ASCII.LF & "Owner: " &
+            LF & "Owner: " &
             To_String(Factions_List(SkyBases(BaseIndex).Owner).Name));
          Append
            (BaseInfo,
-            ASCII.LF & "Size: " &
+            LF & "Size: " &
             To_Lower(Bases_Size'Image(SkyBases(BaseIndex).Size)));
          Append
            (BaseInfo,
-            ASCII.LF & "Last visited: " &
+            LF & "Last visited: " &
             FormatedTime(SkyBases(BaseIndex).Visited));
          if SkyBases(BaseIndex).Population > 0 and
            SkyBases(BaseIndex).Reputation(1) > -25 then
@@ -95,15 +96,15 @@ package body BasesList is
             if TimeDiff > 0 then
                Append
                  (BaseInfo,
-                  ASCII.LF & "New recruits available in" &
+                  LF & "New recruits available in" &
                   Natural'Image(TimeDiff) & " days.");
             else
-               Append(BaseInfo, ASCII.LF & "New recruits available now.");
+               Append(BaseInfo, LF & "New recruits available now.");
             end if;
          else
             Append
               (BaseInfo,
-               ASCII.LF & "You can't recruit crew members at this base.");
+               LF & "You can't recruit crew members at this base.");
          end if;
          if SkyBases(BaseIndex).Population > 0 and
            SkyBases(BaseIndex).Reputation(1) > -25 then
@@ -111,14 +112,14 @@ package body BasesList is
             if TimeDiff < 7 then
                Append
                  (BaseInfo,
-                  ASCII.LF & "You asked for events" & Natural'Image(TimeDiff) &
+                  LF & "You asked for events" & Natural'Image(TimeDiff) &
                   " days ago.");
             else
-               Append(BaseInfo, ASCII.LF & "You can ask for events again.");
+               Append(BaseInfo, LF & "You can ask for events again.");
             end if;
          else
             Append
-              (BaseInfo, ASCII.LF & "You can't ask for events at this base.");
+              (BaseInfo, LF & "You can't ask for events at this base.");
          end if;
          if SkyBases(BaseIndex).Population > 0 and
            SkyBases(BaseIndex).Reputation(1) > -1 then
@@ -126,14 +127,14 @@ package body BasesList is
             if TimeDiff > 0 then
                Append
                  (BaseInfo,
-                  ASCII.LF & "New missions available in" &
+                  LF & "New missions available in" &
                   Natural'Image(TimeDiff) & " days.");
             else
-               Append(BaseInfo, ASCII.LF & "New missions available now.");
+               Append(BaseInfo, LF & "New missions available now.");
             end if;
          else
             Append
-              (BaseInfo, ASCII.LF & "You can't take missions at this base.");
+              (BaseInfo, LF & "You can't take missions at this base.");
          end if;
          Set_Visible
            (Gtk_Widget(Get_Object(Object, "basereputationbox")), True);
@@ -220,7 +221,7 @@ package body BasesList is
                null;
          end case;
          if BaseIndex = PlayerShip.HomeBase then
-            Append(BaseInfo, ASCII.LF & "It is your home base.");
+            Append(BaseInfo, LF & "It is your home base.");
          end if;
       else
          BaseInfo := To_Unbounded_String("Not visited yet.");
