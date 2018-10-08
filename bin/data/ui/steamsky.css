@@ -185,7 +185,7 @@ GtkTextView#mapview {
    .progressbar:selected#negativebar,
    .progressbar:selected#negativebar:focus {
    background:linear-gradient(to bottom, red, black);
-   border-radius:10px 10px 0px 0px;
+   border-radius:10px 0px 0px 10px;
 }
 
 GtkProgressBar.trough#negativebar,
