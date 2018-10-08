@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
@@ -96,31 +97,31 @@ package body Ships.Cargo.UI is
       end if;
       Append
         (ItemInfo,
-         ASCII.LF & "Amount:" &
+         LF & "Amount:" &
          Positive'Image(PlayerShip.Cargo(ItemIndex).Amount));
       Append
         (ItemInfo,
-         ASCII.LF & "Weight:" & Positive'Image(Items_List(ProtoIndex).Weight) &
+         LF & "Weight:" & Positive'Image(Items_List(ProtoIndex).Weight) &
          " kg");
       Append
         (ItemInfo,
-         ASCII.LF & "Total weight:" & Positive'Image(ItemWeight) & " kg");
+         LF & "Total weight:" & Positive'Image(ItemWeight) & " kg");
       if Items_List(ProtoIndex).IType = WeaponType then
          Append
            (ItemInfo,
-            ASCII.LF & "Skill: " &
+            LF & "Skill: " &
             Skills_List(Items_List(ProtoIndex).Value(3)).Name & "/" &
             Attributes_List
               (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
               .Name);
          if Items_List(ProtoIndex).Value(4) = 1 then
-            Append(ItemInfo, ASCII.LF & "Can be used with shield.");
+            Append(ItemInfo, LF & "Can be used with shield.");
          else
             Append
               (ItemInfo,
-               ASCII.LF & "Can't be used with shield (two-handed weapon).");
+               LF & "Can't be used with shield (two-handed weapon).");
          end if;
-         Append(ItemInfo, ASCII.LF & "Damage type: ");
+         Append(ItemInfo, LF & "Damage type: ");
          case Items_List(ProtoIndex).Value(5) is
             when 1 =>
                Append(ItemInfo, "cutting");
@@ -140,7 +141,7 @@ package body Ships.Cargo.UI is
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
          Set_Label
            (Gtk_Label(Get_Object(Object, "lbldescription2")),
-            ASCII.LF & To_String(Items_List(ProtoIndex).Description));
+            LF & To_String(Items_List(ProtoIndex).Description));
       end if;
       if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).IType =
         MissionItemsType then

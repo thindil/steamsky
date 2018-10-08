@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
 with Gtk.List_Store; use Gtk.List_Store;
@@ -144,7 +145,7 @@ package body Combat.UI is
                   To_String(TagNames(Message.Color))));
          end if;
          if I > LoopStart then
-            Insert(MessagesBuffer, MessagesIter, "" & ASCII.LF);
+            Insert(MessagesBuffer, MessagesIter, "" & LF);
          end if;
       end loop;
    end UpdateMessages;
@@ -231,13 +232,13 @@ package body Combat.UI is
       end if;
       Append(EnemyInfo, "Name: ");
       Append(EnemyInfo, EnemyName);
-      Append(EnemyInfo, ASCII.LF);
+      Append(EnemyInfo, LF);
       Append(EnemyInfo, "Type: ");
       Append(EnemyInfo, Enemy.Ship.Name);
-      Append(EnemyInfo, ASCII.LF);
+      Append(EnemyInfo, LF);
       Append(EnemyInfo, "Home: ");
       Append(EnemyInfo, SkyBases(Enemy.Ship.HomeBase).Name);
-      Append(EnemyInfo, ASCII.LF);
+      Append(EnemyInfo, LF);
       Append(EnemyInfo, "Distance: ");
       if Enemy.Distance >= 15000 then
          Append(EnemyInfo, "Escaped");
@@ -250,7 +251,7 @@ package body Combat.UI is
       else
          Append(EnemyInfo, "Close");
       end if;
-      Append(EnemyInfo, ASCII.LF);
+      Append(EnemyInfo, LF);
       Append(EnemyInfo, "Status: ");
       if Enemy.Distance < 15000 then
          if Enemy.Ship.Modules(1).Durability = 0 then
@@ -287,11 +288,11 @@ package body Combat.UI is
       else
          Append(EnemyInfo, "Unknown");
       end if;
-      Append(EnemyInfo, ASCII.LF);
+      Append(EnemyInfo, LF);
       Append(EnemyInfo, "Speed: ");
       if Enemy.Distance < 15000 then
          case Enemy.Ship.Speed is
-            when FULL_STOP =>
+            when Ships.FULL_STOP =>
                Append(EnemyInfo, "Stopped");
             when QUARTER_SPEED =>
                Append(EnemyInfo, "Slow");

@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Exceptions; use Ada.Exceptions;
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.List_Store; use Gtk.List_Store;
@@ -86,9 +87,9 @@ package body Crew.UI.Handlers is
             MemberInfo := To_Unbounded_String("Gender: Female");
          end if;
       end if;
-      Append(MemberInfo, ASCII.LF & "Faction: ");
+      Append(MemberInfo, LF & "Faction: ");
       Append(MemberInfo, Factions_List(Member.Faction).Name);
-      Append(MemberInfo, ASCII.LF & "Home base: ");
+      Append(MemberInfo, LF & "Home base: ");
       Append(MemberInfo, SkyBases(Member.HomeBase).Name);
       Foreach
         (Gtk_List_Store(Get_Object(Builder, "prioritieslist")),
@@ -101,7 +102,7 @@ package body Crew.UI.Handlers is
          Hide(Gtk_Widget(Get_Object(Object, "lblskills")));
          Hide(Gtk_Widget(Get_Object(Object, "treeskills1")));
          Hide(Gtk_Widget(Get_Object(Object, "lblcrewpay")));
-         Append(MemberInfo, ASCII.LF & "Passenger");
+         Append(MemberInfo, LF & "Passenger");
          if Member.ContractLength > 0 then
             declare
                MinutesDiff: Natural;
@@ -127,7 +128,7 @@ package body Crew.UI.Handlers is
                      MinutesDiff := 0;
                   end if;
                end loop;
-               Append(MemberInfo, ASCII.LF & "Time limit:");
+               Append(MemberInfo, LF & "Time limit:");
                if MissionTime.Year > 0 then
                   Append(MemberInfo, Positive'Image(MissionTime.Year) & "y");
                end if;
@@ -154,7 +155,7 @@ package body Crew.UI.Handlers is
          Show_All(Gtk_Widget(Get_Object(Object, "lblskills")));
          Show_All(Gtk_Widget(Get_Object(Object, "treeskills1")));
          if MemberIndex > 1 then
-            Append(MemberInfo, ASCII.LF & "Contract length:");
+            Append(MemberInfo, LF & "Contract length:");
             if Member.ContractLength > 0 then
                Append
                  (MemberInfo, Integer'Image(Member.ContractLength) & " days.");
@@ -163,7 +164,7 @@ package body Crew.UI.Handlers is
             end if;
             Append
               (MemberInfo,
-               ASCII.LF & "Payment:" & Natural'Image(Member.Payment(1)) & " " &
+               LF & "Payment:" & Natural'Image(Member.Payment(1)) & " " &
                To_String(MoneyName) & " each day and " &
                Natural'Image(Member.Payment(2)) &
                " percent of profit from each trade.");
@@ -395,32 +396,32 @@ package body Crew.UI.Handlers is
       end if;
       Append
         (ItemInfo,
-         ASCII.LF & "Amount:" &
+         LF & "Amount:" &
          Positive'Image
            (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount));
       Append
         (ItemInfo,
-         ASCII.LF & "Weight:" & Positive'Image(Items_List(ProtoIndex).Weight) &
+         LF & "Weight:" & Positive'Image(Items_List(ProtoIndex).Weight) &
          " kg");
       Append
         (ItemInfo,
-         ASCII.LF & "Total weight:" & Positive'Image(ItemWeight) & " kg");
+         LF & "Total weight:" & Positive'Image(ItemWeight) & " kg");
       if Items_List(ProtoIndex).IType = WeaponType then
          Append
            (ItemInfo,
-            ASCII.LF & "Skill: " &
+            LF & "Skill: " &
             Skills_List(Items_List(ProtoIndex).Value(3)).Name & "/" &
             Attributes_List
               (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
               .Name);
          if Items_List(ProtoIndex).Value(4) = 1 then
-            Append(ItemInfo, ASCII.LF & "Can be used with shield.");
+            Append(ItemInfo, LF & "Can be used with shield.");
          else
             Append
               (ItemInfo,
-               ASCII.LF & "Can't be used with shield (two-handed weapon).");
+               LF & "Can't be used with shield (two-handed weapon).");
          end if;
-         Append(ItemInfo, ASCII.LF & "Damage type: ");
+         Append(ItemInfo, LF & "Damage type: ");
          case Items_List(ProtoIndex).Value(5) is
             when 1 =>
                Append(ItemInfo, "cutting");
@@ -440,7 +441,7 @@ package body Crew.UI.Handlers is
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
          Set_Label
            (Gtk_Label(Get_Object(Object, "lblitemdescription")),
-            ASCII.LF & To_String(Items_List(ProtoIndex).Description));
+            LF & To_String(Items_List(ProtoIndex).Description));
       end if;
       Set_Upper
         (AmountAdj,

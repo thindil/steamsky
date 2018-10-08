@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with GNAT.String_Split; use GNAT.String_Split;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
@@ -56,11 +57,11 @@ package body Stories.UI is
       Set_Text(StoryBuffer, "");
       Get_Start_Iter(StoryBuffer, Iter);
       for StepText of FinishedStories(StoryIndex).StepsTexts loop
-         Insert(StoryBuffer, Iter, To_String(StepText) & ASCII.LF & ASCII.LF);
+         Insert(StoryBuffer, Iter, To_String(StepText) & LF & LF);
       end loop;
       if Natural(FinishedStories(StoryIndex).StepsTexts.Length) <
         FinishedStories(StoryIndex).StepsAmount then
-         Insert(StoryBuffer, Iter, To_String(GetCurrentStoryText) & ASCII.LF);
+         Insert(StoryBuffer, Iter, To_String(GetCurrentStoryText) & LF);
          if CurrentStory.Data /= Null_Unbounded_String then
             if CurrentStory.CurrentStep = 0 then
                Step := Stories_List(CurrentStory.Index).StartingStep;
@@ -135,7 +136,7 @@ package body Stories.UI is
                   null;
             end case;
          end if;
-         Insert(StoryBuffer, Iter, To_String(TargetText) & ASCII.LF);
+         Insert(StoryBuffer, Iter, To_String(TargetText) & LF);
          Show_All(Gtk_Widget(Get_Object(Builder, "btnstorycenter")));
          Show_All(Gtk_Widget(Get_Object(Builder, "btnstorydestination")));
       else

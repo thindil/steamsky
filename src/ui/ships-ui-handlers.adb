@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Exceptions; use Ada.Exceptions;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
@@ -86,7 +87,7 @@ package body Ships.UI.Handlers is
       end if;
       ModuleInfo :=
         To_Unbounded_String("Weight:" & Integer'Image(Module.Weight) & " kg");
-      Append(ModuleInfo, ASCII.LF & "Repair/Upgrade material: ");
+      Append(ModuleInfo, LF & "Repair/Upgrade material: ");
       for Item of Items_List loop
          if Item.IType = Modules_List(Module.ProtoIndex).RepairMaterial then
             if Mamount > 0 then
@@ -107,7 +108,7 @@ package body Ships.UI.Handlers is
       end loop;
       Append
         (ModuleInfo,
-         ASCII.LF & "Repair/Upgrade skill: " &
+         LF & "Repair/Upgrade skill: " &
          To_String
            (Skills_List(Modules_List(Module.ProtoIndex).RepairSkill).Name) &
          "/" &
@@ -136,7 +137,7 @@ package body Ships.UI.Handlers is
             end if;
             Append
               (ModuleInfo,
-               ASCII.LF & "Fuel usage:" & Integer'Image(Module.Data(1)));
+               LF & "Fuel usage:" & Integer'Image(Module.Data(1)));
             MaxValue :=
               Positive(Float(Modules_List(Module.ProtoIndex).Value) / 2.0);
             if Module.Data(1) = MaxValue then
@@ -243,7 +244,7 @@ package body Ships.UI.Handlers is
                   end if;
                end loop;
             end if;
-            Append(ModuleInfo, ASCII.LF);
+            Append(ModuleInfo, LF);
             if Module.Owner > 0 then
                Append
                  (ModuleInfo,
@@ -268,7 +269,7 @@ package body Ships.UI.Handlers is
             else
                Append(ModuleInfo, "Worker: none");
             end if;
-            Append(ModuleInfo, ASCII.LF);
+            Append(ModuleInfo, LF);
             if Module.Data(1) /= 0 then
                if Module.Data(1) > 0 then
                   Append
@@ -285,7 +286,7 @@ package body Ships.UI.Handlers is
                end if;
                Append
                  (ModuleInfo,
-                  ASCII.LF & "Time to complete current:" &
+                  LF & "Time to complete current:" &
                   Positive'Image(Module.Data(2)) & " mins");
             else
                Append(ModuleInfo, "Manufacturing: nothing");
@@ -310,17 +311,17 @@ package body Ships.UI.Handlers is
             if Module.Owner > 0 then
                Append
                  (ModuleInfo,
-                  ASCII.LF & "Trainee: " &
+                  LF & "Trainee: " &
                   To_String(PlayerShip.Crew(Module.Owner).Name));
             else
-               Append(ModuleInfo, ASCII.LF & "Trainee: none");
+               Append(ModuleInfo, LF & "Trainee: none");
             end if;
          when others =>
             null;
       end case;
       if Modules_List(Module.ProtoIndex).Size > 0 then
          if ModuleInfo /= Null_Unbounded_String then
-            Append(ModuleInfo, ASCII.LF);
+            Append(ModuleInfo, LF);
          end if;
          Append
            (ModuleInfo,
@@ -329,11 +330,11 @@ package body Ships.UI.Handlers is
       if Modules_List(Module.ProtoIndex).Description /=
         Null_Unbounded_String then
          if ModuleInfo /= Null_Unbounded_String then
-            Append(ModuleInfo, ASCII.LF);
+            Append(ModuleInfo, LF);
          end if;
          Append
            (ModuleInfo,
-            ASCII.LF & To_String(Modules_List(Module.ProtoIndex).Description));
+            LF & To_String(Modules_List(Module.ProtoIndex).Description));
       end if;
       Set_Markup
         (Gtk_Label(Get_Object(Object, "lblmoduleinfo2")),
