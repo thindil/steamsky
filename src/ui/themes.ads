@@ -15,11 +15,11 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-package CSS is
+package Themes is
 
    procedure SetFontSize
      (FontName: String); -- Set size of selected font (or all if FontName is empty string)
    procedure LoadTheme; -- Load selected UI theme
    procedure ResetFontsSizes; -- Reset size of fonts to theme default values
 
-end CSS;
+end Themes;

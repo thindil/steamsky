@@ -28,7 +28,7 @@ with Glib.Error; use Glib.Error;
 with Config; use Config;
 with Game; use Game;
 
-package body CSS is
+package body Themes is
 
    CssProvider: Gtk_Css_Provider;
 
@@ -130,4 +130,4 @@ package body CSS is
       GameSettings.InterfaceFontSize := GetFontSize("* {");
    end ResetFontsSizes;
 
-end CSS;
+end Themes;

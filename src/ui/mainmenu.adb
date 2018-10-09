@@ -59,7 +59,7 @@ with Log; use Log;
 with Help.UI; use Help.UI;
 with Factions; use Factions;
 with Events; use Events;
-with CSS; use CSS;
+with Themes; use Themes;
 
 package body MainMenu is
 

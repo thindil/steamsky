@@ -41,7 +41,7 @@ with Config; use Config;
 with Ships; use Ships;
 with Utils.UI; use Utils.UI;
 with Messages; use Messages;
-with CSS; use CSS;
+with Themes; use Themes;
 
 package body GameOptions is
 
