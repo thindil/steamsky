@@ -778,8 +778,7 @@ package body Maps.UI is
             TravelTime: Date_Record :=
               (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
          begin
-            Append
-              (MapInfoText, LF & "Distance:" & Positive'Image(Distance));
+            Append(MapInfoText, LF & "Distance:" & Positive'Image(Distance));
             Append
               (MapInfoText,
                LF & "Approx fuel usage:" &
@@ -1287,8 +1286,7 @@ package body Maps.UI is
       CenterX := X;
       CenterY := Y;
       UpdateMessages;
-      Set_Text
-        (Gtk_Text_Buffer(Get_Object(Builder, "txtmap")), "X" & LF & "X");
+      Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmap")), "X" & LF & "X");
       Show_All(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
       UpdateHeader;
       UpdateMoveButtons;
