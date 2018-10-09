@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New crafting recipes: small book of alchemy and small book of cooking
+- Welcoming message to each new game
 
 ### Fixed
 - Showing information about reputation in base in bases list
