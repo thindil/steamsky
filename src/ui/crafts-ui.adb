@@ -137,8 +137,7 @@ package body Crafts.UI is
       end if;
       if RecipeIndex > 0 then
          Append
-           (RecipeInfo,
-            "Amount:" & Integer'Image(Recipe.ResultAmount) & LF);
+           (RecipeInfo, "Amount:" & Integer'Image(Recipe.ResultAmount) & LF);
       end if;
       Append(RecipeInfo, "Materials needed: ");
       for I in
@@ -246,8 +245,7 @@ package body Crafts.UI is
       end if;
       Append
         (RecipeInfo,
-         LF & "Skill: " & To_String(Skills_List(Recipe.Skill).Name) &
-         "/" &
+         LF & "Skill: " & To_String(Skills_List(Recipe.Skill).Name) & "/" &
          To_String(Attributes_List(Skills_List(Recipe.Skill).Attribute).Name));
       Append
         (RecipeInfo,

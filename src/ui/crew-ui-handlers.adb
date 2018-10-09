@@ -404,8 +404,7 @@ package body Crew.UI.Handlers is
          LF & "Weight:" & Positive'Image(Items_List(ProtoIndex).Weight) &
          " kg");
       Append
-        (ItemInfo,
-         LF & "Total weight:" & Positive'Image(ItemWeight) & " kg");
+        (ItemInfo, LF & "Total weight:" & Positive'Image(ItemWeight) & " kg");
       if Items_List(ProtoIndex).IType = WeaponType then
          Append
            (ItemInfo,

@@ -136,8 +136,7 @@ package body Ships.UI.Handlers is
                Append(ModuleInfo, " (disabled)");
             end if;
             Append
-              (ModuleInfo,
-               LF & "Fuel usage:" & Integer'Image(Module.Data(1)));
+              (ModuleInfo, LF & "Fuel usage:" & Integer'Image(Module.Data(1)));
             MaxValue :=
               Positive(Float(Modules_List(Module.ProtoIndex).Value) / 2.0);
             if Module.Data(1) = MaxValue then

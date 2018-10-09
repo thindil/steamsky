@@ -485,8 +485,7 @@ package body Ships.UI is
       end if;
       Append
         (ShipInfo,
-         LF & "Weight:" & Integer'Image(CountShipWeight(PlayerShip)) &
-         "kg");
+         LF & "Weight:" & Integer'Image(CountShipWeight(PlayerShip)) & "kg");
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblshipinfo")), To_String(ShipInfo));
    end ShowShipInfo;

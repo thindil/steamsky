@@ -166,14 +166,13 @@ package body Bases.ShipyardUI is
       if Modules_List(ModuleIndex).Size > 0 then
          Append
            (ModuleInfo,
-            LF & "Size:" &
-            Natural'Image(Modules_List(ModuleIndex).Size));
+            LF & "Size:" & Natural'Image(Modules_List(ModuleIndex).Size));
       end if;
       if Modules_List(ModuleIndex).Weight > 0 then
          Append
            (ModuleInfo,
-            LF & "Weight:" &
-            Natural'Image(Modules_List(ModuleIndex).Weight) & " kg");
+            LF & "Weight:" & Natural'Image(Modules_List(ModuleIndex).Weight) &
+            " kg");
       end if;
       Append(ModuleInfo, LF & "Repair/Upgrade material: ");
       MAmount := 0;
@@ -196,9 +195,7 @@ package body Bases.ShipyardUI is
               (Skills_List(Modules_List(ModuleIndex).RepairSkill).Attribute)
               .Name));
       if Modules_List(ModuleIndex).Description /= Null_Unbounded_String then
-         Append
-           (ModuleInfo,
-            LF & LF & Modules_List(ModuleIndex).Description);
+         Append(ModuleInfo, LF & LF & Modules_List(ModuleIndex).Description);
       end if;
       Set_Label
         (Gtk_Label(Get_Object(Object, "lblinstallinfo")),

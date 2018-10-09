@@ -88,23 +88,21 @@ package body BasesList is
             To_Lower(Bases_Size'Image(SkyBases(BaseIndex).Size)));
          Append
            (BaseInfo,
-            LF & "Last visited: " &
-            FormatedTime(SkyBases(BaseIndex).Visited));
+            LF & "Last visited: " & FormatedTime(SkyBases(BaseIndex).Visited));
          if SkyBases(BaseIndex).Population > 0 and
            SkyBases(BaseIndex).Reputation(1) > -25 then
             TimeDiff := 30 - DaysDifference(SkyBases(BaseIndex).RecruitDate);
             if TimeDiff > 0 then
                Append
                  (BaseInfo,
-                  LF & "New recruits available in" &
-                  Natural'Image(TimeDiff) & " days.");
+                  LF & "New recruits available in" & Natural'Image(TimeDiff) &
+                  " days.");
             else
                Append(BaseInfo, LF & "New recruits available now.");
             end if;
          else
             Append
-              (BaseInfo,
-               LF & "You can't recruit crew members at this base.");
+              (BaseInfo, LF & "You can't recruit crew members at this base.");
          end if;
          if SkyBases(BaseIndex).Population > 0 and
            SkyBases(BaseIndex).Reputation(1) > -25 then
@@ -118,8 +116,7 @@ package body BasesList is
                Append(BaseInfo, LF & "You can ask for events again.");
             end if;
          else
-            Append
-              (BaseInfo, LF & "You can't ask for events at this base.");
+            Append(BaseInfo, LF & "You can't ask for events at this base.");
          end if;
          if SkyBases(BaseIndex).Population > 0 and
            SkyBases(BaseIndex).Reputation(1) > -1 then
@@ -127,14 +124,13 @@ package body BasesList is
             if TimeDiff > 0 then
                Append
                  (BaseInfo,
-                  LF & "New missions available in" &
-                  Natural'Image(TimeDiff) & " days.");
+                  LF & "New missions available in" & Natural'Image(TimeDiff) &
+                  " days.");
             else
                Append(BaseInfo, LF & "New missions available now.");
             end if;
          else
-            Append
-              (BaseInfo, LF & "You can't take missions at this base.");
+            Append(BaseInfo, LF & "You can't take missions at this base.");
          end if;
          Set_Visible
            (Gtk_Widget(Get_Object(Object, "basereputationbox")), True);
