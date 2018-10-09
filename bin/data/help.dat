@@ -43,6 +43,19 @@
  <entry title="General Informations">{u}Overview{/u}
     Steam Sky is a roguelike game where you are commandeer of a flying ship. You must take care of ship and crew. You can trade items between sky bases, fight with enemies or manufacture items. The game ends when your character dies. At this moment, help is under development (as whole game). To see other help topics, click on topic title (for example {b}&quot;General Informations&quot;{/b} for this screen) above help text. Some informations about game mechanics can depends on your character's faction.
 
+{u}Content of help topics{/u}
+- General Informations: You are here. Some very basic informations about game.
+- Ship movement: Moving ship around map, discovering new sky bases, general informations about reputation in bases.
+- Trading: General informations about buying or selling items from sky bases and friendly traders ships.
+- Combat: Starting combat, giving crew orders during combat, boarding enemy ships, some specific to combat tips.
+- Crafting: Setting crafting orders, discovering or buying new crafting recipes, some specific to crafting tips.
+- Repair/Upgrade ship: Self repairing and repairing in bases ship modules, upgrading ship modules, installing or removing ship modules.
+- Ship crew: Hunger, thirst, morale, tiredness and health effects on your ship crew members, training their skills, setting orders priorities and some specific for crew members tips.
+- Missions: Starting and finishing missions, some detail informations about each type of mission and specific for missions tips.
+- Hiring crew members: Detailed informations about hiring new crew members in sky bases.
+- Tips: General tips about playing game.
+Some game modifications can bring own help topics too.
+
 {u}Ship info{/u}
    On most screens you can see information about needed crew positions in the top right corner. {b}P{/b} means pilot, {b}E{/b} - engineer, {b}G{/b} - gunner, {b}R{/b} - repairs, {b}M{/b} - manufacturing, {b}U{/b} - upgrading ship module, {b}T{/b} - trader, {b}C{/b} - clean ship.
 For pilots and engineers: if their letter is green, the position is taken by a crew member, and if it's red you don't have anyone assigned to this position.
