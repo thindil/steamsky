@@ -249,6 +249,10 @@ package body Game is
             exit;
          end if;
       end loop;
+      -- Add welcoming message
+      AddMessage
+        ("Welcome to Steam Sky. If it is your first game, please consider read help (keyboard shortcut F1 or from Menu).",
+         OtherMessage);
    end NewGame;
 
    procedure UpdateGame(Minutes: Positive) is
