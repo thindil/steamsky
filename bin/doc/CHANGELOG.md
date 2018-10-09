@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New crafting recipe: small book of alchemy
+- New crafting recipes: small book of alchemy and small book of cooking
 
 ### Fixed
 - Showing information about reputation in base in bases list
