@@ -798,7 +798,7 @@ package body Maps.UI.Handlers is
          Show_All(Gtk_Widget(Get_Object(Object, "orderswindow")));
       else
          ShowDialog
-           ("Here are no available ship orders at this moment.",
+           ("Here are no available ship orders at this moment. Ship orders available mostly when you are at base or at event on map.",
             Gtk_Window(Get_Object(Object, "skymapwindow")));
       end if;
    end ShowOrders;
@@ -894,14 +894,14 @@ package body Maps.UI.Handlers is
       if User_Data = Get_Object(Builder, "menumissions") then
          if AcceptedMissions.Length = 0 then
             ShowDialog
-              ("You didn't accepted any mission yet.",
+              ("You didn't accepted any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.",
                Gtk_Window(Get_Object(Builder, "skymapwindow")));
             return;
          end if;
       elsif User_Data = Get_Object(Builder, "menuevents") then
          if Events_List.Length = 0 then
             ShowDialog
-              ("You dont know any event yet.",
+              ("You dont know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.",
                Gtk_Window(Get_Object(Builder, "skymapwindow")));
             return;
          end if;
