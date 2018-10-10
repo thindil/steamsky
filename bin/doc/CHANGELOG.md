@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated help
+- Updated interface
 
 ### Fixed
 - Showing information about reputation in base in bases list
