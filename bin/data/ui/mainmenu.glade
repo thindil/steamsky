@@ -38,20 +38,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     </columns>
   </object>
   <object class="GtkTextBuffer" id="licensebuffer"/>
-  <object class="GtkListStore" id="liststore1">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Male</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Female</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkTextBuffer" id="newsbuffer"/>
   <object class="GtkListStore" id="saveslist">
     <columns>
@@ -285,26 +271,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="cmbgender">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes">Select gender of your character. </property>
-                        <property name="model">liststore1</property>
-                        <property name="active">0</property>
-                        <property name="id_column">0</property>
-                        <child>
-                          <object class="GtkCellRendererText"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -384,6 +350,22 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="cmbgender">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Select gender of your character. </property>
+                        <property name="active">0</property>
+                        <items>
+                          <item translatable="yes">Male</item>
+                          <item translatable="yes">Female</item>
+                        </items>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                   </object>
