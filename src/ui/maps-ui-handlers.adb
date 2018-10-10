@@ -870,22 +870,22 @@ package body Maps.UI.Handlers is
         Get_Visible_Child_Name(Gtk_Stack(Get_Object(Object, "gamestack")));
    begin
       if VisibleChildName = "combat" then
-         ShowHelpUI(4);
-      elsif VisibleChildName = "crafts" then
          ShowHelpUI(5);
-      elsif VisibleChildName = "crew" then
-         ShowHelpUI(7);
-      elsif VisibleChildName = "ship" then
+      elsif VisibleChildName = "crafts" then
          ShowHelpUI(6);
+      elsif VisibleChildName = "crew" then
+         ShowHelpUI(8);
+      elsif VisibleChildName = "ship" then
+         ShowHelpUI(7);
       elsif VisibleChildName = "trade" then
-         ShowHelpUI(3);
+         ShowHelpUI(4);
       elsif VisibleChildName = "skymap" then
          ShowHelpUI(1);
       elsif VisibleChildName = "availablemissions" or
         VisibleChildName = "acceptedmissions" then
-         ShowHelpUI(8);
-      elsif VisibleChildName = "recruit" then
          ShowHelpUI(9);
+      elsif VisibleChildName = "recruit" then
+         ShowHelpUI(10);
       end if;
    end ShowHelp;
 
