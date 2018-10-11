@@ -1528,35 +1528,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     </columns>
   </object>
   <object class="GtkTextBuffer" id="txtstory"/>
-  <object class="GtkListStore" id="typeslist">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">All</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Combat</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Trade</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Orders</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Craft</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Others</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Missions</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkListStore" id="typeslist1">
     <columns>
       <!-- column-name gchararray1 -->
@@ -2371,21 +2342,20 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkComboBox" id="cmbmessages">
+                      <object class="GtkComboBoxText" id="cmbmessages">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="model">typeslist</property>
                         <property name="active">0</property>
-                        <property name="button_sensitivity">on</property>
-                        <property name="entry_text_column">0</property>
-                        <property name="id_column">0</property>
+                        <items>
+                          <item translatable="yes">All</item>
+                          <item translatable="yes">Combat</item>
+                          <item translatable="yes">Trade</item>
+                          <item translatable="yes">Orders</item>
+                          <item translatable="yes">Craft</item>
+                          <item translatable="yes">Others</item>
+                          <item translatable="yes">Missions</item>
+                        </items>
                         <signal name="changed" handler="Select_Messages" swapped="no"/>
-                        <child>
-                          <object class="GtkCellRendererText"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
                       </object>
                       <packing>
                         <property name="expand">True</property>
