@@ -32,6 +32,7 @@ with Gtk.Stack; use Gtk.Stack;
 with Gtk.Tree_Model_Filter; use Gtk.Tree_Model_Filter;
 with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Progress_Bar; use Gtk.Progress_Bar;
+with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Glib; use Glib;
 with Game; use Game;
 with Bases; use Bases;
@@ -349,8 +350,6 @@ package body BasesList is
    end VisibleBases;
 
    procedure CreateBasesListUI(NewBuilder: Gtkada_Builder) is
-      Iter: Gtk_Tree_Iter;
-      List: Gtk_List_Store;
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Base_Info", ShowBaseInfo'Access);
@@ -358,21 +357,18 @@ package body BasesList is
         (Builder, "Set_Destination_Base", SetDestinationBase'Access);
       Register_Handler(Builder, "Show_Base", ShowBase'Access);
       Register_Handler(Builder, "Search_Bases", SearchBases'Access);
-      List := Gtk_List_Store(Get_Object(Builder, "typeslist1"));
       for I in Bases_Types loop
-         Append(List, Iter);
-         Set
-           (List, Iter, 0,
+         Append_Text
+           (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbtype")),
             Bases_Types'Image(I)(1) &
             To_Lower(Bases_Types'Image(I)(2 .. Bases_Types'Image(I)'Last)));
       end loop;
-      List := Gtk_List_Store(Get_Object(Builder, "ownerslist"));
       for Faction of Factions_List loop
-         Append(List, Iter);
-         Set(List, Iter, 0, To_String(Faction.Name));
+         Append_Text
+           (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbowner")),
+            To_String(Faction.Name));
       end loop;
-      Append(List, Iter);
-      Set(List, Iter, 0, "Any");
+      Append_Text(Gtk_Combo_Box_Text(Get_Object(Builder, "cmbowner")), "Any");
       Set_Visible_Func
         (Gtk_Tree_Model_Filter(Get_Object(Builder, "basesfilter")),
          VisibleBases'Access);
