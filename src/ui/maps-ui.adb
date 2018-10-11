@@ -683,7 +683,7 @@ package body Maps.UI is
       if LoopStart < -10 then
          LoopStart := -10;
       end if;
-      for I in reverse LoopStart .. -1 loop
+      for I in LoopStart .. -1 loop
          Message := GetMessage(I + 1);
          if Message.Color = 0 then
             Insert(MessagesBuffer, Iter, To_String(Message.Message));
@@ -694,7 +694,7 @@ package body Maps.UI is
                  (Get_Tag_Table(MessagesBuffer),
                   To_String(TagNames(Message.Color))));
          end if;
-         if I > LoopStart then
+         if I < -1 then
             Insert(MessagesBuffer, Iter, "" & LF);
          end if;
       end loop;

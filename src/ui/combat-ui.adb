@@ -132,20 +132,22 @@ package body Combat.UI is
       if LoopStart < -10 then
          LoopStart := -10;
       end if;
-      for I in reverse LoopStart .. -1 loop
+      for I in LoopStart .. -1 loop
          Message := GetMessage(I + 1);
-         exit when Message.MessageIndex < MessagesStarts;
-         if Message.Color = 0 then
-            Insert(MessagesBuffer, MessagesIter, To_String(Message.Message));
-         else
-            Insert_With_Tags
-              (MessagesBuffer, MessagesIter, To_String(Message.Message),
-               Lookup
-                 (Get_Tag_Table(MessagesBuffer),
-                  To_String(TagNames(Message.Color))));
-         end if;
-         if I > LoopStart then
-            Insert(MessagesBuffer, MessagesIter, "" & LF);
+         if Message.MessageIndex >= MessagesStarts then
+            if Message.Color = 0 then
+               Insert
+                 (MessagesBuffer, MessagesIter, To_String(Message.Message));
+            else
+               Insert_With_Tags
+                 (MessagesBuffer, MessagesIter, To_String(Message.Message),
+                  Lookup
+                    (Get_Tag_Table(MessagesBuffer),
+                     To_String(TagNames(Message.Color))));
+            end if;
+            if I < -1 then
+               Insert(MessagesBuffer, MessagesIter, "" & LF);
+            end if;
          end if;
       end loop;
    end UpdateMessages;
