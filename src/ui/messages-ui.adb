@@ -42,7 +42,7 @@ package body Messages.UI is
            (MessagesList, MessagesIter, 0,
             "There are no messages of that type.");
       else
-         for Message of reverse Messages_List loop
+         for Message of Messages_List loop
             if Message.MType = MessagesType or MessagesType = Default then
                Append(MessagesList, MessagesIter);
                case Message.Color is
