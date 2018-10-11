@@ -2931,17 +2931,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="cmbtype">
+                      <object class="GtkComboBoxText" id="cmbtype">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="model">typeslist1</property>
                         <signal name="changed" handler="Search_Bases" swapped="no"/>
-                        <child>
-                          <object class="GtkCellRendererText"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -2962,18 +2955,16 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="cmbstatus">
+                      <object class="GtkComboBoxText" id="cmbstatus">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="model">statuseslist</property>
                         <property name="active">0</property>
+                        <items>
+                          <item translatable="yes">Any</item>
+                          <item translatable="yes">Only visited</item>
+                          <item translatable="yes">Only not visited</item>
+                        </items>
                         <signal name="changed" handler="Search_Bases" swapped="no"/>
-                        <child>
-                          <object class="GtkCellRendererText"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -2994,17 +2985,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="cmbowner">
+                      <object class="GtkComboBoxText" id="cmbowner">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="model">ownerslist</property>
                         <signal name="changed" handler="Search_Bases" swapped="no"/>
-                        <child>
-                          <object class="GtkCellRendererText"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
