@@ -115,6 +115,11 @@ package body MainMenu is
               (Gtk_Entry(Get_Object(Builder, "entryshipname")),
                To_String(NewGameSettings.ShipName));
          end if;
+         if NewGameSettings.PlayerGender = 'M' then
+            Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbgender")), 0);
+         else
+            Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbgender")), 1);
+         end if;
          CreateGoalsMenu;
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page1");
