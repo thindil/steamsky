@@ -4,8 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New crafting recipes: small book of alchemy, small book of cooking and small
-  book of gunsmithing
+- New crafting recipes: small book of alchemy, small book of cooking, small
+  book of gunsmithing and small book of metalsmithing
 - Welcoming message to each new game
 
 ### Changed
