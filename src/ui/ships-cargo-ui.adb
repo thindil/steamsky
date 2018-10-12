@@ -249,7 +249,6 @@ package body Ships.Cargo.UI is
       PreviousGameState := OldState;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "cargo");
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       ShowLastMessage(Builder);
       SetActiveItem;
       Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbmember")), 0);

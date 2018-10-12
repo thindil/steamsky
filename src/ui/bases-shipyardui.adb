@@ -484,7 +484,6 @@ package body Bases.ShipyardUI is
       Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbtypes")), 0);
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "shipyard");
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       ShowLastMessage(Builder);
       SetActiveModule("treeinstall", "columnnames3");
       SetActiveModule("treeremove", "columnnames4");

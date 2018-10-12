@@ -186,7 +186,6 @@ package body GameOptions is
       ShowSkyMap;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), True);
    end CloseOptions;
 
    function SetAccelerator(Self: access Gtk_Widget_Record'Class;
@@ -374,7 +373,6 @@ package body GameOptions is
       SetFontsSizes;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "options");
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
    end ShowGameOptions;
 
 end GameOptions;

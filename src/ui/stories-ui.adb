@@ -163,7 +163,6 @@ package body Stories.UI is
       ShowSkyMap;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
-      Set_Deletable(Gtk_Window(Get_Object(Object, "skymapwindow")), True);
    end SetStoryAsDestination;
 
    procedure ShowStory(Object: access Gtkada_Builder_Record'Class) is
@@ -173,7 +172,6 @@ package body Stories.UI is
       ShowSkyMap(NewX, NewY);
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
-      Set_Deletable(Gtk_Window(Get_Object(Object, "skymapwindow")), True);
    end ShowStory;
 
    procedure CreateStoriesUI(NewBuilder: Gtkada_Builder) is
@@ -212,7 +210,6 @@ package body Stories.UI is
          Gint(FinishedStories.Length - 1));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "stories");
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       ShowLastMessage(Builder);
    end ShowStoriesUI;
 

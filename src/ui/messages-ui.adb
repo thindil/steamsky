@@ -153,7 +153,6 @@ package body Messages.UI is
       Set_Text(Gtk_GEntry(Get_Object(Builder, "entrysearch")), "");
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "lastmessages");
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Grab_Focus(Gtk_Widget(Get_Object(Builder, "cmbmessages")));
    end ShowMessagesUI;
 
