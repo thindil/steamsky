@@ -674,17 +674,8 @@ package body Maps.UI is
         (To_Unbounded_String("yellow"), To_Unbounded_String("green"),
          To_Unbounded_String("red"), To_Unbounded_String("blue"),
          To_Unbounded_String("cyan"));
-   begin
-      Set_Text(MessagesBuffer, "");
-      Get_Start_Iter(MessagesBuffer, Iter);
-      if LoopStart = 0 then
-         return;
-      end if;
-      if LoopStart < -10 then
-         LoopStart := -10;
-      end if;
-      for I in LoopStart .. -1 loop
-         Message := GetMessage(I + 1);
+      procedure ShowMessage is
+      begin
          if Message.Color = 0 then
             Insert(MessagesBuffer, Iter, To_String(Message.Message));
          else
@@ -694,10 +685,33 @@ package body Maps.UI is
                  (Get_Tag_Table(MessagesBuffer),
                   To_String(TagNames(Message.Color))));
          end if;
-         if I < -1 then
-            Insert(MessagesBuffer, Iter, "" & LF);
-         end if;
-      end loop;
+      end ShowMessage;
+   begin
+      Set_Text(MessagesBuffer, "");
+      Get_Start_Iter(MessagesBuffer, Iter);
+      if LoopStart = 0 then
+         return;
+      end if;
+      if LoopStart < -10 then
+         LoopStart := -10;
+      end if;
+      if GameSettings.MessagesOrder = OLDER_FIRST then
+         for I in LoopStart .. -1 loop
+            Message := GetMessage(I + 1);
+            ShowMessage;
+            if I < -1 then
+               Insert(MessagesBuffer, Iter, "" & LF);
+            end if;
+         end loop;
+      else
+         for I in reverse LoopStart .. -1 loop
+            Message := GetMessage(I + 1);
+            ShowMessage;
+            if I > LoopStart then
+               Insert(MessagesBuffer, Iter, "" & LF);
+            end if;
+         end loop;
+      end if;
       if LastMessage = Null_Unbounded_String then
          Hide(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
       else
