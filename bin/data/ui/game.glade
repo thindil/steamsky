@@ -1528,74 +1528,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     </columns>
   </object>
   <object class="GtkTextBuffer" id="txtstory"/>
-  <object class="GtkListStore" id="typeslist1">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="typeslist2">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Any</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Engines</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Cabins</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Cockpits</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Turrets</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Guns</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Cargo bays</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Hulls</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Armors</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Battering rams</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Alchemy labs</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Furnaces</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Water collectors</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Workshops</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Greenhouses</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Medical rooms</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Harpoon guns</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Training rooms</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkWindow" id="skymapwindow">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Steam Sky</property>
@@ -4573,18 +4505,31 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkComboBox" id="cmbtypes">
+                              <object class="GtkComboBoxText" id="cmbtypes">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="model">typeslist2</property>
                                 <property name="active">0</property>
+                                <items>
+                                  <item translatable="yes">Any</item>
+                                  <item translatable="yes">Engines</item>
+                                  <item translatable="yes">Cabins</item>
+                                  <item translatable="yes">Cockpits</item>
+                                  <item translatable="yes">Turrets</item>
+                                  <item translatable="yes">Guns</item>
+                                  <item translatable="yes">Cargo bays</item>
+                                  <item translatable="yes">Hulls</item>
+                                  <item translatable="yes">Armors</item>
+                                  <item translatable="yes">Battering rams</item>
+                                  <item translatable="yes">Alchemy labs</item>
+                                  <item translatable="yes">Furnaces</item>
+                                  <item translatable="yes">Water collectors</item>
+                                  <item translatable="yes">Workshops</item>
+                                  <item translatable="yes">Greenhouses</item>
+                                  <item translatable="yes">Medical rooms</item>
+                                  <item translatable="yes">Harpoon guns</item>
+                                  <item translatable="yes">Training rooms</item>
+                                </items>
                                 <signal name="changed" handler="Change_Type" swapped="no"/>
-                                <child>
-                                  <object class="GtkCellRendererText"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                  </attributes>
-                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -9497,6 +9442,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkListStore" id="typeslist1">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
   </object>
   <object class="GtkAdjustment" id="waitxadj">
     <property name="lower">1</property>
