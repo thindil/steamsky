@@ -149,7 +149,6 @@ package body Bases.SchoolUI is
       end loop;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "school");
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       ShowLastMessage(Builder);
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treecrew")),

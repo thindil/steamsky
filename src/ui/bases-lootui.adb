@@ -301,7 +301,6 @@ package body Bases.LootUI is
       end loop;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "loot");
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Hide(Gtk_Widget(Get_Object(Builder, "dropbox")));
       Hide(Gtk_Widget(Get_Object(Builder, "takebox")));
       Set_Cursor

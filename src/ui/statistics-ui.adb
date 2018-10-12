@@ -23,7 +23,6 @@ with Gtk.Label; use Gtk.Label;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.List_Store; use Gtk.List_Store;
-with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
@@ -49,7 +48,6 @@ package body Statistics.UI is
          ShowSkyMap;
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
-         Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), True);
       else
          Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
          EndGame(False);
@@ -208,7 +206,6 @@ package body Statistics.UI is
          "Current _goal: " & GoalText(0));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "gamestats");
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Hide(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       if GameStats.DestroyedShips.Length > 0 then
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expdestroyed")), True);

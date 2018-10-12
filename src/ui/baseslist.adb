@@ -247,7 +247,6 @@ package body BasesList is
       ShowSkyMap;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), True);
    end SetDestinationBase;
 
    procedure ShowBase(Object: access Gtkada_Builder_Record'Class) is
@@ -255,7 +254,6 @@ package body BasesList is
       ShowSkyMap(SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY);
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
-      Set_Deletable(Gtk_Window(Get_Object(Object, "skymapwindow")), True);
    end ShowBase;
 
    procedure SearchBases(Object: access Gtkada_Builder_Record'Class) is
@@ -423,7 +421,6 @@ package body BasesList is
       end if;
       Set_Text(Gtk_GEntry(Get_Object(Builder, "entrysearchbases")), "");
       SettingTime := False;
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
    end ShowBasesListUI;
 
 end BasesList;
