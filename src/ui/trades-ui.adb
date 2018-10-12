@@ -56,7 +56,6 @@ package body Trades.UI is
       ShowSkyMap;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
-      Set_Deletable(Gtk_Window(Get_Object(Object, "skymapwindow")), True);
    end CloseTrade;
 
    procedure ShowItemTradeInfo(Object: access Gtkada_Builder_Record'Class) is
@@ -477,7 +476,6 @@ package body Trades.UI is
       Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "trade");
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treeitems1")),
          Gtk_Tree_Path_New_From_String("0"),

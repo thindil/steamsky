@@ -24,7 +24,6 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Cell_Renderer_Combo; use Gtk.Cell_Renderer_Combo;
 with Gtk.Cell_Renderer_Toggle; use Gtk.Cell_Renderer_Toggle;
 with Gtk.Stack; use Gtk.Stack;
-with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Glib.Types; use Glib.Types;
@@ -276,7 +275,6 @@ package body Crew.UI is
       Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "crew");
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       ShowLastMessage(Builder);
       SetActiveMember;
       ShowOrdersForAll;

@@ -27,7 +27,6 @@ with Gtk.Cell_Renderer_Text; use Gtk.Cell_Renderer_Text;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Progress_Bar; use Gtk.Progress_Bar;
-with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
@@ -519,7 +518,6 @@ package body Ships.UI is
       Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "ship");
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treemodules")),
          Gtk_Tree_Path_New_From_String("0"),

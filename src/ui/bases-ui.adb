@@ -24,7 +24,6 @@ with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Button; use Gtk.Button;
-with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
@@ -206,7 +205,6 @@ package body Bases.UI is
          ShowSkyMap;
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
-         Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), True);
       end ShowMap;
       procedure FormatTime is
       begin
@@ -498,7 +496,6 @@ package body Bases.UI is
       Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "recruit");
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       SetActiveRow("treerecruits", "columnname");
       ShowLastMessage(Builder);
    end ShowRecruitUI;
@@ -532,7 +529,6 @@ package body Bases.UI is
         (Gtk_Button(Get_Object(Builder, "btnacceptbase")), "_Buy recipe");
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "base");
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       SetActiveRow("treebases1", "columnbases");
       ShowLastMessage(Builder);
    end ShowBuyRecipesUI;
@@ -576,7 +572,6 @@ package body Bases.UI is
         (Gtk_Button(Get_Object(Builder, "btnacceptbase")), "_Buy repairs");
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "base");
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       SetActiveRow("treebases1", "columnbases");
       ShowLastMessage(Builder);
    end ShowRepairUI;
@@ -603,7 +598,6 @@ package body Bases.UI is
         (Gtk_Button(Get_Object(Builder, "btnacceptbase")), "_Buy healing");
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "base");
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       SetActiveRow("treebases1", "columnbases");
       ShowLastMessage(Builder);
    end ShowHealUI;

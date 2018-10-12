@@ -103,7 +103,6 @@ package body Events.UI is
       ShowSkyMap;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
-      Set_Deletable(Gtk_Window(Get_Object(Object, "skymapwindow")), True);
    end SetEventAsDestination;
 
    procedure ShowEvent(Object: access Gtkada_Builder_Record'Class) is
@@ -111,7 +110,6 @@ package body Events.UI is
       ShowSkyMap(Events_List(EventIndex).SkyX, Events_List(EventIndex).SkyY);
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
-      Set_Deletable(Gtk_Window(Get_Object(Object, "skymapwindow")), True);
    end ShowEvent;
 
    procedure CreateEventsUI(NewBuilder: Gtkada_Builder) is
@@ -164,7 +162,6 @@ package body Events.UI is
             Gtk_Tree_Path_New_From_String("0"),
             Gtk_Tree_View_Column(Get_Object(Builder, "columnnames")), False);
       end if;
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
    end ShowEventsUI;
 
 end Events.UI;

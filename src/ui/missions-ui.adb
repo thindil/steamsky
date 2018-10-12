@@ -307,7 +307,6 @@ package body Missions.UI is
       end if;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), True);
    end ButtonMission;
 
    procedure CreateMissionsUI(NewBuilder: Gtkada_Builder) is
@@ -358,7 +357,6 @@ package body Missions.UI is
       Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "availablemissions");
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treemissions")),
          Gtk_Tree_Path_New_From_String("0"),
@@ -402,7 +400,6 @@ package body Missions.UI is
       Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "acceptedmissions");
-      Set_Deletable(Gtk_Window(Get_Object(Builder, "skymapwindow")), False);
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treemissions1")),
          Gtk_Tree_Path_New_From_String("0"),
