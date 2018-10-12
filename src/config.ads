@@ -29,6 +29,8 @@ package Config is
    type AutoMoveBreak is
      (NEVER, ANY, FRIENDLY,
       ENEMY); -- Options when stop auto move of player ship
+   type MessagesOrderType is
+     (OLDER_FIRST, NEWER_FIRST); -- Options to set showing messages order
    type GameSettingsRecord is -- Data for game settings
    record
       AutoRest: Boolean; -- If true, rest when pilot/engineer need rest
@@ -50,6 +52,7 @@ package Config is
       MapFontSize: Positive; -- Size of font used in map
       InterfaceFontSize: Positive; -- Size of font used in interface
       InterfaceTheme: Unbounded_String; -- Name of current user interface theme
+      MessagesOrder: MessagesOrderType; -- Order of showing messages
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;
