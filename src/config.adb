@@ -36,7 +36,8 @@ package body Config is
          WindowWidth => 800, WindowHeight => 600, AnimationsEnabled => 1,
          AnimationType => 1, MessagesLimit => 500, SavedMessages => 10,
          HelpFontSize => 12, MapFontSize => 10, InterfaceFontSize => 16,
-         InterfaceTheme => To_Unbounded_String("default"));
+         InterfaceTheme => To_Unbounded_String("default"),
+         MessagesOrder => OLDER_FIRST);
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
@@ -113,6 +114,9 @@ package body Config is
                  Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("InterfaceTheme") then
                GameSettings.InterfaceTheme := Value;
+            elsif FieldName = To_Unbounded_String("MessagesOrder") then
+               GameSettings.MessagesOrder :=
+                 MessagesOrderType'Value(To_String(Value));
             end if;
          end if;
       end loop;
@@ -191,6 +195,10 @@ package body Config is
       Put_Line
         (ConfigFile,
          "InterfaceTheme = " & To_String(GameSettings.InterfaceTheme));
+      Put_Line
+        (ConfigFile,
+         "MessagesOrder = " &
+         MessagesOrderType'Image(GameSettings.MessagesOrder));
       Close(ConfigFile);
    end SaveConfig;
 

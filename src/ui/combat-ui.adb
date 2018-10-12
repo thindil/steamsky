@@ -50,6 +50,7 @@ with Ships.UI; use Ships.UI;
 with Ships.Cargo.UI; use Ships.Cargo.UI;
 with Messages; use Messages;
 with Messages.UI; use Messages.UI;
+with Config; use Config;
 
 package body Combat.UI is
 
@@ -123,6 +124,18 @@ package body Combat.UI is
         (To_Unbounded_String("yellow"), To_Unbounded_String("green"),
          To_Unbounded_String("red"), To_Unbounded_String("blue"),
          To_Unbounded_String("cyan"));
+      procedure ShowMessage is
+      begin
+         if Message.Color = 0 then
+            Insert(MessagesBuffer, MessagesIter, To_String(Message.Message));
+         else
+            Insert_With_Tags
+              (MessagesBuffer, MessagesIter, To_String(Message.Message),
+               Lookup
+                 (Get_Tag_Table(MessagesBuffer),
+                  To_String(TagNames(Message.Color))));
+         end if;
+      end ShowMessage;
    begin
       Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmessages")), "");
       Get_Start_Iter(MessagesBuffer, MessagesIter);
@@ -132,24 +145,26 @@ package body Combat.UI is
       if LoopStart < -10 then
          LoopStart := -10;
       end if;
-      for I in LoopStart .. -1 loop
-         Message := GetMessage(I + 1);
-         if Message.MessageIndex >= MessagesStarts then
-            if Message.Color = 0 then
-               Insert
-                 (MessagesBuffer, MessagesIter, To_String(Message.Message));
-            else
-               Insert_With_Tags
-                 (MessagesBuffer, MessagesIter, To_String(Message.Message),
-                  Lookup
-                    (Get_Tag_Table(MessagesBuffer),
-                     To_String(TagNames(Message.Color))));
+      if GameSettings.MessagesOrder = OLDER_FIRST then
+         for I in LoopStart .. -1 loop
+            Message := GetMessage(I + 1);
+            if Message.MessageIndex >= MessagesStarts then
+               ShowMessage;
+               if I < -1 then
+                  Insert(MessagesBuffer, MessagesIter, "" & LF);
+               end if;
             end if;
-            if I < -1 then
+         end loop;
+      else
+         for I in reverse LoopStart .. -1 loop
+            Message := GetMessage(I + 1);
+            exit when Message.MessageIndex < MessagesStarts;
+            ShowMessage;
+            if I > LoopStart then
                Insert(MessagesBuffer, MessagesIter, "" & LF);
             end if;
-         end if;
-      end loop;
+         end loop;
+      end if;
    end UpdateMessages;
 
    procedure RefreshCombatUI is

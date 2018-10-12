@@ -25,6 +25,7 @@ with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Tree_Model_Filter; use Gtk.Tree_Model_Filter;
 with Gtk.GEntry; use Gtk.GEntry;
 with Glib.Object; use Glib.Object;
+with Config; use Config;
 
 package body Messages.UI is
 
@@ -34,6 +35,43 @@ package body Messages.UI is
       MessagesList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "messageslist"));
       MessagesIter: Gtk_Tree_Iter;
+      procedure ShowMessage(Message: Message_Data) is
+      begin
+         if Message.MType = MessagesType or MessagesType = Default then
+            Append(MessagesList, MessagesIter);
+            case Message.Color is
+               when 1 =>
+                  Set
+                    (MessagesList, MessagesIter, 0,
+                     "<span foreground=""yellow"">" &
+                     To_String(Message.Message) & "</span>");
+               when 2 =>
+                  Set
+                    (MessagesList, MessagesIter, 0,
+                     "<span foreground=""#4E9A06"">" &
+                     To_String(Message.Message) & "</span>");
+               when 3 =>
+                  Set
+                    (MessagesList, MessagesIter, 0,
+                     "<span foreground=""red"">" & To_String(Message.Message) &
+                     "</span>");
+               when 4 =>
+                  Set
+                    (MessagesList, MessagesIter, 0,
+                     "<span foreground=""#3465A4"">" &
+                     To_String(Message.Message) & "</span>");
+               when 5 =>
+                  Set
+                    (MessagesList, MessagesIter, 0,
+                     "<span foreground=""cyan"">" &
+                     To_String(Message.Message) & "</span>");
+               when others =>
+                  Set
+                    (MessagesList, MessagesIter, 0,
+                     To_String(Message.Message));
+            end case;
+         end if;
+      end ShowMessage;
    begin
       Clear(MessagesList);
       if MessagesAmount(MessagesType) = 0 then
@@ -42,42 +80,15 @@ package body Messages.UI is
            (MessagesList, MessagesIter, 0,
             "There are no messages of that type.");
       else
-         for Message of Messages_List loop
-            if Message.MType = MessagesType or MessagesType = Default then
-               Append(MessagesList, MessagesIter);
-               case Message.Color is
-                  when 1 =>
-                     Set
-                       (MessagesList, MessagesIter, 0,
-                        "<span foreground=""yellow"">" &
-                        To_String(Message.Message) & "</span>");
-                  when 2 =>
-                     Set
-                       (MessagesList, MessagesIter, 0,
-                        "<span foreground=""#4E9A06"">" &
-                        To_String(Message.Message) & "</span>");
-                  when 3 =>
-                     Set
-                       (MessagesList, MessagesIter, 0,
-                        "<span foreground=""red"">" &
-                        To_String(Message.Message) & "</span>");
-                  when 4 =>
-                     Set
-                       (MessagesList, MessagesIter, 0,
-                        "<span foreground=""#3465A4"">" &
-                        To_String(Message.Message) & "</span>");
-                  when 5 =>
-                     Set
-                       (MessagesList, MessagesIter, 0,
-                        "<span foreground=""cyan"">" &
-                        To_String(Message.Message) & "</span>");
-                  when others =>
-                     Set
-                       (MessagesList, MessagesIter, 0,
-                        To_String(Message.Message));
-               end case;
-            end if;
-         end loop;
+         if GameSettings.MessagesOrder = OLDER_FIRST then
+            for Message of Messages_List loop
+               ShowMessage(Message);
+            end loop;
+         else
+            for Message of reverse Messages_List loop
+               ShowMessage(Message);
+            end loop;
+         end if;
       end if;
    end ShowMessages;
 
