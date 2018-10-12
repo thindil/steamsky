@@ -117,6 +117,15 @@ package body Utils.UI is
    procedure CloseMessages(Object: access Gtkada_Builder_Record'Class) is
       VisibleChildName: constant String :=
         Get_Visible_Child_Name(Gtk_Stack(Get_Object(Object, "gamestack")));
+      MenuArray: constant array(1 .. 11) of Unbounded_String :=
+        (To_Unbounded_String("menuorders"),
+         To_Unbounded_String("menucrafting"),
+         To_Unbounded_String("menubaseslist"),
+         To_Unbounded_String("menuevents"),
+         To_Unbounded_String("menumissions"), To_Unbounded_String("menustory"),
+         To_Unbounded_String("menuwait"), To_Unbounded_String("menumovemap"),
+         To_Unbounded_String("menustats"), To_Unbounded_String("menuhelp"),
+         To_Unbounded_String("menuoptions"));
    begin
       if VisibleChildName = "options" then
          CloseOptions(Object);
@@ -134,6 +143,9 @@ package body Utils.UI is
       end if;
       if VisibleChildName = "combat" then
          Set_Sensitive(Gtk_Widget(Get_Object(Object, "treecrew1")), True);
+         for I in MenuArray'Range loop
+            Show_All(Gtk_Widget(Get_Object(Object, To_String(MenuArray(I)))));
+         end loop;
          UpdateOrders(PlayerShip);
       end if;
       Hide(Gtk_Widget(Get_Object(Object, "btnclose")));
