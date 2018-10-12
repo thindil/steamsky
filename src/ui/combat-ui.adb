@@ -44,12 +44,8 @@ with Events; use Events;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Crew; use Crew;
-with Crew.UI; use Crew.UI;
 with Ships.Crew; use Ships.Crew;
-with Ships.UI; use Ships.UI;
-with Ships.Cargo.UI; use Ships.Cargo.UI;
 with Messages; use Messages;
-with Messages.UI; use Messages.UI;
 with Config; use Config;
 
 package body Combat.UI is
@@ -377,6 +373,15 @@ package body Combat.UI is
       DamagePercent, SpaceIndex: Natural;
       ModuleName: Unbounded_String;
       EnemyIter: Gtk_Tree_Iter;
+      MenuArray: constant array(1 .. 11) of Unbounded_String :=
+        (To_Unbounded_String("menuorders"),
+         To_Unbounded_String("menucrafting"),
+         To_Unbounded_String("menubaseslist"),
+         To_Unbounded_String("menuevents"),
+         To_Unbounded_String("menumissions"), To_Unbounded_String("menustory"),
+         To_Unbounded_String("menuwait"), To_Unbounded_String("menumovemap"),
+         To_Unbounded_String("menustats"), To_Unbounded_String("menuhelp"),
+         To_Unbounded_String("menuoptions"));
    begin
       if NewCombat then
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
@@ -426,8 +431,11 @@ package body Combat.UI is
          end loop;
       end if;
       Hide(Gtk_Widget(Get_Object(Builder, "btnclose")));
-      Hide(Gtk_Widget(Get_Object(Builder, "btnmenu")));
+      for I in MenuArray'Range loop
+         Hide(Gtk_Widget(Get_Object(Builder, To_String(MenuArray(I)))));
+      end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
+      Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "combat");
       HideLastMessage(Builder);
@@ -693,20 +701,6 @@ package body Combat.UI is
       end if;
    end NextTurn;
 
-   procedure ShowCombatInfo(User_Data: access GObject_Record'Class) is
-   begin
-      Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
-      if User_Data = Get_Object(Builder, "btnmessages") then
-         ShowMessagesUI(Combat_View);
-      elsif User_Data = Get_Object(Builder, "btncargoinfo") then
-         ShowCargoUI(Combat_View);
-      elsif User_Data = Get_Object(Builder, "btnshipinfo") then
-         ShowShipUI(Combat_View);
-      else
-         ShowCrewUI(Combat_View);
-      end if;
-   end ShowCombatInfo;
-
    procedure GiveBoardingOrders
      (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
       Path_String: UTF8_String; New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
@@ -732,7 +726,6 @@ package body Combat.UI is
       Builder := NewBuilder;
       Register_Handler(Builder, "Set_Orders_List", SetOrdersList'Access);
       Register_Handler(Builder, "Next_Turn", NextTurn'Access);
-      Register_Handler(Builder, "Show_Combat_Info", ShowCombatInfo'Access);
       On_Changed
         (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "renderorders")),
          GiveCombatOrders'Access);

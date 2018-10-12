@@ -890,6 +890,9 @@ package body Maps.UI.Handlers is
    end ShowHelp;
 
    procedure ShowInfo(User_Data: access GObject_Record'Class) is
+      VisibleChildName: constant String :=
+        Get_Visible_Child_Name(Gtk_Stack(Get_Object(Builder, "gamestack")));
+      OldState: GameStates;
    begin
       if User_Data = Get_Object(Builder, "menumissions") then
          if AcceptedMissions.Length = 0 then
@@ -908,14 +911,19 @@ package body Maps.UI.Handlers is
       end if;
       Hide(Gtk_Widget(Get_Object(Builder, "btnmenu")));
       Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
+      if VisibleChildName = "combat" then
+         OldState := Combat_View;
+      else
+         OldState := SkyMap_View;
+      end if;
       if User_Data = Get_Object(Builder, "menumessages") then
-         ShowMessagesUI(SkyMap_View);
+         ShowMessagesUI(OldState);
       elsif User_Data = Get_Object(Builder, "menucargo") then
-         ShowCargoUI(SkyMap_View);
+         ShowCargoUI(OldState);
       elsif User_Data = Get_Object(Builder, "menuship") then
-         ShowShipUI(SkyMap_View);
+         ShowShipUI(OldState);
       elsif User_Data = Get_Object(Builder, "menucrew") then
-         ShowCrewUI(SkyMap_View);
+         ShowCrewUI(OldState);
       elsif User_Data = Get_Object(Builder, "menustats") then
          ShowStatsUI(SkyMap_View);
       elsif User_Data = Get_Object(Builder, "menumissions") then
