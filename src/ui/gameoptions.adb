@@ -178,6 +178,9 @@ package body GameOptions is
       GameSettings.SavedMessages :=
         Positive
           (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjsavedmessages"))));
+      GameSettings.MessagesOrder :=
+        MessagesOrderType'Val
+          (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbmessagesorder"))));
       SaveConfig;
       Save(To_String(SaveDirectory) & "keys.cfg");
       ShowSkyMap;
@@ -365,6 +368,9 @@ package body GameOptions is
       Set_Value
         (Gtk_Adjustment(Get_Object(Builder, "adjsavedmessages")),
          Gdouble(GameSettings.SavedMessages));
+      Set_Active
+        (Gtk_Combo_Box(Get_Object(Builder, "cmbmessagesorder")),
+         (MessagesOrderType'Pos(GameSettings.MessagesOrder)));
       SetFontsSizes;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "options");
