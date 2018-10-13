@@ -211,3 +211,10 @@ GtkProgressBar.trough#positivebar,
   border-radius:0px 10px 10px 0px;
   background:linear-gradient(to bottom, rgb(73,73,73), rgb(35,41,51));
 }
+
+/* Prevent combo boxes from autoresize on hover */
+GtkComboBox * {
+   border-width:1px;
+   border-style: solid;
+   border-color:rgb(28,28,28);
+}
