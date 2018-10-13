@@ -210,6 +210,7 @@ package body Maps.UI.Handlers is
                Gtk_Window(Get_Object(Object, "skymapwindow")));
             return;
          end if;
+         ShowOrders(Object);
       end if;
       UpdateHeader;
       UpdateMessages;
