@@ -120,16 +120,25 @@ package body Combat.UI is
         (To_Unbounded_String("yellow"), To_Unbounded_String("green"),
          To_Unbounded_String("red"), To_Unbounded_String("blue"),
          To_Unbounded_String("cyan"));
+      CurrentTurnTime: Unbounded_String := To_Unbounded_String(FormatedTime);
       procedure ShowMessage is
       begin
-         if Message.Color = 0 then
-            Insert(MessagesBuffer, MessagesIter, To_String(Message.Message));
+         if Unbounded_Slice(Message.Message, 1, Length(CurrentTurnTime)) =
+           CurrentTurnTime then
+            if Message.Color = 0 then
+               Insert
+                 (MessagesBuffer, MessagesIter, To_String(Message.Message));
+            else
+               Insert_With_Tags
+                 (MessagesBuffer, MessagesIter, To_String(Message.Message),
+                  Lookup
+                    (Get_Tag_Table(MessagesBuffer),
+                     To_String(TagNames(Message.Color))));
+            end if;
          else
             Insert_With_Tags
               (MessagesBuffer, MessagesIter, To_String(Message.Message),
-               Lookup
-                 (Get_Tag_Table(MessagesBuffer),
-                  To_String(TagNames(Message.Color))));
+               Lookup(Get_Tag_Table(MessagesBuffer), "gray"));
          end if;
       end ShowMessage;
    begin
@@ -140,6 +149,12 @@ package body Combat.UI is
       end if;
       if LoopStart < -10 then
          LoopStart := -10;
+      end if;
+      Message := GetMessage(GetLastMessageIndex);
+      if Unbounded_Slice(Message.Message, 1, Length(CurrentTurnTime)) /=
+        CurrentTurnTime then
+         CurrentTurnTime :=
+           Unbounded_Slice(Message.Message, 1, Length(CurrentTurnTime));
       end if;
       if GameSettings.MessagesOrder = OLDER_FIRST then
          for I in LoopStart .. -1 loop
