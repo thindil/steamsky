@@ -4957,36 +4957,52 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkScrolledWindow" id="scrolldamage">
+                              <object class="GtkFrame" id="damageframe">
+                                <property name="name">redframe</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="shadow_type">in</property>
+                                <property name="can_focus">False</property>
+                                <property name="label_xalign">0.10000000149011612</property>
+                                <property name="shadow_type">out</property>
                                 <child>
-                                  <object class="GtkTreeView" id="treedamage">
-                                    <property name="name">redbar</property>
+                                  <object class="GtkScrolledWindow" id="scrolldamage">
                                     <property name="visible">True</property>
-                                    <property name="sensitive">False</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="model">damagelist</property>
-                                    <property name="headers_visible">False</property>
-                                    <property name="headers_clickable">False</property>
-                                    <child internal-child="selection">
-                                      <object class="GtkTreeSelection">
-                                        <property name="mode">none</property>
-                                      </object>
-                                    </child>
+                                    <property name="can_focus">True</property>
+                                    <property name="shadow_type">in</property>
                                     <child>
-                                      <object class="GtkTreeViewColumn">
-                                        <property name="title" translatable="yes">Damage</property>
+                                      <object class="GtkTreeView" id="treedamage">
+                                        <property name="name">redbar</property>
+                                        <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="model">damagelist</property>
+                                        <property name="headers_visible">False</property>
+                                        <property name="headers_clickable">False</property>
+                                        <child internal-child="selection">
+                                          <object class="GtkTreeSelection">
+                                            <property name="mode">none</property>
+                                          </object>
+                                        </child>
                                         <child>
-                                          <object class="GtkCellRendererProgress"/>
-                                          <attributes>
-                                            <attribute name="text">0</attribute>
-                                            <attribute name="value">1</attribute>
-                                          </attributes>
+                                          <object class="GtkTreeViewColumn">
+                                            <property name="title" translatable="yes">Damage</property>
+                                            <child>
+                                              <object class="GtkCellRendererProgress"/>
+                                              <attributes>
+                                                <attribute name="text">0</attribute>
+                                                <attribute name="value">1</attribute>
+                                              </attributes>
+                                            </child>
+                                          </object>
                                         </child>
                                       </object>
                                     </child>
+                                  </object>
+                                </child>
+                                <child type="label">
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">Ship damage:</property>
                                   </object>
                                 </child>
                               </object>
@@ -5007,11 +5023,13 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkBox">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_left">5</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkFrame">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="margin_bottom">5</property>
                                 <property name="label_xalign">0.10000000149011612</property>
                                 <property name="shadow_type">out</property>
                                 <child>
@@ -5403,21 +5421,38 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkScrolledWindow">
+                  <object class="GtkFrame">
+                    <property name="name">whiteframe</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="hscrollbar_policy">never</property>
-                    <property name="shadow_type">in</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_top">5</property>
+                    <property name="label_xalign">0.019999999552965164</property>
+                    <property name="shadow_type">out</property>
                     <child>
-                      <object class="GtkTextView" id="messagesview2">
+                      <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
-                        <property name="sensitive">False</property>
+                        <property name="can_focus">True</property>
+                        <property name="hscrollbar_policy">never</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkTextView" id="messagesview2">
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="can_focus">False</property>
+                            <property name="editable">False</property>
+                            <property name="wrap_mode">word</property>
+                            <property name="cursor_visible">False</property>
+                            <property name="buffer">txtmessages</property>
+                            <property name="accepts_tab">False</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child type="label">
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="editable">False</property>
-                        <property name="wrap_mode">word</property>
-                        <property name="cursor_visible">False</property>
-                        <property name="buffer">txtmessages</property>
-                        <property name="accepts_tab">False</property>
+                        <property name="label" translatable="yes">Last messages:</property>
                       </object>
                     </child>
                   </object>

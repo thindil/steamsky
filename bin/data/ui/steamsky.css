@@ -103,6 +103,38 @@ GtkFrame > GtkLabel {
    padding:4px;
 }
 
+/* Settings for white(gray) frames */
+GtkFrame#whiteframe {
+   border-radius:5px;
+   border-style:solid;
+   border-width:2px;
+   border-color:gray;
+}
+
+GtkFrame#whiteframe > GtkLabel {
+   border-radius:5px;
+   border-style:dashed;
+   border-color:gray;
+   border-width:1px;
+   padding:4px;
+}
+
+/* Settings for red frames */
+GtkFrame#redframe {
+   border-radius:5px;
+   border-style:solid;
+   border-width:2px;
+   border-color:red;
+}
+
+GtkFrame#redframe > GtkLabel {
+   border-radius:5px;
+   border-style:dashed;
+   border-color:red;
+   border-width:1px;
+   padding:4px;
+}
+
 /* Settings for numeric entry fields (like amount of buying/selling items in bases, etc) */
 GtkSpinButton {
    border-radius:20px;
