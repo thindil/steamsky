@@ -811,6 +811,13 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         <property name="font">Normal</property>
       </object>
     </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="gray1">
+        <property name="name">gray</property>
+        <property name="foreground">dimgray</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
   </object>
   <object class="GtkTextBuffer" id="txtmessages">
     <property name="tag_table">messagestags</property>
