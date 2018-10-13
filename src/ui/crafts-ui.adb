@@ -27,6 +27,7 @@ with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
+with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
 with Game; use Game;
@@ -41,8 +42,6 @@ package body Crafts.UI is
    RecipeIndex: Integer;
 
    procedure ShowSetRecipe(Object: access Gtkada_Builder_Record'Class) is
-      ModulesIter: Gtk_Tree_Iter;
-      ModulesList: Gtk_List_Store;
       MaxAmount: Positive;
       AmountAdj: constant Gtk_Adjustment :=
         Gtk_Adjustment(Get_Object(Builder, "amountadj"));
@@ -59,12 +58,12 @@ package body Crafts.UI is
       else
          MType := ALCHEMY_LAB;
       end if;
-      ModulesList := Gtk_List_Store(Get_Object(Object, "moduleslist"));
-      Clear(ModulesList);
+      Remove_All(Gtk_Combo_Box_Text(Get_Object(Object, "cmbmodules")));
       for Module of PlayerShip.Modules loop
          if Modules_List(Module.ProtoIndex).MType = MType then
-            Append(ModulesList, ModulesIter);
-            Set(ModulesList, ModulesIter, 0, To_String(Module.Name));
+            Append_Text
+              (Gtk_Combo_Box_Text(Get_Object(Object, "cmbmodules")),
+               To_String(Module.Name));
          end if;
       end loop;
       if RecipeIndex < 1 then
