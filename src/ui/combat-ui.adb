@@ -254,9 +254,9 @@ package body Combat.UI is
          end if;
       end loop;
       if not IsDamaged then
-         Hide(Gtk_Widget(Get_Object(Builder, "scrolldamage")));
+         Hide(Gtk_Widget(Get_Object(Builder, "damageframe")));
       else
-         Show_All(Gtk_Widget(Get_Object(Builder, "scrolldamage")));
+         Show_All(Gtk_Widget(Get_Object(Builder, "damageframe")));
       end if;
       Append(EnemyInfo, "Name: ");
       Append(EnemyInfo, EnemyName);
