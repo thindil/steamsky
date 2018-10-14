@@ -16,4 +16,5 @@ else
 fi
 
 cd bin
+export RUNFROMSCRIPT=1
 ./steamsky "$@"
