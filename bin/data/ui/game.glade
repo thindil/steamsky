@@ -102,71 +102,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkListStore" id="animationslist">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Crossfade</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Slide right</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Slide left</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Slide up</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Slide down</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Slide left-right</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Slide up-down</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Move over up</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Move over down</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Move over left</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Move over right</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Move under up</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Move under down</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Move under left</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Move under right</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Move over up-down</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Move over down-up</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Move over left-right</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Move over right-left</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkListStore" id="assignammolist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -7046,24 +6981,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkComboBox" id="cmbanimations">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="tooltip_text" translatable="yes">Which animation should be used to move between screens. Works only when animations are enabled.</property>
-                                <property name="model">animationslist</property>
-                                <child>
-                                  <object class="GtkCellRendererText"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -7162,6 +7079,38 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="top_attach">5</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="cmbanimations">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Which animation should be used to move between screens. Works only when animations are enabled.</property>
+                                <items>
+                                  <item translatable="yes">Crossfade</item>
+                                  <item translatable="yes">Slide right</item>
+                                  <item translatable="yes">Slide left</item>
+                                  <item translatable="yes">Slide up</item>
+                                  <item translatable="yes">Slide down</item>
+                                  <item translatable="yes">Slide left-right</item>
+                                  <item translatable="yes">Slide up-down</item>
+                                  <item translatable="yes">Move over up</item>
+                                  <item translatable="yes">Move over down</item>
+                                  <item translatable="yes">Move over left</item>
+                                  <item translatable="yes">Move over right</item>
+                                  <item translatable="yes">Move under up</item>
+                                  <item translatable="yes">Move under down</item>
+                                  <item translatable="yes">Move under left</item>
+                                  <item translatable="yes">Move under right</item>
+                                  <item translatable="yes">Move over up-down</item>
+                                  <item translatable="yes">Move over down-up</item>
+                                  <item translatable="yes">Move over left-right</item>
+                                  <item translatable="yes">Move over right-left</item>
+                                </items>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
                               </packing>
                             </child>
                           </object>
