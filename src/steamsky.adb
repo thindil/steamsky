@@ -20,6 +20,7 @@ with Ada.Directories; use Ada.Directories;
 with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Environment_Variables;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtk.Main; use Gtk.Main;
 with Gtk.Settings; use Gtk.Settings;
@@ -55,6 +56,12 @@ procedure SteamSky is
    end UpdatePath;
 
 begin
+   if Dir_Separator = '/'
+     and then not Ada.Environment_Variables.Exists("RUNFROMSCRIPT") then
+      Put_Line
+        ("The game can be run only via 'steamsky.sh' script. Please don't run binary directly.");
+      return;
+   end if;
    Set_Directory(Dir_Name(Command_Name));
    -- Command line arguments
    for I in 1 .. Argument_Count loop
