@@ -5,8 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New crafting recipes: small book of alchemy, small book of cooking, small
-  book of gunsmithing, small book of metalsmithing, small book of medicine and
-  small book of farming
+  book of gunsmithing, small book of metalsmithing, small book of medicine,
+  small book of farming and small book of woodcutting
 - Welcoming message to each new game
 - Option to set order of displayed messages
 
