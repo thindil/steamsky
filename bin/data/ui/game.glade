@@ -102,30 +102,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkListStore" id="assignammolist">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name guint1 -->
-      <column type="guint"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="assigncrewlist">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name guint1 -->
-      <column type="guint"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="assignskilllist">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name guint1 -->
-      <column type="guint"/>
-    </columns>
-  </object>
   <object class="GtkListStore" id="baseslist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -8250,16 +8226,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="cmbassigncrew">
+                                  <object class="GtkComboBoxText" id="cmbassigncrew">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="model">assigncrewlist</property>
-                                    <child>
-                                      <object class="GtkCellRendererText"/>
-                                      <attributes>
-                                        <attribute name="text">0</attribute>
-                                      </attributes>
-                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -8296,16 +8265,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="cmbassignammo">
+                                  <object class="GtkComboBoxText" id="cmbassignammo">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="model">assignammolist</property>
-                                    <child>
-                                      <object class="GtkCellRendererText"/>
-                                      <attributes>
-                                        <attribute name="text">0</attribute>
-                                      </attributes>
-                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -8342,16 +8304,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="cmbassignskill">
+                                  <object class="GtkComboBoxText" id="cmbassignskill">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="model">assignskilllist</property>
-                                    <child>
-                                      <object class="GtkCellRendererText"/>
-                                      <attributes>
-                                        <attribute name="text">0</attribute>
-                                      </attributes>
-                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
