@@ -26,6 +26,7 @@ with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Cell_Renderer_Text; use Gtk.Cell_Renderer_Text;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
+with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
@@ -39,12 +40,11 @@ with Factions; use Factions;
 
 package body Ships.UI is
 
+   SkillsListSet: Boolean := False;
+
    procedure ShowAssignMember is
-      AssignIter: Gtk_Tree_Iter;
-      AssignList: Gtk_List_Store;
    begin
-      AssignList := Gtk_List_Store(Get_Object(Builder, "assigncrewlist"));
-      Clear(AssignList);
+      Remove_All(Gtk_Combo_Box_Text(Get_Object(Builder, "cmbassigncrew")));
       for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
          if PlayerShip.Modules(ModuleIndex).Owner /= I and
            PlayerShip.Crew(I).Skills.Length > 0 and
@@ -53,18 +53,15 @@ package body Ships.UI is
               .MType is
                when MEDICAL_ROOM =>
                   if PlayerShip.Crew(I).Health = 100 then
-                     Append(AssignList, AssignIter);
-                     Set
-                       (AssignList, AssignIter, 0,
-                        To_String(PlayerShip.Crew(I).Name));
-                     Set(AssignList, AssignIter, 1, Gint(I));
+                     Append
+                       (Gtk_Combo_Box_Text
+                          (Get_Object(Builder, "cmbassigncrew")),
+                        Positive'Image(I), To_String(PlayerShip.Crew(I).Name));
                   end if;
                when others =>
-                  Append(AssignList, AssignIter);
-                  Set
-                    (AssignList, AssignIter, 0,
-                     To_String(PlayerShip.Crew(I).Name));
-                  Set(AssignList, AssignIter, 1, Gint(I));
+                  Append
+                    (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbassigncrew")),
+                     Positive'Image(I), To_String(PlayerShip.Crew(I).Name));
             end case;
          end if;
       end loop;
@@ -72,23 +69,19 @@ package body Ships.UI is
    end ShowAssignMember;
 
    procedure ShowAssignAmmo is
-      AssignIter: Gtk_Tree_Iter;
-      AssignList: Gtk_List_Store;
       HaveAmmo: Boolean := False;
    begin
-      AssignList := Gtk_List_Store(Get_Object(Builder, "assignammolist"));
-      Clear(AssignList);
+      Remove_All(Gtk_Combo_Box_Text(Get_Object(Builder, "cmbassignammo")));
       for I in PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
          if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
            Items_Types
              (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                 .Value) and
            I /= PlayerShip.Modules(ModuleIndex).Data(1) then
-            Append(AssignList, AssignIter);
-            Set
-              (AssignList, AssignIter, 0,
+            Append
+              (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbassignammo")),
+               Positive'Image(I),
                To_String(Items_List(PlayerShip.Cargo(I).ProtoIndex).Name));
-            Set(AssignList, AssignIter, 1, Gint(I));
             HaveAmmo := True;
          end if;
       end loop;
@@ -103,17 +96,13 @@ package body Ships.UI is
       MaxValue: Positive;
       IsPassenger: Boolean := False;
       procedure ShowAssignSkill is
-         AssignIter: Gtk_Tree_Iter;
-         AssignList: Gtk_List_Store;
          SkillText: Unbounded_String;
          ProtoIndex: Positive;
       begin
-         AssignList := Gtk_List_Store(Get_Object(Builder, "assignskilllist"));
-         if N_Children(AssignList) > 0 then
+         if SkillsListSet then
             return;
          end if;
          for I in Skills_List.First_Index .. Skills_List.Last_Index loop
-            Append(AssignList, AssignIter);
             SkillText := Skills_List(I).Name;
             if Skills_List(I).Tool /= Null_Unbounded_String then
                Append(SkillText, " Tool: ");
@@ -124,10 +113,12 @@ package body Ships.UI is
                   Append(SkillText, Items_List(ProtoIndex).IType);
                end if;
             end if;
-            Set(AssignList, AssignIter, 0, To_String(SkillText));
-            Set(AssignList, AssignIter, 1, Gint(I));
+            Append
+              (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbassignskill")),
+               Positive'Image(I), To_String(SkillText));
          end loop;
          Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbassignskill")), 0);
+         SkillsListSet := True;
       end ShowAssignSkill;
    begin
       Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
