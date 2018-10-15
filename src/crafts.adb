@@ -528,7 +528,7 @@ package body Crafts is
                   if Recipe.ResultAmount > 0 then
                      AddMessage
                        (To_String(PlayerShip.Crew(CrafterIndex).Name) &
-                        " was manufactured" & Integer'Image(CraftedAmount) &
+                        " has manufactured" & Integer'Image(CraftedAmount) &
                         " " & To_String(Items_List(Recipe.ResultIndex).Name) &
                         ".",
                         CraftMessage, 2);
