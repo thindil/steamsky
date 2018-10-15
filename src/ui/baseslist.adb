@@ -408,7 +408,7 @@ package body BasesList is
                end if;
                Set(BaseList, BaseIter, 4, Gint(SkyBases(I).Population));
             else
-               Set(BaseList, BaseIter, 3, "unknown");
+               Set(BaseList, BaseIter, 3, "not visited");
                Set(BaseList, BaseIter, 4, -1);
             end if;
          end if;
