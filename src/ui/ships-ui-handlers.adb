@@ -207,6 +207,7 @@ package body Ships.UI.Handlers is
             end if;
          when GUN | HARPOON_GUN =>
             Append(ModuleInfo, "Ammunition: ");
+            HaveAmmo := False;
             if Module.Data(1) >= PlayerShip.Cargo.First_Index and
               Module.Data(1) <= PlayerShip.Cargo.Last_Index then
                if Items_List(PlayerShip.Cargo(Module.Data(1)).ProtoIndex)
@@ -482,34 +483,13 @@ package body Ships.UI.Handlers is
    end SetRepair;
 
    procedure Assign(User_Data: access GObject_Record'Class) is
-      ActiveIndex: Natural;
-      AssignList: Gtk_List_Store;
       AssignIndex: Positive;
    begin
       if User_Data = Get_Object(Builder, "btnassigncrew") then
-         ActiveIndex :=
-           Natural
-             (Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbassigncrew"))));
-         AssignList := Gtk_List_Store(Get_Object(Builder, "assigncrewlist"));
-      elsif User_Data = Get_Object(Builder, "btnassignammo") then
-         ActiveIndex :=
-           Natural
-             (Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbassignammo"))));
-         AssignList := Gtk_List_Store(Get_Object(Builder, "assignammolist"));
-      elsif User_Data = Get_Object(Builder, "btnassignskill") then
-         ActiveIndex :=
-           Natural
-             (Get_Active
-                (Gtk_Combo_Box(Get_Object(Builder, "cmbassignskill"))));
-         AssignList := Gtk_List_Store(Get_Object(Builder, "assignskilllist"));
-      end if;
-      AssignIndex :=
-        Positive
-          (Get_Int
-             (AssignList,
-              Get_Iter_From_String(AssignList, Natural'Image(ActiveIndex)),
-              1));
-      if User_Data = Get_Object(Builder, "btnassigncrew") then
+         AssignIndex :=
+           Positive'Value
+             (Get_Active_Id
+                (Gtk_Combo_Box(Get_Object(Builder, "cmbassigncrew"))));
          case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
             when CABIN =>
                for I in PlayerShip.Modules.Iterate loop
@@ -535,6 +515,10 @@ package body Ships.UI.Handlers is
                null;
          end case;
       elsif User_Data = Get_Object(Builder, "btnassignammo") then
+         AssignIndex :=
+           Positive'Value
+             (Get_Active_Id
+                (Gtk_Combo_Box(Get_Object(Builder, "cmbassignammo"))));
          PlayerShip.Modules(ModuleIndex).Data(1) := AssignIndex;
          AddMessage
            ("You assigned " &
@@ -543,6 +527,10 @@ package body Ships.UI.Handlers is
             " to " & To_String(PlayerShip.Modules(ModuleIndex).Name) & ".",
             OrderMessage);
       elsif User_Data = Get_Object(Builder, "btnassignskill") then
+         AssignIndex :=
+           Positive'Value
+             (Get_Active_Id
+                (Gtk_Combo_Box(Get_Object(Builder, "cmbassignskill"))));
          PlayerShip.Modules(ModuleIndex).Data(1) := AssignIndex;
          AddMessage
            ("You prepared " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
