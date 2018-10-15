@@ -22,6 +22,7 @@ with Ada.Calendar.Formatting;
 with Ada.Calendar.Time_Zones; use Ada.Calendar.Time_Zones;
 with Ada.Containers; use Ada.Containers;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Strings; use Ada.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.Traceback.Symbolic; use GNAT.Traceback.Symbolic;
 with GNAT.String_Split; use GNAT.String_Split;
@@ -472,10 +473,27 @@ package body MainMenu is
 
    procedure ShowErrorInfo(Message: Unbounded_String) is
       Label: constant Gtk_Label := Gtk_Label(Get_Object(Builder, "lblerror"));
+      ErrorFileDirectory: Unbounded_String :=
+        To_Unbounded_String(Current_Directory);
+      NewDataDirectory: Unbounded_String := DataDirectory;
+      DotIndex: Natural := 1;
+      LastDirSeparator: Natural :=
+        Index(ErrorFileDirectory, "" & Dir_Separator, Backward);
    begin
+      loop
+         DotIndex := Index(NewDataDirectory, ".." & Dir_Separator, 1);
+         exit when DotIndex = 0;
+         Delete
+           (ErrorFileDirectory, LastDirSeparator, Length(ErrorFileDirectory));
+         Delete(NewDataDirectory, DotIndex, 3);
+         LastDirSeparator :=
+           Index(ErrorFileDirectory, "" & Dir_Separator, Backward);
+      end loop;
+      Append(ErrorFileDirectory, Dir_Separator & To_String(NewDataDirectory));
+      Put_Line(To_String(ErrorFileDirectory));
       Set_Label
         (Label,
-         Get_Label(Label) & " from '" & To_String(DataDirectory) &
+         Get_Label(Label) & " from '" & To_String(ErrorFileDirectory) &
          "' directory.");
       Set_Text
         (Gtk_Text_Buffer(Get_Object(Builder, "errorbuffer")),
