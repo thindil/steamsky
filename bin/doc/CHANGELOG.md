@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
   small book of blacksmithing
 - Welcoming message to each new game
 - Option to set order of displayed messages
+- Option to zoom in and zoom out map with mouse wheel
 
 ### Changed
 - Updated help
