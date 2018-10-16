@@ -83,5 +83,8 @@ package Maps.UI.Handlers is
    function MapKeyPressed(Self: access Gtk_Widget_Record'Class;
       Event: Gdk.Event.Gdk_Event_Key)
      return Boolean; -- Move mouse cursor on map by keyboard
+   function ZoomMap(Self: access Gtk_Widget_Record'Class;
+      Event: Gdk.Event.Gdk_Event_Scroll)
+     return Boolean; -- Resize sky map font with mouse wheel
 
 end Maps.UI.Handlers;
