@@ -21,10 +21,10 @@ with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
-with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
 with Gtk.Text_Iter; use Gtk.Text_Iter;
+with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Glib; use Glib;
 with Utils.UI; use Utils.UI;
 with Messages; use Messages;
@@ -184,8 +184,6 @@ package body Stories.UI is
    end CreateStoriesUI;
 
    procedure ShowStoriesUI is
-      StoriesIter: Gtk_Tree_Iter;
-      StoriesList: Gtk_List_Store;
    begin
       if FinishedStories.Length = 0 then
          Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));
@@ -196,12 +194,10 @@ package body Stories.UI is
          return;
       end if;
       Setting := True;
-      StoriesList := Gtk_List_Store(Get_Object(Builder, "storieslist"));
-      Clear(StoriesList);
+      Remove_All(Gtk_Combo_Box_Text(Get_Object(Builder, "cmbstories")));
       for FinishedStory of FinishedStories loop
-         Append(StoriesList, StoriesIter);
-         Set
-           (StoriesList, StoriesIter, 0,
+         Append_Text
+           (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbstories")),
             To_String(Stories_List(FinishedStory.Index).Name));
       end loop;
       Setting := False;
