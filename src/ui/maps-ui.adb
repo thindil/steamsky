@@ -1291,6 +1291,8 @@ package body Maps.UI is
       Set_Default_Size
         (Gtk_Window(Get_Object(Builder, "skymapwindow")),
          Gint(GameSettings.WindowWidth), Gint(GameSettings.WindowHeight));
+      On_Scroll_Event
+        (Gtk_Widget(Get_Object(Builder, "mapview")), ZoomMap'Access);
       ShowSkyMap;
    end CreateSkyMap;
 
