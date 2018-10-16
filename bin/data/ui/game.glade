@@ -8668,16 +8668,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBox" id="cmbmember">
+                          <object class="GtkComboBoxText" id="cmbmember">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="model">crewlist</property>
-                            <child>
-                              <object class="GtkCellRendererText"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
