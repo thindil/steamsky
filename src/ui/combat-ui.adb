@@ -47,6 +47,7 @@ with Crew; use Crew;
 with Ships.Crew; use Ships.Crew;
 with Messages; use Messages;
 with Config; use Config;
+with Items; use Items;
 
 package body Combat.UI is
 
@@ -217,27 +218,67 @@ package body Combat.UI is
          Set(List, Iter, 1, To_String(EngineerOrders(EngineerOrder)));
          Set(List, Iter, 2, To_String(PlayerShip.Crew(MemberIndex).Name));
       end if;
-      for I in Guns.First_Index .. Guns.Last_Index loop
-         Append(List, Iter);
-         Set
-           (List, Iter, 0,
-            To_String(PlayerShip.Modules(Guns(I)(1)).Name) & ": ");
-         if PlayerShip.Modules(Guns(I)(1)).Owner /= 0 then
-            if PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner).Order =
-              Gunner then
-               Set(List, Iter, 1, To_String(GunnerOrders(Guns(I)(2))));
-               Set
-                 (List, Iter, 2,
-                  To_String
-                    (PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner)
-                       .Name));
+      declare
+         AmmoAmount, AmmoIndex: Natural := 0;
+         HaveAmmo: Boolean;
+      begin
+         for I in Guns.First_Index .. Guns.Last_Index loop
+            Append(List, Iter);
+            HaveAmmo := False;
+            if PlayerShip.Modules(Guns(I)(1)).Data(1) >=
+              PlayerShip.Cargo.First_Index and
+              PlayerShip.Modules(Guns(I)(1)).Data(1) <=
+                PlayerShip.Cargo.Last_Index then
+               if Items_List
+                   (PlayerShip.Cargo(PlayerShip.Modules(Guns(I)(1)).Data(1))
+                      .ProtoIndex)
+                   .IType =
+                 Items_Types
+                   (Modules_List(PlayerShip.Modules(Guns(I)(1)).ProtoIndex)
+                      .Value) then
+                  AmmoAmount :=
+                    PlayerShip.Cargo(PlayerShip.Modules(Guns(I)(1)).Data(1))
+                      .Amount;
+                  HaveAmmo := True;
+               end if;
+            end if;
+            if not HaveAmmo then
+               for J in Items_List.Iterate loop
+                  if Items_List(J).IType =
+                    Items_Types
+                      (Modules_List(PlayerShip.Modules(Guns(I)(1)).ProtoIndex)
+                         .Value) then
+                     AmmoIndex :=
+                       FindItem
+                         (PlayerShip.Cargo, Objects_Container.To_Index(J));
+                     if AmmoIndex > 0 then
+                        AmmoAmount :=
+                          AmmoAmount + PlayerShip.Cargo(AmmoIndex).Amount;
+                     end if;
+                  end if;
+               end loop;
+            end if;
+            Set
+              (List, Iter, 0,
+               To_String(PlayerShip.Modules(Guns(I)(1)).Name) & LF & "(Ammo:" &
+               Natural'Image(AmmoAmount) & ")");
+            if PlayerShip.Modules(Guns(I)(1)).Owner /= 0 then
+               if PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner).Order =
+                 Gunner then
+                  Set(List, Iter, 1, To_String(GunnerOrders(Guns(I)(2))));
+                  Set
+                    (List, Iter, 2,
+                     To_String
+                       (PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner)
+                          .Name));
+               else
+                  Set(List, Iter, 2, "Nobody");
+               end if;
             else
                Set(List, Iter, 2, "Nobody");
             end if;
-         else
-            Set(List, Iter, 2, "Nobody");
-         end if;
-      end loop;
+         end loop;
+      end;
       List := Gtk_List_Store(Get_Object(Builder, "damagelist"));
       Clear(List);
       for Module of PlayerShip.Modules loop
