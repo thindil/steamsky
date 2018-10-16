@@ -25,6 +25,7 @@ with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
+with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
@@ -236,14 +237,12 @@ package body Ships.Cargo.UI is
    end CreateCargoUI;
 
    procedure ShowCargoUI(OldState: GameStates) is
-      CrewIter: Gtk_Tree_Iter;
-      CrewList: Gtk_List_Store;
    begin
-      CrewList := Gtk_List_Store(Get_Object(Builder, "crewlist"));
-      Clear(CrewList);
+      Remove_All(Gtk_Combo_Box_Text(Get_Object(Builder, "cmbmember")));
       for Member of PlayerShip.Crew loop
-         Append(CrewList, CrewIter);
-         Set(CrewList, CrewIter, 0, To_String(Member.Name));
+         Append_Text
+           (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbmember")),
+            To_String(Member.Name));
       end loop;
       RefreshCargoInfo;
       PreviousGameState := OldState;
