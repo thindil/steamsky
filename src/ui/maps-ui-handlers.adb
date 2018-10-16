@@ -75,6 +75,7 @@ with GameOptions; use GameOptions;
 with Stories; use Stories;
 with Stories.UI; use Stories.UI;
 with Factions; use Factions;
+with Themes; use Themes;
 
 package body Maps.UI.Handlers is
 
@@ -1342,5 +1343,24 @@ package body Maps.UI.Handlers is
       end if;
       return False;
    end MapKeyPressed;
+
+   function ZoomMap(Self: access Gtk_Widget_Record'Class;
+      Event: Gdk.Event.Gdk_Event_Scroll) return Boolean is
+      pragma Unreferenced(Self);
+   begin
+      if Event.Direction = Scroll_Down then
+         GameSettings.MapFontSize := GameSettings.MapFontSize - 1;
+         if GameSettings.MapFontSize < 3 then
+            GameSettings.MapFontSize := 3;
+         end if;
+      elsif Event.Direction = Scroll_Up then
+         GameSettings.MapFontSize := GameSettings.MapFontSize + 1;
+         if GameSettings.MapFontSize > 30 then
+            GameSettings.MapFontSize := 30;
+         end if;
+      end if;
+      SetFontSize("map");
+      return False;
+   end ZoomMap;
 
 end Maps.UI.Handlers;
