@@ -1135,6 +1135,8 @@ package body Maps.UI is
       Add_Entry("<skymapwindow>/cursordownright", GDK_KP_Page_Down, 1);
       Add_Entry("<skymapwindow>/mouseclick", GDK_space, 1);
       Add_Entry("<skymapwindow>/Menu/Stories", GDK_T, 0);
+      Add_Entry("<skymapwindow>/zoomin", GDK_KP_Subtract, 0);
+      Add_Entry("<skymapwindow>/zoomout", GDK_KP_Add, 0);
       if Exists(To_String(SaveDirectory) & "keys.cfg") then
          Load(To_String(SaveDirectory) & "keys.cfg");
       end if;
