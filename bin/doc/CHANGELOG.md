@@ -22,7 +22,8 @@ All notable changes to this project will be documented in this file.
 - Showing information about reputation in base in bases list
 - Reading default player gender from new game configuration
 - Autoresize GUI elements on mouse hover (issue #31)
-- Fixed typo in finished crafting message
+- Typo in finished crafting message
+- Return to old speed after finished combat
 
 ## [2.9] - 2018-10-07
 
