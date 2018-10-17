@@ -1343,6 +1343,7 @@ package body Combat is
             end loop;
          end;
          Enemy.Ship.Speed := FULL_STOP;
+         PlayerShip.Speed := OldSpeed;
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
             if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
                 .EType =
