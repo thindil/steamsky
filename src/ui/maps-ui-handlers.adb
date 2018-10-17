@@ -1266,6 +1266,30 @@ package body Maps.UI.Handlers is
       if Key.Accel_Key = Event.Keyval and Key.Accel_Mods = KeyMods then
          return SetDestination(Builder);
       end if;
+      Lookup_Entry("<skymapwindow>/zoomin", Key, Found);
+      if not Found then
+         return True;
+      end if;
+      if Key.Accel_Key = Event.Keyval and Key.Accel_Mods = KeyMods then
+         GameSettings.MapFontSize := GameSettings.MapFontSize - 1;
+         if GameSettings.MapFontSize < 3 then
+            GameSettings.MapFontSize := 3;
+         end if;
+         SetFontSize("map");
+         return False;
+      end if;
+      Lookup_Entry("<skymapwindow>/zoomout", Key, Found);
+      if not Found then
+         return True;
+      end if;
+      if Key.Accel_Key = Event.Keyval and Key.Accel_Mods = KeyMods then
+         GameSettings.MapFontSize := GameSettings.MapFontSize + 1;
+         if GameSettings.MapFontSize > 30 then
+            GameSettings.MapFontSize := 30;
+         end if;
+         SetFontSize("map");
+         return False;
+      end if;
       return True;
    end MapKeyReleased;
 
