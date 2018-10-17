@@ -54,6 +54,15 @@ package body BasesList is
       BasesModel: Gtk_Tree_Model;
       BaseInfo: Unbounded_String;
       TimeDiff: Integer;
+      procedure SetReputationText(ReputationText: String) is
+      begin
+         Set_ToolTip_Text
+           (Gtk_Widget(Get_Object(Object, "negativereputationbar")),
+            ReputationText);
+         Set_ToolTip_Text
+           (Gtk_Widget(Get_Object(Object, "positivereputationbar")),
+            ReputationText);
+      end SetReputationText;
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -152,68 +161,23 @@ package body BasesList is
          end if;
          case SkyBases(BaseIndex).Reputation(1) is
             when -100 .. -75 =>
-               Set_ToolTip_Text
-                 (Gtk_Widget(Get_Object(Object, "negativereputationbar")),
-                  "Hated");
-               Set_ToolTip_Text
-                 (Gtk_Widget(Get_Object(Object, "positivereputationbar")),
-                  "Hated");
+               SetReputationText("Hated");
             when -74 .. -50 =>
-               Set_ToolTip_Text
-                 (Gtk_Widget(Get_Object(Object, "negativereputationbar")),
-                  "Outlaw");
-               Set_ToolTip_Text
-                 (Gtk_Widget(Get_Object(Object, "positivereputationbar")),
-                  "Outlaw");
+               SetReputationText("Outlaw");
             when -49 .. -25 =>
-               Set_ToolTip_Text
-                 (Gtk_Widget(Get_Object(Object, "negativereputationbar")),
-                  "Hostile");
-               Set_ToolTip_Text
-                 (Gtk_Widget(Get_Object(Object, "positivereputationbar")),
-                  "Hostile");
+               SetReputationText("Hostile");
             when -24 .. -1 =>
-               Set_ToolTip_Text
-                 (Gtk_Widget(Get_Object(Object, "negativereputationbar")),
-                  "Unfriendly");
-               Set_ToolTip_Text
-                 (Gtk_Widget(Get_Object(Object, "positivereputationbar")),
-                  "Unfriendly");
+               SetReputationText("Unfriendly");
             when 0 =>
-               Set_ToolTip_Text
-                 (Gtk_Widget(Get_Object(Object, "negativereputationbar")),
-                  "Unknown");
-               Set_ToolTip_Text
-                 (Gtk_Widget(Get_Object(Object, "positivereputationbar")),
-                  "Unknown");
+               SetReputationText("Unknown");
             when 1 .. 25 =>
-               Set_ToolTip_Text
-                 (Gtk_Widget(Get_Object(Object, "negativereputationbar")),
-                  "Visitor");
-               Set_ToolTip_Text
-                 (Gtk_Widget(Get_Object(Object, "positivereputationbar")),
-                  "Visitor");
+               SetReputationText("Visitor");
             when 26 .. 50 =>
-               Set_ToolTip_Text
-                 (Gtk_Widget(Get_Object(Object, "negativereputationbar")),
-                  "Trader");
-               Set_ToolTip_Text
-                 (Gtk_Widget(Get_Object(Object, "positivereputationbar")),
-                  "Trader");
+               SetReputationText("Trader");
             when 51 .. 75 =>
-               Set_ToolTip_Text
-                 (Gtk_Widget(Get_Object(Object, "negativereputationbar")),
-                  "Friend");
-               Set_ToolTip_Text
-                 (Gtk_Widget(Get_Object(Object, "positivereputationbar")),
-                  "Friend");
+               SetReputationText("Friend");
             when 76 .. 100 =>
-               Set_ToolTip_Text
-                 (Gtk_Widget(Get_Object(Object, "negativereputationbar")),
-                  "Well known");
-               Set_ToolTip_Text
-                 (Gtk_Widget(Get_Object(Object, "positivereputationbar")),
-                  "Well known");
+               SetReputationText("Well known");
             when others =>
                null;
          end case;
@@ -293,20 +257,19 @@ package body BasesList is
       case BasesStatus is
          when 0 => -- All bases
             if BasesType = Any then
-               if BasesOwner <= Factions_List.Last_Index and
-                 SkyBases(BaseIndex).Visited.Year > 0 then
-                  if SkyBases(BaseIndex).Owner = BasesOwner then
-                     ShowBase := True;
-                  end if;
+               if
+                 (BasesOwner <= Factions_List.Last_Index and
+                  SkyBases(BaseIndex).Visited.Year > 0)
+                 and then SkyBases(BaseIndex).Owner = BasesOwner then
+                  ShowBase := True;
                elsif BasesOwner > Factions_List.Last_Index then
                   ShowBase := True;
                end if;
             elsif SkyBases(BaseIndex).Visited.Year > 0 and
               SkyBases(BaseIndex).BaseType = BasesType then
-               if BasesOwner <= Factions_List.Last_Index then
-                  if SkyBases(BaseIndex).Owner = BasesOwner then
-                     ShowBase := True;
-                  end if;
+               if BasesOwner <= Factions_List.Last_Index
+                 and then SkyBases(BaseIndex).Owner = BasesOwner then
+                  ShowBase := True;
                else
                   ShowBase := True;
                end if;
@@ -317,10 +280,9 @@ package body BasesList is
                (BasesType /= Any and
                 SkyBases(BaseIndex).BaseType = BasesType)) and
               SkyBases(BaseIndex).Visited.Year > 0 then
-               if BasesOwner <= Factions_List.Last_Index then
-                  if SkyBases(BaseIndex).Owner = BasesOwner then
-                     ShowBase := True;
-                  end if;
+               if BasesOwner <= Factions_List.Last_Index
+                 and then SkyBases(BaseIndex).Owner = BasesOwner then
+                  ShowBase := True;
                else
                   ShowBase := True;
                end if;
@@ -348,6 +310,7 @@ package body BasesList is
    end VisibleBases;
 
    procedure CreateBasesListUI(NewBuilder: Gtkada_Builder) is
+      ComboBox: Gtk_Combo_Box_Text;
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Base_Info", ShowBaseInfo'Access);
@@ -355,16 +318,16 @@ package body BasesList is
         (Builder, "Set_Destination_Base", SetDestinationBase'Access);
       Register_Handler(Builder, "Show_Base", ShowBase'Access);
       Register_Handler(Builder, "Search_Bases", SearchBases'Access);
+      ComboBox := Gtk_Combo_Box_Text(Get_Object(Builder, "cmbtype"));
       for I in Bases_Types loop
          Append_Text
-           (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbtype")),
+           (ComboBox,
             Bases_Types'Image(I)(1) &
             To_Lower(Bases_Types'Image(I)(2 .. Bases_Types'Image(I)'Last)));
       end loop;
+      ComboBox := Gtk_Combo_Box_Text(Get_Object(Builder, "cmbowner"));
       for Faction of Factions_List loop
-         Append_Text
-           (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbowner")),
-            To_String(Faction.Name));
+         Append_Text(ComboBox, To_String(Faction.Name));
       end loop;
       Append_Text(Gtk_Combo_Box_Text(Get_Object(Builder, "cmbowner")), "Any");
       Set_Visible_Func
