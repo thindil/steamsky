@@ -149,7 +149,9 @@ package body Help.UI is
          To_Unbounded_String("<skymapwindow>/Menu/QuitGame"),
          To_Unbounded_String("<skymapwindow>/Menu/ResignFromGame"),
          To_Unbounded_String("<skymapwindow>/Menu"),
-         To_Unbounded_String("<skymapwindow>/Menu/WaitOrders"));
+         To_Unbounded_String("<skymapwindow>/Menu/WaitOrders"),
+         To_Unbounded_String("<skymapwindow>/zoomin"),
+         To_Unbounded_String("<skymapwindow>/zoomout"));
       HelpBuffer: constant Gtk_Text_Buffer :=
         Gtk_Text_Buffer(Get_Object(Builder, "helpbuffer"));
       Iter: Gtk_Text_Iter;
