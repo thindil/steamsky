@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Autoresize GUI elements on mouse hover (issue #31)
 - Typo in finished crafting message
 - Return to old speed after finished combat
+- Assigning guns to turrets during creating ships
 
 ## [2.9] - 2018-10-07
 
