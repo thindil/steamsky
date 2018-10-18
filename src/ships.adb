@@ -38,8 +38,7 @@ package body Ships is
       ShipModules: Modules_Container.Vector;
       ShipCrew: Crew_Container.Vector;
       NewName: Unbounded_String;
-      TurretIndex, GunIndex, HullIndex, Amount, UpgradesAmount,
-      WeightGain: Natural := 0;
+      HullIndex, Amount, UpgradesAmount, WeightGain: Natural := 0;
       Gender: Character;
       MemberName: Unbounded_String;
       TmpSkills: Skills_Container.Vector;
@@ -50,6 +49,7 @@ package body Ships is
       StartX, StartY, EndX, EndY: Integer;
       TmpAttributes: Attributes_Container.Vector;
       Member: ProtoMobRecord;
+      GunAssigned: Boolean;
    begin
       if RandomUpgrades then
          UpgradesAmount := GetRandom(0, Positive(ProtoShip.Modules.Length));
@@ -242,22 +242,34 @@ package body Ships is
          UpgradeModule => 0, DestinationX => 0, DestinationY => 0,
          RepairModule => 0, Description => ProtoShip.Description,
          HomeBase => 0);
+      for I in TmpShip.Modules.Iterate loop
+         if Modules_List(TmpShip.Modules(I).ProtoIndex).MType = TURRET then
+            for J in TmpShip.Modules.Iterate loop
+               if Modules_List(TmpShip.Modules(J).ProtoIndex).MType = GUN or
+                 Modules_List(TmpShip.Modules(J).ProtoIndex).MType =
+                   HARPOON_GUN then
+                  GunAssigned := False;
+                  for K in TmpShip.Modules.Iterate loop
+                     if Modules_List(TmpShip.Modules(K).ProtoIndex).MType =
+                       TURRET and
+                       TmpShip.Modules(K).Data(1) =
+                         Modules_Container.To_Index(J) then
+                        GunAssigned := True;
+                        exit;
+                     end if;
+                  end loop;
+                  if not GunAssigned then
+                     TmpShip.Modules(I).Data(1) :=
+                       Modules_Container.To_Index(J);
+                  end if;
+               end if;
+            end loop;
+         end if;
+      end loop;
       Amount := 0;
       for I in TmpShip.Modules.Iterate loop
-         case Modules_List(TmpShip.Modules(I).ProtoIndex).MType is
-            when TURRET =>
-               TurretIndex := Modules_Container.To_Index(I);
-            when GUN =>
-               GunIndex := Modules_Container.To_Index(I);
-            when HULL =>
-               HullIndex := Modules_Container.To_Index(I);
-            when others =>
-               null;
-         end case;
-         if TurretIndex > 0 and GunIndex > 0 then
-            TmpShip.Modules(TurretIndex).Data(1) := GunIndex;
-            TurretIndex := 0;
-            GunIndex := 0;
+         if Modules_List(TmpShip.Modules(I).ProtoIndex).MType = HULL then
+            HullIndex := Modules_Container.To_Index(I);
          end if;
          Amount := Amount + Modules_List(TmpShip.Modules(I).ProtoIndex).Size;
       end loop;
