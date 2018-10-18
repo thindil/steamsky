@@ -122,10 +122,9 @@ package body Bases.LootUI is
            (PlayerShip.Cargo(CargoIndex).Durability,
             Get_Object(Object, "lootdamagebar"));
       end if;
-      if BaseCargoIndex > 0 then
-         if SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount > 0 then
-            Append(ItemInfo, LF & "In base:" & Positive'Image(Amount));
-         end if;
+      if BaseCargoIndex > 0
+        and then SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount > 0 then
+         Append(ItemInfo, LF & "In base:" & Positive'Image(Amount));
       end if;
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
          Set_Label
