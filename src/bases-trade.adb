@@ -75,7 +75,10 @@ package body Bases.Trade is
           (To_Unbounded_String("nomorale")) then
          Morale := 50;
       else
-         Morale := SkyBases(BaseIndex).Reputation(1);
+         Morale := 50 + SkyBases(BaseIndex).Reputation(1);
+         if Morale > 100 then
+            Morale := 100;
+         end if;
       end if;
       PlayerShip.Crew.Append
         (New_Item =>
