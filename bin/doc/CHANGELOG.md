@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Redesigned combat UI (issue #30)
 - Updated README.md
+- Updated MODDING.md
 
 ### Fixed
 - Showing information about reputation in base in bases list
