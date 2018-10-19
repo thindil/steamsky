@@ -144,7 +144,8 @@ package body Maps.UI is
             "[<span foreground=""yellow"">Low Fuel</span>]");
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lblnofuel")),
-            "Low level of fuel on ship.");
+            "Low level of fuel on ship. Only" & Natural'Image(ItemAmount) &
+            " left.");
          Show_All(Gtk_Widget(Get_Object(Builder, "lblnofuel")));
       end if;
       for Member of PlayerShip.Crew loop
@@ -172,7 +173,8 @@ package body Maps.UI is
             "[<span foreground=""yellow"">Low Drinks</span>]");
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lblnodrink")),
-            "Low level of drinks on ship.");
+            "Low level of drinks on ship. Only" & Natural'Image(ItemAmount) &
+            " left.");
          Show_All(Gtk_Widget(Get_Object(Builder, "lblnodrink")));
       end if;
       for Member of PlayerShip.Crew loop
@@ -200,7 +202,8 @@ package body Maps.UI is
             "[<span foreground=""yellow"">Low Food</span>]");
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lblnofood")),
-            "Low level of food on ship.");
+            "Low level of food on ship. Only" & Natural'Image(ItemAmount) &
+            " left.");
          Show_All(Gtk_Widget(Get_Object(Builder, "lblnofood")));
       end if;
       for Module of PlayerShip.Modules loop
