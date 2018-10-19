@@ -90,12 +90,111 @@ package body Bases.ShipyardUI is
       SetActiveModule("treeinstall", "columnnames3");
    end ChangeType;
 
+   procedure GetModuleInfo(ModuleInfo: in out Unbounded_String;
+      ModuleIndex: Positive; Installing: Boolean) is
+      MType: ModuleType;
+      MAmount, Size, Weight, MaxValue, Value: Natural;
+   begin
+      if Installing then
+         MType := Modules_List(ModuleIndex).MType;
+         MaxValue := Modules_List(ModuleIndex).MaxValue;
+         Value := Modules_List(ModuleIndex).Value;
+         Size := Modules_List(ModuleIndex).Size;
+         Weight := Modules_List(ModuleIndex).Weight;
+      else
+         MType :=
+           Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType;
+         MaxValue := PlayerShip.Modules(ModuleIndex).Data(2);
+         Value :=
+           Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Value;
+         Size := Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Size;
+         Weight :=
+           Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Weight;
+      end if;
+      case MType is
+         when HULL =>
+            if Installing then
+               Append(ModuleInfo, LF & "Ship hull can be only replaced.");
+               Append
+                 (ModuleInfo,
+                  LF & "Modules space:" & Positive'Image(MaxValue));
+            end if;
+         when ENGINE =>
+            Append(ModuleInfo, LF & "Max power:" & Positive'Image(MaxValue));
+            if Installing then
+               Append(ModuleInfo, LF & "Fuel usage:" & Positive'Image(Value));
+            end if;
+         when ShipModules.CARGO =>
+            Append
+              (ModuleInfo,
+               LF & "Max cargo:" & Positive'Image(MaxValue) & " kg");
+         when CABIN =>
+            Append(ModuleInfo, LF & "Quality: ");
+            if MaxValue < 30 then
+               Append(ModuleInfo, "minimal");
+            elsif MaxValue < 60 then
+               Append(ModuleInfo, "basic");
+            elsif MaxValue < 80 then
+               Append(ModuleInfo, "extended");
+            else
+               Append(ModuleInfo, "luxury");
+            end if;
+         when GUN | HARPOON_GUN =>
+            Append(ModuleInfo, LF & "Ammunition: ");
+            MAmount := 0;
+            for Item of Items_List loop
+               if Item.IType = Items_Types(Value) then
+                  if MAmount > 0 then
+                     Append(ModuleInfo, " or ");
+                  end if;
+                  Append(ModuleInfo, Item.Name);
+                  MAmount := MAmount + 1;
+               end if;
+            end loop;
+         when others =>
+            null;
+      end case;
+      if Size > 0 then
+         Append(ModuleInfo, LF & "Size:" & Natural'Image(Size));
+      end if;
+      if Weight > 0 then
+         Append(ModuleInfo, LF & "Weight:" & Natural'Image(Weight) & " kg");
+      end if;
+      if Installing then
+         Append(ModuleInfo, LF & "Repair/Upgrade material: ");
+         MAmount := 0;
+         for Item of Items_List loop
+            if Item.IType = Modules_List(ModuleIndex).RepairMaterial then
+               if MAmount > 0 then
+                  Append(ModuleInfo, " or ");
+               end if;
+               Append(ModuleInfo, Item.Name);
+               MAmount := MAmount + 1;
+            end if;
+         end loop;
+         Append
+           (ModuleInfo,
+            LF & "Repair/Upgrade skill: " &
+            To_String
+              (Skills_List(Modules_List(ModuleIndex).RepairSkill).Name) &
+            "/" &
+            To_String
+              (Attributes_List
+                 (Skills_List(Modules_List(ModuleIndex).RepairSkill).Attribute)
+                 .Name));
+         if Modules_List(ModuleIndex).Description /= Null_Unbounded_String then
+            Append
+              (ModuleInfo, LF & LF & Modules_List(ModuleIndex).Description);
+         end if;
+      end if;
+   end GetModuleInfo;
+
    procedure ShowInstallInfo(Object: access Gtkada_Builder_Record'Class) is
       ModulesIter: Gtk_Tree_Iter;
       ModulesModel: Gtk_Tree_Model;
       ModuleInfo, InstallInfo: Unbounded_String;
       Cost: Positive;
-      MAmount, MoneyIndex2, UsedSpace, AllSpace: Natural;
+      MoneyIndex2, UsedSpace, AllSpace: Natural;
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -113,90 +212,7 @@ package body Bases.ShipyardUI is
         (ModuleInfo,
          LF & "Installation time:" &
          Positive'Image(Modules_List(ModuleIndex).InstallTime) & " minutes");
-      case Modules_List(ModuleIndex).MType is
-         when HULL =>
-            Append(ModuleInfo, LF & "Ship hull can be only replaced.");
-            Append
-              (ModuleInfo,
-               LF & "Modules space:" &
-               Positive'Image(Modules_List(ModuleIndex).MaxValue));
-         when ENGINE =>
-            Append
-              (ModuleInfo,
-               LF & "Max power:" &
-               Positive'Image(Modules_List(ModuleIndex).MaxValue));
-            Append
-              (ModuleInfo,
-               LF & "Fuel usage:" &
-               Positive'Image(Modules_List(ModuleIndex).Value));
-         when ShipModules.CARGO =>
-            Append
-              (ModuleInfo,
-               LF & "Max cargo:" &
-               Positive'Image(Modules_List(ModuleIndex).MaxValue) & " kg");
-         when CABIN =>
-            Append(ModuleInfo, LF & "Quality: ");
-            if Modules_List(ModuleIndex).MaxValue < 30 then
-               Append(ModuleInfo, "minimal");
-            elsif Modules_List(ModuleIndex).MaxValue > 29 and
-              Modules_List(ModuleIndex).MaxValue < 60 then
-               Append(ModuleInfo, "basic");
-            elsif Modules_List(ModuleIndex).MaxValue > 59 and
-              Modules_List(ModuleIndex).MaxValue < 80 then
-               Append(ModuleInfo, "extended");
-            else
-               Append(ModuleInfo, "luxury");
-            end if;
-         when GUN | HARPOON_GUN =>
-            Append(ModuleInfo, LF & "Ammunition: ");
-            MAmount := 0;
-            for Item of Items_List loop
-               if Item.IType =
-                 Items_Types(Modules_List(ModuleIndex).Value) then
-                  if MAmount > 0 then
-                     Append(ModuleInfo, " or ");
-                  end if;
-                  Append(ModuleInfo, Item.Name);
-                  MAmount := MAmount + 1;
-               end if;
-            end loop;
-         when others =>
-            null;
-      end case;
-      if Modules_List(ModuleIndex).Size > 0 then
-         Append
-           (ModuleInfo,
-            LF & "Size:" & Natural'Image(Modules_List(ModuleIndex).Size));
-      end if;
-      if Modules_List(ModuleIndex).Weight > 0 then
-         Append
-           (ModuleInfo,
-            LF & "Weight:" & Natural'Image(Modules_List(ModuleIndex).Weight) &
-            " kg");
-      end if;
-      Append(ModuleInfo, LF & "Repair/Upgrade material: ");
-      MAmount := 0;
-      for Item of Items_List loop
-         if Item.IType = Modules_List(ModuleIndex).RepairMaterial then
-            if MAmount > 0 then
-               Append(ModuleInfo, " or ");
-            end if;
-            Append(ModuleInfo, Item.Name);
-            MAmount := MAmount + 1;
-         end if;
-      end loop;
-      Append
-        (ModuleInfo,
-         LF & "Repair/Upgrade skill: " &
-         To_String(Skills_List(Modules_List(ModuleIndex).RepairSkill).Name) &
-         "/" &
-         To_String
-           (Attributes_List
-              (Skills_List(Modules_List(ModuleIndex).RepairSkill).Attribute)
-              .Name));
-      if Modules_List(ModuleIndex).Description /= Null_Unbounded_String then
-         Append(ModuleInfo, LF & LF & Modules_List(ModuleIndex).Description);
-      end if;
+      GetModuleInfo(ModuleInfo, ModuleIndex, True);
       Set_Label
         (Gtk_Label(Get_Object(Object, "lblinstallinfo")),
          To_String(ModuleInfo));
@@ -245,7 +261,7 @@ package body Bases.ShipyardUI is
       ModulesModel: Gtk_Tree_Model;
       ModuleInfo, RemoveInfo: Unbounded_String;
       Cost: Natural;
-      MAmount, MoneyIndex2, UsedSpace, AllSpace: Natural;
+      MoneyIndex2, UsedSpace, AllSpace: Natural;
       Damage: Gdouble;
       DamageBar: constant GObject := Get_Object(Object, "removedamagebar");
    begin
@@ -283,62 +299,7 @@ package body Bases.ShipyardUI is
            (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
               .InstallTime) &
          " minutes");
-      case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
-         when ENGINE =>
-            Append
-              (ModuleInfo,
-               LF & "Max power:" &
-               Positive'Image(PlayerShip.Modules(ModuleIndex).Data(2)));
-         when ShipModules.CARGO =>
-            Append
-              (ModuleInfo,
-               LF & "Max cargo:" &
-               Positive'Image(PlayerShip.Modules(ModuleIndex).Data(2)) &
-               " kg");
-         when CABIN =>
-            Append(ModuleInfo, LF & "Quality: ");
-            if PlayerShip.Modules(ModuleIndex).Data(2) < 30 then
-               Append(ModuleInfo, "minimal");
-            elsif PlayerShip.Modules(ModuleIndex).Data(2) > 29 and
-              PlayerShip.Modules(ModuleIndex).Data(2) < 60 then
-               Append(ModuleInfo, "basic");
-            elsif PlayerShip.Modules(ModuleIndex).Data(2) > 59 and
-              PlayerShip.Modules(ModuleIndex).Data(2) < 80 then
-               Append(ModuleInfo, "extended");
-            else
-               Append(ModuleInfo, "luxury");
-            end if;
-         when GUN | HARPOON_GUN =>
-            Append(ModuleInfo, LF & "Ammunition: ");
-            MAmount := 0;
-            for I in Items_List.First_Index .. Items_List.Last_Index loop
-               if Items_List(I).IType =
-                 Items_Types
-                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                      .Value) then
-                  if MAmount > 0 then
-                     Append(ModuleInfo, " or ");
-                  end if;
-                  Append(ModuleInfo, Items_List(I).Name);
-                  MAmount := MAmount + 1;
-               end if;
-            end loop;
-         when others =>
-            null;
-      end case;
-      if Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Size > 0 then
-         Append
-           (ModuleInfo,
-            LF & "Size:" &
-            Natural'Image
-              (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Size));
-      end if;
-      if PlayerShip.Modules(ModuleIndex).Weight > 0 then
-         Append
-           (ModuleInfo,
-            LF & "Weight:" &
-            Natural'Image(PlayerShip.Modules(ModuleIndex).Weight) & " kg");
-      end if;
+      GetModuleInfo(ModuleInfo, ModuleIndex, False);
       Set_Label
         (Gtk_Label(Get_Object(Object, "lblremoveinfo")),
          To_String(ModuleInfo));
