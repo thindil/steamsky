@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - Typo in finished crafting message
 - Return to old speed after finished combat
 - Assigning guns to turrets during creating ships
+- Starting morale and loyality for recruits
 
 ## [2.9] - 2018-10-07
 
