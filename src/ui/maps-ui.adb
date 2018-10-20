@@ -63,6 +63,7 @@ with Bases.UI; use Bases.UI;
 with Bases.LootUI; use Bases.LootUI;
 with Bases.SchoolUI; use Bases.SchoolUI;
 with Bases.ShipyardUI; use Bases.ShipyardUI;
+with Bases.RecruitUI; use Bases.RecruitUI;
 with Statistics; use Statistics;
 with Statistics.UI; use Statistics.UI;
 with MainMenu; use MainMenu;
@@ -1059,6 +1060,7 @@ package body Maps.UI is
       CreateBasesLootUI(Builder);
       CreateBasesSchoolUI(Builder);
       CreateBasesShipyardUI(Builder);
+      CreateRecruitUI(Builder);
       CreateCombatUI(Builder);
       CreateCraftsUI(Builder);
       CreateGameOptions(Builder);
