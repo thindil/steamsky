@@ -53,6 +53,8 @@ package Config is
       InterfaceFontSize: Positive; -- Size of font used in interface
       InterfaceTheme: Unbounded_String; -- Name of current user interface theme
       MessagesOrder: MessagesOrderType; -- Order of showing messages
+      AutoAskForBases: Boolean; -- If true, auto ask for new bases when ship docked
+      AutoAskForEvents: Boolean; -- If true, auto ask for new events in bases when ship docked
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;

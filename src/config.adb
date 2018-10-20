@@ -37,7 +37,8 @@ package body Config is
          AnimationType => 1, MessagesLimit => 500, SavedMessages => 10,
          HelpFontSize => 12, MapFontSize => 10, InterfaceFontSize => 16,
          InterfaceTheme => To_Unbounded_String("default"),
-         MessagesOrder => OLDER_FIRST);
+         MessagesOrder => OLDER_FIRST, AutoAskForBases => False,
+         AutoAskForEvents => False);
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
@@ -117,6 +118,18 @@ package body Config is
             elsif FieldName = To_Unbounded_String("MessagesOrder") then
                GameSettings.MessagesOrder :=
                  MessagesOrderType'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("AutoAskForBases") then
+               if Value = To_Unbounded_String("Yes") then
+                  GameSettings.AutoAskForBases := True;
+               else
+                  GameSettings.AutoAskForBases := False;
+               end if;
+            elsif FieldName = To_Unbounded_String("AutoAskForEvents") then
+               if Value = To_Unbounded_String("Yes") then
+                  GameSettings.AutoAskForEvents := True;
+               else
+                  GameSettings.AutoAskForEvents := False;
+               end if;
             end if;
          end if;
       end loop;
@@ -199,6 +212,16 @@ package body Config is
         (ConfigFile,
          "MessagesOrder = " &
          MessagesOrderType'Image(GameSettings.MessagesOrder));
+      if GameSettings.AutoAskForBases then
+         Put_Line(ConfigFile, "AutoAskForBases = Yes");
+      else
+         Put_Line(ConfigFile, "AutoAskForBases = No");
+      end if;
+      if GameSettings.AutoAskForEvents then
+         Put_Line(ConfigFile, "AutoAskForEvents = Yes");
+      else
+         Put_Line(ConfigFile, "AutoAskForEvents = No");
+      end if;
       Close(ConfigFile);
    end SaveConfig;
 

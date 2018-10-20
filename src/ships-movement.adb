@@ -262,6 +262,12 @@ package body Ships.Movement is
                   end if;
                end loop;
             end;
+            if GameSettings.AutoAskForBases then
+               AskForBases;
+            end if;
+            if GameSettings.AutoAskForEvents then
+               AskForEvents;
+            end if;
          else
             AddMessage
               ("Ship docked to base " & To_String(SkyBases(BaseIndex).Name) &
