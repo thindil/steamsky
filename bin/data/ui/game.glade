@@ -5661,58 +5661,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes">Amount of fuel below which you will see warning about low level of.</property>
-                            <property name="label" translatable="yes">Low level of fuel:</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">5</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes">Amount of drinks below which you will see warning about low level of.</property>
-                            <property name="label" translatable="yes">Low level of drinks:</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">6</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes">Amount of food below which you will see warning about low level of.</property>
-                            <property name="label" translatable="yes">Low level of food:</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">7</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes">Set when auto move ship should stop: never, on meet any ship, on meet friendly ship or on meet enemy ship.</property>
-                            <property name="label" translatable="yes">Stop auto movement:</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">8</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkSwitch" id="switchautorest">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -5775,6 +5723,99 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">In what order show messages in game. If Older first will be select, then older messages will appear at top of the lists. Otherwise newer messages will be at top.</property>
+                            <property name="label" translatable="yes">Messages order:</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">13</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="cmbmessagesorder">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">In what order show messages in game. If Older first will be select, then older messages will appear at top of the lists. Otherwise newer messages will be at top.</property>
+                            <items>
+                              <item translatable="yes">Older messages first</item>
+                              <item translatable="yes">Newer messages first</item>
+                            </items>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">13</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Maximum amount of last messages saved to file. Enter value between 5 and 200.</property>
+                            <property name="label" translatable="yes">Saved messages limit:</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">12</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Maximum amount of last messages saved to file. Enter value between 5 and 200.</property>
+                            <property name="text" translatable="yes">10</property>
+                            <property name="adjustment">adjsavedmessages</property>
+                            <property name="value">10</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">12</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Amount of messages stored in game. If new message arrive when limit is reached, oldest message will be deleted. Enter value between 10 and 5000.</property>
+                            <property name="label" translatable="yes">Messages limit:</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">11</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Amount of messages stored in game. If new message arrive when limit is reached, oldest message will be deleted. Enter value between 10 and 5000.</property>
+                            <property name="adjustment">adjmessageslimit</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">11</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Set when auto move ship should stop: never, on meet any ship, on meet friendly ship or on meet enemy ship.</property>
+                            <property name="label" translatable="yes">Stop auto movement:</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">10</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkComboBox" id="cmbautomovestop">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -5789,39 +5830,20 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="top_attach">8</property>
+                            <property name="top_attach">10</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="GtkLabel">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip_text" translatable="yes">Amount of fuel below which you will see warning about low level of.</property>
-                            <property name="text" translatable="yes">1</property>
-                            <property name="adjustment">adjfuel</property>
-                            <property name="numeric">True</property>
-                            <property name="update_policy">if-valid</property>
-                            <property name="value">1</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Amount of food below which you will see warning about low level of.</property>
+                            <property name="label" translatable="yes">Low level of food:</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">5</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkSpinButton">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip_text" translatable="yes">Amount of drinks below which you will see warning about low level of.</property>
-                            <property name="text" translatable="yes">1</property>
-                            <property name="adjustment">adjdrinks</property>
-                            <property name="numeric">True</property>
-                            <property name="update_policy">if-valid</property>
-                            <property name="value">1</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">6</property>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">9</property>
                           </packing>
                         </child>
                         <child>
@@ -5837,6 +5859,64 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
+                            <property name="top_attach">9</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Amount of drinks below which you will see warning about low level of.</property>
+                            <property name="label" translatable="yes">Low level of drinks:</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">8</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Amount of drinks below which you will see warning about low level of.</property>
+                            <property name="text" translatable="yes">1</property>
+                            <property name="adjustment">adjdrinks</property>
+                            <property name="numeric">True</property>
+                            <property name="update_policy">if-valid</property>
+                            <property name="value">1</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">8</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Amount of fuel below which you will see warning about low level of.</property>
+                            <property name="label" translatable="yes">Low level of fuel:</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">7</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Amount of fuel below which you will see warning about low level of.</property>
+                            <property name="text" translatable="yes">1</property>
+                            <property name="adjustment">adjfuel</property>
+                            <property name="numeric">True</property>
+                            <property name="update_policy">if-valid</property>
+                            <property name="value">1</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
                             <property name="top_attach">7</property>
                           </packing>
                         </child>
@@ -5844,80 +5924,48 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes">Amount of messages stored in game. If new message arrive when limit is reached, oldest message will be deleted. Enter value between 10 and 5000.</property>
-                            <property name="label" translatable="yes">Messages limit:</property>
+                            <property name="tooltip_text" translatable="yes">Auto ask for bases when ship end docking to bases.</property>
+                            <property name="label" translatable="yes">Auto ask for bases:</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
-                            <property name="top_attach">9</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkSpinButton">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip_text" translatable="yes">Amount of messages stored in game. If new message arrive when limit is reached, oldest message will be deleted. Enter value between 10 and 5000.</property>
-                            <property name="adjustment">adjmessageslimit</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">9</property>
+                            <property name="top_attach">5</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes">Maximum amount of last messages saved to file. Enter value between 5 and 200.</property>
-                            <property name="label" translatable="yes">Saved messages limit:</property>
+                            <property name="tooltip_text" translatable="yes">Auto ask for events when ship end docking to bases.</property>
+                            <property name="label" translatable="yes">Auto ask for events:</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
-                            <property name="top_attach">10</property>
+                            <property name="top_attach">6</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton">
+                          <object class="GtkSwitch" id="switchautoaskforbases">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="tooltip_text" translatable="yes">Maximum amount of last messages saved to file. Enter value between 5 and 200.</property>
-                            <property name="text" translatable="yes">10</property>
-                            <property name="adjustment">adjsavedmessages</property>
-                            <property name="value">10</property>
+                            <property name="tooltip_text" translatable="yes">Auto ask for bases when ship end docking to bases.</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="top_attach">10</property>
+                            <property name="top_attach">5</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel">
+                          <object class="GtkSwitch" id="switchautoaskforevents">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes">In what order show messages in game. If Older first will be select, then older messages will appear at top of the lists. Otherwise newer messages will be at top.</property>
-                            <property name="label" translatable="yes">Messages order:</property>
-                            <property name="xalign">0</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">11</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="cmbmessagesorder">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes">In what order show messages in game. If Older first will be select, then older messages will appear at top of the lists. Otherwise newer messages will be at top.</property>
-                            <items>
-                              <item translatable="yes">Older messages first</item>
-                              <item translatable="yes">Newer messages first</item>
-                            </items>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Auto ask for events when ship end docking to bases.</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="top_attach">11</property>
+                            <property name="top_attach">6</property>
                           </packing>
                         </child>
                       </object>
