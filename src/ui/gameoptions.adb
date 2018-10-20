@@ -184,6 +184,10 @@ package body GameOptions is
       GameSettings.MessagesOrder :=
         MessagesOrderType'Val
           (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbmessagesorder"))));
+      GameSettings.AutoAskForBases :=
+        Get_State(Gtk_Switch(Get_Object(Object, "switchautoaskforbases")));
+      GameSettings.AutoAskForEvents :=
+        Get_State(Gtk_Switch(Get_Object(Object, "switchautoaskforevents")));
       SaveConfig;
       Save(To_String(SaveDirectory) & "keys.cfg");
       ShowSkyMap;
@@ -373,6 +377,12 @@ package body GameOptions is
       Set_Active
         (Gtk_Combo_Box(Get_Object(Builder, "cmbmessagesorder")),
          (MessagesOrderType'Pos(GameSettings.MessagesOrder)));
+      Set_State
+        (Gtk_Switch(Get_Object(Builder, "switchautoaskforbases")),
+         GameSettings.AutoAskForBases);
+      Set_State
+        (Gtk_Switch(Get_Object(Builder, "switchautoaskforevents")),
+         GameSettings.AutoAskForEvents);
       SetFontsSizes;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "options");
