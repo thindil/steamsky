@@ -490,7 +490,6 @@ package body MainMenu is
            Index(ErrorFileDirectory, "" & Dir_Separator, Backward);
       end loop;
       Append(ErrorFileDirectory, Dir_Separator & To_String(NewDataDirectory));
-      Put_Line(To_String(ErrorFileDirectory));
       Set_Label
         (Label,
          Get_Label(Label) & " from '" & To_String(ErrorFileDirectory) &
