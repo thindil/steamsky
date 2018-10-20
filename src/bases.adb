@@ -324,11 +324,14 @@ package body Bases is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Radius, TempX, TempY: Integer;
-      Amount, TmpBaseIndex: Natural;
-      TraderIndex, ShipIndex: Positive;
+      Amount, TmpBaseIndex, TraderIndex: Natural;
+      ShipIndex: Positive;
       UnknownBases: Natural := 0;
    begin
       TraderIndex := FindMember(Talk);
+      if SkyBases(BaseIndex).AskedForBases or TraderIndex = 0 then
+         return;
+      end if;
       if BaseIndex > 0 then -- asking in base
          if SkyBases(BaseIndex).Population < 150 then
             Amount := 10;
@@ -450,17 +453,20 @@ package body Bases is
    procedure AskForEvents is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      MaxEvents, EventsAmount, TmpBaseIndex, ItemIndex, ShipIndex,
-      TraderIndex: Positive;
+      MaxEvents, EventsAmount, TmpBaseIndex, ItemIndex, ShipIndex, EventX,
+      EventY, EventTime, DiffX, DiffY: Positive;
       Event: Events_Types;
-      EventX, EventY, EventTime, DiffX, DiffY: Positive;
       MinX, MinY, MaxX, MaxY: Integer;
       Enemies: Positive_Container.Vector;
       PlayerValue: Natural := 0;
-      Attempts: Natural;
+      Attempts, TraderIndex: Natural;
       PlayerShips: UnboundedString_Container.Vector;
    begin
       TraderIndex := FindMember(Talk);
+      if DaysDifference(SkyBases(BaseIndex).AskedForEvents) < 7 or
+        TraderIndex = 0 then
+         return;
+      end if;
       if BaseIndex > 0 then -- asking in base
          if SkyBases(BaseIndex).Population < 150 then
             MaxEvents := 5;
