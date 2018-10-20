@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
   book of gunsmithing, small book of metalsmithing, small book of medicine,
   small book of farming, small book of woodcutting, small book of brewing,
   small book of blacksmithing, small book of woodworking, small book of
-  leatherworking and wooden training dummy
+  leatherworking, wooden training dummy and small wooden traps
 - Welcoming message to each new game
 - Option to set order of displayed messages
 - Option to zoom in and zoom out map with mouse wheel and keyboard shortcuts
