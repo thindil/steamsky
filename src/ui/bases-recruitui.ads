@@ -17,12 +17,10 @@
 
 with Gtkada.Builder; use Gtkada.Builder;
 
-package Bases.UI is
+package Bases.RecruitUI is
 
-   procedure CreateBasesUI
-     (NewBuilder: Gtkada_Builder); -- Create infterace for various bases options
-   procedure ShowBuyRecipesUI; -- Show interface for buying crafting recipes
-   procedure ShowRepairUI; -- Show interface for buying ship repairs in bases
-   procedure ShowHealUI; -- Show interface for buying crew members healing in bases
+   procedure CreateRecruitUI
+     (NewBuilder: Gtkada_Builder); -- Create infterace for recruit new crew members
+   procedure ShowRecruitUI; -- Show interface for recruit new crew members
 
-end Bases.UI;
+end Bases.RecruitUI;

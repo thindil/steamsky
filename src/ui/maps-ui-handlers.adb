@@ -60,6 +60,7 @@ with Bases.UI; use Bases.UI;
 with Bases.SchoolUI; use Bases.SchoolUI;
 with Bases.ShipyardUI; use Bases.ShipyardUI;
 with Bases.LootUI; use Bases.LootUI;
+with Bases.RecruitUI; use Bases.RecruitUI;
 with Missions; use Missions;
 with Missions.UI; use Missions.UI;
 with Crafts; use Crafts;
