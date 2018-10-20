@@ -225,22 +225,23 @@ package body Combat.UI is
          for I in Guns.First_Index .. Guns.Last_Index loop
             Append(List, Iter);
             HaveAmmo := False;
-            if PlayerShip.Modules(Guns(I)(1)).Data(1) >=
-              PlayerShip.Cargo.First_Index and
-              PlayerShip.Modules(Guns(I)(1)).Data(1) <=
-                PlayerShip.Cargo.Last_Index then
-               if Items_List
-                   (PlayerShip.Cargo(PlayerShip.Modules(Guns(I)(1)).Data(1))
-                      .ProtoIndex)
-                   .IType =
-                 Items_Types
-                   (Modules_List(PlayerShip.Modules(Guns(I)(1)).ProtoIndex)
-                      .Value) then
-                  AmmoAmount :=
-                    PlayerShip.Cargo(PlayerShip.Modules(Guns(I)(1)).Data(1))
-                      .Amount;
-                  HaveAmmo := True;
-               end if;
+            if
+              (PlayerShip.Modules(Guns(I)(1)).Data(1) >=
+               PlayerShip.Cargo.First_Index and
+               PlayerShip.Modules(Guns(I)(1)).Data(1) <=
+                 PlayerShip.Cargo.Last_Index)
+              and then
+                Items_List
+                  (PlayerShip.Cargo(PlayerShip.Modules(Guns(I)(1)).Data(1))
+                     .ProtoIndex)
+                  .IType =
+                Items_Types
+                  (Modules_List(PlayerShip.Modules(Guns(I)(1)).ProtoIndex)
+                     .Value) then
+               AmmoAmount :=
+                 PlayerShip.Cargo(PlayerShip.Modules(Guns(I)(1)).Data(1))
+                   .Amount;
+               HaveAmmo := True;
             end if;
             if not HaveAmmo then
                for J in Items_List.Iterate loop
@@ -440,22 +441,21 @@ package body Combat.UI is
          To_Unbounded_String("menuoptions"));
    begin
       if NewCombat then
-         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
-            if EnemyName /=
-              ProtoShips_List
+         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0
+           and then EnemyName /=
+             ProtoShips_List
+               (Events_List
+                  (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                  .Data)
+               .Name then
+            CombatStarted :=
+              StartCombat
                 (Events_List
                    (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-                   .Data)
-                .Name then
-               CombatStarted :=
-                 StartCombat
-                   (Events_List
-                      (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-                      .Data,
-                    False);
-               if not CombatStarted then
-                  return;
-               end if;
+                   .Data,
+                 False);
+            if not CombatStarted then
+               return;
             end if;
          end if;
          Set_Text
@@ -590,31 +590,32 @@ package body Combat.UI is
          return;
       end if;
       AssignedOrder := To_Unbounded_String(Get_String(CrewModel, CrewIter, 1));
-      if Position = 0 then
-         for I in PilotOrders'Range loop
-            if AssignedOrder /= PilotOrders(I) then
-               Append(OrdersList, OrdersIter);
-               Set(OrdersList, OrdersIter, 0, To_String(PilotOrders(I)));
-               Set(OrdersList, OrdersIter, 1, Gint(I));
-            end if;
-         end loop;
-      elsif Position = 1 then
-         for I in EngineerOrders'Range loop
-            if AssignedOrder /= EngineerOrders(I) then
-               Append(OrdersList, OrdersIter);
-               Set(OrdersList, OrdersIter, 0, To_String(EngineerOrders(I)));
-               Set(OrdersList, OrdersIter, 1, Gint(I));
-            end if;
-         end loop;
-      else
-         for I in GunnerOrders'Range loop
-            if AssignedOrder /= GunnerOrders(I) then
-               Append(OrdersList, OrdersIter);
-               Set(OrdersList, OrdersIter, 0, To_String(GunnerOrders(I)));
-               Set(OrdersList, OrdersIter, 1, Gint(I));
-            end if;
-         end loop;
-      end if;
+      case Position is
+         when 0 =>
+            for I in PilotOrders'Range loop
+               if AssignedOrder /= PilotOrders(I) then
+                  Append(OrdersList, OrdersIter);
+                  Set(OrdersList, OrdersIter, 0, To_String(PilotOrders(I)));
+                  Set(OrdersList, OrdersIter, 1, Gint(I));
+               end if;
+            end loop;
+         when 1 =>
+            for I in EngineerOrders'Range loop
+               if AssignedOrder /= EngineerOrders(I) then
+                  Append(OrdersList, OrdersIter);
+                  Set(OrdersList, OrdersIter, 0, To_String(EngineerOrders(I)));
+                  Set(OrdersList, OrdersIter, 1, Gint(I));
+               end if;
+            end loop;
+         when others =>
+            for I in GunnerOrders'Range loop
+               if AssignedOrder /= GunnerOrders(I) then
+                  Append(OrdersList, OrdersIter);
+                  Set(OrdersList, OrdersIter, 0, To_String(GunnerOrders(I)));
+                  Set(OrdersList, OrdersIter, 1, Gint(I));
+               end if;
+            end loop;
+      end case;
    end SetOrdersList;
 
    procedure GiveCombatOrders
