@@ -102,7 +102,7 @@ package body Crafts.UI is
       RecipeInfo, WorkplaceName: Unbounded_String := Null_Unbounded_String;
       Recipe: Craft_Data;
       MAmount, CargoIndex: Natural := 0;
-      HaveWorkplace, IsMaterial, IsTool, HaveMaterials: Boolean := True;
+      HaveWorkplace, IsMaterial, HaveMaterials: Boolean := True;
       HaveTool: Boolean := False;
       TextLength: Positive;
    begin
@@ -147,9 +147,10 @@ package body Crafts.UI is
          HaveMaterials := False;
          for J in Items_List.Iterate loop
             IsMaterial := False;
-            if RecipeIndex > 0
-              and then Items_List(J).IType = Recipe.MaterialTypes(I) then
-               IsMaterial := True;
+            if RecipeIndex > 0 then
+               if Items_List(J).IType = Recipe.MaterialTypes(I) then
+                  IsMaterial := True;
+               end if;
             else
                if Items_List(J).Name = Items_List(Recipe.ResultIndex).Name then
                   IsMaterial := True;
@@ -190,11 +191,7 @@ package body Crafts.UI is
          Append(RecipeInfo, LF & "Tool: ");
          MAmount := 0;
          for I in Items_List.Iterate loop
-            IsTool := False;
             if Items_List(I).IType = Recipe.Tool then
-               IsTool := True;
-            end if;
-            if IsTool then
                if MAmount > 0 then
                   Append(RecipeInfo, " or ");
                end if;
@@ -308,6 +305,9 @@ package body Crafts.UI is
       Deconstructs: Positive_Container.Vector;
       RecipesIter: Gtk_Tree_Iter;
       RecipesList: Gtk_List_Store;
+      CanCraft: Boolean;
+      Recipe: Craft_Data;
+      CargoIndex: Natural;
    begin
       for Item of PlayerShip.Cargo loop
          for J in Recipes_List.First_Index .. Recipes_List.Last_Index loop
@@ -326,10 +326,64 @@ package body Crafts.UI is
       Clear(RecipesList);
       for I in Known_Recipes.First_Index .. Known_Recipes.Last_Index loop
          Append(RecipesList, RecipesIter);
-         Set
-           (RecipesList, RecipesIter, 0,
-            To_String
-              (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex).Name));
+         CanCraft := False;
+         Recipe := Recipes_List(Known_Recipes(I));
+         for Module of PlayerShip.Modules loop
+            if Modules_List(Module.ProtoIndex).MType = Recipe.Workplace
+              and then Module.Durability > 0 then
+               CanCraft := True;
+               exit;
+            end if;
+         end loop;
+         if CanCraft then
+            if Recipe.Tool /= To_Unbounded_String("None") then
+               CanCraft := False;
+               for I in Items_List.Iterate loop
+                  if Items_List(I).IType = Recipe.Tool then
+                     CargoIndex :=
+                       FindItem
+                         (PlayerShip.Cargo, Objects_Container.To_Index(I));
+                     if CargoIndex > 0 then
+                        CanCraft := True;
+                        exit;
+                     end if;
+                  end if;
+               end loop;
+            end if;
+         end if;
+         if CanCraft then
+            for K in
+              Recipe.MaterialTypes.First_Index ..
+                Recipe.MaterialTypes.Last_Index loop
+               CanCraft := False;
+               for J in Items_List.Iterate loop
+                  if Items_List(J).IType = Recipe.MaterialTypes(K) then
+                     CargoIndex :=
+                       FindItem
+                         (PlayerShip.Cargo, Objects_Container.To_Index(J));
+                     if CargoIndex > 0 then
+                        CanCraft := True;
+                        exit;
+                     end if;
+                  end if;
+               end loop;
+            end loop;
+         end if;
+         if CanCraft then
+            Set
+              (RecipesList, RecipesIter, 0,
+               To_String
+                 (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex)
+                    .Name));
+         else
+            Set
+              (RecipesList, RecipesIter, 0,
+               "<span foreground=""gray"">" &
+               To_String
+                 (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex)
+                    .Name) &
+               "</span>");
+         end if;
          Set(RecipesList, RecipesIter, 1, Gint(Known_Recipes.Element(I)));
       end loop;
       for I in Deconstructs.First_Index .. Deconstructs.Last_Index loop
