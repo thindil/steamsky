@@ -397,13 +397,16 @@ package body Combat.UI is
          else
             ModuleName := Modules_List(Enemy.Ship.Modules(I).ProtoIndex).Name;
          end if;
-         Set(List, Iter, 0, To_String(ModuleName));
          DamagePercent :=
-           100 -
            Gint
              ((Float(Enemy.Ship.Modules(I).Durability) /
                Float(Enemy.Ship.Modules(I).MaxDurability)) *
               100.0);
+         if Enemy.Ship.Modules(I).Durability > 0 then
+            Set(List, Iter, 0, To_String(ModuleName));
+         else
+            Set(List, Iter, 0, To_String(ModuleName) & "(destroyed)");
+         end if;
          Set(List, Iter, 1, DamagePercent);
          Next(List, Iter);
       end loop;
