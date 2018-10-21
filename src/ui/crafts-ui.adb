@@ -44,34 +44,34 @@ package body Crafts.UI is
    procedure ShowSetRecipe(Object: access Gtkada_Builder_Record'Class) is
       MaxAmount: Positive;
       AmountAdj: constant Gtk_Adjustment :=
-        Gtk_Adjustment(Get_Object(Builder, "amountadj"));
+        Gtk_Adjustment(Get_Object(Object, "amountadj"));
       MType: ModuleType;
+      CmbModules: constant Gtk_Combo_Box_Text :=
+        Gtk_Combo_Box_Text(Get_Object(Object, "cmbmodules"));
+      LabelTimes: constant Gtk_Label :=
+        Gtk_Label(Get_Object(Object, "lbltimes"));
    begin
       MaxAmount := CheckRecipe(RecipeIndex);
       Set_Value(AmountAdj, 1.0);
       Set_Upper(AmountAdj, Gdouble(MaxAmount));
-      Set_Label
-        (Gtk_Label(Get_Object(Object, "lbltimes")),
-         "(max" & Positive'Image(MaxAmount) & "):");
+      Set_Label(LabelTimes, "(max" & Positive'Image(MaxAmount) & "):");
       if RecipeIndex > 0 then
          MType := Recipes_List(RecipeIndex).Workplace;
       else
          MType := ALCHEMY_LAB;
       end if;
-      Remove_All(Gtk_Combo_Box_Text(Get_Object(Object, "cmbmodules")));
+      Remove_All(CmbModules);
       for Module of PlayerShip.Modules loop
          if Modules_List(Module.ProtoIndex).MType = MType then
-            Append_Text
-              (Gtk_Combo_Box_Text(Get_Object(Object, "cmbmodules")),
-               To_String(Module.Name));
+            Append_Text(CmbModules, To_String(Module.Name));
          end if;
       end loop;
       if RecipeIndex < 1 then
          Hide(Gtk_Widget(Get_Object(Object, "spincraftamount")));
-         Hide(Gtk_Widget(Get_Object(Object, "lbltimes")));
+         Hide(Gtk_Widget(LabelTimes));
       else
          Show_All(Gtk_Widget(Get_Object(Object, "spincraftamount")));
-         Show_All(Gtk_Widget(Get_Object(Object, "lbltimes")));
+         Show_All(Gtk_Widget(LabelTimes));
       end if;
       Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbmodules")), 0);
    exception
@@ -147,10 +147,9 @@ package body Crafts.UI is
          HaveMaterials := False;
          for J in Items_List.Iterate loop
             IsMaterial := False;
-            if RecipeIndex > 0 then
-               if Items_List(J).IType = Recipe.MaterialTypes(I) then
-                  IsMaterial := True;
-               end if;
+            if RecipeIndex > 0
+              and then Items_List(J).IType = Recipe.MaterialTypes(I) then
+               IsMaterial := True;
             else
                if Items_List(J).Name = Items_List(Recipe.ResultIndex).Name then
                   IsMaterial := True;
@@ -312,14 +311,14 @@ package body Crafts.UI is
    begin
       for Item of PlayerShip.Cargo loop
          for J in Recipes_List.First_Index .. Recipes_List.Last_Index loop
-            if Recipes_List(J).ResultIndex = Item.ProtoIndex then
-               if Known_Recipes.Find_Index(Item => J) =
-                 Positive_Container.No_Index and
-                 Deconstructs.Find_Index(Item => Item.ProtoIndex) =
-                   Positive_Container.No_Index then
-                  Deconstructs.Append(New_Item => Item.ProtoIndex);
-                  exit;
-               end if;
+            if Recipes_List(J).ResultIndex = Item.ProtoIndex
+              and then
+              (Known_Recipes.Find_Index(Item => J) =
+               Positive_Container.No_Index and
+               Deconstructs.Find_Index(Item => Item.ProtoIndex) =
+                 Positive_Container.No_Index) then
+               Deconstructs.Append(New_Item => Item.ProtoIndex);
+               exit;
             end if;
          end loop;
       end loop;
