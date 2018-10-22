@@ -68,6 +68,7 @@ package body Crew.UI.Handlers is
       TiredPoints: Integer;
       Iter: Gtk_Tree_Iter;
       List: Gtk_List_Store;
+      ProgressBar: Gtk_Progress_Bar;
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -177,109 +178,74 @@ package body Crew.UI.Handlers is
       else
          Hide(Gtk_Widget(Get_Object(Object, "btndismiss")));
       end if;
-      Show_All(Gtk_Widget(Get_Object(Object, "progresshealth")));
-      Set_Fraction
-        (Gtk_Progress_Bar(Get_Object(Object, "progresshealth")),
-         Gdouble(Member.Health) / 100.0);
+      ProgressBar := Gtk_Progress_Bar(Get_Object(Object, "progresshealth"));
+      Show_All(Gtk_Widget(ProgressBar));
+      Set_Fraction(ProgressBar, Gdouble(Member.Health) / 100.0);
       if Member.Health < 100 and Member.Health > 80 then
-         Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progresshealth")),
-            "Slightly wounded");
+         Set_Text(ProgressBar, "Slightly wounded");
       elsif Member.Health < 81 and Member.Health > 50 then
-         Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progresshealth")), "Wounded");
+         Set_Text(ProgressBar, "Wounded");
       elsif Member.Health < 51 then
-         Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progresshealth")),
-            "Heavily wounded");
+         Set_Text(ProgressBar, "Heavily wounded");
       else
-         Hide(Gtk_Widget(Get_Object(Object, "progresshealth")));
+         Hide(Gtk_Widget(ProgressBar));
       end if;
       TiredPoints := Member.Tired - Member.Attributes(ConditionIndex)(1);
-      Show_All(Gtk_Widget(Get_Object(Object, "progresstired")));
-      Set_Fraction
-        (Gtk_Progress_Bar(Get_Object(Object, "progresstired")),
-         Gdouble(TiredPoints) / 100.0);
+      ProgressBar := Gtk_Progress_Bar(Get_Object(Object, "progresstired"));
+      Show_All(Gtk_Widget(ProgressBar));
+      Set_Fraction(ProgressBar, Gdouble(TiredPoints) / 100.0);
       if TiredPoints > 0 and TiredPoints < 41 then
-         Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progresstired")),
-            "Bit tired");
+         Set_Text(ProgressBar, "Bit tired");
       elsif TiredPoints > 40 and TiredPoints < 81 then
-         Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progresstired")), "Tired");
+         Set_Text(ProgressBar, "Tired");
       elsif TiredPoints > 80 and TiredPoints < 100 then
-         Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progresstired")),
-            "Very tired");
+         Set_Text(ProgressBar, "Very tired");
       elsif TiredPoints = 100 then
-         Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progresstired")),
-            "Unconscious");
+         Set_Text(ProgressBar, "Unconscious");
       else
-         Hide(Gtk_Widget(Get_Object(Object, "progresstired")));
+         Hide(Gtk_Widget(ProgressBar));
       end if;
-      Show_All(Gtk_Widget(Get_Object(Object, "progressthirst")));
-      Set_Fraction
-        (Gtk_Progress_Bar(Get_Object(Object, "progressthirst")),
-         Gdouble(Member.Thirst) / 100.0);
+      ProgressBar := Gtk_Progress_Bar(Get_Object(Object, "progressthirst"));
+      Show_All(Gtk_Widget(ProgressBar));
+      Set_Fraction(ProgressBar, Gdouble(Member.Thirst) / 100.0);
       if Member.Thirst > 0 and Member.Thirst < 41 then
-         Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progressthirst")),
-            "Bit thirsty");
+         Set_Text(ProgressBar, "Bit thirsty");
       elsif Member.Thirst > 40 and Member.Thirst < 81 then
-         Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progressthirst")), "Thirsty");
+         Set_Text(ProgressBar, "Thirsty");
       elsif Member.Thirst > 80 and Member.Thirst < 100 then
-         Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progressthirst")),
-            "Very thirsty");
+         Set_Text(ProgressBar, "Very thirsty");
       elsif Member.Thirst = 100 then
-         Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progressthirst")),
-            "Dehydrated");
+         Set_Text(ProgressBar, "Dehydrated");
       else
-         Hide(Gtk_Widget(Get_Object(Object, "progressthirst")));
+         Hide(Gtk_Widget(ProgressBar));
       end if;
-      Show_All(Gtk_Widget(Get_Object(Object, "progresshunger")));
-      Set_Fraction
-        (Gtk_Progress_Bar(Get_Object(Object, "progresshunger")),
-         Gdouble(Member.Hunger) / 100.0);
+      ProgressBar := Gtk_Progress_Bar(Get_Object(Object, "progresshunger"));
+      Show_All(Gtk_Widget(ProgressBar));
+      Set_Fraction(ProgressBar, Gdouble(Member.Hunger) / 100.0);
       if Member.Hunger > 0 and Member.Hunger < 41 then
-         Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progresshunger")),
-            "Bit hungry");
+         Set_Text(ProgressBar, "Bit hungry");
       elsif Member.Hunger > 40 and Member.Hunger < 81 then
-         Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progresshunger")), "Hungry");
+         Set_Text(ProgressBar, "Hungry");
       elsif Member.Hunger > 80 and Member.Hunger < 100 then
-         Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progresshunger")),
-            "Very hungry");
+         Set_Text(ProgressBar, "Very hungry");
       elsif Member.Hunger = 100 then
-         Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progresshunger")),
-            "Starving");
+         Set_Text(ProgressBar, "Starving");
       else
-         Hide(Gtk_Widget(Get_Object(Object, "progresshunger")));
+         Hide(Gtk_Widget(ProgressBar));
       end if;
-      Show_All(Gtk_Widget(Get_Object(Object, "progressmorale")));
-      Set_Fraction
-        (Gtk_Progress_Bar(Get_Object(Object, "progressmorale")),
-         Gdouble(Member.Morale(1)) / 100.0);
+      ProgressBar := Gtk_Progress_Bar(Get_Object(Object, "progressmorale"));
+      Show_All(Gtk_Widget(ProgressBar));
+      Set_Fraction(ProgressBar, Gdouble(Member.Morale(1)) / 100.0);
       if Member.Morale(1) < 25 then
-         Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progressmorale")), "Upset");
+         Set_Text(ProgressBar, "Upset");
       elsif Member.Morale(1) > 24 and Member.Morale(1) < 50 then
-         Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progressmorale")), "Unhappy");
+         Set_Text(ProgressBar, "Unhappy");
       elsif Member.Morale(1) = 50 then
-         Hide(Gtk_Widget(Get_Object(Object, "progressmorale")));
+         Hide(Gtk_Widget(ProgressBar));
       elsif Member.Morale(1) > 50 and Member.Morale(1) < 75 then
-         Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progressmorale")), "Happy");
+         Set_Text(ProgressBar, "Happy");
       elsif Member.Morale(1) > 74 then
-         Set_Text
-           (Gtk_Progress_Bar(Get_Object(Object, "progressmorale")), "Excited");
+         Set_Text(ProgressBar, "Excited");
       end if;
       if Member.Skills.Length > 0 and Member.ContractLength /= 0 then
          List := Gtk_List_Store(Get_Object(Object, "statslist"));
