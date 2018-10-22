@@ -232,5 +232,6 @@ Text between "module" tags is module description.
  <module durability="400" index="193" installtime="150" material="Orichalcum" maxvalue="320" name="Orichalcum 100mm gun" price="64000" skill="Gunsmith" type="GUN" value="24" weight="700">Upgraded 100mm ship gun, made of orichalcum. Requires an empty turret.</module>
  <module durability="500" index="194" installtime="180" material="Orichalcum" maxvalue="560" name="Orichalcum 120mm gun" price="128000" skill="Gunsmith" type="GUN" value="25" weight="1600">Upgraded 120mm ship gun, made of orichalcum. Requires an empty turret.</module>
  <module durability="500" index="195" installtime="90" material="Orichalcum" maxvalue="0" name="Small orichalcum workshop" price="12000" size="1" skill="Engineering" type="WORKSHOP" value="0" weight="900">Allows crafting of some tools. Made of orichalcum.</module>
+ <module durability="600" index="196" installtime="90" material="Adamantium" maxvalue="0" name="Small adamantium training room" price="64000" size="1" skill="Engineering" type="TRAINING_ROOM" value="0" weight="500">Allow training skills on ship. More durable version made of adamantium.</module>
 </modules>
 
