@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Option to zoom in and zoom out map with mouse wheel and keyboard shortcuts
 - Variables for keyboard shortcuts for zooming map
 - Option to auto ask for bases and events when ship dock to base
+- New ship module: small orichalcum workshop
 
 ### Changed
 - Updated help
