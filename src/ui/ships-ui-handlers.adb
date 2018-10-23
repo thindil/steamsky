@@ -34,6 +34,7 @@ with Crafts; use Crafts;
 with Ships.Upgrade; use Ships.Upgrade;
 with Ships.Crew; use Ships.Crew;
 with Game.SaveLoad; use Game.SaveLoad;
+with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Handlers is
 

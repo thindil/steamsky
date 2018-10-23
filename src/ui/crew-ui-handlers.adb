@@ -40,6 +40,7 @@ with Crew.Inventory; use Crew.Inventory;
 with Bases; use Bases;
 with Utils; use Utils;
 with Factions; use Factions;
+with Utils.UI; use Utils.UI;
 
 package body Crew.UI.Handlers is
 

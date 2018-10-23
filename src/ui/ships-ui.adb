@@ -37,6 +37,7 @@ with Ships.UI.Handlers; use Ships.UI.Handlers;
 with Bases; use Bases;
 with Missions; use Missions;
 with Factions; use Factions;
+with Utils.UI; use Utils.UI;
 
 package body Ships.UI is
 
@@ -495,11 +496,10 @@ package body Ships.UI is
          ChangeModuleName'Access);
    end CreateShipUI;
 
-   procedure ShowShipUI(OldState: GameStates) is
+   procedure ShowShipUI is
       ModulesIter: Gtk_Tree_Iter;
       ModulesList: Gtk_List_Store;
    begin
-      PreviousGameState := OldState;
       ModulesList := Gtk_List_Store(Get_Object(Builder, "moduleslist"));
       Clear(ModulesList);
       for Module of PlayerShip.Modules loop

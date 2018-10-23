@@ -33,6 +33,7 @@ with Ships; use Ships;
 with ShipModules; use ShipModules;
 with Crew.Inventory; use Crew.Inventory;
 with Crew.UI.Handlers; use Crew.UI.Handlers;
+with Utils.UI; use Utils.UI;
 
 package body Crew.UI is
 
@@ -268,10 +269,9 @@ package body Crew.UI is
          SelectElement'Access, Get_Object(Builder, "btnmove"));
    end CreateCrewUI;
 
-   procedure ShowCrewUI(OldState: GameStates) is
+   procedure ShowCrewUI is
    begin
       RefreshCrewInfo;
-      PreviousGameState := OldState;
       Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "crew");

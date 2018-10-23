@@ -92,7 +92,8 @@ package body Maps.UI is
            Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
          Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
          Hide(Gtk_Widget(Get_Object(Builder, "btnmenu")));
-         ShowStatsUI(Main_Menu);
+         PreviousGameState := Main_Menu;
+         ShowStatsUI;
       else
          Hide(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
          EndGame(False);

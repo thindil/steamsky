@@ -16,13 +16,11 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Gtkada.Builder; use Gtkada.Builder;
-with Utils.UI; use Utils.UI;
 
 package Ships.Cargo.UI is
 
    procedure CreateCargoUI
      (NewBuilder: Gtkada_Builder); -- Create infterace for show player ship cargo
-   procedure ShowCargoUI
-     (OldState: GameStates); -- Show interface for show player ship cargo
+   procedure ShowCargoUI; -- Show interface for show player ship cargo
 
 end Ships.Cargo.UI;
