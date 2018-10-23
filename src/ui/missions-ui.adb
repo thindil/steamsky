@@ -354,7 +354,6 @@ package body Missions.UI is
                  (SkyBases(BaseIndex).Missions(I).TargetX,
                   SkyBases(BaseIndex).Missions(I).TargetY)));
       end loop;
-      Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "availablemissions");
       Set_Cursor
@@ -397,7 +396,6 @@ package body Missions.UI is
               (CountDistance
                  (AcceptedMissions(I).TargetX, AcceptedMissions(I).TargetY)));
       end loop;
-      Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "acceptedmissions");
       Set_Cursor

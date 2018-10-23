@@ -28,7 +28,6 @@ with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Settings; use Gtk.Settings;
-with Gtk.Button; use Gtk.Button;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Glib; use Glib;
@@ -167,9 +166,6 @@ package body GameOptions is
       Set_Transition_Type
         (Gtk_Stack(Get_Object(Builder, "combatstack")),
          Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
-      Set_Label
-        (Gtk_Button(Get_Object(Builder, "btnshowhelp")),
-         "Help [" & Get_Text(Gtk_Entry(Get_Object(Object, "edthelp"))) & "]");
       GameSettings.MessagesLimit :=
         Positive
           (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjmessageslimit"))));

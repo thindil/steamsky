@@ -326,7 +326,6 @@ package body Crew.UI.Handlers is
       RefreshInventory;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Object, "gamestack")), "inventory");
-      Hide(Gtk_Widget(Get_Object(Object, "btnshowhelp")));
       SetActiveItem;
    end ShowInventory;
 

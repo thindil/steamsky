@@ -506,7 +506,6 @@ package body Ships.UI is
          Append(ModulesList, ModulesIter);
          Set(ModulesList, ModulesIter, 0, To_String(Module.Name));
       end loop;
-      Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "ship");
       Set_Cursor
