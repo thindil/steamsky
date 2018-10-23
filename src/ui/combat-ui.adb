@@ -433,15 +433,14 @@ package body Combat.UI is
       DamagePercent, SpaceIndex: Natural;
       ModuleName: Unbounded_String;
       EnemyIter: Gtk_Tree_Iter;
-      MenuArray: constant array(1 .. 11) of Unbounded_String :=
+      MenuArray: constant array(1 .. 10) of Unbounded_String :=
         (To_Unbounded_String("menuorders"),
          To_Unbounded_String("menucrafting"),
          To_Unbounded_String("menubaseslist"),
          To_Unbounded_String("menuevents"),
          To_Unbounded_String("menumissions"), To_Unbounded_String("menustory"),
          To_Unbounded_String("menuwait"), To_Unbounded_String("menumovemap"),
-         To_Unbounded_String("menustats"), To_Unbounded_String("menuhelp"),
-         To_Unbounded_String("menuoptions"));
+         To_Unbounded_String("menustats"), To_Unbounded_String("menuoptions"));
    begin
       if NewCombat then
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0
@@ -493,7 +492,6 @@ package body Combat.UI is
       for I in MenuArray'Range loop
          Hide(Gtk_Widget(Get_Object(Builder, To_String(MenuArray(I)))));
       end loop;
-      Show_All(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "combat");
