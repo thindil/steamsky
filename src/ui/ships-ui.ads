@@ -15,15 +15,13 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Utils.UI; use Utils.UI;
 with Gtkada.Builder; use Gtkada.Builder;
 
 package Ships.UI is
 
    procedure CreateShipUI
      (NewBuilder: Gtkada_Builder); -- Create infterace for show player ship info
-   procedure ShowShipUI
-     (OldState: GameStates); -- Show interface for show player ship info
+   procedure ShowShipUI; -- Show interface for show player ship info
 
 private
    Builder: Gtkada_Builder; -- Gtk builder for user interface
