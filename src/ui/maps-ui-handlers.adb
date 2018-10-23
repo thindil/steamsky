@@ -882,13 +882,13 @@ package body Maps.UI.Handlers is
          ShowHelpUI(7);
       elsif VisibleChildName = "trade" then
          ShowHelpUI(4);
-      elsif VisibleChildName = "skymap" then
-         ShowHelpUI(1);
       elsif VisibleChildName = "availablemissions" or
         VisibleChildName = "acceptedmissions" then
          ShowHelpUI(9);
       elsif VisibleChildName = "recruit" then
          ShowHelpUI(10);
+      else
+         ShowHelpUI(1);
       end if;
    end ShowHelp;
 

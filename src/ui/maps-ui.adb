@@ -29,7 +29,6 @@ with Gtk.Text_Iter; use Gtk.Text_Iter;
 with Gtk.Text_Tag_Table; use Gtk.Text_Tag_Table;
 with Gtk.Text_Tag; use Gtk.Text_Tag;
 with Gtk.Text_View; use Gtk.Text_View;
-with Gtk.Button; use Gtk.Button;
 with Gtk.Enums; use Gtk.Enums;
 with Gtk.Container; use Gtk.Container;
 with Gtk.Accel_Map; use Gtk.Accel_Map;
@@ -1229,9 +1228,6 @@ package body Maps.UI is
         (Gtk_Widget(Get_Object(Builder, "menuwait")),
          "<skymapwindow>/Menu/WaitOrders", Accelerators);
       Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btnshowhelp")),
-         "<skymapwindow>/Menu/Help", Accelerators);
-      Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btnmapleft")),
          "<skymapwindow>/btnmapleft", Accelerators);
       Set_Accel_Path
@@ -1253,16 +1249,6 @@ package body Maps.UI is
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btncenter")),
          "<movemapwindow>/btncenter", Accelerators);
-      declare
-         Key: Gtk_Accel_Key;
-         Found: Boolean;
-      begin
-         Lookup_Entry("<skymapwindow>/Menu/Help", Key, Found);
-         Set_Label
-           (Gtk_Button(Get_Object(Builder, "btnshowhelp")),
-            "Help [" & Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods) &
-            "]");
-      end;
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "movemapwindow")), CloseWindow'Access);
       On_Key_Release_Event
@@ -1316,7 +1302,6 @@ package body Maps.UI is
       UpdateMoveButtons;
       Hide(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
       Hide(Gtk_Widget(Get_Object(Builder, "btnclose")));
-      Hide(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
       Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));

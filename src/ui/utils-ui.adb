@@ -132,7 +132,6 @@ package body Utils.UI is
          return;
       end if;
       if VisibleChildName = "inventory" then
-         Show_All(Gtk_Widget(Get_Object(Object, "btnshowhelp")));
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Object, "gamestack")), "crew");
          return;
@@ -149,7 +148,6 @@ package body Utils.UI is
          UpdateOrders(PlayerShip);
       end if;
       Hide(Gtk_Widget(Get_Object(Object, "btnclose")));
-      Hide(Gtk_Widget(Get_Object(Object, "btnshowhelp")));
       case PreviousGameState is
          when SkyMap_View =>
             Show_All(Gtk_Widget(Get_Object(Object, "menuwait")));

@@ -205,7 +205,6 @@ package body Statistics.UI is
          "Current _goal: " & GoalText(0));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "gamestats");
-      Hide(Gtk_Widget(Get_Object(Builder, "btnshowhelp")));
       if GameStats.DestroyedShips.Length > 0 then
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expdestroyed")), True);
          List := Gtk_List_Store(Get_Object(Builder, "destroyedlist"));
