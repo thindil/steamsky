@@ -911,12 +911,13 @@ package body Maps.UI.Handlers is
             return;
          end if;
       end if;
-      Hide(Gtk_Widget(Get_Object(Builder, "btnmenu")));
       Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
       if VisibleChildName = "combat" then
          PreviousGameState := Combat_View;
-      else
+      elsif VisibleChildName = "skymap" then
          PreviousGameState := SkyMap_View;
+         Hide(Gtk_Widget(Get_Object(Builder, "menuwait")));
+         Hide(Gtk_Widget(Get_Object(Builder, "menumovemap")));
       end if;
       if User_Data = Get_Object(Builder, "menumessages") then
          ShowMessagesUI;

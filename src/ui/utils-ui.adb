@@ -152,10 +152,12 @@ package body Utils.UI is
       Hide(Gtk_Widget(Get_Object(Object, "btnshowhelp")));
       case PreviousGameState is
          when SkyMap_View =>
+            Show_All(Gtk_Widget(Get_Object(Object, "menuwait")));
+            Show_All(Gtk_Widget(Get_Object(Object, "menumovemap")));
             ShowSkyMap;
          when Combat_View =>
             ShowCombatUI(False);
-         when others =>
+         when Main_Menu =>
             null;
       end case;
    end CloseMessages;
