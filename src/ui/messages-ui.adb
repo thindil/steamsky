@@ -26,6 +26,7 @@ with Gtk.Tree_Model_Filter; use Gtk.Tree_Model_Filter;
 with Gtk.GEntry; use Gtk.GEntry;
 with Glib.Object; use Glib.Object;
 with Config; use Config;
+with Utils.UI; use Utils.UI;
 
 package body Messages.UI is
 
@@ -146,9 +147,8 @@ package body Messages.UI is
          VisibleMessages'Access);
    end CreateMessagesUI;
 
-   procedure ShowMessagesUI(OldState: GameStates) is
+   procedure ShowMessagesUI is
    begin
-      PreviousGameState := OldState;
       ShowMessages(Default);
       Set_Text(Gtk_GEntry(Get_Object(Builder, "entrysearch")), "");
       Set_Visible_Child_Name

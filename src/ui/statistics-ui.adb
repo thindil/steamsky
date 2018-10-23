@@ -35,16 +35,16 @@ with Missions; use Missions;
 with Crafts; use Crafts;
 with Items; use Items;
 with MainMenu; use MainMenu;
+with Utils.UI; use Utils.UI;
 
 package body Statistics.UI is
 
    Builder: Gtkada_Builder;
-   GameState: GameStates;
 
    procedure HideStatistics is
    begin
       Hide(Gtk_Widget(Get_Object(Builder, "btnclose")));
-      if GameState = SkyMap_View then
+      if PreviousGameState = SkyMap_View then
          ShowSkyMap;
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
@@ -72,7 +72,7 @@ package body Statistics.UI is
       Register_Handler(Builder, "Show_Goals", ShowGoals'Access);
    end CreateStatsUI;
 
-   procedure ShowStatsUI(OldState: GameStates) is
+   procedure ShowStatsUI is
       MinutesDiff: Natural;
       TimePassed: Date_Record :=
         (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
@@ -86,7 +86,6 @@ package body Statistics.UI is
       ProtoIndex: Positive;
       ItemIndex: Positive;
    begin
-      GameState := OldState;
       MinutesDiff :=
         (GameDate.Minutes + (GameDate.Hour * 60) + (GameDate.Day * 1440) +
          (GameDate.Month * 43200) + (GameDate.Year * 518400)) -

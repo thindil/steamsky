@@ -16,15 +16,13 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Gtkada.Builder; use Gtkada.Builder;
-with Utils.UI; use Utils.UI;
 
 package Statistics.UI is
 
    procedure HideStatistics; -- Hide stats and show sky map or main menu
    procedure CreateStatsUI
      (NewBuilder: Gtkada_Builder); -- Create infterace for show game statistics
-   procedure ShowStatsUI
-     (OldState: GameStates); -- Show interface for show game statistics
+   procedure ShowStatsUI; -- Show interface for show game statistics
    procedure UpdateGoalsButton
      (Message: String); -- Update label on character goal button
 

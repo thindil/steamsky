@@ -34,6 +34,7 @@ with Messages; use Messages;
 with Crew.Inventory; use Crew.Inventory;
 with Stories; use Stories;
 with Missions; use Missions;
+with Utils.UI; use Utils.UI;
 
 package body Ships.Cargo.UI is
 
@@ -236,7 +237,7 @@ package body Ships.Cargo.UI is
          SelectElement'Access, Get_Object(Builder, "cmbmember"));
    end CreateCargoUI;
 
-   procedure ShowCargoUI(OldState: GameStates) is
+   procedure ShowCargoUI is
    begin
       Remove_All(Gtk_Combo_Box_Text(Get_Object(Builder, "cmbmember")));
       for Member of PlayerShip.Crew loop
@@ -245,7 +246,6 @@ package body Ships.Cargo.UI is
             To_String(Member.Name));
       end loop;
       RefreshCargoInfo;
-      PreviousGameState := OldState;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "cargo");
       ShowLastMessage(Builder);
