@@ -250,3 +250,11 @@ GtkComboBox * {
    border-style: solid;
    border-color:rgb(28,28,28);
 }
+
+/* Settings for map info element */
+*#overlaylabel {
+   border-radius:5px;
+   border-style:solid;
+   border-width:1px;
+   border-color:gray;
+}
