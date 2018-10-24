@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Option to auto ask for bases and events when ship dock to base
 - New ship modules: small orichalcum workshop, small adamantium training room,
   adamantium cockpit and small adamantium alchemy lab
+- Option to show or hide buttons for map movement
 
 ### Changed
 - Updated help
