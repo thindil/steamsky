@@ -86,9 +86,6 @@ package body MainMenu is
       while More_Entries(Files) loop
          Get_Next_Entry(Files, FoundFile);
          Create(Tokens, Simple_Name(FoundFile), "_");
-         if Slice_Count(Tokens) < 2 then
-            Create(Tokens, Simple_Name(FoundFile), "-");
-         end if;
          Append(SavesList, Iter);
          Set(SavesList, Iter, 0, Slice(Tokens, 1));
          Set(SavesList, Iter, 1, Slice(Tokens, 2));
@@ -459,15 +456,18 @@ package body MainMenu is
            ("Can't load game data files. Error: " & To_String(DataError),
             Gtk_Window(Get_Object(Builder, "mainmenuwindow")));
       end if;
-      Remove_All(Gtk_Combo_Box_Text(Get_Object(Builder, "cmbfaction")));
-      for Faction of Factions_List loop
-         if Faction.Careers.Length > 0 then
-            Append_Text
-              (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbfaction")),
-               To_String(Faction.Name));
-         end if;
-      end loop;
-      Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbfaction")), 0);
+      declare
+         FactionComboBox: constant Gtk_Combo_Box_Text :=
+           Gtk_Combo_Box_Text(Get_Object(Builder, "cmbfaction"));
+      begin
+         Remove_All(FactionComboBox);
+         for Faction of Factions_List loop
+            if Faction.Careers.Length > 0 then
+               Append_Text(FactionComboBox, To_String(Faction.Name));
+            end if;
+         end loop;
+         Set_Active(FactionComboBox, 0);
+      end;
       ShowMainMenu;
    end CreateMainMenu;
 
