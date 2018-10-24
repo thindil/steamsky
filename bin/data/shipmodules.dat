@@ -234,5 +234,6 @@ Text between "module" tags is module description.
  <module durability="500" index="195" installtime="90" material="Orichalcum" maxvalue="0" name="Small orichalcum workshop" price="12000" size="1" skill="Engineering" type="WORKSHOP" value="0" weight="900">Allows crafting of some tools. Made of orichalcum.</module>
  <module durability="600" index="196" installtime="90" material="Adamantium" maxvalue="0" name="Small adamantium training room" price="64000" size="1" skill="Engineering" type="TRAINING_ROOM" value="0" weight="500">Allow training skills on ship. More durable version made of adamantium.</module>
  <module durability="1000" index="197" installtime="90" material="Adamantium" maxvalue="0" name="Adamantium cockpit" price="24000" size="1" skill="Engineering" type="COCKPIT" unique="Y" value="0" weight="900">Each ship requires one cockpit to fly. This is the adamantium version of a standard cockpit.</module>
+ <module durability="600" index="198" installtime="90" material="Adamantium" maxvalue="0" name="Small adamantium alchemy lab" price="24000" size="1" skill="Engineering" type="ALCHEMY_LAB" value="0" weight="1200">Allows research of new crafting recipes and crafting of some items. More durable version made of adamantium.</module>
 </modules>
 
