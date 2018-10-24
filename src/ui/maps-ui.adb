@@ -1228,18 +1228,6 @@ package body Maps.UI is
         (Gtk_Widget(Get_Object(Builder, "menuwait")),
          "<skymapwindow>/Menu/WaitOrders", Accelerators);
       Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btnmapleft")),
-         "<skymapwindow>/btnmapleft", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btnmapright")),
-         "<skymapwindow>/btnmapright", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btnmapup")),
-         "<skymapwindow>/btnmapup", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btnmapdown")),
-         "<skymapwindow>/btnmapdown", Accelerators);
-      Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "menustory")),
          "<skymapwindow>/Menu/Stories", Accelerators);
       Set_Accel_Path
@@ -1318,6 +1306,12 @@ package body Maps.UI is
             end if;
          end if;
          CurrentStory.ShowText := False;
+      end if;
+      if not GameSettings.ShowMapButtons then
+         Hide(Gtk_Widget(Get_Object(Builder, "btnmapleft")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnmapright")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnmapup")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnmapdown")));
       end if;
    end ShowSkyMap;
 
