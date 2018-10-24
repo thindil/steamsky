@@ -55,6 +55,7 @@ package Config is
       MessagesOrder: MessagesOrderType; -- Order of showing messages
       AutoAskForBases: Boolean; -- If true, auto ask for new bases when ship docked
       AutoAskForEvents: Boolean; -- If true, auto ask for new events in bases when ship docked
+      ShowMapButtons: Boolean; -- If true, show buttons to move map
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;

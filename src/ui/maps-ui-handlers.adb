@@ -1314,7 +1314,11 @@ package body Maps.UI.Handlers is
          To_Unbounded_String("<skymapwindow>/cursorright"),
          To_Unbounded_String("<skymapwindow>/cursordownleft"),
          To_Unbounded_String("<skymapwindow>/cursordown"),
-         To_Unbounded_String("<skymapwindow>/cursordownright"));
+         To_Unbounded_String("<skymapwindow>/cursordownright"),
+         To_Unbounded_String("<skymapwindow>/btnmapleft"),
+         To_Unbounded_String("<skymapwindow>/btnmapright"),
+         To_Unbounded_String("<skymapwindow>/btnmapup"),
+         To_Unbounded_String("<skymapwindow>/btnmapdown"));
       Key: Gtk_Accel_Key;
       Found: Boolean;
    begin
@@ -1355,6 +1359,14 @@ package body Maps.UI.Handlers is
                when 8 =>
                   NewX := NewX + Gint(MapCellWidth);
                   NewY := NewY + Gint(MapCellHeight);
+               when 9 =>
+                  MoveMap(Get_Object(Builder, "btnmapleft"));
+               when 10 =>
+                  MoveMap(Get_Object(Builder, "btnmapright"));
+               when 11 =>
+                  MoveMap(Get_Object(Builder, "btnmapup"));
+               when 12 =>
+                  MoveMap(Get_Object(Builder, "btnmapdown"));
                when others =>
                   null;
             end case;

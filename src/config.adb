@@ -38,7 +38,7 @@ package body Config is
          HelpFontSize => 12, MapFontSize => 10, InterfaceFontSize => 16,
          InterfaceTheme => To_Unbounded_String("default"),
          MessagesOrder => OLDER_FIRST, AutoAskForBases => False,
-         AutoAskForEvents => False);
+         AutoAskForEvents => False, ShowMapButtons => True);
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
@@ -129,6 +129,12 @@ package body Config is
                   GameSettings.AutoAskForEvents := True;
                else
                   GameSettings.AutoAskForEvents := False;
+               end if;
+            elsif FieldName = To_Unbounded_String("ShowMapButtons") then
+               if Value = To_Unbounded_String("Yes") then
+                  GameSettings.ShowMapButtons := True;
+               else
+                  GameSettings.ShowMapButtons := False;
                end if;
             end if;
          end if;
@@ -221,6 +227,11 @@ package body Config is
          Put_Line(ConfigFile, "AutoAskForEvents = Yes");
       else
          Put_Line(ConfigFile, "AutoAskForEvents = No");
+      end if;
+      if GameSettings.ShowMapButtons then
+         Put_Line(ConfigFile, "ShowMapButtons = Yes");
+      else
+         Put_Line(ConfigFile, "ShowMapButtons = No");
       end if;
       Close(ConfigFile);
    end SaveConfig;
