@@ -115,39 +115,49 @@ package body Maps.UI is
          end loop;
          return Amount;
       end GetItemAmount;
+      procedure UpdateLabel(LabelName, TextMarkup, TooltipText: String;
+         ShowLabel: Boolean := False) is
+         Label: constant Gtk_Widget :=
+           Gtk_Widget(Get_Object(Builder, LabelName));
+      begin
+         Set_Markup(Gtk_Label(Label), TextMarkup);
+         Set_Tooltip_Text(Label, TooltipText);
+         if ShowLabel then
+            Show_All(Label);
+         end if;
+      end UpdateLabel;
    begin
       if PlayerShip.Crew(1).Health = 0 then
          DeathConfirm;
          return;
       end if;
       Set_Text(Gtk_Label(Get_Object(Builder, "lbltime")), FormatedTime);
-      if Is_Visible(Gtk_Widget(Get_Object(Builder, "lblnofuel"))) then
-         Hide(Gtk_Widget(Get_Object(Builder, "lblnofuel")));
-      end if;
-      if Is_Visible(Gtk_Widget(Get_Object(Builder, "lblnodrink"))) then
-         Hide(Gtk_Widget(Get_Object(Builder, "lblnodrink")));
-      end if;
-      if Is_Visible(Gtk_Widget(Get_Object(Builder, "lblnofood"))) then
-         Hide(Gtk_Widget(Get_Object(Builder, "lblnofood")));
-      end if;
+      declare
+         LabelsNames: constant array(Positive range <>) of Unbounded_String :=
+           (To_Unbounded_String("lblnofuel"),
+            To_Unbounded_String("lblnodrink"),
+            To_Unbounded_String("lblnofood"));
+         CheckLabel: Gtk_Widget;
+      begin
+         for I in LabelsNames'Range loop
+            CheckLabel :=
+              Gtk_Widget(Get_Object(Builder, To_String(LabelsNames(I))));
+            if Is_Visible(CheckLabel) then
+               Hide(CheckLabel);
+            end if;
+         end loop;
+      end;
       ItemAmount := GetItemAmount(FuelType);
       if ItemAmount = 0 then
-         Set_Markup
-           (Gtk_Label(Get_Object(Builder, "lblnofuel")),
-            "[<span foreground=""red"">No Fuel</span>]");
-         Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lblnofuel")),
-            "You can't travel anymore.");
-         Show_All(Gtk_Widget(Get_Object(Builder, "lblnofuel")));
+         UpdateLabel
+           ("lblnofuel", "[<span foreground=""red"">No Fuel</span>]",
+            "You can't travel anymore.", True);
       elsif ItemAmount < GameSettings.LowFuel then
-         Set_Markup
-           (Gtk_Label(Get_Object(Builder, "lblnofuel")),
-            "[<span foreground=""yellow"">Low Fuel</span>]");
-         Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lblnofuel")),
+         UpdateLabel
+           ("lblnofuel", "[<span foreground=""yellow"">Low Fuel</span>]",
             "Low level of fuel on ship. Only" & Natural'Image(ItemAmount) &
-            " left.");
-         Show_All(Gtk_Widget(Get_Object(Builder, "lblnofuel")));
+            " left.",
+            True);
       end if;
       for Member of PlayerShip.Crew loop
          if Factions_List(Member.Faction).DrinksTypes.Length = 0 then
@@ -161,22 +171,15 @@ package body Maps.UI is
          end if;
       end loop;
       if ItemAmount = 0 then
-         Set_Markup
-           (Gtk_Label(Get_Object(Builder, "lblnodrink")),
-            "[<span foreground=""red"">No Drinks</span>]");
-         Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lblnodrink")),
-            "You don't have any drinks in ship.");
-         Show_All(Gtk_Widget(Get_Object(Builder, "lblnodrink")));
+         UpdateLabel
+           ("lblnodrinks", "[<span foreground=""red"">No Drinks</span>]",
+            "You don't have any drinks in ship.", True);
       elsif ItemAmount < GameSettings.LowDrinks then
-         Set_Markup
-           (Gtk_Label(Get_Object(Builder, "lblnodrink")),
-            "[<span foreground=""yellow"">Low Drinks</span>]");
-         Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lblnodrink")),
+         UpdateLabel
+           ("lblnodrinks", "[<span foreground=""yellow"">Low Drinks</span>]",
             "Low level of drinks on ship. Only" & Natural'Image(ItemAmount) &
-            " left.");
-         Show_All(Gtk_Widget(Get_Object(Builder, "lblnodrink")));
+            " left.",
+            True);
       end if;
       for Member of PlayerShip.Crew loop
          if Factions_List(Member.Faction).FoodTypes.Length = 0 then
@@ -190,22 +193,15 @@ package body Maps.UI is
          end if;
       end loop;
       if ItemAmount = 0 then
-         Set_Markup
-           (Gtk_Label(Get_Object(Builder, "lblnofood")),
-            "[<span foreground=""red"">No Food</span>]");
-         Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lblnofood")),
-            "You don't have any food in ship.");
-         Show_All(Gtk_Widget(Get_Object(Builder, "lblnofood")));
+         UpdateLabel
+           ("lblnofood", "[<span foreground=""red"">No Food</span>]",
+            "You don't have any food in ship.", True);
       elsif ItemAmount < GameSettings.LowFood then
-         Set_Markup
-           (Gtk_Label(Get_Object(Builder, "lblnofood")),
-            "[<span foreground=""yellow"">Low Food</span>]");
-         Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lblnofood")),
+         UpdateLabel
+           ("lblnofood", "[<span foreground=""yellow"">Low Food</span>]",
             "Low level of food on ship. Only" & Natural'Image(ItemAmount) &
-            " left.");
-         Show_All(Gtk_Widget(Get_Object(Builder, "lblnofood")));
+            " left.",
+            True);
       end if;
       for Module of PlayerShip.Modules loop
          case Modules_List(Module.ProtoIndex).MType is
@@ -254,172 +250,104 @@ package body Maps.UI is
          end case;
       end loop;
       if HavePilot then
-         Set_Markup
-           (Gtk_Label(Get_Object(Builder, "lblpilot")),
-            "[<span foreground=""#4E9A06"">P</span>]");
-         Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lblpilot")),
+         UpdateLabel
+           ("lblpilot", "[<span foreground=""#4E9A06"">P</span>]",
             "Pilot is in position.");
       else
-         Set_Markup
-           (Gtk_Label(Get_Object(Builder, "lblpilot")),
-            "[<span foreground=""red"">P</span>]");
-         Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lblpilot")),
+         UpdateLabel
+           ("lblpilot", "[<span foreground=""red"">P</span>]",
             "No pilot assigned. Ship can't move.");
       end if;
       if HaveEngineer then
-         Set_Markup
-           (Gtk_Label(Get_Object(Builder, "lblengineer")),
-            "[<span foreground=""#4E9A06"">E</span>]");
-         Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lblengineer")),
+         UpdateLabel
+           ("lblengineer", "[<span foreground=""#4E9A06"">E</span>]",
             "Engineer is in position.");
       else
-         Set_Markup
-           (Gtk_Label(Get_Object(Builder, "lblengineer")),
-            "[<span foreground=""red"">E</span>]");
-         Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lblengineer")),
+         UpdateLabel
+           ("lblengineer", "[<span foreground=""red"">E</span>]",
             "No engineer assigned. Ship can't move.");
       end if;
       if HaveGunner then
-         Set_Markup
-           (Gtk_Label(Get_Object(Builder, "lblgunners")),
-            "[<span foreground=""#4E9A06"">G</span>]");
-         Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lblgunners")),
+         UpdateLabel
+           ("lblgunners", "[<span foreground=""#4E9A06"">G</span>]",
             "All guns are manned.");
       else
-         Set_Markup
-           (Gtk_Label(Get_Object(Builder, "lblgunners")),
-            "[<span foreground=""red"">G</span>]");
-         Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lblgunners")),
+         UpdateLabel
+           ("lblgunners", "[<span foreground=""red"">G</span>]",
             "One or more guns don't have a gunner.");
       end if;
       if NeedRepairs then
          if HaveRepairman then
-            Set_Markup
-              (Gtk_Label(Get_Object(Builder, "lblrepairs")),
-               "[<span foreground=""#4E9A06"">R</span>]");
-            Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Builder, "lblrepairs")),
+            UpdateLabel
+              ("lblrepairs", "[<span foreground=""#4E9A06"">R</span>]",
                "The ship is being repaired.");
          else
-            Set_Markup
-              (Gtk_Label(Get_Object(Builder, "lblrepairs")),
-               "[<span foreground=""red"">R</span>]");
-            Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Builder, "lblrepairs")),
+            UpdateLabel
+              ("lblrepairs", "[<span foreground=""red"">R</span>]",
                "The ship needs repairs but no one is working them.");
          end if;
       else
-         Set_Text(Gtk_Label(Get_Object(Builder, "lblrepairs")), "[R]");
-         Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lblrepairs")),
-            "The ship doesn't require repairs.");
+         UpdateLabel("lblrepairs", "[R]", "The ship doesn't require repairs.");
       end if;
       if NeedWorker then
          if HaveWorker then
-            Set_Markup
-              (Gtk_Label(Get_Object(Builder, "lblcrafting")),
-               "[<span foreground=""#4E9A06"">M</span>]");
-            Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Builder, "lblcrafting")),
+            UpdateLabel
+              ("lblcrafting", "[<span foreground=""#4E9A06"">M</span>]",
                "All crafting orders are being executed.");
          else
-            Set_Markup
-              (Gtk_Label(Get_Object(Builder, "lblcrafting")),
-               "[<span foreground=""red"">M</span>]");
-            Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Builder, "lblcrafting")),
+            UpdateLabel
+              ("lblcrafting", "[<span foreground=""red"">M</span>]",
                "You need to assign crew members to begin manufacturing.");
          end if;
       else
-         Set_Text(Gtk_Label(Get_Object(Builder, "lblcrafting")), "[M]");
-         Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lblcrafting")),
-            "No crafting orders were set.");
+         UpdateLabel("lblcrafting", "[M]", "No crafting orders were set.");
       end if;
       if PlayerShip.UpgradeModule > 0 then
          if HaveUpgrader then
-            Set_Markup
-              (Gtk_Label(Get_Object(Builder, "lblupgrade")),
-               "[<span foreground=""#4E9A06"">U</span>]");
-            Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Builder, "lblupgrade")),
+            UpdateLabel
+              ("lblupgrade", "[<span foreground=""#4E9A06"">U</span>]",
                "A ship module upgrade in progress.");
          else
-            Set_Markup
-              (Gtk_Label(Get_Object(Builder, "lblupgrade")),
-               "[<span foreground=""red"">U</span>]");
-            Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Builder, "lblupgrade")),
+            UpdateLabel
+              ("lblupgrade", "[<span foreground=""red"">U</span>]",
                "A ship module upgrade is in progress but no one is working on it.");
          end if;
       else
-         Set_Text(Gtk_Label(Get_Object(Builder, "lblupgrade")), "[U]");
-         Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lblupgrade")),
-            "No ship module upgrade was set.");
+         UpdateLabel("lblupgrade", "[U]", "No ship module upgrade was set.");
       end if;
       if HaveTrader then
-         Set_Markup
-           (Gtk_Label(Get_Object(Builder, "lbltalk")),
-            "[<span foreground=""#4E9A06"">T</span>]");
-         Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lbltalk")),
+         UpdateLabel
+           ("lbltalk", "[<span foreground=""#4E9A06"">T</span>]",
             "Trader is in position.");
       elsif SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
-         Set_Markup
-           (Gtk_Label(Get_Object(Builder, "lbltalk")),
-            "[<span foreground=""red"">T</span>]");
-         Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lbltalk")),
+         UpdateLabel
+           ("lbltalk", "[<span foreground=""red"">T</span>]",
             "No trader assigned. You need one to talk/trade.");
       elsif SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
          if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
              .EType =
            FriendlyShip then
-            Set_Markup
-              (Gtk_Label(Get_Object(Builder, "lbltalk")),
-               "[<span foreground=""red"">T</span>]");
-            Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Builder, "lbltalk")),
+            UpdateLabel
+              ("lbltalk", "[<span foreground=""red"">T</span>]",
                "No trader assigned. You need one to talk/trade.");
          else
-            Set_Text(Gtk_Label(Get_Object(Builder, "lbltalk")), "[T]");
-            Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Builder, "lbltalk")),
-               "No trader needed.");
+            UpdateLabel("lbltalk", "[T]", "No trader needed.");
          end if;
       else
-         Set_Text(Gtk_Label(Get_Object(Builder, "lbltalk")), "[T]");
-         Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lbltalk")), "No trader needed.");
+         UpdateLabel("lbltalk", "[T]", "No trader needed.");
       end if;
       if NeedCleaning then
          if HaveCleaner then
-            Set_Markup
-              (Gtk_Label(Get_Object(Builder, "lblclean")),
-               "[<span foreground=""#4E9A06"">C</span>]");
-            Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Builder, "lblclean")),
+            UpdateLabel
+              ("lblclean", "[<span foreground=""#4E9A06"">C</span>]",
                "Ship is cleaned.");
          else
-            Set_Markup
-              (Gtk_Label(Get_Object(Builder, "lblclean")),
-               "[<span foreground=""red"">C</span>]");
-            Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Builder, "lblclean")),
+            UpdateLabel
+              ("lblclean", "[<span foreground=""red"">C</span>]",
                "Ship is dirty but no one is cleaning it.");
          end if;
       else
-         Set_Text(Gtk_Label(Get_Object(Builder, "lblclean")), "[C]");
-         Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lblclean")),
-            "Ship needs no cleaning.");
+         UpdateLabel("lblclean", "[C]", "Ship needs no cleaning.");
       end if;
    end UpdateHeader;
 
@@ -441,6 +369,7 @@ package body Maps.UI is
          To_Unbounded_String("Move ship south and west"),
          To_Unbounded_String("Move ship south"),
          To_Unbounded_String("Move ship south and east"));
+      MoveButton: Gtk_Widget;
    begin
       if PlayerShip.Speed = DOCKED then
          Hide(Gtk_Widget(Get_Object(Builder, "cmbspeed")));
@@ -449,11 +378,11 @@ package body Maps.UI is
          Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Builder, "lblmovewait")), "Wait 1 minute.");
          for I in MoveButtonsNames'Range loop
-            Set_Sensitive
-              (Gtk_Widget(Get_Object(Builder, To_String(MoveButtonsNames(I)))),
-               False);
+            MoveButton :=
+              Gtk_Widget(Get_Object(Builder, To_String(MoveButtonsNames(I))));
+            Set_Sensitive(MoveButton, False);
             Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Builder, To_String(MoveButtonsNames(I)))),
+              (MoveButton,
                "You must give order 'Undock' from Ship Orders first to move ship.");
          end loop;
       else
@@ -475,12 +404,10 @@ package body Maps.UI is
                "Wait 1 minute.");
          end if;
          for I in MoveButtonsNames'Range loop
-            Set_Sensitive
-              (Gtk_Widget(Get_Object(Builder, To_String(MoveButtonsNames(I)))),
-               True);
-            Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Builder, To_String(MoveButtonsNames(I)))),
-               To_String(MoveButtonsTooltips(I)));
+            MoveButton :=
+              Gtk_Widget(Get_Object(Builder, To_String(MoveButtonsNames(I))));
+            Set_Sensitive(MoveButton, True);
+            Set_Tooltip_Text(MoveButton, To_String(MoveButtonsTooltips(I)));
          end loop;
       end if;
    end UpdateMoveButtons;
@@ -1146,109 +1073,136 @@ package body Maps.UI is
          Load(To_String(SaveDirectory) & "keys.cfg");
       end if;
       Accelerators := Gtk_Accel_Group(Get_Object(Builder, "movementaccels"));
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btnupleft")),
-         "<skymapwindow>/btnupleft", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btnup")), "<skymapwindow>/btnup",
-         Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btnupright")),
-         "<skymapwindow>/btnupright", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btnleft")), "<skymapwindow>/btnleft",
-         Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btnmovewait")),
-         "<skymapwindow>/btnmovewait", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btnright")),
-         "<skymapwindow>/btnright", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btnbottomleft")),
-         "<skymapwindow>/btnbottomleft", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btnbottom")),
-         "<skymapwindow>/btnbottom", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btnbottomright")),
-         "<skymapwindow>/btnbottomright", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btnmoveto")),
-         "<skymapwindow>/btnmoveto", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btnmenu")), "<skymapwindow>/Menu",
-         Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "menuship")),
-         "<skymapwindow>/Menu/ShipInfo", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "menucargo")),
-         "<skymapwindow>/Menu/ShipCargoInfo", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "menucrew")),
-         "<skymapwindow>/Menu/CrewInfo", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "menuorders")),
-         "<skymapwindow>/Menu/ShipOrders", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "menucrafting")),
-         "<skymapwindow>/Menu/CraftInfo", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "menumessages")),
-         "<skymapwindow>/Menu/MessagesInfo", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "menubaseslist")),
-         "<skymapwindow>/Menu/BasesInfo", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "menuevents")),
-         "<skymapwindow>/Menu/EventsInfo", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "menumissions")),
-         "<skymapwindow>/Menu/MissionsInfo", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "menumovemap")),
-         "<skymapwindow>/Menu/MoveMap", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "menustats")),
-         "<skymapwindow>/Menu/GameStats", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "menuhelp")),
-         "<skymapwindow>/Menu/Help", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "menuoptions")),
-         "<skymapwindow>/Menu/GameOptions", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "menuquit")),
-         "<skymapwindow>/Menu/QuitGame", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "menuresign")),
-         "<skymapwindow>/Menu/ResignFromGame", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "menuwait")),
-         "<skymapwindow>/Menu/WaitOrders", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "menustory")),
-         "<skymapwindow>/Menu/Stories", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btncenter")),
-         "<movemapwindow>/btncenter", Accelerators);
+      declare
+         type Accel_Record is record
+            WidgetName: Unbounded_String;
+            AccelName: Unbounded_String;
+         end record;
+         AccelsArray: constant array(Positive range <>) of Accel_Record :=
+           (1 =>
+              (To_Unbounded_String("btnupleft"),
+               To_Unbounded_String("<skymapwindow>/btnupleft")),
+            2 =>
+              (To_Unbounded_String("btnup"),
+               To_Unbounded_String("<skymapwindow>/btnup")),
+            3 =>
+              (To_Unbounded_String("btnupright"),
+               To_Unbounded_String("<skymapwindow>/btnupright")),
+            4 =>
+              (To_Unbounded_String("btnleft"),
+               To_Unbounded_String("<skymapwindow>/btnleft")),
+            5 =>
+              (To_Unbounded_String("btnmovewait"),
+               To_Unbounded_String("<skymapwindow>/btnmovewait")),
+            6 =>
+              (To_Unbounded_String("btnright"),
+               To_Unbounded_String("<skymapwindow>/btnright")),
+            7 =>
+              (To_Unbounded_String("btnbottomleft"),
+               To_Unbounded_String("<skymapwindow>/btnbottomleft")),
+            8 =>
+              (To_Unbounded_String("btnbottom"),
+               To_Unbounded_String("<skymapwindow>/btnbottom")),
+            9 =>
+              (To_Unbounded_String("btnbottomright"),
+               To_Unbounded_String("<skymapwindow>/btnbottomright")),
+            10 =>
+              (To_Unbounded_String("btnmoveto"),
+               To_Unbounded_String("<skymapwindow>/btnmoveto")),
+            11 =>
+              (To_Unbounded_String("btnmenu"),
+               To_Unbounded_String("<skymapwindow>/Menu")),
+            12 =>
+              (To_Unbounded_String("menuship"),
+               To_Unbounded_String("<skymapwindow>/Menu/ShipInfo")),
+            13 =>
+              (To_Unbounded_String("menucargo"),
+               To_Unbounded_String("<skymapwindow>/Menu/ShipCargoInfo")),
+            14 =>
+              (To_Unbounded_String("menucrew"),
+               To_Unbounded_String("<skymapwindow>/Menu/CrewInfo")),
+            15 =>
+              (To_Unbounded_String("menuorders"),
+               To_Unbounded_String("<skymapwindow>/Menu/ShipOrders")),
+            16 =>
+              (To_Unbounded_String("menucrafting"),
+               To_Unbounded_String("<skymapwindow>/Menu/CraftInfo")),
+            17 =>
+              (To_Unbounded_String("menumessages"),
+               To_Unbounded_String("<skymapwindow>/Menu/MessagesInfo")),
+            18 =>
+              (To_Unbounded_String("menubaseslist"),
+               To_Unbounded_String("<skymapwindow>/Menu/BasesInfo")),
+            19 =>
+              (To_Unbounded_String("menuevents"),
+               To_Unbounded_String("<skymapwindow>/Menu/EventsInfo")),
+            20 =>
+              (To_Unbounded_String("menumissions"),
+               To_Unbounded_String("<skymapwindow>/Menu/MissionsInfo")),
+            21 =>
+              (To_Unbounded_String("menumovemap"),
+               To_Unbounded_String("<skymapwindow>/Menu/MoveMap")),
+            22 =>
+              (To_Unbounded_String("menustats"),
+               To_Unbounded_String("<skymapwindow>/Menu/GameStats")),
+            23 =>
+              (To_Unbounded_String("menuhelp"),
+               To_Unbounded_String("<skymapwindow>/Menu/Help")),
+            24 =>
+              (To_Unbounded_String("menuoptions"),
+               To_Unbounded_String("<skymapwindow>/Menu/GameOptions")),
+            25 =>
+              (To_Unbounded_String("menuquit"),
+               To_Unbounded_String("<skymapwindow>/Menu/QuitGame")),
+            26 =>
+              (To_Unbounded_String("menuresign"),
+               To_Unbounded_String("<skymapwindow>/Menu/ResignFromGame")),
+            27 =>
+              (To_Unbounded_String("menuwait"),
+               To_Unbounded_String("<skymapwindow>/Menu/WaitOrders")),
+            28 =>
+              (To_Unbounded_String("menustory"),
+               To_Unbounded_String("<skymapwindow>/Menu/Stories")),
+            29 =>
+              (To_Unbounded_String("btncenter"),
+               To_Unbounded_String("<movemapwindow>/btncenter")));
+      begin
+         for I in AccelsArray'Range loop
+            Set_Accel_Path
+              (Gtk_Widget
+                 (Get_Object(Builder, To_String(AccelsArray(I).WidgetName))),
+               To_String(AccelsArray(I).AccelName), Accelerators);
+         end loop;
+      end;
       Accelerators := Gtk_Accel_Group(Get_Object(Builder, "movemapaccels"));
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btncenter")),
          "<movemapwindow>/btncenter", Accelerators);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "movemapwindow")), CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "orderswindow")), CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "waitwindow")), CloseWindow'Access);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "skymapwindow")),
-         MapKeyReleased'Access);
-      On_Key_Press_Event
-        (Gtk_Widget(Get_Object(Builder, "skymapwindow")),
-         MapKeyPressed'Access);
+      declare
+         WindowsNames: constant array(Positive range <>) of Unbounded_String :=
+           (To_Unbounded_String("movemapwindow"),
+            To_Unbounded_String("orderswindow"),
+            To_Unbounded_String("waitwindow"));
+      begin
+         for I in WindowsNames'Range loop
+            On_Key_Release_Event
+              (Gtk_Widget(Get_Object(Builder, To_String(WindowsNames(I)))),
+               CloseWindow'Access);
+         end loop;
+      end;
+      declare
+         StackNames: constant array(Positive range <>) of Unbounded_String :=
+           (To_Unbounded_String("gamestack"),
+            To_Unbounded_String("shipyardstack"),
+            To_Unbounded_String("optionsstack"),
+            To_Unbounded_String("combatstack"));
+      begin
+         for I in StackNames'Range loop
+            Set_Transition_Type
+              (Gtk_Stack(Get_Object(Builder, To_String(StackNames(I)))),
+               Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
+         end loop;
+      end;
       On_Key_Press_Event
         (Gtk_Widget(Get_Object(Builder, "spinx")), SelectElement'Access,
          Get_Object(Builder, "spiny"));
@@ -1258,23 +1212,18 @@ package body Maps.UI is
       On_Key_Press_Event
         (Gtk_Widget(Get_Object(Builder, "spinminutes")), SelectElement'Access,
          Get_Object(Builder, "btnwaitx"));
-      Set_Transition_Type
-        (Gtk_Stack(Get_Object(Builder, "gamestack")),
-         Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
-      Set_Transition_Type
-        (Gtk_Stack(Get_Object(Builder, "shipyardstack")),
-         Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
-      Set_Transition_Type
-        (Gtk_Stack(Get_Object(Builder, "optionsstack")),
-         Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
-      Set_Transition_Type
-        (Gtk_Stack(Get_Object(Builder, "combatstack")),
-         Gtk_Stack_Transition_Type'Val(GameSettings.AnimationType));
-      Set_Default_Size
-        (Gtk_Window(Get_Object(Builder, "skymapwindow")),
-         Gint(GameSettings.WindowWidth), Gint(GameSettings.WindowHeight));
       On_Scroll_Event
         (Gtk_Widget(Get_Object(Builder, "mapview")), ZoomMap'Access);
+      declare
+         MainWindow: constant Gtk_Widget :=
+           Gtk_Widget(Get_Object(Builder, "skymapwindow"));
+      begin
+         On_Key_Release_Event(MainWindow, MapKeyReleased'Access);
+         On_Key_Press_Event(MainWindow, MapKeyPressed'Access);
+         Set_Default_Size
+           (Gtk_Window(MainWindow), Gint(GameSettings.WindowWidth),
+            Gint(GameSettings.WindowHeight));
+      end;
       ShowSkyMap;
    end CreateSkyMap;
 
