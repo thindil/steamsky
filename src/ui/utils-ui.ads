@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Widget; use Gtk.Widget;
@@ -54,5 +55,8 @@ package Utils.UI is
    function SelectElement(Self: access GObject_Record'Class;
       Event: Gdk_Event_Key)
      return Boolean; -- Select other element on press Return key
+   procedure TravelInfo(InfoText: in out Unbounded_String; Distance: Positive;
+      ShowFuelName: Boolean :=
+        False); -- Add info about travel eta and approx fuel usage
 
 end Utils.UI;

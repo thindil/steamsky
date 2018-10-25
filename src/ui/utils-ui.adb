@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Gtk.Message_Dialog; use Gtk.Message_Dialog;
 with Gtk.Dialog; use Gtk.Dialog;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
@@ -33,6 +33,8 @@ with GameOptions; use GameOptions;
 with Statistics.UI; use Statistics.UI;
 with Ships; use Ships;
 with Ships.Crew; use Ships.Crew;
+with Ships.Movement; use Ships.Movement;
+with Items; use Items;
 
 package body Utils.UI is
 
@@ -192,5 +194,76 @@ package body Utils.UI is
       end if;
       return False;
    end SelectElement;
+
+   procedure TravelInfo(InfoText: in out Unbounded_String; Distance: Positive;
+      ShowFuelName: Boolean := False) is
+      TravelTime: Date_Record :=
+        (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
+      type SpeedType is digits 2;
+      Speed: constant SpeedType :=
+        (SpeedType(RealSpeed(PlayerShip, True)) / 1000.0);
+      MinutesDiff: Integer;
+   begin
+      MinutesDiff := Integer(100.0 / Speed);
+      case PlayerShip.Speed is
+         when QUARTER_SPEED =>
+            if MinutesDiff < 60 then
+               MinutesDiff := 60;
+            end if;
+         when HALF_SPEED =>
+            if MinutesDiff < 30 then
+               MinutesDiff := 30;
+            end if;
+         when FULL_SPEED =>
+            if MinutesDiff < 15 then
+               MinutesDiff := 15;
+            end if;
+         when others =>
+            null;
+      end case;
+      MinutesDiff := MinutesDiff * Distance;
+      while MinutesDiff > 0 loop
+         if MinutesDiff >= 518400 then
+            TravelTime.Year := TravelTime.Year + 1;
+            MinutesDiff := MinutesDiff - 518400;
+         elsif MinutesDiff >= 43200 then
+            TravelTime.Month := TravelTime.Month + 1;
+            MinutesDiff := MinutesDiff - 43200;
+         elsif MinutesDiff >= 1440 then
+            TravelTime.Day := TravelTime.Day + 1;
+            MinutesDiff := MinutesDiff - 1440;
+         elsif MinutesDiff >= 60 then
+            TravelTime.Hour := TravelTime.Hour + 1;
+            MinutesDiff := MinutesDiff - 60;
+         else
+            TravelTime.Minutes := MinutesDiff;
+            MinutesDiff := 0;
+         end if;
+      end loop;
+      Append(InfoText, LF & "ETA:");
+      if TravelTime.Year > 0 then
+         Append(InfoText, Positive'Image(TravelTime.Year) & "y");
+      end if;
+      if TravelTime.Month > 0 then
+         Append(InfoText, Positive'Image(TravelTime.Month) & "m");
+      end if;
+      if TravelTime.Day > 0 then
+         Append(InfoText, Positive'Image(TravelTime.Day) & "d");
+      end if;
+      if TravelTime.Hour > 0 then
+         Append(InfoText, Positive'Image(TravelTime.Hour) & "h");
+      end if;
+      if TravelTime.Minutes > 0 then
+         Append(InfoText, Positive'Image(TravelTime.Minutes) & "mins");
+      end if;
+      Append
+        (InfoText,
+         LF & "Approx fuel usage:" &
+         Natural'Image(abs (Distance * CountFuelNeeded)) & " ");
+      if ShowFuelName then
+         Append
+           (InfoText, Items_List(FindProtoItem(ItemType => FuelType)).Name);
+      end if;
+   end TravelInfo;
 
 end Utils.UI;

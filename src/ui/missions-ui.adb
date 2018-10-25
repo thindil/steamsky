@@ -34,7 +34,6 @@ with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Game; use Game;
 with Ships; use Ships;
-with Ships.Movement; use Ships.Movement;
 with Bases; use Bases;
 with Messages; use Messages;
 with Items; use Items;
@@ -188,76 +187,9 @@ package body Missions.UI is
          LF & "Reward:" & Positive'Image(Mission.Reward) & " " &
          To_String(MoneyName));
       if User_Data = Get_Object(Builder, "treemissions") then
-         declare
-            Distance: constant Positive :=
-              Positive(Get_Int(MissionsModel, MissionsIter, 2)) * 2;
-            TravelTime: Date_Record :=
-              (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
-            type SpeedType is digits 2;
-            Speed: constant SpeedType :=
-              (SpeedType(RealSpeed(PlayerShip, True)) / 1000.0);
-         begin
-            MinutesDiff := Integer(100.0 / Speed);
-            case PlayerShip.Speed is
-               when QUARTER_SPEED =>
-                  if MinutesDiff < 60 then
-                     MinutesDiff := 60;
-                  end if;
-               when HALF_SPEED =>
-                  if MinutesDiff < 30 then
-                     MinutesDiff := 30;
-                  end if;
-               when FULL_SPEED =>
-                  if MinutesDiff < 15 then
-                     MinutesDiff := 15;
-                  end if;
-               when others =>
-                  null;
-            end case;
-            MinutesDiff := MinutesDiff * Distance;
-            while MinutesDiff > 0 loop
-               if MinutesDiff >= 518400 then
-                  TravelTime.Year := TravelTime.Year + 1;
-                  MinutesDiff := MinutesDiff - 518400;
-               elsif MinutesDiff >= 43200 then
-                  TravelTime.Month := TravelTime.Month + 1;
-                  MinutesDiff := MinutesDiff - 43200;
-               elsif MinutesDiff >= 1440 then
-                  TravelTime.Day := TravelTime.Day + 1;
-                  MinutesDiff := MinutesDiff - 1440;
-               elsif MinutesDiff >= 60 then
-                  TravelTime.Hour := TravelTime.Hour + 1;
-                  MinutesDiff := MinutesDiff - 60;
-               else
-                  TravelTime.Minutes := MinutesDiff;
-                  MinutesDiff := 0;
-               end if;
-            end loop;
-            Append(MissionInfo, LF & "ETA:");
-            if TravelTime.Year > 0 then
-               Append(MissionInfo, Positive'Image(TravelTime.Year) & "y");
-            end if;
-            if TravelTime.Month > 0 then
-               Append(MissionInfo, Positive'Image(TravelTime.Month) & "m");
-            end if;
-            if TravelTime.Day > 0 then
-               Append(MissionInfo, Positive'Image(TravelTime.Day) & "d");
-            end if;
-            if TravelTime.Hour > 0 then
-               Append(MissionInfo, Positive'Image(TravelTime.Hour) & "h");
-            end if;
-            if TravelTime.Minutes > 0 then
-               Append
-                 (MissionInfo, Positive'Image(TravelTime.Minutes) & "mins");
-            end if;
-            Append
-              (MissionInfo,
-               LF & "Approx fuel usage:" &
-               Natural'Image(abs (Distance * CountFuelNeeded)) & " ");
-            Append
-              (MissionInfo,
-               Items_List(FindProtoItem(ItemType => FuelType)).Name);
-         end;
+         TravelInfo
+           (MissionInfo, Positive(Get_Int(MissionsModel, MissionsIter, 2)) * 2,
+            True);
          Set_Markup
            (Gtk_Label(Get_Object(Builder, "lblavailablemissioninfo")),
             To_String(MissionInfo));
