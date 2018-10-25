@@ -76,7 +76,6 @@ with GameOptions; use GameOptions;
 with Ships.Crew; use Ships.Crew;
 with Ships.UI; use Ships.UI;
 with Ships.Cargo.UI; use Ships.Cargo.UI;
-with Ships.Movement; use Ships.Movement;
 with Trades.UI; use Trades.UI;
 with Factions; use Factions;
 with Stories; use Stories;
@@ -714,74 +713,7 @@ package body Maps.UI is
         (MapInfoText,
          "X:" & Positive'Image(MapX) & " Y:" & Positive'Image(MapY));
       if PlayerShip.SkyX /= MapX or PlayerShip.SkyY /= MapY then
-         declare
-            Distance: constant Positive := CountDistance(MapX, MapY);
-            MinutesDiff: Integer;
-            type SpeedType is digits 2;
-            Speed: constant SpeedType :=
-              (SpeedType(RealSpeed(PlayerShip, True)) / 1000.0);
-            TravelTime: Date_Record :=
-              (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
-         begin
-            Append(MapInfoText, LF & "Distance:" & Positive'Image(Distance));
-            Append
-              (MapInfoText,
-               LF & "Approx fuel usage:" &
-               Natural'Image(abs (Distance * CountFuelNeeded)));
-            MinutesDiff := Integer(100.0 / Speed);
-            case PlayerShip.Speed is
-               when QUARTER_SPEED =>
-                  if MinutesDiff < 60 then
-                     MinutesDiff := 60;
-                  end if;
-               when HALF_SPEED =>
-                  if MinutesDiff < 30 then
-                     MinutesDiff := 30;
-                  end if;
-               when FULL_SPEED =>
-                  if MinutesDiff < 15 then
-                     MinutesDiff := 15;
-                  end if;
-               when others =>
-                  null;
-            end case;
-            MinutesDiff := MinutesDiff * Distance;
-            while MinutesDiff > 0 loop
-               if MinutesDiff >= 518400 then
-                  TravelTime.Year := TravelTime.Year + 1;
-                  MinutesDiff := MinutesDiff - 518400;
-               elsif MinutesDiff >= 43200 then
-                  TravelTime.Month := TravelTime.Month + 1;
-                  MinutesDiff := MinutesDiff - 43200;
-               elsif MinutesDiff >= 1440 then
-                  TravelTime.Day := TravelTime.Day + 1;
-                  MinutesDiff := MinutesDiff - 1440;
-               elsif MinutesDiff >= 60 then
-                  TravelTime.Hour := TravelTime.Hour + 1;
-                  MinutesDiff := MinutesDiff - 60;
-               else
-                  TravelTime.Minutes := MinutesDiff;
-                  MinutesDiff := 0;
-               end if;
-            end loop;
-            Append(MapInfoText, LF & "ETA:");
-            if TravelTime.Year > 0 then
-               Append(MapInfoText, Positive'Image(TravelTime.Year) & "y");
-            end if;
-            if TravelTime.Month > 0 then
-               Append(MapInfoText, Positive'Image(TravelTime.Month) & "m");
-            end if;
-            if TravelTime.Day > 0 then
-               Append(MapInfoText, Positive'Image(TravelTime.Day) & "d");
-            end if;
-            if TravelTime.Hour > 0 then
-               Append(MapInfoText, Positive'Image(TravelTime.Hour) & "h");
-            end if;
-            if TravelTime.Minutes > 0 then
-               Append
-                 (MapInfoText, Positive'Image(TravelTime.Minutes) & "mins");
-            end if;
-         end;
+         TravelInfo(MapInfoText, CountDistance(MapX, MapY));
       end if;
       if SkyMap(MapX, MapY).BaseIndex > 0 then
          declare
