@@ -132,14 +132,7 @@ package body Missions is
             end if;
          end if;
       end loop;
-      for I in ProtoShips_List.Iterate loop
-         if ProtoShips_List(I).CombatValue <= PlayerValue and
-           not IsFriendly
-             (Factions_List(PlayerShip.Crew(1).Faction).Index,
-              Factions_List(ProtoShips_List(I).Owner).Index) then
-            Enemies.Append(New_Item => ProtoShips_Container.To_Index(I));
-         end if;
-      end loop;
+      GenerateEnemies(Enemies);
       for I in 1 .. MissionsAmount loop
          Mission.MType :=
            Missions_Types'Val
