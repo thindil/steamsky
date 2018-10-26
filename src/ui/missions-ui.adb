@@ -51,9 +51,6 @@ package body Missions.UI is
       MissionsModel: Gtk_Tree_Model;
       MissionInfo: Unbounded_String;
       Mission: Mission_Data;
-      MinutesDiff: Natural;
-      MissionTime: Date_Record :=
-        (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
       HaveCabin, CabinTaken: Boolean := False;
       CanAccept: Boolean := True;
       MissionsLimit: Natural;
@@ -147,41 +144,8 @@ package body Missions.UI is
                  (SkyBases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
                     .Name));
       end case;
-      MinutesDiff := Mission.Time;
-      while MinutesDiff > 0 loop
-         if MinutesDiff >= 518400 then
-            MissionTime.Year := MissionTime.Year + 1;
-            MinutesDiff := MinutesDiff - 518400;
-         elsif MinutesDiff >= 43200 then
-            MissionTime.Month := MissionTime.Month + 1;
-            MinutesDiff := MinutesDiff - 43200;
-         elsif MinutesDiff >= 1440 then
-            MissionTime.Day := MissionTime.Day + 1;
-            MinutesDiff := MinutesDiff - 1440;
-         elsif MinutesDiff >= 60 then
-            MissionTime.Hour := MissionTime.Hour + 1;
-            MinutesDiff := MinutesDiff - 60;
-         else
-            MissionTime.Minutes := MinutesDiff;
-            MinutesDiff := 0;
-         end if;
-      end loop;
       Append(MissionInfo, LF & "Time limit:");
-      if MissionTime.Year > 0 then
-         Append(MissionInfo, Positive'Image(MissionTime.Year) & "y");
-      end if;
-      if MissionTime.Month > 0 then
-         Append(MissionInfo, Positive'Image(MissionTime.Month) & "m");
-      end if;
-      if MissionTime.Day > 0 then
-         Append(MissionInfo, Positive'Image(MissionTime.Day) & "d");
-      end if;
-      if MissionTime.Hour > 0 then
-         Append(MissionInfo, Positive'Image(MissionTime.Hour) & "h");
-      end if;
-      if MissionTime.Minutes > 0 then
-         Append(MissionInfo, Positive'Image(MissionTime.Minutes) & "mins");
-      end if;
+      MinutesToDate(Mission.Time, MissionInfo);
       Append
         (MissionInfo,
          LF & "Reward:" & Positive'Image(Mission.Reward) & " " &
