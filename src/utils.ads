@@ -15,10 +15,15 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Game; use Game;
+
 package Utils is
 
    function GetRandom
      (Min, Max: Integer)
      return Integer; -- Return random number from Min to Max range
+   function DaysDifference
+     (DateToCompare: Date_Record)
+     return Natural; -- Return days difference between selected date and current game date
 
 end Utils;

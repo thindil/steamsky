@@ -34,12 +34,12 @@ with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Glib; use Glib;
-with Game; use Game;
 with Bases; use Bases;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Ships; use Ships;
+with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 with Factions; use Factions;
 
