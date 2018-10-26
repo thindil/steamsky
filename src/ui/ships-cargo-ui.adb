@@ -238,19 +238,19 @@ package body Ships.Cargo.UI is
    end CreateCargoUI;
 
    procedure ShowCargoUI is
+      ComboBoxMember: constant Gtk_Combo_Box_Text :=
+        Gtk_Combo_Box_Text(Get_Object(Builder, "cmbmember"));
    begin
-      Remove_All(Gtk_Combo_Box_Text(Get_Object(Builder, "cmbmember")));
+      Remove_All(ComboBoxMember);
       for Member of PlayerShip.Crew loop
-         Append_Text
-           (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbmember")),
-            To_String(Member.Name));
+         Append_Text(ComboBoxMember, To_String(Member.Name));
       end loop;
       RefreshCargoInfo;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "cargo");
       ShowLastMessage(Builder);
       SetActiveItem;
-      Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbmember")), 0);
+      Set_Active(ComboBoxMember, 0);
    end ShowCargoUI;
 
 end Ships.Cargo.UI;
