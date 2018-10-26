@@ -25,7 +25,6 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Cell_Renderer_Text; use Gtk.Cell_Renderer_Text;
 with Gtk.Button; use Gtk.Button;
-with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Gtk.Stack; use Gtk.Stack;
@@ -44,8 +43,10 @@ package body Ships.UI is
    SkillsListSet: Boolean := False;
 
    procedure ShowAssignMember is
+      AssignCrewCombo: constant Gtk_Combo_Box_Text :=
+        Gtk_Combo_Box_Text(Get_Object(Builder, "cmbassigncrew"));
    begin
-      Remove_All(Gtk_Combo_Box_Text(Get_Object(Builder, "cmbassigncrew")));
+      Remove_All(AssignCrewCombo);
       for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
          if PlayerShip.Modules(ModuleIndex).Owner /= I and
            PlayerShip.Crew(I).Skills.Length > 0 and
@@ -55,24 +56,25 @@ package body Ships.UI is
                when MEDICAL_ROOM =>
                   if PlayerShip.Crew(I).Health = 100 then
                      Append
-                       (Gtk_Combo_Box_Text
-                          (Get_Object(Builder, "cmbassigncrew")),
-                        Positive'Image(I), To_String(PlayerShip.Crew(I).Name));
+                       (AssignCrewCombo, Positive'Image(I),
+                        To_String(PlayerShip.Crew(I).Name));
                   end if;
                when others =>
                   Append
-                    (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbassigncrew")),
-                     Positive'Image(I), To_String(PlayerShip.Crew(I).Name));
+                    (AssignCrewCombo, Positive'Image(I),
+                     To_String(PlayerShip.Crew(I).Name));
             end case;
          end if;
       end loop;
-      Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbassigncrew")), 0);
+      Set_Active(AssignCrewCombo, 0);
    end ShowAssignMember;
 
    procedure ShowAssignAmmo is
       HaveAmmo: Boolean := False;
+      AssignAmmoCombo: constant Gtk_Combo_Box_Text :=
+        Gtk_Combo_Box_Text(Get_Object(Builder, "cmbassignammo"));
    begin
-      Remove_All(Gtk_Combo_Box_Text(Get_Object(Builder, "cmbassignammo")));
+      Remove_All(AssignAmmoCombo);
       for I in PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
          if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
            Items_Types
@@ -80,17 +82,16 @@ package body Ships.UI is
                 .Value) and
            I /= PlayerShip.Modules(ModuleIndex).Data(1) then
             Append
-              (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbassignammo")),
-               Positive'Image(I),
+              (AssignAmmoCombo, Positive'Image(I),
                To_String(Items_List(PlayerShip.Cargo(I).ProtoIndex).Name));
             HaveAmmo := True;
          end if;
       end loop;
       if not HaveAmmo then
-         Hide(Gtk_Widget(Get_Object(Builder, "boxassignammo")));
+         Hide(AssignAmmoCombo);
          return;
       end if;
-      Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbassignammo")), 0);
+      Set_Active(AssignAmmoCombo, 0);
    end ShowAssignAmmo;
 
    procedure ShowModuleOptions is
@@ -99,6 +100,8 @@ package body Ships.UI is
       procedure ShowAssignSkill is
          SkillText: Unbounded_String;
          ProtoIndex: Positive;
+         AssignSkillCombo: constant Gtk_Combo_Box_Text :=
+           Gtk_Combo_Box_Text(Get_Object(Builder, "cmbassignskill"));
       begin
          if SkillsListSet then
             return;
@@ -114,11 +117,9 @@ package body Ships.UI is
                   Append(SkillText, Items_List(ProtoIndex).IType);
                end if;
             end if;
-            Append
-              (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbassignskill")),
-               Positive'Image(I), To_String(SkillText));
+            Append(AssignSkillCombo, Positive'Image(I), To_String(SkillText));
          end loop;
-         Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbassignskill")), 0);
+         Set_Active(AssignSkillCombo, 0);
          SkillsListSet := True;
       end ShowAssignSkill;
    begin
