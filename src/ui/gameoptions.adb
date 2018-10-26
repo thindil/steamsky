@@ -45,81 +45,143 @@ with Themes; use Themes;
 package body GameOptions is
 
    Builder: Gtkada_Builder;
-   AccelNames: constant array(Positive range <>) of Unbounded_String :=
-     (To_Unbounded_String("<skymapwindow>/btnupleft"),
-      To_Unbounded_String("<skymapwindow>/btnup"),
-      To_Unbounded_String("<skymapwindow>/btnupright"),
-      To_Unbounded_String("<skymapwindow>/btnleft"),
-      To_Unbounded_String("<skymapwindow>/btnmovewait"),
-      To_Unbounded_String("<skymapwindow>/btnright"),
-      To_Unbounded_String("<skymapwindow>/btnbottomleft"),
-      To_Unbounded_String("<skymapwindow>/btnbottom"),
-      To_Unbounded_String("<skymapwindow>/btnbottomright"),
-      To_Unbounded_String("<skymapwindow>/btnmoveto"),
-      To_Unbounded_String("<skymapwindow>/Menu/ShipInfo"),
-      To_Unbounded_String("<skymapwindow>/Menu/ShipCargoInfo"),
-      To_Unbounded_String("<skymapwindow>/Menu/CrewInfo"),
-      To_Unbounded_String("<skymapwindow>/Menu/ShipOrders"),
-      To_Unbounded_String("<skymapwindow>/Menu/CraftInfo"),
-      To_Unbounded_String("<skymapwindow>/Menu/MessagesInfo"),
-      To_Unbounded_String("<skymapwindow>/Menu/BasesInfo"),
-      To_Unbounded_String("<skymapwindow>/Menu/EventsInfo"),
-      To_Unbounded_String("<skymapwindow>/Menu/MissionsInfo"),
-      To_Unbounded_String("<skymapwindow>/Menu/MoveMap"),
-      To_Unbounded_String("<skymapwindow>/Menu/GameStats"),
-      To_Unbounded_String("<skymapwindow>/Menu/Help"),
-      To_Unbounded_String("<skymapwindow>/Menu/GameOptions"),
-      To_Unbounded_String("<skymapwindow>/Menu/QuitGame"),
-      To_Unbounded_String("<skymapwindow>/Menu/ResignFromGame"),
-      To_Unbounded_String("<skymapwindow>/Menu"),
-      To_Unbounded_String("<skymapwindow>/Menu/WaitOrders"),
-      To_Unbounded_String("<movemapwindow>/btncenter"),
-      To_Unbounded_String("<skymapwindow>/btnmapleft"),
-      To_Unbounded_String("<skymapwindow>/btnmapright"),
-      To_Unbounded_String("<skymapwindow>/btnmapup"),
-      To_Unbounded_String("<skymapwindow>/btnmapdown"),
-      To_Unbounded_String("<skymapwindow>/cursorupleft"),
-      To_Unbounded_String("<skymapwindow>/cursorup"),
-      To_Unbounded_String("<skymapwindow>/cursorupright"),
-      To_Unbounded_String("<skymapwindow>/cursorleft"),
-      To_Unbounded_String("<skymapwindow>/cursorright"),
-      To_Unbounded_String("<skymapwindow>/cursordownleft"),
-      To_Unbounded_String("<skymapwindow>/cursordown"),
-      To_Unbounded_String("<skymapwindow>/cursordownright"),
-      To_Unbounded_String("<skymapwindow>/mouseclick"),
-      To_Unbounded_String("<skymapwindow>/Menu/Stories"),
-      To_Unbounded_String("<skymapwindow>/zoomin"),
-      To_Unbounded_String("<skymapwindow>/zoomout"));
-   EditNames: constant array(AccelNames'Range) of Unbounded_String :=
-     (To_Unbounded_String("edtupleft"), To_Unbounded_String("edtup"),
-      To_Unbounded_String("edtupright"), To_Unbounded_String("edtleft"),
-      To_Unbounded_String("edtmovewait"), To_Unbounded_String("edtright"),
-      To_Unbounded_String("edtdownleft"), To_Unbounded_String("edtdown"),
-      To_Unbounded_String("edtdownright"), To_Unbounded_String("edtmoveto"),
-      To_Unbounded_String("edtshipinfo"), To_Unbounded_String("edtcargo"),
-      To_Unbounded_String("edtcrew"), To_Unbounded_String("edtorders"),
-      To_Unbounded_String("edtcrafts"), To_Unbounded_String("edtmessages"),
-      To_Unbounded_String("edtbases"), To_Unbounded_String("edtevents"),
-      To_Unbounded_String("edtmissions"), To_Unbounded_String("edtmap"),
-      To_Unbounded_String("edtgamestats"), To_Unbounded_String("edthelp"),
-      To_Unbounded_String("edtgameoptions"), To_Unbounded_String("edtquit"),
-      To_Unbounded_String("edtresign"), To_Unbounded_String("edtmenu"),
-      To_Unbounded_String("edtwaitorders"),
-      To_Unbounded_String("edtcentermap"),
-      To_Unbounded_String("edtmovemapleft"),
-      To_Unbounded_String("edtmovemapright"),
-      To_Unbounded_String("edtmovemapup"),
-      To_Unbounded_String("edtmovemapdown"),
-      To_Unbounded_String("edtmovecursorupleft"),
-      To_Unbounded_String("edtmovecursorup"),
-      To_Unbounded_String("edtmovecursorupright"),
-      To_Unbounded_String("edtmovecursorleft"),
-      To_Unbounded_String("edtmovecursorright"),
-      To_Unbounded_String("edtmovecursordownleft"),
-      To_Unbounded_String("edtmovecursordown"),
-      To_Unbounded_String("edtmovecursordownright"),
-      To_Unbounded_String("edtclickmouse"), To_Unbounded_String("edtstories"),
-      To_Unbounded_String("edtzoomin"), To_Unbounded_String("edtzoomout"));
+   type Accel_Data is record
+      AccelName: Unbounded_String;
+      EntryName: Unbounded_String;
+   end record;
+   Accels: constant array(Positive range <>) of Accel_Data :=
+     (1 =>
+        (To_Unbounded_String("<skymapwindow>/btnupleft"),
+         To_Unbounded_String("edtupleft")),
+      2 =>
+        (To_Unbounded_String("<skymapwindow>/btnup"),
+         To_Unbounded_String("edtup")),
+      3 =>
+        (To_Unbounded_String("<skymapwindow>/btnupright"),
+         To_Unbounded_String("edtupright")),
+      4 =>
+        (To_Unbounded_String("<skymapwindow>/btnleft"),
+         To_Unbounded_String("edtupleft")),
+      5 =>
+        (To_Unbounded_String("<skymapwindow>/btnmovewait"),
+         To_Unbounded_String("edtmovewait")),
+      6 =>
+        (To_Unbounded_String("<skymapwindow>/btnright"),
+         To_Unbounded_String("edtright")),
+      7 =>
+        (To_Unbounded_String("<skymapwindow>/btnbottomleft"),
+         To_Unbounded_String("edtdownleft")),
+      8 =>
+        (To_Unbounded_String("<skymapwindow>/btnbottom"),
+         To_Unbounded_String("edtdown")),
+      9 =>
+        (To_Unbounded_String("<skymapwindow>/btnbottomright"),
+         To_Unbounded_String("edtdownright")),
+      10 =>
+        (To_Unbounded_String("<skymapwindow>/btnmoveto"),
+         To_Unbounded_String("edtmoveto")),
+      11 =>
+        (To_Unbounded_String("<skymapwindow>/Menu/ShipInfo"),
+         To_Unbounded_String("edtshipinfo")),
+      12 =>
+        (To_Unbounded_String("<skymapwindow>/Menu/ShipCargoInfo"),
+         To_Unbounded_String("edtcargo")),
+      13 =>
+        (To_Unbounded_String("<skymapwindow>/Menu/CrewInfo"),
+         To_Unbounded_String("edtcrew")),
+      14 =>
+        (To_Unbounded_String("<skymapwindow>/Menu/ShipOrders"),
+         To_Unbounded_String("edtorders")),
+      15 =>
+        (To_Unbounded_String("<skymapwindow>/Menu/CraftInfo"),
+         To_Unbounded_String("edtcrafts")),
+      16 =>
+        (To_Unbounded_String("<skymapwindow>/Menu/MessagesInfo"),
+         To_Unbounded_String("edtmessages")),
+      17 =>
+        (To_Unbounded_String("<skymapwindow>/Menu/BasesInfo"),
+         To_Unbounded_String("edtbases")),
+      18 =>
+        (To_Unbounded_String("<skymapwindow>/Menu/EventsInfo"),
+         To_Unbounded_String("edtevents")),
+      19 =>
+        (To_Unbounded_String("<skymapwindow>/Menu/MissionsInfo"),
+         To_Unbounded_String("edtmissions")),
+      20 =>
+        (To_Unbounded_String("<skymapwindow>/Menu/MoveMap"),
+         To_Unbounded_String("edtmap")),
+      21 =>
+        (To_Unbounded_String("<skymapwindow>/Menu/GameStats"),
+         To_Unbounded_String("edtgamestats")),
+      22 =>
+        (To_Unbounded_String("<skymapwindow>/Menu/Help"),
+         To_Unbounded_String("edthelp")),
+      23 =>
+        (To_Unbounded_String("<skymapwindow>/Menu/GameOptions"),
+         To_Unbounded_String("edtgameoptions")),
+      24 =>
+        (To_Unbounded_String("<skymapwindow>/Menu/QuitGame"),
+         To_Unbounded_String("edtquit")),
+      25 =>
+        (To_Unbounded_String("<skymapwindow>/Menu/ResignFromGame"),
+         To_Unbounded_String("edtresign")),
+      26 =>
+        (To_Unbounded_String("<skymapwindow>/Menu"),
+         To_Unbounded_String("edtmenu")),
+      27 =>
+        (To_Unbounded_String("<skymapwindow>/Menu/WaitOrders"),
+         To_Unbounded_String("edtwaitorders")),
+      28 =>
+        (To_Unbounded_String("<movemapwindow>/btncenter"),
+         To_Unbounded_String("edtcentermap")),
+      29 =>
+        (To_Unbounded_String("<skymapwindow>/btnmapleft"),
+         To_Unbounded_String("edtmovemapleft")),
+      30 =>
+        (To_Unbounded_String("<skymapwindow>/btnmapright"),
+         To_Unbounded_String("edtmovemapright")),
+      31 =>
+        (To_Unbounded_String("<skymapwindow>/btnmapup"),
+         To_Unbounded_String("edtmovemapup")),
+      32 =>
+        (To_Unbounded_String("<skymapwindow>/btnmapdown"),
+         To_Unbounded_String("edtmovemapdown")),
+      33 =>
+        (To_Unbounded_String("<skymapwindow>/cursorupleft"),
+         To_Unbounded_String("edtmovecursorupleft")),
+      34 =>
+        (To_Unbounded_String("<skymapwindow>/cursorup"),
+         To_Unbounded_String("edtmovecursorup")),
+      35 =>
+        (To_Unbounded_String("<skymapwindow>/cursorupright"),
+         To_Unbounded_String("edtmovecursorupright")),
+      36 =>
+        (To_Unbounded_String("<skymapwindow>/cursorleft"),
+         To_Unbounded_String("edtmovecursorleft")),
+      37 =>
+        (To_Unbounded_String("<skymapwindow>/cursorright"),
+         To_Unbounded_String("edtmovecursorright")),
+      38 =>
+        (To_Unbounded_String("<skymapwindow>/cursordownleft"),
+         To_Unbounded_String("edtmovecursordownleft")),
+      39 =>
+        (To_Unbounded_String("<skymapwindow>/cursordown"),
+         To_Unbounded_String("edtmovecursordown")),
+      40 =>
+        (To_Unbounded_String("<skymapwindow>/cursordownright"),
+         To_Unbounded_String("edtmovecursordownright")),
+      41 =>
+        (To_Unbounded_String("<skymapwindow>/mouseclick"),
+         To_Unbounded_String("edtclickmouse")),
+      42 =>
+        (To_Unbounded_String("<skymapwindow>/Menu/Stories"),
+         To_Unbounded_String("edtstories")),
+      43 =>
+        (To_Unbounded_String("<skymapwindow>/zoomin"),
+         To_Unbounded_String("edtzoomin")),
+      44 =>
+        (To_Unbounded_String("<skymapwindow>/zoomout"),
+         To_Unbounded_String("edtzoomout")));
 
    procedure CloseOptions(Object: access Gtkada_Builder_Record'Class) is
    begin
@@ -200,8 +262,8 @@ package body GameOptions is
       Changed, Found: Boolean := False;
       Key: Gtk_Accel_Key;
    begin
-      for I in AccelNames'Range loop
-         Lookup_Entry(To_String(AccelNames(I)), Key, Found);
+      for I in Accels'Range loop
+         Lookup_Entry(To_String(Accels(I).AccelName), Key, Found);
          if Key.Accel_Key = Event.Keyval and Key.Accel_Mods = KeyMods then
             ShowDialog
               ("This key is set for other action. Please choose a different key.",
@@ -209,12 +271,12 @@ package body GameOptions is
             return False;
          end if;
       end loop;
-      for I in EditNames'Range loop
+      for I in Accels'Range loop
          if Self =
-           Gtk_Widget(Get_Object(Builder, To_String(EditNames(I)))) then
+           Gtk_Widget(Get_Object(Builder, To_String(Accels(I).EntryName))) then
             Changed :=
               Change_Entry
-                (To_String(AccelNames(I)), Event.Keyval, KeyMods, True);
+                (To_String(Accels(I).AccelName), Event.Keyval, KeyMods, True);
             exit;
          end if;
       end loop;
@@ -288,9 +350,9 @@ package body GameOptions is
       Register_Handler(Builder, "Apply_Theme", ApplyTheme'Access);
       Register_Handler
         (Builder, "Set_Default_Font_Size", SetDefaultFontSize'Access);
-      for I in EditNames'Range loop
+      for I in Accels'Range loop
          On_Key_Press_Event
-           (Gtk_Widget(Get_Object(Builder, To_String(EditNames(I)))),
+           (Gtk_Widget(Get_Object(Builder, To_String(Accels(I).EntryName))),
             SetAccelerator'Access);
       end loop;
       Set_Text
@@ -351,10 +413,10 @@ package body GameOptions is
       Set_Active
         (Gtk_Combo_Box(Get_Object(Builder, "cmbautomovestop")),
          (AutoMoveBreak'Pos(GameSettings.AutoMoveStop)));
-      for I in EditNames'Range loop
-         Lookup_Entry(To_String(AccelNames(I)), Key, Found);
+      for I in Accels'Range loop
+         Lookup_Entry(To_String(Accels(I).AccelName), Key, Found);
          Set_Text
-           (Gtk_Entry(Get_Object(Builder, To_String(EditNames(I)))),
+           (Gtk_Entry(Get_Object(Builder, To_String(Accels(I).EntryName))),
             Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods));
       end loop;
       if GameSettings.AnimationsEnabled = 1 then
