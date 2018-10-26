@@ -603,13 +603,6 @@ package body Game is
       end loop;
    end LoadData;
 
-   function DaysDifference(DateToCompare: Date_Record) return Natural is
-   begin
-      return (GameDate.Day + (30 * GameDate.Month) + (GameDate.Year * 360)) -
-        (DateToCompare.Day + (30 * DateToCompare.Month) +
-         (DateToCompare.Year * 360));
-   end DaysDifference;
-
    procedure EndGame(Save: Boolean) is
    begin
       if Save then
