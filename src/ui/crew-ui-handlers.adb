@@ -106,48 +106,8 @@ package body Crew.UI.Handlers is
          Hide(Gtk_Widget(Get_Object(Object, "lblcrewpay")));
          Append(MemberInfo, LF & "Passenger");
          if Member.ContractLength > 0 then
-            declare
-               MinutesDiff: Natural;
-               MissionTime: Date_Record :=
-                 (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
-            begin
-               MinutesDiff := Member.ContractLength;
-               while MinutesDiff > 0 loop
-                  if MinutesDiff >= 518400 then
-                     MissionTime.Year := MissionTime.Year + 1;
-                     MinutesDiff := MinutesDiff - 518400;
-                  elsif MinutesDiff >= 43200 then
-                     MissionTime.Month := MissionTime.Month + 1;
-                     MinutesDiff := MinutesDiff - 43200;
-                  elsif MinutesDiff >= 1440 then
-                     MissionTime.Day := MissionTime.Day + 1;
-                     MinutesDiff := MinutesDiff - 1440;
-                  elsif MinutesDiff >= 60 then
-                     MissionTime.Hour := MissionTime.Hour + 1;
-                     MinutesDiff := MinutesDiff - 60;
-                  else
-                     MissionTime.Minutes := MinutesDiff;
-                     MinutesDiff := 0;
-                  end if;
-               end loop;
-               Append(MemberInfo, LF & "Time limit:");
-               if MissionTime.Year > 0 then
-                  Append(MemberInfo, Positive'Image(MissionTime.Year) & "y");
-               end if;
-               if MissionTime.Month > 0 then
-                  Append(MemberInfo, Positive'Image(MissionTime.Month) & "m");
-               end if;
-               if MissionTime.Day > 0 then
-                  Append(MemberInfo, Positive'Image(MissionTime.Day) & "d");
-               end if;
-               if MissionTime.Hour > 0 then
-                  Append(MemberInfo, Positive'Image(MissionTime.Hour) & "h");
-               end if;
-               if MissionTime.Minutes > 0 then
-                  Append
-                    (MemberInfo, Positive'Image(MissionTime.Minutes) & "mins");
-               end if;
-            end;
+            Append(MemberInfo, LF & "Time limit:");
+            MinutesToDate(Member.ContractLength, MemberInfo);
          end if;
       else
          Show_All(Gtk_Widget(Get_Object(Object, "treestats1")));
