@@ -74,8 +74,6 @@ package body Statistics.UI is
 
    procedure ShowStatsUI is
       MinutesDiff: Natural;
-      TimePassed: Date_Record :=
-        (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
       type VisitedFactor is digits 4 range 0.0 .. 100.0;
       VisitedPercent: VisitedFactor;
       VisitedString: String(1 .. 5);
@@ -90,33 +88,10 @@ package body Statistics.UI is
         (GameDate.Minutes + (GameDate.Hour * 60) + (GameDate.Day * 1440) +
          (GameDate.Month * 43200) + (GameDate.Year * 518400)) -
         829571520;
-      while MinutesDiff > 0 loop
-         if MinutesDiff >= 518400 then
-            TimePassed.Year := TimePassed.Year + 1;
-            MinutesDiff := MinutesDiff - 518400;
-         elsif MinutesDiff >= 43200 then
-            TimePassed.Month := TimePassed.Month + 1;
-            MinutesDiff := MinutesDiff - 43200;
-         elsif MinutesDiff >= 1440 then
-            TimePassed.Day := TimePassed.Day + 1;
-            MinutesDiff := MinutesDiff - 1440;
-         elsif MinutesDiff >= 60 then
-            TimePassed.Hour := TimePassed.Hour + 1;
-            MinutesDiff := MinutesDiff - 60;
-         else
-            TimePassed.Minutes := MinutesDiff;
-            MinutesDiff := 0;
-         end if;
-      end loop;
       StatsText :=
         To_Unbounded_String("Points:" & Natural'Image(GameStats.Points));
-      Append
-        (StatsText,
-         LF & "Time passed:" & Natural'Image(TimePassed.Year) & "y," &
-         Natural'Image(TimePassed.Month) & "m," &
-         Natural'Image(TimePassed.Day) & "d," &
-         Natural'Image(TimePassed.Hour) & "h," &
-         Natural'Image(TimePassed.Minutes) & "mins");
+      Append(StatsText, LF & "Time passed:");
+      MinutesToDate(MinutesDiff, StatsText);
       VisitedPercent :=
         (VisitedFactor(GameStats.BasesVisited) / 1024.0) * 100.0;
       Put

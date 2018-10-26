@@ -197,8 +197,6 @@ package body Utils.UI is
 
    procedure TravelInfo(InfoText: in out Unbounded_String; Distance: Positive;
       ShowFuelName: Boolean := False) is
-      TravelTime: Date_Record :=
-        (Year => 0, Month => 0, Day => 0, Hour => 0, Minutes => 0);
       type SpeedType is digits 2;
       Speed: constant SpeedType :=
         (SpeedType(RealSpeed(PlayerShip, True)) / 1000.0);
@@ -221,7 +219,24 @@ package body Utils.UI is
          when others =>
             null;
       end case;
+      Append(InfoText, LF & "ETA:");
       MinutesDiff := MinutesDiff * Distance;
+      MinutesToDate(MinutesDiff, InfoText);
+      Append
+        (InfoText,
+         LF & "Approx fuel usage:" &
+         Natural'Image(abs (Distance * CountFuelNeeded)) & " ");
+      if ShowFuelName then
+         Append
+           (InfoText, Items_List(FindProtoItem(ItemType => FuelType)).Name);
+      end if;
+   end TravelInfo;
+
+   procedure MinutesToDate(Minutes: Positive;
+      InfoText: in out Unbounded_String) is
+      TravelTime: Date_Record := (others => 0);
+      MinutesDiff: Integer := Minutes;
+   begin
       while MinutesDiff > 0 loop
          if MinutesDiff >= 518400 then
             TravelTime.Year := TravelTime.Year + 1;
@@ -240,7 +255,6 @@ package body Utils.UI is
             MinutesDiff := 0;
          end if;
       end loop;
-      Append(InfoText, LF & "ETA:");
       if TravelTime.Year > 0 then
          Append(InfoText, Positive'Image(TravelTime.Year) & "y");
       end if;
@@ -256,14 +270,6 @@ package body Utils.UI is
       if TravelTime.Minutes > 0 then
          Append(InfoText, Positive'Image(TravelTime.Minutes) & "mins");
       end if;
-      Append
-        (InfoText,
-         LF & "Approx fuel usage:" &
-         Natural'Image(abs (Distance * CountFuelNeeded)) & " ");
-      if ShowFuelName then
-         Append
-           (InfoText, Items_List(FindProtoItem(ItemType => FuelType)).Name);
-      end if;
-   end TravelInfo;
+   end MinutesToDate;
 
 end Utils.UI;
