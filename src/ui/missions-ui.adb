@@ -187,9 +187,17 @@ package body Missions.UI is
          LF & "Reward:" & Positive'Image(Mission.Reward) & " " &
          To_String(MoneyName));
       if User_Data = Get_Object(Builder, "treemissions") then
-         TravelInfo
-           (MissionInfo, Positive(Get_Int(MissionsModel, MissionsIter, 2)) * 2,
-            True);
+         declare
+            Distance: Positive;
+         begin
+            if Mission.MType = Deliver or Mission.MType = Passenger then
+               Distance := Positive(Get_Int(MissionsModel, MissionsIter, 2));
+            else
+               Distance :=
+                 Positive(Get_Int(MissionsModel, MissionsIter, 2)) * 2;
+            end if;
+            TravelInfo(MissionInfo, Distance, True);
+         end;
          Set_Markup
            (Gtk_Label(Get_Object(Builder, "lblavailablemissioninfo")),
             To_String(MissionInfo));
