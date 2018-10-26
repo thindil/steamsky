@@ -101,9 +101,6 @@ package Game is
       CareerIndex: Positive); -- Start new game: create map, place ship, crew, etc
    procedure UpdateGame
      (Minutes: Positive); -- Game ticks (update time, crew, ship, etc)
-   function DaysDifference
-     (DateToCompare: Date_Record)
-     return Natural; -- Return days difference between selected date and current game date
    procedure EndGame
      (Save: Boolean); -- Save (or not) game and clear all temporary data
    function FindSkillIndex
