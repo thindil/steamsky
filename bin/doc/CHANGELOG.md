@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Redesigned combat UI (issue #30)
 - Updated README.md
 - Updated MODDING.md
+- Don't allow to disable last engine even when player ship is docked to base
 
 ### Fixed
 - Showing information about reputation in base in bases list
