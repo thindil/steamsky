@@ -184,6 +184,8 @@ package body Stories.UI is
    end CreateStoriesUI;
 
    procedure ShowStoriesUI is
+      StoriesComboBox: constant Gtk_Combo_Box_Text :=
+        Gtk_Combo_Box_Text(Get_Object(Builder, "cmbstories"));
    begin
       if FinishedStories.Length = 0 then
          Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));
@@ -194,16 +196,14 @@ package body Stories.UI is
          return;
       end if;
       Setting := True;
-      Remove_All(Gtk_Combo_Box_Text(Get_Object(Builder, "cmbstories")));
+      Remove_All(StoriesComboBox);
       for FinishedStory of FinishedStories loop
          Append_Text
-           (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbstories")),
+           (StoriesComboBox,
             To_String(Stories_List(FinishedStory.Index).Name));
       end loop;
       Setting := False;
-      Set_Active
-        (Gtk_Combo_Box(Get_Object(Builder, "cmbstories")),
-         Gint(FinishedStories.Length - 1));
+      Set_Active(StoriesComboBox, Gint(FinishedStories.Length - 1));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "stories");
       ShowLastMessage(Builder);
