@@ -175,9 +175,9 @@ package body Ships.UI.Handlers is
               (Gtk_Progress_Bar(QualityBar), Gdouble(Module.Data(2)) / 100.0);
             if Module.Data(2) < 30 then
                Set_Text(Gtk_Progress_Bar(QualityBar), "Minimal quality");
-            elsif Module.Data(2) > 29 and Module.Data(2) < 60 then
+            elsif Module.Data(2) < 60 then
                Set_Text(Gtk_Progress_Bar(QualityBar), "Basic quality");
-            elsif Module.Data(2) > 59 and Module.Data(2) < 80 then
+            elsif Module.Data(2) < 80 then
                Set_Text(Gtk_Progress_Bar(QualityBar), "Extended quality");
             else
                Set_Text(Gtk_Progress_Bar(QualityBar), "Luxury");
@@ -209,19 +209,19 @@ package body Ships.UI.Handlers is
          when GUN | HARPOON_GUN =>
             Append(ModuleInfo, "Ammunition: ");
             HaveAmmo := False;
-            if Module.Data(1) >= PlayerShip.Cargo.First_Index and
-              Module.Data(1) <= PlayerShip.Cargo.Last_Index then
-               if Items_List(PlayerShip.Cargo(Module.Data(1)).ProtoIndex)
-                   .IType =
-                 Items_Types(Modules_List(Module.ProtoIndex).Value) then
-                  Append
-                    (ModuleInfo,
-                     To_String
-                       (Items_List(PlayerShip.Cargo(Module.Data(1)).ProtoIndex)
-                          .Name) &
-                     " (assigned)");
-                  HaveAmmo := True;
-               end if;
+            if
+              (Module.Data(1) >= PlayerShip.Cargo.First_Index and
+               Module.Data(1) <= PlayerShip.Cargo.Last_Index)
+              and then
+                Items_List(PlayerShip.Cargo(Module.Data(1)).ProtoIndex).IType =
+                Items_Types(Modules_List(Module.ProtoIndex).Value) then
+               Append
+                 (ModuleInfo,
+                  To_String
+                    (Items_List(PlayerShip.Cargo(Module.Data(1)).ProtoIndex)
+                       .Name) &
+                  " (assigned)");
+               HaveAmmo := True;
             end if;
             if not HaveAmmo then
                Mamount := 0;
@@ -427,18 +427,16 @@ package body Ships.UI.Handlers is
    end ChangeModuleName;
 
    procedure SetUpgrade(User_Data: access GObject_Record'Class) is
-      UpgradeType: Positive;
    begin
       if User_Data = Get_Object(Builder, "btnupgradedur") then
-         UpgradeType := 1;
+         StartUpgrading(ModuleIndex, 1);
       elsif User_Data = Get_Object(Builder, "btnupgrade1") then
-         UpgradeType := 2;
+         StartUpgrading(ModuleIndex, 2);
       elsif User_Data = Get_Object(Builder, "btnupgrade2") then
-         UpgradeType := 3;
+         StartUpgrading(ModuleIndex, 3);
       else
-         UpgradeType := 4;
+         StartUpgrading(ModuleIndex, 4);
       end if;
-      StartUpgrading(ModuleIndex, UpgradeType);
       UpdateOrders(PlayerShip);
       ShowLastMessage(Builder);
       ShowShipInfo;
