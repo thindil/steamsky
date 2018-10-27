@@ -16,8 +16,8 @@ All notable changes to this project will be documented in this file.
 - Variables for keyboard shortcuts for zooming map
 - Option to auto ask for bases and events when ship dock to base
 - New ship modules: small orichalcum workshop, small adamantium training room,
-  adamantium cockpit, small adamantium alchemy lab, small adamantium cargo bay
-  and small adamantium furnace
+  adamantium cockpit, small adamantium alchemy lab, small adamantium cargo bay,
+  small adamantium furnace and heavy adamantium armor
 - Option to show or hide buttons for map movement
 
 ### Changed
