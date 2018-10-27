@@ -17,7 +17,9 @@
 
 package Themes is
 
-   type FontTypes is (HELPFONT, MAPFONT, INTERFACEFONT, ALLFONTS); -- Types of font available in game
+   type FontTypes is
+     (HELPFONT, MAPFONT, INTERFACEFONT,
+      ALLFONTS); -- Types of font available in game
    procedure SetFontSize
      (FontType: FontTypes); -- Set size of selected font (or all if FontName is empty string)
    procedure LoadTheme; -- Load selected UI theme
