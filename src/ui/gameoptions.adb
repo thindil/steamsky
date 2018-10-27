@@ -293,18 +293,18 @@ package body GameOptions is
          GameSettings.HelpFontSize :=
            Positive
              (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjhelpfont"))));
-         SetFontSize("help");
+         SetFontSize(HELPFONT);
       elsif User_Data = Get_Object(Builder, "adjmapfont") then
          GameSettings.MapFontSize :=
            Positive
              (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjmapfont"))));
-         SetFontSize("map");
+         SetFontSize(MAPFONT);
       else
          GameSettings.InterfaceFontSize :=
            Positive
              (Get_Value
                 (Gtk_Adjustment(Get_Object(Builder, "adjinterfacefont"))));
-         SetFontSize("interface");
+         SetFontSize(INTERFACEFONT);
       end if;
    end ResizeFont;
 

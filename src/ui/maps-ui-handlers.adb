@@ -1275,7 +1275,7 @@ package body Maps.UI.Handlers is
          if GameSettings.MapFontSize < 3 then
             GameSettings.MapFontSize := 3;
          end if;
-         SetFontSize("map");
+         SetFontSize(MAPFONT);
          return False;
       end if;
       Lookup_Entry("<skymapwindow>/zoomout", Key, Found);
@@ -1287,7 +1287,7 @@ package body Maps.UI.Handlers is
          if GameSettings.MapFontSize > 30 then
             GameSettings.MapFontSize := 30;
          end if;
-         SetFontSize("map");
+         SetFontSize(MAPFONT);
          return False;
       end if;
       return True;
@@ -1395,7 +1395,7 @@ package body Maps.UI.Handlers is
             GameSettings.MapFontSize := 30;
          end if;
       end if;
-      SetFontSize("map");
+      SetFontSize(MAPFONT);
       return False;
    end ZoomMap;
 
