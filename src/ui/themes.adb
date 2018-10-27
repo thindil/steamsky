@@ -32,12 +32,12 @@ package body Themes is
 
    CssProvider: Gtk_Css_Provider;
 
-   procedure SetFontSize(FontName: String) is
+   procedure SetFontSize(FontType: FontTypes) is
       CssText: Unbounded_String := To_Unbounded_String(To_String(CssProvider));
       StartIndex, EndIndex: Positive;
       Error: aliased GError;
    begin
-      if FontName = "help" or FontName = "" then
+      if FontType = HELPFONT or FontType = ALLFONTS then
          StartIndex := Index(CssText, "*#normalfont", 1);
          StartIndex := Index(CssText, "font-size", StartIndex);
          EndIndex := Index(CssText, ";", StartIndex);
@@ -45,7 +45,7 @@ package body Themes is
            (CssText, StartIndex, EndIndex,
             "font-size:" & Positive'Image(GameSettings.HelpFontSize) & "px;");
       end if;
-      if FontName = "map" or FontName = "" then
+      if FontType = MAPFONT or FontType = ALLFONTS then
          StartIndex := Index(CssText, "#mapview", 1);
          StartIndex := Index(CssText, "font-size", StartIndex);
          EndIndex := Index(CssText, ";", StartIndex);
@@ -53,7 +53,7 @@ package body Themes is
            (CssText, StartIndex, EndIndex,
             "font-size:" & Positive'Image(GameSettings.MapFontSize) & "px;");
       end if;
-      if FontName = "interface" or FontName = "" then
+      if FontType = INTERFACEFONT or FontType = ALLFONTS then
          StartIndex := 1;
          StartIndex := Index(CssText, "font-size", StartIndex);
          EndIndex := Index(CssText, ";", StartIndex);
