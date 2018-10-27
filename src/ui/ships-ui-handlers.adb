@@ -545,19 +545,15 @@ package body Ships.UI.Handlers is
       CanDisable: Boolean := False;
    begin
       if PlayerShip.Modules(ModuleIndex).Data(3) = 0 then
-         if PlayerShip.Speed /= DOCKED then
-            for I in PlayerShip.Modules.Iterate loop
-               if Modules_List(PlayerShip.Modules(I).ProtoIndex).MType =
-                 ENGINE and
-                 PlayerShip.Modules(I).Data(3) = 0 and
-                 Modules_Container.To_Index(I) /= ModuleIndex then
-                  CanDisable := True;
-                  exit;
-               end if;
-            end loop;
-         else
-            CanDisable := True;
-         end if;
+         for I in PlayerShip.Modules.Iterate loop
+            if Modules_List(PlayerShip.Modules(I).ProtoIndex).MType =
+              ENGINE and
+              PlayerShip.Modules(I).Data(3) = 0 and
+              Modules_Container.To_Index(I) /= ModuleIndex then
+               CanDisable := True;
+               exit;
+            end if;
+         end loop;
          if not CanDisable then
             ShowDialog
               ("You can't disable this engine because it is your last working engine.",
