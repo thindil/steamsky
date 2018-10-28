@@ -37,8 +37,7 @@ package body Bases.Cargo is
       end if;
       if SkyBases(BaseIndex).Population < 150 then
          Chance := 5;
-      elsif SkyBases(BaseIndex).Population > 149 and
-        SkyBases(BaseIndex).Population < 300 then
+      elsif SkyBases(BaseIndex).Population < 300 then
          Chance := 10;
       else
          Chance := 15;
@@ -131,35 +130,27 @@ package body Bases.Cargo is
       Durability: Natural := 101) return Natural is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      function FindCargo(Cargo: BaseCargo_Container.Vector) return Natural is
+      begin
+         for I in Cargo.Iterate loop
+            if Durability < 101 then
+               if Cargo(I).ProtoIndex = ProtoIndex and
+                 Cargo(I).Durability = Durability then
+                  return BaseCargo_Container.To_Index(I);
+               end if;
+            else
+               if Cargo(I).ProtoIndex = ProtoIndex then
+                  return BaseCargo_Container.To_Index(I);
+               end if;
+            end if;
+         end loop;
+         return 0;
+      end FindCargo;
    begin
       if BaseIndex > 0 then
-         for I in SkyBases(BaseIndex).Cargo.Iterate loop
-            if Durability < 101 then
-               if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ProtoIndex and
-                 SkyBases(BaseIndex).Cargo(I).Durability = Durability then
-                  return BaseCargo_Container.To_Index(I);
-               end if;
-            else
-               if SkyBases(BaseIndex).Cargo(I).ProtoIndex = ProtoIndex then
-                  return BaseCargo_Container.To_Index(I);
-               end if;
-            end if;
-         end loop;
-      else
-         for I in TraderCargo.Iterate loop
-            if Durability < 101 then
-               if TraderCargo(I).ProtoIndex = ProtoIndex and
-                 TraderCargo(I).Durability = Durability then
-                  return BaseCargo_Container.To_Index(I);
-               end if;
-            else
-               if TraderCargo(I).ProtoIndex = ProtoIndex then
-                  return BaseCargo_Container.To_Index(I);
-               end if;
-            end if;
-         end loop;
+         return FindCargo(SkyBases(BaseIndex).Cargo);
       end if;
-      return 0;
+      return FindCargo(TraderCargo);
    end FindBaseCargo;
 
 end Bases.Cargo;
