@@ -238,5 +238,6 @@ Text between "module" tags is module description.
  <module durability="350" index="199" installtime="90" material="Adamantium" maxvalue="5000" name="Small adamantium cargo bay" price="9600" size="1" skill="Engineering" type="CARGO" value="0" weight="300">Space for holding ship cargo, made of adamantium.</module>
  <module durability="600" index="200" installtime="90" material="Adamantium" maxvalue="0" name="Small adamantium furnace" price="24000" size="1" skill="Metalsmith" type="FURNACE" value="0" weight="2400">Allow smelt ores into metals. Made of adamantium.</module>
  <module durability="1600" index="201" installtime="270" material="Adamantium" maxvalue="10" name="Heavy adamantium armor" price="30000" skill="Engineering" type="ARMOR" unique="Y" value="5" weight="12000">Heaviest type of adamantium armor. Protects whole ship.</module>
+ <module durability="600" index="202" installtime="90" material="Adamantium" maxvalue="0" name="Small adamantium greenhouse" price="24000" size="1" skill="Engineering" type="GREENHOUSE" value="0" weight="2200">Allows cultivation of plants. Made of adamantium.</module>
 </modules>
 
