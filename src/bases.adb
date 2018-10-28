@@ -198,8 +198,7 @@ package body Bases is
       end if;
       if SkyBases(BaseIndex).Population < 150 then
          MaxRecruits := 5;
-      elsif SkyBases(BaseIndex).Population > 149 and
-        SkyBases(BaseIndex).Population < 300 then
+      elsif SkyBases(BaseIndex).Population < 300 then
          MaxRecruits := 10;
       else
          MaxRecruits := 15;
@@ -336,8 +335,7 @@ package body Bases is
          if SkyBases(BaseIndex).Population < 150 then
             Amount := 10;
             Radius := 10;
-         elsif SkyBases(BaseIndex).Population > 149 and
-           SkyBases(BaseIndex).Population < 300 then
+         elsif SkyBases(BaseIndex).Population < 300 then
             Amount := 20;
             Radius := 20;
          else
@@ -389,30 +387,21 @@ package body Bases is
                TempY := 1024;
             end if;
             TmpBaseIndex := SkyMap(TempX, TempY).BaseIndex;
-            if TmpBaseIndex > 0 then
-               if not SkyBases(TmpBaseIndex).Known then
-                  SkyBases(TmpBaseIndex).Known := True;
-                  Amount := Amount - 1;
-                  exit Bases_Loop when Amount = 0;
-               end if;
+            if TmpBaseIndex > 0 and then not SkyBases(TmpBaseIndex).Known then
+               SkyBases(TmpBaseIndex).Known := True;
+               Amount := Amount - 1;
+               exit Bases_Loop when Amount = 0;
             end if;
          end loop;
       end loop Bases_Loop;
       if Amount > 0 then
          if BaseIndex > 0 then -- asking in base
-            if SkyBases(BaseIndex).Population < 150 then
-               if Amount > 1 then
-                  Amount := 1;
-               end if;
-            elsif SkyBases(BaseIndex).Population > 149 and
-              SkyBases(BaseIndex).Population < 300 then
-               if Amount > 2 then
-                  Amount := 2;
-               end if;
-            else
-               if Amount > 4 then
-                  Amount := 4;
-               end if;
+            if SkyBases(BaseIndex).Population < 150 and then Amount > 1 then
+               Amount := 1;
+            elsif SkyBases(BaseIndex).Population < 300 and then Amount > 2 then
+               Amount := 2;
+            elsif Amount > 4 then
+               Amount := 4;
             end if;
          else -- asking friendly ship
             if ProtoShips_List(ShipIndex).Crew.Length < 5 then
@@ -458,7 +447,6 @@ package body Bases is
       Event: Events_Types;
       MinX, MinY, MaxX, MaxY: Integer;
       Enemies: Positive_Container.Vector;
-      PlayerValue: Natural := 0;
       Attempts, TraderIndex: Natural;
       PlayerShips: UnboundedString_Container.Vector;
    begin
@@ -470,8 +458,7 @@ package body Bases is
       if BaseIndex > 0 then -- asking in base
          if SkyBases(BaseIndex).Population < 150 then
             MaxEvents := 5;
-         elsif SkyBases(BaseIndex).Population > 149 and
-           SkyBases(BaseIndex).Population < 300 then
+         elsif SkyBases(BaseIndex).Population < 300 then
             MaxEvents := 10;
          else
             MaxEvents := 15;
@@ -521,25 +508,12 @@ package body Bases is
       if MaxY > 1024 then
          MaxY := 1024;
       end if;
-      if GetRandom(1, 100) < 99 then
-         PlayerValue := CountCombatValue;
-      else
-         PlayerValue := Natural'Last;
-      end if;
       for Faction of Factions_List loop
          for Career of Faction.Careers loop
             PlayerShips.Append(New_Item => Career.ShipIndex);
          end loop;
       end loop;
-      for C in ProtoShips_List.Iterate loop
-         if ProtoShips_List(C).CombatValue <= PlayerValue and
-           not IsFriendly
-             (Factions_List(PlayerShip.Crew(1).Faction).Index,
-              Factions_List(ProtoShips_List(C).Owner).Index) and
-           not PlayerShips.Contains(ProtoShips_List(C).Index) then
-            Enemies.Append(New_Item => ProtoShips_Container.To_Index(C));
-         end if;
-      end loop;
+      GenerateEnemies(Enemies);
       for I in 1 .. EventsAmount loop
          Event := Events_Types'Val(GetRandom(1, 5));
          Attempts := 10;
@@ -694,8 +668,7 @@ package body Bases is
       end if;
       if SkyBases(BaseIndex).Population < 150 then
          Chance := 1;
-      elsif SkyBases(BaseIndex).Population > 149 and
-        SkyBases(BaseIndex).Population < 300 then
+      elsif SkyBases(BaseIndex).Population < 300 then
          Chance := 2;
       else
          Chance := 5;
