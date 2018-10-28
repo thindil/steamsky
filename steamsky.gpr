@@ -33,7 +33,10 @@ project steamsky is
                     "-gnatVa",
                     "-gnatU",
                     "-gnatf",
-                    "-gnateE");
+                    "-gnateE",
+                    "-pg",
+                    "-fprofile-arcs",
+                    "-ftest-coverage");
             when "release" =>
                 for Default_Switches ("ada") use ("-O2",
                     "-gnatn2");
@@ -43,7 +46,7 @@ project steamsky is
     package Linker is
         case Mode is
             when "debug" =>
-              for Default_Switches ("ada") use ("-no-pie");
+              for Default_Switches ("ada") use ("-no-pie", "-pg", "-fprofile-arcs");
             when "release" =>
                 for Default_Switches ("ada") use ("-Wl,--gc-sections");
         end case;
