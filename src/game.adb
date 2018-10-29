@@ -621,14 +621,14 @@ package body Game is
       SaveConfig;
    end EndGame;
 
-   function FindSkillIndex(SkillName: Unbounded_String) return Positive is
+   function FindSkillIndex(SkillName: Unbounded_String) return Natural is
    begin
       for I in Skills_List.Iterate loop
          if Skills_List(I).Name = SkillName then
             return SkillsData_Container.To_Index(I);
          end if;
       end loop;
-      return 1;
+      return 0;
    end FindSkillIndex;
 
    function LoadGameData return String is

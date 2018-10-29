@@ -105,7 +105,7 @@ package Game is
      (Save: Boolean); -- Save (or not) game and clear all temporary data
    function FindSkillIndex
      (SkillName: Unbounded_String)
-     return Positive; -- Return vector index of selected skill
+     return Natural; -- Return vector index of selected skill
    function LoadGameData return String; -- Load game data from files
 
 end Game;
