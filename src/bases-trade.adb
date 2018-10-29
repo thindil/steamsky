@@ -227,9 +227,8 @@ package body Bases.Trade is
             if Skill(2) < 100 then
                Cost := (Skill(2) + 1) * 100;
                exit;
-            else
-               return 0;
             end if;
+            return 0;
          end if;
       end loop;
       CountPrice(Cost, FindMember(Talk));
