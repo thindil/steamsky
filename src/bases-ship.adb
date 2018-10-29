@@ -274,10 +274,9 @@ package body Bases.Ship is
             PlayerShip.UpgradeModule := PlayerShip.UpgradeModule - 1;
          end if;
          for Module of PlayerShip.Modules loop
-            if Modules_List(Module.ProtoIndex).MType = TURRET then
-               if Module.Data(1) > ModuleIndex then
-                  Module.Data(1) := Module.Data(1) - 1;
-               end if;
+            if Modules_List(Module.ProtoIndex).MType = TURRET
+              and then Module.Data(1) > ModuleIndex then
+               Module.Data(1) := Module.Data(1) - 1;
             end if;
          end loop;
       end if;
