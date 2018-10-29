@@ -27,8 +27,8 @@ package body Careers is
       TempRecord: CareerRecord;
       NodesList, ChildNodes: Node_List;
       CareersData: Document;
-      RemoveIndex: Unbounded_String;
-      DeleteIndex: Positive;
+      RemoveIndex, SkillName: Unbounded_String;
+      DeleteIndex: Natural := 0;
       TmpSkills: UnboundedString_Container.Vector;
    begin
       TempRecord :=
@@ -40,16 +40,27 @@ package body Careers is
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord.Index :=
            To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
+         for Career of Careers_List loop
+            if Career.Index = TempRecord.Index then
+               raise Careers_Adding_Error
+                 with "Can't add career '" & To_String(TempRecord.Index) &
+                 "', there is one with that index.";
+            end if;
+         end loop;
          TempRecord.Name :=
            To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name"));
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
              (Item(NodesList, I), "skill");
          for J in 0 .. Length(ChildNodes) - 1 loop
-            TempRecord.Skills.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Get_Attribute(Item(ChildNodes, J), "name")));
+            SkillName :=
+              To_Unbounded_String(Get_Attribute(Item(ChildNodes, J), "name"));
+            if FindSkillIndex(SkillName) = 0 then
+               raise Careers_Adding_Error
+                 with "Can't add career '" & To_String(TempRecord.Index) &
+                 "', skill '" & To_String(SkillName) & "' not exists";
+            end if;
+            TempRecord.Skills.Append(New_Item => SkillName);
          end loop;
          if Get_Attribute(Item(NodesList, I), "remove") = "" then
             Careers_List.Append(New_Item => TempRecord);
@@ -64,6 +75,11 @@ package body Careers is
                   exit;
                end if;
             end loop;
+            if DeleteIndex = 0 then
+               raise Careers_Remove_Error
+                 with "Can't delete career '" & To_String(RemoveIndex) &
+                 "', no career with that index.";
+            end if;
             Careers_List.Delete(Index => DeleteIndex);
             LogMessage
               ("Career removed: " & To_String(RemoveIndex), Everything);
