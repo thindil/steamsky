@@ -324,6 +324,16 @@ package body Bases.SaveLoad is
       BaseCargo: BaseCargo_Container.Vector;
       NodesList, BaseData: Node_List;
       BaseIndex: Positive;
+      NodeName: Unbounded_String;
+      function GetFactionIndex(FactionIndex: String) return Natural is
+      begin
+         for I in Factions_List.Iterate loop
+            if Factions_List(I).Index = To_Unbounded_String(FactionIndex) then
+               return Factions_Container.To_Index(I);
+            end if;
+         end loop;
+         return 0;
+      end GetFactionIndex;
    begin
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "base");
@@ -347,14 +357,8 @@ package body Bases.SaveLoad is
             Owner => 1, Cargo => BaseCargo,
             Size =>
               Bases_Size'Value(Get_Attribute(Item(NodesList, I), "size")));
-         for J in Factions_List.Iterate loop
-            if Factions_List(J).Index =
-              To_Unbounded_String
-                (Get_Attribute(Item(NodesList, I), "owner")) then
-               SkyBases(BaseIndex).Owner := Factions_Container.To_Index(J);
-               exit;
-            end if;
-         end loop;
+         SkyBases(BaseIndex).Owner :=
+           GetFactionIndex(Get_Attribute(Item(NodesList, I), "owner"));
          if Get_Attribute(Item(NodesList, I), "known") = "Y" then
             SkyBases(BaseIndex).Known := True;
          end if;
@@ -363,7 +367,8 @@ package body Bases.SaveLoad is
          end if;
          BaseData := Child_Nodes(Item(NodesList, I));
          for J in 0 .. Length(BaseData) - 1 loop
-            if Node_Name(Item(BaseData, J)) = "visiteddate" then
+            NodeName := To_Unbounded_String(Node_Name(Item(BaseData, J)));
+            if NodeName = To_Unbounded_String("visiteddate") then
                SkyBases(BaseIndex).Visited.Year :=
                  Natural'Value(Get_Attribute(Item(BaseData, J), "year"));
                SkyBases(BaseIndex).Visited.Month :=
@@ -374,14 +379,14 @@ package body Bases.SaveLoad is
                  Natural'Value(Get_Attribute(Item(BaseData, J), "hour"));
                SkyBases(BaseIndex).Visited.Minutes :=
                  Natural'Value(Get_Attribute(Item(BaseData, J), "minutes"));
-            elsif Node_Name(Item(BaseData, J)) = "recruitdate" then
+            elsif NodeName = To_Unbounded_String("recruitdate") then
                SkyBases(BaseIndex).RecruitDate.Year :=
                  Natural'Value(Get_Attribute(Item(BaseData, J), "year"));
                SkyBases(BaseIndex).RecruitDate.Month :=
                  Natural'Value(Get_Attribute(Item(BaseData, J), "month"));
                SkyBases(BaseIndex).RecruitDate.Day :=
                  Natural'Value(Get_Attribute(Item(BaseData, J), "day"));
-            elsif Node_Name(Item(BaseData, J)) = "recruit" then
+            elsif NodeName = To_Unbounded_String("recruit") then
                declare
                   RecruitData: Node_List;
                   RecruitName: Unbounded_String;
@@ -406,7 +411,9 @@ package body Bases.SaveLoad is
                   Payment := 20;
                   RecruitData := Child_Nodes(Item(BaseData, J));
                   for L in 0 .. Length(RecruitData) - 1 loop
-                     if Node_Name(Item(RecruitData, L)) = "skill" then
+                     NodeName :=
+                       To_Unbounded_String(Node_Name(Item(RecruitData, L)));
+                     if NodeName = To_Unbounded_String("skill") then
                         Index :=
                           Natural'Value
                             (Get_Attribute(Item(RecruitData, L), "index"));
@@ -418,7 +425,7 @@ package body Bases.SaveLoad is
                             (Get_Attribute
                                (Item(RecruitData, L), "experience"));
                         Skills.Append(New_Item => (Index, Level, Experience));
-                     elsif Node_Name(Item(RecruitData, L)) = "attribute" then
+                     elsif NodeName = To_Unbounded_String("attribute") then
                         Level :=
                           Natural'Value
                             (Get_Attribute(Item(RecruitData, L), "level"));
@@ -427,12 +434,12 @@ package body Bases.SaveLoad is
                             (Get_Attribute
                                (Item(RecruitData, L), "experience"));
                         Attributes.Append(New_Item => (Level, Experience));
-                     elsif Node_Name(Item(RecruitData, L)) = "item" then
+                     elsif NodeName = To_Unbounded_String("item") then
                         Inventory.Append
                           (New_Item =>
                              Positive'Value
                                (Get_Attribute(Item(RecruitData, L), "index")));
-                     elsif Node_Name(Item(RecruitData, L)) = "equipment" then
+                     elsif NodeName = To_Unbounded_String("equipment") then
                         Equipment
                           (Positive'Value
                              (Get_Attribute(Item(RecruitData, L), "slot"))) :=
@@ -450,15 +457,9 @@ package body Bases.SaveLoad is
                             (Get_Attribute(Item(BaseData, J), "homebase"));
                      end if;
                      if Get_Attribute(Item(BaseData, J), "faction") /= "" then
-                        for K in Factions_List.Iterate loop
-                           if Factions_List(K).Index =
-                             To_Unbounded_String
-                               (Get_Attribute
-                                  (Item(BaseData, J), "faction")) then
-                              RecruitFaction := Factions_Container.To_Index(K);
-                              exit;
-                           end if;
-                        end loop;
+                        RecruitFaction :=
+                          GetFactionIndex
+                            (Get_Attribute(Item(BaseData, J), "faction"));
                      end if;
                   end loop;
                   SkyBases(BaseIndex).Recruits.Append
@@ -469,26 +470,26 @@ package body Bases.SaveLoad is
                         Equipment => Equipment, Payment => Payment,
                         HomeBase => HomeBase, Faction => RecruitFaction));
                end;
-            elsif Node_Name(Item(BaseData, J)) = "askedforeventsdate" then
+            elsif NodeName = To_Unbounded_String("askedforeventsdate") then
                SkyBases(BaseIndex).AskedForEvents.Year :=
                  Natural'Value(Get_Attribute(Item(BaseData, J), "year"));
                SkyBases(BaseIndex).AskedForEvents.Month :=
                  Natural'Value(Get_Attribute(Item(BaseData, J), "month"));
                SkyBases(BaseIndex).AskedForEvents.Day :=
                  Natural'Value(Get_Attribute(Item(BaseData, J), "day"));
-            elsif Node_Name(Item(BaseData, J)) = "reputation" then
+            elsif NodeName = To_Unbounded_String("reputation") then
                SkyBases(BaseIndex).Reputation(1) :=
                  Natural'Value(Get_Attribute(Item(BaseData, J), "level"));
                SkyBases(BaseIndex).Reputation(2) :=
                  Natural'Value(Get_Attribute(Item(BaseData, J), "progress"));
-            elsif Node_Name(Item(BaseData, J)) = "missionsdate" then
+            elsif NodeName = To_Unbounded_String("missionsdate") then
                SkyBases(BaseIndex).MissionsDate.Year :=
                  Natural'Value(Get_Attribute(Item(BaseData, J), "year"));
                SkyBases(BaseIndex).MissionsDate.Month :=
                  Natural'Value(Get_Attribute(Item(BaseData, J), "month"));
                SkyBases(BaseIndex).MissionsDate.Day :=
                  Natural'Value(Get_Attribute(Item(BaseData, J), "day"));
-            elsif Node_Name(Item(BaseData, J)) = "mission" then
+            elsif NodeName = To_Unbounded_String("mission") then
                declare
                   MType: Missions_Types;
                   Target, TargetX, TargetY: Natural;
@@ -515,7 +516,7 @@ package body Bases.SaveLoad is
                         Reward => Reward, StartBase => BaseIndex,
                         Finished => False));
                end;
-            elsif Node_Name(Item(BaseData, J)) = "item" then
+            elsif NodeName = To_Unbounded_String("item") then
                declare
                   ProtoIndex, Durability: Positive;
                   Amount, Price: Natural;
