@@ -450,8 +450,6 @@ package body MainMenu is
          To_String(NewGameSettings.ShipName));
       DataError := To_Unbounded_String(LoadGameData);
       if DataError /= Null_Unbounded_String then
-         Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
-         Hide(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
          ShowDialog
            ("Can't load game data files. Error: " & To_String(DataError),
             Gtk_Window(Get_Object(Builder, "mainmenuwindow")));
@@ -469,6 +467,10 @@ package body MainMenu is
          Set_Active(FactionComboBox, 0);
       end;
       ShowMainMenu;
+      if DataError /= Null_Unbounded_String then
+         Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
+      end if;
    end CreateMainMenu;
 
    procedure ShowErrorInfo(Message: Unbounded_String) is
