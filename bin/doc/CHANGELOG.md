@@ -41,6 +41,7 @@ All notable changes to this project will be documented in this file.
 - Generating enemy ships for missions
 - Don't show new game and load game buttons when there is error in loading game
   data
+- Removing available careers
 
 ## [2.9] - 2018-10-07
 
