@@ -20,6 +20,7 @@ with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
 with Log; use Log;
+with Factions; use Factions;
 
 package body Careers is
 
@@ -30,6 +31,7 @@ package body Careers is
       RemoveIndex, SkillName: Unbounded_String;
       DeleteIndex: Natural := 0;
       TmpSkills: UnboundedString_Container.Vector;
+      CareerIndex: Positive;
    begin
       TempRecord :=
         (Index => Null_Unbounded_String, Name => Null_Unbounded_String,
@@ -81,6 +83,16 @@ package body Careers is
                  "', no career with that index.";
             end if;
             Careers_List.Delete(Index => DeleteIndex);
+            for Faction of Factions_List loop
+               CareerIndex := Faction.Careers.First_Index;
+               while CareerIndex <= Faction.Careers.Last_Index loop
+                  if Faction.Careers(CareerIndex).Index = RemoveIndex then
+                     Faction.Careers.Delete(Index => CareerIndex);
+                     exit;
+                  end if;
+                  CareerIndex := CareerIndex + 1;
+               end loop;
+            end loop;
             LogMessage
               ("Career removed: " & To_String(RemoveIndex), Everything);
          end if;
