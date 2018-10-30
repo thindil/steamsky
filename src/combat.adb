@@ -202,6 +202,17 @@ package body Combat is
                end loop;
             end if;
          end RemoveGun;
+         function FindEnemyModule(MType: ModuleType) return Natural is
+         begin
+            for I in EnemyShip.Modules.Iterate loop
+               if Modules_List(EnemyShip.Modules(I).ProtoIndex).MType =
+                 MType and
+                 EnemyShip.Modules(I).Durability > 0 then
+                  return Modules_Container.To_Index(I);
+               end if;
+            end loop;
+            return 0;
+         end FindEnemyModule;
       begin
          if Ship = PlayerShip then
             LogMessage("Player's round.", Log.Combat);
@@ -263,15 +274,15 @@ package body Combat is
                         Shoots := 0;
                      end if;
                   end if;
-                  if Ship.Modules(K).Data(1) >= Ship.Cargo.First_Index and
-                    Ship.Modules(K).Data(1) <= Ship.Cargo.Last_Index then
-                     if Items_List
-                         (Ship.Cargo(Ship.Modules(K).Data(1)).ProtoIndex)
-                         .IType =
-                       Items_Types
-                         (Modules_List(Ship.Modules(K).ProtoIndex).Value) then
-                        AmmoIndex := Ship.Modules(K).Data(1);
-                     end if;
+                  if Ship.Modules(K).Data(1) in
+                      Ship.Cargo.First_Index .. Ship.Cargo.Last_Index
+                    and then
+                      Items_List
+                        (Ship.Cargo(Ship.Modules(K).Data(1)).ProtoIndex)
+                        .IType =
+                      Items_Types
+                        (Modules_List(Ship.Modules(K).ProtoIndex).Value) then
+                     AmmoIndex := Ship.Modules(K).Data(1);
                   end if;
                   if AmmoIndex = 0 then
                      for I in Items_List.Iterate loop
@@ -312,13 +323,9 @@ package body Combat is
                      if Enemy.Distance > 2000 then
                         Shoots := 0;
                      end if;
-                     for Module of EnemyShip.Modules loop
-                        if Modules_List(Module.ProtoIndex).MType = ARMOR and
-                          Module.Durability > 0 then
-                           Shoots := 0;
-                           exit;
-                        end if;
-                     end loop;
+                     if FindEnemyModule(ARMOR) > 0 then
+                        Shoots := 0;
+                     end if;
                   end if;
                else
                   if Enemy.Distance > 100 then
@@ -352,45 +359,28 @@ package body Combat is
                   LogMessage
                     ("Chance to hit:" & Integer'Image(HitChance), Log.Combat);
                   for I in 1 .. Shoots loop
-                     if Modules_List(Ship.Modules(K).ProtoIndex).MType = GUN or
-                       Modules_List(Ship.Modules(K).ProtoIndex).MType =
-                         HARPOON_GUN then
-                        if Ship = PlayerShip then
+                     if Ship = PlayerShip then
+                        if Modules_List(Ship.Modules(K).ProtoIndex).MType =
+                          GUN or
+                          Modules_List(Ship.Modules(K).ProtoIndex).MType =
+                            HARPOON_GUN then
                            ShootMessage :=
                              Ship.Crew(GunnerIndex).Name &
                              To_Unbounded_String(" shoots at ") &
                              EnemyNameOwner;
                         else
                            ShootMessage :=
-                             EnemyNameOwner &
-                             To_Unbounded_String(" attacks you");
+                             To_Unbounded_String("You ram ") & EnemyNameOwner;
                         end if;
                      else
-                        if Ship = PlayerShip then
-                           ShootMessage :=
-                             To_Unbounded_String("You ram ") & EnemyNameOwner;
-                        else
-                           ShootMessage :=
-                             EnemyNameOwner &
-                             To_Unbounded_String(" attacks you");
-                        end if;
+                        ShootMessage :=
+                          EnemyNameOwner & To_Unbounded_String(" attacks you");
                      end if;
                      if HitChance + GetRandom(1, 50) >
                        GetRandom(1, HitChance + 50) then
                         ShootMessage :=
                           ShootMessage & To_Unbounded_String(" and hit ");
-                        ArmorIndex := 0;
-                        for J in
-                          EnemyShip.Modules.First_Index ..
-                            EnemyShip.Modules.Last_Index loop
-                           if EnemyShip.Modules(J).Durability > 0 and
-                             Modules_List(EnemyShip.Modules(J).ProtoIndex)
-                                 .MType =
-                               ARMOR then
-                              ArmorIndex := J;
-                              exit;
-                           end if;
-                        end loop;
+                        ArmorIndex := FindEnemyModule(Armor);
                         if ArmorIndex > 0 then
                            HitLocation := ArmorIndex;
                         else
@@ -398,35 +388,38 @@ package body Combat is
                               if GunnerIndex > 0 and GunnerOrder > 3 and
                                 GunnerOrder <
                                   7 then -- aim for part of enemy ship
-                                 HitLocation := 1;
-                                 for J in EnemyShip.Modules.Iterate loop
-                                    if
-                                      ((GunnerOrder = 4 and
-                                        Modules_List
-                                            (EnemyShip.Modules(J).ProtoIndex)
-                                            .MType =
-                                          ENGINE) or
-                                       (GunnerOrder = 5 and
-                                        ((Modules_List
-                                            (EnemyShip.Modules(J).ProtoIndex)
-                                            .MType =
-                                          TURRET and
-                                          EnemyShip.Modules(J).Data(1) > 0) or
-                                         Modules_List
-                                             (EnemyShip.Modules(J).ProtoIndex)
-                                             .MType =
-                                           BATTERING_RAM)) or
-                                       (GunnerOrder = 6 and
-                                        Modules_List
-                                            (EnemyShip.Modules(J).ProtoIndex)
-                                            .MType =
-                                          HULL)) and
-                                      EnemyShip.Modules(J).Durability > 0 then
-                                       HitLocation :=
-                                         Modules_Container.To_Index(J);
-                                       exit;
-                                    end if;
-                                 end loop;
+                                 HitLocation := 0;
+                                 case GunnerOrder is
+                                    when 4 =>
+                                       HitLocation := FindEnemyModule(ENGINE);
+                                    when 5 =>
+                                       HitLocation := 0;
+                                       for J in EnemyShip.Modules.Iterate loop
+                                          if Modules_List
+                                              (EnemyShip.Modules(J).ProtoIndex)
+                                              .MType =
+                                            TURRET and
+                                            EnemyShip.Modules(J).Durability >
+                                              0 and
+                                            EnemyShip.Modules(J).Data(1) >
+                                              0 then
+                                             HitLocation :=
+                                               Modules_Container.To_Index(J);
+                                             exit;
+                                          end if;
+                                       end loop;
+                                       if HitLocation = 0 then
+                                          HitLocation :=
+                                            FindEnemyModule(BATTERING_RAM);
+                                       end if;
+                                    when 6 =>
+                                       HitLocation := FindEnemyModule(HULL);
+                                    when others =>
+                                       HitLocation := 1;
+                                 end case;
+                                 if HitLocation = 0 then
+                                    HitLocation := 1;
+                                 end if;
                               else
                                  HitLocation :=
                                    GetRandom
@@ -555,7 +548,11 @@ package body Combat is
                                  end if;
                               when others =>
                                  if EnemyShip.Modules(HitLocation).Owner >
-                                   0 then
+                                   0 and
+                                   EnemyShip.Crew
+                                       (EnemyShip.Modules(HitLocation).Owner)
+                                       .Order /=
+                                     Rest then
                                     Death
                                       (EnemyShip.Modules(HitLocation).Owner,
                                        DeathReason, EnemyShip);
@@ -1107,7 +1104,8 @@ package body Combat is
       if Enemy.HarpoonDuration > 0 then
          Enemy.Ship.Speed := FULL_STOP;
          AddMessage
-           (To_String(EnemyName) & " is stopped by harpoon.", CombatMessage);
+           (To_String(EnemyName) & " is stopped by your harpoon.",
+            CombatMessage);
       elsif Enemy.Ship.Speed = FULL_STOP then
          Enemy.Ship.Speed := QUARTER_SPEED;
       end if;
@@ -1352,21 +1350,21 @@ package body Combat is
             end if;
             DeleteEvent(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex);
          end if;
-         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex > 0 then
-            if AcceptedMissions
-                (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex)
-                .MType =
-              Destroy then
-               if ProtoShips_List
-                   (AcceptedMissions
-                      (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex)
-                      .Target)
-                   .Name =
-                 Enemy.Ship.Name then
-                  UpdateMission
-                    (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
-               end if;
-            end if;
+         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex > 0
+           and then
+             AcceptedMissions
+               (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex)
+               .MType =
+             Destroy
+           and then
+             ProtoShips_List
+               (AcceptedMissions
+                  (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex)
+                  .Target)
+               .Name =
+             Enemy.Ship.Name then
+            UpdateMission
+              (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
          end if;
          if GetRandom(1, 100) < 10 then
             GainRep(Enemy.Ship.HomeBase, -100);
