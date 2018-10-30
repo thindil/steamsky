@@ -40,7 +40,8 @@ package body Crafts is
       TempAmount: Positive_Container.Vector;
       RecipesData: Document;
       NodesList, ChildNodes: Node_List;
-      ItemIndex: Natural;
+      ItemIndex, DeleteIndex, SkillIndex: Natural;
+      RemoveIndex: Unbounded_String;
    begin
       TempRecord :=
         (MaterialTypes => TempMaterials, MaterialAmounts => TempAmount,
@@ -71,22 +72,26 @@ package body Crafts is
                 (Get_Attribute(Item(NodesList, I), "result")));
          if ItemIndex = 0 then
             raise Recipes_Invalid_Data
-              with "Invalid result item index: |" &
-              Get_Attribute(Item(NodesList, I), "result") & "|.";
+              with "Can't add recipe '" & To_String(TempRecord.Index) &
+              "', result item index '" &
+              Get_Attribute(Item(NodesList, I), "result") & "' don't exists.";
          end if;
          TempRecord.ResultIndex := ItemIndex;
          TempRecord.ResultAmount :=
            Positive'Value(Get_Attribute(Item(NodesList, I), "crafted"));
          TempRecord.Workplace :=
            ModuleType'Value(Get_Attribute(Item(NodesList, I), "workplace"));
-         for J in Skills_List.Iterate loop
-            if Skills_List(J).Name =
-              To_Unbounded_String
-                (Get_Attribute(Item(NodesList, I), "skill")) then
-               TempRecord.Skill := SkillsData_Container.To_Index(J);
-               exit;
-            end if;
-         end loop;
+         SkillIndex :=
+           FindSkillIndex
+             (To_Unbounded_String(Get_Attribute(Item(NodesList, I), "skill")));
+         if SkillIndex = 0 then
+            raise Recipes_Invalid_Data
+              with "Can't add recipe '" & To_String(TempRecord.Index) &
+              "', no skill named '" &
+              Get_Attribute(Item(NodesList, I), "skill") & "'";
+         else
+            TempRecord.Skill := SkillIndex;
+         end if;
          if Get_Attribute(Item(NodesList, I), "time") /= "" then
             TempRecord.Time :=
               Positive'Value(Get_Attribute(Item(NodesList, I), "time"));
@@ -102,21 +107,28 @@ package body Crafts is
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "tool"));
          end if;
          if Get_Attribute(Item(NodesList, I), "remove") = "" then
+            if FindRecipe(TempRecord.Index) > 0 then
+               raise Recipes_Invalid_Data
+                 with "Can't add recipe '" & To_String(TempRecord.Index) &
+                 "' because recipe with that index exists.";
+            end if;
             Recipes_List.Append(New_Item => TempRecord);
             LogMessage
               ("Recipe added: " &
                To_String(Items_List(TempRecord.ResultIndex).Name),
                Everything);
          else
-            Recipes_List.Delete
-              (Index =>
-                 FindRecipe
-                   (To_Unbounded_String
-                      (Get_Attribute(Item(NodesList, I), "remove"))));
+            RemoveIndex :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "remove"));
+            DeleteIndex := FindRecipe(RemoveIndex);
+            if DeleteIndex = 0 then
+               raise Recipes_Invalid_Data
+                 with "Can't delete recipe '" & To_String(RemoveIndex) &
+                 "', no recipe with that index.";
+            end if;
+            Recipes_List.Delete(Index => DeleteIndex);
             LogMessage
-              ("Recipe removed: " &
-               Get_Attribute(Item(NodesList, I), "remove"),
-               Everything);
+              ("Recipe removed: " & To_String(RemoveIndex), Everything);
          end if;
          TempRecord :=
            (MaterialTypes => TempMaterials, MaterialAmounts => TempAmount,
