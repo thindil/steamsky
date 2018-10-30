@@ -39,6 +39,8 @@ All notable changes to this project will be documented in this file.
 - Assigning guns to turrets during creating ships
 - Starting morale and loyality for recruits
 - Generating enemy ships for missions
+- Don't show new game and load game buttons when there is error in loading game
+  data
 
 ## [2.9] - 2018-10-07
 
