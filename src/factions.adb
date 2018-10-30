@@ -37,6 +37,7 @@ package body Factions is
       DeleteIndex: Positive;
       TmpCareers: Careers_Container.Vector;
       TmpCareer: CareerRecord;
+      CareerExists: Boolean;
    begin
       TempRecord :=
         (Index => Null_Unbounded_String, Name => Null_Unbounded_String,
@@ -185,7 +186,16 @@ package body Factions is
                   end if;
                end loop;
             end if;
-            TempRecord.Careers.Append(New_Item => TmpCareer);
+            CareerExists := False;
+            for Career of Careers_List loop
+               if Career.Index = TmpCareer.Index then
+                  CareerExists := True;
+                  exit;
+               end if;
+            end loop;
+            if CareerExists then
+               TempRecord.Careers.Append(New_Item => TmpCareer);
+            end if;
          end loop;
          if Get_Attribute(Item(NodesList, I), "remove") = "" then
             Factions_List.Append(New_Item => TempRecord);
