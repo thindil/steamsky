@@ -25,6 +25,13 @@ package body Config is
       ConfigFile: File_Type;
       RawData, FieldName, Value: Unbounded_String;
       EqualIndex: Natural;
+      function LoadBoolean return Boolean is
+      begin
+         if Value = To_Unbounded_String("Yes") then
+            return True;
+         end if;
+         return False;
+      end LoadBoolean;
    begin
       NewGameSettings :=
         (PlayerName => To_Unbounded_String("Laeran"), PlayerGender => 'M',
@@ -56,31 +63,15 @@ package body Config is
             elsif FieldName = To_Unbounded_String("ShipName") then
                NewGameSettings.ShipName := Value;
             elsif FieldName = To_Unbounded_String("AutoRest") then
-               if Value = To_Unbounded_String("Yes") then
-                  GameSettings.AutoRest := True;
-               else
-                  GameSettings.AutoRest := False;
-               end if;
+               GameSettings.AutoRest := LoadBoolean;
             elsif FieldName = To_Unbounded_String("UndockSpeed") then
                GameSettings.UndockSpeed := ShipSpeed'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("AutoCenter") then
-               if Value = To_Unbounded_String("Yes") then
-                  GameSettings.AutoCenter := True;
-               else
-                  GameSettings.AutoCenter := False;
-               end if;
+               GameSettings.AutoCenter := LoadBoolean;
             elsif FieldName = To_Unbounded_String("AutoReturn") then
-               if Value = To_Unbounded_String("Yes") then
-                  GameSettings.AutoReturn := True;
-               else
-                  GameSettings.AutoReturn := False;
-               end if;
+               GameSettings.AutoReturn := LoadBoolean;
             elsif FieldName = To_Unbounded_String("AutoFinish") then
-               if Value = To_Unbounded_String("Yes") then
-                  GameSettings.AutoFinish := True;
-               else
-                  GameSettings.AutoFinish := False;
-               end if;
+               GameSettings.AutoFinish := LoadBoolean;
             elsif FieldName = To_Unbounded_String("LowFuel") then
                GameSettings.LowFuel := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("LowDrinks") then
@@ -119,23 +110,11 @@ package body Config is
                GameSettings.MessagesOrder :=
                  MessagesOrderType'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("AutoAskForBases") then
-               if Value = To_Unbounded_String("Yes") then
-                  GameSettings.AutoAskForBases := True;
-               else
-                  GameSettings.AutoAskForBases := False;
-               end if;
+               GameSettings.AutoAskForBases := LoadBoolean;
             elsif FieldName = To_Unbounded_String("AutoAskForEvents") then
-               if Value = To_Unbounded_String("Yes") then
-                  GameSettings.AutoAskForEvents := True;
-               else
-                  GameSettings.AutoAskForEvents := False;
-               end if;
+               GameSettings.AutoAskForEvents := LoadBoolean;
             elsif FieldName = To_Unbounded_String("ShowMapButtons") then
-               if Value = To_Unbounded_String("Yes") then
-                  GameSettings.ShowMapButtons := True;
-               else
-                  GameSettings.ShowMapButtons := False;
-               end if;
+               GameSettings.ShowMapButtons := LoadBoolean;
             end if;
          end if;
       end loop;
@@ -144,6 +123,14 @@ package body Config is
 
    procedure SaveConfig is
       ConfigFile: File_Type;
+      procedure SaveBoolean(Value: Boolean; Name: String) is
+      begin
+         if Value then
+            Put_Line(ConfigFile, Name & " = Yes");
+         else
+            Put_Line(ConfigFile, Name & " = No");
+         end if;
+      end SaveBoolean;
    begin
       Create(ConfigFile, Append_File, To_String(SaveDirectory) & "game.cfg");
       Put_Line
@@ -151,29 +138,13 @@ package body Config is
       Put_Line(ConfigFile, "PlayerGender = " & NewGameSettings.PlayerGender);
       Put_Line
         (ConfigFile, "ShipName = " & To_String(NewGameSettings.ShipName));
-      if GameSettings.AutoRest then
-         Put_Line(ConfigFile, "AutoRest = Yes");
-      else
-         Put_Line(ConfigFile, "AutoRest = No");
-      end if;
+      SaveBoolean(GameSettings.AutoRest, "AutoRest");
       Put_Line
         (ConfigFile,
          "UndockSpeed = " & ShipSpeed'Image(GameSettings.UndockSpeed));
-      if GameSettings.AutoCenter then
-         Put_Line(ConfigFile, "AutoCenter = Yes");
-      else
-         Put_Line(ConfigFile, "AutoCenter = No");
-      end if;
-      if GameSettings.AutoReturn then
-         Put_Line(ConfigFile, "AutoReturn = Yes");
-      else
-         Put_Line(ConfigFile, "AutoReturn = No");
-      end if;
-      if GameSettings.AutoFinish then
-         Put_Line(ConfigFile, "AutoFinish = Yes");
-      else
-         Put_Line(ConfigFile, "AutoFinish = No");
-      end if;
+      SaveBoolean(GameSettings.AutoCenter, "AutoCenter");
+      SaveBoolean(GameSettings.AutoReturn, "AutoReturn");
+      SaveBoolean(GameSettings.AutoFinish, "AutoFinish");
       Put_Line(ConfigFile, "LowFuel =" & Positive'Image(GameSettings.LowFuel));
       Put_Line
         (ConfigFile, "LowDrinks =" & Positive'Image(GameSettings.LowDrinks));
@@ -218,21 +189,9 @@ package body Config is
         (ConfigFile,
          "MessagesOrder = " &
          MessagesOrderType'Image(GameSettings.MessagesOrder));
-      if GameSettings.AutoAskForBases then
-         Put_Line(ConfigFile, "AutoAskForBases = Yes");
-      else
-         Put_Line(ConfigFile, "AutoAskForBases = No");
-      end if;
-      if GameSettings.AutoAskForEvents then
-         Put_Line(ConfigFile, "AutoAskForEvents = Yes");
-      else
-         Put_Line(ConfigFile, "AutoAskForEvents = No");
-      end if;
-      if GameSettings.ShowMapButtons then
-         Put_Line(ConfigFile, "ShowMapButtons = Yes");
-      else
-         Put_Line(ConfigFile, "ShowMapButtons = No");
-      end if;
+      SaveBoolean(GameSettings.AutoAskForBases, "AutoAskForBases");
+      SaveBoolean(GameSettings.AutoAskForEvents, "AutoAskForEvents");
+      SaveBoolean(GameSettings.ShowMapButtons, "ShowMapButtons");
       Close(ConfigFile);
    end SaveConfig;
 
