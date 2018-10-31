@@ -42,6 +42,7 @@ All notable changes to this project will be documented in this file.
 - Don't show new game and load game buttons when there is error in loading game
   data
 - Removing available careers
+- Index for bronze sicke recipe
 
 ## [2.9] - 2018-10-07
 
