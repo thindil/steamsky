@@ -241,5 +241,6 @@ Text between "module" tags is module description.
  <module durability="600" index="202" installtime="90" material="Adamantium" maxvalue="0" name="Small adamantium greenhouse" price="24000" size="1" skill="Engineering" type="GREENHOUSE" value="0" weight="2200">Allows cultivation of plants. Made of adamantium.</module>
  <module durability="600" index="203" installtime="90" material="Adamantium" maxvalue="0" name="Small adamantium water collector" price="24000" size="1" skill="Engineering" type="WATER_COLLECTOR" value="0" weight="1800">Allows collection of water from air. Made of adamantium.</module>
  <module durability="600" index="204" installtime="90" material="Adamantium" maxvalue="0" name="Small adamantium medical room" price="24000" size="1" skill="Engineering" type="MEDICAL_ROOM" unique="Y" value="0" weight="1000">Allows treatment of wounded crew members. Made of adamantium.</module>
+ <module durability="300" index="205" installtime="150" material="Adamantium" maxvalue="60" name="Small extended orichalcum cabin" price="8000" size="1" skill="Engineering" type="CABIN" value="60" weight="1600">Small, decorated cabin made of adamantium with some better quality furniture.</module>
 </modules>
 
