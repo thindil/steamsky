@@ -29,15 +29,15 @@ package body Crew.Inventory is
       Weight: Integer;
    begin
       if InventoryIndex = 0 then
-         for I in PlayerShip.Crew(MemberIndex).Inventory.Iterate loop
-            if PlayerShip.Crew(MemberIndex).Inventory(I).ProtoIndex =
-              ProtoIndex and
-              PlayerShip.Crew(MemberIndex).Inventory(I).Durability =
-                Durability then
-               ItemIndex := Inventory_Container.To_Index(I);
-               exit;
-            end if;
-         end loop;
+         if Durability > 0 then
+            ItemIndex :=
+              FindItem
+                (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
+                 ProtoIndex => ProtoIndex, Durability => Durability);
+         else
+            ItemIndex :=
+              FindItem(PlayerShip.Crew(MemberIndex).Inventory, ProtoIndex);
+         end if;
       else
          ItemIndex := InventoryIndex;
       end if;
