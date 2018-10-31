@@ -43,6 +43,7 @@ All notable changes to this project will be documented in this file.
   data
 - Removing available careers
 - Index for bronze sicke recipe
+- Updating crew inventory
 
 ## [2.9] - 2018-10-07
 
