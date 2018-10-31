@@ -63,11 +63,10 @@ package body Crew is
       -- Gain experience in associated attribute
       GainExpInAttribute(AttributeIndex);
       -- Gain experience in skill
-      for I in
-        PlayerShip.Crew(CrewIndex).Skills.First_Index ..
-          PlayerShip.Crew(CrewIndex).Skills.Last_Index loop
+      for I in PlayerShip.Crew(CrewIndex).Skills.Iterate loop
          if PlayerShip.Crew(CrewIndex).Skills(I)(1) = SkillNumber then
-            SkillIndex := I;
+            SkillIndex := Skills_Container.To_Index(I);
+            exit;
          end if;
       end loop;
       if SkillIndex > 0 then
@@ -191,6 +190,17 @@ package body Crew is
       return NewName;
    end GenerateMemberName;
 
+   function FindCabin(MemberIndex: Positive) return Natural is
+   begin
+      for I in PlayerShip.Modules.Iterate loop
+         if PlayerShip.Modules(I).Owner = MemberIndex and
+           Modules_List(PlayerShip.Modules(I).ProtoIndex).MType = CABIN then
+            return Modules_Container.To_Index(I);
+         end if;
+      end loop;
+      return 0;
+   end FindCabin;
+
    procedure UpdateCrew(Minutes: Positive; TiredPoints: Natural) is
       TiredLevel, HungerLevel, ThirstLevel: Integer := 0;
       HealthLevel: Integer := 100;
@@ -200,6 +210,7 @@ package body Crew is
       type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
       NeedCleaning, HaveMedicalRoom: Boolean := False;
+      SkillIndex: Positive;
       function Consume(ItemType: Unbounded_String) return Natural is
          ConsumeValue, ItemIndex: Natural;
       begin
@@ -279,7 +290,6 @@ package body Crew is
          if TiredLevel > (80 + Member.Attributes(ConditionIndex)(1)) and
            Member.Order /= Rest then
             declare
-               HaveCabin: Boolean := False;
                CanRest: Boolean := True;
             begin
                if Member.Order = Boarding and HarpoonDuration = 0 and
@@ -294,14 +304,7 @@ package body Crew is
                     (To_String(Member.Name) &
                      " is too tired to work, going rest.",
                      OrderMessage, 1);
-                  for Module of PlayerShip.Modules loop
-                     if Module.Owner = I and
-                       Modules_List(Module.ProtoIndex).MType = CABIN then
-                        HaveCabin := True;
-                        exit;
-                     end if;
-                  end loop;
-                  if not HaveCabin then
+                  if FindCabin(I) = 0 then
                      for Module of PlayerShip.Modules loop
                         if Modules_List(Module.ProtoIndex).MType = CABIN and
                           Module.Durability > 0 and Module.Owner = 0 then
@@ -391,15 +394,7 @@ package body Crew is
          TiredLevel := PlayerShip.Crew(I).Tired;
          if Times > 0 then
             if PlayerShip.Crew(I).Order = Rest then
-               CabinIndex := 0;
-               for J in PlayerShip.Modules.Iterate loop
-                  if Modules_List(PlayerShip.Modules(J).ProtoIndex).MType =
-                    CABIN and
-                    PlayerShip.Modules(J).Owner = I then
-                     CabinIndex := Modules_Container.To_Index(J);
-                     exit;
-                  end if;
-               end loop;
+               CabinIndex := FindCabin(I);
                RestAmount := 0;
                if PlayerShip.Crew(I).Tired > 0 then
                   if CabinIndex > 0 then
@@ -649,47 +644,43 @@ package body Crew is
                         GiveOrders(PlayerShip, I, Rest);
                      end if;
                   when Train =>
-                     declare
-                        SkillIndex: Positive;
-                     begin
-                        for Module of PlayerShip.Modules loop
-                           if Modules_List(Module.ProtoIndex).MType =
-                             TRAINING_ROOM and
-                             Module.Owner = I then
-                              SkillIndex := Module.Data(1);
-                              exit;
-                           end if;
-                        end loop;
-                        if Skills_List(SkillIndex).Tool /=
-                          Null_Unbounded_String then
-                           ToolIndex :=
-                             FindTools(I, Skills_List(SkillIndex).Tool, Train);
-                           if ToolIndex > 0 then
-                              for J in 1 .. Times loop
-                                 GainExp(GetRandom(1, 5), SkillIndex, I);
-                                 DamageItem
-                                   (Inventory => PlayerShip.Crew(I).Inventory,
-                                    ItemIndex => ToolIndex, MemberIndex => I);
-                                 ToolIndex :=
-                                   FindTools
-                                     (I, Skills_List(SkillIndex).Tool, Train);
-                                 exit when ToolIndex = 0;
-                              end loop;
-                              AddMessage
-                                (To_String(PlayerShip.Crew(I).Name) &
-                                 " trained a little " &
-                                 To_String(Skills_List(SkillIndex).Name) & ".",
-                                 OrderMessage);
-                           end if;
-                           if ToolIndex = 0 then
-                              AddMessage
-                                (To_String(PlayerShip.Crew(I).Name) &
-                                 " can't continue training because you don't have proper tools.",
-                                 OrderMessage, 3);
-                              GiveOrders(PlayerShip, I, Rest);
-                           end if;
+                     for Module of PlayerShip.Modules loop
+                        if Modules_List(Module.ProtoIndex).MType =
+                          TRAINING_ROOM and
+                          Module.Owner = I then
+                           SkillIndex := Module.Data(1);
+                           exit;
                         end if;
-                     end;
+                     end loop;
+                     if Skills_List(SkillIndex).Tool /=
+                       Null_Unbounded_String then
+                        ToolIndex :=
+                          FindTools(I, Skills_List(SkillIndex).Tool, Train);
+                        if ToolIndex > 0 then
+                           for J in 1 .. Times loop
+                              GainExp(GetRandom(1, 5), SkillIndex, I);
+                              DamageItem
+                                (Inventory => PlayerShip.Crew(I).Inventory,
+                                 ItemIndex => ToolIndex, MemberIndex => I);
+                              ToolIndex :=
+                                FindTools
+                                  (I, Skills_List(SkillIndex).Tool, Train);
+                              exit when ToolIndex = 0;
+                           end loop;
+                           AddMessage
+                             (To_String(PlayerShip.Crew(I).Name) &
+                              " trained a little " &
+                              To_String(Skills_List(SkillIndex).Name) & ".",
+                              OrderMessage);
+                        end if;
+                        if ToolIndex = 0 then
+                           AddMessage
+                             (To_String(PlayerShip.Crew(I).Name) &
+                              " can't continue training because you don't have proper tools.",
+                              OrderMessage, 3);
+                           GiveOrders(PlayerShip, I, Rest);
+                        end if;
+                     end if;
                   when others =>
                      null;
                end case;
@@ -748,14 +739,7 @@ package body Crew is
            PlayerShip.Crew(I).Order = Rest then
             CabinIndex := 0;
             TempTimeNeeded := 0;
-            for J in PlayerShip.Modules.Iterate loop
-               if Modules_List(PlayerShip.Modules(J).ProtoIndex).MType =
-                 CABIN and
-                 PlayerShip.Modules(J).Owner = Crew_Container.To_Index(I) then
-                  CabinIndex := Modules_Container.To_Index(J);
-                  exit;
-               end if;
-            end loop;
+            CabinIndex := FindCabin(Crew_Container.To_Index(I));
             if CabinIndex > 0 then
                Damage :=
                  1.0 -
