@@ -373,6 +373,16 @@ package body Events is
       end loop;
    end DeleteEvent;
 
+   procedure GetPlayerShips
+     (PlayerShips: in out UnboundedString_Container.Vector) is
+   begin
+      for Faction of Factions_List loop
+         for Career of Faction.Careers loop
+            PlayerShips.Append(New_Item => Career.ShipIndex);
+         end loop;
+      end loop;
+   end GetPlayerShips;
+
    procedure GenerateTraders is
       TraderIndex: Positive;
       PlayerShips: UnboundedString_Container.Vector;
@@ -384,11 +394,7 @@ package body Events is
          end if;
          TraderIndex := TraderIndex + 1;
       end loop;
-      for Faction of Factions_List loop
-         for Career of Faction.Careers loop
-            PlayerShips.Append(New_Item => Career.ShipIndex);
-         end loop;
-      end loop;
+      GetPlayerShips(PlayerShips);
       TraderIndex := ProtoShips_List.First_Index;
       for Ship of ProtoShips_List loop
          if IsFriendly
@@ -442,11 +448,7 @@ package body Events is
       else
          PlayerValue := Natural'Last;
       end if;
-      for Faction of Factions_List loop
-         for Career of Faction.Careers loop
-            PlayerShips.Append(New_Item => Career.ShipIndex);
-         end loop;
-      end loop;
+      GetPlayerShips(PlayerShips);
       for Ship of ProtoShips_List loop
          if Ship.CombatValue <= PlayerValue and
            (Owner = To_Unbounded_String("Any") or
