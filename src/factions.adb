@@ -23,6 +23,7 @@ with DOM.Core.Elements; use DOM.Core.Elements;
 with Log; use Log;
 with Utils; use Utils;
 with Careers; use Careers;
+with Items; use Items;
 
 package body Factions is
 
@@ -33,8 +34,8 @@ package body Factions is
       TmpRelations: Relations_Container.Vector;
       TmpRelation: RelationsRecord;
       TmpFood: UnboundedString_Container.Vector;
-      RemoveIndex: Unbounded_String;
-      DeleteIndex: Positive;
+      RemoveIndex, Value: Unbounded_String;
+      DeleteIndex, ItemIndex, SkillIndex: Natural;
       TmpCareers: Careers_Container.Vector;
       TmpCareer: CareerRecord;
       CareerExists: Boolean;
@@ -54,6 +55,13 @@ package body Factions is
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord.Index :=
            To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
+         for Faction of Factions_List loop
+            if Faction.Index = TempRecord.Index then
+               raise Factions_Adding_Error
+                 with "Can't add faction '" & To_String(TempRecord.Index) &
+                 "', there is one with that index.";
+            end if;
+         end loop;
          TempRecord.Name :=
            To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name"));
          if Get_Attribute(Item(NodesList, I), "membername") /= "" then
@@ -88,15 +96,28 @@ package body Factions is
                 (Get_Attribute(Item(NodesList, I), "namestype"));
          end if;
          if Get_Attribute(Item(NodesList, I), "healingtools") /= "" then
-            TempRecord.HealingTools :=
+            Value :=
               To_Unbounded_String
                 (Get_Attribute(Item(NodesList, I), "healingtools"));
+            ItemIndex := FindProtoItem(ItemType => Value);
+            if ItemIndex = 0 then
+               raise Factions_Adding_Error
+                 with "Can't add faction '" & To_String(TempRecord.Index) &
+                 "', no items with type '" & To_String(Value) & "'.";
+            end if;
+            TempRecord.HealingTools := Value;
          end if;
          if Get_Attribute(Item(NodesList, I), "healingskill") /= "" then
-            TempRecord.HealingSkill :=
-              FindSkillIndex
-                (To_Unbounded_String
-                   (Get_Attribute(Item(NodesList, I), "healingskill")));
+            Value :=
+              To_Unbounded_String
+                (Get_Attribute(Item(NodesList, I), "healingskill"));
+            SkillIndex := FindSkillIndex(Value);
+            if SkillIndex = 0 then
+               raise Factions_Adding_Error
+                 with "Can't add faction '" & To_String(TempRecord.Index) &
+                 "', no skill named '" & To_String(Value) & "'.";
+            end if;
+            TempRecord.HealingSkill := SkillIndex;
          end if;
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
@@ -204,12 +225,18 @@ package body Factions is
          else
             RemoveIndex :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "remove"));
+            DeleteIndex := 0;
             for J in Factions_List.Iterate loop
                if Factions_List(J).Index = RemoveIndex then
                   DeleteIndex := Factions_Container.To_Index(J);
                   exit;
                end if;
             end loop;
+            if DeleteIndex = 0 then
+               raise Factions_Remove_Error
+                 with "Can't delete faction '" & To_String(RemoveIndex) &
+                 "', no faction with that index.";
+            end if;
             Factions_List.Delete(Index => DeleteIndex);
             LogMessage
               ("Faction removed: " & To_String(RemoveIndex), Everything);
