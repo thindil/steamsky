@@ -93,8 +93,9 @@ package body Crew is
    function GenerateMemberName(Gender: Character;
       FactionIndex: Unbounded_String)
      return Unbounded_String is -- based on name generator from libtcod
-      NewName, NameType: Unbounded_String;
+      NewName: Unbounded_String;
       LettersAmount, NumbersAmount: Positive;
+      NameType: NamesTypes;
       subtype Letters is Character range 'A' .. 'Z';
       subtype Numbers is Character range '0' .. '9';
    begin
@@ -106,7 +107,7 @@ package body Crew is
          end if;
       end loop;
       NewName := Null_Unbounded_String;
-      if To_Lower(To_String(NameType)) = "standard" then
+      if NameType = Factions.STANDARD then
          if Gender = 'M' then
             NewName :=
               MaleSyllablesStart
