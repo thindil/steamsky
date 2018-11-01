@@ -18,8 +18,8 @@ All notable changes to this project will be documented in this file.
 - New ship modules: small orichalcum workshop, small adamantium training room,
   adamantium cockpit, small adamantium alchemy lab, small adamantium cargo bay,
   small adamantium furnace, heavy adamantium armor, small adamantium
-  greenhouse, small adamantium water collector, small adamantium medical room
-  and small extended adamantium cabin
+  greenhouse, small adamantium water collector, small adamantium medical room,
+  small extended adamantium cabin and small luxury adamantium cabin
 - Option to show or hide buttons for map movement
 
 ### Changed
