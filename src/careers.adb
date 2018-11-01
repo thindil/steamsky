@@ -71,6 +71,7 @@ package body Careers is
          else
             RemoveIndex :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "remove"));
+            DeleteIndex := 0;
             for J in Careers_List.Iterate loop
                if Careers_List(J).Index = RemoveIndex then
                   DeleteIndex := Careers_Container.To_Index(J);
