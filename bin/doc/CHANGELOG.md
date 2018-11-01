@@ -44,6 +44,7 @@ All notable changes to this project will be documented in this file.
 - Removing available careers
 - Index for bronze sicke recipe
 - Updating crew inventory
+- Possibility of disease event in bases
 
 ## [2.9] - 2018-10-07
 
