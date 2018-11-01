@@ -602,7 +602,7 @@ package body Ships is
    begin
       for Faction of Factions_List loop
          if To_Lower(To_String(Faction.Name)) = To_Lower(To_String(Owner)) then
-            if Faction.NamesType = To_Unbounded_String("robotic") then
+            if Faction.NamesType = ROBOTIC then
                LettersAmount := GetRandom(2, 5);
                for I in 1 .. LettersAmount loop
                   Append

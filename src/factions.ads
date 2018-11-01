@@ -23,6 +23,8 @@ with Game; use Game;
 
 package Factions is
 
+   type NamesTypes is
+     (STANDARD, ROBOTIC); -- Types of names of members and bases factions
    type Reputation_Array is array(1 .. 2) of Integer;
    type RelationsRecord is -- Data structure for relations between factions
    record
@@ -48,7 +50,7 @@ package Factions is
       PluralMemberName: Unbounded_String; -- Plural name of members of faction
       SpawnChance: Natural; -- Chance that created at new game base will be owned by this faction
       Population: Attributes_Array; -- Min and max population for new bases with this faction as owner
-      NamesType: Unbounded_String; -- Type of names of members of faction (used in generating names of ships)
+      NamesType: NamesTypes; -- Type of names of members of faction (used in generating names of ships)
       Relations: Relations_Container
         .Vector; -- Relations of this faction with others factions
       Description: Unbounded_String; -- Description on faction, displayed to player

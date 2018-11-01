@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Numerics.Elementary_Functions; use Ada.Numerics.Elementary_Functions;
-with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Maps; use Maps;
 with Messages; use Messages;
 with Items; use Items;
@@ -108,14 +107,15 @@ package body Bases is
    function GenerateBaseName
      (FactionIndex: Positive)
      return Unbounded_String is -- based on name generator from libtcod
-      NewName, NameType: Unbounded_String;
+      NewName: Unbounded_String;
       LettersAmount, NumbersAmount: Positive;
+      NameType: NamesTypes;
       subtype Letters is Character range 'A' .. 'Z';
       subtype Numbers is Character range '0' .. '9';
    begin
       NameType := Factions_List(FactionIndex).NamesType;
       NewName := Null_Unbounded_String;
-      if To_Lower(To_String(NameType)) = "standard" then
+      if NameType = Factions.STANDARD then
          if GetRandom(1, 100) < 16 then
             NewName :=
               BaseSyllablesPre
