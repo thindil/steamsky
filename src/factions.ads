@@ -65,6 +65,8 @@ package Factions is
    end record;
    package Factions_Container is new Vectors(Positive, FactionRecord);
    Factions_List: Factions_Container.Vector;
+   Factions_Remove_Error: exception; -- Raised when can't remove selected faction
+   Factions_Adding_Error: exception; -- Raised when can't add selected faction
 
    procedure LoadFactions(Reader: Tree_Reader); -- Load NPC factions from file
    function GetReputation
