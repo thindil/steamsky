@@ -44,7 +44,7 @@ package body Factions is
         (Index => Null_Unbounded_String, Name => Null_Unbounded_String,
          MemberName => Null_Unbounded_String,
          PluralMemberName => Null_Unbounded_String, SpawnChance => 0,
-         Population => (0, 0), NamesType => To_Unbounded_String("standard"),
+         Population => (0, 0), NamesType => STANDARD,
          Relations => TmpRelations, Description => Null_Unbounded_String,
          FoodTypes => TmpFood, DrinksTypes => TmpFood,
          HealingTools => Null_Unbounded_String, HealingSkill => 1,
@@ -92,8 +92,7 @@ package body Factions is
          end if;
          if Get_Attribute(Item(NodesList, I), "namestype") /= "" then
             TempRecord.NamesType :=
-              To_Unbounded_String
-                (Get_Attribute(Item(NodesList, I), "namestype"));
+              NamesTypes'Value(Get_Attribute(Item(NodesList, I), "namestype"));
          end if;
          if Get_Attribute(Item(NodesList, I), "healingtools") /= "" then
             Value :=
@@ -245,7 +244,7 @@ package body Factions is
            (Index => Null_Unbounded_String, Name => Null_Unbounded_String,
             MemberName => Null_Unbounded_String,
             PluralMemberName => Null_Unbounded_String, SpawnChance => 0,
-            Population => (0, 0), NamesType => To_Unbounded_String("standard"),
+            Population => (0, 0), NamesType => Standard,
             Relations => TmpRelations, Description => Null_Unbounded_String,
             FoodTypes => TmpFood, DrinksTypes => TmpFood,
             HealingTools => Null_Unbounded_String, HealingSkill => 1,
