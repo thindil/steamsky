@@ -8,7 +8,7 @@ project steamsky is
     for Object_Dir use "obj";
     for Exec_Dir use "bin";
 
-    type Mode_Type is ("debug", "release");
+    type Mode_Type is ("debug", "release", "analyze");
     Mode : Mode_Type := external ("Mode", "debug");
 
     package Builder is
@@ -33,22 +33,25 @@ project steamsky is
                     "-gnatVa",
                     "-gnatU",
                     "-gnatf",
-                    "-gnateE",
-                    "-pg",
-                    "-fprofile-arcs",
-                    "-ftest-coverage");
+                    "-gnateE");
             when "release" =>
                 for Default_Switches ("ada") use ("-O2",
                     "-gnatn2");
+            when "analyze" =>
+                for Default_Switches ("ada") use ("-pg",
+                    "-fprofile-arcs",
+                    "-ftest-coverage");
         end case;
     end Compiler;
 
     package Linker is
         case Mode is
             when "debug" =>
-              for Default_Switches ("ada") use ("-no-pie", "-pg", "-fprofile-arcs");
+              for Default_Switches ("ada") use ("-no-pie");
             when "release" =>
                 for Default_Switches ("ada") use ("-Wl,--gc-sections");
+            when "analyze" =>
+              for Default_Switches ("ada") use ("-no-pie", "-pg", "-fprofile-arcs");
         end case;
     end Linker;
 
