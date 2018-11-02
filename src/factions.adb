@@ -39,6 +39,19 @@ package body Factions is
       TmpCareers: Careers_Container.Vector;
       TmpCareer: CareerRecord;
       CareerExists: Boolean;
+      procedure AddChildNode(Data: in out UnboundedString_Container.Vector;
+         Name: String; Index: Natural) is
+      begin
+         ChildNodes :=
+           DOM.Core.Elements.Get_Elements_By_Tag_Name
+             (Item(NodesList, Index), Name);
+         for J in 0 .. Length(ChildNodes) - 1 loop
+            Data.Append
+              (New_Item =>
+                 To_Unbounded_String
+                   (Get_Attribute(Item(ChildNodes, J), "name")));
+         end loop;
+      end AddChildNode;
    begin
       TempRecord :=
         (Index => Null_Unbounded_String, Name => Null_Unbounded_String,
@@ -152,33 +165,9 @@ package body Factions is
               To_Unbounded_String
                 (Node_Value(First_Child(Item(ChildNodes, 0))));
          end if;
-         ChildNodes :=
-           DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I), "foodtype");
-         for J in 0 .. Length(ChildNodes) - 1 loop
-            TempRecord.FoodTypes.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Get_Attribute(Item(ChildNodes, J), "name")));
-         end loop;
-         ChildNodes :=
-           DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I), "drinktype");
-         for J in 0 .. Length(ChildNodes) - 1 loop
-            TempRecord.DrinksTypes.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Get_Attribute(Item(ChildNodes, J), "name")));
-         end loop;
-         ChildNodes :=
-           DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I), "flag");
-         for J in 0 .. Length(ChildNodes) - 1 loop
-            TempRecord.Flags.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Get_Attribute(Item(ChildNodes, J), "name")));
-         end loop;
+         AddChildNode(TempRecord.FoodTypes, "foodtype", I);
+         AddChildNode(TempRecord.DrinksTypes, "drinktype", I);
+         AddChildNode(TempRecord.Flags, "flag", I);
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
              (Item(NodesList, I), "career");
