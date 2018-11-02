@@ -31,7 +31,7 @@ you prefer, on mail <thindil@laeran.pl>
 
 Title: "Game crashed when entering base"
 
-Body: 
+Body:
 
 1. Dock to base
 2. Open base actions menu
@@ -46,10 +46,10 @@ mechanic. I have my own long TODO list and your propositions can duplicate or
 be against my ideas. Of course, if you really want, you can always start
 discussion about new feature, just I'm afraid, it may take long time to
 implement it into game.
-If you want to talk/propose changes in any existing in game feature or 
-mechanic, feel free to contact me via issues tracker or mail (addresses of 
-both you can find at top of this file). General rule about propositions is 
-same as for bugs reports - please, try write that much informations as 
+If you want to talk/propose changes in any existing in game feature or
+mechanic, feel free to contact me via issues tracker or mail (addresses of
+both you can find at top of this file). General rule about propositions is
+same as for bugs reports - please, try write that much informations as
 possible. This help us all better understand purpose of your changes.
 
 ## Code propositions
@@ -71,7 +71,7 @@ But before you send your changes to project, please use command `gnatpp` which
 automatically format source code to project coding standard. Proper `gnatpp`
 command usage (in main project directory, where *steamsky.gpr* file is):
 
-`gnatpp -P steamsky.gpr --incremental`
+`gnatpp -P steamsky.gpr`
 
 ### Code submission
 
@@ -79,3 +79,24 @@ Preferred way to submit your code is clone repository and then open new pull
 proposal at <https://github.com/thindil/steamsky/compare>. But if you prefer,
 you can send your code by mail too (email address is at top of this file). In
 that situation, please append to your mail patch file with changes.
+
+## Additional debugging options
+
+### Code analysis
+
+To enable check for `gcov` (code coverage) and `gprof` (code profiling) compile
+the game with mode `analyze` (in main project directory, where *steamsky.gpr*
+file is):
+
+`gprbuild -XMode=analyze`
+
+More informations about code coverage and profiling, you can find in proper
+documentation for both programs.
+
+### Generating test units
+
+To generate (or regenerate) unit tests use command `gnattest` which generate
+skeletons code for tests units (in main project directory, where *steamsky.gpr*
+file is):
+
+`gnattest -P steamsky.gpr`
