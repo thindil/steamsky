@@ -63,4 +63,10 @@ project steamsky is
                 "-j0");
     end Pretty_Printer;
 
+    package GnatTest is
+       for Tests_Dir use "../tests";
+       for Harness_Dir use "../tests/driver";
+       for Skeletons_Default use "pass";
+    end GnatTest;
+
 end steamsky;
