@@ -40,16 +40,24 @@ package body Factions is
       TmpCareer: CareerRecord;
       CareerExists: Boolean;
       procedure AddChildNode(Data: in out UnboundedString_Container.Vector;
-         Name: String; Index: Natural) is
+         Name: String; Index: Natural; CheckItemType: Boolean := True) is
+         Value: Unbounded_String;
       begin
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
              (Item(NodesList, Index), Name);
          for J in 0 .. Length(ChildNodes) - 1 loop
-            Data.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Get_Attribute(Item(ChildNodes, J), "name")));
+            Value :=
+              To_Unbounded_String(Get_Attribute(Item(ChildNodes, J), "name"));
+            if CheckItemType then
+               ItemIndex := FindProtoItem(ItemType => Value);
+               if ItemIndex = 0 then
+                  raise Factions_Adding_Error
+                    with "Can't add faction '" & To_String(TempRecord.Index) &
+                    "', no items with type '" & To_String(Value) & "'.";
+               end if;
+            end if;
+            Data.Append(New_Item => Value);
          end loop;
       end AddChildNode;
    begin
@@ -167,7 +175,7 @@ package body Factions is
          end if;
          AddChildNode(TempRecord.FoodTypes, "foodtype", I);
          AddChildNode(TempRecord.DrinksTypes, "drinktype", I);
-         AddChildNode(TempRecord.Flags, "flag", I);
+         AddChildNode(TempRecord.Flags, "flag", I, False);
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
              (Item(NodesList, I), "career");
