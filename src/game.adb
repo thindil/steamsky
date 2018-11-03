@@ -350,6 +350,7 @@ package body Game is
       NodesList: Node_List;
       DeleteIndex: Natural;
       TmpSkill: Skill_Record;
+      NodeName: Unbounded_String;
       function FindAttributeIndex
         (AttributeName: Unbounded_String) return Natural is
       begin
@@ -365,116 +366,117 @@ package body Game is
       GameData := Get_Tree(Reader);
       NodesList := Child_Nodes(First_Child(GameData));
       for I in 0 .. Length(NodesList) - 1 loop
-         if Node_Name(Item(NodesList, I)) = "basessyllablepre" then
+         NodeName := To_Unbounded_String(Node_Name(Item(NodesList, I)));
+         if To_String(NodeName) = "basessyllablepre" then
             BaseSyllablesPre.Append
               (New_Item =>
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "basessyllablestart" then
+         elsif To_String(NodeName) = "basessyllablestart" then
             BaseSyllablesStart.Append
               (New_Item =>
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "basessyllableend" then
+         elsif To_String(NodeName) = "basessyllableend" then
             BaseSyllablesEnd.Append
               (New_Item =>
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "basessyllablepost" then
+         elsif To_String(NodeName) = "basessyllablepost" then
             BaseSyllablesPost.Append
               (New_Item =>
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "malessyllablestart" then
+         elsif To_String(NodeName) = "malessyllablestart" then
             MaleSyllablesStart.Append
               (New_Item =>
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "malessyllablemiddle" then
+         elsif To_String(NodeName) = "malessyllablemiddle" then
             MaleSyllablesMiddle.Append
               (New_Item =>
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "malessyllableend" then
+         elsif To_String(NodeName) = "malessyllableend" then
             MaleSyllablesEnd.Append
               (New_Item =>
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "malesvocal" then
+         elsif To_String(NodeName) = "malesvocal" then
             MaleVocals.Append
               (New_Item =>
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "malesconsonant" then
+         elsif To_String(NodeName) = "malesconsonant" then
             MaleConsonants.Append
               (New_Item =>
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "femalessyllablestart" then
+         elsif To_String(NodeName) = "femalessyllablestart" then
             FemaleSyllablesStart.Append
               (New_Item =>
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "femalessyllablemiddle" then
+         elsif To_String(NodeName) = "femalessyllablemiddle" then
             FemaleSyllablesMiddle.Append
               (New_Item =>
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "femalessyllableend" then
+         elsif To_String(NodeName) = "femalessyllableend" then
             FemaleSyllablesEnd.Append
               (New_Item =>
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "femalesvocal" then
+         elsif To_String(NodeName) = "femalesvocal" then
             FemaleVocals.Append
               (New_Item =>
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "shipssyllablestart" then
+         elsif To_String(NodeName) = "shipssyllablestart" then
             ShipSyllablesStart.Append
               (New_Item =>
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "shipssyllablemiddle" then
+         elsif To_String(NodeName) = "shipssyllablemiddle" then
             ShipSyllablesMiddle.Append
               (New_Item =>
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "shipssyllableend" then
+         elsif To_String(NodeName) = "shipssyllableend" then
             ShipSyllablesEnd.Append
               (New_Item =>
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "itemtype" then
+         elsif To_String(NodeName) = "itemtype" then
             Items_Types.Append
               (New_Item =>
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "repairtools" then
+         elsif To_String(NodeName) = "repairtools" then
             RepairTools :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
-         elsif Node_Name(Item(NodesList, I)) = "cleaningtools" then
+         elsif To_String(NodeName) = "cleaningtools" then
             CleaningTools :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
-         elsif Node_Name(Item(NodesList, I)) = "alchemytools" then
+         elsif To_String(NodeName) = "alchemytools" then
             AlchemyTools :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
-         elsif Node_Name(Item(NodesList, I)) = "corpseindex" then
+         elsif To_String(NodeName) = "corpseindex" then
             CorpseIndex :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
-         elsif Node_Name(Item(NodesList, I)) = "missionitemstype" then
+         elsif To_String(NodeName) = "missionitemstype" then
             MissionItemsType :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
-         elsif Node_Name(Item(NodesList, I)) = "fueltype" then
+         elsif To_String(NodeName) = "fueltype" then
             FuelType :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
-         elsif Node_Name(Item(NodesList, I)) = "moneyindex" then
+         elsif To_String(NodeName) = "moneyindex" then
             MoneyIndex :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
-         elsif Node_Name(Item(NodesList, I)) = "tradersname" then
+         elsif To_String(NodeName) = "tradersname" then
             TradersName :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
-         elsif Node_Name(Item(NodesList, I)) = "attribute" then
+         elsif To_String(NodeName) = "attribute" then
             Attributes_List.Append
               (New_Item =>
                  (Name =>
@@ -483,92 +485,87 @@ package body Game is
                   Description =>
                     To_Unbounded_String
                       (Node_Value(First_Child(Item(NodesList, I))))));
-         elsif Node_Name(Item(NodesList, I)) = "skill" then
+         elsif To_String(NodeName) = "skill" then
             TmpSkill :=
               (To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name")),
                1,
                To_Unbounded_String
                  (Node_Value(First_Child(Item(NodesList, I)))),
                Null_Unbounded_String);
-            for J in
-              Attributes_List.First_Index .. Attributes_List.Last_Index loop
-               if Attributes_List(J).Name =
-                 To_Unbounded_String
-                   (Get_Attribute(Item(NodesList, I), "attribute")) then
-                  TmpSkill.Attribute := J;
-                  exit;
-               end if;
-            end loop;
+            TmpSkill.Attribute :=
+              FindAttributeIndex
+                (To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "attribute")));
             if Get_Attribute(Item(NodesList, I), "tool") /= "" then
                TmpSkill.Tool :=
                  To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "tool"));
             end if;
             Skills_List.Append(New_Item => TmpSkill);
-         elsif Node_Name(Item(NodesList, I)) = "conditionname" then
+         elsif To_String(NodeName) = "conditionname" then
             ConditionIndex :=
               FindAttributeIndex
                 (To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "strengthname" then
+         elsif To_String(NodeName) = "strengthname" then
             StrengthIndex :=
               FindAttributeIndex
                 (To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "pilotingskill" then
+         elsif To_String(NodeName) = "pilotingskill" then
             PilotingSkill :=
               FindSkillIndex
                 (To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "engineeringskill" then
+         elsif To_String(NodeName) = "engineeringskill" then
             EngineeringSkill :=
               FindSkillIndex
                 (To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "gunneryskill" then
+         elsif To_String(NodeName) = "gunneryskill" then
             GunnerySkill :=
               FindSkillIndex
                 (To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "talkingskill" then
+         elsif To_String(NodeName) = "talkingskill" then
             TalkingSkill :=
               FindSkillIndex
                 (To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "perceptionskill" then
+         elsif To_String(NodeName) = "perceptionskill" then
             PerceptionSkill :=
               FindSkillIndex
                 (To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "headarmor" then
+         elsif To_String(NodeName) = "headarmor" then
             HeadArmor :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
-         elsif Node_Name(Item(NodesList, I)) = "chestarmor" then
+         elsif To_String(NodeName) = "chestarmor" then
             ChestArmor :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
-         elsif Node_Name(Item(NodesList, I)) = "armsarmor" then
+         elsif To_String(NodeName) = "armsarmor" then
             ArmsArmor :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
-         elsif Node_Name(Item(NodesList, I)) = "legsarmor" then
+         elsif To_String(NodeName) = "legsarmor" then
             LegsArmor :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
-         elsif Node_Name(Item(NodesList, I)) = "shieldtype" then
+         elsif To_String(NodeName) = "shieldtype" then
             ShieldType :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
-         elsif Node_Name(Item(NodesList, I)) = "weapontype" then
+         elsif To_String(NodeName) = "weapontype" then
             WeaponType :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "value"));
-         elsif Node_Name(Item(NodesList, I)) = "dodgeskill" then
+         elsif To_String(NodeName) = "dodgeskill" then
             DodgeSkill :=
               FindSkillIndex
                 (To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "unarmedskill" then
+         elsif To_String(NodeName) = "unarmedskill" then
             UnarmedSkill :=
               FindSkillIndex
                 (To_Unbounded_String
                    (Get_Attribute(Item(NodesList, I), "value")));
-         elsif Node_Name(Item(NodesList, I)) = "remove" then
+         elsif To_String(NodeName) = "remove" then
             if Get_Attribute(Item(NodesList, I), "name") = "skill" then
                DeleteIndex :=
                  FindSkillIndex
