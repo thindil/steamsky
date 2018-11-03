@@ -38,6 +38,7 @@ package body Goals is
       GoalsData: Document;
       RemoveIndex: Unbounded_String;
       DeleteIndex: Positive;
+      GoalNode: Node;
    begin
       TempRecord :=
         (Index => Null_Unbounded_String, GType => RANDOM, Amount => 0,
@@ -46,27 +47,26 @@ package body Goals is
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(GoalsData, "goal");
       for I in 0 .. Length(NodesList) - 1 loop
+         GoalNode := Item(NodesList, I);
          TempRecord.Index :=
-           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
-         TempRecord.GType :=
-           GoalTypes'Value(Get_Attribute(Item(NodesList, I), "type"));
-         TempRecord.Amount :=
-           Natural'Value(Get_Attribute(Item(NodesList, I), "amount"));
-         if Get_Attribute(Item(NodesList, I), "target") /= "" then
+           To_Unbounded_String(Get_Attribute(GoalNode, "index"));
+         TempRecord.GType := GoalTypes'Value(Get_Attribute(GoalNode, "type"));
+         TempRecord.Amount := Natural'Value(Get_Attribute(GoalNode, "amount"));
+         if Get_Attribute(GoalNode, "target") /= "" then
             TempRecord.TargetIndex :=
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "target"));
+              To_Unbounded_String(Get_Attribute(GoalNode, "target"));
          end if;
-         if Get_Attribute(Item(NodesList, I), "multiplier") /= "" then
+         if Get_Attribute(GoalNode, "multiplier") /= "" then
             TempRecord.Multiplier :=
-              Natural'Value(Get_Attribute(Item(NodesList, I), "multiplier"));
+              Natural'Value(Get_Attribute(GoalNode, "multiplier"));
          end if;
-         if Get_Attribute(Item(NodesList, I), "remove") = "" then
+         if Get_Attribute(GoalNode, "remove") = "" then
             Goals_List.Append(New_Item => TempRecord);
             LogMessage
               ("Goal added: " & To_String(TempRecord.Index), Everything);
          else
             RemoveIndex :=
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "remove"));
+              To_Unbounded_String(Get_Attribute(GoalNode, "remove"));
             for J in Goals_List.Iterate loop
                if Goals_List(J).Index = RemoveIndex then
                   DeleteIndex := Goals_Container.To_Index(J);
