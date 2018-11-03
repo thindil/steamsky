@@ -58,7 +58,7 @@ package Utils.UI is
    procedure TravelInfo(InfoText: in out Unbounded_String; Distance: Positive;
       ShowFuelName: Boolean :=
         False); -- Add info about travel eta and approx fuel usage
-   procedure MinutesToDate(Minutes: Positive;
+   procedure MinutesToDate(Minutes: Natural;
       InfoText: in out Unbounded_String); -- Convert minutes to game date and add it to text
 
 end Utils.UI;
