@@ -171,11 +171,11 @@ package body Maps.UI is
       end loop;
       if ItemAmount = 0 then
          UpdateLabel
-           ("lblnodrinks", "[<span foreground=""red"">No Drinks</span>]",
+           ("lblnodrink", "[<span foreground=""red"">No Drinks</span>]",
             "You don't have any drinks in ship.", True);
       elsif ItemAmount < GameSettings.LowDrinks then
          UpdateLabel
-           ("lblnodrinks", "[<span foreground=""yellow"">Low Drinks</span>]",
+           ("lblnodrink", "[<span foreground=""yellow"">Low Drinks</span>]",
             "Low level of drinks on ship. Only" & Natural'Image(ItemAmount) &
             " left.",
             True);
