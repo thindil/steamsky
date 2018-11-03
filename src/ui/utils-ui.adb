@@ -232,7 +232,7 @@ package body Utils.UI is
       end if;
    end TravelInfo;
 
-   procedure MinutesToDate(Minutes: Positive;
+   procedure MinutesToDate(Minutes: Natural;
       InfoText: in out Unbounded_String) is
       TravelTime: Date_Record := (others => 0);
       MinutesDiff: Integer := Minutes;
