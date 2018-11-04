@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.0] - 2018-11-04
 
 ### Added
 - New crafting recipes: small book of alchemy, small book of cooking, small
