@@ -5,13 +5,13 @@ commander of a flying ship, as leader you will be traveling across floating
 bases, engaging in combat, trading goods etc... There is no mandatory ending
 to this game, you may freely play until your character die. The game is
 currently under heavy development, but is in a playable state. Steam Sky is
-available on Linux and Windows (development version only) 64 bit platforms.
+available on Linux and Windows 64 bit platforms.
 
 ## Game versions
 There are currently 2 versions of the game:
-- 2.0.x: "stable" version of game. This version will receive bug fixes but
-  no new features. Source code for this version is in *2.0* branch.
-- 2.x: "development" version of game, future version 3.0. This is where
+- 3.0.x: "stable" version of game. This version will receive bug fixes but
+  no new features. Source code for this version is in *3.0* branch.
+- 3.x: "development" version of game, future version 4.0. This is where
   game feature updates will happen. Due to new features, save compatibility
   will typically break between releases. Use this version at your own risk.
   Source code for this version is in the *master* branch.
