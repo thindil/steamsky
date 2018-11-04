@@ -349,7 +349,7 @@ package body Bases.SaveLoad is
               Bases_Types'Val
                 (Integer'Value(Get_Attribute(Item(NodesList, I), "type"))),
             Population =>
-              Integer'Value(Get_Attribute(Item(NodesList, I), "y")),
+              Integer'Value(Get_Attribute(Item(NodesList, I), "population")),
             RecruitDate => (0, 0, 0, 0, 0), Recruits => BaseRecruits,
             Known => False, AskedForBases => False,
             AskedForEvents => (0, 0, 0, 0, 0), Reputation => (0, 0),
