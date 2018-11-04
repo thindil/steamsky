@@ -20,7 +20,7 @@ All notable changes to this project will be documented in this file.
   small adamantium furnace, heavy adamantium armor, small adamantium
   greenhouse, small adamantium water collector, small adamantium medical room,
   small extended adamantium cabin, small luxury adamantium cabin, heavy
-  adamantium turret and heavy adamantium battering ram
+  adamantium turret, heavy adamantium battering ram and huge adamantium hull
 - Option to show or hide buttons for map movement
 
 ### Changed
