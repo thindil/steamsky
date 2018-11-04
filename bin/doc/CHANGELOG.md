@@ -47,6 +47,7 @@ All notable changes to this project will be documented in this file.
 - Index for bronze sicke recipe
 - Updating crew inventory
 - Possibility of disease event in bases
+- Reading bases population from saves
 
 ## [2.9] - 2018-10-07
 
