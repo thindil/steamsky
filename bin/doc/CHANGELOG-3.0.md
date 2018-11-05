@@ -39,12 +39,12 @@ All notable changes to this project will be documented in this file.
 - Typo in finished crafting message
 - Return to old speed after finished combat
 - Assigning guns to turrets during creating ships
-- Starting morale and loyality for recruits
+- Starting morale and loyalty for recruits
 - Generating enemy ships for missions
 - Don't show new game and load game buttons when there is error in loading game
   data
 - Removing available careers
-- Index for bronze sicke recipe
+- Index for bronze sickle recipe
 - Updating crew inventory
 - Possibility of disease event in bases
 - Reading bases population from saves
@@ -250,7 +250,7 @@ All notable changes to this project will be documented in this file.
 - Ability to train skills on ship
 - Keyboard shortcuts (and option to set them) to move map
 - New item type: storyitem
-- New items: strange medalion and strange metal scrap
+- New items: strange medallion and strange metal scrap
 - Keyboard shortcuts (and option to set them) to move cursor around map
 - Keyboard shortcut (and option to set it) for selecting map field
 - Randomly generated stories
@@ -295,7 +295,7 @@ All notable changes to this project will be documented in this file.
   in melee combat, kill 8000 pirates in melee combat, kill 10000 pirates in
   melee combat, kill 800 undead in melee combat, kill 1000 undead in melee
   combat, kill 2000 undead in melee combat, kill 4000 undead in melee combat,
-  kill 6000 undead in melee combat, kill 8000 undeand in melee combat and kill
+  kill 6000 undead in melee combat, kill 8000 undead in melee combat and kill
   10000 undead in melee combat
 - Option to set player faction
 - Random equipment to recruits in bases
