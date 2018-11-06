@@ -35,6 +35,7 @@ package body HallOfFame is
       HoFFile: File_Input;
       Reader: Tree_Reader;
       EntriesList: Node_List;
+      EntryNode: Node;
    begin
       if HallOfFame_Array(1).Name /= Null_Unbounded_String then
          return;
@@ -49,13 +50,13 @@ package body HallOfFame is
       EntriesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(HoFData, "entry");
       for I in 0 .. Length(EntriesList) - 1 loop
+         EntryNode := Item(EntriesList, I);
          HallOfFame_Array(I + 1).Name :=
-           To_Unbounded_String(Get_Attribute(Item(EntriesList, I), "name"));
+           To_Unbounded_String(Get_Attribute(EntryNode, "name"));
          HallOfFame_Array(I + 1).Points :=
-           Natural'Value(Get_Attribute(Item(EntriesList, I), "points"));
+           Natural'Value(Get_Attribute(EntryNode, "points"));
          HallOfFame_Array(I + 1).DeathReason :=
-           To_Unbounded_String
-             (Get_Attribute(Item(EntriesList, I), "deathreason"));
+           To_Unbounded_String(Get_Attribute(EntryNode, "deathreason"));
       end loop;
       Free(Reader);
    end LoadHallOfFame;
