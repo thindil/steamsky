@@ -37,7 +37,7 @@ package body Goals is
       NodesList: Node_List;
       GoalsData: Document;
       RemoveIndex: Unbounded_String;
-      DeleteIndex: Positive;
+      DeleteIndex: Natural;
       GoalNode: Node;
    begin
       TempRecord :=
@@ -50,6 +50,13 @@ package body Goals is
          GoalNode := Item(NodesList, I);
          TempRecord.Index :=
            To_Unbounded_String(Get_Attribute(GoalNode, "index"));
+         for Goal of Goals_List loop
+            if Goal.Index = TempRecord.Index then
+               raise Goals_Adding_Error
+                 with "Can't add goal '" & To_String(TempRecord.Index) &
+                 "', there is one with that index.";
+            end if;
+         end loop;
          TempRecord.GType := GoalTypes'Value(Get_Attribute(GoalNode, "type"));
          TempRecord.Amount := Natural'Value(Get_Attribute(GoalNode, "amount"));
          if Get_Attribute(GoalNode, "target") /= "" then
@@ -65,6 +72,7 @@ package body Goals is
             LogMessage
               ("Goal added: " & To_String(TempRecord.Index), Everything);
          else
+            DeleteIndex := 0;
             RemoveIndex :=
               To_Unbounded_String(Get_Attribute(GoalNode, "remove"));
             for J in Goals_List.Iterate loop
@@ -73,6 +81,11 @@ package body Goals is
                   exit;
                end if;
             end loop;
+            if DeleteIndex = 0 then
+               raise Goals_Remove_Error
+                 with "Can't delete goal '" & To_String(RemoveIndex) &
+                 "', no goal with that index.";
+            end if;
             Goals_List.Delete(Index => DeleteIndex);
             LogMessage("Goal removed: " & To_String(RemoveIndex), Everything);
          end if;
