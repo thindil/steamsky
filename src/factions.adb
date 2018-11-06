@@ -39,6 +39,7 @@ package body Factions is
       TmpCareers: Careers_Container.Vector;
       TmpCareer: CareerRecord;
       CareerExists: Boolean;
+      FactionNode, ChildNode: Node;
       procedure AddChildNode(Data: in out UnboundedString_Container.Vector;
          Name: String; Index: Natural; CheckItemType: Boolean := True) is
          Value: Unbounded_String;
@@ -74,8 +75,9 @@ package body Factions is
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(FactionsData, "faction");
       for I in 0 .. Length(NodesList) - 1 loop
+         FactionNode := Item(NodesList, I);
          TempRecord.Index :=
-           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
+           To_Unbounded_String(Get_Attribute(FactionNode, "index"));
          for Faction of Factions_List loop
             if Faction.Index = TempRecord.Index then
                raise Factions_Adding_Error
@@ -84,41 +86,37 @@ package body Factions is
             end if;
          end loop;
          TempRecord.Name :=
-           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name"));
-         if Get_Attribute(Item(NodesList, I), "membername") /= "" then
+           To_Unbounded_String(Get_Attribute(FactionNode, "name"));
+         if Get_Attribute(FactionNode, "membername") /= "" then
             TempRecord.MemberName :=
-              To_Unbounded_String
-                (Get_Attribute(Item(NodesList, I), "membername"));
+              To_Unbounded_String(Get_Attribute(FactionNode, "membername"));
          end if;
-         if Get_Attribute(Item(NodesList, I), "pluralmembername") /= "" then
+         if Get_Attribute(FactionNode, "pluralmembername") /= "" then
             TempRecord.PluralMemberName :=
               To_Unbounded_String
-                (Get_Attribute(Item(NodesList, I), "pluralmembername"));
+                (Get_Attribute(FactionNode, "pluralmembername"));
          end if;
-         if Get_Attribute(Item(NodesList, I), "spawn") /= "" then
+         if Get_Attribute(FactionNode, "spawn") /= "" then
             TempRecord.SpawnChance :=
-              Natural'Value(Get_Attribute(Item(NodesList, I), "spawn"));
+              Natural'Value(Get_Attribute(FactionNode, "spawn"));
          end if;
-         if Get_Attribute(Item(NodesList, I), "population") /= "" then
+         if Get_Attribute(FactionNode, "population") /= "" then
             TempRecord.Population(1) :=
-              Natural'Value(Get_Attribute(Item(NodesList, I), "population"));
+              Natural'Value(Get_Attribute(FactionNode, "population"));
          end if;
-         if Get_Attribute(Item(NodesList, I), "minpopulation") /= "" then
+         if Get_Attribute(FactionNode, "minpopulation") /= "" then
             TempRecord.Population(1) :=
-              Natural'Value
-                (Get_Attribute(Item(NodesList, I), "minpopulation"));
+              Natural'Value(Get_Attribute(FactionNode, "minpopulation"));
             TempRecord.Population(2) :=
-              Natural'Value
-                (Get_Attribute(Item(NodesList, I), "maxpopulation"));
+              Natural'Value(Get_Attribute(FactionNode, "maxpopulation"));
          end if;
-         if Get_Attribute(Item(NodesList, I), "namestype") /= "" then
+         if Get_Attribute(FactionNode, "namestype") /= "" then
             TempRecord.NamesType :=
-              NamesTypes'Value(Get_Attribute(Item(NodesList, I), "namestype"));
+              NamesTypes'Value(Get_Attribute(FactionNode, "namestype"));
          end if;
-         if Get_Attribute(Item(NodesList, I), "healingtools") /= "" then
+         if Get_Attribute(FactionNode, "healingtools") /= "" then
             Value :=
-              To_Unbounded_String
-                (Get_Attribute(Item(NodesList, I), "healingtools"));
+              To_Unbounded_String(Get_Attribute(FactionNode, "healingtools"));
             ItemIndex := FindProtoItem(ItemType => Value);
             if ItemIndex = 0 then
                raise Factions_Adding_Error
@@ -127,10 +125,9 @@ package body Factions is
             end if;
             TempRecord.HealingTools := Value;
          end if;
-         if Get_Attribute(Item(NodesList, I), "healingskill") /= "" then
+         if Get_Attribute(FactionNode, "healingskill") /= "" then
             Value :=
-              To_Unbounded_String
-                (Get_Attribute(Item(NodesList, I), "healingskill"));
+              To_Unbounded_String(Get_Attribute(FactionNode, "healingskill"));
             SkillIndex := FindSkillIndex(Value);
             if SkillIndex = 0 then
                raise Factions_Adding_Error
@@ -140,25 +137,20 @@ package body Factions is
             TempRecord.HealingSkill := SkillIndex;
          end if;
          ChildNodes :=
-           DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I), "relation");
+           DOM.Core.Elements.Get_Elements_By_Tag_Name(FactionNode, "relation");
          for J in 0 .. Length(ChildNodes) - 1 loop
+            ChildNode := Item(ChildNodes, J);
             TmpRelation.TargetFaction :=
-              To_Unbounded_String
-                (Get_Attribute(Item(ChildNodes, J), "faction"));
-            if Get_Attribute(Item(ChildNodes, J), "reputation") /= "" then
+              To_Unbounded_String(Get_Attribute(ChildNode, "faction"));
+            if Get_Attribute(ChildNode, "reputation") /= "" then
                TmpRelation.Reputation :=
-                 (Integer'Value
-                    (Get_Attribute(Item(ChildNodes, J), "reputation")),
-                  0);
+                 (Integer'Value(Get_Attribute(ChildNode, "reputation")), 0);
             else
                TmpRelation.Reputation :=
-                 (Integer'Value
-                    (Get_Attribute(Item(ChildNodes, J), "minreputation")),
-                  Integer'Value
-                    (Get_Attribute(Item(ChildNodes, J), "maxreputation")));
+                 (Integer'Value(Get_Attribute(ChildNode, "minreputation")),
+                  Integer'Value(Get_Attribute(ChildNode, "maxreputation")));
             end if;
-            if Get_Attribute(Item(ChildNodes, J), "friendly") = "Y" then
+            if Get_Attribute(ChildNode, "friendly") = "Y" then
                TmpRelation.Friendly := True;
             else
                TmpRelation.Friendly := False;
@@ -167,7 +159,7 @@ package body Factions is
          end loop;
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I), "description");
+             (FactionNode, "description");
          if Length(ChildNodes) > 0 then
             TempRecord.Description :=
               To_Unbounded_String
@@ -177,24 +169,20 @@ package body Factions is
          AddChildNode(TempRecord.DrinksTypes, "drinktype", I);
          AddChildNode(TempRecord.Flags, "flag", I, False);
          ChildNodes :=
-           DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I), "career");
+           DOM.Core.Elements.Get_Elements_By_Tag_Name(FactionNode, "career");
          for J in 0 .. Length(ChildNodes) - 1 loop
+            ChildNode := Item(ChildNodes, J);
             TmpCareer.Index :=
-              To_Unbounded_String(Get_Attribute(Item(ChildNodes, J), "index"));
+              To_Unbounded_String(Get_Attribute(ChildNode, "index"));
             TmpCareer.ShipIndex :=
-              To_Unbounded_String
-                (Get_Attribute(Item(ChildNodes, J), "shipindex"));
+              To_Unbounded_String(Get_Attribute(ChildNode, "shipindex"));
             TmpCareer.PlayerIndex :=
-              To_Unbounded_String
-                (Get_Attribute(Item(ChildNodes, J), "playerindex"));
+              To_Unbounded_String(Get_Attribute(ChildNode, "playerindex"));
             TmpCareer.Description :=
-              To_Unbounded_String
-                (Node_Value(First_Child(Item(ChildNodes, J))));
-            if Get_Attribute(Item(ChildNodes, J), "name") /= "" then
+              To_Unbounded_String(Node_Value(First_Child(ChildNode)));
+            if Get_Attribute(ChildNode, "name") /= "" then
                TmpCareer.Name :=
-                 To_Unbounded_String
-                   (Get_Attribute(Item(ChildNodes, J), "name"));
+                 To_Unbounded_String(Get_Attribute(ChildNode, "name"));
             else
                for Career of Careers_List loop
                   if Career.Index = TmpCareer.Index then
@@ -214,13 +202,13 @@ package body Factions is
                TempRecord.Careers.Append(New_Item => TmpCareer);
             end if;
          end loop;
-         if Get_Attribute(Item(NodesList, I), "remove") = "" then
+         if Get_Attribute(FactionNode, "remove") = "" then
             Factions_List.Append(New_Item => TempRecord);
             LogMessage
               ("Faction added: " & To_String(TempRecord.Name), Everything);
          else
             RemoveIndex :=
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "remove"));
+              To_Unbounded_String(Get_Attribute(FactionNode, "remove"));
             DeleteIndex := 0;
             for J in Factions_List.Iterate loop
                if Factions_List(J).Index = RemoveIndex then
