@@ -87,9 +87,7 @@ package body ShipModules is
          else
             Modules_List.Delete(Index => FindProtoModule(TempRecord.Index));
             LogMessage
-              ("Module removed: " &
-               To_String(TempRecord.Index),
-               Everything);
+              ("Module removed: " & To_String(TempRecord.Index), Everything);
          end if;
          TempRecord :=
            (Name => Null_Unbounded_String, MType => ENGINE, Weight => 0,
