@@ -29,6 +29,7 @@ package body Help is
       HelpData: Document;
       RemoveTitle: Unbounded_String;
       DeleteIndex: Positive;
+      HelpNode: Node;
    begin
       TmpHelp :=
         (Title => Null_Unbounded_String, Text => Null_Unbounded_String);
@@ -36,16 +37,17 @@ package body Help is
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(HelpData, "entry");
       for I in 0 .. Length(NodesList) - 1 loop
+         HelpNode := Item(NodesList, I);
          TmpHelp.Title :=
-           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "title"));
+           To_Unbounded_String(Get_Attribute(HelpNode, "title"));
          TmpHelp.Text :=
-           To_Unbounded_String(Node_Value(First_Child(Item(NodesList, I))));
-         if Get_Attribute(Item(NodesList, I), "remove") = "" then
+           To_Unbounded_String(Node_Value(First_Child(HelpNode)));
+         if Get_Attribute(HelpNode, "remove") = "" then
             Help_List.Append(New_Item => TmpHelp);
             LogMessage("Help added: " & To_String(TmpHelp.Title), Everything);
          else
             RemoveTitle :=
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "remove"));
+              To_Unbounded_String(Get_Attribute(HelpNode, "remove"));
             for J in Help_List.Iterate loop
                if Help_List(J).Title = RemoveTitle then
                   DeleteIndex := Help_Container.To_Index(J);
