@@ -248,5 +248,6 @@ Text between "module" tags is module description.
  <module durability="650" index="209" installtime="330" material="Adamantium" maxvalue="50" name="Huge adamantium hull" price="72000" skill="Engineering" type="HULL" value="0" weight="20000">Base module of each ship, made of adamantium. The entire ship goes down if the hull is destroyed.</module>
  <module durability="700" index="210" installtime="350" material="Adamantium" maxvalue="55" name="Advanced huge adamantium hull" price="75000" skill="Engineering" type="HULL" value="0" weight="22000">Base module of each ship, made of adamantium. The entire ship goes down if the hull is destroyed.</module>
  <module durability="650" index="211" installtime="280" material="Adamantium" maxvalue="60000" name="Huge adamantium engine" price="80000" size="4" skill="Engineering" type="ENGINE" value="10" weight="12000">Huge engine made of adamantium. Each ship needs at least one engine to fly.</module>
+ <module durability="650" index="212" installtime="300" material="Adamantium" maxvalue="65000" name="Advanced huge adamantium engine" price="85000" size="4" skill="Engineering" type="ENGINE" value="11" weight="15000">Updated version of huge engine made of adamantium. Each ship needs at least one engine to fly.</module>
 </modules>
 
