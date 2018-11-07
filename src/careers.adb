@@ -32,6 +32,7 @@ package body Careers is
       DeleteIndex: Natural := 0;
       TmpSkills: UnboundedString_Container.Vector;
       CareerIndex: Positive;
+      CareerNode: Node;
    begin
       TempRecord :=
         (Index => Null_Unbounded_String, Name => Null_Unbounded_String,
@@ -40,8 +41,9 @@ package body Careers is
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(CareersData, "career");
       for I in 0 .. Length(NodesList) - 1 loop
+         CareerNode := Item(NodesList, I);
          TempRecord.Index :=
-           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
+           To_Unbounded_String(Get_Attribute(CareerNode, "index"));
          for Career of Careers_List loop
             if Career.Index = TempRecord.Index then
                raise Careers_Adding_Error
@@ -50,10 +52,9 @@ package body Careers is
             end if;
          end loop;
          TempRecord.Name :=
-           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name"));
+           To_Unbounded_String(Get_Attribute(CareerNode, "name"));
          ChildNodes :=
-           DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I), "skill");
+           DOM.Core.Elements.Get_Elements_By_Tag_Name(CareerNode, "skill");
          for J in 0 .. Length(ChildNodes) - 1 loop
             SkillName :=
               To_Unbounded_String(Get_Attribute(Item(ChildNodes, J), "name"));
@@ -64,13 +65,13 @@ package body Careers is
             end if;
             TempRecord.Skills.Append(New_Item => SkillName);
          end loop;
-         if Get_Attribute(Item(NodesList, I), "remove") = "" then
+         if Get_Attribute(CareerNode, "remove") = "" then
             Careers_List.Append(New_Item => TempRecord);
             LogMessage
               ("Career added: " & To_String(TempRecord.Name), Everything);
          else
             RemoveIndex :=
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "remove"));
+              To_Unbounded_String(Get_Attribute(CareerNode, "remove"));
             DeleteIndex := 0;
             for J in Careers_List.Iterate loop
                if Careers_List(J).Index = RemoveIndex then
