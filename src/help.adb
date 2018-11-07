@@ -27,7 +27,7 @@ package body Help is
       TmpHelp: Help_Data;
       NodesList: Node_List;
       HelpData: Document;
-      RemoveTitle: Unbounded_String;
+      Action: Unbounded_String;
       DeleteIndex: Positive;
       HelpNode: Node;
    begin
@@ -40,22 +40,23 @@ package body Help is
          HelpNode := Item(NodesList, I);
          TmpHelp.Title :=
            To_Unbounded_String(Get_Attribute(HelpNode, "title"));
-         TmpHelp.Text :=
-           To_Unbounded_String(Node_Value(First_Child(HelpNode)));
-         if Get_Attribute(HelpNode, "remove") = "" then
+         Action := To_Unbounded_String(Get_Attribute(HelpNode, "action"));
+         if Action = Null_Unbounded_String or
+           Action = To_Unbounded_String("add") then
+            TmpHelp.Text :=
+              To_Unbounded_String(Node_Value(First_Child(HelpNode)));
             Help_List.Append(New_Item => TmpHelp);
             LogMessage("Help added: " & To_String(TmpHelp.Title), Everything);
          else
-            RemoveTitle :=
-              To_Unbounded_String(Get_Attribute(HelpNode, "remove"));
             for J in Help_List.Iterate loop
-               if Help_List(J).Title = RemoveTitle then
+               if Help_List(J).Title = TmpHelp.Title then
                   DeleteIndex := Help_Container.To_Index(J);
                   exit;
                end if;
             end loop;
             Help_List.Delete(Index => DeleteIndex);
-            LogMessage("Help removed: " & To_String(RemoveTitle), Everything);
+            LogMessage
+              ("Help removed: " & To_String(TmpHelp.Title), Everything);
          end if;
          TmpHelp :=
            (Title => Null_Unbounded_String, Text => Null_Unbounded_String);
