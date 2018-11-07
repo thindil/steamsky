@@ -34,6 +34,7 @@ package body Items is
       NodesList, ChildNodes: Node_List;
       ItemsData: Document;
       TempValue: Natural_Container.Vector;
+      Action: Unbounded_String;
    begin
       TempRecord :=
         (Name => Null_Unbounded_String, Weight => 1,
@@ -47,44 +48,49 @@ package body Items is
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord.Index :=
            To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
-         TempRecord.Name :=
-           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name"));
-         TempRecord.Weight :=
-           Natural'Value(Get_Attribute(Item(NodesList, I), "weight"));
-         TempRecord.IType :=
-           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "type"));
-         if Get_Attribute(Item(NodesList, I), "showtype") /= "" then
-            TempRecord.ShowType :=
-              To_Unbounded_String
-                (Get_Attribute(Item(NodesList, I), "showtype"));
-         end if;
-         ChildNodes :=
-           DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I), "trade");
-         for J in 0 .. Length(ChildNodes) - 1 loop
-            TempRecord.Prices(J + 1) :=
-              Natural'Value(Get_Attribute(Item(ChildNodes, J), "price"));
-            if Get_Attribute(Item(ChildNodes, J), "buyable") = "Y" then
-               TempRecord.Buyable(J + 1) := True;
+         Action :=
+           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "action"));
+         if Action = Null_Unbounded_String or
+           Action = To_Unbounded_String("add") then
+            TempRecord.Name :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name"));
+            TempRecord.Weight :=
+              Natural'Value(Get_Attribute(Item(NodesList, I), "weight"));
+            TempRecord.IType :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "type"));
+            if Get_Attribute(Item(NodesList, I), "showtype") /= "" then
+               TempRecord.ShowType :=
+                 To_Unbounded_String
+                   (Get_Attribute(Item(NodesList, I), "showtype"));
             end if;
-         end loop;
-         ChildNodes :=
-           DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I), "data");
-         for J in 0 .. Length(ChildNodes) - 1 loop
-            TempRecord.Value.Append
-              (New_Item =>
-                 Natural'Value(Get_Attribute(Item(ChildNodes, J), "value")));
-         end loop;
-         ChildNodes :=
-           DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I), "description");
-         TempRecord.Description :=
-           To_Unbounded_String(Node_Value(First_Child(Item(ChildNodes, 0))));
-         if TempRecord.Index = MoneyIndex then
-            MoneyName := TempRecord.Name;
-         end if;
-         if Get_Attribute(Item(NodesList, I), "remove") = "" then
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I), "trade");
+            for J in 0 .. Length(ChildNodes) - 1 loop
+               TempRecord.Prices(J + 1) :=
+                 Natural'Value(Get_Attribute(Item(ChildNodes, J), "price"));
+               if Get_Attribute(Item(ChildNodes, J), "buyable") = "Y" then
+                  TempRecord.Buyable(J + 1) := True;
+               end if;
+            end loop;
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I), "data");
+            for J in 0 .. Length(ChildNodes) - 1 loop
+               TempRecord.Value.Append
+                 (New_Item =>
+                    Natural'Value
+                      (Get_Attribute(Item(ChildNodes, J), "value")));
+            end loop;
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I), "description");
+            TempRecord.Description :=
+              To_Unbounded_String
+                (Node_Value(First_Child(Item(ChildNodes, 0))));
+            if TempRecord.Index = MoneyIndex then
+               MoneyName := TempRecord.Name;
+            end if;
             Items_List.Append(New_Item => TempRecord);
             if TempRecord.IType = WeaponType then
                Weapons_List.Append(New_Item => Items_List.Last_Index);
@@ -102,14 +108,9 @@ package body Items is
             LogMessage
               ("Item added: " & To_String(TempRecord.Name), Everything);
          else
-            Items_List.Delete
-              (Index =>
-                 FindProtoItem
-                   (To_Unbounded_String
-                      (Get_Attribute(Item(NodesList, I), "remove"))));
+            Items_List.Delete(Index => FindProtoItem(TempRecord.Index));
             LogMessage
-              ("Item removed: " & Get_Attribute(Item(NodesList, I), "remove"),
-               Everything);
+              ("Item removed: " & To_String(TempRecord.Index), Everything);
          end if;
          TempRecord :=
            (Name => Null_Unbounded_String, Weight => 1,

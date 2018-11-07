@@ -44,7 +44,7 @@ package body Stories is
       StartStep, FinalStep: Unbounded_String;
       TempTexts: StepTexts_Container.Vector;
       TempData: StepData_Container.Vector;
-      RemoveIndex: Unbounded_String;
+      Action: Unbounded_String;
       DeleteIndex: Positive;
    begin
       ClearCurrentStory;
@@ -63,112 +63,120 @@ package body Stories is
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(StoriesData, "story");
       for I in 0 .. Length(NodesList) - 1 loop
-         StartStep :=
-           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "startstep"));
-         FinalStep :=
-           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "finalstep"));
          TempRecord.Index :=
            To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
-         TempRecord.StartCondition :=
-           StartConditionType'Value
-             (Get_Attribute(Item(NodesList, I), "start"));
-         TempRecord.MinSteps :=
-           Positive'Value(Get_Attribute(Item(NodesList, I), "minsteps"));
-         TempRecord.MaxSteps :=
-           Positive'Value(Get_Attribute(Item(NodesList, I), "maxsteps"));
-         TempRecord.Name :=
-           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name"));
-         ChildNodes :=
-           DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I), "startdata");
-         for J in 0 .. Length(ChildNodes) - 1 loop
-            TempRecord.StartData.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Get_Attribute(Item(ChildNodes, J), "value")));
-         end loop;
-         ChildNodes :=
-           DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I), "forbiddenfaction");
-         for J in 0 .. Length(ChildNodes) - 1 loop
-            TempRecord.ForbiddenFactions.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Get_Attribute(Item(ChildNodes, J), "value")));
-         end loop;
-         ChildNodes :=
-           DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I), "step");
-         for J in 0 .. Length(ChildNodes) - 1 loop
-            TempStep :=
-              (Index => Null_Unbounded_String, FinishCondition => ASKINBASE,
-               FinishData => TempData, FailText => Null_Unbounded_String,
-               Texts => TempTexts);
-            TempStep.Index :=
-              To_Unbounded_String(Get_Attribute(Item(ChildNodes, J), "index"));
-            TempStep.FinishCondition :=
-              StepConditionType'Value
-                (Get_Attribute(Item(ChildNodes, J), "finish"));
-            StepDataNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(ChildNodes, J), "finishdata");
-            for K in 0 .. Length(StepDataNodes) - 1 loop
-               TempStep.FinishData.Append
-                 (New_Item =>
-                    (Name =>
-                       To_Unbounded_String
-                         (Get_Attribute(Item(StepDataNodes, K), "name")),
-                     Value =>
-                       To_Unbounded_String
-                         (Get_Attribute(Item(StepDataNodes, K), "value"))));
-            end loop;
-            StepDataNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(ChildNodes, J), "text");
-            for K in 0 .. Length(StepDataNodes) - 1 loop
-               TempStep.Texts.Append
-                 (New_Item =>
-                    (Condition =>
-                       StepConditionType'Value
-                         (Get_Attribute(Item(StepDataNodes, K), "condition")),
-                     Text =>
-                       To_Unbounded_String
-                         (Node_Value(First_Child(Item(StepDataNodes, K))))));
-            end loop;
-            StepDataNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(ChildNodes, J), "failtext");
-            TempStep.FailText :=
+         Action :=
+           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "action"));
+         if Action = Null_Unbounded_String or
+           Action = To_Unbounded_String("add") then
+            StartStep :=
               To_Unbounded_String
-                (Node_Value(First_Child(Item(StepDataNodes, 0))));
-            if TempStep.Index = StartStep then
-               TempRecord.StartingStep := TempStep;
-            elsif TempStep.Index = FinalStep then
-               TempRecord.FinalStep := TempStep;
-            else
-               TempRecord.Steps.Append(New_Item => TempStep);
-            end if;
-         end loop;
-         ChildNodes :=
-           DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, I), "endtext");
-         TempRecord.EndText :=
-           To_Unbounded_String(Node_Value(First_Child(Item(ChildNodes, 0))));
-         if Get_Attribute(Item(NodesList, I), "remove") = "" then
+                (Get_Attribute(Item(NodesList, I), "startstep"));
+            FinalStep :=
+              To_Unbounded_String
+                (Get_Attribute(Item(NodesList, I), "finalstep"));
+            TempRecord.StartCondition :=
+              StartConditionType'Value
+                (Get_Attribute(Item(NodesList, I), "start"));
+            TempRecord.MinSteps :=
+              Positive'Value(Get_Attribute(Item(NodesList, I), "minsteps"));
+            TempRecord.MaxSteps :=
+              Positive'Value(Get_Attribute(Item(NodesList, I), "maxsteps"));
+            TempRecord.Name :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name"));
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I), "startdata");
+            for J in 0 .. Length(ChildNodes) - 1 loop
+               TempRecord.StartData.Append
+                 (New_Item =>
+                    To_Unbounded_String
+                      (Get_Attribute(Item(ChildNodes, J), "value")));
+            end loop;
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I), "forbiddenfaction");
+            for J in 0 .. Length(ChildNodes) - 1 loop
+               TempRecord.ForbiddenFactions.Append
+                 (New_Item =>
+                    To_Unbounded_String
+                      (Get_Attribute(Item(ChildNodes, J), "value")));
+            end loop;
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I), "step");
+            for J in 0 .. Length(ChildNodes) - 1 loop
+               TempStep :=
+                 (Index => Null_Unbounded_String, FinishCondition => ASKINBASE,
+                  FinishData => TempData, FailText => Null_Unbounded_String,
+                  Texts => TempTexts);
+               TempStep.Index :=
+                 To_Unbounded_String
+                   (Get_Attribute(Item(ChildNodes, J), "index"));
+               TempStep.FinishCondition :=
+                 StepConditionType'Value
+                   (Get_Attribute(Item(ChildNodes, J), "finish"));
+               StepDataNodes :=
+                 DOM.Core.Elements.Get_Elements_By_Tag_Name
+                   (Item(ChildNodes, J), "finishdata");
+               for K in 0 .. Length(StepDataNodes) - 1 loop
+                  TempStep.FinishData.Append
+                    (New_Item =>
+                       (Name =>
+                          To_Unbounded_String
+                            (Get_Attribute(Item(StepDataNodes, K), "name")),
+                        Value =>
+                          To_Unbounded_String
+                            (Get_Attribute(Item(StepDataNodes, K), "value"))));
+               end loop;
+               StepDataNodes :=
+                 DOM.Core.Elements.Get_Elements_By_Tag_Name
+                   (Item(ChildNodes, J), "text");
+               for K in 0 .. Length(StepDataNodes) - 1 loop
+                  TempStep.Texts.Append
+                    (New_Item =>
+                       (Condition =>
+                          StepConditionType'Value
+                            (Get_Attribute
+                               (Item(StepDataNodes, K), "condition")),
+                        Text =>
+                          To_Unbounded_String
+                            (Node_Value
+                               (First_Child(Item(StepDataNodes, K))))));
+               end loop;
+               StepDataNodes :=
+                 DOM.Core.Elements.Get_Elements_By_Tag_Name
+                   (Item(ChildNodes, J), "failtext");
+               TempStep.FailText :=
+                 To_Unbounded_String
+                   (Node_Value(First_Child(Item(StepDataNodes, 0))));
+               if TempStep.Index = StartStep then
+                  TempRecord.StartingStep := TempStep;
+               elsif TempStep.Index = FinalStep then
+                  TempRecord.FinalStep := TempStep;
+               else
+                  TempRecord.Steps.Append(New_Item => TempStep);
+               end if;
+            end loop;
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I), "endtext");
+            TempRecord.EndText :=
+              To_Unbounded_String
+                (Node_Value(First_Child(Item(ChildNodes, 0))));
             Stories_List.Append(New_Item => TempRecord);
             LogMessage
               ("Story added: " & To_String(TempRecord.Index), Everything);
          else
-            RemoveIndex :=
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "remove"));
             for J in Stories_List.Iterate loop
-               if Stories_List(J).Index = RemoveIndex then
+               if Stories_List(J).Index = TempRecord.Index then
                   DeleteIndex := Stories_Container.To_Index(J);
                   exit;
                end if;
             end loop;
             Stories_List.Delete(Index => DeleteIndex);
-            LogMessage("Story removed: " & To_String(RemoveIndex), Everything);
+            LogMessage
+              ("Story removed: " & To_String(TempRecord.Index), Everything);
          end if;
          TempRecord :=
            (Index => Null_Unbounded_String, StartCondition => DROPITEM,

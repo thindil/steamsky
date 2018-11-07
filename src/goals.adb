@@ -36,7 +36,7 @@ package body Goals is
       TempRecord: Goal_Data;
       NodesList: Node_List;
       GoalsData: Document;
-      RemoveIndex: Unbounded_String;
+      Action: Unbounded_String;
       DeleteIndex: Natural;
       GoalNode: Node;
    begin
@@ -50,44 +50,47 @@ package body Goals is
          GoalNode := Item(NodesList, I);
          TempRecord.Index :=
            To_Unbounded_String(Get_Attribute(GoalNode, "index"));
-         for Goal of Goals_List loop
-            if Goal.Index = TempRecord.Index then
-               raise Goals_Adding_Error
-                 with "Can't add goal '" & To_String(TempRecord.Index) &
-                 "', there is one with that index.";
+         Action := To_Unbounded_String(Get_Attribute(GoalNode, "action"));
+         if Action = Null_Unbounded_String or
+           Action = To_Unbounded_String("add") then
+            for Goal of Goals_List loop
+               if Goal.Index = TempRecord.Index then
+                  raise Goals_Adding_Error
+                    with "Can't add goal '" & To_String(TempRecord.Index) &
+                    "', there is one with that index.";
+               end if;
+            end loop;
+            TempRecord.GType :=
+              GoalTypes'Value(Get_Attribute(GoalNode, "type"));
+            TempRecord.Amount :=
+              Natural'Value(Get_Attribute(GoalNode, "amount"));
+            if Get_Attribute(GoalNode, "target") /= "" then
+               TempRecord.TargetIndex :=
+                 To_Unbounded_String(Get_Attribute(GoalNode, "target"));
             end if;
-         end loop;
-         TempRecord.GType := GoalTypes'Value(Get_Attribute(GoalNode, "type"));
-         TempRecord.Amount := Natural'Value(Get_Attribute(GoalNode, "amount"));
-         if Get_Attribute(GoalNode, "target") /= "" then
-            TempRecord.TargetIndex :=
-              To_Unbounded_String(Get_Attribute(GoalNode, "target"));
-         end if;
-         if Get_Attribute(GoalNode, "multiplier") /= "" then
-            TempRecord.Multiplier :=
-              Natural'Value(Get_Attribute(GoalNode, "multiplier"));
-         end if;
-         if Get_Attribute(GoalNode, "remove") = "" then
+            if Get_Attribute(GoalNode, "multiplier") /= "" then
+               TempRecord.Multiplier :=
+                 Natural'Value(Get_Attribute(GoalNode, "multiplier"));
+            end if;
             Goals_List.Append(New_Item => TempRecord);
             LogMessage
               ("Goal added: " & To_String(TempRecord.Index), Everything);
          else
             DeleteIndex := 0;
-            RemoveIndex :=
-              To_Unbounded_String(Get_Attribute(GoalNode, "remove"));
             for J in Goals_List.Iterate loop
-               if Goals_List(J).Index = RemoveIndex then
+               if Goals_List(J).Index = TempRecord.Index then
                   DeleteIndex := Goals_Container.To_Index(J);
                   exit;
                end if;
             end loop;
             if DeleteIndex = 0 then
                raise Goals_Remove_Error
-                 with "Can't delete goal '" & To_String(RemoveIndex) &
+                 with "Can't delete goal '" & To_String(TempRecord.Index) &
                  "', no goal with that index.";
             end if;
             Goals_List.Delete(Index => DeleteIndex);
-            LogMessage("Goal removed: " & To_String(RemoveIndex), Everything);
+            LogMessage
+              ("Goal removed: " & To_String(TempRecord.Index), Everything);
          end if;
          TempRecord :=
            (Index => Null_Unbounded_String, GType => RANDOM, Amount => 0,

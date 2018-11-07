@@ -28,6 +28,7 @@ package body ShipModules is
       NodesList: Node_List;
       ModulesData: Document;
       TempRecord: BaseModule_Data;
+      Action: Unbounded_String;
    begin
       TempRecord :=
         (Name => Null_Unbounded_String, MType => ENGINE, Weight => 0,
@@ -41,53 +42,53 @@ package body ShipModules is
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord.Index :=
            To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
-         TempRecord.Name :=
-           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name"));
-         TempRecord.MType :=
-           ModuleType'Value(Get_Attribute(Item(NodesList, I), "type"));
-         TempRecord.Weight :=
-           Natural'Value(Get_Attribute(Item(NodesList, I), "weight"));
-         TempRecord.Value :=
-           Integer'Value(Get_Attribute(Item(NodesList, I), "value"));
-         TempRecord.MaxValue :=
-           Integer'Value(Get_Attribute(Item(NodesList, I), "maxvalue"));
-         TempRecord.Durability :=
-           Integer'Value(Get_Attribute(Item(NodesList, I), "durability"));
-         TempRecord.RepairMaterial :=
-           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "material"));
-         for J in Skills_List.Iterate loop
-            if Get_Attribute(Item(NodesList, I), "skill") =
-              To_String(Skills_List(J).Name) then
-               TempRecord.RepairSkill := SkillsData_Container.To_Index(J);
-               exit;
+         Action :=
+           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "action"));
+         if Action = Null_Unbounded_String or
+           Action = To_Unbounded_String("add") then
+            TempRecord.Name :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name"));
+            TempRecord.MType :=
+              ModuleType'Value(Get_Attribute(Item(NodesList, I), "type"));
+            TempRecord.Weight :=
+              Natural'Value(Get_Attribute(Item(NodesList, I), "weight"));
+            TempRecord.Value :=
+              Integer'Value(Get_Attribute(Item(NodesList, I), "value"));
+            TempRecord.MaxValue :=
+              Integer'Value(Get_Attribute(Item(NodesList, I), "maxvalue"));
+            TempRecord.Durability :=
+              Integer'Value(Get_Attribute(Item(NodesList, I), "durability"));
+            TempRecord.RepairMaterial :=
+              To_Unbounded_String
+                (Get_Attribute(Item(NodesList, I), "material"));
+            for J in Skills_List.Iterate loop
+               if Get_Attribute(Item(NodesList, I), "skill") =
+                 To_String(Skills_List(J).Name) then
+                  TempRecord.RepairSkill := SkillsData_Container.To_Index(J);
+                  exit;
+               end if;
+            end loop;
+            TempRecord.Price :=
+              Integer'Value(Get_Attribute(Item(NodesList, I), "price"));
+            TempRecord.InstallTime :=
+              Positive'Value(Get_Attribute(Item(NodesList, I), "installtime"));
+            if Get_Attribute(Item(NodesList, I), "unique") /= "" then
+               TempRecord.Unique := True;
             end if;
-         end loop;
-         TempRecord.Price :=
-           Integer'Value(Get_Attribute(Item(NodesList, I), "price"));
-         TempRecord.InstallTime :=
-           Positive'Value(Get_Attribute(Item(NodesList, I), "installtime"));
-         if Get_Attribute(Item(NodesList, I), "unique") /= "" then
-            TempRecord.Unique := True;
-         end if;
-         if Get_Attribute(Item(NodesList, I), "size") /= "" then
-            TempRecord.Size :=
-              Integer'Value(Get_Attribute(Item(NodesList, I), "size"));
-         end if;
-         TempRecord.Description :=
-           To_Unbounded_String(Node_Value(First_Child(Item(NodesList, I))));
-         if Get_Attribute(Item(NodesList, I), "remove") = "" then
+            if Get_Attribute(Item(NodesList, I), "size") /= "" then
+               TempRecord.Size :=
+                 Integer'Value(Get_Attribute(Item(NodesList, I), "size"));
+            end if;
+            TempRecord.Description :=
+              To_Unbounded_String(Node_Value(First_Child(Item(NodesList, I))));
             Modules_List.Append(New_Item => TempRecord);
             LogMessage
               ("Module added: " & To_String(TempRecord.Name), Everything);
          else
-            Modules_List.Delete
-              (Index =>
-                 FindProtoModule
-                   (To_Unbounded_String
-                      (Get_Attribute(Item(NodesList, I), "remove"))));
+            Modules_List.Delete(Index => FindProtoModule(TempRecord.Index));
             LogMessage
               ("Module removed: " &
-               Get_Attribute(Item(NodesList, I), "remove"),
+               To_String(TempRecord.Index),
                Everything);
          end if;
          TempRecord :=
