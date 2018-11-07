@@ -49,6 +49,7 @@ package body Mobs is
          To_Unbounded_String("Head"), To_Unbounded_String("Torso"),
          To_Unbounded_String("Arms"), To_Unbounded_String("Legs"),
          To_Unbounded_String("Tool"));
+      RemoveIndex: Unbounded_String;
    begin
       TempRecord :=
         (Index => Null_Unbounded_String, Skills => TempSkills,
@@ -165,8 +166,16 @@ package body Mobs is
                end if;
             end loop;
          end loop;
-         ProtoMobs_List.Append(New_Item => TempRecord);
-         LogMessage("Mob added: " & To_String(TempRecord.Index), Everything);
+         if Get_Attribute(Item(NodesList, I), "remove") = "" then
+            ProtoMobs_List.Append(New_Item => TempRecord);
+            LogMessage
+              ("Mob added: " & To_String(TempRecord.Index), Everything);
+         else
+            RemoveIndex :=
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "remove"));
+            Items_List.Delete(Index => FindProtoMob(RemoveIndex));
+            LogMessage("Item removed: " & To_String(RemoveIndex), Everything);
+         end if;
          TempRecord :=
            (Index => Null_Unbounded_String, Skills => TempSkills,
             Attributes => TempAttributes, Order => Rest,
