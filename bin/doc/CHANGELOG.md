@@ -13,3 +13,4 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Some typos in old changelog
+- Removing mobs from game data
