@@ -4,6 +4,8 @@
 - Each help entry is between "entry" tags.
 - Attribute "title" is help menu entry in main help menu. It can be number or
   text.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Text between tags "entry" is help entry text text visible when player select
   this option from help menu.
 - Inside help text you can use special variables which later will be replaced
