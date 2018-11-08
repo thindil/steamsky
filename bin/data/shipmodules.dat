@@ -3,6 +3,8 @@
 <!-- Each ship module is between "module" tags. 
 - Attribute "index" is a module index (it can be number or text) and must be
 unique. This value is used in ships data entries. 
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Attribute "name": Standard name of module. Will be visible in ship info 
 screen and in shipyards. 
 - Attribute "type": Type of module. Available options are: Engine, Cabin, 
@@ -249,5 +251,6 @@ Text between "module" tags is module description.
  <module durability="700" index="210" installtime="350" material="Adamantium" maxvalue="55" name="Advanced huge adamantium hull" price="75000" skill="Engineering" type="HULL" value="0" weight="22000">Base module of each ship, made of adamantium. The entire ship goes down if the hull is destroyed.</module>
  <module durability="650" index="211" installtime="280" material="Adamantium" maxvalue="60000" name="Huge adamantium engine" price="80000" size="4" skill="Engineering" type="ENGINE" value="10" weight="12000">Huge engine made of adamantium. Each ship needs at least one engine to fly.</module>
  <module durability="650" index="212" installtime="300" material="Adamantium" maxvalue="65000" name="Advanced huge adamantium engine" price="85000" size="4" skill="Engineering" type="ENGINE" value="11" weight="15000">Updated version of huge engine made of adamantium. Each ship needs at least one engine to fly.</module>
+ <module durability="60" index="213" installtime="50" material="Adamantium" maxvalue="20" name="Adamantium harpoon gun" price="8000" skill="Gunsmith" type="HARPOON_GUN" value="45" weight="60">Harpoon gun made of adamantium. Like other guns, requires an empty turret to install.</module>
 </modules>
 
