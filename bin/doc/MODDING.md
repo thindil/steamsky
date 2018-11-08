@@ -214,13 +214,15 @@ Value must be existing skill name.
 ### General informations
 - Default game items are in *items.dat* file which is in *data* directory.
 - To remove existing item from game, you can delete it from *items.dat* or in
-  modification file add tag `item` with attribute `remove` which value will be
-  index of item to remove.
+  modification file add tag `item` with attribute `index` which value will be
+  index of item to remove and attribute `action` with value `remove`.
 
 ### Item data structure
 - Each item starts with tag `item`.
 - Attribute `index` is a item index (it can be number or text) and must be
   unique. This value is used in ships and recipes data entries.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option) or "remove" (remove this entry).
 - `name` attribute: name of item displayed in various places (cargo info,
   crafting, etc.)
 - Attribute `weight`: weight of one item in kilograms
@@ -257,14 +259,16 @@ Value must be existing skill name.
 - Default game crafting recipes are in *recipes.dat* file which is in *data*
   directory.
 - To remove existing recipe from game, you can delete it from *recipes.dat* or
-  in modification file add tag `recipe` with attribute `remove` which value
-  will be index of recipe to remove.
+  in modification file add tag `recipe` with attribute `index` which value
+  will be index of recipe to remove and attribute `action` with value `remove`.
 
 ### Recipe data structure
 - Each recipe starts with tag `recipe`.
 - Attribute `index` is a recipe index (it can be number or text) and must be
   unique. This value is used at this moment for set starting recipes and in
   Craft types of goals.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Tag `material` contains data about material used to craft recipe. Attribute
   `type` is item type of material need for recipe. Attribute `amount` is
   amount of crafting materials needed for recipe. If you want to add more
@@ -293,12 +297,15 @@ Value must be existing skill name.
   directory.
 - To remove existing ship module from game, you can delete it from
   *shipmodules.dat* or in modification file add tag `module` with attribute
-  `remove` which value will be index of ship module to remove.
+  `index` which value will be index of ship module to remove and attriburte
+  `action` with value `remove`.
 
 ### Ship module data structure
 - Each ship module starts with tag `module`.
 - Attribute `index` is a module index (it can be number or text) and must be
   unique. This value is used in ships data entries.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Attribute `name`: Standard name of module. Will be visible in ship info screen
   and in shipyards.
 - Attribute `type`: Type of module. Available options are: Engine, Cabin, Cockpit,
@@ -337,13 +344,16 @@ Value must be existing skill name.
 ### General informations
 - Default game ships are in *ships.dat* file which is in *data* directory.
 - To remove existing ship from game, you can delete it from *ships.dat* or in
-  modification file add tag `ship` with attribute `remove` which value will be
-  index of ship to remove.
+  modification file add tag `ship` with attribute `index` which value will be
+  index of ship to remove and attribute `action` with value `remove`.
 
 ### Ship data structure
-- Each ship is between `ship` tags. Attribute `index` is a index (it can be
-  number or text) and must be unique. This value is used at this moment to
-  set player ship and in Destroy types of goals.
+- Each ship is between `ship` tags.
+- Attribute `index` is a index (it can be number or text) and must be unique.
+  This value is used at this moment to set player ship and in Destroy types of
+  goals.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Attribute `name`: Type of ship. Will be visible during combat information.
   If you want that ship will be used in friendly trader random event, you must
   have word which you set in *game.dat* as *TraderNames* in ship name. Example:
@@ -397,13 +407,15 @@ Value must be existing skill name.
 ### General informations
 - Default game help entries are in *help.dat* file which is in *data* directory.
 - To remove existing help topic from game, you can delete it from *help.dat*
-  or in modification file add tag `entry` with attribute `remove` which value
-  will be title of help to remove.
+  or in modification file add tag `entry` with attribute `title` which value
+  will be title of help to remove and attribute `action` with value `remove`.
 
 ### Help data structure
 - Each help entry is between `entry` tags.
 - Attribute `title` is help menu entry in main help menu. It can be number or
   text.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Text between tags `entry` is help entry text text visible when player select
   this option from help menu.
 - Inside help text you can use special variables which later will be replaced
@@ -446,13 +458,15 @@ Value must be existing skill name.
 ### General informations
 - Default game goals are in *goals.dat* file which is in *data* directory.
 - To remove existing goal from game, you can delete it from *goals.dat* or in
-  modification file add tag `goal` with attribute `remove` which value will be
-  index of goal to remove.
+  modification file add tag `goal` with attribute `index` which value will be
+  index of goal to remove and attribute `action` with value `remove`.
 
 ### Goal data structure
 - Each goal starts with tag `goal`.
 - Attribute `index` is index of goal (it can be number or text) and must be
   unique. At this moment this value is used to set/update goal in game.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Attribute `type`: Type/category of goal which define what is needed to do for
   finish selected goal. Possible values: Reputation - gain max reputation in X
   bases, Destroy - destroy X ships, Discover - discover X fields of map,
@@ -480,13 +494,15 @@ Value must be existing skill name.
 ### General informations
 - Default game mobiles are in *mobs.dat* file which is in *data* directory.
 - To remove existing mobile from game, you can delete it from *mobs.dat* or in
-  modification file add tag `mobile` with attribute `remove` which value will
-  be index of mobile to remove.
+  modification file add tag `mobile` with attribute `index` which value will
+  be index of mobile to remove and attribute `action` with value `remove`.
 
 ### Mob data structure
 - Each mobile starts with tag `mobile`.
 - Attribute `index` is is a mobile index (it can be number or text) and must be
   unique. At this moment this value is used to set crew on ships.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Attribute `order`: current ship order of selected mob. Possible values are:
   Pilot, Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean, Rest,
   Defend, Boarding.
@@ -520,14 +536,17 @@ Value must be existing skill name.
 ### General informations
 - Default game factions are in *factions.dat* file which is in *data* directory.
 - To remove existing faction from game, you can delete it from *factions.dat*
-  or in modification file add tag `faction` with attribute `remove` which value
-  will be index of faction to remove.
+  or in modification file add tag `faction` with attribute `index` which value
+  will be index of faction to remove and attribute `action` with value
+  `remove`.
 
 ### Faction data structure
 - Each faction is between `faction` tags.
 - Attribute `index`: index of faction (it can be number or text) and must be
   unique. At this moment this value is used to create bases during starting new
   game and to determine which ships are enemies or friends.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Attribute `name`: name of factions displayed in game. Can be any text and
   unique.
 - Attribute `membername`: name of single mobile from this faction. Can be any
@@ -598,14 +617,16 @@ Value must be existing skill name.
 ### General informations
 - Default game stories are in *stories.dat* file which is in *data* directory.
 - To remove existing story from game, you can delete it from *stories.dat* or
-  in modification file add tag `story` with attribute `remove` which value will
-  be index of story to remove.
+  in modification file add tag `story` with attribute `index` which value will
+  be index of story to remove and attribute `action` with value `remove`.
 
 ### Story data structure
 - Each story is between "story" tags.
 - Attribute `index`: index of story (it can be number or text) and must be
   unique. At this moment this value is used to manage current story in which
   player is involved.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Attribute `start`: condition which must be met to start that story. Possible
   values are: dropitem - story starts on drop selected item from enemies from
   selected faction.
@@ -653,12 +674,14 @@ story.
 ### General informations
 - Default game careers are in *careers.dat* file which is in *data* directory.
 - To remove existing career from game, you can delete it from *careers.dat* or
-  in modification file add tag `career` with attribute `remove` which value will
-  be index of career to remove.
+  in modification file add tag `career` with attribute `index` which value will
+  be index of career to remove and attribute `action` with value `remove`.
 
 ### Career data structure
 - Each career is between "career" tags.
 - Attribute `index` is index of career.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Attribute `name` is name of career visible to player.
 - Each career can have bonuses to experience to certain skills. Each that
   skill is between `skill` tag. Attribute `name` is name of skill which will
