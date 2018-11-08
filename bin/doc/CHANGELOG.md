@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Raised maximum amount of modules for huge adamantium hull
 - Raised default durability of huge orichalcum engine
+- Updated README.md
 
 ### Fixed
 - Some typos in old changelog
