@@ -55,7 +55,8 @@ run `./steamsky.sh` script to start game. Game will not works if you try to
 start it by binary file `steamsky`.
 
 ### Windows
-If you compiled the game just clicking on `steamsky.exe` should run it.
+If you compiled the game or use downloaded binaries just clicking on
+`steamsky.exe` in `bin` directory should run it.
 
 ### Starting parameters
 You can set game directories by starting parameters. Possible options are:
