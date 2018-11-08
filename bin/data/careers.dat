@@ -2,6 +2,8 @@
 <careers>
 <!--Each career is between tag `career`.
 - Attribute `index` is index of career.
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Attribute `name` is name of career visible to player.
 -->
  <career index="general" name="General" />

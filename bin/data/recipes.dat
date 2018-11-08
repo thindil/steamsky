@@ -4,6 +4,8 @@
 - Attribute "index" is a recipe index (it can be number or text) and must be 
 unique. This value is used at this moment for set starting recipes and in Craft
 types of goals. 
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Attribute "result": item index which will be produced by recipe (you can 
 check this index in *items* directory). Attribute "crafted": amount of items 
 crafted from one recipe. 

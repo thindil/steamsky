@@ -1,9 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ships>
 <!-- 
-- Each ship is between "ship" tags. Attribute "index" is a index (it can be 
-number or text) and must be unique. This value is used at this moment to 
-set player ship and in Destroy types of goals.
+- Each ship is between "ship" tags. 
+- Attribute "index" is a index (it can be number or text) and must be unique.
+This value is used at this moment to set player ship and in Destroy types of
+goals.
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Attribute "name": Type of ship. Will be visible during combat information. 
 If you want that ship will be used in friendly trader random event, you must
 have word which you set in *game.dat* as *TraderNames* in ship name. Example:

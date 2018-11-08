@@ -4,6 +4,8 @@
 - Each item is between "item" tags. 
 - Attribute "index" must be unique for each item. This value is used in ships
 and recipes data entries. 
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Attribute "name" is name of item displayed in various places (cargo info, 
 crafting, etc.). 
 - Attribute "type" is item type of item (from *game.dat* file, entry 

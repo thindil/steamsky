@@ -4,6 +4,8 @@
 - Each mobile is between "mobile" tag. 
 - Attribute "index" is index of mobile (it can be number or text) and must be
 unique. At this moment it is used only in setting ships crews. 
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Attribute "order": current ship order of selected mob. Possible values are:
 Pilot, Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean, Rest,
 Defend, Boarding. 
