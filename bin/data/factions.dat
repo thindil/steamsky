@@ -4,6 +4,8 @@
 - Attribute "index": index of faction (it can be number or text) and must be
 unique. At this moment this value is used to create bases during starting new
 game and to determine which ships are enemies or friends.
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Attribute "name": name of factions displayed in game. Can be any text and
 unique.
 - Attribute "membername": name of single mobile from this faction. Can be any
