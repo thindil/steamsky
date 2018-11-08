@@ -35,47 +35,46 @@ package body Items is
       ItemsData: Document;
       TempValue: Natural_Container.Vector;
       Action: Unbounded_String;
+      ItemNode, ChildNode: Node;
    begin
       TempRecord :=
         (Name => Null_Unbounded_String, Weight => 1,
-         IType => Null_Unbounded_String, Prices => (0, 0, 0, 0, 0),
-         Buyable => (False, False, False, False, False), Value => TempValue,
+         IType => Null_Unbounded_String, Prices => (others => 0),
+         Buyable => (others => False), Value => TempValue,
          ShowType => Null_Unbounded_String,
          Description => Null_Unbounded_String, Index => Null_Unbounded_String);
       ItemsData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(ItemsData, "item");
       for I in 0 .. Length(NodesList) - 1 loop
+         ItemNode := Item(NodesList, I);
          TempRecord.Index :=
-           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
-         Action :=
-           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "action"));
+           To_Unbounded_String(Get_Attribute(ItemNode, "index"));
+         Action := To_Unbounded_String(Get_Attribute(ItemNode, "action"));
          if Action = Null_Unbounded_String or
            Action = To_Unbounded_String("add") then
             TempRecord.Name :=
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name"));
+              To_Unbounded_String(Get_Attribute(ItemNode, "name"));
             TempRecord.Weight :=
-              Natural'Value(Get_Attribute(Item(NodesList, I), "weight"));
+              Natural'Value(Get_Attribute(ItemNode, "weight"));
             TempRecord.IType :=
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "type"));
-            if Get_Attribute(Item(NodesList, I), "showtype") /= "" then
+              To_Unbounded_String(Get_Attribute(ItemNode, "type"));
+            if Get_Attribute(ItemNode, "showtype") /= "" then
                TempRecord.ShowType :=
-                 To_Unbounded_String
-                   (Get_Attribute(Item(NodesList, I), "showtype"));
+                 To_Unbounded_String(Get_Attribute(ItemNode, "showtype"));
             end if;
             ChildNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I), "trade");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name(ItemNode, "trade");
             for J in 0 .. Length(ChildNodes) - 1 loop
+               ChildNode := Item(ChildNodes, J);
                TempRecord.Prices(J + 1) :=
-                 Natural'Value(Get_Attribute(Item(ChildNodes, J), "price"));
-               if Get_Attribute(Item(ChildNodes, J), "buyable") = "Y" then
+                 Natural'Value(Get_Attribute(ChildNode, "price"));
+               if Get_Attribute(ChildNode, "buyable") = "Y" then
                   TempRecord.Buyable(J + 1) := True;
                end if;
             end loop;
             ChildNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I), "data");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name(ItemNode, "data");
             for J in 0 .. Length(ChildNodes) - 1 loop
                TempRecord.Value.Append
                  (New_Item =>
@@ -84,7 +83,7 @@ package body Items is
             end loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I), "description");
+                (ItemNode, "description");
             TempRecord.Description :=
               To_Unbounded_String
                 (Node_Value(First_Child(Item(ChildNodes, 0))));
@@ -114,8 +113,8 @@ package body Items is
          end if;
          TempRecord :=
            (Name => Null_Unbounded_String, Weight => 1,
-            IType => Null_Unbounded_String, Prices => (0, 0, 0, 0, 0),
-            Buyable => (False, False, False, False, False), Value => TempValue,
+            IType => Null_Unbounded_String, Prices => (others => 0),
+            Buyable => (others => False), Value => TempValue,
             ShowType => Null_Unbounded_String,
             Description => Null_Unbounded_String,
             Index => Null_Unbounded_String);
@@ -238,26 +237,22 @@ package body Items is
    begin
       if ProtoIndex > 0 then
          for I in Inventory.Iterate loop
-            if Durability < 101 then
-               if Inventory(I).ProtoIndex = ProtoIndex and
-                 Inventory(I).Durability = Durability then
+            if Inventory(I).ProtoIndex = ProtoIndex then
+               if Durability < 101
+                 and then Inventory(I).Durability = Durability then
                   return Inventory_Container.To_Index(I);
-               end if;
-            else
-               if Inventory(I).ProtoIndex = ProtoIndex then
+               else
                   return Inventory_Container.To_Index(I);
                end if;
             end if;
          end loop;
       elsif ItemType /= Null_Unbounded_String then
          for I in Inventory.Iterate loop
-            if Durability < 101 then
-               if Items_List(Inventory(I).ProtoIndex).IType = ItemType and
-                 Inventory(I).Durability = Durability then
+            if Items_List(Inventory(I).ProtoIndex).IType = ItemType then
+               if Durability < 101
+                 and then Inventory(I).Durability = Durability then
                   return Inventory_Container.To_Index(I);
-               end if;
-            else
-               if Items_List(Inventory(I).ProtoIndex).IType = ItemType then
+               else
                   return Inventory_Container.To_Index(I);
                end if;
             end if;
