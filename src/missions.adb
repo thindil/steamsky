@@ -125,11 +125,11 @@ package body Missions is
          end case;
       end loop;
       for Item of PlayerShip.Cargo loop
-         if Length(Items_List(Item.ProtoIndex).IType) >= 4 then
-            if Slice(Items_List(Item.ProtoIndex).IType, 1, 4) = "Ammo" then
-               PlayerValue :=
-                 PlayerValue + (Items_List(Item.ProtoIndex).Value(1) * 10);
-            end if;
+         if Length(Items_List(Item.ProtoIndex).IType) >= 4
+           and then Slice(Items_List(Item.ProtoIndex).IType, 1, 4) =
+             "Ammo" then
+            PlayerValue :=
+              PlayerValue + (Items_List(Item.ProtoIndex).Value(1) * 10);
          end if;
       end loop;
       GenerateEnemies(Enemies);
@@ -166,21 +166,23 @@ package body Missions is
                Mission.Target :=
                  Cabins(GetRandom(Cabins.First_Index, Cabins.Last_Index));
          end case;
-         loop
-            if Mission.MType /= Deliver and Mission.MType /= Passenger then
+         if Mission.MType /= Deliver and Mission.MType /= Passenger then
+            loop
                MissionX := GetRandom(MinX, MaxX);
                MissionY := GetRandom(MinY, MaxY);
                exit when SkyMap(MissionX, MissionY).BaseIndex = 0 and
                  MissionX /= PlayerShip.SkyX and MissionY /= PlayerShip.SkyY;
-            else
+            end loop;
+         else
+            loop
                TmpBaseIndex :=
                  GetRandom(BasesInRange.First_Index, BasesInRange.Last_Index);
                MissionX := SkyBases(BasesInRange(TmpBaseIndex)).SkyX;
                MissionY := SkyBases(BasesInRange(TmpBaseIndex)).SkyY;
                exit when MissionX /= PlayerShip.SkyX and
                  MissionY /= PlayerShip.SkyY;
-            end if;
-         end loop;
+            end loop;
+         end if;
          Mission.TargetX := MissionX;
          Mission.TargetY := MissionY;
          DiffX := abs (PlayerShip.SkyX - MissionX);
@@ -416,7 +418,7 @@ package body Missions is
          Reputation := 2;
       end if;
       if Failed then
-         GainRep(Mission.StartBase, (Reputation * (-1)));
+         GainRep(Mission.StartBase, -Reputation);
          UpdateMorale(PlayerShip, 1, GetRandom(-10, -5));
          case Mission.MType is
             when Deliver =>
@@ -537,12 +539,12 @@ package body Missions is
       if BaseIndex = 0 then
          return "";
       end if;
-      if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
-         if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-             .EType /=
-           DoublePrice then
-            return "";
-         end if;
+      if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0
+        and then
+          Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+            .EType /=
+          DoublePrice then
+         return "";
       end if;
       if FindMember(Talk) = 0 then
          return "";
