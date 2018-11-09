@@ -81,9 +81,9 @@ modification there can be overwritten with new version of game.
 - Each skill starts with tag `skill`.
 - Attribute `name` is name of selected skill.
 - Attribute `attribute` is name of character attribute (must be defined
-  ealier in this same file).
+  earlier in this same file).
 - Optional attribute `tool` is item type used as tool during training (must be
-  defined ealier in this same file).
+  defined earlier in this same file).
 - After change/remove skill, you been need to made proper changes in other game
   data files (recipes, items and this same file) if needed.
 
@@ -92,11 +92,11 @@ modification there can be overwritten with new version of game.
 - If editing own file: need to remove first selected skill then add new.
 - To change skill name, just edit value of `name` attribute of selected skill.
 - To change assigned attribute to selected skill enter new name in attribute
-  `attribute`. Name must be existing attribute name, defined ealier in
+  `attribute`. Name must be existing attribute name, defined earlier in
   *game.dat* file.
 - To change skill description, just edit text between `skill` tags.
 - To change assigned tool, edit value of `tool` attribute of selected skill.
-  Tool must be existing item type, defined ealier in *game.dat* file.
+  Tool must be existing item type, defined earlier in *game.dat* file.
 
 ### Adding new skills
 - To add new skill, just append new line with tag `skill` with it name as
@@ -247,7 +247,7 @@ Value must be existing skill name.
   done by weapon and for armor piece it is amount of damage reduced by this armor.
   Third entry for weapons is number of skill used by this weapon (from
   *game.dat* file, entry *Skills*) and for armor is amount of levels of dodge
-  skill which this armor reduce when weared. Forth entry for weapon is amount
+  skill which this armor reduce when worn. Forth entry for weapon is amount
   of hands used (1 for one-handed, 2 for two-handed weapons). Fifth entry for
   weapon is damage type (1 - cutting damage, 2 - impaling damage, 3 - blunt
   damage).
@@ -297,7 +297,7 @@ Value must be existing skill name.
   directory.
 - To remove existing ship module from game, you can delete it from
   *shipmodules.dat* or in modification file add tag `module` with attribute
-  `index` which value will be index of ship module to remove and attriburte
+  `index` which value will be index of ship module to remove and attribute
   `action` with value `remove`.
 
 ### Ship module data structure
@@ -320,7 +320,7 @@ Value must be existing skill name.
   of modules should be 0 (zero).
 - Attribute `maxvalue`: Depends on type of module. For 'Hull' it is max free
   module space. For 'Engine' it is engine power. For 'Cabin' should be that
-  same like attribuge `value` value. For 'Cargo' it is maximum capacity in
+  same like attribute `value` value. For 'Cargo' it is maximum capacity in
   kilograms for cargo for that module. For 'Gun', 'Battering\_ram' it is amount
   of damage done by selected weapon. For 'Harpoon\_Gun' it is amount of combat
   rounds by how long harpoon is stuck in enemy ship. For any other type of
@@ -563,7 +563,7 @@ Value must be existing skill name.
   population of base owned by that faction. If it should be constant value, use
   attribute `population`. If it should be random value, use attribute
   `minpopulation` for minimum population and `maxpopulation` for maximum
-  population. Minumum value is 0.
+  population. Minimum value is 0.
 - Optional attribute `namestype`: Used in generating ship names of that faction
   and names of all bases. Can be `standard` (default value) or `robotic`.
 - Attribute `healingtools`: name of item type used to healing members of that
@@ -578,7 +578,7 @@ Value must be existing skill name.
   reputation with selected faction. If it should have random reputation, use
   attribute `minreputation` for minimum level of reputation and
   `maxreputation` for maximum level of reputation. If it should be constant
-  reputation, use attribute `reputation`. Minumum value is -100 and maximum
+  reputation, use attribute `reputation`. Minimum value is -100 and maximum
   is 100.
 - Attribute `friendly`: did selected faction is friendly to this faction.
   Value `Y` means `Yes`, value `N` means `No`. Used mostly to generate
@@ -630,8 +630,8 @@ Value must be existing skill name.
 - Attribute `start`: condition which must be met to start that story. Possible
   values are: dropitem - story starts on drop selected item from enemies from
   selected faction.
-- Attribute `minsteps`: minumum amount of steps in that story.
-- Attribute `maxsteps`: maxiumum amount of steps in that story.
+- Attribute `minsteps`: minimum amount of steps in that story.
+- Attribute `maxsteps`: maximum amount of steps in that story.
 - Attribute `startstep`: index of step which will be used as first step in
 story.
 - Attribute `finalstep`: index of step which will be used as final step in
@@ -673,19 +673,25 @@ story.
 
 ### General informations
 - Default game careers are in *careers.dat* file which is in *data* directory.
-- To remove existing career from game, you can delete it from *careers.dat* or
-  in modification file add tag `career` with attribute `index` which value will
-  be index of career to remove and attribute `action` with value `remove`.
+- If you want remove or update any existing career, you can do it in
+  *careers.dat* file in *data* directory or in modification file (better
+  option) add tag `career` with attribute `index` which value will be index
+  of selected career and attribute `action`. Then if you modify existing
+  career, add changed values.
 
 ### Career data structure
 - Each career is between "career" tags.
 - Attribute `index` is index of career.
 - Optional attribute `action`: what to do with this entry. Possible values
-  are: "add" (add this entry, default option) or "remove" (remove this entry).
+  are: "add" (add this entry, default option) or "remove" (remove this entry)
+  or "update" (update selected entry).
 - Attribute `name` is name of career visible to player.
 - Each career can have bonuses to experience to certain skills. Each that
-  skill is between `skill` tag. Attribute `name` is name of skill which will
-  be have bonuses to experience.
+  skill is between `skill` tag.
+- Attribute `name` is name of skill which will be have bonuses to experience.
+- Optional attribute `action`: what to do with this skill. Possible values are:
+  "add" (add skill, default option) or "remove" (remove this skill from bonus
+  list).
 
 ## Themes
 All themes files are standard CSS files. To edit default game theme, open file
