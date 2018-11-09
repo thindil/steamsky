@@ -32,8 +32,6 @@ package Careers is
    package Careers_Container is new Vectors(Positive, CareerRecord);
    Careers_List: Careers_Container
      .Vector; -- List of all available careers for player
-   Careers_Remove_Error: exception; -- Raised when can't remove selected career
-   Careers_Adding_Error: exception; -- Raised when can't add selected career
 
    procedure LoadCareers(Reader: Tree_Reader); -- Load player careers from file
 

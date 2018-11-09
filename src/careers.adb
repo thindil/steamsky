@@ -28,10 +28,10 @@ package body Careers is
       TempRecord: CareerRecord;
       NodesList, ChildNodes: Node_List;
       CareersData: Document;
-      Action, SkillName: Unbounded_String;
-      DeleteIndex: Natural := 0;
+      Action, SkillName, SkillAction: Unbounded_String;
+      CareerIndex: Natural;
       TmpSkills: UnboundedString_Container.Vector;
-      CareerIndex: Positive;
+      DeleteIndex: Positive;
       CareerNode: Node;
    begin
       TempRecord :=
@@ -45,55 +45,89 @@ package body Careers is
          TempRecord.Index :=
            To_Unbounded_String(Get_Attribute(CareerNode, "index"));
          Action := To_Unbounded_String(Get_Attribute(CareerNode, "action"));
-         if Action = Null_Unbounded_String or
-           Action = To_Unbounded_String("add") then
-            for Career of Careers_List loop
-               if Career.Index = TempRecord.Index then
-                  raise Careers_Adding_Error
-                    with "Can't add career '" & To_String(TempRecord.Index) &
-                    "', there is one with that index.";
-               end if;
-            end loop;
-            TempRecord.Name :=
-              To_Unbounded_String(Get_Attribute(CareerNode, "name"));
+         CareerIndex := 0;
+         for J in Careers_List.Iterate loop
+            if Careers_List(J).Index = TempRecord.Index then
+               CareerIndex := Careers_Container.To_Index(J);
+               exit;
+            end if;
+         end loop;
+         if
+           (Action = To_Unbounded_String("update") or
+            Action = To_Unbounded_String("remove")) then
+            if CareerIndex = 0 then
+               raise Data_Loading_Error
+                 with "Can't " & To_String(Action) & " career '" &
+                 To_String(TempRecord.Index) &
+                 "', there no career with that index.";
+            end if;
+         elsif CareerIndex > 0 then
+            raise Data_Loading_Error
+              with "Can't add career '" & To_String(TempRecord.Index) &
+              "', there is one with that index.";
+         end if;
+         if Action /= To_Unbounded_String("remove") then
+            if Action = To_Unbounded_String("update") then
+               TempRecord := Careers_List(CareerIndex);
+            end if;
+            if Get_Attribute(CareerNode, "name") /= "" then
+               TempRecord.Name :=
+                 To_Unbounded_String(Get_Attribute(CareerNode, "name"));
+            end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(CareerNode, "skill");
             for J in 0 .. Length(ChildNodes) - 1 loop
                SkillName :=
                  To_Unbounded_String
                    (Get_Attribute(Item(ChildNodes, J), "name"));
+               SkillAction :=
+                 To_Unbounded_String
+                   (Get_Attribute(Item(ChildNodes, J), "action"));
                if FindSkillIndex(SkillName) = 0 then
-                  raise Careers_Adding_Error
-                    with "Can't add career '" & To_String(TempRecord.Index) &
-                    "', skill '" & To_String(SkillName) & "' not exists";
+                  if Action = To_Unbounded_String("update") then
+                     raise Data_Loading_Error
+                       with "Can't update career '" &
+                       To_String(TempRecord.Index) & "', skill '" &
+                       To_String(SkillName) & "' not exists";
+                  else
+                     raise Data_Loading_Error
+                       with "Can't add career '" &
+                       To_String(TempRecord.Index) & "', skill '" &
+                       To_String(SkillName) & "' not exists";
+                  end if;
                end if;
-               TempRecord.Skills.Append(New_Item => SkillName);
-            end loop;
-            Careers_List.Append(New_Item => TempRecord);
-            LogMessage
-              ("Career added: " & To_String(TempRecord.Name), Everything);
-         else
-            DeleteIndex := 0;
-            for J in Careers_List.Iterate loop
-               if Careers_List(J).Index = TempRecord.Index then
-                  DeleteIndex := Careers_Container.To_Index(J);
-                  exit;
+               if SkillAction /= To_Unbounded_String("remove") then
+                  TempRecord.Skills.Append(New_Item => SkillName);
+               else
+                  DeleteIndex := TempRecord.Skills.First_Index;
+                  while DeleteIndex <= TempRecord.Skills.Last_Index loop
+                     if TempRecord.Skills(DeleteIndex) = SkillName then
+                        TempRecord.Skills.Delete(Index => DeleteIndex);
+                        exit;
+                     end if;
+                     DeleteIndex := DeleteIndex + 1;
+                  end loop;
                end if;
             end loop;
-            if DeleteIndex = 0 then
-               raise Careers_Remove_Error
-                 with "Can't delete career '" & To_String(TempRecord.Index) &
-                 "', no career with that index.";
+            if Action /= To_Unbounded_String("update") then
+               Careers_List.Append(New_Item => TempRecord);
+               LogMessage
+                 ("Career added: " & To_String(TempRecord.Name), Everything);
+            else
+               Careers_List(CareerIndex) := TempRecord;
+               LogMessage
+                 ("Career updated: " & To_String(TempRecord.Name), Everything);
             end if;
-            Careers_List.Delete(Index => DeleteIndex);
+         else
+            Careers_List.Delete(Index => CareerIndex);
             for Faction of Factions_List loop
-               CareerIndex := Faction.Careers.First_Index;
-               while CareerIndex <= Faction.Careers.Last_Index loop
-                  if Faction.Careers(CareerIndex).Index = TempRecord.Index then
-                     Faction.Careers.Delete(Index => CareerIndex);
+               DeleteIndex := Faction.Careers.First_Index;
+               while DeleteIndex <= Faction.Careers.Last_Index loop
+                  if Faction.Careers(DeleteIndex).Index = TempRecord.Index then
+                     Faction.Careers.Delete(Index => DeleteIndex);
                      exit;
                   end if;
-                  CareerIndex := CareerIndex + 1;
+                  DeleteIndex := DeleteIndex + 1;
                end loop;
             end loop;
             LogMessage
