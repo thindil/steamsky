@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Raised default durability of huge orichalcum engine
 - Updated README.md
 - Removing game data
+- Updated MODDING.md
 
 ### Fixed
 - Some typos in old changelog
