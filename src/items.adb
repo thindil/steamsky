@@ -173,8 +173,8 @@ package body Items is
    begin
       if SkillLevel > 0 then
          DamageChance := DamageChance - (SkillLevel / 5);
-         if DamageChance < 0 then
-            DamageChance := 0;
+         if DamageChance < 1 then
+            DamageChance := 1;
          end if;
       end if;
       if GetRandom(1, 100) > DamageChance then -- Item not damaged
