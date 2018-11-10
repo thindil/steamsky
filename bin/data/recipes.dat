@@ -5,7 +5,8 @@
 unique. This value is used at this moment for set starting recipes and in Craft
 types of goals. 
 - Optional attribute `action`: what to do with this entry. Possible values
-are: "add" (add this entry, default option) or "remove" (remove this entry).
+are: "add" (add this entry, default option), "remove" (remove this entry) or
+"update" (update selected entry).
 - Attribute "result": item index which will be produced by recipe (you can 
 check this index in *items* directory). Attribute "crafted": amount of items 
 crafted from one recipe. 
@@ -26,7 +27,8 @@ If not set, it take 15 minutes.
  <recipe basetype="2" crafted="1" index="1" result="2" skill="Cooking" tool="CookingSet" workplace="ALCHEMY_LAB">
 <!-- Tags "material" contains data about materials used to craft selected recipe. 
 - Attribute "type" is item type of materials need for recipe.
-- Attribute "amount": Amount of crafting materials needed for recipe. 
+- Attribute "amount": Amount of crafting materials needed for recipe. Zero
+amount for updating recipe means that this material should be removed.
 If you want add more materials to recipe, just add new tag "material" with proper data. -->
   <material amount="1" type="RawFood"/>
  </recipe>

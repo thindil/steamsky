@@ -43,7 +43,6 @@ package Crafts is
    Recipes_List: Recipes_Container.Vector; -- List of recipes available in game
    Known_Recipes: Positive_Container
      .Vector; -- List of all know by player recipes
-   Recipes_Invalid_Data: exception; -- Raised when invalid data found in recipe file
    Crafting_No_Materials: exception; -- Raised when no materials needed for selected recipe
    Crafting_No_Tools: exception; -- Raised when no tool needed for selected recipe
    Crafting_No_Workshop: exception; -- Raised when no workshop needed for selected recipe
