@@ -50,6 +50,7 @@ package body Mobs is
          To_Unbounded_String("Arms"), To_Unbounded_String("Legs"),
          To_Unbounded_String("Tool"));
       Action: Unbounded_String;
+      MobNode, ChildNode: Node;
    begin
       TempRecord :=
         (Index => Null_Unbounded_String, Skills => TempSkills,
@@ -60,66 +61,56 @@ package body Mobs is
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(MobsData, "mobile");
       for I in 0 .. Length(NodesList) - 1 loop
+         MobNode := Item(NodesList, I);
          TempRecord.Index :=
-           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
-         Action :=
-           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "action"));
+           To_Unbounded_String(Get_Attribute(MobNode, "index"));
+         Action := To_Unbounded_String(Get_Attribute(MobNode, "action"));
          if Action = Null_Unbounded_String or
            Action = To_Unbounded_String("add") then
             ChildNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I), "skill");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "skill");
             for J in 0 .. Length(ChildNodes) - 1 loop
-               if Get_Attribute(Item(ChildNodes, J), "level") /= "" then
+               ChildNode := Item(ChildNodes, J);
+               if Get_Attribute(ChildNode, "level") /= "" then
                   TempRecord.Skills.Append
                     (New_Item =>
                        (FindSkillIndex
                           (To_Unbounded_String
-                             (Get_Attribute(Item(ChildNodes, J), "name"))),
-                        Integer'Value
-                          (Get_Attribute(Item(ChildNodes, J), "level")),
-                        0));
+                             (Get_Attribute(ChildNode, "name"))),
+                        Integer'Value(Get_Attribute(ChildNode, "level")), 0));
                else
                   TempRecord.Skills.Append
                     (New_Item =>
                        (FindSkillIndex
                           (To_Unbounded_String
-                             (Get_Attribute(Item(ChildNodes, J), "name"))),
-                        Integer'Value
-                          (Get_Attribute(Item(ChildNodes, J), "minlevel")),
-                        Integer'Value
-                          (Get_Attribute(Item(ChildNodes, J), "maxlevel"))));
+                             (Get_Attribute(ChildNode, "name"))),
+                        Integer'Value(Get_Attribute(ChildNode, "minlevel")),
+                        Integer'Value(Get_Attribute(ChildNode, "maxlevel"))));
                end if;
             end loop;
             ChildNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I), "attribute");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "attribute");
             for J in 0 .. Length(ChildNodes) - 1 loop
-               if Get_Attribute(Item(ChildNodes, J), "level") /= "" then
+               ChildNode := Item(ChildNodes, J);
+               if Get_Attribute(ChildNode, "level") /= "" then
                   TempRecord.Attributes.Append
                     (New_Item =>
-                       (Integer'Value
-                          (Get_Attribute(Item(ChildNodes, J), "level")),
-                        0));
+                       (Integer'Value(Get_Attribute(ChildNode, "level")), 0));
                else
                   TempRecord.Attributes.Append
                     (New_Item =>
-                       (Integer'Value
-                          (Get_Attribute(Item(ChildNodes, J), "minlevel")),
-                        Integer'Value
-                          (Get_Attribute(Item(ChildNodes, J), "maxlevel"))));
+                       (Integer'Value(Get_Attribute(ChildNode, "minlevel")),
+                        Integer'Value(Get_Attribute(ChildNode, "maxlevel"))));
                end if;
             end loop;
             ChildNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I), "priority");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "priority");
             for J in 0 .. Length(ChildNodes) - 1 loop
+               ChildNode := Item(ChildNodes, J);
                for K in OrdersNames'Range loop
                   if OrdersNames(K) =
-                    To_Unbounded_String
-                      (Get_Attribute(Item(ChildNodes, J), "name")) then
-                     if Get_Attribute(Item(ChildNodes, J), "value") =
-                       "Normal" then
+                    To_Unbounded_String(Get_Attribute(ChildNode, "name")) then
+                     if Get_Attribute(ChildNode, "value") = "Normal" then
                         TempRecord.Priorities(K) := 1;
                      else
                         TempRecord.Priorities(K) := 2;
@@ -129,43 +120,37 @@ package body Mobs is
                end loop;
             end loop;
             TempRecord.Order :=
-              Crew_Orders'Value(Get_Attribute(Item(NodesList, I), "order"));
+              Crew_Orders'Value(Get_Attribute(MobNode, "order"));
             ChildNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I), "item");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "item");
             for J in 0 .. Length(ChildNodes) - 1 loop
-               if Get_Attribute(Item(ChildNodes, J), "amount") /= "" then
+               ChildNode := Item(ChildNodes, J);
+               if Get_Attribute(ChildNode, "amount") /= "" then
                   TempRecord.Inventory.Append
                     (New_Item =>
                        (FindProtoItem
                           (To_Unbounded_String
-                             (Get_Attribute(Item(ChildNodes, J), "index"))),
-                        Integer'Value
-                          (Get_Attribute(Item(ChildNodes, J), "amount")),
-                        0));
+                             (Get_Attribute(ChildNode, "index"))),
+                        Integer'Value(Get_Attribute(ChildNode, "amount")), 0));
                else
                   TempRecord.Inventory.Append
                     (New_Item =>
                        (FindProtoItem
                           (To_Unbounded_String
-                             (Get_Attribute(Item(ChildNodes, J), "index"))),
-                        Integer'Value
-                          (Get_Attribute(Item(ChildNodes, J), "minamount")),
-                        Integer'Value
-                          (Get_Attribute(Item(ChildNodes, J), "maxamount"))));
+                             (Get_Attribute(ChildNode, "index"))),
+                        Integer'Value(Get_Attribute(ChildNode, "minamount")),
+                        Integer'Value(Get_Attribute(ChildNode, "maxamount"))));
                end if;
             end loop;
             ChildNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I), "equipment");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "equipment");
             for J in 0 .. Length(ChildNodes) - 1 loop
+               ChildNode := Item(ChildNodes, J);
                for K in EquipmentNames'Range loop
                   if EquipmentNames(K) =
-                    To_Unbounded_String
-                      (Get_Attribute(Item(ChildNodes, J), "slot")) then
+                    To_Unbounded_String(Get_Attribute(ChildNode, "slot")) then
                      TempRecord.Equipment(K) :=
-                       Positive'Value
-                         (Get_Attribute(Item(ChildNodes, J), "index"));
+                       Positive'Value(Get_Attribute(ChildNode, "index"));
                      exit;
                   end if;
                end loop;
