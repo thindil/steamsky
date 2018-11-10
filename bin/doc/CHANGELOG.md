@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Some typos in changelog
 - Removing mobs from game data
+- Chance for damage for items during usage
 
 ## [3.0] - 2018-11-04
 
