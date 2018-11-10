@@ -258,9 +258,11 @@ Value must be existing skill name.
 ### General informations
 - Default game crafting recipes are in *recipes.dat* file which is in *data*
   directory.
-- To remove existing recipe from game, you can delete it from *recipes.dat* or
-  in modification file add tag `recipe` with attribute `index` which value
-  will be index of recipe to remove and attribute `action` with value `remove`.
+- If you want remove or update any existing recipe, you can do it in
+  *recipes.dat* file in *data* directory or in modification file (better
+  option) add tag `recipe` with attribute `index` which value will be index
+  of selected recipe and attribute `action`. Then if you modify existing
+  recipe, add changed values.
 
 ### Recipe data structure
 - Each recipe starts with tag `recipe`.
@@ -268,11 +270,14 @@ Value must be existing skill name.
   unique. This value is used at this moment for set starting recipes and in
   Craft types of goals.
 - Optional attribute `action`: what to do with this entry. Possible values
-  are: "add" (add this entry, default option) or "remove" (remove this entry).
-- Tag `material` contains data about material used to craft recipe. Attribute
-  `type` is item type of material need for recipe. Attribute `amount` is
-  amount of crafting materials needed for recipe. If you want to add more
-  materials to recipe, just add new tag `material` with proper data.
+  are: "add" (add this entry, default option) or "remove" (remove this entry)
+  or "update" (update selected entry).
+- Tag `material` contains data about material used to craft recipe. If you want
+  to add more materials to recipe, just add new tag `material` with proper
+  data.
+- Attribute `type` is item type of material need for recipe.
+- Attribute `amount` is amount of crafting materials needed for recipe. Zero
+  value for updating recipe means that this material should be removed.
 - Attribute `result`: Item index which will be produced by recipe (you can
   check this index in *items* directory).
 - Attribute `crafted`: Amount of items crafted from one recipe.
