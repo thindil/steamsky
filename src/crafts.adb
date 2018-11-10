@@ -40,9 +40,10 @@ package body Crafts is
       TempAmount: Positive_Container.Vector;
       RecipesData: Document;
       NodesList, ChildNodes: Node_List;
-      ItemIndex, DeleteIndex, SkillIndex: Natural;
-      Action: Unbounded_String;
+      ItemIndex, RecipeIndex, SkillIndex, Amount, DeleteIndex: Natural;
+      Action, Value: Unbounded_String;
       RecipeNode, ChildNode: Node;
+      MaterialAdded: Boolean;
    begin
       TempRecord :=
         (MaterialTypes => TempMaterials, MaterialAmounts => TempAmount,
@@ -56,45 +57,89 @@ package body Crafts is
          RecipeNode := Item(NodesList, I);
          TempRecord.Index :=
            To_Unbounded_String(Get_Attribute(RecipeNode, "index"));
+         RecipeIndex := FindRecipe(TempRecord.Index);
          Action := To_Unbounded_String(Get_Attribute(RecipeNode, "action"));
-         if Action = Null_Unbounded_String or
-           Action = To_Unbounded_String("add") then
+         if
+           (Action = To_Unbounded_String("update") or
+            Action = To_Unbounded_String("remove")) then
+            if RecipeIndex = 0 then
+               raise Data_Loading_Error
+                 with "Can't " & To_String(Action) & " recipe '" &
+                 To_String(TempRecord.Index) &
+                 "', there no recipe with that index.";
+            end if;
+         elsif RecipeIndex > 0 then
+            raise Data_Loading_Error
+              with "Can't add recipe '" & To_String(TempRecord.Index) &
+              "', there is one with that index.";
+         end if;
+         if Action /= To_Unbounded_String("remove") then
+            if Action = To_Unbounded_String("update") then
+               TempRecord := Recipes_List(RecipeIndex);
+            end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
                 (RecipeNode, "material");
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
-               TempRecord.MaterialTypes.Append
-                 (New_Item =>
-                    To_Unbounded_String(Get_Attribute(ChildNode, "type")));
-               TempRecord.MaterialAmounts.Append
-                 (New_Item =>
-                    Positive'Value(Get_Attribute(ChildNode, "amount")));
+               Amount := Natural'Value(Get_Attribute(ChildNode, "amount"));
+               Value := To_Unbounded_String(Get_Attribute(ChildNode, "type"));
+               if Amount > 0 then
+                  MaterialAdded := False;
+                  for K in
+                    TempRecord.MaterialTypes.First_Index ..
+                      TempRecord.MaterialTypes.Last_Index loop
+                     if TempRecord.MaterialTypes(K) = Value then
+                        TempRecord.MaterialAmounts(K) := Amount;
+                        MaterialAdded := True;
+                        exit;
+                     end if;
+                  end loop;
+                  if not MaterialAdded then
+                     TempRecord.MaterialTypes.Append(New_Item => Value);
+                     TempRecord.MaterialAmounts.Append(New_Item => Amount);
+                  end if;
+               else
+                  DeleteIndex := TempRecord.MaterialTypes.First_Index;
+                  while DeleteIndex <= TempRecord.MaterialTypes.Last_Index loop
+                     if TempRecord.MaterialTypes(DeleteIndex) = Value then
+                        TempRecord.MaterialTypes.Delete(Index => DeleteIndex);
+                        exit;
+                     end if;
+                     DeleteIndex := DeleteIndex + 1;
+                  end loop;
+               end if;
             end loop;
-            ItemIndex :=
-              FindProtoItem
-                (To_Unbounded_String(Get_Attribute(RecipeNode, "result")));
-            if ItemIndex = 0 then
-               raise Recipes_Invalid_Data
-                 with "Can't add recipe '" & To_String(TempRecord.Index) &
-                 "', result item index '" &
-                 Get_Attribute(RecipeNode, "result") & "' don't exists.";
+            Value := To_Unbounded_String(Get_Attribute(RecipeNode, "result"));
+            if Value /= Null_Unbounded_String then
+               ItemIndex := FindProtoItem(Value);
+               if ItemIndex = 0 then
+                  raise Data_Loading_Error
+                    with "Can't add recipe '" & To_String(TempRecord.Index) &
+                    "', result item index '" & To_String(Value) &
+                    "' don't exists.";
+               end if;
+               TempRecord.ResultIndex := ItemIndex;
             end if;
-            TempRecord.ResultIndex := ItemIndex;
-            TempRecord.ResultAmount :=
-              Positive'Value(Get_Attribute(RecipeNode, "crafted"));
-            TempRecord.Workplace :=
-              ModuleType'Value(Get_Attribute(RecipeNode, "workplace"));
-            SkillIndex :=
-              FindSkillIndex
-                (To_Unbounded_String(Get_Attribute(RecipeNode, "skill")));
-            if SkillIndex = 0 then
-               raise Recipes_Invalid_Data
-                 with "Can't add recipe '" & To_String(TempRecord.Index) &
-                 "', no skill named '" & Get_Attribute(RecipeNode, "skill") &
-                 "'";
+            Value := To_Unbounded_String(Get_Attribute(RecipeNode, "crafted"));
+            if Value /= Null_Unbounded_String then
+               TempRecord.ResultAmount := Positive'Value(To_String(Value));
             end if;
-            TempRecord.Skill := SkillIndex;
+            Value :=
+              To_Unbounded_String(Get_Attribute(RecipeNode, "workplace"));
+            if Value /= Null_Unbounded_String then
+               TempRecord.Workplace := ModuleType'Value(To_String(Value));
+            end if;
+            Value := To_Unbounded_String(Get_Attribute(RecipeNode, "skill"));
+            if Value /= Null_Unbounded_String then
+               SkillIndex := FindSkillIndex(Value);
+               if SkillIndex = 0 then
+                  raise Data_Loading_Error
+                    with "Can't add recipe '" & To_String(TempRecord.Index) &
+                    "', no skill named '" & To_String(Value) & "'";
+               end if;
+               TempRecord.Skill := SkillIndex;
+            end if;
             if Get_Attribute(RecipeNode, "time") /= "" then
                TempRecord.Time :=
                  Positive'Value(Get_Attribute(RecipeNode, "time"));
@@ -103,30 +148,30 @@ package body Crafts is
                TempRecord.Difficulty :=
                  Positive'Value(Get_Attribute(RecipeNode, "difficulty"));
             end if;
-            TempRecord.BaseType :=
-              Natural'Value(Get_Attribute(RecipeNode, "basetype"));
+            Value :=
+              To_Unbounded_String(Get_Attribute(RecipeNode, "basetype"));
+            if Value /= Null_Unbounded_String then
+               TempRecord.BaseType := Natural'Value(To_String(Value));
+            end if;
             if Get_Attribute(RecipeNode, "tool") /= "" then
                TempRecord.Tool :=
                  To_Unbounded_String(Get_Attribute(RecipeNode, "tool"));
             end if;
-            if FindRecipe(TempRecord.Index) > 0 then
-               raise Recipes_Invalid_Data
-                 with "Can't add recipe '" & To_String(TempRecord.Index) &
-                 "' because recipe with that index exists.";
+            if Action /= To_Unbounded_String("update") then
+               Recipes_List.Append(New_Item => TempRecord);
+               LogMessage
+                 ("Recipe added: " &
+                  To_String(Items_List(TempRecord.ResultIndex).Name),
+                  Everything);
+            else
+               Recipes_List(RecipeIndex) := TempRecord;
+               LogMessage
+                 ("Recipe updated: " &
+                  To_String(Items_List(TempRecord.ResultIndex).Name),
+                  Everything);
             end if;
-            Recipes_List.Append(New_Item => TempRecord);
-            LogMessage
-              ("Recipe added: " &
-               To_String(Items_List(TempRecord.ResultIndex).Name),
-               Everything);
-         elsif Action = To_Unbounded_String("remove") then
-            DeleteIndex := FindRecipe(TempRecord.Index);
-            if DeleteIndex = 0 then
-               raise Recipes_Invalid_Data
-                 with "Can't delete recipe '" & To_String(TempRecord.Index) &
-                 "', no recipe with that index.";
-            end if;
-            Recipes_List.Delete(Index => DeleteIndex);
+         else
+            Recipes_List.Delete(Index => RecipeIndex);
             LogMessage
               ("Recipe removed: " & To_String(TempRecord.Index), Everything);
          end if;
