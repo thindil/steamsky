@@ -5,8 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New ship modules: advanced huge adamantium hull, huge adamantium engine,
-  advanced huge adamantium engine, adamantium harpoon gun, adamantium 80mm gun
-  and adamantium 100mm gun
+  advanced huge adamantium engine, adamantium harpoon gun, adamantium 80mm gun,
+  adamantium 100mm gun and adamantium 120mm gun
 - Option to update careers by modification files
 
 ### Changed
