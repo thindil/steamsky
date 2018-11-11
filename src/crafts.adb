@@ -268,9 +268,10 @@ package body Crafts is
       RecipeName: Unbounded_String;
       HaveMaterial: Boolean;
       CraftingMaterial: Natural;
-      procedure ResetOrder(Data: in out Data_Array) is
+      procedure ResetOrder(Module: in out ModuleData) is
       begin
-         Data := (0, 0, 0);
+         Module.Data := (0, 0, 0);
+         Module.Owner := 0;
          if ToolIndex > 0 then
             TakeOffItem(CrafterIndex, ToolIndex);
             UpdateCargo
@@ -309,7 +310,7 @@ package body Crafts is
                      To_String(PlayerShip.Crew(CrafterIndex).Name) &
                      " can't work on " & To_String(RecipeName) & ".",
                      CraftMessage, 3);
-                  ResetOrder(Module.Data);
+                  ResetOrder(Module);
                   CurrentMinutes := 0;
                end if;
                WorkTime := PlayerShip.Crew(CrafterIndex).OrderTime;
@@ -371,7 +372,7 @@ package body Crafts is
                              ("You don't have tool for " &
                               To_String(RecipeName) & ".",
                               CraftMessage, 3);
-                           ResetOrder(Module.Data);
+                           ResetOrder(Module);
                            exit Craft_Loop;
                         end if;
                      else
@@ -424,7 +425,7 @@ package body Crafts is
                           ("You don't have enough crafting materials for " &
                            To_String(RecipeName) & ".",
                            CraftMessage, 3);
-                        ResetOrder(Module.Data);
+                        ResetOrder(Module);
                         exit Craft_Loop;
                      end if;
                      CraftedAmount := CraftedAmount + ResultAmount;
@@ -475,7 +476,7 @@ package body Crafts is
                              ("You don't have free cargo space for " &
                               To_String(RecipeName) & ".",
                               CraftMessage, 3);
-                           ResetOrder(Module.Data);
+                           ResetOrder(Module);
                            exit Craft_Loop;
                         end if;
                         UpdateCargo
@@ -541,7 +542,7 @@ package body Crafts is
                   end if;
                   PlayerShip.Crew(CrafterIndex).OrderTime := WorkTime;
                   if Module.Data(3) = 0 then
-                     ResetOrder(Module.Data);
+                     ResetOrder(Module);
                   end if;
                end if;
             end if;
