@@ -21,3 +21,4 @@ All notable changes to this project will be documented in this file.
 - Some typos in old changelog
 - Removing mobs from game data
 - Chance for damage for items during usage
+- Going on break after finishing crafting
