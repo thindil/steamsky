@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Removing mobs from game data
 - Chance for damage for items during usage
 - Going on break after finishing crafting
+- Log entry about removed mob
 
 ## [3.0] - 2018-11-04
 
