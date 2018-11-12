@@ -174,7 +174,7 @@ package body Mobs is
             RemoveIndex :=
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "remove"));
             Items_List.Delete(Index => FindProtoMob(RemoveIndex));
-            LogMessage("Item removed: " & To_String(RemoveIndex), Everything);
+            LogMessage("Mob removed: " & To_String(RemoveIndex), Everything);
          end if;
          TempRecord :=
            (Index => Null_Unbounded_String, Skills => TempSkills,
