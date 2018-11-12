@@ -161,7 +161,7 @@ package body Mobs is
          else
             Items_List.Delete(Index => FindProtoMob(TempRecord.Index));
             LogMessage
-              ("Item removed: " & To_String(TempRecord.Index), Everything);
+              ("Mob removed: " & To_String(TempRecord.Index), Everything);
          end if;
          TempRecord :=
            (Index => Null_Unbounded_String, Skills => TempSkills,
