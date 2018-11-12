@@ -255,5 +255,6 @@ Text between "module" tags is module description.
  <module durability="300" index="214" installtime="120" material="Adamantium" maxvalue="240" name="Adamantium 80mm gun" price="64000" skill="Gunsmith" type="GUN" value="23" weight="320">Upgraded 80mm ship gun, made of adamantium. Requires an empty turret.</module>
  <module durability="500" index="215" installtime="150" material="Adamantium" maxvalue="360" name="Adamantium 100mm gun" price="128000" skill="Gunsmith" type="GUN" value="24" weight="700">Upgraded 100mm ship gun, made of adamantium. Requires an empty turret.</module>
  <module durability="600" index="216" installtime="180" material="Adamantium" maxvalue="600" name="Adamantium 120mm gun" price="256000" skill="Gunsmith" type="GUN" value="25" weight="1600">Upgraded 120mm ship gun, made of adamantium. Requires an empty turret.</module>
+ <module durability="600" index="217" installtime="90" material="Adamantium" maxvalue="0" name="Small adamantium workshop" price="24000" size="1" skill="Engineering" type="WORKSHOP" value="0" weight="900">Allows crafting of some tools. Made of adamantium.</module>
 </modules>
 
