@@ -80,15 +80,13 @@ package body Ships.Crew is
    procedure Death(MemberIndex: Positive; Reason: Unbounded_String;
       Ship: in out ShipRecord; CreateBody: Boolean := True) is
    begin
-      if MemberIndex > 1 then
-         if Ship = PlayerShip then
+      if Ship = PlayerShip then
+         if MemberIndex > 1 then
             AddMessage
               (To_String(Ship.Crew(MemberIndex).Name) & " died from " &
                To_String(Reason) & ".",
                CombatMessage, 3);
-         end if;
-      else
-         if Ship = PlayerShip then
+         else
             AddMessage
               ("You died from " & To_String(Reason) & ".", CombatMessage, 3);
             PlayerShip.Crew(MemberIndex).Order := Rest;
@@ -175,16 +173,13 @@ package body Ships.Crew is
          Ship.Crew(MemberIndex).Loyalty < 20) then
          raise Crew_Order_Error with MemberName & " refuses to execute order.";
       end if;
+      if GivenOrder = Train and then Ship.Modules(ModuleIndex).Data(1) = 0 then
+         raise Crew_Order_Error
+           with MemberName & " can't starts training because " &
+           To_String(Ship.Modules(ModuleIndex).Name) & " isn't prepared.";
+      end if;
       if GivenOrder = Upgrading or GivenOrder = Repair or GivenOrder = Clean or
         GivenOrder = Train then -- Check for tools
-         if GivenOrder = Train then
-            if Ship.Modules(ModuleIndex).Data(1) = 0 then
-               raise Crew_Order_Error
-                 with MemberName & " can't starts training because " &
-                 To_String(Ship.Modules(ModuleIndex).Name) &
-                 " isn't prepared.";
-            end if;
-         end if;
          if GivenOrder = Clean then
             RequiredTool := CleaningTools;
          elsif GivenOrder = Train then
@@ -195,13 +190,13 @@ package body Ships.Crew is
          end if;
          if RequiredTool /= Null_Unbounded_String then
             ToolsIndex := Ship.Crew(MemberIndex).Equipment(7);
-            if ToolsIndex > 0 then
-               if Items_List
-                   (Ship.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex)
-                   .IType /=
-                 RequiredTool then
-                  ToolsIndex := 0;
-               end if;
+            if ToolsIndex > 0
+              and then
+                Items_List
+                  (Ship.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex)
+                  .IType /=
+                RequiredTool then
+               ToolsIndex := 0;
             end if;
             if ToolsIndex = 0 then
                ToolsIndex :=
@@ -454,52 +449,41 @@ package body Ships.Crew is
          if MemberIndex = 0 then
             return False;
          end if;
-         if Order = Gunner or Order = Craft or Order = Heal then
+         if Order = Gunner or Order = Craft or Order = Heal or Order = Pilot or
+           Order = Engineer then
             for I in Ship.Modules.Iterate loop
-               case Modules_List(Ship.Modules(I).ProtoIndex).MType is
-                  when GUN =>
-                     if Order = Gunner and Ship.Modules(I).Owner = 0 and
-                       Ship.Modules(I).Durability > 0 then
-                        ModuleIndex := Modules_Container.To_Index(I);
-                        exit;
-                     end if;
-                  when ALCHEMY_LAB .. GREENHOUSE =>
-                     if Order = Craft and Ship.Modules(I).Owner = 0 and
-                       Ship.Modules(I).Durability > 0 and
-                       Ship.Modules(I).Data(1) /= 0 then
-                        ModuleIndex := Modules_Container.To_Index(I);
-                        exit;
-                     end if;
-                  when MEDICAL_ROOM =>
-                     if Order = Heal and Ship.Modules(I).Owner = 0 and
-                       Ship.Modules(I).Durability > 0 then
-                        ModuleIndex := Modules_Container.To_Index(I);
-                        exit;
-                     end if;
-                  when others =>
-                     null;
-               end case;
-            end loop;
-            if ModuleIndex = 0 then
-               return False;
-            end if;
-         elsif Order = Pilot or Order = Engineer then
-            for I in Ship.Modules.Iterate loop
-               case Modules_List(Ship.Modules(I).ProtoIndex).MType is
-                  when COCKPIT =>
-                     if Order = Pilot and Ship.Modules(I).Durability > 0 then
-                        ModuleIndex := Modules_Container.To_Index(I);
-                        exit;
-                     end if;
-                  when ENGINE =>
-                     if Order = Engineer and
-                       Ship.Modules(I).Durability > 0 then
-                        ModuleIndex := Modules_Container.To_Index(I);
-                        exit;
-                     end if;
-                  when others =>
-                     null;
-               end case;
+               if Ship.Modules(I).Durability > 0 then
+                  case Modules_List(Ship.Modules(I).ProtoIndex).MType is
+                     when GUN =>
+                        if Order = Gunner and Ship.Modules(I).Owner = 0 then
+                           ModuleIndex := Modules_Container.To_Index(I);
+                           exit;
+                        end if;
+                     when ALCHEMY_LAB .. GREENHOUSE =>
+                        if Order = Craft and Ship.Modules(I).Owner = 0 and
+                          Ship.Modules(I).Data(1) /= 0 then
+                           ModuleIndex := Modules_Container.To_Index(I);
+                           exit;
+                        end if;
+                     when MEDICAL_ROOM =>
+                        if Order = Heal and Ship.Modules(I).Owner = 0 then
+                           ModuleIndex := Modules_Container.To_Index(I);
+                           exit;
+                        end if;
+                     when COCKPIT =>
+                        if Order = Pilot then
+                           ModuleIndex := Modules_Container.To_Index(I);
+                           exit;
+                        end if;
+                     when ENGINE =>
+                        if Order = Engineer then
+                           ModuleIndex := Modules_Container.To_Index(I);
+                           exit;
+                        end if;
+                     when others =>
+                        null;
+                  end case;
+               end if;
             end loop;
             if ModuleIndex = 0 then
                return False;
@@ -541,25 +525,25 @@ package body Ships.Crew is
          end if;
       end loop;
       for Module of Ship.Modules loop
-         case Modules_List(Module.ProtoIndex).MType is
-            when GUN =>
-               if Module.Owner = 0 and Module.Durability > 0 and
-                 not NeedGunners then
-                  NeedGunners := True;
-               end if;
-            when ALCHEMY_LAB .. GREENHOUSE =>
-               if Module.Data(1) /= 0 and Module.Owner = 0 and
-                 Module.Durability > 0 and not NeedCrafters then
-                  NeedCrafters := True;
-               end if;
-            when CABIN =>
-               if Module.Data(1) < Module.Data(2) and
-                 Module.Durability > 0 then
-                  NeedClean := True;
-               end if;
-            when others =>
-               null;
-         end case;
+         if Module.Durability > 0 then
+            case Modules_List(Module.ProtoIndex).MType is
+               when GUN =>
+                  if Module.Owner = 0 and not NeedGunners then
+                     NeedGunners := True;
+                  end if;
+               when ALCHEMY_LAB .. GREENHOUSE =>
+                  if Module.Data(1) /= 0 and Module.Owner = 0 and
+                    not NeedCrafters then
+                     NeedCrafters := True;
+                  end if;
+               when CABIN =>
+                  if Module.Data(1) < Module.Data(2) then
+                     NeedClean := True;
+                  end if;
+               when others =>
+                  null;
+            end case;
+         end if;
          if Module.Durability < Module.MaxDurability and not NeedRepairs then
             for Item of Ship.Cargo loop
                if Items_List(Item.ProtoIndex).IType =
@@ -573,31 +557,23 @@ package body Ships.Crew is
       if SkyMap(Ship.SkyX, Ship.SkyY).BaseIndex > 0 then
          NeedTrader := True;
       end if;
-      if not NeedTrader and EventIndex > 0 then
-         if Events_List(EventIndex).EType = Trader or
-           Events_List(EventIndex).EType = FriendlyShip then
-            NeedTrader := True;
-         end if;
+      if (not NeedTrader and EventIndex > 0)
+        and then
+        (Events_List(EventIndex).EType = Trader or
+         Events_List(EventIndex).EType = FriendlyShip) then
+         NeedTrader := True;
       end if;
-      if not HavePilot then
-         if UpdatePosition(Pilot) then
-            UpdateOrders(Ship);
-         end if;
+      if not HavePilot and then UpdatePosition(Pilot) then
+         UpdateOrders(Ship);
       end if;
-      if not HaveEngineer then
-         if UpdatePosition(Engineer) then
-            UpdateOrders(Ship);
-         end if;
+      if not HaveEngineer and then UpdatePosition(Engineer) then
+         UpdateOrders(Ship);
       end if;
-      if NeedGunners then
-         if UpdatePosition(Gunner) then
-            UpdateOrders(Ship);
-         end if;
+      if NeedGunners and then UpdatePosition(Gunner) then
+         UpdateOrders(Ship);
       end if;
-      if NeedCrafters then
-         if UpdatePosition(Craft) then
-            UpdateOrders(Ship);
-         end if;
+      if NeedCrafters and then UpdatePosition(Craft) then
+         UpdateOrders(Ship);
       end if;
       if not HaveUpgrade and Ship.UpgradeModule > 0 and
         FindItem(Inventory => Ship.Cargo, ItemType => RepairTools) > 0 then
@@ -606,33 +582,28 @@ package body Ships.Crew is
               ItemType =>
                 Modules_List(Ship.Modules(Ship.UpgradeModule).ProtoIndex)
                   .RepairMaterial) >
-           0 then
-            if UpdatePosition(Upgrading) then
-               UpdateOrders(Ship);
-            end if;
-         end if;
-      end if;
-      if not HaveTrader and NeedTrader then
-         if UpdatePosition(Talk) then
+           0
+           and then UpdatePosition(Upgrading) then
             UpdateOrders(Ship);
          end if;
       end if;
-      if NeedClean and
-        FindItem(Inventory => Ship.Cargo, ItemType => CleaningTools) > 0 then
-         if UpdatePosition(Clean) then
-            UpdateOrders(Ship);
-         end if;
+      if (not HaveTrader and NeedTrader) and then UpdatePosition(Talk) then
+         UpdateOrders(Ship);
       end if;
-      if CanHeal then
-         if UpdatePosition(Heal) then
-            UpdateOrders(Ship);
-         end if;
+      if
+        (NeedClean and
+         FindItem(Inventory => Ship.Cargo, ItemType => CleaningTools) > 0)
+        and then UpdatePosition(Clean) then
+         UpdateOrders(Ship);
       end if;
-      if NeedRepairs and
-        FindItem(Inventory => Ship.Cargo, ItemType => RepairTools) > 0 then
-         if UpdatePosition(Repair) then
-            UpdateOrders(Ship);
-         end if;
+      if CanHeal and then UpdatePosition(Heal) then
+         UpdateOrders(Ship);
+      end if;
+      if
+        (NeedRepairs and
+         FindItem(Inventory => Ship.Cargo, ItemType => RepairTools) > 0)
+        and then UpdatePosition(Repair) then
+         UpdateOrders(Ship);
       end if;
       if Combat then
          if UpdatePosition(Defend) then
@@ -642,25 +613,17 @@ package body Ships.Crew is
             UpdateOrders(Ship);
          end if;
       end if;
-      if not HavePilot then
-         if UpdatePosition(Pilot, False) then
-            UpdateOrders(Ship);
-         end if;
+      if not HavePilot and then UpdatePosition(Pilot, False) then
+         UpdateOrders(Ship);
       end if;
-      if not HaveEngineer then
-         if UpdatePosition(Engineer, False) then
-            UpdateOrders(Ship);
-         end if;
+      if not HaveEngineer and then UpdatePosition(Engineer, False) then
+         UpdateOrders(Ship);
       end if;
-      if NeedGunners then
-         if UpdatePosition(Gunner, False) then
-            UpdateOrders(Ship);
-         end if;
+      if NeedGunners and then UpdatePosition(Gunner, False) then
+         UpdateOrders(Ship);
       end if;
-      if NeedCrafters then
-         if UpdatePosition(Craft, False) then
-            UpdateOrders(Ship);
-         end if;
+      if NeedCrafters and then UpdatePosition(Craft, False) then
+         UpdateOrders(Ship);
       end if;
       if not HaveUpgrade and Ship.UpgradeModule > 0 and
         FindItem(Inventory => Ship.Cargo, ItemType => RepairTools) > 0 then
@@ -669,33 +632,29 @@ package body Ships.Crew is
               ItemType =>
                 Modules_List(Ship.Modules(Ship.UpgradeModule).ProtoIndex)
                   .RepairMaterial) >
-           0 then
-            if UpdatePosition(Upgrading, False) then
-               UpdateOrders(Ship);
-            end if;
-         end if;
-      end if;
-      if not HaveTrader and SkyMap(Ship.SkyX, Ship.SkyY).BaseIndex > 0 then
-         if UpdatePosition(Talk, False) then
+           0
+           and then UpdatePosition(Upgrading, False) then
             UpdateOrders(Ship);
          end if;
       end if;
-      if NeedClean and
-        FindItem(Inventory => Ship.Cargo, ItemType => CleaningTools) > 0 then
-         if UpdatePosition(Clean, False) then
-            UpdateOrders(Ship);
-         end if;
+      if (not HaveTrader and SkyMap(Ship.SkyX, Ship.SkyY).BaseIndex > 0)
+        and then UpdatePosition(Talk, False) then
+         UpdateOrders(Ship);
       end if;
-      if CanHeal then
-         if UpdatePosition(Heal, False) then
-            UpdateOrders(Ship);
-         end if;
+      if
+        (NeedClean and
+         FindItem(Inventory => Ship.Cargo, ItemType => CleaningTools) > 0)
+        and then UpdatePosition(Clean, False) then
+         UpdateOrders(Ship);
       end if;
-      if NeedRepairs and
-        FindItem(Inventory => Ship.Cargo, ItemType => RepairTools) > 0 then
-         if UpdatePosition(Repair, False) then
-            UpdateOrders(Ship);
-         end if;
+      if CanHeal and then UpdatePosition(Heal, False) then
+         UpdateOrders(Ship);
+      end if;
+      if
+        (NeedRepairs and
+         FindItem(Inventory => Ship.Cargo, ItemType => RepairTools) > 0)
+        and then UpdatePosition(Repair, False) then
+         UpdateOrders(Ship);
       end if;
       if Combat then
          if UpdatePosition(Defend, False) then
