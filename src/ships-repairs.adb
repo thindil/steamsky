@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -54,12 +54,10 @@ package body Ships.Repairs is
                          Modules_List
                            (PlayerShip.Modules(ModuleIndex).ProtoIndex)
                            .RepairMaterial);
-                  if RepairMaterial > 0 then
-                     if PlayerShip.Cargo(RepairMaterial).Amount <
-                       RepairPoints then
-                        RepairPoints :=
-                          PlayerShip.Cargo(RepairMaterial).Amount;
-                     end if;
+                  if RepairMaterial > 0
+                    and then PlayerShip.Cargo(RepairMaterial).Amount <
+                      RepairPoints then
+                     RepairPoints := PlayerShip.Cargo(RepairMaterial).Amount;
                   end if;
                   if RepairMaterial = 0 then
                      AddMessage
@@ -156,11 +154,10 @@ package body Ships.Repairs is
       if CrewRepairPoints.Length = 0 then
          return;
       end if;
-      if PlayerShip.RepairModule > 0 then
-         if PlayerShip.Modules(PlayerShip.RepairModule).Durability <
-           PlayerShip.Modules(PlayerShip.RepairModule).MaxDurability then
-            RepairModule(PlayerShip.RepairModule);
-         end if;
+      if PlayerShip.RepairModule > 0
+        and then PlayerShip.Modules(PlayerShip.RepairModule).Durability <
+          PlayerShip.Modules(PlayerShip.RepairModule).MaxDurability then
+         RepairModule(PlayerShip.RepairModule);
       end if;
       Repair_Loop :
       for I in PlayerShip.Modules.Iterate loop
