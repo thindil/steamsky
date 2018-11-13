@@ -35,6 +35,7 @@ with Gtk.Accel_Map; use Gtk.Accel_Map;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Overlay; use Gtk.Overlay;
+with Gtk.Text_Mark; use Gtk.Text_Mark;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -633,6 +634,13 @@ package body Maps.UI is
                Insert(MessagesBuffer, Iter, "" & LF);
             end if;
          end loop;
+         declare
+            Mark: Gtk_Text_Mark;
+         begin
+            Mark := Create_Mark(MessagesBuffer, "end", Iter);
+            Scroll_Mark_Onscreen
+              (Gtk_Text_View(Get_Object(Builder, "messagesview")), Mark);
+         end;
       else
          for I in reverse LoopStart .. -1 loop
             Message := GetMessage(I + 1);
