@@ -540,10 +540,11 @@ Value must be existing skill name.
 
 ### General informations
 - Default game factions are in *factions.dat* file which is in *data* directory.
-- To remove existing faction from game, you can delete it from *factions.dat*
-  or in modification file add tag `faction` with attribute `index` which value
-  will be index of faction to remove and attribute `action` with value
-  `remove`.
+- If you want remove or update any existing faction, you can do it in
+  *factions.dat* file in *data* directory or in modification file (better
+  option) add tag `faction` with attribute `index` which value will be index
+  of selected recipe and attribute `action`. Then if you modify existing
+  recipe, add changed values.
 
 ### Faction data structure
 - Each faction is between `faction` tags.
@@ -551,7 +552,8 @@ Value must be existing skill name.
   unique. At this moment this value is used to create bases during starting new
   game and to determine which ships are enemies or friends.
 - Optional attribute `action`: what to do with this entry. Possible values
-  are: "add" (add this entry, default option) or "remove" (remove this entry).
+  are: "add" (add this entry, default option) or "remove" (remove this entry)
+  or "update" (update selected entry).
 - Attribute `name`: name of factions displayed in game. Can be any text and
   unique.
 - Attribute `membername`: name of single mobile from this faction. Can be any
@@ -578,6 +580,8 @@ Value must be existing skill name.
   faction. Must be valid skill name from *data/game.dat* file
 - Tags `relation`: Relation of this faction with other faction. All factions
   must have this tags for each faction (even for self).
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option) or "update" (update this entry).
 - Attribute `faction` is faction index to which relation will be set.
 - Attributes `minreputation`, `maxreputation`, `reputation`: starting
   reputation with selected faction. If it should have random reputation, use
@@ -593,21 +597,30 @@ Value must be existing skill name.
   no `foodtype` tags inside faction, that faction members can't be hungry.
 - Attribute `name`: name of item type used as food. Must be valid item type
   from *data/game.dat* file.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Tags `drinktype`: Types of items used as drink by this faction members. If
   no `drinktype` tags inside faction, that faction members can't be hungry.
 - Attribute `name`: name of item type used as food. Must be valid item type
   from *data/game.dat* file.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Tags `flags`: Various info about faction (optional tag).
 - Attribute `name`: name of flag. Possible values: `nogender` faction don't
   have genders and use male names as default, `diseaseimmune` faction members
   cannot become ill, no disease event for this faction, `nofatigue` faction
   members don't get tired so, they can't rest and regenerate health, `nomorale`
   faction members don't have morale (and bonuses from it)
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Tags `career`: Available careers for player when choice this faction. Text
   between tags is description of career visible in new game setting. If faction
   don't have any available career then it is unavailable for player.
 - Attribute `index`: index of career. Must be existing career index from
   *data/careers.dat* file.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option) or "remove" (remove this entry)
+  or "update" (update selected entry).
 - Attribute `playerindex`: index of mobile used for starting player character,
   when he/she choice this career. Value must be existing mobile index from any
   mobiles file.
