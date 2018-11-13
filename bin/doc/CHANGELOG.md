@@ -24,3 +24,4 @@ All notable changes to this project will be documented in this file.
 - Chance for damage for items during usage
 - Going on break after finishing crafting
 - Log entry about removed mob
+- Scrolling messages lists to last messsage
