@@ -5,6 +5,9 @@
 unique. At this moment this value is used to create bases during starting new
 game and to determine which ships are enemies or friends.
 - Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option), "remove" (remove this entry) or
+"update" (update selected entry).
+- Optional attribute `action`: what to do with this entry. Possible values
 are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Attribute "name": name of factions displayed in game. Can be any text and
 unique.
@@ -35,6 +38,9 @@ faction. Must be valid skill name from *data/game.dat* file
 <!--
 - Tags "relation": Relation of this faction with other faction. All factions
 must have this tags for each faction (even for self).
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option), "update" (update selected
+entry).
 - Attribute "faction" is faction index to which relation will be set.
 - Attributes "minreputation", "maxreputation", "reputation": starting
 reputation with selected faction. If it should have random reputation, use
@@ -61,6 +67,8 @@ enemy ships.
 no "foodtype" tags inside faction, that faction members can't be hungry.
 - Attribute "name": name of item type used as food. Must be valid item type
 from *data/game.dat* file.
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option), "remove" (remove this entry).
 -->
   <foodtype name="Food" />
   <foodtype name="RawFood" />
@@ -69,6 +77,8 @@ from *data/game.dat* file.
 no "drinktype" tags inside faction, that faction members can't be hungry.
 - Attribute "name": name of item type used as food. Must be valid item type
 from *data/game.dat* file.
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option), "remove" (remove this entry).
 -->
   <drinktype name="Drink" />
 <!--
@@ -77,6 +87,9 @@ between tags is description of career visible in new game setting. If faction
 don't have any available career then it is unavailable for player.
 - Attribute "index": index of career. Must be existing career index from
 *data/careers.dat* file.
+- Optional attribute `action`: what to do with this career. Possible values
+are: "add" (add this career, default option), "remove" (remove this career) or
+"update" (update selected career).
 - Attribute "playerindex": index of mobile used for starting player character,
 when he/she choice this career. Value must be existing mobile index from any
 mobiles file.
