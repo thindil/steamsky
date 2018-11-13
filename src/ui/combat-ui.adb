@@ -32,6 +32,8 @@ with Gtk.Check_Button; use Gtk.Check_Button;
 with Gtk.Toggle_Button; use Gtk.Toggle_Button;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Stack; use Gtk.Stack;
+with Gtk.Text_View; use Gtk.Text_View;
+with Gtk.Text_Mark; use Gtk.Text_Mark;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Glib.Properties; use Glib.Properties;
@@ -167,6 +169,13 @@ package body Combat.UI is
                end if;
             end if;
          end loop;
+         declare
+            Mark: Gtk_Text_Mark;
+         begin
+            Mark := Create_Mark(MessagesBuffer, "end", MessagesIter);
+            Scroll_Mark_Onscreen
+              (Gtk_Text_View(Get_Object(Builder, "messagesview2")), Mark);
+         end;
       else
          for I in reverse LoopStart .. -1 loop
             Message := GetMessage(I + 1);
