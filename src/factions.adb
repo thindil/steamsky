@@ -34,12 +34,13 @@ package body Factions is
       TmpRelations: Relations_Container.Vector;
       TmpRelation: RelationsRecord;
       TmpFood: UnboundedString_Container.Vector;
-      Action, Value: Unbounded_String;
-      DeleteIndex, ItemIndex, SkillIndex: Natural;
+      Action, Value, SubAction: Unbounded_String;
+      FactionIndex, ItemIndex, SkillIndex: Natural;
       TmpCareers: Careers_Container.Vector;
       TmpCareer: CareerRecord;
       CareerExists: Boolean;
       FactionNode, ChildNode: Node;
+      DeleteIndex: Positive;
       procedure AddChildNode(Data: in out UnboundedString_Container.Vector;
          Name: String; Index: Natural; CheckItemType: Boolean := True) is
          Value: Unbounded_String;
@@ -50,15 +51,30 @@ package body Factions is
          for J in 0 .. Length(ChildNodes) - 1 loop
             Value :=
               To_Unbounded_String(Get_Attribute(Item(ChildNodes, J), "name"));
+            SubAction :=
+              To_Unbounded_String
+                (Get_Attribute(Item(ChildNodes, J), "action"));
             if CheckItemType then
                ItemIndex := FindProtoItem(ItemType => Value);
                if ItemIndex = 0 then
-                  raise Factions_Adding_Error
-                    with "Can't add faction '" & To_String(TempRecord.Index) &
-                    "', no items with type '" & To_String(Value) & "'.";
+                  raise Data_Loading_Error
+                    with "Can't " & To_String(Action) & " faction '" &
+                    To_String(TempRecord.Index) & "', no items with type '" &
+                    To_String(Value) & "'.";
                end if;
             end if;
-            Data.Append(New_Item => Value);
+            if SubAction /= To_Unbounded_String("remove") then
+               Data.Append(New_Item => Value);
+            else
+               DeleteIndex := Data.First_Index;
+               while DeleteIndex <= Data.Last_Index loop
+                  if Data(DeleteIndex) = Value then
+                     Data.Delete(Index => DeleteIndex);
+                     exit;
+                  end if;
+                  DeleteIndex := DeleteIndex + 1;
+               end loop;
+            end if;
          end loop;
       end AddChildNode;
    begin
@@ -79,17 +95,35 @@ package body Factions is
          TempRecord.Index :=
            To_Unbounded_String(Get_Attribute(FactionNode, "index"));
          Action := To_Unbounded_String(Get_Attribute(FactionNode, "action"));
-         if Action = Null_Unbounded_String or
-           Action = To_Unbounded_String("add") then
-            for Faction of Factions_List loop
-               if Faction.Index = TempRecord.Index then
-                  raise Factions_Adding_Error
-                    with "Can't add faction '" & To_String(TempRecord.Index) &
-                    "', there is one with that index.";
-               end if;
-            end loop;
-            TempRecord.Name :=
-              To_Unbounded_String(Get_Attribute(FactionNode, "name"));
+         FactionIndex := 0;
+         for J in Factions_List.Iterate loop
+            if Factions_List(J).Index = TempRecord.Index then
+               FactionIndex := Factions_Container.To_Index(J);
+               exit;
+            end if;
+         end loop;
+         if
+           (Action = To_Unbounded_String("update") or
+            Action = To_Unbounded_String("remove")) then
+            if FactionIndex = 0 then
+               raise Data_Loading_Error
+                 with "Can't " & To_String(Action) & " faction '" &
+                 To_String(TempRecord.Index) &
+                 "', there no faction with that index.";
+            end if;
+         elsif FactionIndex > 0 then
+            raise Data_Loading_Error
+              with "Can't add faction '" & To_String(TempRecord.Index) &
+              "', there is one with that index.";
+         end if;
+         if Action /= To_Unbounded_String("remove") then
+            if Action = To_Unbounded_String("update") then
+               TempRecord := Factions_List(FactionIndex);
+            end if;
+            if Get_Attribute(FactionNode, "name") /= "" then
+               TempRecord.Name :=
+                 To_Unbounded_String(Get_Attribute(FactionNode, "name"));
+            end if;
             if Get_Attribute(FactionNode, "membername") /= "" then
                TempRecord.MemberName :=
                  To_Unbounded_String(Get_Attribute(FactionNode, "membername"));
@@ -106,6 +140,7 @@ package body Factions is
             if Get_Attribute(FactionNode, "population") /= "" then
                TempRecord.Population(1) :=
                  Natural'Value(Get_Attribute(FactionNode, "population"));
+               TempRecord.Population(2) := 0;
             end if;
             if Get_Attribute(FactionNode, "minpopulation") /= "" then
                TempRecord.Population(1) :=
@@ -123,9 +158,10 @@ package body Factions is
                    (Get_Attribute(FactionNode, "healingtools"));
                ItemIndex := FindProtoItem(ItemType => Value);
                if ItemIndex = 0 then
-                  raise Factions_Adding_Error
-                    with "Can't add faction '" & To_String(TempRecord.Index) &
-                    "', no items with type '" & To_String(Value) & "'.";
+                  raise Data_Loading_Error
+                    with "Can't " & To_String(Action) & " faction '" &
+                    To_String(TempRecord.Index) & "', no items with type '" &
+                    To_String(Value) & "'.";
                end if;
                TempRecord.HealingTools := Value;
             end if;
@@ -135,9 +171,10 @@ package body Factions is
                    (Get_Attribute(FactionNode, "healingskill"));
                SkillIndex := FindSkillIndex(Value);
                if SkillIndex = 0 then
-                  raise Factions_Adding_Error
-                    with "Can't add faction '" & To_String(TempRecord.Index) &
-                    "', no skill named '" & To_String(Value) & "'.";
+                  raise Data_Loading_Error
+                    with "Can't " & To_String(Action) & " faction '" &
+                    To_String(TempRecord.Index) & "', no skill named '" &
+                    To_String(Value) & "'.";
                end if;
                TempRecord.HealingSkill := SkillIndex;
             end if;
@@ -161,7 +198,16 @@ package body Factions is
                else
                   TmpRelation.Friendly := False;
                end if;
-               TempRecord.Relations.Append(New_Item => TmpRelation);
+               if Action /= To_Unbounded_String("update") then
+                  TempRecord.Relations.Append(New_Item => TmpRelation);
+               else
+                  for Relation of TempRecord.Relations loop
+                     if Relation.TargetFaction = TmpRelation.TargetFaction then
+                        Relation := TmpRelation;
+                        exit;
+                     end if;
+                  end loop;
+               end if;
             end loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
@@ -181,12 +227,21 @@ package body Factions is
                ChildNode := Item(ChildNodes, J);
                TmpCareer.Index :=
                  To_Unbounded_String(Get_Attribute(ChildNode, "index"));
-               TmpCareer.ShipIndex :=
-                 To_Unbounded_String(Get_Attribute(ChildNode, "shipindex"));
-               TmpCareer.PlayerIndex :=
-                 To_Unbounded_String(Get_Attribute(ChildNode, "playerindex"));
-               TmpCareer.Description :=
-                 To_Unbounded_String(Node_Value(First_Child(ChildNode)));
+               SubAction :=
+                 To_Unbounded_String(Get_Attribute(ChildNode, "action"));
+               if Get_Attribute(ChildNode, "shipindex") /= "" then
+                  TmpCareer.ShipIndex :=
+                    To_Unbounded_String(Get_Attribute(ChildNode, "shipindex"));
+               end if;
+               if Get_Attribute(ChildNode, "playerindex") /= "" then
+                  TmpCareer.PlayerIndex :=
+                    To_Unbounded_String
+                      (Get_Attribute(ChildNode, "playerindex"));
+               end if;
+               if Has_Child_Nodes(ChildNode) then
+                  TmpCareer.Description :=
+                    To_Unbounded_String(Node_Value(First_Child(ChildNode)));
+               end if;
                if Get_Attribute(ChildNode, "name") /= "" then
                   TmpCareer.Name :=
                     To_Unbounded_String(Get_Attribute(ChildNode, "name"));
@@ -206,26 +261,40 @@ package body Factions is
                   end if;
                end loop;
                if CareerExists then
-                  TempRecord.Careers.Append(New_Item => TmpCareer);
+                  if SubAction = To_Unbounded_String("remove") then
+                     DeleteIndex := TempRecord.Careers.First_Index;
+                     while DeleteIndex <= TempRecord.Careers.Last_Index loop
+                        if TempRecord.Careers(DeleteIndex).Index =
+                          TmpCareer.Index then
+                           TempRecord.Careers.Delete(Index => DeleteIndex);
+                           exit;
+                        end if;
+                        DeleteIndex := DeleteIndex + 1;
+                     end loop;
+                  elsif SubAction = To_Unbounded_String("update") then
+                     for Career of TempRecord.Careers loop
+                        if Career.Index = TmpCareer.Index then
+                           Career := TmpCareer;
+                           exit;
+                        end if;
+                     end loop;
+                  else
+                     TempRecord.Careers.Append(New_Item => TmpCareer);
+                  end if;
                end if;
             end loop;
-            Factions_List.Append(New_Item => TempRecord);
-            LogMessage
-              ("Faction added: " & To_String(TempRecord.Name), Everything);
-         else
-            DeleteIndex := 0;
-            for J in Factions_List.Iterate loop
-               if Factions_List(J).Index = TempRecord.Index then
-                  DeleteIndex := Factions_Container.To_Index(J);
-                  exit;
-               end if;
-            end loop;
-            if DeleteIndex = 0 then
-               raise Factions_Remove_Error
-                 with "Can't delete faction '" & To_String(TempRecord.Index) &
-                 "', no faction with that index.";
+            if Action /= To_Unbounded_String("update") then
+               Factions_List.Append(New_Item => TempRecord);
+               LogMessage
+                 ("Faction added: " & To_String(TempRecord.Name), Everything);
+            else
+               Factions_List(FactionIndex) := TempRecord;
+               LogMessage
+                 ("Faction updated: " & To_String(TempRecord.Name),
+                  Everything);
             end if;
-            Factions_List.Delete(Index => DeleteIndex);
+         else
+            Factions_List.Delete(Index => FactionIndex);
             LogMessage
               ("Faction removed: " & To_String(TempRecord.Index), Everything);
          end if;
