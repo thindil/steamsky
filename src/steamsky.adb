@@ -40,15 +40,15 @@ procedure SteamSky is
       if Element(Path, Length(Path)) /= Dir_Separator then
          Append(Path, Dir_Separator);
       end if;
-      if not Exists(To_String(Path)) then
-         if PathName /= "Save" and PathName /= "Modifications" and
-           PathName /= "Themes" then
-            Put_Line
-              ("Directory " & To_String(Path) &
-               " not exists. You must use existing directory as " &
-               To_Lower(PathName) & " directory.");
-            return False;
-         end if;
+      if not Exists(To_String(Path))
+        and then
+        (PathName /= "Save" and PathName /= "Modifications" and
+         PathName /= "Themes") then
+         Put_Line
+           ("Directory " & To_String(Path) &
+            " not exists. You must use existing directory as " &
+            To_Lower(PathName) & " directory.");
+         return False;
       end if;
       LogMessage
         (PathName & " directory sets to: " & To_String(Path), Everything);
