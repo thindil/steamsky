@@ -4,7 +4,8 @@
 - Attribute "index" is index of goal (it can be number or text) and must be
 unique. At this moment this value is used to set/update goal in game.
 - Optional attribute `action`: what to do with this entry. Possible values
-are: "add" (add this entry, default option) or "remove" (remove this entry).
+are: "add" (add this entry, default option), "remove" (remove this entry) or
+"update" (update selected entry).
 - Attribute "type": Type/category of goal which define what is needed to do
 for finish selected goal. Possible values: Reputation - gain max reputation 
 in X bases, Destroy - destroy X ships, Discover - discover X fields of map, 
