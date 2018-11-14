@@ -36,8 +36,6 @@ package Goals is
    Goals_List: Goals_Container
      .Vector; -- List of player goals available in game
    CurrentGoal: Goal_Data; -- Player current goal
-   Goals_Remove_Error: exception; -- Raised when can't remove selected goal
-   Goals_Adding_Error: exception; -- Raised when can't add selected goal
 
    procedure LoadGoals(Reader: Tree_Reader); -- Load player goals from files
    function GoalText
