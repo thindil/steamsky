@@ -29,6 +29,7 @@ with Statistics; use Statistics;
 with Messages; use Messages;
 with Missions; use Missions;
 with Factions; use Factions;
+with Game; use Game;
 
 package body Goals is
 
@@ -37,7 +38,7 @@ package body Goals is
       NodesList: Node_List;
       GoalsData: Document;
       Action: Unbounded_String;
-      DeleteIndex: Natural;
+      GoalIndex: Natural;
       GoalNode: Node;
    begin
       TempRecord :=
@@ -51,19 +52,39 @@ package body Goals is
          TempRecord.Index :=
            To_Unbounded_String(Get_Attribute(GoalNode, "index"));
          Action := To_Unbounded_String(Get_Attribute(GoalNode, "action"));
-         if Action = Null_Unbounded_String or
-           Action = To_Unbounded_String("add") then
-            for Goal of Goals_List loop
-               if Goal.Index = TempRecord.Index then
-                  raise Goals_Adding_Error
-                    with "Can't add goal '" & To_String(TempRecord.Index) &
-                    "', there is one with that index.";
-               end if;
-            end loop;
-            TempRecord.GType :=
-              GoalTypes'Value(Get_Attribute(GoalNode, "type"));
-            TempRecord.Amount :=
-              Natural'Value(Get_Attribute(GoalNode, "amount"));
+         GoalIndex := 0;
+         for J in Goals_List.Iterate loop
+            if Goals_List(J).Index = TempRecord.Index then
+               GoalIndex := Goals_Container.To_Index(J);
+               exit;
+            end if;
+         end loop;
+         if
+           (Action = To_Unbounded_String("update") or
+            Action = To_Unbounded_String("remove")) then
+            if GoalIndex = 0 then
+               raise Data_Loading_Error
+                 with "Can't " & To_String(Action) & " goal '" &
+                 To_String(TempRecord.Index) &
+                 "', there no goal with that index.";
+            end if;
+         elsif GoalIndex > 0 then
+            raise Data_Loading_Error
+              with "Can't add goal '" & To_String(TempRecord.Index) &
+              "', there is one with that index.";
+         end if;
+         if Action /= To_Unbounded_String("remove") then
+            if Action = To_Unbounded_String("update") then
+               TempRecord := Goals_List(GoalIndex);
+            end if;
+            if Get_Attribute(GoalNode, "type") /= "" then
+               TempRecord.GType :=
+                 GoalTypes'Value(Get_Attribute(GoalNode, "type"));
+            end if;
+            if Get_Attribute(GoalNode, "amount") /= "" then
+               TempRecord.Amount :=
+                 Natural'Value(Get_Attribute(GoalNode, "amount"));
+            end if;
             if Get_Attribute(GoalNode, "target") /= "" then
                TempRecord.TargetIndex :=
                  To_Unbounded_String(Get_Attribute(GoalNode, "target"));
@@ -72,23 +93,17 @@ package body Goals is
                TempRecord.Multiplier :=
                  Natural'Value(Get_Attribute(GoalNode, "multiplier"));
             end if;
-            Goals_List.Append(New_Item => TempRecord);
-            LogMessage
-              ("Goal added: " & To_String(TempRecord.Index), Everything);
-         else
-            DeleteIndex := 0;
-            for J in Goals_List.Iterate loop
-               if Goals_List(J).Index = TempRecord.Index then
-                  DeleteIndex := Goals_Container.To_Index(J);
-                  exit;
-               end if;
-            end loop;
-            if DeleteIndex = 0 then
-               raise Goals_Remove_Error
-                 with "Can't delete goal '" & To_String(TempRecord.Index) &
-                 "', no goal with that index.";
+            if Action /= To_Unbounded_String("update") then
+               Goals_List.Append(New_Item => TempRecord);
+               LogMessage
+                 ("Goal added: " & To_String(TempRecord.Index), Everything);
+            else
+               Goals_List(GoalIndex) := TempRecord;
+               LogMessage
+                 ("Goal updated: " & To_String(TempRecord.Index), Everything);
             end if;
-            Goals_List.Delete(Index => DeleteIndex);
+         else
+            Goals_List.Delete(Index => GoalIndex);
             LogMessage
               ("Goal removed: " & To_String(TempRecord.Index), Everything);
          end if;
