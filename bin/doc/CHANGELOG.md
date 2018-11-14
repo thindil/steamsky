@@ -8,7 +8,8 @@ All notable changes to this project will be documented in this file.
   advanced huge adamantium engine, adamantium harpoon gun, adamantium 80mm gun,
   adamantium 100mm gun, adamantium 120mm gun and small adamantium workshop
 - Options to update careers, crafting recipes and factions by modification files
-- New ships: huge pirate ship mk VI and advanced huge pirate ship mk VI
+- New ships: huge pirate ship mk VI, advanced huge pirate ship mk VI and huge
+  undead ship mk VI
 
 ### Changed
 - Raised maximum amount of modules for huge adamantium hull
