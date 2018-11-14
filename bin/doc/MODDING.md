@@ -462,16 +462,18 @@ Value must be existing skill name.
 
 ### General informations
 - Default game goals are in *goals.dat* file which is in *data* directory.
-- To remove existing goal from game, you can delete it from *goals.dat* or in
-  modification file add tag `goal` with attribute `index` which value will be
-  index of goal to remove and attribute `action` with value `remove`.
+- If you want remove or update any existing goal, you can do it in *goals.dat*
+  file in *data* directory or in modification file (better option) add tag
+  `goal` with attribute `index` which value will be index of selected goal and
+  attribute `action`. Then if you modify existing goal, add changed values.
 
 ### Goal data structure
 - Each goal starts with tag `goal`.
 - Attribute `index` is index of goal (it can be number or text) and must be
   unique. At this moment this value is used to set/update goal in game.
 - Optional attribute `action`: what to do with this entry. Possible values
-  are: "add" (add this entry, default option) or "remove" (remove this entry).
+  are: "add" (add this entry, default option) or "remove" (remove this entry)
+  or "update" (update selected entry).
 - Attribute `type`: Type/category of goal which define what is needed to do for
   finish selected goal. Possible values: Reputation - gain max reputation in X
   bases, Destroy - destroy X ships, Discover - discover X fields of map,
