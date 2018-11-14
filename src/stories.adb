@@ -46,6 +46,7 @@ package body Stories is
       TempData: StepData_Container.Vector;
       Action: Unbounded_String;
       DeleteIndex: Positive;
+      StoryNode, ChildNode, StepNode: Node;
    begin
       ClearCurrentStory;
       TempStep :=
@@ -63,30 +64,27 @@ package body Stories is
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(StoriesData, "story");
       for I in 0 .. Length(NodesList) - 1 loop
+         StoryNode := Item(NodesList, I);
          TempRecord.Index :=
-           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index"));
-         Action :=
-           To_Unbounded_String(Get_Attribute(Item(NodesList, I), "action"));
+           To_Unbounded_String(Get_Attribute(StoryNode, "index"));
+         Action := To_Unbounded_String(Get_Attribute(StoryNode, "action"));
          if Action = Null_Unbounded_String or
            Action = To_Unbounded_String("add") then
             StartStep :=
-              To_Unbounded_String
-                (Get_Attribute(Item(NodesList, I), "startstep"));
+              To_Unbounded_String(Get_Attribute(StoryNode, "startstep"));
             FinalStep :=
-              To_Unbounded_String
-                (Get_Attribute(Item(NodesList, I), "finalstep"));
+              To_Unbounded_String(Get_Attribute(StoryNode, "finalstep"));
             TempRecord.StartCondition :=
-              StartConditionType'Value
-                (Get_Attribute(Item(NodesList, I), "start"));
+              StartConditionType'Value(Get_Attribute(StoryNode, "start"));
             TempRecord.MinSteps :=
-              Positive'Value(Get_Attribute(Item(NodesList, I), "minsteps"));
+              Positive'Value(Get_Attribute(StoryNode, "minsteps"));
             TempRecord.MaxSteps :=
-              Positive'Value(Get_Attribute(Item(NodesList, I), "maxsteps"));
+              Positive'Value(Get_Attribute(StoryNode, "maxsteps"));
             TempRecord.Name :=
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "name"));
+              To_Unbounded_String(Get_Attribute(StoryNode, "name"));
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I), "startdata");
+                (StoryNode, "startdata");
             for J in 0 .. Length(ChildNodes) - 1 loop
                TempRecord.StartData.Append
                  (New_Item =>
@@ -95,7 +93,7 @@ package body Stories is
             end loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I), "forbiddenfaction");
+                (StoryNode, "forbiddenfaction");
             for J in 0 .. Length(ChildNodes) - 1 loop
                TempRecord.ForbiddenFactions.Append
                  (New_Item =>
@@ -103,46 +101,43 @@ package body Stories is
                       (Get_Attribute(Item(ChildNodes, J), "value")));
             end loop;
             ChildNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I), "step");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name(StoryNode, "step");
             for J in 0 .. Length(ChildNodes) - 1 loop
                TempStep :=
                  (Index => Null_Unbounded_String, FinishCondition => ASKINBASE,
                   FinishData => TempData, FailText => Null_Unbounded_String,
                   Texts => TempTexts);
+               ChildNode := Item(ChildNodes, J);
                TempStep.Index :=
-                 To_Unbounded_String
-                   (Get_Attribute(Item(ChildNodes, J), "index"));
+                 To_Unbounded_String(Get_Attribute(ChildNode, "index"));
                TempStep.FinishCondition :=
-                 StepConditionType'Value
-                   (Get_Attribute(Item(ChildNodes, J), "finish"));
+                 StepConditionType'Value(Get_Attribute(ChildNode, "finish"));
                StepDataNodes :=
                  DOM.Core.Elements.Get_Elements_By_Tag_Name
-                   (Item(ChildNodes, J), "finishdata");
+                   (ChildNode, "finishdata");
                for K in 0 .. Length(StepDataNodes) - 1 loop
+                  StepNode := Item(StepDataNodes, K);
                   TempStep.FinishData.Append
                     (New_Item =>
                        (Name =>
-                          To_Unbounded_String
-                            (Get_Attribute(Item(StepDataNodes, K), "name")),
+                          To_Unbounded_String(Get_Attribute(StepNode, "name")),
                         Value =>
                           To_Unbounded_String
-                            (Get_Attribute(Item(StepDataNodes, K), "value"))));
+                            (Get_Attribute(StepNode, "value"))));
                end loop;
                StepDataNodes :=
                  DOM.Core.Elements.Get_Elements_By_Tag_Name
                    (Item(ChildNodes, J), "text");
                for K in 0 .. Length(StepDataNodes) - 1 loop
+                  StepNode := Item(StepDataNodes, K);
                   TempStep.Texts.Append
                     (New_Item =>
                        (Condition =>
                           StepConditionType'Value
-                            (Get_Attribute
-                               (Item(StepDataNodes, K), "condition")),
+                            (Get_Attribute(StepNode, "condition")),
                         Text =>
                           To_Unbounded_String
-                            (Node_Value
-                               (First_Child(Item(StepDataNodes, K))))));
+                            (Node_Value(First_Child(StepNode)))));
                end loop;
                StepDataNodes :=
                  DOM.Core.Elements.Get_Elements_By_Tag_Name
@@ -159,8 +154,7 @@ package body Stories is
                end if;
             end loop;
             ChildNodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I), "endtext");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name(StoryNode, "endtext");
             TempRecord.EndText :=
               To_Unbounded_String
                 (Node_Value(First_Child(Item(ChildNodes, 0))));
@@ -307,57 +301,56 @@ package body Stories is
          if CanStart then
             case Condition is
                when DROPITEM =>
-                  if Stories_List(I).StartData(2) = FactionIndex then
-                     if GetRandom
-                         (1,
-                          Positive'Value
-                            (To_String(Stories_List(I).StartData(3)))) =
-                       1 then
-                        case Stories_List(I).StartingStep.FinishCondition is
-                           when ASKINBASE =>
-                              StepData :=
-                                SelectBase
-                                  (To_String
-                                     (GetStepData
-                                        (Stories_List(I).StartingStep
-                                           .FinishData,
-                                         "base")));
-                           when DESTROYSHIP =>
-                              StepData :=
-                                SelectEnemy
-                                  (Stories_List(I).StartingStep.FinishData);
-                           when EXPLORE =>
-                              StepData :=
-                                SelectLocation
-                                  (Stories_List(I).StartingStep.FinishData);
-                           when LOOT =>
-                              StepData :=
-                                SelectLoot
-                                  (Stories_List(I).StartingStep.FinishData);
-                           when ANY =>
-                              null;
-                        end case;
-                        CurrentStory :=
-                          (Index => Stories_Container.To_Index(I), Step => 1,
-                           CurrentStep => 0,
-                           MaxSteps =>
-                             GetRandom
-                               (Stories_List(I).MinSteps,
-                                Stories_List(I).MaxSteps),
-                           ShowText => True, Data => StepData,
-                           FinishedStep => ANY);
-                        UpdateCargo
-                          (PlayerShip,
-                           Positive'Value
-                             (To_String(Stories_List(I).StartData(1))),
-                           1);
-                        FinishedStories.Append
-                          (New_Item =>
-                             (Index => CurrentStory.Index,
-                              StepsAmount => CurrentStory.MaxSteps,
-                              StepsTexts => TempTexts));
-                        return;
-                     end if;
+                  if Stories_List(I).StartData(2) = FactionIndex
+                    and then
+                      GetRandom
+                        (1,
+                         Positive'Value
+                           (To_String(Stories_List(I).StartData(3)))) =
+                      1 then
+                     case Stories_List(I).StartingStep.FinishCondition is
+                        when ASKINBASE =>
+                           StepData :=
+                             SelectBase
+                               (To_String
+                                  (GetStepData
+                                     (Stories_List(I).StartingStep.FinishData,
+                                      "base")));
+                        when DESTROYSHIP =>
+                           StepData :=
+                             SelectEnemy
+                               (Stories_List(I).StartingStep.FinishData);
+                        when EXPLORE =>
+                           StepData :=
+                             SelectLocation
+                               (Stories_List(I).StartingStep.FinishData);
+                        when LOOT =>
+                           StepData :=
+                             SelectLoot
+                               (Stories_List(I).StartingStep.FinishData);
+                        when ANY =>
+                           null;
+                     end case;
+                     CurrentStory :=
+                       (Index => Stories_Container.To_Index(I), Step => 1,
+                        CurrentStep => 0,
+                        MaxSteps =>
+                          GetRandom
+                            (Stories_List(I).MinSteps,
+                             Stories_List(I).MaxSteps),
+                        ShowText => True, Data => StepData,
+                        FinishedStep => ANY);
+                     UpdateCargo
+                       (PlayerShip,
+                        Positive'Value
+                          (To_String(Stories_List(I).StartData(1))),
+                        1);
+                     FinishedStories.Append
+                       (New_Item =>
+                          (Index => CurrentStory.Index,
+                           StepsAmount => CurrentStory.MaxSteps,
+                           StepsTexts => TempTexts));
+                     return;
                   end if;
             end case;
          end if;
@@ -392,11 +385,10 @@ package body Stories is
          MaxRandom := 1;
       end if;
       FinishCondition := GetStepData(Step.FinishData, "condition");
-      if FinishCondition = To_Unbounded_String("random") then
-         if GetRandom(1, MaxRandom) > 1 then
-            UpdateGame(10);
-            return False;
-         end if;
+      if FinishCondition = To_Unbounded_String("random")
+        and then GetRandom(1, MaxRandom) > 1 then
+         UpdateGame(10);
+         return False;
       else
          Chance := 0;
          case Step.FinishCondition is
