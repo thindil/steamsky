@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Updated README.md
 - Removing game data
 - Updated MODDING.md
+- Final enemy for story with undead
 
 ### Fixed
 - Some typos in old changelog
