@@ -20,6 +20,7 @@ with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
 with Log; use Log;
+with Game; use Game;
 
 package body Help is
 
@@ -28,7 +29,7 @@ package body Help is
       NodesList: Node_List;
       HelpData: Document;
       Action: Unbounded_String;
-      DeleteIndex: Positive;
+      HelpIndex: Natural;
       HelpNode: Node;
    begin
       TmpHelp :=
@@ -41,20 +42,44 @@ package body Help is
          TmpHelp.Title :=
            To_Unbounded_String(Get_Attribute(HelpNode, "title"));
          Action := To_Unbounded_String(Get_Attribute(HelpNode, "action"));
-         if Action = Null_Unbounded_String or
-           Action = To_Unbounded_String("add") then
-            TmpHelp.Text :=
-              To_Unbounded_String(Node_Value(First_Child(HelpNode)));
-            Help_List.Append(New_Item => TmpHelp);
-            LogMessage("Help added: " & To_String(TmpHelp.Title), Everything);
+         HelpIndex := 0;
+         for J in Help_List.Iterate loop
+            if Help_List(J).Title = TmpHelp.Title then
+               HelpIndex := Help_Container.To_Index(J);
+               exit;
+            end if;
+         end loop;
+         if
+           (Action = To_Unbounded_String("update") or
+            Action = To_Unbounded_String("remove")) then
+            if HelpIndex = 0 then
+               raise Data_Loading_Error
+                 with "Can't " & To_String(Action) & " help '" &
+                 To_String(TmpHelp.Title) &
+                 "', there no help with that title.";
+            end if;
+         elsif HelpIndex > 0 then
+            raise Data_Loading_Error
+              with "Can't add help '" & To_String(TmpHelp.Title) &
+              "', there is one with that title.";
+         end if;
+         if Action /= To_Unbounded_String("remove") then
+            if Action = To_Unbounded_String("update") then
+               TmpHelp := Help_List(HelpIndex);
+            end if;
+            if Has_Child_Nodes(HelpNode) then
+               TmpHelp.Text :=
+                 To_Unbounded_String(Node_Value(First_Child(HelpNode)));
+            end if;
+            if Action /= To_Unbounded_String("update") then
+               Help_List.Append(New_Item => TmpHelp);
+               LogMessage
+                 ("Help added: " & To_String(TmpHelp.Title), Everything);
+            else
+               Help_List(HelpIndex) := TmpHelp;
+            end if;
          else
-            for J in Help_List.Iterate loop
-               if Help_List(J).Title = TmpHelp.Title then
-                  DeleteIndex := Help_Container.To_Index(J);
-                  exit;
-               end if;
-            end loop;
-            Help_List.Delete(Index => DeleteIndex);
+            Help_List.Delete(Index => HelpIndex);
             LogMessage
               ("Help removed: " & To_String(TmpHelp.Title), Everything);
          end if;
