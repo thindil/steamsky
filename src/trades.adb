@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -59,11 +59,11 @@ package body Trades is
             raise Trade_Buying_Too_Much with To_String(ItemName);
          end if;
          Price := SkyBases(BaseIndex).Cargo(BaseItemIndex).Price;
-         if EventIndex > 0 then
-            if Events_List(EventIndex).EType = DoublePrice and
-              Events_List(EventIndex).Data = ItemIndex then
-               Price := Price * 2;
-            end if;
+         if EventIndex > 0
+           and then
+           (Events_List(EventIndex).EType = DoublePrice and
+            Events_List(EventIndex).Data = ItemIndex) then
+            Price := Price * 2;
          end if;
       else
          ItemIndex := TraderCargo(BaseItemIndex).ProtoIndex;
