@@ -29,3 +29,4 @@ All notable changes to this project will be documented in this file.
 - Going on break after finishing crafting
 - Log entry about removed mob
 - Scrolling messages lists to last messsage
+- Even more autoresize GUI elements on mouse hover (issue #31)
