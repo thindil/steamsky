@@ -10,7 +10,8 @@ All notable changes to this project will be documented in this file.
 - Options to update careers, crafting recipes, factions, goals and help entries
   by modification files
 - New ships: huge pirate ship mk VI, advanced huge pirate ship mk VI, huge
-  undead ship mk VI and advanced huge undead ship mk VI
+  undead ship mk VI, advanced huge undead ship mk VI and huge attacking drone
+  mk VI
 
 ### Changed
 - Raised maximum amount of modules for huge adamantium hull
