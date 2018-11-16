@@ -213,16 +213,18 @@ Value must be existing skill name.
 
 ### General informations
 - Default game items are in *items.dat* file which is in *data* directory.
-- To remove existing item from game, you can delete it from *items.dat* or in
-  modification file add tag `item` with attribute `index` which value will be
-  index of item to remove and attribute `action` with value `remove`.
+- If you want remove or update any existing item, you can do it in *items.dat*
+  file in *data* directory or in modification file (better option) add tag
+  `item` with attribute `index` which value will be index of selected item and
+  attribute `action`. Then if you modify existing item, add changed values.
 
 ### Item data structure
 - Each item starts with tag `item`.
 - Attribute `index` is a item index (it can be number or text) and must be
   unique. This value is used in ships and recipes data entries.
 - Optional attribute `action`: what to do with this entry. Possible values
-  are: "add" (add this entry, default option) or "remove" (remove this entry).
+  are: "add" (add this entry, default option), "remove" (remove this entry)
+  or "update" (update selected entry).
 - `name` attribute: name of item displayed in various places (cargo info,
   crafting, etc.)
 - Attribute `weight`: weight of one item in kilograms
@@ -270,7 +272,7 @@ Value must be existing skill name.
   unique. This value is used at this moment for set starting recipes and in
   Craft types of goals.
 - Optional attribute `action`: what to do with this entry. Possible values
-  are: "add" (add this entry, default option) or "remove" (remove this entry)
+  are: "add" (add this entry, default option), "remove" (remove this entry)
   or "update" (update selected entry).
 - Tag `material` contains data about material used to craft recipe. If you want
   to add more materials to recipe, just add new tag `material` with proper
@@ -422,7 +424,7 @@ Value must be existing skill name.
 - Attribute `title` is help menu entry in main help menu. It can be number or
   text.
 - Optional attribute `action`: what to do with this entry. Possible values
-  are: "add" (add this entry, default option) or "remove" (remove this entry)
+  are: "add" (add this entry, default option), "remove" (remove this entry)
   or "update" (update selected entry).
 - Text between tags `entry` is help entry text text visible when player select
   this option from help menu.
@@ -475,7 +477,7 @@ Value must be existing skill name.
 - Attribute `index` is index of goal (it can be number or text) and must be
   unique. At this moment this value is used to set/update goal in game.
 - Optional attribute `action`: what to do with this entry. Possible values
-  are: "add" (add this entry, default option) or "remove" (remove this entry)
+  are: "add" (add this entry, default option), "remove" (remove this entry)
   or "update" (update selected entry).
 - Attribute `type`: Type/category of goal which define what is needed to do for
   finish selected goal. Possible values: Reputation - gain max reputation in X
@@ -557,7 +559,7 @@ Value must be existing skill name.
   unique. At this moment this value is used to create bases during starting new
   game and to determine which ships are enemies or friends.
 - Optional attribute `action`: what to do with this entry. Possible values
-  are: "add" (add this entry, default option) or "remove" (remove this entry)
+  are: "add" (add this entry, default option), "remove" (remove this entry)
   or "update" (update selected entry).
 - Attribute `name`: name of factions displayed in game. Can be any text and
   unique.
@@ -624,7 +626,7 @@ Value must be existing skill name.
 - Attribute `index`: index of career. Must be existing career index from
   *data/careers.dat* file.
 - Optional attribute `action`: what to do with this entry. Possible values
-  are: "add" (add this entry, default option) or "remove" (remove this entry)
+  are: "add" (add this entry, default option), "remove" (remove this entry)
   or "update" (update selected entry).
 - Attribute `playerindex`: index of mobile used for starting player character,
   when he/she choice this career. Value must be existing mobile index from any
@@ -706,7 +708,7 @@ story.
 - Each career is between "career" tags.
 - Attribute `index` is index of career.
 - Optional attribute `action`: what to do with this entry. Possible values
-  are: "add" (add this entry, default option) or "remove" (remove this entry)
+  are: "add" (add this entry, default option), "remove" (remove this entry)
   or "update" (update selected entry).
 - Attribute `name` is name of career visible to player.
 - Each career can have bonuses to experience to certain skills. Each that
