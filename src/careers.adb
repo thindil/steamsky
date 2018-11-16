@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
@@ -28,11 +29,12 @@ package body Careers is
       TempRecord: CareerRecord;
       NodesList, ChildNodes: Node_List;
       CareersData: Document;
-      Action, SkillName, SkillAction: Unbounded_String;
+      SkillName: Unbounded_String;
       CareerIndex: Natural;
       TmpSkills: UnboundedString_Container.Vector;
       DeleteIndex: Positive;
       CareerNode: Node;
+      Action, SkillAction: DataAction;
    begin
       TempRecord :=
         (Index => Null_Unbounded_String, Name => Null_Unbounded_String,
@@ -44,7 +46,11 @@ package body Careers is
          CareerNode := Item(NodesList, I);
          TempRecord.Index :=
            To_Unbounded_String(Get_Attribute(CareerNode, "index"));
-         Action := To_Unbounded_String(Get_Attribute(CareerNode, "action"));
+         if Get_Attribute(CareerNode, "action")'Length > 0 then
+            Action := DataAction'Value(Get_Attribute(CareerNode, "action"));
+         else
+            Action := ADD;
+         end if;
          CareerIndex := 0;
          for J in Careers_List.Iterate loop
             if Careers_List(J).Index = TempRecord.Index then
@@ -52,13 +58,11 @@ package body Careers is
                exit;
             end if;
          end loop;
-         if
-           (Action = To_Unbounded_String("update") or
-            Action = To_Unbounded_String("remove")) then
+         if (Action = UPDATE or Action = REMOVE) then
             if CareerIndex = 0 then
                raise Data_Loading_Error
-                 with "Can't " & To_String(Action) & " career '" &
-                 To_String(TempRecord.Index) &
+                 with "Can't " & To_Lower(DataAction'Image(Action)) &
+                 " career '" & To_String(TempRecord.Index) &
                  "', there no career with that index.";
             end if;
          elsif CareerIndex > 0 then
@@ -66,8 +70,8 @@ package body Careers is
               with "Can't add career '" & To_String(TempRecord.Index) &
               "', there is one with that index.";
          end if;
-         if Action /= To_Unbounded_String("remove") then
-            if Action = To_Unbounded_String("update") then
+         if Action /= REMOVE then
+            if Action = UPDATE then
                TempRecord := Careers_List(CareerIndex);
             end if;
             if Get_Attribute(CareerNode, "name") /= "" then
@@ -80,23 +84,20 @@ package body Careers is
                SkillName :=
                  To_Unbounded_String
                    (Get_Attribute(Item(ChildNodes, J), "name"));
-               SkillAction :=
-                 To_Unbounded_String
-                   (Get_Attribute(Item(ChildNodes, J), "action"));
-               if FindSkillIndex(SkillName) = 0 then
-                  if Action = To_Unbounded_String("update") then
-                     raise Data_Loading_Error
-                       with "Can't update career '" &
-                       To_String(TempRecord.Index) & "', skill '" &
-                       To_String(SkillName) & "' not exists";
-                  else
-                     raise Data_Loading_Error
-                       with "Can't add career '" &
-                       To_String(TempRecord.Index) & "', skill '" &
-                       To_String(SkillName) & "' not exists";
-                  end if;
+               if Get_Attribute(Item(ChildNodes, J), "action")'Length > 0 then
+                  SkillAction :=
+                    DataAction'Value
+                      (Get_Attribute(Item(ChildNodes, J), "action"));
+               else
+                  SkillAction := ADD;
                end if;
-               if SkillAction /= To_Unbounded_String("remove") then
+               if FindSkillIndex(SkillName) = 0 then
+                  raise Data_Loading_Error
+                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    "career '" & To_String(TempRecord.Index) & "', skill '" &
+                    To_String(SkillName) & "' not exists";
+               end if;
+               if SkillAction /= REMOVE then
                   TempRecord.Skills.Append(New_Item => SkillName);
                else
                   DeleteIndex := TempRecord.Skills.First_Index;
@@ -109,7 +110,7 @@ package body Careers is
                   end loop;
                end if;
             end loop;
-            if Action /= To_Unbounded_String("update") then
+            if Action /= UPDATE then
                Careers_List.Append(New_Item => TempRecord);
                LogMessage
                  ("Career added: " & To_String(TempRecord.Name), Everything);

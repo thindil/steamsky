@@ -95,6 +95,8 @@ package Game is
      To_Unbounded_String
        ("data" & Dir_Separator & "themes" &
         Dir_Separator); -- Path to directory where are ui themes
+   type DataAction is
+     (ADD, UPDATE, REMOVE); -- Possible actions to do when loading game data
    Data_Loading_Error: exception; -- Raised when error occurs during loading any game data
 
    procedure NewGame(CharName, ShipName: Unbounded_String; Gender: Character;
