@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
@@ -34,8 +35,9 @@ package body Items is
       NodesList, ChildNodes: Node_List;
       ItemsData: Document;
       TempValue: Natural_Container.Vector;
-      Action: Unbounded_String;
       ItemNode, ChildNode: Node;
+      ItemIndex: Natural;
+      Action: DataAction;
    begin
       TempRecord :=
         (Name => Null_Unbounded_String, Weight => 1,
@@ -50,15 +52,40 @@ package body Items is
          ItemNode := Item(NodesList, I);
          TempRecord.Index :=
            To_Unbounded_String(Get_Attribute(ItemNode, "index"));
-         Action := To_Unbounded_String(Get_Attribute(ItemNode, "action"));
-         if Action = Null_Unbounded_String or
-           Action = To_Unbounded_String("add") then
-            TempRecord.Name :=
-              To_Unbounded_String(Get_Attribute(ItemNode, "name"));
-            TempRecord.Weight :=
-              Natural'Value(Get_Attribute(ItemNode, "weight"));
-            TempRecord.IType :=
-              To_Unbounded_String(Get_Attribute(ItemNode, "type"));
+         if Get_Attribute(ItemNode, "action")'Length > 0 then
+            Action := DataAction'Value(Get_Attribute(ItemNode, "action"));
+         else
+            Action := ADD;
+         end if;
+         ItemIndex := FindProtoItem(TempRecord.Index);
+         if (Action = UPDATE or Action = REMOVE) then
+            if ItemIndex = 0 then
+               raise Data_Loading_Error
+                 with "Can't " & To_Lower(DataAction'Image(Action)) &
+                 " item '" & To_String(TempRecord.Index) &
+                 "', there no item with that index.";
+            end if;
+         elsif ItemIndex > 0 then
+            raise Data_Loading_Error
+              with "Can't add item '" & To_String(TempRecord.Index) &
+              "', there is one with that index.";
+         end if;
+         if Action /= REMOVE then
+            if Action = UPDATE then
+               TempRecord := Items_List(ItemIndex);
+            end if;
+            if Get_Attribute(ItemNode, "name")'Length > 0 then
+               TempRecord.Name :=
+                 To_Unbounded_String(Get_Attribute(ItemNode, "name"));
+            end if;
+            if Get_Attribute(ItemNode, "weight")'Length > 0 then
+               TempRecord.Weight :=
+                 Natural'Value(Get_Attribute(ItemNode, "weight"));
+            end if;
+            if Get_Attribute(ItemNode, "type")'Length > 0 then
+               TempRecord.IType :=
+                 To_Unbounded_String(Get_Attribute(ItemNode, "type"));
+            end if;
             if Get_Attribute(ItemNode, "showtype") /= "" then
                TempRecord.ShowType :=
                  To_Unbounded_String(Get_Attribute(ItemNode, "showtype"));
@@ -75,6 +102,9 @@ package body Items is
             end loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(ItemNode, "data");
+            if Length(ChildNodes) > 0 then
+               TempRecord.Value.Clear;
+            end if;
             for J in 0 .. Length(ChildNodes) - 1 loop
                TempRecord.Value.Append
                  (New_Item =>
@@ -84,30 +114,25 @@ package body Items is
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
                 (ItemNode, "description");
-            TempRecord.Description :=
-              To_Unbounded_String
-                (Node_Value(First_Child(Item(ChildNodes, 0))));
+            if Length(ChildNodes) > 0 then
+               TempRecord.Description :=
+                 To_Unbounded_String
+                   (Node_Value(First_Child(Item(ChildNodes, 0))));
+            end if;
             if TempRecord.Index = MoneyIndex then
                MoneyName := TempRecord.Name;
             end if;
-            Items_List.Append(New_Item => TempRecord);
-            if TempRecord.IType = WeaponType then
-               Weapons_List.Append(New_Item => Items_List.Last_Index);
-            elsif TempRecord.IType = ShieldType then
-               Shields_List.Append(New_Item => Items_List.Last_Index);
-            elsif TempRecord.IType = HeadArmor then
-               HeadArmors_List.Append(New_Item => Items_List.Last_Index);
-            elsif TempRecord.IType = ChestArmor then
-               ChestArmors_List.Append(New_Item => Items_List.Last_Index);
-            elsif TempRecord.IType = ArmsArmor then
-               ArmsArmors_List.Append(New_Item => Items_List.Last_Index);
-            elsif TempRecord.IType = LegsArmor then
-               LegsArmors_List.Append(New_Item => Items_List.Last_Index);
+            if Action /= UPDATE then
+               Items_List.Append(New_Item => TempRecord);
+               LogMessage
+                 ("Item added: " & To_String(TempRecord.Name), Everything);
+            else
+               Items_List(ItemIndex) := TempRecord;
+               LogMessage
+                 ("Item updated: " & To_String(TempRecord.Name), Everything);
             end if;
-            LogMessage
-              ("Item added: " & To_String(TempRecord.Name), Everything);
          else
-            Items_List.Delete(Index => FindProtoItem(TempRecord.Index));
+            Items_List.Delete(Index => ItemIndex);
             LogMessage
               ("Item removed: " & To_String(TempRecord.Index), Everything);
          end if;
@@ -118,6 +143,21 @@ package body Items is
             ShowType => Null_Unbounded_String,
             Description => Null_Unbounded_String,
             Index => Null_Unbounded_String);
+      end loop;
+      for Item of Items_List loop
+         if Item.IType = WeaponType then
+            Weapons_List.Append(New_Item => Items_List.Last_Index);
+         elsif Item.IType = ShieldType then
+            Shields_List.Append(New_Item => Items_List.Last_Index);
+         elsif Item.IType = HeadArmor then
+            HeadArmors_List.Append(New_Item => Items_List.Last_Index);
+         elsif Item.IType = ChestArmor then
+            ChestArmors_List.Append(New_Item => Items_List.Last_Index);
+         elsif Item.IType = ArmsArmor then
+            ArmsArmors_List.Append(New_Item => Items_List.Last_Index);
+         elsif Item.IType = LegsArmor then
+            LegsArmors_List.Append(New_Item => Items_List.Last_Index);
+         end if;
       end loop;
    end LoadItems;
 
