@@ -1,38 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <mobiles>
-<!-- 
-- Each mobile is between "mobile" tag. 
+<!--
+- Each mobile is between "mobile" tag.
 - Attribute "index" is index of mobile (it can be number or text) and must be
-unique. At this moment it is used only in setting ships crews. 
+unique. At this moment it is used only in setting ships crews.
 - Optional attribute `action`: what to do with this entry. Possible values
-are: "add" (add this entry, default option) or "remove" (remove this entry).
+are: "add" (add this entry, default option), "remove" (remove this entry) or
+"update" (update selected entry).
 - Attribute "order": current ship order of selected mob. Possible values are:
 Pilot, Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean, Rest,
-Defend, Boarding. 
+Defend, Boarding.
 -->
  <mobile index="1" order="TALK">
-<!-- Tags "skill" define skill of mobile. 
-- Attribute "name" is name of skill (from *game.dat* from *data* directory). 
-If mobile should have constant level of skill, add attribute "level" with level
-of selected skill. If mobile should have random level of skill, add attribute 
-"minlevel" with minimum level of skill and attribute "maxlevel" with maximum 
-level of skill. -->
+<!-- Tags "skill" define skill of mobile.
+- Attribute "name" is name of skill (from *game.dat* from *data* directory).
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option), "remove" (remove this entry) or
+"update" (update selected entry).
+- If mobile should have constant level of skill, add attribute "level" with
+level of selected skill. If mobile should have random level of skill, add
+attribute "minlevel" with minimum level of skill and attribute "maxlevel"
+with maximum level of skill. -->
   <skill level="5" name="Rhetoric"/>
   <skill level="5" name="Swords"/>
   <skill level="5" name="Dodge"/>
-<!-- Tags "attribute" define attribute of mobile. If mobile should have 
-constant level of attribute, add attribute "level" with level of selected 
-attribute. If mobile should have random level of attribute, add attributes 
-"minlevel" with minimum level of attribute and attribute "maxlevel" with 
-maximum level of attribute. -->
+<!-- Tags "attribute" define attribute of mobile. If mobile should have
+constant level of attribute, add attribute "level" with level of selected
+attribute. If mobile should have random level of attribute, add attributes
+"minlevel" with minimum level of attribute and attribute "maxlevel" with
+maximum level of attribute.
+If you want update attribute of mob, you must add all attributes values.-->
   <attribute level="3"/>
   <attribute level="3"/>
   <attribute level="3"/>
   <attribute level="3"/>
-<!-- Tags "priority" define orders priorities of mobile. 
-- Attribute "name" can have value: Piloting, Engineering, Operating guns, 
-Repair ship, Manufacturing, Upgrading ship, Talking in bases, Healing 
-wounded, Cleaning ship, Defend ship, Board enemy ship. 
+<!-- Tags "priority" define orders priorities of mobile.
+- Attribute "name" can have value: Piloting, Engineering, Operating guns,
+Repair ship, Manufacturing, Upgrading ship, Talking in bases, Healing
+wounded, Cleaning ship, Defend ship, Board enemy ship.
 - Attribute "value" can have value Normal or High (only one High per mobile). -->
   <priority name="Repair ship" value="Normal"/>
   <priority name="Manufacturing" value="Normal"/>
@@ -41,21 +46,25 @@ wounded, Cleaning ship, Defend ship, Board enemy ship.
   <priority name="Healing wounded" value="Normal"/>
   <priority name="Cleaning ship" value="Normal"/>
   <priority name="Defend ship" value="Normal"/>
-<!-- Tags "item" define item in mobile inventory. 
-- Attribute "index" is index of item from files from *items* directory. If 
-mobile should have constant amount of item, add attribute "amount" with amount 
-of item. If mobile should have random amount of item, add attribute "minamount"
-with minimum amount of item and attribute "maxamount" with maximum amount of item. -->
+<!-- Tags "item" define item in mobile inventory.
+- Attribute "index" is index of item from files from *items* directory.
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option), "remove" (remove this entry) or
+"update" (update selected entry).
+- If mobile should have constant amount of item, add attribute "amount" with
+amount of item. If mobile should have random amount of item, add attribute
+"minamount" with minimum amount of item and attribute "maxamount" with maximum
+amount of item. -->
   <item amount="1" index="66"/>
   <item amount="1" index="67"/>
   <item amount="1" index="68"/>
   <item amount="1" index="69"/>
   <item amount="1" index="71"/>
   <item amount="1" index="72"/>
-<!-- Tags "equipment" define which items are used by mobile. 
+<!-- Tags "equipment" define which items are used by mobile.
 - Attribute "index" is item index from inventory. Item index always starts with
-1. 
-- Attribute "slot" is name of equipment slot in which selected item is set. 
+1.
+- Attribute "slot" is name of equipment slot in which selected item is set.
 Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <equipment index="1" slot="Weapon"/>
   <equipment index="6" slot="Shield"/>
