@@ -172,7 +172,6 @@ package body Combat is
       DistanceTraveled, SpeedBonus: Integer;
       ShootMessage, Message: Unbounded_String;
       EnemyPilotOrder: Positive := 2;
-      HaveFuel: Boolean := False;
       DamageRange: Positive := 10000;
       FreeSpace: Integer := 0;
       procedure Attack(Ship, EnemyShip: in out ShipRecord) is
@@ -943,15 +942,12 @@ package body Combat is
          end case;
       end loop;
       EnemyPilotIndex := FindMember(Pilot, Enemy.Ship.Crew);
-      if FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType) > 0 then
-         HaveFuel := True;
-      end if;
-      if not HaveFuel then
-         PilotOrder := 1;
-         EngineerOrder := 1;
-         if EngineerIndex = 0 and PlayerShip.Speed /= FULL_STOP then
-            PlayerShip.Speed := FULL_STOP;
-         end if;
+      if FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType) = 0 then
+         AddMessage
+           ("Ship fall from sky due to lack of fuel.", OtherMessage, 3);
+         Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
+         EndCombat := True;
+         return;
       end if;
       if PilotIndex > 0 then
          case PilotOrder is
@@ -982,7 +978,7 @@ package body Combat is
            AccuracyBonus -
            GetSkillLevel(Enemy.Ship.Crew(EnemyPilotIndex), PilotingSkill);
       end if;
-      if EngineerIndex > 0 and HaveFuel then
+      if EngineerIndex > 0 then
          Message :=
            To_Unbounded_String(ChangeShipSpeed(ShipSpeed'Val(EngineerOrder)));
          if Length(Message) > 0 then
