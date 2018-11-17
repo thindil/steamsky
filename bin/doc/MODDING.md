@@ -505,39 +505,52 @@ Value must be existing skill name.
 
 ### General informations
 - Default game mobiles are in *mobs.dat* file which is in *data* directory.
-- To remove existing mobile from game, you can delete it from *mobs.dat* or in
-  modification file add tag `mobile` with attribute `index` which value will
-  be index of mobile to remove and attribute `action` with value `remove`.
+- If you want remove or update any existing mobile, you can do it in *mobs.dat*
+  file in *data* directory or in modification file (better option) add tag
+  `mobile` with attribute `index` which value will be index of selected mobile
+  and attribute `action`. Then if you modify existing mobile, add changed
+  values.
 
 ### Mob data structure
 - Each mobile starts with tag `mobile`.
 - Attribute `index` is is a mobile index (it can be number or text) and must be
   unique. At this moment this value is used to set crew on ships.
 - Optional attribute `action`: what to do with this entry. Possible values
-  are: "add" (add this entry, default option) or "remove" (remove this entry).
+  are: "add" (add this entry, default option), "remove" (remove this entry)
+  or "update" (update selected entry).
 - Attribute `order`: current ship order of selected mob. Possible values are:
   Pilot, Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean, Rest,
   Defend, Boarding.
-- Tag `skill` define skill of mobile. Attribute `name` is name of skill (from
-  *game.dat* from *data* directory). If mobile should have constant level of
-  skill, add attribute `level` with level of selected skill. If mobile should
-  have random level of skill, add attribute `minlevel` with minimum level of
-  skill and attribute `maxlevel` with maximum level of skill.
+- Tag `skill` define skill of mobile.
+- Attribute `name` is name of skill (from *game.dat* from *data* directory).
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option), "remove" (remove this entry)
+  or "update" (update selected entry).
+- If mobile should have constant level of skill, add attribute `level` with
+  level of selected skill. If mobile should have random level of skill, add
+  attribute `minlevel` with minimum level of skill and attribute `maxlevel`
+  with maximum level of skill.
 - Tag `attribute` define attribute of mobile. If mobile should have constant
   level of attribute, add attribute `level` with level of selected attribute.
   If mobile should have random level of attribute, add attributes `minlevel`
   with minimum level of attribute and attribute `maxlevel` with maximum level
-  of attribute.
+  of attribute. If you want update attribute of mob, you must add all
+  attributes values.
 - Tag `priority` define orders priorities of mobile. Attribute `name` can have
   value: Piloting, Engineering, Operating guns, Repair ship, Manufacturing,
   Upgrading ship, Talking in bases, Healing wounded, Cleaning ship, Defend ship,
   Board enemy ship. Attribute `value` can have value Normal or High (only
   one High per mobile).
-- Tag `item` define item in mobile inventory. Attribute `index` is index of
-  item from files from *items* directory. If mobile should have constant amount
-  of item, add attribute `amount` with amount of item. If mobile should have
-  random amount of item, add attribute `minamount` with minimum amount of item
-  and attribute `maxamount` with maximum amount of item.
+- Tag `item` define item in mobile inventory.
+- Attribute `index` is index of item from files (from *items.dat* file from
+  *data* directory).
+- If mobile should have constant amount of item, add attribute `amount` with
+  amount of item. If mobile should have random amount of item, add attribute
+  `minamount` with minimum amount of item and attribute `maxamount` with
+  maximum amount of item.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option), "remove" (remove this entry)
+  or "update" (update selected entry).
 - Tag `equipment` define which items are used by mobile. Attribute `index` is
   item index from inventory. Item index always starts with 1. Attribute `slot`
   is name of equipment slot in which selected item is set. Possible values for
