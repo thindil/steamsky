@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Log entry about removed mob
 - Scrolling messages list to last message
 - Even more autoresize GUI elements on mouse hover (issue #31)
+- Dying in combat from lack of fuel
 
 ## [3.0] - 2018-11-04
 
