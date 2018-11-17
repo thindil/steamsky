@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
@@ -49,8 +50,10 @@ package body Mobs is
          To_Unbounded_String("Head"), To_Unbounded_String("Torso"),
          To_Unbounded_String("Arms"), To_Unbounded_String("Legs"),
          To_Unbounded_String("Tool"));
-      Action: Unbounded_String;
+      Action, SubAction: DataAction;
       MobNode, ChildNode: Node;
+      MobIndex, ChildIndex: Natural;
+      DeleteIndex: Positive;
    begin
       TempRecord :=
         (Index => Null_Unbounded_String, Skills => TempSkills,
@@ -64,32 +67,101 @@ package body Mobs is
          MobNode := Item(NodesList, I);
          TempRecord.Index :=
            To_Unbounded_String(Get_Attribute(MobNode, "index"));
-         Action := To_Unbounded_String(Get_Attribute(MobNode, "action"));
-         if Action = Null_Unbounded_String or
-           Action = To_Unbounded_String("add") then
+         if Get_Attribute(MobNode, "action")'Length > 0 then
+            Action := DataAction'Value(Get_Attribute(MobNode, "action"));
+         else
+            Action := ADD;
+         end if;
+         MobIndex := FindProtoMob(TempRecord.Index);
+         if (Action = UPDATE or Action = REMOVE) then
+            if MobIndex = 0 then
+               raise Data_Loading_Error
+                 with "Can't " & To_Lower(DataAction'Image(Action)) &
+                 " mob '" & To_String(TempRecord.Index) &
+                 "', there no mob with that index.";
+            end if;
+         elsif MobIndex > 0 then
+            raise Data_Loading_Error
+              with "Can't add mob '" & To_String(TempRecord.Index) &
+              "', there is one with that index.";
+         end if;
+         if Action /= REMOVE then
+            if Action = UPDATE then
+               TempRecord := ProtoMobs_List(MobIndex);
+            end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "skill");
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
-               if Get_Attribute(ChildNode, "level") /= "" then
-                  TempRecord.Skills.Append
-                    (New_Item =>
-                       (FindSkillIndex
-                          (To_Unbounded_String
-                             (Get_Attribute(ChildNode, "name"))),
-                        Integer'Value(Get_Attribute(ChildNode, "level")), 0));
-               else
-                  TempRecord.Skills.Append
-                    (New_Item =>
-                       (FindSkillIndex
-                          (To_Unbounded_String
-                             (Get_Attribute(ChildNode, "name"))),
-                        Integer'Value(Get_Attribute(ChildNode, "minlevel")),
-                        Integer'Value(Get_Attribute(ChildNode, "maxlevel"))));
+               ChildIndex :=
+                 FindSkillIndex
+                   (To_Unbounded_String(Get_Attribute(ChildNode, "name")));
+               if ChildIndex = 0 then
+                  raise Data_Loading_Error
+                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    " mob '" & To_String(TempRecord.Index) &
+                    "', there no skill named '" &
+                    Get_Attribute(ChildNode, "name") & "'.";
                end if;
+               if Get_Attribute(ChildNode, "action")'Length > 0 then
+                  SubAction :=
+                    DataAction'Value(Get_Attribute(ChildNode, "action"));
+               else
+                  SubAction := ADD;
+               end if;
+               case SubAction is
+                  when ADD =>
+                     if Get_Attribute(ChildNode, "level")'Length /= 0 then
+                        TempRecord.Skills.Append
+                          (New_Item =>
+                             (ChildIndex,
+                              Integer'Value(Get_Attribute(ChildNode, "level")),
+                              0));
+                     else
+                        TempRecord.Skills.Append
+                          (New_Item =>
+                             (ChildIndex,
+                              Integer'Value
+                                (Get_Attribute(ChildNode, "minlevel")),
+                              Integer'Value
+                                (Get_Attribute(ChildNode, "maxlevel"))));
+                     end if;
+                  when UPDATE =>
+                     for Skill of TempRecord.Skills loop
+                        if Skill(1) = ChildIndex then
+                           if Get_Attribute(ChildNode, "level")'Length /=
+                             0 then
+                              Skill :=
+                                (ChildIndex,
+                                 Integer'Value
+                                   (Get_Attribute(ChildNode, "level")),
+                                 0);
+                           else
+                              Skill :=
+                                (ChildIndex,
+                                 Integer'Value
+                                   (Get_Attribute(ChildNode, "minlevel")),
+                                 Integer'Value
+                                   (Get_Attribute(ChildNode, "maxlevel")));
+                           end if;
+                           exit;
+                        end if;
+                     end loop;
+                  when REMOVE =>
+                     for K in TempRecord.Skills.Iterate loop
+                        if TempRecord.Skills(K)(1) = ChildIndex then
+                           DeleteIndex := Skills_Container.To_Index(K);
+                           exit;
+                        end if;
+                     end loop;
+                     TempRecord.Skills.Delete(Index => DeleteIndex);
+               end case;
             end loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "attribute");
+            if Length(ChildNodes) > 0 and ACTION = UPDATE then
+               TempRecord.Attributes.Clear;
+            end if;
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                if Get_Attribute(ChildNode, "level") /= "" then
@@ -119,28 +191,78 @@ package body Mobs is
                   end if;
                end loop;
             end loop;
-            TempRecord.Order :=
-              Crew_Orders'Value(Get_Attribute(MobNode, "order"));
+            if Get_Attribute(MobNode, "order")'Length > 0 then
+               TempRecord.Order :=
+                 Crew_Orders'Value(Get_Attribute(MobNode, "order"));
+            end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "item");
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
-               if Get_Attribute(ChildNode, "amount") /= "" then
-                  TempRecord.Inventory.Append
-                    (New_Item =>
-                       (FindProtoItem
-                          (To_Unbounded_String
-                             (Get_Attribute(ChildNode, "index"))),
-                        Integer'Value(Get_Attribute(ChildNode, "amount")), 0));
-               else
-                  TempRecord.Inventory.Append
-                    (New_Item =>
-                       (FindProtoItem
-                          (To_Unbounded_String
-                             (Get_Attribute(ChildNode, "index"))),
-                        Integer'Value(Get_Attribute(ChildNode, "minamount")),
-                        Integer'Value(Get_Attribute(ChildNode, "maxamount"))));
+               ChildIndex :=
+                 FindProtoItem
+                   (To_Unbounded_String(Get_Attribute(ChildNode, "index")));
+               if ChildIndex = 0 then
+                  raise Data_Loading_Error
+                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    " mob '" & To_String(TempRecord.Index) &
+                    "', there no item with index '" &
+                    Get_Attribute(ChildNode, "index") & "'.";
                end if;
+               if Get_Attribute(ChildNode, "action")'Length > 0 then
+                  SubAction :=
+                    DataAction'Value(Get_Attribute(ChildNode, "action"));
+               else
+                  SubAction := ADD;
+               end if;
+               case SubAction is
+                  when ADD =>
+                     if Get_Attribute(ChildNode, "amount")'Length /= 0 then
+                        TempRecord.Inventory.Append
+                          (New_Item =>
+                             (ChildIndex,
+                              Integer'Value
+                                (Get_Attribute(ChildNode, "amount")),
+                              0));
+                     else
+                        TempRecord.Inventory.Append
+                          (New_Item =>
+                             (ChildIndex,
+                              Integer'Value
+                                (Get_Attribute(ChildNode, "minamount")),
+                              Integer'Value
+                                (Get_Attribute(ChildNode, "maxamount"))));
+                     end if;
+                  when UPDATE =>
+                     for Item of TempRecord.Inventory loop
+                        if Item(1) = ChildIndex then
+                           if Get_Attribute(ChildNode, "amount")'Length /=
+                             0 then
+                              Item :=
+                                (ChildIndex,
+                                 Integer'Value
+                                   (Get_Attribute(ChildNode, "amount")),
+                                 0);
+                           else
+                              Item :=
+                                (ChildIndex,
+                                 Integer'Value
+                                   (Get_Attribute(ChildNode, "minamount")),
+                                 Integer'Value
+                                   (Get_Attribute(ChildNode, "maxamount")));
+                           end if;
+                           exit;
+                        end if;
+                     end loop;
+                  when REMOVE =>
+                     for K in TempRecord.Inventory.Iterate loop
+                        if TempRecord.Inventory(K)(1) = ChildIndex then
+                           DeleteIndex := Skills_Container.To_Index(K);
+                           exit;
+                        end if;
+                     end loop;
+                     TempRecord.Inventory.Delete(Index => DeleteIndex);
+               end case;
             end loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "equipment");
@@ -155,11 +277,17 @@ package body Mobs is
                   end if;
                end loop;
             end loop;
-            ProtoMobs_List.Append(New_Item => TempRecord);
-            LogMessage
-              ("Mob added: " & To_String(TempRecord.Index), Everything);
+            if Action /= UPDATE then
+               ProtoMobs_List.Append(New_Item => TempRecord);
+               LogMessage
+                 ("Mob added: " & To_String(TempRecord.Index), Everything);
+            else
+               ProtoMobs_List(MobIndex) := TempRecord;
+               LogMessage
+                 ("Mob updated: " & To_String(TempRecord.Index), Everything);
+            end if;
          else
-            Items_List.Delete(Index => FindProtoMob(TempRecord.Index));
+            Items_List.Delete(Index => MobIndex);
             LogMessage
               ("Mob removed: " & To_String(TempRecord.Index), Everything);
          end if;
