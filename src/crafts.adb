@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Exceptions; use Ada.Exceptions;
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
@@ -41,9 +42,10 @@ package body Crafts is
       RecipesData: Document;
       NodesList, ChildNodes: Node_List;
       ItemIndex, RecipeIndex, SkillIndex, Amount, DeleteIndex: Natural;
-      Action, Value: Unbounded_String;
+      Value: Unbounded_String;
       RecipeNode, ChildNode: Node;
       MaterialAdded: Boolean;
+      Action: DataAction;
    begin
       TempRecord :=
         (MaterialTypes => TempMaterials, MaterialAmounts => TempAmount,
@@ -58,14 +60,16 @@ package body Crafts is
          TempRecord.Index :=
            To_Unbounded_String(Get_Attribute(RecipeNode, "index"));
          RecipeIndex := FindRecipe(TempRecord.Index);
-         Action := To_Unbounded_String(Get_Attribute(RecipeNode, "action"));
-         if
-           (Action = To_Unbounded_String("update") or
-            Action = To_Unbounded_String("remove")) then
+         if Get_Attribute(RecipeNode, "action")'Length > 0 then
+            Action := DataAction'Value(Get_Attribute(RecipeNode, "action"));
+         else
+            Action := ADD;
+         end if;
+         if (Action = UPDATE or Action = REMOVE) then
             if RecipeIndex = 0 then
                raise Data_Loading_Error
-                 with "Can't " & To_String(Action) & " recipe '" &
-                 To_String(TempRecord.Index) &
+                 with "Can't " & To_Lower(DataAction'Image(Action)) &
+                 " recipe '" & To_String(TempRecord.Index) &
                  "', there no recipe with that index.";
             end if;
          elsif RecipeIndex > 0 then
@@ -73,8 +77,8 @@ package body Crafts is
               with "Can't add recipe '" & To_String(TempRecord.Index) &
               "', there is one with that index.";
          end if;
-         if Action /= To_Unbounded_String("remove") then
-            if Action = To_Unbounded_String("update") then
+         if Action /= REMOVE then
+            if Action = UPDATE then
                TempRecord := Recipes_List(RecipeIndex);
             end if;
             ChildNodes :=
@@ -157,7 +161,7 @@ package body Crafts is
                TempRecord.Tool :=
                  To_Unbounded_String(Get_Attribute(RecipeNode, "tool"));
             end if;
-            if Action /= To_Unbounded_String("update") then
+            if Action /= UPDATE then
                Recipes_List.Append(New_Item => TempRecord);
                LogMessage
                  ("Recipe added: " &
