@@ -302,17 +302,19 @@ Value must be existing skill name.
 ### General informations
 - Default game ship modules are in *shipmodules.dat* file which is in *data*
   directory.
-- To remove existing ship module from game, you can delete it from
-  *shipmodules.dat* or in modification file add tag `module` with attribute
-  `index` which value will be index of ship module to remove and attribute
-  `action` with value `remove`.
+- If you want remove or update any existing ship module, you can do it in
+  *shipmodules.dat* file in *data* directory or in modification file (better
+  option) add tag `module` with attribute `index` which value will be index of
+  selected ship module and attribute `action`. Then if you modify existing ship
+  module, add changed values.
 
 ### Ship module data structure
 - Each ship module starts with tag `module`.
 - Attribute `index` is a module index (it can be number or text) and must be
   unique. This value is used in ships data entries.
 - Optional attribute `action`: what to do with this entry. Possible values
-  are: "add" (add this entry, default option) or "remove" (remove this entry).
+  are: "add" (add this entry, default option), "remove" (remove this entry)
+  or "update" (update selected entry).
 - Attribute `name`: Standard name of module. Will be visible in ship info screen
   and in shipyards.
 - Attribute `type`: Type of module. Available options are: Engine, Cabin, Cockpit,
