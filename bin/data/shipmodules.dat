@@ -4,7 +4,8 @@
 - Attribute "index" is a module index (it can be number or text) and must be
 unique. This value is used in ships data entries. 
 - Optional attribute `action`: what to do with this entry. Possible values
-are: "add" (add this entry, default option) or "remove" (remove this entry).
+are: "add" (add this entry, default option), "remove" (remove this entry) or
+"update" (update selected entry).
 - Attribute "name": Standard name of module. Will be visible in ship info 
 screen and in shipyards. 
 - Attribute "type": Type of module. Available options are: Engine, Cabin, 
