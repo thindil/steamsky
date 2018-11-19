@@ -1,46 +1,50 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ships>
-<!-- 
-- Each ship is between "ship" tags. 
+<!--
+- Each ship is between "ship" tags.
 - Attribute "index" is a index (it can be number or text) and must be unique.
 This value is used at this moment to set player ship and in Destroy types of
 goals.
 - Optional attribute `action`: what to do with this entry. Possible values
-are: "add" (add this entry, default option) or "remove" (remove this entry).
-- Attribute "name": Type of ship. Will be visible during combat information. 
+are: "add" (add this entry, default option), "remove" (remove this entry) or
+"update" (update selected entry).
+- Attribute "name": Type of ship. Will be visible during combat information.
 If you want that ship will be used in friendly trader random event, you must
 have word which you set in *game.dat* as *TraderNames* in ship name. Example:
 if you use *trader* word, ship name can be *small poleis trader*.
 - Attribute "accuracy": Bonus to accuracy for ship.
 - Attributes "minaccuracy" and "maxaccuracy": If bonus to accuracy for ship
-should be random, add attribute "minaccuracy" for minimum value and 
+should be random, add attribute "minaccuracy" for minimum value and
 "maxaccuracy" for maximum value.
-- Attribute "combatai": Behavior of ship in combat (NPC ships only). Possible 
-values are: Berserker - attack to end, no matter how heavy damage take. 
-Attacker - aggressive but will be run away from combat when lost all 
-ammunition or weapons. Coward - try run from combat, attack only in 
+- Attribute "combatai": Behavior of ship in combat (NPC ships only). Possible
+values are: Berserker - attack to end, no matter how heavy damage take.
+Attacker - aggressive but will be run away from combat when lost all
+ammunition or weapons. Coward - try run from combat, attack only in
 self-defense. Disarmer - same as Attacker but first aim for player ship weapons
 before start destroying ship.
 - Attribute "evasion": Bonus to evasion for ship.
 - Attributes "minevasion" and "maxevasion": If bonus to evasion for ship should
-be random, add attribute "minevasion" for minimum value and "maxevasion" for 
+be random, add attribute "minevasion" for minimum value and "maxevasion" for
 maximum value.
 - Attribute "loot": Amount of money earned for destroying that ship.
-- Attributes "minloot" and "maxloot": If amount of earned money for destroying 
-that ship should be random, add attribute "minloot" for minimum value and 
+- Attributes "minloot" and "maxloot": If amount of earned money for destroying
+that ship should be random, add attribute "minloot" for minimum value and
 "maxloot" for maximum value.
 - Attribute "perception": Bonus to perception for ship.
-- Attributes "minperception" and "maxperception": If bonus to perception for 
-ship should be random, add attribute "minperception" for minimum value and 
+- Attributes "minperception" and "maxperception": If bonus to perception for
+ship should be random, add attribute "minperception" for minimum value and
 "maxperception" for maximum value.
-- Attribute "owner": Which fraction own ship. Possible values are: Poleis, 
+- Attribute "owner": Which fraction own ship. Possible values are: Poleis,
 Independent, Pirates, Undead, Drones, Inquisition.
 -->
  <ship index="1" name="Player Ship" owner="POLEIS">
-<!-- Tag "module": Ship module installed on selected ship. 
-- Attribute "index" is module index from files from *shipmodules* directory. 
+<!-- Tag "module": Ship module installed on selected ship.
+- Attribute "index" is module index from files from *shipmodules* directory.
 - Attribute"amount" is optional: if ship should have more than one that module,
-just add attribute "amount" with number of modules.-->
+just add attribute "amount" with number of modules.
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option) or "remove" (remove this entry).
+-->
   <module index="1"/>
   <module index="2"/>
   <module index="3"/>
@@ -50,11 +54,15 @@ just add attribute "amount" with number of modules.-->
   <module amount="2" index="7"/>
   <module index="8"/>
   <module index="9"/>
-<!-- Tag "cargo": Item in cargo of ship. 
-- Attribute "index" is index of item from files from *items* directory. 
-If amount of that item should be constant, add attribute "amount" with proper 
+<!-- Tag "cargo": Item in cargo of ship.
+- Attribute "index" is index of item from files from *items* directory.
+- If amount of that item should be constant, add attribute "amount" with proper
 value. If amount of that item should be random, add attributes "minamount" with
-minimum amount and attribute "maxamount" with maximum amount of that item.-->
+minimum amount and attribute "maxamount" with maximum amount of that item.
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option), "remove" (remove this entry) or
+"update" (update selected entry).
+-->
   <cargo amount="2000" index="1"/>
   <cargo amount="100" index="2"/>
   <cargo amount="200" index="3"/>
@@ -67,18 +75,25 @@ minimum amount and attribute "maxamount" with maximum amount of that item.-->
   <cargo amount="4" index="61"/>
   <cargo amount="1" index="53"/>
   <cargo amount="10" index="22"/>
-<!-- Tag "recipe": Know recipe (player ship only). 
-- Attribute "index" is recipe index from files from *recipes*. -->
+<!-- Tag "recipe": Know recipe (player ship only).
+- Attribute "index" is recipe index from files from *recipes*.
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option) or "remove" (remove this entry).
+-->
   <recipe index="1"/>
   <recipe index="2"/>
   <recipe index="4"/>
   <recipe index="20"/>
-<!-- Tag "member": meber of crew of ship. 
-- Attribute "index" is mobile index from files form *mobs* directory. 
-If ship should have more than one that same mobile if crew, add 
-attribute "amount". If ship should have more than one that same mobile and 
-amount should be random, add attributes "minamount" for minimum amount of 
-that mobile and attribute "maxamount" for maximum amount of that mobile. -->
+<!-- Tag "member": meber of crew of ship.
+- Attribute "index" is mobile index from files form *mobs* directory.
+- If ship should have more than one that same mobile if crew, add
+attribute "amount". If ship should have more than one that same mobile and
+amount should be random, add attributes "minamount" for minimum amount of
+that mobile and attribute "maxamount" for maximum amount of that mobile.
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option), "remove" (remove this entry) or
+"update" (update selected entry).
+-->
   <member index="2"/>
   <member index="3"/>
   <member index="4"/>
