@@ -32,3 +32,4 @@ All notable changes to this project will be documented in this file.
 - Scrolling messages lists to last messsage
 - Even more autoresize GUI elements on mouse hover (issue #31)
 - Dying in combat from lack of fuel
+- Index for small steel training room
