@@ -37,7 +37,7 @@ package body Goals is
       TempRecord: Goal_Data;
       NodesList: Node_List;
       GoalsData: Document;
-      Action: Unbounded_String;
+      Action: DataAction;
       GoalIndex: Natural;
       GoalNode: Node;
    begin
@@ -51,7 +51,11 @@ package body Goals is
          GoalNode := Item(NodesList, I);
          TempRecord.Index :=
            To_Unbounded_String(Get_Attribute(GoalNode, "index"));
-         Action := To_Unbounded_String(Get_Attribute(GoalNode, "action"));
+         if Get_Attribute(GoalNode, "action")'Length > 0 then
+            Action := DataAction'Value(Get_Attribute(GoalNode, "action"));
+         else
+            Action := ADD;
+         end if;
          GoalIndex := 0;
          for J in Goals_List.Iterate loop
             if Goals_List(J).Index = TempRecord.Index then
@@ -59,13 +63,11 @@ package body Goals is
                exit;
             end if;
          end loop;
-         if
-           (Action = To_Unbounded_String("update") or
-            Action = To_Unbounded_String("remove")) then
+         if (Action = UPDATE or Action = REMOVE) then
             if GoalIndex = 0 then
                raise Data_Loading_Error
-                 with "Can't " & To_String(Action) & " goal '" &
-                 To_String(TempRecord.Index) &
+                 with "Can't " & To_Lower(DataAction'Image(Action)) &
+                 " goal '" & To_String(TempRecord.Index) &
                  "', there no goal with that index.";
             end if;
          elsif GoalIndex > 0 then
@@ -73,8 +75,8 @@ package body Goals is
               with "Can't add goal '" & To_String(TempRecord.Index) &
               "', there is one with that index.";
          end if;
-         if Action /= To_Unbounded_String("remove") then
-            if Action = To_Unbounded_String("update") then
+         if Action /= REMOVE then
+            if Action = UPDATE then
                TempRecord := Goals_List(GoalIndex);
             end if;
             if Get_Attribute(GoalNode, "type") /= "" then
@@ -93,7 +95,7 @@ package body Goals is
                TempRecord.Multiplier :=
                  Natural'Value(Get_Attribute(GoalNode, "multiplier"));
             end if;
-            if Action /= To_Unbounded_String("update") then
+            if Action /= UPDATE then
                Goals_List.Append(New_Item => TempRecord);
                LogMessage
                  ("Goal added: " & To_String(TempRecord.Index), Everything);
