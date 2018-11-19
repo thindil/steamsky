@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Scrolling messages list to last message
 - Even more autoresize GUI elements on mouse hover (issue #31)
 - Dying in combat from lack of fuel
+- Index for small steel training room
 
 ## [3.0] - 2018-11-04
 
