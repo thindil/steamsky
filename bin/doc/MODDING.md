@@ -352,9 +352,10 @@ Value must be existing skill name.
 
 ### General informations
 - Default game ships are in *ships.dat* file which is in *data* directory.
-- To remove existing ship from game, you can delete it from *ships.dat* or in
-  modification file add tag `ship` with attribute `index` which value will be
-  index of ship to remove and attribute `action` with value `remove`.
+- If you want remove or update any existing ship, you can do it in *ships.dat*
+  file in *data* directory or in modification file (better option) add tag
+  `ship` with attribute `index` which value will be index of selected ship and
+  attribute `action`. Then if you modify existing ship, add changed values.
 
 ### Ship data structure
 - Each ship is between `ship` tags.
@@ -362,15 +363,18 @@ Value must be existing skill name.
   This value is used at this moment to set player ship and in Destroy types of
   goals.
 - Optional attribute `action`: what to do with this entry. Possible values
-  are: "add" (add this entry, default option) or "remove" (remove this entry).
+  are: "add" (add this entry, default option), "remove" (remove this entry)
+  or "update" (update selected entry).
 - Attribute `name`: Type of ship. Will be visible during combat information.
   If you want that ship will be used in friendly trader random event, you must
   have word which you set in *game.dat* as *TraderNames* in ship name. Example:
   if you use *trader* word, ship name can be *small poleis trader*.
-- Tags `module`: List of ship modules installed on selected ship. Attribute
-  `index` is module index from files from *shipmodules* directory. Attribute
-  `amount` is optional: if ship should have more than one that module, just
-  add attribute `amount` with number of modules.
+- Tags `module`: List of ship modules installed on selected ship.
+- Attribute`index` is module index from files from *shipmodules* directory.
+- Attribute `amount` is optional: if ship should have more than one that module,
+  just add attribute `amount` with number of modules.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Attribute `accuracy`: Bonus to accuracy for ship.
 - Attributes `minaccuracy` and `maxaccuracy`: If bonus to accuracy for ship
   should be random, add attribute `minaccuracy` for minimum value and
@@ -393,23 +397,32 @@ Value must be existing skill name.
 - Attributes `minperception` and `maxperception`: If bonus to perception for
   ship should be random, add attribute `minperception` for minimum value and
   `maxperception` for maximum value.
-- Tags `cargo`: List of items in cargo of ship. Attribute `index` is index of
-  item from files from *items* directory. If amount of that item should be
-  constant, add attribute `amount` with proper value. If amount of that item
-  should be random, add attributes `minamount` with minimum amount and attribute
-  `maxamount` with maximum amount of that item.
+- Tags `cargo`: List of items in cargo of ship.
+- Attribute `index` is index of item from files from *items* directory. If
+  amount of that item should be constant, add attribute `amount` with proper
+  value. If amount of that item should be random, add attributes `minamount`
+  with minimum amount and attribute `maxamount` with maximum amount of that
+  item.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option), "remove" (remove this entry)
+  or "update" (update selected entry).
 - Tag `description`: Description of ship (NPC ships only). Will be displayed
   during combat.
 - Attribute `owner`: Which fraction own ship. Possible values are: Poleis,
   Independent, Pirates, Undead, Drones, Inquisition.
-- Tags `recipes`: List of know recipes. Attribute `index` is recipe index from
-  files from *recipes* directory (player ship only).
-- Tags `member`: List of crew members. Attribute `index` is mobile index from
-  files form *mobs* directory. If ship should have more than one that same
-  mobile if crew, add attribute `amount`. If ship should have more than one
-  that same mobile and amount should be random, add attributes `minamount` for
-  minimum amount of that mobile and attribute `maxamount` for maximum amount of
-  that mobile.
+- Tags `recipes`: List of know recipes. (player ships only).
+- Attribute `index` is recipe index from files from *recipes* directory.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option) or "remove" (remove this entry).
+- Tags `member`: List of crew members.
+- Attribute `index` is mobile index from files form *mobs* directory. If ship
+  should have more than one that same mobile if crew, add attribute `amount`.
+  If ship should have more than one that same mobile and amount should be
+  random, add attributes `minamount` for minimum amount of that mobile and
+  attribute `maxamount` for maximum amount of that mobile.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option), "remove" (remove this entry)
+  or "update" (update selected entry).
 
 ## Help
 
