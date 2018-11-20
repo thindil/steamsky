@@ -39,13 +39,17 @@ package body Events.UI is
 
    Builder: Gtkada_Builder;
    EventIndex: Positive;
+   Cleaning: Boolean;
 
    procedure ShowEventInfo(Object: access Gtkada_Builder_Record'Class) is
       EventsIter: Gtk_Tree_Iter;
       EventsModel: Gtk_Tree_Model;
       EventInfo: Unbounded_String;
-      BaseIndex: Natural;
+      BaseIndex: Integer;
    begin
+      if Cleaning then
+         return;
+      end if;
       Get_Selected
         (Gtk.Tree_View.Get_Selection
            (Gtk_Tree_View(Get_Object(Object, "treeevents"))),
@@ -126,7 +130,9 @@ package body Events.UI is
       EventsList: Gtk_List_Store;
    begin
       EventsList := Gtk_List_Store(Get_Object(Builder, "eventslist"));
+      Cleaning := True;
       Clear(EventsList);
+      Cleaning := False;
       for I in Events_List.First_Index .. Events_List.Last_Index loop
          Append(EventsList, EventsIter);
          case Events_List(I).EType is
