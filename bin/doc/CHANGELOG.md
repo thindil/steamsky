@@ -34,3 +34,4 @@ All notable changes to this project will be documented in this file.
 - Even more autoresize GUI elements on mouse hover (issue #31)
 - Dying in combat from lack of fuel
 - Index for small steel training room
+- Crash on showing know events list
