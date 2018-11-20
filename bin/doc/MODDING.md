@@ -669,9 +669,11 @@ Value must be existing skill name.
 
 ### General informations
 - Default game stories are in *stories.dat* file which is in *data* directory.
-- To remove existing story from game, you can delete it from *stories.dat* or
-  in modification file add tag `story` with attribute `index` which value will
-  be index of story to remove and attribute `action` with value `remove`.
+- If you want remove or update any existing story, you can do it in
+  *stories.dat* file in *data* directory or in modification file (better
+  option) add tag `story` with attribute `index` which value will be index of
+  selected ship and attribute `action`. Then if you modify existing ship, add
+  changed values.
 
 ### Story data structure
 - Each story is between "story" tags.
@@ -679,7 +681,8 @@ Value must be existing skill name.
   unique. At this moment this value is used to manage current story in which
   player is involved.
 - Optional attribute `action`: what to do with this entry. Possible values
-  are: "add" (add this entry, default option) or "remove" (remove this entry).
+  are: "add" (add this entry, default option), "remove" (remove this entry)
+  or "update" (update selected entry).
 - Attribute `start`: condition which must be met to start that story. Possible
   values are: dropitem - story starts on drop selected item from enemies from
   selected faction.
@@ -692,33 +695,43 @@ story.
 - Tags `startdata`: contains data needed for story starting condition. For
   "dropitem" it will be index of item which should drop, mob faction from which
   item will be dropped, chance (1 to that number) for drop.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Tag `endtext`: text which will be show to player when he/she finish story.
 - Tags `forbiddenfaction`: if player is in that faction, he can't start this
   story.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Tag `step` contains data for step of story.
 - Attribute `finish`: condition which must be met to finish this step. Possible
   values are: `askinbase` - go to next step when player ask about something in
   any or selected base, `destroyship` - go to next step when player destroy
   selected ship, `explore` - go to next step when player search selected map
   field.
-- Tags `finishdata`: contains data needed for finish selected step. Attribute
-  `name` is name of data. Possible values: `item` - item index (for `askinbase`
-  and `loot` steps), `base` - ask in any base (value `any`) or randomly
-  selected (value `selected`) needed for `askinbase` steps. Names `faction` -
-  index of faction to which ship belongs, `ship` - index of ship which must be
-  destroyed (for `destroyship` and `loot` steps), `random` value if enemy ship
-  should be selected randomly or `any` for any enemy ship (for `loot` step only).
-  Names `x` and `y` are location on map where player must go to progress in
-  story. Value `random` mean randomly selected place on map or numeric
-  coordinates of map field. Both used by `destroyship` and `explore` steps.
-  Name `condition` is used by all steps and mean which skill should be used
-  for check did step will progress to next, or value `random` for random
+- Tags `finishdata`: contains data needed for finish selected step.
+- Attribute `name` is name of data. Possible values: `item` - item index (for
+  `askinbase` and `loot` steps), `base` - ask in any base (value `any`) or
+  randomly selected (value `selected`) needed for `askinbase` steps. Names
+  `faction` - index of faction to which ship belongs, `ship` - index of ship
+  which must be destroyed (for `destroyship` and `loot` steps), `random` value
+  if enemy ship should be selected randomly or `any` for any enemy ship (for
+  `loot` step only). Names `x` and `y` are location on map where player must go
+  to progress in story. Value `random` mean randomly selected place on map or
+  numeric coordinates of map field. Both used by `destroyship` and `explore`
+  steps. Name `condition` is used by all steps and mean which skill should be
+  used for check did step will progress to next, or value `random` for random
   chance. Name `chance` is used by all steps and mean chance (1 to that number
   for `random` condition or Skill + roll from 1 to 100) that step will
   progress to next.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option), "remove" (remove this entry)
+  or "update" (update selected entry).
 - Tag `text`: text which will be show to player when step starts. Attribute
   `condition`: finish condition of previous step which was lead to this one.
   Possible values: `any`, `askinbase` and `destroyship`.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option), "remove" (remove this entry)
+  or "update" (update selected entry).
 - Tag `failtext`: text which will be show to player if step not progress to
   next.
 
