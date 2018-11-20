@@ -5,7 +5,8 @@
 unique. At this moment this value is used to manage current story in which
 player is involved.
 - Optional attribute `action`: what to do with this entry. Possible values
-are: "add" (add this entry, default option) or "remove" (remove this entry).
+are: "add" (add this entry, default option), "remove" (remove this entry) or
+"update" (update selected entry).
 - Attribute "start": condition which must be met to start that story. Possible
 values are: dropitem - story starts on drop selected item from enemies from
 selected faction.
@@ -18,9 +19,13 @@ story.
 - Tags "startdata": contains data needed for story starting condition. For
 "dropitem" it will be index of item which should drop, mob faction from which
 item will be dropped, chance (1 to that number) for drop.
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Tag "endtext": text which will be show to player when he/she finish story.
 - Tags "forbiddenfaction": if player is in that faction, he can't start this
 story.
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option) or "remove" (remove this entry).
 -->
  <story index="1" start="dropitem" minsteps="3" maxsteps="10" startstep="1" finalstep="4" name="Strange find">
   <startdata value="164" />
@@ -35,25 +40,34 @@ values are: "askinbase" - go to next step when player ask about something in
 any or selected base, "destroyship" - go to next step when player destroy
 selected ship, "explore" - go to next step when player search selected map
 field, "loot" - loot selected item from enemy ship.
-- Tags "finishdata": contains data needed for finish selected step. Attribute
-"name" is name of data. Possible values: "item" - item index (for "askinbase"
-and "loot" steps), "base" - ask in any base (value "any") or randomly 
-selected (value "selected") needed for "askinbase" steps. Names "faction" - 
-index of faction to which ship belongs, "ship" - index of ship which must be 
-destroyed (for "destroyship" and "loot" steps), "random" value if enemy ship
-should be selected randomly or "any" for any enemy ship (for "loot" step only).
-Names "x" and "y" are location on map where player must go to progress in 
-story. Value "random" mean randomly selected place on map or numeric 
-coordinates of map field. Both used by "destroyship" and "explore" steps.
-Name "condition" is used by all steps and mean which skill should be used
-for check did step will progress to next, or value "random" for random
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option), "remove" (remove this entry) or
+"update" (update selected entry).
+- Tags "finishdata": contains data needed for finish selected step.
+- Attribute "name" is name of data. Possible values: "item" - item index
+(for "askinbase" and "loot" steps), "base" - ask in any base (value "any") or
+randomly selected (value "selected") needed for "askinbase" steps. Names
+"faction" - index of faction to which ship belongs, "ship" - index of ship
+which must be destroyed (for "destroyship" and "loot" steps), "random" value if
+enemy ship should be selected randomly or "any" for any enemy ship (for "loot"
+step only). Names "x" and "y" are location on map where player must go to
+progress in story. Value "random" mean randomly selected place on map or
+numeric coordinates of map field. Both used by "destroyship" and "explore"
+steps. Name "condition" is used by all steps and mean which skill should be
+used for check did step will progress to next, or value "random" for random
 chance. Name "chance" is used by all steps and mean chance (1 to that number
-for "random" condition or Skill + roll from 1 to 100) that step will 
+for "random" condition or Skill + roll from 1 to 100) that step will
 progress to next.
-- Tag "text": text which will be show to player when step starts. Attribute
-"condition": finish condition of previous step which was lead to this one.
-Possible values: "any", "askinbase", "destroyship" and "explore".
-- Tag "failtext": text which will be show to player if step not progress to 
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option), "remove" (remove this entry) or
+"update" (update selected entry).
+- Tag "text": text which will be show to player when step starts.
+- Attribute "condition": finish condition of previous step which was lead to
+this one. Possible values: "any", "askinbase", "destroyship" and "explore".
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option), "remove" (remove this entry) or
+"update" (update selected entry).
+- Tag "failtext": text which will be show to player if step not progress to
 next.
 -->
   <step index="1" finish="askinbase">
