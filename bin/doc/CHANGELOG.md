@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
   undead ship mk VI, advanced huge undead ship mk VI, huge attacking drone mk
   VI, advanced huge attacking drone mk VI, huge inquisition ship mk VI and
   advanced huge inquisition ship mk VI
+- Few new mobs
 
 ### Changed
 - Raised maximum amount of modules for huge adamantium hull
