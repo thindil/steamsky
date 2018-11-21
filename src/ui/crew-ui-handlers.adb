@@ -232,7 +232,10 @@ package body Crew.UI.Handlers is
          begin
             for Skill of Member.Skills loop
                Append(List, Iter);
-               Set(List, Iter, 0, To_String(Skills_List(Skill(1)).Name));
+               Set
+                 (List, Iter, 0,
+                  To_String(Skills_List(Skill(1)).Name) & ": " &
+                  GetSkillLevelName(Skill(2)));
                Set(List, Iter, 1, Gint(Skill(2)));
                TooltipText := Null_Unbounded_String;
                Append(TooltipText, "Related statistic: ");
