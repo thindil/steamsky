@@ -91,7 +91,10 @@ package body Bases.RecruitUI is
       Clear(List);
       for Skill of Recruit.Skills loop
          Append(List, Iter);
-         Set(List, Iter, 0, To_String(Skills_List(Skill(1)).Name));
+         Set
+           (List, Iter, 0,
+            To_String(Skills_List(Skill(1)).Name) & ": " &
+            GetSkillLevelName(Skill(2)));
          Set(List, Iter, 1, Gint(Skill(2)));
          Set
            (List, Iter, 2,
