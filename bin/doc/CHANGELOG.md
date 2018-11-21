@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Removing game data
 - Updated MODDING.md
 - Final enemy for story with undead
+- Updated interface
 
 ### Fixed
 - Some typos in old changelog
