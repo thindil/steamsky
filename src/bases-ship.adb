@@ -37,9 +37,6 @@ package body Bases.Ship is
       end if;
       ProtoMoneyIndex := FindProtoItem(MoneyIndex);
       MoneyIndex2 := FindItem(PlayerShip.Cargo, ProtoMoneyIndex);
-      if MoneyIndex2 = 0 then
-         raise Trade_No_Money;
-      end if;
       TraderIndex := FindMember(Talk);
       CountPrice(Cost, TraderIndex);
       if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
