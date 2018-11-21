@@ -328,9 +328,6 @@ package body Bases is
       UnknownBases: Natural := 0;
    begin
       TraderIndex := FindMember(Talk);
-      if SkyBases(BaseIndex).AskedForBases or TraderIndex = 0 then
-         return;
-      end if;
       if BaseIndex > 0 then -- asking in base
          if SkyBases(BaseIndex).Population < 150 then
             Amount := 10;
@@ -451,10 +448,6 @@ package body Bases is
       PlayerShips: UnboundedString_Container.Vector;
    begin
       TraderIndex := FindMember(Talk);
-      if DaysDifference(SkyBases(BaseIndex).AskedForEvents) < 7 or
-        TraderIndex = 0 then
-         return;
-      end if;
       if BaseIndex > 0 then -- asking in base
          if SkyBases(BaseIndex).Population < 150 then
             MaxEvents := 5;
