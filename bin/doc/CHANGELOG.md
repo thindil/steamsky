@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Dying in combat from lack of fuel
 - Index for small steel training room
 - Crash on showing know events list
+- Crash on asking friendly ships for bases and events
 
 ## [3.0] - 2018-11-04
 
