@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
@@ -28,7 +29,7 @@ package body Help is
       TmpHelp: Help_Data;
       NodesList: Node_List;
       HelpData: Document;
-      Action: Unbounded_String;
+      Action: DataAction;
       HelpIndex: Natural;
       HelpNode: Node;
    begin
@@ -41,7 +42,11 @@ package body Help is
          HelpNode := Item(NodesList, I);
          TmpHelp.Title :=
            To_Unbounded_String(Get_Attribute(HelpNode, "title"));
-         Action := To_Unbounded_String(Get_Attribute(HelpNode, "action"));
+         if Get_Attribute(HelpNode, "action")'Length > 0 then
+            Action := DataAction'Value(Get_Attribute(HelpNode, "action"));
+         else
+            Action := ADD;
+         end if;
          HelpIndex := 0;
          for J in Help_List.Iterate loop
             if Help_List(J).Title = TmpHelp.Title then
@@ -49,13 +54,11 @@ package body Help is
                exit;
             end if;
          end loop;
-         if
-           (Action = To_Unbounded_String("update") or
-            Action = To_Unbounded_String("remove")) then
+         if (Action = UPDATE or Action = REMOVE) then
             if HelpIndex = 0 then
                raise Data_Loading_Error
-                 with "Can't " & To_String(Action) & " help '" &
-                 To_String(TmpHelp.Title) &
+                 with "Can't " & To_Lower(DataAction'Image(Action)) &
+                 " help '" & To_String(TmpHelp.Title) &
                  "', there no help with that title.";
             end if;
          elsif HelpIndex > 0 then
@@ -63,15 +66,15 @@ package body Help is
               with "Can't add help '" & To_String(TmpHelp.Title) &
               "', there is one with that title.";
          end if;
-         if Action /= To_Unbounded_String("remove") then
-            if Action = To_Unbounded_String("update") then
+         if Action /= REMOVE then
+            if Action = UPDATE then
                TmpHelp := Help_List(HelpIndex);
             end if;
             if Has_Child_Nodes(HelpNode) then
                TmpHelp.Text :=
                  To_Unbounded_String(Node_Value(First_Child(HelpNode)));
             end if;
-            if Action /= To_Unbounded_String("update") then
+            if Action /= UPDATE then
                Help_List.Append(New_Item => TmpHelp);
                LogMessage
                  ("Help added: " & To_String(TmpHelp.Title), Everything);
