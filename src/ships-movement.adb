@@ -192,15 +192,6 @@ package body Ships.Movement is
         FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
       Message: Unbounded_String;
    begin
-      if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
-         return "Here no base to dock or undock.";
-      end if;
-      if Docking and PlayerShip.Speed = DOCKED then
-         return "Ship is docked to base.";
-      end if;
-      if not Docking and PlayerShip.Speed > DOCKED then
-         return "Ship isn't docked to base.";
-      end if;
       Message := To_Unbounded_String(HaveOrderRequirements);
       if Length(Message) > 0 then
          return To_String(Message);
@@ -292,9 +283,6 @@ package body Ships.Movement is
    function ChangeShipSpeed(SpeedValue: ShipSpeed) return String is
       HaveEngine: Boolean := False;
    begin
-      if PlayerShip.Speed = DOCKED then
-         return "First undock from base before you set ship speed.";
-      end if;
       for Module of PlayerShip.Modules loop
          if Modules_List(Module.ProtoIndex).MType = ENGINE and
            Module.Durability > 0 then
