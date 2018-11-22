@@ -1916,5 +1916,42 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <equipment index="4" slot="Arms"/>
   <equipment index="5" slot="Legs"/>
  </mobile>
+ <mobile index="90" order="PILOT">
+  <skill maxlevel="80" minlevel="60" name="Piloting"/>
+  <skill maxlevel="80" minlevel="60" name="Perception"/>
+  <skill maxlevel="80" minlevel="60" name="Brawling"/>
+  <skill maxlevel="80" minlevel="60" name="Dodge"/>
+  <attribute maxlevel="40" minlevel="30"/>
+  <attribute maxlevel="40" minlevel="30"/>
+  <attribute maxlevel="40" minlevel="30"/>
+  <attribute maxlevel="40" minlevel="30"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="185"/>
+  <item amount="1" index="187"/>
+  <item amount="1" index="190"/>
+  <item amount="1" index="193"/>
+  <equipment index="2" slot="Head"/>
+  <equipment index="1" slot="Torso"/>
+  <equipment index="3" slot="Arms"/>
+  <equipment index="4" slot="Legs"/>
+ </mobile>
+ <mobile index="91" order="DEFEND">
+  <skill maxlevel="80" minlevel="60" name="Brawling"/>
+  <skill maxlevel="80" minlevel="60" name="Dodge"/>
+  <attribute maxlevel="40" minlevel="30"/>
+  <attribute maxlevel="40" minlevel="30"/>
+  <attribute maxlevel="40" minlevel="30"/>
+  <attribute maxlevel="40" minlevel="30"/>
+  <priority name="Defend ship" value="Normal"/>
+  <priority name="Board enemy ship" value="High"/>
+  <item amount="1" index="185"/>
+  <item amount="1" index="187"/>
+  <item amount="1" index="190"/>
+  <item amount="1" index="193"/>
+  <equipment index="2" slot="Head"/>
+  <equipment index="1" slot="Torso"/>
+  <equipment index="3" slot="Arms"/>
+  <equipment index="4" slot="Legs"/>
+ </mobile>
 </mobiles>
 
