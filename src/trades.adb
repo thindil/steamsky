@@ -35,7 +35,7 @@ package body Trades is
       BuyAmount, Price, ProtoMoneyIndex: Positive;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      BaseType, ItemIndex: Positive;
+      ItemIndex: Positive;
       Cost, MoneyIndex2: Natural;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
@@ -47,17 +47,8 @@ package body Trades is
          raise Trade_No_Trader;
       end if;
       if BaseIndex > 0 then
-         BaseType := Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
          ItemIndex := SkyBases(BaseIndex).Cargo(BaseItemIndex).ProtoIndex;
          ItemName := Items_List(ItemIndex).Name;
-         if not Items_List(ItemIndex).Buyable(BaseType) then
-            raise Trade_Cant_Buy with To_String(ItemName);
-         end if;
-         if SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount = 0 then
-            raise Trade_Not_For_Sale_Now with To_String(ItemName);
-         elsif SkyBases(BaseIndex).Cargo(BaseItemIndex).Amount < BuyAmount then
-            raise Trade_Buying_Too_Much with To_String(ItemName);
-         end if;
          Price := SkyBases(BaseIndex).Cargo(BaseItemIndex).Price;
          if EventIndex > 0
            and then
@@ -143,9 +134,6 @@ package body Trades is
       SellAmount := Positive'Value(Amount);
       if TraderIndex = 0 then
          raise Trade_No_Trader;
-      end if;
-      if PlayerShip.Cargo(ItemIndex).Amount < SellAmount then
-         raise Trade_Too_Much_For_Sale with ItemName;
       end if;
       if BaseIndex > 0 then
          BaseType := Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
