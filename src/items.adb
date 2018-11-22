@@ -144,19 +144,19 @@ package body Items is
             Description => Null_Unbounded_String,
             Index => Null_Unbounded_String);
       end loop;
-      for Item of Items_List loop
-         if Item.IType = WeaponType then
-            Weapons_List.Append(New_Item => Items_List.Last_Index);
-         elsif Item.IType = ShieldType then
-            Shields_List.Append(New_Item => Items_List.Last_Index);
-         elsif Item.IType = HeadArmor then
-            HeadArmors_List.Append(New_Item => Items_List.Last_Index);
-         elsif Item.IType = ChestArmor then
-            ChestArmors_List.Append(New_Item => Items_List.Last_Index);
-         elsif Item.IType = ArmsArmor then
-            ArmsArmors_List.Append(New_Item => Items_List.Last_Index);
-         elsif Item.IType = LegsArmor then
-            LegsArmors_List.Append(New_Item => Items_List.Last_Index);
+      for I in Items_List.Iterate loop
+         if Items_List(I).IType = WeaponType then
+            Weapons_List.Append(New_Item => Objects_Container.To_Index(I));
+         elsif Items_List(I).IType = ShieldType then
+            Shields_List.Append(New_Item => Objects_Container.To_Index(I));
+         elsif Items_List(I).IType = HeadArmor then
+            HeadArmors_List.Append(New_Item => Objects_Container.To_Index(I));
+         elsif Items_List(I).IType = ChestArmor then
+            ChestArmors_List.Append(New_Item => Objects_Container.To_Index(I));
+         elsif Items_List(I).IType = ArmsArmor then
+            ArmsArmors_List.Append(New_Item => Objects_Container.To_Index(I));
+         elsif Items_List(I).IType = LegsArmor then
+            LegsArmors_List.Append(New_Item => Objects_Container.To_Index(I));
          end if;
       end loop;
    end LoadItems;
