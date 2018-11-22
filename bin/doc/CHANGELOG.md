@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Index for small steel training room
 - Crash on showing know events list
 - Crash on asking friendly ships for bases and events
+- Saving crew members home base and faction
 
 ## [3.0] - 2018-11-04
 
