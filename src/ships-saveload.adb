@@ -226,7 +226,6 @@ package body Ships.SaveLoad is
    end SavePlayerShip;
 
    procedure LoadPlayerShip(SaveData: Document) is
-      --BaseMissions: Mission_Container.Vector;
       ShipNode, ChildNodes: Node_List;
       LoadNode, ChildNode: Node;
    begin
@@ -363,26 +362,11 @@ package body Ships.SaveLoad is
                  Natural'Value(Get_Attribute(ChildNode, "tradepay"));
                ContractLength :=
                  Integer'Value(Get_Attribute(ChildNode, "contractlength"));
-               if Get_Attribute(ChildNode, "morale") /= "" then
-                  Morale :=
-                    (Natural'Value(Get_Attribute(ChildNode, "morale")), 0);
-               else
-                  Morale := (50, 0);
-               end if;
-               if Get_Attribute(ChildNode, "moralelevel") /= "" then
-                  Morale(1) :=
-                    Natural'Value(Get_Attribute(ChildNode, "moralelevel"));
-               end if;
-               if Get_Attribute(ChildNode, "moralepoints") /= "" then
-                  Morale(2) :=
-                    Natural'Value(Get_Attribute(ChildNode, "moralepoints"));
-               end if;
-               if Get_Attribute(ChildNode, "loyalty") /= "" then
-                  Loyalty :=
-                    Natural'Value(Get_Attribute(ChildNode, "loyalty"));
-               else
-                  Loyalty := 100;
-               end if;
+               Morale(1) :=
+                 Natural'Value(Get_Attribute(ChildNode, "moralelevel"));
+               Morale(2) :=
+                 Natural'Value(Get_Attribute(ChildNode, "moralepoints"));
+               Loyalty := Natural'Value(Get_Attribute(ChildNode, "loyalty"));
                for K in 0 .. Length(MemberData) - 1 loop
                   MemberNode := Item(MemberData, K);
                   if Node_Name(MemberNode) = "skill" then
