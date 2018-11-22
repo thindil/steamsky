@@ -136,7 +136,7 @@ package body Ships.SaveLoad is
             To_Unbounded_String("contractlength"),
             To_Unbounded_String("moralelevel"),
             To_Unbounded_String("moralepoints"),
-            To_Unbounded_String("loyalty"));
+            To_Unbounded_String("loyalty"), To_Unbounded_String("homebase"));
          AttributesValues: array(AttributesNames'Range) of Integer;
       begin
          for Member of PlayerShip.Crew loop
@@ -144,12 +144,16 @@ package body Ships.SaveLoad is
             DataNode := Append_Child(CategoryNode, DataNode);
             Set_Attribute(DataNode, "name", To_String(Member.Name));
             Set_Attribute(DataNode, "gender", Member.Gender & "");
+            Set_Attribute
+              (DataNode, "faction",
+               To_String(Factions_List(Member.Faction).Index));
             AttributesValues :=
               (Member.Health, Member.Tired, Member.Hunger, Member.Thirst,
                Crew_Orders'Pos(Member.Order),
                Crew_Orders'Pos(Member.PreviousOrder), Member.OrderTime,
                Member.Payment(1), Member.Payment(2), Member.ContractLength,
-               Member.Morale(1), Member.Morale(2), Member.Loyalty);
+               Member.Morale(1), Member.Morale(2), Member.Loyalty,
+               Member.HomeBase);
             for I in AttributesNames'Range loop
                RawValue :=
                  To_Unbounded_String(Integer'Image(AttributesValues(I)));
