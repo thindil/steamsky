@@ -22,6 +22,7 @@ with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
 with Game; use Game;
 with Log; use Log;
+with Items; use Items;
 
 package body ShipModules is
 
@@ -31,7 +32,8 @@ package body ShipModules is
       TempRecord: BaseModule_Data;
       Action: DataAction;
       ModuleNode: Node;
-      ModuleIndex: Natural;
+      ModuleIndex, SkillIndex: Natural;
+      MaterialExists: Boolean;
    begin
       TempRecord :=
         (Name => Null_Unbounded_String, MType => ENGINE, Weight => 0,
@@ -95,11 +97,33 @@ package body ShipModules is
             if Get_Attribute(ModuleNode, "material")'Length > 0 then
                TempRecord.RepairMaterial :=
                  To_Unbounded_String(Get_Attribute(ModuleNode, "material"));
+               MaterialExists := False;
+               for Material of Items_Types loop
+                  if Material = TempRecord.RepairMaterial then
+                     MaterialExists := True;
+                     exit;
+                  end if;
+               end loop;
+               if not MaterialExists then
+                  raise Data_Loading_Error
+                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    " ship module '" & To_String(TempRecord.Index) &
+                    "', there no item type '" &
+                    Get_Attribute(ModuleNode, "material") & "'.";
+               end if;
             end if;
             if Get_Attribute(ModuleNode, "skill")'Length > 0 then
-               TempRecord.RepairSkill :=
+               SkillIndex :=
                  FindSkillIndex
                    (To_Unbounded_String(Get_Attribute(ModuleNode, "skill")));
+               if SkillIndex = 0 then
+                  raise Data_Loading_Error
+                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    " ship module '" & To_String(TempRecord.Index) &
+                    "', there no skill named '" &
+                    Get_Attribute(ModuleNode, "skill") & "'.";
+               end if;
+               TempRecord.RepairSkill := SkillIndex;
             end if;
             if Get_Attribute(ModuleNode, "price")'Length > 0 then
                TempRecord.Price :=
