@@ -277,21 +277,13 @@ package body Ships is
          TmpShip.HomeBase := SkyMap(X, Y).BaseIndex;
       else
          StartX := X - 100;
-         if StartX < 1 then
-            StartX := 1;
-         end if;
+         NormalizeCoord(StartX);
          StartY := Y - 100;
-         if StartY < 1 then
-            StartY := 1;
-         end if;
+         NormalizeCoord(StartY, False);
          EndX := X + 100;
-         if EndX > 1024 then
-            EndX := 1024;
-         end if;
+         NormalizeCoord(EndX);
          EndY := Y + 100;
-         if EndY > 1024 then
-            EndY := 1024;
-         end if;
+         NormalizeCoord(EndY, False);
          Bases_Loop :
          for SkyX in StartX .. EndX loop
             for SkyY in StartY .. EndY loop

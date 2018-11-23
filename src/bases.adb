@@ -372,17 +372,9 @@ package body Bases is
       for X in -Radius .. Radius loop
          for Y in -Radius .. Radius loop
             TempX := PlayerShip.SkyX + X;
-            if TempX < 1 then
-               TempX := 1;
-            elsif TempX > 1024 then
-               TempX := 1024;
-            end if;
+            NormalizeCoord(TempX);
             TempY := PlayerShip.SkyY + Y;
-            if TempY < 1 then
-               TempY := 1;
-            elsif TempY > 1024 then
-               TempY := 1024;
-            end if;
+            NormalizeCoord(TempY, False);
             TmpBaseIndex := SkyMap(TempX, TempY).BaseIndex;
             if TmpBaseIndex > 0 and then not SkyBases(TmpBaseIndex).Known then
                SkyBases(TmpBaseIndex).Known := True;
@@ -486,21 +478,13 @@ package body Bases is
       end if;
       EventsAmount := GetRandom(1, MaxEvents);
       MinX := PlayerShip.SkyX - 100;
-      if MinX < 1 then
-         MinX := 1;
-      end if;
+      NormalizeCoord(MinX);
       MaxX := PlayerShip.SkyX + 100;
-      if MaxX > 1024 then
-         MaxX := 1024;
-      end if;
+      NormalizeCoord(MaxX);
       MinY := PlayerShip.SkyY - 100;
-      if MinY < 1 then
-         MinY := 1;
-      end if;
+      NormalizeCoord(MinY, False);
       MaxY := PlayerShip.SkyY + 100;
-      if MaxY > 1024 then
-         MaxY := 1024;
-      end if;
+      NormalizeCoord(MaxY, False);
       for Faction of Factions_List loop
          for Career of Faction.Careers loop
             PlayerShips.Append(New_Item => Career.ShipIndex);

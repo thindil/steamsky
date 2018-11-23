@@ -92,20 +92,10 @@ package body Game is
             PosY := GetRandom(1, 1024);
             for J in -5 .. 5 loop
                TempX := Integer(PosX) + J;
-               if TempX < 1 then
-                  TempX := 1;
-               end if;
-               if TempX > 1024 then
-                  TempX := 1024;
-               end if;
+               NormalizeCoord(TempX);
                for K in -5 .. 5 loop
                   TempY := Integer(PosY) + K;
-                  if TempY < 1 then
-                     TempY := 1;
-                  end if;
-                  if TempY > 1024 then
-                     TempY := 1024;
-                  end if;
+                  NormalizeCoord(TempY, False);
                   if SkyMap(TempX, TempY).BaseIndex > 0 then
                      ValidLocation := False;
                      exit;

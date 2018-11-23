@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -30,5 +30,22 @@ package body Maps is
       Distance := Sqrt(Float((DiffX**2) + (DiffY**2)));
       return Natural(Float'Floor(Distance));
    end CountDistance;
+
+   procedure NormalizeCoord(Coord: in out Integer; IsXAxis: Boolean := True) is
+   begin
+      if IsXAxis then
+         if Coord < SkyMap'First(1) then
+            Coord := SkyMap'First(1);
+         elsif Coord > SkyMap'Last(1) then
+            Coord := SkyMap'Last(1);
+         end if;
+      else
+         if Coord < SkyMap'First(2) then
+            Coord := SkyMap'First(2);
+         elsif Coord > SkyMap'Last(2) then
+            Coord := SkyMap'Last(2);
+         end if;
+      end if;
+   end NormalizeCoord;
 
 end Maps;

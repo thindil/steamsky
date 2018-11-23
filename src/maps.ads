@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -29,5 +29,7 @@ package Maps is
    function CountDistance
      (DestinationX, DestinationY: Positive)
      return Natural; -- Return distance between player ship and destination point
+   procedure NormalizeCoord(Coord: in out Integer;
+      IsXAxis: Boolean := True); -- Normalize map coordinates
 
 end Maps;
