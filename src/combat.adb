@@ -546,9 +546,9 @@ package body Combat is
                                     end if;
                                  end if;
                               when others =>
-                                 if EnemyShip.Modules(HitLocation).Owner >
-                                   0 and
-                                   EnemyShip.Crew
+                                 if EnemyShip.Modules(HitLocation).Owner > 0
+                                   and then
+                                     EnemyShip.Crew
                                        (EnemyShip.Modules(HitLocation).Owner)
                                        .Order /=
                                      Rest then
