@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Crash on showing know events list
 - Crash on asking friendly ships for bases and events
 - Saving crew members home base and faction
+- Crash in combat on destroying module in player ship
 
 ## [3.0] - 2018-11-04
 
