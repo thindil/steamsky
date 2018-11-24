@@ -136,6 +136,7 @@ package body Combat is
       end loop;
       if NewCombat then
          PlayerPerception := CountPerception(PlayerShip, Enemy.Ship);
+         OldSpeed := PlayerShip.Speed;
          if Enemy.Perception > 0 then
             EnemyPerception := Enemy.Perception;
          else
@@ -148,7 +149,6 @@ package body Combat is
                OtherMessage);
          else
             if RealSpeed(PlayerShip) < RealSpeed(Enemy.Ship) then
-               OldSpeed := PlayerShip.Speed;
                LogMessage
                  ("You were attacked by " & To_String(Enemy.Ship.Name),
                   Log.Combat);
