@@ -3247,10 +3247,10 @@ during combat. -->
   <cargo index="179" maxamount="1000" minamount="500"/>
   <cargo index="167" maxamount="800" minamount="600"/>
   <cargo index="181" maxamount="300" minamount="150"/>
-  <member index="43"/>
-  <member amount="5" index="44"/>
-  <member index="45"/>
-  <member index="69" maxamount="11" minamount="7"/>
+  <member index="94"/>
+  <member amount="5" index="95"/>
+  <member index="96"/>
+  <member index="97" maxamount="11" minamount="7"/>
   <description>Advanced and upgraded version of huge, well armored pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
  </ship>
  <ship combatai="BERSERKER" index="177" maxloot="750" minloot="500" name="Huge undead ship mk VI" owner="UNDEAD">
