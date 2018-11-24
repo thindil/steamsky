@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
   VI, advanced huge attacking drone mk VI, huge inquisition ship mk VI and
   advanced huge inquisition ship mk VI
 - Few new mobs
+- Option to set starting base for new game
 
 ### Changed
 - Raised maximum amount of modules for huge adamantium hull
