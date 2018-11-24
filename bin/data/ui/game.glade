@@ -2201,7 +2201,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkEntry" id="entrysearch">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="secondary_icon_pixbuf">images/clear.png</property>
+                        <property name="secondary_icon_stock">gtk-clear</property>
                         <property name="secondary_icon_tooltip_text" translatable="yes">Clear search criteria</property>
                         <property name="placeholder_text" translatable="yes">&lt;Search messages&gt;</property>
                         <signal name="changed" handler="Search_Messages" swapped="no"/>
@@ -2834,7 +2834,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkEntry" id="entrysearchbases">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="secondary_icon_pixbuf">images/clear.png</property>
+                        <property name="secondary_icon_stock">gtk-clear</property>
                         <property name="secondary_icon_tooltip_text" translatable="yes">Clear search criteria</property>
                         <property name="secondary_icon_tooltip_markup" translatable="yes">Clear search criteria</property>
                         <property name="placeholder_text" translatable="yes">&lt;Search bases&gt;</property>
