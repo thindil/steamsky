@@ -305,7 +305,9 @@ package body MainMenu is
         (To_Unbounded_String(CharacterName), To_Unbounded_String(ShipName),
          Gender, FactionIndex,
          Positive
-           (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbcareer"))) + 1));
+           (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbcareer"))) + 1),
+         Natural
+           (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbbasetype")))));
       StartGame;
    end NewGame;
 
@@ -408,6 +410,23 @@ package body MainMenu is
            (Factions_List(FactionIndex).Careers(CareerIndex).Description));
    end ShowCareerDescription;
 
+   procedure ShowBaseDescription(Object: access Gtkada_Builder_Record'Class) is
+      BaseTypeIndex: constant Integer :=
+        Integer(Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbbasetype"))));
+      BasesTypesList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Object, "basesstore"));
+   begin
+      if BaseTypeIndex = -1 then
+         return;
+      end if;
+      Set_Label
+        (Gtk_Label(Get_Object(Builder, "lblbasetypeinfo")),
+         Get_String
+           (BasesTypesList,
+            Get_Iter_From_String(BasesTypesList, Integer'Image(BaseTypeIndex)),
+            1));
+   end ShowBaseDescription;
+
    procedure CreateMainMenu is
       Error: aliased GError;
       DataError: Unbounded_String;
@@ -435,6 +454,8 @@ package body MainMenu is
         (Builder, "Show_Faction_Description", ShowFactionDescription'Access);
       Register_Handler
         (Builder, "Show_Career_Description", ShowCareerDescription'Access);
+      Register_Handler
+        (Builder, "Show_Base_Description", ShowBaseDescription'Access);
       Do_Connect(Builder);
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
       if HallOfFame_Array(1).Name = Null_Unbounded_String then
