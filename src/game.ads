@@ -100,8 +100,8 @@ package Game is
    Data_Loading_Error: exception; -- Raised when error occurs during loading any game data
 
    procedure NewGame(CharName, ShipName: Unbounded_String; Gender: Character;
-      FactionIndex,
-      CareerIndex: Positive); -- Start new game: create map, place ship, crew, etc
+      FactionIndex, CareerIndex: Positive;
+      BaseTypeIndex: Natural); -- Start new game: create map, place ship, crew, etc
    procedure UpdateGame
      (Minutes: Positive); -- Game ticks (update time, crew, ship, etc)
    procedure EndGame

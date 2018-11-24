@@ -53,7 +53,7 @@ with Careers; use Careers;
 package body Game is
 
    procedure NewGame(CharName, ShipName: Unbounded_String; Gender: Character;
-      FactionIndex, CareerIndex: Positive) is
+      FactionIndex, CareerIndex: Positive; BaseTypeIndex: Natural) is
       PosX, PosY, RandomBase, ShipIndex, Amount, FactionRoll, BaseOwner,
       PlayerIndex2, PlayerMorale: Positive;
       ValidLocation: Boolean;
@@ -154,11 +154,21 @@ package body Game is
             Size => BaseSize);
       end loop;
       -- Place player ship in random large base
-      loop
-         RandomBase := GetRandom(1, 1024);
-         exit when SkyBases(RandomBase).Population > 299 and
-           SkyBases(RandomBase).Owner = FactionIndex;
-      end loop;
+      declare
+         BaseType: constant Bases_Types := Bases_Types'Val(BaseTypeIndex);
+      begin
+         loop
+            RandomBase := GetRandom(1, 1024);
+            if BaseType = ANY then
+               exit when SkyBases(RandomBase).Population > 299 and
+                 SkyBases(RandomBase).Owner = FactionIndex;
+            else
+               exit when SkyBases(RandomBase).Population > 299 and
+                 SkyBases(RandomBase).Owner = FactionIndex and
+                 SkyBases(RandomBase).BaseType = BaseType;
+            end if;
+         end loop;
+      end;
       -- Create player ship
       for I in ProtoShips_List.Iterate loop
          if ProtoShips_List(I).Index =
