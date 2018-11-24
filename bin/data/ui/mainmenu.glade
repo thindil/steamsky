@@ -24,6 +24,40 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
   <!-- interface-license-type gplv3 -->
   <!-- interface-name Steam Sky -->
   <!-- interface-copyright 2018 Bartek thindil Jasicki -->
+  <object class="GtkListStore" id="basesstore">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+      <!-- column-name gchararray2 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Industrial</col>
+        <col id="1" translatable="yes">Industrial bases provide tools and materials for crafting. Little more difficult start point than Agricultural bases.</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Agricultural</col>
+        <col id="1" translatable="yes">Agricultural bases provides food, drinks and raw materials to create them. Easiest starting point.</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Refinery</col>
+        <col id="1" translatable="yes">Refinery bases provides raw materials for refining which later can be sold in Industrial bases. Little more difficult starting point than Industrial bases.</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Shipyard</col>
+        <col id="1" translatable="yes">Shipyard bases don't sell any items but offers cheaper repairs to ships and ability to upgrade ships. Difficult place for starting point.</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Military</col>
+        <col id="1" translatable="yes">Military bases provides ammunition to guns and melee weapons. They are most difficult place for starting point.</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Any</col>
+        <col id="1" translatable="yes">Start game in randomly selected base type.</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkTextBuffer" id="errorbuffer"/>
   <object class="GtkListStore" id="hoflist">
     <columns>
@@ -368,6 +402,38 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="top_attach">1</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Select type of base in which you will start game. This may have some impact on game difficulty.</property>
+                        <property name="label" translatable="yes">Starting base type:</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">6</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="cmbbasetype">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Select type of base in which you will start game. This may have some impact on game difficulty.</property>
+                        <property name="model">basesstore</property>
+                        <property name="active">5</property>
+                        <signal name="changed" handler="Show_Base_Description" swapped="no"/>
+                        <child>
+                          <object class="GtkCellRendererText"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">6</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -451,6 +517,43 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkFrame">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="margin_top">5</property>
+                        <property name="label_xalign">0.10000000149011612</property>
+                        <property name="shadow_type">out</property>
+                        <child>
+                          <object class="GtkAlignment">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="left_padding">12</property>
+                            <child>
+                              <object class="GtkLabel" id="lblbasetypeinfo">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Start game in randomly selected base type.</property>
+                                <property name="wrap">True</property>
+                                <property name="xalign">0</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Base type Info</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                   </object>
