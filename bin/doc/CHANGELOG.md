@@ -39,3 +39,4 @@ All notable changes to this project will be documented in this file.
 - Saving crew members faction and homebase
 - Crash in combat on destroying module in player ship
 - Repair material for titanium armor
+- Setting player ship speed after combat
