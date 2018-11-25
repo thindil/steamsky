@@ -2205,6 +2205,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="secondary_icon_tooltip_text" translatable="yes">Clear search criteria</property>
                         <property name="placeholder_text" translatable="yes">&lt;Search messages&gt;</property>
                         <signal name="changed" handler="Search_Messages" swapped="no"/>
+                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                         <signal name="icon-release" handler="Clear_Search" object="entrysearch" swapped="no"/>
                       </object>
                       <packing>
@@ -2299,6 +2301,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="model">eventslist</property>
                         <property name="search_column">0</property>
                         <signal name="cursor-changed" handler="Show_Event_Info" swapped="no"/>
+                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
@@ -2446,6 +2450,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="model">missionslist</property>
                         <property name="search_column">0</property>
                         <signal name="cursor-changed" handler="Show_Mission_Info" object="treemissions1" swapped="no"/>
+                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
@@ -2618,6 +2624,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="model">missionslist</property>
                         <property name="search_column">0</property>
                         <signal name="cursor-changed" handler="Show_Mission_Info" object="treemissions" swapped="no"/>
+                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
@@ -2839,6 +2847,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="secondary_icon_tooltip_markup" translatable="yes">Clear search criteria</property>
                         <property name="placeholder_text" translatable="yes">&lt;Search bases&gt;</property>
                         <signal name="changed" handler="Search_Bases" swapped="no"/>
+                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                         <signal name="icon-release" handler="Clear_Search" object="entrysearchbases" swapped="no"/>
                       </object>
                       <packing>
@@ -3513,6 +3523,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="model">recruitlist</property>
                         <property name="search_column">0</property>
                         <signal name="cursor-changed" handler="Show_Recruit_Info" swapped="no"/>
+                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
@@ -3795,6 +3807,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="model">itemslist</property>
                         <property name="search_column">0</property>
                         <signal name="cursor-changed" handler="Object_Selected" swapped="no"/>
+                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
@@ -3900,6 +3914,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="model">itemslist2</property>
                         <property name="search_column">0</property>
                         <signal name="cursor-changed" handler="Show_Item_Info" swapped="no"/>
+                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
@@ -4239,6 +4255,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="model">crewlist</property>
                         <property name="search_column">0</property>
                         <signal name="cursor-changed" handler="Show_Train_Info" swapped="no"/>
+                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
@@ -4282,6 +4300,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="model">skillslist1</property>
                             <property name="search_column">0</property>
                             <property name="tooltip_column">2</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection"/>
                             </child>
@@ -4466,6 +4486,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="model">installmoduleslist</property>
                                     <property name="search_column">0</property>
                                     <signal name="cursor-changed" handler="Show_Install_Info" swapped="no"/>
+                                    <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                    <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                                     <child internal-child="selection">
                                       <object class="GtkTreeSelection"/>
                                     </child>
@@ -4601,6 +4623,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="model">removemodulelist</property>
                                 <property name="search_column">0</property>
                                 <signal name="cursor-changed" handler="Show_Remove_Info" swapped="no"/>
+                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                                 <child internal-child="selection">
                                   <object class="GtkTreeSelection"/>
                                 </child>
@@ -4874,6 +4898,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <property name="model">damagelist</property>
                                         <property name="headers_visible">False</property>
                                         <property name="headers_clickable">False</property>
+                                        <property name="enable_search">False</property>
                                         <child internal-child="selection">
                                           <object class="GtkTreeSelection">
                                             <property name="mode">none</property>
@@ -5384,6 +5409,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="model">recipeslist</property>
                         <property name="search_column">0</property>
                         <signal name="cursor-changed" handler="Show_Recipe_Info" swapped="no"/>
+                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
@@ -7380,6 +7407,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="model">crewlist2</property>
                         <property name="search_column">0</property>
                         <signal name="cursor-changed" handler="Show_Member_Info" swapped="no"/>
+                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
@@ -7826,6 +7855,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="model">inventorylist</property>
                         <property name="search_column">0</property>
                         <signal name="cursor-changed" handler="Show_Item_Info2" swapped="no"/>
+                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
@@ -8063,6 +8094,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="can_focus">True</property>
                             <property name="tooltip_text" translatable="yes">Insert new name and press Enter to change your ship name.</property>
                             <signal name="changed" handler="Change_Ship_Name" swapped="no"/>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -8119,6 +8152,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="headers_clickable">False</property>
                             <property name="search_column">0</property>
                             <signal name="cursor-changed" handler="Show_Module_Info" swapped="no"/>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection"/>
                             </child>
@@ -8128,6 +8163,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <child>
                                   <object class="GtkCellRendererText" id="rendername">
                                     <property name="editable">True</property>
+                                    <signal name="edited" handler="Enable_Menu_Shortcuts_Proc" swapped="no"/>
+                                    <signal name="editing-canceled" handler="Enable_Menu_Shortcuts_Proc" swapped="no"/>
+                                    <signal name="editing-started" handler="Disable_Menu_Shortcuts_Proc" swapped="no"/>
                                   </object>
                                   <attributes>
                                     <attribute name="text">0</attribute>
@@ -8580,6 +8618,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="model">cargolist</property>
                         <property name="search_column">0</property>
                         <signal name="cursor-changed" handler="Show_Item_Cargo_Info" swapped="no"/>
+                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
@@ -8836,6 +8876,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="model">itemslist1</property>
                         <property name="search_column">0</property>
                         <signal name="cursor-changed" handler="Show_Item_Trade_Info" swapped="no"/>
+                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
