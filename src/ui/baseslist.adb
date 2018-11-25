@@ -337,7 +337,8 @@ package body BasesList is
 
    procedure ShowBasesListUI is
       BaseIter: Gtk_Tree_Iter;
-      BaseList: Gtk_List_Store;
+      BaseList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "baseslist"));
    begin
       Set_Active
         (Gtk_Combo_Box(Get_Object(Builder, "cmbtype")),
@@ -349,7 +350,6 @@ package body BasesList is
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "baseslist");
       SettingTime := True;
-      BaseList := Gtk_List_Store(Get_Object(Builder, "baseslist"));
       Clear(BaseList);
       for I in SkyBases'Range loop
          if SkyBases(I).Known then
