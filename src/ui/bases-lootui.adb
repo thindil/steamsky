@@ -258,7 +258,8 @@ package body Bases.LootUI is
 
    procedure ShowLootUI is
       ItemsIter: Gtk_Tree_Iter;
-      ItemsList: Gtk_List_Store;
+      ItemsList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "itemslist2"));
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=
@@ -266,7 +267,6 @@ package body Bases.LootUI is
       IndexesList: Positive_Container.Vector;
       BaseCargoIndex: Natural;
    begin
-      ItemsList := Gtk_List_Store(Get_Object(Builder, "itemslist2"));
       Clear(ItemsList);
       for I in PlayerShip.Cargo.Iterate loop
          if Items_List(PlayerShip.Cargo(I).ProtoIndex).Prices(BaseType) >
