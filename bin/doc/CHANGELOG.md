@@ -41,3 +41,4 @@ All notable changes to this project will be documented in this file.
 - Crash in combat on destroying module in player ship
 - Repair material for titanium armor
 - Setting player ship speed after combat
+- Entering text cause activation of menu
