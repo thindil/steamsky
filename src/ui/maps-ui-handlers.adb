@@ -80,6 +80,8 @@ with Themes; use Themes;
 
 package body Maps.UI.Handlers is
 
+   AccelsRemoved: Boolean := False;
+
    procedure QuitGameMenu(Object: access Gtkada_Builder_Record'Class) is
    begin
       if not QuitGame(Gtk_Window(Get_Object(Object, "skymapwindow"))) then
@@ -1398,5 +1400,55 @@ package body Maps.UI.Handlers is
       SetFontSize(MAPFONT);
       return False;
    end ZoomMap;
+
+   function DisableMenuShortcuts
+     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+   begin
+      if AccelsRemoved then
+         return False;
+      end if;
+      Remove_Accel_Group
+        (Gtk_Window(Get_Object(Object, "skymapwindow")),
+         Gtk_Accel_Group(Get_Object(Object, "movementaccels")));
+      AccelsRemoved := True;
+      return False;
+   end DisableMenuShortcuts;
+
+   function EnableMenuShortcuts
+     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+   begin
+      if not AccelsRemoved then
+         return False;
+      end if;
+      Add_Accel_Group
+        (Gtk_Window(Get_Object(Object, "skymapwindow")),
+         Gtk_Accel_Group(Get_Object(Object, "movementaccels")));
+      AccelsRemoved := False;
+      return False;
+   end EnableMenuShortcuts;
+
+   procedure DisableMenuShortcutsProc
+     (Object: access Gtkada_Builder_Record'Class) is
+   begin
+      if AccelsRemoved then
+         return;
+      end if;
+      Remove_Accel_Group
+        (Gtk_Window(Get_Object(Object, "skymapwindow")),
+         Gtk_Accel_Group(Get_Object(Object, "movementaccels")));
+      AccelsRemoved := True;
+   end DisableMenuShortcutsProc;
+
+   procedure EnableMenuShortcutsProc
+     (Object: access Gtkada_Builder_Record'Class) is
+   begin
+      if not AccelsRemoved then
+         return;
+      end if;
+      Add_Accel_Group
+        (Gtk_Window(Get_Object(Object, "skymapwindow")),
+         Gtk_Accel_Group(Get_Object(Object, "movementaccels")));
+      AccelsRemoved := False;
+   end EnableMenuShortcutsProc;
 
 end Maps.UI.Handlers;

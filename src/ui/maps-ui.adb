@@ -964,6 +964,16 @@ package body Maps.UI is
       Register_Handler(Builder, "Show_Wait_Orders", ShowWaitOrders'Access);
       Register_Handler(Builder, "Update_Tooltip", UpdateTooltip'Access);
       Register_Handler(Builder, "Deliver_Medicines", DeliverMedicines'Access);
+      Register_Handler
+        (Builder, "Disable_Menu_Shortcuts", DisableMenuShortcuts'Access);
+      Register_Handler
+        (Builder, "Enable_Menu_Shortcuts", EnableMenuShortcuts'Access);
+      Register_Handler
+        (Builder, "Disable_Menu_Shortcuts_Proc",
+         DisableMenuShortcutsProc'Access);
+      Register_Handler
+        (Builder, "Enable_Menu_Shortcuts_Proc",
+         EnableMenuShortcutsProc'Access);
       Do_Connect(Builder);
       Add_Entry("<skymapwindow>/btnupleft", GDK_KP_7, 0);
       Add_Entry("<skymapwindow>/btnup", GDK_KP_8, 0);
