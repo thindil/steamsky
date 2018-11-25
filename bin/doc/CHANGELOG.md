@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.0.1] - 2018-11-25
 
 ### Changed
 - Raised maximum amount of modules for huge adamantium hull
