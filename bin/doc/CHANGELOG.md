@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file.
   undead ship mk VI, advanced huge undead ship mk VI, huge attacking drone mk
   VI, advanced huge attacking drone mk VI, huge inquisition ship mk VI and
   advanced huge inquisition ship mk VI
-- Few new mobs
+- Few new mobs for ships crews
 - Option to set starting base for new game
 
 ### Changed
@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Updated MODDING.md
 - Final enemy for story with undead
 - Updated interface
+- Crew for advanced huge inquistition ship mk V
 
 ### Fixed
 - Some typos in old changelog
