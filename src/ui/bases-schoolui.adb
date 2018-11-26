@@ -39,7 +39,8 @@ package body Bases.SchoolUI is
    procedure ShowTrainInfo(Object: access Gtkada_Builder_Record'Class) is
       CrewIter, SkillsIter: Gtk_Tree_Iter;
       CrewModel: Gtk_Tree_Model;
-      SkillsList: Gtk_List_Store;
+      SkillsList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Object, "skillslist1"));
       MoneyIndex2: Natural;
       Cost: Gint;
    begin
@@ -51,7 +52,6 @@ package body Bases.SchoolUI is
          return;
       end if;
       CrewIndex := Natural'Value(To_String(Get_Path(CrewModel, CrewIter))) + 1;
-      SkillsList := Gtk_List_Store(Get_Object(Builder, "skillslist1"));
       Clear(SkillsList);
       for I in Skills_List.Iterate loop
          Cost := Gint(TrainCost(CrewIndex, SkillsData_Container.To_Index(I)));
@@ -139,9 +139,9 @@ package body Bases.SchoolUI is
 
    procedure ShowSchoolUI is
       CrewIter: Gtk_Tree_Iter;
-      CrewList: Gtk_List_Store;
+      CrewList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "crewlist"));
    begin
-      CrewList := Gtk_List_Store(Get_Object(Builder, "crewlist"));
       Clear(CrewList);
       for Member of PlayerShip.Crew loop
          Append(CrewList, CrewIter);
