@@ -43,3 +43,4 @@ All notable changes to this project will be documented in this file.
 - Repair material for titanium armor
 - Setting player ship speed after combat
 - Entering text cause activation of menu
+- Entering text cause activation of menu in numeric fields
