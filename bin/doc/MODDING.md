@@ -721,8 +721,8 @@ story.
     - Attribute `name` is name of data. Possible values: `item` - item index
       (for `askinbase` and `loot` steps), `base` - ask in any base (value
       `any`) or randomly selected (value `selected`) needed for `askinbase`
-      steps. Names `faction` - index of faction to which ship belongs, `ship`
-      - index of ship which must be destroyed (for `destroyship` and `loot`
+      steps. Names `faction` - index of faction to which ship belongs, `ship` -
+      index of ship which must be destroyed (for `destroyship` and `loot`
       steps), `random` value if enemy ship should be selected randomly or `any`
       for any enemy ship (for `loot` step only). Names `x` and `y` are location
       on map where player must go to progress in story. Value `random` mean
