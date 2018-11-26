@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Entering text cause activation of menu in numeric fields
+
 ## [3.0.1] - 2018-11-25
 
 ### Changed
