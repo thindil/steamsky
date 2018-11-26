@@ -310,11 +310,11 @@ package body Bases.RecruitUI is
 
    procedure ShowRecruitUI is
       RecruitIter: Gtk_Tree_Iter;
-      RecruitList: Gtk_List_Store;
+      RecruitList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "recruitlist"));
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
-      RecruitList := Gtk_List_Store(Get_Object(Builder, "recruitlist"));
       Clear(RecruitList);
       for I in SkyBases(BaseIndex).Recruits.Iterate loop
          Append(RecruitList, RecruitIter);
