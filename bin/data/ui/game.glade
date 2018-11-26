@@ -4072,6 +4072,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="numeric">True</property>
                                 <property name="update_policy">if-valid</property>
                                 <property name="value">1</property>
+                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
@@ -4165,6 +4167,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="numeric">True</property>
                                 <property name="update_policy">if-valid</property>
                                 <property name="value">1</property>
+                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
@@ -5533,6 +5537,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="adjustment">amountadj</property>
                             <property name="numeric">True</property>
                             <property name="update_policy">if-valid</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -8028,6 +8034,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="numeric">True</property>
                             <property name="update_policy">if-valid</property>
                             <property name="value">2.2351741811588166e-10</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -8774,6 +8782,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="adjustment">amountadj</property>
                             <property name="numeric">True</property>
                             <property name="update_policy">if-valid</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -8813,6 +8823,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="can_focus">True</property>
                             <property name="width_chars">6</property>
                             <property name="adjustment">amountadj1</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -9068,6 +9080,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="adjustment">amountadj1</property>
                             <property name="numeric">True</property>
                             <property name="update_policy">if-valid</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -9126,6 +9140,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="numeric">True</property>
                             <property name="update_policy">if-valid</property>
                             <property name="value">1</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
