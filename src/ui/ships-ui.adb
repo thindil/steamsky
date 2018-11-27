@@ -495,6 +495,9 @@ package body Ships.UI is
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "rendername")),
          ChangeModuleName'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "edtname")), SelectElement'Access,
+         Get_Object(Builder, "btnmenu"));
    end CreateShipUI;
 
    procedure ShowShipUI is

@@ -188,7 +188,8 @@ package body Utils.UI is
       KeyMods: constant Gdk_Modifier_Type :=
         Event.State and Get_Default_Mod_Mask;
    begin
-      if KeyMods = 0 and Event.Keyval = GDK_Return then
+      if KeyMods = 0 and
+        (Event.Keyval = GDK_Return or Event.Keyval = GDK_Escape) then
          Grab_Focus(Gtk_Widget(Self));
          return True;
       end if;

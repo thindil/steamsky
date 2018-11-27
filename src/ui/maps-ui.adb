@@ -974,6 +974,10 @@ package body Maps.UI is
       Register_Handler
         (Builder, "Enable_Menu_Shortcuts_Proc",
          EnableMenuShortcutsProc'Access);
+      Register_Handler
+        (Builder, "Toggle_Close_Button", ToggleCloseButton'Access);
+      Register_Handler
+        (Builder, "Toggle_Close_Button_Proc", ToggleCloseButtonProc'Access);
       Do_Connect(Builder);
       Add_Entry("<skymapwindow>/btnupleft", GDK_KP_7, 0);
       Add_Entry("<skymapwindow>/btnup", GDK_KP_8, 0);
