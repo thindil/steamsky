@@ -2206,7 +2206,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="placeholder_text" translatable="yes">&lt;Search messages&gt;</property>
                         <signal name="changed" handler="Search_Messages" swapped="no"/>
                         <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                        <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
                         <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                        <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                         <signal name="icon-release" handler="Clear_Search" object="entrysearch" swapped="no"/>
                       </object>
                       <packing>
@@ -2848,7 +2850,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="placeholder_text" translatable="yes">&lt;Search bases&gt;</property>
                         <signal name="changed" handler="Search_Bases" swapped="no"/>
                         <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                        <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
                         <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                        <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                         <signal name="icon-release" handler="Clear_Search" object="entrysearchbases" swapped="no"/>
                       </object>
                       <packing>
@@ -4072,7 +4076,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="update_policy">if-valid</property>
                                 <property name="value">1</property>
                                 <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
                                 <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
@@ -4167,7 +4173,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="update_policy">if-valid</property>
                                 <property name="value">1</property>
                                 <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
                                 <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
@@ -5536,7 +5544,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="numeric">True</property>
                             <property name="update_policy">if-valid</property>
                             <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
                             <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -8029,7 +8039,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="update_policy">if-valid</property>
                             <property name="value">2.2351741811588166e-10</property>
                             <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
                             <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -8103,7 +8115,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="tooltip_text" translatable="yes">Insert new name and press Enter to change your ship name.</property>
                             <signal name="changed" handler="Change_Ship_Name" swapped="no"/>
                             <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
                             <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -8172,8 +8186,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                   <object class="GtkCellRendererText" id="rendername">
                                     <property name="editable">True</property>
                                     <signal name="edited" handler="Enable_Menu_Shortcuts_Proc" swapped="no"/>
+                                    <signal name="edited" handler="Toggle_Close_Button_Proc" swapped="no"/>
                                     <signal name="editing-canceled" handler="Enable_Menu_Shortcuts_Proc" swapped="no"/>
+                                    <signal name="editing-canceled" handler="Toggle_Close_Button_Proc" swapped="no"/>
                                     <signal name="editing-started" handler="Disable_Menu_Shortcuts_Proc" swapped="no"/>
+                                    <signal name="editing-started" handler="Toggle_Close_Button_Proc" swapped="no"/>
                                   </object>
                                   <attributes>
                                     <attribute name="text">0</attribute>
@@ -8777,7 +8794,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="numeric">True</property>
                             <property name="update_policy">if-valid</property>
                             <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
                             <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -8818,7 +8837,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="width_chars">6</property>
                             <property name="adjustment">amountadj1</property>
                             <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
                             <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -9075,7 +9096,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="numeric">True</property>
                             <property name="update_policy">if-valid</property>
                             <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
                             <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -9135,7 +9158,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="update_policy">if-valid</property>
                             <property name="value">1</property>
                             <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
                             <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>

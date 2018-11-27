@@ -974,6 +974,10 @@ package body Maps.UI is
       Register_Handler
         (Builder, "Enable_Menu_Shortcuts_Proc",
          EnableMenuShortcutsProc'Access);
+      Register_Handler
+        (Builder, "Toggle_Close_Button", ToggleCloseButton'Access);
+      Register_Handler
+        (Builder, "Toggle_Close_Button_Proc", ToggleCloseButtonProc'Access);
       Do_Connect(Builder);
       Add_Entry("<skymapwindow>/btnupleft", GDK_KP_7, 0);
       Add_Entry("<skymapwindow>/btnup", GDK_KP_8, 0);
@@ -1128,18 +1132,6 @@ package body Maps.UI is
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btncenter")),
          "<movemapwindow>/btncenter", Accelerators);
-      declare
-         WindowsNames: constant array(Positive range <>) of Unbounded_String :=
-           (To_Unbounded_String("movemapwindow"),
-            To_Unbounded_String("orderswindow"),
-            To_Unbounded_String("waitwindow"));
-      begin
-         for I in WindowsNames'Range loop
-            On_Key_Release_Event
-              (Gtk_Widget(Get_Object(Builder, To_String(WindowsNames(I)))),
-               CloseWindow'Access);
-         end loop;
-      end;
       declare
          StackNames: constant array(Positive range <>) of Unbounded_String :=
            (To_Unbounded_String("gamestack"),

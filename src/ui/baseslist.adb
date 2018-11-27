@@ -333,6 +333,9 @@ package body BasesList is
       Set_Visible_Func
         (Gtk_Tree_Model_Filter(Get_Object(Builder, "basesfilter")),
          VisibleBases'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "entrysearchbases")),
+         SelectElement'Access, Get_Object(Builder, "btnmenu"));
    end CreateBasesListUI;
 
    procedure ShowBasesListUI is
