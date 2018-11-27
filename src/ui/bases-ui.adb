@@ -225,14 +225,14 @@ package body Bases.UI is
 
    procedure ShowBuyRecipesUI is
       RecipesIter: Gtk_Tree_Iter;
-      RecipesList: Gtk_List_Store;
+      RecipesList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "itemslist"));
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=
         Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
    begin
       CurrentState := CLEARING;
-      RecipesList := Gtk_List_Store(Get_Object(Builder, "itemslist"));
       Clear(RecipesList);
       CurrentState := RECIPES;
       for I in Recipes_List.Iterate loop
@@ -258,12 +258,12 @@ package body Bases.UI is
 
    procedure ShowRepairUI is
       RepairsIter: Gtk_Tree_Iter;
-      RepairsList: Gtk_List_Store;
+      RepairsList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "itemslist"));
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
       CurrentState := CLEARING;
-      RepairsList := Gtk_List_Store(Get_Object(Builder, "itemslist"));
       Clear(RepairsList);
       CurrentState := REPAIRS;
       for I in PlayerShip.Modules.Iterate loop
@@ -301,10 +301,10 @@ package body Bases.UI is
 
    procedure ShowHealUI is
       HealsIter: Gtk_Tree_Iter;
-      HealsList: Gtk_List_Store;
+      HealsList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "itemslist"));
    begin
       CurrentState := CLEARING;
-      HealsList := Gtk_List_Store(Get_Object(Builder, "itemslist"));
       Clear(HealsList);
       CurrentState := HEAL;
       for I in PlayerShip.Crew.Iterate loop
