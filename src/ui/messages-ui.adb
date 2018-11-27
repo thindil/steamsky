@@ -145,6 +145,9 @@ package body Messages.UI is
       Set_Visible_Func
         (Gtk_Tree_Model_Filter(Get_Object(Builder, "messagesfilter")),
          VisibleMessages'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "entrysearch")), SelectElement'Access,
+         Get_Object(Builder, "btnmenu"));
    end CreateMessagesUI;
 
    procedure ShowMessagesUI is

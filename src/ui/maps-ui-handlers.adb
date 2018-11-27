@@ -1451,4 +1451,21 @@ package body Maps.UI.Handlers is
       AccelsRemoved := False;
    end EnableMenuShortcutsProc;
 
+   function ToggleCloseButton
+     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+      Button: constant Gtk_Widget :=
+        Gtk_Widget(Get_Object(Object, "btnclose"));
+   begin
+      Set_Sensitive(Button, not Get_Sensitive(Button));
+      return False;
+   end ToggleCloseButton;
+
+   procedure ToggleCloseButtonProc
+     (Object: access Gtkada_Builder_Record'Class) is
+      Button: constant Gtk_Widget :=
+        Gtk_Widget(Get_Object(Object, "btnclose"));
+   begin
+      Set_Sensitive(Button, not Get_Sensitive(Button));
+   end ToggleCloseButtonProc;
+
 end Maps.UI.Handlers;
