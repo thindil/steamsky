@@ -45,7 +45,8 @@ package body Bases.ShipyardUI is
    ModuleIndex: Positive;
 
    procedure SetInstallModulesList(ShowType: ModuleType) is
-      ModulesList: Gtk_List_Store;
+      ModulesList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "installmoduleslist"));
       procedure AddListItems(MType: ModuleType) is
          ModulesIter: Gtk_Tree_Iter;
       begin
@@ -62,7 +63,6 @@ package body Bases.ShipyardUI is
          end loop;
       end AddListItems;
    begin
-      ModulesList := Gtk_List_Store(Get_Object(Builder, "installmoduleslist"));
       Clear(ModulesList);
       if ShowType = ANY then
          for I in ModuleType'Range loop
@@ -361,10 +361,10 @@ package body Bases.ShipyardUI is
    end ShowRemoveInfo;
 
    procedure SetRemoveModulesList is
-      ModulesList: Gtk_List_Store;
+      ModulesList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "removemodulelist"));
       ModulesIter: Gtk_Tree_Iter;
    begin
-      ModulesList := Gtk_List_Store(Get_Object(Builder, "removemodulelist"));
       Clear(ModulesList);
       for I in PlayerShip.Modules.Iterate loop
          if Modules_List(PlayerShip.Modules(I).ProtoIndex).MType /= HULL then
