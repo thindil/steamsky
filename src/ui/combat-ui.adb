@@ -514,13 +514,15 @@ package body Combat.UI is
 
    procedure SetOrdersList(Object: access Gtkada_Builder_Record'Class) is
       OrdersModel: Glib.Types.GType_Interface;
-      OrdersList, CrewList: Gtk_List_Store;
+      OrdersList: Gtk_List_Store;
       OrdersIter, CrewIter, NamesIter: Gtk_Tree_Iter;
       CrewModel: Gtk_Tree_Model;
       Position: Natural;
       AssignedName, AssignedOrder: Unbounded_String;
       SkillIndex, SkillValue: Natural := 0;
       SkillString: Unbounded_String;
+      CrewList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "crewnames"));
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -530,7 +532,6 @@ package body Combat.UI is
          return;
       end if;
       Position := Natural'Value(To_String(Get_Path(CrewModel, CrewIter)));
-      CrewList := Gtk_List_Store(Get_Object(Builder, "crewnames"));
       Clear(CrewList);
       AssignedName := To_Unbounded_String(Get_String(CrewModel, CrewIter, 2));
       for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
@@ -689,14 +690,15 @@ package body Combat.UI is
 
    procedure RefreshBoardingUI is
       Iter, OrdersIter: Gtk_Tree_Iter;
-      List, OrdersList: Gtk_List_Store;
+      List: Gtk_List_Store;
       OrderIndex: Positive := 1;
       OrderName: Unbounded_String;
+      OrdersList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "orders2"));
    begin
       UpdateMessages;
       List := Gtk_List_Store(Get_Object(Builder, "enemycrewlist"));
       Clear(List);
-      OrdersList := Gtk_List_Store(Get_Object(Builder, "orders2"));
       Clear(OrdersList);
       Append(OrdersList, OrdersIter);
       Set(OrdersList, OrdersIter, 0, "Attack");
@@ -771,13 +773,14 @@ package body Combat.UI is
    procedure GiveBoardingOrders
      (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
       Path_String: UTF8_String; New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
-      List, OrdersList: Gtk_List_Store;
+      OrdersList: Gtk_List_Store;
       Model: Glib.Types.GType_Interface;
       NewOrder: Integer;
+      List: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "crewlist3"));
    begin
       Model := Get_Property(Self, Gtk.Cell_Renderer_Combo.Model_Property);
       OrdersList := -(Gtk_Tree_Model(Model));
-      List := Gtk_List_Store(Get_Object(Builder, "crewlist3"));
       Set
         (List, Get_Iter_From_String(List, Path_String), 3,
          Get_String(OrdersList, New_Iter, 0));
