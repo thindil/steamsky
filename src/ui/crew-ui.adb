@@ -162,10 +162,10 @@ package body Crew.UI is
 
    procedure RefreshInventory is
       InventoryIter: Gtk_Tree_Iter;
-      InventoryList: Gtk_List_Store;
+      InventoryList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "inventorylist"));
       ItemType: Unbounded_String;
    begin
-      InventoryList := Gtk_List_Store(Get_Object(Builder, "inventorylist"));
       Clear(InventoryList);
       for I in
         PlayerShip.Crew(MemberIndex).Inventory.First_Index ..
@@ -212,7 +212,8 @@ package body Crew.UI is
 
    procedure RefreshCrewInfo is
       CrewIter: Gtk_Tree_Iter;
-      CrewList: Gtk_List_Store;
+      CrewList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "crewlist2"));
       OrdersNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("Piloting"), To_Unbounded_String("Engineering"),
          To_Unbounded_String("Gunner"), To_Unbounded_String("Repair ship"),
@@ -224,7 +225,6 @@ package body Crew.UI is
          To_Unbounded_String("Defends ship"), To_Unbounded_String("Boarding"),
          To_Unbounded_String("Trains"));
    begin
-      CrewList := Gtk_List_Store(Get_Object(Builder, "crewlist2"));
       Clear(CrewList);
       for I in PlayerShip.Crew.Iterate loop
          Append(CrewList, CrewIter);
