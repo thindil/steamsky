@@ -5803,6 +5803,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="text" translatable="yes">10</property>
                             <property name="adjustment">adjsavedmessages</property>
                             <property name="value">10</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -5828,6 +5832,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="can_focus">True</property>
                             <property name="tooltip_text" translatable="yes">Amount of messages stored in game. If new message arrive when limit is reached, oldest message will be deleted. Enter value between 10 and 5000.</property>
                             <property name="adjustment">adjmessageslimit</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -5888,6 +5896,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="numeric">True</property>
                             <property name="update_policy">if-valid</property>
                             <property name="value">1</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -5917,6 +5929,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="numeric">True</property>
                             <property name="update_policy">if-valid</property>
                             <property name="value">1</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -5946,6 +5962,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="numeric">True</property>
                             <property name="update_policy">if-valid</property>
                             <property name="value">1</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6135,6 +6155,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6146,6 +6170,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6157,6 +6185,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6168,6 +6200,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6179,6 +6215,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6190,6 +6230,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6201,6 +6245,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6212,6 +6260,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6223,6 +6275,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6234,6 +6290,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6292,6 +6352,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6303,6 +6367,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6314,6 +6382,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6397,6 +6469,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6408,6 +6484,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6419,6 +6499,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6430,6 +6514,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6441,6 +6529,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6452,6 +6544,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6475,6 +6571,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6498,6 +6598,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6521,6 +6625,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6544,6 +6652,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6567,6 +6679,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6590,6 +6706,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6613,6 +6733,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6636,6 +6760,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6659,6 +6787,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6693,6 +6825,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6752,6 +6888,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6763,6 +6903,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6774,6 +6918,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6785,6 +6933,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6892,6 +7044,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6903,6 +7059,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6914,6 +7074,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6925,6 +7089,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6936,6 +7104,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6947,6 +7119,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6958,6 +7134,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6969,6 +7149,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -6992,6 +7176,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -7027,6 +7215,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -7038,6 +7230,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="editable">False</property>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -7229,6 +7425,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="tooltip_text" translatable="yes">Size (in pixels) of font used to draw game map.</property>
                                 <property name="adjustment">adjmapfont</property>
                                 <property name="numeric">True</property>
+                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                <signal name="focus-in-event" handler="Toggle_Close_Button" swapped="no"/>
+                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                <signal name="focus-out-event" handler="Toggle_Close_Button" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
