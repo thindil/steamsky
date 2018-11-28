@@ -304,7 +304,8 @@ package body Crafts.UI is
    procedure ShowCraftsUI is
       Deconstructs: Positive_Container.Vector;
       RecipesIter: Gtk_Tree_Iter;
-      RecipesList: Gtk_List_Store;
+      RecipesList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "recipeslist"));
       CanCraft: Boolean;
       Recipe: Craft_Data;
       CargoIndex: Natural;
@@ -322,7 +323,6 @@ package body Crafts.UI is
             end if;
          end loop;
       end loop;
-      RecipesList := Gtk_List_Store(Get_Object(Builder, "recipeslist"));
       Clear(RecipesList);
       for I in Known_Recipes.First_Index .. Known_Recipes.Last_Index loop
          Append(RecipesList, RecipesIter);
