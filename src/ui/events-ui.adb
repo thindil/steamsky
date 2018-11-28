@@ -127,9 +127,9 @@ package body Events.UI is
 
    procedure ShowEventsUI is
       EventsIter: Gtk_Tree_Iter;
-      EventsList: Gtk_List_Store;
+      EventsList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "eventslist"));
    begin
-      EventsList := Gtk_List_Store(Get_Object(Builder, "eventslist"));
       Cleaning := True;
       Clear(EventsList);
       Cleaning := False;
