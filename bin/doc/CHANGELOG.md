@@ -46,3 +46,4 @@ All notable changes to this project will be documented in this file.
 - Entering text cause activation of menu
 - Entering text cause activation of menu in numeric fields
 - Close windows when entering texts
+- Entering text cause activation of shortcuts in options
