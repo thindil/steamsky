@@ -61,7 +61,7 @@ package body GameOptions is
          To_Unbounded_String("edtupright")),
       4 =>
         (To_Unbounded_String("<skymapwindow>/btnleft"),
-         To_Unbounded_String("edtupleft")),
+         To_Unbounded_String("edtleft")),
       5 =>
         (To_Unbounded_String("<skymapwindow>/btnmovewait"),
          To_Unbounded_String("edtmovewait")),
