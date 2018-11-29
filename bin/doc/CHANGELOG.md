@@ -25,7 +25,7 @@ All notable changes to this project will be documented in this file.
 - Final enemy for story with undead
 - Updated interface
 - Crews for advanced huge inquistition ship mk V, huge inquisition ship mk V,
-  advanced huge undead ship mk V
+  advanced huge undead ship mk V, huge undead ship mk V
 
 ### Fixed
 - Some typos in old changelog
