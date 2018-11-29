@@ -297,9 +297,9 @@ package body Missions.UI is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MissionsIter: Gtk_Tree_Iter;
-      MissionsList: Gtk_List_Store;
+      MissionsList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "missionslist"));
    begin
-      MissionsList := Gtk_List_Store(Get_Object(Builder, "missionslist"));
       Cleaning := True;
       Clear(MissionsList);
       Cleaning := False;
