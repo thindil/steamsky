@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - Repair material for titanium armor
 - Setting player ship speed after combat
 - Entering text cause activation of menu
+- Setting key for move ship left
 
 ## [3.0] - 2018-11-04
 
