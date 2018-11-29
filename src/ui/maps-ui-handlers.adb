@@ -1171,18 +1171,17 @@ package body Maps.UI.Handlers is
    end ExecuteOrder;
 
    procedure DeliverMedicines(User_Data: access GObject_Record'Class) is
-      EventIndex, ItemIndex: Natural := 0;
-      NewTime: Integer;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-   begin
-      EventIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
-      ItemIndex :=
+      EventIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
+      ItemIndex: constant Natural :=
         FindItem
           (Inventory => PlayerShip.Cargo,
            ItemType => Factions_List(SkyBases(BaseIndex).Owner).HealingTools);
-      NewTime :=
+      NewTime: constant Integer :=
         Events_List(EventIndex).Time - PlayerShip.Cargo(ItemIndex).Amount;
+   begin
       if NewTime < 1 then
          DeleteEvent(EventIndex);
       else
