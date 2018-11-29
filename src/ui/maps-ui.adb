@@ -1133,18 +1133,6 @@ package body Maps.UI is
         (Gtk_Widget(Get_Object(Builder, "btncenter")),
          "<movemapwindow>/btncenter", Accelerators);
       declare
-         WindowsNames: constant array(Positive range <>) of Unbounded_String :=
-           (To_Unbounded_String("movemapwindow"),
-            To_Unbounded_String("orderswindow"),
-            To_Unbounded_String("waitwindow"));
-      begin
-         for I in WindowsNames'Range loop
-            On_Key_Release_Event
-              (Gtk_Widget(Get_Object(Builder, To_String(WindowsNames(I)))),
-               CloseWindow'Access);
-         end loop;
-      end;
-      declare
          StackNames: constant array(Positive range <>) of Unbounded_String :=
            (To_Unbounded_String("gamestack"),
             To_Unbounded_String("shipyardstack"),
