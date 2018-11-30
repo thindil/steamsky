@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Entering text cause activation of menu in numeric fields
 - Close windows when entering text
 - Entering text cause activation of shortcuts in options
+- Showing info about player reputation in bases
 
 ## [3.0.1] - 2018-11-25
 
