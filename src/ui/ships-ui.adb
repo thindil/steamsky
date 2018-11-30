@@ -502,9 +502,9 @@ package body Ships.UI is
 
    procedure ShowShipUI is
       ModulesIter: Gtk_Tree_Iter;
-      ModulesList: Gtk_List_Store;
+      ModulesList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "moduleslist"));
    begin
-      ModulesList := Gtk_List_Store(Get_Object(Builder, "moduleslist"));
       Clear(ModulesList);
       for Module of PlayerShip.Modules loop
          Append(ModulesList, ModulesIter);
