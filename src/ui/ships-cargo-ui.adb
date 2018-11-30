@@ -43,9 +43,9 @@ package body Ships.Cargo.UI is
 
    procedure RefreshCargoInfo is
       CargoIter: Gtk_Tree_Iter;
-      CargoList: Gtk_List_Store;
+      CargoList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "cargolist"));
    begin
-      CargoList := Gtk_List_Store(Get_Object(Builder, "cargolist"));
       Clear(CargoList);
       for I in PlayerShip.Cargo.Iterate loop
          Append(CargoList, CargoIter);
