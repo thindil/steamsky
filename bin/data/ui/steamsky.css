@@ -233,7 +233,7 @@ GtkProgressBar.trough#negativebar,
    .progressbar:selected#positivebar,
    .progressbar:selected#positivebar:focus {
    background:linear-gradient(to bottom, darkgreen, black);
-   border-radius:10px 10px 0px 0px;
+   border-radius:0px 10px 10px 0px;
 }
 
 GtkProgressBar.trough#positivebar,
