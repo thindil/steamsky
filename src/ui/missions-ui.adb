@@ -340,9 +340,9 @@ package body Missions.UI is
 
    procedure ShowAcceptedMissions is
       MissionsIter: Gtk_Tree_Iter;
-      MissionsList: Gtk_List_Store;
+      MissionsList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "missionslist"));
    begin
-      MissionsList := Gtk_List_Store(Get_Object(Builder, "missionslist"));
       Cleaning := True;
       Clear(MissionsList);
       Cleaning := False;
