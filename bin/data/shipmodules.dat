@@ -257,5 +257,6 @@ Text between "module" tags is module description.
  <module durability="600" index="216" installtime="180" material="Adamantium" maxvalue="600" name="Adamantium 120mm gun" price="256000" skill="Gunsmith" type="GUN" value="25" weight="1600">Upgraded 120mm ship gun, made of adamantium. Requires an empty turret.</module>
  <module durability="600" index="217" installtime="90" material="Adamantium" maxvalue="0" name="Small adamantium workshop" price="24000" size="1" skill="Engineering" type="WORKSHOP" value="0" weight="900">Allows crafting of some tools. Made of adamantium.</module>
  <module durability="300" index="218" installtime="60" material="Steel" maxvalue="0" name="Small steel training room" price="8000" size="1" skill="Engineering" type="TRAINING_ROOM" value="0" weight="450">Allow training skills on ship. More durable version made of steel.</module>
+ <module durability="20" index="219" installtime="100" material="Bronze" maxvalue="10000" name="Medium bronze cargo bay" price="600" size="2" skill="Engineering" type="CARGO" value="0" weight="200">Space for holding ship cargo.</module>
 </modules>
 
