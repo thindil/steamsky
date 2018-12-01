@@ -99,10 +99,10 @@ package Maps.UI.Handlers is
      (Object: access Gtkada_Builder_Record'
         Class); -- Enable menu shortcuts keys
    function ToggleCloseButton
-     (Object: access Gtkada_Builder_Record'Class)
+     (User_Data: access GObject_Record'Class)
      return Boolean; -- Toggle sensitive of close button
    procedure ToggleCloseButtonProc
-     (Object: access Gtkada_Builder_Record'
+     (User_Data: access GObject_Record'
         Class); -- Toggle sensitive of close button
 
 end Maps.UI.Handlers;
