@@ -26,7 +26,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Crews for advanced huge inquistition ship mk V, huge inquisition ship mk V,
   advanced huge undead ship mk V, huge undead ship mk V, advanced huge pirate
-  ship mk V
+  ship mk V and huge pirate ship mk V
 
 ### Fixed
 - Some typos in old changelog
