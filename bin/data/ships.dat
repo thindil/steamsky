@@ -2738,10 +2738,10 @@ during combat. -->
   <cargo index="153" maxamount="1000" minamount="500"/>
   <cargo index="131" maxamount="750" minamount="500"/>
   <cargo index="156" maxamount="200" minamount="100"/>
-  <member index="39"/>
-  <member amount="5" index="40"/>
-  <member index="41"/>
-  <member index="68" maxamount="9" minamount="5"/>
+  <member index="116"/>
+  <member amount="5" index="117"/>
+  <member index="118"/>
+  <member index="119" maxamount="9" minamount="5"/>
   <description>Huge, well armored pirate ship (upgraded version). Like many pirates, they prefer to disarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="156" maxloot="1200" minloot="750" name="Advanced huge pirate ship mk V" owner="PIRATES">
