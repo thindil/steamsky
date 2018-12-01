@@ -73,7 +73,10 @@ package body Statistics.UI is
    end CreateStatsUI;
 
    procedure ShowStatsUI is
-      MinutesDiff: Natural;
+      MinutesDiff: constant Natural :=
+        (GameDate.Minutes + (GameDate.Hour * 60) + (GameDate.Day * 1440) +
+         (GameDate.Month * 43200) + (GameDate.Year * 518400)) -
+        829571520;
       type VisitedFactor is digits 4 range 0.0 .. 100.0;
       VisitedPercent: VisitedFactor;
       VisitedString: String(1 .. 5);
@@ -84,10 +87,6 @@ package body Statistics.UI is
       ProtoIndex: Positive;
       ItemIndex: Positive;
    begin
-      MinutesDiff :=
-        (GameDate.Minutes + (GameDate.Hour * 60) + (GameDate.Day * 1440) +
-         (GameDate.Month * 43200) + (GameDate.Year * 518400)) -
-        829571520;
       StatsText :=
         To_Unbounded_String("Points:" & Natural'Image(GameStats.Points));
       Append(StatsText, LF & "Time passed:");
