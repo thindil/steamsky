@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Close windows when entering text
 - Entering text cause activation of shortcuts in options
 - Showing info about player reputation in bases
+- Close wait orders and move map windows when entering text
 
 ## [3.0.1] - 2018-11-25
 
