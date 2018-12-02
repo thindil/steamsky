@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
   advanced huge inquisition ship mk VI
 - Few new mobs for ships crews
 - Option to set starting base for new game
-- New ship module: medium bronze cargo bay
+- New ship modules: medium bronze cargo bay and medium iron cargo bay
 
 ### Changed
 - Raised maximum amount of modules for huge adamantium hull
