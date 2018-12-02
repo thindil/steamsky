@@ -428,7 +428,8 @@ package body Trades.UI is
 
    procedure ShowTradeUI is
       ItemsIter: Gtk_Tree_Iter;
-      ItemsList: Gtk_List_Store;
+      ItemsList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "itemslist1"));
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: Positive;
@@ -443,7 +444,6 @@ package body Trades.UI is
          BaseType := 1;
          BaseCargo := TraderCargo;
       end if;
-      ItemsList := Gtk_List_Store(Get_Object(Builder, "itemslist1"));
       Clear(ItemsList);
       for I in PlayerShip.Cargo.Iterate loop
          if Items_List(PlayerShip.Cargo(I).ProtoIndex).Prices(BaseType) >
