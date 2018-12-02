@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.1] - 2018-12-02
 
 ### Added
 - New ship modules: advanced huge adamantium hull, huge adamantium engine,
