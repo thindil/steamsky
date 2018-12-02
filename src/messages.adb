@@ -53,7 +53,8 @@ package body Messages is
       Color: Natural := 0) is
    begin
       if Natural(Messages_List.Length) = GameSettings.MessagesLimit then
-         Messages_List.Delete(Index => 1);
+         Messages_List.Delete_First;
+         LastIndex := LastIndex - 1;
       end if;
       LastIndex := LastIndex + 1;
       Messages_List.Append
