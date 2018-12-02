@@ -52,3 +52,4 @@ All notable changes to this project will be documented in this file.
 - Setting key for move ship left
 - Showing info about player reputation in bases
 - Close wait orders and move map windows when entering text
+- Crash during combat on showing messages
