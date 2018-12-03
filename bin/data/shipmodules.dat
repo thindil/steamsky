@@ -259,5 +259,6 @@ Text between "module" tags is module description.
  <module durability="300" index="218" installtime="60" material="Steel" maxvalue="0" name="Small steel training room" price="8000" size="1" skill="Engineering" type="TRAINING_ROOM" value="0" weight="450">Allow training skills on ship. More durable version made of steel.</module>
  <module durability="20" index="219" installtime="100" material="Bronze" maxvalue="10000" name="Medium bronze cargo bay" price="600" size="2" skill="Engineering" type="CARGO" value="0" weight="200">Space for holding ship cargo.</module>
  <module durability="100" index="220" installtime="100" material="Iron" maxvalue="10000" name="Medium iron cargo bay" price="1200" size="2" skill="Engineering" type="CARGO" value="0" weight="200">Space for holding ship cargo, made of iron.</module>
+ <module durability="150" index="221" installtime="100" material="Steel" maxvalue="10000" name="Medium steel cargo bay" price="2400" size="1" skill="Engineering" type="CARGO" value="0" weight="300">Space for holding ship cargo, made of steel.</module>
 </modules>
 
