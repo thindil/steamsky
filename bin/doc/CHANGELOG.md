@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- New ship module: medium steel cargo bay
+
 ## [3.1] - 2018-12-02
 
 ### Added
