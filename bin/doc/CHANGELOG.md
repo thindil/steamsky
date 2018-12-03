@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updated README.md
+
 ### Fixed
 - Entering text cause activation of menu in numeric fields
 - Close windows when entering text
