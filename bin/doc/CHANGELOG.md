@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New ship module: medium steel cargo bay
 
+### Changed
+- Updated README.md
+
 ## [3.1] - 2018-12-02
 
 ### Added
