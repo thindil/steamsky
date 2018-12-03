@@ -2,7 +2,7 @@
 
 Steam Sky is an open source roguelike with a steampunk setting. You are a
 commander of a flying ship, as leader you will be traveling across floating
-bases, engaging in combat, trading goods etc... There is no mandatory ending
+bases, engaging in combat, trading goods etc. There is no mandatory ending
 to this game, you may freely play until your character die. The game is
 currently under heavy development, but is in a playable state. Steam Sky is
 available on Linux and Windows 64 bit platforms.
