@@ -108,14 +108,9 @@ package body Bases is
      (FactionIndex: Positive)
      return Unbounded_String is -- based on name generator from libtcod
       NewName: Unbounded_String;
-      LettersAmount, NumbersAmount: Positive;
-      NameType: NamesTypes;
-      subtype Letters is Character range 'A' .. 'Z';
-      subtype Numbers is Character range '0' .. '9';
    begin
-      NameType := Factions_List(FactionIndex).NamesType;
       NewName := Null_Unbounded_String;
-      if NameType = Factions.STANDARD then
+      if Factions_List(FactionIndex).NamesType = Factions.STANDARD then
          if GetRandom(1, 100) < 16 then
             NewName :=
               BaseSyllablesPre
@@ -142,23 +137,33 @@ package body Bases is
                     BaseSyllablesPost.Last_Index));
          end if;
       else
-         LettersAmount := GetRandom(2, 5);
-         for I in 1 .. LettersAmount loop
-            Append
-              (NewName,
-               Letters'Val
-                 (GetRandom
-                    (Letters'Pos(Letters'First), Letters'Pos(Letters'Last))));
-         end loop;
-         Append(NewName, '-');
-         NumbersAmount := GetRandom(2, 4);
-         for I in 1 .. NumbersAmount loop
-            Append
-              (NewName,
-               Numbers'Val
-                 (GetRandom
-                    (Numbers'Pos(Numbers'First), Numbers'Pos(Numbers'Last))));
-         end loop;
+         declare
+            LettersAmount: constant Positive := GetRandom(2, 5);
+            subtype Letters is Character range 'A' .. 'Z';
+         begin
+            for I in 1 .. LettersAmount loop
+               Append
+                 (NewName,
+                  Letters'Val
+                    (GetRandom
+                       (Letters'Pos(Letters'First),
+                        Letters'Pos(Letters'Last))));
+            end loop;
+         end;
+         declare
+            NumbersAmount: constant Positive := GetRandom(2, 4);
+            subtype Numbers is Character range '0' .. '9';
+         begin
+            Append(NewName, '-');
+            for I in 1 .. NumbersAmount loop
+               Append
+                 (NewName,
+                  Numbers'Val
+                    (GetRandom
+                       (Numbers'Pos(Numbers'First),
+                        Numbers'Pos(Numbers'Last))));
+            end loop;
+         end;
       end if;
       return NewName;
    end GenerateBaseName;
