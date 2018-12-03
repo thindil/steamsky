@@ -9,6 +9,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated README.md
 
+### Fixed
+- Info about item damage
+
 ## [3.1] - 2018-12-02
 
 ### Added
