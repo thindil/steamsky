@@ -2310,6 +2310,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <signal name="cursor-changed" handler="Show_Event_Info" swapped="no"/>
                         <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
                         <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                        <signal name="row-activated" handler="Show_Event" swapped="no"/>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
@@ -2459,6 +2460,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <signal name="cursor-changed" handler="Show_Mission_Info" object="treemissions1" swapped="no"/>
                         <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
                         <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                        <signal name="row-activated" handler="Button_Mission" object="btnmissioncenter" swapped="no"/>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
@@ -2891,6 +2893,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="model">basessort</property>
                             <property name="enable_search">False</property>
                             <signal name="cursor-changed" handler="Show_Base_Info" swapped="no"/>
+                            <signal name="row-activated" handler="Show_Base" swapped="no"/>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection"/>
                             </child>
