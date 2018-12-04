@@ -406,8 +406,10 @@ package body Ships.UI.Handlers is
             Gtk_Window(Get_Object(Builder, "skymapwindow")));
          return;
       end if;
-      PlayerShip.Name := To_Unbounded_String(NewName);
-      GenerateSaveName(True);
+      if To_Unbounded_String(NewName) /= PlayerShip.Name then
+         PlayerShip.Name := To_Unbounded_String(NewName);
+         GenerateSaveName(True);
+      end if;
    end ChangeShipName;
 
    procedure ChangeModuleName(Self: access Gtk_Cell_Renderer_Text_Record'Class;
