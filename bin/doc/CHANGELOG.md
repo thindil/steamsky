@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Info about item damage
+- Unnecessary changes of name of save game file
 
 ## [3.1] - 2018-12-02
 
