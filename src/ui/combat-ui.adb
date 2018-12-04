@@ -162,7 +162,7 @@ package body Combat.UI is
       if GameSettings.MessagesOrder = OLDER_FIRST then
          for I in LoopStart .. -1 loop
             Message := GetMessage(I + 1);
-            if Message.MessageIndex >= MessagesStarts then
+            if (GetLastMessageIndex + I + 1) >= MessagesStarts then
                ShowMessage;
                if I < -1 then
                   Insert(MessagesBuffer, MessagesIter, "" & LF);
@@ -179,7 +179,7 @@ package body Combat.UI is
       else
          for I in reverse LoopStart .. -1 loop
             Message := GetMessage(I + 1);
-            exit when Message.MessageIndex < MessagesStarts;
+            exit when (GetLastMessageIndex + I + 1) < MessagesStarts;
             ShowMessage;
             if I > LoopStart then
                Insert(MessagesBuffer, MessagesIter, "" & LF);
