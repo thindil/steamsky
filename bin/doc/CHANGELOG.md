@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New ship module: medium steel cargo bay
+- New ship modules: medium steel cargo bay and medium titanium cargo bay
 
 ### Changed
 - Updated README.md
@@ -17,15 +17,15 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New ship modules: advanced huge adamantium hull, huge adamantium engine,
   advanced huge adamantium engine, adamantium harpoon gun, adamantium 80mm gun,
-  adamantium 100mm gun, adamantium 120mm gun and small adamantium workshop
+  adamantium 100mm gun, adamantium 120mm gun, small adamantium workshop, medium
+  bronze cargo bay and medium iron cargo bay
 - Options to update game data (ships, mobs, factions, etc) by modification files
 - New ships: huge pirate ship mk VI, advanced huge pirate ship mk VI, huge
   undead ship mk VI, advanced huge undead ship mk VI, huge attacking drone mk
-  VI, advanced huge attacking drone mk VI, huge inquisition ship mk VI and
+  VI, advanced huge attacking drone mk VI, huge inquisition ship mk VI,
   advanced huge inquisition ship mk VI
 - Few new mobs for ships crews
 - Option to set starting base for new game
-- New ship modules: medium bronze cargo bay and medium iron cargo bay
 
 ### Changed
 - Raised maximum amount of modules for huge adamantium hull
