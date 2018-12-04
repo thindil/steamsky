@@ -26,11 +26,8 @@ package body Bases.Cargo is
    procedure GenerateCargo is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      BaseType: constant Positive :=
-        Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
-      Chance, Roll: Positive;
+      Chance: Positive;
       Population: Natural := SkyBases(BaseIndex).Population;
-      MaxAmount: Natural;
    begin
       if Population = 0 then
          Population := 1;
@@ -55,37 +52,47 @@ package body Bases.Cargo is
               (ProtoIndex => FindProtoItem(MoneyIndex),
                Amount => (GetRandom(50, 200) * Population), Durability => 100,
                Price => 0));
-         for I in Items_List.Iterate loop
-            if Items_List(I).Buyable(BaseType) then
-               SkyBases(BaseIndex).Cargo.Append
-                 (New_Item =>
-                    (ProtoIndex => Objects_Container.To_Index(I),
-                     Amount => (GetRandom(0, 100) * Population),
-                     Durability => 100,
-                     Price => Items_List(I).Prices(BaseType)));
-            end if;
-         end loop;
-      else
-         for Item of SkyBases(BaseIndex).Cargo loop
-            Roll := GetRandom(1, 100);
-            if Roll < 30 and Item.Amount > 0 then
-               MaxAmount := Item.Amount / 2;
-               if MaxAmount < 1 then
-                  MaxAmount := 1;
+         declare
+            BaseType: constant Positive :=
+              Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
+         begin
+            for I in Items_List.Iterate loop
+               if Items_List(I).Buyable(BaseType) then
+                  SkyBases(BaseIndex).Cargo.Append
+                    (New_Item =>
+                       (ProtoIndex => Objects_Container.To_Index(I),
+                        Amount => (GetRandom(0, 100) * Population),
+                        Durability => 100,
+                        Price => Items_List(I).Prices(BaseType)));
                end if;
-               Item.Amount := Item.Amount - GetRandom(1, MaxAmount);
-            elsif Roll < 60 and SkyBases(BaseIndex).Population > 0 then
-               if Item.Amount = 0 then
-                  Item.Amount := GetRandom(1, 10) * Population;
-               else
+            end loop;
+         end;
+      else
+         declare
+            Roll: Positive;
+            MaxAmount: Natural;
+         begin
+            for Item of SkyBases(BaseIndex).Cargo loop
+               Roll := GetRandom(1, 100);
+               if Roll < 30 and Item.Amount > 0 then
                   MaxAmount := Item.Amount / 2;
                   if MaxAmount < 1 then
                      MaxAmount := 1;
                   end if;
-                  Item.Amount := Item.Amount + GetRandom(1, MaxAmount);
+                  Item.Amount := Item.Amount - GetRandom(1, MaxAmount);
+               elsif Roll < 60 and SkyBases(BaseIndex).Population > 0 then
+                  if Item.Amount = 0 then
+                     Item.Amount := GetRandom(1, 10) * Population;
+                  else
+                     MaxAmount := Item.Amount / 2;
+                     if MaxAmount < 1 then
+                        MaxAmount := 1;
+                     end if;
+                     Item.Amount := Item.Amount + GetRandom(1, MaxAmount);
+                  end if;
                end if;
-            end if;
-         end loop;
+            end loop;
+         end;
       end if;
    end GenerateCargo;
 
