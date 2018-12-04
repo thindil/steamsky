@@ -28,7 +28,6 @@ package Messages is
    record
       Message: Unbounded_String; -- Text of message
       MType: Message_Type; -- Type of message
-      MessageIndex: Positive; -- Index of message
       Color: Natural; -- Color used for show message
    end record;
    package Messages_Container is new Vectors(Positive, Message_Data);

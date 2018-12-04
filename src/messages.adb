@@ -19,8 +19,6 @@ with Config; use Config;
 
 package body Messages is
 
-   LastIndex: Integer := 0;
-
    function FormatedTime(Time: Date_Record := GameDate) return String is
       Result: Unbounded_String := To_Unbounded_String("");
       RawImage: Unbounded_String;
@@ -54,15 +52,13 @@ package body Messages is
    begin
       if Natural(Messages_List.Length) = GameSettings.MessagesLimit then
          Messages_List.Delete_First;
-         LastIndex := LastIndex - 1;
       end if;
-      LastIndex := LastIndex + 1;
       Messages_List.Append
         (New_Item =>
            (Message =>
               To_Unbounded_String(FormatedTime) & ": " &
               To_Unbounded_String(Message),
-            MType => MType, MessageIndex => LastIndex, Color => Color));
+            MType => MType, Color => Color));
       LastMessage := To_Unbounded_String(Message);
    end AddMessage;
 
@@ -72,7 +68,7 @@ package body Messages is
    begin
       if MessageIndex > Integer(Messages_List.Length) then
          return (Message => Null_Unbounded_String, MType => Default,
-            MessageIndex => 1, Color => 0);
+            Color => 0);
       end if;
       if MessageIndex < 1 then
          Index := 1;
@@ -87,7 +83,7 @@ package body Messages is
             end loop;
          end if;
          return (Message => Null_Unbounded_String, MType => Default,
-            MessageIndex => 1, Color => 0);
+            Color => 0);
       end if;
       Index := 0;
       for Message of Messages_List loop
@@ -98,13 +94,11 @@ package body Messages is
             return Message;
          end if;
       end loop;
-      return (Message => Null_Unbounded_String, MType => Default,
-         MessageIndex => 1, Color => 0);
+      return (Message => Null_Unbounded_String, MType => Default, Color => 0);
    end GetMessage;
 
    procedure ClearMessages is
    begin
-      LastIndex := 0;
       Messages_List.Clear;
    end ClearMessages;
 
@@ -126,16 +120,13 @@ package body Messages is
    procedure RestoreMessage(Message: Unbounded_String;
       MType: Message_Type := Default; Color: Natural := 0) is
    begin
-      LastIndex := LastIndex + 1;
       Messages_List.Append
-        (New_Item =>
-           (Message => Message, MType => MType, MessageIndex => LastIndex,
-            Color => Color));
+        (New_Item => (Message => Message, MType => MType, Color => Color));
    end RestoreMessage;
 
    function GetLastMessageIndex return Natural is
    begin
-      return LastIndex;
+      return Messages_List.Last_Index;
    end GetLastMessageIndex;
 
 end Messages;
