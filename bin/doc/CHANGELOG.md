@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Close wait orders and move map windows when entering text
 - Crash during combat on showing messages
 - Info about item damage
+- Unnecessary changes of name of save game file
 
 ## [3.0.1] - 2018-11-25
 
