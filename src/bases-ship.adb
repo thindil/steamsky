@@ -80,8 +80,6 @@ package body Bases.Ship is
         FindItem(PlayerShip.Cargo, ProtoMoneyIndex);
       HullIndex, ModulesAmount, TraderIndex: Positive;
       FreeTurretIndex, Price: Natural := 0;
-      type DamageFactor is digits 2 range 0.0 .. 1.0;
-      Damage: DamageFactor := 0.0;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
@@ -185,18 +183,23 @@ package body Bases.Ship is
             To_String(MoneyName) & ".",
             TradeMessage);
       else
-         Damage :=
-           1.0 -
-           DamageFactor
-             (Float(PlayerShip.Modules(ModuleIndex).Durability) /
-              Float(PlayerShip.Modules(ModuleIndex).MaxDurability));
-         Price :=
-           Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Price -
-           Integer
-             (Float
-                (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                   .Price) *
-              Float(Damage));
+         declare
+            type DamageFactor is digits 2 range 0.0 .. 1.0;
+            Damage: DamageFactor := 0.0;
+         begin
+            Damage :=
+              1.0 -
+              DamageFactor
+                (Float(PlayerShip.Modules(ModuleIndex).Durability) /
+                 Float(PlayerShip.Modules(ModuleIndex).MaxDurability));
+            Price :=
+              Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Price -
+              Integer
+                (Float
+                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                      .Price) *
+                 Float(Damage));
+         end;
          CountPrice(Price, TraderIndex, False);
          if FreeCargo((0 - Price)) < 0 then
             raise Trade_No_Free_Cargo;
