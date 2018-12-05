@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New ship modules: medium steel cargo bay, medium titanium cargo bay and
   medium orichalcum cargo bay
+- Option to center map on home base
 
 ### Changed
 - Updated README.md
