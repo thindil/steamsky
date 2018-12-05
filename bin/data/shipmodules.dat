@@ -1,41 +1,41 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <modules>
-<!-- Each ship module is between "module" tags. 
+<!-- Each ship module is between "module" tags.
 - Attribute "index" is a module index (it can be number or text) and must be
-unique. This value is used in ships data entries. 
+unique. This value is used in ships data entries.
 - Optional attribute `action`: what to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
-- Attribute "name": Standard name of module. Will be visible in ship info 
-screen and in shipyards. 
-- Attribute "type": Type of module. Available options are: Engine, Cabin, 
+- Attribute "name": Standard name of module. Will be visible in ship info
+screen and in shipyards.
+- Attribute "type": Type of module. Available options are: Engine, Cabin,
 Cockpit, Turret, Gun, Cargo, Hull, Armor, Battering_ram, Alchemy_Lab, Furnace,
-Water_Collector, Workshop, Greenhouse, Medical_room, Harpoon_Gun, 
-Training_Room. 
-- Attribute "weight": Weight of module in kilograms. 
+Water_Collector, Workshop, Greenhouse, Medical_room, Harpoon_Gun,
+Training_Room.
+- Attribute "weight": Weight of module in kilograms.
 - Attribute "value": Depends on type of module. For 'Engine' it is fuel usage
-for travel by one map field. For 'Cabin' it is value of reduced tiredness of 
+for travel by one map field. For 'Cabin' it is value of reduced tiredness of
 owner who rest there. For 'Gun' or 'Harpoon_Gun' it is index of item type used
-as ammunition (item types are in *game.dat* file). For any other type of 
-modules should be 0 (zero). Attribute "maxvalue": Depends on type of module. 
-For 'Hull' it is max free module space. For 'Engine' it is engine power. For 
-'Cabin' should be that same like "value" attribute value. For 'Cargo' it is 
-maximum capacity in kilograms for cargo for that module. For 'Gun', 
-'Battering_ram' it is amount of damage done by selected weapon. For 
+as ammunition (item types are in *game.dat* file). For any other type of
+modules should be 0 (zero). Attribute "maxvalue": Depends on type of module.
+For 'Hull' it is max free module space. For 'Engine' it is engine power. For
+'Cabin' should be that same like "value" attribute value. For 'Cargo' it is
+maximum capacity in kilograms for cargo for that module. For 'Gun',
+'Battering_ram' it is amount of damage done by selected weapon. For
 'Harpoon_Gun' it is amount of combat rounds by how long harpoon is stuck in
-enemy ship. For any other type of modules should be 0 (zero). 
+enemy ship. For any other type of modules should be 0 (zero).
 - Attribute "durability": Base durability of module. How many damage module can
-take before will be destroyed. 
-- Attribute "material": Type of item which will be used to repair or upgrade 
-module. 
+take before will be destroyed.
+- Attribute "material": Type of item which will be used to repair or upgrade
+module.
 - Attribute "skill": Name of skill which will be used during repair or upgrading
-module. 
-- Attribute "price": Base buy or sell price of module in shipyard. 
-- Attribute "installtime": How long in minutes take install/remove selected 
-module from ship. 
-- Optional attribute "unique": If set to 'Y' then each ship can have only one 
-module of that type. 
-- Optional attribute "size": Amount of hull module space used by module. 
+module.
+- Attribute "price": Base buy or sell price of module in shipyard.
+- Attribute "installtime": How long in minutes take install/remove selected
+module from ship.
+- Optional attribute "unique": If set to 'Y' then each ship can have only one
+module of that type.
+- Optional attribute "size": Amount of hull module space used by module.
 Text between "module" tags is module description.
 -->
  <module durability="100" index="1" installtime="180" material="Bronze" maxvalue="10" name="Small bronze hull" price="5000" skill="Engineering" type="HULL" value="0" weight="4000">Base module of each ship. The entire ship goes down if the hull is destroyed.</module>
@@ -261,5 +261,6 @@ Text between "module" tags is module description.
  <module durability="100" index="220" installtime="100" material="Iron" maxvalue="10000" name="Medium iron cargo bay" price="1200" size="2" skill="Engineering" type="CARGO" value="0" weight="200">Space for holding ship cargo, made of iron.</module>
  <module durability="150" index="221" installtime="100" material="Steel" maxvalue="10000" name="Medium steel cargo bay" price="2400" size="2" skill="Engineering" type="CARGO" value="0" weight="300">Space for holding ship cargo, made of steel.</module>
  <module durability="300" index="222" installtime="150" material="Titanium" maxvalue="10000" name="Medium titanium cargo bay" price="4800" size="2" skill="Engineering" type="CARGO" value="0" weight="600">Space for holding ship cargo, made of titanium.</module>
+ <module durability="500" index="223" installtime="150" material="Orichalcum" maxvalue="10000" name="Medium orichalcum cargo bay" price="9600" size="2" skill="Engineering" type="CARGO" value="0" weight="600">Space for holding ship cargo, made of orichalcum.</module>
 </modules>
 
