@@ -1023,6 +1023,7 @@ package body Maps.UI is
       Add_Entry("<skymapwindow>/Menu/Stories", GDK_T, 0);
       Add_Entry("<skymapwindow>/zoomin", GDK_KP_Subtract, 0);
       Add_Entry("<skymapwindow>/zoomout", GDK_KP_Add, 0);
+      Add_Entry("<movemapwindow>/btncenterhomebase", GDK_H, 1);
       if Exists(To_String(SaveDirectory) & "keys.cfg") then
          Load(To_String(SaveDirectory) & "keys.cfg");
       end if;
@@ -1119,7 +1120,10 @@ package body Maps.UI is
                To_Unbounded_String("<skymapwindow>/Menu/Stories")),
             29 =>
               (To_Unbounded_String("btncenter"),
-               To_Unbounded_String("<movemapwindow>/btncenter")));
+               To_Unbounded_String("<movemapwindow>/btncenter")),
+            30 =>
+              (To_Unbounded_String("btncenterhomebase"),
+               To_Unbounded_String("<movemapwindow>/btncenterhomebase")));
       begin
          for I in AccelsArray'Range loop
             Set_Accel_Path
@@ -1132,6 +1136,9 @@ package body Maps.UI is
       Set_Accel_Path
         (Gtk_Widget(Get_Object(Builder, "btncenter")),
          "<movemapwindow>/btncenter", Accelerators);
+      Set_Accel_Path
+        (Gtk_Widget(Get_Object(Builder, "btncenterhomebase")),
+         "<movemapwindow>/btncenterhomebase", Accelerators);
       declare
          StackNames: constant array(Positive range <>) of Unbounded_String :=
            (To_Unbounded_String("gamestack"),

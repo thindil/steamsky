@@ -1250,18 +1250,29 @@ package body Maps.UI.Handlers is
         Event.State and Get_Default_Mod_Mask;
       Key: Gtk_Accel_Key;
       Found: Boolean;
+      function CenterMapOn(AccelName, ButtonName: String) return Boolean is
+      begin
+         Lookup_Entry(AccelName, Key, Found);
+         if not Found then
+            return False;
+         end if;
+         if Key.Accel_Key = Event.Keyval and Key.Accel_Mods = KeyMods then
+            MoveMap(Get_Object(Builder, ButtonName));
+            return True;
+         end if;
+         return True;
+      end CenterMapOn;
    begin
       if Get_Visible_Child_Name(Gtk_Stack(Get_Object(Builder, "gamestack"))) /=
         "skymap" then
          return True;
       end if;
-      Lookup_Entry("<movemapwindow>/btncenter", Key, Found);
-      if not Found then
+      if not CenterMapOn("<movemapwindow>/btncenter", "btncenter") then
          return True;
       end if;
-      if Key.Accel_Key = Event.Keyval and Key.Accel_Mods = KeyMods then
-         MoveMap(Get_Object(Builder, "btncenter"));
-         return False;
+      if not CenterMapOn
+          ("<movemapwindow>/btncenterhomebase", "btncenterhomebase") then
+         return True;
       end if;
       Lookup_Entry("<skymapwindow>/mouseclick", Key, Found);
       if not Found then
