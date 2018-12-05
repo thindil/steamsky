@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New ship modules: medium steel cargo bay and medium titanium cargo bay
+- New ship modules: medium steel cargo bay, medium titanium cargo bay and
+  medium orichalcum cargo bay
 
 ### Changed
 - Updated README.md
