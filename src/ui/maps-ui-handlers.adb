@@ -180,6 +180,9 @@ package body Maps.UI.Handlers is
          else
             CenterX := CenterX + (MapWidth / 3);
          end if;
+      elsif User_Data = Get_Object(Builder, "btncenterhomebase") then
+         CenterX := SkyBases(PlayerShip.HomeBase).SkyX;
+         CenterY := SkyBases(PlayerShip.HomeBase).SkyY;
       end if;
       Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmap")), "");
       DrawMap;
