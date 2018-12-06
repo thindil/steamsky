@@ -42,7 +42,6 @@ package body Combat is
    function StartCombat(EnemyIndex: Positive;
       NewCombat: Boolean := True) return Boolean is
       EnemyShip: ShipRecord;
-      PlayerPerception, EnemyPerception: Natural := 0;
       function CountPerception(Spotter, Spotted: ShipRecord) return Natural is
          Result: Natural := 0;
       begin
@@ -135,29 +134,34 @@ package body Combat is
          end if;
       end loop;
       if NewCombat then
-         PlayerPerception := CountPerception(PlayerShip, Enemy.Ship);
-         OldSpeed := PlayerShip.Speed;
-         if Enemy.Perception > 0 then
-            EnemyPerception := Enemy.Perception;
-         else
-            EnemyPerception := CountPerception(Enemy.Ship, PlayerShip);
-         end if;
-         if (PlayerPerception + GetRandom(1, 50)) >
-           (EnemyPerception + GetRandom(1, 50)) then
-            AddMessage
-              ("You spotted " & To_String(Enemy.Ship.Name) & ".",
-               OtherMessage);
-         else
-            if RealSpeed(PlayerShip) < RealSpeed(Enemy.Ship) then
-               LogMessage
-                 ("You were attacked by " & To_String(Enemy.Ship.Name),
-                  Log.Combat);
-               return True;
+         declare
+            PlayerPerception: constant Natural :=
+              CountPerception(PlayerShip, Enemy.Ship);
+            EnemyPerception: Natural := 0;
+         begin
+            OldSpeed := PlayerShip.Speed;
+            if Enemy.Perception > 0 then
+               EnemyPerception := Enemy.Perception;
+            else
+               EnemyPerception := CountPerception(Enemy.Ship, PlayerShip);
             end if;
-            AddMessage
-              ("You spotted " & To_String(Enemy.Ship.Name) & ".",
-               OtherMessage);
-         end if;
+            if (PlayerPerception + GetRandom(1, 50)) >
+              (EnemyPerception + GetRandom(1, 50)) then
+               AddMessage
+                 ("You spotted " & To_String(Enemy.Ship.Name) & ".",
+                  OtherMessage);
+            else
+               if RealSpeed(PlayerShip) < RealSpeed(Enemy.Ship) then
+                  LogMessage
+                    ("You were attacked by " & To_String(Enemy.Ship.Name),
+                     Log.Combat);
+                  return True;
+               end if;
+               AddMessage
+                 ("You spotted " & To_String(Enemy.Ship.Name) & ".",
+                  OtherMessage);
+            end if;
+         end;
          return False;
       end if;
       LogMessage
@@ -379,7 +383,7 @@ package body Combat is
                        GetRandom(1, HitChance + 50) then
                         ShootMessage :=
                           ShootMessage & To_Unbounded_String(" and hit ");
-                        ArmorIndex := FindEnemyModule(Armor);
+                        ArmorIndex := FindEnemyModule(ARMOR);
                         if ArmorIndex > 0 then
                            HitLocation := ArmorIndex;
                         else
@@ -929,6 +933,13 @@ package body Combat is
          end if;
       end MeleeCombat;
    begin
+      if FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType) = 0 then
+         AddMessage
+           ("Ship fall from sky due to lack of fuel.", OtherMessage, 3);
+         Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
+         EndCombat := True;
+         return;
+      end if;
       for I in PlayerShip.Crew.Iterate loop
          case PlayerShip.Crew(I).Order is
             when Pilot =>
@@ -941,14 +952,6 @@ package body Combat is
                null;
          end case;
       end loop;
-      EnemyPilotIndex := FindMember(Pilot, Enemy.Ship.Crew);
-      if FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType) = 0 then
-         AddMessage
-           ("Ship fall from sky due to lack of fuel.", OtherMessage, 3);
-         Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
-         EndCombat := True;
-         return;
-      end if;
       if PilotIndex > 0 then
          case PilotOrder is
             when 1 =>
@@ -973,6 +976,7 @@ package body Combat is
          AccuracyBonus := 20;
          EvadeBonus := -10;
       end if;
+      EnemyPilotIndex := FindMember(Pilot, Enemy.Ship.Crew);
       if EnemyPilotIndex > 0 then
          AccuracyBonus :=
            AccuracyBonus -
