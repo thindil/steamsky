@@ -181,7 +181,10 @@ package body GameOptions is
          To_Unbounded_String("edtzoomin")),
       44 =>
         (To_Unbounded_String("<skymapwindow>/zoomout"),
-         To_Unbounded_String("edtzoomout")));
+         To_Unbounded_String("edtzoomout")),
+      45 =>
+        (To_Unbounded_String("<movemapwindow>/btncenterhomebase"),
+         To_Unbounded_String("edtcentermaphomebase")));
 
    procedure CloseOptions(Object: access Gtkada_Builder_Record'Class) is
    begin
