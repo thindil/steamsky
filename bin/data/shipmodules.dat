@@ -262,5 +262,6 @@ Text between "module" tags is module description.
  <module durability="150" index="221" installtime="100" material="Steel" maxvalue="10000" name="Medium steel cargo bay" price="2400" size="2" skill="Engineering" type="CARGO" value="0" weight="300">Space for holding ship cargo, made of steel.</module>
  <module durability="300" index="222" installtime="150" material="Titanium" maxvalue="10000" name="Medium titanium cargo bay" price="4800" size="2" skill="Engineering" type="CARGO" value="0" weight="600">Space for holding ship cargo, made of titanium.</module>
  <module durability="500" index="223" installtime="150" material="Orichalcum" maxvalue="10000" name="Medium orichalcum cargo bay" price="9600" size="2" skill="Engineering" type="CARGO" value="0" weight="600">Space for holding ship cargo, made of orichalcum.</module>
+ <module durability="700" index="224" installtime="150" material="Adamantium" maxvalue="10000" name="Medium adamantium cargo bay" price="19200" size="1" skill="Engineering" type="CARGO" value="0" weight="600">Space for holding ship cargo, made of adamantium.</module>
 </modules>
 
