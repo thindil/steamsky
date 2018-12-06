@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Crash during combat on showing messages
 - Info about item damage
 - Unnecessary changes of name of save game file
+- Crash on item damage when there is more than one that same item
 
 ## [3.0.1] - 2018-11-25
 
