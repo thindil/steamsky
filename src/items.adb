@@ -181,12 +181,14 @@ package body Items is
          return;
       end if;
       if Inventory(ItemIndex).Amount > 1 then
-         Inventory.Append
-           (New_Item =>
-              (ProtoIndex => Inventory(ItemIndex).ProtoIndex,
-               Amount => (Inventory(ItemIndex).Amount - 1),
-               Name => Inventory(ItemIndex).Name,
-               Durability => Inventory(ItemIndex).Durability));
+         declare
+            Item: constant InventoryData := Inventory(ItemIndex);
+         begin
+            Inventory.Append
+              (New_Item =>
+                 (ProtoIndex => Item.ProtoIndex, Amount => (Item.Amount - 1),
+                  Name => Item.Name, Durability => Item.Durability));
+         end;
          Inventory(ItemIndex).Amount := 1;
       end if;
       Inventory(ItemIndex).Durability := Inventory(ItemIndex).Durability - 1;
