@@ -25,6 +25,9 @@ package Config is
       PlayerName: Unbounded_String; -- Default player name
       PlayerGender: Character; -- Default player gender
       ShipName: Unbounded_String; -- Default ship name
+      PlayerFaction: Unbounded_String; -- Default player faction index
+      PlayerCareer: Unbounded_String; -- Default player career index
+      StartingBase: Unbounded_String; -- Default starting base type
    end record;
    type AutoMoveBreak is
      (NEVER, ANY, FRIENDLY,

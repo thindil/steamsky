@@ -68,7 +68,13 @@ package body Game is
    begin
       -- Save new game configuration
       NewGameSettings :=
-        (PlayerName => CharName, PlayerGender => Gender, ShipName => ShipName);
+        (PlayerName => CharName, PlayerGender => Gender, ShipName => ShipName,
+         PlayerFaction => Factions_List(FactionIndex).Index,
+         PlayerCareer =>
+           Factions_List(FactionIndex).Careers(CareerIndex).Index,
+         StartingBase =>
+           To_Unbounded_String
+             (Bases_Types'Image(Bases_Types'Val(BaseTypeIndex))));
       SaveConfig;
       -- Set game statistics
       ClearGameStats;
