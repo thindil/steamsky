@@ -214,10 +214,8 @@ package body Crafts is
 
    function CheckRecipe(RecipeIndex: Integer) return Positive is
       Recipe: constant Craft_Data := SetRecipeData(RecipeIndex);
-      SpaceNeeded: Integer := 0;
       MaterialIndexes: Positive_Container.Vector;
       RecipeName: Unbounded_String;
-      HaveTool, HaveWorkshop: Boolean := False;
       MaxAmount: Positive := Positive'Last;
       MType: ModuleType;
    begin
@@ -231,16 +229,20 @@ package body Crafts is
          MType := ALCHEMY_LAB;
       end if;
       -- Check for workshop
-      for Module of PlayerShip.Modules loop
-         if Modules_List(Module.ProtoIndex).MType = MType and
-           Module.Durability > 0 then
-            HaveWorkshop := True;
-            exit;
+      declare
+         HaveWorkshop: Boolean := False;
+      begin
+         for Module of PlayerShip.Modules loop
+            if Modules_List(Module.ProtoIndex).MType = MType and
+              Module.Durability > 0 then
+               HaveWorkshop := True;
+               exit;
+            end if;
+         end loop;
+         if not HaveWorkshop then
+            raise Crafting_No_Workshop with To_String(RecipeName);
          end if;
-      end loop;
-      if not HaveWorkshop then
-         raise Crafting_No_Workshop with To_String(RecipeName);
-      end if;
+      end;
       -- Check for materials
       if RecipeIndex > 0 then
          for J in Recipe.MaterialTypes.Iterate loop
@@ -280,30 +282,39 @@ package body Crafts is
          raise Crafting_No_Materials with To_String(RecipeName);
       end if;
       -- Check for tool
-      if Recipe.Tool /= To_Unbounded_String("None") then
-         if FindItem(Inventory => PlayerShip.Cargo, ItemType => Recipe.Tool) >
-           0 then
+      declare
+         HaveTool: Boolean := False;
+      begin
+         if Recipe.Tool /= To_Unbounded_String("None") then
+            if FindItem
+                (Inventory => PlayerShip.Cargo, ItemType => Recipe.Tool) >
+              0 then
+               HaveTool := True;
+            end if;
+         else
             HaveTool := True;
          end if;
-      else
-         HaveTool := True;
-      end if;
-      if not HaveTool then
-         raise Crafting_No_Tools with To_String(RecipeName);
-      end if;
+         if not HaveTool then
+            raise Crafting_No_Tools with To_String(RecipeName);
+         end if;
+      end;
       -- Check for free space
-      for I in MaterialIndexes.Iterate loop
-         SpaceNeeded :=
-           SpaceNeeded +
-           Items_List(MaterialIndexes(I)).Weight *
-             Recipe.MaterialAmounts(Positive_Container.To_Index(I));
-      end loop;
-      if FreeCargo
-          (SpaceNeeded -
-           (Items_List(Recipe.ResultIndex).Weight * Recipe.ResultAmount)) <
-        0 then
-         raise Trade_No_Free_Cargo;
-      end if;
+      declare
+         SpaceNeeded: Integer := 0;
+      begin
+         for I in MaterialIndexes.Iterate loop
+            SpaceNeeded :=
+              SpaceNeeded +
+              Items_List(MaterialIndexes(I)).Weight *
+                Recipe.MaterialAmounts(Positive_Container.To_Index(I));
+         end loop;
+         if FreeCargo
+             (SpaceNeeded -
+              (Items_List(Recipe.ResultIndex).Weight * Recipe.ResultAmount)) <
+           0 then
+            raise Trade_No_Free_Cargo;
+         end if;
+      end;
       return MaxAmount;
    end CheckRecipe;
 
