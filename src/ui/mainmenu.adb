@@ -118,6 +118,30 @@ package body MainMenu is
          else
             Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbgender")), 1);
          end if;
+         declare
+            FactionIndex: Natural := 0;
+         begin
+            for I in Factions_List.Iterate loop
+               if Factions_List(I).Index = NewGameSettings.PlayerFaction then
+                  FactionIndex := Factions_Container.To_Index(I);
+                  Set_Active
+                    (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbfaction")),
+                     Gint(FactionIndex - 1));
+                  exit;
+               end if;
+            end loop;
+            if FactionIndex > 0 then
+               for I in Factions_List(FactionIndex).Careers.Iterate loop
+                  if Factions_List(FactionIndex).Careers(I).Index =
+                    NewGameSettings.PlayerCareer then
+                     Set_Active
+                       (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbcareer")),
+                        Gint(Careers_Container.To_Index(I) - 1));
+                     exit;
+                  end if;
+               end loop;
+            end if;
+         end;
          CreateGoalsMenu;
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page1");

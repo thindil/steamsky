@@ -35,7 +35,9 @@ package body Config is
    begin
       NewGameSettings :=
         (PlayerName => To_Unbounded_String("Laeran"), PlayerGender => 'M',
-         ShipName => To_Unbounded_String("Anaria"));
+         ShipName => To_Unbounded_String("Anaria"),
+         PlayerFaction => To_Unbounded_String("POLEIS"),
+         PlayerCareer => To_Unbounded_String("general"));
       GameSettings :=
         (AutoRest => True, UndockSpeed => FULL_SPEED, AutoCenter => True,
          AutoReturn => True, AutoFinish => True, LowFuel => 100,
@@ -62,6 +64,10 @@ package body Config is
                NewGameSettings.PlayerGender := Element(Value, 1);
             elsif FieldName = To_Unbounded_String("ShipName") then
                NewGameSettings.ShipName := Value;
+            elsif FieldName = To_Unbounded_String("PlayerFaction") then
+               NewGameSettings.PlayerFaction := Value;
+            elsif FieldName = To_Unbounded_String("PlayerCareer") then
+               NewGameSettings.PlayerCareer := Value;
             elsif FieldName = To_Unbounded_String("AutoRest") then
                GameSettings.AutoRest := LoadBoolean;
             elsif FieldName = To_Unbounded_String("UndockSpeed") then
@@ -138,6 +144,12 @@ package body Config is
       Put_Line(ConfigFile, "PlayerGender = " & NewGameSettings.PlayerGender);
       Put_Line
         (ConfigFile, "ShipName = " & To_String(NewGameSettings.ShipName));
+      Put_Line
+        (ConfigFile,
+         "PlayerFaction = " & To_String(NewGameSettings.PlayerFaction));
+      Put_Line
+        (ConfigFile,
+         "PlayerCareer = " & To_String(NewGameSettings.PlayerCareer));
       SaveBoolean(GameSettings.AutoRest, "AutoRest");
       Put_Line
         (ConfigFile,
