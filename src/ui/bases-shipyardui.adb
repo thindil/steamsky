@@ -119,6 +119,7 @@ package body Bases.ShipyardUI is
                  (ModuleInfo,
                   LF & "Modules space:" & Positive'Image(MaxValue));
             end if;
+            Append(ModuleInfo, LF & "Max module size:" & Integer'Image(Value));
          when ENGINE =>
             Append(ModuleInfo, LF & "Max power:" & Positive'Image(MaxValue));
             if Installing then
@@ -156,6 +157,15 @@ package body Bases.ShipyardUI is
       end case;
       if Size > 0 then
          Append(ModuleInfo, LF & "Size:" & Natural'Image(Size));
+         if Installing then
+            for Module of PlayerShip.Modules loop
+               if Modules_List(Module.ProtoIndex).MType = HULL
+                 and then Size > Modules_List(Module.ProtoIndex).Value then
+                  Append(ModuleInfo, " (too big)");
+                  exit;
+               end if;
+            end loop;
+         end if;
       end if;
       if Weight > 0 then
          Append(ModuleInfo, LF & "Weight:" & Natural'Image(Weight) & " kg");
@@ -194,7 +204,7 @@ package body Bases.ShipyardUI is
       ModulesModel: Gtk_Tree_Model;
       ModuleInfo, InstallInfo: Unbounded_String;
       Cost: Positive;
-      MoneyIndex2, UsedSpace, AllSpace: Natural;
+      MoneyIndex2, UsedSpace, AllSpace, MaxSize: Natural;
    begin
       Get_Selected
         (Gtk.Tree_View.Get_Selection
@@ -233,6 +243,7 @@ package body Bases.ShipyardUI is
          if Modules_List(Module.ProtoIndex).MType = HULL then
             UsedSpace := Module.Data(1);
             AllSpace := Module.Data(2);
+            MaxSize := Modules_List(Module.ProtoIndex).Value;
             Append
               (InstallInfo,
                LF & "You have used" & Natural'Image(UsedSpace) &
@@ -248,7 +259,8 @@ package body Bases.ShipyardUI is
          Set_Sensitive(Gtk_Widget(Get_Object(Object, "btninstall")), False);
       else
          if PlayerShip.Cargo(MoneyIndex2).Amount < Cost or
-           (AllSpace - UsedSpace) < Modules_List(ModuleIndex).Size then
+           (AllSpace - UsedSpace) < Modules_List(ModuleIndex).Size or
+           Modules_List(ModuleIndex).Size > MaxSize then
             Set_Sensitive(Gtk_Widget(Get_Object(Object, "btninstall")), False);
          else
             Set_Sensitive(Gtk_Widget(Get_Object(Object, "btninstall")), True);

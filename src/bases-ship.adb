@@ -116,6 +116,11 @@ package body Bases.Ship is
             end if;
          end loop;
          if Modules_List(ModuleIndex).MType /= HULL then
+            if Modules_List(ModuleIndex).Size >
+              Modules_List(PlayerShip.Modules(HullIndex).ProtoIndex).Value then
+               raise BasesShip_Installation_Error
+                 with "You can't install this module because it is too big for this hull.";
+            end if;
             ModulesAmount := ModulesAmount + Modules_List(ModuleIndex).Size;
             if ModulesAmount > PlayerShip.Modules(HullIndex).Data(2) and
               (Modules_List(ModuleIndex).MType /= GUN and
@@ -131,6 +136,13 @@ package body Bases.Ship is
                  with "You don't have free turret for next gun. Install new turret or remove old gun first.";
             end if;
          else
+            for Module of PlayerShip.Modules loop
+               if Modules_List(Module.ProtoIndex).Size >
+                 Modules_List(ModuleIndex).Value then
+                  raise BasesShip_Installation_Error
+                    with "This hull don't allow to have installed that big modules what you currently have.";
+               end if;
+            end loop;
             if Modules_List(ModuleIndex).MaxValue < ModulesAmount then
                raise BasesShip_Installation_Error
                  with "This hull is too small for your ship. Remove some modules first.";
