@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated README.md
 - Updated interface
+- Updated ships hulls data with maximum allowed size of installed modules
 
 ### Fixed
 - Info about item damage
