@@ -28,7 +28,8 @@ GtkWindow {
 .button:active,
    .button:active *,
    GtkTreeView:selected,
-   GtkTreeView:selected:focus {
+   GtkTreeView:selected:focus,
+   .entry:selected {
   background:rgb(128,0,0);
 }
 
@@ -79,14 +80,23 @@ GtkWindow {
    background:transparent;
 }
 
-/* Setting for tables headers */
-GtkTreeView.view .button {
-   border-radius:0px;
-}
-
 /* Settings for menus (game and help) */
 .button .menu {
    background:rgb(28,28,28);
+}
+
+/* Default settings for text entry fields (like player and ship name) */
+.entry {
+   box-shadow:inset 0px 1px 0px 0px #5c4745;
+   background-color:#1a130c;
+   border:1px solid #120c06;
+   color:rgb(255,223,0);
+   text-shadow:0px 1px 0px #120d0d;
+}
+
+/* Settings for currently active text entry fields (like player and ship name) */
+.entry:focus, .entry:active {
+   border-color:rgb(255,223,0);
 }
 
 /* Setting for all sliders */
@@ -175,27 +185,6 @@ GtkFrame#redframe > GtkLabel {
    padding:4px;
 }
 
-/* Settings for numeric entry fields (like amount of buying/selling items in bases, etc) */
-GtkSpinButton {
-   border-radius:20px;
-}
-
-/* Default settings for text entry fields (like player and ship name) */
-.entry {
-   border-style:solid;
-   border-width:1px;
-   border-color:rgb(57,57,57);
-   border-radius:20px;
-}
-
-/* Settings for currently active text entry fields (like player and ship name) */
-.entry:focus, .entry:active {
-   border-style:solid;
-   border-width:1px;
-   border-color:rgb(255,223,0);
-   border-radius:20px;
-}
-
 /* Settings for tooltip popups */
 .tooltip {
    border-style:solid;
@@ -282,6 +271,11 @@ GtkProgressBar.trough#positivebar,
    GtkTreeView.view.trough#positivebar:selected:focus {
   border-radius:0px 15px 15px 0px;
   background:linear-gradient(to bottom, rgb(73,73,73), rgb(35,41,51));
+}
+
+/* Setting for tables headers */
+GtkTreeView.view .button {
+   border-radius:0px;
 }
 
 /* Prevent expanders from autoresize on hover */
