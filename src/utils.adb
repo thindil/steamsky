@@ -35,4 +35,29 @@ package body Utils is
          (DateToCompare.Year * 360));
    end DaysDifference;
 
+   function GenerateRoboticName return Unbounded_String is
+      NewName: Unbounded_String;
+      LettersAmount: constant Positive := GetRandom(2, 5);
+      NumbersAmount: constant Positive := GetRandom(2, 4);
+      subtype Letters is Character range 'A' .. 'Z';
+      subtype Numbers is Character range '0' .. '9';
+   begin
+      for I in 1 .. LettersAmount loop
+         Append
+           (NewName,
+            Letters'Val
+              (GetRandom
+                 (Letters'Pos(Letters'First), Letters'Pos(Letters'Last))));
+      end loop;
+      Append(NewName, '-');
+      for I in 1 .. NumbersAmount loop
+         Append
+           (NewName,
+            Numbers'Val
+              (GetRandom
+                 (Numbers'Pos(Numbers'First), Numbers'Pos(Numbers'Last))));
+      end loop;
+      return NewName;
+   end GenerateRoboticName;
+
 end Utils;
