@@ -137,33 +137,7 @@ package body Bases is
                     BaseSyllablesPost.Last_Index));
          end if;
       else
-         declare
-            LettersAmount: constant Positive := GetRandom(2, 5);
-            subtype Letters is Character range 'A' .. 'Z';
-         begin
-            for I in 1 .. LettersAmount loop
-               Append
-                 (NewName,
-                  Letters'Val
-                    (GetRandom
-                       (Letters'Pos(Letters'First),
-                        Letters'Pos(Letters'Last))));
-            end loop;
-         end;
-         declare
-            NumbersAmount: constant Positive := GetRandom(2, 4);
-            subtype Numbers is Character range '0' .. '9';
-         begin
-            Append(NewName, '-');
-            for I in 1 .. NumbersAmount loop
-               Append
-                 (NewName,
-                  Numbers'Val
-                    (GetRandom
-                       (Numbers'Pos(Numbers'First),
-                        Numbers'Pos(Numbers'Last))));
-            end loop;
-         end;
+         NewName := GenerateRoboticName;
       end if;
       return NewName;
    end GenerateBaseName;

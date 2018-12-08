@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Game; use Game;
 
 package Utils is
@@ -25,5 +26,7 @@ package Utils is
    function DaysDifference
      (DateToCompare: Date_Record)
      return Natural; -- Return days difference between selected date and current game date
+   function GenerateRoboticName
+     return Unbounded_String; -- Generate robotic type name for bases, mobs, ships, etc
 
 end Utils;
