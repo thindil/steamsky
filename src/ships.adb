@@ -718,32 +718,11 @@ package body Ships is
      (Owner: Unbounded_String)
      return Unbounded_String is -- based on name generator from libtcod
       NewName: Unbounded_String := Null_Unbounded_String;
-      LettersAmount, NumbersAmount: Positive;
-      subtype Letters is Character range 'A' .. 'Z';
-      subtype Numbers is Character range '0' .. '9';
    begin
       for Faction of Factions_List loop
          if To_Lower(To_String(Faction.Name)) = To_Lower(To_String(Owner)) then
             if Faction.NamesType = ROBOTIC then
-               LettersAmount := GetRandom(2, 5);
-               for I in 1 .. LettersAmount loop
-                  Append
-                    (NewName,
-                     Letters'Val
-                       (GetRandom
-                          (Letters'Pos(Letters'First),
-                           Letters'Pos(Letters'Last))));
-               end loop;
-               Append(NewName, '-');
-               NumbersAmount := GetRandom(2, 4);
-               for I in 1 .. NumbersAmount loop
-                  Append
-                    (NewName,
-                     Numbers'Val
-                       (GetRandom
-                          (Numbers'Pos(Numbers'First),
-                           Numbers'Pos(Numbers'Last))));
-               end loop;
+               NewName := GenerateRoboticName;
             else
                NewName :=
                  ShipSyllablesStart
