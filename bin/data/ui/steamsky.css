@@ -2,7 +2,7 @@
 
 /* General setting of ui */
 * {
-   background:rgb(28,28,28);
+   background:transparent;
    color:rgb(238,232,170);
    border-style:none;
    box-shadow:none;
@@ -15,6 +15,7 @@
 /* General setting for all game windows */
 GtkWindow {
    border: 1px solid rgb(125,120,0);
+   background-color:#1a130c;
 }
 
 /* Mouse hovering over UI element */
@@ -22,15 +23,6 @@ GtkWindow {
    border-style:dotted;
    border-width:1px;
    border-color:rgb(255,223,0);
-}
-
-/* Button pressed and selected item in lists (like modules list, etc) */
-.button:active,
-   .button:active *,
-   GtkTreeView:selected,
-   GtkTreeView:selected:focus,
-   .entry:selected {
-  background:rgb(128,0,0);
 }
 
 /* Blocked buttons */
@@ -46,8 +38,7 @@ GtkWindow {
 .button {
    box-shadow:inset 0px 1px 0px 0px #5c4745;
    background:linear-gradient(to bottom, #473422 5%, #1a130c 100%);
-   background-color:#473422;
-   border-radius:15px;
+   border-radius:10px;
    border:1px solid #120c06;
    color:rgb(255,223,0);
    text-shadow:0px 1px 0px #120d0d;
@@ -55,7 +46,6 @@ GtkWindow {
 
 /* Setting for buttons texts */
 .button * {
-   background:transparent;
    color:rgb(255,223,0);
    text-shadow:0px 1px 0px #2b1e1d;
 }
@@ -63,32 +53,20 @@ GtkWindow {
 /* Setting for currently focused button */
 .button:focus  {
    background:linear-gradient(to bottom, #1a130c 5%, #473422 100%);
-   background-color:#1a130c;
    border-style:solid;
    border-width:1px;
    border-color:rgb(255,223,0);
 }
 
 /* Setting for currently mouse hovered over button */
-.button:hover, .button:hover * {
+.button:hover {
    background:linear-gradient(to bottom, #1a130c 5%, #473422 100%);
-   background-color:#1a130c;
-}
-
-/* Setting for currently mouse hovered/focused button text */
-.button:hover *, .button:focus * {
-   background:transparent;
-}
-
-/* Settings for menus (game and help) */
-.button .menu {
-   background:rgb(28,28,28);
 }
 
 /* Default settings for text entry fields (like player and ship name) */
 .entry {
    box-shadow:inset 0px 1px 0px 0px #5c4745;
-   background-color:#1a130c;
+   background-color:#2d2115;
    border:1px solid #120c06;
    color:rgb(255,223,0);
    text-shadow:0px 1px 0px #120d0d;
@@ -97,6 +75,16 @@ GtkWindow {
 /* Settings for currently active text entry fields (like player and ship name) */
 .entry:focus, .entry:active {
    border-color:rgb(255,223,0);
+   background-color:#2d2115;
+}
+
+/* Button pressed and selected item in lists (like modules list, etc) */
+.button:active,
+   .button:active *,
+   GtkTreeView:selected,
+   GtkTreeView:selected:focus,
+   .entry:selected {
+  background:rgb(128,0,0);
 }
 
 /* Setting for all sliders */
@@ -193,11 +181,6 @@ GtkFrame#redframe > GtkLabel {
    background:rgb(25,25,25);
 }
 
-/* Setting for text inside tooltip popups */
-.tooltip * {
-   background:rgb(25,25,25);
-}
-
 /* Settings for scales (like in negotiating with recruits) */
 GtkScale, GtkScale:hover {
    background:grey;
@@ -254,7 +237,7 @@ GtkProgressBar.trough#negativebar,
    GtkTreeView.view.trough#negativebar:selected,
    GtkTreeView.view.trough#negativebar:selected:focus {
   border-radius:15px 0px 0px 15px;
-  background:linear-gradient(to bottom, rgb(73,73,73), rgb(35,41,51));
+  background:linear-gradient(to bottom, rgb(53,53,53), rgb(15,21,31));
 }
 
 /* Positive values bar settings (for example, positive reputation) */
@@ -270,7 +253,7 @@ GtkProgressBar.trough#positivebar,
    GtkTreeView.view.trough#positivebar:selected,
    GtkTreeView.view.trough#positivebar:selected:focus {
   border-radius:0px 15px 15px 0px;
-  background:linear-gradient(to bottom, rgb(73,73,73), rgb(35,41,51));
+  background:linear-gradient(to bottom, rgb(53,53,53), rgb(15,21,31));
 }
 
 /* Setting for tables headers */
@@ -282,7 +265,7 @@ GtkTreeView.view .button {
 GtkExpander * {
    border-width:1px;
    border-style: dotted;
-   border-color:rgb(28,28,28);
+   border-color:transparent;
 }
 
 /* Settings for map info element */
@@ -291,4 +274,5 @@ GtkExpander * {
    border-style:solid;
    border-width:1px;
    border-color:gray;
+   background:rgb(25,25,25);
 }
