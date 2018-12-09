@@ -25,8 +25,6 @@ package body Crew.Inventory is
    procedure UpdateInventory(MemberIndex: Positive; Amount: Integer;
       ProtoIndex, Durability, InventoryIndex: Natural := 0) is
       ItemIndex: Natural := 0;
-      NewAmount: Natural;
-      Weight: Integer;
    begin
       if InventoryIndex = 0 then
          if Durability > 0 then
@@ -42,22 +40,26 @@ package body Crew.Inventory is
          ItemIndex := InventoryIndex;
       end if;
       if Amount > 0 then
-         if ItemIndex > 0 then
-            Weight :=
-              0 -
-              Items_List
-                  (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
-                     .ProtoIndex)
-                  .Weight *
-                Amount;
-         else
-            Weight := 0 - Items_List(ProtoIndex).Weight * Amount;
-         end if;
-         if FreeInventory(MemberIndex, Weight) < 0 then
-            raise Crew_No_Space_Error
-              with To_String(PlayerShip.Crew(MemberIndex).Name) &
-              " don't have free space in own inventory.";
-         end if;
+         declare
+            Weight: Integer;
+         begin
+            if ItemIndex > 0 then
+               Weight :=
+                 0 -
+                 Items_List
+                     (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
+                        .ProtoIndex)
+                     .Weight *
+                   Amount;
+            else
+               Weight := 0 - Items_List(ProtoIndex).Weight * Amount;
+            end if;
+            if FreeInventory(MemberIndex, Weight) < 0 then
+               raise Crew_No_Space_Error
+                 with To_String(PlayerShip.Crew(MemberIndex).Name) &
+                 " don't have free space in own inventory.";
+            end if;
+         end;
       else
          if ItemIsUsed(MemberIndex, ItemIndex) then
             TakeOffItem(MemberIndex, ItemIndex);
@@ -69,21 +71,27 @@ package body Crew.Inventory is
               (ProtoIndex => ProtoIndex, Amount => Amount,
                Name => Items_List(ProtoIndex).Name, Durability => Durability));
       else
-         NewAmount :=
-           PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount + Amount;
-         if NewAmount = 0 then
-            PlayerShip.Crew(MemberIndex).Inventory.Delete(Index => ItemIndex);
-            for Item of PlayerShip.Crew(MemberIndex).Equipment loop
-               if Item = ItemIndex then
-                  Item := 0;
-               elsif Item > ItemIndex then
-                  Item := Item - 1;
-               end if;
-            end loop;
-         else
-            PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount :=
-              NewAmount;
-         end if;
+         declare
+            NewAmount: Natural;
+         begin
+            NewAmount :=
+              PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount +
+              Amount;
+            if NewAmount = 0 then
+               PlayerShip.Crew(MemberIndex).Inventory.Delete
+                 (Index => ItemIndex);
+               for Item of PlayerShip.Crew(MemberIndex).Equipment loop
+                  if Item = ItemIndex then
+                     Item := 0;
+                  elsif Item > ItemIndex then
+                     Item := Item - 1;
+                  end if;
+               end loop;
+            else
+               PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount :=
+                 NewAmount;
+            end if;
+         end;
       end if;
    end UpdateInventory;
 
