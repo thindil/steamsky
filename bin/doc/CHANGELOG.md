@@ -5,8 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New ship modules: medium steel cargo bay, medium titanium cargo bay, medium
-  orichalcum cargo bay, medium adamantium cargo bay, large bronze cargo bay and
-  large iron cargo bay
+  orichalcum cargo bay, medium adamantium cargo bay, large bronze cargo bay,
+  large iron cargo bay and large steel cargo bay
 - Option to center map on home base
 - Keyboard shortcut (and option to set it) for center map on home base
 - Maximum allowed size of modules to ship hulls
