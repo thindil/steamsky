@@ -37,7 +37,7 @@ package body Events is
    function CheckForEvent return Boolean is
       TimePassed: Integer;
       CrewIndex: Natural := 0;
-      Roll, Roll2, ItemIndex, EngineIndex, Injuries, LostCargo: Positive;
+      Roll, Roll2: Positive;
       Enemies, Engines: Positive_Container.Vector;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -99,12 +99,15 @@ package body Events is
                               Engines.Append(New_Item => I);
                            end if;
                         end loop;
-                        EngineIndex :=
-                          Engines
-                            (GetRandom
-                               (Engines.First_Index, Engines.Last_Index));
-                        PlayerShip.Modules(EngineIndex).Durability :=
-                          PlayerShip.Modules(EngineIndex).Durability - 1;
+                        declare
+                           EngineIndex: constant Positive :=
+                             Engines
+                               (GetRandom
+                                  (Engines.First_Index, Engines.Last_Index));
+                        begin
+                           PlayerShip.Modules(EngineIndex).Durability :=
+                             PlayerShip.Modules(EngineIndex).Durability - 1;
+                        end;
                         UpdateOrders(PlayerShip);
                      else
                         AddMessage
@@ -216,16 +219,20 @@ package body Events is
                        ("You can't dock to base now, it is closed due to disease.",
                         OtherMessage);
                   when 22 .. 30 => -- Double price for item in base
-                     loop
-                        ItemIndex :=
-                          GetRandom
-                            (Items_List.First_Index, Items_List.Last_Index);
-                        exit when Items_List(ItemIndex).Prices(1) > 0;
-                     end loop;
-                     Events_List.Append
-                       (New_Item =>
-                          (DoublePrice, PlayerShip.SkyX, PlayerShip.SkyY,
-                           GetRandom(1440, 2880), ItemIndex));
+                     declare
+                        ItemIndex: Positive;
+                     begin
+                        loop
+                           ItemIndex :=
+                             GetRandom
+                               (Items_List.First_Index, Items_List.Last_Index);
+                           exit when Items_List(ItemIndex).Prices(1) > 0;
+                        end loop;
+                        Events_List.Append
+                          (New_Item =>
+                             (DoublePrice, PlayerShip.SkyX, PlayerShip.SkyY,
+                              GetRandom(1440, 2880), ItemIndex));
+                     end;
                   when others => -- Full docks or enemy patrol
                      if Roll in 20 .. 40 and
                        not IsFriendly
@@ -262,6 +269,7 @@ package body Events is
                  PlayerShip.Crew.Last_Index > 1 then -- Brawl in base
                   declare
                      RestingCrew: Positive_Container.Vector;
+                     Injuries: Positive;
                   begin
                      for I in PlayerShip.Crew.Iterate loop
                         if PlayerShip.Crew(I).Order = Rest then
@@ -297,18 +305,21 @@ package body Events is
                   end;
                elsif Roll > 4 and Roll < 10 then -- Lost cargo in base
                   Roll2 := GetRandom(1, PlayerShip.Cargo.Last_Index);
-                  LostCargo := GetRandom(1, 10);
-                  if LostCargo > PlayerShip.Cargo(Roll2).Amount then
-                     LostCargo := PlayerShip.Cargo(Roll2).Amount;
-                  end if;
-                  AddMessage
-                    ("During checking ship cargo, you noticed that you lost" &
-                     Positive'Image(LostCargo) & " " &
-                     GetItemName(PlayerShip.Cargo(Roll2)) & ".",
-                     OtherMessage, 3);
-                  UpdateCargo
-                    (Ship => PlayerShip, Amount => (0 - LostCargo),
-                     CargoIndex => Roll2);
+                  declare
+                     LostCargo: Positive := GetRandom(1, 10);
+                  begin
+                     if LostCargo > PlayerShip.Cargo(Roll2).Amount then
+                        LostCargo := PlayerShip.Cargo(Roll2).Amount;
+                     end if;
+                     AddMessage
+                       ("During checking ship cargo, you noticed that you lost" &
+                        Positive'Image(LostCargo) & " " &
+                        GetItemName(PlayerShip.Cargo(Roll2)) & ".",
+                        OtherMessage, 3);
+                     UpdateCargo
+                       (Ship => PlayerShip, Amount => (0 - LostCargo),
+                        CargoIndex => Roll2);
+                  end;
                end if;
             end if;
          end if;
@@ -428,9 +439,9 @@ package body Events is
          end if;
       end loop;
       SkyBases(BaseIndex).Population := GetRandom(2, 50);
-      SkyBases(BaseIndex).Visited := (0, 0, 0, 0, 0);
-      SkyBases(BaseIndex).RecruitDate := (0, 0, 0, 0, 0);
-      SkyBases(BaseIndex).MissionsDate := (0, 0, 0, 0, 0);
+      SkyBases(BaseIndex).Visited := (others => 0);
+      SkyBases(BaseIndex).RecruitDate := (others => 0);
+      SkyBases(BaseIndex).MissionsDate := (others => 0);
       AddMessage
         ("Base " & To_String(SkyBases(BaseIndex).Name) & " have new owner.",
          OtherMessage, 5);
