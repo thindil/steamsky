@@ -325,8 +325,9 @@ Value must be existing skill name.
 - Attribute `value`: Depends on type of module. For 'Engine' it is fuel usage
   for travel by one map field. For 'Cabin' it is value of reduced tiredness of
   owner who rest there. For 'Gun' or 'Harpoon\_Gun' it is index of item type
-  used as ammunition (item types are in *game.dat* file). For any other type
-  of modules should be 0 (zero).
+  used as ammunition (item types are in *game.dat* file). For 'Hull' it is
+  maximum allowed size of installed module. For any other type of modules
+  should be 0.
 - Attribute `maxvalue`: Depends on type of module. For 'Hull' it is max free
   module space. For 'Engine' it is engine power. For 'Cabin' should be that
   same like attribute `value` value. For 'Cargo' it is maximum capacity in
