@@ -89,22 +89,21 @@ GtkWindow {
 
 /* Setting for all sliders */
 .scrollbar.slider {
-   border-style:dotted;
-   border-width:1px;
-   border-color:rgb(57,57,57);
+   box-shadow:inset 0px 0px 0px 1px #5c4745;
+   background:linear-gradient(to right, #473422 5%, #1a130c 100%);
+   border-radius:10px;
+   border:1px solid #120c06;
 }
 
 /* Setting for currently used slider */
 .scrollbar.slider:prelight:active,
    .scrollbar.slider:active {
   background:rgb(128,0,0);
-  border-style:none;
 }
 
 /* Mouse hover over slider */
 .scrollbar.slider:hover {
-  background:rgb(57,57,57);
-  border-style:none;
+   background:linear-gradient(to right, #1a130c 5%, #473422 100%);
 }
 
 /* Settings for progress bars */
