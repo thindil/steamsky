@@ -31,7 +31,6 @@ with Goals; use Goals;
 with MainMenu; use MainMenu;
 with Statistics.UI; use Statistics.UI;
 with Utils; use Utils;
-with Utils.UI; use Utils.UI;
 
 package body Goals.UI is
 
@@ -97,6 +96,11 @@ package body Goals.UI is
       Hide(Gtk_Widget(Get_Object(Object, "goalswindow")));
    end SelectGoal;
 
+   procedure CloseGoals(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Hide(Gtk_Widget(Get_Object(Object, "goalswindow")));
+   end CloseGoals;
+
    procedure CreateGoalsMenu is
       Error: aliased GError;
       GoalsList: Gtk_Tree_Store;
@@ -137,6 +141,7 @@ package body Goals.UI is
       Register_Handler(Builder, "Hide_Goals", HideGoals'Access);
       Register_Handler(Builder, "Goal_Selected", GoalSelected'Access);
       Register_Handler(Builder, "Select_Goal", SelectGoal'Access);
+      Register_Handler(Builder, "Close_Goals", CloseGoals'Access);
       Do_Connect(Builder);
       GoalsList := Gtk_Tree_Store(Get_Object(Builder, "goalslist"));
       Append(GoalsList, CategoryIter, Null_Iter);
@@ -149,8 +154,6 @@ package body Goals.UI is
       AddGoals("Craft items", CRAFT);
       AddGoals("Finish missions", MISSION);
       AddGoals("Kill enemies in melee combat", KILL);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "goalswindow")), CloseWindow'Access);
    end CreateGoalsMenu;
 
 end Goals.UI;
