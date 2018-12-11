@@ -160,7 +160,8 @@ package body Game.SaveLoad is
                Set_Attribute
                  (MessageNode, "type",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
-               RawValue := To_Unbounded_String(Integer'Image(Message.Color));
+               RawValue :=
+                 To_Unbounded_String(Message_Color'Image(Message.Color));
                Set_Attribute
                  (MessageNode, "color",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
@@ -439,7 +440,7 @@ package body Game.SaveLoad is
       declare
          Text: Unbounded_String;
          MType: Message_Type;
-         Color: Natural;
+         Color: Message_Color;
       begin
          for I in 0 .. Length(NodesList) - 1 loop
             SavedNode := Item(NodesList, I);
@@ -447,7 +448,7 @@ package body Game.SaveLoad is
             MType :=
               Message_Type'Val
                 (Integer'Value(Get_Attribute(SavedNode, "type")));
-            Color := Natural'Value(Get_Attribute(SavedNode, "color"));
+            Color := Message_Color'Val(Integer'Value(Get_Attribute(SavedNode, "color")));
             RestoreMessage(Text, MType, Color);
          end loop;
       end;

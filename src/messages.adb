@@ -48,7 +48,7 @@ package body Messages is
    end FormatedTime;
 
    procedure AddMessage(Message: String; MType: Message_Type;
-      Color: Natural := 0) is
+      Color: Message_Color := WHITE) is
    begin
       if Natural(Messages_List.Length) = GameSettings.MessagesLimit then
          Messages_List.Delete_First;
@@ -68,7 +68,7 @@ package body Messages is
    begin
       if MessageIndex > Integer(Messages_List.Length) then
          return (Message => Null_Unbounded_String, MType => Default,
-            Color => 0);
+            Color => WHITE);
       end if;
       if MessageIndex < 1 then
          Index := 1;
@@ -83,7 +83,7 @@ package body Messages is
             end loop;
          end if;
          return (Message => Null_Unbounded_String, MType => Default,
-            Color => 0);
+            Color => WHITE);
       end if;
       Index := 0;
       for Message of Messages_List loop
@@ -94,7 +94,8 @@ package body Messages is
             return Message;
          end if;
       end loop;
-      return (Message => Null_Unbounded_String, MType => Default, Color => 0);
+      return (Message => Null_Unbounded_String, MType => Default,
+         Color => WHITE);
    end GetMessage;
 
    procedure ClearMessages is
@@ -118,7 +119,7 @@ package body Messages is
    end MessagesAmount;
 
    procedure RestoreMessage(Message: Unbounded_String;
-      MType: Message_Type := Default; Color: Natural := 0) is
+      MType: Message_Type := Default; Color: Message_Color := WHITE) is
    begin
       Messages_List.Append
         (New_Item => (Message => Message, MType => MType, Color => Color));

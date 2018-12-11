@@ -310,7 +310,7 @@ package body Combat is
                         AddMessage
                           ("You don't have ammo to " &
                            To_String(Ship.Modules(K).Name) & "!",
-                           CombatMessage, 3);
+                           CombatMessage, RED);
                      end if;
                      Shoots := 0;
                   elsif Ship.Cargo(AmmoIndex).Amount < Shoots then
@@ -564,20 +564,20 @@ package body Combat is
                         end if;
                         if Ship = PlayerShip then
                            AddMessage
-                             (To_String(ShootMessage), CombatMessage, 2);
+                             (To_String(ShootMessage), CombatMessage, GREEN);
                         else
                            AddMessage
-                             (To_String(ShootMessage), CombatMessage, 1);
+                             (To_String(ShootMessage), CombatMessage, YELLOW);
                         end if;
                      else
                         ShootMessage :=
                           ShootMessage & To_Unbounded_String(" and misses.");
                         if Ship = PlayerShip then
                            AddMessage
-                             (To_String(ShootMessage), CombatMessage, 4);
+                             (To_String(ShootMessage), CombatMessage, BLUE);
                         else
                            AddMessage
-                             (To_String(ShootMessage), CombatMessage, 5);
+                             (To_String(ShootMessage), CombatMessage, CYAN);
                         end if;
                      end if;
                      if AmmoIndex > 0 then
@@ -611,9 +611,10 @@ package body Combat is
             LocationNames: constant array(3 .. 6) of Unbounded_String :=
               (To_Unbounded_String("head"), To_Unbounded_String("torso"),
                To_Unbounded_String("leg"), To_Unbounded_String("arm"));
-            MessageColor, AttackSkill, BaseDamage: Natural;
+            AttackSkill, BaseDamage: Natural;
             type DamageFactor is digits 2 range 0.0 .. 1.0;
             Wounds: DamageFactor := 0.0;
+            MessageColor: Message_Color;
          begin
             if PlayerAttack2 then
                Attacker := PlayerShip.Crew(AttackerIndex);
@@ -717,9 +718,9 @@ package body Combat is
                AttackMessage :=
                  AttackMessage & To_Unbounded_String(" and miss.");
                if PlayerAttack then
-                  MessageColor := 4;
+                  MessageColor := BLUE;
                else
-                  MessageColor := 5;
+                  MessageColor := CYAN;
                end if;
                if not PlayerAttack then
                   GainExp(2, DodgeSkill, DefenderIndex);
@@ -732,9 +733,9 @@ package body Combat is
                  AttackMessage & To_Unbounded_String(" and hit ") &
                  LocationNames(HitLocation) & To_Unbounded_String(".");
                if PlayerAttack2 then
-                  MessageColor := 2;
+                  MessageColor := GREEN;
                else
-                  MessageColor := 1;
+                  MessageColor := YELLOW;
                end if;
                if Attacker.Equipment(1) > 0 then
                   DamageItem
@@ -935,7 +936,7 @@ package body Combat is
    begin
       if FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType) = 0 then
          AddMessage
-           ("Ship fall from sky due to lack of fuel.", OtherMessage, 3);
+           ("Ship fall from sky due to lack of fuel.", OtherMessage, RED);
          Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
          EndCombat := True;
          return;
@@ -986,7 +987,7 @@ package body Combat is
          Message :=
            To_Unbounded_String(ChangeShipSpeed(ShipSpeed'Val(EngineerOrder)));
          if Length(Message) > 0 then
-            AddMessage(To_String(Message), OrderMessage, 3);
+            AddMessage(To_String(Message), OrderMessage, RED);
          end if;
       end if;
       SpeedBonus := 20 - (RealSpeed(PlayerShip) / 100);

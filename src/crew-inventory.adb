@@ -166,27 +166,27 @@ package body Crew.Inventory is
                         AddMessage
                           (To_String(PlayerShip.Crew(MemberIndex).Name) &
                            " can't continue repairs because don't have space in inventory for repair tools.",
-                           OrderMessage, 3);
+                           OrderMessage, RED);
                      when Upgrading =>
                         AddMessage
                           (To_String(PlayerShip.Crew(MemberIndex).Name) &
                            " can't continue upgrading module because don't have space in inventory for repair tools.",
-                           OrderMessage, 3);
+                           OrderMessage, RED);
                      when Clean =>
                         AddMessage
                           (To_String(PlayerShip.Crew(MemberIndex).Name) &
                            " can't continue cleaning ship because don't have space in inventory for cleaning tools.",
-                           OrderMessage, 3);
+                           OrderMessage, RED);
                      when Craft =>
                         AddMessage
                           (To_String(PlayerShip.Crew(MemberIndex).Name) &
                            " can't continue manufacturing because don't have space in inventory for proper tools.",
-                           OrderMessage, 3);
+                           OrderMessage, RED);
                      when Train =>
                         AddMessage
                           (To_String(PlayerShip.Crew(MemberIndex).Name) &
                            " can't continue training because don't have space in inventory for proper tools.",
-                           OrderMessage, 3);
+                           OrderMessage, RED);
                      when others =>
                         null;
                   end case;

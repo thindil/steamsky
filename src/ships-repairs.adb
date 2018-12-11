@@ -63,7 +63,7 @@ package body Ships.Repairs is
                      AddMessage
                        ("You don't have repair materials to continue repairs of " &
                         To_String(PlayerShip.Modules(ModuleIndex).Name) & ".",
-                        OrderMessage, 3);
+                        OrderMessage, RED);
                      RepairStopped := True;
                      return;
                   end if;
@@ -75,12 +75,12 @@ package body Ships.Repairs is
                           ("You don't have repair tools to continue repairs of " &
                            To_String(PlayerShip.Modules(ModuleIndex).Name) &
                            ".",
-                           OrderMessage, 3);
+                           OrderMessage, RED);
                      else
                         AddMessage
                           (To_String(PlayerShip.Crew(J).Name) &
                            " can't continue repairs due to lack of repair tools.",
-                           OrderMessage, 3);
+                           OrderMessage, RED);
                      end if;
                      RepairStopped := True;
                      return;
@@ -169,7 +169,7 @@ package body Ships.Repairs is
       -- Send repair team on break if all is ok
       if not RepairNeeded or RepairStopped then
          if not RepairNeeded then
-            AddMessage("All repairs are finished.", OrderMessage, 2);
+            AddMessage("All repairs are finished.", OrderMessage, GREEN);
          end if;
          for I in PlayerShip.Crew.Iterate loop
             if PlayerShip.Crew(I).Order = Repair then
