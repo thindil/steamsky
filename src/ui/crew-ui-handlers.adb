@@ -276,7 +276,8 @@ package body Crew.UI.Handlers is
                GiveOrders(PlayerShip, I, Order);
             exception
                when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
-                  AddMessage(Exception_Message(An_Exception), OrderMessage, RED);
+                  AddMessage
+                    (Exception_Message(An_Exception), OrderMessage, RED);
                   ShowLastMessage(Builder);
             end;
          end if;
