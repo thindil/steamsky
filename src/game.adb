@@ -54,17 +54,7 @@ package body Game is
 
    procedure NewGame(CharName, ShipName: Unbounded_String; Gender: Character;
       FactionIndex, CareerIndex: Positive; BaseTypeIndex: Natural) is
-      PosX, PosY, RandomBase, ShipIndex, Amount, FactionRoll, BaseOwner,
-      PlayerIndex2, PlayerMorale: Positive;
-      ValidLocation: Boolean;
-      TempX, TempY, BaseReputation: Integer;
-      TmpRecruits: Recruit_Container.Vector;
-      TmpMissions: Mission_Container.Vector;
-      CabinAssigned: Boolean := False;
-      BasePopulation, MaxSpawnRoll: Natural;
-      TmpCargo: BaseCargo_Container.Vector;
-      TmpInventory: Inventory_Container.Vector;
-      BaseSize: Bases_Size;
+      RandomBase: Positive;
    begin
       -- Save new game configuration
       NewGameSettings :=
@@ -87,78 +77,90 @@ package body Game is
            (others =>
               (BaseIndex => 0, Visited => False, EventIndex => 0,
                MissionIndex => 0)));
-      MaxSpawnRoll := 0;
-      for Faction of Factions_List loop
-         MaxSpawnRoll := MaxSpawnRoll + Faction.SpawnChance;
-      end loop;
-      for I in SkyBases'Range loop
-         loop
-            ValidLocation := True;
-            PosX := GetRandom(1, 1024);
-            PosY := GetRandom(1, 1024);
-            for J in -5 .. 5 loop
-               TempX := Integer(PosX) + J;
-               NormalizeCoord(TempX);
-               for K in -5 .. 5 loop
-                  TempY := Integer(PosY) + K;
-                  NormalizeCoord(TempY, False);
-                  if SkyMap(TempX, TempY).BaseIndex > 0 then
-                     ValidLocation := False;
+      declare
+         MaxSpawnRoll: Natural := 0;
+         PosX, PosY, FactionRoll, BaseOwner: Positive;
+         ValidLocation: Boolean;
+         TempX, TempY, BaseReputation: Integer;
+         TmpRecruits: Recruit_Container.Vector;
+         TmpMissions: Mission_Container.Vector;
+         BasePopulation: Natural;
+         TmpCargo: BaseCargo_Container.Vector;
+         BaseSize: Bases_Size;
+      begin
+         for Faction of Factions_List loop
+            MaxSpawnRoll := MaxSpawnRoll + Faction.SpawnChance;
+         end loop;
+         for I in SkyBases'Range loop
+            loop
+               ValidLocation := True;
+               PosX := GetRandom(1, 1024);
+               PosY := GetRandom(1, 1024);
+               for J in -5 .. 5 loop
+                  TempX := Integer(PosX) + J;
+                  NormalizeCoord(TempX);
+                  for K in -5 .. 5 loop
+                     TempY := Integer(PosY) + K;
+                     NormalizeCoord(TempY, False);
+                     if SkyMap(TempX, TempY).BaseIndex > 0 then
+                        ValidLocation := False;
+                        exit;
+                     end if;
+                  end loop;
+                  if not ValidLocation then
                      exit;
                   end if;
                end loop;
-               if not ValidLocation then
+               if SkyMap(Integer(PosX), Integer(PosY)).BaseIndex > 0 then
+                  ValidLocation := False;
+               end if;
+               exit when ValidLocation;
+            end loop;
+            SkyMap(Integer(PosX), Integer(PosY)) :=
+              (BaseIndex => I, Visited => False, EventIndex => 0,
+               MissionIndex => 0);
+            FactionRoll := GetRandom(1, MaxSpawnRoll);
+            for J in Factions_List.Iterate loop
+               if FactionRoll > Factions_List(J).SpawnChance then
+                  FactionRoll := FactionRoll - Factions_List(J).SpawnChance;
+               else
+                  BaseOwner := Factions_Container.To_Index(J);
+                  if Factions_List(J).Population(2) = 0 then
+                     BasePopulation := Factions_List(J).Population(1);
+                  else
+                     BasePopulation :=
+                       GetRandom
+                         (Factions_List(J).Population(1),
+                          Factions_List(J).Population(2));
+                  end if;
+                  BaseReputation :=
+                    GetReputation
+                      (Factions_List(FactionIndex).Index,
+                       Factions_List(J).Index);
                   exit;
                end if;
             end loop;
-            if SkyMap(Integer(PosX), Integer(PosY)).BaseIndex > 0 then
-               ValidLocation := False;
-            end if;
-            exit when ValidLocation;
-         end loop;
-         SkyMap(Integer(PosX), Integer(PosY)) :=
-           (BaseIndex => I, Visited => False, EventIndex => 0,
-            MissionIndex => 0);
-         FactionRoll := GetRandom(1, MaxSpawnRoll);
-         for J in Factions_List.Iterate loop
-            if FactionRoll > Factions_List(J).SpawnChance then
-               FactionRoll := FactionRoll - Factions_List(J).SpawnChance;
+            if BasePopulation = 0 then
+               BaseSize := Bases_Size'Val(GetRandom(0, 2));
+            elsif BasePopulation < 150 then
+               BaseSize := Small;
+            elsif BasePopulation < 300 then
+               BaseSize := Medium;
             else
-               BaseOwner := Factions_Container.To_Index(J);
-               if Factions_List(J).Population(2) = 0 then
-                  BasePopulation := Factions_List(J).Population(1);
-               else
-                  BasePopulation :=
-                    GetRandom
-                      (Factions_List(J).Population(1),
-                       Factions_List(J).Population(2));
-               end if;
-               BaseReputation :=
-                 GetReputation
-                   (Factions_List(FactionIndex).Index, Factions_List(J).Index);
-               exit;
+               BaseSize := Big;
             end if;
+            SkyBases(I) :=
+              (Name => GenerateBaseName(BaseOwner), Visited => (others => 0),
+               SkyX => Integer(PosX), SkyY => Integer(PosY),
+               BaseType => Bases_Types'Val(GetRandom(0, 4)),
+               Population => BasePopulation, RecruitDate => (others => 0),
+               Recruits => TmpRecruits, Known => False, AskedForBases => False,
+               AskedForEvents => (others => 0),
+               Reputation => (BaseReputation, 0),
+               MissionsDate => (others => 0), Missions => TmpMissions,
+               Owner => BaseOwner, Cargo => TmpCargo, Size => BaseSize);
          end loop;
-         if BasePopulation = 0 then
-            BaseSize := Bases_Size'Val(GetRandom(0, 2));
-         elsif BasePopulation < 150 then
-            BaseSize := Small;
-         elsif BasePopulation < 300 then
-            BaseSize := Medium;
-         else
-            BaseSize := Big;
-         end if;
-         SkyBases(I) :=
-           (Name => GenerateBaseName(BaseOwner), Visited => (0, 0, 0, 0, 0),
-            SkyX => Integer(PosX), SkyY => Integer(PosY),
-            BaseType => Bases_Types'Val(GetRandom(0, 4)),
-            Population => BasePopulation, RecruitDate => (0, 0, 0, 0, 0),
-            Recruits => TmpRecruits, Known => False, AskedForBases => False,
-            AskedForEvents => (0, 0, 0, 0, 0),
-            Reputation => (BaseReputation, 0), MissionsDate => (0, 0, 0, 0, 0),
-            Missions => TmpMissions, Owner => BaseOwner, Cargo => TmpCargo,
-            Size => BaseSize);
-      end loop;
+      end;
       -- Place player ship in random large base
       declare
          BaseType: constant Bases_Types := Bases_Types'Val(BaseTypeIndex);
@@ -176,62 +178,75 @@ package body Game is
          end loop;
       end;
       -- Create player ship
-      for I in ProtoShips_List.Iterate loop
-         if ProtoShips_List(I).Index =
-           Factions_List(FactionIndex).Careers(CareerIndex).ShipIndex then
-            ShipIndex := ProtoShips_Container.To_Index(I);
-            exit;
-         end if;
-      end loop;
-      PlayerShip :=
-        CreateShip
-          (ShipIndex, ShipName, SkyBases(Integer(RandomBase)).SkyX,
-           SkyBases(Integer(RandomBase)).SkyY, DOCKED, False);
+      declare
+         ShipIndex: Positive;
+      begin
+         for I in ProtoShips_List.Iterate loop
+            if ProtoShips_List(I).Index =
+              Factions_List(FactionIndex).Careers(CareerIndex).ShipIndex then
+               ShipIndex := ProtoShips_Container.To_Index(I);
+               exit;
+            end if;
+         end loop;
+         PlayerShip :=
+           CreateShip
+             (ShipIndex, ShipName, SkyBases(Integer(RandomBase)).SkyX,
+              SkyBases(Integer(RandomBase)).SkyY, DOCKED, False);
+      end;
       -- Add player to ship
-      PlayerIndex2 :=
-        FindProtoMob
-          (Factions_List(FactionIndex).Careers(CareerIndex).PlayerIndex);
-      for Item of ProtoMobs_List(PlayerIndex2).Inventory loop
-         if Item(3) > 0 then
-            Amount := GetRandom(Item(2), Item(3));
+      declare
+         PlayerIndex2: constant Positive :=
+           FindProtoMob
+             (Factions_List(FactionIndex).Careers(CareerIndex).PlayerIndex);
+         Amount, PlayerMorale: Positive;
+         TmpInventory: Inventory_Container.Vector;
+      begin
+         for Item of ProtoMobs_List(PlayerIndex2).Inventory loop
+            if Item(3) > 0 then
+               Amount := GetRandom(Item(2), Item(3));
+            else
+               Amount := Item(2);
+            end if;
+            TmpInventory.Append
+              (New_Item =>
+                 (ProtoIndex => Item(1), Amount => Amount,
+                  Name => Null_Unbounded_String, Durability => 100));
+         end loop;
+         if Factions_List(FactionIndex).Flags.Contains
+             (To_Unbounded_String("nomorale")) then
+            PlayerMorale := 50;
          else
-            Amount := Item(2);
+            PlayerMorale := 100;
          end if;
-         TmpInventory.Append
+         PlayerShip.Crew.Prepend
            (New_Item =>
-              (ProtoIndex => Item(1), Amount => Amount,
-               Name => Null_Unbounded_String, Durability => 100));
-      end loop;
-      if Factions_List(FactionIndex).Flags.Contains
-          (To_Unbounded_String("nomorale")) then
-         PlayerMorale := 50;
-      else
-         PlayerMorale := 100;
-      end if;
-      PlayerShip.Crew.Prepend
-        (New_Item =>
-           (Name => CharName, Gender => Gender, Health => 100, Tired => 0,
-            Skills => ProtoMobs_List(PlayerIndex2).Skills, Hunger => 0,
-            Thirst => 0, Order => ProtoMobs_List(PlayerIndex2).Order,
-            PreviousOrder => Rest, OrderTime => 15,
-            Orders => ProtoMobs_List(PlayerIndex2).Priorities,
-            Attributes => ProtoMobs_List(PlayerIndex2).Attributes,
-            Inventory => TmpInventory,
-            Equipment => ProtoMobs_List(PlayerIndex2).Equipment,
-            Payment => (others => 0), ContractLength => -1,
-            Morale => (PlayerMorale, 0), Loyalty => 100,
-            HomeBase => RandomBase, Faction => FactionIndex));
-      for Module of PlayerShip.Modules loop
-         if Module.Owner > 0 then
-            Module.Owner := Module.Owner + 1;
-         end if;
-         if Modules_List(Module.ProtoIndex).MType = CABIN and
-           Module.Owner = 0 and not CabinAssigned then
-            Module.Name := CharName & To_Unbounded_String("'s Cabin");
-            Module.Owner := 1;
-            CabinAssigned := True;
-         end if;
-      end loop;
+              (Name => CharName, Gender => Gender, Health => 100, Tired => 0,
+               Skills => ProtoMobs_List(PlayerIndex2).Skills, Hunger => 0,
+               Thirst => 0, Order => ProtoMobs_List(PlayerIndex2).Order,
+               PreviousOrder => Rest, OrderTime => 15,
+               Orders => ProtoMobs_List(PlayerIndex2).Priorities,
+               Attributes => ProtoMobs_List(PlayerIndex2).Attributes,
+               Inventory => TmpInventory,
+               Equipment => ProtoMobs_List(PlayerIndex2).Equipment,
+               Payment => (others => 0), ContractLength => -1,
+               Morale => (PlayerMorale, 0), Loyalty => 100,
+               HomeBase => RandomBase, Faction => FactionIndex));
+      end;
+      declare
+         CabinAssigned: Boolean := False;
+      begin
+         for Module of PlayerShip.Modules loop
+            if Module.Owner > 0 then
+               Module.Owner := Module.Owner + 1;
+            end if;
+            if Modules_List(Module.ProtoIndex).MType = CABIN and
+              Module.Owner = 0 and not CabinAssigned then
+               Module.Name := CharName & To_Unbounded_String("'s Cabin");
+               Module.Owner := 1;
+               CabinAssigned := True;
+            end if;
+         end loop;
+      end;
       -- Set current map field/sky base info
       SkyBases(Integer(RandomBase)).Visited := GameDate;
       SkyBases(Integer(RandomBase)).Known := True;
