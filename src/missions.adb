@@ -203,42 +203,40 @@ package body Missions is
    procedure AcceptMission(MissionIndex: Positive) is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      MissionsLimit: Integer;
       Mission: Mission_Data := SkyBases(BaseIndex).Missions(MissionIndex);
       AcceptMessage: Unbounded_String;
-      TraderIndex, Morale, PassengerBase: Positive;
-      HaveCabin: Boolean := False;
-      Gender: Character;
-      Skills: Skills_Container.Vector;
-      Attributes: Attributes_Container.Vector;
-      Inventory: Inventory_Container.Vector;
+      TraderIndex: constant Positive := FindMember(Talk);
    begin
       if SkyBases(BaseIndex).Reputation(1) < 0 then
          raise Missions_Accepting_Error
            with "Your reputation in this base is too low to receive any mission.";
       end if;
-      case SkyBases(BaseIndex).Reputation(1) is
-         when 0 .. 25 =>
-            MissionsLimit := 1;
-         when 26 .. 50 =>
-            MissionsLimit := 3;
-         when 51 .. 75 =>
-            MissionsLimit := 5;
-         when 76 .. 100 =>
-            MissionsLimit := 10;
-         when others =>
-            MissionsLimit := 0;
-      end case;
-      for Mission of AcceptedMissions loop
-         if Mission.StartBase = BaseIndex then
-            MissionsLimit := MissionsLimit - 1;
+      declare
+         MissionsLimit: Integer;
+      begin
+         case SkyBases(BaseIndex).Reputation(1) is
+            when 0 .. 25 =>
+               MissionsLimit := 1;
+            when 26 .. 50 =>
+               MissionsLimit := 3;
+            when 51 .. 75 =>
+               MissionsLimit := 5;
+            when 76 .. 100 =>
+               MissionsLimit := 10;
+            when others =>
+               MissionsLimit := 0;
+         end case;
+         for Mission of AcceptedMissions loop
+            if Mission.StartBase = BaseIndex then
+               MissionsLimit := MissionsLimit - 1;
+            end if;
+            exit when MissionsLimit = 0;
+         end loop;
+         if MissionsLimit < 1 then
+            raise Missions_Accepting_Error
+              with "You can't take any more missions from this base. ";
          end if;
-         exit when MissionsLimit = 0;
-      end loop;
-      if MissionsLimit < 1 then
-         raise Missions_Accepting_Error
-           with "You can't take any more missions from this base. ";
-      end if;
+      end;
       if Mission.MType = Deliver then
          if FreeCargo((0 - Items_List(Mission.Target).Weight)) < 0 then
             raise Missions_Accepting_Error
@@ -246,18 +244,21 @@ package body Missions is
          end if;
       end if;
       if Mission.MType = Passenger then
-         for Module of PlayerShip.Modules loop
-            if Module.ProtoIndex = Mission.Target and Module.Owner = 0 then
-               HaveCabin := True;
-               exit;
+         declare
+            HaveCabin: Boolean := False;
+         begin
+            for Module of PlayerShip.Modules loop
+               if Module.ProtoIndex = Mission.Target and Module.Owner = 0 then
+                  HaveCabin := True;
+                  exit;
+               end if;
+            end loop;
+            if not HaveCabin then
+               raise Missions_Accepting_Error
+                 with "You don't have proper (or free) cabin for this passenger.";
             end if;
-         end loop;
-         if not HaveCabin then
-            raise Missions_Accepting_Error
-              with "You don't have proper (or free) cabin for this passenger.";
-         end if;
+         end;
       end if;
-      TraderIndex := FindMember(Talk);
       Mission.StartBase := BaseIndex;
       Mission.Finished := False;
       AcceptMessage := To_Unbounded_String("You accepted mission ");
@@ -279,42 +280,51 @@ package body Missions is
             Append(AcceptMessage, "'Explore selected area'.");
          when Passenger =>
             Append(AcceptMessage, "'Transport passenger to base'.");
-            if GetRandom(1, 100) < 60 then
-               PassengerBase := BaseIndex;
-            else
-               PassengerBase := GetRandom(SkyBases'First, SkyBases'Last);
-            end if;
-            if not Factions_List(SkyBases(PassengerBase).Owner).Flags.Contains
-                (To_Unbounded_String("nogender")) then
-               if GetRandom(1, 2) = 1 then
-                  Gender := 'M';
+            declare
+               PassengerBase, Morale: Positive;
+               Gender: Character;
+               Skills: Skills_Container.Vector;
+               Attributes: Attributes_Container.Vector;
+               Inventory: Inventory_Container.Vector;
+            begin
+               if GetRandom(1, 100) < 60 then
+                  PassengerBase := BaseIndex;
                else
-                  Gender := 'F';
+                  PassengerBase := GetRandom(SkyBases'First, SkyBases'Last);
                end if;
-            else
-               Gender := 'M';
-            end if;
-            if Factions_List(SkyBases(PassengerBase).Owner).Flags.Contains
-                (To_Unbounded_String("nomorale")) then
-               Morale := 50;
-            else
-               Morale := 50 + SkyBases(PassengerBase).Reputation(1);
-            end if;
-            PlayerShip.Crew.Append
-              (New_Item =>
-                 (Name =>
-                    GenerateMemberName
-                      (Gender,
-                       Factions_List(SkyBases(PassengerBase).Owner).Index),
-                  Gender => Gender, Health => 100, Tired => 0,
-                  Skills => Skills, Hunger => 0, Thirst => 0, Order => Rest,
-                  PreviousOrder => Rest, OrderTime => 15,
-                  Orders => (others => 0), Attributes => Attributes,
-                  Inventory => Inventory, Equipment => (others => 0),
-                  Payment => (others => 0), ContractLength => Mission.Time,
-                  Morale => (Morale, 0), Loyalty => Morale,
-                  HomeBase => PassengerBase,
-                  Faction => SkyBases(PassengerBase).Owner));
+               if not Factions_List(SkyBases(PassengerBase).Owner).Flags
+                   .Contains
+                   (To_Unbounded_String("nogender")) then
+                  if GetRandom(1, 2) = 1 then
+                     Gender := 'M';
+                  else
+                     Gender := 'F';
+                  end if;
+               else
+                  Gender := 'M';
+               end if;
+               if Factions_List(SkyBases(PassengerBase).Owner).Flags.Contains
+                   (To_Unbounded_String("nomorale")) then
+                  Morale := 50;
+               else
+                  Morale := 50 + SkyBases(PassengerBase).Reputation(1);
+               end if;
+               PlayerShip.Crew.Append
+                 (New_Item =>
+                    (Name =>
+                       GenerateMemberName
+                         (Gender,
+                          Factions_List(SkyBases(PassengerBase).Owner).Index),
+                     Gender => Gender, Health => 100, Tired => 0,
+                     Skills => Skills, Hunger => 0, Thirst => 0, Order => Rest,
+                     PreviousOrder => Rest, OrderTime => 15,
+                     Orders => (others => 0), Attributes => Attributes,
+                     Inventory => Inventory, Equipment => (others => 0),
+                     Payment => (others => 0), ContractLength => Mission.Time,
+                     Morale => (Morale, 0), Loyalty => Morale,
+                     HomeBase => PassengerBase,
+                     Faction => SkyBases(PassengerBase).Owner));
+            end;
             for Module of PlayerShip.Modules loop
                if Module.ProtoIndex = Mission.Target and Module.Owner = 0 then
                   Module.Owner := PlayerShip.Crew.Last_Index;
@@ -402,7 +412,6 @@ package body Missions is
       MessageText: Unbounded_String :=
         To_Unbounded_String("You failed mission ");
       Mission: constant Mission_Data := AcceptedMissions(MissionIndex);
-      FreeSpace, RewardAmount: Integer;
       Reputation: Natural;
    begin
       Reputation := Mission.Reward / 50;
@@ -441,18 +450,23 @@ package body Missions is
             GainRep(Mission.StartBase, Reputation);
          end if;
          UpdateMorale(PlayerShip, 1, 1);
-         RewardAmount := Mission.Reward;
-         FreeSpace := FreeCargo((0 - RewardAmount));
-         if FreeSpace < 0 then
-            RewardAmount := RewardAmount + FreeSpace;
-         end if;
-         if RewardAmount > 0 then
-            AddMessage
-              ("You received" & Integer'Image(RewardAmount) & " " &
-               To_String(MoneyName) & " for finished mission.",
-               MissionMessage);
-            UpdateCargo(PlayerShip, FindProtoItem(MoneyIndex), RewardAmount);
-         end if;
+         declare
+            FreeSpace, RewardAmount: Integer;
+         begin
+            RewardAmount := Mission.Reward;
+            FreeSpace := FreeCargo((0 - RewardAmount));
+            if FreeSpace < 0 then
+               RewardAmount := RewardAmount + FreeSpace;
+            end if;
+            if RewardAmount > 0 then
+               AddMessage
+                 ("You received" & Integer'Image(RewardAmount) & " " &
+                  To_String(MoneyName) & " for finished mission.",
+                  MissionMessage);
+               UpdateCargo
+                 (PlayerShip, FindProtoItem(MoneyIndex), RewardAmount);
+            end if;
+         end;
       end if;
       SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex := 0;
       SkyMap
