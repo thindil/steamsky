@@ -448,7 +448,9 @@ package body Game.SaveLoad is
             MType :=
               Message_Type'Val
                 (Integer'Value(Get_Attribute(SavedNode, "type")));
-            Color := Message_Color'Val(Integer'Value(Get_Attribute(SavedNode, "color")));
+            Color :=
+              Message_Color'Val
+                (Integer'Value(Get_Attribute(SavedNode, "color")));
             RestoreMessage(Text, MType, Color);
          end loop;
       end;
