@@ -63,6 +63,11 @@ GtkWindow {
    background:linear-gradient(to bottom, #1a130c 5%, #473422 100%);
 }
 
+/* Setting for pressed button */
+.button:active {
+   background:linear-gradient(to bottom, #4c0000 5%, #990000 100%);
+}
+
 /* Default settings for text entry fields (like player and ship name) */
 .entry {
    box-shadow:inset 0px 1px 0px 0px #5c4745;
@@ -79,9 +84,7 @@ GtkWindow {
 }
 
 /* Button pressed and selected item in lists (like modules list, etc) */
-.button:active,
-   .button:active *,
-   GtkTreeView:selected,
+GtkTreeView:selected,
    GtkTreeView:selected:focus,
    .entry:selected {
   background:rgb(128,0,0);
@@ -98,7 +101,7 @@ GtkWindow {
 /* Setting for currently used slider */
 .scrollbar.slider:prelight:active,
    .scrollbar.slider:active {
-  background:rgb(128,0,0);
+   background:linear-gradient(to right, #4c0000 5%, #990000 100%);
 }
 
 /* Mouse hover over slider */
