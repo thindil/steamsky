@@ -295,7 +295,7 @@ package body Goals is
       if CurrentGoal.Amount = 0 then
          UpdateFinishedGoals(CurrentGoal.Index);
          AddMessage
-           ("You finished your goal. New goal is set.", OtherMessage, 4);
+           ("You finished your goal. New goal is set.", OtherMessage, BLUE);
          CurrentGoal :=
            Goals_List
              (GetRandom(Goals_List.First_Index, Goals_List.Last_Index));

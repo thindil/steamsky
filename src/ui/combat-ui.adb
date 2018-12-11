@@ -128,7 +128,7 @@ package body Combat.UI is
       begin
          if Unbounded_Slice(Message.Message, 1, Length(CurrentTurnTime)) =
            CurrentTurnTime then
-            if Message.Color = 0 then
+            if Message.Color = WHITE then
                Insert
                  (MessagesBuffer, MessagesIter, To_String(Message.Message));
             else
@@ -136,7 +136,7 @@ package body Combat.UI is
                  (MessagesBuffer, MessagesIter, To_String(Message.Message),
                   Lookup
                     (Get_Tag_Table(MessagesBuffer),
-                     To_String(TagNames(Message.Color))));
+                     To_String(TagNames(Message_Color'Pos(Message.Color)))));
             end if;
          else
             Insert_With_Tags

@@ -160,7 +160,8 @@ package body Ships.Movement is
               FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
             if FuelIndex = 0 then
                AddMessage
-                 ("Ship fall from sky due to lack of fuel.", OtherMessage, 3);
+                 ("Ship fall from sky due to lack of fuel.", OtherMessage,
+                  RED);
                Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
                return 0;
             end if;
@@ -407,13 +408,13 @@ package body Ships.Movement is
         FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
       if FuelIndex = 0 then
          AddMessage
-           ("Ship fall from sky due to lack of fuel.", OtherMessage, 3);
+           ("Ship fall from sky due to lack of fuel.", OtherMessage, RED);
          Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
          return;
       end if;
       if PlayerShip.Cargo(FuelIndex).Amount <= abs (FuelNeeded) then
          AddMessage
-           ("Ship fall from sky due to lack of fuel.", OtherMessage, 3);
+           ("Ship fall from sky due to lack of fuel.", OtherMessage, RED);
          Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
          return;
       end if;
