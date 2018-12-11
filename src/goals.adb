@@ -117,7 +117,6 @@ package body Goals is
 
    function GoalText(Index: Natural) return String is
       Text: Unbounded_String;
-      ItemIndex: Positive;
       Goal: Goal_Data;
       InsertPosition: Positive;
       Added: Boolean := False;
@@ -224,9 +223,13 @@ package body Goals is
                end if;
             when CRAFT =>
                if FindRecipe(Goal.TargetIndex) > 0 then
-                  ItemIndex :=
-                    Recipes_List(FindRecipe(Goal.TargetIndex)).ResultIndex;
-                  Append(Text, ": " & To_String(Items_List(ItemIndex).Name));
+                  declare
+                     ItemIndex: constant Positive :=
+                       Recipes_List(FindRecipe(Goal.TargetIndex)).ResultIndex;
+                  begin
+                     Append
+                       (Text, ": " & To_String(Items_List(ItemIndex).Name));
+                  end;
                else
                   Append(Text, ": " & To_String(Goal.TargetIndex));
                end if;
