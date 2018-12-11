@@ -41,27 +41,27 @@ package body Messages.UI is
          if Message.MType = MessagesType or MessagesType = Default then
             Append(MessagesList, MessagesIter);
             case Message.Color is
-               when 1 =>
+               when YELLOW =>
                   Set
                     (MessagesList, MessagesIter, 0,
                      "<span foreground=""yellow"">" &
                      To_String(Message.Message) & "</span>");
-               when 2 =>
+               when GREEN =>
                   Set
                     (MessagesList, MessagesIter, 0,
                      "<span foreground=""#4E9A06"">" &
                      To_String(Message.Message) & "</span>");
-               when 3 =>
+               when RED =>
                   Set
                     (MessagesList, MessagesIter, 0,
                      "<span foreground=""red"">" & To_String(Message.Message) &
                      "</span>");
-               when 4 =>
+               when BLUE =>
                   Set
                     (MessagesList, MessagesIter, 0,
                      "<span foreground=""#3465A4"">" &
                      To_String(Message.Message) & "</span>");
-               when 5 =>
+               when CYAN =>
                   Set
                     (MessagesList, MessagesIter, 0,
                      "<span foreground=""cyan"">" &

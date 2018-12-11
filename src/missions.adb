@@ -365,7 +365,7 @@ package body Missions is
                To_String
                  (Items_List(AcceptedMissions(MissionIndex).Target).Name) &
                "'.",
-               MissionMessage, 2);
+               MissionMessage, GREEN);
          when Destroy =>
             AddMessage
               ("You finished mission 'Destroy " &
@@ -377,15 +377,15 @@ package body Missions is
          when Patrol =>
             AddMessage
               ("You finished mission 'Patrol selected area'.", MissionMessage,
-               2);
+               GREEN);
          when Explore =>
             AddMessage
               ("You finished mission 'Explore selected area'.", MissionMessage,
-               2);
+               GREEN);
          when Passenger =>
             AddMessage
               ("You finished mission 'Transport passenger to base'.",
-               MissionMessage, 2);
+               MissionMessage, GREEN);
       end case;
       UpdateGoal
         (MISSION,
@@ -430,7 +430,7 @@ package body Missions is
             when Passenger =>
                Append(MessageText, "'Transport passenger to base'.");
          end case;
-         AddMessage(To_String(MessageText), MissionMessage, 3);
+         AddMessage(To_String(MessageText), MissionMessage, RED);
       else
          if Mission.MType = Deliver or Mission.MType = Passenger then
             GainRep

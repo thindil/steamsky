@@ -607,14 +607,14 @@ package body Maps.UI is
          To_Unbounded_String("cyan"));
       procedure ShowMessage is
       begin
-         if Message.Color = 0 then
+         if Message.Color = WHITE then
             Insert(MessagesBuffer, Iter, To_String(Message.Message));
          else
             Insert_With_Tags
               (MessagesBuffer, Iter, To_String(Message.Message),
                Lookup
                  (Get_Tag_Table(MessagesBuffer),
-                  To_String(TagNames(Message.Color))));
+                  To_String(TagNames(Message_Color'Pos(Message.Color)))));
          end if;
       end ShowMessage;
    begin

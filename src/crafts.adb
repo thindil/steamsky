@@ -372,7 +372,7 @@ package body Crafts is
                     (To_String(Module.Name) & " is destroyed, so " &
                      To_String(PlayerShip.Crew(CrafterIndex).Name) &
                      " can't work on " & To_String(RecipeName) & ".",
-                     CraftMessage, 3);
+                     CraftMessage, RED);
                   ResetOrder(Module);
                   CurrentMinutes := 0;
                end if;
@@ -417,7 +417,7 @@ package body Crafts is
                            AddMessage
                              ("You don't have crafting materials for " &
                               To_String(RecipeName) & ".",
-                              CraftMessage, 3);
+                              CraftMessage, RED);
                            Module.Data := (0, 0, 0);
                            GiveOrders(PlayerShip, CrafterIndex, Rest);
                            exit Craft_Loop;
@@ -434,7 +434,7 @@ package body Crafts is
                            AddMessage
                              ("You don't have tool for " &
                               To_String(RecipeName) & ".",
-                              CraftMessage, 3);
+                              CraftMessage, RED);
                            ResetOrder(Module);
                            exit Craft_Loop;
                         end if;
@@ -487,7 +487,7 @@ package body Crafts is
                         AddMessage
                           ("You don't have enough crafting materials for " &
                            To_String(RecipeName) & ".",
-                           CraftMessage, 3);
+                           CraftMessage, RED);
                         ResetOrder(Module);
                         exit Craft_Loop;
                      end if;
@@ -538,7 +538,7 @@ package body Crafts is
                            AddMessage
                              ("You don't have free cargo space for " &
                               To_String(RecipeName) & ".",
-                              CraftMessage, 3);
+                              CraftMessage, RED);
                            ResetOrder(Module);
                            exit Craft_Loop;
                         end if;
@@ -573,7 +573,7 @@ package body Crafts is
                         " has manufactured" & Integer'Image(CraftedAmount) &
                         " " & To_String(Items_List(Recipe.ResultIndex).Name) &
                         ".",
-                        CraftMessage, 2);
+                        CraftMessage, GREEN);
                      UpdateGoal(CRAFT, Recipe.Index, CraftedAmount);
                      if CurrentGoal.TargetIndex /= Null_Unbounded_String then
                         UpdateGoal
@@ -591,7 +591,7 @@ package body Crafts is
                        (To_String(PlayerShip.Crew(CrafterIndex).Name) &
                         " was discovered recipe for " &
                         To_String(Items_List(Recipe.ResultIndex).Name) & ".",
-                        CraftMessage, 2);
+                        CraftMessage, GREEN);
                      UpdateGoal(CRAFT, Null_Unbounded_String);
                   end if;
                end if;
@@ -613,7 +613,7 @@ package body Crafts is
       end loop;
    exception
       when An_Exception : Crew_No_Space_Error =>
-         AddMessage(Exception_Message(An_Exception), OrderMessage, 3);
+         AddMessage(Exception_Message(An_Exception), OrderMessage, RED);
          GiveOrders(PlayerShip, CrafterIndex, Rest);
    end Manufacturing;
 

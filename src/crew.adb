@@ -264,7 +264,7 @@ package body Crew is
                Member.OrderTime := 15;
                AddMessage
                  (To_String(Member.Name) & " back to work, fully rested.",
-                  OrderMessage, 1);
+                  OrderMessage, YELLOW);
                UpdateMorale(PlayerShip, I, 1);
             end if;
             Member.PreviousOrder := Rest;
@@ -285,7 +285,7 @@ package body Crew is
                   AddMessage
                     (To_String(Member.Name) &
                      " is too tired to work, going rest.",
-                     OrderMessage, 1);
+                     OrderMessage, YELLOW);
                   if FindCabin(I) = 0 then
                      for Module of PlayerShip.Modules loop
                         if Modules_List(Module.ProtoIndex).MType = CABIN and
@@ -303,7 +303,7 @@ package body Crew is
                   AddMessage
                     (To_String(Member.Name) &
                      " is very tired but can't go to rest.",
-                     OrderMessage, 3);
+                     OrderMessage, RED);
                   UpdateMorale(PlayerShip, I, GetRandom(1, 5));
                end if;
             end;
@@ -321,7 +321,7 @@ package body Crew is
                AddMessage
                  (To_String(Member.Name) &
                   " is hungry, but can't find anything to eat.",
-                  OtherMessage, 3);
+                  OtherMessage, RED);
             end if;
          end if;
          Member.Hunger := HungerLevel;
@@ -338,7 +338,7 @@ package body Crew is
                AddMessage
                  (To_String(Member.Name) &
                   " is thirsty, but can't find anything to drink.",
-                  OtherMessage, 3);
+                  OtherMessage, RED);
             end if;
          end if;
          Member.Thirst := ThirstLevel;
@@ -543,7 +543,7 @@ package body Crew is
                                       .HealingTools) &
                                  " to continue healing wounded " &
                                  To_String(Member.Name) & ".",
-                                 OrderMessage, 3);
+                                 OrderMessage, RED);
                            end if;
                         end if;
                      end loop;
@@ -576,7 +576,7 @@ package body Crew is
                         AddMessage
                           (To_String(PlayerShip.Crew(I).Name) &
                            " finished healing wounded.",
-                           OrderMessage, 2);
+                           OrderMessage, GREEN);
                      end if;
                      if HealAmount /= 0 then
                         GiveOrders(PlayerShip, I, Rest);
@@ -611,7 +611,7 @@ package body Crew is
                         if ToolIndex = 0 then
                            AddMessage
                              ("You can't continue cleaning ship because you don't have any cleaning tools.",
-                              OrderMessage, 3);
+                              OrderMessage, RED);
                         end if;
                         for J in PlayerShip.Crew.Iterate loop
                            if PlayerShip.Crew(J).Order = Clean then
@@ -659,7 +659,7 @@ package body Crew is
                            AddMessage
                              (To_String(PlayerShip.Crew(I).Name) &
                               " can't continue training because you don't have proper tools.",
-                              OrderMessage, 3);
+                              OrderMessage, RED);
                            GiveOrders(PlayerShip, I, Rest);
                         end if;
                      end if;
@@ -819,7 +819,7 @@ package body Crew is
                AddMessage
                  ("You don't have " & To_String(MoneyName) &
                   " to pay your crew members.",
-                  TradeMessage, 3);
+                  TradeMessage, RED);
                HaveMoney := False;
             end if;
             if HaveMoney then
@@ -830,7 +830,7 @@ package body Crew is
                   AddMessage
                     ("You don't have enough " & To_String(MoneyName) &
                      " to pay your crew members.",
-                     TradeMessage, 3);
+                     TradeMessage, RED);
                   HaveMoney := False;
                end if;
                if HaveMoney then
@@ -863,7 +863,7 @@ package body Crew is
                AddMessage
                  ("Your contract with " &
                   To_String(PlayerShip.Crew(MemberIndex).Name) & " has ended.",
-                  TradeMessage, 3);
+                  TradeMessage, RED);
                if PlayerShip.Speed /= DOCKED then
                   PlayerShip.Crew(MemberIndex).Orders := (others => 0);
                   GiveOrders(PlayerShip, MemberIndex, Rest);

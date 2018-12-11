@@ -85,10 +85,10 @@ package body Ships.Crew is
             AddMessage
               (To_String(Ship.Crew(MemberIndex).Name) & " died from " &
                To_String(Reason) & ".",
-               CombatMessage, 3);
+               CombatMessage, RED);
          else
             AddMessage
-              ("You died from " & To_String(Reason) & ".", CombatMessage, 3);
+              ("You died from " & To_String(Reason) & ".", CombatMessage, RED);
             PlayerShip.Crew(MemberIndex).Order := Rest;
             PlayerShip.Crew(MemberIndex).Health := 0;
             UpdateHallOfFame(PlayerShip.Crew(MemberIndex).Name, Reason);
@@ -497,7 +497,7 @@ package body Ships.Crew is
       exception
          when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
             if Ship = PlayerShip then
-               AddMessage(Exception_Message(An_Exception), OrderMessage, 3);
+               AddMessage(Exception_Message(An_Exception), OrderMessage, RED);
             end if;
             return False;
       end UpdatePosition;

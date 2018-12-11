@@ -88,7 +88,7 @@ package body Events is
                          (PlayerShip.Crew(CrewIndex), EngineeringSkill) then
                         AddMessage
                           ("One of your engines is taking damage.",
-                           OtherMessage, 3);
+                           OtherMessage, RED);
                         for I in
                           PlayerShip.Modules.First_Index ..
                             PlayerShip.Modules.Last_Index loop
@@ -113,7 +113,7 @@ package body Events is
                         AddMessage
                           (To_String(PlayerShip.Crew(CrewIndex).Name) &
                            " has prevented engine damage.",
-                           OtherMessage, 2);
+                           OtherMessage, GREEN);
                      end if;
                      GainExp(1, EngineeringSkill, CrewIndex);
                   end if;
@@ -122,7 +122,7 @@ package body Events is
                   if CrewIndex > 0 then
                      AddMessage
                        ("Sudden bad weather makes your travel takes longer.",
-                        OtherMessage, 3);
+                        OtherMessage, RED);
                      TimePassed :=
                        60 -
                        GetSkillLevel
@@ -294,7 +294,7 @@ package body Events is
                           (To_String
                              (PlayerShip.Crew(RestingCrew(Roll2)).Name) &
                            " was injured in brawl in base.",
-                           OtherMessage, 3);
+                           OtherMessage, RED);
                         if PlayerShip.Crew(RestingCrew(Roll2)).Health = 0 then
                            Death
                              (RestingCrew(Roll2),
@@ -315,7 +315,7 @@ package body Events is
                        ("During checking ship cargo, you noticed that you lost" &
                         Positive'Image(LostCargo) & " " &
                         GetItemName(PlayerShip.Cargo(Roll2)) & ".",
-                        OtherMessage, 3);
+                        OtherMessage, RED);
                      UpdateCargo
                        (Ship => PlayerShip, Amount => (0 - LostCargo),
                         CargoIndex => Roll2);
@@ -444,7 +444,7 @@ package body Events is
       SkyBases(BaseIndex).MissionsDate := (others => 0);
       AddMessage
         ("Base " & To_String(SkyBases(BaseIndex).Name) & " have new owner.",
-         OtherMessage, 5);
+         OtherMessage, CYAN);
    end RecoverBase;
 
    procedure GenerateEnemies(Enemies: in out Positive_Container.Vector;

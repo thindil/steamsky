@@ -1,4 +1,4 @@
---    Copyright 2016-2017 Bartek thindil Jasicki
+--    Copyright 2016-2018 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -24,11 +24,13 @@ package Messages is
    type Message_Type is
      (Default, CombatMessage, TradeMessage, OrderMessage, CraftMessage,
       OtherMessage, MissionMessage); -- Types of messages
+   type Message_Color is
+     (WHITE, YELLOW, GREEN, RED, BLUE, CYAN); -- Colors of messages
    type Message_Data is -- Data structure for messages
    record
       Message: Unbounded_String; -- Text of message
       MType: Message_Type; -- Type of message
-      Color: Natural; -- Color used for show message
+      Color: Message_Color; -- Color used for show message
    end record;
    package Messages_Container is new Vectors(Positive, Message_Data);
    Messages_List: Messages_Container.Vector; -- List of all messages
@@ -38,7 +40,7 @@ package Messages is
    function FormatedTime
      (Time: Date_Record := GameDate) return String; -- Format game time
    procedure AddMessage(Message: String; MType: Message_Type;
-      Color: Natural := 0); -- Add new message to list
+      Color: Message_Color := WHITE); -- Add new message to list
    function GetMessage(MessageIndex: Integer;
       MType: Message_Type := Default)
      return Message_Data; -- Return selected message
@@ -48,7 +50,7 @@ package Messages is
      return Natural; -- Return amount of selected type messages
    procedure RestoreMessage(Message: Unbounded_String;
       MType: Message_Type := Default;
-      Color: Natural := 0); -- Restore message from save file
+      Color: Message_Color := WHITE); -- Restore message from save file
    function GetLastMessageIndex return Natural; -- Return last message index
 
 end Messages;
