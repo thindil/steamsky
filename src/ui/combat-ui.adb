@@ -253,6 +253,7 @@ package body Combat.UI is
                HaveAmmo := True;
             end if;
             if not HaveAmmo then
+               AmmoAmount := 0;
                for J in Items_List.Iterate loop
                   if Items_List(J).IType =
                     Items_Types
