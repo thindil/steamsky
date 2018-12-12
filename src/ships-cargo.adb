@@ -22,7 +22,6 @@ package body Ships.Cargo is
    procedure UpdateCargo(Ship: in out ShipRecord; ProtoIndex: Natural := 0;
       Amount: Integer; Durability: Natural := 100; CargoIndex: Natural := 0) is
       ItemIndex: Natural := 0;
-      NewAmount: Integer;
    begin
       if ProtoIndex > 0 and CargoIndex = 0 then
          for I in Ship.Cargo.Iterate loop
@@ -41,21 +40,25 @@ package body Ships.Cargo is
               (ProtoIndex => ProtoIndex, Amount => Amount,
                Name => Null_Unbounded_String, Durability => Durability));
       else
-         NewAmount := Ship.Cargo(ItemIndex).Amount + Amount;
-         if NewAmount < 1 then
-            Ship.Cargo.Delete(Index => ItemIndex);
-            for Module of Ship.Modules loop
-               if Modules_List(Module.ProtoIndex).MType = GUN then
-                  if Module.Data(1) > ItemIndex then
-                     Module.Data(1) := Module.Data(1) - 1;
-                  elsif Module.Data(1) = ItemIndex then
-                     Module.Data(1) := 0;
+         declare
+            NewAmount: constant Integer :=
+              Ship.Cargo(ItemIndex).Amount + Amount;
+         begin
+            if NewAmount < 1 then
+               Ship.Cargo.Delete(Index => ItemIndex);
+               for Module of Ship.Modules loop
+                  if Modules_List(Module.ProtoIndex).MType = GUN then
+                     if Module.Data(1) > ItemIndex then
+                        Module.Data(1) := Module.Data(1) - 1;
+                     elsif Module.Data(1) = ItemIndex then
+                        Module.Data(1) := 0;
+                     end if;
                   end if;
-               end if;
-            end loop;
-         else
-            Ship.Cargo(ItemIndex).Amount := NewAmount;
-         end if;
+               end loop;
+            else
+               Ship.Cargo(ItemIndex).Amount := NewAmount;
+            end if;
+         end;
       end if;
    end UpdateCargo;
 
