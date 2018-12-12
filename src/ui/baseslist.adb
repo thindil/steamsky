@@ -86,18 +86,6 @@ package body BasesList is
               Positive'Image(SkyBases(BaseIndex).SkyY));
          Append
            (BaseInfo,
-            LF & "Type: " &
-            To_Lower(Bases_Types'Image(SkyBases(BaseIndex).BaseType)));
-         Append
-           (BaseInfo,
-            LF & "Owner: " &
-            To_String(Factions_List(SkyBases(BaseIndex).Owner).Name));
-         Append
-           (BaseInfo,
-            LF & "Size: " &
-            To_Lower(Bases_Size'Image(SkyBases(BaseIndex).Size)));
-         Append
-           (BaseInfo,
             LF & "Last visited: " & FormatedTime(SkyBases(BaseIndex).Visited));
          if SkyBases(BaseIndex).Population > 0 and
            SkyBases(BaseIndex).Reputation(1) > -25 then
@@ -186,8 +174,7 @@ package body BasesList is
          end if;
       else
          BaseInfo := To_Unbounded_String("Not visited yet.");
-         Set_Visible
-           (Gtk_Widget(Get_Object(Object, "basereputationbox")), False);
+         Set_Visible(Gtk_Widget(Get_Object(Object, "baseinfoframe")), False);
       end if;
       Set_Label
         (Gtk_Label(Get_Object(Object, "lblbaseinfo")), To_String(BaseInfo));
@@ -373,9 +360,21 @@ package body BasesList is
                   Set(BaseList, BaseIter, 3, "large");
                end if;
                Set(BaseList, BaseIter, 4, Gint(SkyBases(I).Population));
+               Set
+                 (BaseList, BaseIter, 5,
+                  To_Lower(Bases_Size'Image(SkyBases(I).Size)));
+               Set
+                 (BaseList, BaseIter, 6,
+                  To_String(Factions_List(SkyBases(I).Owner).Name));
+               Set
+                 (BaseList, BaseIter, 7,
+                  To_Lower(Bases_Types'Image(SkyBases(I).BaseType)));
             else
                Set(BaseList, BaseIter, 3, "not visited");
                Set(BaseList, BaseIter, 4, -1);
+               Set(BaseList, BaseIter, 5, "not visited");
+               Set(BaseList, BaseIter, 6, "not visited");
+               Set(BaseList, BaseIter, 7, "not visited");
             end if;
          end if;
       end loop;
