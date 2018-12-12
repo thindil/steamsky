@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Crash on item damage when there is more than one that same item
 - Saving default settings for player faction and career for new game
 - Size of website button
+- Showing info about available ammo for guns in combat
 
 ## [3.0.1] - 2018-11-25
 
