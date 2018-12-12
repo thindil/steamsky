@@ -38,191 +38,209 @@ package body Ships is
       ShipModules: Modules_Container.Vector;
       ShipCrew: Crew_Container.Vector;
       NewName: Unbounded_String;
-      HullIndex, Amount, UpgradesAmount, WeightGain: Natural := 0;
-      Gender: Character;
-      MemberName: Unbounded_String;
-      TmpSkills: Skills_Container.Vector;
+      HullIndex, Amount: Natural := 0;
       ProtoShip: constant ProtoShipData := ProtoShips_List(ProtoIndex);
-      ShipCargo, TmpInventory: Inventory_Container.Vector;
-      TempModule: BaseModule_Data;
-      MaxValue, Roll, MemberFaction: Positive;
-      StartX, StartY, EndX, EndY: Integer;
-      TmpAttributes: Attributes_Container.Vector;
-      Member: ProtoMobRecord;
-      GunAssigned: Boolean;
+      ShipCargo: Inventory_Container.Vector;
    begin
-      if RandomUpgrades then
-         UpgradesAmount := GetRandom(0, Positive(ProtoShip.Modules.Length));
-      end if;
-      for Module of ProtoShip.Modules loop
-         TempModule := Modules_List(Module);
-         if UpgradesAmount > 0 then
-            WeightGain :=
-              Modules_List(Module).Weight / Modules_List(Module).Durability;
-            if WeightGain < 1 then
-               WeightGain := 1;
-            end if;
-            if GetRandom(1, 100) > 50 then
-               Roll := GetRandom(1, 100);
-               case Roll is
-                  when 1 .. 50 => -- Upgrade durability of module
-                     MaxValue :=
-                       Positive(Float(Modules_List(Module).Durability) * 1.5);
-                     TempModule.Durability :=
-                       GetRandom(Modules_List(Module).Durability, MaxValue);
-                     TempModule.Weight :=
-                       TempModule.Weight +
-                       (WeightGain *
-                        (TempModule.Durability -
-                         Modules_List(Module).Durability));
-                  when 51 ..
-                        75 => -- Upgrade value (depends on module) of module
-                     if Modules_List(Module).MType = ENGINE then
-                        WeightGain := WeightGain * 10;
-                        MaxValue :=
-                          Positive(Float(Modules_List(Module).Value) / 2.0);
-                        TempModule.Value :=
-                          GetRandom(MaxValue, Modules_List(Module).Value);
-                        TempModule.Weight :=
-                          TempModule.Weight +
-                          (WeightGain *
-                           (Modules_List(Module).Value - TempModule.Value));
-                     end if;
-                  when 76 ..
-                        100 => -- Upgrade max_value (depends on module) of module
-                     case Modules_List(Module).MType is
-                        when HULL =>
-                           WeightGain := WeightGain * 10;
-                        when ENGINE =>
-                           WeightGain := 1;
-                        when others =>
-                           null;
-                     end case;
-                     if TempModule.MType = ENGINE or
-                       TempModule.MType = CABIN or TempModule.MType = GUN or
-                       TempModule.MType = BATTERING_RAM or
-                       TempModule.MType = HULL or
-                       TempModule.MType = HARPOON_GUN then
-                        MaxValue :=
-                          Positive(Float(Modules_List(Module).MaxValue) * 1.5);
-                        TempModule.MaxValue :=
-                          GetRandom(Modules_List(Module).MaxValue, MaxValue);
-                        TempModule.Weight :=
-                          TempModule.Weight +
-                          (WeightGain *
-                           (TempModule.MaxValue -
-                            Modules_List(Module).MaxValue));
-                     end if;
-                  when others =>
-                     null;
-               end case;
-               UpgradesAmount := UpgradesAmount - 1;
-            end if;
+      -- Set ship modules
+      declare
+         UpgradesAmount, WeightGain: Natural := 0;
+         MaxValue, Roll: Positive;
+         TempModule: BaseModule_Data;
+      begin
+         if RandomUpgrades then
+            UpgradesAmount := GetRandom(0, Positive(ProtoShip.Modules.Length));
          end if;
-         ShipModules.Append
-           (New_Item =>
-              (Name => Modules_List(Module).Name, ProtoIndex => Module,
-               Weight => TempModule.Weight,
-               Durability => TempModule.Durability,
-               MaxDurability => TempModule.Durability, Owner => 0,
-               UpgradeProgress => 0, UpgradeAction => NONE,
-               Data => (TempModule.Value, TempModule.MaxValue, 0)));
-      end loop;
+         for Module of ProtoShip.Modules loop
+            TempModule := Modules_List(Module);
+            if UpgradesAmount > 0 then
+               WeightGain :=
+                 Modules_List(Module).Weight / Modules_List(Module).Durability;
+               if WeightGain < 1 then
+                  WeightGain := 1;
+               end if;
+               if GetRandom(1, 100) > 50 then
+                  Roll := GetRandom(1, 100);
+                  case Roll is
+                     when 1 .. 50 => -- Upgrade durability of module
+                        MaxValue :=
+                          Positive
+                            (Float(Modules_List(Module).Durability) * 1.5);
+                        TempModule.Durability :=
+                          GetRandom(Modules_List(Module).Durability, MaxValue);
+                        TempModule.Weight :=
+                          TempModule.Weight +
+                          (WeightGain *
+                           (TempModule.Durability -
+                            Modules_List(Module).Durability));
+                     when 51 ..
+                           75 => -- Upgrade value (depends on module) of module
+                        if Modules_List(Module).MType = ENGINE then
+                           WeightGain := WeightGain * 10;
+                           MaxValue :=
+                             Positive(Float(Modules_List(Module).Value) / 2.0);
+                           TempModule.Value :=
+                             GetRandom(MaxValue, Modules_List(Module).Value);
+                           TempModule.Weight :=
+                             TempModule.Weight +
+                             (WeightGain *
+                              (Modules_List(Module).Value - TempModule.Value));
+                        end if;
+                     when 76 ..
+                           100 => -- Upgrade max_value (depends on module) of module
+                        case Modules_List(Module).MType is
+                           when HULL =>
+                              WeightGain := WeightGain * 10;
+                           when ENGINE =>
+                              WeightGain := 1;
+                           when others =>
+                              null;
+                        end case;
+                        if TempModule.MType = ENGINE or
+                          TempModule.MType = CABIN or TempModule.MType = GUN or
+                          TempModule.MType = BATTERING_RAM or
+                          TempModule.MType = HULL or
+                          TempModule.MType = HARPOON_GUN then
+                           MaxValue :=
+                             Positive
+                               (Float(Modules_List(Module).MaxValue) * 1.5);
+                           TempModule.MaxValue :=
+                             GetRandom
+                               (Modules_List(Module).MaxValue, MaxValue);
+                           TempModule.Weight :=
+                             TempModule.Weight +
+                             (WeightGain *
+                              (TempModule.MaxValue -
+                               Modules_List(Module).MaxValue));
+                        end if;
+                     when others =>
+                        null;
+                  end case;
+                  UpgradesAmount := UpgradesAmount - 1;
+               end if;
+            end if;
+            ShipModules.Append
+              (New_Item =>
+                 (Name => Modules_List(Module).Name, ProtoIndex => Module,
+                  Weight => TempModule.Weight,
+                  Durability => TempModule.Durability,
+                  MaxDurability => TempModule.Durability, Owner => 0,
+                  UpgradeProgress => 0, UpgradeAction => NONE,
+                  Data => (TempModule.Value, TempModule.MaxValue, 0)));
+         end loop;
+      end;
+      -- Set ship name
       if Name = Null_Unbounded_String then
          NewName := ProtoShip.Name;
       else
          NewName := Name;
       end if;
-      for ProtoMember of ProtoShip.Crew loop
-         if ProtoMember(3) = 0 then
-            Amount := ProtoMember(2);
-         else
-            Amount := GetRandom(ProtoMember(2), ProtoMember(3));
-         end if;
-         for I in 1 .. Amount loop
-            if GetRandom(1, 100) < 99 then
-               MemberFaction := ProtoShip.Owner;
+      -- Set ship crew
+      declare
+         Gender: Character;
+         MemberName: Unbounded_String;
+         TmpSkills: Skills_Container.Vector;
+         MemberFaction: Positive;
+         TmpAttributes: Attributes_Container.Vector;
+         TmpInventory: Inventory_Container.Vector;
+         Member: ProtoMobRecord;
+      begin
+         for ProtoMember of ProtoShip.Crew loop
+            if ProtoMember(3) = 0 then
+               Amount := ProtoMember(2);
             else
-               MemberFaction :=
-                 GetRandom
-                   (Factions_List.First_Index, Factions_List.Last_Index);
+               Amount := GetRandom(ProtoMember(2), ProtoMember(3));
             end if;
-            if not Factions_List(MemberFaction).Flags.Contains
-                (To_Unbounded_String("nogender")) then
-               if GetRandom(1, 100) < 50 then
+            for I in 1 .. Amount loop
+               if GetRandom(1, 100) < 99 then
+                  MemberFaction := ProtoShip.Owner;
+               else
+                  MemberFaction :=
+                    GetRandom
+                      (Factions_List.First_Index, Factions_List.Last_Index);
+               end if;
+               if not Factions_List(MemberFaction).Flags.Contains
+                   (To_Unbounded_String("nogender")) then
+                  if GetRandom(1, 100) < 50 then
+                     Gender := 'M';
+                  else
+                     Gender := 'F';
+                  end if;
+               else
                   Gender := 'M';
-               else
-                  Gender := 'F';
                end if;
-            else
-               Gender := 'M';
-            end if;
-            MemberName :=
-              GenerateMemberName(Gender, Factions_List(MemberFaction).Index);
-            Member := ProtoMobs_List.Element(ProtoMember(1));
-            for Skill of Member.Skills loop
-               if Skill(3) = 0 then
-                  TmpSkills.Append(New_Item => Skill);
-               else
-                  TmpSkills.Append
-                    (New_Item => (Skill(1), GetRandom(Skill(2), Skill(3)), 0));
-               end if;
-            end loop;
-            for Attribute of Member.Attributes loop
-               if Attribute(2) = 0 then
-                  TmpAttributes.Append(New_Item => Attribute);
-               else
-                  TmpAttributes.Append
-                    (New_Item => (GetRandom(Attribute(1), Attribute(2)), 0));
-               end if;
-            end loop;
-            for Item of Member.Inventory loop
-               if Item(3) > 0 then
-                  Amount := GetRandom(Item(2), Item(3));
-               else
-                  Amount := Item(2);
-               end if;
-               TmpInventory.Append
+               MemberName :=
+                 GenerateMemberName
+                   (Gender, Factions_List(MemberFaction).Index);
+               Member := ProtoMobs_List.Element(ProtoMember(1));
+               for Skill of Member.Skills loop
+                  if Skill(3) = 0 then
+                     TmpSkills.Append(New_Item => Skill);
+                  else
+                     TmpSkills.Append
+                       (New_Item =>
+                          (Skill(1), GetRandom(Skill(2), Skill(3)), 0));
+                  end if;
+               end loop;
+               for Attribute of Member.Attributes loop
+                  if Attribute(2) = 0 then
+                     TmpAttributes.Append(New_Item => Attribute);
+                  else
+                     TmpAttributes.Append
+                       (New_Item =>
+                          (GetRandom(Attribute(1), Attribute(2)), 0));
+                  end if;
+               end loop;
+               for Item of Member.Inventory loop
+                  if Item(3) > 0 then
+                     Amount := GetRandom(Item(2), Item(3));
+                  else
+                     Amount := Item(2);
+                  end if;
+                  TmpInventory.Append
+                    (New_Item =>
+                       (ProtoIndex => Item(1), Amount => Amount,
+                        Name => Null_Unbounded_String, Durability => 100));
+               end loop;
+               ShipCrew.Append
                  (New_Item =>
-                    (ProtoIndex => Item(1), Amount => Amount,
-                     Name => Null_Unbounded_String, Durability => 100));
-            end loop;
-            ShipCrew.Append
-              (New_Item =>
-                 (Name => MemberName, Gender => Gender, Health => 100,
-                  Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0,
-                  Order => Member.Order, PreviousOrder => Rest,
-                  OrderTime => 15, Orders => Member.Priorities,
-                  Attributes => TmpAttributes, Inventory => TmpInventory,
-                  Equipment => Member.Equipment, Payment => (20, 0),
-                  ContractLength => -1, Morale => (50, 0), Loyalty => 100,
-                  HomeBase => 1, Faction => MemberFaction));
-            TmpSkills.Clear;
-            TmpAttributes.Clear;
-            TmpInventory.Clear;
-            for Module of ShipModules loop
-               if Modules_List(Module.ProtoIndex).MType = CABIN and
-                 Module.Owner = 0 then
-                  Module.Name := MemberName & To_Unbounded_String("'s Cabin");
-                  Module.Owner := ShipCrew.Last_Index;
-                  exit;
-               end if;
-            end loop;
-            for Module of ShipModules loop
-               if Module.Owner = 0 and
-                 ((Modules_List(Module.ProtoIndex).MType = GUN or
-                   Modules_List(Module.ProtoIndex).MType = HARPOON_GUN) and
-                  Member.Order = Gunner) then
-                  Module.Owner := ShipCrew.Last_Index;
-                  exit;
-               elsif Modules_List(Module.ProtoIndex).MType = COCKPIT and
-                 Member.Order = Pilot then
-                  Module.Owner := ShipCrew.Last_Index;
-                  exit;
-               end if;
+                    (Name => MemberName, Gender => Gender, Health => 100,
+                     Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0,
+                     Order => Member.Order, PreviousOrder => Rest,
+                     OrderTime => 15, Orders => Member.Priorities,
+                     Attributes => TmpAttributes, Inventory => TmpInventory,
+                     Equipment => Member.Equipment, Payment => (20, 0),
+                     ContractLength => -1, Morale => (50, 0), Loyalty => 100,
+                     HomeBase => 1, Faction => MemberFaction));
+               TmpSkills.Clear;
+               TmpAttributes.Clear;
+               TmpInventory.Clear;
+               for Module of ShipModules loop
+                  if Modules_List(Module.ProtoIndex).MType = CABIN and
+                    Module.Owner = 0 then
+                     Module.Name :=
+                       MemberName & To_Unbounded_String("'s Cabin");
+                     Module.Owner := ShipCrew.Last_Index;
+                     exit;
+                  end if;
+               end loop;
+               for Module of ShipModules loop
+                  if Module.Owner = 0 and
+                    ((Modules_List(Module.ProtoIndex).MType = GUN or
+                      Modules_List(Module.ProtoIndex).MType = HARPOON_GUN) and
+                     Member.Order = Gunner) then
+                     Module.Owner := ShipCrew.Last_Index;
+                     exit;
+                  elsif Modules_List(Module.ProtoIndex).MType = COCKPIT and
+                    Member.Order = Pilot then
+                     Module.Owner := ShipCrew.Last_Index;
+                     exit;
+                  end if;
+               end loop;
             end loop;
          end loop;
-      end loop;
+      end;
+      -- Set ship cargo
       for Item of ProtoShip.Cargo loop
          if Item(3) > 0 then
             Amount := GetRandom(Item(2), Item(3));
@@ -240,35 +258,41 @@ package body Ships is
          UpgradeModule => 0, DestinationX => 0, DestinationY => 0,
          RepairModule => 0, Description => ProtoShip.Description,
          HomeBase => 0);
-      Amount := 0;
-      for I in TmpShip.Modules.Iterate loop
-         if Modules_List(TmpShip.Modules(I).ProtoIndex).MType = TURRET then
-            for J in TmpShip.Modules.Iterate loop
-               if Modules_List(TmpShip.Modules(J).ProtoIndex).MType = GUN or
-                 Modules_List(TmpShip.Modules(J).ProtoIndex).MType =
-                   HARPOON_GUN then
-                  GunAssigned := False;
-                  for K in TmpShip.Modules.Iterate loop
-                     if Modules_List(TmpShip.Modules(K).ProtoIndex).MType =
-                       TURRET and
-                       TmpShip.Modules(K).Data(1) =
-                         Modules_Container.To_Index(J) then
-                        GunAssigned := True;
-                        exit;
+      declare
+         GunAssigned: Boolean;
+      begin
+         Amount := 0;
+         for I in TmpShip.Modules.Iterate loop
+            if Modules_List(TmpShip.Modules(I).ProtoIndex).MType = TURRET then
+               for J in TmpShip.Modules.Iterate loop
+                  if Modules_List(TmpShip.Modules(J).ProtoIndex).MType = GUN or
+                    Modules_List(TmpShip.Modules(J).ProtoIndex).MType =
+                      HARPOON_GUN then
+                     GunAssigned := False;
+                     for K in TmpShip.Modules.Iterate loop
+                        if Modules_List(TmpShip.Modules(K).ProtoIndex).MType =
+                          TURRET and
+                          TmpShip.Modules(K).Data(1) =
+                            Modules_Container.To_Index(J) then
+                           GunAssigned := True;
+                           exit;
+                        end if;
+                     end loop;
+                     if not GunAssigned then
+                        TmpShip.Modules(I).Data(1) :=
+                          Modules_Container.To_Index(J);
                      end if;
-                  end loop;
-                  if not GunAssigned then
-                     TmpShip.Modules(I).Data(1) :=
-                       Modules_Container.To_Index(J);
                   end if;
-               end if;
-            end loop;
-         elsif Modules_List(TmpShip.Modules(I).ProtoIndex).MType = HULL then
-            HullIndex := Modules_Container.To_Index(I);
-         end if;
-         Amount := Amount + Modules_List(TmpShip.Modules(I).ProtoIndex).Size;
-      end loop;
-      TmpShip.Modules(HullIndex).Data(1) := Amount;
+               end loop;
+            elsif Modules_List(TmpShip.Modules(I).ProtoIndex).MType = HULL then
+               HullIndex := Modules_Container.To_Index(I);
+            end if;
+            Amount :=
+              Amount + Modules_List(TmpShip.Modules(I).ProtoIndex).Size;
+         end loop;
+         TmpShip.Modules(HullIndex).Data(1) := Amount;
+      end;
+      -- Set known crafting recipes
       for Recipe of ProtoShip.KnownRecipes loop
          Known_Recipes.Append(New_Item => Recipe);
       end loop;
@@ -276,34 +300,38 @@ package body Ships is
       if SkyMap(X, Y).BaseIndex > 0 then
          TmpShip.HomeBase := SkyMap(X, Y).BaseIndex;
       else
-         StartX := X - 100;
-         NormalizeCoord(StartX);
-         StartY := Y - 100;
-         NormalizeCoord(StartY, False);
-         EndX := X + 100;
-         NormalizeCoord(EndX);
-         EndY := Y + 100;
-         NormalizeCoord(EndY, False);
-         Bases_Loop :
-         for SkyX in StartX .. EndX loop
-            for SkyY in StartY .. EndY loop
-               if SkyMap(SkyX, SkyY).BaseIndex > 0 then
-                  if SkyBases(SkyMap(SkyX, SkyY).BaseIndex).Owner =
-                    ProtoShip.Owner then
-                     TmpShip.HomeBase := SkyMap(SkyX, SkyY).BaseIndex;
-                     exit Bases_Loop;
+         declare
+            StartX, StartY, EndX, EndY: Integer;
+         begin
+            StartX := X - 100;
+            NormalizeCoord(StartX);
+            StartY := Y - 100;
+            NormalizeCoord(StartY, False);
+            EndX := X + 100;
+            NormalizeCoord(EndX);
+            EndY := Y + 100;
+            NormalizeCoord(EndY, False);
+            Bases_Loop :
+            for SkyX in StartX .. EndX loop
+               for SkyY in StartY .. EndY loop
+                  if SkyMap(SkyX, SkyY).BaseIndex > 0 then
+                     if SkyBases(SkyMap(SkyX, SkyY).BaseIndex).Owner =
+                       ProtoShip.Owner then
+                        TmpShip.HomeBase := SkyMap(SkyX, SkyY).BaseIndex;
+                        exit Bases_Loop;
+                     end if;
                   end if;
-               end if;
-            end loop;
-         end loop Bases_Loop;
-         if TmpShip.HomeBase = 0 then
-            for I in SkyBases'Range loop
-               if SkyBases(I).Owner = ProtoShip.Owner then
-                  TmpShip.HomeBase := I;
-                  exit;
-               end if;
-            end loop;
-         end if;
+               end loop;
+            end loop Bases_Loop;
+            if TmpShip.HomeBase = 0 then
+               for I in SkyBases'Range loop
+                  if SkyBases(I).Owner = ProtoShip.Owner then
+                     TmpShip.HomeBase := I;
+                     exit;
+                  end if;
+               end loop;
+            end if;
+         end;
       end if;
       -- Set home base for crew members
       for Member of TmpShip.Crew loop
