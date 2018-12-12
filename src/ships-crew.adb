@@ -153,7 +153,6 @@ package body Ships.Crew is
       CheckPriorities: Boolean := True) is
       MemberName: constant String := To_String(Ship.Crew(MemberIndex).Name);
       ModuleIndex2, ToolsIndex: Natural := 0;
-      MType: ModuleType := ENGINE;
       RequiredTool: Unbounded_String;
    begin
       if GivenOrder = Ship.Crew(MemberIndex).Order then
@@ -253,36 +252,40 @@ package body Ships.Crew is
       end if;
       if ModuleIndex = 0 and
         (GivenOrder = Pilot or GivenOrder = Engineer or GivenOrder = Rest) then
-         case GivenOrder is
-            when Pilot =>
-               MType := COCKPIT;
-            when Engineer =>
-               MType := ENGINE;
-            when Rest =>
-               MType := CABIN;
-            when others =>
-               null;
-         end case;
-         for I in Ship.Modules.Iterate loop
-            if MType /= CABIN then
-               if Modules_List(Ship.Modules(I).ProtoIndex).MType = MType and
-                 Ship.Modules(I).Durability > 0 then
-                  if Ship.Modules(I).Owner /= 0 then
-                     GiveOrders
-                       (PlayerShip, Ship.Modules(I).Owner, Rest, 0, False);
+         declare
+            MType: ModuleType := ENGINE;
+         begin
+            case GivenOrder is
+               when Pilot =>
+                  MType := COCKPIT;
+               when Engineer =>
+                  MType := ENGINE;
+               when Rest =>
+                  MType := CABIN;
+               when others =>
+                  null;
+            end case;
+            for I in Ship.Modules.Iterate loop
+               if MType /= CABIN then
+                  if Modules_List(Ship.Modules(I).ProtoIndex).MType = MType and
+                    Ship.Modules(I).Durability > 0 then
+                     if Ship.Modules(I).Owner /= 0 then
+                        GiveOrders
+                          (PlayerShip, Ship.Modules(I).Owner, Rest, 0, False);
+                     end if;
+                     ModuleIndex2 := Modules_Container.To_Index(I);
+                     exit;
                   end if;
-                  ModuleIndex2 := Modules_Container.To_Index(I);
-                  exit;
+               else
+                  if Modules_List(Ship.Modules(I).ProtoIndex).MType = CABIN and
+                    Ship.Modules(I).Durability > 0 and
+                    Ship.Modules(I).Owner = MemberIndex then
+                     ModuleIndex2 := Modules_Container.To_Index(I);
+                     exit;
+                  end if;
                end if;
-            else
-               if Modules_List(Ship.Modules(I).ProtoIndex).MType = CABIN and
-                 Ship.Modules(I).Durability > 0 and
-                 Ship.Modules(I).Owner = MemberIndex then
-                  ModuleIndex2 := Modules_Container.To_Index(I);
-                  exit;
-               end if;
-            end if;
-         end loop;
+            end loop;
+         end;
       else
          ModuleIndex2 := ModuleIndex;
       end if;
