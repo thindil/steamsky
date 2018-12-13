@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated README.md
+- Updated new game message
 
 ### Fixed
 - Entering text cause activation of menu in numeric fields
