@@ -185,12 +185,6 @@ package body Ships.Movement is
    function DockShip(Docking: Boolean) return String is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      MoneyIndex2: constant Natural :=
-        FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
-      DockingCost: Positive;
-      TraderIndex: Natural := 0;
-      FuelIndex: constant Natural :=
-        FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
       Message: Unbounded_String;
    begin
       Message := To_Unbounded_String(HaveOrderRequirements);
@@ -199,33 +193,40 @@ package body Ships.Movement is
       end if;
       if Docking then
          if SkyBases(BaseIndex).Population > 0 then
-            if MoneyIndex2 = 0 then
-               return "You can't dock to base because you don't have " &
-                 To_String(MoneyName) & " to pay for docking.";
-            end if;
-            for Module of PlayerShip.Modules loop
-               if Modules_List(Module.ProtoIndex).MType = HULL then
-                  DockingCost := Module.Data(2);
-                  exit;
+            declare
+               MoneyIndex2: constant Natural :=
+                 FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+               DockingCost: Positive;
+               TraderIndex: constant Natural := FindMember(Talk);
+            begin
+               if MoneyIndex2 = 0 then
+                  return "You can't dock to base because you don't have " &
+                    To_String(MoneyName) & " to pay for docking.";
                end if;
-            end loop;
-            TraderIndex := FindMember(Talk);
-            CountPrice(DockingCost, TraderIndex);
-            if DockingCost > PlayerShip.Cargo(MoneyIndex2).Amount then
-               return "You can't dock to base because you don't have enough " &
-                 To_String(MoneyName) & " to pay for docking.";
-            end if;
-            UpdateCargo
-              (Ship => PlayerShip, CargoIndex => MoneyIndex2,
-               Amount => (0 - DockingCost));
-            AddMessage
-              ("Ship docked to base " & To_String(SkyBases(BaseIndex).Name) &
-               ". It costs" & Positive'Image(DockingCost) & " " &
-               To_String(MoneyName) & ".",
-               OrderMessage);
-            if TraderIndex > 0 then
-               GainExp(1, TalkingSkill, TraderIndex);
-            end if;
+               for Module of PlayerShip.Modules loop
+                  if Modules_List(Module.ProtoIndex).MType = HULL then
+                     DockingCost := Module.Data(2);
+                     exit;
+                  end if;
+               end loop;
+               CountPrice(DockingCost, TraderIndex);
+               if DockingCost > PlayerShip.Cargo(MoneyIndex2).Amount then
+                  return "You can't dock to base because you don't have enough " &
+                    To_String(MoneyName) & " to pay for docking.";
+               end if;
+               UpdateCargo
+                 (Ship => PlayerShip, CargoIndex => MoneyIndex2,
+                  Amount => (0 - DockingCost));
+               AddMessage
+                 ("Ship docked to base " &
+                  To_String(SkyBases(BaseIndex).Name) & ". It costs" &
+                  Positive'Image(DockingCost) & " " & To_String(MoneyName) &
+                  ".",
+                  OrderMessage);
+               if TraderIndex > 0 then
+                  GainExp(1, TalkingSkill, TraderIndex);
+               end if;
+            end;
             declare
                MemberIndex: Positive := 1;
             begin
@@ -269,9 +270,14 @@ package body Ships.Movement is
          PlayerShip.Speed := DOCKED;
          UpdateGame(10);
       else
-         if FuelIndex = 0 then
-            return "You can't undock from base because you don't have any fuel.";
-         end if;
+         declare
+            FuelIndex: constant Natural :=
+              FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
+         begin
+            if FuelIndex = 0 then
+               return "You can't undock from base because you don't have any fuel.";
+            end if;
+         end;
          PlayerShip.Speed := GameSettings.UndockSpeed;
          AddMessage
            ("Ship undocked from base " & To_String(SkyBases(BaseIndex).Name),
@@ -304,8 +310,6 @@ package body Ships.Movement is
    function RealSpeed(Ship: ShipRecord;
       InfoOnly: Boolean := False) return Natural is
       BaseSpeed, Speed: Natural := 0;
-      type DamageFactor is digits 2 range 0.0 .. 1.0;
-      Damage: DamageFactor := 0.0;
       Message: Unbounded_String;
       ShipSetSpeed: ShipSpeed;
    begin
@@ -315,18 +319,24 @@ package body Ships.Movement is
             return 0;
          end if;
       end if;
-      for Module of Ship.Modules loop
-         if Modules_List(Module.ProtoIndex).MType = ENGINE and
-           Module.Data(3) = 0 then
-            BaseSpeed := Module.Data(2) * 10;
-            Damage :=
-              1.0 -
-              DamageFactor
-                (Float(Module.Durability) / Float(Module.MaxDurability));
-            Speed :=
-              Speed + (BaseSpeed - Natural(Float(BaseSpeed) * Float(Damage)));
-         end if;
-      end loop;
+      declare
+         type DamageFactor is digits 2 range 0.0 .. 1.0;
+         Damage: DamageFactor := 0.0;
+      begin
+         for Module of Ship.Modules loop
+            if Modules_List(Module.ProtoIndex).MType = ENGINE and
+              Module.Data(3) = 0 then
+               BaseSpeed := Module.Data(2) * 10;
+               Damage :=
+                 1.0 -
+                 DamageFactor
+                   (Float(Module.Durability) / Float(Module.MaxDurability));
+               Speed :=
+                 Speed +
+                 (BaseSpeed - Natural(Float(BaseSpeed) * Float(Damage)));
+            end if;
+         end loop;
+      end;
       Speed :=
         Natural((Float(Speed) / Float(CountShipWeight(Ship))) * 100000.0);
       for I in Ship.Crew.Iterate loop
