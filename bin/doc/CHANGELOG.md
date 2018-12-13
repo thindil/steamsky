@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Updated ships hulls data with maximum allowed size of installed modules
 - Updated help
 - Updated MODDING.md
+- Updated new game message
 
 ### Fixed
 - Info about item damage
