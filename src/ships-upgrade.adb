@@ -24,7 +24,7 @@ with Crew.Inventory; use Crew.Inventory;
 package body Ships.Upgrade is
 
    procedure StartUpgrading(ModuleIndex, UpgradeType: Positive) is
-      MaxValue, MaterialIndex: Natural;
+      MaxValue: Natural;
       UpgradeProgress: Positive;
       UpgradeAction: ShipUpgrade;
    begin
@@ -132,24 +132,27 @@ package body Ships.Upgrade is
          when others =>
             return;
       end case;
-      MaterialIndex :=
-        FindItem
-          (Inventory => PlayerShip.Cargo,
-           ItemType =>
-             Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-               .RepairMaterial);
-      if MaterialIndex = 0 then
-         for Item of Items_List loop
-            if Item.IType =
-              Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                .RepairMaterial then
-               raise Ship_Upgrade_Error
-                 with "You don't have " & To_String(Item.Name) &
-                 " for upgrading " &
-                 To_String(PlayerShip.Modules(ModuleIndex).Name) & ".";
-            end if;
-         end loop;
-      end if;
+      declare
+         MaterialIndex: constant Natural :=
+           FindItem
+             (Inventory => PlayerShip.Cargo,
+              ItemType =>
+                Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                  .RepairMaterial);
+      begin
+         if MaterialIndex = 0 then
+            for Item of Items_List loop
+               if Item.IType =
+                 Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                   .RepairMaterial then
+                  raise Ship_Upgrade_Error
+                    with "You don't have " & To_String(Item.Name) &
+                    " for upgrading " &
+                    To_String(PlayerShip.Modules(ModuleIndex).Name) & ".";
+               end if;
+            end loop;
+         end if;
+      end;
       PlayerShip.UpgradeModule := ModuleIndex;
       if PlayerShip.Modules(ModuleIndex).UpgradeAction /= UpgradeAction then
          PlayerShip.Modules(ModuleIndex).UpgradeProgress := UpgradeProgress;
