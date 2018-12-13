@@ -254,7 +254,7 @@ package body Game is
       end loop;
       -- Add welcoming message
       AddMessage
-        ("Welcome to Steam Sky. If it is your first game, please consider read help (keyboard shortcut F1 or from Menu).",
+        ("Welcome to Steam Sky. If it is your first game, please consider read help (entry 'Help' in Menu).",
          OtherMessage);
    end NewGame;
 
