@@ -45,13 +45,50 @@ package body Ships.Cargo.UI is
       CargoIter: Gtk_Tree_Iter;
       CargoList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "cargolist"));
+      ProtoIndex, ItemWeight: Positive;
+      Visible: Boolean := False;
    begin
       Clear(CargoList);
       for I in PlayerShip.Cargo.Iterate loop
          Append(CargoList, CargoIter);
          Set(CargoList, CargoIter, 0, GetItemName(PlayerShip.Cargo(I)));
          Set(CargoList, CargoIter, 1, Gint(Inventory_Container.To_Index(I)));
+         ProtoIndex := PlayerShip.Cargo(I).ProtoIndex;
+         if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
+            Set
+              (CargoList, CargoIter, 2,
+               To_String(Items_List(ProtoIndex).IType));
+         else
+            Set
+              (CargoList, CargoIter, 2,
+               To_String(Items_List(ProtoIndex).ShowType));
+         end if;
+         Set(CargoList, CargoIter, 3, Gint(PlayerShip.Cargo(I).Amount));
+         ItemWeight :=
+           PlayerShip.Cargo(I).Amount * Items_List(ProtoIndex).Weight;
+         Set(CargoList, CargoIter, 4, Positive'Image(ItemWeight) & " kg");
+         Set(CargoList, CargoIter, 7, True);
+         case PlayerShip.Cargo(I).Durability is
+            when 100 =>
+               Set(CargoList, CargoIter, 7, False);
+            when 81 .. 99 =>
+               Set(CargoList, CargoIter, 5, "Slightly used");
+               Visible := True;
+            when 51 .. 80 =>
+               Set(CargoList, CargoIter, 5, "Damaged");
+               Visible := True;
+            when 21 .. 50 =>
+               Set(CargoList, CargoIter, 5, "Heavily damaged");
+               Visible := True;
+            when others =>
+               Set(CargoList, CargoIter, 5, "Almost destroyed");
+               Visible := True;
+         end case;
+         Set(CargoList, CargoIter, 6, Gint(PlayerShip.Cargo(I).Durability));
       end loop;
+      Set_Visible
+        (Gtk_Tree_View_Column(Get_Object(Builder, "columncargodurability")),
+         Visible);
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblfreespace")),
          "Free cargo space:" & Integer'Image(FreeCargo(0)) & " kg");
@@ -71,7 +108,7 @@ package body Ships.Cargo.UI is
       CargoIter: Gtk_Tree_Iter;
       CargoModel: Gtk_Tree_Model;
       ItemInfo: Unbounded_String;
-      ProtoIndex, ItemWeight: Positive;
+      ProtoIndex: Positive;
       AmountAdj: constant Gtk_Adjustment :=
         Gtk_Adjustment(Get_Object(Object, "amountadj"));
       AmountAdj2: constant Gtk_Adjustment :=
@@ -89,23 +126,9 @@ package body Ships.Cargo.UI is
          return;
       end if;
       ProtoIndex := PlayerShip.Cargo(ItemIndex).ProtoIndex;
-      ItemWeight :=
-        PlayerShip.Cargo(ItemIndex).Amount * Items_List(ProtoIndex).Weight;
-      ItemInfo := To_Unbounded_String("Type: ");
-      if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
-         Append(ItemInfo, Items_List(ProtoIndex).IType);
-      else
-         Append(ItemInfo, Items_List(ProtoIndex).ShowType);
-      end if;
-      Append
-        (ItemInfo,
-         LF & "Amount:" & Positive'Image(PlayerShip.Cargo(ItemIndex).Amount));
-      Append
-        (ItemInfo,
-         LF & "Weight:" & Positive'Image(Items_List(ProtoIndex).Weight) &
-         " kg");
-      Append
-        (ItemInfo, LF & "Total weight:" & Positive'Image(ItemWeight) & " kg");
+      ItemInfo :=
+        To_Unbounded_String
+          ("Weight:" & Positive'Image(Items_List(ProtoIndex).Weight) & " kg");
       if Items_List(ProtoIndex).IType = WeaponType then
          Append
            (ItemInfo,
@@ -135,9 +158,6 @@ package body Ships.Cargo.UI is
       end if;
       Set_Markup
         (Gtk_Label(Get_Object(Object, "lbliteminfo2")), To_String(ItemInfo));
-      ShowItemDamage
-        (PlayerShip.Cargo(ItemIndex).Durability,
-         Get_Object(Object, "itemdamagebar2"));
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
          Set_Label
            (Gtk_Label(Get_Object(Object, "lbldescription2")),
