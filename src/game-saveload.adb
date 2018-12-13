@@ -161,7 +161,8 @@ package body Game.SaveLoad is
                  (MessageNode, "type",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
                RawValue :=
-                 To_Unbounded_String(Message_Color'Image(Message.Color));
+                 To_Unbounded_String
+                   (Integer'Image(Message_Color'Pos(Message.Color)));
                Set_Attribute
                  (MessageNode, "color",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
