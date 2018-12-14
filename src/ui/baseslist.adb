@@ -50,10 +50,7 @@ package body BasesList is
    BaseIndex: Positive;
 
    procedure ShowBaseInfo(Object: access Gtkada_Builder_Record'Class) is
-      BasesIter: Gtk_Tree_Iter;
-      BasesModel: Gtk_Tree_Model;
       BaseInfo: Unbounded_String;
-      TimeDiff: Integer;
       procedure SetReputationText(ReputationText: String) is
       begin
          Set_ToolTip_Text
@@ -64,21 +61,28 @@ package body BasesList is
             ReputationText);
       end SetReputationText;
    begin
-      Get_Selected
-        (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Object, "treebases"))),
-         BasesModel, BasesIter);
-      if BasesIter = Null_Iter then
-         Set_Visible(Gtk_Widget(Get_Object(Object, "baseinfoframe")), False);
-         Set_Visible(Gtk_Widget(Get_Object(Object, "btnshowbase")), False);
+      declare
+         BasesIter: Gtk_Tree_Iter;
+         BasesModel: Gtk_Tree_Model;
+      begin
+         Get_Selected
+           (Gtk.Tree_View.Get_Selection
+              (Gtk_Tree_View(Get_Object(Object, "treebases"))),
+            BasesModel, BasesIter);
+         if BasesIter = Null_Iter then
+            Set_Visible
+              (Gtk_Widget(Get_Object(Object, "baseinfoframe")), False);
+            Set_Visible(Gtk_Widget(Get_Object(Object, "btnshowbase")), False);
+            Set_Visible
+              (Gtk_Widget(Get_Object(Object, "btndestinationbase")), False);
+            return;
+         end if;
+         Set_Visible(Gtk_Widget(Get_Object(Object, "baseinfoframe")), True);
+         Set_Visible(Gtk_Widget(Get_Object(Object, "btnshowbase")), True);
          Set_Visible
-           (Gtk_Widget(Get_Object(Object, "btndestinationbase")), False);
-         return;
-      end if;
-      Set_Visible(Gtk_Widget(Get_Object(Object, "baseinfoframe")), True);
-      Set_Visible(Gtk_Widget(Get_Object(Object, "btnshowbase")), True);
-      Set_Visible(Gtk_Widget(Get_Object(Object, "btndestinationbase")), True);
-      BaseIndex := Natural(Get_Int(BasesModel, BasesIter, 1));
+           (Gtk_Widget(Get_Object(Object, "btndestinationbase")), True);
+         BaseIndex := Natural(Get_Int(BasesModel, BasesIter, 1));
+      end;
       if SkyBases(BaseIndex).Visited.Year > 0 then
          BaseInfo :=
            To_Unbounded_String
@@ -87,49 +91,56 @@ package body BasesList is
          Append
            (BaseInfo,
             LF & "Last visited: " & FormatedTime(SkyBases(BaseIndex).Visited));
-         if SkyBases(BaseIndex).Population > 0 and
-           SkyBases(BaseIndex).Reputation(1) > -25 then
-            TimeDiff := 30 - DaysDifference(SkyBases(BaseIndex).RecruitDate);
-            if TimeDiff > 0 then
+         declare
+            TimeDiff: Integer;
+         begin
+            if SkyBases(BaseIndex).Population > 0 and
+              SkyBases(BaseIndex).Reputation(1) > -25 then
+               TimeDiff :=
+                 30 - DaysDifference(SkyBases(BaseIndex).RecruitDate);
+               if TimeDiff > 0 then
+                  Append
+                    (BaseInfo,
+                     LF & "New recruits available in" &
+                     Natural'Image(TimeDiff) & " days.");
+               else
+                  Append(BaseInfo, LF & "New recruits available now.");
+               end if;
+            else
                Append
                  (BaseInfo,
-                  LF & "New recruits available in" & Natural'Image(TimeDiff) &
-                  " days.");
-            else
-               Append(BaseInfo, LF & "New recruits available now.");
+                  LF & "You can't recruit crew members at this base.");
             end if;
-         else
-            Append
-              (BaseInfo, LF & "You can't recruit crew members at this base.");
-         end if;
-         if SkyBases(BaseIndex).Population > 0 and
-           SkyBases(BaseIndex).Reputation(1) > -25 then
-            TimeDiff := DaysDifference(SkyBases(BaseIndex).AskedForEvents);
-            if TimeDiff < 7 then
-               Append
-                 (BaseInfo,
-                  LF & "You asked for events" & Natural'Image(TimeDiff) &
-                  " days ago.");
+            if SkyBases(BaseIndex).Population > 0 and
+              SkyBases(BaseIndex).Reputation(1) > -25 then
+               TimeDiff := DaysDifference(SkyBases(BaseIndex).AskedForEvents);
+               if TimeDiff < 7 then
+                  Append
+                    (BaseInfo,
+                     LF & "You asked for events" & Natural'Image(TimeDiff) &
+                     " days ago.");
+               else
+                  Append(BaseInfo, LF & "You can ask for events again.");
+               end if;
             else
-               Append(BaseInfo, LF & "You can ask for events again.");
+               Append(BaseInfo, LF & "You can't ask for events at this base.");
             end if;
-         else
-            Append(BaseInfo, LF & "You can't ask for events at this base.");
-         end if;
-         if SkyBases(BaseIndex).Population > 0 and
-           SkyBases(BaseIndex).Reputation(1) > -1 then
-            TimeDiff := 7 - DaysDifference(SkyBases(BaseIndex).MissionsDate);
-            if TimeDiff > 0 then
-               Append
-                 (BaseInfo,
-                  LF & "New missions available in" & Natural'Image(TimeDiff) &
-                  " days.");
+            if SkyBases(BaseIndex).Population > 0 and
+              SkyBases(BaseIndex).Reputation(1) > -1 then
+               TimeDiff :=
+                 7 - DaysDifference(SkyBases(BaseIndex).MissionsDate);
+               if TimeDiff > 0 then
+                  Append
+                    (BaseInfo,
+                     LF & "New missions available in" &
+                     Natural'Image(TimeDiff) & " days.");
+               else
+                  Append(BaseInfo, LF & "New missions available now.");
+               end if;
             else
-               Append(BaseInfo, LF & "New missions available now.");
+               Append(BaseInfo, LF & "You can't take missions at this base.");
             end if;
-         else
-            Append(BaseInfo, LF & "You can't take missions at this base.");
-         end if;
+         end;
          Set_Visible
            (Gtk_Widget(Get_Object(Object, "basereputationbox")), True);
          Set_Fraction
@@ -222,8 +233,6 @@ package body BasesList is
 
    function VisibleBases(Model: Gtk_Tree_Model;
       Iter: Gtk_Tree_Iter) return Boolean is
-      SearchEntry: constant Gtk_GEntry :=
-        Gtk_GEntry(Get_Object(Builder, "entrysearchbases"));
       ShowBase: Boolean := False;
       BasesType: Bases_Types;
       BasesStatus, BasesOwner: Natural;
@@ -284,15 +293,20 @@ package body BasesList is
       if not ShowBase then
          return False;
       end if;
-      if Get_Text(SearchEntry) = "" then
-         return True;
-      end if;
-      if Index
-          (To_Lower(Get_String(Model, Iter, 0)),
-           To_Lower(Get_Text(SearchEntry)), 1) >
-        0 then
-         return True;
-      end if;
+      declare
+         SearchEntry: constant Gtk_GEntry :=
+           Gtk_GEntry(Get_Object(Builder, "entrysearchbases"));
+      begin
+         if Get_Text(SearchEntry) = "" then
+            return True;
+         end if;
+         if Index
+             (To_Lower(Get_String(Model, Iter, 0)),
+              To_Lower(Get_Text(SearchEntry)), 1) >
+           0 then
+            return True;
+         end if;
+      end;
       return False;
    end VisibleBases;
 
@@ -381,8 +395,7 @@ package body BasesList is
       if N_Children(BaseList, Null_Iter) > 0 then
          Set_Cursor
            (Gtk_Tree_View(Get_Object(Builder, "treebases")),
-            Gtk_Tree_Path_New_From_String("0"),
-            Gtk_Tree_View_Column(Get_Object(Builder, "columnnames1")), False);
+            Gtk_Tree_Path_New_From_String("0"), null, False);
       end if;
       Set_Text(Gtk_GEntry(Get_Object(Builder, "entrysearchbases")), "");
       SettingTime := False;
