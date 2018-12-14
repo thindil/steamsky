@@ -17,8 +17,8 @@
 
 package Ships.Movement is
 
-   function MoveShip(ShipIndex, X, Y: Integer;
-      Message: in out Unbounded_String) return Natural; -- Move selected ship
+   function MoveShip(X, Y: Integer;
+      Message: in out Unbounded_String) return Natural; -- Move player ship
    function DockShip
      (Docking: Boolean)
      return String; -- Dock/Undock ship at base, returns empty string if all ok otherwise error message

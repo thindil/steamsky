@@ -63,7 +63,7 @@ package body Ships.Movement is
       return "";
    end HaveOrderRequirements;
 
-   function MoveShip(ShipIndex, X, Y: Integer;
+   function MoveShip(X, Y: Integer;
       Message: in out Unbounded_String) return Natural is
       NewX, NewY: Integer;
       TimePassed, FuelNeeded: Integer := 0;
@@ -84,87 +84,82 @@ package body Ships.Movement is
          return False;
       end NeedRest;
    begin
-      if ShipIndex = 0 then
-         case PlayerShip.Speed is
-            when DOCKED =>
-               Message :=
-                 To_Unbounded_String("First you must undock ship from base.");
-               return 0;
-            when FULL_STOP =>
-               Message :=
-                 To_Unbounded_String("First you must set speed for ship.");
-               return 0;
-            when others =>
-               null;
-         end case;
-         Message := To_Unbounded_String(HaveOrderRequirements);
-         if Length(Message) > 0 then
-            return 0;
-         end if;
-         FuelIndex :=
-           FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
-         if FuelIndex = 0 then
-            Message := To_Unbounded_String("You don't have any fuel.");
-            return 0;
-         end if;
-         FuelNeeded := CountFuelNeeded;
-         if PlayerShip.Cargo(FuelIndex).Amount < abs FuelNeeded then
+      case PlayerShip.Speed is
+         when DOCKED =>
             Message :=
-              To_Unbounded_String
-                ("You don't have enough fuel (" &
-                 To_String
-                   (Items_List(PlayerShip.Cargo(FuelIndex).ProtoIndex).Name) &
-                 ").");
+              To_Unbounded_String("First you must undock ship from base.");
             return 0;
-         end if;
-         Speed := (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
-         if Speed < 0.01 then
+         when FULL_STOP =>
             Message :=
-              To_Unbounded_String
-                ("You can't fly because your ship is overloaded.");
+              To_Unbounded_String("First you must set speed for ship.");
             return 0;
-         end if;
-         NewX := PlayerShip.SkyX + X;
-         NewY := PlayerShip.SkyY + Y;
+         when others =>
+            null;
+      end case;
+      Message := To_Unbounded_String(HaveOrderRequirements);
+      if Length(Message) > 0 then
+         return 0;
       end if;
+      FuelIndex :=
+        FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
+      if FuelIndex = 0 then
+         Message := To_Unbounded_String("You don't have any fuel.");
+         return 0;
+      end if;
+      FuelNeeded := CountFuelNeeded;
+      if PlayerShip.Cargo(FuelIndex).Amount < abs FuelNeeded then
+         Message :=
+           To_Unbounded_String
+             ("You don't have enough fuel (" &
+              To_String
+                (Items_List(PlayerShip.Cargo(FuelIndex).ProtoIndex).Name) &
+              ").");
+         return 0;
+      end if;
+      Speed := (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
+      if Speed < 0.01 then
+         Message :=
+           To_Unbounded_String
+             ("You can't fly because your ship is overloaded.");
+         return 0;
+      end if;
+      NewX := PlayerShip.SkyX + X;
+      NewY := PlayerShip.SkyY + Y;
       if NewX < 1 or NewX > 1024 or NewY < 1 or NewY > 1024 then
          return 0;
       end if;
-      if ShipIndex = 0 then
-         PlayerShip.SkyX := NewX;
-         PlayerShip.SkyY := NewY;
-         UpdateCargo
-           (PlayerShip, PlayerShip.Cargo.Element(FuelIndex).ProtoIndex,
-            FuelNeeded);
-         TimePassed := Integer(100.0 / Speed);
-         if TimePassed > 0 then
-            case PlayerShip.Speed is
-               when QUARTER_SPEED =>
-                  if TimePassed < 60 then
-                     TimePassed := 60;
-                  end if;
-               when HALF_SPEED =>
-                  if TimePassed < 30 then
-                     TimePassed := 30;
-                  end if;
-               when FULL_SPEED =>
-                  if TimePassed < 15 then
-                     TimePassed := 15;
-                  end if;
-               when others =>
-                  null;
-            end case;
-            GameStats.DistanceTraveled := GameStats.DistanceTraveled + 1;
-            UpdateGame(TimePassed);
-            FuelIndex :=
-              FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
-            if FuelIndex = 0 then
-               AddMessage
-                 ("Ship fall from sky due to lack of fuel.", OtherMessage,
-                  RED);
-               Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
-               return 0;
-            end if;
+      PlayerShip.SkyX := NewX;
+      PlayerShip.SkyY := NewY;
+      UpdateCargo
+        (PlayerShip, PlayerShip.Cargo.Element(FuelIndex).ProtoIndex,
+         FuelNeeded);
+      TimePassed := Integer(100.0 / Speed);
+      if TimePassed > 0 then
+         case PlayerShip.Speed is
+            when QUARTER_SPEED =>
+               if TimePassed < 60 then
+                  TimePassed := 60;
+               end if;
+            when HALF_SPEED =>
+               if TimePassed < 30 then
+                  TimePassed := 30;
+               end if;
+            when FULL_SPEED =>
+               if TimePassed < 15 then
+                  TimePassed := 15;
+               end if;
+            when others =>
+               null;
+         end case;
+         GameStats.DistanceTraveled := GameStats.DistanceTraveled + 1;
+         UpdateGame(TimePassed);
+         FuelIndex :=
+           FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
+         if FuelIndex = 0 then
+            AddMessage
+              ("Ship fall from sky due to lack of fuel.", OtherMessage, RED);
+            Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
+            return 0;
          end if;
       end if;
       if NeedRest(Pilot) then
