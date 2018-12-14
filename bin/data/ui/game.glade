@@ -139,7 +139,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <!-- column-name amount -->
       <column type="gint"/>
       <!-- column-name weight -->
-      <column type="gchararray"/>
+      <column type="guint"/>
       <!-- column-name durabilitytext -->
       <column type="gchararray"/>
       <!-- column-name durability -->
@@ -9015,7 +9015,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         </child>
                         <child>
                           <object class="GtkTreeViewColumn">
-                            <property name="title" translatable="yes">Weight</property>
+                            <property name="title" translatable="yes">Weight (in kg)</property>
                             <property name="sort_indicator">True</property>
                             <property name="sort_column_id">4</property>
                             <child>

@@ -66,7 +66,7 @@ package body Ships.Cargo.UI is
          Set(CargoList, CargoIter, 3, Gint(PlayerShip.Cargo(I).Amount));
          ItemWeight :=
            PlayerShip.Cargo(I).Amount * Items_List(ProtoIndex).Weight;
-         Set(CargoList, CargoIter, 4, Positive'Image(ItemWeight) & " kg");
+         Set(CargoList, CargoIter, 4, Gint(ItemWeight));
          Set(CargoList, CargoIter, 7, True);
          case PlayerShip.Cargo(I).Durability is
             when 100 =>
