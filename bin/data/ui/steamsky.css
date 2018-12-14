@@ -234,10 +234,7 @@ GtkTextView#mapview {
    border-radius:15px 0px 0px 15px;
 }
 
-GtkProgressBar.trough#negativebar,
-   GtkTreeView.view.trough#negativebar,
-   GtkTreeView.view.trough#negativebar:selected,
-   GtkTreeView.view.trough#negativebar:selected:focus {
+GtkProgressBar.trough#negativebar {
   border-radius:15px 0px 0px 15px;
   background:linear-gradient(to bottom, rgb(53,53,53), rgb(15,21,31));
 }
@@ -250,10 +247,7 @@ GtkProgressBar.trough#negativebar,
    border-radius:0px 15px 15px 0px;
 }
 
-GtkProgressBar.trough#positivebar,
-   GtkTreeView.view.trough#positivebar,
-   GtkTreeView.view.trough#positivebar:selected,
-   GtkTreeView.view.trough#positivebar:selected:focus {
+GtkProgressBar.trough#positivebar {
   border-radius:0px 15px 15px 0px;
   background:linear-gradient(to bottom, rgb(53,53,53), rgb(15,21,31));
 }
