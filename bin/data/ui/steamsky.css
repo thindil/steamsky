@@ -20,7 +20,7 @@ GtkWindow {
 
 /* Mouse hovering over UI element */
 *:hover {
-   border-style:dotted;
+   border-style:solid;
    border-width:1px;
    border-color:rgb(255,223,0);
 }
@@ -278,3 +278,9 @@ GtkExpander * {
    border-color:gray;
    background:rgb(25,25,25);
 }
+
+/* Mouse hovering over tables cells */
+GtkTreeView row:hover {
+   border-width:1px 0;
+}
+
