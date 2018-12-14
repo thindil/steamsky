@@ -8949,6 +8949,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="shadow_type">in</property>
                     <child>
                       <object class="GtkTreeView" id="treecargo">
+                        <property name="name">redbar</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="model">cargolist</property>
