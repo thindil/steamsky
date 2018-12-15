@@ -35,7 +35,7 @@ GtkWindow {
 }
 
 /* Default all buttons settings */
-.button {
+.button, GtkSwitch.slider {
    box-shadow:inset 0px 1px 0px 0px #5c4745;
    background:linear-gradient(to bottom, #473422 5%, #1a130c 100%);
    border-radius:10px;
