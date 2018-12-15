@@ -235,8 +235,8 @@ package body BasesList is
       Iter: Gtk_Tree_Iter) return Boolean is
       ShowBase: Boolean := False;
       BasesType: Bases_Types;
-      BasesStatus, BasesOwner: Natural;
-      BaseIndex: Positive;
+      BasesStatus: Natural;
+      BaseIndex, BasesOwner: Positive;
    begin
       if SettingTime then
          return True;
@@ -279,7 +279,7 @@ package body BasesList is
                if BasesOwner <= Factions_List.Last_Index
                  and then SkyBases(BaseIndex).Owner = BasesOwner then
                   ShowBase := True;
-               else
+               elsif BasesOwner > Factions_List.Last_Index then
                   ShowBase := True;
                end if;
             end if;
