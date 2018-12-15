@@ -36,18 +36,18 @@ GtkWindow {
 
 /* Default all buttons settings */
 .button, GtkSwitch.slider {
-   box-shadow:inset 0px 1px 0px 0px #5c4745;
+   box-shadow:inset 0 1px 0 0 #5c4745;
    background:linear-gradient(to bottom, #473422 5%, #1a130c 100%);
    border-radius:10px;
    border:1px solid #120c06;
    color:rgb(255,223,0);
-   text-shadow:0px 1px 0px #120d0d;
+   text-shadow:0 1px 0 #120d0d;
 }
 
 /* Setting for buttons texts */
 .button * {
    color:rgb(255,223,0);
-   text-shadow:0px 1px 0px #2b1e1d;
+   text-shadow:0 1px 0 #2b1e1d;
 }
 
 /* Setting for currently focused button */
@@ -70,11 +70,11 @@ GtkWindow {
 
 /* Default settings for text entry fields (like player and ship name) */
 .entry {
-   box-shadow:inset 0px 1px 0px 0px #5c4745;
+   box-shadow:inset 0 1px 0 0 #5c4745;
    background-color:#2d2115;
    border:1px solid #120c06;
    color:rgb(255,223,0);
-   text-shadow:0px 1px 0px #120d0d;
+   text-shadow:0 1px 0 #120d0d;
 }
 
 /* Settings for currently active text entry fields (like player and ship name) */
@@ -92,7 +92,7 @@ GtkTreeView:selected,
 
 /* Setting for all sliders */
 .scrollbar.slider {
-   box-shadow:inset 0px 0px 0px 1px #5c4745;
+   box-shadow:inset 0 0 0 1px #5c4745;
    background:linear-gradient(to right, #473422 5%, #1a130c 100%);
    border-radius:10px;
    border:1px solid #120c06;
@@ -231,11 +231,11 @@ GtkTextView#mapview {
    .progressbar:selected#negativebar,
    .progressbar:selected#negativebar:focus {
    background:linear-gradient(to bottom, red, black);
-   border-radius:15px 0px 0px 15px;
+   border-radius:15px 0 0 15px;
 }
 
 GtkProgressBar.trough#negativebar {
-  border-radius:15px 0px 0px 15px;
+  border-radius:15px 0 0 15px;
   background:linear-gradient(to bottom, rgb(53,53,53), rgb(15,21,31));
 }
 
@@ -244,17 +244,17 @@ GtkProgressBar.trough#negativebar {
    .progressbar:selected#positivebar,
    .progressbar:selected#positivebar:focus {
    background:linear-gradient(to bottom, darkgreen, black);
-   border-radius:0px 15px 15px 0px;
+   border-radius:0 15px 15px 0;
 }
 
 GtkProgressBar.trough#positivebar {
-  border-radius:0px 15px 15px 0px;
+  border-radius:0 15px 15px 0;
   background:linear-gradient(to bottom, rgb(53,53,53), rgb(15,21,31));
 }
 
 /* Setting for tables headers */
 GtkTreeView.view .button {
-   border-radius:0px;
+   border-radius:0;
 }
 
 /* Prevent expanders from autoresize on hover */
