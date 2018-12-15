@@ -42,27 +42,28 @@ package body Bases.LootUI is
    Builder: Gtkada_Builder;
 
    procedure ShowItemInfo(Object: access Gtkada_Builder_Record'Class) is
-      ItemsIter: Gtk_Tree_Iter;
-      ItemsModel: Gtk_Tree_Model;
       ItemInfo: Unbounded_String;
-      Amount, ProtoIndex: Natural;
-      CargoIndex, BaseCargoIndex: Natural := 0;
+      ProtoIndex, CargoIndex, BaseCargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      FreeSpace: Integer;
    begin
-      Get_Selected
-        (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Object, "treeitems"))),
-         ItemsModel, ItemsIter);
-      if ItemsIter = Null_Iter then
-         return;
-      end if;
-      CargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 1));
-      if CargoIndex > Natural(PlayerShip.Cargo.Length) then
-         return;
-      end if;
-      BaseCargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 2));
+      declare
+         ItemsIter: Gtk_Tree_Iter;
+         ItemsModel: Gtk_Tree_Model;
+      begin
+         Get_Selected
+           (Gtk.Tree_View.Get_Selection
+              (Gtk_Tree_View(Get_Object(Object, "treeitems"))),
+            ItemsModel, ItemsIter);
+         if ItemsIter = Null_Iter then
+            return;
+         end if;
+         CargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 1));
+         if CargoIndex > Natural(PlayerShip.Cargo.Length) then
+            return;
+         end if;
+         BaseCargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 2));
+      end;
       if BaseCargoIndex > Natural(SkyBases(BaseIndex).Cargo.Length) then
          return;
       end if;
@@ -70,9 +71,6 @@ package body Bases.LootUI is
          ProtoIndex := PlayerShip.Cargo(CargoIndex).ProtoIndex;
       else
          ProtoIndex := SkyBases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex;
-      end if;
-      if BaseCargoIndex > 0 then
-         Amount := SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
       end if;
       ItemInfo := To_Unbounded_String("Type: ");
       if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
@@ -124,7 +122,10 @@ package body Bases.LootUI is
       end if;
       if BaseCargoIndex > 0
         and then SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount > 0 then
-         Append(ItemInfo, LF & "In base:" & Positive'Image(Amount));
+         Append
+           (ItemInfo,
+            LF & "In base:" &
+            Positive'Image(SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount));
       end if;
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
          Set_Label
@@ -149,13 +150,16 @@ package body Bases.LootUI is
            (Gtk_Adjustment(Get_Object(Object, "amountadj1")),
             Gdouble(SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount));
       end if;
-      FreeSpace := FreeCargo(0);
-      if FreeSpace < 0 then
-         FreeSpace := 0;
-      end if;
-      Set_Label
-        (Gtk_Label(Get_Object(Object, "lblshipspace")),
-         "Free cargo space:" & Integer'Image(FreeSpace) & " kg");
+      declare
+         FreeSpace: Integer := FreeCargo(0);
+      begin
+         if FreeSpace < 0 then
+            FreeSpace := 0;
+         end if;
+         Set_Label
+           (Gtk_Label(Get_Object(Object, "lblshipspace")),
+            "Free cargo space:" & Integer'Image(FreeSpace) & " kg");
+      end;
    end ShowItemInfo;
 
    procedure LootItem(User_Data: access GObject_Record'Class) is
@@ -163,18 +167,21 @@ package body Bases.LootUI is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Amount, ProtoIndex: Positive;
       CargoIndex, BaseCargoIndex: Natural := 0;
-      ItemsIter: Gtk_Tree_Iter;
-      ItemsModel: Gtk_Tree_Model;
    begin
-      Get_Selected
-        (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Builder, "treeitems"))),
-         ItemsModel, ItemsIter);
-      if ItemsIter = Null_Iter then
-         return;
-      end if;
-      CargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 1));
-      BaseCargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 2));
+      declare
+         ItemsIter: Gtk_Tree_Iter;
+         ItemsModel: Gtk_Tree_Model;
+      begin
+         Get_Selected
+           (Gtk.Tree_View.Get_Selection
+              (Gtk_Tree_View(Get_Object(Builder, "treeitems"))),
+            ItemsModel, ItemsIter);
+         if ItemsIter = Null_Iter then
+            return;
+         end if;
+         CargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 1));
+         BaseCargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 2));
+      end;
       if CargoIndex > 0 then
          ProtoIndex := PlayerShip.Cargo(CargoIndex).ProtoIndex;
       else
@@ -304,8 +311,7 @@ package body Bases.LootUI is
       Hide(Gtk_Widget(Get_Object(Builder, "takebox")));
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treeitems")),
-         Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columnname1")), False);
+         Gtk_Tree_Path_New_From_String("0"), null, False);
       ShowLastMessage(Builder);
    end ShowLootUI;
 
