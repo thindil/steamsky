@@ -59,7 +59,7 @@ GtkWindow {
 }
 
 /* Setting for currently mouse hovered over button */
-.button:hover {
+.button:hover, GtkScale:hover {
    background:linear-gradient(to bottom, #1a130c 5%, #473422 100%);
 }
 
@@ -183,11 +183,6 @@ GtkFrame#redframe > GtkLabel {
    background:rgb(25,25,25);
 }
 
-/* Settings for scales (like in negotiating with recruits) */
-GtkScale, GtkScale:hover {
-   background:grey;
-}
-
 /* Sky map settings */
 GtkTextView#mapview {
    font-family:Hack;
@@ -276,5 +271,15 @@ GtkExpander * {
 /* Mouse hovering over tables cells */
 GtkTreeView row:hover {
    border-width:1px 0;
+}
+
+/* Default setting for all scales */
+GtkScale {
+   box-shadow:inset 0 1px 0 0 #5c4745;
+   background:linear-gradient(to bottom, #473422 5%, #1a130c 100%);
+   border-radius:5px;
+   border:1px solid #120c06;
+   color:rgb(255,223,0);
+   text-shadow:0 1px 0 #120d0d;
 }
 
