@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.0.2] - 2018-12-16
 
 ### Added
 - Missing close button to goals list
