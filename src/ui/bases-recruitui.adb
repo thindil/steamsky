@@ -39,25 +39,31 @@ with Factions; use Factions;
 package body Bases.RecruitUI is
 
    Builder: Gtkada_Builder;
+   RecruitIndex: Natural;
 
    procedure ShowRecruitInfo(Object: access Gtkada_Builder_Record'Class) is
-      RecruitIter, Iter: Gtk_Tree_Iter;
-      RecruitModel: Gtk_Tree_Model;
       RecruitInfo: Unbounded_String;
       Recruit: Recruit_Data;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      List: Gtk_List_Store;
-      Cost, RecruitIndex: Positive;
    begin
-      Get_Selected
-        (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Object, "treerecruits"))),
-         RecruitModel, RecruitIter);
-      if RecruitIter = Null_Iter then
+      declare
+         RecruitIter: Gtk_Tree_Iter;
+         RecruitModel: Gtk_Tree_Model;
+      begin
+         Get_Selected
+           (Gtk.Tree_View.Get_Selection
+              (Gtk_Tree_View(Get_Object(Builder, "treerecruits"))),
+            RecruitModel, RecruitIter);
+         if RecruitIter = Null_Iter then
+            RecruitIndex := 0;
+            return;
+         end if;
+         RecruitIndex := Positive(Get_Int(RecruitModel, RecruitIter, 1));
+      end;
+      if RecruitIndex = 0 then
          return;
       end if;
-      RecruitIndex := Positive(Get_Int(RecruitModel, RecruitIter, 1));
       Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
       if not Factions_List(Recruit.Faction).Flags.Contains
           (To_Unbounded_String("nogender")) then
@@ -74,62 +80,77 @@ package body Bases.RecruitUI is
       Set_Markup
         (Gtk_Label(Get_Object(Object, "lblrecruitinfo")),
          To_String(RecruitInfo));
-      List := Gtk_List_Store(Get_Object(Object, "statslist"));
-      Clear(List);
-      for I in Recruit.Attributes.Iterate loop
-         Append(List, Iter);
-         Set
-           (List, Iter, 0,
-            To_String(Attributes_List(Attributes_Container.To_Index(I)).Name));
-         Set(List, Iter, 1, Gint(Recruit.Attributes(I)(1) * 2));
-         Set
-           (List, Iter, 2,
-            To_String
-              (Attributes_List(Attributes_Container.To_Index(I)).Description));
-      end loop;
-      List := Gtk_List_Store(Get_Object(Object, "skillslist"));
-      Clear(List);
-      for Skill of Recruit.Skills loop
-         Append(List, Iter);
-         Set
-           (List, Iter, 0,
-            To_String(Skills_List(Skill(1)).Name) & ": " &
-            GetSkillLevelName(Skill(2)));
-         Set(List, Iter, 1, Gint(Skill(2)));
-         Set
-           (List, Iter, 2,
-            "Related statistic: " &
-            To_String(Attributes_List(Skills_List(Skill(1)).Attribute).Name) &
-            ". " & To_String(Skills_List(Skill(1)).Description));
-      end loop;
-      List := Gtk_List_Store(Get_Object(Object, "equipmentlist"));
-      Clear(List);
-      for Item of Recruit.Inventory loop
-         Append(List, Iter);
-         Set(List, Iter, 0, To_String(Items_List(Item).Name));
-      end loop;
+      declare
+         StatsIter: Gtk_Tree_Iter;
+         StatsList: constant Gtk_List_Store :=
+           Gtk_List_Store(Get_Object(Object, "statslist"));
+      begin
+         Clear(StatsList);
+         for I in Recruit.Attributes.Iterate loop
+            Append(StatsList, StatsIter);
+            Set
+              (StatsList, StatsIter, 0,
+               To_String
+                 (Attributes_List(Attributes_Container.To_Index(I)).Name));
+            Set(StatsList, StatsIter, 1, Gint(Recruit.Attributes(I)(1) * 2));
+            Set
+              (StatsList, StatsIter, 2,
+               To_String
+                 (Attributes_List(Attributes_Container.To_Index(I))
+                    .Description));
+         end loop;
+      end;
+      declare
+         SkillsIter: Gtk_Tree_Iter;
+         SkillsList: constant Gtk_List_Store :=
+           Gtk_List_Store(Get_Object(Object, "skillslist"));
+      begin
+         Clear(SkillsList);
+         for Skill of Recruit.Skills loop
+            Append(SkillsList, SkillsIter);
+            Set
+              (SkillsList, SkillsIter, 0,
+               To_String(Skills_List(Skill(1)).Name) & ": " &
+               GetSkillLevelName(Skill(2)));
+            Set(SkillsList, SkillsIter, 1, Gint(Skill(2)));
+            Set
+              (SkillsList, SkillsIter, 2,
+               "Related statistic: " &
+               To_String
+                 (Attributes_List(Skills_List(Skill(1)).Attribute).Name) &
+               ". " & To_String(Skills_List(Skill(1)).Description));
+         end loop;
+      end;
+      declare
+         EquipmentIter: Gtk_Tree_Iter;
+         EquipmentList: constant Gtk_List_Store :=
+           Gtk_List_Store(Get_Object(Object, "equipmentlist"));
+      begin
+         Clear(EquipmentList);
+         for Item of Recruit.Inventory loop
+            Append(EquipmentList, EquipmentIter);
+            Set
+              (EquipmentList, EquipmentIter, 0,
+               To_String(Items_List(Item).Name));
+         end loop;
+      end;
       RecruitInfo := To_Unbounded_String("Starting offer:");
       Append
         (RecruitInfo,
          LF & "Payment:" & Natural'Image(Recruit.Payment) & " " &
          To_String(MoneyName) & " each day.");
-      Cost := Recruit.Price;
-      CountPrice(Cost, FindMember(Talk));
-      Append
-        (RecruitInfo,
-         LF & "One time fee:" & Positive'Image(Cost) & " " &
-         To_String(MoneyName) & ".");
+      declare
+         Cost: Positive := Recruit.Price;
+      begin
+         CountPrice(Cost, FindMember(Talk));
+         Append
+           (RecruitInfo,
+            LF & "One time fee:" & Positive'Image(Cost) & " " &
+            To_String(MoneyName) & ".");
+      end;
       Set_Label
         (Gtk_Label(Get_Object(Object, "lblpayment")), To_String(RecruitInfo));
    end ShowRecruitInfo;
-
-   procedure SetActiveRow(TreeViewName, ColumnName: String) is
-   begin
-      Set_Cursor
-        (Gtk_Tree_View(Get_Object(Builder, TreeViewName)),
-         Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, ColumnName)), False);
-   end SetActiveRow;
 
    procedure Hire(Object: access Gtkada_Builder_Record'Class) is
       RecruitIter: Gtk_Tree_Iter;
@@ -181,28 +202,23 @@ package body Bases.RecruitUI is
       HireRecruit
         (RecruitIndex, Cost, DailyPayment, TradePayment, ContractLength2);
       Remove(-(RecruitModel), RecruitIter);
-      SetActiveRow("treerecruits", "columnname");
+      Set_Cursor
+        (Gtk_Tree_View(Get_Object(Builder, "treerecruits")),
+         Gtk_Tree_Path_New_From_String("0"), null, False);
       ShowLastMessage(Object);
    end Hire;
 
    procedure StartNegotiations(Object: access Gtkada_Builder_Record'Class) is
       MoneyIndex2: constant Natural :=
         FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
-      Cost, RecruitIndex: Positive;
-      RecruitIter: Gtk_Tree_Iter;
-      RecruitModel: Gtk_Tree_Model;
+      Cost: Positive;
       Recruit: Recruit_Data;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
-      Get_Selected
-        (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Object, "treerecruits"))),
-         RecruitModel, RecruitIter);
-      if RecruitIter = Null_Iter then
+      if RecruitIndex = 0 then
          return;
       end if;
-      RecruitIndex := Positive(Get_Int(RecruitModel, RecruitIter, 1));
       Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
       Set_Upper
         (Gtk_Adjustment(Get_Object(Object, "adjdailypayment")),
@@ -240,9 +256,6 @@ package body Bases.RecruitUI is
    procedure NegotiateHire(Object: access Gtkada_Builder_Record'Class) is
       MoneyIndex2: constant Natural :=
         FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
-      RecruitIndex: Positive;
-      RecruitIter: Gtk_Tree_Iter;
-      RecruitModel: Gtk_Tree_Model;
       Recruit: Recruit_Data;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -256,14 +269,9 @@ package body Bases.RecruitUI is
       ContractLength: constant Gint :=
         Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbcontractlength")));
    begin
-      Get_Selected
-        (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Object, "treerecruits"))),
-         RecruitModel, RecruitIter);
-      if RecruitIter = Null_Iter then
+      if RecruitIndex = 0 then
          return;
       end if;
-      RecruitIndex := Positive(Get_Int(RecruitModel, RecruitIter, 1));
       Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
       Cost :=
         Recruit.Price - ((DailyPayment - Recruit.Payment) * 50) -
@@ -325,7 +333,9 @@ package body Bases.RecruitUI is
       end loop;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "recruit");
-      SetActiveRow("treerecruits", "columnname");
+      Set_Cursor
+        (Gtk_Tree_View(Get_Object(Builder, "treerecruits")),
+         Gtk_Tree_Path_New_From_String("0"), null, False);
       ShowLastMessage(Builder);
    end ShowRecruitUI;
 
