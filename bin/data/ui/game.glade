@@ -7548,6 +7548,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkLabel" id="lbldatadir">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Place where all standard game data are.</property>
                             <property name="halign">start</property>
                           </object>
                           <packing>
@@ -7559,6 +7560,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkLabel" id="lblsavedir">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Place where all game saves and configuration files are.</property>
                             <property name="halign">start</property>
                           </object>
                           <packing>
@@ -7570,6 +7572,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkLabel" id="lbldocdir">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Place where are game documentation files.</property>
                             <property name="halign">start</property>
                           </object>
                           <packing>
@@ -7581,6 +7584,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkLabel" id="lblmodsdir">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Place where you should put all modifications files.</property>
                             <property name="halign">start</property>
                           </object>
                           <packing>
