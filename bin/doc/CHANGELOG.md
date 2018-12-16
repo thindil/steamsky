@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Missing close button to goals list
+- Missing tooltips for directories info in options
 
 ### Changed
 - Updated README.md
