@@ -114,7 +114,7 @@ GtkTreeView:selected,
    .progressbar:selected,
    .progressbar:selected:focus {
    background:linear-gradient(to bottom, blue, black);
-   border-radius:15px;
+   border-radius:10px;
 }
 
 /* Settings for progress bars background */
@@ -122,8 +122,8 @@ GtkProgressBar.trough,
    GtkTreeView.view.trough,
    GtkTreeView.view.trough:selected,
    GtkTreeView.view.trough:selected:focus {
-  border-radius: 15px;
-  background:linear-gradient(to bottom, rgb(53,53,53), rgb(15,21,31));
+  border-radius: 10px;
+  background:linear-gradient(to bottom, rgb(53,53,53), transparent);
 }
 
 /* Settings for frames */
@@ -202,7 +202,7 @@ GtkTextView#mapview {
    .progressbar:selected#redbar,
    .progressbar:selected#redbar:focus {
    background:linear-gradient(to bottom, red, black);
-   border-radius:15px;
+   border-radius:10px;
 }
 
 /* Green progress bars settings */
@@ -210,7 +210,7 @@ GtkTextView#mapview {
    .progressbar:selected#greenbar,
    .progressbar:selected#greenbar:focus {
    background:linear-gradient(to bottom, darkgreen, black);
-   border-radius:15px;
+   border-radius:10px;
 }
 
 /* Yellow progress bars settings */
@@ -218,7 +218,7 @@ GtkTextView#mapview {
    .progressbar:selected#yellowbar,
    .progressbar:selected#yellowbar:focus {
    background:linear-gradient(to bottom, rgb(172, 119, 0), black);
-   border-radius:15px;
+   border-radius:10px;
 }
 
 /* Negative values bar settings (for example, negative reputation) */
@@ -226,12 +226,11 @@ GtkTextView#mapview {
    .progressbar:selected#negativebar,
    .progressbar:selected#negativebar:focus {
    background:linear-gradient(to bottom, red, black);
-   border-radius:15px 0 0 15px;
+   border-radius:10px 0 0 10px;
 }
 
 GtkProgressBar.trough#negativebar {
-  border-radius:15px 0 0 15px;
-  background:linear-gradient(to bottom, rgb(53,53,53), rgb(15,21,31));
+  border-radius:10px 0 0 10px;
 }
 
 /* Positive values bar settings (for example, positive reputation) */
@@ -239,17 +238,17 @@ GtkProgressBar.trough#negativebar {
    .progressbar:selected#positivebar,
    .progressbar:selected#positivebar:focus {
    background:linear-gradient(to bottom, darkgreen, black);
-   border-radius:0 15px 15px 0;
+   border-radius:0 10px 10px 0;
 }
 
 GtkProgressBar.trough#positivebar {
-  border-radius:0 15px 15px 0;
-  background:linear-gradient(to bottom, rgb(53,53,53), rgb(15,21,31));
+  border-radius:0 10px 10px 0;
 }
 
 /* Setting for tables headers */
 GtkTreeView.view .button {
    border-radius:0;
+   border-width:0;
 }
 
 /* Prevent expanders from autoresize on hover */
