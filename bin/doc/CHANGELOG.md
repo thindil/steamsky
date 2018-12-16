@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Keyboard shortcut (and option to set it) for center map on home base
 - Maximum allowed size of modules to ship hulls
 - Missing close button to goals list
+- Missing tooltips for directories info in options
 
 ### Changed
 - Updated README.md
