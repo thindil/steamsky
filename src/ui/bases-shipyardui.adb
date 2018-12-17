@@ -73,21 +73,15 @@ package body Bases.ShipyardUI is
       end if;
    end SetInstallModulesList;
 
-   procedure SetActiveModule(TreeName, ColumnName: String) is
-   begin
-      Set_Cursor
-        (Gtk_Tree_View(Get_Object(Builder, TreeName)),
-         Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, ColumnName)), False);
-   end SetActiveModule;
-
    procedure ChangeType(Object: access Gtkada_Builder_Record'Class) is
    begin
       SetInstallModulesList
         (ModuleType'Val
            (Natural
               (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbtypes"))))));
-      SetActiveModule("treeinstall", "columnnames3");
+      Set_Cursor
+        (Gtk_Tree_View(Get_Object(Builder, "treeinstall")),
+         Gtk_Tree_Path_New_From_String("0"), null, False);
    end ChangeType;
 
    procedure GetModuleInfo(ModuleInfo: in out Unbounded_String;
@@ -200,20 +194,23 @@ package body Bases.ShipyardUI is
    end GetModuleInfo;
 
    procedure ShowInstallInfo(Object: access Gtkada_Builder_Record'Class) is
-      ModulesIter: Gtk_Tree_Iter;
-      ModulesModel: Gtk_Tree_Model;
       ModuleInfo, InstallInfo: Unbounded_String;
       Cost: Positive;
       MoneyIndex2, UsedSpace, AllSpace, MaxSize: Natural;
    begin
-      Get_Selected
-        (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Object, "treeinstall"))),
-         ModulesModel, ModulesIter);
-      if ModulesIter = Null_Iter then
-         return;
-      end if;
-      ModuleIndex := Positive(Get_Int(ModulesModel, ModulesIter, 1));
+      declare
+         ModulesIter: Gtk_Tree_Iter;
+         ModulesModel: Gtk_Tree_Model;
+      begin
+         Get_Selected
+           (Gtk.Tree_View.Get_Selection
+              (Gtk_Tree_View(Get_Object(Object, "treeinstall"))),
+            ModulesModel, ModulesIter);
+         if ModulesIter = Null_Iter then
+            return;
+         end if;
+         ModuleIndex := Positive(Get_Int(ModulesModel, ModulesIter, 1));
+      end;
       Cost := Modules_List(ModuleIndex).Price;
       CountPrice(Cost, FindMember(Talk));
       ModuleInfo :=
@@ -269,22 +266,24 @@ package body Bases.ShipyardUI is
    end ShowInstallInfo;
 
    procedure ShowRemoveInfo(Object: access Gtkada_Builder_Record'Class) is
-      ModulesIter: Gtk_Tree_Iter;
-      ModulesModel: Gtk_Tree_Model;
       ModuleInfo, RemoveInfo: Unbounded_String;
       Cost: Natural;
-      MoneyIndex2, UsedSpace, AllSpace: Natural;
       Damage: Gdouble;
       DamageBar: constant GObject := Get_Object(Object, "removedamagebar");
    begin
-      Get_Selected
-        (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Object, "treeremove"))),
-         ModulesModel, ModulesIter);
-      if ModulesIter = Null_Iter then
-         return;
-      end if;
-      ModuleIndex := Positive(Get_Int(ModulesModel, ModulesIter, 1));
+      declare
+         ModulesIter: Gtk_Tree_Iter;
+         ModulesModel: Gtk_Tree_Model;
+      begin
+         Get_Selected
+           (Gtk.Tree_View.Get_Selection
+              (Gtk_Tree_View(Get_Object(Object, "treeremove"))),
+            ModulesModel, ModulesIter);
+         if ModulesIter = Null_Iter then
+            return;
+         end if;
+         ModuleIndex := Positive(Get_Int(ModulesModel, ModulesIter, 1));
+      end;
       if ModuleIndex > Positive(PlayerShip.Modules.Length) then
          return;
       end if;
@@ -342,27 +341,29 @@ package body Bases.ShipyardUI is
               (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                  .Description));
       end if;
-      MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
-      if MoneyIndex2 > 0 then
-         RemoveInfo :=
-           To_Unbounded_String
-             (LF & "You have" &
-              Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
-              To_String(MoneyName) & ".");
-      else
-         RemoveInfo :=
-           To_Unbounded_String
-             (LF & "You don't have any " & To_String(MoneyName) &
-              " to install anything.");
-      end if;
+      declare
+         MoneyIndex2: constant Natural :=
+           FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+      begin
+         if MoneyIndex2 > 0 then
+            RemoveInfo :=
+              To_Unbounded_String
+                (LF & "You have" &
+                 Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
+                 To_String(MoneyName) & ".");
+         else
+            RemoveInfo :=
+              To_Unbounded_String
+                (LF & "You don't have any " & To_String(MoneyName) &
+                 " to install anything.");
+         end if;
+      end;
       for Module of PlayerShip.Modules loop
          if Modules_List(Module.ProtoIndex).MType = HULL then
-            UsedSpace := Module.Data(1);
-            AllSpace := Module.Data(2);
             Append
               (RemoveInfo,
-               LF & "You have used" & Natural'Image(UsedSpace) &
-               " modules space from max" & Natural'Image(AllSpace) &
+               LF & "You have used" & Natural'Image(Module.Data(1)) &
+               " modules space from max" & Natural'Image(Module.Data(2)) &
                " allowed.");
             exit;
          end if;
@@ -458,8 +459,12 @@ package body Bases.ShipyardUI is
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "shipyard");
       ShowLastMessage(Builder);
-      SetActiveModule("treeinstall", "columnnames3");
-      SetActiveModule("treeremove", "columnnames4");
+      Set_Cursor
+        (Gtk_Tree_View(Get_Object(Builder, "treeinstall")),
+         Gtk_Tree_Path_New_From_String("0"), null, False);
+      Set_Cursor
+        (Gtk_Tree_View(Get_Object(Builder, "treeremove")),
+         Gtk_Tree_Path_New_From_String("0"), null, False);
    end ShowShipyardUI;
 
 end Bases.ShipyardUI;
