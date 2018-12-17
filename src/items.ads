@@ -46,6 +46,7 @@ package Items is
       Amount: Positive; -- Amount of item
       Name: Unbounded_String; -- Name of item if different than default
       Durability: Natural; -- Current durability of item
+      Price: Natural; -- Price for which item was bought
    end record;
    package Inventory_Container is new Vectors(Positive, InventoryData);
    Items_List: Objects_Container.Vector; -- List of item available in game

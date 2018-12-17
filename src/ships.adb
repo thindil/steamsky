@@ -200,7 +200,8 @@ package body Ships is
                   TmpInventory.Append
                     (New_Item =>
                        (ProtoIndex => Item(1), Amount => Amount,
-                        Name => Null_Unbounded_String, Durability => 100));
+                        Name => Null_Unbounded_String, Durability => 100,
+                        Price => 0));
                end loop;
                ShipCrew.Append
                  (New_Item =>
@@ -250,7 +251,7 @@ package body Ships is
          ShipCargo.Append
            (New_Item =>
               (ProtoIndex => Item(1), Amount => Amount,
-               Name => Null_Unbounded_String, Durability => 100));
+               Name => Null_Unbounded_String, Durability => 100, Price => 0));
       end loop;
       TmpShip :=
         (Name => NewName, SkyX => X, SkyY => Y, Speed => Speed,

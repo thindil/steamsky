@@ -444,7 +444,9 @@ package body Crew.UI.Handlers is
             Gtk_Window(Get_Object(Object, "skymapwindow")));
          return;
       end if;
-      UpdateCargo(PlayerShip, Item.ProtoIndex, Amount, Item.Durability);
+      UpdateCargo
+        (Ship => PlayerShip, ProtoIndex => Item.ProtoIndex, Amount => Amount,
+         Durability => Item.Durability, Price => Item.Price);
       UpdateInventory
         (MemberIndex => MemberIndex, Amount => (0 - Amount),
          InventoryIndex => ItemIndex);

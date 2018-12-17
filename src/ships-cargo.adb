@@ -20,7 +20,8 @@ with ShipModules; use ShipModules;
 package body Ships.Cargo is
 
    procedure UpdateCargo(Ship: in out ShipRecord; ProtoIndex: Natural := 0;
-      Amount: Integer; Durability: Natural := 100; CargoIndex: Natural := 0) is
+      Amount: Integer; Durability: Natural := 100;
+      CargoIndex, Price: Natural := 0) is
       ItemIndex: Natural := 0;
    begin
       if ProtoIndex > 0 and CargoIndex = 0 then
@@ -38,7 +39,8 @@ package body Ships.Cargo is
          Ship.Cargo.Append
            (New_Item =>
               (ProtoIndex => ProtoIndex, Amount => Amount,
-               Name => Null_Unbounded_String, Durability => Durability));
+               Name => Null_Unbounded_String, Durability => Durability,
+               Price => Price));
       else
          declare
             NewAmount: constant Integer :=

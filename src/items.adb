@@ -227,7 +227,8 @@ package body Items is
             Inventory.Append
               (New_Item =>
                  (ProtoIndex => Item.ProtoIndex, Amount => (Item.Amount - 1),
-                  Name => Item.Name, Durability => Item.Durability));
+                  Name => Item.Name, Durability => Item.Durability,
+                  Price => Item.Price));
          end;
          Inventory(ItemIndex).Amount := 1;
       end if;
