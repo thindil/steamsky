@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Maximum allowed size of modules to ship hulls
 - Missing close button to goals list
 - Missing tooltips for directories info in options
+- Last bought price to items to show profit in trade
 
 ### Changed
 - Updated README.md
