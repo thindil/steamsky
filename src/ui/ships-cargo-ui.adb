@@ -208,8 +208,11 @@ package body Ships.Cargo.UI is
             GetItemName(PlayerShip.Cargo(ItemIndex)) & ".",
             OtherMessage);
          UpdateCargo
-           (PlayerShip, PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
-            (0 - DropAmount), PlayerShip.Cargo.Element(ItemIndex).Durability);
+           (Ship => PlayerShip,
+            ProtoIndex => PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
+            Amount => (0 - DropAmount),
+            Durability => PlayerShip.Cargo.Element(ItemIndex).Durability,
+            Price => PlayerShip.Cargo.Element(ItemIndex).Price);
       end if;
       RefreshCargoInfo;
       ShowLastMessage(Object);
@@ -234,9 +237,13 @@ package body Ships.Cargo.UI is
             Gtk_Window(Get_Object(Object, "giveitemwindow")));
          return;
       end if;
-      UpdateInventory(MemberIndex, Amount, Item.ProtoIndex, Item.Durability);
+      UpdateInventory
+        (MemberIndex => MemberIndex, Amount => Amount,
+         ProtoIndex => Item.ProtoIndex, Durability => Item.Durability,
+         Price => Item.Price);
       UpdateCargo
-        (Ship => PlayerShip, Amount => (0 - Amount), CargoIndex => ItemIndex);
+        (Ship => PlayerShip, Amount => (0 - Amount), CargoIndex => ItemIndex,
+         Price => Item.Price);
       RefreshCargoInfo;
       ShowLastMessage(Object);
       SetActiveItem;

@@ -18,7 +18,7 @@
 package Crew.Inventory is
 
    procedure UpdateInventory(MemberIndex: Positive; Amount: Integer;
-      ProtoIndex, Durability, InventoryIndex: Natural :=
+      ProtoIndex, Durability, InventoryIndex, Price: Natural :=
         0); -- Update member inventory
    function FreeInventory(MemberIndex: Positive;
       Amount: Integer)

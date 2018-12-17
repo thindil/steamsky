@@ -86,8 +86,9 @@ package body Trades is
       end if;
       if BaseIndex > 0 then
          UpdateCargo
-           (PlayerShip, ItemIndex, BuyAmount,
-            SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability);
+           (Ship => PlayerShip, ProtoIndex => ItemIndex, Amount => BuyAmount,
+            Durability => SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability,
+            Price => Price);
          UpdateBaseCargo
            (CargoIndex => BaseItemIndex, Amount => (0 - BuyAmount),
             Durability =>
@@ -95,8 +96,9 @@ package body Trades is
          GainRep(BaseIndex, 1);
       else
          UpdateCargo
-           (PlayerShip, ItemIndex, BuyAmount,
-            TraderCargo(BaseItemIndex).Durability);
+           (Ship => PlayerShip, ProtoIndex => ItemIndex, Amount => BuyAmount,
+            Durability => TraderCargo(BaseItemIndex).Durability,
+            Price => Price);
          TraderCargo(BaseItemIndex).Amount :=
            TraderCargo(BaseItemIndex).Amount - BuyAmount;
          if TraderCargo(BaseItemIndex).Amount = 0 then
@@ -289,7 +291,8 @@ package body Trades is
                TraderShip.Cargo.Append
                  (New_Item =>
                     (ProtoIndex => ItemIndex, Amount => ItemAmount,
-                     Durability => 100, Name => Null_Unbounded_String));
+                     Durability => 100, Name => Null_Unbounded_String,
+                     Price => 0));
             else
                CargoAmount := 1;
             end if;
