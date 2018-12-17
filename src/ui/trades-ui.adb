@@ -152,6 +152,13 @@ package body Trades.UI is
          end if;
       end if;
       Append(ItemInfo, Natural'Image(Price) & " " & To_String(MoneyName));
+      if CargoIndex > 0 then
+         Append
+           (ItemInfo,
+            LF & "Profit:" &
+            Integer'Image(Price - PlayerShip.Cargo(CargoIndex).Price) & " " &
+            To_String(MoneyName));
+      end if;
       Append
         (ItemInfo,
          LF & "Weight:" & Integer'Image(Items_List(ProtoIndex).Weight) &
