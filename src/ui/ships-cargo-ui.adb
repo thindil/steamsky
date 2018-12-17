@@ -85,6 +85,7 @@ package body Ships.Cargo.UI is
                Visible := True;
          end case;
          Set(CargoList, CargoIter, 6, Gint(PlayerShip.Cargo(I).Durability));
+         Set(CargoList, CargoIter, 8, Gint(PlayerShip.Cargo(I).Price));
       end loop;
       Set_Visible
         (Gtk_Tree_View_Column(Get_Object(Builder, "columncargodurability")),
