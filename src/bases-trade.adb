@@ -69,7 +69,7 @@ package body Bases.Trade is
          Inventory.Append
            (New_Item =>
               (ProtoIndex => Item, Amount => 1, Name => Null_Unbounded_String,
-               Durability => 100));
+               Durability => 100, Price => 0));
       end loop;
       if Factions_List(SkyBases(BaseIndex).Owner).Flags.Contains
           (To_Unbounded_String("nomorale")) then

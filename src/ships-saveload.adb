@@ -123,6 +123,9 @@ package body Ships.SaveLoad is
          Set_Attribute
            (DataNode, "durability",
             To_String(Trim(RawValue, Ada.Strings.Left)));
+         RawValue := To_Unbounded_String(Integer'Image(Item.Price));
+         Set_Attribute
+           (DataNode, "price", To_String(Trim(RawValue, Ada.Strings.Left)));
       end loop;
       declare
          StatNode: DOM.Core.Element;
@@ -215,6 +218,10 @@ package body Ships.SaveLoad is
                Set_Attribute
                  (StatNode, "durability",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
+               RawValue := To_Unbounded_String(Integer'Image(Item.Price));
+               Set_Attribute
+                 (StatNode, "price",
+                  To_String(Trim(RawValue, Ada.Strings.Left)));
             end loop;
             for I in Member.Equipment'Range loop
                StatNode := Create_Element(SaveData, "equipment");
@@ -305,7 +312,7 @@ package body Ships.SaveLoad is
             declare
                ProtoIndex, Amount: Positive;
                Name: Unbounded_String;
-               Durability: Natural;
+               Durability, Price: Natural;
             begin
                ProtoIndex :=
                  FindProtoItem
@@ -314,10 +321,15 @@ package body Ships.SaveLoad is
                Name := To_Unbounded_String(Get_Attribute(ChildNode, "name"));
                Durability :=
                  Natural'Value(Get_Attribute(ChildNode, "durability"));
+               if Get_Attribute(ChildNode, "price")'Length > 0 then
+                  Price := Natural'Value(Get_Attribute(ChildNode, "price"));
+               else
+                  Price := 0;
+               end if;
                PlayerShip.Cargo.Append
                  (New_Item =>
                     (ProtoIndex => ProtoIndex, Amount => Amount, Name => Name,
-                     Durability => Durability));
+                     Durability => Durability, Price => Price));
             end;
          elsif Node_Name(ChildNode) = "member" then
             declare
@@ -325,7 +337,7 @@ package body Ships.SaveLoad is
                Name, ItemName: Unbounded_String;
                Gender: String(1 .. 1);
                Health, Tired, Hunger, Thirst, Index, Level, Experience,
-               Loyalty: Natural;
+               Loyalty, Price: Natural;
                Skills: Skills_Container.Vector;
                Attributes: Attributes_Container.Vector;
                Order, PreviousOrder: Crew_Orders;
@@ -402,10 +414,17 @@ package body Ships.SaveLoad is
                        To_Unbounded_String(Get_Attribute(MemberNode, "name"));
                      Durability :=
                        Integer'Value(Get_Attribute(MemberNode, "durability"));
+                     if Get_Attribute(MemberNode, "price")'Length > 0 then
+                        Price :=
+                          Integer'Value(Get_Attribute(MemberNode, "price"));
+                     else
+                        Price := 0;
+                     end if;
                      Inventory.Append
                        (New_Item =>
                           (ProtoIndex => Index, Amount => Amount,
-                           Name => ItemName, Durability => Durability));
+                           Name => ItemName, Durability => Durability,
+                           Price => Price));
                   elsif Node_Name(MemberNode) = "equipment" then
                      Equipment(EquipmentIndex) :=
                        Natural'Value(Get_Attribute(MemberNode, "index"));

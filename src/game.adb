@@ -210,7 +210,8 @@ package body Game is
             TmpInventory.Append
               (New_Item =>
                  (ProtoIndex => Item(1), Amount => Amount,
-                  Name => Null_Unbounded_String, Durability => 100));
+                  Name => Null_Unbounded_String, Durability => 100,
+                  Price => 0));
          end loop;
          if Factions_List(FactionIndex).Flags.Contains
              (To_Unbounded_String("nomorale")) then

@@ -23,7 +23,7 @@ with Ships.Crew; use Ships.Crew;
 package body Crew.Inventory is
 
    procedure UpdateInventory(MemberIndex: Positive; Amount: Integer;
-      ProtoIndex, Durability, InventoryIndex: Natural := 0) is
+      ProtoIndex, Durability, InventoryIndex, Price: Natural := 0) is
       ItemIndex: Natural := 0;
    begin
       if InventoryIndex = 0 then
@@ -69,7 +69,8 @@ package body Crew.Inventory is
          PlayerShip.Crew(MemberIndex).Inventory.Append
            (New_Item =>
               (ProtoIndex => ProtoIndex, Amount => Amount,
-               Name => Items_List(ProtoIndex).Name, Durability => Durability));
+               Name => Items_List(ProtoIndex).Name, Durability => Durability,
+               Price => Price));
       else
          declare
             NewAmount: Natural;
