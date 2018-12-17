@@ -81,8 +81,7 @@ package body Bases.SchoolUI is
       if N_Children(SkillsList, Null_Iter) > 0 then
          Set_Cursor
            (Gtk_Tree_View(Get_Object(Builder, "treeskills")),
-            Gtk_Tree_Path_New_From_String("0"),
-            Gtk_Tree_View_Column(Get_Object(Builder, "columnskill")), False);
+            Gtk_Tree_Path_New_From_String("0"), null, False);
          Set_Sensitive(Gtk_Widget(Get_Object(Object, "btntrain")), True);
       else
          Set_Sensitive(Gtk_Widget(Get_Object(Object, "btntrain")), False);
