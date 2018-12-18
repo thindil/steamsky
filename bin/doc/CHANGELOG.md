@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Updated help
 - Updated MODDING.md
 - Updated new game message
+- Updated cargo bays for some ships
 
 ### Fixed
 - Info about item damage
