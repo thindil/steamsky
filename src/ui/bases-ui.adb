@@ -43,14 +43,6 @@ package body Bases.UI is
    type States is (RECIPES, REPAIRS, HEAL, CLEARING);
    CurrentState: States;
 
-   procedure SetActiveRow(TreeViewName, ColumnName: String) is
-   begin
-      Set_Cursor
-        (Gtk_Tree_View(Get_Object(Builder, TreeViewName)),
-         Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, ColumnName)), False);
-   end SetActiveRow;
-
    procedure ObjectSelected(Object: access Gtkada_Builder_Record'Class) is
       Iter: Gtk_Tree_Iter;
       Model: Gtk_Tree_Model;
@@ -252,7 +244,9 @@ package body Bases.UI is
         (Gtk_Button(Get_Object(Builder, "btnacceptbase")), "_Buy recipe");
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "base");
-      SetActiveRow("treebases1", "columnbases");
+      Set_Cursor
+        (Gtk_Tree_View(Get_Object(Builder, "treebases1")),
+         Gtk_Tree_Path_New_From_String("0"), null, False);
       ShowLastMessage(Builder);
    end ShowBuyRecipesUI;
 
@@ -295,7 +289,9 @@ package body Bases.UI is
         (Gtk_Button(Get_Object(Builder, "btnacceptbase")), "_Buy repairs");
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "base");
-      SetActiveRow("treebases1", "columnbases");
+      Set_Cursor
+        (Gtk_Tree_View(Get_Object(Builder, "treebases1")),
+         Gtk_Tree_Path_New_From_String("0"), null, False);
       ShowLastMessage(Builder);
    end ShowRepairUI;
 
@@ -321,7 +317,9 @@ package body Bases.UI is
         (Gtk_Button(Get_Object(Builder, "btnacceptbase")), "_Buy healing");
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "base");
-      SetActiveRow("treebases1", "columnbases");
+      Set_Cursor
+        (Gtk_Tree_View(Get_Object(Builder, "treebases1")),
+         Gtk_Tree_Path_New_From_String("0"), null, False);
       ShowLastMessage(Builder);
    end ShowHealUI;
 
