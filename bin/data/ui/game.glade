@@ -8948,7 +8948,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkBox" id="cargobox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
@@ -9072,26 +9071,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="lblfreespace">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">center</property>
-                    <property name="valign">start</property>
-                    <property name="wrap">True</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">center</property>
                     <property name="valign">start</property>
+                    <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkFrame">
                         <property name="visible">True</property>
@@ -9114,6 +9098,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="can_focus">False</property>
                                 <property name="use_markup">True</property>
                                 <property name="wrap">True</property>
+                                <property name="max_width_chars">20</property>
                                 <property name="xalign">0</property>
                               </object>
                             </child>
@@ -9131,6 +9116,21 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="lblfreespace">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">center</property>
+                        <property name="valign">start</property>
+                        <property name="wrap">True</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
@@ -9162,6 +9162,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <object class="GtkSpinButton" id="spincargodrop">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="halign">end</property>
                                 <property name="width_chars">6</property>
                                 <property name="adjustment">amountadj</property>
                                 <property name="numeric">True</property>
@@ -9181,7 +9182,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">1</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
@@ -9215,11 +9216,23 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
+                                <property name="expand">True</property>
                                 <property name="fill">True</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">end</property>
                             <child>
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
@@ -9229,7 +9242,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">2</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
@@ -9240,7 +9253,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">3</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
