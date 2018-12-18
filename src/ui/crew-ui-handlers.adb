@@ -127,9 +127,14 @@ package body Crew.UI.Handlers is
             Append
               (MemberInfo,
                LF & "Payment:" & Natural'Image(Member.Payment(1)) & " " &
-               To_String(MoneyName) & " each day and " &
-               Natural'Image(Member.Payment(2)) &
-               " percent of profit from each trade.");
+               To_String(MoneyName) & " each day");
+            if Member.Payment(2) > 0 then
+               Append
+                 (MemberInfo,
+                  " and " & Natural'Image(Member.Payment(2)) &
+                  " percent of profit from each trade");
+            end if;
+            Append(MemberInfo, ".");
          end if;
       end if;
       Set_Label
