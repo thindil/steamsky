@@ -184,7 +184,7 @@ during combat. -->
   <module index="15"/>
   <module amount="8" index="4"/>
   <module index="5"/>
-  <module amount="4" index="7"/>
+  <module amount="2" index="219"/>
   <module amount="2" index="28"/>
   <module index="27"/>
   <module index="128"/>
@@ -207,7 +207,7 @@ during combat. -->
   <module index="15"/>
   <module amount="8" index="4"/>
   <module index="5"/>
-  <module amount="4" index="7"/>
+  <module amount="2" index="219"/>
   <module amount="2" index="28"/>
   <module index="27"/>
   <module index="128"/>
@@ -238,7 +238,7 @@ during combat. -->
  <ship combatai="BERSERKER" index="11" maxaccuracy="10" maxevasion="10" maxloot="100" maxperception="20" minaccuracy="5" minevasion="5" minloot="10" minperception="10" name="Attacking clockwork drone" owner="DRONES">
   <module index="17"/>
   <module index="15"/>
-  <module amount="2" index="7"/>
+  <module index="219"/>
   <module index="12"/>
   <module index="8"/>
   <module index="9"/>
@@ -250,7 +250,7 @@ during combat. -->
   <module index="17"/>
   <module index="2"/>
   <module index="15"/>
-  <module amount="2" index="7"/>
+  <module index="219"/>
   <module index="12"/>
   <module index="8"/>
   <module index="9"/>
@@ -293,7 +293,7 @@ during combat. -->
   <module index="15"/>
   <module amount="8" index="4"/>
   <module index="5"/>
-  <module amount="4" index="7"/>
+  <module amount="2" index="219"/>
   <module index="12"/>
   <module index="8"/>
   <module index="9"/>
@@ -314,7 +314,7 @@ during combat. -->
   <module index="15"/>
   <module amount="8" index="4"/>
   <module index="5"/>
-  <module amount="4" index="7"/>
+  <module amount="2" index="219"/>
   <module index="12"/>
   <module index="8"/>
   <module index="9"/>
@@ -371,7 +371,7 @@ during combat. -->
   <module index="25"/>
   <module index="15"/>
   <module index="5"/>
-  <module amount="4" index="7"/>
+  <module amount="2" index="219"/>
   <module index="40"/>
   <cargo index="1" maxamount="2500" minamount="2000"/>
   <cargo index="5" maxamount="300" minamount="150"/>
@@ -432,7 +432,8 @@ during combat. -->
   <module index="22"/>
   <module index="25"/>
   <module index="18"/>
-  <module amount="5" index="7"/>
+  <module index="7"/>
+  <module amount="2" index="219"/>
   <module index="40"/>
   <module index="28"/>
   <module index="27"/>
@@ -448,7 +449,8 @@ during combat. -->
   <module index="18"/>
   <module amount="6" index="4"/>
   <module index="5"/>
-  <module amount="5" index="7"/>
+  <module index="7"/>
+  <module amount="2" index="219"/>
   <module amount="2" index="28"/>
   <module index="27"/>
   <module index="128"/>
@@ -470,7 +472,8 @@ during combat. -->
   <module index="25"/>
   <module index="18"/>
   <module index="5"/>
-  <module amount="5" index="7"/>
+  <module index="7"/>
+  <module amount="2" index="219"/>
   <module index="40"/>
   <cargo index="1" maxamount="3000" minamount="2500"/>
   <cargo index="5" maxamount="350" minamount="200"/>
@@ -484,7 +487,7 @@ during combat. -->
   <module index="18"/>
   <module amount="8" index="4"/>
   <module index="5"/>
-  <module amount="4" index="7"/>
+  <module amount="2" index="219"/>
   <module index="40"/>
   <module index="28"/>
   <module index="29"/>
@@ -1701,7 +1704,7 @@ during combat. -->
   <module index="15"/>
   <module amount="8" index="4"/>
   <module index="5"/>
-  <module amount="8" index="7"/>
+  <module amount="4" index="219"/>
   <module index="28"/>
   <module index="27"/>
   <cargo index="1" maxamount="2000" minamount="1500"/>
@@ -1722,7 +1725,7 @@ during combat. -->
   <module index="15"/>
   <module amount="8" index="4"/>
   <module index="5"/>
-  <module amount="8" index="7"/>
+  <module amount="4" index="219"/>
   <module index="28"/>
   <module index="27"/>
   <cargo index="1" maxamount="2000" minamount="1500"/>
@@ -1744,7 +1747,7 @@ during combat. -->
   <module index="18"/>
   <module amount="6" index="4"/>
   <module index="5"/>
-  <module amount="10" index="7"/>
+  <module amount="5" index="219"/>
   <module index="28"/>
   <module index="27"/>
   <cargo index="1" maxamount="1700" minamount="1000"/>
@@ -1766,7 +1769,7 @@ during combat. -->
   <module index="18"/>
   <module amount="6" index="4"/>
   <module index="5"/>
-  <module amount="10" index="7"/>
+  <module amount="5" index="219"/>
   <module index="28"/>
   <module index="27"/>
   <cargo index="1" maxamount="1700" minamount="1000"/>
@@ -1989,7 +1992,7 @@ during combat. -->
   <module index="15"/>
   <module amount="8" index="4"/>
   <module index="5"/>
-  <module amount="4" index="7"/>
+  <module amount="2" index="219"/>
   <module index="28"/>
   <module index="27"/>
   <cargo index="1" maxamount="2000" minamount="1500"/>
@@ -2009,7 +2012,7 @@ during combat. -->
   <module index="15"/>
   <module amount="8" index="4"/>
   <module index="5"/>
-  <module amount="4" index="7"/>
+  <module amount="2" index="219"/>
   <module index="28"/>
   <module index="27"/>
   <cargo index="1" maxamount="2000" minamount="1500"/>
@@ -2030,7 +2033,7 @@ during combat. -->
   <module index="15"/>
   <module amount="8" index="4"/>
   <module index="5"/>
-  <module amount="4" index="7"/>
+  <module amount="2" index="219"/>
   <module index="28"/>
   <module index="27"/>
   <cargo index="1" maxamount="2000" minamount="1000"/>
@@ -2051,7 +2054,7 @@ during combat. -->
   <module index="15"/>
   <module amount="8" index="4"/>
   <module index="5"/>
-  <module amount="4" index="7"/>
+  <module amount="2" index="219"/>
   <module index="28"/>
   <module index="27"/>
   <cargo index="1" maxamount="2000" minamount="1000"/>
@@ -2072,7 +2075,7 @@ during combat. -->
   <module index="18"/>
   <module amount="6" index="4"/>
   <module index="5"/>
-  <module amount="4" index="7"/>
+  <module amount="2" index="219"/>
   <module index="28"/>
   <module index="27"/>
   <cargo index="1" maxamount="1700" minamount="1000"/>
@@ -2093,7 +2096,7 @@ during combat. -->
   <module index="18"/>
   <module amount="6" index="4"/>
   <module index="5"/>
-  <module amount="4" index="7"/>
+  <module amount="2" index="219"/>
   <module index="28"/>
   <module index="27"/>
   <cargo index="1" maxamount="1700" minamount="1000"/>
