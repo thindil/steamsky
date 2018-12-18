@@ -86,6 +86,7 @@ package body Ships.Cargo.UI is
          end case;
          Set(CargoList, CargoIter, 6, Gint(PlayerShip.Cargo(I).Durability));
          Set(CargoList, CargoIter, 8, Gint(PlayerShip.Cargo(I).Price));
+         Set(CargoList, CargoIter, 9, Gint(Items_List(ProtoIndex).Weight));
       end loop;
       Set_Visible
         (Gtk_Tree_View_Column(Get_Object(Builder, "columncargodurability")),
@@ -127,13 +128,10 @@ package body Ships.Cargo.UI is
          return;
       end if;
       ProtoIndex := PlayerShip.Cargo(ItemIndex).ProtoIndex;
-      ItemInfo :=
-        To_Unbounded_String
-          ("Weight:" & Positive'Image(Items_List(ProtoIndex).Weight) & " kg");
       if Items_List(ProtoIndex).IType = WeaponType then
          Append
            (ItemInfo,
-            LF & "Skill: " &
+            "Skill: " &
             Skills_List(Items_List(ProtoIndex).Value(3)).Name & "/" &
             Attributes_List
               (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
@@ -156,14 +154,13 @@ package body Ships.Cargo.UI is
             when others =>
                null;
          end case;
+         Append(ItemInfo, LF & LF);
+      end if;
+      if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
+         Append(ItemInfo, To_String(Items_List(ProtoIndex).Description));
       end if;
       Set_Markup
         (Gtk_Label(Get_Object(Object, "lbliteminfo2")), To_String(ItemInfo));
-      if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
-         Set_Label
-           (Gtk_Label(Get_Object(Object, "lbldescription2")),
-            LF & To_String(Items_List(ProtoIndex).Description));
-      end if;
       if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).IType =
         MissionItemsType then
          Hide(Gtk_Widget(Get_Object(Builder, "givebox")));
