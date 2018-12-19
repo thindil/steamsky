@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash after recruit new crew member in bases
+
 ## [3.0.2] - 2018-12-16
 
 ### Added
