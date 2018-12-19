@@ -53,7 +53,7 @@ package body Bases.RecruitUI is
       begin
          Get_Selected
            (Gtk.Tree_View.Get_Selection
-              (Gtk_Tree_View(Get_Object(Builder, "treerecruits"))),
+              (Gtk_Tree_View(Get_Object(Object, "treerecruits"))),
             RecruitModel, RecruitIter);
          if RecruitIter = Null_Iter then
             RecruitIndex := 0;
@@ -61,7 +61,7 @@ package body Bases.RecruitUI is
          end if;
          RecruitIndex := Positive(Get_Int(RecruitModel, RecruitIter, 1));
       end;
-      if RecruitIndex = 0 then
+      if RecruitIndex > SkyBases(BaseIndex).Recruits.Last_Index then
          return;
       end if;
       Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
@@ -152,6 +152,23 @@ package body Bases.RecruitUI is
         (Gtk_Label(Get_Object(Object, "lblpayment")), To_String(RecruitInfo));
    end ShowRecruitInfo;
 
+   procedure UpdateRecruitList is
+      RecruitIter: Gtk_Tree_Iter;
+      RecruitList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "recruitlist"));
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+   begin
+      Clear(RecruitList);
+      for I in SkyBases(BaseIndex).Recruits.Iterate loop
+         Append(RecruitList, RecruitIter);
+         Set
+           (RecruitList, RecruitIter, 0,
+            To_String(SkyBases(BaseIndex).Recruits(I).Name));
+         Set(RecruitList, RecruitIter, 1, Gint(Recruit_Container.To_Index(I)));
+      end loop;
+   end UpdateRecruitList;
+
    procedure Hire(Object: access Gtkada_Builder_Record'Class) is
       RecruitIter: Gtk_Tree_Iter;
       RecruitModel: Gtk_Tree_Model;
@@ -201,7 +218,7 @@ package body Bases.RecruitUI is
       Hide(Gtk_Widget(Get_Object(Object, "negotiatewindow")));
       HireRecruit
         (RecruitIndex, Cost, DailyPayment, TradePayment, ContractLength2);
-      Remove(-(RecruitModel), RecruitIter);
+      UpdateRecruitList;
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treerecruits")),
          Gtk_Tree_Path_New_From_String("0"), null, False);
@@ -216,9 +233,6 @@ package body Bases.RecruitUI is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
-      if RecruitIndex = 0 then
-         return;
-      end if;
       Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
       Set_Upper
         (Gtk_Adjustment(Get_Object(Object, "adjdailypayment")),
@@ -317,20 +331,8 @@ package body Bases.RecruitUI is
    end CreateRecruitUI;
 
    procedure ShowRecruitUI is
-      RecruitIter: Gtk_Tree_Iter;
-      RecruitList: constant Gtk_List_Store :=
-        Gtk_List_Store(Get_Object(Builder, "recruitlist"));
-      BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
-      Clear(RecruitList);
-      for I in SkyBases(BaseIndex).Recruits.Iterate loop
-         Append(RecruitList, RecruitIter);
-         Set
-           (RecruitList, RecruitIter, 0,
-            To_String(SkyBases(BaseIndex).Recruits(I).Name));
-         Set(RecruitList, RecruitIter, 1, Gint(Recruit_Container.To_Index(I)));
-      end loop;
+      UpdateRecruitList;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "recruit");
       Set_Cursor
