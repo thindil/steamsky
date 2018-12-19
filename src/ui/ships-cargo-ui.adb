@@ -72,16 +72,16 @@ package body Ships.Cargo.UI is
             when 100 =>
                Set(CargoList, CargoIter, 7, False);
             when 81 .. 99 =>
-               Set(CargoList, CargoIter, 5, "Slightly used");
+               Set(CargoList, CargoIter, 5, " Slightly used ");
                Visible := True;
             when 51 .. 80 =>
-               Set(CargoList, CargoIter, 5, "Damaged");
+               Set(CargoList, CargoIter, 5, " Damaged ");
                Visible := True;
             when 21 .. 50 =>
-               Set(CargoList, CargoIter, 5, "Heavily damaged");
+               Set(CargoList, CargoIter, 5, " Heavily damaged ");
                Visible := True;
             when others =>
-               Set(CargoList, CargoIter, 5, "Almost destroyed");
+               Set(CargoList, CargoIter, 5, " Almost destroyed ");
                Visible := True;
          end case;
          Set(CargoList, CargoIter, 6, Gint(PlayerShip.Cargo(I).Durability));
