@@ -181,7 +181,7 @@ package body Items is
       return 0;
    end FindProtoItem;
 
-   function GetItemName(Item: InventoryData) return String is
+   function GetItemName(Item: InventoryData; DamageInfo: Boolean := True) return String is
       ItemName: Unbounded_String;
       DamagePercent: Float;
    begin
@@ -190,7 +190,7 @@ package body Items is
       else
          ItemName := Items_List(Item.ProtoIndex).Name;
       end if;
-      if Item.Durability < 100 then
+      if DamageInfo and then Item.Durability < 100 then
          DamagePercent := 1.0 - (Float(Item.Durability) / 100.0);
          if DamagePercent < 0.2 then
             Append(ItemName, " (slightly used)");
