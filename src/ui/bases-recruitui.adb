@@ -58,6 +58,9 @@ package body Bases.RecruitUI is
          return;
       end if;
       RecruitIndex := Positive(Get_Int(RecruitModel, RecruitIter, 1));
+      if RecruitIndex > SkyBases(BaseIndex).Recruits.Last_Index then
+         return;
+      end if;
       Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
       if not Factions_List(Recruit.Faction).Flags.Contains
           (To_Unbounded_String("nogender")) then
@@ -128,6 +131,23 @@ package body Bases.RecruitUI is
          Gtk_Tree_View_Column(Get_Object(Builder, ColumnName)), False);
    end SetActiveRow;
 
+   procedure UpdateRecruitList is
+      RecruitIter: Gtk_Tree_Iter;
+      RecruitList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "recruitlist"));
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+   begin
+      Clear(RecruitList);
+      for I in SkyBases(BaseIndex).Recruits.Iterate loop
+         Append(RecruitList, RecruitIter);
+         Set
+           (RecruitList, RecruitIter, 0,
+            To_String(SkyBases(BaseIndex).Recruits(I).Name));
+         Set(RecruitList, RecruitIter, 1, Gint(Recruit_Container.To_Index(I)));
+      end loop;
+   end UpdateRecruitList;
+
    procedure Hire(Object: access Gtkada_Builder_Record'Class) is
       RecruitIter: Gtk_Tree_Iter;
       RecruitModel: Gtk_Tree_Model;
@@ -177,7 +197,7 @@ package body Bases.RecruitUI is
       Hide(Gtk_Widget(Get_Object(Object, "negotiatewindow")));
       HireRecruit
         (RecruitIndex, Cost, DailyPayment, TradePayment, ContractLength2);
-      Remove(-(RecruitModel), RecruitIter);
+      UpdateRecruitList;
       SetActiveRow("treerecruits", "columnname");
       ShowLastMessage(Object);
    end Hire;
@@ -306,20 +326,8 @@ package body Bases.RecruitUI is
    end CreateRecruitUI;
 
    procedure ShowRecruitUI is
-      RecruitIter: Gtk_Tree_Iter;
-      RecruitList: Gtk_List_Store;
-      BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
-      RecruitList := Gtk_List_Store(Get_Object(Builder, "recruitlist"));
-      Clear(RecruitList);
-      for I in SkyBases(BaseIndex).Recruits.Iterate loop
-         Append(RecruitList, RecruitIter);
-         Set
-           (RecruitList, RecruitIter, 0,
-            To_String(SkyBases(BaseIndex).Recruits(I).Name));
-         Set(RecruitList, RecruitIter, 1, Gint(Recruit_Container.To_Index(I)));
-      end loop;
+      UpdateRecruitList;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "recruit");
       SetActiveRow("treerecruits", "columnname");
