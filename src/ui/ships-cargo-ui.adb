@@ -51,7 +51,7 @@ package body Ships.Cargo.UI is
       Clear(CargoList);
       for I in PlayerShip.Cargo.Iterate loop
          Append(CargoList, CargoIter);
-         Set(CargoList, CargoIter, 0, GetItemName(PlayerShip.Cargo(I)));
+         Set(CargoList, CargoIter, 0, GetItemName(PlayerShip.Cargo(I), False));
          Set(CargoList, CargoIter, 1, Gint(Inventory_Container.To_Index(I)));
          ProtoIndex := PlayerShip.Cargo(I).ProtoIndex;
          if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
