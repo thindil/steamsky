@@ -146,10 +146,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="gint"/>
       <!-- column-name durabilityvisible -->
       <column type="gboolean"/>
-      <!-- column-name price -->
-      <column type="guint"/>
-      <!-- column-name unitweight -->
-      <column type="guint"/>
     </columns>
   </object>
   <object class="GtkListStore" id="contractlength">
@@ -9029,34 +9025,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <object class="GtkCellRendererText"/>
                               <attributes>
                                 <attribute name="text">4</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn">
-                            <property name="title" translatable="yes">Unit Weight (in kg)</property>
-                            <property name="clickable">True</property>
-                            <property name="sort_indicator">True</property>
-                            <property name="sort_column_id">9</property>
-                            <child>
-                              <object class="GtkCellRendererText"/>
-                              <attributes>
-                                <attribute name="text">9</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn">
-                            <property name="title" translatable="yes">Bought for</property>
-                            <property name="clickable">True</property>
-                            <property name="sort_indicator">True</property>
-                            <property name="sort_column_id">8</property>
-                            <child>
-                              <object class="GtkCellRendererText"/>
-                              <attributes>
-                                <attribute name="text">8</attribute>
                               </attributes>
                             </child>
                           </object>
