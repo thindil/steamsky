@@ -119,12 +119,12 @@ package body Combat.UI is
       LoopStart: Integer := 0 - MessagesAmount;
       Message: Message_Data;
       MessagesIter: Gtk_Text_Iter;
-      TagNames: constant array(1 .. 5) of Unbounded_String :=
-        (To_Unbounded_String("yellow"), To_Unbounded_String("green"),
-         To_Unbounded_String("red"), To_Unbounded_String("blue"),
-         To_Unbounded_String("cyan"));
       CurrentTurnTime: Unbounded_String := To_Unbounded_String(FormatedTime);
       procedure ShowMessage is
+         TagNames: constant array(1 .. 5) of Unbounded_String :=
+           (To_Unbounded_String("yellow"), To_Unbounded_String("green"),
+            To_Unbounded_String("red"), To_Unbounded_String("blue"),
+            To_Unbounded_String("cyan"));
       begin
          if Unbounded_Slice(Message.Message, 1, Length(CurrentTurnTime)) =
            CurrentTurnTime then
@@ -189,12 +189,8 @@ package body Combat.UI is
    end UpdateMessages;
 
    procedure RefreshCombatUI is
-      Iter: Gtk_Tree_Iter;
-      List: Gtk_List_Store;
       DamagePercent: Gint;
-      IsDamaged: Boolean := False;
       EnemyInfo, ModuleName: Unbounded_String;
-      MemberIndex, SpaceIndex: Natural;
       ButtonBox: constant Gtk_Container :=
         Gtk_Container(Get_Object(Builder, "btnboxboard"));
    begin
@@ -205,34 +201,43 @@ package body Combat.UI is
          Hide(Gtk_Widget(Get_Object(Builder, "expboard")));
       end if;
       UpdateMessages;
-      List := Gtk_List_Store(Get_Object(Builder, "crewlist1"));
-      Clear(List);
-      Append(List, Iter);
-      MemberIndex := FindMember(Pilot);
-      if MemberIndex = 0 then
-         Set(List, Iter, 0, "Pilot:");
-         Set(List, Iter, 2, "Nobody");
-      else
-         Set(List, Iter, 0, "Pilot:");
-         Set(List, Iter, 1, To_String(PilotOrders(PilotOrder)));
-         Set(List, Iter, 2, To_String(PlayerShip.Crew(MemberIndex).Name));
-      end if;
-      Append(List, Iter);
-      MemberIndex := FindMember(Engineer);
-      if MemberIndex = 0 then
-         Set(List, Iter, 0, "Engineer:");
-         Set(List, Iter, 2, "Nobody");
-      else
-         Set(List, Iter, 0, "Engineer:");
-         Set(List, Iter, 1, To_String(EngineerOrders(EngineerOrder)));
-         Set(List, Iter, 2, To_String(PlayerShip.Crew(MemberIndex).Name));
-      end if;
       declare
+         CrewIter: Gtk_Tree_Iter;
+         CrewList: constant Gtk_List_Store :=
+           Gtk_List_Store(Get_Object(Builder, "crewlist1"));
+         MemberIndex: Natural;
          AmmoAmount, AmmoIndex: Natural := 0;
          HaveAmmo: Boolean;
       begin
+         Clear(CrewList);
+         Append(CrewList, CrewIter);
+         MemberIndex := FindMember(Pilot);
+         if MemberIndex = 0 then
+            Set(CrewList, CrewIter, 0, "Pilot:");
+            Set(CrewList, CrewIter, 2, "Nobody");
+         else
+            Set(CrewList, CrewIter, 0, "Pilot:");
+            Set(CrewList, CrewIter, 1, To_String(PilotOrders(PilotOrder)));
+            Set
+              (CrewList, CrewIter, 2,
+               To_String(PlayerShip.Crew(MemberIndex).Name));
+         end if;
+         Append(CrewList, CrewIter);
+         MemberIndex := FindMember(Engineer);
+         if MemberIndex = 0 then
+            Set(CrewList, CrewIter, 0, "Engineer:");
+            Set(CrewList, CrewIter, 2, "Nobody");
+         else
+            Set(CrewList, CrewIter, 0, "Engineer:");
+            Set
+              (CrewList, CrewIter, 1,
+               To_String(EngineerOrders(EngineerOrder)));
+            Set
+              (CrewList, CrewIter, 2,
+               To_String(PlayerShip.Crew(MemberIndex).Name));
+         end if;
          for I in Guns.First_Index .. Guns.Last_Index loop
-            Append(List, Iter);
+            Append(CrewList, CrewIter);
             HaveAmmo := False;
             if
               (PlayerShip.Modules(Guns(I)(1)).Data(1) >=
@@ -270,46 +275,54 @@ package body Combat.UI is
                end loop;
             end if;
             Set
-              (List, Iter, 0,
+              (CrewList, CrewIter, 0,
                To_String(PlayerShip.Modules(Guns(I)(1)).Name) & LF & "(Ammo:" &
                Natural'Image(AmmoAmount) & ")");
             if PlayerShip.Modules(Guns(I)(1)).Owner /= 0 then
                if PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner).Order =
                  Gunner then
-                  Set(List, Iter, 1, To_String(GunnerOrders(Guns(I)(2))));
                   Set
-                    (List, Iter, 2,
+                    (CrewList, CrewIter, 1,
+                     To_String(GunnerOrders(Guns(I)(2))));
+                  Set
+                    (CrewList, CrewIter, 2,
                      To_String
                        (PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner)
                           .Name));
                else
-                  Set(List, Iter, 2, "Nobody");
+                  Set(CrewList, CrewIter, 2, "Nobody");
                end if;
             else
-               Set(List, Iter, 2, "Nobody");
+               Set(CrewList, CrewIter, 2, "Nobody");
             end if;
          end loop;
       end;
-      List := Gtk_List_Store(Get_Object(Builder, "damagelist"));
-      Clear(List);
-      for Module of PlayerShip.Modules loop
-         if Module.Durability < Module.MaxDurability then
-            Append(List, Iter);
-            Set(List, Iter, 0, To_String(Module.Name));
-            DamagePercent :=
-              100 -
-              Gint
-                ((Float(Module.Durability) / Float(Module.MaxDurability)) *
-                 100.0);
-            Set(List, Iter, 1, DamagePercent);
-            IsDamaged := True;
+      declare
+         DamageIter: Gtk_Tree_Iter;
+         DamageList: constant Gtk_List_Store :=
+           Gtk_List_Store(Get_Object(Builder, "damagelist"));
+         IsDamaged: Boolean := False;
+      begin
+         Clear(DamageList);
+         for Module of PlayerShip.Modules loop
+            if Module.Durability < Module.MaxDurability then
+               Append(DamageList, DamageIter);
+               Set(DamageList, DamageIter, 0, To_String(Module.Name));
+               DamagePercent :=
+                 100 -
+                 Gint
+                   ((Float(Module.Durability) / Float(Module.MaxDurability)) *
+                    100.0);
+               Set(DamageList, DamageIter, 1, DamagePercent);
+               IsDamaged := True;
+            end if;
+         end loop;
+         if not IsDamaged then
+            Hide(Gtk_Widget(Get_Object(Builder, "damageframe")));
+         else
+            Show_All(Gtk_Widget(Get_Object(Builder, "damageframe")));
          end if;
-      end loop;
-      if not IsDamaged then
-         Hide(Gtk_Widget(Get_Object(Builder, "damageframe")));
-      else
-         Show_All(Gtk_Widget(Get_Object(Builder, "damageframe")));
-      end if;
+      end;
       Append(EnemyInfo, "Name: ");
       Append(EnemyInfo, EnemyName);
       Append(EnemyInfo, LF);
@@ -388,38 +401,46 @@ package body Combat.UI is
       end if;
       Set_Text
         (Gtk_Label(Get_Object(Builder, "lblenemyinfo")), To_String(EnemyInfo));
-      List := Gtk_List_Store(Get_Object(Builder, "enemyinfolist"));
-      Iter := Get_Iter_First(List);
-      for I in Enemy.Ship.Modules.Iterate loop
-         if Enemy.Distance > 1000 then
-            ModuleName :=
-              To_Unbounded_String
-                (ModuleType'Image
-                   (Modules_List(Enemy.Ship.Modules(I).ProtoIndex).MType));
-            Replace_Slice
-              (ModuleName, 2, Length(ModuleName),
-               To_Lower(Slice(ModuleName, 2, Length(ModuleName))));
-            SpaceIndex := Index(ModuleName, "_");
-            while SpaceIndex > 0 loop
-               Replace_Element(ModuleName, SpaceIndex, ' ');
+      declare
+         EnemyInfoList: constant Gtk_List_Store :=
+           Gtk_List_Store(Get_Object(Builder, "enemyinfolist"));
+         EnemyInfoIter: Gtk_Tree_Iter := Get_Iter_First(EnemyInfoList);
+         SpaceIndex: Natural;
+      begin
+         for I in Enemy.Ship.Modules.Iterate loop
+            if Enemy.Distance > 1000 then
+               ModuleName :=
+                 To_Unbounded_String
+                   (ModuleType'Image
+                      (Modules_List(Enemy.Ship.Modules(I).ProtoIndex).MType));
+               Replace_Slice
+                 (ModuleName, 2, Length(ModuleName),
+                  To_Lower(Slice(ModuleName, 2, Length(ModuleName))));
                SpaceIndex := Index(ModuleName, "_");
-            end loop;
-         else
-            ModuleName := Modules_List(Enemy.Ship.Modules(I).ProtoIndex).Name;
-         end if;
-         DamagePercent :=
-           Gint
-             ((Float(Enemy.Ship.Modules(I).Durability) /
-               Float(Enemy.Ship.Modules(I).MaxDurability)) *
-              100.0);
-         if Enemy.Ship.Modules(I).Durability > 0 then
-            Set(List, Iter, 0, To_String(ModuleName));
-         else
-            Set(List, Iter, 0, To_String(ModuleName) & "(destroyed)");
-         end if;
-         Set(List, Iter, 1, DamagePercent);
-         Next(List, Iter);
-      end loop;
+               while SpaceIndex > 0 loop
+                  Replace_Element(ModuleName, SpaceIndex, ' ');
+                  SpaceIndex := Index(ModuleName, "_");
+               end loop;
+            else
+               ModuleName :=
+                 Modules_List(Enemy.Ship.Modules(I).ProtoIndex).Name;
+            end if;
+            DamagePercent :=
+              Gint
+                ((Float(Enemy.Ship.Modules(I).Durability) /
+                  Float(Enemy.Ship.Modules(I).MaxDurability)) *
+                 100.0);
+            if Enemy.Ship.Modules(I).Durability > 0 then
+               Set(EnemyInfoList, EnemyInfoIter, 0, To_String(ModuleName));
+            else
+               Set
+                 (EnemyInfoList, EnemyInfoIter, 0,
+                  To_String(ModuleName) & "(destroyed)");
+            end if;
+            Set(EnemyInfoList, EnemyInfoIter, 1, DamagePercent);
+            Next(EnemyInfoList, EnemyInfoIter);
+         end loop;
+      end;
       if Is_Visible(Gtk_Widget(Get_Object(Builder, "expboard"))) then
          Foreach
            (Gtk_Container(Get_Object(Builder, "btnboxboard")),
@@ -438,11 +459,6 @@ package body Combat.UI is
 
    procedure ShowCombatUI(NewCombat: Boolean := True) is
       CombatStarted: Boolean;
-      EnemyList: constant Gtk_List_Store :=
-        Gtk_List_Store(Get_Object(Builder, "enemyinfolist"));
-      DamagePercent, SpaceIndex: Natural;
-      ModuleName: Unbounded_String;
-      EnemyIter: Gtk_Tree_Iter;
       MenuArray: constant array(1 .. 10) of Unbounded_String :=
         (To_Unbounded_String("menuorders"),
          To_Unbounded_String("menucrafting"),
@@ -473,30 +489,38 @@ package body Combat.UI is
          Set_Text
            (Gtk_Label(Get_Object(Builder, "lbldescription")),
             To_String(Enemy.Ship.Description));
-         Clear(EnemyList);
-         for I in Enemy.Ship.Modules.Iterate loop
-            Append(EnemyList, EnemyIter);
-            ModuleName :=
-              To_Unbounded_String
-                (ModuleType'Image
-                   (Modules_List(Enemy.Ship.Modules(I).ProtoIndex).MType));
-            Replace_Slice
-              (ModuleName, 2, Length(ModuleName),
-               To_Lower(Slice(ModuleName, 2, Length(ModuleName))));
-            SpaceIndex := Index(ModuleName, "_");
-            while SpaceIndex > 0 loop
-               Replace_Element(ModuleName, SpaceIndex, ' ');
+         declare
+            EnemyList: constant Gtk_List_Store :=
+              Gtk_List_Store(Get_Object(Builder, "enemyinfolist"));
+            DamagePercent, SpaceIndex: Natural;
+            ModuleName: Unbounded_String;
+            EnemyIter: Gtk_Tree_Iter;
+         begin
+            Clear(EnemyList);
+            for I in Enemy.Ship.Modules.Iterate loop
+               Append(EnemyList, EnemyIter);
+               ModuleName :=
+                 To_Unbounded_String
+                   (ModuleType'Image
+                      (Modules_List(Enemy.Ship.Modules(I).ProtoIndex).MType));
+               Replace_Slice
+                 (ModuleName, 2, Length(ModuleName),
+                  To_Lower(Slice(ModuleName, 2, Length(ModuleName))));
                SpaceIndex := Index(ModuleName, "_");
+               while SpaceIndex > 0 loop
+                  Replace_Element(ModuleName, SpaceIndex, ' ');
+                  SpaceIndex := Index(ModuleName, "_");
+               end loop;
+               Set(EnemyList, EnemyIter, 0, To_String(ModuleName));
+               DamagePercent :=
+                 100 -
+                 Natural
+                   ((Float(Enemy.Ship.Modules(I).Durability) /
+                     Float(Enemy.Ship.Modules(I).MaxDurability)) *
+                    100.0);
+               Set(EnemyList, EnemyIter, 1, Gint(DamagePercent));
             end loop;
-            Set(EnemyList, EnemyIter, 0, To_String(ModuleName));
-            DamagePercent :=
-              100 -
-              Natural
-                ((Float(Enemy.Ship.Modules(I).Durability) /
-                  Float(Enemy.Ship.Modules(I).MaxDurability)) *
-                 100.0);
-            Set(EnemyList, EnemyIter, 1, Gint(DamagePercent));
-         end loop;
+         end;
       end if;
       Hide(Gtk_Widget(Get_Object(Builder, "btnclose")));
       for I in MenuArray'Range loop
@@ -514,12 +538,10 @@ package body Combat.UI is
    end ShowCombatUI;
 
    procedure SetOrdersList(Object: access Gtkada_Builder_Record'Class) is
-      OrdersModel: Glib.Types.GType_Interface;
-      OrdersList: Gtk_List_Store;
-      OrdersIter, CrewIter, NamesIter: Gtk_Tree_Iter;
+      CrewIter, NamesIter: Gtk_Tree_Iter;
       CrewModel: Gtk_Tree_Model;
       Position: Natural;
-      AssignedName, AssignedOrder: Unbounded_String;
+      AssignedName: Unbounded_String;
       SkillIndex, SkillValue: Natural := 0;
       SkillString: Unbounded_String;
       CrewList: constant Gtk_List_Store :=
@@ -592,78 +614,86 @@ package body Combat.UI is
             Set(CrewList, NamesIter, 1, Gint(I));
          end if;
       end loop;
-      OrdersModel :=
-        Get_Property
-          (Get_Object(Object, "renderorders"),
-           Gtk.Cell_Renderer_Combo.Model_Property);
-      OrdersList := -(Gtk_Tree_Model(OrdersModel));
-      OrdersList.Clear;
-      if AssignedName = To_Unbounded_String("Nobody") then
-         return;
-      end if;
-      AssignedOrder := To_Unbounded_String(Get_String(CrewModel, CrewIter, 1));
-      case Position is
-         when 0 =>
-            for I in PilotOrders'Range loop
-               if AssignedOrder /= PilotOrders(I) then
-                  Append(OrdersList, OrdersIter);
-                  Set(OrdersList, OrdersIter, 0, To_String(PilotOrders(I)));
-                  Set(OrdersList, OrdersIter, 1, Gint(I));
-               end if;
-            end loop;
-         when 1 =>
-            for I in EngineerOrders'Range loop
-               if AssignedOrder /= EngineerOrders(I) then
-                  Append(OrdersList, OrdersIter);
-                  Set(OrdersList, OrdersIter, 0, To_String(EngineerOrders(I)));
-                  Set(OrdersList, OrdersIter, 1, Gint(I));
-               end if;
-            end loop;
-         when others =>
-            for I in GunnerOrders'Range loop
-               if AssignedOrder /= GunnerOrders(I) then
-                  Append(OrdersList, OrdersIter);
-                  Set(OrdersList, OrdersIter, 0, To_String(GunnerOrders(I)));
-                  Set(OrdersList, OrdersIter, 1, Gint(I));
-               end if;
-            end loop;
-      end case;
+      declare
+         OrdersModel: constant Glib.Types.GType_Interface :=
+           Get_Property
+             (Get_Object(Object, "renderorders"),
+              Gtk.Cell_Renderer_Combo.Model_Property);
+         OrdersList: constant Gtk_List_Store := -(Gtk_Tree_Model(OrdersModel));
+         OrdersIter: Gtk_Tree_Iter;
+         AssignedOrder: Unbounded_String;
+      begin
+         OrdersList.Clear;
+         if AssignedName = To_Unbounded_String("Nobody") then
+            return;
+         end if;
+         AssignedOrder :=
+           To_Unbounded_String(Get_String(CrewModel, CrewIter, 1));
+         case Position is
+            when 0 =>
+               for I in PilotOrders'Range loop
+                  if AssignedOrder /= PilotOrders(I) then
+                     Append(OrdersList, OrdersIter);
+                     Set(OrdersList, OrdersIter, 0, To_String(PilotOrders(I)));
+                     Set(OrdersList, OrdersIter, 1, Gint(I));
+                  end if;
+               end loop;
+            when 1 =>
+               for I in EngineerOrders'Range loop
+                  if AssignedOrder /= EngineerOrders(I) then
+                     Append(OrdersList, OrdersIter);
+                     Set
+                       (OrdersList, OrdersIter, 0,
+                        To_String(EngineerOrders(I)));
+                     Set(OrdersList, OrdersIter, 1, Gint(I));
+                  end if;
+               end loop;
+            when others =>
+               for I in GunnerOrders'Range loop
+                  if AssignedOrder /= GunnerOrders(I) then
+                     Append(OrdersList, OrdersIter);
+                     Set
+                       (OrdersList, OrdersIter, 0, To_String(GunnerOrders(I)));
+                     Set(OrdersList, OrdersIter, 1, Gint(I));
+                  end if;
+               end loop;
+         end case;
+      end;
    end SetOrdersList;
 
    procedure GiveCombatOrders
      (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
       Path_String: UTF8_String; New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
-      Model: Glib.Types.GType_Interface;
-      List: Gtk_List_Store;
+      Model: constant Glib.Types.GType_Interface :=
+        Get_Property(Self, Gtk.Cell_Renderer_Combo.Model_Property);
+      OrdersList: constant Gtk_List_Store := -(Gtk_Tree_Model(Model));
       ModuleIndex: Natural := 0;
    begin
-      Model := Get_Property(Self, Gtk.Cell_Renderer_Combo.Model_Property);
-      List := -(Gtk_Tree_Model(Model));
       if Self = Gtk_Cell_Renderer_Combo(Get_Object(Builder, "rendercrew")) then
          if Path_String = "0" then
             GiveOrders
-              (PlayerShip, Positive(Get_Int(List, New_Iter, 1)), Pilot,
+              (PlayerShip, Positive(Get_Int(OrdersList, New_Iter, 1)), Pilot,
                ModuleIndex);
          elsif Path_String = "1" then
             GiveOrders
-              (PlayerShip, Positive(Get_Int(List, New_Iter, 1)), Engineer,
-               ModuleIndex);
+              (PlayerShip, Positive(Get_Int(OrdersList, New_Iter, 1)),
+               Engineer, ModuleIndex);
          else
             ModuleIndex := Guns(Positive'Value(Path_String) - 1)(1);
             GiveOrders
-              (PlayerShip, Positive(Get_Int(List, New_Iter, 1)), Gunner,
+              (PlayerShip, Positive(Get_Int(OrdersList, New_Iter, 1)), Gunner,
                ModuleIndex);
          end if;
       else
          if Path_String = "0" then
-            PilotOrder := Positive(Get_Int(List, New_Iter, 1));
+            PilotOrder := Positive(Get_Int(OrdersList, New_Iter, 1));
             AddMessage
               ("Order for " &
                To_String(PlayerShip.Crew(FindMember(Pilot)).Name) &
                " was set on: " & To_String(PilotOrders(PilotOrder)),
                CombatMessage);
          elsif Path_String = "1" then
-            EngineerOrder := Positive(Get_Int(List, New_Iter, 1));
+            EngineerOrder := Positive(Get_Int(OrdersList, New_Iter, 1));
             AddMessage
               ("Order for " &
                To_String(PlayerShip.Crew(FindMember(Engineer)).Name) &
@@ -671,7 +701,7 @@ package body Combat.UI is
                CombatMessage);
          else
             Guns(Positive'Value(Path_String) - 1)(2) :=
-              Positive(Get_Int(List, New_Iter, 1));
+              Positive(Get_Int(OrdersList, New_Iter, 1));
             AddMessage
               ("Order for " &
                To_String
@@ -690,54 +720,71 @@ package body Combat.UI is
    end GiveCombatOrders;
 
    procedure RefreshBoardingUI is
-      Iter, OrdersIter: Gtk_Tree_Iter;
-      List: Gtk_List_Store;
       OrderIndex: Positive := 1;
-      OrderName: Unbounded_String;
       OrdersList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "orders2"));
+      OrdersIter: Gtk_Tree_Iter;
    begin
       UpdateMessages;
-      List := Gtk_List_Store(Get_Object(Builder, "enemycrewlist"));
-      Clear(List);
-      Clear(OrdersList);
-      Append(OrdersList, OrdersIter);
-      Set(OrdersList, OrdersIter, 0, "Attack");
-      for I in Enemy.Ship.Crew.Iterate loop
-         Append(List, Iter);
-         Set(List, Iter, 0, To_String(Enemy.Ship.Crew(I).Name));
-         Set(List, Iter, 1, Gint(Enemy.Ship.Crew(I).Health));
-         Set(List, Iter, 2, Gint(Crew_Container.To_Index(I)));
-         OrderName :=
-           To_Unbounded_String(Crew_Orders'Image(Enemy.Ship.Crew(I).Order));
-         Replace_Slice
-           (OrderName, 2, Length(OrderName),
-            To_Lower(Slice(OrderName, 2, Length(OrderName))));
-         Set(List, Iter, 3, To_String(OrderName));
+      declare
+         EnemyCrewList: constant Gtk_List_Store :=
+           Gtk_List_Store(Get_Object(Builder, "enemycrewlist"));
+         EnemyCrewIter: Gtk_Tree_Iter;
+         OrderName: Unbounded_String;
+      begin
+         Clear(EnemyCrewList);
+         Clear(OrdersList);
          Append(OrdersList, OrdersIter);
-         Set
-           (OrdersList, OrdersIter, 0,
-            "Attack " & To_String(Enemy.Ship.Crew(I).Name));
-      end loop;
-      if HarpoonDuration > 0 or Enemy.HarpoonDuration > 0 then
-         Append(OrdersList, OrdersIter);
-         Set(OrdersList, OrdersIter, 0, "Back to ship");
-      end if;
-      List := Gtk_List_Store(Get_Object(Builder, "crewlist3"));
-      Clear(List);
-      for I in PlayerShip.Crew.Iterate loop
-         if PlayerShip.Crew(I).Order = Boarding then
-            Append(List, Iter);
-            Set(List, Iter, 0, To_String(PlayerShip.Crew(I).Name));
-            Set(List, Iter, 1, Gint(PlayerShip.Crew(I).Health));
-            Set(List, Iter, 2, Gint(Crew_Container.To_Index(I)));
-            OrdersIter :=
-              Get_Iter_From_String
-                (OrdersList, Natural'Image(BoardingOrders(OrderIndex)));
-            Set(List, Iter, 3, Get_String(OrdersList, OrdersIter, 0));
-            OrderIndex := OrderIndex + 1;
+         Set(OrdersList, OrdersIter, 0, "Attack");
+         for I in Enemy.Ship.Crew.Iterate loop
+            Append(EnemyCrewList, EnemyCrewIter);
+            Set
+              (EnemyCrewList, EnemyCrewIter, 0,
+               To_String(Enemy.Ship.Crew(I).Name));
+            Set
+              (EnemyCrewList, EnemyCrewIter, 1,
+               Gint(Enemy.Ship.Crew(I).Health));
+            Set
+              (EnemyCrewList, EnemyCrewIter, 2,
+               Gint(Crew_Container.To_Index(I)));
+            OrderName :=
+              To_Unbounded_String(Crew_Orders'Image(Enemy.Ship.Crew(I).Order));
+            Replace_Slice
+              (OrderName, 2, Length(OrderName),
+               To_Lower(Slice(OrderName, 2, Length(OrderName))));
+            Set(EnemyCrewList, EnemyCrewIter, 3, To_String(OrderName));
+            Append(OrdersList, OrdersIter);
+            Set
+              (OrdersList, OrdersIter, 0,
+               "Attack " & To_String(Enemy.Ship.Crew(I).Name));
+         end loop;
+         if HarpoonDuration > 0 or Enemy.HarpoonDuration > 0 then
+            Append(OrdersList, OrdersIter);
+            Set(OrdersList, OrdersIter, 0, "Back to ship");
          end if;
-      end loop;
+      end;
+      declare
+         CrewList: constant Gtk_List_Store :=
+           Gtk_List_Store(Get_Object(Builder, "crewlist3"));
+         CrewIter: Gtk_Tree_Iter;
+      begin
+         Clear(CrewList);
+         for I in PlayerShip.Crew.Iterate loop
+            if PlayerShip.Crew(I).Order = Boarding then
+               Append(CrewList, CrewIter);
+               Set(CrewList, CrewIter, 0, To_String(PlayerShip.Crew(I).Name));
+               Set(CrewList, CrewIter, 1, Gint(PlayerShip.Crew(I).Health));
+               Set(CrewList, CrewIter, 2, Gint(Crew_Container.To_Index(I)));
+               OrdersIter :=
+                 Get_Iter_From_String
+                   (OrdersList, Natural'Image(BoardingOrders(OrderIndex)));
+               Set
+                 (CrewList, CrewIter, 3,
+                  Get_String(OrdersList, OrdersIter, 0));
+               OrderIndex := OrderIndex + 1;
+            end if;
+         end loop;
+      end;
    end RefreshBoardingUI;
 
    procedure NextTurn(Object: access Gtkada_Builder_Record'Class) is
