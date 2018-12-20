@@ -38,7 +38,6 @@ with Utils.UI; use Utils.UI;
 package body Crew.UI is
 
    procedure SetOrdersList is
-      OrdersModel: Glib.Types.GType_Interface;
       OrdersList: Gtk_List_Store;
       OrdersIter: Gtk_Tree_Iter;
       NeedClean, NeedRepair: Boolean := True;
@@ -51,11 +50,14 @@ package body Crew.UI is
          Set(OrdersList, OrdersIter, 2, Gint(ModuleIndex));
       end AddOrder;
    begin
-      OrdersModel :=
-        Get_Property
-          (Get_Object(Builder, "renderorders1"),
-           Gtk.Cell_Renderer_Combo.Model_Property);
-      OrdersList := -(Gtk_Tree_Model(OrdersModel));
+      declare
+         OrdersModel: constant Glib.Types.GType_Interface :=
+           Get_Property
+             (Get_Object(Builder, "renderorders1"),
+              Gtk.Cell_Renderer_Combo.Model_Property);
+      begin
+         OrdersList := -(Gtk_Tree_Model(OrdersModel));
+      end;
       OrdersList.Clear;
       if
         (PlayerShip.Crew(MemberIndex).Tired = 100 or
@@ -204,9 +206,7 @@ package body Crew.UI is
       if PlayerShip.Crew(MemberIndex).Inventory.Length > 0 then
          Set_Cursor
            (Gtk_Tree_View(Get_Object(Builder, "treeinventory")),
-            Gtk_Tree_Path_New_From_String("0"),
-            Gtk_Tree_View_Column(Get_Object(Builder, "columninventory")),
-            False);
+            Gtk_Tree_Path_New_From_String("0"), null, False);
       end if;
    end SetActiveItem;
 
@@ -242,8 +242,8 @@ package body Crew.UI is
       MemberIndex := NewMemberIndex + 1;
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treecrew2")),
-         Gtk_Tree_Path_New_From_String(Natural'Image(NewMemberIndex)),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columncrew")), False);
+         Gtk_Tree_Path_New_From_String(Natural'Image(NewMemberIndex)), null,
+         False);
    end SetActiveMember;
 
    procedure CreateCrewUI(NewBuilder: Gtkada_Builder) is
