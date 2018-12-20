@@ -1207,7 +1207,7 @@ during combat. -->
   <module index="101"/>
   <module amount="7" index="93"/>
   <module index="94"/>
-  <module amount="4" index="96"/>
+  <module amount="2" index="221"/>
   <module amount="2" index="113"/>
   <module index="50"/>
   <module index="128"/>
@@ -1229,7 +1229,7 @@ during combat. -->
   <module index="101"/>
   <module amount="8" index="93"/>
   <module index="94"/>
-  <module amount="4" index="96"/>
+  <module amount="2" index="221"/>
   <module amount="2" index="113"/>
   <module index="50"/>
   <module index="128"/>
@@ -1259,7 +1259,7 @@ during combat. -->
  <ship combatai="BERSERKER" index="73" maxaccuracy="10" maxevasion="10" maxloot="100" maxperception="20" minaccuracy="5" minevasion="5" minloot="10" minperception="10" name="Attacking clockwork drone mk III" owner="DRONES">
   <module index="103"/>
   <module index="101"/>
-  <module amount="2" index="96"/>
+  <module index="221"/>
   <module index="98"/>
   <module index="97"/>
   <module index="49"/>
@@ -1271,7 +1271,7 @@ during combat. -->
   <module index="103"/>
   <module index="91"/>
   <module index="101"/>
-  <module amount="2" index="96"/>
+  <module index="221"/>
   <module index="98"/>
   <module index="97"/>
   <module index="49"/>
@@ -1300,7 +1300,7 @@ during combat. -->
   <module index="101"/>
   <module amount="8" index="93"/>
   <module index="94"/>
-  <module amount="4" index="96"/>
+  <module amount="2" index="221"/>
   <module index="98"/>
   <module index="97"/>
   <module index="49"/>
@@ -1320,7 +1320,7 @@ during combat. -->
   <module index="101"/>
   <module amount="8" index="93"/>
   <module index="94"/>
-  <module amount="4" index="96"/>
+  <module amount="2" index="221"/>
   <module index="98"/>
   <module index="97"/>
   <module index="49"/>
@@ -1374,7 +1374,7 @@ during combat. -->
   <module index="111"/>
   <module index="101"/>
   <module index="94"/>
-  <module amount="4" index="96"/>
+  <module amount="2" index="221"/>
   <module index="121"/>
   <cargo index="1" maxamount="2500" minamount="2000"/>
   <cargo index="21" maxamount="300" minamount="150"/>
@@ -1432,7 +1432,8 @@ during combat. -->
   <module index="108"/>
   <module index="111"/>
   <module index="104"/>
-  <module amount="5" index="96"/>
+  <module index="96"/>
+  <module amount="2" index="221"/>
   <module index="121"/>
   <module index="113"/>
   <module index="50"/>
@@ -1447,7 +1448,8 @@ during combat. -->
   <module index="104"/>
   <module amount="6" index="93"/>
   <module index="94"/>
-  <module amount="5" index="96"/>
+  <module index="96"/>
+  <module amount="2" index="221"/>
   <module amount="2" index="113"/>
   <module index="50"/>
   <module index="128"/>
@@ -1468,7 +1470,8 @@ during combat. -->
   <module index="111"/>
   <module index="104"/>
   <module index="94"/>
-  <module amount="5" index="96"/>
+  <module index="96"/>
+  <module amount="2" index="221"/>
   <module index="121"/>
   <cargo index="1" maxamount="3000" minamount="2500"/>
   <cargo index="21" maxamount="350" minamount="200"/>
@@ -1482,7 +1485,7 @@ during combat. -->
   <module index="104"/>
   <module amount="8" index="93"/>
   <module index="94"/>
-  <module amount="4" index="96"/>
+  <module amount="2" index="221"/>
   <module index="121"/>
   <module index="113"/>
   <module index="50"/>
