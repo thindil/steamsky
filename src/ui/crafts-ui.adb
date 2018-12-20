@@ -97,8 +97,6 @@ package body Crafts.UI is
    end ShowSetRecipe;
 
    procedure ShowRecipeInfo(Object: access Gtkada_Builder_Record'Class) is
-      RecipesIter: Gtk_Tree_Iter;
-      RecipesModel: Gtk_Tree_Model;
       RecipeInfo, WorkplaceName: Unbounded_String := Null_Unbounded_String;
       Recipe: Craft_Data;
       MAmount, CargoIndex: Natural := 0;
@@ -106,14 +104,19 @@ package body Crafts.UI is
       HaveTool: Boolean := False;
       TextLength: Positive;
    begin
-      Get_Selected
-        (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Object, "treerecipes"))),
-         RecipesModel, RecipesIter);
-      if RecipesIter = Null_Iter then
-         return;
-      end if;
-      RecipeIndex := Integer(Get_Int(RecipesModel, RecipesIter, 1));
+      declare
+         RecipesIter: Gtk_Tree_Iter;
+         RecipesModel: Gtk_Tree_Model;
+      begin
+         Get_Selected
+           (Gtk.Tree_View.Get_Selection
+              (Gtk_Tree_View(Get_Object(Object, "treerecipes"))),
+            RecipesModel, RecipesIter);
+         if RecipesIter = Null_Iter then
+            return;
+         end if;
+         RecipeIndex := Integer(Get_Int(RecipesModel, RecipesIter, 1));
+      end;
       if RecipeIndex > 0 then
          Recipe := Recipes_List(RecipeIndex);
       else
@@ -397,8 +400,7 @@ package body Crafts.UI is
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "crafts");
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treerecipes")),
-         Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columnname2")), False);
+         Gtk_Tree_Path_New_From_String("0"), null, False);
       ShowLastMessage(Builder);
    end ShowCraftsUI;
 
