@@ -8944,96 +8944,18 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkBox" id="cargobox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkScrolledWindow">
+                  <object class="GtkLabel" id="lblfreespace">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="shadow_type">in</property>
-                    <child>
-                      <object class="GtkTreeView" id="treecargo">
-                        <property name="name">redbar</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="model">cargolist</property>
-                        <property name="search_column">0</property>
-                        <signal name="cursor-changed" handler="Show_Item_Cargo_Info" swapped="no"/>
-                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection"/>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="columncargo">
-                            <property name="title" translatable="yes">Name</property>
-                            <property name="sort_indicator">True</property>
-                            <property name="sort_column_id">0</property>
-                            <child>
-                              <object class="GtkCellRendererText"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="columncargodurability">
-                            <property name="title" translatable="yes">Durability</property>
-                            <property name="sort_indicator">True</property>
-                            <property name="sort_column_id">6</property>
-                            <child>
-                              <object class="GtkCellRendererProgress"/>
-                              <attributes>
-                                <attribute name="visible">7</attribute>
-                                <attribute name="text">5</attribute>
-                                <attribute name="value">6</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn">
-                            <property name="title" translatable="yes">Type</property>
-                            <property name="sort_indicator">True</property>
-                            <property name="sort_column_id">2</property>
-                            <child>
-                              <object class="GtkCellRendererText"/>
-                              <attributes>
-                                <attribute name="text">2</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn">
-                            <property name="title" translatable="yes">Amount</property>
-                            <property name="sort_indicator">True</property>
-                            <property name="sort_column_id">3</property>
-                            <child>
-                              <object class="GtkCellRendererText"/>
-                              <attributes>
-                                <attribute name="text">3</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn">
-                            <property name="title" translatable="yes">Weight (in kg)</property>
-                            <property name="sort_indicator">True</property>
-                            <property name="sort_column_id">4</property>
-                            <child>
-                              <object class="GtkCellRendererText"/>
-                              <attributes>
-                                <attribute name="text">4</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
+                    <property name="can_focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="valign">start</property>
+                    <property name="wrap">True</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
+                    <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
@@ -9042,109 +8964,140 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="valign">start</property>
-                    <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkFrame">
+                      <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_left">5</property>
-                        <property name="margin_right">5</property>
-                        <property name="margin_top">5</property>
-                        <property name="margin_bottom">5</property>
-                        <property name="label_xalign">0.10000000149011612</property>
-                        <property name="shadow_type">out</property>
+                        <property name="can_focus">True</property>
+                        <property name="shadow_type">in</property>
                         <child>
-                          <object class="GtkAlignment">
+                          <object class="GtkTreeView" id="treecargo">
+                            <property name="name">redbar</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="left_padding">12</property>
-                            <property name="right_padding">12</property>
+                            <property name="can_focus">True</property>
+                            <property name="model">cargolist</property>
+                            <property name="search_column">0</property>
+                            <signal name="cursor-changed" handler="Show_Item_Cargo_Info" swapped="no"/>
+                            <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection"/>
+                            </child>
                             <child>
-                              <object class="GtkLabel" id="lbliteminfo2">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="use_markup">True</property>
-                                <property name="wrap">True</property>
-                                <property name="max_width_chars">20</property>
-                                <property name="xalign">0</property>
+                              <object class="GtkTreeViewColumn" id="columncargo">
+                                <property name="title" translatable="yes">Name</property>
+                                <property name="sort_indicator">True</property>
+                                <property name="sort_column_id">0</property>
+                                <child>
+                                  <object class="GtkCellRendererText"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="columncargodurability">
+                                <property name="title" translatable="yes">Durability</property>
+                                <property name="sort_indicator">True</property>
+                                <property name="sort_column_id">6</property>
+                                <child>
+                                  <object class="GtkCellRendererProgress"/>
+                                  <attributes>
+                                    <attribute name="visible">7</attribute>
+                                    <attribute name="text">5</attribute>
+                                    <attribute name="value">6</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn">
+                                <property name="title" translatable="yes">Type</property>
+                                <property name="sort_indicator">True</property>
+                                <property name="sort_column_id">2</property>
+                                <child>
+                                  <object class="GtkCellRendererText"/>
+                                  <attributes>
+                                    <attribute name="text">2</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn">
+                                <property name="title" translatable="yes">Amount</property>
+                                <property name="sort_indicator">True</property>
+                                <property name="sort_column_id">3</property>
+                                <child>
+                                  <object class="GtkCellRendererText"/>
+                                  <attributes>
+                                    <attribute name="text">3</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn">
+                                <property name="title" translatable="yes">Weight (in kg)</property>
+                                <property name="sort_indicator">True</property>
+                                <property name="sort_column_id">4</property>
+                                <child>
+                                  <object class="GtkCellRendererText"/>
+                                  <attributes>
+                                    <attribute name="text">4</attribute>
+                                  </attributes>
+                                </child>
                               </object>
                             </child>
                           </object>
                         </child>
-                        <child type="label">
-                          <object class="GtkLabel">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Item Info:</property>
-                          </object>
-                        </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
+                        <property name="expand">True</property>
                         <property name="fill">True</property>
                         <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="lblfreespace">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">center</property>
-                        <property name="valign">start</property>
-                        <property name="wrap">True</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="valign">center</property>
+                        <property name="valign">start</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkBox">
+                          <object class="GtkFrame">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_left">5</property>
+                            <property name="margin_right">5</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
+                            <property name="label_xalign">0.10000000149011612</property>
+                            <property name="shadow_type">out</property>
                             <child>
-                              <object class="GtkButton" id="btndropitem">
-                                <property name="label" translatable="yes">_Drop</property>
+                              <object class="GtkAlignment">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="use_underline">True</property>
-                                <signal name="clicked" handler="Drop_Item" swapped="no"/>
+                                <property name="can_focus">False</property>
+                                <property name="left_padding">12</property>
+                                <property name="right_padding">12</property>
+                                <child>
+                                  <object class="GtkLabel" id="lbliteminfo2">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="use_markup">True</property>
+                                    <property name="wrap">True</property>
+                                    <property name="max_width_chars">20</property>
+                                    <property name="xalign">0</property>
+                                  </object>
+                                </child>
                               </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
                             </child>
-                            <child>
-                              <object class="GtkSpinButton" id="spincargodrop">
+                            <child type="label">
+                              <object class="GtkLabel">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="halign">end</property>
-                                <property name="width_chars">6</property>
-                                <property name="adjustment">amountadj</property>
-                                <property name="numeric">True</property>
-                                <property name="update_policy">if-valid</property>
-                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Item Info:</property>
                               </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
                             </child>
                           </object>
                           <packing>
@@ -9154,58 +9107,50 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="givebox">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child>
-                              <object class="GtkButton" id="btngive">
-                                <property name="label" translatable="yes">_Give</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="use_underline">True</property>
-                                <signal name="clicked" handler="Give_Item" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSpinButton" id="spincargogive">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="width_chars">6</property>
-                                <property name="adjustment">amountadj1</property>
-                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkBox">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">end</property>
+                            <property name="valign">center</property>
+                            <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkBox">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">To:</property>
+                                <child>
+                                  <object class="GtkButton" id="btndropitem">
+                                    <property name="label" translatable="yes">_Drop</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="use_underline">True</property>
+                                    <signal name="clicked" handler="Drop_Item" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkSpinButton" id="spincargodrop">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="halign">end</property>
+                                    <property name="width_chars">6</property>
+                                    <property name="adjustment">amountadj</property>
+                                    <property name="numeric">True</property>
+                                    <property name="update_policy">if-valid</property>
+                                    <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                    <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                    <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                    <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -9214,14 +9159,81 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkComboBoxText" id="cmbmember">
+                              <object class="GtkBox" id="givebox">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <child>
+                                  <object class="GtkButton" id="btngive">
+                                    <property name="label" translatable="yes">_Give</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="use_underline">True</property>
+                                    <signal name="clicked" handler="Give_Item" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkSpinButton" id="spincargogive">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="width_chars">6</property>
+                                    <property name="adjustment">amountadj1</property>
+                                    <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                    <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                    <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                    <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
                                 <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">end</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">To:</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBoxText" id="cmbmember">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">2</property>
                               </packing>
                             </child>
                           </object>
@@ -9235,14 +9247,14 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
