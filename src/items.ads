@@ -69,8 +69,8 @@ package Items is
    function FindProtoItem
      (Index, ItemType: Unbounded_String := Null_Unbounded_String)
       return Natural; -- Return vector index of item or zero if item not found
-   function GetItemName
-     (Item: InventoryData; DamageInfo: Boolean := True)
+   function GetItemName(Item: InventoryData;
+      DamageInfo: Boolean := True)
      return String; -- Get name of item in ship cargo or character inventory
    procedure DamageItem(Inventory: in out Inventory_Container.Vector;
       ItemIndex: Positive;

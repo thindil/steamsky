@@ -181,7 +181,8 @@ package body Items is
       return 0;
    end FindProtoItem;
 
-   function GetItemName(Item: InventoryData; DamageInfo: Boolean := True) return String is
+   function GetItemName(Item: InventoryData;
+      DamageInfo: Boolean := True) return String is
       ItemName: Unbounded_String;
       DamagePercent: Float;
    begin
