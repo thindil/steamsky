@@ -35,6 +35,7 @@ with Items; use Items;
 with Bases.Trade; use Bases.Trade;
 with Utils.UI; use Utils.UI;
 with Factions; use Factions;
+with Maps.UI; use Maps.UI;
 
 package body Bases.RecruitUI is
 
@@ -198,8 +199,14 @@ package body Bases.RecruitUI is
       HireRecruit
         (RecruitIndex, Cost, DailyPayment, TradePayment, ContractLength2);
       UpdateRecruitList;
-      SetActiveRow("treerecruits", "columnname");
-      ShowLastMessage(Object);
+      if SkyBases(BaseIndex).Recruits.Length > 0 then
+         SetActiveRow("treerecruits", "columnname");
+         ShowLastMessage(Object);
+      else
+         ShowSkyMap;
+         Set_Visible_Child_Name
+           (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
+      end if;
    end Hire;
 
    procedure StartNegotiations(Object: access Gtkada_Builder_Record'Class) is
