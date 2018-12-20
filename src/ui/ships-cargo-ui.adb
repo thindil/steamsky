@@ -255,6 +255,13 @@ package body Ships.Cargo.UI is
       SetActiveItem;
    end GiveItem;
 
+   procedure HideItemCargoInfo(Object: access Gtkada_Builder_Record'Class) is
+      ItemInfoBox: constant Gtk_Widget :=
+        Gtk_Widget(Get_Object(Object, "boxcargoiteminfo"));
+   begin
+      Set_Visible(ItemInfoBox, not Get_Visible(ItemInfoBox));
+   end HideItemCargoInfo;
+
    procedure CreateCargoUI(NewBuilder: Gtkada_Builder) is
    begin
       Builder := NewBuilder;
@@ -262,6 +269,8 @@ package body Ships.Cargo.UI is
         (Builder, "Show_Item_Cargo_Info", ShowItemCargoInfo'Access);
       Register_Handler(Builder, "Drop_Item", DropItem'Access);
       Register_Handler(Builder, "Give_Item", GiveItem'Access);
+      Register_Handler
+        (Builder, "Hide_Item_Cargo_Info", HideItemCargoInfo'Access);
       On_Key_Press_Event
         (Gtk_Widget(Get_Object(Builder, "spincargodrop")),
          SelectElement'Access, Get_Object(Builder, "btndropitem"));
