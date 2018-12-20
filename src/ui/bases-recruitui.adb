@@ -35,6 +35,7 @@ with Items; use Items;
 with Bases.Trade; use Bases.Trade;
 with Utils.UI; use Utils.UI;
 with Factions; use Factions;
+with Maps.UI; use Maps.UI;
 
 package body Bases.RecruitUI is
 
@@ -170,9 +171,6 @@ package body Bases.RecruitUI is
    end UpdateRecruitList;
 
    procedure Hire(Object: access Gtkada_Builder_Record'Class) is
-      RecruitIter: Gtk_Tree_Iter;
-      RecruitModel: Gtk_Tree_Model;
-      RecruitIndex: Positive;
       DailyPayment: constant Natural :=
         Natural
           (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjdailypayment"))));
@@ -186,12 +184,6 @@ package body Bases.RecruitUI is
       ContractLength: constant Gint :=
         Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbcontractlength")));
    begin
-      Get_Selected
-        (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Object, "treerecruits"))),
-         RecruitModel, RecruitIter);
-      RecruitIndex :=
-        Natural'Value(To_String(Get_Path(RecruitModel, RecruitIter))) + 1;
       Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
       Cost :=
         Recruit.Price - ((DailyPayment - Recruit.Payment) * 50) -
@@ -219,10 +211,16 @@ package body Bases.RecruitUI is
       HireRecruit
         (RecruitIndex, Cost, DailyPayment, TradePayment, ContractLength2);
       UpdateRecruitList;
-      Set_Cursor
-        (Gtk_Tree_View(Get_Object(Builder, "treerecruits")),
-         Gtk_Tree_Path_New_From_String("0"), null, False);
-      ShowLastMessage(Object);
+      if SkyBases(BaseIndex).Recruits.Length > 0 then
+         Set_Cursor
+           (Gtk_Tree_View(Get_Object(Object, "treerecruits")),
+            Gtk_Tree_Path_New_From_String("0"), null, False);
+         ShowLastMessage(Object);
+      else
+         ShowSkyMap;
+         Set_Visible_Child_Name
+           (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
+      end if;
    end Hire;
 
    procedure StartNegotiations(Object: access Gtkada_Builder_Record'Class) is
