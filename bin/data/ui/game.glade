@@ -128,6 +128,28 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
   <object class="GtkTreeModelSort" id="basessort">
     <property name="model">basesfilter</property>
   </object>
+  <object class="GtkMenu" id="baseslistmenu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">_Show base on map</property>
+        <property name="use_underline">True</property>
+        <signal name="activate" handler="Show_Base" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">S_et base as destination for ship</property>
+        <property name="use_underline">True</property>
+        <signal name="activate" handler="Set_Destination_Base" swapped="no"/>
+      </object>
+    </child>
+  </object>
   <object class="GtkListStore" id="cargolist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -2929,9 +2951,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkTreeView" id="treebases">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Double left click or press enter to show base on map or right click for menu.</property>
                         <property name="model">basessort</property>
                         <property name="enable_search">False</property>
                         <signal name="cursor-changed" handler="Show_Base_Info" swapped="no"/>
+                        <signal name="popup-menu" handler="Show_Bases_List_Menu" swapped="no"/>
                         <signal name="row-activated" handler="Show_Base" swapped="no"/>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>

@@ -33,6 +33,8 @@ with Gtk.Tree_Model_Filter; use Gtk.Tree_Model_Filter;
 with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
+with Gtk.Menu; use Gtk.Menu;
+with Gdk.Event; use Gdk.Event;
 with Glib; use Glib;
 with Bases; use Bases;
 with Maps; use Maps;
@@ -310,6 +312,23 @@ package body BasesList is
       return False;
    end VisibleBases;
 
+   function ShowBasesListMenu
+     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+   begin
+      Popup(Gtk_Menu(Get_Object(Object, "baseslistmenu")));
+      return False;
+   end ShowBasesListMenu;
+
+   function ShowBasesListMenuButton(Self: access Gtk_Widget_Record'Class;
+      Event: Gdk_Event_Button) return Boolean is
+      pragma Unreferenced(Self);
+   begin
+      if Event.Button = 3 then
+         return ShowBasesListMenu(Builder);
+      end if;
+      return False;
+   end ShowBasesListMenuButton;
+
    procedure CreateBasesListUI(NewBuilder: Gtkada_Builder) is
       ComboBox: Gtk_Combo_Box_Text;
    begin
@@ -319,6 +338,8 @@ package body BasesList is
         (Builder, "Set_Destination_Base", SetDestinationBase'Access);
       Register_Handler(Builder, "Show_Base", ShowBase'Access);
       Register_Handler(Builder, "Search_Bases", SearchBases'Access);
+      Register_Handler
+        (Builder, "Show_Bases_List_Menu", ShowBasesListMenu'Access);
       ComboBox := Gtk_Combo_Box_Text(Get_Object(Builder, "cmbtype"));
       for I in Bases_Types loop
          Append_Text
@@ -337,6 +358,12 @@ package body BasesList is
       On_Key_Press_Event
         (Gtk_Widget(Get_Object(Builder, "entrysearchbases")),
          SelectElement'Access, Get_Object(Builder, "btnmenu"));
+      Attach_To_Widget
+        (Gtk_Menu(Get_Object(Builder, "baseslistmenu")),
+         Gtk_Widget(Get_Object(Builder, "treebases")), null);
+      On_Button_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "treebases")),
+         ShowBasesListMenuButton'Access);
    end CreateBasesListUI;
 
    procedure ShowBasesListUI is
