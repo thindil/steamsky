@@ -62,23 +62,24 @@ package body Crew.UI.Handlers is
    end UpdatePriorities;
 
    procedure ShowMemberInfo(Object: access Gtkada_Builder_Record'Class) is
-      CrewIter: Gtk_Tree_Iter;
-      CrewModel: Gtk_Tree_Model;
       Member: Member_Data;
       MemberInfo: Unbounded_String;
       TiredPoints: Integer;
-      Iter: Gtk_Tree_Iter;
-      List: Gtk_List_Store;
       ProgressBar: Gtk_Progress_Bar;
    begin
-      Get_Selected
-        (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Object, "treecrew2"))),
-         CrewModel, CrewIter);
-      if CrewIter = Null_Iter then
-         return;
-      end if;
-      MemberIndex := Positive(Get_Int(CrewModel, CrewIter, 2));
+      declare
+         CrewIter: Gtk_Tree_Iter;
+         CrewModel: Gtk_Tree_Model;
+      begin
+         Get_Selected
+           (Gtk.Tree_View.Get_Selection
+              (Gtk_Tree_View(Get_Object(Object, "treecrew2"))),
+            CrewModel, CrewIter);
+         if CrewIter = Null_Iter then
+            return;
+         end if;
+         MemberIndex := Positive(Get_Int(CrewModel, CrewIter, 2));
+      end;
       Member := PlayerShip.Crew(MemberIndex);
       if Factions_List(Member.Faction).Flags.Find_Index
           (To_Unbounded_String("nogender")) =
@@ -214,34 +215,41 @@ package body Crew.UI.Handlers is
          Set_Text(ProgressBar, "Excited");
       end if;
       if Member.Skills.Length > 0 and Member.ContractLength /= 0 then
-         List := Gtk_List_Store(Get_Object(Object, "statslist"));
-         Clear(List);
-         for I in Member.Attributes.Iterate loop
-            Append(List, Iter);
-            Set
-              (List, Iter, 0,
-               To_String
-                 (Attributes_List(Attributes_Container.To_Index(I)).Name));
-            Set(List, Iter, 1, Gint(Member.Attributes(I)(1) * 2));
-            Set
-              (List, Iter, 2,
-               To_String
-                 (Attributes_List(Attributes_Container.To_Index(I))
-                    .Description));
-         end loop;
-         List := Gtk_List_Store(Get_Object(Builder, "skillslist"));
-         Clear(List);
          declare
+            StatsIter: Gtk_Tree_Iter;
+            StatsList: constant Gtk_List_Store :=
+              Gtk_List_Store(Get_Object(Object, "statslist"));
+         begin
+            Clear(StatsList);
+            for I in Member.Attributes.Iterate loop
+               Append(StatsList, StatsIter);
+               Set
+                 (StatsList, StatsIter, 0,
+                  To_String
+                    (Attributes_List(Attributes_Container.To_Index(I)).Name));
+               Set(StatsList, StatsIter, 1, Gint(Member.Attributes(I)(1) * 2));
+               Set
+                 (StatsList, StatsIter, 2,
+                  To_String
+                    (Attributes_List(Attributes_Container.To_Index(I))
+                       .Description));
+            end loop;
+         end;
+         declare
+            SkillsList: constant Gtk_List_Store :=
+              Gtk_List_Store(Get_Object(Builder, "skillslist"));
+            SkillsIter: Gtk_Tree_Iter;
             ItemIndex: Positive;
             TooltipText: Unbounded_String;
          begin
+            Clear(SkillsList);
             for Skill of Member.Skills loop
-               Append(List, Iter);
+               Append(SkillsList, SkillsIter);
                Set
-                 (List, Iter, 0,
+                 (SkillsList, SkillsIter, 0,
                   To_String(Skills_List(Skill(1)).Name) & ": " &
                   GetSkillLevelName(Skill(2)));
-               Set(List, Iter, 1, Gint(Skill(2)));
+               Set(SkillsList, SkillsIter, 1, Gint(Skill(2)));
                TooltipText := Null_Unbounded_String;
                Append(TooltipText, "Related statistic: ");
                Append
@@ -260,7 +268,7 @@ package body Crew.UI.Handlers is
                end if;
                Append(TooltipText, ". ");
                Append(TooltipText, Skills_List(Skill(1)).Description);
-               Set(List, Iter, 2, To_String(TooltipText));
+               Set(SkillsList, SkillsIter, 2, To_String(TooltipText));
             end loop;
          end;
       end if;
@@ -299,21 +307,22 @@ package body Crew.UI.Handlers is
    end ShowInventory;
 
    procedure ShowItemInfo2(Object: access Gtkada_Builder_Record'Class) is
-      InventoryIter: Gtk_Tree_Iter;
-      InventoryModel: Gtk_Tree_Model;
       ItemInfo: Unbounded_String;
       ProtoIndex: Positive;
-      AmountAdj: constant Gtk_Adjustment :=
-        Gtk_Adjustment(Get_Object(Object, "amountadj"));
    begin
-      Get_Selected
-        (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Object, "treeinventory"))),
-         InventoryModel, InventoryIter);
-      if InventoryIter = Null_Iter then
-         return;
-      end if;
-      ItemIndex := Positive(Get_Int(InventoryModel, InventoryIter, 1));
+      declare
+         InventoryIter: Gtk_Tree_Iter;
+         InventoryModel: Gtk_Tree_Model;
+      begin
+         Get_Selected
+           (Gtk.Tree_View.Get_Selection
+              (Gtk_Tree_View(Get_Object(Object, "treeinventory"))),
+            InventoryModel, InventoryIter);
+         if InventoryIter = Null_Iter then
+            return;
+         end if;
+         ItemIndex := Positive(Get_Int(InventoryModel, InventoryIter, 1));
+      end;
       if ItemIndex >
         Positive(PlayerShip.Crew(MemberIndex).Inventory.Length) then
          return;
@@ -356,10 +365,15 @@ package body Crew.UI.Handlers is
       end if;
       Set_Markup
         (Gtk_Label(Get_Object(Object, "lbliteminfo")), To_String(ItemInfo));
-      Set_Upper
-        (AmountAdj,
-         Gdouble(PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount));
-      Set_Value(AmountAdj, 1.0);
+      declare
+         AmountAdj: constant Gtk_Adjustment :=
+           Gtk_Adjustment(Get_Object(Object, "amountadj"));
+      begin
+         Set_Upper
+           (AmountAdj,
+            Gdouble(PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount));
+         Set_Value(AmountAdj, 1.0);
+      end;
    end ShowItemInfo2;
 
    procedure UseItem(Self: access Gtk_Cell_Renderer_Toggle_Record'Class;
