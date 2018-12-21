@@ -302,7 +302,7 @@ package body Crew.UI.Handlers is
       InventoryIter: Gtk_Tree_Iter;
       InventoryModel: Gtk_Tree_Model;
       ItemInfo: Unbounded_String;
-      ProtoIndex, ItemWeight: Positive;
+      ProtoIndex: Positive;
       AmountAdj: constant Gtk_Adjustment :=
         Gtk_Adjustment(Get_Object(Object, "amountadj"));
    begin
@@ -320,26 +320,9 @@ package body Crew.UI.Handlers is
       end if;
       ProtoIndex :=
         PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex;
-      ItemWeight :=
-        PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount *
-        Items_List(ProtoIndex).Weight;
-      ItemInfo := To_Unbounded_String("Type: ");
-      if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
-         Append(ItemInfo, Items_List(ProtoIndex).IType);
-      else
-         Append(ItemInfo, Items_List(ProtoIndex).ShowType);
-      end if;
       Append
         (ItemInfo,
-         LF & "Amount:" &
-         Positive'Image
-           (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount));
-      Append
-        (ItemInfo,
-         LF & "Weight:" & Positive'Image(Items_List(ProtoIndex).Weight) &
-         " kg");
-      Append
-        (ItemInfo, LF & "Total weight:" & Positive'Image(ItemWeight) & " kg");
+         "Weight:" & Positive'Image(Items_List(ProtoIndex).Weight) & " kg");
       if Items_List(ProtoIndex).IType = WeaponType then
          Append
            (ItemInfo,
@@ -367,16 +350,12 @@ package body Crew.UI.Handlers is
                null;
          end case;
       end if;
-      ShowItemDamage
-        (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Durability,
-         Get_Object(Object, "itemdamagebar"));
+      if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
+         Append
+           (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
+      end if;
       Set_Markup
         (Gtk_Label(Get_Object(Object, "lbliteminfo")), To_String(ItemInfo));
-      if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
-         Set_Label
-           (Gtk_Label(Get_Object(Object, "lblitemdescription")),
-            LF & To_String(Items_List(ProtoIndex).Description));
-      end if;
       Set_Upper
         (AmountAdj,
          Gdouble(PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount));
@@ -566,5 +545,13 @@ package body Crew.UI.Handlers is
          SetActiveMember;
       end if;
    end DismissMember;
+
+   procedure HideInventoryItemInfo
+     (Object: access Gtkada_Builder_Record'Class) is
+      ItemInfoBox: constant Gtk_Widget :=
+        Gtk_Widget(Get_Object(Object, "boxinventoryiteminfo"));
+   begin
+      Set_Visible(ItemInfoBox, not Get_Visible(ItemInfoBox));
+   end HideInventoryItemInfo;
 
 end Crew.UI.Handlers;

@@ -50,4 +50,8 @@ package Crew.UI.Handlers is
    procedure DismissMember
      (Object: access Gtkada_Builder_Record'
         Class); -- Dismiss selected crew member
+   procedure HideInventoryItemInfo
+     (Object: access Gtkada_Builder_Record'
+        Class); -- Hide info about item in crew member inventory
+
 end Crew.UI.Handlers;
