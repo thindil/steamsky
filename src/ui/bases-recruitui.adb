@@ -234,6 +234,7 @@ package body Bases.RecruitUI is
       Set_Value
         (Gtk_Adjustment(Get_Object(Object, "adjdailypayment")),
          Gdouble(Recruit.Payment));
+      Set_Value(Gtk_Adjustment(Get_Object(Object, "adjtradepayment")), 0.0);
       Cost := Recruit.Price;
       CountPrice(Cost, FindMember(Talk));
       Set_Label
