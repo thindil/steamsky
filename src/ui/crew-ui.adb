@@ -167,6 +167,8 @@ package body Crew.UI is
       InventoryList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "inventorylist"));
       ItemType: Unbounded_String;
+      Visible: Boolean := False;
+      ProtoIndex, ItemWeight: Positive;
    begin
       Clear(InventoryList);
       for I in
@@ -175,16 +177,15 @@ package body Crew.UI is
          Append(InventoryList, InventoryIter);
          Set
            (InventoryList, InventoryIter, 0,
-            GetItemName(PlayerShip.Crew(MemberIndex).Inventory(I)));
+            GetItemName(PlayerShip.Crew(MemberIndex).Inventory(I), False));
          Set(InventoryList, InventoryIter, 1, Gint(I));
          if ItemIsUsed(MemberIndex, I) then
             Set(InventoryList, InventoryIter, 2, True);
          else
             Set(InventoryList, InventoryIter, 2, False);
          end if;
-         ItemType :=
-           Items_List(PlayerShip.Crew(MemberIndex).Inventory(I).ProtoIndex)
-             .IType;
+         ProtoIndex := PlayerShip.Crew(MemberIndex).Inventory(I).ProtoIndex;
+         ItemType := Items_List(ProtoIndex).IType;
          if ItemType = WeaponType or ItemType = ShieldType or
            ItemType = HeadArmor or ItemType = ChestArmor or
            ItemType = ArmsArmor or ItemType = LegsArmor or
@@ -194,7 +195,47 @@ package body Crew.UI is
          else
             Set(InventoryList, InventoryIter, 3, False);
          end if;
+         Set(InventoryList, InventoryIter, 6, True);
+         case PlayerShip.Crew(MemberIndex).Inventory(I).Durability is
+            when 100 =>
+               Set(InventoryList, InventoryIter, 6, False);
+            when 81 .. 99 =>
+               Set(InventoryList, InventoryIter, 4, " Slightly used ");
+               Visible := True;
+            when 51 .. 80 =>
+               Set(InventoryList, InventoryIter, 4, " Damaged ");
+               Visible := True;
+            when 21 .. 50 =>
+               Set(InventoryList, InventoryIter, 4, " Heavily damaged ");
+               Visible := True;
+            when others =>
+               Set(InventoryList, InventoryIter, 4, " Almost destroyed ");
+               Visible := True;
+         end case;
+         Set
+           (InventoryList, InventoryIter, 5,
+            Gint(PlayerShip.Crew(MemberIndex).Inventory(I).Durability));
+         if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
+            Set
+              (InventoryList, InventoryIter, 7,
+               To_String(Items_List(ProtoIndex).IType));
+         else
+            Set
+              (InventoryList, InventoryIter, 7,
+               To_String(Items_List(ProtoIndex).ShowType));
+         end if;
+         Set
+           (InventoryList, InventoryIter, 8,
+            Gint(PlayerShip.Crew(MemberIndex).Inventory(I).Amount));
+         ItemWeight :=
+           PlayerShip.Crew(MemberIndex).Inventory(I).Amount *
+           Items_List(ProtoIndex).Weight;
+         Set(InventoryList, InventoryIter, 9, Gint(ItemWeight));
       end loop;
+      Set_Visible
+        (Gtk_Tree_View_Column
+           (Get_Object(Builder, "columninventorydurability")),
+         Visible);
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblinventoryfreespace")),
          "Free inventory space:" &
@@ -255,6 +296,8 @@ package body Crew.UI is
       Register_Handler(Builder, "Show_Item_Info2", ShowItemInfo2'Access);
       Register_Handler(Builder, "Move_Item", MoveItem'Access);
       Register_Handler(Builder, "Dismiss_Member", DismissMember'Access);
+      Register_Handler
+        (Builder, "Hide_Inventory_Item_Info", HideInventoryItemInfo'Access);
       On_Changed
         (Gtk_Cell_Renderer_Combo(Get_Object(Builder, "renderorders1")),
          GiveCrewOrders'Access);
