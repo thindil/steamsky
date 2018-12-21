@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 - Showing only visited bases of selected faction on bases list
 - Crash after recruit new crew member in bases
 - Auto back to map when all recruits are hired
+- Resetting hire negotiations
 
 ## [3.1] - 2018-12-02
 
