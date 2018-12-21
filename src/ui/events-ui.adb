@@ -42,22 +42,25 @@ package body Events.UI is
    Cleaning: Boolean;
 
    procedure ShowEventInfo(Object: access Gtkada_Builder_Record'Class) is
-      EventsIter: Gtk_Tree_Iter;
-      EventsModel: Gtk_Tree_Model;
       EventInfo: Unbounded_String;
       BaseIndex: Integer;
    begin
       if Cleaning then
          return;
       end if;
-      Get_Selected
-        (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Object, "treeevents"))),
-         EventsModel, EventsIter);
-      if EventsIter = Null_Iter then
-         return;
-      end if;
-      EventIndex := Positive(Get_Int(EventsModel, EventsIter, 1));
+      declare
+         EventsIter: Gtk_Tree_Iter;
+         EventsModel: Gtk_Tree_Model;
+      begin
+         Get_Selected
+           (Gtk.Tree_View.Get_Selection
+              (Gtk_Tree_View(Get_Object(Object, "treeevents"))),
+            EventsModel, EventsIter);
+         if EventsIter = Null_Iter then
+            return;
+         end if;
+         EventIndex := Positive(Get_Int(EventsModel, EventsIter, 1));
+      end;
       BaseIndex :=
         SkyMap(Events_List(EventIndex).SkyX, Events_List(EventIndex).SkyY)
           .BaseIndex;
@@ -165,8 +168,7 @@ package body Events.UI is
       if N_Children(EventsList, Null_Iter) > 0 then
          Set_Cursor
            (Gtk_Tree_View(Get_Object(Builder, "treeevents")),
-            Gtk_Tree_Path_New_From_String("0"),
-            Gtk_Tree_View_Column(Get_Object(Builder, "columnnames")), False);
+            Gtk_Tree_Path_New_From_String("0"), null, False);
       end if;
    end ShowEventsUI;
 
