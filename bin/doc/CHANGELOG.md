@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Crash after recruit new crew member in bases
 - Auto back to map when all recruits are hired
 - Resetting hire negotiations
+- Info about available missions after accepting mission
 
 ## [3.0.2] - 2018-12-16
 
