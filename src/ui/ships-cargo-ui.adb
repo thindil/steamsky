@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
@@ -107,8 +106,6 @@ package body Ships.Cargo.UI is
    procedure ShowItemCargoInfo(Object: access Gtkada_Builder_Record'Class) is
       CargoIter: Gtk_Tree_Iter;
       CargoModel: Gtk_Tree_Model;
-      ItemInfo: Unbounded_String;
-      ProtoIndex: Positive;
       AmountAdj: constant Gtk_Adjustment :=
         Gtk_Adjustment(Get_Object(Object, "amountadj"));
       AmountAdj2: constant Gtk_Adjustment :=
@@ -125,50 +122,8 @@ package body Ships.Cargo.UI is
       if ItemIndex > Positive(PlayerShip.Cargo.Length) then
          return;
       end if;
-      ProtoIndex := PlayerShip.Cargo(ItemIndex).ProtoIndex;
-      Append
-        (ItemInfo,
-         "Weight:" & Positive'Image(Items_List(ProtoIndex).Weight) & " kg");
-      if PlayerShip.Cargo(ItemIndex).Price > 0 then
-         Append
-           (ItemInfo,
-            LF & "Bought for " &
-            Positive'Image(PlayerShip.Cargo(ItemIndex).Price) & " " &
-            To_String(MoneyName));
-      end if;
-      if Items_List(ProtoIndex).IType = WeaponType then
-         Append
-           (ItemInfo,
-            LF & "Skill: " &
-            Skills_List(Items_List(ProtoIndex).Value(3)).Name & "/" &
-            Attributes_List
-              (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
-              .Name);
-         if Items_List(ProtoIndex).Value(4) = 1 then
-            Append(ItemInfo, LF & "Can be used with shield.");
-         else
-            Append
-              (ItemInfo,
-               LF & "Can't be used with shield (two-handed weapon).");
-         end if;
-         Append(ItemInfo, LF & "Damage type: ");
-         case Items_List(ProtoIndex).Value(5) is
-            when 1 =>
-               Append(ItemInfo, "cutting");
-            when 2 =>
-               Append(ItemInfo, "impaling");
-            when 3 =>
-               Append(ItemInfo, "blunt");
-            when others =>
-               null;
-         end case;
-      end if;
-      if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
-         Append
-           (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
-      end if;
-      Set_Markup
-        (Gtk_Label(Get_Object(Object, "lbliteminfo2")), To_String(ItemInfo));
+      ShowInventoryItemInfo
+        (Gtk_Label(Get_Object(Object, "lbliteminfo2")), ItemIndex, 0);
       if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).IType =
         MissionItemsType then
          Hide(Gtk_Widget(Get_Object(Builder, "givebox")));
