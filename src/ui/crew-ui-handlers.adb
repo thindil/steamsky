@@ -307,8 +307,6 @@ package body Crew.UI.Handlers is
    end ShowInventory;
 
    procedure ShowItemInfo2(Object: access Gtkada_Builder_Record'Class) is
-      ItemInfo: Unbounded_String;
-      ProtoIndex: Positive;
    begin
       declare
          InventoryIter: Gtk_Tree_Iter;
@@ -327,44 +325,8 @@ package body Crew.UI.Handlers is
         Positive(PlayerShip.Crew(MemberIndex).Inventory.Length) then
          return;
       end if;
-      ProtoIndex :=
-        PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex;
-      Append
-        (ItemInfo,
-         "Weight:" & Positive'Image(Items_List(ProtoIndex).Weight) & " kg");
-      if Items_List(ProtoIndex).IType = WeaponType then
-         Append
-           (ItemInfo,
-            LF & "Skill: " &
-            Skills_List(Items_List(ProtoIndex).Value(3)).Name & "/" &
-            Attributes_List
-              (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
-              .Name);
-         if Items_List(ProtoIndex).Value(4) = 1 then
-            Append(ItemInfo, LF & "Can be used with shield.");
-         else
-            Append
-              (ItemInfo,
-               LF & "Can't be used with shield (two-handed weapon).");
-         end if;
-         Append(ItemInfo, LF & "Damage type: ");
-         case Items_List(ProtoIndex).Value(5) is
-            when 1 =>
-               Append(ItemInfo, "cutting");
-            when 2 =>
-               Append(ItemInfo, "impaling");
-            when 3 =>
-               Append(ItemInfo, "blunt");
-            when others =>
-               null;
-         end case;
-      end if;
-      if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
-         Append
-           (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
-      end if;
-      Set_Markup
-        (Gtk_Label(Get_Object(Object, "lbliteminfo")), To_String(ItemInfo));
+      ShowInventoryItemInfo
+        (Gtk_Label(Get_Object(Object, "lbliteminfo")), ItemIndex, MemberIndex);
       declare
          AmountAdj: constant Gtk_Adjustment :=
            Gtk_Adjustment(Get_Object(Object, "amountadj"));

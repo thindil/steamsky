@@ -19,7 +19,6 @@ with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Gtk.Message_Dialog; use Gtk.Message_Dialog;
 with Gtk.Dialog; use Gtk.Dialog;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
-with Gtk.Label; use Gtk.Label;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Gdk.Types; use Gdk.Types;
@@ -273,5 +272,53 @@ package body Utils.UI is
          Append(InfoText, Positive'Image(TravelTime.Minutes) & "mins");
       end if;
    end MinutesToDate;
+
+   procedure ShowInventoryItemInfo(Label: Gtk_Label; ItemIndex: Positive;
+      MemberIndex: Natural) is
+      ProtoIndex: Positive;
+      ItemInfo: Unbounded_String;
+   begin
+      if MemberIndex > 0 then
+         ProtoIndex :=
+           PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex;
+      else
+         ProtoIndex := PlayerShip.Cargo(ItemIndex).ProtoIndex;
+      end if;
+      Append
+        (ItemInfo,
+         "Weight:" & Positive'Image(Items_List(ProtoIndex).Weight) & " kg");
+      if Items_List(ProtoIndex).IType = WeaponType then
+         Append
+           (ItemInfo,
+            LF & "Skill: " &
+            Skills_List(Items_List(ProtoIndex).Value(3)).Name & "/" &
+            Attributes_List
+              (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
+              .Name);
+         if Items_List(ProtoIndex).Value(4) = 1 then
+            Append(ItemInfo, LF & "Can be used with shield.");
+         else
+            Append
+              (ItemInfo,
+               LF & "Can't be used with shield (two-handed weapon).");
+         end if;
+         Append(ItemInfo, LF & "Damage type: ");
+         case Items_List(ProtoIndex).Value(5) is
+            when 1 =>
+               Append(ItemInfo, "cutting");
+            when 2 =>
+               Append(ItemInfo, "impaling");
+            when 3 =>
+               Append(ItemInfo, "blunt");
+            when others =>
+               null;
+         end case;
+      end if;
+      if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
+         Append
+           (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
+      end if;
+      Set_Markup(Label, To_String(ItemInfo));
+   end ShowInventoryItemInfo;
 
 end Utils.UI;
