@@ -221,6 +221,44 @@ package body Missions.UI is
       end if;
    end ShowMissionInfo;
 
+   procedure RefreshMissionsList is
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      MissionsIter: Gtk_Tree_Iter;
+      MissionsList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "missionslist"));
+   begin
+      Cleaning := True;
+      Clear(MissionsList);
+      Cleaning := False;
+      for I in SkyBases(BaseIndex).Missions.Iterate loop
+         Append(MissionsList, MissionsIter);
+         case SkyBases(BaseIndex).Missions(I).MType is
+            when Deliver =>
+               Set(MissionsList, MissionsIter, 0, "Deliver item to base");
+            when Patrol =>
+               Set(MissionsList, MissionsIter, 0, "Patrol area");
+            when Destroy =>
+               Set(MissionsList, MissionsIter, 0, "Destroy ship");
+            when Explore =>
+               Set(MissionsList, MissionsIter, 0, "Explore area");
+            when Passenger =>
+               Set
+                 (MissionsList, MissionsIter, 0,
+                  "Transport passenger to base");
+         end case;
+         Set
+           (MissionsList, MissionsIter, 1,
+            Gint(Mission_Container.To_Index(I)));
+         Set
+           (MissionsList, MissionsIter, 2,
+            Gint
+              (CountDistance
+                 (SkyBases(BaseIndex).Missions(I).TargetX,
+                  SkyBases(BaseIndex).Missions(I).TargetY)));
+      end loop;
+   end RefreshMissionsList;
+
    procedure AcceptSelectedMission
      (Object: access Gtkada_Builder_Record'Class) is
       MissionsIter: Gtk_Tree_Iter;
@@ -240,7 +278,7 @@ package body Missions.UI is
          CloseMessages(Object);
          return;
       end if;
-      Remove(-(MissionsModel), MissionsIter);
+      RefreshMissionsList;
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treemissions")),
          Gtk_Tree_Path_New_From_String("0"),
@@ -294,41 +332,8 @@ package body Missions.UI is
    end CreateMissionsUI;
 
    procedure ShowMissionsUI is
-      BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      MissionsIter: Gtk_Tree_Iter;
-      MissionsList: Gtk_List_Store;
    begin
-      MissionsList := Gtk_List_Store(Get_Object(Builder, "missionslist"));
-      Cleaning := True;
-      Clear(MissionsList);
-      Cleaning := False;
-      for I in SkyBases(BaseIndex).Missions.Iterate loop
-         Append(MissionsList, MissionsIter);
-         case SkyBases(BaseIndex).Missions(I).MType is
-            when Deliver =>
-               Set(MissionsList, MissionsIter, 0, "Deliver item to base");
-            when Patrol =>
-               Set(MissionsList, MissionsIter, 0, "Patrol area");
-            when Destroy =>
-               Set(MissionsList, MissionsIter, 0, "Destroy ship");
-            when Explore =>
-               Set(MissionsList, MissionsIter, 0, "Explore area");
-            when Passenger =>
-               Set
-                 (MissionsList, MissionsIter, 0,
-                  "Transport passenger to base");
-         end case;
-         Set
-           (MissionsList, MissionsIter, 1,
-            Gint(Mission_Container.To_Index(I)));
-         Set
-           (MissionsList, MissionsIter, 2,
-            Gint
-              (CountDistance
-                 (SkyBases(BaseIndex).Missions(I).TargetX,
-                  SkyBases(BaseIndex).Missions(I).TargetY)));
-      end loop;
+      RefreshMissionsList;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "availablemissions");
       Set_Cursor
