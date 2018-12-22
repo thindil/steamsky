@@ -19,6 +19,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Widget; use Gtk.Widget;
+with Gtk.Label; use Gtk.Label;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Gdk.Event; use Gdk.Event;
@@ -60,5 +61,7 @@ package Utils.UI is
         False); -- Add info about travel eta and approx fuel usage
    procedure MinutesToDate(Minutes: Natural;
       InfoText: in out Unbounded_String); -- Convert minutes to game date and add it to text
+   procedure ShowInventoryItemInfo(Label: Gtk_Label; ItemIndex: Positive;
+      MemberIndex: Natural); -- Show info about selected item in ship cargo or crew member inventory
 
 end Utils.UI;
