@@ -4432,6 +4432,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="tooltip_column">2</property>
                             <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
                             <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="row-activated" handler="Train_Selected_Skill" swapped="no"/>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection"/>
                             </child>
