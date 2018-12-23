@@ -520,6 +520,22 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="guint"/>
       <!-- column-name guint2 -->
       <column type="guint"/>
+      <!-- column-name type -->
+      <column type="gchararray"/>
+      <!-- column-name durability -->
+      <column type="gint"/>
+      <!-- column-name price -->
+      <column type="gint"/>
+      <!-- column-name profit -->
+      <column type="gint"/>
+      <!-- column-name owned -->
+      <column type="gint"/>
+      <!-- column-name available -->
+      <column type="gint"/>
+      <!-- column-name durabilitytext -->
+      <column type="gchararray"/>
+      <!-- column-name durabilityvisible -->
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkListStore" id="itemslist2">
@@ -9335,15 +9351,14 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkBox" id="tradebox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="homogeneous">True</property>
                 <child>
                   <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="hscrollbar_policy">never</property>
                     <property name="shadow_type">in</property>
                     <child>
                       <object class="GtkTreeView" id="treeitems1">
+                        <property name="name">redbar</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="model">itemslist1</property>
@@ -9367,11 +9382,91 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             </child>
                           </object>
                         </child>
+                        <child>
+                          <object class="GtkTreeViewColumn">
+                            <property name="title" translatable="yes">Type</property>
+                            <property name="sort_indicator">True</property>
+                            <property name="sort_column_id">3</property>
+                            <child>
+                              <object class="GtkCellRendererText"/>
+                              <attributes>
+                                <attribute name="text">3</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="columntradedurability">
+                            <property name="title" translatable="yes">Durability</property>
+                            <property name="sort_indicator">True</property>
+                            <property name="sort_column_id">4</property>
+                            <child>
+                              <object class="GtkCellRendererProgress"/>
+                              <attributes>
+                                <attribute name="visible">10</attribute>
+                                <attribute name="text">9</attribute>
+                                <attribute name="value">4</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn">
+                            <property name="title" translatable="yes">Price</property>
+                            <property name="sort_indicator">True</property>
+                            <property name="sort_column_id">5</property>
+                            <child>
+                              <object class="GtkCellRendererText"/>
+                              <attributes>
+                                <attribute name="text">5</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn">
+                            <property name="title" translatable="yes">Profit</property>
+                            <property name="sort_indicator">True</property>
+                            <property name="sort_column_id">6</property>
+                            <child>
+                              <object class="GtkCellRendererText"/>
+                              <attributes>
+                                <attribute name="text">6</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn">
+                            <property name="title" translatable="yes">Owned</property>
+                            <property name="sort_indicator">True</property>
+                            <property name="sort_column_id">7</property>
+                            <child>
+                              <object class="GtkCellRendererText"/>
+                              <attributes>
+                                <attribute name="text">7</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn">
+                            <property name="title" translatable="yes">Available</property>
+                            <property name="sort_indicator">True</property>
+                            <property name="sort_column_id">8</property>
+                            <child>
+                              <object class="GtkCellRendererText"/>
+                              <attributes>
+                                <attribute name="text">8</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="expand">True</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
@@ -9397,50 +9492,13 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="can_focus">False</property>
                             <property name="left_padding">12</property>
                             <child>
-                              <object class="GtkBox">
+                              <object class="GtkLabel" id="lbltradeinfo">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="orientation">vertical</property>
-                                <child>
-                                  <object class="GtkLabel" id="lbltradeinfo">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="use_markup">True</property>
-                                    <property name="wrap">True</property>
-                                    <property name="xalign">0</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkProgressBar" id="tradedamagebar">
-                                    <property name="name">redbar</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="show_text">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="lbltradedescription">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="wrap">True</property>
-                                    <property name="xalign">0</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">2</property>
-                                  </packing>
-                                </child>
+                                <property name="use_markup">True</property>
+                                <property name="wrap">True</property>
+                                <property name="max_width_chars">20</property>
+                                <property name="xalign">0</property>
                               </object>
                             </child>
                           </object>
@@ -9608,6 +9666,17 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="position">2</property>
                           </packing>
                         </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="sellbox2">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <child>
                           <object class="GtkLabel">
                             <property name="visible">True</property>
@@ -9617,7 +9686,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">3</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
@@ -9633,14 +9702,14 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <packing>
                             <property name="expand">True</property>
                             <property name="fill">True</property>
-                            <property name="position">4</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">5</property>
+                        <property name="position">6</property>
                       </packing>
                     </child>
                   </object>
