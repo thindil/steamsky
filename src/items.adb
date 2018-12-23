@@ -181,10 +181,30 @@ package body Items is
       return 0;
    end FindProtoItem;
 
-   function GetItemName(Item: InventoryData;
-      DamageInfo: Boolean := True) return String is
-      ItemName: Unbounded_String;
+   function GetItemDamage(ItemDurability: Natural;
+      ToLower: Boolean := False) return String is
       DamagePercent: Float;
+      DamageText: Unbounded_String;
+   begin
+      DamagePercent := 1.0 - (Float(ItemDurability) / 100.0);
+      if DamagePercent < 0.2 then
+         DamageText := To_Unbounded_String("Slightly used");
+      elsif DamagePercent < 0.5 then
+         DamageText := To_Unbounded_String("Damaged");
+      elsif DamagePercent < 0.8 then
+         DamageText := To_Unbounded_String("Heavily damaged");
+      else
+         DamageText := To_Unbounded_String("Almost destroyed");
+      end if;
+      if ToLower then
+         DamageText := To_Unbounded_String(To_Lower(To_String(DamageText)));
+      end if;
+      return To_String(DamageText);
+   end GetItemDamage;
+
+   function GetItemName(Item: InventoryData;
+      DamageInfo, ToLower: Boolean := True) return String is
+      ItemName: Unbounded_String;
    begin
       if Item.Name /= Null_Unbounded_String then
          ItemName := Item.Name;
@@ -192,16 +212,8 @@ package body Items is
          ItemName := Items_List(Item.ProtoIndex).Name;
       end if;
       if DamageInfo and then Item.Durability < 100 then
-         DamagePercent := 1.0 - (Float(Item.Durability) / 100.0);
-         if DamagePercent < 0.2 then
-            Append(ItemName, " (slightly used)");
-         elsif DamagePercent < 0.5 then
-            Append(ItemName, " (damaged)");
-         elsif DamagePercent < 0.8 then
-            Append(ItemName, " (heavily damaged)");
-         else
-            Append(ItemName, " (almost destroyed)");
-         end if;
+         Append
+           (ItemName, " (" & GetItemDamage(Item.Durability, ToLower) & ")");
       end if;
       return To_String(ItemName);
    end GetItemName;

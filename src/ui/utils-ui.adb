@@ -168,16 +168,7 @@ package body Utils.UI is
          DamagePercent := Gdouble(ItemDurability) / 100.0;
          Set_Visible(Gtk_Widget(DamageBar), True);
          Set_Fraction(Gtk_Progress_Bar(DamageBar), DamagePercent);
-         DamagePercent := 1.0 - DamagePercent;
-         if DamagePercent < 0.2 then
-            Set_Text(Gtk_Progress_Bar(DamageBar), "Slightly used");
-         elsif DamagePercent < 0.5 then
-            Set_Text(Gtk_Progress_Bar(DamageBar), "Damaged");
-         elsif DamagePercent < 0.8 then
-            Set_Text(Gtk_Progress_Bar(DamageBar), "Heavily damaged");
-         else
-            Set_Text(Gtk_Progress_Bar(DamageBar), "Almost destroyed");
-         end if;
+         Set_Text(Gtk_Progress_Bar(DamageBar), GetItemDamage(ItemDurability));
       else
          Set_Visible(Gtk_Widget(DamageBar), False);
       end if;
