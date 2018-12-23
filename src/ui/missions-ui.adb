@@ -281,8 +281,7 @@ package body Missions.UI is
       RefreshMissionsList;
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treemissions")),
-         Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columnmission")), False);
+         Gtk_Tree_Path_New_From_String("0"), null, False);
       ShowLastMessage(Object);
    exception
       when An_Exception : Missions_Accepting_Error =>
