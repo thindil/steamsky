@@ -514,8 +514,7 @@ package body Ships.UI is
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "ship");
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treemodules")),
-         Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columnmodule")), False);
+         Gtk_Tree_Path_New_From_String("0"), null, False);
       ShowLastMessage(Builder);
       ShowShipInfo;
    end ShowShipUI;
