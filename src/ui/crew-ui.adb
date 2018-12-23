@@ -195,23 +195,18 @@ package body Crew.UI is
          else
             Set(InventoryList, InventoryIter, 3, False);
          end if;
-         Set(InventoryList, InventoryIter, 6, True);
-         case PlayerShip.Crew(MemberIndex).Inventory(I).Durability is
-            when 100 =>
-               Set(InventoryList, InventoryIter, 6, False);
-            when 81 .. 99 =>
-               Set(InventoryList, InventoryIter, 4, " Slightly used ");
-               Visible := True;
-            when 51 .. 80 =>
-               Set(InventoryList, InventoryIter, 4, " Damaged ");
-               Visible := True;
-            when 21 .. 50 =>
-               Set(InventoryList, InventoryIter, 4, " Heavily damaged ");
-               Visible := True;
-            when others =>
-               Set(InventoryList, InventoryIter, 4, " Almost destroyed ");
-               Visible := True;
-         end case;
+         if PlayerShip.Crew(MemberIndex).Inventory(I).Durability < 100 then
+            Set(InventoryList, InventoryIter, 6, True);
+            Set
+              (InventoryList, InventoryIter, 4,
+               " " &
+               GetItemDamage
+                 (PlayerShip.Crew(MemberIndex).Inventory(I).Durability) &
+               " ");
+            Visible := True;
+         else
+            Set(InventoryList, InventoryIter, 6, False);
+         end if;
          Set
            (InventoryList, InventoryIter, 5,
             Gint(PlayerShip.Crew(MemberIndex).Inventory(I).Durability));
