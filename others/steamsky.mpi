@@ -78,43 +78,43 @@ InstallVersion
 {3.2.0.0}
 
 Language,ca
-{Yes}
+{No}
 
 Language,cs
-{Yes}
+{No}
 
 Language,de
-{Yes}
+{No}
 
 Language,en
 {Yes}
 
 Language,es
-{Yes}
+{No}
 
 Language,fr
-{Yes}
+{No}
 
 Language,hu
-{Yes}
+{No}
 
 Language,it
-{Yes}
+{No}
 
 Language,lt
-{Yes}
+{No}
 
 Language,nl
-{Yes}
+{No}
 
 Language,pl
-{Yes}
+{No}
 
 Language,pt_br
-{Yes}
+{No}
 
 Language,ru
-{Yes}
+{No}
 
 LastIgnoreDirectories
 {}
@@ -2948,207 +2948,4 @@ ZipArchive,VirtualTextMap
 
 }
 
-::msgcat::mcmset ca {
-7DC31249-647B-F509-ABB7-443CA3B51F61,Message
-{<%UninstallCompleteText%>}
-
-8B03C1B1-B019-47DF-2066-7EF347BE5D3B,Message
-{<%UninstallingApplicationText%>}
-
-BA8A883F-F262-844D-8FDF-81BF4CE0C0E9,Message
-{<%InstallationCompleteText%>}
-
-E418589E-BEE0-1EB7-8E83-1308B86BAA98,Message
-{<%InstallingApplicationText%>}
-
-}
-::msgcat::mcmset cs {
-7DC31249-647B-F509-ABB7-443CA3B51F61,Message
-{<%UninstallCompleteText%>}
-
-8B03C1B1-B019-47DF-2066-7EF347BE5D3B,Message
-{<%UninstallingApplicationText%>}
-
-BA8A883F-F262-844D-8FDF-81BF4CE0C0E9,Message
-{<%InstallationCompleteText%>}
-
-E418589E-BEE0-1EB7-8E83-1308B86BAA98,Message
-{<%InstallingApplicationText%>}
-
-}
-::msgcat::mcmset de {
-7DC31249-647B-F509-ABB7-443CA3B51F61,Message
-{<%UninstallCompleteText%>}
-
-8B03C1B1-B019-47DF-2066-7EF347BE5D3B,Message
-{<%UninstallingApplicationText%>}
-
-BA8A883F-F262-844D-8FDF-81BF4CE0C0E9,Message
-{<%InstallationCompleteText%>}
-
-E418589E-BEE0-1EB7-8E83-1308B86BAA98,Message
-{<%InstallingApplicationText%>}
-
-}
-::msgcat::mcmset en {
-1760BA9C-BA8E-7D2A-D2F0-EA88C0458C9D,Message
-{<%InstallStartupText%>}
-
-1760BA9C-BA8E-7D2A-D2F0-EA88C0458C9D,Title
-{<%InstallApplicationText%>}
-
-282484E7-9655-406D-FAB1-E242878320B9,Message
-{<%UninstallStartupText%>}
-
-282484E7-9655-406D-FAB1-E242878320B9,Title
-{<%UninstallApplicationText%>}
-
-2E55E7BE-1C35-5315-85E8-44D237A14C58,Description
-{<%CustomInstallDescription%>}
-
-7DC31249-647B-F509-ABB7-443CA3B51F61,Message
-{<%UninstallCompleteText%>}
-
-8B03C1B1-B019-47DF-2066-7EF347BE5D3B,Message
-{<%UninstallingApplicationText%>}
-
-BA8A883F-F262-844D-8FDF-81BF4CE0C0E9,Message
-{<%InstallationCompleteText%>}
-
-CC3D6157-3BB3-0C91-0166-D29013AD65DE,Description
-{<%TypicalInstallDescription%>}
-
-E418589E-BEE0-1EB7-8E83-1308B86BAA98,Message
-{<%InstallingApplicationText%>}
-
-F0AB94BD-2F82-D537-758D-9F6C41D3798A,Description
-{<%ProgramFilesDescription%>}
-
-}
-::msgcat::mcmset es {
-7DC31249-647B-F509-ABB7-443CA3B51F61,Message
-{<%UninstallCompleteText%>}
-
-8B03C1B1-B019-47DF-2066-7EF347BE5D3B,Message
-{<%UninstallingApplicationText%>}
-
-BA8A883F-F262-844D-8FDF-81BF4CE0C0E9,Message
-{<%InstallationCompleteText%>}
-
-E418589E-BEE0-1EB7-8E83-1308B86BAA98,Message
-{<%InstallingApplicationText%>}
-
-}
-::msgcat::mcmset fr {
-7DC31249-647B-F509-ABB7-443CA3B51F61,Message
-{<%UninstallCompleteText%>}
-
-8B03C1B1-B019-47DF-2066-7EF347BE5D3B,Message
-{<%UninstallingApplicationText%>}
-
-BA8A883F-F262-844D-8FDF-81BF4CE0C0E9,Message
-{<%InstallationCompleteText%>}
-
-E418589E-BEE0-1EB7-8E83-1308B86BAA98,Message
-{<%InstallingApplicationText%>}
-
-}
-::msgcat::mcmset hu {
-7DC31249-647B-F509-ABB7-443CA3B51F61,Message
-{<%UninstallCompleteText%>}
-
-8B03C1B1-B019-47DF-2066-7EF347BE5D3B,Message
-{<%UninstallingApplicationText%>}
-
-BA8A883F-F262-844D-8FDF-81BF4CE0C0E9,Message
-{<%InstallationCompleteText%>}
-
-E418589E-BEE0-1EB7-8E83-1308B86BAA98,Message
-{<%InstallingApplicationText%>}
-
-}
-::msgcat::mcmset it {
-7DC31249-647B-F509-ABB7-443CA3B51F61,Message
-{<%UninstallCompleteText%>}
-
-8B03C1B1-B019-47DF-2066-7EF347BE5D3B,Message
-{<%UninstallingApplicationText%>}
-
-BA8A883F-F262-844D-8FDF-81BF4CE0C0E9,Message
-{<%InstallationCompleteText%>}
-
-E418589E-BEE0-1EB7-8E83-1308B86BAA98,Message
-{<%InstallingApplicationText%>}
-
-}
-::msgcat::mcmset lt {
-7DC31249-647B-F509-ABB7-443CA3B51F61,Message
-{<%UninstallCompleteText%>}
-
-8B03C1B1-B019-47DF-2066-7EF347BE5D3B,Message
-{<%UninstallingApplicationText%>}
-
-BA8A883F-F262-844D-8FDF-81BF4CE0C0E9,Message
-{<%InstallationCompleteText%>}
-
-E418589E-BEE0-1EB7-8E83-1308B86BAA98,Message
-{<%InstallingApplicationText%>}
-
-}
-::msgcat::mcmset nl {
-7DC31249-647B-F509-ABB7-443CA3B51F61,Message
-{<%UninstallCompleteText%>}
-
-8B03C1B1-B019-47DF-2066-7EF347BE5D3B,Message
-{<%UninstallingApplicationText%>}
-
-BA8A883F-F262-844D-8FDF-81BF4CE0C0E9,Message
-{<%InstallationCompleteText%>}
-
-E418589E-BEE0-1EB7-8E83-1308B86BAA98,Message
-{<%InstallingApplicationText%>}
-
-}
-::msgcat::mcmset pl {
-7DC31249-647B-F509-ABB7-443CA3B51F61,Message
-{<%UninstallCompleteText%>}
-
-8B03C1B1-B019-47DF-2066-7EF347BE5D3B,Message
-{<%UninstallingApplicationText%>}
-
-BA8A883F-F262-844D-8FDF-81BF4CE0C0E9,Message
-{<%InstallationCompleteText%>}
-
-E418589E-BEE0-1EB7-8E83-1308B86BAA98,Message
-{<%InstallingApplicationText%>}
-
-}
-::msgcat::mcmset pt_br {
-7DC31249-647B-F509-ABB7-443CA3B51F61,Message
-{<%UninstallCompleteText%>}
-
-8B03C1B1-B019-47DF-2066-7EF347BE5D3B,Message
-{<%UninstallingApplicationText%>}
-
-BA8A883F-F262-844D-8FDF-81BF4CE0C0E9,Message
-{<%InstallationCompleteText%>}
-
-E418589E-BEE0-1EB7-8E83-1308B86BAA98,Message
-{<%InstallingApplicationText%>}
-
-}
-::msgcat::mcmset ru {
-7DC31249-647B-F509-ABB7-443CA3B51F61,Message
-{<%UninstallCompleteText%>}
-
-8B03C1B1-B019-47DF-2066-7EF347BE5D3B,Message
-{<%UninstallingApplicationText%>}
-
-BA8A883F-F262-844D-8FDF-81BF4CE0C0E9,Message
-{<%InstallationCompleteText%>}
-
-E418589E-BEE0-1EB7-8E83-1308B86BAA98,Message
-{<%InstallingApplicationText%>}
-
-}
 
