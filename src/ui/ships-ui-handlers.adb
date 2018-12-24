@@ -39,53 +39,59 @@ with Utils.UI; use Utils.UI;
 package body Ships.UI.Handlers is
 
    procedure ShowModuleInfo(Object: access Gtkada_Builder_Record'Class) is
-      ModulesIter: Gtk_Tree_Iter;
-      ModulesModel: Gtk_Tree_Model;
       ModuleInfo: Unbounded_String;
       Module: ModuleData;
       MaxValue, MaxUpgrade: Positive;
       HaveAmmo: Boolean;
       Mamount: Natural := 0;
       DamagePercent, UpgradePercent: Gdouble;
-      DamageBar: constant Gtk_Progress_Bar :=
-        Gtk_Progress_Bar(Get_Object(Object, "moduledamagebar"));
       CleanBar: constant GObject := Get_Object(Object, "cleanbar");
       QualityBar: constant GObject := Get_Object(Object, "qualitybar");
       UpgradeBar: constant GObject := Get_Object(Object, "upgradebar2");
    begin
-      Get_Selected
-        (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Object, "treemodules"))),
-         ModulesModel, ModulesIter);
-      if ModulesIter = Null_Iter then
-         return;
-      end if;
-      ModuleIndex :=
-        Natural'Value(To_String(Get_Path(ModulesModel, ModulesIter))) + 1;
-      Module := PlayerShip.Modules(ModuleIndex);
-      Hide(Gtk_Widget(DamageBar));
-      if Module.Durability < Module.MaxDurability then
-         Show_All(Gtk_Widget(DamageBar));
-         DamagePercent :=
-           (Gdouble(Module.Durability) / Gdouble(Module.MaxDurability));
-         if DamagePercent < 1.0 and DamagePercent > 0.79 then
-            Set_Text(DamageBar, "Slightly damaged");
-         elsif DamagePercent < 0.8 and DamagePercent > 0.49 then
-            Set_Text(DamageBar, "Damaged");
-         elsif DamagePercent < 0.5 and DamagePercent > 0.19 then
-            Set_Text(DamageBar, "Heavily damaged");
-         elsif DamagePercent < 0.2 and DamagePercent > 0.0 then
-            Set_Text(DamageBar, "Almost destroyed");
-         elsif DamagePercent = 0.0 then
-            Set_Text(DamageBar, "Destroyed");
+      declare
+         ModulesIter: Gtk_Tree_Iter;
+         ModulesModel: Gtk_Tree_Model;
+      begin
+         Get_Selected
+           (Gtk.Tree_View.Get_Selection
+              (Gtk_Tree_View(Get_Object(Object, "treemodules"))),
+            ModulesModel, ModulesIter);
+         if ModulesIter = Null_Iter then
+            return;
          end if;
-         Set_Fraction(DamageBar, DamagePercent);
-      end if;
-      MaxValue :=
-        Positive(Float(Modules_List(Module.ProtoIndex).Durability) * 1.5);
-      if Module.MaxDurability = MaxValue then
-         Set_Text(DamageBar, Get_Text(DamageBar) & " (max upgrade)");
-      end if;
+         ModuleIndex :=
+           Natural'Value(To_String(Get_Path(ModulesModel, ModulesIter))) + 1;
+      end;
+      Module := PlayerShip.Modules(ModuleIndex);
+      declare
+         DamageBar: constant Gtk_Progress_Bar :=
+           Gtk_Progress_Bar(Get_Object(Object, "moduledamagebar"));
+      begin
+         Hide(Gtk_Widget(DamageBar));
+         if Module.Durability < Module.MaxDurability then
+            Show_All(Gtk_Widget(DamageBar));
+            DamagePercent :=
+              (Gdouble(Module.Durability) / Gdouble(Module.MaxDurability));
+            if DamagePercent < 1.0 and DamagePercent > 0.79 then
+               Set_Text(DamageBar, "Slightly damaged");
+            elsif DamagePercent < 0.8 and DamagePercent > 0.49 then
+               Set_Text(DamageBar, "Damaged");
+            elsif DamagePercent < 0.5 and DamagePercent > 0.19 then
+               Set_Text(DamageBar, "Heavily damaged");
+            elsif DamagePercent < 0.2 and DamagePercent > 0.0 then
+               Set_Text(DamageBar, "Almost destroyed");
+            elsif DamagePercent = 0.0 then
+               Set_Text(DamageBar, "Destroyed");
+            end if;
+            Set_Fraction(DamageBar, DamagePercent);
+         end if;
+         MaxValue :=
+           Positive(Float(Modules_List(Module.ProtoIndex).Durability) * 1.5);
+         if Module.MaxDurability = MaxValue then
+            Set_Text(DamageBar, Get_Text(DamageBar) & " (max upgrade)");
+         end if;
+      end;
       ModuleInfo :=
         To_Unbounded_String("Weight:" & Integer'Image(Module.Weight) & " kg");
       Append(ModuleInfo, LF & "Repair/Upgrade material: ");
