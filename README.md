@@ -51,12 +51,12 @@ this file is) to compile:
 
 ### Linux
 If you use downloaded binaries, you don't need any additional libraries. Just
-run `./steamsky.sh` script to start game. Game will not works if you try to
-start it by binary file `steamsky`.
+run `./steamsky.sh` script or start the game by menu entry. Game will not
+works if you try to start it by binary file `steamsky`.
 
 ### Windows
-If you compiled the game or use downloaded binaries just clicking on
-`steamsky.exe` in `bin` directory should run it.
+If you use downloaded binaries just clicking on `steamsky.exe` in `bin`
+directory should run it or start the game by menu entry.
 
 ### Starting parameters
 You can set game directories by starting parameters. Possible options are:
@@ -82,8 +82,9 @@ You can set game directories by starting parameters. Possible options are:
 Of course, you can set all parameters together: `./steamsky.sh --datadir=somedir/
 --savedir=otherdir/ --docdir=anotherdir/`
 
-Paths to directories can be absolute or relative where file `steamsky` is. For
-Windows, use `steamsky.exe` instead `./steamsky.sh`.
+Paths to directories can be absolute or relative where file `steamsky` (Linux)
+or `steamsky.exe` (Windows) is. For Windows, use `steamsky.exe` instead
+`./steamsky.sh`.
 
 ## Modding Support
 For detailed informations about modifying various game elements or debugging
