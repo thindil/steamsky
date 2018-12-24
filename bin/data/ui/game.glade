@@ -8264,7 +8264,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <signal name="cursor-changed" handler="Show_Item_Info2" swapped="no"/>
                             <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
                             <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                            <signal name="row-activated" handler="Hide_Inventory_Item_Info" swapped="no"/>
+                            <signal name="row-activated" handler="Hide_Item_Info" object="boxinventoryiteminfo" swapped="no"/>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection"/>
                             </child>
@@ -9061,7 +9061,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <signal name="cursor-changed" handler="Show_Item_Cargo_Info" swapped="no"/>
                             <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
                             <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                            <signal name="row-activated" handler="Hide_Item_Cargo_Info" swapped="no"/>
+                            <signal name="row-activated" handler="Hide_Item_Info" object="boxcargoiteminfo" swapped="no"/>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection"/>
                             </child>

@@ -312,4 +312,10 @@ package body Utils.UI is
       Set_Markup(Label, To_String(ItemInfo));
    end ShowInventoryItemInfo;
 
+   procedure HideItemInfo(User_Data: access GObject_Record'Class) is
+      ItemInfoBox: constant Gtk_Widget := Gtk_Widget(User_Data);
+   begin
+      Set_Visible(ItemInfoBox, not Get_Visible(ItemInfoBox));
+   end HideItemInfo;
+
 end Utils.UI;
