@@ -59,6 +59,7 @@ package body Ships.Cargo is
                end loop;
             else
                Ship.Cargo(ItemIndex).Amount := NewAmount;
+               Ship.Cargo(ItemIndex).Price := Price;
             end if;
          end;
       end if;
