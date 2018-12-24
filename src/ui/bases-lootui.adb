@@ -72,16 +72,9 @@ package body Bases.LootUI is
       else
          ProtoIndex := SkyBases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex;
       end if;
-      ItemInfo := To_Unbounded_String("Type: ");
-      if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
-         Append(ItemInfo, Items_List(ProtoIndex).IType);
-      else
-         Append(ItemInfo, Items_List(ProtoIndex).ShowType);
-      end if;
       Append
         (ItemInfo,
-         LF & "Weight:" & Integer'Image(Items_List(ProtoIndex).Weight) &
-         " kg");
+         "Weight:" & Integer'Image(Items_List(ProtoIndex).Weight) & " kg");
       if Items_List(ProtoIndex).IType = WeaponType then
          Append
            (ItemInfo,
@@ -111,26 +104,9 @@ package body Bases.LootUI is
                null;
          end case;
       end if;
-      if CargoIndex > 0 then
-         Append
-           (ItemInfo,
-            LF & "Owned:" &
-            Positive'Image(PlayerShip.Cargo(CargoIndex).Amount));
-         ShowItemDamage
-           (PlayerShip.Cargo(CargoIndex).Durability,
-            Get_Object(Object, "lootdamagebar"));
-      end if;
-      if BaseCargoIndex > 0
-        and then SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount > 0 then
-         Append
-           (ItemInfo,
-            LF & "In base:" &
-            Positive'Image(SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount));
-      end if;
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
-         Set_Label
-           (Gtk_Label(Get_Object(Object, "lbllootdescription")),
-            LF & To_String(Items_List(ProtoIndex).Description));
+         Append
+           (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
       end if;
       Set_Label
         (Gtk_Label(Get_Object(Object, "lbllootinfo")), To_String(ItemInfo));
@@ -273,6 +249,8 @@ package body Bases.LootUI is
         Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       IndexesList: Positive_Container.Vector;
       BaseCargoIndex: Natural;
+      ProtoIndex: Positive;
+      Visible: Boolean := False;
    begin
       Clear(ItemsList);
       for I in PlayerShip.Cargo.Iterate loop
@@ -282,14 +260,36 @@ package body Bases.LootUI is
             Set(ItemsList, ItemsIter, 0, GetItemName(PlayerShip.Cargo(I)));
             Set
               (ItemsList, ItemsIter, 1, Gint(Inventory_Container.To_Index(I)));
+            ProtoIndex := PlayerShip.Cargo(I).ProtoIndex;
             BaseCargoIndex :=
-              FindBaseCargo
-                (PlayerShip.Cargo(I).ProtoIndex,
-                 PlayerShip.Cargo(I).Durability);
+              FindBaseCargo(ProtoIndex, PlayerShip.Cargo(I).Durability);
             if BaseCargoIndex > 0 then
                IndexesList.Append(New_Item => BaseCargoIndex);
             end if;
             Set(ItemsList, ItemsIter, 2, Gint(BaseCargoIndex));
+            if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
+               Set
+                 (ItemsList, ItemsIter, 3,
+                  To_String(Items_List(ProtoIndex).IType));
+            else
+               Set
+                 (ItemsList, ItemsIter, 3,
+                  To_String(Items_List(ProtoIndex).ShowType));
+            end if;
+            if PlayerShip.Cargo(I).Durability < 100 then
+               Set
+                 (ItemsList, ItemsIter, 5,
+                  " " & GetItemDamage(PlayerShip.Cargo(I).Durability) & " ");
+               Set(ItemsList, ItemsIter, 6, True);
+               Visible := True;
+            end if;
+            Set(ItemsList, ItemsIter, 4, Gint(PlayerShip.Cargo(I).Durability));
+            Set(ItemsList, ItemsIter, 7, Gint(PlayerShip.Cargo(I).Amount));
+            if BaseCargoIndex > 0 then
+               Set
+                 (ItemsList, ItemsIter, 8,
+                  Gint(SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount));
+            end if;
          end if;
       end loop;
       for I in
@@ -297,14 +297,41 @@ package body Bases.LootUI is
           SkyBases(BaseIndex).Cargo.Last_Index loop
          if IndexesList.Find_Index(Item => I) = 0 then
             Append(ItemsList, ItemsIter);
+            ProtoIndex := SkyBases(BaseIndex).Cargo(I).ProtoIndex;
             Set
               (ItemsList, ItemsIter, 0,
-               To_String
-                 (Items_List(SkyBases(BaseIndex).Cargo(I).ProtoIndex).Name));
+               To_String(Items_List(ProtoIndex).Name));
             Set(ItemsList, ItemsIter, 1, 0);
             Set(ItemsList, ItemsIter, 2, Gint(I));
+            if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
+               Set
+                 (ItemsList, ItemsIter, 3,
+                  To_String(Items_List(ProtoIndex).IType));
+            else
+               Set
+                 (ItemsList, ItemsIter, 3,
+                  To_String(Items_List(ProtoIndex).ShowType));
+            end if;
+            if SkyBases(BaseIndex).Cargo(I).Durability < 100 then
+               Set
+                 (ItemsList, ItemsIter, 5,
+                  " " &
+                  GetItemDamage(SkyBases(BaseIndex).Cargo(I).Durability) &
+                  " ");
+               Set(ItemsList, ItemsIter, 6, True);
+               Visible := True;
+            end if;
+            Set
+              (ItemsList, ItemsIter, 4,
+               Gint(SkyBases(BaseIndex).Cargo(I).Durability));
+            Set
+              (ItemsList, ItemsIter, 8,
+               Gint(SkyBases(BaseIndex).Cargo(I).Amount));
          end if;
       end loop;
+      Set_Visible
+        (Gtk_Tree_View_Column(Get_Object(Builder, "columnlootdurability")),
+         Visible);
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "loot");
       Hide(Gtk_Widget(Get_Object(Builder, "dropbox")));
