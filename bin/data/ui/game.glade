@@ -546,6 +546,18 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="guint"/>
       <!-- column-name guint2 -->
       <column type="guint"/>
+      <!-- column-name type -->
+      <column type="gchararray"/>
+      <!-- column-name durability -->
+      <column type="gint"/>
+      <!-- column-name durabilitytext -->
+      <column type="gchararray"/>
+      <!-- column-name durabilityvisible -->
+      <column type="gboolean"/>
+      <!-- column-name owned -->
+      <column type="gint"/>
+      <!-- column-name available -->
+      <column type="gint"/>
     </columns>
   </object>
   <object class="GtkListStore" id="killedlist">
@@ -4040,15 +4052,14 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkBox" id="lootbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="homogeneous">True</property>
                 <child>
                   <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="hscrollbar_policy">never</property>
                     <property name="shadow_type">in</property>
                     <child>
                       <object class="GtkTreeView" id="treeitems">
+                        <property name="name">redbar</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="model">itemslist2</property>
@@ -4072,11 +4083,65 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             </child>
                           </object>
                         </child>
+                        <child>
+                          <object class="GtkTreeViewColumn">
+                            <property name="title" translatable="yes">Type</property>
+                            <property name="sort_indicator">True</property>
+                            <property name="sort_column_id">3</property>
+                            <child>
+                              <object class="GtkCellRendererText"/>
+                              <attributes>
+                                <attribute name="text">3</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="columnlootdurability">
+                            <property name="title" translatable="yes">Durability</property>
+                            <property name="sort_indicator">True</property>
+                            <property name="sort_column_id">4</property>
+                            <child>
+                              <object class="GtkCellRendererProgress"/>
+                              <attributes>
+                                <attribute name="visible">6</attribute>
+                                <attribute name="text">5</attribute>
+                                <attribute name="value">4</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn">
+                            <property name="title" translatable="yes">Owned</property>
+                            <property name="sort_indicator">True</property>
+                            <property name="sort_column_id">7</property>
+                            <child>
+                              <object class="GtkCellRendererText"/>
+                              <attributes>
+                                <attribute name="text">7</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn">
+                            <property name="title" translatable="yes">Available</property>
+                            <property name="sort_indicator">True</property>
+                            <property name="sort_column_id">8</property>
+                            <child>
+                              <object class="GtkCellRendererText"/>
+                              <attributes>
+                                <attribute name="text">8</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
+                    <property name="expand">True</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
@@ -4102,51 +4167,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="can_focus">False</property>
                             <property name="left_padding">12</property>
                             <child>
-                              <object class="GtkBox">
+                              <object class="GtkLabel" id="lbllootinfo">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="orientation">vertical</property>
-                                <child>
-                                  <object class="GtkLabel" id="lbllootinfo">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="wrap">True</property>
-                                    <property name="xalign">0</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkProgressBar" id="lootdamagebar">
-                                    <property name="name">redbar</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="tooltip_text" translatable="yes">How much item is damaged</property>
-                                    <property name="halign">start</property>
-                                    <property name="show_text">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="lbllootdescription">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="wrap">True</property>
-                                    <property name="xalign">0</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">2</property>
-                                  </packing>
-                                </child>
+                                <property name="wrap">True</property>
+                                <property name="max_width_chars">20</property>
+                                <property name="xalign">0</property>
                               </object>
                             </child>
                           </object>
