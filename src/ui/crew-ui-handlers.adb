@@ -522,12 +522,4 @@ package body Crew.UI.Handlers is
       end if;
    end DismissMember;
 
-   procedure HideInventoryItemInfo
-     (Object: access Gtkada_Builder_Record'Class) is
-      ItemInfoBox: constant Gtk_Widget :=
-        Gtk_Widget(Get_Object(Object, "boxinventoryiteminfo"));
-   begin
-      Set_Visible(ItemInfoBox, not Get_Visible(ItemInfoBox));
-   end HideInventoryItemInfo;
-
 end Crew.UI.Handlers;

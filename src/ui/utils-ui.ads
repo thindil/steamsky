@@ -63,5 +63,8 @@ package Utils.UI is
       InfoText: in out Unbounded_String); -- Convert minutes to game date and add it to text
    procedure ShowInventoryItemInfo(Label: Gtk_Label; ItemIndex: Positive;
       MemberIndex: Natural); -- Show info about selected item in ship cargo or crew member inventory
+   procedure HideItemInfo
+     (User_Data: access GObject_Record'
+        Class); -- Hide or show detailed item info
 
 end Utils.UI;
