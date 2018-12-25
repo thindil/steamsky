@@ -321,6 +321,18 @@ package body Missions.UI is
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
    end ButtonMission;
 
+   procedure ShowAvailableMission
+     (Object: access Gtkada_Builder_Record'Class) is
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+   begin
+      ShowSkyMap
+        (SkyBases(BaseIndex).Missions(MissionIndex).TargetX,
+         SkyBases(BaseIndex).Missions(MissionIndex).TargetY);
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
+   end ShowAvailableMission;
+
    procedure CreateMissionsUI(NewBuilder: Gtkada_Builder) is
    begin
       Builder := NewBuilder;
@@ -328,6 +340,8 @@ package body Missions.UI is
       Register_Handler(Builder, "Button_Mission", ButtonMission'Access);
       Register_Handler
         (Builder, "Accept_Mission", AcceptSelectedMission'Access);
+      Register_Handler
+        (Builder, "Show_Available_Mission", ShowAvailableMission'Access);
    end CreateMissionsUI;
 
    procedure ShowMissionsUI is
@@ -338,7 +352,7 @@ package body Missions.UI is
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treemissions")),
          Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columnmission")), False);
+         null, False);
       ShowLastMessage(Builder);
    end ShowMissionsUI;
 
@@ -380,7 +394,7 @@ package body Missions.UI is
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treemissions1")),
          Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columnmission1")), False);
+         null, False);
    end ShowAcceptedMissions;
 
 end Missions.UI;
