@@ -20,7 +20,6 @@ with Gtk.Message_Dialog; use Gtk.Message_Dialog;
 with Gtk.Dialog; use Gtk.Dialog;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Stack; use Gtk.Stack;
-with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Gdk.Types; use Gdk.Types;
 with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
 with MainMenu; use MainMenu;
@@ -160,19 +159,6 @@ package body Utils.UI is
             null;
       end case;
    end CloseMessages;
-
-   procedure ShowItemDamage(ItemDurability: Natural; DamageBar: GObject) is
-      DamagePercent: Gdouble;
-   begin
-      if ItemDurability < 100 then
-         DamagePercent := Gdouble(ItemDurability) / 100.0;
-         Set_Visible(Gtk_Widget(DamageBar), True);
-         Set_Fraction(Gtk_Progress_Bar(DamageBar), DamagePercent);
-         Set_Text(Gtk_Progress_Bar(DamageBar), GetItemDamage(ItemDurability));
-      else
-         Set_Visible(Gtk_Widget(DamageBar), False);
-      end if;
-   end ShowItemDamage;
 
    function SelectElement(Self: access GObject_Record'Class;
       Event: Gdk_Event_Key) return Boolean is
