@@ -73,42 +73,46 @@ package body Statistics.UI is
    end CreateStatsUI;
 
    procedure ShowStatsUI is
-      MinutesDiff: constant Natural :=
-        (GameDate.Minutes + (GameDate.Hour * 60) + (GameDate.Day * 1440) +
-         (GameDate.Month * 43200) + (GameDate.Year * 518400)) -
-        829571520;
-      type VisitedFactor is digits 4 range 0.0 .. 100.0;
-      VisitedPercent: VisitedFactor;
-      VisitedString: String(1 .. 5);
-      MissionsPercent, TotalFinished, TotalDestroyed: Natural := 0;
+      TotalFinished, TotalDestroyed: Natural := 0;
       StatsText: Unbounded_String;
-      Iter: Gtk_Tree_Iter;
-      List: Gtk_List_Store;
       ProtoIndex: Positive;
-      ItemIndex: Positive;
    begin
       StatsText :=
         To_Unbounded_String("Points:" & Natural'Image(GameStats.Points));
       Append(StatsText, LF & "Time passed:");
-      MinutesToDate(MinutesDiff, StatsText);
-      VisitedPercent :=
-        (VisitedFactor(GameStats.BasesVisited) / 1024.0) * 100.0;
-      Put
-        (To => VisitedString, Item => Float(VisitedPercent), Aft => 3,
-         Exp => 0);
-      Append
-        (StatsText,
-         LF & "Bases visited:" & Positive'Image(GameStats.BasesVisited) &
-         " (" & VisitedString & "%)");
-      VisitedPercent :=
-        VisitedFactor(Float(GameStats.MapVisited) / (1024.0 * 1024.0)) * 100.0;
-      if VisitedPercent < 0.001 then
-         VisitedPercent := 0.001;
-      end if;
-      Put
-        (To => VisitedString, Item => Float(VisitedPercent), Aft => 3,
-         Exp => 0);
-      Append(StatsText, LF & "Map discovered: " & VisitedString & "%");
+      declare
+         MinutesDiff: constant Natural :=
+           (GameDate.Minutes + (GameDate.Hour * 60) + (GameDate.Day * 1440) +
+            (GameDate.Month * 43200) + (GameDate.Year * 518400)) -
+           829571520;
+      begin
+         MinutesToDate(MinutesDiff, StatsText);
+      end;
+      declare
+         type VisitedFactor is digits 4 range 0.0 .. 100.0;
+         VisitedPercent: VisitedFactor;
+         VisitedString: String(1 .. 5);
+      begin
+         VisitedPercent :=
+           (VisitedFactor(GameStats.BasesVisited) / 1024.0) * 100.0;
+         Put
+           (To => VisitedString, Item => Float(VisitedPercent), Aft => 3,
+            Exp => 0);
+         Append
+           (StatsText,
+            LF & "Bases visited:" & Positive'Image(GameStats.BasesVisited) &
+            " (" & VisitedString & "%)");
+         VisitedPercent :=
+           VisitedFactor(Float(GameStats.MapVisited) / (1024.0 * 1024.0)) *
+           100.0;
+         if VisitedPercent < 0.001 then
+            VisitedPercent := 0.001;
+         end if;
+         Put
+           (To => VisitedString, Item => Float(VisitedPercent), Aft => 3,
+            Exp => 0);
+         Append(StatsText, LF & "Map discovered: " & VisitedString & "%");
+      end;
       Append
         (StatsText,
          LF & "Distance traveled:" &
@@ -122,58 +126,81 @@ package body Statistics.UI is
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblcrafts")),
          "_Crafting orders finished:" & Natural'Image(TotalFinished));
-      List := Gtk_List_Store(Get_Object(Builder, "craftslist"));
-      Clear(List);
-      if TotalFinished > 0 then
-         for I in GameStats.CraftingOrders.Iterate loop
-            Append(List, Iter);
-            ItemIndex :=
-              Recipes_List(FindRecipe(GameStats.CraftingOrders(I).Index))
-                .ResultIndex;
-            Set(List, Iter, 0, To_String(Items_List(ItemIndex).Name));
-            Set(List, Iter, 1, Gint(GameStats.CraftingOrders(I).Amount));
-         end loop;
-      end if;
+      declare
+         CraftsList: constant Gtk_List_Store :=
+           Gtk_List_Store(Get_Object(Builder, "craftslist"));
+         CraftsIter: Gtk_Tree_Iter;
+         ItemIndex: Positive;
+      begin
+         Clear(CraftsList);
+         if TotalFinished > 0 then
+            for I in GameStats.CraftingOrders.Iterate loop
+               Append(CraftsList, CraftsIter);
+               ItemIndex :=
+                 Recipes_List(FindRecipe(GameStats.CraftingOrders(I).Index))
+                   .ResultIndex;
+               Set
+                 (CraftsList, CraftsIter, 0,
+                  To_String(Items_List(ItemIndex).Name));
+               Set
+                 (CraftsList, CraftsIter, 1,
+                  Gint(GameStats.CraftingOrders(I).Amount));
+            end loop;
+         end if;
+      end;
       TotalFinished := 0;
       for FinishedMission of GameStats.FinishedMissions loop
          TotalFinished := TotalFinished + FinishedMission.Amount;
       end loop;
-      if GameStats.AcceptedMissions > 0 then
-         MissionsPercent :=
-           Natural
-             ((Float(TotalFinished) / Float(GameStats.AcceptedMissions)) *
-              100.0);
-      end if;
-      Set_Label
-        (Gtk_Label(Get_Object(Builder, "lblmissions")),
-         "_Missions completed:" & Natural'Image(TotalFinished) & " (" &
-         To_String
-           (Trim
-              (To_Unbounded_String(Natural'Image(MissionsPercent)),
-               Ada.Strings.Left)) &
-         "%)");
-      List := Gtk_List_Store(Get_Object(Builder, "finishedmissionslist"));
-      Clear(List);
-      if TotalFinished > 0 then
-         for I in GameStats.FinishedMissions.Iterate loop
-            Append(List, Iter);
-            case Missions_Types'Val
-              (Integer'Value
-                 (To_String(GameStats.FinishedMissions(I).Index))) is
-               when Deliver =>
-                  Set(List, Iter, 0, "Delivered items");
-               when Patrol =>
-                  Set(List, Iter, 0, "Patroled areas");
-               when Destroy =>
-                  Set(List, Iter, 0, "Destroyed ships");
-               when Explore =>
-                  Set(List, Iter, 0, "Explored areas");
-               when Passenger =>
-                  Set(List, Iter, 0, "Passengers transported");
-            end case;
-            Set(List, Iter, 1, Gint(GameStats.FinishedMissions(I).Amount));
-         end loop;
-      end if;
+      declare
+         MissionsPercent: Natural := 0;
+      begin
+         if GameStats.AcceptedMissions > 0 then
+            MissionsPercent :=
+              Natural
+                ((Float(TotalFinished) / Float(GameStats.AcceptedMissions)) *
+                 100.0);
+         end if;
+         Set_Label
+           (Gtk_Label(Get_Object(Builder, "lblmissions")),
+            "_Missions completed:" & Natural'Image(TotalFinished) & " (" &
+            To_String
+              (Trim
+                 (To_Unbounded_String(Natural'Image(MissionsPercent)),
+                  Ada.Strings.Left)) &
+            "%)");
+      end;
+      declare
+         MissionsList: constant Gtk_List_Store :=
+           Gtk_List_Store(Get_Object(Builder, "finishedmissionslist"));
+         MissionsIter: Gtk_Tree_Iter;
+      begin
+         Clear(MissionsList);
+         if TotalFinished > 0 then
+            for I in GameStats.FinishedMissions.Iterate loop
+               Append(MissionsList, MissionsIter);
+               case Missions_Types'Val
+                 (Integer'Value
+                    (To_String(GameStats.FinishedMissions(I).Index))) is
+                  when Deliver =>
+                     Set(MissionsList, MissionsIter, 0, "Delivered items");
+                  when Patrol =>
+                     Set(MissionsList, MissionsIter, 0, "Patroled areas");
+                  when Destroy =>
+                     Set(MissionsList, MissionsIter, 0, "Destroyed ships");
+                  when Explore =>
+                     Set(MissionsList, MissionsIter, 0, "Explored areas");
+                  when Passenger =>
+                     Set
+                       (MissionsList, MissionsIter, 0,
+                        "Passengers transported");
+               end case;
+               Set
+                 (MissionsList, MissionsIter, 1,
+                  Gint(GameStats.FinishedMissions(I).Amount));
+            end loop;
+         end if;
+      end;
       Set_Label
         (Gtk_Button(Get_Object(Builder, "btngoals")),
          "Current _goal: " & GoalText(0));
@@ -181,20 +208,29 @@ package body Statistics.UI is
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "gamestats");
       if GameStats.DestroyedShips.Length > 0 then
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expdestroyed")), True);
-         List := Gtk_List_Store(Get_Object(Builder, "destroyedlist"));
-         Clear(List);
-         for I in GameStats.DestroyedShips.Iterate loop
-            Append(List, Iter);
-            for ProtoShip of ProtoShips_List loop
-               if ProtoShip.Index = GameStats.DestroyedShips(I).Index then
-                  Set(List, Iter, 0, To_String(ProtoShip.Name));
-                  Set(List, Iter, 1, Gint(GameStats.DestroyedShips(I).Amount));
-                  exit;
-               end if;
+         declare
+            DestroyedList: constant Gtk_List_Store :=
+              Gtk_List_Store(Get_Object(Builder, "destroyedlist"));
+            DestroyedIter: Gtk_Tree_Iter;
+         begin
+            Clear(DestroyedList);
+            for I in GameStats.DestroyedShips.Iterate loop
+               Append(DestroyedList, DestroyedIter);
+               for ProtoShip of ProtoShips_List loop
+                  if ProtoShip.Index = GameStats.DestroyedShips(I).Index then
+                     Set
+                       (DestroyedList, DestroyedIter, 0,
+                        To_String(ProtoShip.Name));
+                     Set
+                       (DestroyedList, DestroyedIter, 1,
+                        Gint(GameStats.DestroyedShips(I).Amount));
+                     exit;
+                  end if;
+               end loop;
+               TotalDestroyed :=
+                 TotalDestroyed + GameStats.DestroyedShips(I).Amount;
             end loop;
-            TotalDestroyed :=
-              TotalDestroyed + GameStats.DestroyedShips(I).Amount;
-         end loop;
+         end;
          Set_Label
            (Gtk_Label(Get_Object(Builder, "lbldestroyed")),
             "_Destroyed ships (Total:" & Natural'Image(TotalDestroyed) & ")");
@@ -207,20 +243,29 @@ package body Statistics.UI is
       TotalFinished := 0;
       if GameStats.FinishedGoals.Length > 0 then
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expgoals")), True);
-         List := Gtk_List_Store(Get_Object(Builder, "goalslist"));
-         Clear(List);
-         for I in GameStats.FinishedGoals.Iterate loop
-            Append(List, Iter);
-            for J in Goals_List.Iterate loop
-               if GameStats.FinishedGoals(I).Index = Goals_List(J).Index then
-                  ProtoIndex := Goals_Container.To_Index(J);
-                  exit;
-               end if;
+         declare
+            GoalsList: constant Gtk_List_Store :=
+              Gtk_List_Store(Get_Object(Builder, "goalslist"));
+            GoalsIter: Gtk_Tree_Iter;
+         begin
+            Clear(GoalsList);
+            for I in GameStats.FinishedGoals.Iterate loop
+               Append(GoalsList, GoalsIter);
+               for J in Goals_List.Iterate loop
+                  if GameStats.FinishedGoals(I).Index =
+                    Goals_List(J).Index then
+                     ProtoIndex := Goals_Container.To_Index(J);
+                     exit;
+                  end if;
+               end loop;
+               Set(GoalsList, GoalsIter, 0, GoalText(ProtoIndex));
+               Set
+                 (GoalsList, GoalsIter, 1,
+                  Gint(GameStats.FinishedGoals(I).Amount));
+               TotalFinished :=
+                 TotalFinished + GameStats.FinishedGoals(I).Amount;
             end loop;
-            Set(List, Iter, 0, GoalText(ProtoIndex));
-            Set(List, Iter, 1, Gint(GameStats.FinishedGoals(I).Amount));
-            TotalFinished := TotalFinished + GameStats.FinishedGoals(I).Amount;
-         end loop;
+         end;
          Set_Label
            (Gtk_Label(Get_Object(Builder, "lblfinishedgoals")),
             "_Finished goals (Total:" & Natural'Image(TotalFinished) & ")");
@@ -248,14 +293,19 @@ package body Statistics.UI is
       if GameStats.KilledMobs.Length > 0 then
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expkilledmobs")), True);
          TotalDestroyed := 0;
-         List := Gtk_List_Store(Get_Object(Builder, "killedlist"));
-         Clear(List);
-         for KilledMob of GameStats.KilledMobs loop
-            Append(List, Iter);
-            Set(List, Iter, 0, To_String(KilledMob.Index));
-            Set(List, Iter, 1, Gint(KilledMob.Amount));
-            TotalDestroyed := TotalDestroyed + KilledMob.Amount;
-         end loop;
+         declare
+            KillsList: constant Gtk_List_Store :=
+              Gtk_List_Store(Get_Object(Builder, "killedlist"));
+            KillsIter: Gtk_Tree_Iter;
+         begin
+            Clear(KillsList);
+            for KilledMob of GameStats.KilledMobs loop
+               Append(KillsList, KillsIter);
+               Set(KillsList, KillsIter, 0, To_String(KilledMob.Index));
+               Set(KillsList, KillsIter, 1, Gint(KilledMob.Amount));
+               TotalDestroyed := TotalDestroyed + KilledMob.Amount;
+            end loop;
+         end;
          Set_Label
            (Gtk_Label(Get_Object(Builder, "lblkilledstat")),
             "_Killed enemies (Total:" & Natural'Image(TotalDestroyed) & ")");
