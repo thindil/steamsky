@@ -351,8 +351,7 @@ package body Missions.UI is
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "availablemissions");
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treemissions")),
-         Gtk_Tree_Path_New_From_String("0"),
-         null, False);
+         Gtk_Tree_Path_New_From_String("0"), null, False);
       ShowLastMessage(Builder);
    end ShowMissionsUI;
 
@@ -393,8 +392,7 @@ package body Missions.UI is
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "acceptedmissions");
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treemissions1")),
-         Gtk_Tree_Path_New_From_String("0"),
-         null, False);
+         Gtk_Tree_Path_New_From_String("0"), null, False);
    end ShowAcceptedMissions;
 
 end Missions.UI;
