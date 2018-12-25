@@ -59,28 +59,33 @@ package body Trades.UI is
    end CloseTrade;
 
    procedure ShowItemTradeInfo(Object: access Gtkada_Builder_Record'Class) is
-      ItemsIter: Gtk_Tree_Iter;
-      ItemsModel: Gtk_Tree_Model;
       ItemInfo: Unbounded_String;
       ProtoIndex, Price: Positive;
       CargoIndex, BaseCargoIndex, BaseCargoIndex2: Natural := 0;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: Positive;
-      EventIndex: constant Natural :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       MoneyIndex2, MaxAmount: Natural;
-      FreeSpace: Integer;
       AmountAdj2: constant Gtk_Adjustment :=
         Gtk_Adjustment(Get_Object(Builder, "amountadj1"));
       AmountAdj: constant Gtk_Adjustment :=
         Gtk_Adjustment(Get_Object(Builder, "amountadj"));
    begin
-      Get_Selected
-        (Gtk.Tree_View.Get_Selection
-           (Gtk_Tree_View(Get_Object(Object, "treeitems1"))),
-         ItemsModel, ItemsIter);
-      if ItemsIter = Null_Iter then
+      declare
+         ItemsIter: Gtk_Tree_Iter;
+         ItemsModel: Gtk_Tree_Model;
+      begin
+         Get_Selected
+           (Gtk.Tree_View.Get_Selection
+              (Gtk_Tree_View(Get_Object(Object, "treeitems1"))),
+            ItemsModel, ItemsIter);
+         if ItemsIter = Null_Iter then
+            return;
+         end if;
+         CargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 1));
+         BaseCargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 2));
+      end;
+      if CargoIndex > Natural(PlayerShip.Cargo.Length) then
          return;
       end if;
       if BaseIndex > 0 then
@@ -88,11 +93,6 @@ package body Trades.UI is
       else
          BaseType := 1;
       end if;
-      CargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 1));
-      if CargoIndex > Natural(PlayerShip.Cargo.Length) then
-         return;
-      end if;
-      BaseCargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 2));
       if BaseIndex = 0 and BaseCargoIndex > Natural(TraderCargo.Length) then
          return;
       elsif BaseCargoIndex > Natural(SkyBases(BaseIndex).Cargo.Length) then
@@ -127,12 +127,17 @@ package body Trades.UI is
             Price := TraderCargo(BaseCargoIndex).Price;
          end if;
       end if;
-      if EventIndex > 0 then
-         if Events_List(EventIndex).EType = DoublePrice and
-           Events_List(EventIndex).Data = ProtoIndex then
-            Price := Price * 2;
+      declare
+         EventIndex: constant Natural :=
+           SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
+      begin
+         if EventIndex > 0 then
+            if Events_List(EventIndex).EType = DoublePrice and
+              Events_List(EventIndex).Data = ProtoIndex then
+               Price := Price * 2;
+            end if;
          end if;
-      end if;
+      end;
       Append
         (ItemInfo,
          "Weight:" & Integer'Image(Items_List(ProtoIndex).Weight) & " kg");
@@ -242,13 +247,16 @@ package body Trades.UI is
             "You don't have any " & To_String(MoneyName) &
             " to buy anything.");
       end if;
-      FreeSpace := FreeCargo(0);
-      if FreeSpace < 0 then
-         FreeSpace := 0;
-      end if;
-      Set_Label
-        (Gtk_Label(Get_Object(Object, "lblshipspace1")),
-         "Free cargo space:" & Integer'Image(FreeSpace) & " kg");
+      declare
+         FreeSpace: Integer := FreeCargo(0);
+      begin
+         if FreeSpace < 0 then
+            FreeSpace := 0;
+         end if;
+         Set_Label
+           (Gtk_Label(Get_Object(Object, "lblshipspace1")),
+            "Free cargo space:" & Integer'Image(FreeSpace) & " kg");
+      end;
       if BaseIndex > 0 then
          if SkyBases(BaseIndex).Cargo(1).Amount = 0 then
             Set_Label
@@ -535,8 +543,7 @@ package body Trades.UI is
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "trade");
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treeitems1")),
-         Gtk_Tree_Path_New_From_String("0"),
-         Gtk_Tree_View_Column(Get_Object(Builder, "columnname3")), False);
+         Gtk_Tree_Path_New_From_String("0"), null, False);
       ShowLastMessage(Builder);
    end ShowTradeUI;
 
