@@ -64,5 +64,13 @@ package Utils.UI is
    procedure HideItemInfo
      (User_Data: access GObject_Record'
         Class); -- Hide or show detailed item info
+   function ShowPopupMenu
+     (User_Data: access GObject_Record'Class)
+     return Boolean; -- Show popup menu for selected widget
+   function ShowPopupMenuButton(Self: access Gtk_Widget_Record'Class;
+      Event: Gdk_Event_Button)
+     return Boolean; -- Show popup menu on click of right mouse button
+   procedure SetUtilsBuilder
+     (NewBuilder: Gtkada_Builder); -- Set Gtk Builder for Utils package
 
 end Utils.UI;
