@@ -20,6 +20,7 @@ with Gtk.Message_Dialog; use Gtk.Message_Dialog;
 with Gtk.Dialog; use Gtk.Dialog;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Stack; use Gtk.Stack;
+with Gtk.Menu; use Gtk.Menu;
 with Gdk.Types; use Gdk.Types;
 with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
 with MainMenu; use MainMenu;
@@ -35,6 +36,8 @@ with Ships.Movement; use Ships.Movement;
 with Items; use Items;
 
 package body Utils.UI is
+
+   Builder: Gtkada_Builder;
 
    procedure ShowDialog(Message: String; Parent: Gtk_Window) is
       MessageDialog: constant Gtk_Message_Dialog :=
@@ -303,5 +306,30 @@ package body Utils.UI is
    begin
       Set_Visible(ItemInfoBox, not Get_Visible(ItemInfoBox));
    end HideItemInfo;
+
+   function ShowPopupMenu
+     (User_Data: access GObject_Record'Class) return Boolean is
+   begin
+      Popup(Gtk_Menu(User_Data));
+      return False;
+   end ShowPopupMenu;
+
+   function ShowPopupMenuButton(Self: access Gtk_Widget_Record'Class;
+      Event: Gdk_Event_Button) return Boolean is
+   begin
+      if Event.Button = 3 then
+         if Self = Gtk_Widget(Get_Object(Builder, "treebases")) then
+            return ShowPopupMenu(Get_Object(Builder, "baseslistmenu"));
+         elsif Self = Gtk_Widget(Get_Object(Builder, "treemissions1")) then
+            return ShowPopupMenu(Get_Object(Builder, "acceptedmissionsmenu"));
+         end if;
+      end if;
+      return False;
+   end ShowPopupMenuButton;
+
+   procedure SetUtilsBuilder(NewBuilder: Gtkada_Builder) is
+   begin
+      Builder := NewBuilder;
+   end SetUtilsBuilder;
 
 end Utils.UI;
