@@ -342,6 +342,9 @@ package body Missions.UI is
         (Builder, "Accept_Mission", AcceptSelectedMission'Access);
       Register_Handler
         (Builder, "Show_Available_Mission", ShowAvailableMission'Access);
+      On_Button_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "treemissions1")),
+         ShowPopupMenuButton'Access);
    end CreateMissionsUI;
 
    procedure ShowMissionsUI is

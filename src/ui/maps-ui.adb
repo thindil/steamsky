@@ -936,6 +936,7 @@ package body Maps.UI is
       CreateCargoUI(Builder);
       CreateTradeUI(Builder);
       CreateStoriesUI(Builder);
+      SetUtilsBuilder(Builder);
       Add_Overlay
         (Gtk_Overlay(Get_Object(Builder, "mapoverlay")),
          Gtk_Widget(Get_Object(Builder, "lblmaptooltip")));
