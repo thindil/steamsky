@@ -155,7 +155,8 @@ package body Bases.ShipyardUI is
             for Module of PlayerShip.Modules loop
                if Modules_List(Module.ProtoIndex).MType = HULL
                  and then Size > Modules_List(Module.ProtoIndex).Value then
-                  Append(ModuleInfo, " (too big)");
+                  Append
+                    (ModuleInfo, " <span foreground=""red"">(too big)</span>");
                   exit;
                end if;
             end loop;
@@ -213,8 +214,17 @@ package body Bases.ShipyardUI is
       end;
       Cost := Modules_List(ModuleIndex).Price;
       CountPrice(Cost, FindMember(Talk));
-      ModuleInfo :=
-        To_Unbounded_String("Install cost:" & Positive'Image(Cost));
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+      ModuleInfo := To_Unbounded_String("Install cost:");
+      if MoneyIndex2 = 0
+        or else PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
+         Append
+           (ModuleInfo,
+            "<span foreground=""red"">" & Positive'Image(Cost) & " " &
+            To_String(MoneyName) & "</span> ");
+      else
+         Append(ModuleInfo, Positive'Image(Cost) & " " & To_String(MoneyName));
+      end if;
       Append
         (ModuleInfo,
          LF & "Installation time:" &
@@ -223,7 +233,6 @@ package body Bases.ShipyardUI is
       Set_Label
         (Gtk_Label(Get_Object(Object, "lblinstallinfo")),
          To_String(ModuleInfo));
-      MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
       if MoneyIndex2 > 0 then
          InstallInfo :=
            To_Unbounded_String
