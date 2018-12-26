@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Resetting hire negotiations
 - Info about available missions after accepting mission
 - Player ship for general career in pirates faction
+- Losing morale when crew member can't go sleep
 
 ## [3.0.2] - 2018-12-16
 
