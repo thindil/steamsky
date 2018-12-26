@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Updated MODDING.md
 - Updated new game message
 - Updated cargo bays for some ships
+- Reduced chance to meet strongest enemies on weaker ships
 
 ### Fixed
 - Info about item damage
