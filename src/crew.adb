@@ -323,7 +323,7 @@ package body Crew is
                     (To_String(Member.Name) &
                      " is very tired but can't go to rest.",
                      OrderMessage, 3);
-                  UpdateMorale(PlayerShip, I, GetRandom(1, 5));
+                  UpdateMorale(PlayerShip, I, GetRandom(-5, -1));
                end if;
             end;
          end if;
