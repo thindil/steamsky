@@ -329,3 +329,7 @@ GtkScale {
    text-shadow:0 1px 0 #120d0d;
 }
 
+/* Setting for currently selected page in options or shipyard */
+GtkStackSwitcher .button:checked {
+   background:linear-gradient(to bottom, #4c0000 5%, #990000 100%);
+}
