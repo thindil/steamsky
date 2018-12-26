@@ -454,10 +454,9 @@ package body Events is
       PlayerShips: UnboundedString_Container.Vector;
    begin
       EnemyIndex := ProtoShips_List.First_Index;
-      if GetRandom(1, 100) < 99 then
-         PlayerValue := CountCombatValue;
-      else
-         PlayerValue := Natural'Last;
+      PlayerValue := CountCombatValue;
+      if GetRandom(1, 100) > 98 then
+         PlayerValue := PlayerValue * 2;
       end if;
       GetPlayerShips(PlayerShips);
       for Ship of ProtoShips_List loop
