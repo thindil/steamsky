@@ -18,7 +18,7 @@ project steamsky is
 
     package Binder is
         case Mode is
-            when "debug" =>
+            when "debug" | "analyze" =>
                 for Default_Switches("ada") use ("-E", "-shared");
             when "release" =>
                 for Default_Switches("ada") use ("-E");
