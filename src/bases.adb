@@ -19,17 +19,15 @@ with Ada.Numerics.Elementary_Functions; use Ada.Numerics.Elementary_Functions;
 with Maps; use Maps;
 with Messages; use Messages;
 with Items; use Items;
-with Ships; use Ships;
 with Ships.Crew; use Ships.Crew;
 with Events; use Events;
 with Utils; use Utils;
 with Goals; use Goals;
-with Factions; use Factions;
 with Crafts; use Crafts;
 
 package body Bases is
 
-   procedure GainRep(BaseIndex: Positive; Points: Integer) is
+   procedure GainRep(BaseIndex: BasesRange; Points: Integer) is
       NewPoints: Integer;
    begin
       if SkyBases(BaseIndex).Reputation(1) = -100 or
@@ -61,11 +59,11 @@ package body Bases is
       end if;
    end GainRep;
 
-   procedure CountPrice(Price: in out Positive; TraderIndex: Natural;
-      Reduce: Boolean := True) is
+   procedure CountPrice(Price: in out Positive;
+      TraderIndex: Crew_Container.Extended_Index; Reduce: Boolean := True) is
       Bonus: Integer := 0;
    begin
-      if TraderIndex > 0 then
+      if TraderIndex /= Crew_Container.No_Index then
          Bonus :=
            Integer
              (Float'Floor
@@ -143,7 +141,7 @@ package body Bases is
    end GenerateBaseName;
 
    procedure GenerateRecruits is
-      BaseIndex: constant Natural :=
+      BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MaxRecruits, RecruitsAmount, SkillsAmount, SkillNumber, SkillLevel,
       HighestSkill, HighestLevel, RecruitBase, RecruitFaction: Positive;
@@ -580,7 +578,7 @@ package body Bases is
    end AskForEvents;
 
    procedure UpdatePopulation is
-      BaseIndex: constant Natural :=
+      BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       PopulationDiff: Integer;
    begin
@@ -615,7 +613,7 @@ package body Bases is
    end UpdatePopulation;
 
    procedure UpdatePrices is
-      BaseIndex: constant Natural :=
+      BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Chance, Roll: Positive;
    begin
