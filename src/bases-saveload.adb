@@ -20,7 +20,6 @@ with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
 with Maps; use Maps;
 with Items; use Items;
-with Factions; use Factions;
 
 package body Bases.SaveLoad is
 
