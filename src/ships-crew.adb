@@ -680,12 +680,12 @@ package body Ships.Crew is
       end if;
       NewValue := Ship.Crew(MemberIndex).Morale(2) + Value;
       NewMorale := Ship.Crew(MemberIndex).Morale(1);
-      while NewValue >= (NewMorale * 5) loop
-         NewValue := NewValue - (NewMorale * 5);
+      while NewValue >= 5 loop
+         NewValue := NewValue - 5;
          NewMorale := NewMorale + 1;
       end loop;
       while NewValue < 0 loop
-         NewValue := NewValue + (NewMorale * 5);
+         NewValue := NewValue + 5;
          NewMorale := NewMorale - 1;
       end loop;
       if NewMorale > 100 then
