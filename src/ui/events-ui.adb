@@ -126,6 +126,9 @@ package body Events.UI is
       Register_Handler
         (Builder, "Set_Event_As_Destination", SetEventAsDestination'Access);
       Register_Handler(Builder, "Show_Event", ShowEvent'Access);
+      On_Button_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "treeevents")),
+         ShowPopupMenuButton'Access);
    end CreateEventsUI;
 
    procedure ShowEventsUI is
