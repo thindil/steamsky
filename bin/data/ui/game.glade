@@ -321,6 +321,28 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="guint"/>
     </columns>
   </object>
+  <object class="GtkMenu" id="eventsmenu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">_Show event on map</property>
+        <property name="use_underline">True</property>
+        <signal name="activate" handler="Show_Event" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">S_et event as destination for ship</property>
+        <property name="use_underline">True</property>
+        <signal name="activate" handler="Set_Event_As_Destination" swapped="no"/>
+      </object>
+    </child>
+  </object>
   <object class="GtkListStore" id="finishedmissionslist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -2428,6 +2450,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <signal name="cursor-changed" handler="Show_Event_Info" swapped="no"/>
                         <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
                         <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                        <signal name="popup-menu" handler="Show_Popup_Menu" object="eventsmenu" swapped="no"/>
                         <signal name="row-activated" handler="Show_Event" swapped="no"/>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
@@ -2514,7 +2537,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                     <child>
                       <object class="GtkButton" id="btnshowevent">
-                        <property name="label" translatable="yes">_Show on map</property>
+                        <property name="label" translatable="yes">_Show event on map</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -2530,7 +2553,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     </child>
                     <child>
                       <object class="GtkButton" id="btneventdestination">
-                        <property name="label" translatable="yes">S_et as destination for ship</property>
+                        <property name="label" translatable="yes">S_et event as destination for ship</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
