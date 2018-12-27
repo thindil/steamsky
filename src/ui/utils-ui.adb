@@ -322,6 +322,8 @@ package body Utils.UI is
             return ShowPopupMenu(Get_Object(Builder, "baseslistmenu"));
          elsif Self = Gtk_Widget(Get_Object(Builder, "treemissions1")) then
             return ShowPopupMenu(Get_Object(Builder, "acceptedmissionsmenu"));
+         elsif Self = Gtk_Widget(Get_Object(Builder, "treeevents")) then
+            return ShowPopupMenu(Get_Object(Builder, "eventsmenu"));
          end if;
       end if;
       return False;
