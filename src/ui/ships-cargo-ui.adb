@@ -211,7 +211,7 @@ package body Ships.Cargo.UI is
            ("No free space in " &
             To_String(PlayerShip.Crew(MemberIndex).Name) &
             "'s inventory for that amount of " & GetItemName(Item),
-            Gtk_Window(Get_Object(Object, "giveitemwindow")));
+            Gtk_Window(Get_Object(Object, "skymapwindow")));
          return;
       end if;
       UpdateInventory(MemberIndex, Amount, Item.ProtoIndex, Item.Durability);
