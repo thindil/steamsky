@@ -18,14 +18,12 @@
 with Maps; use Maps;
 with Messages; use Messages;
 with Items; use Items;
-with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Crafts; use Crafts;
 with Trades; use Trades;
 with Utils; use Utils;
 with Bases.Cargo; use Bases.Cargo;
-with Factions; use Factions;
 
 package body Bases.Trade is
 

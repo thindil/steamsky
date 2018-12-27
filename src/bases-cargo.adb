@@ -17,7 +17,6 @@
 
 with Maps; use Maps;
 with Items; use Items;
-with Ships; use Ships;
 with Utils; use Utils;
 with Trades; use Trades;
 

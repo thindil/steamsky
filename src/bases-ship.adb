@@ -19,7 +19,6 @@ with Maps; use Maps;
 with Messages; use Messages;
 with Items; use Items;
 with ShipModules; use ShipModules;
-with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Trades; use Trades;
