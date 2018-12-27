@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Info about available missions after accepting mission
 - Player ship for general career in pirates faction
 - Losing morale when crew member can't go sleep
+- Warning in console when giving items to crew members
 
 ## [3.0.2] - 2018-12-16
 
