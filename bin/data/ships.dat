@@ -509,7 +509,8 @@ during combat. -->
   <module amount="2" index="62"/>
   <module amount="14" index="4"/>
   <module index="5"/>
-  <module amount="10" index="7"/>
+  <module amount="2" index="7"/>
+  <module amount="2" index="231"/>
   <module amount="5" index="39"/>
   <module amount="4" index="33"/>
   <module index="129"/>
@@ -532,7 +533,7 @@ during combat. -->
   <module amount="2" index="63"/>
   <module amount="16" index="4"/>
   <module index="5"/>
-  <module amount="12" index="7"/>
+  <module amount="3" index="231"/>
   <module amount="5" index="39"/>
   <module amount="4" index="34"/>
   <module index="129"/>
@@ -554,7 +555,8 @@ during combat. -->
   <module index="26"/>
   <module index="62"/>
   <module index="5"/>
-  <module amount="10" index="7"/>
+  <module amount="2" index="7"/>
+  <module amount="2" index="231"/>
   <module index="40"/>
   <cargo index="1" maxamount="7000" minamount="5000"/>
   <cargo index="5" maxamount="750" minamount="500"/>
@@ -566,7 +568,8 @@ during combat. -->
   <module index="60"/>
   <module index="26"/>
   <module index="62"/>
-  <module amount="10" index="7"/>
+  <module amount="2" index="7"/>
+  <module amount="2" index="231"/>
   <module index="40"/>
   <module amount="3" index="39"/>
   <module amount="3" index="33"/>
@@ -581,7 +584,8 @@ during combat. -->
   <module index="26"/>
   <module index="63"/>
   <module index="5"/>
-  <module amount="10" index="7"/>
+  <module amount="2" index="7"/>
+  <module amount="2" index="231"/>
   <module index="40"/>
   <cargo index="1" maxamount="8000" minamount="6000"/>
   <cargo index="5" maxamount="800" minamount="600"/>
@@ -593,7 +597,7 @@ during combat. -->
   <module index="61"/>
   <module index="26"/>
   <module index="63"/>
-  <module amount="12" index="7"/>
+  <module amount="2" index="231"/>
   <module index="40"/>
   <module amount="3" index="39"/>
   <module amount="3" index="34"/>
@@ -609,7 +613,8 @@ during combat. -->
   <module index="62"/>
   <module amount="13" index="4"/>
   <module index="5"/>
-  <module amount="9" index="7"/>
+  <module index="7"/>
+  <module amount="2" index="231"/>
   <module index="40"/>
   <module amount="4" index="39"/>
   <module amount="4" index="33"/>
@@ -630,7 +635,8 @@ during combat. -->
   <module index="63"/>
   <module amount="15" index="4"/>
   <module index="5"/>
-  <module amount="11" index="7"/>
+  <module amount="3" index="7"/>
+  <module amount="2" index="231"/>
   <module index="40"/>
   <module amount="4" index="39"/>
   <module amount="4" index="34"/>
