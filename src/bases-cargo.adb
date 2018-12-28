@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Maps; use Maps;
-with Items; use Items;
 with Utils; use Utils;
 with Trades; use Trades;
 
@@ -95,15 +94,17 @@ package body Bases.Cargo is
       end if;
    end GenerateCargo;
 
-   procedure UpdateBaseCargo(ProtoIndex: Natural := 0; Amount: Integer;
-      Durability: Natural := 100; CargoIndex: Natural := 0) is
+   procedure UpdateBaseCargo
+     (ProtoIndex: Objects_Container.Extended_Index :=
+        Objects_Container.No_Index;
+      Amount: Integer; Durability: Natural := 100; CargoIndex: Natural := 0) is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=
         Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       ItemIndex: Natural;
    begin
-      if ProtoIndex > 0 then
+      if ProtoIndex > Objects_Container.No_Index then
          ItemIndex := FindBaseCargo(ProtoIndex, Durability);
       else
          ItemIndex := CargoIndex;
