@@ -124,6 +124,28 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkMenu" id="availablemissionsmenu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">_Accept mission</property>
+        <property name="use_underline">True</property>
+        <signal name="activate" handler="Accept_Mission" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">_Show mission on map</property>
+        <property name="use_underline">True</property>
+        <signal name="activate" handler="Show_Available_Mission" swapped="no"/>
+      </object>
+    </child>
+  </object>
   <object class="GtkListStore" id="baseslist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -2784,6 +2806,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <signal name="cursor-changed" handler="Show_Mission_Info" object="treemissions" swapped="no"/>
                             <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
                             <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                            <signal name="popup-menu" handler="Show_Popup_Menu" object="availablemissionsmenu" swapped="no"/>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection"/>
                             </child>

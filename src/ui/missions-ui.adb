@@ -345,6 +345,9 @@ package body Missions.UI is
       On_Button_Release_Event
         (Gtk_Widget(Get_Object(Builder, "treemissions1")),
          ShowPopupMenuButton'Access);
+      On_Button_Release_Event
+        (Gtk_Widget(Get_Object(Builder, "treemissions")),
+         ShowPopupMenuButton'Access);
    end CreateMissionsUI;
 
    procedure ShowMissionsUI is
