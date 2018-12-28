@@ -844,7 +844,8 @@ package body Crew is
             if HaveMoney then
                if PlayerShip.Cargo(MoneyIndex2).Amount < Member.Payment(1) then
                   UpdateCargo
-                    (Ship => PlayerShip, CargoIndex => MoneyIndex2,
+                    (Ship => PlayerShip,
+                     ProtoIndex => FindProtoItem(MoneyIndex),
                      Amount => (0 - PlayerShip.Cargo(MoneyIndex2).Amount));
                   AddMessage
                     ("You don't have enough " & To_String(MoneyName) &
