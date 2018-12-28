@@ -940,6 +940,9 @@ package body Maps.UI is
       Add_Overlay
         (Gtk_Overlay(Get_Object(Builder, "mapoverlay")),
          Gtk_Widget(Get_Object(Builder, "lblmaptooltip")));
+      Add_Overlay
+        (Gtk_Overlay(Get_Object(Builder, "gameoverlay")),
+         Gtk_Widget(Get_Object(Builder, "inforevealer")));
       Register_Handler(Builder, "Quit_Game", QuitGame'Access);
       Register_Handler(Builder, "Quit_Game_Menu", QuitGameMenu'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
