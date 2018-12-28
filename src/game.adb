@@ -167,7 +167,7 @@ package body Game is
       begin
          loop
             RandomBase := GetRandom(1, 1024);
-            if BaseType = ANY then
+            if BaseType = Any then
                exit when SkyBases(RandomBase).Population > 299 and
                  SkyBases(RandomBase).Owner = FactionIndex;
             else
