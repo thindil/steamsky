@@ -59,6 +59,7 @@ package Config is
       AutoAskForBases: Boolean; -- If true, auto ask for new bases when ship docked
       AutoAskForEvents: Boolean; -- If true, auto ask for new events in bases when ship docked
       ShowMapButtons: Boolean; -- If true, show buttons to move map
+      ShowLastMessage: Boolean; -- If true, show last message to player
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;
