@@ -28,8 +28,10 @@ package Bases.Trade is
    function TrainCost
      (MemberIndex, SkillIndex: Positive)
      return Natural; -- Count cost of training action
-   procedure TrainSkill
-     (MemberIndex, SkillIndex: Positive); -- Train selected skill
+   procedure TrainSkill(MemberIndex, SkillIndex: Positive) with
+      Pre =>
+      (MemberIndex <= PlayerShip.Crew.Last_Index and
+       SkillIndex < Skills_List.Last_Index); -- Train selected skill
    Trade_Already_Known: exception; -- Raised when player known selected recipe
    Trade_Cant_Heal: exception; -- Raised when no crew members are wounded
    Trade_Cant_Train: exception; -- Raised when skill is maxed and can't be trained
