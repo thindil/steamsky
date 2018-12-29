@@ -298,7 +298,7 @@ package body Bases.Ship is
          GainRep(BaseIndex, -10);
          AddMessage
            ("You don't have " & To_String(MoneyName) & " for pay for docking!",
-            OtherMessage);
+            OtherMessage, 3);
          return;
       end if;
       for Module of PlayerShip.Modules loop
