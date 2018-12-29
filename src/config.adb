@@ -48,7 +48,8 @@ package body Config is
          HelpFontSize => 12, MapFontSize => 10, InterfaceFontSize => 16,
          InterfaceTheme => To_Unbounded_String("default"),
          MessagesOrder => OLDER_FIRST, AutoAskForBases => False,
-         AutoAskForEvents => False, ShowMapButtons => True);
+         AutoAskForEvents => False, ShowMapButtons => True,
+         ShowLastMessage => True);
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
@@ -124,6 +125,8 @@ package body Config is
                GameSettings.AutoAskForEvents := LoadBoolean;
             elsif FieldName = To_Unbounded_String("ShowMapButtons") then
                GameSettings.ShowMapButtons := LoadBoolean;
+            elsif FieldName = To_Unbounded_String("ShowLastMessage") then
+               GameSettings.ShowLastMessage := LoadBoolean;
             end if;
          end if;
       end loop;
@@ -210,6 +213,7 @@ package body Config is
       SaveBoolean(GameSettings.AutoAskForBases, "AutoAskForBases");
       SaveBoolean(GameSettings.AutoAskForEvents, "AutoAskForEvents");
       SaveBoolean(GameSettings.ShowMapButtons, "ShowMapButtons");
+      SaveBoolean(GameSettings.ShowLastMessage, "ShowLastMessage");
       Close(ConfigFile);
    end SaveConfig;
 
