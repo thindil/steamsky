@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Missing close button to goals list
 - Missing tooltips for directories info in options
 - Last bought price to items to show profit in trade
+- Option to enable or disable last message info
 
 ### Changed
 - Updated README.md
