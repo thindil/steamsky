@@ -35,6 +35,7 @@ with Ships; use Ships;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
 with Items; use Items;
+with Config; use Config;
 
 package body Utils.UI is
 
@@ -100,6 +101,9 @@ package body Utils.UI is
 
    procedure ShowLastMessage(Object: access Gtkada_Builder_Record'Class) is
    begin
+      if not GameSettings.ShowLastMessage then
+         return;
+      end if;
       if LastMessage = Null_Unbounded_String then
          HideLastMessage(Object);
       else

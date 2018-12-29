@@ -251,6 +251,8 @@ package body GameOptions is
         Get_State(Gtk_Switch(Get_Object(Object, "switchautoaskforevents")));
       GameSettings.ShowMapButtons :=
         Get_State(Gtk_Switch(Get_Object(Object, "switchshowmapbuttons")));
+      GameSettings.ShowLastMessage :=
+        Get_State(Gtk_Switch(Get_Object(Object, "switchshowlastmessage")));
       SaveConfig;
       Save(To_String(SaveDirectory) & "keys.cfg");
       ShowSkyMap;
@@ -452,6 +454,9 @@ package body GameOptions is
       Set_State
         (Gtk_Switch(Get_Object(Builder, "switchshowmapbuttons")),
          GameSettings.ShowMapButtons);
+      Set_State
+        (Gtk_Switch(Get_Object(Builder, "switchshowlastmessage")),
+         GameSettings.ShowLastMessage);
       SetFontsSizes;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "options");
