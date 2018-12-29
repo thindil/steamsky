@@ -30,7 +30,6 @@ with Gtk.Text_Tag_Table; use Gtk.Text_Tag_Table;
 with Gtk.Text_Tag; use Gtk.Text_Tag;
 with Gtk.Text_View; use Gtk.Text_View;
 with Gtk.Enums; use Gtk.Enums;
-with Gtk.Container; use Gtk.Container;
 with Gtk.Accel_Map; use Gtk.Accel_Map;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Stack; use Gtk.Stack;
@@ -650,16 +649,7 @@ package body Maps.UI is
             end if;
          end loop;
       end if;
-      if LastMessage = Null_Unbounded_String then
-         Hide(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
-      else
-         Set_Text
-           (Gtk_Label(Get_Object(Builder, "lbllastmessage")),
-            To_String(LastMessage));
-         Show_All(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
-         Check_Resize(Gtk_Container(Get_Object(Builder, "skymapwindow")));
-         LastMessage := Null_Unbounded_String;
-      end if;
+      ShowLastMessage(Builder);
    end UpdateMessages;
 
    procedure HideButtons(Widget: not null access Gtk_Widget_Record'Class) is

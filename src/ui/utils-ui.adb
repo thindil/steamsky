@@ -23,6 +23,7 @@ with Gtk.Stack; use Gtk.Stack;
 with Gtk.Menu; use Gtk.Menu;
 with Gdk.Types; use Gdk.Types;
 with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
+with Glib.Main; use Glib.Main;
 with MainMenu; use MainMenu;
 with Game; use Game;
 with Messages; use Messages;
@@ -87,9 +88,15 @@ package body Utils.UI is
 
    procedure HideLastMessage(Object: access Gtkada_Builder_Record'Class) is
    begin
-      Hide(Gtk_Widget(Get_Object(Object, "infolastmessage")));
+      Hide(Gtk_Widget(Get_Object(Object, "inforevealer")));
       LastMessage := Null_Unbounded_String;
    end HideLastMessage;
+
+   function AutoHideLastMessage return Boolean is
+   begin
+      Hide(Gtk_Widget(Get_Object(Builder, "inforevealer")));
+      return False;
+   end AutoHideLastMessage;
 
    procedure ShowLastMessage(Object: access Gtkada_Builder_Record'Class) is
    begin
@@ -99,8 +106,14 @@ package body Utils.UI is
          Set_Text
            (Gtk_Label(Get_Object(Object, "lbllastmessage")),
             To_String(LastMessage));
-         Show_All(Gtk_Widget(Get_Object(Object, "infolastmessage")));
+         Show_All(Gtk_Widget(Get_Object(Object, "inforevealer")));
          LastMessage := Null_Unbounded_String;
+         declare
+            Source_Id: G_Source_Id;
+            pragma Unreferenced(Source_Id);
+         begin
+            Source_Id := Timeout_Add(4000, AutoHideLastMessage'Access);
+         end;
       end if;
       UpdateHeader;
    end ShowLastMessage;
