@@ -1478,4 +1478,17 @@ package body Maps.UI.Handlers is
       Set_Sensitive(Button, not Get_Sensitive(Button));
    end ToggleCloseButtonProc;
 
+   function MoveMapInfo
+     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+      MapInfo: constant Gtk_Widget :=
+        Gtk_Widget(Get_Object(Object, "eventmaptooltip"));
+   begin
+      if Get_Valign(MapInfo) = Align_Start then
+         Set_Valign(MapInfo, Align_End);
+      else
+         Set_Valign(MapInfo, Align_Start);
+      end if;
+      return False;
+   end MoveMapInfo;
+
 end Maps.UI.Handlers;

@@ -929,7 +929,7 @@ package body Maps.UI is
       SetUtilsBuilder(Builder);
       Add_Overlay
         (Gtk_Overlay(Get_Object(Builder, "mapoverlay")),
-         Gtk_Widget(Get_Object(Builder, "lblmaptooltip")));
+         Gtk_Widget(Get_Object(Builder, "eventmaptooltip")));
       Add_Overlay
         (Gtk_Overlay(Get_Object(Builder, "gameoverlay")),
          Gtk_Widget(Get_Object(Builder, "inforevealer")));
@@ -972,6 +972,7 @@ package body Maps.UI is
         (Builder, "Toggle_Close_Button", ToggleCloseButton'Access);
       Register_Handler
         (Builder, "Toggle_Close_Button_Proc", ToggleCloseButtonProc'Access);
+      Register_Handler(Builder, "Move_Map_Info", MoveMapInfo'Access);
       Do_Connect(Builder);
       Add_Entry("<skymapwindow>/btnupleft", GDK_KP_7, 0);
       Add_Entry("<skymapwindow>/btnup", GDK_KP_8, 0);
@@ -1175,6 +1176,7 @@ package body Maps.UI is
    begin
       CenterX := X;
       CenterY := Y;
+      Set_Margin_Top(Gtk_Widget(Get_Object(Builder, "gamestack")), 0);
       UpdateMessages;
       Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmap")), "X" & LF & "X");
       Show_All(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
