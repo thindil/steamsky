@@ -91,11 +91,12 @@ package body Utils.UI is
    begin
       Hide(Gtk_Widget(Get_Object(Object, "inforevealer")));
       LastMessage := Null_Unbounded_String;
+      Set_Margin_Top(Gtk_Widget(Get_Object(Object, "gamestack")), 0);
    end HideLastMessage;
 
    function AutoHideLastMessage return Boolean is
    begin
-      Hide(Gtk_Widget(Get_Object(Builder, "inforevealer")));
+      HideLastMessage(Builder);
       return False;
    end AutoHideLastMessage;
 
@@ -111,6 +112,13 @@ package body Utils.UI is
            (Gtk_Label(Get_Object(Object, "lbllastmessage")),
             To_String(LastMessage));
          Show_All(Gtk_Widget(Get_Object(Object, "inforevealer")));
+         if Get_Visible_Child_Name
+             (Gtk_Stack(Get_Object(Object, "gamestack"))) /=
+           "skymap" then
+            Set_Margin_Top
+              (Gtk_Widget(Get_Object(Object, "gamestack")),
+               Gint(GameSettings.InterfaceFontSize * 3));
+         end if;
          LastMessage := Null_Unbounded_String;
          declare
             Source_Id: G_Source_Id;
