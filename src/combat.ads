@@ -49,8 +49,10 @@ package Combat is
    EnemyShipIndex: Positive; -- Prototype index of enemy ship
 
    function StartCombat(EnemyIndex: Positive;
-      NewCombat: Boolean := True)
-     return Boolean; -- Generate enemy and start battle, return True if combat starts
+      NewCombat: Boolean := True) return Boolean with
+      Pre => EnemyIndex <=
+      ProtoShips_List
+        .Last_Index; -- Generate enemy and start battle, return True if combat starts
    procedure CombatTurn; -- Count damage/ships actions, etc
 
 end Combat;
