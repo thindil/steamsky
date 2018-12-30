@@ -154,6 +154,7 @@ package body Utils.UI is
          when SkyMap_View =>
             Show_All(Gtk_Widget(Get_Object(Object, "menuwait")));
             Show_All(Gtk_Widget(Get_Object(Object, "menumovemap")));
+            Show_All(Gtk_Widget(Get_Object(Object, "menuorders")));
             ShowSkyMap;
          when Combat_View =>
             ShowCombatUI(False);
