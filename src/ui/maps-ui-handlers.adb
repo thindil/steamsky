@@ -920,6 +920,7 @@ package body Maps.UI.Handlers is
          PreviousGameState := SkyMap_View;
          Hide(Gtk_Widget(Get_Object(Builder, "menuwait")));
          Hide(Gtk_Widget(Get_Object(Builder, "menumovemap")));
+         Hide(Gtk_Widget(Get_Object(Builder, "menuorders")));
       end if;
       if User_Data = Get_Object(Builder, "menumessages") then
          ShowMessagesUI;
