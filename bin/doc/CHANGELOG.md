@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Warning in console when giving items to crew members
 - Crash when player don't have enough money for paying crew members
 - Color of message when player don't have moneys for pay for docking
+- Don't show orders menu outside map
 
 ## [3.0.2] - 2018-12-16
 
