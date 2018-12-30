@@ -333,6 +333,24 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="gchararray"/>
     </columns>
   </object>
+  <object class="GtkEventBox" id="eventmaptooltip">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="events">GDK_ENTER_NOTIFY_MASK | GDK_STRUCTURE_MASK</property>
+    <property name="halign">end</property>
+    <property name="valign">start</property>
+    <property name="visible_window">False</property>
+    <signal name="enter-notify-event" handler="Move_Map_Info" swapped="no"/>
+    <child>
+      <object class="GtkLabel" id="lblmaptooltip">
+        <property name="name">overlaylabel</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="xpad">5</property>
+        <property name="label" translatable="yes">label</property>
+      </object>
+    </child>
+  </object>
   <object class="GtkListStore" id="eventslist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -692,15 +710,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <!-- column-name guint1 -->
       <column type="guint"/>
     </columns>
-  </object>
-  <object class="GtkLabel" id="lblmaptooltip">
-    <property name="name">overlaylabel</property>
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="halign">end</property>
-    <property name="valign">start</property>
-    <property name="xpad">5</property>
-    <property name="label" translatable="yes">label</property>
   </object>
   <object class="GtkListStore" id="levelslist">
     <columns>
