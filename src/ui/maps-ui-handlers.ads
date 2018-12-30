@@ -104,5 +104,8 @@ package Maps.UI.Handlers is
    procedure ToggleCloseButtonProc
      (User_Data: access GObject_Record'
         Class); -- Toggle sensitive of close button
+   function MoveMapInfo
+     (Object: access Gtkada_Builder_Record'Class)
+     return Boolean; -- Move map info widget when mouse enters it
 
 end Maps.UI.Handlers;
