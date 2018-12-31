@@ -35,8 +35,7 @@ package Messages is
    package Messages_Container is new Vectors(Positive, Message_Data);
    Messages_List: Messages_Container.Vector; -- List of all messages
 
-   LastMessage: Unbounded_String :=
-     To_Unbounded_String(""); -- Last message received
+   LastMessageIndex: Natural := 0; -- Index of last message to show
    function FormatedTime
      (Time: Date_Record := GameDate) return String; -- Format game time
    procedure AddMessage(Message: String; MType: Message_Type;
