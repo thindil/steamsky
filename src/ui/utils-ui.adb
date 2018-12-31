@@ -90,7 +90,6 @@ package body Utils.UI is
    procedure HideLastMessage(Object: access Gtkada_Builder_Record'Class) is
    begin
       Hide(Gtk_Widget(Get_Object(Object, "inforevealer")));
-      LastMessage := Null_Unbounded_String;
       Set_Margin_Top(Gtk_Widget(Get_Object(Object, "gamestack")), 0);
    end HideLastMessage;
 
@@ -105,12 +104,25 @@ package body Utils.UI is
       if not GameSettings.ShowLastMessage then
          return;
       end if;
-      if LastMessage = Null_Unbounded_String then
+      if LastMessageIndex = 0 then
          HideLastMessage(Object);
       else
-         Set_Text
-           (Gtk_Label(Get_Object(Object, "lbllastmessage")),
-            To_String(LastMessage));
+         declare
+            LastMessage: constant Message_Data :=
+              Messages_List(LastMessageIndex);
+         begin
+            if LastMessage.Color = WHITE then
+               Set_Text
+                 (Gtk_Label(Get_Object(Object, "lbllastmessage")),
+                  To_String(LastMessage.Message));
+            else
+               Set_Markup
+                 (Gtk_Label(Get_Object(Object, "lbllastmessage")),
+                  "<span foreground=""" &
+                  Message_Color'Image(LastMessage.Color) & """>" &
+                  To_String(LastMessage.Message) & "</span>");
+            end if;
+         end;
          Show_All(Gtk_Widget(Get_Object(Object, "inforevealer")));
          if Get_Visible_Child_Name
              (Gtk_Stack(Get_Object(Object, "gamestack"))) /=
@@ -119,7 +131,7 @@ package body Utils.UI is
               (Gtk_Widget(Get_Object(Object, "gamestack")),
                Gint(GameSettings.InterfaceFontSize * 3));
          end if;
-         LastMessage := Null_Unbounded_String;
+         LastMessageIndex := 0;
          declare
             Source_Id: G_Source_Id;
             pragma Unreferenced(Source_Id);

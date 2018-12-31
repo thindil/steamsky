@@ -59,7 +59,7 @@ package body Messages is
               To_Unbounded_String(FormatedTime) & ": " &
               To_Unbounded_String(Message),
             MType => MType, Color => Color));
-      LastMessage := To_Unbounded_String(Message);
+      LastMessageIndex := GetLastMessageIndex;
    end AddMessage;
 
    function GetMessage(MessageIndex: Integer;
