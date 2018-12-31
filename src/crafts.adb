@@ -22,7 +22,6 @@ with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
 with Messages; use Messages;
-with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Crew; use Crew;
