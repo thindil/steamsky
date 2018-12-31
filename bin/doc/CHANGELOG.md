@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 - Updated cargo bays for some ships
 - Updated interface
 
+### Fixed
+- Hide close button when showing stories
+
 ## [3.2] - 2018-12-30
 
 ### Added
