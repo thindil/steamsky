@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated cargo bays for some ships
+- Updated interface
 
 ## [3.2] - 2018-12-30
 
