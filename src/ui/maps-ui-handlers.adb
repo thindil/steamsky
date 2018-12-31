@@ -912,6 +912,13 @@ package body Maps.UI.Handlers is
                Gtk_Window(Get_Object(Builder, "skymapwindow")));
             return;
          end if;
+      elsif User_Data = Get_Object(Builder, "menustory") then
+         if FinishedStories.Length = 0 then
+            ShowDialog
+              ("You didn't discovered any story yet.",
+               Gtk_Window(Get_Object(Builder, "skymapwindow")));
+            return;
+         end if;
       end if;
       Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
       if VisibleChildName = "combat" then
