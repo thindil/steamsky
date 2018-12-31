@@ -20,6 +20,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with DOM.Readers; use DOM.Readers;
 with ShipModules; use ShipModules;
 with Game; use Game;
+with Ships; use Ships;
 
 package Crafts is
 
@@ -49,13 +50,18 @@ package Crafts is
 
    procedure LoadRecipes(Reader: Tree_Reader); -- Load recipes from files
    procedure Manufacturing(Minutes: Positive); -- Craft selected items
-   function CheckRecipe
-     (RecipeIndex: Integer)
-     return Positive; -- Check if player have all requirements for selected recipe, return max amount of items which can be craft
-   function FindRecipe
-     (Index: Unbounded_String)
-     return Natural; -- Return vector index of recipe or zero if recipe not found
-   procedure SetRecipe(Workshop, Amount: Positive;
-      RecipeIndex: Integer); -- Set crafting recipe for selected workshop
+   function CheckRecipe(RecipeIndex: Integer) return Positive with
+      Pre => RecipeIndex <=
+      Recipes_List
+        .Last_Index; -- Check if player have all requirements for selected recipe, return max amount of items which can be craft
+   function FindRecipe(Index: Unbounded_String) return Natural with
+      Pre => Index /=
+      Null_Unbounded_String; -- Return vector index of recipe or zero if recipe not found
+   procedure SetRecipe(Workshop, Amount: Positive; RecipeIndex: Integer) with
+      Pre =>
+      (Workshop <= PlayerShip.Modules.Last_Index and
+       RecipeIndex <=
+         Known_Recipes
+           .Last_Index); -- Set crafting recipe for selected workshop
 
 end Crafts;
