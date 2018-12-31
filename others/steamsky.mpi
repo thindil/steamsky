@@ -75,7 +75,7 @@ InstallPassword
 {}
 
 InstallVersion
-{3.2.0.0}
+{3.3.0.0}
 
 Language,ca
 {No}
@@ -183,7 +183,7 @@ UpgradeApplicationID
 {}
 
 Version
-{3.2}
+{3.3}
 
 WizardHeight
 {365}
