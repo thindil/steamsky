@@ -187,14 +187,6 @@ package body Stories.UI is
       StoriesComboBox: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Object(Builder, "cmbstories"));
    begin
-      if FinishedStories.Length = 0 then
-         Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));
-         Hide(Gtk_Widget(Get_Object(Builder, "btnclose")));
-         ShowDialog
-           ("You didn't discovered any story yet.",
-            Gtk_Window(Get_Object(Builder, "skymapwindow")));
-         return;
-      end if;
       Setting := True;
       Remove_All(StoriesComboBox);
       for FinishedStory of FinishedStories loop
