@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -253,7 +253,10 @@ package body GameOptions is
         Get_State(Gtk_Switch(Get_Object(Object, "switchshowmapbuttons")));
       GameSettings.ShowLastMessage :=
         Get_State(Gtk_Switch(Get_Object(Object, "switchshowlastmessage")));
+      GameSettings.ShowTooltips :=
+        Get_State(Gtk_Switch(Get_Object(Object, "switchshowtooltips")));
       SaveConfig;
+      LoadTheme;
       Save(To_String(SaveDirectory) & "keys.cfg");
       ShowSkyMap;
       Set_Visible_Child_Name
@@ -457,6 +460,9 @@ package body GameOptions is
       Set_State
         (Gtk_Switch(Get_Object(Builder, "switchshowlastmessage")),
          GameSettings.ShowLastMessage);
+      Set_State
+        (Gtk_Switch(Get_Object(Builder, "switchshowtooltips")),
+         GameSettings.ShowTooltips);
       SetFontsSizes;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "options");

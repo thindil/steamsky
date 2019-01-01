@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.22.1 
 
-Copyright (C) 2018 Bartek thindil Jasicki
+Copyright (C) 2018-2019 Bartek thindil Jasicki
 
 This file is part of Steam Sky.
 
@@ -23,7 +23,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
   <requires lib="gtk+" version="3.14"/>
   <!-- interface-license-type gplv3 -->
   <!-- interface-name Steam Sky -->
-  <!-- interface-copyright 2018 Bartek thindil Jasicki -->
+  <!-- interface-copyright 2018-2019 Bartek thindil Jasicki -->
   <object class="GtkMenu" id="acceptedmissionsmenu">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -7670,90 +7670,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                   <object class="GtkLabel">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="tooltip_text" translatable="yes">Size (in pixels) of font used in interface (for example, here).</property>
-                                    <property name="label" translatable="yes">Size of interface font:</property>
-                                    <property name="xalign">0</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">0</property>
-                                    <property name="top_attach">7</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkSpinButton">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="tooltip_text" translatable="yes">Size (in pixels) of font used in interface (for example, here).</property>
-                                    <property name="text" translatable="yes">10</property>
-                                    <property name="adjustment">adjinterfacefont</property>
-                                    <property name="numeric">True</property>
-                                    <property name="value">10</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">1</property>
-                                    <property name="top_attach">7</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkSpinButton">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="tooltip_text" translatable="yes">Size (in pixels) of font used mainly in help.</property>
-                                    <property name="adjustment">adjhelpfont</property>
-                                    <property name="numeric">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">1</property>
-                                    <property name="top_attach">6</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkSpinButton">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="tooltip_text" translatable="yes">Size (in pixels) of font used to draw game map.</property>
-                                    <property name="adjustment">adjmapfont</property>
-                                    <property name="numeric">True</property>
-                                    <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                    <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                    <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                    <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">1</property>
-                                    <property name="top_attach">5</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="tooltip_text" translatable="yes">Size (in pixels) of font used mainly in help.</property>
-                                    <property name="label" translatable="yes">Size of help font:</property>
-                                    <property name="xalign">0</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">0</property>
-                                    <property name="top_attach">6</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="tooltip_text" translatable="yes">Size (in pixels) of font used to draw game map.</property>
-                                    <property name="label" translatable="yes">Size of map font:</property>
-                                    <property name="xalign">0</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">0</property>
-                                    <property name="top_attach">5</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
                                     <property name="tooltip_text" translatable="yes">Show last message in left upper corner.</property>
                                     <property name="label" translatable="yes">Show last message:</property>
                                     <property name="xalign">0</property>
@@ -7772,6 +7688,114 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                   <packing>
                                     <property name="left_attach">1</property>
                                     <property name="top_attach">4</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="tooltip_text" translatable="yes">Size (in pixels) of font used in interface (for example, here).</property>
+                                    <property name="label" translatable="yes">Size of interface font:</property>
+                                    <property name="xalign">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">0</property>
+                                    <property name="top_attach">8</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkSpinButton">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="tooltip_text" translatable="yes">Size (in pixels) of font used in interface (for example, here).</property>
+                                    <property name="text" translatable="yes">10</property>
+                                    <property name="adjustment">adjinterfacefont</property>
+                                    <property name="numeric">True</property>
+                                    <property name="value">10</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">8</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="tooltip_text" translatable="yes">Size (in pixels) of font used mainly in help.</property>
+                                    <property name="label" translatable="yes">Size of help font:</property>
+                                    <property name="xalign">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">0</property>
+                                    <property name="top_attach">7</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkSpinButton">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="tooltip_text" translatable="yes">Size (in pixels) of font used mainly in help.</property>
+                                    <property name="adjustment">adjhelpfont</property>
+                                    <property name="numeric">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">7</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="tooltip_text" translatable="yes">Size (in pixels) of font used to draw game map.</property>
+                                    <property name="label" translatable="yes">Size of map font:</property>
+                                    <property name="xalign">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">0</property>
+                                    <property name="top_attach">6</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkSpinButton">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="tooltip_text" translatable="yes">Size (in pixels) of font used to draw game map.</property>
+                                    <property name="adjustment">adjmapfont</property>
+                                    <property name="numeric">True</property>
+                                    <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                    <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                    <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                    <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">6</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="tooltip_text" translatable="yes">Show help tooltips for various game elements.</property>
+                                    <property name="label" translatable="yes">Show tooltips:</property>
+                                    <property name="xalign">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">0</property>
+                                    <property name="top_attach">5</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkSwitch" id="switchshowtooltips">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="tooltip_text" translatable="yes">Show help tooltips for various game elements.</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">5</property>
                                   </packing>
                                 </child>
                               </object>
