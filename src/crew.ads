@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -68,11 +68,15 @@ package Crew is
    Crew_Order_Error: exception; -- Raised when new order can't be set for selected crew member
    Crew_No_Space_Error: exception; -- Raised when no space for new item in crew member inventory
 
-   procedure GainExp(Amount: Natural;
-      SkillNumber, CrewIndex: Positive); -- Gain experience in selected skill.
+   procedure GainExp(Amount: Natural; SkillNumber, CrewIndex: Positive) with
+      Pre => SkillNumber <=
+      Skills_List.Last_Index; -- Gain experience in selected skill.
    function GenerateMemberName(Gender: Character;
-      FactionIndex: Unbounded_String)
-     return Unbounded_String; -- Generate random name for crew member
+      FactionIndex: Unbounded_String) return Unbounded_String with
+      Pre =>
+      ((Gender = 'M' or Gender = 'F') and
+       FactionIndex /=
+         Null_Unbounded_String); -- Generate random name for crew member
    procedure UpdateCrew(Minutes: Positive;
       TiredPoints: Natural); -- Update ship crew
    procedure WaitForRest; -- Wait until whole crew is rested
