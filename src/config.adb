@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -49,7 +49,7 @@ package body Config is
          InterfaceTheme => To_Unbounded_String("default"),
          MessagesOrder => OLDER_FIRST, AutoAskForBases => False,
          AutoAskForEvents => False, ShowMapButtons => True,
-         ShowLastMessage => True);
+         ShowLastMessage => True, ShowTooltips => True);
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
@@ -127,6 +127,8 @@ package body Config is
                GameSettings.ShowMapButtons := LoadBoolean;
             elsif FieldName = To_Unbounded_String("ShowLastMessage") then
                GameSettings.ShowLastMessage := LoadBoolean;
+            elsif FieldName = To_Unbounded_String("ShowTooltips") then
+               GameSettings.ShowTooltips := LoadBoolean;
             end if;
          end if;
       end loop;
@@ -214,6 +216,7 @@ package body Config is
       SaveBoolean(GameSettings.AutoAskForEvents, "AutoAskForEvents");
       SaveBoolean(GameSettings.ShowMapButtons, "ShowMapButtons");
       SaveBoolean(GameSettings.ShowLastMessage, "ShowLastMessage");
+      SaveBoolean(GameSettings.ShowTooltips, "ShowTooltips");
       Close(ConfigFile);
    end SaveConfig;
 

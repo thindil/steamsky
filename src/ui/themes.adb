@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -70,7 +70,8 @@ package body Themes is
 
    procedure LoadTheme is
       Error: aliased GError;
-      FileName: Unbounded_String;
+      FileName, CssText: Unbounded_String;
+      ThemeFile: File_Type;
    begin
       if GameSettings.InterfaceTheme = To_Unbounded_String("default") then
          FileName :=
@@ -88,9 +89,18 @@ package body Themes is
          end if;
       end if;
       Gtk_New(CssProvider);
-      if not Load_From_Path
-          (CssProvider, To_String(FileName), Error'Access) then
-         Put_Line("Error : " & Get_Message(Error));
+      Open(ThemeFile, In_File, To_String(FileName));
+      while not End_Of_File(ThemeFile) loop
+         Append(CssText, Get_Line(ThemeFile));
+      end loop;
+      Close(ThemeFile);
+      if not GameSettings.ShowTooltips then
+         Append(CssText, ".tooltip {opacity:0;}");
+      else
+         Append(CssText, ".tooltip {opacity:1;}");
+      end if;
+      if not Load_From_Data(CssProvider, To_String(CssText), Error'Access) then
+         Put_Line("Error: " & Get_Message(Error));
          return;
       end if;
       Add_Provider_For_Screen

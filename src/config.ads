@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -60,6 +60,7 @@ package Config is
       AutoAskForEvents: Boolean; -- If true, auto ask for new events in bases when ship docked
       ShowMapButtons: Boolean; -- If true, show buttons to move map
       ShowLastMessage: Boolean; -- If true, show last message to player
+      ShowTooltips: Boolean; -- If true, show tooltips to player
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;
