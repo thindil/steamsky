@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Option to enable or disable tooltips
+
 ### Changed
 - Updated cargo bays for some ships
 - Updated interface
