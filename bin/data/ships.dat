@@ -3403,5 +3403,21 @@ during combat. -->
   <member index="86" maxamount="12" minamount="8"/>
   <description>Advanced and upgraded version of huge, well armored inquisition flying vessel.</description>
  </ship>
+ <ship combatai="COWARD" index="183" maxloot="100" minloot="10" name="Tiny pirates trader" owner="PIRATES">
+  <module index="1"/>
+  <module index="3"/>
+  <module amount="2" index="4"/>
+  <module index="5"/>
+  <module amount="2" index="7"/>
+  <module index="8"/>
+  <module index="11"/>
+  <cargo index="1" maxamount="1000" minamount="800"/>
+  <cargo index="2" maxamount="100" minamount="80"/>
+  <cargo index="3" maxamount="200" minamount="150"/>
+  <cargo index="14" maxamount="200" minamount="100"/>
+  <member index="5"/>
+  <member index="6"/>
+  <description>Smallest known pirates trader. Avoids any fights.</description>
+ </ship>
 </ships>
 
