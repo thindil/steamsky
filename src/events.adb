@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -24,7 +24,6 @@ with Maps; use Maps;
 with Combat; use Combat;
 with Messages; use Messages;
 with Crew; use Crew;
-with Bases; use Bases;
 with ShipModules; use ShipModules;
 with Items; use Items;
 with Utils; use Utils;
@@ -418,7 +417,7 @@ package body Events is
       end loop;
    end GenerateTraders;
 
-   procedure RecoverBase(BaseIndex: Positive) is
+   procedure RecoverBase(BaseIndex: BasesRange) is
       MaxSpawnChance: Natural := 0;
       FactionRoll: Positive;
    begin
