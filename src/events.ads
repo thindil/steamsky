@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -18,6 +18,7 @@
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Game; use Game;
+with Bases; use Bases;
 
 package Events is
 
@@ -38,11 +39,12 @@ package Events is
    function CheckForEvent
      return Boolean; -- Check if event happen, returns True, if combat starts
    procedure UpdateEvents(Minutes: Positive); -- Update all events timers
-   procedure DeleteEvent(EventIndex: Positive); -- Delete selected event
+   procedure DeleteEvent(EventIndex: Positive) with
+      Pre => EventIndex <= Events_List.Last_Index; -- Delete selected event
    procedure GenerateTraders; -- Create list of traders needed for trader event
-   procedure RecoverBase(BaseIndex: Positive); -- Recover abandoned base
+   procedure RecoverBase(BaseIndex: BasesRange); -- Recover abandoned base
    procedure GenerateEnemies(Enemies: in out Positive_Container.Vector;
-      Owner: Unbounded_String :=
-        To_Unbounded_String("Any")); -- Create list of enemies ships
+      Owner: Unbounded_String := To_Unbounded_String("Any")) with
+      Pre => Owner /= Null_Unbounded_String; -- Create list of enemies ships
 
 end Events;
