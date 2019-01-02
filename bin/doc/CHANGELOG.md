@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Missing message when enemy ship intercept player
+
 ### Fixed
 - Crash after recruit new crew member in bases
 - Auto back to map when all recruits are hired
