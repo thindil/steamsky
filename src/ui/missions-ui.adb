@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -148,7 +148,7 @@ package body Missions.UI is
       MinutesToDate(Mission.Time, MissionInfo);
       Append
         (MissionInfo,
-         LF & "Reward:" & Positive'Image(Mission.Reward) & " " &
+         LF & "Base reward:" & Positive'Image(Mission.Reward) & " " &
          To_String(MoneyName));
       if User_Data = Get_Object(Builder, "treemissions") then
          declare

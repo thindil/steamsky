@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -452,8 +452,13 @@ package body Missions is
          UpdateMorale(PlayerShip, 1, 1);
          declare
             FreeSpace, RewardAmount: Integer;
+            TraderIndex: constant Natural := FindMember(Talk);
          begin
             RewardAmount := Mission.Reward;
+            CountPrice(RewardAmount, TraderIndex, False);
+            if TraderIndex > 0 then
+               GainExp(1, TalkingSkill, TraderIndex);
+            end if;
             FreeSpace := FreeCargo((0 - RewardAmount));
             if FreeSpace < 0 then
                RewardAmount := RewardAmount + FreeSpace;
