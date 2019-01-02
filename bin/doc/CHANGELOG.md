@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated cargo bays for some ships
 - Updated interface
+- Trader talking skill and reputation affects award for completed missions
 
 ### Fixed
 - Hide close button when showing stories
