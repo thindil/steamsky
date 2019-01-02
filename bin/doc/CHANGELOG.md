@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Option to enable or disable tooltips
-- New ship: tiny pirates trader
+- New ships: tiny pirates trader and small pirates trader
 
 ### Changed
 - Updated cargo bays for some ships
