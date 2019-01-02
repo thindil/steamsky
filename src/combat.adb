@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -152,6 +152,7 @@ package body Combat is
                LogMessage
                  ("You were attacked by " & To_String(Enemy.Ship.Name),
                   Log.Combat);
+               AddMessage(To_String(Enemy.Ship.Name) & " intercepted you.", CombatMessage);
                return True;
             end if;
             AddMessage
