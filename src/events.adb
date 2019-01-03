@@ -259,7 +259,7 @@ package body Events is
                            GetRandom(15, 30), 1));
                      AddMessage
                        ("You can't dock to base now, because its docks are full.",
-                        OtherMessage);
+                        OtherMessage, RED);
                end case;
                SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                  Events_List.Last_Index;
