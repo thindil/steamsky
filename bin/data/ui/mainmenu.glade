@@ -747,7 +747,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">(c) 2016-2018 Bartek thindil Jasicki</property>
+                <property name="label" translatable="yes">(c) 2016-2019 Bartek thindil Jasicki</property>
                 <property name="wrap">True</property>
               </object>
               <packing>
