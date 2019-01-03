@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -70,10 +70,16 @@ package Factions is
 
    procedure LoadFactions(Reader: Tree_Reader); -- Load NPC factions from file
    function GetReputation
-     (SourceFaction, TargetFaction: Unbounded_String)
-     return Integer; -- Get reputation between SourceFaction and TargetFaction
+     (SourceFaction, TargetFaction: Unbounded_String) return Integer with
+      Pre =>
+      (SourceFaction /= Null_Unbounded_String and
+       TargetFaction /=
+         Null_Unbounded_String); -- Get reputation between SourceFaction and TargetFaction
    function IsFriendly
-     (SourceFaction, TargetFaction: Unbounded_String)
-     return Boolean; -- Check if TargetFaction is friendly for SourceFaction. Returns true if yes, otherwise false.
+     (SourceFaction, TargetFaction: Unbounded_String) return Boolean with
+      Pre =>
+      (SourceFaction /= Null_Unbounded_String and
+       TargetFaction /=
+         Null_Unbounded_String); -- Check if TargetFaction is friendly for SourceFaction. Returns true if yes, otherwise false.
 
 end Factions;
