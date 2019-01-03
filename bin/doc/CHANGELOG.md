@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Option to enable or disable tooltips
-- New ships: tiny pirates trader and small pirates trader
+- New ships: tiny pirates trader, small pirates trader and pirates trader
 - Missing message when enemy ship intercept player
 
 ### Changed
