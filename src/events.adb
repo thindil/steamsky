@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -253,7 +253,7 @@ package body Events is
                            GetRandom(15, 30), 1));
                      AddMessage
                        ("You can't dock to base now, because its docks are full.",
-                        OtherMessage);
+                        OtherMessage, 3);
                end case;
                SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                  Events_List.Last_Index;
