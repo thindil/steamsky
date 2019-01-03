@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -322,6 +322,7 @@ package body Crew is
                  (To_String(Member.Name) &
                   " is hungry, but can't find anything to eat.",
                   OtherMessage, RED);
+               UpdateMorale(PlayerShip, I, GetRandom(-10, -5));
             end if;
          end if;
          Member.Hunger := HungerLevel;
@@ -339,6 +340,7 @@ package body Crew is
                  (To_String(Member.Name) &
                   " is thirsty, but can't find anything to drink.",
                   OtherMessage, RED);
+               UpdateMorale(PlayerShip, I, GetRandom(-20, -10));
             end if;
          end if;
          Member.Thirst := ThirstLevel;
@@ -677,6 +679,7 @@ package body Crew is
                end if;
                if PlayerShip.Crew(I).Hunger = 100 then
                   HealthLevel := HealthLevel - TiredPoints;
+                  UpdateMorale(PlayerShip, I, (0 - TiredPoints));
                   if HealthLevel < 1 then
                      HealthLevel := 0;
                      DeathReason := To_Unbounded_String("starvation");
@@ -691,6 +694,7 @@ package body Crew is
                end if;
                if PlayerShip.Crew(I).Thirst = 100 then
                   HealthLevel := HealthLevel - TiredPoints;
+                  UpdateMorale(PlayerShip, I, (0 - TiredPoints));
                   if HealthLevel < 1 then
                      HealthLevel := 0;
                      DeathReason := To_Unbounded_String("dehydration");
