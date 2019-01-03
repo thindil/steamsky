@@ -3438,5 +3438,26 @@ during combat. -->
   <member index="10"/>
   <description>Small pirates traders vessel. Avoids any fights.</description>
  </ship>
+ <ship combatai="COWARD" index="185" maxloot="200" minloot="100" name="Pirates trader" owner="Pirates">
+  <module index="17"/>
+  <module index="15"/>
+  <module amount="8" index="4"/>
+  <module index="5"/>
+  <module amount="4" index="219"/>
+  <module index="28"/>
+  <module index="27"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="300"/>
+  <cargo index="20" maxamount="1000" minamount="750"/>
+  <cargo index="5" maxamount="200" minamount="150"/>
+  <cargo index="13" maxamount="40" minamount="10"/>
+  <member index="12"/>
+  <member index="13"/>
+  <member index="14"/>
+  <member index="15"/>
+  <member amount="2" index="57"/>
+  <description>Standard pirates traders vessel. Avoids any fights.</description>
+ </ship>
 </ships>
 
