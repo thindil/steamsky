@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Color of message when player don't have moneys for pay for docking
 - Show orders menu outside map
 - Hide close button when showing stories
+- Color of message when player can't dock to base because its docks are full
 
 ## [3.0.2] - 2018-12-16
 
