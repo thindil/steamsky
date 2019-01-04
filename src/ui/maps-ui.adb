@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -1207,6 +1207,9 @@ package body Maps.UI is
          Hide(Gtk_Widget(Get_Object(Builder, "btnmapup")));
          Hide(Gtk_Widget(Get_Object(Builder, "btnmapdown")));
       end if;
+      Show_All(Gtk_Widget(Get_Object(Builder, "menuwait")));
+      Show_All(Gtk_Widget(Get_Object(Builder, "menumovemap")));
+      Show_All(Gtk_Widget(Get_Object(Builder, "menuorders")));
    end ShowSkyMap;
 
    procedure FinishStory is
