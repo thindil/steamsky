@@ -239,7 +239,7 @@ Note: Information about estimated time to achievement (ETA) and approximately fu
 
 {u}Finishing missions{/u}
    To finish mission, you must fly to map cell where mission target is and from {b}Orders{/b} menu (key {GameKey 14}) select proper order (for example, for patrol missions, you must select order {b}'Patrol area'{/b}). After some game time mission will be finished (for {i}delivery{/i} or {i}transport passengers{/i} missions) or ready to finish (any other type of missions). In second case, you must back to base from which you accepted mission to receive reward for it.
-Amount of {MoneyName} for a mission depends on distance which you must fly to complete mission, type of mission and amount of free space in your ship cargo. If you don't have free space in cargo ship, you don't get reward for mission.
+Amount of {MoneyName} for a mission depends on distance which you must fly to complete mission, type of mission and amount of free space in your ship cargo. Additionally, same as in trading, final award for finishing missions depends on assigned as trader crew member skill {TalkingSkill} and your reputation in the base. If you don't have free space in cargo ship, you don't get reward for mission.
 Amount of reputation gained for finished mission or lost for failed mission depends on (same as amount of money) distance you must fly to complete mission and type of mission.
 If you successfully finish mission, your character gain some morale, if you fail, he/she will lose some morale.
 
