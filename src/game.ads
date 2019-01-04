@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -100,15 +100,19 @@ package Game is
    Data_Loading_Error: exception; -- Raised when error occurs during loading any game data
 
    procedure NewGame(CharName, ShipName: Unbounded_String; Gender: Character;
-      FactionIndex, CareerIndex: Positive;
-      BaseTypeIndex: Natural); -- Start new game: create map, place ship, crew, etc
+      FactionIndex, CareerIndex: Positive; BaseTypeIndex: Natural) with
+      Pre =>
+      (CharName /= Null_Unbounded_String and
+       ShipName /= Null_Unbounded_String and
+       (Gender = 'M' or
+        Gender = 'F')); -- Start new game: create map, place ship, crew, etc
    procedure UpdateGame
      (Minutes: Positive); -- Game ticks (update time, crew, ship, etc)
    procedure EndGame
      (Save: Boolean); -- Save (or not) game and clear all temporary data
-   function FindSkillIndex
-     (SkillName: Unbounded_String)
-     return Natural; -- Return vector index of selected skill
+   function FindSkillIndex(SkillName: Unbounded_String) return Natural with
+      Pre => SkillName /=
+      Null_Unbounded_String; -- Return vector index of selected skill
    function LoadGameData return String; -- Load game data from files
 
 end Game;
