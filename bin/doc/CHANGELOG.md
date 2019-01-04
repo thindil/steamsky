@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Hide close button when showing stories
 - Color of message when player can't dock to base because its docks are full
+- Missing menu entries after selecting destination for ship
 
 ## [3.2] - 2018-12-30
 
