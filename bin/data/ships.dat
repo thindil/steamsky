@@ -3438,7 +3438,7 @@ during combat. -->
   <member index="10"/>
   <description>Small pirates traders vessel. Avoids any fights.</description>
  </ship>
- <ship combatai="COWARD" index="185" maxloot="200" minloot="100" name="Pirates trader" owner="Pirates">
+ <ship combatai="COWARD" index="185" maxloot="200" minloot="100" name="Pirates trader" owner="PIRATES">
   <module index="17"/>
   <module index="15"/>
   <module amount="8" index="4"/>
@@ -3458,6 +3458,28 @@ during combat. -->
   <member index="15"/>
   <member amount="2" index="57"/>
   <description>Standard pirates traders vessel. Avoids any fights.</description>
+ </ship>
+ <ship combatai="COWARD" index="186" maxloot="500" minloot="300" name="Large pirates trader" owner="PIRATES">
+  <module index="23"/>
+  <module index="26"/>
+  <module index="19"/>
+  <module amount="10" index="4"/>
+  <module index="5"/>
+  <module amount="4" index="225"/>
+  <module amount="2" index="28"/>
+  <module amount="2" index="29"/>
+  <cargo index="1" maxamount="3000" minamount="1500"/>
+  <cargo index="2" maxamount="400" minamount="200"/>
+  <cargo index="3" maxamount="600" minamount="400"/>
+  <cargo index="26" maxamount="1000" minamount="500"/>
+  <cargo index="5" maxamount="400" minamount="200"/>
+  <cargo index="13" maxamount="100" minamount="50"/>
+  <member index="23"/>
+  <member amount="2" index="24"/>
+  <member index="25"/>
+  <member index="26"/>
+  <member amount="3" index="61"/>
+  <description>Large, well armored version of pirates traders ship. Avoids any fights.</description>
  </ship>
 </ships>
 
