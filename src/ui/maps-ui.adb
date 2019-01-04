@@ -1204,6 +1204,9 @@ package body Maps.UI is
          Hide(Gtk_Widget(Get_Object(Builder, "btnmapup")));
          Hide(Gtk_Widget(Get_Object(Builder, "btnmapdown")));
       end if;
+      Show_All(Gtk_Widget(Get_Object(Builder, "menuwait")));
+      Show_All(Gtk_Widget(Get_Object(Builder, "menumovemap")));
+      Show_All(Gtk_Widget(Get_Object(Builder, "menuorders")));
    end ShowSkyMap;
 
    procedure FinishStory is
