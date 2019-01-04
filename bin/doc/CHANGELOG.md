@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Show orders menu outside map
 - Hide close button when showing stories
 - Color of message when player can't dock to base because its docks are full
+- Missing menu entries after selecting destination for ship
 
 ## [3.0.2] - 2018-12-16
 
