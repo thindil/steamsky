@@ -5,7 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Option to enable or disable tooltips
-- New ships: tiny pirates trader, small pirates trader and pirates trader
+- New ships: tiny pirates trader, small pirates trader, pirates trader and
+  large pirates trader
 - Missing message when enemy ship intercept player
 - Lack of food or drinks reduce morale of crew members
 
