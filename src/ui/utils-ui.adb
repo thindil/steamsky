@@ -91,11 +91,13 @@ package body Utils.UI is
    begin
       Hide(Gtk_Widget(Get_Object(Object, "inforevealer")));
       Set_Margin_Top(Gtk_Widget(Get_Object(Object, "gamestack")), 0);
+      LastMessageIndex := 0;
    end HideLastMessage;
 
    function AutoHideLastMessage return Boolean is
    begin
       HideLastMessage(Builder);
+      UpdateHeader;
       return False;
    end AutoHideLastMessage;
 
