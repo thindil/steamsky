@@ -1180,7 +1180,6 @@ package body Maps.UI is
       UpdateMessages;
       Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmap")), "X" & LF & "X");
       Show_All(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
-      UpdateHeader;
       UpdateMoveButtons;
       Hide(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
       Hide(Gtk_Widget(Get_Object(Builder, "btnclose")));
@@ -1210,6 +1209,7 @@ package body Maps.UI is
       Show_All(Gtk_Widget(Get_Object(Builder, "menuwait")));
       Show_All(Gtk_Widget(Get_Object(Builder, "menumovemap")));
       Show_All(Gtk_Widget(Get_Object(Builder, "menuorders")));
+      ShowLastMessage(Builder);
    end ShowSkyMap;
 
    procedure FinishStory is
