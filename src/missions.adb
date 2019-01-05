@@ -360,6 +360,7 @@ package body Missions is
 
    procedure FinishMission(MissionIndex: Positive) is
       Message: Unbounded_String;
+      MissionsAmount: constant Positive := Positive(AcceptedMissions.Length);
    begin
       if PlayerShip.Speed /= DOCKED then
          Message := To_Unbounded_String(DockShip(True));
@@ -368,6 +369,9 @@ package body Missions is
          end if;
       end if;
       UpdateGame(5);
+      if MissionsAmount > Positive(AcceptedMissions.Length) then
+         return;
+      end if;
       case AcceptedMissions(MissionIndex).MType is
          when Deliver =>
             AddMessage
