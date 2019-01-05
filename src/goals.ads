@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -38,9 +38,10 @@ package Goals is
    CurrentGoal: Goal_Data; -- Player current goal
 
    procedure LoadGoals(Reader: Tree_Reader); -- Load player goals from files
-   function GoalText
-     (Index: Natural)
-     return String; -- Return info about selected goal or current goal if Index = 0
+   function GoalText(Index: Goals_Container.Extended_Index) return String with
+      Pre => Index <=
+      Goals_List
+        .Last_Index; -- Return info about selected goal or current goal if Index = 0
    procedure ClearCurrentGoal; -- Reset current goal
    procedure UpdateGoal(GType: GoalTypes; TargetIndex: Unbounded_String;
       Amount: Positive := 1); -- Update current goal
