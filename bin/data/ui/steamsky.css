@@ -347,3 +347,31 @@ GtkStackSwitcher .button:checked {
 *#overlayinfo .button {
    background:rgba(25,25,25,0.5);
 }
+
+/* Default setting for number entry fields (like amount in trading, wait x minutes) */
+.spinbutton {
+   border-radius: 0;
+}
+
+/* Default setting for focused number entry fields buttons */
+.spinbutton .button:focus {
+   box-shadow:inset 0 1px 0 0 #5c4745;
+   background:linear-gradient(to bottom, #473422 5%, #1a130c 100%);
+   border:1px solid #120c06;
+   color:rgb(255,223,0);
+   text-shadow:0 1px 0 #120d0d;
+}
+
+/* Default setting for pressed buttons in number entry fields */
+.spinbutton .button:active {
+   background:linear-gradient(to bottom, #4c0000 5%, #990000 100%);
+}
+
+/* Default setting for inactive buttons in number entry fiedls */
+.spinbutton .button:insensitive {
+   color:black;
+   border-style:none;
+   box-shadow:none;
+   text-shadow:none;
+   background:transparent;
+}
