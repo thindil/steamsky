@@ -3501,7 +3501,29 @@ during combat. -->
   <member index="41"/>
   <member index="42"/>
   <member index="68" maxamount="5" minamount="3"/>
-  <description>Huge, well armored version of independent traders ship. Avoids any fights.</description>
+  <description>Huge, well armored version of pirates traders ship. Avoids any fights.</description>
+ </ship>
+ <ship combatai="COWARD" index="188" maxloot="1200" minloot="750" name="Advanced huge pirates trader" owner="PIRATES">
+  <module index="61"/>
+  <module index="26"/>
+  <module amount="2" index="63"/>
+  <module amount="16" index="4"/>
+  <module index="5"/>
+  <module amount="20" index="7"/>
+  <module amount="3" index="39"/>
+  <module amount="3" index="34"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="2" maxamount="800" minamount="600"/>
+  <cargo index="3" maxamount="2000" minamount="1500"/>
+  <cargo index="33" maxamount="1000" minamount="500"/>
+  <cargo index="5" maxamount="800" minamount="600"/>
+  <cargo index="13" maxamount="500" minamount="300"/>
+  <member index="43"/>
+  <member amount="3" index="44"/>
+  <member index="45"/>
+  <member index="46"/>
+  <member index="69" maxamount="8" minamount="4"/>
+  <description>Advanced version of huge, well armored pirates traders ship. Avoids any fights.</description>
  </ship>
 </ships>
 
