@@ -44,7 +44,8 @@ package Events is
    procedure GenerateTraders; -- Create list of traders needed for trader event
    procedure RecoverBase(BaseIndex: BasesRange); -- Recover abandoned base
    procedure GenerateEnemies(Enemies: in out Positive_Container.Vector;
-      Owner: Unbounded_String := To_Unbounded_String("Any")) with
+      Owner: Unbounded_String := To_Unbounded_String("Any");
+      WithTraders: Boolean := True) with
       Pre => Owner /= Null_Unbounded_String; -- Create list of enemies ships
 
 end Events;
