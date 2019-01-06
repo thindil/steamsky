@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Missing message when enemy ship intercept player
 
+### Changed
+- Don't add enemy traders to attack on base and enemy patrol events
+
 ### Fixed
 - Crash after recruit new crew member in bases
 - Auto back to map when all recruits are hired
