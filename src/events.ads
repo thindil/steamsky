@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -42,7 +42,7 @@ package Events is
    procedure GenerateTraders; -- Create list of traders needed for trader event
    procedure RecoverBase(BaseIndex: Positive); -- Recover abandoned base
    procedure GenerateEnemies(Enemies: in out Positive_Container.Vector;
-      Owner: Unbounded_String :=
-        To_Unbounded_String("Any")); -- Create list of enemies ships
+      Owner: Unbounded_String := To_Unbounded_String("Any");
+      WithTraders: Boolean := True); -- Create list of enemies ships
 
 end Events;

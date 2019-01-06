@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -583,12 +583,14 @@ package body Bases is
                      Enemies
                        (GetRandom(Enemies.First_Index, Enemies.Last_Index))));
             when AttackOnBase =>
+               GenerateEnemies(Enemies, To_Unbounded_String("Any"), False);
                Events_List.Append
                  (New_Item =>
                     (AttackOnBase, EventX, EventY,
                      GetRandom(EventTime, EventTime + 120),
                      Enemies
                        (GetRandom(Enemies.First_Index, Enemies.Last_Index))));
+               GenerateEnemies(Enemies);
             when Disease =>
                Events_List.Append
                  (New_Item =>
