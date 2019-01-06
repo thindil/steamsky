@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Trader talking skill and reputation affects award for completed missions
 - Updated help
+- Don't add enemy traders to attack on base and enemy patrol events
 
 ### Fixed
 - Hide close button when showing stories
