@@ -196,7 +196,8 @@ package body Events is
                end if;
                case Roll is
                   when 1 .. 20 => -- Base is attacked
-                     GenerateEnemies(Enemies);
+                     GenerateEnemies
+                       (Enemies, To_Unbounded_String("Any"), False);
                      Events_List.Append
                        (New_Item =>
                           (AttackOnBase, PlayerShip.SkyX, PlayerShip.SkyY,
@@ -239,7 +240,8 @@ package body Events is
                           Factions_List(SkyBases(BaseIndex).Owner).Index) then
                         GenerateEnemies
                           (Enemies,
-                           Factions_List(SkyBases(BaseIndex).Owner).Index);
+                           Factions_List(SkyBases(BaseIndex).Owner).Index,
+                           False);
                         Events_List.Append
                           (New_Item =>
                              (EnemyPatrol, PlayerShip.SkyX, PlayerShip.SkyY,
@@ -447,7 +449,8 @@ package body Events is
    end RecoverBase;
 
    procedure GenerateEnemies(Enemies: in out Positive_Container.Vector;
-      Owner: Unbounded_String := To_Unbounded_String("Any")) is
+      Owner: Unbounded_String := To_Unbounded_String("Any");
+      WithTraders: Boolean := True) is
       EnemyIndex: Positive;
       PlayerValue: Natural := 0;
       PlayerShips: UnboundedString_Container.Vector;
@@ -466,7 +469,8 @@ package body Events is
            not IsFriendly
              (Factions_List(PlayerShip.Crew(1).Faction).Index,
               Factions_List(Ship.Owner).Index) and
-           not PlayerShips.Contains(Ship.Index) then
+           not PlayerShips.Contains(Ship.Index) and
+           (WithTraders or Index(Ship.Name, To_String(TradersName)) = 0) then
             Enemies.Append(New_Item => EnemyIndex);
          end if;
          EnemyIndex := EnemyIndex + 1;
