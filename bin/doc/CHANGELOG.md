@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.0.3] - 2019-01-06
 
 ### Added
 - Missing message when enemy ship intercept player
