@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -32,8 +32,10 @@ package HallOfFame is
            Null_Unbounded_String)); -- Store all hall of fame entries
 
    procedure LoadHallOfFame; -- Read hall of fame data from file
-   procedure UpdateHallOfFame
-     (PlayerName,
-      DeathReason: Unbounded_String); -- Check did new entry should enter hall of fame
+   procedure UpdateHallOfFame(PlayerName, DeathReason: Unbounded_String) with
+      Pre =>
+      (PlayerName /= Null_Unbounded_String and
+       DeathReason /=
+         Null_Unbounded_String); -- Check did new entry should enter hall of fame
 
 end HallOfFame;
