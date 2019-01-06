@@ -152,7 +152,9 @@ package body Combat is
                LogMessage
                  ("You were attacked by " & To_String(Enemy.Ship.Name),
                   Log.Combat);
-               AddMessage(To_String(Enemy.Ship.Name) & " intercepted you.", CombatMessage);
+               AddMessage
+                 (To_String(Enemy.Ship.Name) & " intercepted you.",
+                  CombatMessage);
                return True;
             end if;
             AddMessage
