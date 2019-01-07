@@ -20,6 +20,8 @@ with Ada.Directories; use Ada.Directories;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Containers; use Ada.Containers;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Strings.UTF_Encoding.Wide_Strings;
+use Ada.Strings.UTF_Encoding.Wide_Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Label; use Gtk.Label;
@@ -435,7 +437,8 @@ package body Maps.UI is
       Red3GrayColor: constant Gtk_Text_Tag := Lookup(Tags, "red3gray");
       Green2Color: constant Gtk_Text_Tag := Lookup(Tags, "green2");
       Green2GrayColor: constant Gtk_Text_Tag := Lookup(Tags, "green2gray");
-      MapChar: Character;
+      BlackColor: constant Gtk_Text_Tag := Lookup(Tags, "black");
+      MapChar: Wide_Character;
       MapColor: Gtk_Text_Tag;
       TextWindow: constant Gdk_Window :=
         Get_Window
@@ -472,23 +475,24 @@ package body Maps.UI is
       for Y in StartY .. EndY loop
          for X in StartX .. EndX loop
             if X = PlayerShip.SkyX and Y = PlayerShip.SkyY then
-               MapChar := '+';
+               MapChar := Wide_Character'Val(16#f135#);
                MapColor := WhiteColor;
             else
-               MapChar := ' ';
+               MapChar := Wide_Character'Val(16#f0c8#);
                if SkyMap(X, Y).Visited then
-                  MapColor := WhiteColor;
+                  MapColor := BlackColor;
                else
                   MapColor := GrayColor;
                end if;
                if X = PlayerShip.DestinationX and
                  Y = PlayerShip.DestinationY then
-                  MapChar := 'X';
+                  MapChar := Wide_Character'Val(16#f05b#);
+                  MapColor := WhiteColor;
                elsif X = StoryX and Y = StoryY then
-                  MapChar := '+';
+                  MapChar := Wide_Character'Val(16#f059#);
                   MapColor := GreenColor;
                elsif SkyMap(X, Y).MissionIndex > 0 then
-                  MapChar := '!';
+                  MapChar := Wide_Character'Val(16#f057#);
                   if SkyMap(X, Y).Visited then
                      case AcceptedMissions(SkyMap(X, Y).MissionIndex).MType is
                         when Deliver =>
@@ -517,7 +521,7 @@ package body Maps.UI is
                      end case;
                   end if;
                elsif SkyMap(X, Y).EventIndex > 0 then
-                  MapChar := '?';
+                  MapChar := Wide_Character'Val(16#f666#);
                   if SkyMap(X, Y).Visited then
                      case Events_List(SkyMap(X, Y).EventIndex).EType is
                         when EnemyShip =>
@@ -563,7 +567,7 @@ package body Maps.UI is
                   end if;
                elsif SkyMap(X, Y).BaseIndex > 0 then
                   if SkyBases(SkyMap(X, Y).BaseIndex).Known then
-                     MapChar := 'o';
+                     MapChar := Wide_Character'Val(16#f5d2#);
                      if SkyBases(SkyMap(X, Y).BaseIndex).Visited.Year > 0 then
                         case SkyBases(SkyMap(X, Y).BaseIndex).BaseType is
                            when Industrial =>
@@ -579,11 +583,13 @@ package body Maps.UI is
                            when others =>
                               null;
                         end case;
+                     else
+                        MapColor := WhiteColor;
                      end if;
                   end if;
                end if;
             end if;
-            Insert_With_Tags(MapBuffer, Iter, "" & MapChar, MapColor);
+            Insert_With_Tags(MapBuffer, Iter, Encode("" & MapChar), MapColor);
          end loop;
          if Y < EndY then
             Insert(MapBuffer, Iter, "" & LF);
