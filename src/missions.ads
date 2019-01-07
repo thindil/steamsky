@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -41,10 +41,16 @@ package Missions is
    procedure AcceptMission
      (MissionIndex: Positive); -- Accept selected mission from base
    procedure UpdateMissions(Minutes: Positive); -- Update accepted missions
-   procedure FinishMission(MissionIndex: Positive); -- Finish selected mission
+   procedure FinishMission(MissionIndex: Positive) with
+      Pre => MissionIndex <=
+      AcceptedMissions.Last_Index; -- Finish selected mission
    procedure DeleteMission(MissionIndex: Positive;
-      Failed: Boolean := True); -- Delete selected mission
-   procedure UpdateMission(MissionIndex: Positive); -- Update status of mission
+      Failed: Boolean := True) with
+      Pre => MissionIndex <=
+      AcceptedMissions.Last_Index; -- Delete selected mission
+   procedure UpdateMission(MissionIndex: Positive) with
+      Pre => MissionIndex <=
+      AcceptedMissions.Last_Index; -- Update status of mission
    function AutoFinishMissions
      return String; -- Finish all possible missions, return empty string if all ok
 
