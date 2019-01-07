@@ -108,9 +108,9 @@ Font Roboto is under Apache v2.0 license:
 
 https://fonts.google.com/specimen/Roboto
 
-Font Hack is under MIT license:
+Font Awesome is under SIL Open Font License:
 
-https://sourcefoundry.org/hack/
+https://fontawesome.com
 
 Font Z003 is under AGPL v3 license:
 
