@@ -45,7 +45,7 @@ package body Config is
          LowDrinks => 50, LowFood => 25, AutoMoveStop => NEVER,
          WindowWidth => 800, WindowHeight => 600, AnimationsEnabled => 1,
          AnimationType => 1, MessagesLimit => 500, SavedMessages => 10,
-         HelpFontSize => 12, MapFontSize => 10, InterfaceFontSize => 16,
+         HelpFontSize => 12, MapFontSize => 12, InterfaceFontSize => 16,
          InterfaceTheme => To_Unbounded_String("default"),
          MessagesOrder => OLDER_FIRST, AutoAskForBases => False,
          AutoAskForEvents => False, ShowMapButtons => True,
