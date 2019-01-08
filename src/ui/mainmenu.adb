@@ -99,6 +99,28 @@ package body MainMenu is
       End_Search(Files);
    end RefreshSavesList;
 
+   procedure LoadFile(FileName: String) is
+      LicenseFile: File_Type;
+      LicenseText: Unbounded_String := Null_Unbounded_String;
+   begin
+      if not Exists(To_String(DocDirectory) & FileName) then
+         LicenseText :=
+           To_Unbounded_String
+             ("Can't find file to load. Did '" & FileName & "' file is in '" &
+              To_String(DocDirectory) & "' directory?");
+      else
+         Open(LicenseFile, In_File, To_String(DocDirectory) & FileName);
+         while not End_Of_File(LicenseFile) loop
+            Append(LicenseText, Get_Line(LicenseFile));
+            Append(LicenseText, LF);
+         end loop;
+         Close(LicenseFile);
+      end if;
+      Set_Text
+        (Gtk_Text_Buffer(Get_Object(Builder, "licensebuffer")),
+         To_String(LicenseText));
+   end LoadFile;
+
    procedure ShowPage(User_Data: access GObject_Record'Class) is
    begin
       if User_Data = Get_Object(Builder, "btnnewgame") then
@@ -195,6 +217,7 @@ package body MainMenu is
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page4");
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback4")));
       elsif User_Data = Get_Object(Builder, "btnlicense") then
+         LoadFile("COPYING");
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback5")));
@@ -208,6 +231,11 @@ package body MainMenu is
             Gtk_Tree_Path_New_From_String("0"),
             Gtk_Tree_View_Column(Get_Object(Builder, "columnplayername")),
             False);
+      elsif User_Data = Get_Object(Builder, "btncontribute") then
+         LoadFile("CONTRIBUTING.md");
+         Set_Visible_Child_Name
+           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
+         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback5")));
       end if;
    end ShowPage;
 
@@ -340,28 +368,6 @@ package body MainMenu is
       StartGame;
    end NewGame;
 
-   procedure LoadLicense is
-      LicenseFile: File_Type;
-      LicenseText: Unbounded_String := Null_Unbounded_String;
-   begin
-      if not Exists(To_String(DocDirectory) & "COPYING") then
-         LicenseText :=
-           To_Unbounded_String
-             ("Can't find license file. Did 'COPYING' file is in '" &
-              To_String(DocDirectory) & "' directory?");
-      else
-         Open(LicenseFile, In_File, To_String(DocDirectory) & "COPYING");
-         while not End_Of_File(LicenseFile) loop
-            Append(LicenseText, Get_Line(LicenseFile));
-            Append(LicenseText, LF);
-         end loop;
-         Close(LicenseFile);
-      end if;
-      Set_Text
-        (Gtk_Text_Buffer(Get_Object(Builder, "licensebuffer")),
-         To_String(LicenseText));
-   end LoadLicense;
-
    procedure DeleteGame(Object: access Gtkada_Builder_Record'Class) is
       SavesIter: Gtk_Tree_Iter;
       SavesModel: Gtk_Tree_Model;
@@ -491,7 +497,6 @@ package body MainMenu is
          Hide(Gtk_Widget(Get_Object(Builder, "btnhalloffame")));
       end if;
       UpdateNews;
-      LoadLicense;
       Set_Text
         (Gtk_Entry(Get_Object(Builder, "entrycharactername")),
          To_String(NewGameSettings.PlayerName));
