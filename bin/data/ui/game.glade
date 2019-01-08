@@ -882,6 +882,14 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         <property name="font">Normal</property>
       </object>
     </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="whitegray">
+        <property name="name">whitegray</property>
+        <property name="foreground">white</property>
+        <property name="background_rgba">rgb(31,34,35)</property>
+        <property name="font">Normal</property>
+      </object>
+    </child>
   </object>
   <object class="GtkTextBuffer" id="txtmap">
     <property name="tag_table">maptags</property>

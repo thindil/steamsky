@@ -438,6 +438,7 @@ package body Maps.UI is
       Green2Color: constant Gtk_Text_Tag := Lookup(Tags, "green2");
       Green2GrayColor: constant Gtk_Text_Tag := Lookup(Tags, "green2gray");
       BlackColor: constant Gtk_Text_Tag := Lookup(Tags, "black");
+      WhiteGrayColor: constant Gtk_Text_Tag := Lookup(Tags, "whitegray");
       MapChar: Wide_Character;
       MapColor: Gtk_Text_Tag;
       TextWindow: constant Gdk_Window :=
@@ -487,7 +488,11 @@ package body Maps.UI is
                if X = PlayerShip.DestinationX and
                  Y = PlayerShip.DestinationY then
                   MapChar := Wide_Character'Val(16#f05b#);
-                  MapColor := WhiteColor;
+                  if SkyMap(X, Y).Visited then
+                     MapColor := WhiteColor;
+                  else
+                     MapColor := WhiteGrayColor;
+                  end if;
                elsif X = StoryX and Y = StoryY then
                   MapChar := Wide_Character'Val(16#f059#);
                   MapColor := GreenColor;
@@ -584,7 +589,7 @@ package body Maps.UI is
                               null;
                         end case;
                      else
-                        MapColor := WhiteColor;
+                        MapColor := WhiteGrayColor;
                      end if;
                   end if;
                end if;
