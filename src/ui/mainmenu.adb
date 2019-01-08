@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -233,6 +233,11 @@ package body MainMenu is
             False);
       elsif User_Data = Get_Object(Builder, "btncontribute") then
          LoadFile("CONTRIBUTING.md");
+         Set_Visible_Child_Name
+           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
+         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback5")));
+      elsif User_Data = Get_Object(Builder, "btnmodding") then
+         LoadFile("MODDING.md");
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback5")));
