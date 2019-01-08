@@ -847,11 +847,14 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               </packing>
             </child>
             <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+              <object class="GtkLinkButton">
                 <property name="label" translatable="yes">(c) 2016-2019 Bartek thindil Jasicki</property>
-                <property name="wrap">True</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="halign">center</property>
+                <property name="relief">none</property>
+                <property name="uri">mailto:thindil@laeran.pl</property>
               </object>
               <packing>
                 <property name="expand">False</property>
