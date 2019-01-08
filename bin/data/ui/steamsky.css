@@ -234,7 +234,7 @@ GtkFrame#redframe > GtkLabel {
 GtkTextView#mapview {
    font-family:"Font Awesome 5 Free";
    font-style:normal;
-   font-size:10px;
+   font-size:12px;
 }
 
 /* Font used mostly in help, but in ship info in corner too */
