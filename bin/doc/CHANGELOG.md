@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file.
 - Option to enable or disable tooltips
 - New ships: tiny pirates trader, small pirates trader, pirates trader, large
   pirates trader, huge pirates trader, advanced huge pirates trader, tiny
-  poleis trader mk II and tiny independent trader mk II
+  poleis trader mk II, tiny independent trader mk II and tiny pirates trader
+  mk II
 - Missing message when enemy ship intercept player
 - Lack of food or drinks reduce morale of crew members
 
