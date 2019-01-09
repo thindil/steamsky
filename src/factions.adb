@@ -90,7 +90,8 @@ package body Factions is
          Relations => TmpRelations, Description => Null_Unbounded_String,
          FoodTypes => TmpFood, DrinksTypes => TmpFood,
          HealingTools => Null_Unbounded_String, HealingSkill => 1,
-         Flags => TmpFood, Careers => TmpCareers);
+         Flags => TmpFood, Careers => TmpCareers,
+         BaseIcon => Wide_Character'Val(16#f5d2#));
       FactionsData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(FactionsData, "faction");
@@ -183,6 +184,12 @@ package body Factions is
                     "', no skill named '" & To_String(Value) & "'.";
                end if;
                TempRecord.HealingSkill := SkillIndex;
+            end if;
+            if Get_Attribute(FactionNode, "baseicon") /= "" then
+               TempRecord.BaseIcon :=
+                 Wide_Character'Val
+                   (Natural'Value
+                      ("16#" & Get_Attribute(FactionNode, "baseicon") & "#"));
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
@@ -317,7 +324,8 @@ package body Factions is
             Relations => TmpRelations, Description => Null_Unbounded_String,
             FoodTypes => TmpFood, DrinksTypes => TmpFood,
             HealingTools => Null_Unbounded_String, HealingSkill => 1,
-            Flags => TmpFood, Careers => TmpCareers);
+            Flags => TmpFood, Careers => TmpCareers,
+            BaseIcon => Wide_Character'Val(16#f5d2#));
       end loop;
    end LoadFactions;
 
