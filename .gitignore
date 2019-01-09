@@ -1,3 +1,4 @@
 bin/steamsky
 bin/data/saves/*
 bin/gmon.out
+obj/*
