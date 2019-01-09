@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
   II and tiny poleis patrol ship mk II
 - Missing message when enemy ship intercept player
 - Lack of food or drinks reduce morale of crew members
+- Separated icon on map for bases for each faction
 
 ### Changed
 - Updated cargo bays for some ships
