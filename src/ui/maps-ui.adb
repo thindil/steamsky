@@ -806,6 +806,11 @@ package body Maps.UI is
               SkyMap(MapX, MapY).BaseIndex > 0 then
                Append(MapInfoText, LF);
             end if;
+            if Events_List(EventIndex).EType = DoublePrice then
+               Append(MapInfoText, "<span foreground=""green"">");
+            else
+               Append(MapInfoText, "<span foreground=""red"">");
+            end if;
             case Events_List(EventIndex).EType is
                when EnemyShip | Trader | FriendlyShip =>
                   Append
@@ -827,6 +832,7 @@ package body Maps.UI is
                when None | BaseRecovery =>
                   null;
             end case;
+            Append(MapInfoText, "</span>");
          end;
       end if;
       if SkyMap(MapX, MapY).MissionIndex > 0 then
