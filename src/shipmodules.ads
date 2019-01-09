@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -47,8 +47,8 @@ package ShipModules is
      .Vector; -- List of ship modules available in game
 
    procedure LoadShipModules(Reader: Tree_Reader); -- Load modules from files
-   function FindProtoModule
-     (Index: Unbounded_String)
-     return Natural; -- Return vector index of module or zero if module not found
+   function FindProtoModule(Index: Unbounded_String) return Natural with
+      Pre => Index /=
+      Null_Unbounded_String; -- Return vector index of module or zero if module not found
 
 end ShipModules;
