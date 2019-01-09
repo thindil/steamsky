@@ -64,6 +64,7 @@ package Factions is
         .Vector; -- Various flags for faction (no gender, etc)
       Careers: Careers_Container
         .Vector; -- List of possible careers for that faction
+      BaseIcon: Wide_Character; -- Character used as base icon on map for this faction
    end record;
    package Factions_Container is new Vectors(Positive, FactionRecord);
    Factions_List: Factions_Container.Vector;
