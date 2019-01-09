@@ -574,6 +574,9 @@ package body Maps.UI is
                   if SkyBases(SkyMap(X, Y).BaseIndex).Known then
                      MapChar := Wide_Character'Val(16#f5d2#);
                      if SkyBases(SkyMap(X, Y).BaseIndex).Visited.Year > 0 then
+                        MapChar :=
+                          Factions_List(SkyBases(SkyMap(X, Y).BaseIndex).Owner)
+                            .BaseIcon;
                         case SkyBases(SkyMap(X, Y).BaseIndex).BaseType is
                            when Industrial =>
                               MapColor := RedColor;
