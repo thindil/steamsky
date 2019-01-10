@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -107,5 +107,7 @@ package Maps.UI.Handlers is
    function MoveMapInfo
      (Object: access Gtkada_Builder_Record'Class)
      return Boolean; -- Move map info widget when mouse enters it
+   function ShowMapButton(User_Data: access GObject_Record'Class) return Boolean; -- Show selected map button
+   function HideMapButton(User_Data: access GObject_Record'Class) return Boolean; -- Hide selected map button
 
 end Maps.UI.Handlers;

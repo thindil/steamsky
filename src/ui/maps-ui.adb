@@ -993,6 +993,8 @@ package body Maps.UI is
       Register_Handler
         (Builder, "Toggle_Close_Button_Proc", ToggleCloseButtonProc'Access);
       Register_Handler(Builder, "Move_Map_Info", MoveMapInfo'Access);
+      Register_Handler(Builder, "Show_Map_Button", ShowMapButton'Access);
+      Register_Handler(Builder, "Hide_Map_Button", HideMapButton'Access);
       Do_Connect(Builder);
       Add_Entry("<skymapwindow>/btnupleft", GDK_KP_7, 0);
       Add_Entry("<skymapwindow>/btnup", GDK_KP_8, 0);
@@ -1220,11 +1222,15 @@ package body Maps.UI is
          end if;
          CurrentStory.ShowText := False;
       end if;
+      Hide(Gtk_Widget(Get_Object(Builder, "mapleftrevealer")));
+      Hide(Gtk_Widget(Get_Object(Builder, "maprightrevealer")));
+      Hide(Gtk_Widget(Get_Object(Builder, "mapuprevealer")));
+      Hide(Gtk_Widget(Get_Object(Builder, "mapdownrevealer")));
       if not GameSettings.ShowMapButtons then
-         Hide(Gtk_Widget(Get_Object(Builder, "btnmapleft")));
-         Hide(Gtk_Widget(Get_Object(Builder, "btnmapright")));
-         Hide(Gtk_Widget(Get_Object(Builder, "btnmapup")));
-         Hide(Gtk_Widget(Get_Object(Builder, "btnmapdown")));
+         Hide(Gtk_Widget(Get_Object(Builder, "mapleftevent")));
+         Hide(Gtk_Widget(Get_Object(Builder, "maprightevent")));
+         Hide(Gtk_Widget(Get_Object(Builder, "mapupevent")));
+         Hide(Gtk_Widget(Get_Object(Builder, "mapdownevent")));
       end if;
       Show_All(Gtk_Widget(Get_Object(Builder, "menuwait")));
       Show_All(Gtk_Widget(Get_Object(Builder, "menumovemap")));

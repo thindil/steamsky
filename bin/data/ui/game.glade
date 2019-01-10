@@ -1943,13 +1943,31 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkButton" id="btnmapup">
-                        <property name="label" translatable="yes">⬆</property>
+                      <object class="GtkEventBox" id="mapupevent">
+                        <property name="height_request">20</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Move map up</property>
-                        <signal name="clicked" handler="Move_Map" object="btnmapup" swapped="no"/>
+                        <property name="can_focus">False</property>
+                        <signal name="enter-notify-event" handler="Show_Map_Button" object="mapuprevealer" swapped="no"/>
+                        <child>
+                          <object class="GtkRevealer" id="mapuprevealer">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="transition_type">slide-up</property>
+                            <property name="reveal_child">True</property>
+                            <child>
+                              <object class="GtkButton" id="btnmapup">
+                                <property name="label" translatable="yes">⬆</property>
+                                <property name="width_request">100</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="tooltip_text" translatable="yes">Move map up</property>
+                                <signal name="clicked" handler="Move_Map" object="btnmapup" swapped="no"/>
+                                <signal name="leave-notify-event" handler="Hide_Map_Button" object="mapuprevealer" swapped="no"/>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1958,18 +1976,36 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="mapbox2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
-                          <object class="GtkButton" id="btnmapleft">
-                            <property name="label" translatable="yes">⬅</property>
-                            <property name="name">vertical</property>
+                          <object class="GtkEventBox" id="mapleftevent">
+                            <property name="width_request">20</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Move map left</property>
-                            <signal name="clicked" handler="Move_Map" object="btnmapleft" swapped="no"/>
+                            <property name="can_focus">False</property>
+                            <signal name="enter-notify-event" handler="Show_Map_Button" object="mapleftrevealer" swapped="no"/>
+                            <child>
+                              <object class="GtkRevealer" id="mapleftrevealer">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="transition_type">slide-left</property>
+                                <property name="reveal_child">True</property>
+                                <child>
+                                  <object class="GtkButton" id="btnmapleft">
+                                    <property name="label" translatable="yes">⬅</property>
+                                    <property name="name">vertical</property>
+                                    <property name="height_request">100</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="tooltip_text" translatable="yes">Move map left</property>
+                                    <signal name="clicked" handler="Move_Map" object="btnmapleft" swapped="no"/>
+                                    <signal name="leave-notify-event" handler="Hide_Map_Button" object="mapleftrevealer" swapped="no"/>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1985,6 +2021,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <object class="GtkScrolledWindow" id="scrollmap">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="hscrollbar_policy">never</property>
+                                <property name="vscrollbar_policy">never</property>
                                 <property name="shadow_type">in</property>
                                 <child>
                                   <object class="GtkTextView" id="mapview">
@@ -2009,14 +2047,32 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton" id="btnmapright">
-                            <property name="label" translatable="yes">➡</property>
-                            <property name="name">vertical</property>
+                          <object class="GtkEventBox" id="maprightevent">
+                            <property name="width_request">40</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Move map right</property>
-                            <signal name="clicked" handler="Move_Map" object="btnmapright" swapped="no"/>
+                            <property name="can_focus">False</property>
+                            <signal name="enter-notify-event" handler="Show_Map_Button" object="maprightrevealer" swapped="no"/>
+                            <child>
+                              <object class="GtkRevealer" id="maprightrevealer">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="transition_type">slide-right</property>
+                                <property name="reveal_child">True</property>
+                                <child>
+                                  <object class="GtkButton" id="btnmapright">
+                                    <property name="label" translatable="yes">➡</property>
+                                    <property name="name">vertical</property>
+                                    <property name="height_request">100</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="tooltip_text" translatable="yes">Move map right</property>
+                                    <signal name="clicked" handler="Move_Map" object="btnmapright" swapped="no"/>
+                                    <signal name="leave-notify-event" handler="Hide_Map_Button" object="maprightrevealer" swapped="no"/>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -2032,13 +2088,30 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="btnmapdown">
-                        <property name="label" translatable="yes">⬇</property>
+                      <object class="GtkEventBox" id="mapdownevent">
+                        <property name="height_request">20</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Move map down</property>
-                        <signal name="clicked" handler="Move_Map" object="btnmapdown" swapped="no"/>
+                        <property name="can_focus">False</property>
+                        <signal name="enter-notify-event" handler="Show_Map_Button" object="mapdownrevealer" swapped="no"/>
+                        <child>
+                          <object class="GtkRevealer" id="mapdownrevealer">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="reveal_child">True</property>
+                            <child>
+                              <object class="GtkButton" id="btnmapdown">
+                                <property name="label" translatable="yes">⬇</property>
+                                <property name="width_request">100</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="tooltip_text" translatable="yes">Move map down</property>
+                                <signal name="clicked" handler="Move_Map" object="btnmapdown" swapped="no"/>
+                                <signal name="leave-notify-event" handler="Hide_Map_Button" object="mapdownrevealer" swapped="no"/>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
