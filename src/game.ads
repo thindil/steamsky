@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -30,7 +30,7 @@ package Game is
       Minutes: Natural;
    end record;
    GameDate: Date_Record;
-   GameVersion: constant String := "Version: 3.0.3";
+   GameVersion: constant String := "Version: 3.0.4";
    package UnboundedString_Container is new Vectors(Positive,
       Unbounded_String);
    package Positive_Container is new Vectors(Positive, Positive);
