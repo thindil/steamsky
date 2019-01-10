@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Color of message when player can't dock to base because its docks are full
 - Missing menu entries after selecting destination for ship
 - Crash on failing mission
+- Missing info about lack of tools when giving orders to whole crew
 
 ## [3.2] - 2018-12-30
 
