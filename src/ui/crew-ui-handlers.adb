@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -291,7 +291,6 @@ package body Crew.UI.Handlers is
                when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
                   AddMessage
                     (Exception_Message(An_Exception), OrderMessage, RED);
-                  ShowLastMessage(Builder);
             end;
          end if;
       end loop;
