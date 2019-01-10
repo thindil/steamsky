@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -86,14 +86,15 @@ package Ships is
 
    function CreateShip(ProtoIndex: Positive; Name: Unbounded_String;
       X, Y: Integer; Speed: ShipSpeed;
-      RandomUpgrades: Boolean := True) return ShipRecord; -- Create new ship
+      RandomUpgrades: Boolean := True) return ShipRecord with
+      Pre => (ProtoIndex <= ProtoShips_List.Last_Index); -- Create new ship
    procedure LoadShips(Reader: Tree_Reader); -- Load ships from files
    function CountShipWeight
      (Ship: ShipRecord)
      return Positive; -- Count weight of ship (with modules and cargo)
    function GenerateShipName
-     (Owner: Unbounded_String)
-     return Unbounded_String; -- Generate random name for ship
+     (Owner: Unbounded_String) return Unbounded_String with
+      Pre => Owner /= Null_Unbounded_String; -- Generate random name for ship
    function CountCombatValue
      return Natural; -- Count combat value of player ship
 
