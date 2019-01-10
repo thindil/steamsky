@@ -1500,4 +1500,16 @@ package body Maps.UI.Handlers is
       return False;
    end MoveMapInfo;
 
+   function ShowMapButton(User_Data: access GObject_Record'Class) return Boolean is
+   begin
+      Show_All(Gtk_Widget(User_Data));
+      return False;
+   end ShowMapButton;
+
+   function HideMapButton(User_Data: access GObject_Record'Class) return Boolean is
+   begin
+      Hide(Gtk_Widget(User_Data));
+      return False;
+   end HideMapButton;
+
 end Maps.UI.Handlers;
