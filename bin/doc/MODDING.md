@@ -616,6 +616,8 @@ Value must be existing skill name.
   *data/game.dat* file.
 - Attribute `healingskill`: name of skill used to healing members of that
   faction. Must be valid skill name from *data/game.dat* file
+- Attribute `baseicon`: hexadecimal number of character used as base icon for
+  this faction on map. Must be valid UTF-8 character from current map font.
 - Tags `relation`: Relation of this faction with other faction. All factions
   must have this tags for each faction (even for self).
     - Optional attribute `action`: what to do with this relation. Possible
