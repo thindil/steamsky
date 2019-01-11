@@ -185,6 +185,7 @@ package body GameOptions is
       45 =>
         (To_Unbounded_String("<movemapwindow>/btncenterhomebase"),
          To_Unbounded_String("edtcentermaphomebase")));
+   Setting: Boolean := False;
 
    procedure CloseOptions(Object: access Gtkada_Builder_Record'Class) is
    begin
@@ -297,6 +298,9 @@ package body GameOptions is
 
    procedure ResizeFont(User_Data: access GObject_Record'Class) is
    begin
+      if Setting then
+         return;
+      end if;
       if User_Data = Get_Object(Builder, "adjhelpfont") then
          GameSettings.HelpFontSize :=
            Positive
@@ -327,6 +331,7 @@ package body GameOptions is
 
    procedure SetFontsSizes is
    begin
+      Setting := True;
       Set_Value
         (Gtk_Adjustment(Get_Object(Builder, "adjhelpfont")),
          Gdouble(GameSettings.HelpFontSize));
@@ -336,6 +341,7 @@ package body GameOptions is
       Set_Value
         (Gtk_Adjustment(Get_Object(Builder, "adjinterfacefont")),
          Gdouble(GameSettings.InterfaceFontSize));
+      Setting := False;
    end SetFontsSizes;
 
    procedure SetDefaultFontSize(Object: access Gtkada_Builder_Record'Class) is
@@ -343,6 +349,7 @@ package body GameOptions is
    begin
       ResetFontsSizes;
       SetFontsSizes;
+      SetFontSize(ALLFONTS);
    end SetDefaultFontSize;
 
    procedure CreateGameOptions(NewBuilder: Gtkada_Builder) is

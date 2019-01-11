@@ -7802,6 +7802,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="adjustment">adjinterfacefont</property>
                                     <property name="numeric">True</property>
                                     <property name="value">10</property>
+                                    <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                    <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                    <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                    <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -7828,6 +7832,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="tooltip_text" translatable="yes">Size (in pixels) of font used mainly in help.</property>
                                     <property name="adjustment">adjhelpfont</property>
                                     <property name="numeric">True</property>
+                                    <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                    <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                    <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                    <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
