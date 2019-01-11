@@ -30,10 +30,38 @@ with Game; use Game;
 
 package body Themes is
 
-   CssProvider: Gtk_Css_Provider;
+   OldProvider: Gtk_Css_Provider;
+
+   function LoadCssText return Unbounded_String is
+      FileName, CssText: Unbounded_String;
+      ThemeFile: File_Type;
+   begin
+      if GameSettings.InterfaceTheme = To_Unbounded_String("default") then
+         FileName :=
+           DataDirectory &
+           To_Unbounded_String("ui" & Dir_Separator & "steamsky.css");
+      else
+         FileName :=
+           ThemesDirectory & GameSettings.InterfaceTheme &
+           To_Unbounded_String(".css");
+         if not Exists(To_String(FileName)) then
+            FileName :=
+              DataDirectory &
+              To_Unbounded_String("ui" & Dir_Separator & "steamsky.css");
+            GameSettings.InterfaceTheme := To_Unbounded_String("default");
+         end if;
+      end if;
+      Open(ThemeFile, In_File, To_String(FileName));
+      while not End_Of_File(ThemeFile) loop
+         Append(CssText, Get_Line(ThemeFile));
+      end loop;
+      Close(ThemeFile);
+      return CssText;
+   end LoadCssText;
 
    procedure SetFontSize(FontType: FontTypes) is
-      CssText: Unbounded_String := To_Unbounded_String(To_String(CssProvider));
+      CssProvider: Gtk_Css_Provider;
+      CssText: Unbounded_String := LoadCssText;
       StartIndex, EndIndex: Positive;
       Error: aliased GError;
    begin
@@ -62,49 +90,36 @@ package body Themes is
             "font-size:" & Positive'Image(GameSettings.InterfaceFontSize) &
             "px;");
       end if;
+      Gtk_New(CssProvider);
       if not Load_From_Data(CssProvider, To_String(CssText), Error'Access) then
          Put_Line("Error: " & Get_Message(Error));
          return;
       end if;
+      if OldProvider /= null then
+         Remove_Provider_For_Screen
+           (Get_Default_Screen(Get_Default), +(OldProvider));
+      end if;
+      Add_Provider_For_Screen
+        (Get_Default_Screen(Get_Default), +(CssProvider), Guint'Last);
+      OldProvider := CssProvider;
    end SetFontSize;
 
    procedure LoadTheme is
+      CssProvider: Gtk_Css_Provider;
+      CssText: Unbounded_String := LoadCssText;
       Error: aliased GError;
-      FileName, CssText: Unbounded_String;
-      ThemeFile: File_Type;
    begin
-      if GameSettings.InterfaceTheme = To_Unbounded_String("default") then
-         FileName :=
-           DataDirectory &
-           To_Unbounded_String("ui" & Dir_Separator & "steamsky.css");
-      else
-         FileName :=
-           ThemesDirectory & GameSettings.InterfaceTheme &
-           To_Unbounded_String(".css");
-         if not Exists(To_String(FileName)) then
-            FileName :=
-              DataDirectory &
-              To_Unbounded_String("ui" & Dir_Separator & "steamsky.css");
-            GameSettings.InterfaceTheme := To_Unbounded_String("default");
-         end if;
-      end if;
-      Gtk_New(CssProvider);
-      Open(ThemeFile, In_File, To_String(FileName));
-      while not End_Of_File(ThemeFile) loop
-         Append(CssText, Get_Line(ThemeFile));
-      end loop;
-      Close(ThemeFile);
       if not GameSettings.ShowTooltips then
          Append(CssText, ".tooltip {opacity:0;}");
       else
          Append(CssText, ".tooltip {opacity:1;}");
       end if;
+      Gtk_New(CssProvider);
       if not Load_From_Data(CssProvider, To_String(CssText), Error'Access) then
          Put_Line("Error: " & Get_Message(Error));
          return;
       end if;
-      Add_Provider_For_Screen
-        (Get_Default_Screen(Get_Default), +(CssProvider), Guint'Last);
+      SetFontSize(ALLFONTS);
    end LoadTheme;
 
    procedure ResetFontsSizes is
