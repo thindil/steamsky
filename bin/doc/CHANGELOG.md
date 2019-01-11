@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Missing info about lack of tools when giving orders to whole crew
+- Setting fonts size
 
 ## [3.0.3] - 2019-01-06
 
