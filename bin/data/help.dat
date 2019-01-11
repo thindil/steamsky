@@ -65,14 +65,7 @@ Some game modifications can bring own help topics too. If you are first time her
 For pilots and engineers: if their letter is green, the position is taken by a crew member, and if it's red you don't have anyone assigned to this position.
 For gunners and manufacturing: a green letter mean all positions are taken (all guns, all crafting modules), a red letter means you have free positions (not all guns/crafting modules are taken), and a white letter means you don't have or don't need anyone assigned to this positions.
 For repairs, upgrading ship modules, trader and cleaning ship, green means you have someone assigned to this position, red means you don't have anyone on that position but need someone, and white letter means you don't have anyone assigned to this position and you don't need anyone.</entry>
- <entry title="Ship movement">{u}Map information{/u}
-- White {b}+{/b} sign on map represents your ship.
-- Colored {b}o{/b} sign mean sky base. For more information about sky bases look at {b}Sky bases{/b} topic.
-- Colored {b}?{/b} sign mean event (enemy ship, traders, events in bases, etc). For more information about events, look below.
-- Colored {b}!{/b} sign mean target for any accepted mission. For more information about mission look at {b}Missions{/b} topic.
-- Visited fields of map have black background.
-
-{u}Undocking from bases{/u}
+ <entry title="Ship movement">{u}Undocking from bases{/u}
     Your ship starts docked to base. To move it, you must first give order {b}&quot;Undock&quot;{/b} from base, by clicking on {b}&quot;Undock&quot;{/b} button. To see other orders available for ship, press {GameKey 14} key (or first {GameKey 26} key for see game menu) for open orders menu.
 Each docking operation cost some money, depending on your ship size (bigger ships have bigger docking cost) and your reputation in that base. Same is with staying longer in base - for each day you pay this same price as for docking. Undocking from bases is free.
 When you undocked from base, in this same menu, you can dock again.
