@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Don't add enemy traders to attack on base and enemy patrol events
 - Updated README.md
 - Factions data with new bases icons
+- Updated MODDING.md
 
 ### Fixed
 - Hide close button when showing stories
