@@ -8,8 +8,8 @@ All notable changes to this project will be documented in this file.
 - New ships: tiny pirates trader, small pirates trader, pirates trader, large
   pirates trader, huge pirates trader, advanced huge pirates trader, tiny
   poleis trader mk II, tiny independent trader mk II, tiny pirates trader mk
-  II, tiny poleis patrol ship mk II, tiny independent patrol ship mk II and
-  small poleis trader mk II
+  II, tiny poleis patrol ship mk II, tiny independent patrol ship mk II, small
+  poleis trader mk II and small independent trader mk II
 - Missing message when enemy ship intercept player
 - Lack of food or drinks reduce morale of crew members
 - Separated icon on map for bases for each faction
