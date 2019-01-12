@@ -384,17 +384,21 @@ package body GameOptions is
            Gtk_Combo_Box_Text(Get_Object(NewBuilder, "cmbtheme"));
       begin
          Append_Text(ThemesComboBox, "default");
-         Start_Search(Files, To_String(ThemesDirectory), "*.css");
+         Start_Search(Files, To_String(ThemesDirectory), "");
          while More_Entries(Files) loop
             Get_Next_Entry(Files, FoundFile);
-            Append_Text
-              (ThemesComboBox,
-               Ada.Directories.Base_Name(Simple_Name(FoundFile)));
-            if Ada.Directories.Base_Name(Simple_Name(FoundFile)) =
-              To_String(GameSettings.InterfaceTheme) then
-               ThemeIndex := FileIndex;
+            if Kind(FoundFile) = Directory and
+              (Simple_Name(FoundFile) /= "." and
+               Simple_Name(FoundFile) /= "..") then
+               Append_Text
+                 (ThemesComboBox,
+                  Ada.Directories.Base_Name(Simple_Name(FoundFile)));
+               if Ada.Directories.Base_Name(Simple_Name(FoundFile)) =
+                 To_String(GameSettings.InterfaceTheme) then
+                  ThemeIndex := FileIndex;
+               end if;
+               FileIndex := FileIndex + 1;
             end if;
-            FileIndex := FileIndex + 1;
          end loop;
          Set_Active(ThemesComboBox, Gint(ThemeIndex));
          End_Search(Files);
