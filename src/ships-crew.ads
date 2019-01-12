@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -21,21 +21,29 @@ package Ships.Crew is
       SkillIndex: Positive)
      return Natural; -- Get level of skill of selected crew member
    procedure Death(MemberIndex: Positive; Reason: Unbounded_String;
-      Ship: in out ShipRecord;
-      CreateBody: Boolean := True); -- Handle crew member death
-   procedure DeleteMember(MemberIndex: Positive;
-      Ship: in out ShipRecord); -- Delete selected member from crew list
+      Ship: in out ShipRecord; CreateBody: Boolean := True) with
+      Pre =>
+      (MemberIndex <= Ship.Crew.Last_Index and
+       Reason /= Null_Unbounded_String); -- Handle crew member death
+   procedure DeleteMember(MemberIndex: Positive; Ship: in out ShipRecord) with
+      Pre => MemberIndex <=
+      Ship.Crew.Last_Index; -- Delete selected member from crew list
    function FindMember(Order: Crew_Orders;
       Crew: Crew_Container.Vector := PlayerShip.Crew)
      return Natural; -- Find index of first crew member with selected order
    procedure GiveOrders(Ship: in out ShipRecord; MemberIndex: Positive;
       GivenOrder: Crew_Orders; ModuleIndex: Natural := 0;
-      CheckPriorities: Boolean :=
-        True); -- Change order for selected crew member
+      CheckPriorities: Boolean := True) with
+      Pre =>
+      (MemberIndex <= Ship.Crew.Last_Index and
+       ModuleIndex <=
+         Ship.Modules.Last_Index); -- Change order for selected crew member
    procedure UpdateOrders(Ship: in out ShipRecord;
       Combat: Boolean :=
         False); -- Update crew orders based on their orders priorities
    procedure UpdateMorale(Ship: in out ShipRecord; MemberIndex: Positive;
-      Value: Integer); -- Update morale of selected crew member by value
+      Value: Integer) with
+      Pre => MemberIndex <=
+      Ship.Crew.Last_Index; -- Update morale of selected crew member by value
 
 end Ships.Crew;
