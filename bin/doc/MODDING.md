@@ -774,11 +774,13 @@ story.
 
 ## Themes
 All themes files are standard CSS files. To edit default game theme, open file
-*steamsky.css* in *data/ui* directory. But best option is create new file in
-themes directory (by default it is *data/themes* but you can change it with
-game starting parameter, see [README.md](../README.md) for more info about it).
-To remove theme just delete theme file from themes directory. More information
-about variables, settings is in default game theme file *data/ui/steamsky.css*.
+*steamsky.css* in *data/ui* directory. But best option is create new directory in
+*themes* directory (by default it is *data/themes* but you can change it with
+game starting parameter, see [README.md](../README.md) for more info about it)
+and then file *.css* with that same name inside new directory.
+To remove theme just delete theme directory from *themes* directory. More
+information about variables and settings is in default game theme file
+*data/ui/steamsky.css*.
 More information about how CSS works with GTK (GUI library used by the game)
 is available at: https://developer.gnome.org/gtk3/stable/chap-css-overview.html
 
