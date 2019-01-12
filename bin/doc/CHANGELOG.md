@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Updated README.md
 - Factions data with new bases icons
 - Updated MODDING.md
+- Each custom theme must be in separated directory inside themes directory
 
 ### Fixed
 - Hide close button when showing stories
