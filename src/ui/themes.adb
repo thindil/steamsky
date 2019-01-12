@@ -43,7 +43,8 @@ package body Themes is
       else
          FileName :=
            ThemesDirectory & GameSettings.InterfaceTheme &
-           To_Unbounded_String(".css");
+           To_Unbounded_String("" & Dir_Separator) &
+           GameSettings.InterfaceTheme & To_Unbounded_String(".css");
          if not Exists(To_String(FileName)) then
             FileName :=
               DataDirectory &
