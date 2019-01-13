@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -33,26 +32,13 @@ package body Themes is
    OldProvider: Gtk_Css_Provider;
 
    function LoadCssText return Unbounded_String is
-      FileName, CssText: Unbounded_String;
+      CssText: Unbounded_String;
       ThemeFile: File_Type;
    begin
-      if GameSettings.InterfaceTheme = To_Unbounded_String("default") then
-         FileName :=
-           DataDirectory &
-           To_Unbounded_String("ui" & Dir_Separator & "steamsky.css");
-      else
-         FileName :=
-           ThemesDirectory & GameSettings.InterfaceTheme &
-           To_Unbounded_String("" & Dir_Separator) &
-           GameSettings.InterfaceTheme & To_Unbounded_String(".css");
-         if not Exists(To_String(FileName)) then
-            FileName :=
-              DataDirectory &
-              To_Unbounded_String("ui" & Dir_Separator & "steamsky.css");
-            GameSettings.InterfaceTheme := To_Unbounded_String("default");
-         end if;
-      end if;
-      Open(ThemeFile, In_File, To_String(FileName));
+      Open
+        (ThemeFile, In_File,
+         To_String
+           (Themes_List(To_String(GameSettings.InterfaceTheme)).FileName));
       while not End_Of_File(ThemeFile) loop
          Append(CssText, Get_Line(ThemeFile));
       end loop;
@@ -124,7 +110,6 @@ package body Themes is
    end LoadTheme;
 
    procedure ResetFontsSizes is
-      FileName: Unbounded_String;
       CssText: Unbounded_String := Null_Unbounded_String;
       CssFile: File_Type;
       function GetFontSize(FontName: String) return Positive is
@@ -137,16 +122,10 @@ package body Themes is
          return Positive'Value(Slice(CssText, StartIndex, EndIndex));
       end GetFontSize;
    begin
-      if GameSettings.InterfaceTheme = To_Unbounded_String("default") then
-         FileName :=
-           DataDirectory &
-           To_Unbounded_String("ui" & Dir_Separator & "steamsky.css");
-      else
-         FileName :=
-           ThemesDirectory & GameSettings.InterfaceTheme &
-           To_Unbounded_String(".css");
-      end if;
-      Open(CssFile, In_File, To_String(FileName));
+      Open
+        (CssFile, In_File,
+         To_String
+           (Themes_List(To_String(GameSettings.InterfaceTheme)).FileName));
       while not End_Of_File(CssFile) loop
          Append(CssText, Get_Line(CssFile));
       end loop;
@@ -155,5 +134,57 @@ package body Themes is
       GameSettings.MapFontSize := GetFontSize("#mapview");
       GameSettings.InterfaceFontSize := GetFontSize("* {");
    end ResetFontsSizes;
+
+   procedure LoadThemes is
+      Directories, Files: Search_Type;
+      FoundDirectory, FoundFile: Directory_Entry_Type;
+      ConfigFile: File_Type;
+      RawData, FieldName, Value: Unbounded_String;
+      EqualIndex: Natural;
+      TempRecord: ThemeRecord;
+   begin
+      Themes_Container.Include
+        (Themes_List, "default",
+         (Name => To_Unbounded_String("Default theme"),
+          Filename =>
+            DataDirectory &
+            To_Unbounded_String("ui" & Dir_Separator & "steamsky.css")));
+      Start_Search
+        (Directories, To_String(ThemesDirectory), "",
+         (Directory => True, others => False));
+      while More_Entries(Directories) loop
+         Get_Next_Entry(Directories, FoundDirectory);
+         if Simple_Name(FoundDirectory) /= "." and
+           Simple_Name(FoundDirectory) /= ".." then
+            Start_Search(Files, Full_Name(FoundDirectory), "*.cfg");
+            while More_Entries(Files) loop
+               Get_Next_Entry(Files, FoundFile);
+               Open(ConfigFile, In_File, Full_Name(FoundFile));
+               while not End_Of_File(ConfigFile) loop
+                  RawData := To_Unbounded_String(Get_Line(ConfigFile));
+                  if Length(RawData) > 0 then
+                     EqualIndex := Index(RawData, "=");
+                     FieldName := Head(RawData, EqualIndex - 2);
+                     Value :=
+                       Tail(RawData, (Length(RawData) - EqualIndex - 1));
+                     if FieldName = To_Unbounded_String("Name") then
+                        TempRecord.Name := Value;
+                     elsif FieldName = To_Unbounded_String("FileName") then
+                        TempRecord.FileName :=
+                          To_Unbounded_String
+                            (Full_Name(FoundDirectory) & Dir_Separator) &
+                          Value;
+                     end if;
+                  end if;
+               end loop;
+               Close(ConfigFile);
+               Themes_Container.Include
+                 (Themes_List, Simple_Name(FoundDirectory), TempRecord);
+            end loop;
+            End_Search(Files);
+         end if;
+      end loop;
+      End_Search(Directories);
+   end LoadThemes;
 
 end Themes;
