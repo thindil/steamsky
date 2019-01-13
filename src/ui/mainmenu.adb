@@ -471,6 +471,7 @@ package body MainMenu is
       Error: aliased GError;
       DataError: Unbounded_String;
    begin
+      LoadThemes;
       LoadTheme;
       Gtk_New(Builder);
       if Add_From_File
