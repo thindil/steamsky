@@ -17,7 +17,6 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers; use Ada.Containers;
-with Ada.Directories; use Ada.Directories;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Switch; use Gtk.Switch;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
@@ -324,8 +323,7 @@ package body GameOptions is
    begin
       GameSettings.InterfaceTheme :=
         To_Unbounded_String
-          (Get_Active_Text
-             (Gtk_Combo_Box_Text(Get_Object(Object, "cmbtheme"))));
+          (Get_Active_Id(Gtk_Combo_Box_Text(Get_Object(Object, "cmbtheme"))));
       LoadTheme;
    end ApplyTheme;
 
@@ -377,31 +375,20 @@ package body GameOptions is
         (Gtk_Label(Get_Object(Builder, "lblmodsdir")),
          To_String(ModsDirectory));
       declare
-         ThemeIndex, FileIndex: Natural := 0;
-         Files: Search_Type;
-         FoundFile: Directory_Entry_Type;
          ThemesComboBox: constant Gtk_Combo_Box_Text :=
            Gtk_Combo_Box_Text(Get_Object(NewBuilder, "cmbtheme"));
       begin
-         Append_Text(ThemesComboBox, "default");
-         Start_Search(Files, To_String(ThemesDirectory), "");
-         while More_Entries(Files) loop
-            Get_Next_Entry(Files, FoundFile);
-            if Kind(FoundFile) = Directory and
-              (Simple_Name(FoundFile) /= "." and
-               Simple_Name(FoundFile) /= "..") then
-               Append_Text
-                 (ThemesComboBox,
-                  Ada.Directories.Base_Name(Simple_Name(FoundFile)));
-               if Ada.Directories.Base_Name(Simple_Name(FoundFile)) =
-                 To_String(GameSettings.InterfaceTheme) then
-                  ThemeIndex := FileIndex;
-               end if;
-               FileIndex := FileIndex + 1;
-            end if;
+         for I in Themes_List.Iterate loop
+            Append
+              (ThemesComboBox, Themes_Container.Key(I),
+               To_String(Themes_List(I).Name));
          end loop;
-         Set_Active(ThemesComboBox, Gint(ThemeIndex));
-         End_Search(Files);
+         if not Set_Active_Id
+             (ThemesComboBox, To_String(GameSettings.InterfaceTheme)) then
+            ShowDialog
+              ("Can't set current theme",
+               Gtk_Window(Get_Object(Builder, "skymapwindow")));
+         end if;
       end;
    end CreateGameOptions;
 
