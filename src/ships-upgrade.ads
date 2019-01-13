@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,8 +19,10 @@ package Ships.Upgrade is
 
    Ship_Upgrade_Error: exception; -- Raised when player can't start upgrading module
 
-   procedure StartUpgrading
-     (ModuleIndex, UpgradeType: Positive); -- Set upgrading order
+   procedure StartUpgrading(ModuleIndex, UpgradeType: Positive) with
+      Pre =>
+      (ModuleIndex <= PlayerShip.Modules.Last_Index and
+       UpgradeType < 5); -- Set upgrading order
    procedure UpgradeShip(Minutes: Positive); -- Upgrade selected module on ship
 
 end Ships.Upgrade;
