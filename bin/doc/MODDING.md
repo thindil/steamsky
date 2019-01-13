@@ -773,16 +773,29 @@ story.
       from bonus list).
 
 ## Themes
-All themes files are standard CSS files. To edit default game theme, open file
-*steamsky.css* in *data/ui* directory. But best option is create new directory in
-*themes* directory (by default it is *data/themes* but you can change it with
-game starting parameter, see [README.md](../README.md) for more info about it)
-and then file *.css* with that same name inside new directory.
-To remove theme just delete theme directory from *themes* directory. More
-information about variables and settings is in default game theme file
-*data/ui/steamsky.css*.
-More information about how CSS works with GTK (GUI library used by the game)
-is available at: https://developer.gnome.org/gtk3/stable/chap-css-overview.html
+
+### General informations
+- To edit default game theme, open file *steamsky.css* in *data/ui* directory.
+- To create new theme, first create new directory in *themes* directory
+  (by default it is *data/themes* but you can change it with game starting
+  parameter, see [README.md](../README.md) for more info about it). Next,
+  inside new theme directory, create two files: one with extension
+  *.cfg*(theme configuration file) and second with extension *.css*. Their can
+  have any names.
+- To remove theme just delete theme directory from *themes* directory.
+- More information about variables and settings is in default game theme file
+  *data/ui/steamsky.css*.
+- More information about how CSS works with GTK (GUI library used by the game)
+  is available at:
+  https://developer.gnome.org/gtk3/stable/chap-css-overview.html
+
+### Theme configuration options
+- All theme configuration options are standard configuration pairs
+  `key = value`. Example: `Name = Default theme`.
+- Each configuration pair must be in one line.
+- Key `Name`: name of theme. Will be displayed to player in game options when
+  user will be selecting game theme.
+- Key `FileName`: name of *.css* file for theme.
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
