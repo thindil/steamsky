@@ -796,6 +796,22 @@ story.
 - Key `Name`: name of theme. Will be displayed to player in game options when
   user will be selecting game theme.
 - Key `FileName`: name of *.css* file for theme.
+- Key `EnemyShipIcon`: Hexadecimal number on UTF-8 character used to show
+  Enemy Ship event on map. Optional.
+- Key `AttackOnBaseIcon`: Hexadecimal number on UTF-8 character used to show
+  Attack on Base event on map. Optional.
+- Key `DiseaseIcon`: Hexadecimal number on UTF-8 character used to show
+  Disease in Base event on map. Optional.
+- Key `DoublePriceIcon`: Hexadecimal number on UTF-8 character used to show
+  Double Price on Item in Base event on map. Optional.
+- Key `FullDocksIcon`: Hexadecimal number on UTF-8 character used to show
+  Full Docks in Base event on map. Optional.
+- Key `EnemyPatrolIcon`: Hexadecimal number on UTF-8 character used to show
+  Enemy Patrol event on map. Optional.
+- Key `TraderIcon`: Hexadecimal number on UTF-8 character used to show
+  Trader ship event on map. Optional.
+- Key `FriendlyShipIcon`: Hexadecimal number on UTF-8 character used to show
+  Friendly Ship event on map. Optional.
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
