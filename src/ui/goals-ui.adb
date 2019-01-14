@@ -73,6 +73,15 @@ package body Goals.UI is
       Get_Selected(Get_Selection(GoalsView), GoalsModel, Iter);
       if Get_String(GoalsModel, Iter, 0) /= "Random" and
         Get_Int(GoalsModel, Iter, 1) = 0 then
+         if Row_Expanded(GoalsView, Get_Path(GoalsModel, Iter)) then
+            if not Collapse_Row(GoalsView, Get_Path(GoalsModel, Iter)) then
+               return;
+            end if;
+         else
+            if not Expand_Row(GoalsView, Get_Path(GoalsModel, Iter), True) then
+               return;
+            end if;
+         end if;
          return;
       end if;
       if Get_String(GoalsModel, Iter, 0) = "Random" then
