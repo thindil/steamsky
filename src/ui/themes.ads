@@ -28,6 +28,14 @@ package Themes is
    record
       Name: Unbounded_String; -- Name of theme
       FileName: Unbounded_String; -- Name of .css file of theme
+      EnemyShipIcon: Wide_Character; -- Icon used for Enemy Ship event
+      AttackOnBaseIcon: Wide_Character; -- Icon used for Attack on Base event
+      DiseaseIcon: Wide_Character; -- Icon used for Disease event
+      DoublePriceIcon: Wide_Character; -- Icon used for Double Price event
+      FullDocksIcon: Wide_Character; -- Icon used for Full Docks event
+      EnemyPatrolIcon: Wide_Character; -- Icon used for Enemy Patrol event
+      TraderIcon: Wide_Character; -- Icon used for Trader event
+      FriendlyShipIcon: Wide_Character; -- Icon used for Friendly Ship event
    end record;
    package Themes_Container is new Ada.Containers.Indefinite_Hashed_Maps
      (String, ThemeRecord, Ada.Strings.Hash, "=");
