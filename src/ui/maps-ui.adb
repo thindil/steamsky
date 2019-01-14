@@ -82,6 +82,7 @@ with Trades.UI; use Trades.UI;
 with Factions; use Factions;
 with Stories; use Stories;
 with Stories.UI; use Stories.UI;
+with Themes; use Themes;
 
 package body Maps.UI is
 
@@ -444,6 +445,8 @@ package body Maps.UI is
       TextWindow: constant Gdk_Window :=
         Get_Window
           (Gtk_Text_View(Get_Object(Builder, "mapview")), Text_Window_Text);
+      CurrentTheme: constant ThemeRecord :=
+        Themes_List(To_String(GameSettings.InterfaceTheme));
    begin
       StartY := CenterY - (MapHeight / 2);
       StartX := CenterX - (MapWidth / 2);
@@ -526,7 +529,26 @@ package body Maps.UI is
                      end case;
                   end if;
                elsif SkyMap(X, Y).EventIndex > 0 then
-                  MapChar := Wide_Character'Val(16#f666#);
+                  case Events_List(SkyMap(X, Y).EventIndex).EType is
+                     when EnemyShip =>
+                        MapChar := CurrentTheme.EnemyShipIcon;
+                     when AttackOnBase =>
+                        MapChar := CurrentTheme.AttackOnBaseIcon;
+                     when EnemyPatrol =>
+                        MapChar := CurrentTheme.EnemyPatrolIcon;
+                     when Disease =>
+                        MapChar := CurrentTheme.DiseaseIcon;
+                     when FullDocks =>
+                        MapChar := CurrentTheme.FullDocksIcon;
+                     when DoublePrice =>
+                        MapChar := CurrentTheme.DoublePriceIcon;
+                     when Trader =>
+                        MapChar := CurrentTheme.TraderIcon;
+                     when FriendlyShip =>
+                        MapChar := CurrentTheme.FriendlyShipIcon;
+                     when others =>
+                        null;
+                  end case;
                   if SkyMap(X, Y).Visited then
                      case Events_List(SkyMap(X, Y).EventIndex).EType is
                         when EnemyShip =>
