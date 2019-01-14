@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -47,16 +47,21 @@ package Statistics is
    end record;
    GameStats: GameStats_Data; -- Game statistics
 
-   procedure UpdateDestroyedShips
-     (ShipName: Unbounded_String); -- Add new destroyed ship to list
+   procedure UpdateDestroyedShips(ShipName: Unbounded_String) with
+      Pre => ShipName /=
+      Null_Unbounded_String; -- Add new destroyed ship to list
    procedure ClearGameStats; -- Clear game statistics
-   procedure UpdateFinishedGoals
-     (Index: Unbounded_String); -- Add new finished goal to list
-   procedure UpdateFinishedMissions
-     (MType: Unbounded_String); -- Add new finished mission to list
-   procedure UpdateCraftingOrders
-     (Index: Unbounded_String); -- Add new finished crafting order to list
+   procedure UpdateFinishedGoals(Index: Unbounded_String) with
+      Pre => Index /= Null_Unbounded_String; -- Add new finished goal to list
+   procedure UpdateFinishedMissions(MType: Unbounded_String) with
+      Pre => MType /=
+      Null_Unbounded_String; -- Add new finished mission to list
+   procedure UpdateCraftingOrders(Index: Unbounded_String) with
+      Pre => Index /=
+      Null_Unbounded_String; -- Add new finished crafting order to list
    procedure UpdateKilledMobs(Mob: Member_Data;
-      FractionName: Unbounded_String); -- Add new killed mob to list
+      FractionName: Unbounded_String) with
+      Pre => FractionName /=
+      Null_Unbounded_String; -- Add new killed mob to list
 
 end Statistics;
