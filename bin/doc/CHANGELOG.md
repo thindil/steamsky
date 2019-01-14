@@ -34,6 +34,8 @@ All notable changes to this project will be documented in this file.
 - Crash on failing mission
 - Missing info about lack of tools when giving orders to whole crew
 - Setting fonts size
+- UI/UX: Selecting character goal behaves different than other menuses
+  (issue #35)
 
 ## [3.2] - 2018-12-30
 
