@@ -148,7 +148,15 @@ package body Themes is
          (Name => To_Unbounded_String("Default theme"),
           Filename =>
             DataDirectory &
-            To_Unbounded_String("ui" & Dir_Separator & "steamsky.css")));
+            To_Unbounded_String("ui" & Dir_Separator & "steamsky.css"),
+          EnemyShipIcon => Wide_Character'Val(16#f0fb#),
+          AttackOnBaseIcon => Wide_Character'Val(16#f78c#),
+          DiseaseIcon => Wide_Character'Val(16#f780#),
+          DoublePriceIcon => Wide_Character'Val(16#f53a#),
+          FullDocksIcon => Wide_Character'Val(16#f057#),
+          EnemyPatrolIcon => Wide_Character'Val(16#f0fb#),
+          TraderIcon => Wide_Character'Val(16#f197#),
+          FriendlyShipIcon => Wide_Character'Val(16#f197#)));
       Start_Search
         (Directories, To_String(ThemesDirectory), "",
          (Directory => True, others => False));
@@ -174,12 +182,61 @@ package body Themes is
                           To_Unbounded_String
                             (Full_Name(FoundDirectory) & Dir_Separator) &
                           Value;
+                     elsif FieldName =
+                       To_Unbounded_String("EnemyShipIcon") then
+                        TempRecord.EnemyShipIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName =
+                       To_Unbounded_String("AttackOnBaseIcon") then
+                        TempRecord.AttackOnBaseIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName = To_Unbounded_String("DiseaseIcon") then
+                        TempRecord.DiseaseIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName =
+                       To_Unbounded_String("DoublePriceIcon") then
+                        TempRecord.DoublePriceIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName =
+                       To_Unbounded_String("FullDocksIcon") then
+                        TempRecord.FullDocksIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName =
+                       To_Unbounded_String("EnemyPatrolIcon") then
+                        TempRecord.EnemyPatrolIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName = To_Unbounded_String("TraderIcon") then
+                        TempRecord.TraderIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName =
+                       To_Unbounded_String("FriendlyShipIcon") then
+                        TempRecord.FriendlyShipIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
                      end if;
                   end if;
                end loop;
                Close(ConfigFile);
                Themes_Container.Include
                  (Themes_List, Simple_Name(FoundDirectory), TempRecord);
+               TempRecord :=
+                 (Name => Null_Unbounded_String,
+                  Filename => Null_Unbounded_String,
+                  EnemyShipIcon => Wide_Character'Val(16#f0fb#),
+                  AttackOnBaseIcon => Wide_Character'Val(16#f78c#),
+                  DiseaseIcon => Wide_Character'Val(16#f780#),
+                  DoublePriceIcon => Wide_Character'Val(16#f53a#),
+                  FullDocksIcon => Wide_Character'Val(16#f057#),
+                  EnemyPatrolIcon => Wide_Character'Val(16#f0fb#),
+                  TraderIcon => Wide_Character'Val(16#f197#),
+                  FriendlyShipIcon => Wide_Character'Val(16#f197#));
             end loop;
             End_Search(Files);
          end if;
