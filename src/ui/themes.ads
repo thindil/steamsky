@@ -36,6 +36,11 @@ package Themes is
       EnemyPatrolIcon: Wide_Character; -- Icon used for Enemy Patrol event
       TraderIcon: Wide_Character; -- Icon used for Trader event
       FriendlyShipIcon: Wide_Character; -- Icon used for Friendly Ship event
+      DeliverIcon: Wide_Character; -- Icon used for Deliver Item mission
+      DestroyIcon: Wide_Character; -- Icon used for Destroy Ship mission
+      PatrolIcon: Wide_Character; -- Icon used for  Patrol Area mission
+      ExploreIcon: Wide_Character; -- Icon used for Explore Area mission
+      PassengerIcon: Wide_Character; -- Icon used for Transport Passenger mission
    end record;
    package Themes_Container is new Ada.Containers.Indefinite_Hashed_Maps
      (String, ThemeRecord, Ada.Strings.Hash, "=");

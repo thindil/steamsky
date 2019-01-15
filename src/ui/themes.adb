@@ -156,7 +156,12 @@ package body Themes is
           FullDocksIcon => Wide_Character'Val(16#f057#),
           EnemyPatrolIcon => Wide_Character'Val(16#f0fb#),
           TraderIcon => Wide_Character'Val(16#f197#),
-          FriendlyShipIcon => Wide_Character'Val(16#f197#)));
+          FriendlyShipIcon => Wide_Character'Val(16#f197#),
+          DeliverIcon => Wide_Character'Val(16#f187#),
+          DestroyIcon => Wide_Character'Val(16#f666#),
+          PatrolIcon => Wide_Character'Val(16#f0b2#),
+          ExploreIcon => Wide_Character'Val(16#f06e#),
+          PassengerIcon => Wide_Character'Val(16#f183#)));
       Start_Search
         (Directories, To_String(ThemesDirectory), "",
          (Directory => True, others => False));
@@ -220,6 +225,27 @@ package body Themes is
                         TempRecord.FriendlyShipIcon :=
                           Wide_Character'Val
                             (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName = To_Unbounded_String("DeliverIcon") then
+                        TempRecord.DeliverIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName = To_Unbounded_String("DestroyIcon") then
+                        TempRecord.DestroyIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName = To_Unbounded_String("PatrolIcon") then
+                        TempRecord.PatrolIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName = To_Unbounded_String("ExploreIcon") then
+                        TempRecord.ExploreIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName =
+                       To_Unbounded_String("PassengerIcon") then
+                        TempRecord.PassengerIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
                      end if;
                   end if;
                end loop;
@@ -236,7 +262,12 @@ package body Themes is
                   FullDocksIcon => Wide_Character'Val(16#f057#),
                   EnemyPatrolIcon => Wide_Character'Val(16#f0fb#),
                   TraderIcon => Wide_Character'Val(16#f197#),
-                  FriendlyShipIcon => Wide_Character'Val(16#f197#));
+                  FriendlyShipIcon => Wide_Character'Val(16#f197#),
+                  DeliverIcon => Wide_Character'Val(16#f187#),
+                  DestroyIcon => Wide_Character'Val(16#f666#),
+                  PatrolIcon => Wide_Character'Val(16#f0b2#),
+                  ExploreIcon => Wide_Character'Val(16#f06e#),
+                  PassengerIcon => Wide_Character'Val(16#f183#));
             end loop;
             End_Search(Files);
          end if;
