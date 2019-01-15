@@ -20,7 +20,6 @@ with Ada.Containers; use Ada.Containers;
 with Maps; use Maps;
 with Messages; use Messages;
 with Items; use Items;
-with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Events; use Events;
