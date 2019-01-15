@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -16,17 +16,19 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Bases; use Bases;
+with Ships; use Ships;
 
 package Trades is
 
    TraderCargo: BaseCargo_Container.Vector; -- List of all cargo in trader ship
 
    procedure BuyItems(BaseItemIndex: Positive;
-      Amount: String); -- Buy items from bases
+      Amount: String); -- Buy items from bases or trader
    procedure SellItems(ItemIndex: Positive;
-      Amount: String); -- Sell items from bases
-   procedure GenerateTraderCargo
-     (ProtoIndex: Positive); -- Generate list of cargo to trade
+      Amount: String); -- Sell items from bases or trader
+   procedure GenerateTraderCargo(ProtoIndex: Positive) with
+      Pre => ProtoIndex <=
+      ProtoShips_List.Last_Index; -- Generate list of cargo to trade
    Trade_Cant_Buy: exception; -- Raised when items is not available to buy
    Trade_Not_For_Sale_Now: exception; -- Raised when no items available at this time for sale
    Trade_Buying_Too_Much: exception; -- Raised when player trying buy more than can
