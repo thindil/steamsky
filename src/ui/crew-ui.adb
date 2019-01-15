@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -29,7 +29,6 @@ with Glib.Object; use Glib.Object;
 with Glib.Types; use Glib.Types;
 with Glib.Properties; use Glib.Properties;
 with Game; use Game;
-with Ships; use Ships;
 with ShipModules; use ShipModules;
 with Crew.Inventory; use Crew.Inventory;
 with Crew.UI.Handlers; use Crew.UI.Handlers;
