@@ -500,7 +500,18 @@ package body Maps.UI is
                   MapChar := Wide_Character'Val(16#f059#);
                   MapColor := GreenColor;
                elsif SkyMap(X, Y).MissionIndex > 0 then
-                  MapChar := Wide_Character'Val(16#f057#);
+                  case AcceptedMissions(SkyMap(X, Y).MissionIndex).MType is
+                     when Deliver =>
+                        MapChar := CurrentTheme.DeliverIcon;
+                     when Destroy =>
+                        MapChar := CurrentTheme.DestroyIcon;
+                     when Patrol =>
+                        MapChar := CurrentTheme.PatrolIcon;
+                     when Explore =>
+                        MapChar := CurrentTheme.ExploreIcon;
+                     when Passenger =>
+                        MapChar := CurrentTheme.PassengerIcon;
+                  end case;
                   if SkyMap(X, Y).Visited then
                      case AcceptedMissions(SkyMap(X, Y).MissionIndex).MType is
                         when Deliver =>
