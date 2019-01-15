@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 - Setting fonts size
 - UI/UX: Selecting character goal behaves different than other menuses
   (issue #35)
+- Auto-resizing window makes it hard to exit character creation screen
+  in specific curcumstances (issue #36)
 
 ## [3.0.3] - 2019-01-06
 
