@@ -852,6 +852,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="halign">center</property>
                 <property name="relief">none</property>
                 <property name="uri">https://thindil.github.io/steamsky/</property>
+                <property name="name">flatbutton</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -868,6 +869,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="halign">center</property>
                 <property name="relief">none</property>
                 <property name="uri">mailto:thindil@laeran.pl</property>
+                <property name="name">flatbutton</property>
               </object>
               <packing>
                 <property name="expand">False</property>
