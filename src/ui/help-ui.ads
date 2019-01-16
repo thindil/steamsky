@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -18,6 +18,7 @@
 package Help.UI is
 
    procedure CreateHelpUI; -- Create help user interface
-   procedure ShowHelpUI(Topic: Positive); -- Show help user interface
+   procedure ShowHelpUI(Topic: Positive) with
+      Pre => Topic <= Help_List.Last_Index; -- Show help user interface
 
 end Help.UI;
