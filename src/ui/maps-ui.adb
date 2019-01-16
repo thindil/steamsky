@@ -253,103 +253,166 @@ package body Maps.UI is
       end loop;
       if HavePilot then
          UpdateLabel
-           ("lblpilot", "[<span foreground=""#4E9A06"">P</span>]",
+           ("lblpilot",
+            Encode
+              ("<span foreground=""#4E9A06"">" & Wide_Character'Val(16#f655#) &
+               "</span>"),
             "Pilot is in position.");
       else
          UpdateLabel
-           ("lblpilot", "[<span foreground=""red"">P</span>]",
+           ("lblpilot",
+            Encode
+              ("<span foreground=""red"">" & Wide_Character'Val(16#f655#) &
+               "</span>"),
             "No pilot assigned. Ship can't move.");
       end if;
       if HaveEngineer then
          UpdateLabel
-           ("lblengineer", "[<span foreground=""#4E9A06"">E</span>]",
+           ("lblengineer",
+            Encode
+              ("<span foreground=""#4E9A06"">" & Wide_Character'Val(16#f013#) &
+               "</span>"),
             "Engineer is in position.");
       else
          UpdateLabel
-           ("lblengineer", "[<span foreground=""red"">E</span>]",
+           ("lblengineer",
+            Encode
+              ("<span foreground=""red"">" & Wide_Character'Val(16#f013#) &
+               "</span>"),
             "No engineer assigned. Ship can't move.");
       end if;
       if HaveGunner then
          UpdateLabel
-           ("lblgunners", "[<span foreground=""#4E9A06"">G</span>]",
+           ("lblgunners",
+            Encode
+              ("<span foreground=""#4E9A06"">" & Wide_Character'Val(16#f4fb#) &
+               "</span>"),
             "All guns are manned.");
       else
          UpdateLabel
-           ("lblgunners", "[<span foreground=""red"">G</span>]",
+           ("lblgunners",
+            Encode
+              ("<span foreground=""red"">" & Wide_Character'Val(16#f4fb#) &
+               "</span>"),
             "One or more guns don't have a gunner.");
       end if;
       if NeedRepairs then
          if HaveRepairman then
             UpdateLabel
-              ("lblrepairs", "[<span foreground=""#4E9A06"">R</span>]",
+              ("lblrepairs",
+               Encode
+                 ("<span foreground=""#4E9A06"">" &
+                  Wide_Character'Val(16#f54a#) & "</span>"),
                "The ship is being repaired.");
          else
             UpdateLabel
-              ("lblrepairs", "[<span foreground=""red"">R</span>]",
+              ("lblrepairs",
+               Encode
+                 ("<span foreground=""red"">" & Wide_Character'Val(16#f54a#) &
+                  "</span>"),
                "The ship needs repairs but no one is working them.");
          end if;
       else
-         UpdateLabel("lblrepairs", "[R]", "The ship doesn't require repairs.");
+         UpdateLabel
+           ("lblrepairs", Encode("" & Wide_Character'Val(16#f54a#)),
+            "The ship doesn't require repairs.");
       end if;
       if NeedWorker then
          if HaveWorker then
             UpdateLabel
-              ("lblcrafting", "[<span foreground=""#4E9A06"">M</span>]",
+              ("lblcrafting",
+               Encode
+                 ("<span foreground=""#4E9A06"">" &
+                  Wide_Character'Val(16#f0e3#) & "</span>"),
                "All crafting orders are being executed.");
          else
             UpdateLabel
-              ("lblcrafting", "[<span foreground=""red"">M</span>]",
+              ("lblcrafting",
+               Encode
+                 ("<span foreground=""red"">" & Wide_Character'Val(16#f0e3#) &
+                  "</span>"),
                "You need to assign crew members to begin manufacturing.");
          end if;
       else
-         UpdateLabel("lblcrafting", "[M]", "No crafting orders were set.");
+         UpdateLabel
+           ("lblcrafting", Encode("" & Wide_Character'Val(16#f0e3#)),
+            "No crafting orders were set.");
       end if;
       if PlayerShip.UpgradeModule > 0 then
          if HaveUpgrader then
             UpdateLabel
-              ("lblupgrade", "[<span foreground=""#4E9A06"">U</span>]",
+              ("lblupgrade",
+               Encode
+                 ("<span foreground=""#4E9A06"">" &
+                  Wide_Character'Val(16#f6e3#) & "</span>"),
                "A ship module upgrade in progress.");
          else
             UpdateLabel
-              ("lblupgrade", "[<span foreground=""red"">U</span>]",
+              ("lblupgrade",
+               Encode
+                 ("<span foreground=""red"">" & Wide_Character'Val(16#f6e3#) &
+                  "</span>"),
                "A ship module upgrade is in progress but no one is working on it.");
          end if;
       else
-         UpdateLabel("lblupgrade", "[U]", "No ship module upgrade was set.");
+         UpdateLabel
+           ("lblupgrade", Encode("" & Wide_Character'Val(16#f6e3#)),
+            "No ship module upgrade was set.");
       end if;
       if HaveTrader then
          UpdateLabel
-           ("lbltalk", "[<span foreground=""#4E9A06"">T</span>]",
+           ("lbltalk",
+            Encode
+              ("<span foreground=""#4E9A06"">" & Wide_Character'Val(16#f651#) &
+               "</span>"),
             "Trader is in position.");
       elsif SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
          UpdateLabel
-           ("lbltalk", "[<span foreground=""red"">T</span>]",
+           ("lbltalk",
+            Encode
+              ("<span foreground=""red"">" & Wide_Character'Val(16#f651#) &
+               "</span>"),
             "No trader assigned. You need one to talk/trade.");
       elsif SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
          if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
              .EType =
            FriendlyShip then
             UpdateLabel
-              ("lbltalk", "[<span foreground=""red"">T</span>]",
+              ("lbltalk",
+               Encode
+                 ("<span foreground=""red"">" & Wide_Character'Val(16#f651#) &
+                  "</span>"),
                "No trader assigned. You need one to talk/trade.");
          else
-            UpdateLabel("lbltalk", "[T]", "No trader needed.");
+            UpdateLabel
+              ("lbltalk", Encode("" & Wide_Character'Val(16#f651#)),
+               "No trader needed.");
          end if;
       else
-         UpdateLabel("lbltalk", "[T]", "No trader needed.");
+         UpdateLabel
+           ("lbltalk", Encode("" & Wide_Character'Val(16#f651#)),
+            "No trader needed.");
       end if;
       if NeedCleaning then
          if HaveCleaner then
             UpdateLabel
-              ("lblclean", "[<span foreground=""#4E9A06"">C</span>]",
+              ("lblclean",
+               Encode
+                 ("<span foreground=""#4E9A06"">" &
+                  Wide_Character'Val(16#f458#) & "</span>"),
                "Ship is cleaned.");
          else
             UpdateLabel
-              ("lblclean", "[<span foreground=""red"">C</span>]",
+              ("lblclean",
+               Encode
+                 ("<span foreground=""red"">" & Wide_Character'Val(16#f458#) &
+                  "</span>"),
                "Ship is dirty but no one is cleaning it.");
          end if;
       else
-         UpdateLabel("lblclean", "[C]", "Ship needs no cleaning.");
+         UpdateLabel
+           ("lblclean", Encode("" & Wide_Character'Val(16#f458#)),
+            "Ship needs no cleaning.");
       end if;
    end UpdateHeader;
 
