@@ -812,6 +812,16 @@ story.
   Trader ship event on map. Optional.
 - Key `FriendlyShipIcon`: Hexadecimal number on UTF-8 character used to show
   Friendly Ship event on map. Optional.
+- Key `DeliverIcon`: Hexadecimal number on UTF-8 character used to show
+  Deliver type mission on map. Optional.
+- Key `DestroyIcon`: Hexadecimal number on UTF-8 character used to show
+  Destroy Ship type mission on map. Optional.
+- Key `PatrolIcon`: Hexadecimal number on UTF-8 character used to show
+  Patrol Area type mission on map. Optional.
+- Key `ExploreIcon`: Hexadecimal number on UTF-8 character used to show
+  Explore Area type mission on map. Optional.
+- Key `PassengerIcon`: Hexadecimal number on UTF-8 character used to show
+  Transport Passenger type mission on map. Optional.
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
