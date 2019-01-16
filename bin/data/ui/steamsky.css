@@ -237,7 +237,7 @@ GtkTextView#mapview {
    font-size:12px;
 }
 
-/* Font used mostly in help, but in ship info in corner too */
+/* Font used mostly in help */
 *#normalfont {
    font-family:Roboto;
    font-style:normal;
@@ -390,3 +390,9 @@ GtkStackSwitcher .button:checked {
    border-width:0;
 }
 
+
+/* Font used for icons in UI */
+*#fontawesome {
+   font-family:"Font Awesome 5 Free";
+   font-size:12px;
+}
