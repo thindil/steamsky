@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -21,8 +21,8 @@ with Ada.Exceptions; use Ada.Exceptions;
 package MainMenu is
 
    procedure CreateMainMenu; -- Create main menu and show it
-   procedure UpdateGoalButton
-     (Message: String); -- Update label on character goal button
+   procedure UpdateGoalButton(Message: String) with
+      Pre => Message'Length > 0; -- Update label on character goal button
    procedure ShowMainMenu; -- Show main menu window
    procedure SaveException(An_Exception: Exception_Occurrence;
       PrintToTerminal: Boolean); -- Save data exception to file
