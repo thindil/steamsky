@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -26,6 +26,7 @@ package Maps.UI is
    procedure ShowSkyMap(X: Integer := PlayerShip.SkyX;
       Y: Integer := PlayerShip.SkyY); -- Show sky map
    procedure UpdateHeader; -- Update game header informations
+   procedure SetMapMoveButtons; -- Set icons on move map buttons
 
 private
 
