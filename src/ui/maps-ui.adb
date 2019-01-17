@@ -107,6 +107,8 @@ package body Maps.UI is
       NeedCleaning, NeedRepairs, NeedWorker, HavePilot, HaveEngineer,
       HaveTrader, HaveUpgrader, HaveCleaner, HaveRepairman: Boolean := False;
       ItemAmount: Natural := 0;
+      CurrentTheme: constant ThemeRecord :=
+        Themes_List(To_String(GameSettings.InterfaceTheme));
       function GetItemAmount(ItemType: Unbounded_String) return Natural is
          Amount: Natural := 0;
       begin
@@ -255,14 +257,14 @@ package body Maps.UI is
          UpdateLabel
            ("lblpilot",
             Encode
-              ("<span foreground=""#4E9A06"">" & Wide_Character'Val(16#f655#) &
+              ("<span foreground=""#4E9A06"">" & CurrentTheme.PilotIcon &
                "</span>"),
             "Pilot is in position.");
       else
          UpdateLabel
            ("lblpilot",
             Encode
-              ("<span foreground=""red"">" & Wide_Character'Val(16#f655#) &
+              ("<span foreground=""red"">" & CurrentTheme.PilotIcon &
                "</span>"),
             "No pilot assigned. Ship can't move.");
       end if;
@@ -270,14 +272,14 @@ package body Maps.UI is
          UpdateLabel
            ("lblengineer",
             Encode
-              ("<span foreground=""#4E9A06"">" & Wide_Character'Val(16#f013#) &
+              ("<span foreground=""#4E9A06"">" & CurrentTheme.EngineerIcon &
                "</span>"),
             "Engineer is in position.");
       else
          UpdateLabel
            ("lblengineer",
             Encode
-              ("<span foreground=""red"">" & Wide_Character'Val(16#f013#) &
+              ("<span foreground=""red"">" & CurrentTheme.EngineerIcon &
                "</span>"),
             "No engineer assigned. Ship can't move.");
       end if;
@@ -285,14 +287,14 @@ package body Maps.UI is
          UpdateLabel
            ("lblgunners",
             Encode
-              ("<span foreground=""#4E9A06"">" & Wide_Character'Val(16#f4fb#) &
+              ("<span foreground=""#4E9A06"">" & CurrentTheme.GunnerIcon &
                "</span>"),
             "All guns are manned.");
       else
          UpdateLabel
            ("lblgunners",
             Encode
-              ("<span foreground=""red"">" & Wide_Character'Val(16#f4fb#) &
+              ("<span foreground=""red"">" & CurrentTheme.GunnerIcon &
                "</span>"),
             "One or more guns don't have a gunner.");
       end if;
@@ -301,20 +303,20 @@ package body Maps.UI is
             UpdateLabel
               ("lblrepairs",
                Encode
-                 ("<span foreground=""#4E9A06"">" &
-                  Wide_Character'Val(16#f54a#) & "</span>"),
+                 ("<span foreground=""#4E9A06"">" & CurrentTheme.RepairIcon &
+                  "</span>"),
                "The ship is being repaired.");
          else
             UpdateLabel
               ("lblrepairs",
                Encode
-                 ("<span foreground=""red"">" & Wide_Character'Val(16#f54a#) &
+                 ("<span foreground=""red"">" & CurrentTheme.RepairIcon &
                   "</span>"),
                "The ship needs repairs but no one is working them.");
          end if;
       else
          UpdateLabel
-           ("lblrepairs", Encode("" & Wide_Character'Val(16#f54a#)),
+           ("lblrepairs", Encode("" & CurrentTheme.RepairIcon),
             "The ship doesn't require repairs.");
       end if;
       if NeedWorker then
@@ -323,19 +325,19 @@ package body Maps.UI is
               ("lblcrafting",
                Encode
                  ("<span foreground=""#4E9A06"">" &
-                  Wide_Character'Val(16#f0e3#) & "</span>"),
+                  CurrentTheme.ManufactureIcon & "</span>"),
                "All crafting orders are being executed.");
          else
             UpdateLabel
               ("lblcrafting",
                Encode
-                 ("<span foreground=""red"">" & Wide_Character'Val(16#f0e3#) &
+                 ("<span foreground=""red"">" & CurrentTheme.ManufactureIcon &
                   "</span>"),
                "You need to assign crew members to begin manufacturing.");
          end if;
       else
          UpdateLabel
-           ("lblcrafting", Encode("" & Wide_Character'Val(16#f0e3#)),
+           ("lblcrafting", Encode("" & CurrentTheme.ManufactureIcon),
             "No crafting orders were set.");
       end if;
       if PlayerShip.UpgradeModule > 0 then
@@ -343,34 +345,34 @@ package body Maps.UI is
             UpdateLabel
               ("lblupgrade",
                Encode
-                 ("<span foreground=""#4E9A06"">" &
-                  Wide_Character'Val(16#f6e3#) & "</span>"),
+                 ("<span foreground=""#4E9A06"">" & CurrentTheme.UpgradeIcon &
+                  "</span>"),
                "A ship module upgrade in progress.");
          else
             UpdateLabel
               ("lblupgrade",
                Encode
-                 ("<span foreground=""red"">" & Wide_Character'Val(16#f6e3#) &
+                 ("<span foreground=""red"">" & CurrentTheme.UpgradeIcon &
                   "</span>"),
                "A ship module upgrade is in progress but no one is working on it.");
          end if;
       else
          UpdateLabel
-           ("lblupgrade", Encode("" & Wide_Character'Val(16#f6e3#)),
+           ("lblupgrade", Encode("" & CurrentTheme.UpgradeIcon),
             "No ship module upgrade was set.");
       end if;
       if HaveTrader then
          UpdateLabel
            ("lbltalk",
             Encode
-              ("<span foreground=""#4E9A06"">" & Wide_Character'Val(16#f651#) &
+              ("<span foreground=""#4E9A06"">" & CurrentTheme.CrewTraderIcon &
                "</span>"),
             "Trader is in position.");
       elsif SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
          UpdateLabel
            ("lbltalk",
             Encode
-              ("<span foreground=""red"">" & Wide_Character'Val(16#f651#) &
+              ("<span foreground=""red"">" & CurrentTheme.CrewTraderIcon &
                "</span>"),
             "No trader assigned. You need one to talk/trade.");
       elsif SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
@@ -380,17 +382,17 @@ package body Maps.UI is
             UpdateLabel
               ("lbltalk",
                Encode
-                 ("<span foreground=""red"">" & Wide_Character'Val(16#f651#) &
+                 ("<span foreground=""red"">" & CurrentTheme.CrewTraderIcon &
                   "</span>"),
                "No trader assigned. You need one to talk/trade.");
          else
             UpdateLabel
-              ("lbltalk", Encode("" & Wide_Character'Val(16#f651#)),
+              ("lbltalk", Encode("" & CurrentTheme.CrewTraderIcon),
                "No trader needed.");
          end if;
       else
          UpdateLabel
-           ("lbltalk", Encode("" & Wide_Character'Val(16#f651#)),
+           ("lbltalk", Encode("" & CurrentTheme.CrewTraderIcon),
             "No trader needed.");
       end if;
       if NeedCleaning then
@@ -398,20 +400,20 @@ package body Maps.UI is
             UpdateLabel
               ("lblclean",
                Encode
-                 ("<span foreground=""#4E9A06"">" &
-                  Wide_Character'Val(16#f458#) & "</span>"),
+                 ("<span foreground=""#4E9A06"">" & CurrentTheme.CleanIcon &
+                  "</span>"),
                "Ship is cleaned.");
          else
             UpdateLabel
               ("lblclean",
                Encode
-                 ("<span foreground=""red"">" & Wide_Character'Val(16#f458#) &
+                 ("<span foreground=""red"">" & CurrentTheme.CleanIcon &
                   "</span>"),
                "Ship is dirty but no one is cleaning it.");
          end if;
       else
          UpdateLabel
-           ("lblclean", Encode("" & Wide_Character'Val(16#f458#)),
+           ("lblclean", Encode("" & CurrentTheme.CleanIcon),
             "Ship needs no cleaning.");
       end if;
    end UpdateHeader;
