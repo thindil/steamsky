@@ -31,7 +31,6 @@ with Maps.UI; use Maps.UI;
 with Combat.UI; use Combat.UI;
 with GameOptions; use GameOptions;
 with Statistics.UI; use Statistics.UI;
-with Ships; use Ships;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
 with Items; use Items;

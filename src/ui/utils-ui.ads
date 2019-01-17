@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -23,6 +23,7 @@ with Gtk.Label; use Gtk.Label;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Gdk.Event; use Gdk.Event;
+with Ships; use Ships;
 
 package Utils.UI is
 
@@ -60,7 +61,10 @@ package Utils.UI is
    procedure MinutesToDate(Minutes: Natural;
       InfoText: in out Unbounded_String); -- Convert minutes to game date and add it to text
    procedure ShowInventoryItemInfo(Label: Gtk_Label; ItemIndex: Positive;
-      MemberIndex: Natural); -- Show info about selected item in ship cargo or crew member inventory
+      MemberIndex: Natural) with
+      Pre => MemberIndex <=
+      PlayerShip.Crew
+        .Last_Index; -- Show info about selected item in ship cargo or crew member inventory
    procedure HideItemInfo
      (User_Data: access GObject_Record'
         Class); -- Hide or show detailed item info
