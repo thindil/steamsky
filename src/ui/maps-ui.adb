@@ -37,6 +37,7 @@ with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Overlay; use Gtk.Overlay;
 with Gtk.Text_Mark; use Gtk.Text_Mark;
+with Gtk.Button; use Gtk.Button;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -1288,6 +1289,7 @@ package body Maps.UI is
            (Gtk_Window(MainWindow), Gint(GameSettings.WindowWidth),
             Gint(GameSettings.WindowHeight));
       end;
+      SetMapMoveButtons;
       ShowSkyMap;
    end CreateSkyMap;
 
@@ -1350,5 +1352,21 @@ package body Maps.UI is
             PlayerShip);
       end if;
    end FinishStory;
+
+   procedure SetMapMoveButtons is
+   begin
+      Set_Label
+        (Gtk_Button(Get_Object(Builder, "btnmapup")),
+         Encode("" & Wide_Character'Val(16#f106#)));
+      Set_Label
+        (Gtk_Button(Get_Object(Builder, "btnmapdown")),
+         Encode("" & Wide_Character'Val(16#f107#)));
+      Set_Label
+        (Gtk_Button(Get_Object(Builder, "btnmapleft")),
+         Encode("" & Wide_Character'Val(16#f104#)));
+      Set_Label
+        (Gtk_Button(Get_Object(Builder, "btnmapright")),
+         Encode("" & Wide_Character'Val(16#f105#)));
+   end SetMapMoveButtons;
 
 end Maps.UI;
