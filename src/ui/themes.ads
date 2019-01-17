@@ -41,6 +41,14 @@ package Themes is
       PatrolIcon: Wide_Character; -- Icon used for  Patrol Area mission
       ExploreIcon: Wide_Character; -- Icon used for Explore Area mission
       PassengerIcon: Wide_Character; -- Icon used for Transport Passenger mission
+      PilotIcon: Wide_Character; -- Icon used for Pilot info
+      EngineerIcon: Wide_Character; -- Icon used for Engineer info
+      GunnerIcon: Wide_Character; -- Icon used for Gunners info
+      CrewTraderIcon: Wide_Character; -- Icon used for Trader info
+      RepairIcon: Wide_Character; -- Icon used for Repairs info
+      UpgradeIcon: Wide_Character; -- Icon used for Upgrade info
+      CleanIcon: Wide_Character; -- Icon used for Clean Ship info
+      ManufactureIcon: Wide_Character; -- Icon used for Manufacturing info
    end record;
    package Themes_Container is new Ada.Containers.Indefinite_Hashed_Maps
      (String, ThemeRecord, Ada.Strings.Hash, "=");
