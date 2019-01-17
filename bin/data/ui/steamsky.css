@@ -76,6 +76,8 @@ GtkWindow {
    border:1px solid #120c06;
    color:rgb(255,223,0);
    text-shadow:0 1px 0 #120d0d;
+   font-family:"Font Awesome 5 Free";
+   font-size:12px;
 }
 
 /* Setting for currently focused vertical button */

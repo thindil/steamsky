@@ -2006,6 +2006,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <child>
                               <object class="GtkButton" id="btnmapup">
                                 <property name="label" translatable="yes">⬆</property>
+                                <property name="name">fontawesome</property>
                                 <property name="width_request">100</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -2148,6 +2149,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <child>
                               <object class="GtkButton" id="btnmapdown">
                                 <property name="label" translatable="yes">⬇</property>
+                                <property name="name">fontawesome</property>
                                 <property name="width_request">100</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>

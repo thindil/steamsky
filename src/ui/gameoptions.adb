@@ -325,6 +325,7 @@ package body GameOptions is
         To_Unbounded_String
           (Get_Active_Id(Gtk_Combo_Box_Text(Get_Object(Object, "cmbtheme"))));
       LoadTheme;
+      SetMapMoveButtons;
    end ApplyTheme;
 
    procedure SetFontsSizes is
