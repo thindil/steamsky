@@ -161,7 +161,15 @@ package body Themes is
           DestroyIcon => Wide_Character'Val(16#f666#),
           PatrolIcon => Wide_Character'Val(16#f0b2#),
           ExploreIcon => Wide_Character'Val(16#f06e#),
-          PassengerIcon => Wide_Character'Val(16#f183#)));
+          PassengerIcon => Wide_Character'Val(16#f183#),
+          PilotIcon => Wide_Character'Val(16#f655#),
+          EngineerIcon => Wide_Character'Val(16#f013#),
+          GunnerIcon => Wide_Character'Val(16#f4fb#),
+          CrewTraderIcon => Wide_Character'Val(16#f651#),
+          RepairIcon => Wide_Character'Val(16#f54a#),
+          UpgradeIcon => Wide_Character'Val(16#f6e3#),
+          CleanIcon => Wide_Character'Val(16#f458#),
+          ManufactureIcon => Wide_Character'Val(16#f0e3#)));
       Start_Search
         (Directories, To_String(ThemesDirectory), "",
          (Directory => True, others => False));
@@ -246,6 +254,40 @@ package body Themes is
                         TempRecord.PassengerIcon :=
                           Wide_Character'Val
                             (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName = To_Unbounded_String("PilotIcon") then
+                        TempRecord.PilotIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName = To_Unbounded_String("EngineerIcon") then
+                        TempRecord.EngineerIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName = To_Unbounded_String("GunnerIcon") then
+                        TempRecord.GunnerIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName =
+                       To_Unbounded_String("CrewTraderIcon") then
+                        TempRecord.CrewTraderIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName = To_Unbounded_String("RepairIcon") then
+                        TempRecord.RepairIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName = To_Unbounded_String("UpgradeIcon") then
+                        TempRecord.UpgradeIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName = To_Unbounded_String("CleanIcon") then
+                        TempRecord.CleanIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName =
+                       To_Unbounded_String("ManufactureIcon") then
+                        TempRecord.ManufactureIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
                      end if;
                   end if;
                end loop;
@@ -267,7 +309,15 @@ package body Themes is
                   DestroyIcon => Wide_Character'Val(16#f666#),
                   PatrolIcon => Wide_Character'Val(16#f0b2#),
                   ExploreIcon => Wide_Character'Val(16#f06e#),
-                  PassengerIcon => Wide_Character'Val(16#f183#));
+                  PassengerIcon => Wide_Character'Val(16#f183#),
+                  PilotIcon => Wide_Character'Val(16#f655#),
+                  EngineerIcon => Wide_Character'Val(16#f013#),
+                  GunnerIcon => Wide_Character'Val(16#f4fb#),
+                  CrewTraderIcon => Wide_Character'Val(16#f651#),
+                  RepairIcon => Wide_Character'Val(16#f54a#),
+                  UpgradeIcon => Wide_Character'Val(16#f6e3#),
+                  CleanIcon => Wide_Character'Val(16#f458#),
+                  ManufactureIcon => Wide_Character'Val(16#f0e3#));
             end loop;
             End_Search(Files);
          end if;
