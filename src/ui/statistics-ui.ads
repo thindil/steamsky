@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -23,7 +23,7 @@ package Statistics.UI is
    procedure CreateStatsUI
      (NewBuilder: Gtkada_Builder); -- Create infterace for show game statistics
    procedure ShowStatsUI; -- Show interface for show game statistics
-   procedure UpdateGoalsButton
-     (Message: String); -- Update label on character goal button
+   procedure UpdateGoalsButton(Message: String) with
+      Pre => Message'Length > 0; -- Update label on character goal button
 
 end Statistics.UI;
