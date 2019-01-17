@@ -822,6 +822,22 @@ story.
   Explore Area type mission on map. Optional.
 - Key `PassengerIcon`: Hexadecimal number on UTF-8 character used to show
   Transport Passenger type mission on map. Optional.
+- Key `PilotIcon`: Hexadecimal number on UTF-8 character used to show
+  Pilot position info. Optional.
+- Key `EngineerIcon`: Hexadecimal number on UTF-8 character used to show
+  Engineer position info. Optional.
+- Key `GunnerIcon`: Hexadecimal number on UTF-8 character used to show
+  Gunners position info. Optional.
+- Key `CrewTraderIcon`: Hexadecimal number on UTF-8 character used to show
+  Trader position info. Optional.
+- Key `RepairIcon`: Hexadecimal number on UTF-8 character used to show
+  Repair Ship info. Optional.
+- Key `UpgradeIcon`: Hexadecimal number on UTF-8 character used to show
+  Upgrade Ship info. Optional.
+- Key `CleanIcon`: Hexadecimal number on UTF-8 character used to show
+  Clean Ship info. Optional.
+- Key `ManufactureIcon`: Hexadecimal number on UTF-8 character used to show
+  Manufacturing info. Optional.
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
