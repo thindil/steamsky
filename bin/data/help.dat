@@ -61,10 +61,10 @@
 Some game modifications can bring own help topics too. If you are first time here, it is recommended to look at least to {b}Ship movement{/b}, {b}Trading{/b}, {b}Combat{/b} and {b}Tips{/b} topics for basic informations about game.
 
 {u}Ship info{/u}
-   On most screens you can see information about needed crew positions in the top right corner. {b}P{/b} means pilot, {b}E{/b} - engineer, {b}G{/b} - gunner, {b}R{/b} - repairs, {b}M{/b} - manufacturing, {b}U{/b} - upgrading ship module, {b}T{/b} - trader, {b}C{/b} - clean ship.
+    On most screens you can see information about needed crew positions in the top right corner. First icon is for pilot, second - engineer, third - gunner, forth - trader, fifth - repairs, sixth - upgrading ship module, seventh - clean ship and eighth - manufacturing.
 For pilots and engineers: if their letter is green, the position is taken by a crew member, and if it's red you don't have anyone assigned to this position.
-For gunners and manufacturing: a green letter mean all positions are taken (all guns, all crafting modules), a red letter means you have free positions (not all guns/crafting modules are taken), and a white letter means you don't have or don't need anyone assigned to this positions.
-For repairs, upgrading ship modules, trader and cleaning ship, green means you have someone assigned to this position, red means you don't have anyone on that position but need someone, and white letter means you don't have anyone assigned to this position and you don't need anyone.</entry>
+For gunners and manufacturing: a green icon mean all positions are taken (all guns, all crafting modules), a red icon means you have free positions (not all guns/crafting modules are taken), and a white icon means you don't have or don't need anyone assigned to this positions.
+For repairs, upgrading ship modules, trader and cleaning ship, green means you have someone assigned to this position, red means you don't have anyone on that position but need someone, and white icon means you don't have anyone assigned to this position and you don't need anyone.</entry>
  <entry title="Ship movement">{u}Undocking from bases{/u}
     Your ship starts docked to base. To move it, you must first give order {b}&quot;Undock&quot;{/b} from base, by clicking on {b}&quot;Undock&quot;{/b} button. To see other orders available for ship, press {GameKey 14} key (or first {GameKey 26} key for see game menu) for open orders menu.
 Each docking operation cost some money, depending on your ship size (bigger ships have bigger docking cost) and your reputation in that base. Same is with staying longer in base - for each day you pay this same price as for docking. Undocking from bases is free.
