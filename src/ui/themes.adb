@@ -176,7 +176,11 @@ package body Themes is
           RepairIcon => Wide_Character'Val(16#f54a#),
           UpgradeIcon => Wide_Character'Val(16#f6e3#),
           CleanIcon => Wide_Character'Val(16#f458#),
-          ManufactureIcon => Wide_Character'Val(16#f0e3#)));
+          ManufactureIcon => Wide_Character'Val(16#f0e3#),
+          MoveMapUpIcon => Wide_Character'Val(16#f106#),
+          MoveMapDownIcon => Wide_Character'Val(16#f107#),
+          MoveMapLeftIcon => Wide_Character'Val(16#f104#),
+          MoveMapRightIcon => Wide_Character'Val(16#f105#)));
       Start_Search
         (Directories, To_String(ThemesDirectory), "",
          (Directory => True, others => False));
@@ -295,6 +299,26 @@ package body Themes is
                         TempRecord.ManufactureIcon :=
                           Wide_Character'Val
                             (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName =
+                       To_Unbounded_String("MoveMapUpIcon") then
+                        TempRecord.MoveMapUpIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName =
+                       To_Unbounded_String("MoveMapDownIcon") then
+                        TempRecord.MoveMapDownIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName =
+                       To_Unbounded_String("MoveMapLeftIcon") then
+                        TempRecord.MoveMapLeftIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName =
+                       To_Unbounded_String("MoveMapRightIcon") then
+                        TempRecord.MoveMapRightIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
                      end if;
                   end if;
                end loop;
@@ -324,7 +348,11 @@ package body Themes is
                   RepairIcon => Wide_Character'Val(16#f54a#),
                   UpgradeIcon => Wide_Character'Val(16#f6e3#),
                   CleanIcon => Wide_Character'Val(16#f458#),
-                  ManufactureIcon => Wide_Character'Val(16#f0e3#));
+                  ManufactureIcon => Wide_Character'Val(16#f0e3#),
+                  MoveMapUpIcon => Wide_Character'Val(16#f106#),
+                  MoveMapDownIcon => Wide_Character'Val(16#f107#),
+                  MoveMapLeftIcon => Wide_Character'Val(16#f104#),
+                  MoveMapRightIcon => Wide_Character'Val(16#f105#));
             end loop;
             End_Search(Files);
          end if;

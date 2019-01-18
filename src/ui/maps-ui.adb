@@ -1356,19 +1356,21 @@ package body Maps.UI is
    end FinishStory;
 
    procedure SetMapMoveButtons is
+      CurrentTheme: constant ThemeRecord :=
+        Themes_List(To_String(GameSettings.InterfaceTheme));
    begin
       Set_Text
         (Gtk_Label(Get_Object(Builder, "lblmovemapup")),
-         Encode("" & Wide_Character'Val(16#f106#)));
+         Encode("" & CurrentTheme.MoveMapUpIcon));
       Set_Text
         (Gtk_Label(Get_Object(Builder, "lblmovemapdown")),
-         Encode("" & Wide_Character'Val(16#f107#)));
+         Encode("" & CurrentTheme.MoveMapDownIcon));
       Set_Text
         (Gtk_Label(Get_Object(Builder, "lblmovemapleft")),
-         Encode("" & Wide_Character'Val(16#f104#)));
+         Encode("" & CurrentTheme.MoveMapLeftIcon));
       Set_Text
         (Gtk_Label(Get_Object(Builder, "lblmovemapright")),
-         Encode("" & Wide_Character'Val(16#f105#)));
+         Encode("" & CurrentTheme.MoveMapRightIcon));
    end SetMapMoveButtons;
 
 end Maps.UI;

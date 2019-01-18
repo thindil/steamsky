@@ -49,6 +49,10 @@ package Themes is
       UpgradeIcon: Wide_Character; -- Icon used for Upgrade info
       CleanIcon: Wide_Character; -- Icon used for Clean Ship info
       ManufactureIcon: Wide_Character; -- Icon used for Manufacturing info
+      MoveMapUpIcon: Wide_Character; -- Icon used for move map up button
+      MoveMapDownIcon: Wide_Character; -- Icon used for move map down button
+      MoveMapLeftIcon: Wide_Character; -- Icon used for move map left button
+      MoveMapRightIcon: Wide_Character; -- Icon used for move map right button
    end record;
    package Themes_Container is new Ada.Containers.Indefinite_Hashed_Maps
      (String, ThemeRecord, Ada.Strings.Hash, "=");
