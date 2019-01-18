@@ -37,7 +37,6 @@ with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Overlay; use Gtk.Overlay;
 with Gtk.Text_Mark; use Gtk.Text_Mark;
-with Gtk.Button; use Gtk.Button;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -1355,17 +1354,17 @@ package body Maps.UI is
 
    procedure SetMapMoveButtons is
    begin
-      Set_Label
-        (Gtk_Button(Get_Object(Builder, "btnmapup")),
+      Set_Text
+        (Gtk_Label(Get_Object(Builder, "lblmovemapup")),
          Encode("" & Wide_Character'Val(16#f106#)));
-      Set_Label
-        (Gtk_Button(Get_Object(Builder, "btnmapdown")),
+      Set_Text
+        (Gtk_Label(Get_Object(Builder, "lblmovemapdown")),
          Encode("" & Wide_Character'Val(16#f107#)));
-      Set_Label
-        (Gtk_Button(Get_Object(Builder, "btnmapleft")),
+      Set_Text
+        (Gtk_Label(Get_Object(Builder, "lblmovemapleft")),
          Encode("" & Wide_Character'Val(16#f104#)));
-      Set_Label
-        (Gtk_Button(Get_Object(Builder, "btnmapright")),
+      Set_Text
+        (Gtk_Label(Get_Object(Builder, "lblmovemapright")),
          Encode("" & Wide_Character'Val(16#f105#)));
    end SetMapMoveButtons;
 
