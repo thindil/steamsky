@@ -838,6 +838,14 @@ story.
   Clean Ship info. Optional.
 - Key `ManufactureIcon`: Hexadecimal number on UTF-8 character used to show
   Manufacturing info. Optional.
+- Key `MoveMapUpIcon`: Hexadecimal number on UTF-8 character used to show
+  on move map up button. Optional.
+- Key `MoveMapDownIcon`: Hexadecimal number on UTF-8 character used to show
+  on move map down button. Optional.
+- Key `MoveMapLeftIcon`: Hexadecimal number on UTF-8 character used to show
+  on move map left button. Optional.
+- Key `MoveMapRightIcon`: Hexadecimal number on UTF-8 character used to show
+  on move map right button. Optional.
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
