@@ -2005,7 +2005,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="reveal_child">True</property>
                             <child>
                               <object class="GtkButton" id="btnmapup">
-                                <property name="label" translatable="yes">⬆</property>
                                 <property name="name">fontawesome</property>
                                 <property name="width_request">100</property>
                                 <property name="visible">True</property>
@@ -2014,6 +2013,13 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="tooltip_text" translatable="yes">Move map up</property>
                                 <signal name="clicked" handler="Move_Map" object="btnmapup" swapped="no"/>
                                 <signal name="leave-notify-event" handler="Hide_Map_Button" object="mapuprevealer" swapped="no"/>
+                                <child>
+                                  <object class="GtkLabel" id="lblmovemapup">
+                                    <property name="name">fontawesome</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -2043,7 +2049,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="reveal_child">True</property>
                                 <child>
                                   <object class="GtkButton" id="btnmapleft">
-                                    <property name="label" translatable="yes">⬅</property>
                                     <property name="name">vertical</property>
                                     <property name="height_request">100</property>
                                     <property name="visible">True</property>
@@ -2052,6 +2057,13 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="tooltip_text" translatable="yes">Move map left</property>
                                     <signal name="clicked" handler="Move_Map" object="btnmapleft" swapped="no"/>
                                     <signal name="leave-notify-event" handler="Hide_Map_Button" object="mapleftrevealer" swapped="no"/>
+                                    <child>
+                                      <object class="GtkLabel" id="lblmovemapleft">
+                                        <property name="name">fontawesome</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -2108,7 +2120,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="reveal_child">True</property>
                                 <child>
                                   <object class="GtkButton" id="btnmapright">
-                                    <property name="label" translatable="yes">➡</property>
                                     <property name="name">vertical</property>
                                     <property name="height_request">100</property>
                                     <property name="visible">True</property>
@@ -2117,6 +2128,13 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="tooltip_text" translatable="yes">Move map right</property>
                                     <signal name="clicked" handler="Move_Map" object="btnmapright" swapped="no"/>
                                     <signal name="leave-notify-event" handler="Hide_Map_Button" object="maprightrevealer" swapped="no"/>
+                                    <child>
+                                      <object class="GtkLabel" id="lblmovemapright">
+                                        <property name="name">fontawesome</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -2148,7 +2166,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             <property name="reveal_child">True</property>
                             <child>
                               <object class="GtkButton" id="btnmapdown">
-                                <property name="label" translatable="yes">⬇</property>
                                 <property name="name">fontawesome</property>
                                 <property name="width_request">100</property>
                                 <property name="visible">True</property>
@@ -2157,6 +2174,13 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="tooltip_text" translatable="yes">Move map down</property>
                                 <signal name="clicked" handler="Move_Map" object="btnmapdown" swapped="no"/>
                                 <signal name="leave-notify-event" handler="Hide_Map_Button" object="mapdownrevealer" swapped="no"/>
+                                <child>
+                                  <object class="GtkLabel" id="lblmovemapdown">
+                                    <property name="name">fontawesome</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
