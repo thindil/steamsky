@@ -76,6 +76,13 @@ package body Themes is
            (CssText, StartIndex, EndIndex,
             "font-size:" & Positive'Image(GameSettings.InterfaceFontSize) &
             "px;");
+         StartIndex := Index(CssText, "#fontawesome", 1);
+         StartIndex := Index(CssText, "font-size", StartIndex);
+         EndIndex := Index(CssText, ";", StartIndex);
+         Replace_Slice
+           (CssText, StartIndex, EndIndex,
+            "font-size:" & Positive'Image(GameSettings.InterfaceFontSize - 4) &
+            "px;");
       end if;
       Gtk_New(CssProvider);
       if not Load_From_Data(CssProvider, To_String(CssText), Error'Access) then
