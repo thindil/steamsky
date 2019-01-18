@@ -90,7 +90,7 @@ package Game is
      To_Unbounded_String
        ("data" & Dir_Separator & "mods" &
         Dir_Separator); -- Path to directory where are game modifications
-   PlayerCareer: Positive; -- Index of career selected by player during starting game
+   PlayerCareer: Unbounded_String; -- Index of career selected by player during starting game
    ThemesDirectory: Unbounded_String :=
      To_Unbounded_String
        ("data" & Dir_Separator & "themes" &

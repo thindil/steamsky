@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,7 +15,8 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Containers.Hashed_Maps; use Ada.Containers;
+with Ada.Strings.Unbounded.Hash;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with DOM.Readers; use DOM.Readers;
 with Game; use Game;
@@ -24,14 +25,14 @@ package Careers is
 
    type CareerRecord is -- Data structure for player career
    record
-      Index: Unbounded_String; -- Index of career, used in code
       Name: Unbounded_String; -- Name of career, displayed to player
       Skills: UnboundedString_Container
         .Vector; -- List of skills which have bonuses to experience if player select this career
    end record;
-   package Careers_Container is new Vectors(Positive, CareerRecord);
+   package Careers_Container is new Hashed_Maps(Unbounded_String, CareerRecord,
+      Ada.Strings.Unbounded.Hash, "=");
    Careers_List: Careers_Container
-     .Vector; -- List of all available careers for player
+     .Map; -- List of all available careers for player
 
    procedure LoadCareers(Reader: Tree_Reader); -- Load player careers from file
 

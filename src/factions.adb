@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -38,7 +38,6 @@ package body Factions is
       FactionIndex, ItemIndex, SkillIndex: Natural;
       TmpCareers: Careers_Container.Vector;
       TmpCareer: CareerRecord;
-      CareerExists: Boolean;
       FactionNode, ChildNode: Node;
       DeleteIndex: Positive;
       Action, SubAction: DataAction;
@@ -263,21 +262,10 @@ package body Factions is
                   TmpCareer.Name :=
                     To_Unbounded_String(Get_Attribute(ChildNode, "name"));
                else
-                  for Career of Careers_List loop
-                     if Career.Index = TmpCareer.Index then
-                        TmpCareer.Name := Career.Name;
-                        exit;
-                     end if;
-                  end loop;
+                  TmpCareer.Name := Careers_List(TmpCareer.Index).Name;
                end if;
-               CareerExists := False;
-               for Career of Careers_List loop
-                  if Career.Index = TmpCareer.Index then
-                     CareerExists := True;
-                     exit;
-                  end if;
-               end loop;
-               if CareerExists then
+               if Careers.Careers_Container.Contains
+                   (Careers_List, TmpCareer.Index) then
                   case SubAction is
                      when REMOVE =>
                         DeleteIndex := TempRecord.Careers.First_Index;

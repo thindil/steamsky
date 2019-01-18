@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -359,8 +359,7 @@ package body Game.SaveLoad is
       LogMessage("Saving player career...", Everything, False);
       CategoryNode := Create_Element(SaveData, "playercareer");
       CategoryNode := Append_Child(MainNode, CategoryNode);
-      Set_Attribute
-        (CategoryNode, "index", To_String(Careers_List(PlayerCareer).Index));
+      Set_Attribute(CategoryNode, "index", To_String(PlayerCareer));
       LogMessage("done.", Everything, True, False);
       Create(SaveFile, Out_File, To_String(SaveName));
       Write(Stream => Stream(SaveFile), N => SaveData, Pretty_Print => False);
@@ -678,15 +677,10 @@ package body Game.SaveLoad is
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "playercareer");
       if Length(NodesList) > 0 then
          SavedNode := Item(NodesList, 0);
-         for I in Careers_List.Iterate loop
-            if Careers_List(I).Index =
-              To_Unbounded_String(Get_Attribute(SavedNode, "index")) then
-               PlayerCareer := Careers_Container.To_Index(I);
-               exit;
-            end if;
-         end loop;
+         PlayerCareer :=
+           To_Unbounded_String(Get_Attribute(SavedNode, "index"));
       else
-         PlayerCareer := 1;
+         PlayerCareer := Careers_Container.Key(Careers_List.First);
       end if;
       LogMessage("done.", Everything, True, False);
       Free(Reader);

@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -29,45 +29,35 @@ package body Careers is
       TempRecord: CareerRecord;
       NodesList, ChildNodes: Node_List;
       CareersData: Document;
-      SkillName: Unbounded_String;
-      CareerIndex: Natural;
+      SkillName, CareerIndex: Unbounded_String;
       TmpSkills: UnboundedString_Container.Vector;
       DeleteIndex: Positive;
       CareerNode: Node;
       Action, SkillAction: DataAction;
    begin
-      TempRecord :=
-        (Index => Null_Unbounded_String, Name => Null_Unbounded_String,
-         Skills => TmpSkills);
+      TempRecord := (Name => Null_Unbounded_String, Skills => TmpSkills);
       CareersData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(CareersData, "career");
       for I in 0 .. Length(NodesList) - 1 loop
          CareerNode := Item(NodesList, I);
-         TempRecord.Index :=
+         CareerIndex :=
            To_Unbounded_String(Get_Attribute(CareerNode, "index"));
          if Get_Attribute(CareerNode, "action")'Length > 0 then
             Action := DataAction'Value(Get_Attribute(CareerNode, "action"));
          else
             Action := ADD;
          end if;
-         CareerIndex := 0;
-         for J in Careers_List.Iterate loop
-            if Careers_List(J).Index = TempRecord.Index then
-               CareerIndex := Careers_Container.To_Index(J);
-               exit;
-            end if;
-         end loop;
          if (Action = UPDATE or Action = REMOVE) then
-            if CareerIndex = 0 then
+            if not Careers_Container.Contains(Careers_List, CareerIndex) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
-                 " career '" & To_String(TempRecord.Index) &
+                 " career '" & To_String(CareerIndex) &
                  "', there no career with that index.";
             end if;
-         elsif CareerIndex > 0 then
+         elsif Careers_Container.Contains(Careers_List, CareerIndex) then
             raise Data_Loading_Error
-              with "Can't add career '" & To_String(TempRecord.Index) &
+              with "Can't add career '" & To_String(CareerIndex) &
               "', there is one with that index.";
          end if;
          if Action /= REMOVE then
@@ -94,7 +84,7 @@ package body Careers is
                if FindSkillIndex(SkillName) = 0 then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(DataAction'Image(Action)) &
-                    "career '" & To_String(TempRecord.Index) & "', skill '" &
+                    "career '" & To_String(CareerIndex) & "', skill '" &
                     To_String(SkillName) & "' not exists";
                end if;
                if SkillAction /= REMOVE then
@@ -111,7 +101,8 @@ package body Careers is
                end if;
             end loop;
             if Action /= UPDATE then
-               Careers_List.Append(New_Item => TempRecord);
+               Careers_Container.Include
+                 (Careers_List, CareerIndex, TempRecord);
                LogMessage
                  ("Career added: " & To_String(TempRecord.Name), Everything);
             else
@@ -120,11 +111,11 @@ package body Careers is
                  ("Career updated: " & To_String(TempRecord.Name), Everything);
             end if;
          else
-            Careers_List.Delete(Index => CareerIndex);
+            Careers_Container.Exclude(Careers_List, CareerIndex);
             for Faction of Factions_List loop
                DeleteIndex := Faction.Careers.First_Index;
                while DeleteIndex <= Faction.Careers.Last_Index loop
-                  if Faction.Careers(DeleteIndex).Index = TempRecord.Index then
+                  if Faction.Careers(DeleteIndex).Index = CareerIndex then
                      Faction.Careers.Delete(Index => DeleteIndex);
                      exit;
                   end if;
@@ -132,11 +123,9 @@ package body Careers is
                end loop;
             end loop;
             LogMessage
-              ("Career removed: " & To_String(TempRecord.Index), Everything);
+              ("Career removed: " & To_String(CareerIndex), Everything);
          end if;
-         TempRecord :=
-           (Index => Null_Unbounded_String, Name => Null_Unbounded_String,
-            Skills => TmpSkills);
+         TempRecord := (Name => Null_Unbounded_String, Skills => TmpSkills);
       end loop;
    end LoadCareers;
 

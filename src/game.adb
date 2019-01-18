@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -264,13 +264,7 @@ package body Game is
       -- Set name of savegame
       GenerateSaveName;
       -- Set player career
-      for I in Careers_List.Iterate loop
-         if Careers_List(I).Index =
-           Factions_List(FactionIndex).Careers(CareerIndex).Index then
-            PlayerCareer := Careers.Careers_Container.To_Index(I);
-            exit;
-         end if;
-      end loop;
+      PlayerCareer := Factions_List(FactionIndex).Careers(CareerIndex).Index;
       -- Add welcoming message
       AddMessage
         ("Welcome to Steam Sky. If it is your first game, please consider read help (entry 'Help' in Menu).",
