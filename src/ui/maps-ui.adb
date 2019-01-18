@@ -1290,6 +1290,9 @@ package body Maps.UI is
       end;
       SetMapMoveButtons;
       ShowSkyMap;
+      if PlayerShip.Speed = DOCKED then
+         ShowOrders(Builder);
+      end if;
    end CreateSkyMap;
 
    procedure ShowSkyMap(X: Integer := PlayerShip.SkyX;
