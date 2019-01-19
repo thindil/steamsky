@@ -16,7 +16,9 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Containers.Hashed_Maps;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Strings.Unbounded.Hash;
 with DOM.Readers; use DOM.Readers;
 with Crew; use Crew;
 with Game; use Game;
@@ -35,13 +37,13 @@ package Factions is
    package Relations_Container is new Vectors(Positive, RelationsRecord);
    type CareerRecord is -- Data structure for player career in faction
    record
-      Index: Unbounded_String; -- Index of career
       ShipIndex: Unbounded_String; -- Index of proto ship which will be used as starting ship for player
       PlayerIndex: Unbounded_String; -- Index of mobile which will be used as starting character for player
       Description: Unbounded_String; -- Description of career, displayed to player
       Name: Unbounded_String; -- Name of career, may be different for each faction
    end record;
-   package Careers_Container is new Vectors(Positive, CareerRecord);
+   package Careers_Container is new Hashed_Maps(Unbounded_String, CareerRecord,
+      Ada.Strings.Unbounded.Hash, "=");
    type FactionRecord is -- Data structure for faction
    record
       Index: Unbounded_String; -- Index of faction, used in code
@@ -63,7 +65,7 @@ package Factions is
       Flags: UnboundedString_Container
         .Vector; -- Various flags for faction (no gender, etc)
       Careers: Careers_Container
-        .Vector; -- List of possible careers for that faction
+        .Map; -- List of possible careers for that faction
       BaseIcon: Wide_Character; -- Character used as base icon on map for this faction
    end record;
    package Factions_Container is new Vectors(Positive, FactionRecord);
