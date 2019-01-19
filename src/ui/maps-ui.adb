@@ -156,7 +156,7 @@ package body Maps.UI is
          UpdateLabel
            ("lblnofuel",
             Encode
-              ("<span foreground=""red"">" & Wide_Character'Val(16#f2ca#) &
+              ("<span foreground=""red"">" & CurrentTheme.NoFuelIcon &
                "</span>"),
             "You can't travel anymore, because you don't have any fuel for ship.",
             True);
@@ -164,7 +164,7 @@ package body Maps.UI is
          UpdateLabel
            ("lblnofuel",
             Encode
-              ("<span foreground=""yellow"">" & Wide_Character'Val(16#f2ca#) &
+              ("<span foreground=""yellow"">" & CurrentTheme.NoFuelIcon &
                "</span>"),
             "Low level of fuel on ship. Only" & Natural'Image(ItemAmount) &
             " left.",
@@ -185,7 +185,7 @@ package body Maps.UI is
          UpdateLabel
            ("lblnodrink",
             Encode
-              ("<span foreground=""red"">" & Wide_Character'Val(16#f72f#) &
+              ("<span foreground=""red"">" & CurrentTheme.NoDrinksIcon &
                "</span>"),
             "You don't have any drinks in ship but your crew needs them to live.",
             True);
@@ -193,7 +193,7 @@ package body Maps.UI is
          UpdateLabel
            ("lblnodrink",
             Encode
-              ("<span foreground=""yellow"">" & Wide_Character'Val(16#f72f#) &
+              ("<span foreground=""yellow"">" & CurrentTheme.NoDrinksIcon &
                "</span>"),
             "Low level of drinks on ship. Only" & Natural'Image(ItemAmount) &
             " left.",
@@ -214,7 +214,7 @@ package body Maps.UI is
          UpdateLabel
            ("lblnofood",
             Encode
-              ("<span foreground=""red"">" & Wide_Character'Val(16#f787#) &
+              ("<span foreground=""red"">" & CurrentTheme.NoFoodIcon &
                "</span>"),
             "You don't have any food in ship but your crew needs it to live.",
             True);
@@ -222,7 +222,7 @@ package body Maps.UI is
          UpdateLabel
            ("lblnofood",
             Encode
-              ("<span foreground=""yellow"">" & Wide_Character'Val(16#f787#) &
+              ("<span foreground=""yellow"">" & CurrentTheme.NoFoodIcon &
                "</span>"),
             "Low level of food on ship. Only" & Natural'Image(ItemAmount) &
             " left.",

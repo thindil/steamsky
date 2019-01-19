@@ -53,6 +53,9 @@ package Themes is
       MoveMapDownIcon: Wide_Character; -- Icon used for move map down button
       MoveMapLeftIcon: Wide_Character; -- Icon used for move map left button
       MoveMapRightIcon: Wide_Character; -- Icon used for move map right button
+      NoFuelIcon: Wide_Character; -- Icon used for show warning about no fuel
+      NoFoodIcon: Wide_Character; -- Icon used for show warning about no food
+      NoDrinksIcon: Wide_Character; -- Icon used for show warning about no drinks
    end record;
    package Themes_Container is new Ada.Containers.Indefinite_Hashed_Maps
      (String, ThemeRecord, Ada.Strings.Hash, "=");
