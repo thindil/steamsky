@@ -154,11 +154,18 @@ package body Maps.UI is
       ItemAmount := GetItemAmount(FuelType);
       if ItemAmount = 0 then
          UpdateLabel
-           ("lblnofuel", "[<span foreground=""red"">No Fuel</span>]",
-            "You can't travel anymore.", True);
+           ("lblnofuel",
+            Encode
+              ("<span foreground=""red"">" & Wide_Character'Val(16#f2ca#) &
+               "</span>"),
+            "You can't travel anymore, because you don't have any fuel for ship.",
+            True);
       elsif ItemAmount < GameSettings.LowFuel then
          UpdateLabel
-           ("lblnofuel", "[<span foreground=""yellow"">Low Fuel</span>]",
+           ("lblnofuel",
+            Encode
+              ("<span foreground=""yellow"">" & Wide_Character'Val(16#f2ca#) &
+               "</span>"),
             "Low level of fuel on ship. Only" & Natural'Image(ItemAmount) &
             " left.",
             True);
@@ -176,11 +183,18 @@ package body Maps.UI is
       end loop;
       if ItemAmount = 0 then
          UpdateLabel
-           ("lblnodrink", "[<span foreground=""red"">No Drinks</span>]",
-            "You don't have any drinks in ship.", True);
+           ("lblnodrink",
+            Encode
+              ("<span foreground=""red"">" & Wide_Character'Val(16#f72f#) &
+               "</span>"),
+            "You don't have any drinks in ship but your crew needs them to live.",
+            True);
       elsif ItemAmount < GameSettings.LowDrinks then
          UpdateLabel
-           ("lblnodrink", "[<span foreground=""yellow"">Low Drinks</span>]",
+           ("lblnodrink",
+            Encode
+              ("<span foreground=""yellow"">" & Wide_Character'Val(16#f72f#) &
+               "</span>"),
             "Low level of drinks on ship. Only" & Natural'Image(ItemAmount) &
             " left.",
             True);
@@ -198,11 +212,18 @@ package body Maps.UI is
       end loop;
       if ItemAmount = 0 then
          UpdateLabel
-           ("lblnofood", "[<span foreground=""red"">No Food</span>]",
-            "You don't have any food in ship.", True);
+           ("lblnofood",
+            Encode
+              ("<span foreground=""red"">" & Wide_Character'Val(16#f787#) &
+               "</span>"),
+            "You don't have any food in ship but your crew needs it to live.",
+            True);
       elsif ItemAmount < GameSettings.LowFood then
          UpdateLabel
-           ("lblnofood", "[<span foreground=""yellow"">Low Food</span>]",
+           ("lblnofood",
+            Encode
+              ("<span foreground=""yellow"">" & Wide_Character'Val(16#f787#) &
+               "</span>"),
             "Low level of food on ship. Only" & Natural'Image(ItemAmount) &
             " left.",
             True);
