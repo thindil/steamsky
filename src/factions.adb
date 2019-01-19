@@ -34,10 +34,10 @@ package body Factions is
       TmpRelations: Relations_Container.Vector;
       TmpRelation: RelationsRecord;
       TmpFood: UnboundedString_Container.Vector;
-      Value: Unbounded_String;
+      Value, CareerIndex: Unbounded_String;
       FactionIndex, ItemIndex, SkillIndex: Natural;
-      TmpCareers: Careers_Container.Vector;
-      TmpCareer: CareerRecord;
+      TmpCareers: Factions.Careers_Container.Map;
+      TmpCareer: Factions.CareerRecord;
       FactionNode, ChildNode: Node;
       DeleteIndex: Positive;
       Action, SubAction: DataAction;
@@ -237,7 +237,7 @@ package body Factions is
                 (FactionNode, "career");
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
-               TmpCareer.Index :=
+               CareerIndex :=
                  To_Unbounded_String(Get_Attribute(ChildNode, "index"));
                if Get_Attribute(ChildNode, "action")'Length > 0 then
                   SubAction :=
@@ -262,30 +262,19 @@ package body Factions is
                   TmpCareer.Name :=
                     To_Unbounded_String(Get_Attribute(ChildNode, "name"));
                else
-                  TmpCareer.Name := Careers_List(TmpCareer.Index).Name;
+                  TmpCareer.Name := Careers_List(CareerIndex).Name;
                end if;
                if Careers.Careers_Container.Contains
-                   (Careers_List, TmpCareer.Index) then
+                   (Careers_List, CareerIndex) then
                   case SubAction is
                      when REMOVE =>
-                        DeleteIndex := TempRecord.Careers.First_Index;
-                        while DeleteIndex <= TempRecord.Careers.Last_Index loop
-                           if TempRecord.Careers(DeleteIndex).Index =
-                             TmpCareer.Index then
-                              TempRecord.Careers.Delete(Index => DeleteIndex);
-                              exit;
-                           end if;
-                           DeleteIndex := DeleteIndex + 1;
-                        end loop;
+                        Factions.Careers_Container.Exclude
+                          (TempRecord.Careers, CareerIndex);
                      when UPDATE =>
-                        for Career of TempRecord.Careers loop
-                           if Career.Index = TmpCareer.Index then
-                              Career := TmpCareer;
-                              exit;
-                           end if;
-                        end loop;
+                        TempRecord.Careers(CareerIndex) := TmpCareer;
                      when ADD =>
-                        TempRecord.Careers.Append(New_Item => TmpCareer);
+                        Factions.Careers_Container.Include
+                          (TempRecord.Careers, CareerIndex, TmpCareer);
                   end case;
                end if;
             end loop;

@@ -155,11 +155,13 @@ package body MainMenu is
             end loop;
             if FactionIndex > 0 then
                for I in Factions_List(FactionIndex).Careers.Iterate loop
-                  if Factions_List(FactionIndex).Careers(I).Index =
+                  if Careers_Container.Key(I) =
                     NewGameSettings.PlayerCareer then
-                     Set_Active
-                       (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbcareer")),
-                        Gint(Careers_Container.To_Index(I) - 1));
+                     if not Set_Active_Id
+                         (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbcareer")),
+                          To_String(Careers_Container.Key(I))) then
+                        return;
+                     end if;
                      exit;
                   end if;
                end loop;
@@ -365,9 +367,9 @@ package body MainMenu is
       end loop;
       NewGame
         (To_Unbounded_String(CharacterName), To_Unbounded_String(ShipName),
+         To_Unbounded_String
+           (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbcareer")))),
          Gender, FactionIndex,
-         Positive
-           (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbcareer"))) + 1),
          Natural
            (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbbasetype")))));
       StartGame;
@@ -426,8 +428,10 @@ package body MainMenu is
          Show_All(Gtk_Widget(Get_Object(Object, "lblgender")));
       end if;
       Remove_All(CareerComboBox);
-      for Career of Factions_List(FactionIndex).Careers loop
-         Append_Text(CareerComboBox, To_String(Career.Name));
+      for I in Factions_List(FactionIndex).Careers.Iterate loop
+         Append
+           (CareerComboBox, To_String(Careers_Container.Key(I)),
+            To_String(Factions_List(FactionIndex).Careers(I).Name));
       end loop;
       Set_Active(Gtk_Combo_Box(CareerComboBox), 0);
    end ShowFactionDescription;
@@ -437,11 +441,11 @@ package body MainMenu is
       FactionIndex: constant Natural :=
         Integer(Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbfaction")))) +
         1;
-      CareerIndex: constant Natural :=
-        Integer(Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbcareer")))) +
-        1;
+      CareerIndex: constant Unbounded_String :=
+        To_Unbounded_String
+          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbcareer"))));
    begin
-      if FactionIndex = 0 or CareerIndex = 0 then
+      if FactionIndex = 0 or CareerIndex = Null_Unbounded_String then
          return;
       end if;
       Set_Label
