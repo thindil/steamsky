@@ -52,16 +52,15 @@ with Careers; use Careers;
 
 package body Game is
 
-   procedure NewGame(CharName, ShipName: Unbounded_String; Gender: Character;
-      FactionIndex, CareerIndex: Positive; BaseTypeIndex: Natural) is
+   procedure NewGame(CharName, ShipName, CareerIndex: Unbounded_String;
+      Gender: Character; FactionIndex: Positive; BaseTypeIndex: Natural) is
       RandomBase: Positive;
    begin
       -- Save new game configuration
       NewGameSettings :=
         (PlayerName => CharName, PlayerGender => Gender, ShipName => ShipName,
          PlayerFaction => Factions_List(FactionIndex).Index,
-         PlayerCareer =>
-           Factions_List(FactionIndex).Careers(CareerIndex).Index,
+         PlayerCareer => CareerIndex,
          StartingBase =>
            To_Unbounded_String
              (Bases_Types'Image(Bases_Types'Val(BaseTypeIndex))));
@@ -264,7 +263,7 @@ package body Game is
       -- Set name of savegame
       GenerateSaveName;
       -- Set player career
-      PlayerCareer := Factions_List(FactionIndex).Careers(CareerIndex).Index;
+      PlayerCareer := CareerIndex;
       -- Add welcoming message
       AddMessage
         ("Welcome to Steam Sky. If it is your first game, please consider read help (entry 'Help' in Menu).",

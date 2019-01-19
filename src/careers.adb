@@ -113,14 +113,8 @@ package body Careers is
          else
             Careers_Container.Exclude(Careers_List, CareerIndex);
             for Faction of Factions_List loop
-               DeleteIndex := Faction.Careers.First_Index;
-               while DeleteIndex <= Faction.Careers.Last_Index loop
-                  if Faction.Careers(DeleteIndex).Index = CareerIndex then
-                     Faction.Careers.Delete(Index => DeleteIndex);
-                     exit;
-                  end if;
-                  DeleteIndex := DeleteIndex + 1;
-               end loop;
+               Factions.Careers_Container.Exclude
+                 (Faction.Careers, CareerIndex);
             end loop;
             LogMessage
               ("Career removed: " & To_String(CareerIndex), Everything);
