@@ -3776,5 +3776,24 @@ during combat. -->
   <member index="10"/>
   <description>Small, fast poleis patrol vessel, upgraded version. As a law enforcers they trying to dismarm enemies first.</description>
  </ship>
+ <ship combatai="DISARMER" index="203" maxloot="200" minloot="20" name="Small independent patrol ship mk III" owner="INDEPENDENT">
+  <module index="90"/>
+  <module index="92"/>
+  <module amount="3" index="93"/>
+  <module index="94"/>
+  <module amount="2" index="96"/>
+  <module index="97"/>
+  <module index="49"/>
+  <cargo index="1" maxamount="2000" minamount="1800"/>
+  <cargo index="2" maxamount="100" minamount="80"/>
+  <cargo index="3" maxamount="200" minamount="170"/>
+  <cargo index="23" maxamount="500" minamount="450"/>
+  <cargo index="21" maxamount="100" minamount="80"/>
+  <cargo index="63" maxamount="20" minamount="10"/>
+  <member index="8"/>
+  <member index="9"/>
+  <member index="10"/>
+  <description>Small, fast independent patrol vessel, upgraded version. As a law enforcers they trying to dismarm enemies first.</description>
+ </ship>
 </ships>
 
