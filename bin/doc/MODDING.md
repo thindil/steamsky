@@ -846,6 +846,12 @@ story.
   on move map left button. Optional.
 - Key `MoveMapRightIcon`: Hexadecimal number on UTF-8 character used to show
   on move map right button. Optional.
+- Key `NoFuelIcon`: Hexadecimal number on UTF-8 character used to show
+  warning about lack of fuel. Optional.
+- Key `NoFoodIcon`: Hexadecimal number on UTF-8 character used to show
+  warning about lack of food. Optional.
+- Key `NoDrinksIcon`: Hexadecimal number on UTF-8 character used to show
+  warning about lack of drinks. Optional.
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
