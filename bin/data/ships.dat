@@ -3816,5 +3816,26 @@ during combat. -->
   <member amount="2" index="57"/>
   <description>Standard poleis traders vessel, upgraded version. Avoids any fights.</description>
  </ship>
+ <ship combatai="COWARD" index="205" maxloot="200" minloot="100" name="Independent trader mk II" owner="INDEPENDENT">
+  <module index="66"/>
+  <module index="74"/>
+  <module amount="8" index="80"/>
+  <module index="41"/>
+  <module amount="2" index="220"/>
+  <module index="85"/>
+  <module index="27"/>
+  <cargo index="1" maxamount="2000" minamount="1500"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="300"/>
+  <cargo index="20" maxamount="1000" minamount="750"/>
+  <cargo index="5" maxamount="200" minamount="150"/>
+  <cargo index="13" maxamount="40" minamount="10"/>
+  <member index="12"/>
+  <member index="13"/>
+  <member index="14"/>
+  <member index="15"/>
+  <member amount="2" index="57"/>
+  <description>Standard independent traders vessel, upgraded version. Avoids any fights.</description>
+ </ship>
 </ships>
 
