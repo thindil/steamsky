@@ -30,11 +30,11 @@ package Factions is
    type Reputation_Array is array(1 .. 2) of Integer;
    type RelationsRecord is -- Data structure for relations between factions
    record
-      TargetFaction: Unbounded_String; -- Index of faction to which relation is described
       Reputation: Reputation_Array; -- Min and max value for starting reputation in bases owned by target faction
       Friendly: Boolean; -- Did target faction is friendly or enemy to this faction
    end record;
-   package Relations_Container is new Vectors(Positive, RelationsRecord);
+   package Relations_Container is new Hashed_Maps(Unbounded_String,
+      RelationsRecord, Ada.Strings.Unbounded.Hash, "=");
    type CareerRecord is -- Data structure for player career in faction
    record
       ShipIndex: Unbounded_String; -- Index of proto ship which will be used as starting ship for player
@@ -54,7 +54,7 @@ package Factions is
       Population: Attributes_Array; -- Min and max population for new bases with this faction as owner
       NamesType: NamesTypes; -- Type of names of members of faction (used in generating names of ships)
       Relations: Relations_Container
-        .Vector; -- Relations of this faction with others factions
+        .Map; -- Relations of this faction with others factions
       Description: Unbounded_String; -- Description on faction, displayed to player
       FoodTypes: UnboundedString_Container
         .Vector; -- Types of items used as food for members of this faction
