@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.0.4] - 2019-01-20
 
 ### Fixed
 - Missing info about lack of tools when giving orders to whole crew
