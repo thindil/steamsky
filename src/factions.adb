@@ -31,10 +31,10 @@ package body Factions is
       TempRecord: FactionRecord;
       NodesList, ChildNodes: Node_List;
       FactionsData: Document;
-      TmpRelations: Relations_Container.Vector;
+      TmpRelations: Relations_Container.Map;
       TmpRelation: RelationsRecord;
       TmpFood: UnboundedString_Container.Vector;
-      Value, CareerIndex: Unbounded_String;
+      Value, CareerIndex, RelationIndex: Unbounded_String;
       FactionIndex, ItemIndex, SkillIndex: Natural;
       TmpCareers: Factions.Careers_Container.Map;
       TmpCareer: Factions.CareerRecord;
@@ -195,7 +195,7 @@ package body Factions is
                 (FactionNode, "relation");
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
-               TmpRelation.TargetFaction :=
+               RelationIndex :=
                  To_Unbounded_String(Get_Attribute(ChildNode, "faction"));
                if Get_Attribute(ChildNode, "reputation") /= "" then
                   TmpRelation.Reputation :=
@@ -211,14 +211,10 @@ package body Factions is
                   TmpRelation.Friendly := False;
                end if;
                if Action /= UPDATE then
-                  TempRecord.Relations.Append(New_Item => TmpRelation);
+                  Relations_Container.Include
+                    (TempRecord.Relations, RelationIndex, TmpRelation);
                else
-                  for Relation of TempRecord.Relations loop
-                     if Relation.TargetFaction = TmpRelation.TargetFaction then
-                        Relation := TmpRelation;
-                        exit;
-                     end if;
-                  end loop;
+                  TempRecord.Relations(RelationIndex) := TmpRelation;
                end if;
             end loop;
             ChildNodes :=
@@ -312,17 +308,13 @@ package body Factions is
       for Source of Factions_List loop
          if To_Lower(To_String(Source.Index)) =
            To_Lower(To_String(SourceFaction)) then
-            for Target of Source.Relations loop
-               if To_Lower(To_String(Target.TargetFaction)) =
-                 To_Lower(To_String(TargetFaction)) then
-                  if Target.Reputation(2) = 0 then
-                     return Target.Reputation(1);
-                  else
-                     return GetRandom
-                         (Target.Reputation(1), Target.Reputation(2));
-                  end if;
-               end if;
-            end loop;
+            if Source.Relations(TargetFaction).Reputation(2) = 0 then
+               return Source.Relations(TargetFaction).Reputation(1);
+            else
+               return GetRandom
+                   (Source.Relations(TargetFaction).Reputation(1),
+                    Source.Relations(TargetFaction).Reputation(2));
+            end if;
          end if;
       end loop;
       return 0;
@@ -334,12 +326,7 @@ package body Factions is
       for Source of Factions_List loop
          if To_Lower(To_String(Source.Index)) =
            To_Lower(To_String(SourceFaction)) then
-            for Target of Source.Relations loop
-               if To_Lower(To_String(Target.TargetFaction)) =
-                 To_Lower(To_String(TargetFaction)) then
-                  return Target.Friendly;
-               end if;
-            end loop;
+            return Source.Relations(TargetFaction).Friendly;
          end if;
       end loop;
       return True;
