@@ -928,7 +928,9 @@ package body Maps.UI is
               SkyMap(MapX, MapY).BaseIndex > 0 then
                Append(MapInfoText, LF);
             end if;
-            if Events_List(EventIndex).EType = DoublePrice then
+            if
+              (Events_List(EventIndex).EType = DoublePrice or
+               Events_List(EventIndex).EType = FriendlyShip) then
                Append(MapInfoText, "<span foreground=""green"">");
             else
                Append(MapInfoText, "<span foreground=""red"">");
