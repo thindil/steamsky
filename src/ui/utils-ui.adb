@@ -105,9 +105,7 @@ package body Utils.UI is
       if not GameSettings.ShowLastMessage then
          return;
       end if;
-      if LastMessageIndex = 0 then
-         HideLastMessage(Object);
-      else
+      if LastMessageIndex > 0 then
          declare
             LastMessage: constant Message_Data :=
               Messages_List(LastMessageIndex);
