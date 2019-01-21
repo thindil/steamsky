@@ -313,8 +313,7 @@ package body Missions is
                  (New_Item =>
                     (Name =>
                        GenerateMemberName
-                         (Gender,
-                          Factions_List(SkyBases(PassengerBase).Owner).Index),
+                         (Gender, SkyBases(PassengerBase).Owner),
                      Gender => Gender, Health => 100, Tired => 0,
                      Skills => Skills, Hunger => 0, Thirst => 0, Order => Rest,
                      PreviousOrder => Rest, OrderTime => 15,

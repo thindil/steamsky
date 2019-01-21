@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ships; use Ships;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
@@ -96,13 +95,7 @@ package body Crew is
       NewName: Unbounded_String;
       NameType: NamesTypes;
    begin
-      for Faction of Factions_List loop
-         if To_Lower(To_String(Faction.Index)) =
-           To_Lower(To_String(FactionIndex)) then
-            NameType := Faction.NamesType;
-            exit;
-         end if;
-      end loop;
+      NameType := Factions_List(FactionIndex).NamesType;
       NewName := Null_Unbounded_String;
       if NameType = Factions.STANDARD then
          if Gender = 'M' then

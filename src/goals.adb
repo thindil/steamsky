@@ -124,20 +124,14 @@ package body Goals is
       function GetFactionName(FactionIndex: Unbounded_String;
          FType: FactionNameType) return String is
       begin
-         for Faction of Factions_List loop
-            if To_Lower(To_String(Faction.Index)) =
-              To_Lower(To_String(FactionIndex)) then
-               case FType is
-                  when NAME =>
-                     return To_String(Faction.Name);
-                  when MEMBERNAME =>
-                     return To_String(Faction.MemberName);
-                  when PLURALMEMBERNAME =>
-                     return To_String(Faction.PluralMemberName);
-               end case;
-            end if;
-         end loop;
-         return "Error";
+         case FType is
+            when NAME =>
+               return To_String(Factions_List(FactionIndex).Name);
+            when MEMBERNAME =>
+               return To_String(Factions_List(FactionIndex).MemberName);
+            when PLURALMEMBERNAME =>
+               return To_String(Factions_List(FactionIndex).PluralMemberName);
+         end case;
       end GetFactionName;
    begin
       if Index > 0 then

@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -672,7 +672,8 @@ package body Ships.Crew is
    procedure UpdateMorale(Ship: in out ShipRecord; MemberIndex: Positive;
       Value: Integer) is
       NewMorale, NewLoyalty, NewValue: Integer;
-      FactionIndex: constant Positive := Ship.Crew(MemberIndex).Faction;
+      FactionIndex: constant Unbounded_String :=
+        Ship.Crew(MemberIndex).Faction;
    begin
       if Factions_List(FactionIndex).Flags.Contains
           (To_Unbounded_String("nomorale")) then

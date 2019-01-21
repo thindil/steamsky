@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
@@ -236,12 +235,10 @@ package body Events is
                   when others => -- Full docks or enemy patrol
                      if Roll in 20 .. 40 and
                        not IsFriendly
-                         (Factions_List(PlayerShip.Crew(1).Faction).Index,
-                          Factions_List(SkyBases(BaseIndex).Owner).Index) then
+                         (PlayerShip.Crew(1).Faction,
+                          SkyBases(BaseIndex).Owner) then
                         GenerateEnemies
-                          (Enemies,
-                           Factions_List(SkyBases(BaseIndex).Owner).Index,
-                           False);
+                          (Enemies, SkyBases(BaseIndex).Owner, False);
                         Events_List.Append
                           (New_Item =>
                              (EnemyPatrol, PlayerShip.SkyX, PlayerShip.SkyY,
@@ -409,9 +406,7 @@ package body Events is
       GetPlayerShips(PlayerShips);
       TraderIndex := ProtoShips_List.First_Index;
       for Ship of ProtoShips_List loop
-         if IsFriendly
-             (Factions_List(PlayerShip.Crew(1).Faction).Index,
-              Factions_List(Ship.Owner).Index) and
+         if IsFriendly(PlayerShip.Crew(1).Faction, Ship.Owner) and
            not PlayerShips.Contains(Ship.Index) then
             FriendlyShips.Append(New_Item => TraderIndex);
          end if;
@@ -431,11 +426,10 @@ package body Events is
          if FactionRoll > Factions_List(I).SpawnChance then
             FactionRoll := FactionRoll - Factions_List(I).SpawnChance;
          else
-            SkyBases(BaseIndex).Owner := Factions_Container.To_Index(I);
+            SkyBases(BaseIndex).Owner := Factions_Container.Key(I);
             SkyBases(BaseIndex).Reputation(1) :=
               GetReputation
-                (Factions_List(PlayerShip.Crew(1).Faction).Index,
-                 Factions_List(I).Index);
+                (PlayerShip.Crew(1).Faction, SkyBases(BaseIndex).Owner);
             exit;
          end if;
       end loop;
@@ -463,12 +457,8 @@ package body Events is
       GetPlayerShips(PlayerShips);
       for Ship of ProtoShips_List loop
          if Ship.CombatValue <= PlayerValue and
-           (Owner = To_Unbounded_String("Any") or
-            To_Lower(To_String(Factions_List(Ship.Owner).Index)) =
-              To_Lower(To_String(Owner))) and
-           not IsFriendly
-             (Factions_List(PlayerShip.Crew(1).Faction).Index,
-              Factions_List(Ship.Owner).Index) and
+           (Owner = To_Unbounded_String("Any") or Ship.Owner = Owner) and
+           not IsFriendly(PlayerShip.Crew(1).Faction, Ship.Owner) and
            not PlayerShips.Contains(Ship.Index) and
            (WithTraders or Index(Ship.Name, To_String(TradersName)) = 0) then
             Enemies.Append(New_Item => EnemyIndex);

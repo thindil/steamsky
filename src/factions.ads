@@ -15,8 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers.Vectors; use Ada.Containers;
-with Ada.Containers.Hashed_Maps;
+with Ada.Containers.Hashed_Maps; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Strings.Unbounded.Hash;
 with DOM.Readers; use DOM.Readers;
@@ -46,7 +45,6 @@ package Factions is
       Ada.Strings.Unbounded.Hash, "=");
    type FactionRecord is -- Data structure for faction
    record
-      Index: Unbounded_String; -- Index of faction, used in code
       Name: Unbounded_String; -- Name of faction, displayed to player
       MemberName: Unbounded_String; -- Name of single member of faction
       PluralMemberName: Unbounded_String; -- Plural name of members of faction
@@ -68,21 +66,26 @@ package Factions is
         .Map; -- List of possible careers for that faction
       BaseIcon: Wide_Character; -- Character used as base icon on map for this faction
    end record;
-   package Factions_Container is new Vectors(Positive, FactionRecord);
-   Factions_List: Factions_Container.Vector;
+   package Factions_Container is new Hashed_Maps(Unbounded_String,
+      FactionRecord, Ada.Strings.Unbounded.Hash, "=");
+   Factions_List: Factions_Container.Map;
 
    procedure LoadFactions(Reader: Tree_Reader); -- Load NPC factions from file
    function GetReputation
      (SourceFaction, TargetFaction: Unbounded_String) return Integer with
       Pre =>
-      (SourceFaction /= Null_Unbounded_String and
-       TargetFaction /=
-         Null_Unbounded_String); -- Get reputation between SourceFaction and TargetFaction
+      (Factions_Container.Contains(Factions_List, SourceFaction) and
+       Factions_Container.Contains
+         (Factions_List,
+          TargetFaction)); -- Get reputation between SourceFaction and TargetFaction
    function IsFriendly
      (SourceFaction, TargetFaction: Unbounded_String) return Boolean with
       Pre =>
-      (SourceFaction /= Null_Unbounded_String and
-       TargetFaction /=
-         Null_Unbounded_String); -- Check if TargetFaction is friendly for SourceFaction. Returns true if yes, otherwise false.
+      (Factions_Container.Contains(Factions_List, SourceFaction) and
+       Factions_Container.Contains
+         (Factions_List,
+          TargetFaction)); -- Check if TargetFaction is friendly for SourceFaction. Returns true if yes, otherwise false.
+   function GetRandomFaction
+     return Unbounded_String; -- Select random faction from list
 
 end Factions;

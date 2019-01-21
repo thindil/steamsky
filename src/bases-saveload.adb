@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -177,8 +177,7 @@ package body Bases.SaveLoad is
                        (RecruitNode, "homebase",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
                      Set_Attribute
-                       (RecruitNode, "faction",
-                        To_String(Factions_List(Recruit.Faction).Index));
+                       (RecruitNode, "faction", To_String(Recruit.Faction));
                   end loop;
                end;
             end if;
@@ -310,9 +309,7 @@ package body Bases.SaveLoad is
          else
             Set_Attribute(BaseNode, "known", "N");
          end if;
-         Set_Attribute
-           (BaseNode, "owner",
-            To_String(Factions_List(SkyBases(I).Owner).Index));
+         Set_Attribute(BaseNode, "owner", To_String(SkyBases(I).Owner));
          Set_Attribute(BaseNode, "size", Bases_Size'Image(SkyBases(I).Size));
       end loop;
    end SaveBases;
@@ -325,15 +322,6 @@ package body Bases.SaveLoad is
       BaseIndex: Positive;
       NodeName: Unbounded_String;
       BaseNode, ChildNode: Node;
-      function GetFactionIndex(FactionIndex: String) return Natural is
-      begin
-         for I in Factions_List.Iterate loop
-            if Factions_List(I).Index = To_Unbounded_String(FactionIndex) then
-               return Factions_Container.To_Index(I);
-            end if;
-         end loop;
-         return 0;
-      end GetFactionIndex;
    begin
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "base");
@@ -352,10 +340,11 @@ package body Bases.SaveLoad is
             Known => False, AskedForBases => False,
             AskedForEvents => (0, 0, 0, 0, 0), Reputation => (0, 0),
             MissionsDate => (0, 0, 0, 0, 0), Missions => BaseMissions,
-            Owner => 1, Cargo => BaseCargo,
+            Owner => Factions_Container.Key(Factions_List.First),
+            Cargo => BaseCargo,
             Size => Bases_Size'Value(Get_Attribute(BaseNode, "size")));
          SkyBases(BaseIndex).Owner :=
-           GetFactionIndex(Get_Attribute(BaseNode, "owner"));
+           To_Unbounded_String(Get_Attribute(BaseNode, "owner"));
          if Get_Attribute(BaseNode, "known") = "Y" then
             SkyBases(BaseIndex).Known := True;
          end if;
@@ -387,9 +376,9 @@ package body Bases.SaveLoad is
             elsif NodeName = To_Unbounded_String("recruit") then
                declare
                   RecruitData: Node_List;
-                  RecruitName: Unbounded_String;
+                  RecruitName, RecruitFaction: Unbounded_String;
                   Gender: String(1 .. 1);
-                  Price, Payment, HomeBase, RecruitFaction: Positive;
+                  Price, Payment, HomeBase: Positive;
                   Skills: Skills_Container.Vector;
                   Attributes: Attributes_Container.Vector;
                   Index, Level, Experience: Natural;
@@ -447,7 +436,8 @@ package body Bases.SaveLoad is
                      end if;
                      if Get_Attribute(ChildNode, "faction") /= "" then
                         RecruitFaction :=
-                          GetFactionIndex(Get_Attribute(ChildNode, "faction"));
+                          To_Unbounded_String
+                            (Get_Attribute(ChildNode, "faction"));
                      end if;
                   end loop;
                   SkyBases(BaseIndex).Recruits.Append

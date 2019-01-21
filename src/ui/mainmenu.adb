@@ -141,32 +141,25 @@ package body MainMenu is
          else
             Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbgender")), 1);
          end if;
-         declare
-            FactionIndex: Natural := 0;
-         begin
-            for I in Factions_List.Iterate loop
-               if Factions_List(I).Index = NewGameSettings.PlayerFaction then
-                  FactionIndex := Factions_Container.To_Index(I);
-                  Set_Active
-                    (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbfaction")),
-                     Gint(FactionIndex - 1));
+         if not Set_Active_Id
+             (Gtk_Combo_Box(Get_Object(Builder, "cmbfaction")),
+              To_String(NewGameSettings.PlayerFaction)) then
+            return;
+         end if;
+         if Factions_Container.Contains
+             (Factions_List, NewGameSettings.PlayerFaction) then
+            for I in Factions_List(NewGameSettings.PlayerFaction).Careers
+              .Iterate loop
+               if Careers_Container.Key(I) = NewGameSettings.PlayerCareer then
+                  if not Set_Active_Id
+                      (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbcareer")),
+                       To_String(Careers_Container.Key(I))) then
+                     return;
+                  end if;
                   exit;
                end if;
             end loop;
-            if FactionIndex > 0 then
-               for I in Factions_List(FactionIndex).Careers.Iterate loop
-                  if Careers_Container.Key(I) =
-                    NewGameSettings.PlayerCareer then
-                     if not Set_Active_Id
-                         (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbcareer")),
-                          To_String(Careers_Container.Key(I))) then
-                        return;
-                     end if;
-                     exit;
-                  end if;
-               end loop;
-            end if;
-         end;
+         end if;
          Set_Active
            (Gtk_Combo_Box(Get_Object(Builder, "cmbbasetype")),
             Bases_Types'Pos
@@ -289,26 +282,23 @@ package body MainMenu is
    end ShowAllNews;
 
    procedure RandomName(User_Data: access GObject_Record'Class) is
-      FactionIndex: constant Natural :=
-        Integer(Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbfaction")))) +
-        1;
+      FactionIndex: constant Unbounded_String :=
+        To_Unbounded_String
+          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Builder, "cmbfaction"))));
    begin
       if User_Data = Get_Object(Builder, "entryshipname") then
          Set_Text
-           (Gtk_Entry(User_Data),
-            To_String(GenerateShipName(Factions_List(FactionIndex).Index)));
+           (Gtk_Entry(User_Data), To_String(GenerateShipName(FactionIndex)));
       else
          if Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbgender"))) =
            0 then
             Set_Text
               (Gtk_Entry(User_Data),
-               To_String
-                 (GenerateMemberName('M', Factions_List(FactionIndex).Index)));
+               To_String(GenerateMemberName('M', FactionIndex)));
          else
             Set_Text
               (Gtk_Entry(User_Data),
-               To_String
-                 (GenerateMemberName('F', Factions_List(FactionIndex).Index)));
+               To_String(GenerateMemberName('F', FactionIndex)));
          end if;
       end if;
    end RandomName;
@@ -349,27 +339,19 @@ package body MainMenu is
       ShipName: constant String :=
         Get_Text(Gtk_Entry(Get_Object(Object, "entryshipname")));
       Gender: Character;
-      SelectedFaction: constant Unbounded_String :=
-        To_Unbounded_String
-          (Get_Active_Text(Gtk_Combo_Box(Get_Object(Object, "cmbfaction"))));
-      FactionIndex: Positive;
    begin
       if Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbgender"))) = 0 then
          Gender := 'M';
       else
          Gender := 'F';
       end if;
-      for I in Factions_List.Iterate loop
-         if Factions_List(I).Name = SelectedFaction then
-            FactionIndex := Factions_Container.To_Index(I);
-            exit;
-         end if;
-      end loop;
       NewGame
         (To_Unbounded_String(CharacterName), To_Unbounded_String(ShipName),
          To_Unbounded_String
            (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbcareer")))),
-         Gender, FactionIndex,
+         To_Unbounded_String
+           (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbfaction")))),
+         Gender,
          Natural
            (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbbasetype")))));
       StartGame;
@@ -406,13 +388,13 @@ package body MainMenu is
 
    procedure ShowFactionDescription
      (Object: access Gtkada_Builder_Record'Class) is
-      FactionIndex: constant Natural :=
-        Integer(Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbfaction")))) +
-        1;
+      FactionIndex: constant Unbounded_String :=
+        To_Unbounded_String
+          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbfaction"))));
       CareerComboBox: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Object(Object, "cmbcareer"));
    begin
-      if FactionIndex = 0 then
+      if FactionIndex = Null_Unbounded_String then
          return;
       end if;
       Set_Label
@@ -438,14 +420,15 @@ package body MainMenu is
 
    procedure ShowCareerDescription
      (Object: access Gtkada_Builder_Record'Class) is
-      FactionIndex: constant Natural :=
-        Integer(Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbfaction")))) +
-        1;
+      FactionIndex: constant Unbounded_String :=
+        To_Unbounded_String
+          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbfaction"))));
       CareerIndex: constant Unbounded_String :=
         To_Unbounded_String
           (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbcareer"))));
    begin
-      if FactionIndex = 0 or CareerIndex = Null_Unbounded_String then
+      if FactionIndex = Null_Unbounded_String or
+        CareerIndex = Null_Unbounded_String then
          return;
       end if;
       Set_Label
@@ -524,9 +507,11 @@ package body MainMenu is
            Gtk_Combo_Box_Text(Get_Object(Builder, "cmbfaction"));
       begin
          Remove_All(FactionComboBox);
-         for Faction of Factions_List loop
-            if Faction.Careers.Length > 0 then
-               Append_Text(FactionComboBox, To_String(Faction.Name));
+         for I in Factions_List.Iterate loop
+            if Factions_List(I).Careers.Length > 0 then
+               Append
+                 (FactionComboBox, To_String(Factions_Container.Key(I)),
+                  To_String(Factions_List(I).Name));
             end if;
          end loop;
          Set_Active(FactionComboBox, 0);

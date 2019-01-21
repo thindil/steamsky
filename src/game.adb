@@ -52,15 +52,15 @@ with Careers; use Careers;
 
 package body Game is
 
-   procedure NewGame(CharName, ShipName, CareerIndex: Unbounded_String;
-      Gender: Character; FactionIndex: Positive; BaseTypeIndex: Natural) is
+   procedure NewGame
+     (CharName, ShipName, CareerIndex, FactionIndex: Unbounded_String;
+      Gender: Character; BaseTypeIndex: Natural) is
       RandomBase: Positive;
    begin
       -- Save new game configuration
       NewGameSettings :=
         (PlayerName => CharName, PlayerGender => Gender, ShipName => ShipName,
-         PlayerFaction => Factions_List(FactionIndex).Index,
-         PlayerCareer => CareerIndex,
+         PlayerFaction => FactionIndex, PlayerCareer => CareerIndex,
          StartingBase =>
            To_Unbounded_String
              (Bases_Types'Image(Bases_Types'Val(BaseTypeIndex))));
@@ -78,7 +78,7 @@ package body Game is
                MissionIndex => 0)));
       declare
          MaxSpawnRoll: Natural := 0;
-         PosX, PosY, FactionRoll, BaseOwner: Positive;
+         PosX, PosY, FactionRoll: Positive;
          ValidLocation: Boolean;
          TempX, TempY, BaseReputation: Integer;
          TmpRecruits: Recruit_Container.Vector;
@@ -86,6 +86,7 @@ package body Game is
          BasePopulation: Natural;
          TmpCargo: BaseCargo_Container.Vector;
          BaseSize: Bases_Size;
+         BaseOwner: Unbounded_String;
       begin
          for Faction of Factions_List loop
             MaxSpawnRoll := MaxSpawnRoll + Faction.SpawnChance;
@@ -123,7 +124,7 @@ package body Game is
                if FactionRoll > Factions_List(J).SpawnChance then
                   FactionRoll := FactionRoll - Factions_List(J).SpawnChance;
                else
-                  BaseOwner := Factions_Container.To_Index(J);
+                  BaseOwner := Factions_Container.Key(J);
                   if Factions_List(J).Population(2) = 0 then
                      BasePopulation := Factions_List(J).Population(1);
                   else
@@ -133,9 +134,7 @@ package body Game is
                           Factions_List(J).Population(2));
                   end if;
                   BaseReputation :=
-                    GetReputation
-                      (Factions_List(FactionIndex).Index,
-                       Factions_List(J).Index);
+                    GetReputation(FactionIndex, Factions_Container.Key(J));
                   exit;
                end if;
             end loop;
@@ -330,7 +329,7 @@ package body Game is
          if SkyBases(BaseIndex).Visited.Year = 0 then
             GameStats.BasesVisited := GameStats.BasesVisited + 1;
             GameStats.Points := GameStats.Points + 1;
-            UpdateGoal(VISIT, Factions_List(SkyBases(BaseIndex).Owner).Index);
+            UpdateGoal(VISIT, SkyBases(BaseIndex).Owner);
          end if;
          SkyBases(BaseIndex).Visited := GameDate;
          if not SkyBases(BaseIndex).Known then

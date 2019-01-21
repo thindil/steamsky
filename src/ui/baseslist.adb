@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -238,7 +238,8 @@ package body BasesList is
       ShowBase: Boolean := False;
       BasesType: Bases_Types;
       BasesStatus: Natural;
-      BaseIndex, BasesOwner: Positive;
+      BaseIndex: Positive;
+      BasesOwner: Unbounded_String;
    begin
       if SettingTime then
          return True;
@@ -249,23 +250,24 @@ package body BasesList is
       BasesStatus :=
         Natural(Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbstatus"))));
       BasesOwner :=
-        Natural(Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbowner")))) +
-        1;
+        To_Unbounded_String
+          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Builder, "cmbowner"))));
       BaseIndex := Positive(Get_Int(Model, Iter, 1));
       case BasesStatus is
          when 0 => -- All bases
             if BasesType = Any then
                if
-                 (BasesOwner <= Factions_List.Last_Index and
+                 (Factions_Container.Contains(Factions_List, BasesOwner) and
                   SkyBases(BaseIndex).Visited.Year > 0)
                  and then SkyBases(BaseIndex).Owner = BasesOwner then
                   ShowBase := True;
-               elsif BasesOwner > Factions_List.Last_Index then
+               elsif not Factions_Container.Contains
+                   (Factions_List, BasesOwner) then
                   ShowBase := True;
                end if;
             elsif SkyBases(BaseIndex).Visited.Year > 0 and
               SkyBases(BaseIndex).BaseType = BasesType then
-               if BasesOwner <= Factions_List.Last_Index
+               if Factions_Container.Contains(Factions_List, BasesOwner)
                  and then SkyBases(BaseIndex).Owner = BasesOwner then
                   ShowBase := True;
                else
@@ -278,10 +280,11 @@ package body BasesList is
                (BasesType /= Any and
                 SkyBases(BaseIndex).BaseType = BasesType)) and
               SkyBases(BaseIndex).Visited.Year > 0 then
-               if BasesOwner <= Factions_List.Last_Index
+               if Factions_Container.Contains(Factions_List, BasesOwner)
                  and then SkyBases(BaseIndex).Owner = BasesOwner then
                   ShowBase := True;
-               elsif BasesOwner > Factions_List.Last_Index then
+               elsif not Factions_Container.Contains
+                   (Factions_List, BasesOwner) then
                   ShowBase := True;
                end if;
             end if;
@@ -330,10 +333,12 @@ package body BasesList is
             To_Lower(Bases_Types'Image(I)(2 .. Bases_Types'Image(I)'Last)));
       end loop;
       ComboBox := Gtk_Combo_Box_Text(Get_Object(Builder, "cmbowner"));
-      for Faction of Factions_List loop
-         Append_Text(ComboBox, To_String(Faction.Name));
+      for I in Factions_List.Iterate loop
+         Append
+           (ComboBox, To_String(Factions_Container.Key(I)),
+            To_String(Factions_List(I).Name));
       end loop;
-      Append_Text(Gtk_Combo_Box_Text(Get_Object(Builder, "cmbowner")), "Any");
+      Append(Gtk_Combo_Box_Text(Get_Object(Builder, "cmbowner")), "Any", "Any");
       Set_Visible_Func
         (Gtk_Tree_Model_Filter(Get_Object(Builder, "basesfilter")),
          VisibleBases'Access);
@@ -357,9 +362,10 @@ package body BasesList is
         (Gtk_Combo_Box(Get_Object(Builder, "cmbtype")),
          Bases_Types'Pos(Bases_Types'Last));
       Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbstatus")), 0);
-      Set_Active
-        (Gtk_Combo_Box(Get_Object(Builder, "cmbowner")),
-         Gint(Factions_List.Last_Index));
+      if not Set_Active_Id
+          (Gtk_Combo_Box(Get_Object(Builder, "cmbowner")), "Any") then
+         return;
+      end if;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "baseslist");
       SettingTime := True;
