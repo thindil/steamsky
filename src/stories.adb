@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -444,9 +444,9 @@ package body Stories is
       if CurrentStory.Index > 0 then
          return;
       end if;
-      for Faction of Factions_List loop
-         if Faction.Name = FactionName then
-            FactionIndex := Faction.Index;
+      for I in Factions_List.Iterate loop
+         if Factions_List(I).Name = FactionName then
+            FactionIndex := Factions_Container.Key(I);
             exit;
          end if;
       end loop;
@@ -457,9 +457,7 @@ package body Stories is
          CanStart := True;
          for ForbiddenFaction of Stories_List(I).ForbiddenFactions loop
             if To_Lower(To_String(ForbiddenFaction)) =
-              To_Lower
-                (To_String
-                   (Factions_List(PlayerShip.Crew(1).Faction).Index)) then
+              To_Lower(To_String(PlayerShip.Crew(1).Faction)) then
                CanStart := False;
                exit;
             end if;

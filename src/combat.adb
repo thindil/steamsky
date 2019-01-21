@@ -119,9 +119,7 @@ package body Combat is
       PilotOrder := 2;
       EngineerOrder := 3;
       EndCombat := False;
-      EnemyName :=
-        GenerateShipName
-          (Factions_List(ProtoShips_List(EnemyIndex).Owner).Index);
+      EnemyName := GenerateShipName(ProtoShips_List(EnemyIndex).Owner);
       MessagesStarts := GetLastMessageIndex + 1;
       Guns.Clear;
       for I in PlayerShip.Modules.Iterate loop
@@ -1376,9 +1374,7 @@ package body Combat is
          UpdateDestroyedShips(Enemy.Ship.Name);
          UpdateGoal(DESTROY, ProtoShips_List(EnemyShipIndex).Index);
          if CurrentGoal.TargetIndex /= Null_Unbounded_String then
-            UpdateGoal
-              (DESTROY,
-               Factions_List(ProtoShips_List(EnemyShipIndex).Owner).Index);
+            UpdateGoal(DESTROY, ProtoShips_List(EnemyShipIndex).Owner);
          end if;
          if CurrentStory.Index > 0 then
             declare
