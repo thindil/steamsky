@@ -7,22 +7,22 @@ unique. At this moment this value is used to set/update goal in game.
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 - Attribute "type": Type/category of goal which define what is needed to do
-for finish selected goal. Possible values: Reputation - gain max reputation 
-in X bases, Destroy - destroy X ships, Discover - discover X fields of map, 
-Visit - visit (discover) X bases, Craft - craft X items, Mission - Finish 
+for finish selected goal. Possible values: Reputation - gain max reputation
+in X bases, Destroy - destroy X ships, Discover - discover X fields of map,
+Visit - visit (discover) X bases, Craft - craft X items, Mission - Finish
 X missions, Kill - Kill X enemies in melee combat.
 - Attribute "amount": Amount of target for selected goal to do for finish it.
 For example 100 ships to destroy, etc.
-- Attribuge "target": Optional attribute, ignored for Discover type, exact 
-target for  goal, depends on type of goal. Possible values: for Reputation 
-and Visit, bases owners names: Poleis, Independent, Pirates, Undead, Drones, 
-Inquisition. For Destroy, any enemy ship index (from *ships* directory) or
-owners names: Poleis, Independent, Pirates, Undead, Drones, Inquisition. For
+- Attribuge "target": Optional attribute, ignored for Discover type, exact
+target for  goal, depends on type of goal. Possible values: for Reputation
+and Visit, bases owners names: POLEIS, INDEPENDENT, PIRATES, UNDEAD, DRONES,
+INQUISITION. For Destroy, any enemy ship index (from *ships* directory) or
+owners names: POLEIS, INDEPENDENT, PIRATES, UNDEAD, DRONES, INQUISITION. For
 Craft, recipe index (from *recipes* directory), Type or ShowType (from *items*
-directory). For Mission, missions types: Deliver for deliver item to bases, 
-Destroy for destroy enemy ship, Patrol for patrol missions, Explore for 
+directory). For Mission, missions types: Deliver for deliver item to bases,
+Destroy for destroy enemy ship, Patrol for patrol missions, Explore for
 explore missions, Passenger for transport passengers missions. For Kill,
-enemy fraction name: Poleis, Independent, Pirates, Undead, Drones, Inquisition.
+enemy fraction name: POLEIS, INDEPENDENT, PIRATES, UNDEAD, DRONES, INQUISITION.
 - Attribute "multiplier": Optional attribute, multiplier for amount of game
 points earned by finishing this goal. Default value is 1, which mean goal give
 attribute "amount" of points for finish it.
@@ -75,68 +75,68 @@ attribute "amount" of points for finish it.
  <goal amount="1500" index="46" type="MISSION"/>
  <goal amount="2000" index="47" type="MISSION"/>
  <goal amount="2500" index="48" type="MISSION"/>
- <goal amount="1" index="49" target="Poleis" type="REPUTATION"/>
- <goal amount="3" index="50" multiplier="2" target="Poleis" type="REPUTATION"/>
- <goal amount="5" index="51" multiplier="2" target="Poleis" type="REPUTATION"/>
- <goal amount="7" index="52" multiplier="2" target="Poleis" type="REPUTATION"/>
- <goal amount="10" index="53" multiplier="2" target="Poleis" type="REPUTATION"/>
- <goal amount="15" index="54" multiplier="2" target="Poleis" type="REPUTATION"/>
- <goal amount="20" index="55" multiplier="2" target="Poleis" type="REPUTATION"/>
- <goal amount="25" index="56" multiplier="2" target="Poleis" type="REPUTATION"/>
- <goal amount="50" index="57" multiplier="2" target="Poleis" type="REPUTATION"/>
- <goal amount="1" index="58" target="Independent" type="REPUTATION"/>
- <goal amount="3" index="59" multiplier="3" target="Independent" type="REPUTATION"/>
- <goal amount="5" index="60" multiplier="3" target="Independent" type="REPUTATION"/>
- <goal amount="7" index="61" multiplier="3" target="Independent" type="REPUTATION"/>
- <goal amount="10" index="62" multiplier="3" target="Independent" type="REPUTATION"/>
- <goal amount="1" index="63" multiplier="5" target="Pirates" type="REPUTATION"/>
- <goal amount="3" index="64" multiplier="5" target="Pirates" type="REPUTATION"/>
- <goal amount="5" index="65" multiplier="5" target="Pirates" type="REPUTATION"/>
- <goal amount="50" index="66" multiplier="2" target="Poleis" type="VISIT"/>
- <goal amount="75" index="67" multiplier="2" target="Poleis" type="VISIT"/>
- <goal amount="100" index="68" multiplier="2" target="Poleis" type="VISIT"/>
- <goal amount="125" index="69" multiplier="2" target="Poleis" type="VISIT"/>
- <goal amount="150" index="70" multiplier="2" target="Poleis" type="VISIT"/>
- <goal amount="175" index="71" multiplier="2" target="Poleis" type="VISIT"/>
- <goal amount="200" index="72" multiplier="2" target="Poleis" type="VISIT"/>
- <goal amount="250" index="73" multiplier="2" target="Poleis" type="VISIT"/>
- <goal amount="10" index="74" multiplier="3" target="Independent" type="VISIT"/>
- <goal amount="15" index="75" multiplier="3" target="Independent" type="VISIT"/>
- <goal amount="20" index="76" multiplier="3" target="Independent" type="VISIT"/>
- <goal amount="25" index="77" multiplier="3" target="Independent" type="VISIT"/>
- <goal amount="50" index="78" multiplier="3" target="Independent" type="VISIT"/>
- <goal amount="1" index="79" multiplier="4" target="Pirates" type="VISIT"/>
- <goal amount="3" index="80" multiplier="4" target="Pirates" type="VISIT"/>
- <goal amount="5" index="81" multiplier="4" target="Pirates" type="VISIT"/>
- <goal amount="10" index="82" multiplier="4" target="Pirates" type="VISIT"/>
- <goal amount="200" index="83" multiplier="2" target="Pirates" type="DESTROY"/>
- <goal amount="250" index="84" multiplier="2" target="Pirates" type="DESTROY"/>
- <goal amount="500" index="85" multiplier="2" target="Pirates" type="DESTROY"/>
- <goal amount="1000" index="86" multiplier="2" target="Pirates" type="DESTROY"/>
- <goal amount="1500" index="87" multiplier="2" target="Pirates" type="DESTROY"/>
- <goal amount="2000" index="88" multiplier="2" target="Pirates" type="DESTROY"/>
- <goal amount="2500" index="89" multiplier="2" target="Pirates" type="DESTROY"/>
- <goal amount="200" index="90" multiplier="2" target="Drones" type="DESTROY"/>
- <goal amount="250" index="91" multiplier="2" target="Drones" type="DESTROY"/>
- <goal amount="500" index="92" multiplier="2" target="Drones" type="DESTROY"/>
- <goal amount="1000" index="93" multiplier="2" target="Drones" type="DESTROY"/>
- <goal amount="1500" index="94" multiplier="2" target="Drones" type="DESTROY"/>
- <goal amount="2000" index="95" multiplier="2" target="Drones" type="DESTROY"/>
- <goal amount="2500" index="96" multiplier="2" target="Drones" type="DESTROY"/>
- <goal amount="200" index="97" multiplier="2" target="Undead" type="DESTROY"/>
- <goal amount="250" index="98" multiplier="2" target="Undead" type="DESTROY"/>
- <goal amount="500" index="99" multiplier="2" target="Undead" type="DESTROY"/>
- <goal amount="1000" index="100" multiplier="2" target="Undead" type="DESTROY"/>
- <goal amount="1500" index="101" multiplier="2" target="Undead" type="DESTROY"/>
- <goal amount="2000" index="102" multiplier="2" target="Undead" type="DESTROY"/>
- <goal amount="2500" index="103" multiplier="2" target="Undead" type="DESTROY"/>
- <goal amount="200" index="104" multiplier="2" target="Inquisition" type="DESTROY"/>
- <goal amount="250" index="105" multiplier="2" target="Inquisition" type="DESTROY"/>
- <goal amount="500" index="106" multiplier="2" target="Inquisition" type="DESTROY"/>
- <goal amount="1000" index="107" multiplier="2" target="Inquisition" type="DESTROY"/>
- <goal amount="1500" index="108" multiplier="2" target="Inquisition" type="DESTROY"/>
- <goal amount="2000" index="109" multiplier="2" target="Inquisition" type="DESTROY"/>
- <goal amount="2500" index="110" multiplier="2" target="Inquisition" type="DESTROY"/>
+ <goal amount="1" index="49" target="POLEIS" type="REPUTATION"/>
+ <goal amount="3" index="50" multiplier="2" target="POLEIS" type="REPUTATION"/>
+ <goal amount="5" index="51" multiplier="2" target="POLEIS" type="REPUTATION"/>
+ <goal amount="7" index="52" multiplier="2" target="POLEIS" type="REPUTATION"/>
+ <goal amount="10" index="53" multiplier="2" target="POLEIS" type="REPUTATION"/>
+ <goal amount="15" index="54" multiplier="2" target="POLEIS" type="REPUTATION"/>
+ <goal amount="20" index="55" multiplier="2" target="POLEIS" type="REPUTATION"/>
+ <goal amount="25" index="56" multiplier="2" target="POLEIS" type="REPUTATION"/>
+ <goal amount="50" index="57" multiplier="2" target="POLEIS" type="REPUTATION"/>
+ <goal amount="1" index="58" target="INDEPENDENT" type="REPUTATION"/>
+ <goal amount="3" index="59" multiplier="3" target="INDEPENDENT" type="REPUTATION"/>
+ <goal amount="5" index="60" multiplier="3" target="INDEPENDENT" type="REPUTATION"/>
+ <goal amount="7" index="61" multiplier="3" target="INDEPENDENT" type="REPUTATION"/>
+ <goal amount="10" index="62" multiplier="3" target="INDEPENDENT" type="REPUTATION"/>
+ <goal amount="1" index="63" multiplier="5" target="PIRATES" type="REPUTATION"/>
+ <goal amount="3" index="64" multiplier="5" target="PIRATES" type="REPUTATION"/>
+ <goal amount="5" index="65" multiplier="5" target="PIRATES" type="REPUTATION"/>
+ <goal amount="50" index="66" multiplier="2" target="POLEIS" type="VISIT"/>
+ <goal amount="75" index="67" multiplier="2" target="POLEIS" type="VISIT"/>
+ <goal amount="100" index="68" multiplier="2" target="POLEIS" type="VISIT"/>
+ <goal amount="125" index="69" multiplier="2" target="POLEIS" type="VISIT"/>
+ <goal amount="150" index="70" multiplier="2" target="POLEIS" type="VISIT"/>
+ <goal amount="175" index="71" multiplier="2" target="POLEIS" type="VISIT"/>
+ <goal amount="200" index="72" multiplier="2" target="POLEIS" type="VISIT"/>
+ <goal amount="250" index="73" multiplier="2" target="POLEIS" type="VISIT"/>
+ <goal amount="10" index="74" multiplier="3" target="INDEPENDENT" type="VISIT"/>
+ <goal amount="15" index="75" multiplier="3" target="INDEPENDENT" type="VISIT"/>
+ <goal amount="20" index="76" multiplier="3" target="INDEPENDENT" type="VISIT"/>
+ <goal amount="25" index="77" multiplier="3" target="INDEPENDENT" type="VISIT"/>
+ <goal amount="50" index="78" multiplier="3" target="INDEPENDENT" type="VISIT"/>
+ <goal amount="1" index="79" multiplier="4" target="PIRATES" type="VISIT"/>
+ <goal amount="3" index="80" multiplier="4" target="PIRATES" type="VISIT"/>
+ <goal amount="5" index="81" multiplier="4" target="PIRATES" type="VISIT"/>
+ <goal amount="10" index="82" multiplier="4" target="PIRATES" type="VISIT"/>
+ <goal amount="200" index="83" multiplier="2" target="PIRATES" type="DESTROY"/>
+ <goal amount="250" index="84" multiplier="2" target="PIRATES" type="DESTROY"/>
+ <goal amount="500" index="85" multiplier="2" target="PIRATES" type="DESTROY"/>
+ <goal amount="1000" index="86" multiplier="2" target="PIRATES" type="DESTROY"/>
+ <goal amount="1500" index="87" multiplier="2" target="PIRATES" type="DESTROY"/>
+ <goal amount="2000" index="88" multiplier="2" target="PIRATES" type="DESTROY"/>
+ <goal amount="2500" index="89" multiplier="2" target="PIRATES" type="DESTROY"/>
+ <goal amount="200" index="90" multiplier="2" target="DRONES" type="DESTROY"/>
+ <goal amount="250" index="91" multiplier="2" target="DRONES" type="DESTROY"/>
+ <goal amount="500" index="92" multiplier="2" target="DRONES" type="DESTROY"/>
+ <goal amount="1000" index="93" multiplier="2" target="DRONES" type="DESTROY"/>
+ <goal amount="1500" index="94" multiplier="2" target="DRONES" type="DESTROY"/>
+ <goal amount="2000" index="95" multiplier="2" target="DRONES" type="DESTROY"/>
+ <goal amount="2500" index="96" multiplier="2" target="DRONES" type="DESTROY"/>
+ <goal amount="200" index="97" multiplier="2" target="UNDEAD" type="DESTROY"/>
+ <goal amount="250" index="98" multiplier="2" target="UNDEAD" type="DESTROY"/>
+ <goal amount="500" index="99" multiplier="2" target="UNDEAD" type="DESTROY"/>
+ <goal amount="1000" index="100" multiplier="2" target="UNDEAD" type="DESTROY"/>
+ <goal amount="1500" index="101" multiplier="2" target="UNDEAD" type="DESTROY"/>
+ <goal amount="2000" index="102" multiplier="2" target="UNDEAD" type="DESTROY"/>
+ <goal amount="2500" index="103" multiplier="2" target="UNDEAD" type="DESTROY"/>
+ <goal amount="200" index="104" multiplier="2" target="INQUISITION" type="DESTROY"/>
+ <goal amount="250" index="105" multiplier="2" target="INQUISITION" type="DESTROY"/>
+ <goal amount="500" index="106" multiplier="2" target="INQUISITION" type="DESTROY"/>
+ <goal amount="1000" index="107" multiplier="2" target="INQUISITION" type="DESTROY"/>
+ <goal amount="1500" index="108" multiplier="2" target="INQUISITION" type="DESTROY"/>
+ <goal amount="2000" index="109" multiplier="2" target="INQUISITION" type="DESTROY"/>
+ <goal amount="2500" index="110" multiplier="2" target="INQUISITION" type="DESTROY"/>
  <goal amount="200" index="111" multiplier="2" target="Deliver" type="MISSION"/>
  <goal amount="250" index="112" multiplier="2" target="Deliver" type="MISSION"/>
  <goal amount="500" index="113" multiplier="2" target="Deliver" type="MISSION"/>
@@ -179,26 +179,26 @@ attribute "amount" of points for finish it.
  <goal amount="6000" index="154" type="KILL"/>
  <goal amount="8000" index="155" type="KILL"/>
  <goal amount="10000" index="156" type="KILL"/>
- <goal amount="800" index="157" multiplier="2" target="Pirates" type="KILL"/>
- <goal amount="1000" index="158" multiplier="2" target="Pirates" type="KILL"/>
- <goal amount="2000" index="159" multiplier="2" target="Pirates" type="KILL"/>
- <goal amount="4000" index="160" multiplier="2" target="Pirates" type="KILL"/>
- <goal amount="6000" index="161" multiplier="2" target="Pirates" type="KILL"/>
- <goal amount="8000" index="162" multiplier="2" target="Pirates" type="KILL"/>
- <goal amount="10000" index="163" multiplier="2" target="Pirates" type="KILL"/>
- <goal amount="800" index="164" multiplier="2" target="Undead" type="KILL"/>
- <goal amount="1000" index="165" multiplier="2" target="Undead" type="KILL"/>
- <goal amount="2000" index="166" multiplier="2" target="Undead" type="KILL"/>
- <goal amount="4000" index="167" multiplier="2" target="Undead" type="KILL"/>
- <goal amount="6000" index="168" multiplier="2" target="Undead" type="KILL"/>
- <goal amount="8000" index="169" multiplier="2" target="Undead" type="KILL"/>
- <goal amount="10000" index="170" multiplier="2" target="Undead" type="KILL"/>
- <goal amount="800" index="171" multiplier="2" target="Inquisition" type="KILL"/>
- <goal amount="1000" index="172" multiplier="2" target="Inquisition" type="KILL"/>
- <goal amount="2000" index="173" multiplier="2" target="Inquisition" type="KILL"/>
- <goal amount="4000" index="174" multiplier="2" target="Inquisition" type="KILL"/>
- <goal amount="6000" index="175" multiplier="2" target="Inquisition" type="KILL"/>
- <goal amount="8000" index="176" multiplier="2" target="Inquisition" type="KILL"/>
- <goal amount="10000" index="177" multiplier="2" target="Inquisition" type="KILL"/>
+ <goal amount="800" index="157" multiplier="2" target="PIRATES" type="KILL"/>
+ <goal amount="1000" index="158" multiplier="2" target="PIRATES" type="KILL"/>
+ <goal amount="2000" index="159" multiplier="2" target="PIRATES" type="KILL"/>
+ <goal amount="4000" index="160" multiplier="2" target="PIRATES" type="KILL"/>
+ <goal amount="6000" index="161" multiplier="2" target="PIRATES" type="KILL"/>
+ <goal amount="8000" index="162" multiplier="2" target="PIRATES" type="KILL"/>
+ <goal amount="10000" index="163" multiplier="2" target="PIRATES" type="KILL"/>
+ <goal amount="800" index="164" multiplier="2" target="UNDEAD" type="KILL"/>
+ <goal amount="1000" index="165" multiplier="2" target="UNDEAD" type="KILL"/>
+ <goal amount="2000" index="166" multiplier="2" target="UNDEAD" type="KILL"/>
+ <goal amount="4000" index="167" multiplier="2" target="UNDEAD" type="KILL"/>
+ <goal amount="6000" index="168" multiplier="2" target="UNDEAD" type="KILL"/>
+ <goal amount="8000" index="169" multiplier="2" target="UNDEAD" type="KILL"/>
+ <goal amount="10000" index="170" multiplier="2" target="UNDEAD" type="KILL"/>
+ <goal amount="800" index="171" multiplier="2" target="INQUISITION" type="KILL"/>
+ <goal amount="1000" index="172" multiplier="2" target="INQUISITION" type="KILL"/>
+ <goal amount="2000" index="173" multiplier="2" target="INQUISITION" type="KILL"/>
+ <goal amount="4000" index="174" multiplier="2" target="INQUISITION" type="KILL"/>
+ <goal amount="6000" index="175" multiplier="2" target="INQUISITION" type="KILL"/>
+ <goal amount="8000" index="176" multiplier="2" target="INQUISITION" type="KILL"/>
+ <goal amount="10000" index="177" multiplier="2" target="INQUISITION" type="KILL"/>
 </goals>
 
