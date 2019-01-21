@@ -83,7 +83,7 @@ package body Crew.UI.Handlers is
       Member := PlayerShip.Crew(MemberIndex);
       if Factions_List(Member.Faction).Flags.Find_Index
           (To_Unbounded_String("nogender")) =
-        Factions_Container.No_Index then
+        UnboundedString_Container.No_Index then
          if Member.Gender = 'M' then
             MemberInfo := To_Unbounded_String("Gender: Male");
          else

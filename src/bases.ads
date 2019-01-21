@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -40,7 +40,7 @@ package Bases is
       Equipment: Equipment_Array; -- Items indexes from inventory used by recruit: 1 - weapon, 2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs, 7 - tool
       Payment: Positive; -- How much money recruit will take as payment each day.
       HomeBase: Positive; -- Index of base from which recruit is
-      Faction: Positive; -- Index of faction to which recruit belongs
+      Faction: Unbounded_String; -- Index of faction to which recruit belongs
    end record;
    package Recruit_Container is new Vectors(Positive, Recruit_Data);
    type Reputation_Array is
@@ -72,7 +72,7 @@ package Bases is
       Reputation: Reputation_Array; -- Reputation level and progress of player
       MissionsDate: Date_Record; -- Time when missions was generated
       Missions: Mission_Container.Vector; -- List of available missions
-      Owner: Positive; -- Index of faction which own base
+      Owner: Unbounded_String; -- Index of faction which own base
       Cargo: BaseCargo_Container.Vector; -- List of all cargo in base
       Size: Bases_Size; -- Size of base
    end record;
@@ -91,10 +91,10 @@ package Bases is
       PlayerShip.Crew
         .Last_Index; -- Count price for actions with bases (buying/selling/docking/ect)
    function GenerateBaseName
-     (FactionIndex: Positive) return Unbounded_String with
-      Pre => FactionIndex <=
-      Factions_List
-        .Last_Index; -- Generate random name for base based on faction
+     (FactionIndex: Unbounded_String) return Unbounded_String with
+      Pre => Factions_Container.Contains
+        (Factions_List,
+         FactionIndex); -- Generate random name for base based on faction
    procedure GenerateRecruits; -- Generate if needed new recruits in base
    procedure AskForBases; -- Ask in base for direction for other bases
    procedure AskForEvents; -- Ask in base for direction for random events

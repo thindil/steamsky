@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -114,14 +114,16 @@ package body Stories.UI is
                     To_Unbounded_String(" from ");
                   if Slice(Tokens, 2) = "any" then
                      Append(TargetText, "any ");
-                     for Faction of Factions_List loop
-                        if Faction.Index =
-                          GetStepData(Step.FinishData, "faction") then
-                           Append(TargetText, Faction.Name);
-                           Append(TargetText, " ship.");
-                           exit;
-                        end if;
-                     end loop;
+                     if Factions_Container.Contains
+                         (Factions_List,
+                          GetStepData(Step.FinishData, "faction")) then
+                        Append
+                          (TargetText,
+                           Factions_List
+                             (GetStepData(Step.FinishData, "faction"))
+                             .Name);
+                        Append(TargetText, " ship.");
+                     end if;
                   else
                      for ProtoShip of ProtoShips_List loop
                         if ProtoShip.Index =

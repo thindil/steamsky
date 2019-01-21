@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,7 +19,6 @@ with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
 with ShipModules; use ShipModules;
-with Factions; use Factions;
 with Bases; use Bases;
 
 package body Ships.SaveLoad is
@@ -147,9 +146,7 @@ package body Ships.SaveLoad is
             DataNode := Append_Child(CategoryNode, DataNode);
             Set_Attribute(DataNode, "name", To_String(Member.Name));
             Set_Attribute(DataNode, "gender", Member.Gender & "");
-            Set_Attribute
-              (DataNode, "faction",
-               To_String(Factions_List(Member.Faction).Index));
+            Set_Attribute(DataNode, "faction", To_String(Member.Faction));
             AttributesValues :=
               (Member.Health, Member.Tired, Member.Hunger, Member.Thirst,
                Crew_Orders'Pos(Member.Order),
@@ -334,7 +331,7 @@ package body Ships.SaveLoad is
          elsif Node_Name(ChildNode) = "member" then
             declare
                MemberData: Node_List;
-               Name, ItemName: Unbounded_String;
+               Name, ItemName, FactionIndex: Unbounded_String;
                Gender: String(1 .. 1);
                Health, Tired, Hunger, Thirst, Index, Level, Experience,
                Loyalty, Price: Natural;
@@ -345,8 +342,8 @@ package body Ships.SaveLoad is
                Inventory: Inventory_Container.Vector;
                Equipment: Equipment_Array;
                OrderTime, ContractLength: Integer;
-               Amount, Durability, EquipmentIndex, PriorityIndex, HomeBase,
-               FactionIndex: Positive;
+               Amount, Durability, EquipmentIndex, PriorityIndex,
+               HomeBase: Positive;
                Payment, Morale: Attributes_Array;
                MemberNode: Node;
             begin
@@ -438,14 +435,8 @@ package body Ships.SaveLoad is
                   HomeBase := PlayerShip.HomeBase;
                end if;
                if Get_Attribute(ChildNode, "faction") /= "" then
-                  for J in Factions_List.Iterate loop
-                     if Factions_List(J).Index =
-                       To_Unbounded_String
-                         (Get_Attribute(ChildNode, "faction")) then
-                        FactionIndex := Factions_Container.To_Index(J);
-                        exit;
-                     end if;
-                  end loop;
+                  FactionIndex :=
+                    To_Unbounded_String(Get_Attribute(ChildNode, "faction"));
                else
                   FactionIndex := SkyBases(HomeBase).Owner;
                end if;

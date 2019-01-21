@@ -140,7 +140,7 @@ package body Ships is
          Gender: Character;
          MemberName: Unbounded_String;
          TmpSkills: Skills_Container.Vector;
-         MemberFaction: Positive;
+         MemberFaction: Unbounded_String;
          TmpAttributes: Attributes_Container.Vector;
          TmpInventory: Inventory_Container.Vector;
          Member: ProtoMobRecord;
@@ -155,9 +155,7 @@ package body Ships is
                if GetRandom(1, 100) < 99 then
                   MemberFaction := ProtoShip.Owner;
                else
-                  MemberFaction :=
-                    GetRandom
-                      (Factions_List.First_Index, Factions_List.Last_Index);
+                  MemberFaction := GetRandomFaction;
                end if;
                if not Factions_List(MemberFaction).Flags.Contains
                    (To_Unbounded_String("nogender")) then
@@ -169,9 +167,7 @@ package body Ships is
                else
                   Gender := 'M';
                end if;
-               MemberName :=
-                 GenerateMemberName
-                   (Gender, Factions_List(MemberFaction).Index);
+               MemberName := GenerateMemberName(Gender, MemberFaction);
                Member := ProtoMobs_List.Element(ProtoMember(1));
                for Skill of Member.Skills loop
                   if Skill(3) = 0 then
@@ -371,7 +367,8 @@ package body Ships is
          Accuracy => (0, 0), CombatAI => NONE, Evasion => (0, 0),
          Loot => (0, 0), Perception => (0, 0), Cargo => TempCargo,
          CombatValue => 1, Crew => TempCrew,
-         Description => Null_Unbounded_String, Owner => 1,
+         Description => Null_Unbounded_String,
+         Owner => Factions_Container.Key(Factions_List.First),
          Index => Null_Unbounded_String, KnownRecipes => TempRecipes);
       ShipsData := Get_Tree(Reader);
       NodesList :=
@@ -563,13 +560,8 @@ package body Ships is
                end case;
             end loop;
             if Get_Attribute(ShipNode, "owner") /= "" then
-               for J in Factions_List.Iterate loop
-                  if To_Lower(To_String(Factions_List(J).Index)) =
-                    To_Lower(Get_Attribute(ShipNode, "owner")) then
-                     TempRecord.Owner := Factions_Container.To_Index(J);
-                     exit;
-                  end if;
-               end loop;
+               TempRecord.Owner :=
+                 To_Unbounded_String(Get_Attribute(ShipNode, "owner"));
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(ShipNode, "recipe");
@@ -724,7 +716,8 @@ package body Ships is
             Accuracy => (0, 0), CombatAI => NONE, Evasion => (0, 0),
             Loot => (0, 0), Perception => (0, 0), Cargo => TempCargo,
             CombatValue => 1, Crew => TempCrew,
-            Description => Null_Unbounded_String, Owner => 1,
+            Description => Null_Unbounded_String,
+            Owner => Factions_Container.Key(Factions_List.First),
             Index => Null_Unbounded_String, KnownRecipes => TempRecipes);
       end loop;
    end LoadShips;

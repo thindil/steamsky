@@ -54,8 +54,7 @@ package body Bases is
       end loop;
       SkyBases(BaseIndex).Reputation(2) := NewPoints;
       if SkyBases(BaseIndex).Reputation(1) = 100 then
-         UpdateGoal
-           (REPUTATION, Factions_List(SkyBases(BaseIndex).Owner).Index);
+         UpdateGoal(REPUTATION, SkyBases(BaseIndex).Owner);
       end if;
    end GainRep;
 
@@ -103,7 +102,7 @@ package body Bases is
    end CountPrice;
 
    function GenerateBaseName
-     (FactionIndex: Positive)
+     (FactionIndex: Unbounded_String)
      return Unbounded_String is -- based on name generator from libtcod
       NewName: Unbounded_String;
    begin
@@ -144,7 +143,7 @@ package body Bases is
       BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MaxRecruits, RecruitsAmount, SkillsAmount, SkillNumber, SkillLevel,
-      HighestSkill, HighestLevel, RecruitBase, RecruitFaction: Positive;
+      HighestSkill, HighestLevel, RecruitBase: Positive;
       BaseRecruits: Recruit_Container.Vector;
       Skills: Skills_Container.Vector;
       Gender: Character;
@@ -154,6 +153,7 @@ package body Bases is
       Inventory, TempTools: Positive_Container.Vector;
       Equipment: Equipment_Array;
       MaxSkillLevel: Integer;
+      RecruitFaction: Unbounded_String;
       procedure AddInventory(ItemsIndexes: Positive_Container.Vector;
          EquipIndex: Positive) is
          ItemIndex: Positive;
@@ -195,8 +195,7 @@ package body Bases is
          if GetRandom(1, 100) < 99 then
             RecruitFaction := SkyBases(BaseIndex).Owner;
          else
-            RecruitFaction :=
-              GetRandom(Factions_List.First_Index, Factions_List.Last_Index);
+            RecruitFaction := GetRandomFaction;
          end if;
          if not Factions_List(RecruitFaction).Flags.Contains
              (To_Unbounded_String("nogender")) then
@@ -284,9 +283,7 @@ package body Bases is
          end if;
          BaseRecruits.Append
            (New_Item =>
-              (Name =>
-                 GenerateMemberName
-                   (Gender, Factions_List(RecruitFaction).Index),
+              (Name => GenerateMemberName(Gender, RecruitFaction),
                Gender => Gender, Price => Price, Skills => Skills,
                Attributes => Attributes, Inventory => Inventory,
                Equipment => Equipment, Payment => Payment,
@@ -505,10 +502,8 @@ package body Bases is
                   end if;
                   if Event = DoublePrice and
                     IsFriendly
-                      (Factions_List(PlayerShip.Crew(1).Faction).Index,
-                       Factions_List
-                         (SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner)
-                         .Index) then
+                      (PlayerShip.Crew(1).Faction,
+                       SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner) then
                      exit;
                   end if;
                   if Event = Disease and
@@ -518,10 +513,8 @@ package body Bases is
                       .Contains
                       (To_Unbounded_String("diseaseimmune")) and
                     IsFriendly
-                      (Factions_List(PlayerShip.Crew(1).Faction).Index,
-                       Factions_List
-                         (SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner)
-                         .Index) then
+                      (PlayerShip.Crew(1).Faction,
+                       SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner) then
                      exit;
                   end if;
                   if Event = BaseRecovery and
@@ -609,8 +602,7 @@ package body Bases is
             return;
          end if;
          SkyBases(BaseIndex).Population := GetRandom(5, 10);
-         SkyBases(BaseIndex).Owner :=
-           GetRandom(Factions_List.First_Index, Factions_List.Last_Index);
+         SkyBases(BaseIndex).Owner := GetRandomFaction;
       end if;
    end UpdatePopulation;
 
