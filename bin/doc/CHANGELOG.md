@@ -44,6 +44,7 @@ All notable changes to this project will be documented in this file.
   (issue #35)
 - Auto-resizing window makes it hard to exit character creation screen in
   specific curcumstances (issue #36)
+- Name of faction in destroy ship goals
 
 ## [3.2] - 2018-12-30
 
