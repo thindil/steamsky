@@ -18,6 +18,7 @@
 with Maps; use Maps;
 with Utils; use Utils;
 with Trades; use Trades;
+with Items; use Items;
 
 package body Bases.Cargo is
 
@@ -47,7 +48,7 @@ package body Bases.Cargo is
       if SkyBases(BaseIndex).Cargo.Length = 0 then
          SkyBases(BaseIndex).Cargo.Append
            (New_Item =>
-              (ProtoIndex => FindProtoItem(MoneyIndex),
+              (ProtoIndex => MoneyIndex,
                Amount => (GetRandom(50, 200) * Population), Durability => 100,
                Price => 0));
          declare
@@ -58,7 +59,7 @@ package body Bases.Cargo is
                if Items_List(I).Buyable(BaseType) then
                   SkyBases(BaseIndex).Cargo.Append
                     (New_Item =>
-                       (ProtoIndex => Objects_Container.To_Index(I),
+                       (ProtoIndex => Objects_Container.Key(I),
                         Amount => (GetRandom(0, 100) * Population),
                         Durability => 100,
                         Price => Items_List(I).Prices(BaseType)));
@@ -95,8 +96,8 @@ package body Bases.Cargo is
    end GenerateCargo;
 
    procedure UpdateBaseCargo
-     (ProtoIndex: Objects_Container.Extended_Index :=
-        Objects_Container.No_Index;
+     (ProtoIndex: Unbounded_String :=
+        Null_Unbounded_String;
       Amount: Integer; Durability: Natural := 100; CargoIndex: Natural := 0) is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -104,7 +105,7 @@ package body Bases.Cargo is
         Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       ItemIndex: Natural;
    begin
-      if ProtoIndex > Objects_Container.No_Index then
+      if ProtoIndex /= Null_Unbounded_String then
          ItemIndex := FindBaseCargo(ProtoIndex, Durability);
       else
          ItemIndex := CargoIndex;
@@ -133,7 +134,7 @@ package body Bases.Cargo is
       end if;
    end UpdateBaseCargo;
 
-   function FindBaseCargo(ProtoIndex: Positive;
+   function FindBaseCargo(ProtoIndex: Unbounded_String;
       Durability: Natural := 101) return Natural is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;

@@ -36,7 +36,7 @@ package Bases is
       Price: Positive; -- Cost of enlist of recruit
       Attributes: Attributes_Container
         .Vector; -- Names indexes, levels and experience in attributes of recruit
-      Inventory: Positive_Container.Vector; -- Owned items by recruit
+      Inventory: UnboundedString_Container.Vector; -- Owned items by recruit
       Equipment: Equipment_Array; -- Items indexes from inventory used by recruit: 1 - weapon, 2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs, 7 - tool
       Payment: Positive; -- How much money recruit will take as payment each day.
       HomeBase: Positive; -- Index of base from which recruit is
@@ -49,7 +49,7 @@ package Bases is
             2) of Integer; -- Data structure for reputation, 1 = level, 2 = points to next level
    type Base_Cargo is -- Data structure for bases cargo
    record
-      ProtoIndex: Positive; -- Index of item prototype
+      ProtoIndex: Unbounded_String; -- Index of item prototype
       Amount: Natural; -- Amount of items
       Durability: Positive; -- Durability of items
       Price: Natural; -- Current price of item

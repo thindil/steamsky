@@ -28,13 +28,14 @@ package body Bases.Ship is
 
    procedure RepairShip(ModuleIndex: Integer) is
       Cost, Time, MoneyIndex2: Natural := 0;
-      TraderIndex, ProtoMoneyIndex: Positive;
+      TraderIndex: Positive;
+      ProtoMoneyIndex: Unbounded_String;
    begin
       RepairCost(Cost, Time, ModuleIndex);
       if Cost = 0 then
          raise BasesShip_Nothing_To_Repair;
       end if;
-      ProtoMoneyIndex := FindProtoItem(MoneyIndex);
+      ProtoMoneyIndex := MoneyIndex;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, ProtoMoneyIndex);
       TraderIndex := FindMember(Talk);
       CountPrice(Cost, TraderIndex);
@@ -74,7 +75,7 @@ package body Bases.Ship is
    end RepairShip;
 
    procedure UpgradeShip(Install: Boolean; ModuleIndex: Positive) is
-      ProtoMoneyIndex: constant Positive := FindProtoItem(MoneyIndex);
+      ProtoMoneyIndex: constant Unbounded_String := MoneyIndex;
       MoneyIndex2: constant Natural :=
         FindItem(PlayerShip.Cargo, ProtoMoneyIndex);
       HullIndex, ModulesAmount, TraderIndex: Positive;
@@ -296,7 +297,7 @@ package body Bases.Ship is
    procedure PayForDock is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      ProtoMoneyIndex: constant Positive := FindProtoItem(MoneyIndex);
+      ProtoMoneyIndex: constant Unbounded_String := MoneyIndex;
       MoneyIndex2: constant Natural :=
         FindItem(PlayerShip.Cargo, ProtoMoneyIndex);
       DockingCost: Positive;
@@ -341,7 +342,7 @@ package body Bases.Ship is
           (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
              .BaseType) +
         1;
-      ProtoIndex: Positive;
+      ProtoIndex: Unbounded_String;
    begin
       if ModuleIndex > 0 then
          Time :=

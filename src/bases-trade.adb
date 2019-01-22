@@ -110,7 +110,8 @@ package body Bases.Trade is
         To_String(Items_List(Recipes_List(RecipeIndex).ResultIndex).Name);
       BaseType: constant Positive :=
         Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
-      TraderIndex, ProtoMoneyIndex: Positive;
+      TraderIndex: Positive;
+      ProtoMoneyIndex: Unbounded_String;
    begin
       if BaseType /= Recipes_List(RecipeIndex).BaseType then
          raise Trade_Cant_Buy;
@@ -129,7 +130,7 @@ package body Bases.Trade is
          Cost := Recipes_List(RecipeIndex).Difficulty * 100;
       end if;
       CountPrice(Cost, TraderIndex);
-      ProtoMoneyIndex := FindProtoItem(MoneyIndex);
+      ProtoMoneyIndex := MoneyIndex;
       MoneyIndex2 := CheckMoney(Cost, RecipeName);
       UpdateCargo
         (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => (0 - Cost));
@@ -148,7 +149,8 @@ package body Bases.Trade is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Cost, Time, MoneyIndex2: Natural := 0;
-      TraderIndex, ProtoMoneyIndex: Positive;
+      TraderIndex: Positive;
+      ProtoMoneyIndex: Unbounded_String;
    begin
       HealCost(Cost, Time, MemberIndex);
       if Cost = 0 then
@@ -236,9 +238,10 @@ package body Bases.Trade is
    procedure TrainSkill(MemberIndex, SkillIndex: Positive) is
       Cost: constant Natural := TrainCost(MemberIndex, SkillIndex);
       MoneyIndex2, TraderIndex: Natural;
-      ProtoMoneyIndex, GainedExp: Positive;
+      GainedExp: Positive;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      ProtoMoneyIndex: Unbounded_String;
    begin
       if Cost = 0 then
          raise Trade_Cant_Train;

@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package Missions is
 
@@ -23,7 +24,7 @@ package Missions is
    type Mission_Data is -- Data structure for missions
    record
       MType: Missions_Types; -- Type of mission
-      Target: Natural; -- Target for mission (ship, item or passenger index)
+      Target: Unbounded_String; -- Target for mission (ship, item or passenger index)
       Time: Positive; -- Amount of minutes to finish mission
       TargetX: Natural; -- Skymap X-axis for mission target
       TargetY: Natural; -- Skymap Y-axis for mission target

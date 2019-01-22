@@ -30,7 +30,7 @@ package Crafts is
         .Vector; -- Types of material needed for recipe
       MaterialAmounts: Positive_Container
         .Vector; -- Amounts of material needed for recipe
-      ResultIndex: Positive; -- Prototype index of crafted item
+      ResultIndex: Unbounded_String; -- Prototype index of crafted item
       ResultAmount: Natural; -- Amount of products
       Workplace: ModuleType; -- Ship module needed for crafting
       Skill: Positive; -- Skill used in crafting item
@@ -57,7 +57,7 @@ package Crafts is
    function FindRecipe(Index: Unbounded_String) return Natural with
       Pre => Index /=
       Null_Unbounded_String; -- Return vector index of recipe or zero if recipe not found
-   procedure SetRecipe(Workshop, Amount: Positive; RecipeIndex: Integer) with
+   procedure SetRecipe(Workshop, Amount: Positive; RecipeIndex: Integer; ItemIndex: Unbounded_String := Null_Unbounded_String) with
       Pre =>
       (Workshop <= PlayerShip.Modules.Last_Index and
        RecipeIndex <=
