@@ -125,13 +125,15 @@ package body Ships.Crew is
          for I in
            AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
             if AcceptedMissions(I).MType = Passenger and
-              Integer'Value(To_String(AcceptedMissions(I).Target)) = MemberIndex then
+              Integer'Value(To_String(AcceptedMissions(I).Target)) =
+                MemberIndex then
                DeleteMission(I);
                exit;
             end if;
          end loop;
          for Mission of AcceptedMissions loop
-            if Mission.MType = Passenger and Integer'Value(To_String(Mission.Target)) > MemberIndex then
+            if Mission.MType = Passenger and
+              Integer'Value(To_String(Mission.Target)) > MemberIndex then
                TempValue := Integer'Value(To_String(Mission.Target));
                TempValue := TempValue - 1;
                Mission.Target := To_Unbounded_String(TempValue);

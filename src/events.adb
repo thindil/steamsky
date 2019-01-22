@@ -54,9 +54,12 @@ package body Events is
            .EType is
             when EnemyShip =>
                return StartCombat
-                   (Integer'Value(To_String(Events_List
-                      (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-                      .Data)));
+                   (Integer'Value
+                      (To_String
+                         (Events_List
+                            (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
+                               .EventIndex)
+                            .Data)));
             when others =>
                return False;
          end case;
@@ -139,9 +142,10 @@ package body Events is
                     (New_Item =>
                        (Trader, PlayerShip.SkyX, PlayerShip.SkyY,
                         GetRandom(30, 45),
-                        To_Unbounded_String(Traders
-                          (GetRandom
-                             (Traders.First_Index, Traders.Last_Index)))));
+                        To_Unbounded_String
+                          (Traders
+                             (GetRandom
+                                (Traders.First_Index, Traders.Last_Index)))));
                   SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                     Events_List.Last_Index;
                   AddMessage("You meet friendly trader.", OtherMessage);
@@ -152,10 +156,11 @@ package body Events is
                     (New_Item =>
                        (FriendlyShip, PlayerShip.SkyX, PlayerShip.SkyY,
                         GetRandom(30, 45),
-                        To_Unbounded_String(FriendlyShips
-                          (GetRandom
-                             (FriendlyShips.First_Index,
-                              FriendlyShips.Last_Index)))));
+                        To_Unbounded_String
+                          (FriendlyShips
+                             (GetRandom
+                                (FriendlyShips.First_Index,
+                                 FriendlyShips.Last_Index)))));
                   SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                     Events_List.Last_Index;
                   AddMessage("You spotted friendly ship.", OtherMessage);
@@ -167,12 +172,16 @@ package body Events is
                     (New_Item =>
                        (EnemyShip, PlayerShip.SkyX, PlayerShip.SkyY,
                         GetRandom(30, 45),
-                        To_Unbounded_String(Enemies
-                          (GetRandom
-                             (Enemies.First_Index, Enemies.Last_Index)))));
+                        To_Unbounded_String
+                          (Enemies
+                             (GetRandom
+                                (Enemies.First_Index, Enemies.Last_Index)))));
                   SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                     Events_List.Last_Index;
-                  return StartCombat(Integer'Value(To_String(Events_List(Events_List.Last_Index).Data)));
+                  return StartCombat
+                      (Integer'Value
+                         (To_String
+                            (Events_List(Events_List.Last_Index).Data)));
             end case;
          else
             if SkyBases(BaseIndex).Population = 0 then
@@ -201,14 +210,18 @@ package body Events is
                        (New_Item =>
                           (AttackOnBase, PlayerShip.SkyX, PlayerShip.SkyY,
                            GetRandom(60, 90),
-                           To_Unbounded_String(Enemies
-                             (GetRandom
-                                (Enemies.First_Index, Enemies.Last_Index)))));
+                           To_Unbounded_String
+                             (Enemies
+                                (GetRandom
+                                   (Enemies.First_Index,
+                                    Enemies.Last_Index)))));
                      AddMessage
                        ("You can't dock to base now, because base is under attack. You can help defend it.",
                         OtherMessage);
                      return StartCombat
-                         (Integer'Value(To_String(Events_List(Events_List.Last_Index).Data)));
+                         (Integer'Value
+                            (To_String
+                               (Events_List(Events_List.Last_Index).Data)));
                   when 21 => -- Disease in base
                      Events_List.Append
                        (New_Item =>
@@ -224,17 +237,17 @@ package body Events is
                      begin
                         loop
                            ItemIndex :=
-                              GetRandom(1, Positive(Items_List.Length));
-                              for J in Items_List.Iterate loop
-                                 ItemIndex := ItemIndex - 1;
-                                 if ItemIndex = 0 then
-                                    if Items_List(J).Prices(1) > 0 then
-                                       NewItemIndex := Objects_Container.Key(J);
-                                    end if;
-                                    exit;
+                             GetRandom(1, Positive(Items_List.Length));
+                           for J in Items_List.Iterate loop
+                              ItemIndex := ItemIndex - 1;
+                              if ItemIndex = 0 then
+                                 if Items_List(J).Prices(1) > 0 then
+                                    NewItemIndex := Objects_Container.Key(J);
                                  end if;
-                              end loop;
-                              exit when Items_List(NewItemIndex).Prices(1) > 0;
+                                 exit;
+                              end if;
+                           end loop;
+                           exit when Items_List(NewItemIndex).Prices(1) > 0;
                         end loop;
                         Events_List.Append
                           (New_Item =>
@@ -252,14 +265,17 @@ package body Events is
                           (New_Item =>
                              (EnemyPatrol, PlayerShip.SkyX, PlayerShip.SkyY,
                               GetRandom(30, 45),
-                              To_Unbounded_String(Enemies
-                                (GetRandom
-                                   (Enemies.First_Index,
-                                    Enemies.Last_Index)))));
+                              To_Unbounded_String
+                                (Enemies
+                                   (GetRandom
+                                      (Enemies.First_Index,
+                                       Enemies.Last_Index)))));
                         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                           Events_List.Last_Index;
                         return StartCombat
-                            (Integer'Value(To_String(Events_List(Events_List.Last_Index).Data)));
+                            (Integer'Value
+                               (To_String
+                                  (Events_List(Events_List.Last_Index).Data)));
                      end if;
                      Events_List.Append
                        (New_Item =>

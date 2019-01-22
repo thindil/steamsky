@@ -102,13 +102,17 @@ package body Missions.UI is
          when Destroy =>
             MissionInfo :=
               To_Unbounded_String
-                ("Target: " & To_String(ProtoShips_List(Integer'Value(To_String(Mission.Target))).Name));
+                ("Target: " &
+                 To_String
+                   (ProtoShips_List(Integer'Value(To_String(Mission.Target)))
+                      .Name));
          when Explore =>
             MissionInfo := To_Unbounded_String("Explore selected area");
          when Passenger =>
             CanAccept := False;
             for Module of PlayerShip.Modules loop
-               if Module.ProtoIndex = Integer'Value(To_String(Mission.Target)) then
+               if Module.ProtoIndex =
+                 Integer'Value(To_String(Mission.Target)) then
                   if Module.Owner = 0 then
                      HaveCabin := True;
                      CanAccept := True;
@@ -123,7 +127,9 @@ package body Missions.UI is
             end if;
             MissionInfo := To_Unbounded_String("Needed cabin: ");
             if HaveCabin then
-               Append(MissionInfo, Modules_List(Integer'Value(To_String(Mission.Target))).Name);
+               Append
+                 (MissionInfo,
+                  Modules_List(Integer'Value(To_String(Mission.Target))).Name);
             elsif CabinTaken then
                Append
                  (MissionInfo,
