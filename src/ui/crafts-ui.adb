@@ -103,6 +103,7 @@ package body Crafts.UI is
       HaveWorkplace, IsMaterial, HaveMaterials: Boolean := True;
       HaveTool: Boolean := False;
       TextLength: Positive;
+      ItemIndex: Unbounded_String;
    begin
       declare
          RecipesIter: Gtk_Tree_Iter;
@@ -116,14 +117,15 @@ package body Crafts.UI is
             return;
          end if;
          RecipeIndex := Integer(Get_Int(RecipesModel, RecipesIter, 1));
+         ItemIndex := To_Unbounded_String(Get_String(RecipesModel, RecipesIter, 1));
       end;
       if RecipeIndex > 0 then
          Recipe := Recipes_List(RecipeIndex);
       else
          Recipe.MaterialTypes.Append
-           (New_Item => Items_List(abs (RecipeIndex)).IType);
+            (New_Item => Items_List(ItemIndex).IType);
+         Recipe.ResultIndex := ItemIndex;
          Recipe.MaterialAmounts.Append(New_Item => 1);
-         Recipe.ResultIndex := abs (RecipeIndex);
          Recipe.ResultAmount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
          for ProtoRecipe of Recipes_List loop
@@ -164,7 +166,7 @@ package body Crafts.UI is
                   Append(RecipeInfo, " or");
                end if;
                CargoIndex :=
-                 FindItem(PlayerShip.Cargo, Objects_Container.To_Index(J));
+                 FindItem(PlayerShip.Cargo, Objects_Container.Key(J));
                if CargoIndex = 0 then
                   Append(RecipeInfo, "<span foreground=""red"">");
                else
@@ -199,7 +201,7 @@ package body Crafts.UI is
                   Append(RecipeInfo, " or ");
                end if;
                CargoIndex :=
-                 FindItem(PlayerShip.Cargo, Objects_Container.To_Index(I));
+                 FindItem(PlayerShip.Cargo, Objects_Container.Key(I));
                if CargoIndex = 0 then
                   Append(RecipeInfo, "<span foreground=""red"">");
                else
@@ -305,7 +307,7 @@ package body Crafts.UI is
    end CreateCraftsUI;
 
    procedure ShowCraftsUI is
-      Deconstructs: Positive_Container.Vector;
+      Deconstructs: UnboundedString_Container.Vector;
       RecipesIter: Gtk_Tree_Iter;
       RecipesList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "recipeslist"));
@@ -345,7 +347,7 @@ package body Crafts.UI is
                   if Items_List(I).IType = Recipe.Tool then
                      CargoIndex :=
                        FindItem
-                         (PlayerShip.Cargo, Objects_Container.To_Index(I));
+                         (PlayerShip.Cargo, Objects_Container.Key(I));
                      if CargoIndex > 0 then
                         CanCraft := True;
                         exit;
@@ -363,7 +365,7 @@ package body Crafts.UI is
                   if Items_List(J).IType = Recipe.MaterialTypes(K) then
                      CargoIndex :=
                        FindItem
-                         (PlayerShip.Cargo, Objects_Container.To_Index(J));
+                         (PlayerShip.Cargo, Objects_Container.Key(J));
                      if CargoIndex > 0 then
                         CanCraft := True;
                         exit;
@@ -394,7 +396,7 @@ package body Crafts.UI is
          Set
            (RecipesList, RecipesIter, 0,
             "Deconstruct " & To_String(Items_List(Deconstructs(I)).Name));
-         Set(RecipesList, RecipesIter, 1, Gint(0 - Deconstructs(I)));
+         Set(RecipesList, RecipesIter, 1, To_String(Deconstructs(I)));
       end loop;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "crafts");

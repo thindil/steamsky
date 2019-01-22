@@ -111,6 +111,7 @@ package body Ships.Crew is
    end Death;
 
    procedure DeleteMember(MemberIndex: Positive; Ship: in out ShipRecord) is
+      TempValue: Integer;
    begin
       Ship.Crew.Delete(Index => MemberIndex);
       for Module of Ship.Modules loop
@@ -124,14 +125,16 @@ package body Ships.Crew is
          for I in
            AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
             if AcceptedMissions(I).MType = Passenger and
-              AcceptedMissions(I).Target = MemberIndex then
+              Integer'Value(To_String(AcceptedMissions(I).Target)) = MemberIndex then
                DeleteMission(I);
                exit;
             end if;
          end loop;
          for Mission of AcceptedMissions loop
-            if Mission.MType = Passenger and Mission.Target > MemberIndex then
-               Mission.Target := Mission.Target - 1;
+            if Mission.MType = Passenger and Integer'Value(To_String(Mission.Target)) > MemberIndex then
+               TempValue := Integer'Value(To_String(Mission.Target));
+               TempValue := TempValue - 1;
+               Mission.Target := To_Unbounded_String(TempValue);
             end if;
          end loop;
       end if;

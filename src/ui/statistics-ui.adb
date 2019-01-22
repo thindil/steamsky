@@ -130,7 +130,7 @@ package body Statistics.UI is
          CraftsList: constant Gtk_List_Store :=
            Gtk_List_Store(Get_Object(Builder, "craftslist"));
          CraftsIter: Gtk_Tree_Iter;
-         ItemIndex: Positive;
+         ItemIndex: Unbounded_String;
       begin
          Clear(CraftsList);
          if TotalFinished > 0 then

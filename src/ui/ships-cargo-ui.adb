@@ -44,8 +44,9 @@ package body Ships.Cargo.UI is
       CargoIter: Gtk_Tree_Iter;
       CargoList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "cargolist"));
-      ProtoIndex, ItemWeight: Positive;
+      ItemWeight: Positive;
       Visible: Boolean := False;
+      ProtoIndex: Unbounded_String;
    begin
       Clear(CargoList);
       for I in PlayerShip.Cargo.Iterate loop
@@ -148,8 +149,7 @@ package body Ships.Cargo.UI is
             end loop;
          end loop;
       elsif CurrentStory.Index /= 0 then
-         if Positive'Value
-             (To_String(Stories_List(CurrentStory.Index).StartData(1))) =
+         if Stories_List(CurrentStory.Index).StartData(1) =
            PlayerShip.Cargo(ItemIndex).ProtoIndex then
             FinishedStories.Delete(FinishedStories.Last_Index);
             ClearCurrentStory;

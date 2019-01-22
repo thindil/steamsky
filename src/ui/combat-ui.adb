@@ -266,7 +266,7 @@ package body Combat.UI is
                          .Value) then
                      AmmoIndex :=
                        FindItem
-                         (PlayerShip.Cargo, Objects_Container.To_Index(J));
+                         (PlayerShip.Cargo, Objects_Container.Key(J));
                      if AmmoIndex > 0 then
                         AmmoAmount :=
                           AmmoAmount + PlayerShip.Cargo(AmmoIndex).Amount;
@@ -472,15 +472,15 @@ package body Combat.UI is
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0
            and then EnemyName /=
              ProtoShips_List
-               (Events_List
+               (Integer'Value(To_String(Events_List
                   (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-                  .Data)
+                  .Data)))
                .Name then
             CombatStarted :=
               StartCombat
-                (Events_List
+                (Integer'Value(To_String(Events_List
                    (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-                   .Data,
+                   .Data)),
                  False);
             if not CombatStarted then
                return;

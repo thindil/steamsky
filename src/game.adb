@@ -199,15 +199,15 @@ package body Game is
          Amount, PlayerMorale: Positive;
          TmpInventory: Inventory_Container.Vector;
       begin
-         for Item of ProtoMobs_List(PlayerIndex2).Inventory loop
-            if Item(3) > 0 then
-               Amount := GetRandom(Item(2), Item(3));
+         for I in ProtoMobs_List(PlayerIndex2).Inventory.Iterate loop
+            if ProtoMobs_List(PlayerIndex2).Inventory(I)(2) > 0 then
+               Amount := GetRandom(ProtoMobs_List(PlayerIndex2).Inventory(I)(1), ProtoMobs_List(PlayerIndex2).Inventory(I)(2));
             else
-               Amount := Item(2);
+               Amount := ProtoMobs_List(PlayerIndex2).Inventory(I)(1);
             end if;
             TmpInventory.Append
               (New_Item =>
-                 (ProtoIndex => Item(1), Amount => Amount,
+                 (ProtoIndex => MobInventory_Container.Key(I), Amount => Amount,
                   Name => Null_Unbounded_String, Durability => 100,
                   Price => 0));
          end loop;

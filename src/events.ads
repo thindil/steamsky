@@ -31,7 +31,7 @@ package Events is
       SkyX: Integer; -- X coordinate on sky map
       SkyY: Integer; -- Y coordinate on sky map
       Time: Integer; -- Time to end of event
-      Data: Positive; -- Various data for event (for example index of enemy ship)
+      Data: Unbounded_String; -- Various data for event (for example index of enemy ship)
    end record;
    package Events_Container is new Vectors(Positive, EventData);
    Events_List: Events_Container.Vector;

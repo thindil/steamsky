@@ -17,13 +17,12 @@
 
 package Ships.Cargo is
 
-   procedure UpdateCargo(Ship: in out ShipRecord; ProtoIndex: Natural := 0;
+   procedure UpdateCargo(Ship: in out ShipRecord; ProtoIndex: Unbounded_String := Null_Unbounded_String;
       Amount: Integer; Durability: Natural := 100;
       CargoIndex, Price: Natural := 0) with
       Pre =>
-      (ProtoIndex <= ProtoShips_List.Last_Index and
        CargoIndex <=
-         Ship.Cargo.Last_Index); -- Update selected item in ship cargo
+         Ship.Cargo.Last_Index; -- Update selected item in ship cargo
    function FreeCargo(Amount: Integer;
       Ship: ShipRecord := PlayerShip)
      return Integer; -- Return available space in cargo after adding/extracting Amount

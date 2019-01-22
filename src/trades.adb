@@ -31,14 +31,13 @@ with Bases.Cargo; use Bases.Cargo;
 package body Trades is
 
    procedure BuyItems(BaseItemIndex: Positive; Amount: String) is
-      BuyAmount, Price, ProtoMoneyIndex: Positive;
+      BuyAmount, Price: Positive;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      ItemIndex: Positive;
       Cost, MoneyIndex2: Natural;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
-      ItemName: Unbounded_String;
+      ItemName, ItemIndex, ProtoMoneyIndex: Unbounded_String;
       TraderIndex: constant Natural := FindMember(Talk);
    begin
       BuyAmount := Positive'Value(Amount);
@@ -65,7 +64,7 @@ package body Trades is
       end if;
       Cost := BuyAmount * Price;
       CountPrice(Cost, TraderIndex);
-      ProtoMoneyIndex := FindProtoItem(MoneyIndex);
+      ProtoMoneyIndex := MoneyIndex;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, ProtoMoneyIndex);
       if FreeCargo(Cost - (Items_List(ItemIndex).Weight * BuyAmount)) < 0 then
          raise Trade_No_Free_Cargo;
@@ -122,12 +121,12 @@ package body Trades is
       SellAmount: Positive;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      ProtoIndex: constant Positive := PlayerShip.Cargo(ItemIndex).ProtoIndex;
+      ProtoIndex: constant Unbounded_String := PlayerShip.Cargo(ItemIndex).ProtoIndex;
       ItemName: constant String := To_String(Items_List(ProtoIndex).Name);
       Profit, Price, BaseType: Positive;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
-      MoneyIndex2: constant Positive := FindProtoItem(MoneyIndex);
+      MoneyIndex2: constant Unbounded_String := MoneyIndex;
       BaseItemIndex: Natural := 0;
       CargoAdded: Boolean := False;
       TraderIndex: constant Natural := FindMember(Talk);
@@ -211,7 +210,7 @@ package body Trades is
               (New_Item =>
                  (ProtoIndex => ProtoIndex, Amount => SellAmount,
                   Durability => PlayerShip.Cargo(ItemIndex).Durability,
-                  Price => Items_List(ItemIndex).Prices(BaseType)));
+                  Price => Items_List(ProtoIndex).Prices(BaseType)));
          end if;
       end if;
       UpdateCargo
@@ -244,8 +243,9 @@ package body Trades is
         CreateShip
           (ProtoIndex, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY,
            FULL_STOP);
-      BaseType, CargoAmount, CargoItemIndex: Natural;
-      ItemIndex, ItemAmount: Positive;
+      BaseType, CargoAmount, CargoItemIndex, ItemIndex: Natural;
+      ItemAmount: Positive;
+      NewItemIndex: Unbounded_String;
    begin
       TraderCargo.Clear;
       for Item of TraderShip.Cargo loop
@@ -264,7 +264,6 @@ package body Trades is
          CargoAmount := GetRandom(1, 10);
       end if;
       while CargoAmount > 0 loop
-         ItemIndex := GetRandom(Items_List.First_Index, Items_List.Last_Index);
          if TraderShip.Crew.Length < 5 then
             ItemAmount := GetRandom(1, 100);
          elsif TraderShip.Crew.Length < 10 then
@@ -272,24 +271,32 @@ package body Trades is
          else
             ItemAmount := GetRandom(1, 1000);
          end if;
-         CargoItemIndex := FindItem(TraderShip.Cargo, ItemIndex);
+         ItemIndex := GetRandom(1, Positive(Items_List.Length));
+         for I in Items_List.Iterate loop
+            ItemIndex := ItemIndex - 1;
+            if ItemIndex = 0 then
+               NewItemIndex := Objects_Container.Key(I);
+               exit;
+            end if;
+         end loop;
+         CargoItemIndex := FindItem(TraderShip.Cargo, NewItemIndex);
          if CargoItemIndex > 0 then
             TraderCargo(CargoItemIndex).Amount :=
               TraderCargo(CargoItemIndex).Amount + ItemAmount;
             TraderShip.Cargo(CargoItemIndex).Amount :=
               TraderShip.Cargo(CargoItemIndex).Amount + ItemAmount;
          else
-            if FreeCargo(0 - (Items_List(ItemIndex).Weight * ItemAmount)) >
+            if FreeCargo(0 - (Items_List(NewItemIndex).Weight * ItemAmount)) >
               -1 then
                BaseType := GetRandom(1, 4);
                TraderCargo.Append
                  (New_Item =>
-                    (ProtoIndex => ItemIndex, Amount => ItemAmount,
+                    (ProtoIndex => NewItemIndex, Amount => ItemAmount,
                      Durability => 100,
-                     Price => Items_List(ItemIndex).Prices(BaseType)));
+                     Price => Items_List(NewItemIndex).Prices(BaseType)));
                TraderShip.Cargo.Append
                  (New_Item =>
-                    (ProtoIndex => ItemIndex, Amount => ItemAmount,
+                    (ProtoIndex => NewItemIndex, Amount => ItemAmount,
                      Durability => 100, Name => Null_Unbounded_String,
                      Price => 0));
             else

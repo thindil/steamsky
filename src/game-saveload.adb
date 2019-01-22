@@ -195,7 +195,7 @@ package body Game.SaveLoad is
             RawValue := To_Unbounded_String(Integer'Image(Event.Time));
             Set_Attribute
               (EventNode, "time", To_String(Trim(RawValue, Ada.Strings.Left)));
-            RawValue := To_Unbounded_String(Integer'Image(Event.Data));
+            RawValue := Event.Data;
             Set_Attribute
               (EventNode, "data", To_String(Trim(RawValue, Ada.Strings.Left)));
          end loop;
@@ -326,7 +326,7 @@ package body Game.SaveLoad is
              (Integer'Image(Missions_Types'Pos(Mission.MType)));
          Set_Attribute
            (CategoryNode, "type", To_String(Trim(RawValue, Ada.Strings.Left)));
-         RawValue := To_Unbounded_String(Integer'Image(Mission.Target));
+         RawValue := Mission.Target;
          Set_Attribute
            (CategoryNode, "target",
             To_String(Trim(RawValue, Ada.Strings.Left)));
@@ -463,7 +463,7 @@ package body Game.SaveLoad is
       declare
          EType: Events_Types;
          X, Y, Time: Integer;
-         Data: Positive;
+         Data: Unbounded_String;
       begin
          for I in 0 .. Length(NodesList) - 1 loop
             SavedNode := Item(NodesList, I);
@@ -473,7 +473,7 @@ package body Game.SaveLoad is
             X := Integer'Value(Get_Attribute(SavedNode, "x"));
             Y := Integer'Value(Get_Attribute(SavedNode, "y"));
             Time := Integer'Value(Get_Attribute(SavedNode, "time"));
-            Data := Positive'Value(Get_Attribute(SavedNode, "data"));
+            Data := To_Unbounded_String(Get_Attribute(SavedNode, "data"));
             Events_List.Append
               (New_Item =>
                  (EType => EType, SkyX => X, SkyY => Y, Time => Time,
@@ -629,9 +629,10 @@ package body Game.SaveLoad is
           (SaveData, "acceptedmission");
       declare
          MType: Missions_Types;
-         Target, TargetX, TargetY, StartBase: Natural;
+         TargetX, TargetY, StartBase: Natural;
          Time, Reward, MIndex: Positive;
          Finished: Boolean;
+         Target: Unbounded_String;
       begin
          LogMessage("Loading accepted missions...", Everything, False);
          for I in 0 .. Length(NodesList) - 1 loop
@@ -639,7 +640,7 @@ package body Game.SaveLoad is
             MType :=
               Missions_Types'Val
                 (Integer'Value(Get_Attribute(SavedNode, "type")));
-            Target := Natural'Value(Get_Attribute(SavedNode, "target"));
+            Target := To_Unbounded_String(Get_Attribute(SavedNode, "target"));
             Time := Positive'Value(Get_Attribute(SavedNode, "time"));
             TargetX := Natural'Value(Get_Attribute(SavedNode, "targetx"));
             TargetY := Natural'Value(Get_Attribute(SavedNode, "targety"));
