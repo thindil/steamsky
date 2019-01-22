@@ -213,12 +213,12 @@ package body Goals is
                      InsertPosition := InsertPosition - 1;
                   end if;
                   Insert
-                    (Text, InsertPosition, To_String(Goal.TargetIndex) & " ");
+                    (Text, InsertPosition, GetFactionName(Goal.TargetIndex, Name) & " ");
                end if;
             when CRAFT =>
                if FindRecipe(Goal.TargetIndex) > 0 then
                   declare
-                     ItemIndex: constant Positive :=
+                     ItemIndex: constant Unbounded_String :=
                        Recipes_List(FindRecipe(Goal.TargetIndex)).ResultIndex;
                   begin
                      Append
