@@ -57,7 +57,8 @@ package Crafts is
    function FindRecipe(Index: Unbounded_String) return Natural with
       Pre => Index /=
       Null_Unbounded_String; -- Return vector index of recipe or zero if recipe not found
-   procedure SetRecipe(Workshop, Amount: Positive; RecipeIndex: Integer; ItemIndex: Unbounded_String := Null_Unbounded_String) with
+   procedure SetRecipe(Workshop, Amount: Positive; RecipeIndex: Integer;
+      ItemIndex: Unbounded_String := Null_Unbounded_String) with
       Pre =>
       (Workshop <= PlayerShip.Modules.Last_Index and
        RecipeIndex <=

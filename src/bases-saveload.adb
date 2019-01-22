@@ -246,8 +246,7 @@ package body Bases.SaveLoad is
                      Set_Attribute
                        (MissionNode, "type",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
-                     RawValue :=
-                       Mission.Target;
+                     RawValue := Mission.Target;
                      Set_Attribute
                        (MissionNode, "target",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
@@ -282,8 +281,7 @@ package body Bases.SaveLoad is
                      ItemNode := Create_Element(SaveData, "item");
                      ItemNode := Append_Child(BaseNode, ItemNode);
                      Set_Attribute
-                       (ItemNode, "index",
-                        To_String(Item.ProtoIndex));
+                       (ItemNode, "index", To_String(Item.ProtoIndex));
                      RawValue :=
                        To_Unbounded_String(Integer'Image(Item.Amount));
                      Set_Attribute
@@ -476,7 +474,8 @@ package body Bases.SaveLoad is
                   MType :=
                     Missions_Types'Val
                       (Integer'Value(Get_Attribute(ChildNode, "type")));
-                  Target := To_Unbounded_String(Get_Attribute(ChildNode, "target"));
+                  Target :=
+                    To_Unbounded_String(Get_Attribute(ChildNode, "target"));
                   Time := Positive'Value(Get_Attribute(ChildNode, "time"));
                   TargetX :=
                     Natural'Value(Get_Attribute(ChildNode, "targetx"));

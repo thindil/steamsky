@@ -504,10 +504,7 @@ package body Stories is
                              Stories_List(I).MaxSteps),
                         ShowText => True, Data => StepData,
                         FinishedStep => ANY);
-                     UpdateCargo
-                       (PlayerShip,
-                          Stories_List(I).StartData(1),
-                        1);
+                     UpdateCargo(PlayerShip, Stories_List(I).StartData(1), 1);
                      FinishedStories.Append
                        (New_Item =>
                           (Index => CurrentStory.Index,

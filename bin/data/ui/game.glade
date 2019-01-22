@@ -2111,9 +2111,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                   </object>
                                 </child>
                               </object>
-                              <packing>
-                                <property name="index">-1</property>
-                              </packing>
                             </child>
                           </object>
                           <packing>
@@ -10179,9 +10176,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </packing>
                 </child>
               </object>
-              <packing>
-                <property name="index">-1</property>
-              </packing>
             </child>
           </object>
           <packing>

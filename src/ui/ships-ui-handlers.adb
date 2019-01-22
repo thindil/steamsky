@@ -237,8 +237,7 @@ package body Ships.UI.Handlers is
                      if Mamount > 0 then
                         Append(ModuleInfo, " or ");
                      end if;
-                     if FindItem
-                         (PlayerShip.Cargo, Objects_Container.To_Index(I)) >
+                     if FindItem(PlayerShip.Cargo, Objects_Container.Key(I)) >
                        0 then
                         Append(ModuleInfo, To_String(Items_List(I).Name));
                      else
@@ -286,10 +285,20 @@ package body Ships.UI.Handlers is
                        (Items_List(Recipes_List(Module.Data(1)).ResultIndex)
                           .Name));
                else
-                  Append
-                    (ModuleInfo,
-                     "Deconstructing " &
-                     To_String(Items_List(abs (Module.Data(1))).Name));
+                  declare
+                     ItemIndex: Natural := 0;
+                  begin
+                     for I in Items_List.Iterate loop
+                        ItemIndex := ItemIndex + 1;
+                        if ItemIndex = abs (Module.Data(1)) then
+                           Append
+                             (ModuleInfo,
+                              "Deconstructing " &
+                              To_String(Items_List(I).Name));
+                           exit;
+                        end if;
+                     end loop;
+                  end;
                end if;
                Append
                  (ModuleInfo,

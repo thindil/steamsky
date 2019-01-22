@@ -239,8 +239,7 @@ package body Crew.UI.Handlers is
             SkillsList: constant Gtk_List_Store :=
               Gtk_List_Store(Get_Object(Builder, "skillslist"));
             SkillsIter: Gtk_Tree_Iter;
-            ItemIndex: Positive;
-            TooltipText: Unbounded_String;
+            ItemIndex, TooltipText: Unbounded_String;
          begin
             Clear(SkillsList);
             for Skill of Member.Skills loop

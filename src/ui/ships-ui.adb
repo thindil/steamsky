@@ -213,7 +213,8 @@ package body Ships.UI is
             end if;
             for Mission of AcceptedMissions loop
                if Mission.MType = Passenger and
-                 Integer'Value(To_String(Mission.Target)) = PlayerShip.Modules(ModuleIndex).Owner then
+                 Integer'Value(To_String(Mission.Target)) =
+                   PlayerShip.Modules(ModuleIndex).Owner then
                   IsPassenger := True;
                   exit;
                end if;
