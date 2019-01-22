@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -187,7 +187,7 @@ package body Goals is
                      InsertPosition := InsertPosition - 1;
                   end if;
                   Insert
-                    (Text, InsertPosition, To_String(Goal.TargetIndex) & " ");
+                    (Text, InsertPosition, GetFactionName(Goal.TargetIndex, Name) & " ");
                end if;
             when CRAFT =>
                if FindRecipe(Goal.TargetIndex) > 0 then
