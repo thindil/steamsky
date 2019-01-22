@@ -117,13 +117,13 @@ package body Crafts.UI is
             return;
          end if;
          RecipeIndex := Integer(Get_Int(RecipesModel, RecipesIter, 1));
-         ItemIndex := To_Unbounded_String(Get_String(RecipesModel, RecipesIter, 1));
+         ItemIndex :=
+           To_Unbounded_String(Get_String(RecipesModel, RecipesIter, 1));
       end;
       if RecipeIndex > 0 then
          Recipe := Recipes_List(RecipeIndex);
       else
-         Recipe.MaterialTypes.Append
-            (New_Item => Items_List(ItemIndex).IType);
+         Recipe.MaterialTypes.Append(New_Item => Items_List(ItemIndex).IType);
          Recipe.ResultIndex := ItemIndex;
          Recipe.MaterialAmounts.Append(New_Item => 1);
          Recipe.ResultAmount := 0;
@@ -346,8 +346,7 @@ package body Crafts.UI is
                for I in Items_List.Iterate loop
                   if Items_List(I).IType = Recipe.Tool then
                      CargoIndex :=
-                       FindItem
-                         (PlayerShip.Cargo, Objects_Container.Key(I));
+                       FindItem(PlayerShip.Cargo, Objects_Container.Key(I));
                      if CargoIndex > 0 then
                         CanCraft := True;
                         exit;
@@ -364,8 +363,7 @@ package body Crafts.UI is
                for J in Items_List.Iterate loop
                   if Items_List(J).IType = Recipe.MaterialTypes(K) then
                      CargoIndex :=
-                       FindItem
-                         (PlayerShip.Cargo, Objects_Container.Key(J));
+                       FindItem(PlayerShip.Cargo, Objects_Container.Key(J));
                      if CargoIndex > 0 then
                         CanCraft := True;
                         exit;

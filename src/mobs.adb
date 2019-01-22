@@ -202,7 +202,7 @@ package body Mobs is
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                ItemIndex :=
-                   To_Unbounded_String(Get_Attribute(ChildNode, "index"));
+                 To_Unbounded_String(Get_Attribute(ChildNode, "index"));
                if not Objects_Container.Contains(Items_List, ItemIndex) then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(DataAction'Image(Action)) &
@@ -219,37 +219,33 @@ package body Mobs is
                case SubAction is
                   when ADD =>
                      if Get_Attribute(ChildNode, "amount")'Length /= 0 then
-                        MobInventory_Container.Include(TempRecord.Inventory, ItemIndex,
-                            (
-                              Integer'Value
-                                (Get_Attribute(ChildNode, "amount")),
-                              0));
+                        MobInventory_Container.Include
+                          (TempRecord.Inventory, ItemIndex,
+                           (Integer'Value(Get_Attribute(ChildNode, "amount")),
+                            0));
                      else
-                        MobInventory_Container.Include(TempRecord.Inventory, ItemIndex,
-                             (
-                              Integer'Value
-                                (Get_Attribute(ChildNode, "minamount")),
-                              Integer'Value
-                                (Get_Attribute(ChildNode, "maxamount"))));
+                        MobInventory_Container.Include
+                          (TempRecord.Inventory, ItemIndex,
+                           (Integer'Value
+                              (Get_Attribute(ChildNode, "minamount")),
+                            Integer'Value
+                              (Get_Attribute(ChildNode, "maxamount"))));
                      end if;
                   when UPDATE =>
-                           if Get_Attribute(ChildNode, "amount")'Length /=
-                             0 then
-                             TempRecord.Inventory(ItemIndex) :=
-                                (
-                                 Integer'Value
-                                   (Get_Attribute(ChildNode, "amount")),
-                                 0);
-                           else
-                             TempRecord.Inventory(ItemIndex) :=
-                                (
-                                 Integer'Value
-                                   (Get_Attribute(ChildNode, "minamount")),
-                                 Integer'Value
-                                   (Get_Attribute(ChildNode, "maxamount")));
-                           end if;
+                     if Get_Attribute(ChildNode, "amount")'Length /= 0 then
+                        TempRecord.Inventory(ItemIndex) :=
+                          (Integer'Value(Get_Attribute(ChildNode, "amount")),
+                           0);
+                     else
+                        TempRecord.Inventory(ItemIndex) :=
+                          (Integer'Value
+                             (Get_Attribute(ChildNode, "minamount")),
+                           Integer'Value
+                             (Get_Attribute(ChildNode, "maxamount")));
+                     end if;
                   when REMOVE =>
-                     MobInventory_Container.Exclude(TempRecord.Inventory, ItemIndex);
+                     MobInventory_Container.Exclude
+                       (TempRecord.Inventory, ItemIndex);
                end case;
             end loop;
             ChildNodes :=

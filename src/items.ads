@@ -40,8 +40,8 @@ package Items is
       ShowType: Unbounded_String; -- Displayed type of item (can be group of items, renamed type, etc)
       Description: Unbounded_String; -- Description of item
    end record;
-   package Objects_Container is new Hashed_Maps(Unbounded_String,
-      Object_Data, Ada.Strings.Unbounded.Hash, "=");
+   package Objects_Container is new Hashed_Maps(Unbounded_String, Object_Data,
+      Ada.Strings.Unbounded.Hash, "=");
    type InventoryData is -- Data structure for item in inventory
    record
       ProtoIndex: Unbounded_String; -- Index of prototype
@@ -70,7 +70,7 @@ package Items is
    procedure LoadItems(Reader: Tree_Reader); -- Load items from files
    function FindProtoItem
      (ItemType: Unbounded_String)
-      return Unbounded_String; -- Return map index of item or empty string if item not found
+     return Unbounded_String; -- Return map index of item or empty string if item not found
    function GetItemDamage(ItemDurability: Natural;
       ToLower: Boolean := False)
      return String; -- Get description of item damage

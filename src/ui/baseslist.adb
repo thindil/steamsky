@@ -338,7 +338,8 @@ package body BasesList is
            (ComboBox, To_String(Factions_Container.Key(I)),
             To_String(Factions_List(I).Name));
       end loop;
-      Append(Gtk_Combo_Box_Text(Get_Object(Builder, "cmbowner")), "Any", "Any");
+      Append
+        (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbowner")), "Any", "Any");
       Set_Visible_Func
         (Gtk_Tree_Model_Filter(Get_Object(Builder, "basesfilter")),
          VisibleBases'Access);

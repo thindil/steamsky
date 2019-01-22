@@ -121,7 +121,8 @@ package body Trades is
       SellAmount: Positive;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      ProtoIndex: constant Unbounded_String := PlayerShip.Cargo(ItemIndex).ProtoIndex;
+      ProtoIndex: constant Unbounded_String :=
+        PlayerShip.Cargo(ItemIndex).ProtoIndex;
       ItemName: constant String := To_String(Items_List(ProtoIndex).Name);
       Profit, Price, BaseType: Positive;
       EventIndex: constant Natural :=

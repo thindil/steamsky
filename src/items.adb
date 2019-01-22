@@ -50,8 +50,7 @@ package body Items is
         DOM.Core.Documents.Get_Elements_By_Tag_Name(ItemsData, "item");
       for I in 0 .. Length(NodesList) - 1 loop
          ItemNode := Item(NodesList, I);
-         ItemIndex :=
-           To_Unbounded_String(Get_Attribute(ItemNode, "index"));
+         ItemIndex := To_Unbounded_String(Get_Attribute(ItemNode, "index"));
          if Get_Attribute(ItemNode, "action")'Length > 0 then
             Action := DataAction'Value(Get_Attribute(ItemNode, "action"));
          else
@@ -132,8 +131,7 @@ package body Items is
             end if;
          else
             Objects_Container.Exclude(Items_List, ItemIndex);
-            LogMessage
-              ("Item removed: " & To_String(ItemIndex), Everything);
+            LogMessage("Item removed: " & To_String(ItemIndex), Everything);
          end if;
          TempRecord :=
            (Name => Null_Unbounded_String, Weight => 1,
@@ -160,8 +158,7 @@ package body Items is
    end LoadItems;
 
    function FindProtoItem
-     (ItemType: Unbounded_String)
-      return Unbounded_String is
+     (ItemType: Unbounded_String) return Unbounded_String is
    begin
       for I in Items_List.Iterate loop
          if Items_List(I).IType = ItemType then

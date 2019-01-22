@@ -188,15 +188,17 @@ package body Ships is
                end loop;
                for I in Member.Inventory.Iterate loop
                   if Member.Inventory(I)(2) > 0 then
-                     Amount := GetRandom(Member.Inventory(I)(1), Member.Inventory(I)(2));
+                     Amount :=
+                       GetRandom
+                         (Member.Inventory(I)(1), Member.Inventory(I)(2));
                   else
                      Amount := Member.Inventory(I)(2);
                   end if;
                   TmpInventory.Append
                     (New_Item =>
-                       (ProtoIndex => MobInventory_Container.Key(I), Amount => Amount,
-                        Name => Null_Unbounded_String, Durability => 100,
-                        Price => 0));
+                       (ProtoIndex => MobInventory_Container.Key(I),
+                        Amount => Amount, Name => Null_Unbounded_String,
+                        Durability => 100, Price => 0));
                end loop;
                ShipCrew.Append
                  (New_Item =>
@@ -355,10 +357,12 @@ package body Ships is
       procedure CountAmmoValue(ItemTypeIndex, Multiple: Positive) is
       begin
          for I in TempRecord.Cargo.Iterate loop
-            if Items_List(MobInventory_Container.Key(I)).IType = Items_Types(ItemTypeIndex) then
+            if Items_List(MobInventory_Container.Key(I)).IType =
+              Items_Types(ItemTypeIndex) then
                TempRecord.CombatValue :=
                  TempRecord.CombatValue +
-                 (Items_List(MobInventory_Container.Key(I)).Value(1) * Multiple);
+                 (Items_List(MobInventory_Container.Key(I)).Value(1) *
+                  Multiple);
             end if;
          end loop;
       end CountAmmoValue;
@@ -497,7 +501,8 @@ package body Ships is
               DOM.Core.Elements.Get_Elements_By_Tag_Name(ShipNode, "cargo");
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
-               ItemIndex := To_Unbounded_String(Get_Attribute(ChildNode, "index"));
+               ItemIndex :=
+                 To_Unbounded_String(Get_Attribute(ChildNode, "index"));
                if not Objects_Container.Contains(Items_List, ItemIndex) then
                   raise Ships_Invalid_Data
                     with "Invalid item index: |" &
@@ -513,35 +518,32 @@ package body Ships is
                case SubAction is
                   when ADD =>
                      if Get_Attribute(ChildNode, "amount") /= "" then
-                        MobInventory_Container.Include(TempRecord.Cargo, ItemIndex,
-                             (
-                              Integer'Value
-                                (Get_Attribute(ChildNode, "amount")),
-                              0));
+                        MobInventory_Container.Include
+                          (TempRecord.Cargo, ItemIndex,
+                           (Integer'Value(Get_Attribute(ChildNode, "amount")),
+                            0));
                      elsif Get_Attribute(ChildNode, "minamount") /= "" then
-                        MobInventory_Container.Include(TempRecord.Cargo, ItemIndex,
-                              (Integer'Value
-                                (Get_Attribute(ChildNode, "minamount")),
-                              Integer'Value
-                                (Get_Attribute(ChildNode, "maxamount"))));
+                        MobInventory_Container.Include
+                          (TempRecord.Cargo, ItemIndex,
+                           (Integer'Value
+                              (Get_Attribute(ChildNode, "minamount")),
+                            Integer'Value
+                              (Get_Attribute(ChildNode, "maxamount"))));
                      end if;
                   when UPDATE =>
-                           if Get_Attribute(ChildNode, "amount") /= "" then
-                              TempRecord.Cargo(ItemIndex)(1) :=
-                                Integer'Value
-                                  (Get_Attribute(ChildNode, "amount"));
-                              TempRecord.Cargo(ItemIndex)(2) := 0;
-                           elsif Get_Attribute(ChildNode, "minamount") /=
-                             "" then
-                              TempRecord.Cargo(ItemIndex)(1) :=
-                                Integer'Value
-                                  (Get_Attribute(ChildNode, "minamount"));
-                              TempRecord.Cargo(ItemIndex)(2) :=
-                                Integer'Value
-                                  (Get_Attribute(ChildNode, "maxamount"));
-                           end if;
+                     if Get_Attribute(ChildNode, "amount") /= "" then
+                        TempRecord.Cargo(ItemIndex)(1) :=
+                          Integer'Value(Get_Attribute(ChildNode, "amount"));
+                        TempRecord.Cargo(ItemIndex)(2) := 0;
+                     elsif Get_Attribute(ChildNode, "minamount") /= "" then
+                        TempRecord.Cargo(ItemIndex)(1) :=
+                          Integer'Value(Get_Attribute(ChildNode, "minamount"));
+                        TempRecord.Cargo(ItemIndex)(2) :=
+                          Integer'Value(Get_Attribute(ChildNode, "maxamount"));
+                     end if;
                   when REMOVE =>
-                     MobInventory_Container.Exclude(TempRecord.Cargo, ItemIndex);
+                     MobInventory_Container.Exclude
+                       (TempRecord.Cargo, ItemIndex);
                end case;
             end loop;
             if Get_Attribute(ShipNode, "owner") /= "" then

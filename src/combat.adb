@@ -1322,7 +1322,8 @@ package body Combat is
                                  when LOOT =>
                                     UpdateCargo
                                       (PlayerShip,
-                                       To_Unbounded_String(Slice(Tokens, 1)), 1);
+                                       To_Unbounded_String(Slice(Tokens, 1)),
+                                       1);
                                  when others =>
                                     null;
                               end case;
@@ -1360,9 +1361,11 @@ package body Combat is
              Destroy
            and then
              ProtoShips_List
-               (Integer'Value(To_String(AcceptedMissions
-                  (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex)
-                  .Target)))
+               (Integer'Value
+                  (To_String
+                     (AcceptedMissions
+                        (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex)
+                        .Target)))
                .Name =
              Enemy.Ship.Name then
             UpdateMission

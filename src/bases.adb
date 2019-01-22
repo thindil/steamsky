@@ -166,7 +166,8 @@ package body Bases is
          Inventory.Append(New_Item => ItemsIndexes(ItemIndex));
          Equipment(EquipIndex) := Inventory.Last_Index;
          Price := Price + (Items_List(ItemsIndexes(ItemIndex)).Prices(1) * 2);
-         Payment := Payment + (Items_List(ItemsIndexes(ItemIndex)).Prices(1) / 10);
+         Payment :=
+           Payment + (Items_List(ItemsIndexes(ItemIndex)).Prices(1) / 10);
       end AddInventory;
    begin
       if DaysDifference(SkyBases(BaseIndex).RecruitDate) < 30 or
@@ -267,8 +268,7 @@ package body Bases is
             if HighestSkill = Recipe.Skill then
                for J in Items_List.Iterate loop
                   if Items_List(J).IType = Recipe.Tool then
-                     TempTools.Append
-                       (New_Item => Objects_Container.Key(J));
+                     TempTools.Append(New_Item => Objects_Container.Key(J));
                   end if;
                end loop;
                AddInventory(TempTools, 7);
@@ -323,8 +323,11 @@ package body Bases is
       else -- asking friendly ship
          Radius := 40;
          ShipIndex :=
-           Integer'Value(To_String(Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-             .Data));
+           Integer'Value
+             (To_String
+                (Events_List
+                   (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                   .Data));
          if ProtoShips_List(ShipIndex).Crew.Length < 5 then
             Amount := 3;
          elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then
@@ -405,8 +408,8 @@ package body Bases is
    procedure AskForEvents is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      MaxEvents, EventsAmount, TmpBaseIndex, ShipIndex, EventX,
-      EventY, EventTime, DiffX, DiffY: Positive;
+      MaxEvents, EventsAmount, TmpBaseIndex, ShipIndex, EventX, EventY,
+      EventTime, DiffX, DiffY: Positive;
       Event: Events_Types;
       MinX, MinY, MaxX, MaxY: Integer;
       Enemies: Positive_Container.Vector;
@@ -432,8 +435,11 @@ package body Bases is
          GainRep(BaseIndex, 1);
       else -- asking friendly ship
          ShipIndex :=
-           Integer'Value(To_String(Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-             .Data));
+           Integer'Value
+             (To_String
+                (Events_List
+                   (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                   .Data));
          if ProtoShips_List(ShipIndex).Crew.Length < 5 then
             MaxEvents := 1;
          elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then
@@ -535,25 +541,29 @@ package body Bases is
                  (New_Item =>
                     (EnemyShip, EventX, EventY,
                      GetRandom(EventTime, EventTime + 60),
-                     To_Unbounded_String(Enemies
-                       (GetRandom(Enemies.First_Index, Enemies.Last_Index)))));
+                     To_Unbounded_String
+                       (Enemies
+                          (GetRandom
+                             (Enemies.First_Index, Enemies.Last_Index)))));
             when AttackOnBase =>
                GenerateEnemies(Enemies, To_Unbounded_String("Any"), False);
                Events_List.Append
                  (New_Item =>
                     (AttackOnBase, EventX, EventY,
                      GetRandom(EventTime, EventTime + 120),
-                     To_Unbounded_String(Enemies
-                       (GetRandom(Enemies.First_Index, Enemies.Last_Index)))));
+                     To_Unbounded_String
+                       (Enemies
+                          (GetRandom
+                             (Enemies.First_Index, Enemies.Last_Index)))));
                GenerateEnemies(Enemies);
             when Disease =>
                Events_List.Append
                  (New_Item =>
-                    (Disease, EventX, EventY, GetRandom(10080, 12000), To_Unbounded_String(1)));
+                    (Disease, EventX, EventY, GetRandom(10080, 12000),
+                     To_Unbounded_String(1)));
             when DoublePrice =>
                loop
-                  ItemIndex :=
-                    GetRandom(1, Positive(Items_List.Length));
+                  ItemIndex := GetRandom(1, Positive(Items_List.Length));
                   for J in Items_List.Iterate loop
                      ItemIndex := ItemIndex - 1;
                      if ItemIndex = 0 then
@@ -568,7 +578,8 @@ package body Bases is
                Events_List.Append
                  (New_Item =>
                     (DoublePrice, EventX, EventY,
-                     GetRandom((EventTime * 3), (EventTime * 4)), NewItemIndex));
+                     GetRandom((EventTime * 3), (EventTime * 4)),
+                     NewItemIndex));
             when BaseRecovery =>
                RecoverBase(SkyMap(EventX, EventY).BaseIndex);
             when others =>

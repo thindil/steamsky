@@ -96,9 +96,8 @@ package body Bases.Cargo is
    end GenerateCargo;
 
    procedure UpdateBaseCargo
-     (ProtoIndex: Unbounded_String :=
-        Null_Unbounded_String;
-      Amount: Integer; Durability: Natural := 100; CargoIndex: Natural := 0) is
+     (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
+      Durability: Natural := 100; CargoIndex: Natural := 0) is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=

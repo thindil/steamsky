@@ -110,8 +110,7 @@ package body Ships.SaveLoad is
       for Item of PlayerShip.Cargo loop
          DataNode := Create_Element(SaveData, "cargo");
          DataNode := Append_Child(CategoryNode, DataNode);
-         Set_Attribute
-           (DataNode, "index", To_String(Item.ProtoIndex));
+         Set_Attribute(DataNode, "index", To_String(Item.ProtoIndex));
          RawValue := To_Unbounded_String(Integer'Image(Item.Amount));
          Set_Attribute
            (DataNode, "amount", To_String(Trim(RawValue, Ada.Strings.Left)));
@@ -201,9 +200,7 @@ package body Ships.SaveLoad is
             for Item of Member.Inventory loop
                StatNode := Create_Element(SaveData, "item");
                StatNode := Append_Child(DataNode, StatNode);
-               Set_Attribute
-                 (StatNode, "index",
-                  To_String(Item.ProtoIndex));
+               Set_Attribute(StatNode, "index", To_String(Item.ProtoIndex));
                RawValue := To_Unbounded_String(Integer'Image(Item.Amount));
                Set_Attribute
                  (StatNode, "amount",
@@ -312,7 +309,7 @@ package body Ships.SaveLoad is
                Durability, Price: Natural;
             begin
                ProtoIndex :=
-                   To_Unbounded_String(Get_Attribute(ChildNode, "index"));
+                 To_Unbounded_String(Get_Attribute(ChildNode, "index"));
                Amount := Positive'Value(Get_Attribute(ChildNode, "amount"));
                Name := To_Unbounded_String(Get_Attribute(ChildNode, "name"));
                Durability :=
@@ -401,8 +398,7 @@ package body Ships.SaveLoad is
                      Attributes.Append(New_Item => (Level, Experience));
                   elsif Node_Name(MemberNode) = "item" then
                      ItemIndex :=
-                         To_Unbounded_String
-                            (Get_Attribute(MemberNode, "index"));
+                       To_Unbounded_String(Get_Attribute(MemberNode, "index"));
                      Amount :=
                        Integer'Value(Get_Attribute(MemberNode, "amount"));
                      ItemName :=

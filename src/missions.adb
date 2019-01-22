@@ -137,7 +137,9 @@ package body Missions is
                       (MissionsItems.First_Index, MissionsItems.Last_Index));
             when Destroy =>
                Mission.Target :=
-                 To_Unbounded_String(Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index)));
+                 To_Unbounded_String
+                   (Enemies
+                      (GetRandom(Enemies.First_Index, Enemies.Last_Index)));
             when Patrol =>
                Mission.Target := To_Unbounded_String(0);
             when Explore =>
@@ -156,7 +158,8 @@ package body Missions is
                end if;
             when Passenger =>
                Mission.Target :=
-                 To_Unbounded_String(Cabins(GetRandom(Cabins.First_Index, Cabins.Last_Index)));
+                 To_Unbounded_String
+                   (Cabins(GetRandom(Cabins.First_Index, Cabins.Last_Index)));
          end case;
          if Mission.MType /= Deliver and Mission.MType /= Passenger then
             loop
@@ -248,7 +251,9 @@ package body Missions is
             HaveCabin: Boolean := False;
          begin
             for Module of PlayerShip.Modules loop
-               if Module.ProtoIndex = Integer'Value(To_String(Mission.Target)) and Module.Owner = 0 then
+               if Module.ProtoIndex =
+                 Integer'Value(To_String(Mission.Target)) and
+                 Module.Owner = 0 then
                   HaveCabin := True;
                   exit;
                end if;
@@ -272,7 +277,10 @@ package body Missions is
          when Destroy =>
             Append
               (AcceptMessage,
-               "'Destroy " & To_String(ProtoShips_List(Integer'Value(To_String(Mission.Target))).Name) &
+               "'Destroy " &
+               To_String
+                 (ProtoShips_List(Integer'Value(To_String(Mission.Target)))
+                    .Name) &
                "'.");
          when Patrol =>
             Append(AcceptMessage, "'Patrol selected area'.");
@@ -325,7 +333,9 @@ package body Missions is
                      Faction => SkyBases(PassengerBase).Owner));
             end;
             for Module of PlayerShip.Modules loop
-               if Module.ProtoIndex = Integer'Value(To_String(Mission.Target)) and Module.Owner = 0 then
+               if Module.ProtoIndex =
+                 Integer'Value(To_String(Mission.Target)) and
+                 Module.Owner = 0 then
                   Module.Owner := PlayerShip.Crew.Last_Index;
                   exit;
                end if;
@@ -383,7 +393,9 @@ package body Missions is
             AddMessage
               ("You finished mission 'Destroy " &
                To_String
-                 (ProtoShips_List(Integer'Value(To_String(AcceptedMissions(MissionIndex).Target)))
+                 (ProtoShips_List
+                    (Integer'Value
+                       (To_String(AcceptedMissions(MissionIndex).Target)))
                     .Name) &
                "'.",
                MissionMessage);
@@ -434,7 +446,10 @@ package body Missions is
                Append
                  (MessageText,
                   "'Destroy " &
-                  To_String(ProtoShips_List(Integer'Value(To_String(Mission.Target))).Name) & "'.");
+                  To_String
+                    (ProtoShips_List(Integer'Value(To_String(Mission.Target)))
+                       .Name) &
+                  "'.");
             when Patrol =>
                Append(MessageText, "'Patrol selected area'.");
             when Explore =>
@@ -527,7 +542,9 @@ package body Missions is
               (MessageText,
                "'Destroy " &
                To_String
-                 (ProtoShips_List(Integer'Value(To_String(AcceptedMissions(MissionIndex).Target)))
+                 (ProtoShips_List
+                    (Integer'Value
+                       (To_String(AcceptedMissions(MissionIndex).Target)))
                     .Name) &
                "'.");
          when Patrol =>

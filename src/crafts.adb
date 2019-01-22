@@ -48,9 +48,10 @@ package body Crafts is
    begin
       TempRecord :=
         (MaterialTypes => TempMaterials, MaterialAmounts => TempAmount,
-         ResultIndex => Null_Unbounded_String, ResultAmount => 10000, Workplace => ALCHEMY_LAB,
-         Skill => 1, Time => 15, Difficulty => 1, BaseType => 0,
-         Tool => To_Unbounded_String("None"), Index => Null_Unbounded_String);
+         ResultIndex => Null_Unbounded_String, ResultAmount => 10000,
+         Workplace => ALCHEMY_LAB, Skill => 1, Time => 15, Difficulty => 1,
+         BaseType => 0, Tool => To_Unbounded_String("None"),
+         Index => Null_Unbounded_String);
       RecipesData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(RecipesData, "recipe");
@@ -180,19 +181,20 @@ package body Crafts is
          end if;
          TempRecord :=
            (MaterialTypes => TempMaterials, MaterialAmounts => TempAmount,
-            ResultIndex => Null_Unbounded_String, ResultAmount => 10000, Workplace => ALCHEMY_LAB,
-            Skill => 1, Time => 15, Difficulty => 1, BaseType => 0,
-            Tool => To_Unbounded_String("None"),
+            ResultIndex => Null_Unbounded_String, ResultAmount => 10000,
+            Workplace => ALCHEMY_LAB, Skill => 1, Time => 15, Difficulty => 1,
+            BaseType => 0, Tool => To_Unbounded_String("None"),
             Index => Null_Unbounded_String);
       end loop;
    end LoadRecipes;
 
-   function SetRecipeData(RecipeIndex: Natural := 0; ItemIndex: Unbounded_String := Null_Unbounded_String) return Craft_Data is
+   function SetRecipeData(RecipeIndex: Natural := 0;
+      ItemIndex: Unbounded_String := Null_Unbounded_String)
+      return Craft_Data is
       Recipe: Craft_Data;
    begin
       if RecipeIndex = 0 then
-         Recipe.MaterialTypes.Append
-           (New_Item => Items_List(ItemIndex).IType);
+         Recipe.MaterialTypes.Append(New_Item => Items_List(ItemIndex).IType);
          Recipe.MaterialAmounts.Append(New_Item => 1);
          Recipe.ResultIndex := ItemIndex;
          Recipe.ResultAmount := 1;
@@ -304,7 +306,8 @@ package body Crafts is
          for I in MaterialIndexes.Iterate loop
             SpaceNeeded :=
               SpaceNeeded +
-              Items_List(PlayerShip.Cargo(MaterialIndexes(I)).ProtoIndex).Weight *
+              Items_List(PlayerShip.Cargo(MaterialIndexes(I)).ProtoIndex)
+                  .Weight *
                 Recipe.MaterialAmounts(Positive_Container.To_Index(I));
          end loop;
          if FreeCargo
@@ -626,7 +629,8 @@ package body Crafts is
       return 0;
    end FindRecipe;
 
-   procedure SetRecipe(Workshop, Amount: Positive; RecipeIndex: Integer; ItemIndex: Unbounded_String := Null_Unbounded_String) is
+   procedure SetRecipe(Workshop, Amount: Positive; RecipeIndex: Integer;
+      ItemIndex: Unbounded_String := Null_Unbounded_String) is
       RecipeName: Unbounded_String;
    begin
       PlayerShip.Modules(Workshop).Data(1) := RecipeIndex;
@@ -644,8 +648,7 @@ package body Crafts is
             end if;
          end loop;
          RecipeName :=
-           To_Unbounded_String("Deconstructing ") &
-           Items_List(ItemIndex).Name;
+           To_Unbounded_String("Deconstructing ") & Items_List(ItemIndex).Name;
       end if;
       AddMessage
         (To_String(RecipeName) & " was set as manufacturing order in " &
