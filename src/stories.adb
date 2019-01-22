@@ -506,8 +506,7 @@ package body Stories is
                         FinishedStep => ANY);
                      UpdateCargo
                        (PlayerShip,
-                        Positive'Value
-                          (To_String(Stories_List(I).StartData(1))),
+                          Stories_List(I).StartData(1),
                         1);
                      FinishedStories.Append
                        (New_Item =>

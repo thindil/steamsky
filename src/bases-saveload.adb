@@ -19,7 +19,6 @@ with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
 with Maps; use Maps;
-with Items; use Items;
 
 package body Bases.SaveLoad is
 
@@ -143,7 +142,7 @@ package body Bases.SaveLoad is
                         RecruitDataNode := Create_Element(SaveData, "item");
                         RecruitDataNode :=
                           Append_Child(RecruitNode, RecruitDataNode);
-                        RawValue := To_Unbounded_String(Integer'Image(Item));
+                        RawValue := Item;
                         Set_Attribute
                           (RecruitDataNode, "index",
                            To_String(Trim(RawValue, Ada.Strings.Left)));
@@ -248,7 +247,7 @@ package body Bases.SaveLoad is
                        (MissionNode, "type",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
                      RawValue :=
-                       To_Unbounded_String(Integer'Image(Mission.Target));
+                       Mission.Target;
                      Set_Attribute
                        (MissionNode, "target",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
@@ -284,7 +283,7 @@ package body Bases.SaveLoad is
                      ItemNode := Append_Child(BaseNode, ItemNode);
                      Set_Attribute
                        (ItemNode, "index",
-                        To_String(Items_List(Item.ProtoIndex).Index));
+                        To_String(Item.ProtoIndex));
                      RawValue :=
                        To_Unbounded_String(Integer'Image(Item.Amount));
                      Set_Attribute
@@ -382,7 +381,7 @@ package body Bases.SaveLoad is
                   Skills: Skills_Container.Vector;
                   Attributes: Attributes_Container.Vector;
                   Index, Level, Experience: Natural;
-                  Inventory: Positive_Container.Vector;
+                  Inventory: UnboundedString_Container.Vector;
                   Equipment: Equipment_Array;
                   RecruitNode: Node;
                begin
@@ -418,7 +417,7 @@ package body Bases.SaveLoad is
                      elsif NodeName = To_Unbounded_String("item") then
                         Inventory.Append
                           (New_Item =>
-                             Positive'Value
+                             To_Unbounded_String
                                (Get_Attribute(RecruitNode, "index")));
                      elsif NodeName = To_Unbounded_String("equipment") then
                         Equipment
@@ -470,13 +469,14 @@ package body Bases.SaveLoad is
             elsif NodeName = To_Unbounded_String("mission") then
                declare
                   MType: Missions_Types;
-                  Target, TargetX, TargetY: Natural;
+                  TargetX, TargetY: Natural;
                   Time, Reward: Positive;
+                  Target: Unbounded_String;
                begin
                   MType :=
                     Missions_Types'Val
                       (Integer'Value(Get_Attribute(ChildNode, "type")));
-                  Target := Natural'Value(Get_Attribute(ChildNode, "target"));
+                  Target := To_Unbounded_String(Get_Attribute(ChildNode, "target"));
                   Time := Positive'Value(Get_Attribute(ChildNode, "time"));
                   TargetX :=
                     Natural'Value(Get_Attribute(ChildNode, "targetx"));
@@ -492,11 +492,12 @@ package body Bases.SaveLoad is
                end;
             elsif NodeName = To_Unbounded_String("item") then
                declare
-                  ProtoIndex, Durability: Positive;
+                  Durability: Positive;
                   Amount, Price: Natural;
+                  ProtoIndex: Unbounded_String;
                begin
                   ProtoIndex :=
-                    Positive'Value(Get_Attribute(ChildNode, "index"));
+                    To_Unbounded_String(Get_Attribute(ChildNode, "index"));
                   Durability :=
                     Positive'Value(Get_Attribute(ChildNode, "durability"));
                   Amount := Natural'Value(Get_Attribute(ChildNode, "amount"));

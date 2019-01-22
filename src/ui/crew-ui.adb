@@ -165,9 +165,9 @@ package body Crew.UI is
       InventoryIter: Gtk_Tree_Iter;
       InventoryList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "inventorylist"));
-      ItemType: Unbounded_String;
+      ItemType, ProtoIndex: Unbounded_String;
       Visible: Boolean := False;
-      ProtoIndex, ItemWeight: Positive;
+      ItemWeight: Positive;
    begin
       Clear(InventoryList);
       for I in

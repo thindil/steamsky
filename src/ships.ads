@@ -21,6 +21,7 @@ with DOM.Readers; use DOM.Readers;
 with Crew; use Crew;
 with Game; use Game;
 with Items; use Items;
+with Mobs; use Mobs;
 
 package Ships is
    type ShipSpeed is
@@ -68,7 +69,7 @@ package Ships is
       Evasion: ShipSkills_Array; -- Bonus to evade attacks
       Loot: ShipSkills_Array; -- Amount of loot(moneys) gained for destroying ship
       Perception: ShipSkills_Array; -- Bonus to spot player ship first
-      Cargo: Skills_Container.Vector; -- List of ship cargo
+      Cargo: MobInventory_Container.Map; -- List of ship cargo
       CombatValue: Positive; -- Combat value of ship (used to generate enemies)
       Crew: Skills_Container.Vector; -- List of mobs indexes of ship crew
       Description: Unbounded_String; -- Description of ship

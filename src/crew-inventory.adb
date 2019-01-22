@@ -22,7 +22,7 @@ with Ships.Crew; use Ships.Crew;
 package body Crew.Inventory is
 
    procedure UpdateInventory(MemberIndex: Positive; Amount: Integer;
-      ProtoIndex, Durability, InventoryIndex, Price: Natural := 0) is
+      ProtoIndex: Unbounded_String := Null_Unbounded_String; Durability, InventoryIndex, Price: Natural := 0) is
       ItemIndex: Natural := 0;
    begin
       if InventoryIndex = 0 then

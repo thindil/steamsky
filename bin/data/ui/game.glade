@@ -1585,8 +1585,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <columns>
       <!-- column-name gchararray1 -->
       <column type="gchararray"/>
-      <!-- column-name gint1 -->
-      <column type="gint"/>
+      <!-- column-name gchararray2 -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkListStore" id="recruitlist">
@@ -2111,6 +2111,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                   </object>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="index">-1</property>
+                              </packing>
                             </child>
                           </object>
                           <packing>
@@ -10176,6 +10179,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </packing>
                 </child>
               </object>
+              <packing>
+                <property name="index">-1</property>
+              </packing>
             </child>
           </object>
           <packing>

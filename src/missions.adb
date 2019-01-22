@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Numerics.Elementary_Functions; use Ada.Numerics.Elementary_Functions;
 with Ada.Exceptions; use Ada.Exceptions;
 with Ships; use Ships;
@@ -43,7 +42,8 @@ package body Missions is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MissionsAmount, MissionX, MissionY, TmpBaseIndex, DiffX, DiffY: Positive;
       Mission: Mission_Data;
-      MissionsItems, BasesInRange, Cabins: Positive_Container.Vector;
+      MissionsItems: UnboundedString_Container.Vector;
+      BasesInRange, Cabins: Positive_Container.Vector;
       MinX, MinY, MaxX, MaxY: Integer;
       Enemies: Positive_Container.Vector;
       PlayerValue: Natural := 0;
@@ -74,7 +74,7 @@ package body Missions is
       end case;
       for I in Items_List.Iterate loop
          if Items_List(I).IType = MissionItemsType then
-            MissionsItems.Append(New_Item => Objects_Container.To_Index(I));
+            MissionsItems.Append(New_Item => Objects_Container.Key(I));
          end if;
       end loop;
       for I in Modules_List.Iterate loop
@@ -137,26 +137,26 @@ package body Missions is
                       (MissionsItems.First_Index, MissionsItems.Last_Index));
             when Destroy =>
                Mission.Target :=
-                 Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index));
+                 To_Unbounded_String(Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index)));
             when Patrol =>
-               Mission.Target := 0;
+               Mission.Target := To_Unbounded_String(0);
             when Explore =>
-               Mission.Target := 1;
+               Mission.Target := To_Unbounded_String(1);
                for J in 1 .. 10 loop
                   MissionX := GetRandom(MinX, MaxX);
                   MissionY := GetRandom(MinY, MaxY);
                   if not SkyMap(MissionX, MissionY).Visited then
-                     Mission.Target := 0;
+                     Mission.Target := To_Unbounded_String(0);
                      exit;
                   end if;
                end loop;
-               if Mission.Target = 1 then
-                  Mission.Target := 0;
+               if Mission.Target = To_Unbounded_String("1") then
+                  Mission.Target := To_Unbounded_String(0);
                   Mission.MType := Patrol;
                end if;
             when Passenger =>
                Mission.Target :=
-                 Cabins(GetRandom(Cabins.First_Index, Cabins.Last_Index));
+                 To_Unbounded_String(Cabins(GetRandom(Cabins.First_Index, Cabins.Last_Index)));
          end case;
          if Mission.MType /= Deliver and Mission.MType /= Passenger then
             loop
@@ -248,7 +248,7 @@ package body Missions is
             HaveCabin: Boolean := False;
          begin
             for Module of PlayerShip.Modules loop
-               if Module.ProtoIndex = Mission.Target and Module.Owner = 0 then
+               if Module.ProtoIndex = Integer'Value(To_String(Mission.Target)) and Module.Owner = 0 then
                   HaveCabin := True;
                   exit;
                end if;
@@ -272,7 +272,7 @@ package body Missions is
          when Destroy =>
             Append
               (AcceptMessage,
-               "'Destroy " & To_String(ProtoShips_List(Mission.Target).Name) &
+               "'Destroy " & To_String(ProtoShips_List(Integer'Value(To_String(Mission.Target))).Name) &
                "'.");
          when Patrol =>
             Append(AcceptMessage, "'Patrol selected area'.");
@@ -325,12 +325,12 @@ package body Missions is
                      Faction => SkyBases(PassengerBase).Owner));
             end;
             for Module of PlayerShip.Modules loop
-               if Module.ProtoIndex = Mission.Target and Module.Owner = 0 then
+               if Module.ProtoIndex = Integer'Value(To_String(Mission.Target)) and Module.Owner = 0 then
                   Module.Owner := PlayerShip.Crew.Last_Index;
                   exit;
                end if;
             end loop;
-            Mission.Target := PlayerShip.Crew.Last_Index;
+            Mission.Target := To_Unbounded_String(PlayerShip.Crew.Last_Index);
       end case;
       SkyBases(BaseIndex).Missions.Delete(Index => MissionIndex);
       AcceptedMissions.Append(New_Item => Mission);
@@ -383,7 +383,7 @@ package body Missions is
             AddMessage
               ("You finished mission 'Destroy " &
                To_String
-                 (ProtoShips_List(AcceptedMissions(MissionIndex).Target)
+                 (ProtoShips_List(Integer'Value(To_String(AcceptedMissions(MissionIndex).Target)))
                     .Name) &
                "'.",
                MissionMessage);
@@ -434,7 +434,7 @@ package body Missions is
                Append
                  (MessageText,
                   "'Destroy " &
-                  To_String(ProtoShips_List(Mission.Target).Name) & "'.");
+                  To_String(ProtoShips_List(Integer'Value(To_String(Mission.Target))).Name) & "'.");
             when Patrol =>
                Append(MessageText, "'Patrol selected area'.");
             when Explore =>
@@ -485,7 +485,7 @@ package body Missions is
       if Mission.MType = Deliver then
          UpdateCargo(PlayerShip, Mission.Target, -1);
       elsif Mission.MType = Passenger then
-         DeleteMember(Mission.Target, PlayerShip);
+         DeleteMember(Integer'Value(To_String(Mission.Target)), PlayerShip);
       end if;
       for I in AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
          if AcceptedMissions(I).Finished then
@@ -527,7 +527,7 @@ package body Missions is
               (MessageText,
                "'Destroy " &
                To_String
-                 (ProtoShips_List(AcceptedMissions(MissionIndex).Target)
+                 (ProtoShips_List(Integer'Value(To_String(AcceptedMissions(MissionIndex).Target)))
                     .Name) &
                "'.");
          when Patrol =>

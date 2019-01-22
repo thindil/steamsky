@@ -110,7 +110,7 @@ package body Stories.UI is
                when LOOT =>
                   TargetText :=
                     To_Unbounded_String(" You must loot: ") &
-                    Items_List(Positive'Value(Slice(Tokens, 1))).Name &
+                    Items_List(To_Unbounded_String((Slice(Tokens, 1)))).Name &
                     To_Unbounded_String(" from ");
                   if Slice(Tokens, 2) = "any" then
                      Append(TargetText, "any ");

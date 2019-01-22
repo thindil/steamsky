@@ -20,10 +20,9 @@ with Ships; use Ships;
 package Crew.Inventory is
 
    procedure UpdateInventory(MemberIndex: Positive; Amount: Integer;
-      ProtoIndex, Durability, InventoryIndex, Price: Natural := 0) with
+      ProtoIndex: Unbounded_String := Null_Unbounded_String; Durability, InventoryIndex, Price: Natural := 0) with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
-       ProtoIndex <= Items_List.Last_Index and
        InventoryIndex <=
          PlayerShip.Crew(MemberIndex).Inventory
            .Last_Index); -- Update member inventory

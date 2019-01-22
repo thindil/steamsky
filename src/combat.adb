@@ -296,7 +296,7 @@ package body Combat is
                                .Value) then
                            for J in Ship.Cargo.Iterate loop
                               if Ship.Cargo(J).ProtoIndex =
-                                Objects_Container.To_Index(I) then
+                                Objects_Container.Key(I) then
                                  AmmoIndex := Inventory_Container.To_Index(J);
                                  Ship.Modules(K).Data(1) := AmmoIndex;
                                  exit;
@@ -1036,7 +1036,7 @@ package body Combat is
                             .Value) then
                         for J in Enemy.Ship.Cargo.Iterate loop
                            if Enemy.Ship.Cargo(J).ProtoIndex =
-                             Objects_Container.To_Index(K) then
+                             Objects_Container.Key(K) then
                               EnemyAmmoIndex :=
                                 Inventory_Container.To_Index(J);
                               exit;
@@ -1245,7 +1245,7 @@ package body Combat is
          declare
             WasBoarded: Boolean := False;
             LootAmount: Integer;
-            MoneyIndex2: constant Positive := FindProtoItem(MoneyIndex);
+            MoneyIndex2: constant Unbounded_String := MoneyIndex;
          begin
             if FindMember(Boarding) > 0 then
                WasBoarded := True;
@@ -1322,7 +1322,7 @@ package body Combat is
                                  when LOOT =>
                                     UpdateCargo
                                       (PlayerShip,
-                                       Positive'Value(Slice(Tokens, 1)), 1);
+                                       To_Unbounded_String(Slice(Tokens, 1)), 1);
                                  when others =>
                                     null;
                               end case;
@@ -1360,9 +1360,9 @@ package body Combat is
              Destroy
            and then
              ProtoShips_List
-               (AcceptedMissions
+               (Integer'Value(To_String(AcceptedMissions
                   (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex)
-                  .Target)
+                  .Target)))
                .Name =
              Enemy.Ship.Name then
             UpdateMission

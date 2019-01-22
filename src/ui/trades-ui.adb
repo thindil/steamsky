@@ -59,8 +59,8 @@ package body Trades.UI is
    end CloseTrade;
 
    procedure ShowItemTradeInfo(Object: access Gtkada_Builder_Record'Class) is
-      ItemInfo: Unbounded_String;
-      ProtoIndex, Price: Positive;
+      ItemInfo, ProtoIndex: Unbounded_String;
+      Price: Positive;
       CargoIndex, BaseCargoIndex, BaseCargoIndex2: Natural := 0;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -404,13 +404,14 @@ package body Trades.UI is
         Gtk_List_Store(Get_Object(Builder, "itemslist1"));
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      BaseType, ProtoIndex, Price: Positive;
+      BaseType, Price: Positive;
       IndexesList: Positive_Container.Vector;
       BaseCargoIndex: Natural;
       BaseCargo: BaseCargo_Container.Vector;
       Visible: Boolean := False;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
+      ProtoIndex: Unbounded_String;
    begin
       if BaseIndex > 0 then
          BaseType := Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;

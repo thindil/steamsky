@@ -30,7 +30,8 @@ package body Mobs is
       MobsData: Document;
       NodesList, ChildNodes: Node_List;
       TempRecord: ProtoMobRecord;
-      TempSkills, TempInventory: Skills_Container.Vector;
+      TempSkills: Skills_Container.Vector;
+      TempInventory: MobInventory_Container.Map;
       TempAttributes: Attributes_Container.Vector;
       TempPriorities: constant Orders_Array := (others => 0);
       TempEquipment: constant Equipment_Array := (others => 0);
@@ -54,6 +55,7 @@ package body Mobs is
       MobNode, ChildNode: Node;
       MobIndex, ChildIndex: Natural;
       DeleteIndex: Positive;
+      ItemIndex: Unbounded_String;
    begin
       TempRecord :=
         (Index => Null_Unbounded_String, Skills => TempSkills,
@@ -199,10 +201,9 @@ package body Mobs is
               DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "item");
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
-               ChildIndex :=
-                 FindProtoItem
-                   (To_Unbounded_String(Get_Attribute(ChildNode, "index")));
-               if ChildIndex = 0 then
+               ItemIndex :=
+                   To_Unbounded_String(Get_Attribute(ChildNode, "index"));
+               if not Objects_Container.Contains(Items_List, ItemIndex) then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(DataAction'Image(Action)) &
                     " mob '" & To_String(TempRecord.Index) &
@@ -218,50 +219,37 @@ package body Mobs is
                case SubAction is
                   when ADD =>
                      if Get_Attribute(ChildNode, "amount")'Length /= 0 then
-                        TempRecord.Inventory.Append
-                          (New_Item =>
-                             (ChildIndex,
+                        MobInventory_Container.Include(TempRecord.Inventory, ItemIndex,
+                            (
                               Integer'Value
                                 (Get_Attribute(ChildNode, "amount")),
                               0));
                      else
-                        TempRecord.Inventory.Append
-                          (New_Item =>
-                             (ChildIndex,
+                        MobInventory_Container.Include(TempRecord.Inventory, ItemIndex,
+                             (
                               Integer'Value
                                 (Get_Attribute(ChildNode, "minamount")),
                               Integer'Value
                                 (Get_Attribute(ChildNode, "maxamount"))));
                      end if;
                   when UPDATE =>
-                     for Item of TempRecord.Inventory loop
-                        if Item(1) = ChildIndex then
                            if Get_Attribute(ChildNode, "amount")'Length /=
                              0 then
-                              Item :=
-                                (ChildIndex,
+                             TempRecord.Inventory(ItemIndex) :=
+                                (
                                  Integer'Value
                                    (Get_Attribute(ChildNode, "amount")),
                                  0);
                            else
-                              Item :=
-                                (ChildIndex,
+                             TempRecord.Inventory(ItemIndex) :=
+                                (
                                  Integer'Value
                                    (Get_Attribute(ChildNode, "minamount")),
                                  Integer'Value
                                    (Get_Attribute(ChildNode, "maxamount")));
                            end if;
-                           exit;
-                        end if;
-                     end loop;
                   when REMOVE =>
-                     for K in TempRecord.Inventory.Iterate loop
-                        if TempRecord.Inventory(K)(1) = ChildIndex then
-                           DeleteIndex := Skills_Container.To_Index(K);
-                           exit;
-                        end if;
-                     end loop;
-                     TempRecord.Inventory.Delete(Index => DeleteIndex);
+                     MobInventory_Container.Exclude(TempRecord.Inventory, ItemIndex);
                end case;
             end loop;
             ChildNodes :=
@@ -287,7 +275,7 @@ package body Mobs is
                  ("Mob updated: " & To_String(TempRecord.Index), Everything);
             end if;
          else
-            Items_List.Delete(Index => MobIndex);
+            ProtoMobs_List.Delete(Index => MobIndex);
             LogMessage
               ("Mob removed: " & To_String(TempRecord.Index), Everything);
          end if;

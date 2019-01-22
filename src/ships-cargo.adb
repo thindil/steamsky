@@ -19,12 +19,12 @@ with ShipModules; use ShipModules;
 
 package body Ships.Cargo is
 
-   procedure UpdateCargo(Ship: in out ShipRecord; ProtoIndex: Natural := 0;
+   procedure UpdateCargo(Ship: in out ShipRecord; ProtoIndex: Unbounded_String := Null_Unbounded_String;
       Amount: Integer; Durability: Natural := 100;
       CargoIndex, Price: Natural := 0) is
       ItemIndex: Natural := 0;
    begin
-      if ProtoIndex > 0 and CargoIndex = 0 then
+      if ProtoIndex /= Null_Unbounded_String and CargoIndex = 0 then
          for I in Ship.Cargo.Iterate loop
             if Ship.Cargo(I).ProtoIndex = ProtoIndex and
               Ship.Cargo(I).Durability = Durability then

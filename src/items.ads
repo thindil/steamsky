@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -16,7 +16,9 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Strings.Unbounded.Hash;
 with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Containers.Hashed_Maps;
 with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 
@@ -37,38 +39,38 @@ package Items is
         .Vector; -- Additional item data (damage for ammo, etc)
       ShowType: Unbounded_String; -- Displayed type of item (can be group of items, renamed type, etc)
       Description: Unbounded_String; -- Description of item
-      Index: Unbounded_String; -- Index of item
    end record;
-   package Objects_Container is new Vectors(Positive, Object_Data);
+   package Objects_Container is new Hashed_Maps(Unbounded_String,
+      Object_Data, Ada.Strings.Unbounded.Hash, "=");
    type InventoryData is -- Data structure for item in inventory
    record
-      ProtoIndex: Positive; -- Index of prototype
+      ProtoIndex: Unbounded_String; -- Index of prototype
       Amount: Positive; -- Amount of item
       Name: Unbounded_String; -- Name of item if different than default
       Durability: Natural; -- Current durability of item
       Price: Natural; -- Price for which item was bought
    end record;
    package Inventory_Container is new Vectors(Positive, InventoryData);
-   Items_List: Objects_Container.Vector; -- List of item available in game
+   Items_List: Objects_Container.Map; -- List of item available in game
    Tools_List: UnboundedString_Container
      .Vector; -- List of all tools types in game
-   Weapons_List: Positive_Container
+   Weapons_List: UnboundedString_Container
      .Vector; -- List of indexes of all weapons in game
-   Shields_List: Positive_Container
+   Shields_List: UnboundedString_Container
      .Vector; -- List of indexes of all shields in game
-   HeadArmors_List: Positive_Container
+   HeadArmors_List: UnboundedString_Container
      .Vector; -- List of indexes of all head armors in game
-   ChestArmors_List: Positive_Container
+   ChestArmors_List: UnboundedString_Container
      .Vector; -- List of indexes of all chest armors in game
-   ArmsArmors_List: Positive_Container
+   ArmsArmors_List: UnboundedString_Container
      .Vector; -- List of indexes of all arms armors in game
-   LegsArmors_List: Positive_Container
+   LegsArmors_List: UnboundedString_Container
      .Vector; -- List of indexes of all legs armors in game
 
    procedure LoadItems(Reader: Tree_Reader); -- Load items from files
    function FindProtoItem
-     (Index, ItemType: Unbounded_String := Null_Unbounded_String)
-      return Natural; -- Return vector index of item or zero if item not found
+     (ItemType: Unbounded_String)
+      return Unbounded_String; -- Return map index of item or empty string if item not found
    function GetItemDamage(ItemDurability: Natural;
       ToLower: Boolean := False)
      return String; -- Get description of item damage
@@ -80,8 +82,7 @@ package Items is
       SkillLevel, MemberIndex: Natural :=
         0); -- Check if item in ship cargo or character inventory was damaged
    function FindItem(Inventory: Inventory_Container.Vector;
-      ProtoIndex: Natural := 0;
-      ItemType: Unbounded_String := Null_Unbounded_String;
+      ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
       Durability: Natural := 101)
      return Natural; -- Find item in ship cargo or character inventory, return item index or 0 if item not found
    procedure SetToolsList; -- Fill tools types list

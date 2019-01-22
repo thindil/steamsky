@@ -42,8 +42,8 @@ package body Bases.LootUI is
    Builder: Gtkada_Builder;
 
    procedure ShowItemInfo(Object: access Gtkada_Builder_Record'Class) is
-      ItemInfo: Unbounded_String;
-      ProtoIndex, CargoIndex, BaseCargoIndex: Natural := 0;
+      ItemInfo, ProtoIndex: Unbounded_String;
+      CargoIndex, BaseCargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
@@ -141,8 +141,9 @@ package body Bases.LootUI is
    procedure LootItem(User_Data: access GObject_Record'Class) is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      Amount, ProtoIndex: Positive;
+      Amount: Positive;
       CargoIndex, BaseCargoIndex: Natural := 0;
+      ProtoIndex: Unbounded_String;
    begin
       declare
          ItemsIter: Gtk_Tree_Iter;
@@ -249,7 +250,7 @@ package body Bases.LootUI is
         Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       IndexesList: Positive_Container.Vector;
       BaseCargoIndex: Natural;
-      ProtoIndex: Positive;
+      ProtoIndex: Unbounded_String;
       Visible: Boolean := False;
    begin
       Clear(ItemsList);

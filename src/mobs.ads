@@ -17,11 +17,15 @@
 
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Strings.Unbounded.Hash;
+with Ada.Containers.Hashed_Maps;
 with DOM.Readers; use DOM.Readers;
 with Crew; use Crew;
 
 package Mobs is
 
+   package MobInventory_Container is new Hashed_Maps(Unbounded_String,
+      Attributes_Array, Ada.Strings.Unbounded.Hash, "=");
    type ProtoMobRecord is -- Data structure for mobs prototypes
    record
       Index: Unbounded_String; -- Index of mob
@@ -31,7 +35,7 @@ package Mobs is
         .Vector; -- Levels and experience in attributes of mob
       Order: Crew_Orders; -- Current order for mob
       Priorities: Orders_Array; -- Priority of orders of mob
-      Inventory: Skills_Container.Vector; -- List of mob inventory
+      Inventory: MobInventory_Container.Map; -- List of mob inventory
       Equipment: Equipment_Array; -- Items indexes from inventory used by mob: 1 - weapon, 2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs, 7 - tool
    end record;
    package ProtoMobs_Container is new Vectors(Positive, ProtoMobRecord);

@@ -289,7 +289,7 @@ package body Utils.UI is
 
    procedure ShowInventoryItemInfo(Label: Gtk_Label; ItemIndex: Positive;
       MemberIndex: Natural) is
-      ProtoIndex: Positive;
+      ProtoIndex: Unbounded_String;
       ItemInfo: Unbounded_String;
    begin
       if MemberIndex > 0 then

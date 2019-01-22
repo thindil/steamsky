@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -36,7 +36,7 @@ package body Items is
       ItemsData: Document;
       TempValue: Natural_Container.Vector;
       ItemNode, ChildNode: Node;
-      ItemIndex: Natural;
+      ItemIndex: Unbounded_String;
       Action: DataAction;
    begin
       TempRecord :=
@@ -44,30 +44,29 @@ package body Items is
          IType => Null_Unbounded_String, Prices => (others => 0),
          Buyable => (others => False), Value => TempValue,
          ShowType => Null_Unbounded_String,
-         Description => Null_Unbounded_String, Index => Null_Unbounded_String);
+         Description => Null_Unbounded_String);
       ItemsData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(ItemsData, "item");
       for I in 0 .. Length(NodesList) - 1 loop
          ItemNode := Item(NodesList, I);
-         TempRecord.Index :=
+         ItemIndex :=
            To_Unbounded_String(Get_Attribute(ItemNode, "index"));
          if Get_Attribute(ItemNode, "action")'Length > 0 then
             Action := DataAction'Value(Get_Attribute(ItemNode, "action"));
          else
             Action := ADD;
          end if;
-         ItemIndex := FindProtoItem(TempRecord.Index);
          if (Action = UPDATE or Action = REMOVE) then
-            if ItemIndex = 0 then
+            if not Objects_Container.Contains(Items_List, ItemIndex) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
-                 " item '" & To_String(TempRecord.Index) &
+                 " item '" & To_String(ItemIndex) &
                  "', there no item with that index.";
             end if;
-         elsif ItemIndex > 0 then
+         elsif Objects_Container.Contains(Items_List, ItemIndex) then
             raise Data_Loading_Error
-              with "Can't add item '" & To_String(TempRecord.Index) &
+              with "Can't add item '" & To_String(ItemIndex) &
               "', there is one with that index.";
          end if;
          if Action /= REMOVE then
@@ -119,11 +118,11 @@ package body Items is
                  To_Unbounded_String
                    (Node_Value(First_Child(Item(ChildNodes, 0))));
             end if;
-            if TempRecord.Index = MoneyIndex then
+            if ItemIndex = MoneyIndex then
                MoneyName := TempRecord.Name;
             end if;
             if Action /= UPDATE then
-               Items_List.Append(New_Item => TempRecord);
+               Objects_Container.Include(Items_List, ItemIndex, TempRecord);
                LogMessage
                  ("Item added: " & To_String(TempRecord.Name), Everything);
             else
@@ -132,53 +131,44 @@ package body Items is
                  ("Item updated: " & To_String(TempRecord.Name), Everything);
             end if;
          else
-            Items_List.Delete(Index => ItemIndex);
+            Objects_Container.Exclude(Items_List, ItemIndex);
             LogMessage
-              ("Item removed: " & To_String(TempRecord.Index), Everything);
+              ("Item removed: " & To_String(ItemIndex), Everything);
          end if;
          TempRecord :=
            (Name => Null_Unbounded_String, Weight => 1,
             IType => Null_Unbounded_String, Prices => (others => 0),
             Buyable => (others => False), Value => TempValue,
             ShowType => Null_Unbounded_String,
-            Description => Null_Unbounded_String,
-            Index => Null_Unbounded_String);
+            Description => Null_Unbounded_String);
       end loop;
       for I in Items_List.Iterate loop
          if Items_List(I).IType = WeaponType then
-            Weapons_List.Append(New_Item => Objects_Container.To_Index(I));
+            Weapons_List.Append(New_Item => Objects_Container.Key(I));
          elsif Items_List(I).IType = ShieldType then
-            Shields_List.Append(New_Item => Objects_Container.To_Index(I));
+            Shields_List.Append(New_Item => Objects_Container.Key(I));
          elsif Items_List(I).IType = HeadArmor then
-            HeadArmors_List.Append(New_Item => Objects_Container.To_Index(I));
+            HeadArmors_List.Append(New_Item => Objects_Container.Key(I));
          elsif Items_List(I).IType = ChestArmor then
-            ChestArmors_List.Append(New_Item => Objects_Container.To_Index(I));
+            ChestArmors_List.Append(New_Item => Objects_Container.Key(I));
          elsif Items_List(I).IType = ArmsArmor then
-            ArmsArmors_List.Append(New_Item => Objects_Container.To_Index(I));
+            ArmsArmors_List.Append(New_Item => Objects_Container.Key(I));
          elsif Items_List(I).IType = LegsArmor then
-            LegsArmors_List.Append(New_Item => Objects_Container.To_Index(I));
+            LegsArmors_List.Append(New_Item => Objects_Container.Key(I));
          end if;
       end loop;
    end LoadItems;
 
    function FindProtoItem
-     (Index, ItemType: Unbounded_String := Null_Unbounded_String)
-      return Natural is
+     (ItemType: Unbounded_String)
+      return Unbounded_String is
    begin
-      if Index /= Null_Unbounded_String then
-         for I in Items_List.Iterate loop
-            if Items_List(I).Index = Index then
-               return Objects_Container.To_Index(I);
-            end if;
-         end loop;
-      elsif ItemType /= Null_Unbounded_String then
-         for I in Items_List.Iterate loop
-            if Items_List(I).IType = ItemType then
-               return Objects_Container.To_Index(I);
-            end if;
-         end loop;
-      end if;
-      return 0;
+      for I in Items_List.Iterate loop
+         if Items_List(I).IType = ItemType then
+            return Objects_Container.Key(I);
+         end if;
+      end loop;
+      return Null_Unbounded_String;
    end FindProtoItem;
 
    function GetItemDamage(ItemDurability: Natural;
@@ -287,11 +277,10 @@ package body Items is
    end DamageItem;
 
    function FindItem(Inventory: Inventory_Container.Vector;
-      ProtoIndex: Natural := 0;
-      ItemType: Unbounded_String := Null_Unbounded_String;
+      ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
       Durability: Natural := 101) return Natural is
    begin
-      if ProtoIndex > 0 then
+      if ProtoIndex /= Null_Unbounded_String then
          for I in Inventory.Iterate loop
             if Inventory(I).ProtoIndex = ProtoIndex then
                if Durability < 101

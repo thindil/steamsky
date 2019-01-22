@@ -34,8 +34,8 @@ package body Factions is
       TmpRelations: Relations_Container.Map;
       TmpRelation: RelationsRecord;
       TmpFood: UnboundedString_Container.Vector;
-      Value, CareerIndex, RelationIndex, FactionIndex: Unbounded_String;
-      ItemIndex, SkillIndex: Natural;
+      Value, CareerIndex, RelationIndex, FactionIndex, ItemIndex: Unbounded_String;
+      SkillIndex: Natural;
       TmpCareers: Factions.Careers_Container.Map;
       TmpCareer: Factions.CareerRecord;
       FactionNode, ChildNode: Node;
@@ -59,7 +59,7 @@ package body Factions is
             end if;
             if CheckItemType then
                ItemIndex := FindProtoItem(ItemType => Value);
-               if ItemIndex = 0 then
+               if ItemIndex = Null_Unbounded_String then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(DataAction'Image(Action)) &
                     " faction '" & To_String(FactionIndex) &
@@ -156,7 +156,7 @@ package body Factions is
                  To_Unbounded_String
                    (Get_Attribute(FactionNode, "healingtools"));
                ItemIndex := FindProtoItem(ItemType => Value);
-               if ItemIndex = 0 then
+               if ItemIndex = Null_Unbounded_String then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(DataAction'Image(Action)) &
                     " faction '" & To_String(FactionIndex) &
