@@ -192,7 +192,7 @@ package body Ships is
                        GetRandom
                          (Member.Inventory(I)(1), Member.Inventory(I)(2));
                   else
-                     Amount := Member.Inventory(I)(2);
+                     Amount := Member.Inventory(I)(1);
                   end if;
                   TmpInventory.Append
                     (New_Item =>

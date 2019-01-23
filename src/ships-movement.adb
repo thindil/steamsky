@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -190,7 +190,7 @@ package body Ships.Movement is
          if SkyBases(BaseIndex).Population > 0 then
             declare
                MoneyIndex2: constant Natural :=
-                 FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+                 FindItem(PlayerShip.Cargo, MoneyIndex);
                DockingCost: Positive;
                TraderIndex: constant Natural := FindMember(Talk);
             begin

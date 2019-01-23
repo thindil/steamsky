@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -224,8 +224,7 @@ package body Bases.RecruitUI is
    end Hire;
 
    procedure StartNegotiations(Object: access Gtkada_Builder_Record'Class) is
-      MoneyIndex2: constant Natural :=
-        FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
       Cost: Positive;
       Recruit: Recruit_Data;
       BaseIndex: constant Positive :=
@@ -267,8 +266,7 @@ package body Bases.RecruitUI is
    end StartNegotiations;
 
    procedure NegotiateHire(Object: access Gtkada_Builder_Record'Class) is
-      MoneyIndex2: constant Natural :=
-        FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
       Recruit: Recruit_Data;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;

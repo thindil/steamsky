@@ -1080,8 +1080,7 @@ package body Maps.UI.Handlers is
    procedure ExecuteOrder(User_Data: access GObject_Record'Class) is
       TraderIndex: constant Natural := FindMember(Talk);
       Price: Positive := 1000;
-      MoneyIndex2: constant Natural :=
-        FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
    begin
       Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
       if User_Data = Get_Object(Builder, "btnaskevents") then
