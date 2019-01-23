@@ -40,6 +40,7 @@ package body Crafts.UI is
 
    Builder: Gtkada_Builder;
    RecipeIndex: Integer;
+   ItemIndex: Unbounded_String;
 
    procedure ShowSetRecipe(Object: access Gtkada_Builder_Record'Class) is
       MaxAmount: Positive;
@@ -103,11 +104,11 @@ package body Crafts.UI is
       HaveWorkplace, IsMaterial, HaveMaterials: Boolean := True;
       HaveTool: Boolean := False;
       TextLength: Positive;
-      ItemIndex: Unbounded_String;
    begin
       declare
          RecipesIter: Gtk_Tree_Iter;
          RecipesModel: Gtk_Tree_Model;
+         ProtoIndex: Natural := 0;
       begin
          Get_Selected
            (Gtk.Tree_View.Get_Selection
@@ -116,9 +117,21 @@ package body Crafts.UI is
          if RecipesIter = Null_Iter then
             return;
          end if;
-         RecipeIndex := Integer(Get_Int(RecipesModel, RecipesIter, 1));
          ItemIndex :=
            To_Unbounded_String(Get_String(RecipesModel, RecipesIter, 1));
+         if Element(ItemIndex, 1) /= 'D' then
+            RecipeIndex :=
+              Integer'Value(Get_String(RecipesModel, RecipesIter, 1));
+         else
+            Delete(ItemIndex, 1, 1);
+            for I in Items_List.Iterate loop
+               ProtoIndex := ProtoIndex + 1;
+               if Objects_Container.Key(I) = ItemIndex then
+                  RecipeIndex := ProtoIndex * (-1);
+                  exit;
+               end if;
+            end loop;
+         end if;
       end;
       if RecipeIndex > 0 then
          Recipe := Recipes_List(RecipeIndex);
@@ -289,7 +302,13 @@ package body Crafts.UI is
    begin
       for I in PlayerShip.Modules.Iterate loop
          if PlayerShip.Modules(I).Name = WorkshopName then
-            SetRecipe(Modules_Container.To_Index(I), Amount, RecipeIndex);
+            if RecipeIndex > 0 then
+               SetRecipe(Modules_Container.To_Index(I), Amount, RecipeIndex);
+            else
+               SetRecipe
+                 (Modules_Container.To_Index(I), Amount, RecipeIndex,
+                  ItemIndex);
+            end if;
             exit;
          end if;
       end loop;
@@ -387,14 +406,16 @@ package body Crafts.UI is
                     .Name) &
                "</span>");
          end if;
-         Set(RecipesList, RecipesIter, 1, Gint(Known_Recipes.Element(I)));
+         Set
+           (RecipesList, RecipesIter, 1,
+            Integer'Image(Known_Recipes.Element(I)));
       end loop;
       for I in Deconstructs.First_Index .. Deconstructs.Last_Index loop
          Append(RecipesList, RecipesIter);
          Set
            (RecipesList, RecipesIter, 0,
             "Deconstruct " & To_String(Items_List(Deconstructs(I)).Name));
-         Set(RecipesList, RecipesIter, 1, To_String(Deconstructs(I)));
+         Set(RecipesList, RecipesIter, 1, "D" & To_String(Deconstructs(I)));
       end loop;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "crafts");
