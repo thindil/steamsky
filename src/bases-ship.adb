@@ -35,8 +35,7 @@ package body Bases.Ship is
       if Cost = 0 then
          raise BasesShip_Nothing_To_Repair;
       end if;
-      ProtoMoneyIndex := MoneyIndex;
-      MoneyIndex2 := FindItem(PlayerShip.Cargo, ProtoMoneyIndex);
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
       TraderIndex := FindMember(Talk);
       CountPrice(Cost, TraderIndex);
       if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
@@ -75,9 +74,7 @@ package body Bases.Ship is
    end RepairShip;
 
    procedure UpgradeShip(Install: Boolean; ModuleIndex: Positive) is
-      ProtoMoneyIndex: constant Unbounded_String := MoneyIndex;
-      MoneyIndex2: constant Natural :=
-        FindItem(PlayerShip.Cargo, ProtoMoneyIndex);
+      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
       HullIndex, ModulesAmount, TraderIndex: Positive;
       FreeTurretIndex, Price: Natural := 0;
       BaseIndex: constant Positive :=
@@ -153,7 +150,7 @@ package body Bases.Ship is
          UpdateCargo
            (Ship => PlayerShip, CargoIndex => MoneyIndex2,
             Amount => (0 - Price));
-         UpdateBaseCargo(ProtoMoneyIndex, Price);
+         UpdateBaseCargo(MoneyIndex, Price);
          GainExp(1, TalkingSkill, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
          if Modules_List(ModuleIndex).MType /= HULL then
@@ -268,7 +265,7 @@ package body Bases.Ship is
          end if;
          UpdateCargo
            (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => Price);
-         UpdateBaseCargo(ProtoMoneyIndex, Price);
+         UpdateBaseCargo(MoneyIndex, Price);
          GainExp(1, TalkingSkill, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
          AddMessage
@@ -297,9 +294,7 @@ package body Bases.Ship is
    procedure PayForDock is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      ProtoMoneyIndex: constant Unbounded_String := MoneyIndex;
-      MoneyIndex2: constant Natural :=
-        FindItem(PlayerShip.Cargo, ProtoMoneyIndex);
+      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
       DockingCost: Positive;
       TraderIndex: constant Natural := FindMember(Talk);
    begin
@@ -326,7 +321,7 @@ package body Bases.Ship is
       UpdateCargo
         (Ship => PlayerShip, CargoIndex => MoneyIndex2,
          Amount => (0 - DockingCost));
-      UpdateBaseCargo(ProtoMoneyIndex, DockingCost);
+      UpdateBaseCargo(MoneyIndex, DockingCost);
       AddMessage
         ("You pay" & Positive'Image(DockingCost) & " " & To_String(MoneyName) &
          " docking fee.",

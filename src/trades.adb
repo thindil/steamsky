@@ -37,7 +37,7 @@ package body Trades is
       Cost, MoneyIndex2: Natural;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
-      ItemName, ItemIndex, ProtoMoneyIndex: Unbounded_String;
+      ItemName, ItemIndex: Unbounded_String;
       TraderIndex: constant Natural := FindMember(Talk);
    begin
       BuyAmount := Positive'Value(Amount);
@@ -64,8 +64,7 @@ package body Trades is
       end if;
       Cost := BuyAmount * Price;
       CountPrice(Cost, TraderIndex);
-      ProtoMoneyIndex := MoneyIndex;
-      MoneyIndex2 := FindItem(PlayerShip.Cargo, ProtoMoneyIndex);
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
       if FreeCargo(Cost - (Items_List(ItemIndex).Weight * BuyAmount)) < 0 then
          raise Trade_No_Free_Cargo;
       end if;
@@ -78,7 +77,7 @@ package body Trades is
       UpdateCargo
         (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => (0 - Cost));
       if BaseIndex > 0 then
-         UpdateBaseCargo(ProtoMoneyIndex, Cost);
+         UpdateBaseCargo(MoneyIndex, Cost);
       else
          TraderCargo(1).Amount := TraderCargo(1).Amount + Cost;
       end if;
@@ -127,7 +126,6 @@ package body Trades is
       Profit, Price, BaseType: Positive;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
-      MoneyIndex2: constant Unbounded_String := MoneyIndex;
       BaseItemIndex: Natural := 0;
       CargoAdded: Boolean := False;
       TraderIndex: constant Natural := FindMember(Talk);
@@ -218,9 +216,9 @@ package body Trades is
         (Ship => PlayerShip, CargoIndex => ItemIndex,
          Amount => (0 - SellAmount),
          Durability => PlayerShip.Cargo.Element(ItemIndex).Durability);
-      UpdateCargo(PlayerShip, MoneyIndex2, Profit);
+      UpdateCargo(PlayerShip, MoneyIndex, Profit);
       if BaseIndex > 0 then
-         UpdateBaseCargo(MoneyIndex2, (0 - Profit));
+         UpdateBaseCargo(MoneyIndex, (0 - Profit));
          GainRep(BaseIndex, 1);
       else
          TraderCargo(1).Amount := TraderCargo(1).Amount - Profit;
