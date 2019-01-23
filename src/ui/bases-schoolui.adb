@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -66,7 +66,7 @@ package body Bases.SchoolUI is
                ". " & To_String(Skills_List(I).Description));
          end if;
       end loop;
-      MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
       if MoneyIndex2 > 0 then
          Set_Label
            (Gtk_Label(Get_Object(Object, "lblmoney")),
