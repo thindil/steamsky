@@ -198,7 +198,7 @@ package body Trades.UI is
            (Gtk_Label(Get_Object(Builder, "lblsellamount")),
             "(max" & Natural'Image(MaxAmount) & "):");
       end if;
-      MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
       if BaseCargoIndex = 0 or MoneyIndex2 = 0 or
         not Items_List(ProtoIndex).Buyable(BaseType) then
          Hide(Gtk_Widget(Get_Object(Object, "buybox")));

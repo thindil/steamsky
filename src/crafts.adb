@@ -214,16 +214,29 @@ package body Crafts is
    end SetRecipeData;
 
    function CheckRecipe(RecipeIndex: Integer) return Positive is
-      Recipe: constant Craft_Data := SetRecipeData(RecipeIndex);
+      Recipe: Craft_Data;
       MaterialIndexes: Positive_Container.Vector;
       RecipeName: Unbounded_String;
       MaxAmount: Positive := Positive'Last;
       MType: ModuleType;
    begin
       if RecipeIndex > 0 then
+         Recipe := SetRecipeData(RecipeIndex);
          RecipeName := Items_List(Recipe.ResultIndex).Name;
          MType := Recipes_List(RecipeIndex).Workplace;
       else
+         declare
+            ProtoIndex: Integer := 0;
+         begin
+            for I in Items_List.Iterate loop
+               ProtoIndex := ProtoIndex - 1;
+               if ProtoIndex = RecipeIndex then
+                  Recipe :=
+                    SetRecipeData(ItemIndex => Objects_Container.Key(I));
+                  exit;
+               end if;
+            end loop;
+         end;
          RecipeName :=
            To_Unbounded_String("Deconstructing ") &
            Items_List(Recipe.ResultIndex).Name;

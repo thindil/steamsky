@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -214,7 +214,7 @@ package body Bases.ShipyardUI is
       end;
       Cost := Modules_List(ModuleIndex).Price;
       CountPrice(Cost, FindMember(Talk));
-      MoneyIndex2 := FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
       ModuleInfo := To_Unbounded_String("Install cost:");
       if MoneyIndex2 = 0
         or else PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
@@ -352,7 +352,7 @@ package body Bases.ShipyardUI is
       end if;
       declare
          MoneyIndex2: constant Natural :=
-           FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+           FindItem(PlayerShip.Cargo, MoneyIndex);
       begin
          if MoneyIndex2 > 0 then
             RemoveInfo :=

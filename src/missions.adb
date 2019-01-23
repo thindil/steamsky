@@ -486,8 +486,7 @@ package body Missions is
                  ("You received" & Integer'Image(RewardAmount) & " " &
                   To_String(MoneyName) & " for finished mission.",
                   MissionMessage);
-               UpdateCargo
-                 (PlayerShip, FindProtoItem(MoneyIndex), RewardAmount);
+               UpdateCargo(PlayerShip, MoneyIndex, RewardAmount);
             end if;
          end;
       end if;
