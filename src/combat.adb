@@ -1245,7 +1245,6 @@ package body Combat is
          declare
             WasBoarded: Boolean := False;
             LootAmount: Integer;
-            MoneyIndex2: constant Unbounded_String := MoneyIndex;
          begin
             if FindMember(Boarding) > 0 then
                WasBoarded := True;
@@ -1262,7 +1261,7 @@ package body Combat is
                  ("You looted" & Integer'Image(LootAmount) & " " &
                   To_String(MoneyName) & " from " & To_String(EnemyName) & ".",
                   CombatMessage);
-               UpdateCargo(PlayerShip, MoneyIndex2, LootAmount);
+               UpdateCargo(PlayerShip, MoneyIndex, LootAmount);
             end if;
             FreeSpace := FreeCargo(0);
             if WasBoarded and FreeSpace > 0 then
@@ -1277,7 +1276,7 @@ package body Combat is
                      LootAmount := LootAmount + FreeSpace;
                   end if;
                   if Items_List(Item.ProtoIndex).Prices(1) = 0 and
-                    Item.ProtoIndex /= MoneyIndex2 then
+                    Item.ProtoIndex /= MoneyIndex then
                      LootAmount := 0;
                   end if;
                   if LootAmount > 0 then

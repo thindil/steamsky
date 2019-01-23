@@ -29,8 +29,7 @@ package body Bases.Trade is
 
    function CheckMoney(Price: Positive;
       Message: String := "") return Positive is
-      MoneyIndex2: constant Natural :=
-        FindItem(PlayerShip.Cargo, FindProtoItem(MoneyIndex));
+      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
    begin
       if MoneyIndex2 = 0 then
          if Message /= "" then
@@ -111,7 +110,6 @@ package body Bases.Trade is
       BaseType: constant Positive :=
         Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       TraderIndex: Positive;
-      ProtoMoneyIndex: Unbounded_String;
    begin
       if BaseType /= Recipes_List(RecipeIndex).BaseType then
          raise Trade_Cant_Buy;
@@ -130,11 +128,10 @@ package body Bases.Trade is
          Cost := Recipes_List(RecipeIndex).Difficulty * 100;
       end if;
       CountPrice(Cost, TraderIndex);
-      ProtoMoneyIndex := MoneyIndex;
       MoneyIndex2 := CheckMoney(Cost, RecipeName);
       UpdateCargo
         (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => (0 - Cost));
-      UpdateBaseCargo(ProtoMoneyIndex, Cost);
+      UpdateBaseCargo(MoneyIndex, Cost);
       Known_Recipes.Append(New_Item => RecipeIndex);
       AddMessage
         ("You bought recipe for " & RecipeName & " for" &
@@ -150,13 +147,11 @@ package body Bases.Trade is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Cost, Time, MoneyIndex2: Natural := 0;
       TraderIndex: Positive;
-      ProtoMoneyIndex: Unbounded_String;
    begin
       HealCost(Cost, Time, MemberIndex);
       if Cost = 0 then
          raise Trade_Cant_Heal;
       end if;
-      ProtoMoneyIndex := FindProtoItem(MoneyIndex);
       TraderIndex := FindMember(Talk);
       MoneyIndex2 := CheckMoney(Cost);
       if MemberIndex > 0 then
@@ -182,7 +177,7 @@ package body Bases.Trade is
       end if;
       UpdateCargo
         (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => (0 - Cost));
-      UpdateBaseCargo(ProtoMoneyIndex, Cost);
+      UpdateBaseCargo(MoneyIndex, Cost);
       GainExp(1, TalkingSkill, TraderIndex);
       GainRep(BaseIndex, 1);
       UpdateGame(Time);
@@ -241,12 +236,10 @@ package body Bases.Trade is
       GainedExp: Positive;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      ProtoMoneyIndex: Unbounded_String;
    begin
       if Cost = 0 then
          raise Trade_Cant_Train;
       end if;
-      ProtoMoneyIndex := FindProtoItem(MoneyIndex);
       MoneyIndex2 := CheckMoney(Cost);
       AddMessage
         ("You bought training session in " &
@@ -266,7 +259,7 @@ package body Bases.Trade is
       GainExp(GainedExp, SkillIndex, MemberIndex);
       UpdateCargo
         (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => (0 - Cost));
-      UpdateBaseCargo(ProtoMoneyIndex, Cost);
+      UpdateBaseCargo(MoneyIndex, Cost);
       TraderIndex := FindMember(Talk);
       if TraderIndex > 0 then
          GainExp(5, TalkingSkill, TraderIndex);
