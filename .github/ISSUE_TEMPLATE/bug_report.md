@@ -19,7 +19,7 @@ A clear and concise description of what you expected to happen.
 
 **Technical Info:**
  - OS: [e.g. iOS]
- - Version [e.g. 22]
+ - Version: [e.g. 22]
 
 **Additional context**
 Add any other context about the problem here. If possible, please attach error.log file (if it exists) with information about problem.
