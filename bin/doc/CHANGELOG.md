@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Name of faction in destroy ship goals
+- Deleting mob by modification files
 
 ## [3.0.4] - 2019-01-20
 
