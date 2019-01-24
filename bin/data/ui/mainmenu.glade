@@ -449,7 +449,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                      <object class="GtkLabel">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">Carrer Info</property>
+                                        <property name="label" translatable="yes">Career Info</property>
                                      </object>
                                   </child>
                                </object>
