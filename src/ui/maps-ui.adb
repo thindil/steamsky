@@ -975,17 +975,14 @@ package body Maps.UI is
                     (MapInfoText,
                      "Deliver " &
                      To_String
-                       (Items_List(AcceptedMissions(MissionIndex).Target)
+                       (Items_List(AcceptedMissions(MissionIndex).ItemIndex)
                           .Name));
                when Destroy =>
                   Append
                     (MapInfoText,
                      "Destroy " &
                      To_String
-                       (ProtoShips_List
-                          (Integer'Value
-                             (To_String
-                                (AcceptedMissions(MissionIndex).Target)))
+                       (ProtoShips_List(AcceptedMissions(MissionIndex).Target)
                           .Name));
                when Patrol =>
                   Append(MapInfoText, "Patrol area");

@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -140,7 +140,7 @@ package body Ships.Cargo.UI is
             for I in
               AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
                if AcceptedMissions(I).MType = Deliver and
-                 AcceptedMissions(I).Target =
+                 AcceptedMissions(I).ItemIndex =
                    PlayerShip.Cargo(ItemIndex).ProtoIndex then
                   DeleteMission(I);
                   DropAmount := DropAmount - 1;

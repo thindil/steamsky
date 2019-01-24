@@ -33,7 +33,7 @@ package Events is
       Time: Integer; -- Time to end of event
       case EType is
          when DoublePrice =>
-            ItemIndex: Unbounded_String;
+            ItemIndex: Unbounded_String; -- Index of proto item which have bonus to price
          when others =>
             Data: Natural; -- Various data for event (for example index of enemy ship)
       end case;
