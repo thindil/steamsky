@@ -939,10 +939,7 @@ package body Maps.UI is
                when EnemyShip | Trader | FriendlyShip =>
                   Append
                     (MapInfoText,
-                     ProtoShips_List
-                       (Positive'Value
-                          (To_String(Events_List(EventIndex).Data)))
-                       .Name);
+                     ProtoShips_List(Events_List(EventIndex).Data).Name);
                when FullDocks =>
                   Append(MapInfoText, "Full docks in base");
                when AttackOnBase =>
@@ -955,7 +952,8 @@ package body Maps.UI is
                   Append
                     (MapInfoText,
                      "Double price for " &
-                     To_String(Items_List(Events_List(EventIndex).Data).Name));
+                     To_String
+                       (Items_List(Events_List(EventIndex).ItemIndex).Name));
                when None | BaseRecovery =>
                   null;
             end case;

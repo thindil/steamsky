@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -133,7 +133,7 @@ package body Trades.UI is
       begin
          if EventIndex > 0 then
             if Events_List(EventIndex).EType = DoublePrice and
-              Events_List(EventIndex).Data = ProtoIndex then
+              Events_List(EventIndex).ItemIndex = ProtoIndex then
                Price := Price * 2;
             end if;
          end if;
@@ -465,7 +465,7 @@ package body Trades.UI is
             end if;
             if EventIndex > 0 then
                if Events_List(EventIndex).EType = DoublePrice and
-                 Events_List(EventIndex).Data = ProtoIndex then
+                 Events_List(EventIndex).ItemIndex = ProtoIndex then
                   Price := Price * 2;
                end if;
             end if;
@@ -525,7 +525,7 @@ package body Trades.UI is
             end if;
             if EventIndex > 0 then
                if Events_List(EventIndex).EType = DoublePrice and
-                 Events_List(EventIndex).Data = ProtoIndex then
+                 Events_List(EventIndex).ItemIndex = ProtoIndex then
                   Price := Price * 2;
                end if;
             end if;

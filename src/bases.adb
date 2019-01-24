@@ -323,11 +323,8 @@ package body Bases is
       else -- asking friendly ship
          Radius := 40;
          ShipIndex :=
-           Integer'Value
-             (To_String
-                (Events_List
-                   (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-                   .Data));
+           (Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+              .Data);
          if ProtoShips_List(ShipIndex).Crew.Length < 5 then
             Amount := 3;
          elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then
@@ -435,11 +432,8 @@ package body Bases is
          GainRep(BaseIndex, 1);
       else -- asking friendly ship
          ShipIndex :=
-           Integer'Value
-             (To_String
-                (Events_List
-                   (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-                   .Data));
+           Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+             .Data;
          if ProtoShips_List(ShipIndex).Crew.Length < 5 then
             MaxEvents := 1;
          elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then
@@ -541,26 +535,21 @@ package body Bases is
                  (New_Item =>
                     (EnemyShip, EventX, EventY,
                      GetRandom(EventTime, EventTime + 60),
-                     To_Unbounded_String
-                       (Enemies
-                          (GetRandom
-                             (Enemies.First_Index, Enemies.Last_Index)))));
+                     Enemies
+                       (GetRandom(Enemies.First_Index, Enemies.Last_Index))));
             when AttackOnBase =>
                GenerateEnemies(Enemies, To_Unbounded_String("Any"), False);
                Events_List.Append
                  (New_Item =>
                     (AttackOnBase, EventX, EventY,
                      GetRandom(EventTime, EventTime + 120),
-                     To_Unbounded_String
-                       (Enemies
-                          (GetRandom
-                             (Enemies.First_Index, Enemies.Last_Index)))));
+                     Enemies
+                       (GetRandom(Enemies.First_Index, Enemies.Last_Index))));
                GenerateEnemies(Enemies);
             when Disease =>
                Events_List.Append
                  (New_Item =>
-                    (Disease, EventX, EventY, GetRandom(10080, 12000),
-                     To_Unbounded_String(1)));
+                    (Disease, EventX, EventY, GetRandom(10080, 12000), 1));
             when DoublePrice =>
                loop
                   ItemIndex := GetRandom(1, Positive(Items_List.Length));
