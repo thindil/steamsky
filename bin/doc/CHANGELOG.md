@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Name of faction in destroy ship goals
 - Deleting mob by modification files
+- Typo in character creation screen - "Carrer" instead of "Career" (issue #40)
 
 ## [3.0.4] - 2019-01-20
 
