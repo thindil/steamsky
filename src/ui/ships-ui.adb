@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -213,8 +213,7 @@ package body Ships.UI is
             end if;
             for Mission of AcceptedMissions loop
                if Mission.MType = Passenger and
-                 Integer'Value(To_String(Mission.Target)) =
-                   PlayerShip.Modules(ModuleIndex).Owner then
+                 Mission.Target = PlayerShip.Modules(ModuleIndex).Owner then
                   IsPassenger := True;
                   exit;
                end if;

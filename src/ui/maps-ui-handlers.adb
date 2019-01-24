@@ -576,7 +576,7 @@ package body Maps.UI.Handlers is
                              (Gtk_Button
                                 (Get_Object(Object, "btnfinishmission")),
                               "_Complete delivery of " &
-                              To_String(Items_List(Mission.Target).Name));
+                              To_String(Items_List(Mission.ItemIndex).Name));
                         when Destroy =>
                            if Mission.Finished then
                               Set_Label
@@ -584,10 +584,7 @@ package body Maps.UI.Handlers is
                                    (Get_Object(Object, "btnfinishmission")),
                                  "_Complete destroy " &
                                  To_String
-                                   (ProtoShips_List
-                                      (Integer'Value
-                                         (To_String(Mission.Target)))
-                                      .Name));
+                                   (ProtoShips_List(Mission.Target).Name));
                            end if;
                         when Patrol =>
                            if Mission.Finished then
@@ -691,7 +688,8 @@ package body Maps.UI.Handlers is
                                 (Gtk_Button
                                    (Get_Object(Object, "btnfinishmission")),
                                  "_Complete delivery of " &
-                                 To_String(Items_List(Mission.Target).Name));
+                                 To_String
+                                   (Items_List(Mission.ItemIndex).Name));
                            when Destroy =>
                               if Mission.Finished then
                                  Set_Label
@@ -699,10 +697,7 @@ package body Maps.UI.Handlers is
                                       (Get_Object(Object, "btnfinishmission")),
                                     "_Complete destroy " &
                                     To_String
-                                      (ProtoShips_List
-                                         (Integer'Value
-                                            (To_String(Mission.Target)))
-                                         .Name));
+                                      (ProtoShips_List(Mission.Target).Name));
                               end if;
                            when Patrol =>
                               if Mission.Finished then
@@ -745,10 +740,7 @@ package body Maps.UI.Handlers is
                                    (Get_Object(Object, "btncurrentmission")),
                                  "_Search for " &
                                  To_String
-                                   (ProtoShips_List
-                                      (Integer'Value
-                                         (To_String(Mission.Target)))
-                                      .Name));
+                                   (ProtoShips_List(Mission.Target).Name));
                            when Patrol =>
                               Set_Label
                                 (Gtk_Button
@@ -1026,12 +1018,10 @@ package body Maps.UI.Handlers is
                   if not StartsCombat then
                      StartsCombat :=
                        StartCombat
-                         (Integer'Value
-                            (To_String
-                               (AcceptedMissions
-                                  (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
-                                     .MissionIndex)
-                                  .Target)),
+                         (AcceptedMissions
+                            (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
+                               .MissionIndex)
+                            .Target,
                           False);
                   end if;
                when Patrol =>

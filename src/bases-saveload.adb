@@ -246,7 +246,12 @@ package body Bases.SaveLoad is
                      Set_Attribute
                        (MissionNode, "type",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
-                     RawValue := Mission.Target;
+                     if Mission.MType = Deliver then
+                        RawValue := Mission.ItemIndex;
+                     else
+                        RawValue :=
+                          To_Unbounded_String(Integer'Image(Mission.Target));
+                     end if;
                      Set_Attribute
                        (MissionNode, "target",
                         To_String(Trim(RawValue, Ada.Strings.Left)));
@@ -469,25 +474,62 @@ package body Bases.SaveLoad is
                   MType: Missions_Types;
                   TargetX, TargetY: Natural;
                   Time, Reward: Positive;
-                  Target: Unbounded_String;
+                  Target: Integer;
+                  ItemIndex: Unbounded_String;
                begin
                   MType :=
                     Missions_Types'Val
                       (Integer'Value(Get_Attribute(ChildNode, "type")));
-                  Target :=
-                    To_Unbounded_String(Get_Attribute(ChildNode, "target"));
+                  if MType = Deliver then
+                     ItemIndex :=
+                       To_Unbounded_String(Get_Attribute(ChildNode, "target"));
+                  else
+                     Target :=
+                       Integer'Value(Get_Attribute(ChildNode, "target"));
+                  end if;
                   Time := Positive'Value(Get_Attribute(ChildNode, "time"));
                   TargetX :=
                     Natural'Value(Get_Attribute(ChildNode, "targetx"));
                   TargetY :=
                     Natural'Value(Get_Attribute(ChildNode, "targety"));
                   Reward := Positive'Value(Get_Attribute(ChildNode, "reward"));
-                  SkyBases(BaseIndex).Missions.Append
-                    (New_Item =>
-                       (MType => MType, Target => Target, Time => Time,
-                        TargetX => TargetX, TargetY => TargetY,
-                        Reward => Reward, StartBase => BaseIndex,
-                        Finished => False));
+                  case MType is
+                     when Deliver =>
+                        SkyBases(BaseIndex).Missions.Append
+                          (New_Item =>
+                             (MType => Deliver, ItemIndex => ItemIndex,
+                              Time => Time, TargetX => TargetX,
+                              TargetY => TargetY, Reward => Reward,
+                              StartBase => BaseIndex, Finished => False));
+                     when Destroy =>
+                        SkyBases(BaseIndex).Missions.Append
+                          (New_Item =>
+                             (MType => Destroy, Target => Target, Time => Time,
+                              TargetX => TargetX, TargetY => TargetY,
+                              Reward => Reward, StartBase => BaseIndex,
+                              Finished => False));
+                     when Patrol =>
+                        SkyBases(BaseIndex).Missions.Append
+                          (New_Item =>
+                             (MType => Patrol, Target => Target, Time => Time,
+                              TargetX => TargetX, TargetY => TargetY,
+                              Reward => Reward, StartBase => BaseIndex,
+                              Finished => False));
+                     when Explore =>
+                        SkyBases(BaseIndex).Missions.Append
+                          (New_Item =>
+                             (MType => Explore, Target => Target, Time => Time,
+                              TargetX => TargetX, TargetY => TargetY,
+                              Reward => Reward, StartBase => BaseIndex,
+                              Finished => False));
+                     when Passenger =>
+                        SkyBases(BaseIndex).Missions.Append
+                          (New_Item =>
+                             (MType => Passenger, Target => Target,
+                              Time => Time, TargetX => TargetX,
+                              TargetY => TargetY, Reward => Reward,
+                              StartBase => BaseIndex, Finished => False));
+                  end case;
                end;
             elsif NodeName = To_Unbounded_String("item") then
                declare

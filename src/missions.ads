@@ -21,16 +21,21 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package Missions is
 
    type Missions_Types is (Deliver, Destroy, Patrol, Explore, Passenger);
-   type Mission_Data is -- Data structure for missions
+   type Mission_Data(MType: Missions_Types := Deliver)
+   is -- Data structure for missions
    record
-      MType: Missions_Types; -- Type of mission
-      Target: Unbounded_String; -- Target for mission (ship, item or passenger index)
       Time: Positive; -- Amount of minutes to finish mission
       TargetX: Natural; -- Skymap X-axis for mission target
       TargetY: Natural; -- Skymap Y-axis for mission target
       Reward: Positive; -- Amount of moneys for mission
       StartBase: Positive; -- Index of sky base where mission starts
       Finished: Boolean; -- Did mission is finished
+      case MType is
+         when Deliver =>
+            ItemIndex: Unbounded_String; -- Index of proto item to deliver to base
+         when others =>
+            Target: Natural;  -- Target for mission (ship, item or passenger index)
+      end case;
    end record;
    package Mission_Container is new Vectors(Positive, Mission_Data);
    AcceptedMissions: Mission_Container
