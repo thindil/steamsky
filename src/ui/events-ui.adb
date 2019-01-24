@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -73,10 +73,7 @@ package body Events.UI is
             Append
               (EventInfo,
                LF & "Ship type: " &
-               To_String
-                 (ProtoShips_List
-                    (Integer'Value(To_String(Events_List(EventIndex).Data)))
-                    .Name));
+               To_String(ProtoShips_List(Events_List(EventIndex).Data).Name));
          when FullDocks | AttackOnBase | Disease =>
             Append
               (EventInfo,
@@ -88,7 +85,7 @@ package body Events.UI is
             Append
               (EventInfo,
                LF & "Item: " &
-               To_String(Items_List(Events_List(EventIndex).Data).Name));
+               To_String(Items_List(Events_List(EventIndex).ItemIndex).Name));
          when None | BaseRecovery =>
             null;
       end case;

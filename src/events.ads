@@ -25,13 +25,18 @@ package Events is
    type Events_Types is
      (None, EnemyShip, AttackOnBase, Disease, DoublePrice, BaseRecovery,
       FullDocks, EnemyPatrol, Trader, FriendlyShip); -- Types of events
-   type EventData is -- Data structure for random events
+   type EventData(EType: Events_Types := None)
+   is -- Data structure for random events
    record
-      EType: Events_Types; -- Type of event
       SkyX: Integer; -- X coordinate on sky map
       SkyY: Integer; -- Y coordinate on sky map
       Time: Integer; -- Time to end of event
-      Data: Unbounded_String; -- Various data for event (for example index of enemy ship)
+      case EType is
+         when DoublePrice =>
+            ItemIndex: Unbounded_String;
+         when others =>
+            Data: Natural; -- Various data for event (for example index of enemy ship)
+      end case;
    end record;
    package Events_Container is new Vectors(Positive, EventData);
    Events_List: Events_Container.Vector;

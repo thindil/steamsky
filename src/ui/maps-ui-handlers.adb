@@ -783,12 +783,10 @@ package body Maps.UI.Handlers is
                if HaveTrader then
                   if Index
                       (ProtoShips_List
-                         (Integer'Value
-                            (To_String
-                               (Events_List
-                                  (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
-                                     .EventIndex)
-                                  .Data)))
+                         (Events_List
+                            (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
+                               .EventIndex)
+                            .Data)
                          .Name,
                        To_String(TradersName)) >
                     0 then
@@ -957,11 +955,8 @@ package body Maps.UI.Handlers is
          Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
             GenerateTraderCargo
-              (Integer'Value
-                 (To_String
-                    (Events_List
-                       (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-                       .Data)));
+              (Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                 .Data);
          end if;
          ShowTradeUI;
       elsif User_Data = Get_Object(Builder, "btnrecruit") then
