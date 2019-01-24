@@ -330,7 +330,11 @@ package body Game.SaveLoad is
              (Integer'Image(Missions_Types'Pos(Mission.MType)));
          Set_Attribute
            (CategoryNode, "type", To_String(Trim(RawValue, Ada.Strings.Left)));
-         RawValue := Mission.Target;
+         if Mission.MType = Deliver then
+            RawValue := Mission.ItemIndex;
+         else
+            RawValue := To_Unbounded_String(Integer'Image(Mission.Target));
+         end if;
          Set_Attribute
            (CategoryNode, "target",
             To_String(Trim(RawValue, Ada.Strings.Left)));
@@ -676,7 +680,8 @@ package body Game.SaveLoad is
          TargetX, TargetY, StartBase: Natural;
          Time, Reward, MIndex: Positive;
          Finished: Boolean;
-         Target: Unbounded_String;
+         Target: Natural;
+         ItemIndex: Unbounded_String;
       begin
          LogMessage("Loading accepted missions...", Everything, False);
          for I in 0 .. Length(NodesList) - 1 loop
@@ -684,7 +689,12 @@ package body Game.SaveLoad is
             MType :=
               Missions_Types'Val
                 (Integer'Value(Get_Attribute(SavedNode, "type")));
-            Target := To_Unbounded_String(Get_Attribute(SavedNode, "target"));
+            if MType = Deliver then
+               ItemIndex :=
+                 To_Unbounded_String(Get_Attribute(SavedNode, "target"));
+            else
+               Target := Integer'Value(Get_Attribute(SavedNode, "target"));
+            end if;
             Time := Positive'Value(Get_Attribute(SavedNode, "time"));
             TargetX := Natural'Value(Get_Attribute(SavedNode, "targetx"));
             TargetY := Natural'Value(Get_Attribute(SavedNode, "targety"));
@@ -695,11 +705,43 @@ package body Game.SaveLoad is
             else
                Finished := False;
             end if;
-            AcceptedMissions.Append
-              (New_Item =>
-                 (MType => MType, Target => Target, Time => Time,
-                  TargetX => TargetX, TargetY => TargetY, Reward => Reward,
-                  StartBase => StartBase, Finished => Finished));
+            case MType is
+               when Deliver =>
+                  AcceptedMissions.Append
+                    (New_Item =>
+                       (MType => Deliver, ItemIndex => ItemIndex, Time => Time,
+                        TargetX => TargetX, TargetY => TargetY,
+                        Reward => Reward, StartBase => StartBase,
+                        Finished => Finished));
+               when Destroy =>
+                  AcceptedMissions.Append
+                    (New_Item =>
+                       (MType => Destroy, Target => Target, Time => Time,
+                        TargetX => TargetX, TargetY => TargetY,
+                        Reward => Reward, StartBase => StartBase,
+                        Finished => Finished));
+               when Patrol =>
+                  AcceptedMissions.Append
+                    (New_Item =>
+                       (MType => Patrol, Target => Target, Time => Time,
+                        TargetX => TargetX, TargetY => TargetY,
+                        Reward => Reward, StartBase => StartBase,
+                        Finished => Finished));
+               when Explore =>
+                  AcceptedMissions.Append
+                    (New_Item =>
+                       (MType => Explore, Target => Target, Time => Time,
+                        TargetX => TargetX, TargetY => TargetY,
+                        Reward => Reward, StartBase => StartBase,
+                        Finished => Finished));
+               when Passenger =>
+                  AcceptedMissions.Append
+                    (New_Item =>
+                       (MType => Passenger, Target => Target, Time => Time,
+                        TargetX => TargetX, TargetY => TargetY,
+                        Reward => Reward, StartBase => StartBase,
+                        Finished => Finished));
+            end case;
             MIndex := AcceptedMissions.Last_Index;
             if not Finished then
                SkyMap

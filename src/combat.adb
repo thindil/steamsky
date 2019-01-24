@@ -1360,11 +1360,9 @@ package body Combat is
              Destroy
            and then
              ProtoShips_List
-               (Integer'Value
-                  (To_String
-                     (AcceptedMissions
-                        (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex)
-                        .Target)))
+               (AcceptedMissions
+                  (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex)
+                  .Target)
                .Name =
              Enemy.Ship.Name then
             UpdateMission
