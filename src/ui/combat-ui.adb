@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -471,19 +471,15 @@ package body Combat.UI is
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0
            and then EnemyName /=
              ProtoShips_List
-               (Integer'Value
-                  (To_String
-                     (Events_List
-                        (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-                        .Data)))
+               (Events_List
+                  (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                  .Data)
                .Name then
             CombatStarted :=
               StartCombat
-                (Integer'Value
-                   (To_String
-                      (Events_List
-                         (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-                         .Data)),
+                (Events_List
+                   (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                   .Data,
                  False);
             if not CombatStarted then
                return;

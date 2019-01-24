@@ -54,12 +54,9 @@ package body Events is
            .EType is
             when EnemyShip =>
                return StartCombat
-                   (Integer'Value
-                      (To_String
-                         (Events_List
-                            (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
-                               .EventIndex)
-                            .Data)));
+                   (Events_List
+                      (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                      .Data);
             when others =>
                return False;
          end case;
@@ -142,10 +139,9 @@ package body Events is
                     (New_Item =>
                        (Trader, PlayerShip.SkyX, PlayerShip.SkyY,
                         GetRandom(30, 45),
-                        To_Unbounded_String
-                          (Traders
-                             (GetRandom
-                                (Traders.First_Index, Traders.Last_Index)))));
+                        Traders
+                          (GetRandom
+                             (Traders.First_Index, Traders.Last_Index))));
                   SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                     Events_List.Last_Index;
                   AddMessage("You meet friendly trader.", OtherMessage);
@@ -156,11 +152,10 @@ package body Events is
                     (New_Item =>
                        (FriendlyShip, PlayerShip.SkyX, PlayerShip.SkyY,
                         GetRandom(30, 45),
-                        To_Unbounded_String
-                          (FriendlyShips
-                             (GetRandom
-                                (FriendlyShips.First_Index,
-                                 FriendlyShips.Last_Index)))));
+                        FriendlyShips
+                          (GetRandom
+                             (FriendlyShips.First_Index,
+                              FriendlyShips.Last_Index))));
                   SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                     Events_List.Last_Index;
                   AddMessage("You spotted friendly ship.", OtherMessage);
@@ -172,16 +167,12 @@ package body Events is
                     (New_Item =>
                        (EnemyShip, PlayerShip.SkyX, PlayerShip.SkyY,
                         GetRandom(30, 45),
-                        To_Unbounded_String
-                          (Enemies
-                             (GetRandom
-                                (Enemies.First_Index, Enemies.Last_Index)))));
+                        Enemies
+                          (GetRandom
+                             (Enemies.First_Index, Enemies.Last_Index))));
                   SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                     Events_List.Last_Index;
-                  return StartCombat
-                      (Integer'Value
-                         (To_String
-                            (Events_List(Events_List.Last_Index).Data)));
+                  return StartCombat(Events_List(Events_List.Last_Index).Data);
             end case;
          else
             if SkyBases(BaseIndex).Population = 0 then
@@ -210,23 +201,19 @@ package body Events is
                        (New_Item =>
                           (AttackOnBase, PlayerShip.SkyX, PlayerShip.SkyY,
                            GetRandom(60, 90),
-                           To_Unbounded_String
-                             (Enemies
-                                (GetRandom
-                                   (Enemies.First_Index,
-                                    Enemies.Last_Index)))));
+                           Enemies
+                             (GetRandom
+                                (Enemies.First_Index, Enemies.Last_Index))));
                      AddMessage
                        ("You can't dock to base now, because base is under attack. You can help defend it.",
                         OtherMessage);
                      return StartCombat
-                         (Integer'Value
-                            (To_String
-                               (Events_List(Events_List.Last_Index).Data)));
+                         (Events_List(Events_List.Last_Index).Data);
                   when 21 => -- Disease in base
                      Events_List.Append
                        (New_Item =>
                           (Disease, PlayerShip.SkyX, PlayerShip.SkyY,
-                           GetRandom(10080, 12000), To_Unbounded_String(1)));
+                           GetRandom(10080, 12000), 1));
                      AddMessage
                        ("You can't dock to base now, it is closed due to disease.",
                         OtherMessage);
@@ -265,22 +252,19 @@ package body Events is
                           (New_Item =>
                              (EnemyPatrol, PlayerShip.SkyX, PlayerShip.SkyY,
                               GetRandom(30, 45),
-                              To_Unbounded_String
-                                (Enemies
-                                   (GetRandom
-                                      (Enemies.First_Index,
-                                       Enemies.Last_Index)))));
+                              Enemies
+                                (GetRandom
+                                   (Enemies.First_Index,
+                                    Enemies.Last_Index))));
                         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                           Events_List.Last_Index;
                         return StartCombat
-                            (Integer'Value
-                               (To_String
-                                  (Events_List(Events_List.Last_Index).Data)));
+                            (Events_List(Events_List.Last_Index).Data);
                      end if;
                      Events_List.Append
                        (New_Item =>
                           (FullDocks, PlayerShip.SkyX, PlayerShip.SkyY,
-                           GetRandom(15, 30), To_Unbounded_String(1)));
+                           GetRandom(15, 30), 1));
                      AddMessage
                        ("You can't dock to base now, because its docks are full.",
                         OtherMessage, RED);
