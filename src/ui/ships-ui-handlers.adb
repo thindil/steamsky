@@ -278,31 +278,28 @@ package body Ships.UI.Handlers is
             Append(ModuleInfo, LF);
             if Module.Data(1) /= 0 then
                if Module.Data(1) > 0 then
-                  Append
-                    (ModuleInfo,
-                     "Manufacturing:" & Positive'Image(Module.Data(3)) & "x " &
-                     To_String
-                       (Items_List
-                          (Recipes_List
-                             (To_Unbounded_String
-                                (Integer'Image(Module.Data(1))))
-                             .ResultIndex)
-                          .Name));
+                  for I in Recipes_List.Iterate loop
+                     if Integer'Value(To_String(Recipes_Container.Key(I))) =
+                       abs (Module.Data(1)) then
+                        Append
+                          (ModuleInfo,
+                           "Manufacturing:" & Positive'Image(Module.Data(3)) &
+                           "x " &
+                           To_String
+                             (Items_List(Recipes_List(I).ResultIndex).Name));
+                        exit;
+                     end if;
+                  end loop;
                else
-                  declare
-                     ItemIndex: Natural := 0;
-                  begin
-                     for I in Items_List.Iterate loop
-                        ItemIndex := ItemIndex + 1;
-                        if ItemIndex = abs (Module.Data(1)) then
-                           Append
-                             (ModuleInfo,
-                              "Deconstructing " &
-                              To_String(Items_List(I).Name));
-                           exit;
-                        end if;
-                     end loop;
-                  end;
+                  for I in Items_List.Iterate loop
+                     if Integer'Value(To_String(Objects_Container.Key(I))) =
+                       abs (Module.Data(1)) then
+                        Append
+                          (ModuleInfo,
+                           "Deconstructing " & To_String(Items_List(I).Name));
+                        exit;
+                     end if;
+                  end loop;
                end if;
                Append
                  (ModuleInfo,
