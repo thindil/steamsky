@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,7 +15,8 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Containers.Hashed_Maps; use Ada.Containers;
+with Ada.Strings.Unbounded.Hash;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with DOM.Readers; use DOM.Readers;
 with ShipModules; use ShipModules;
@@ -38,11 +39,11 @@ package Crafts is
       Difficulty: Positive; -- How difficult is recipe to discover
       BaseType: Natural; -- Sky base type in which recipe can be bought
       Tool: Unbounded_String; -- Type of tool used to craft item
-      Index: Unbounded_String; -- Index of recipe
    end record;
-   package Recipes_Container is new Vectors(Positive, Craft_Data);
-   Recipes_List: Recipes_Container.Vector; -- List of recipes available in game
-   Known_Recipes: Positive_Container
+   package Recipes_Container is new Hashed_Maps(Unbounded_String, Craft_Data,
+      Ada.Strings.Unbounded.Hash, "=");
+   Recipes_List: Recipes_Container.Map; -- List of recipes available in game
+   Known_Recipes: UnboundedString_Container
      .Vector; -- List of all know by player recipes
    Crafting_No_Materials: exception; -- Raised when no materials needed for selected recipe
    Crafting_No_Tools: exception; -- Raised when no tool needed for selected recipe
@@ -50,19 +51,12 @@ package Crafts is
 
    procedure LoadRecipes(Reader: Tree_Reader); -- Load recipes from files
    procedure Manufacturing(Minutes: Positive); -- Craft selected items
-   function CheckRecipe(RecipeIndex: Integer) return Positive with
-      Pre => RecipeIndex <=
-      Recipes_List
-        .Last_Index; -- Check if player have all requirements for selected recipe, return max amount of items which can be craft
-   function FindRecipe(Index: Unbounded_String) return Natural with
-      Pre => Index /=
-      Null_Unbounded_String; -- Return vector index of recipe or zero if recipe not found
-   procedure SetRecipe(Workshop, Amount: Positive; RecipeIndex: Integer;
-      ItemIndex: Unbounded_String := Null_Unbounded_String) with
+   function CheckRecipe(RecipeIndex: Unbounded_String) return Positive with
+      Pre => RecipeIndex /= Null_Unbounded_String; -- Check if player have all requirements for selected recipe, return max amount of items which can be craft
+   procedure SetRecipe(Workshop, Amount: Positive;
+      RecipeIndex: Unbounded_String) with
       Pre =>
       (Workshop <= PlayerShip.Modules.Last_Index and
-       RecipeIndex <=
-         Known_Recipes
-           .Last_Index); -- Set crafting recipe for selected workshop
+       RecipeIndex /= Null_Unbounded_String); -- Set crafting recipe for selected workshop
 
 end Crafts;

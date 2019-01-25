@@ -52,9 +52,8 @@ package body Bases.UI is
       BaseType: constant Positive :=
         Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       MoneyIndex2: Natural;
-      ObjectIndex: Integer;
       MinChildren: Gint;
-      FormattedTime: Unbounded_String;
+      FormattedTime, ObjectIndex: Unbounded_String;
       procedure ShowMap is
       begin
          ShowSkyMap;
@@ -123,7 +122,7 @@ package body Bases.UI is
       if Iter = Null_Iter then
          return;
       end if;
-      ObjectIndex := Integer(Get_Int(Model, Iter, 1));
+      ObjectIndex := To_Unbounded_String(Get_String(Model, Iter, 1));
       case CurrentState is
          when RECIPES =>
             if Items_List(Recipes_List(ObjectIndex).ResultIndex).Prices
@@ -142,7 +141,7 @@ package body Bases.UI is
                "Base price:" & Positive'Image(Cost) & " " &
                To_String(MoneyName));
          when REPAIRS =>
-            RepairCost(Cost, Time, ObjectIndex);
+            RepairCost(Cost, Time, Integer'Value(To_String(ObjectIndex)));
             CountPrice(Cost, FindMember(Talk));
             FormatTime;
             Set_Label
@@ -151,7 +150,7 @@ package body Bases.UI is
                To_String(MoneyName) & LF & "Repair time:" &
                To_String(FormattedTime));
          when HEAL =>
-            HealCost(Cost, Time, ObjectIndex);
+            HealCost(Cost, Time, Integer'Value(To_String(ObjectIndex)));
             FormatTime;
             Set_Label
               (Gtk_Label(Get_Object(Object, "lblbaseinfo2")),
@@ -195,13 +194,13 @@ package body Bases.UI is
       end if;
       case CurrentState is
          when RECIPES =>
-            BuyRecipe(Positive(Get_Int(Model, Iter, 1)));
+            BuyRecipe(To_Unbounded_String(Get_String(Model, Iter, 1)));
             ShowBuyRecipesUI;
          when REPAIRS =>
-            Bases.Ship.RepairShip(Integer(Get_Int(Model, Iter, 1)));
+            Bases.Ship.RepairShip(Integer'Value(Get_String(Model, Iter, 1)));
             ShowRepairUI;
          when HEAL =>
-            HealWounded(Natural(Get_Int(Model, Iter, 1)));
+            HealWounded(Natural'Value(Get_String(Model, Iter, 1)));
             ShowHealUI;
          when CLEARING =>
             null;
@@ -229,7 +228,7 @@ package body Bases.UI is
       CurrentState := RECIPES;
       for I in Recipes_List.Iterate loop
          if Recipes_List(I).BaseType = BaseType and
-           Known_Recipes.Find_Index(Item => Recipes_Container.To_Index(I)) =
+           Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) =
              Positive_Container.No_Index then
             Append(RecipesList, RecipesIter);
             Set
@@ -237,7 +236,7 @@ package body Bases.UI is
                To_String(Items_List(Recipes_List(I).ResultIndex).Name));
             Set
               (RecipesList, RecipesIter, 1,
-               Gint(Recipes_Container.To_Index(I)));
+               To_String(Recipes_Container.Key(I)));
          end if;
       end loop;
       Set_Label
@@ -269,7 +268,7 @@ package body Bases.UI is
                To_String(PlayerShip.Modules(I).Name));
             Set
               (RepairsList, RepairsIter, 1,
-               Gint(Modules_Container.To_Index(I)));
+               Integer'Image(Modules_Container.To_Index(I)));
          end if;
       end loop;
       Append(RepairsList, RepairsIter);
@@ -307,7 +306,9 @@ package body Bases.UI is
          if PlayerShip.Crew(I).Health < 100 then
             Append(HealsList, HealsIter);
             Set(HealsList, HealsIter, 0, To_String(PlayerShip.Crew(I).Name));
-            Set(HealsList, HealsIter, 1, Gint(Crew_Container.To_Index(I)));
+            Set
+              (HealsList, HealsIter, 1,
+               Integer'Image(Crew_Container.To_Index(I)));
          end if;
       end loop;
       Append(HealsList, HealsIter);
