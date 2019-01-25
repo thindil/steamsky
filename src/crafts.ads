@@ -52,11 +52,13 @@ package Crafts is
    procedure LoadRecipes(Reader: Tree_Reader); -- Load recipes from files
    procedure Manufacturing(Minutes: Positive); -- Craft selected items
    function CheckRecipe(RecipeIndex: Unbounded_String) return Positive with
-      Pre => RecipeIndex /= Null_Unbounded_String; -- Check if player have all requirements for selected recipe, return max amount of items which can be craft
+      Pre => RecipeIndex /=
+      Null_Unbounded_String; -- Check if player have all requirements for selected recipe, return max amount of items which can be craft
    procedure SetRecipe(Workshop, Amount: Positive;
       RecipeIndex: Unbounded_String) with
       Pre =>
       (Workshop <= PlayerShip.Modules.Last_Index and
-       RecipeIndex /= Null_Unbounded_String); -- Set crafting recipe for selected workshop
+       RecipeIndex /=
+         Null_Unbounded_String); -- Set crafting recipe for selected workshop
 
 end Crafts;
