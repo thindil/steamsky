@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file.
   ship mk III, poleis trader mk II, independent trader mk II, pirates trader
   mk II, poleis patrol ship mk II, independent patrol ship mk II, poleis
   trader mk III, independent trader mk III, pirates trader mk III, poleis
-  patrol ship mk III and indepdenent patrol ship mk III
+  patrol ship mk III, indepdenent patrol ship mk III and poleis trader mk IV
 - Missing message when enemy ship intercept player
 - Lack of food or drinks reduce morale of crew members
 - Separated icon on map for bases for each faction
