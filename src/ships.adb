@@ -346,14 +346,15 @@ package body Ships is
       NodesList, ChildNodes: Node_List;
       ShipsData: Document;
       TempRecord: ProtoShipData;
-      TempModules, TempRecipes: Positive_Container.Vector;
+      TempModules: Positive_Container.Vector;
       TempCargo: MobInventory_Container.Map;
       TempCrew: Skills_Container.Vector;
       ModuleAmount, DeleteIndex: Positive;
       Index, ShipIndex: Natural;
       Action, SubAction: DataAction;
       ShipNode, ChildNode: Node;
-      ItemIndex: Unbounded_String;
+      ItemIndex, RecipeIndex: Unbounded_String;
+      TempRecipes: UnboundedString_Container.Vector;
       procedure CountAmmoValue(ItemTypeIndex, Multiple: Positive) is
       begin
          for I in TempRecord.Cargo.Iterate loop
@@ -553,11 +554,11 @@ package body Ships is
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(ShipNode, "recipe");
             for J in 0 .. Length(ChildNodes) - 1 loop
-               Index :=
-                 FindRecipe
-                   (To_Unbounded_String
-                      (Get_Attribute(Item(ChildNodes, J), "index")));
-               if Index = 0 then
+               RecipeIndex :=
+                 To_Unbounded_String
+                   (Get_Attribute(Item(ChildNodes, J), "index"));
+               if not Recipes_Container.Contains
+                   (Recipes_List, RecipeIndex) then
                   raise Ships_Invalid_Data
                     with "Invalid recipe index: |" &
                     Get_Attribute(Item(ChildNodes, J), "index") & "| in " &
@@ -570,11 +571,11 @@ package body Ships is
                   SubAction := ADD;
                end if;
                if SubAction = ADD then
-                  TempRecord.KnownRecipes.Append(New_Item => Index);
+                  TempRecord.KnownRecipes.Append(New_Item => RecipeIndex);
                else
                   for K in TempRecord.KnownRecipes.Iterate loop
-                     if TempRecord.KnownRecipes(K) = Index then
-                        DeleteIndex := Positive_Container.To_Index(K);
+                     if TempRecord.KnownRecipes(K) = RecipeIndex then
+                        DeleteIndex := UnboundedString_Container.To_Index(K);
                         exit;
                      end if;
                   end loop;
