@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -20,7 +20,8 @@ package Bases.Trade is
    procedure HireRecruit(RecruitIndex, Cost: Positive;
       DailyPayment, TradePayment: Natural;
       ContractLenght: Integer); -- Hire selected recruit from bases
-   procedure BuyRecipe(RecipeIndex: Positive); -- Buy new crafting recipe
+   procedure BuyRecipe
+     (RecipeIndex: Unbounded_String); -- Buy new crafting recipe
    procedure HealWounded
      (MemberIndex: Natural); -- Heals wounded crew members in bases
    procedure HealCost(Cost, Time: in out Natural;

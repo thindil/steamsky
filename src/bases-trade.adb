@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -101,7 +101,7 @@ package body Bases.Trade is
       UpdateGame(5);
    end HireRecruit;
 
-   procedure BuyRecipe(RecipeIndex: Positive) is
+   procedure BuyRecipe(RecipeIndex: Unbounded_String) is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Cost, MoneyIndex2: Natural;

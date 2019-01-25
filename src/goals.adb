@@ -217,10 +217,11 @@ package body Goals is
                      GetFactionName(Goal.TargetIndex, Name) & " ");
                end if;
             when CRAFT =>
-               if FindRecipe(Goal.TargetIndex) > 0 then
+               if Recipes_Container.Contains
+                   (Recipes_List, Goal.TargetIndex) then
                   declare
                      ItemIndex: constant Unbounded_String :=
-                       Recipes_List(FindRecipe(Goal.TargetIndex)).ResultIndex;
+                       Recipes_List(Goal.TargetIndex).ResultIndex;
                   begin
                      Append
                        (Text, ": " & To_String(Items_List(ItemIndex).Name));

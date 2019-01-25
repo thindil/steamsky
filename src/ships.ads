@@ -75,7 +75,7 @@ package Ships is
       Description: Unbounded_String; -- Description of ship
       Owner: Unbounded_String; -- Index of faction to which ship belong
       Index: Unbounded_String; -- Index of ship
-      KnownRecipes: Positive_Container.Vector; -- List of known recipes
+      KnownRecipes: UnboundedString_Container.Vector; -- List of known recipes
    end record;
    package ProtoShips_Container is new Vectors(Positive, ProtoShipData);
    ProtoShips_List: ProtoShips_Container.Vector;

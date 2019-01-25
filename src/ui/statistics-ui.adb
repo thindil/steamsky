@@ -137,8 +137,7 @@ package body Statistics.UI is
             for I in GameStats.CraftingOrders.Iterate loop
                Append(CraftsList, CraftsIter);
                ItemIndex :=
-                 Recipes_List(FindRecipe(GameStats.CraftingOrders(I).Index))
-                   .ResultIndex;
+                 Recipes_List(GameStats.CraftingOrders(I).Index).ResultIndex;
                Set
                  (CraftsList, CraftsIter, 0,
                   To_String(Items_List(ItemIndex).Name));

@@ -39,8 +39,7 @@ with Trades; use Trades;
 package body Crafts.UI is
 
    Builder: Gtkada_Builder;
-   RecipeIndex: Integer;
-   ItemIndex: Unbounded_String;
+   RecipeIndex: Unbounded_String;
 
    procedure ShowSetRecipe(Object: access Gtkada_Builder_Record'Class) is
       MaxAmount: Positive;
@@ -56,10 +55,11 @@ package body Crafts.UI is
       Set_Value(AmountAdj, 1.0);
       Set_Upper(AmountAdj, Gdouble(MaxAmount));
       Set_Label(LabelTimes, "(max" & Positive'Image(MaxAmount) & "):");
-      if RecipeIndex > 0 then
-         MType := Recipes_List(RecipeIndex).Workplace;
-      else
+      if Length(RecipeIndex) > 12
+        and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
          MType := ALCHEMY_LAB;
+      else
+         MType := Recipes_List(RecipeIndex).Workplace;
       end if;
       Remove_All(CmbModules);
       for Module of PlayerShip.Modules loop
@@ -67,7 +67,8 @@ package body Crafts.UI is
             Append_Text(CmbModules, To_String(Module.Name));
          end if;
       end loop;
-      if RecipeIndex < 1 then
+      if Length(RecipeIndex) > 12
+        and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
          Hide(Gtk_Widget(Get_Object(Object, "spincraftamount")));
          Hide(Gtk_Widget(LabelTimes));
       else
@@ -108,7 +109,6 @@ package body Crafts.UI is
       declare
          RecipesIter: Gtk_Tree_Iter;
          RecipesModel: Gtk_Tree_Model;
-         ProtoIndex: Natural := 0;
       begin
          Get_Selected
            (Gtk.Tree_View.Get_Selection
@@ -117,27 +117,17 @@ package body Crafts.UI is
          if RecipesIter = Null_Iter then
             return;
          end if;
-         ItemIndex :=
+         RecipeIndex :=
            To_Unbounded_String(Get_String(RecipesModel, RecipesIter, 1));
-         if Element(ItemIndex, 1) /= 'D' then
-            RecipeIndex :=
-              Integer'Value(Get_String(RecipesModel, RecipesIter, 1));
-         else
-            Delete(ItemIndex, 1, 1);
-            for I in Items_List.Iterate loop
-               ProtoIndex := ProtoIndex + 1;
-               if Objects_Container.Key(I) = ItemIndex then
-                  RecipeIndex := ProtoIndex * (-1);
-                  exit;
-               end if;
-            end loop;
-         end if;
       end;
-      if RecipeIndex > 0 then
-         Recipe := Recipes_List(RecipeIndex);
-      else
-         Recipe.MaterialTypes.Append(New_Item => Items_List(ItemIndex).IType);
-         Recipe.ResultIndex := ItemIndex;
+      if Length(RecipeIndex) > 12
+        and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
+         Recipe.MaterialTypes.Append
+           (New_Item =>
+              Items_List(Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex)))
+                .IType);
+         Recipe.ResultIndex :=
+           Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex));
          Recipe.MaterialAmounts.Append(New_Item => 1);
          Recipe.ResultAmount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
@@ -151,8 +141,8 @@ package body Crafts.UI is
          Recipe.Difficulty := 1;
          Recipe.BaseType := 0;
          Recipe.Tool := AlchemyTools;
-      end if;
-      if RecipeIndex > 0 then
+      else
+         Recipe := Recipes_List(RecipeIndex);
          Append
            (RecipeInfo, "Amount:" & Integer'Image(Recipe.ResultAmount) & LF);
       end if;
@@ -165,12 +155,13 @@ package body Crafts.UI is
          HaveMaterials := False;
          for J in Items_List.Iterate loop
             IsMaterial := False;
-            if RecipeIndex > 0 then
-               if Items_List(J).IType = Recipe.MaterialTypes(I) then
+            if Length(RecipeIndex) > 12
+              and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
+               if Items_List(J).Name = Items_List(Recipe.ResultIndex).Name then
                   IsMaterial := True;
                end if;
             else
-               if Items_List(J).Name = Items_List(Recipe.ResultIndex).Name then
+               if Items_List(J).IType = Recipe.MaterialTypes(I) then
                   IsMaterial := True;
                end if;
             end if;
@@ -302,13 +293,7 @@ package body Crafts.UI is
    begin
       for I in PlayerShip.Modules.Iterate loop
          if PlayerShip.Modules(I).Name = WorkshopName then
-            if RecipeIndex > 0 then
-               SetRecipe(Modules_Container.To_Index(I), Amount, RecipeIndex);
-            else
-               SetRecipe
-                 (Modules_Container.To_Index(I), Amount, RecipeIndex,
-                  ItemIndex);
-            end if;
+            SetRecipe(Modules_Container.To_Index(I), Amount, RecipeIndex);
             exit;
          end if;
       end loop;
@@ -335,10 +320,10 @@ package body Crafts.UI is
       CargoIndex: Natural;
    begin
       for Item of PlayerShip.Cargo loop
-         for J in Recipes_List.First_Index .. Recipes_List.Last_Index loop
+         for J in Recipes_List.Iterate loop
             if Recipes_List(J).ResultIndex = Item.ProtoIndex
               and then
-              (Known_Recipes.Find_Index(Item => J) =
+              (Known_Recipes.Find_Index(Item => Recipes_Container.Key(J)) =
                Positive_Container.No_Index and
                Deconstructs.Find_Index(Item => Item.ProtoIndex) =
                  Positive_Container.No_Index) then
@@ -406,16 +391,14 @@ package body Crafts.UI is
                     .Name) &
                "</span>");
          end if;
-         Set
-           (RecipesList, RecipesIter, 1,
-            Integer'Image(Known_Recipes.Element(I)));
+         Set(RecipesList, RecipesIter, 1, To_String(Known_Recipes.Element(I)));
       end loop;
       for I in Deconstructs.First_Index .. Deconstructs.Last_Index loop
          Append(RecipesList, RecipesIter);
          Set
            (RecipesList, RecipesIter, 0,
             "Deconstruct " & To_String(Items_List(Deconstructs(I)).Name));
-         Set(RecipesList, RecipesIter, 1, "D" & To_String(Deconstructs(I)));
+         Set(RecipesList, RecipesIter, 1, "Deconstruct " & To_String(Deconstructs(I)));
       end loop;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "crafts");

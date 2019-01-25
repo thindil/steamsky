@@ -131,8 +131,7 @@ package body Game.SaveLoad is
          for Recipe of Known_Recipes loop
             RecipeNode := Create_Element(SaveData, "recipe");
             RecipeNode := Append_Child(MainNode, RecipeNode);
-            Set_Attribute
-              (RecipeNode, "index", To_String(Recipes_List(Recipe).Index));
+            Set_Attribute(RecipeNode, "index", To_String(Recipe));
          end loop;
       end;
       LogMessage("done.", Everything, True, False);
@@ -435,9 +434,7 @@ package body Game.SaveLoad is
       for I in 0 .. Length(NodesList) - 1 loop
          Known_Recipes.Append
            (New_Item =>
-              FindRecipe
-                (To_Unbounded_String
-                   (Get_Attribute(Item(NodesList, I), "index"))));
+              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index")));
       end loop;
       LogMessage("done.", Everything, True, False);
       -- Load messages

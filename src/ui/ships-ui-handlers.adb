@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -282,7 +282,11 @@ package body Ships.UI.Handlers is
                     (ModuleInfo,
                      "Manufacturing:" & Positive'Image(Module.Data(3)) & "x " &
                      To_String
-                       (Items_List(Recipes_List(Module.Data(1)).ResultIndex)
+                       (Items_List
+                          (Recipes_List
+                             (To_Unbounded_String
+                                (Integer'Image(Module.Data(1))))
+                             .ResultIndex)
                           .Name));
                else
                   declare
