@@ -398,7 +398,9 @@ package body Crafts.UI is
          Set
            (RecipesList, RecipesIter, 0,
             "Deconstruct " & To_String(Items_List(Deconstructs(I)).Name));
-         Set(RecipesList, RecipesIter, 1, "Deconstruct " & To_String(Deconstructs(I)));
+         Set
+           (RecipesList, RecipesIter, 1,
+            "Deconstruct " & To_String(Deconstructs(I)));
       end loop;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "crafts");
