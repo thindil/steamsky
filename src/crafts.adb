@@ -208,8 +208,15 @@ package body Crafts is
          Recipe.Difficulty := 1;
          Recipe.Tool := AlchemyTools;
          return Recipe;
+      else
+         for I in Recipes_List.Iterate loop
+            if Integer'Value(To_String(Recipes_Container.Key(I))) =
+              Integer'Value(To_String(RecipeIndex)) then
+               return Recipes_List(I);
+            end if;
+         end loop;
       end if;
-      return Recipes_List(RecipeIndex);
+      raise Constraint_Error;
    end SetRecipeData;
 
    function CheckRecipe(RecipeIndex: Unbounded_String) return Positive is
@@ -551,13 +558,16 @@ package body Crafts is
                            ResetOrder(Module);
                            exit Craft_Loop;
                         end if;
-                        UpdateCargo
-                          (PlayerShip,
-                           Recipes_List.Element
-                             (To_Unbounded_String
-                                (Integer'Image(Module.Data(1))))
-                             .ResultIndex,
-                           ResultAmount);
+                        for I in Recipes_List.Iterate loop
+                           if Integer'Value
+                               (To_String(Recipes_Container.Key(I))) =
+                             Module.Data(1) then
+                              UpdateCargo
+                                (PlayerShip, Recipes_List(I).ResultIndex,
+                                 ResultAmount);
+                              exit;
+                           end if;
+                        end loop;
                         for I in Recipes_List.Iterate loop
                            if Recipes_List(I).ResultIndex =
                              Recipe.ResultIndex then
