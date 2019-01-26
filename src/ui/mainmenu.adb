@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -42,9 +42,14 @@ with Gtk.Stack; use Gtk.Stack;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
+with Gtk.Adjustment; use Gtk.Adjustment;
+with Gtk.Scrolled_Window; use Gtk.Scrolled_Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
+with Gdk.Event;
+with Gdk.Types; use Gdk.Types;
+with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
 with Game; use Game;
 with HallOfFame; use HallOfFame;
 with Ships; use Ships;
@@ -432,6 +437,23 @@ package body MainMenu is
            (Factions_List(FactionIndex).Careers(CareerIndex).Description));
    end ShowCareerDescription;
 
+   function NewGameKeyPressed(Self: access Gtk_Widget_Record'Class;
+      Event: Gdk.Event.Gdk_Event_Key) return Boolean is
+      pragma Unreferenced(Self);
+      ScrollBar: constant Gtk_Adjustment :=
+        Get_Vadjustment
+          (Gtk_Scrolled_Window(Get_Object(Builder, "scrollinfo")));
+   begin
+      if Event.Keyval = GDK_Page_Up then
+         Set_Value
+           (ScrollBar, Get_Value(ScrollBar) - Get_Page_Increment(ScrollBar));
+      elsif Event.Keyval = GDK_Page_Down then
+         Set_Value
+           (ScrollBar, Get_Value(ScrollBar) + Get_Page_Increment(ScrollBar));
+      end if;
+      return False;
+   end NewGameKeyPressed;
+
    procedure CreateMainMenu is
       Error: aliased GError;
       DataError: Unbounded_String;
@@ -490,6 +512,9 @@ package body MainMenu is
          end loop;
          Set_Active(FactionComboBox, 0);
       end;
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "newgamebox")),
+         NewGameKeyPressed'Access);
       ShowMainMenu;
       if DataError /= Null_Unbounded_String then
          Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
