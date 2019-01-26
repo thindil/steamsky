@@ -21,7 +21,8 @@ All notable changes to this project will be documented in this file.
 - Missing message when enemy ship intercept player
 - Lack of food or drinks reduce morale of crew members
 - Separated icon on map for bases for each faction
-- Separated icon on map for each event
+- Separated icon on map for each event type
+- Separated icon on map for each mission type
 - Configuration files for custom themes
 
 ### Changed
