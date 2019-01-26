@@ -49,6 +49,8 @@ All notable changes to this project will be documented in this file.
 - Name of faction in destroy ship goals
 - Deleting mob by modification files
 - Typo in character creation screen - "Carrer" instead of "Career" (issue #40)
+- RFE: allow to scroll box info (during character creation) using keyboard
+  (issue #41)
 
 ## [3.2] - 2018-12-30
 
