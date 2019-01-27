@@ -467,7 +467,8 @@ package body Ships.Crew is
                         end if;
                      when ALCHEMY_LAB .. GREENHOUSE =>
                         if Order = Craft and Ship.Modules(I).Owner = 0 and
-                          Ship.Modules(I).Data(1) /= 0 then
+                          Ship.Modules(I).CraftingIndex /=
+                            Null_Unbounded_String then
                            ModuleIndex := Modules_Container.To_Index(I);
                            exit;
                         end if;
@@ -538,8 +539,8 @@ package body Ships.Crew is
                      NeedGunners := True;
                   end if;
                when ALCHEMY_LAB .. GREENHOUSE =>
-                  if Module.Data(1) /= 0 and Module.Owner = 0 and
-                    not NeedCrafters then
+                  if Module.CraftingIndex /= Null_Unbounded_String and
+                    Module.Owner = 0 and not NeedCrafters then
                      NeedCrafters := True;
                   end if;
                when CABIN =>
