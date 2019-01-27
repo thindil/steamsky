@@ -154,22 +154,39 @@ package body Bases.Ship is
          GainExp(1, TalkingSkill, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
          if Modules_List(ModuleIndex).MType /= HULL then
-            PlayerShip.Modules.Append
-              (New_Item =>
-                 (Name => Modules_List(ModuleIndex).Name,
-                  ProtoIndex => ModuleIndex,
-                  Weight => Modules_List(ModuleIndex).Weight,
-                  Durability => Modules_List(ModuleIndex).Durability,
-                  MaxDurability => Modules_List(ModuleIndex).Durability,
-                  Owner => 0, UpgradeProgress => 0, UpgradeAction => NONE,
-                  Data =>
-                    (Modules_List(ModuleIndex).Value,
-                     Modules_List(ModuleIndex).MaxValue, 0)));
+            case Modules_List(ModuleIndex).MType is
+               when ALCHEMY_LAB .. GREENHOUSE =>
+                  PlayerShip.Modules.Append
+                    (New_Item =>
+                       (MType => WORKSHOP,
+                        Name => Modules_List(ModuleIndex).Name,
+                        ProtoIndex => ModuleIndex,
+                        Weight => Modules_List(ModuleIndex).Weight,
+                        Durability => Modules_List(ModuleIndex).Durability,
+                        MaxDurability => Modules_List(ModuleIndex).Durability,
+                        Owner => 0, UpgradeProgress => 0,
+                        UpgradeAction => NONE,
+                        CraftingIndex => Null_Unbounded_String,
+                        CraftingTime => 0, CraftingAmount => 0));
+               when others =>
+                  PlayerShip.Modules.Append
+                    (New_Item =>
+                       (MType => ANY, Name => Modules_List(ModuleIndex).Name,
+                        ProtoIndex => ModuleIndex,
+                        Weight => Modules_List(ModuleIndex).Weight,
+                        Durability => Modules_List(ModuleIndex).Durability,
+                        MaxDurability => Modules_List(ModuleIndex).Durability,
+                        Owner => 0, UpgradeProgress => 0,
+                        UpgradeAction => NONE,
+                        Data =>
+                          (Modules_List(ModuleIndex).Value,
+                           Modules_List(ModuleIndex).MaxValue, 0)));
+            end case;
          else
             PlayerShip.Modules.Insert
               (Before => HullIndex,
                New_Item =>
-                 (Name => Modules_List(ModuleIndex).Name,
+                 (MType => ANY, Name => Modules_List(ModuleIndex).Name,
                   ProtoIndex => ModuleIndex,
                   Weight => Modules_List(ModuleIndex).Weight,
                   Durability => Modules_List(ModuleIndex).Durability,

@@ -208,15 +208,8 @@ package body Crafts is
          Recipe.Difficulty := 1;
          Recipe.Tool := AlchemyTools;
          return Recipe;
-      else
-         for I in Recipes_List.Iterate loop
-            if Integer'Value(To_String(Recipes_Container.Key(I))) =
-              Integer'Value(To_String(RecipeIndex)) then
-               return Recipes_List(I);
-            end if;
-         end loop;
       end if;
-      raise Constraint_Error;
+      return Recipes_List(RecipeIndex);
    end SetRecipeData;
 
    function CheckRecipe(RecipeIndex: Unbounded_String) return Positive is
@@ -336,13 +329,14 @@ package body Crafts is
       WorkTime, CurrentMinutes, RecipeTime: Integer;
       type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
-      subtype Workplaces is ModuleType range ALCHEMY_LAB .. GREENHOUSE;
       RecipeName: Unbounded_String;
       HaveMaterial: Boolean;
       CraftingMaterial: Natural;
       procedure ResetOrder(Module: in out ModuleData) is
       begin
-         Module.Data := (others => 0);
+         Module.CraftingIndex := Null_Unbounded_String;
+         Module.CraftingTime := 0;
+         Module.CraftingAmount := 0;
          Module.Owner := 0;
          if ToolIndex > 0 then
             TakeOffItem(CrafterIndex, ToolIndex);
@@ -359,28 +353,22 @@ package body Crafts is
       end ResetOrder;
    begin
       for Module of PlayerShip.Modules loop
-         if Module.Owner > 0 and
-           (Modules_List(Module.ProtoIndex).MType in Workplaces) and
-           Module.Data(1) /= 0 then
+         if (Module.Owner > 0 and Module.MType = WORKSHOP)
+           and then Module.CraftingIndex /= Null_Unbounded_String then
             CrafterIndex := Module.Owner;
             if PlayerShip.Crew(CrafterIndex).Order = Craft then
                CurrentMinutes := Minutes;
-               RecipeTime := Module.Data(2);
-               if Module.Data(1) > 0 then
-                  Recipe :=
-                    SetRecipeData
-                      (To_Unbounded_String(Integer'Image(Module.Data(1))));
-                  RecipeName :=
-                    To_Unbounded_String("manufacturing ") &
-                    Items_List(Recipe.ResultIndex).Name;
-               else
-                  Recipe :=
-                    SetRecipeData
-                      (To_Unbounded_String("Deconstruct") &
-                       To_Unbounded_String
-                         (Integer'Image(abs (Module.Data(1)))));
+               RecipeTime := Module.CraftingTime;
+               Recipe := SetRecipeData(Module.CraftingIndex);
+               if Length(Module.CraftingIndex) > 12
+                 and then Slice(Module.CraftingIndex, 1, 11) =
+                   "Deconstruct" then
                   RecipeName :=
                     To_Unbounded_String("deconstructing ") &
+                    Items_List(Recipe.ResultIndex).Name;
+               else
+                  RecipeName :=
+                    To_Unbounded_String("manufacturing ") &
                     Items_List(Recipe.ResultIndex).Name;
                end if;
                if Module.Durability = 0 then
@@ -401,7 +389,18 @@ package body Crafts is
                      WorkTime := WorkTime - RecipeTime;
                      RecipeTime := Recipe.Time;
                      MaterialIndexes.Clear;
-                     if Module.Data(1) > 0 then
+                     if Length(Module.CraftingIndex) > 12
+                       and then Slice(Module.CraftingIndex, 1, 11) =
+                         "Deconstruct" then
+                        for J in Items_List.Iterate loop
+                           if Items_List(J).Name =
+                             Items_List(Recipe.ResultIndex).Name then
+                              MaterialIndexes.Append
+                                (New_Item => Objects_Container.Key(J));
+                              exit;
+                           end if;
+                        end loop;
+                     else
                         for K in Recipe.MaterialTypes.Iterate loop
                            for J in Items_List.Iterate loop
                               if Items_List(J).IType =
@@ -412,15 +411,6 @@ package body Crafts is
                                  exit;
                               end if;
                            end loop;
-                        end loop;
-                     else
-                        for J in Items_List.Iterate loop
-                           if Items_List(J).Name =
-                             Items_List(Recipe.ResultIndex).Name then
-                              MaterialIndexes.Append
-                                (New_Item => Objects_Container.Key(J));
-                              exit;
-                           end if;
                         end loop;
                      end if;
                      CraftingMaterial := 0;
@@ -434,8 +424,7 @@ package body Crafts is
                              ("You don't have crafting materials for " &
                               To_String(RecipeName) & ".",
                               CraftMessage, RED);
-                           Module.Data := (0, 0, 0);
-                           GiveOrders(PlayerShip, CrafterIndex, Rest);
+                           ResetOrder(Module);
                            exit Craft_Loop;
                         elsif PlayerShip.Cargo(CraftingMaterial).ProtoIndex /=
                           MaterialIndex then
@@ -508,7 +497,7 @@ package body Crafts is
                         exit Craft_Loop;
                      end if;
                      CraftedAmount := CraftedAmount + ResultAmount;
-                     Module.Data(3) := Module.Data(3) - 1;
+                     Module.CraftingAmount := Module.CraftingAmount - 1;
                      for J in MaterialIndexes.Iterate loop
                         CargoIndex := 1;
                         while CargoIndex <= PlayerShip.Cargo.Last_Index loop
@@ -545,7 +534,11 @@ package body Crafts is
                              (PlayerShip.Crew(CrafterIndex), Recipe.Skill),
                            CrafterIndex);
                      end if;
-                     if Module.Data(1) > 0 then
+                     if Length(Module.CraftingIndex) < 12
+                       or else
+                       (Length(Module.CraftingIndex) < 12
+                        and then Slice(Module.CraftingIndex, 1, 11) =
+                          "Deconstruct") then
                         Amount :=
                           Amount -
                           (Items_List(Recipe.ResultIndex).Weight *
@@ -558,16 +551,10 @@ package body Crafts is
                            ResetOrder(Module);
                            exit Craft_Loop;
                         end if;
-                        for I in Recipes_List.Iterate loop
-                           if Integer'Value
-                               (To_String(Recipes_Container.Key(I))) =
-                             Module.Data(1) then
-                              UpdateCargo
-                                (PlayerShip, Recipes_List(I).ResultIndex,
-                                 ResultAmount);
-                              exit;
-                           end if;
-                        end loop;
+                        UpdateCargo
+                          (PlayerShip,
+                           Recipes_List(Module.CraftingIndex).ResultIndex,
+                           ResultAmount);
                         for I in Recipes_List.Iterate loop
                            if Recipes_List(I).ResultIndex =
                              Recipe.ResultIndex then
@@ -586,14 +573,14 @@ package body Crafts is
                         end loop;
                         exit Craft_Loop;
                      end if;
-                     exit Craft_Loop when Module.Data(3) = 0;
+                     exit Craft_Loop when Module.CraftingAmount = 0;
                   else
                      RecipeTime := RecipeTime - CurrentMinutes;
                      WorkTime := WorkTime - CurrentMinutes;
                      CurrentMinutes := 0;
                   end if;
                end loop Craft_Loop;
-               Module.Data(2) := RecipeTime;
+               Module.CraftingTime := RecipeTime;
                if CraftedAmount > 0 then
                   if Recipe.ResultAmount > 0 then
                      AddMessage
@@ -639,7 +626,7 @@ package body Crafts is
                      GainExp(GainedExp, Recipe.Skill, CrafterIndex);
                   end if;
                   PlayerShip.Crew(CrafterIndex).OrderTime := WorkTime;
-                  if Module.Data(3) = 0 then
+                  if Module.CraftingAmount = 0 then
                      ResetOrder(Module);
                   end if;
                end if;
@@ -656,25 +643,23 @@ package body Crafts is
       RecipeIndex: Unbounded_String) is
       RecipeName, ItemIndex: Unbounded_String;
    begin
-      PlayerShip.Modules(Workshop).Data(3) := Amount;
+      PlayerShip.Modules(Workshop).CraftingAmount := Amount;
       if Length(RecipeIndex) > 12
         and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
          ItemIndex := Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex));
          for ProtoRecipe of Recipes_List loop
             if ProtoRecipe.ResultIndex = ItemIndex then
-               PlayerShip.Modules(Workshop).Data(2) :=
+               PlayerShip.Modules(Workshop).CraftingTime :=
                  ProtoRecipe.Difficulty * 15;
                exit;
             end if;
          end loop;
          RecipeName :=
            To_Unbounded_String("Deconstructing ") & Items_List(ItemIndex).Name;
-         PlayerShip.Modules(Workshop).Data(1) :=
-           Integer'Value(Slice(RecipeIndex, 13, Length(RecipeIndex))) * (-1);
+         PlayerShip.Modules(Workshop).CraftingIndex := RecipeIndex;
       else
-         PlayerShip.Modules(Workshop).Data(1) :=
-           Integer'Value(To_String(RecipeIndex));
-         PlayerShip.Modules(Workshop).Data(2) :=
+         PlayerShip.Modules(Workshop).CraftingIndex := RecipeIndex;
+         PlayerShip.Modules(Workshop).CraftingTime :=
            Recipes_List(RecipeIndex).Time;
          RecipeName := Items_List(Recipes_List(RecipeIndex).ResultIndex).Name;
       end if;

@@ -82,7 +82,8 @@ package body Crew.UI is
                      end if;
                   when ALCHEMY_LAB .. GREENHOUSE =>
                      if PlayerShip.Modules(I).Owner /= MemberIndex and
-                       PlayerShip.Modules(I).Data(1) /= 0 then
+                       PlayerShip.Modules(I).CraftingIndex /=
+                         Null_Unbounded_String then
                         AddOrder
                           ("Work in " & To_String(PlayerShip.Modules(I).Name),
                            4, Modules_Container.To_Index(I));
@@ -142,9 +143,10 @@ package body Crew.UI is
          if Module.Durability < Module.MaxDurability then
             NeedRepair := True;
          end if;
-         if Module.Durability > 0 and
-           Modules_List(Module.ProtoIndex).MType = CABIN and
-           Module.Data(1) < Module.Data(2) then
+         if
+           (Module.Durability > 0 and
+            Modules_List(Module.ProtoIndex).MType = CABIN)
+           and then Module.Data(1) < Module.Data(2) then
             NeedCleaning := True;
          end if;
          exit when NeedCleaning and NeedRepair;

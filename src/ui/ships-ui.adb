@@ -301,7 +301,8 @@ package body Ships.UI is
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             end if;
          when ALCHEMY_LAB .. GREENHOUSE =>
-            if PlayerShip.Modules(ModuleIndex).Data(1) /= 0 then
+            if PlayerShip.Modules(ModuleIndex).CraftingIndex /=
+              Null_Unbounded_String then
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
                   "Assign as _worker");

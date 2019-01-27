@@ -319,8 +319,8 @@ package body Ships.Movement is
          Damage: DamageFactor := 0.0;
       begin
          for Module of Ship.Modules loop
-            if Modules_List(Module.ProtoIndex).MType = ENGINE and
-              Module.Data(3) = 0 then
+            if Modules_List(Module.ProtoIndex).MType = ENGINE
+              and then Module.Data(3) = 0 then
                BaseSpeed := Module.Data(2) * 10;
                Damage :=
                  1.0 -
@@ -378,8 +378,8 @@ package body Ships.Movement is
          Speed := GameSettings.UndockSpeed;
       end if;
       for Module of PlayerShip.Modules loop
-         if Modules_List(Module.ProtoIndex).MType = ENGINE and
-           Module.Data(3) = 0 then
+         if Modules_List(Module.ProtoIndex).MType = ENGINE
+           and then Module.Data(3) = 0 then
             case Speed is
                when QUARTER_SPEED =>
                   FuelNeeded := FuelNeeded - (Module.Data(1) / 4);
