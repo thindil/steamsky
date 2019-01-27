@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.3 - 2019-01-27]
 
 ### Added
 - Option to enable or disable tooltips
