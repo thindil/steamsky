@@ -29,7 +29,9 @@ package Ships is
    type ShipCombatAi is (NONE, BERSERKER, ATTACKER, COWARD, DISARMER);
    type ShipUpgrade is (NONE, DURABILITY, MAX_VALUE, VALUE);
    type Data_Array is array(1 .. 3) of Integer;
-   type ModuleData is -- Data structure for ship modules
+   type ModuleType2 is (WORKSHOP, ANY);
+   type ModuleData(MType: ModuleType2 := ANY)
+   is -- Data structure for ship modules
    record
       Name: Unbounded_String; -- Name of module
       ProtoIndex: Positive; -- Index of module prototype
@@ -39,7 +41,14 @@ package Ships is
       Owner: Natural; -- Crew member owner of module (mostly for cabins)
       UpgradeProgress: Integer; -- Progress of module upgrade
       UpgradeAction: ShipUpgrade; -- Type of module upgrade
-      Data: Data_Array; -- Various data for module (depends on module)
+      case MType is
+         when WORKSHOP =>
+            CraftingIndex: Unbounded_String; -- Index of crafting recipe or item which is deconstructed
+            CraftingTime: Natural; -- Time needed to finish crating order
+            CraftingAmount: Natural; -- How many times repeat crafting order
+         when ANY =>
+            Data: Data_Array; -- Various data for module (depends on module)
+      end case;
    end record;
    package Modules_Container is new Vectors(Positive, ModuleData);
    package Crew_Container is new Vectors(Positive, Member_Data);

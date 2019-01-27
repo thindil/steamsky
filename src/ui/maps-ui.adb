@@ -237,7 +237,7 @@ package body Maps.UI is
                   HaveGunner := False;
                end if;
             when ALCHEMY_LAB .. GREENHOUSE =>
-               if Module.Data(1) > 0 then
+               if Module.CraftingIndex /= Null_Unbounded_String then
                   NeedWorker := True;
                   if Module.Owner = 0 then
                      HaveWorker := False;

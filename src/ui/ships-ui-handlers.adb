@@ -276,35 +276,33 @@ package body Ships.UI.Handlers is
                Append(ModuleInfo, "Worker: none");
             end if;
             Append(ModuleInfo, LF);
-            if Module.Data(1) /= 0 then
-               if Module.Data(1) > 0 then
-                  for I in Recipes_List.Iterate loop
-                     if Integer'Value(To_String(Recipes_Container.Key(I))) =
-                       abs (Module.Data(1)) then
-                        Append
-                          (ModuleInfo,
-                           "Manufacturing:" & Positive'Image(Module.Data(3)) &
-                           "x " &
-                           To_String
-                             (Items_List(Recipes_List(I).ResultIndex).Name));
-                        exit;
-                     end if;
-                  end loop;
+            if Module.CraftingIndex /= Null_Unbounded_String then
+               if Length(Module.CraftingIndex) > 12
+                 and then Slice(Module.CraftingIndex, 1, 11) =
+                   "Deconstruct" then
+                  Append
+                    (ModuleInfo,
+                     "Deconstructing " &
+                     To_String
+                       (Items_List
+                          (Unbounded_Slice
+                             (Module.CraftingIndex, 13,
+                              Length(Module.CraftingIndex)))
+                          .Name));
                else
-                  for I in Items_List.Iterate loop
-                     if Integer'Value(To_String(Objects_Container.Key(I))) =
-                       abs (Module.Data(1)) then
-                        Append
-                          (ModuleInfo,
-                           "Deconstructing " & To_String(Items_List(I).Name));
-                        exit;
-                     end if;
-                  end loop;
+                  Append
+                    (ModuleInfo,
+                     "Manufacturing:" & Positive'Image(Module.CraftingAmount) &
+                     "x " &
+                     To_String
+                       (Items_List
+                          (Recipes_List(Module.CraftingIndex).ResultIndex)
+                          .Name));
                end if;
                Append
                  (ModuleInfo,
                   LF & "Time to complete current:" &
-                  Positive'Image(Module.Data(2)) & " mins");
+                  Positive'Image(Module.CraftingTime) & " mins");
             else
                Append(ModuleInfo, "Manufacturing: nothing");
             end if;

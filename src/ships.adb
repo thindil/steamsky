@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -20,13 +20,13 @@ with DOM.Core; use DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
-with ShipModules; use ShipModules;
 with Utils; use Utils;
 with Log; use Log;
 with Crafts; use Crafts;
 with Maps; use Maps;
 with Factions; use Factions;
 with Bases; use Bases;
+with ShipModules; use ShipModules;
 
 package body Ships is
 
@@ -118,14 +118,27 @@ package body Ships is
                   UpgradesAmount := UpgradesAmount - 1;
                end if;
             end if;
-            ShipModules.Append
-              (New_Item =>
-                 (Name => Modules_List(Module).Name, ProtoIndex => Module,
-                  Weight => TempModule.Weight,
-                  Durability => TempModule.Durability,
-                  MaxDurability => TempModule.Durability, Owner => 0,
-                  UpgradeProgress => 0, UpgradeAction => NONE,
-                  Data => (TempModule.Value, TempModule.MaxValue, 0)));
+            case TempModule.MType is
+               when ALCHEMY_LAB .. GREENHOUSE =>
+                  ShipModules.Append
+                    (New_Item =>
+                       (MType => WORKSHOP, Name => Modules_List(Module).Name,
+                        ProtoIndex => Module, Weight => TempModule.Weight,
+                        Durability => TempModule.Durability,
+                        MaxDurability => TempModule.Durability, Owner => 0,
+                        UpgradeProgress => 0, UpgradeAction => NONE,
+                        CraftingIndex => Null_Unbounded_String,
+                        CraftingTime => 0, CraftingAmount => 0));
+               when others =>
+                  ShipModules.Append
+                    (New_Item =>
+                       (MType => ANY, Name => Modules_List(Module).Name,
+                        ProtoIndex => Module, Weight => TempModule.Weight,
+                        Durability => TempModule.Durability,
+                        MaxDurability => TempModule.Durability, Owner => 0,
+                        UpgradeProgress => 0, UpgradeAction => NONE,
+                        Data => (TempModule.Value, TempModule.MaxValue, 0)));
+            end case;
          end loop;
       end;
       -- Set ship name
@@ -269,8 +282,8 @@ package body Ships is
                      GunAssigned := False;
                      for K in TmpShip.Modules.Iterate loop
                         if Modules_List(TmpShip.Modules(K).ProtoIndex).MType =
-                          TURRET and
-                          TmpShip.Modules(K).Data(1) =
+                          TURRET
+                          and then TmpShip.Modules(K).Data(1) =
                             Modules_Container.To_Index(J) then
                            GunAssigned := True;
                            exit;
