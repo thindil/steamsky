@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- New ship: armored independent patrol ship mk II
+
 ## [3.3 - 2019-01-27]
 
 ### Added
