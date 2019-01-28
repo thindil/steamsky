@@ -308,75 +308,94 @@ package body Ships.SaveLoad is
                UpgradeProgress :=
                  Integer'Value(Get_Attribute(ChildNode, "upgradeprogress"));
                if Get_Attribute(ChildNode, "mtype") /= "" then
-                  MType :=
-                    ModuleType2'Value(Get_Attribute(ChildNode, "mtype"));
+                  if Modules_List(ProtoIndex).MType /=
+                    MEDICAL_ROOM then -- backward compatibility
+                     MType :=
+                       ModuleType2'Value(Get_Attribute(ChildNode, "mtype"));
+                  else
+                     MType := MEDICAL_ROOM;
+                  end if;
                else
                   case Modules_List(ProtoIndex).MType is
                      when ALCHEMY_LAB .. GREENHOUSE =>
                         MType := WORKSHOP;
+                     when MEDICAL_ROOM =>
+                        MType := MEDICAL_ROOM;
                      when others =>
                         MType := ANY;
                   end case;
                end if;
-               if MType = ANY then
-                  Data := (others => 0);
-                  ModuleData := Child_Nodes(ChildNode);
-                  DataIndex := 1;
-                  for K in 0 .. Length(ModuleData) - 1 loop
-                     ModuleNode := Item(ModuleData, K);
-                     if Node_Name(ModuleNode) = "data" then
-                        Data(DataIndex) :=
-                          Integer'Value(Get_Attribute(ModuleNode, "value"));
-                        DataIndex := DataIndex + 1;
-                     end if;
-                  end loop;
-                  PlayerShip.Modules.Append
-                    (New_Item =>
-                       (MType => ANY, Name => Name, ProtoIndex => ProtoIndex,
-                        Weight => Weight, Durability => Durability,
-                        MaxDurability => MaxDurability, Owner => Owner,
-                        UpgradeProgress => UpgradeProgress,
-                        UpgradeAction => UpgradeAction, Data => Data));
-               elsif MType = WORKSHOP then
-                  ModuleData := Child_Nodes(ChildNode);
-                  DataIndex := 1;
-                  for K in 0 .. Length(ModuleData) - 1 loop
-                     ModuleNode := Item(ModuleData, K);
-                     if Node_Name(ModuleNode) = "data" then
-                        case DataIndex is
-                           when 1 =>
-                              CraftingIndex :=
-                                To_Unbounded_String
-                                  (Get_Attribute(ModuleNode, "value"));
-                              if CraftingIndex = To_Unbounded_String("0") then
-                                 CraftingIndex := Null_Unbounded_String;
-                              end if;
-                           when 2 =>
-                              CraftingTime :=
-                                Integer'Value
-                                  (Get_Attribute(ModuleNode, "value"));
-                           when 3 =>
-                              CraftingAmount :=
-                                Integer'Value
-                                  (Get_Attribute(ModuleNode, "value"));
-                           when others =>
-                              null;
-                        end case;
-                        DataIndex := DataIndex + 1;
-                     end if;
-                  end loop;
-                  PlayerShip.Modules.Append
-                    (New_Item =>
-                       (MType => WORKSHOP, Name => Name,
-                        ProtoIndex => ProtoIndex, Weight => Weight,
-                        Durability => Durability,
-                        MaxDurability => MaxDurability, Owner => Owner,
-                        UpgradeProgress => UpgradeProgress,
-                        UpgradeAction => UpgradeAction,
-                        CraftingIndex => CraftingIndex,
-                        CraftingTime => CraftingTime,
-                        CraftingAmount => CraftingAmount));
-               end if;
+               case MType is
+                  when ANY =>
+                     Data := (others => 0);
+                     ModuleData := Child_Nodes(ChildNode);
+                     DataIndex := 1;
+                     for K in 0 .. Length(ModuleData) - 1 loop
+                        ModuleNode := Item(ModuleData, K);
+                        if Node_Name(ModuleNode) = "data" then
+                           Data(DataIndex) :=
+                             Integer'Value(Get_Attribute(ModuleNode, "value"));
+                           DataIndex := DataIndex + 1;
+                        end if;
+                     end loop;
+                     PlayerShip.Modules.Append
+                       (New_Item =>
+                          (MType => ANY, Name => Name,
+                           ProtoIndex => ProtoIndex, Weight => Weight,
+                           Durability => Durability,
+                           MaxDurability => MaxDurability, Owner => Owner,
+                           UpgradeProgress => UpgradeProgress,
+                           UpgradeAction => UpgradeAction, Data => Data));
+                  when WORKSHOP =>
+                     ModuleData := Child_Nodes(ChildNode);
+                     DataIndex := 1;
+                     for K in 0 .. Length(ModuleData) - 1 loop
+                        ModuleNode := Item(ModuleData, K);
+                        if Node_Name(ModuleNode) = "data" then
+                           case DataIndex is
+                              when 1 =>
+                                 CraftingIndex :=
+                                   To_Unbounded_String
+                                     (Get_Attribute(ModuleNode, "value"));
+                                 if CraftingIndex =
+                                   To_Unbounded_String("0") then
+                                    CraftingIndex := Null_Unbounded_String;
+                                 end if;
+                              when 2 =>
+                                 CraftingTime :=
+                                   Integer'Value
+                                     (Get_Attribute(ModuleNode, "value"));
+                              when 3 =>
+                                 CraftingAmount :=
+                                   Integer'Value
+                                     (Get_Attribute(ModuleNode, "value"));
+                              when others =>
+                                 null;
+                           end case;
+                           DataIndex := DataIndex + 1;
+                        end if;
+                     end loop;
+                     PlayerShip.Modules.Append
+                       (New_Item =>
+                          (MType => WORKSHOP, Name => Name,
+                           ProtoIndex => ProtoIndex, Weight => Weight,
+                           Durability => Durability,
+                           MaxDurability => MaxDurability, Owner => Owner,
+                           UpgradeProgress => UpgradeProgress,
+                           UpgradeAction => UpgradeAction,
+                           CraftingIndex => CraftingIndex,
+                           CraftingTime => CraftingTime,
+                           CraftingAmount => CraftingAmount));
+                  when MEDICAL_ROOM =>
+                     PlayerShip.Modules.Append
+                       (New_Item =>
+                          (MType => MEDICAL_ROOM, Name => Name,
+                           ProtoIndex => ProtoIndex, Weight => Weight,
+                           Durability => Durability,
+                           MaxDurability => MaxDurability, Owner => Owner,
+                           UpgradeProgress => UpgradeProgress,
+                           UpgradeAction => UpgradeAction));
+               end case;
             end;
          elsif Node_Name(ChildNode) = "cargo" then
             declare
