@@ -29,7 +29,7 @@ package Ships is
    type ShipCombatAi is (NONE, BERSERKER, ATTACKER, COWARD, DISARMER);
    type ShipUpgrade is (NONE, DURABILITY, MAX_VALUE, VALUE);
    type Data_Array is array(1 .. 3) of Integer;
-   type ModuleType2 is (WORKSHOP, ANY, MEDICAL_ROOM);
+   type ModuleType2 is (WORKSHOP, ANY, MEDICAL_ROOM, TRAINING_ROOM);
    type ModuleData(MType: ModuleType2 := ANY)
    is -- Data structure for ship modules
    record
@@ -48,6 +48,8 @@ package Ships is
             CraftingAmount: Natural; -- How many times repeat crafting order
          when MEDICAL_ROOM =>
             null; -- Medical room don't have any special fields
+         when TRAINING_ROOM =>
+            TrainedSkill: Natural; -- Index of skill set to training
          when ANY =>
             Data: Data_Array; -- Various data for module (depends on module)
       end case;
