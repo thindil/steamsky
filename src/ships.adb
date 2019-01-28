@@ -129,6 +129,15 @@ package body Ships is
                         UpgradeProgress => 0, UpgradeAction => NONE,
                         CraftingIndex => Null_Unbounded_String,
                         CraftingTime => 0, CraftingAmount => 0));
+               when MEDICAL_ROOM =>
+                  ShipModules.Append
+                    (New_Item =>
+                       (MType => MEDICAL_ROOM,
+                        Name => Modules_List(Module).Name,
+                        ProtoIndex => Module, Weight => TempModule.Weight,
+                        Durability => TempModule.Durability,
+                        MaxDurability => TempModule.Durability, Owner => 0,
+                        UpgradeProgress => 0, UpgradeAction => NONE));
                when others =>
                   ShipModules.Append
                     (New_Item =>

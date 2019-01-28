@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -168,6 +168,17 @@ package body Bases.Ship is
                         UpgradeAction => NONE,
                         CraftingIndex => Null_Unbounded_String,
                         CraftingTime => 0, CraftingAmount => 0));
+               when MEDICAL_ROOM =>
+                  PlayerShip.Modules.Append
+                    (New_Item =>
+                       (MType => MEDICAL_ROOM,
+                        Name => Modules_List(ModuleIndex).Name,
+                        ProtoIndex => ModuleIndex,
+                        Weight => Modules_List(ModuleIndex).Weight,
+                        Durability => Modules_List(ModuleIndex).Durability,
+                        MaxDurability => Modules_List(ModuleIndex).Durability,
+                        Owner => 0, UpgradeProgress => 0,
+                        UpgradeAction => NONE));
                when others =>
                   PlayerShip.Modules.Append
                     (New_Item =>
