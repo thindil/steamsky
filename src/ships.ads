@@ -29,7 +29,7 @@ package Ships is
    type ShipCombatAi is (NONE, BERSERKER, ATTACKER, COWARD, DISARMER);
    type ShipUpgrade is (NONE, DURABILITY, MAX_VALUE, VALUE);
    type Data_Array is array(1 .. 3) of Integer;
-   type ModuleType2 is (WORKSHOP, ANY);
+   type ModuleType2 is (WORKSHOP, ANY, MEDICAL_ROOM);
    type ModuleData(MType: ModuleType2 := ANY)
    is -- Data structure for ship modules
    record
@@ -46,6 +46,8 @@ package Ships is
             CraftingIndex: Unbounded_String; -- Index of crafting recipe or item which is deconstructed
             CraftingTime: Natural; -- Time needed to finish crating order
             CraftingAmount: Natural; -- How many times repeat crafting order
+         when MEDICAL_ROOM =>
+            null; -- Medical room don't have any special fields
          when ANY =>
             Data: Data_Array; -- Various data for module (depends on module)
       end case;
