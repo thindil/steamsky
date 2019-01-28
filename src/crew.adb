@@ -621,10 +621,9 @@ package body Crew is
                      end if;
                   when Train =>
                      for Module of PlayerShip.Modules loop
-                        if Modules_List(Module.ProtoIndex).MType =
-                          TRAINING_ROOM and
+                        if Module.MType = TRAINING_ROOM and
                           Module.Owner = I then
-                           SkillIndex := Module.Data(1);
+                           SkillIndex := Module.TrainedSkill;
                            exit;
                         end if;
                      end loop;

@@ -315,11 +315,11 @@ package body Ships.UI.Handlers is
                Append(ModuleInfo, "Medic: none");
             end if;
          when TRAINING_ROOM =>
-            if Module.Data(1) > 0 then
+            if Module.TrainedSkill > 0 then
                Append
                  (ModuleInfo,
                   "Set for training " &
-                  To_String(Skills_List(Module.Data(1)).Name) & ".");
+                  To_String(Skills_List(Module.TrainedSkill).Name) & ".");
             else
                Append(ModuleInfo, "Must be set for training.");
             end if;

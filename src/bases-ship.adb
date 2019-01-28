@@ -179,6 +179,17 @@ package body Bases.Ship is
                         MaxDurability => Modules_List(ModuleIndex).Durability,
                         Owner => 0, UpgradeProgress => 0,
                         UpgradeAction => NONE));
+               when TRAINING_ROOM =>
+                  PlayerShip.Modules.Append
+                    (New_Item =>
+                       (MType => TRAINING_ROOM,
+                        Name => Modules_List(ModuleIndex).Name,
+                        ProtoIndex => ModuleIndex,
+                        Weight => Modules_List(ModuleIndex).Weight,
+                        Durability => Modules_List(ModuleIndex).Durability,
+                        MaxDurability => Modules_List(ModuleIndex).Durability,
+                        Owner => 0, UpgradeProgress => 0,
+                        UpgradeAction => NONE, TrainedSkill => 0));
                when others =>
                   PlayerShip.Modules.Append
                     (New_Item =>
