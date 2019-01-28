@@ -217,7 +217,6 @@ package body Crew is
       procedure UpdateMember(Member: in out Member_Data) is
          BackToWork: Boolean := True;
          ConsumeResult: Natural := 0;
-         subtype Workplaces is ModuleType range ALCHEMY_LAB .. GREENHOUSE;
       begin
          if Factions_List(Member.Faction).Flags.Contains
              (To_Unbounded_String("nofatigue")) then
@@ -243,7 +242,7 @@ package body Crew is
                      Module.Owner := I;
                      exit;
                   elsif Member.PreviousOrder = Craft and
-                    Modules_List(Module.ProtoIndex).MType in Workplaces and
+                    Module.MType = WORKSHOP and
                     (Module.Owner = I or Module.Owner = 0) and
                     Module.Data(1) /= 0 then
                      BackToWork := True;
