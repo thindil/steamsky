@@ -3998,7 +3998,7 @@ during combat. -->
   <module index="130"/>
   <module amount="2" index="222"/>
   <module index="145"/>
-  <module index="160"/>
+  <module index="129"/>
   <cargo index="1" maxamount="2000" minamount="1500"/>
   <cargo index="2" maxamount="200" minamount="100"/>
   <cargo index="3" maxamount="400" minamount="300"/>
@@ -4018,7 +4018,7 @@ during combat. -->
   <module index="130"/>
   <module amount="2" index="222"/>
   <module index="145"/>
-  <module index="160"/>
+  <module index="129"/>
   <cargo index="1" maxamount="2000" minamount="1500"/>
   <cargo index="2" maxamount="200" minamount="100"/>
   <cargo index="3" maxamount="400" minamount="300"/>
@@ -4038,7 +4038,7 @@ during combat. -->
   <module index="130"/>
   <module amount="2" index="222"/>
   <module index="145"/>
-  <module index="160"/>
+  <module index="129"/>
   <cargo index="1" maxamount="2000" minamount="1500"/>
   <cargo index="2" maxamount="200" minamount="100"/>
   <cargo index="3" maxamount="400" minamount="300"/>
@@ -4058,7 +4058,7 @@ during combat. -->
   <module index="130"/>
   <module amount="2" index="222"/>
   <module index="145"/>
-  <module index="160"/>
+  <module index="129"/>
   <cargo index="1" maxamount="2000" minamount="1500"/>
   <cargo index="2" maxamount="200" minamount="100"/>
   <cargo index="3" maxamount="400" minamount="300"/>
@@ -4077,7 +4077,7 @@ during combat. -->
   <module index="130"/>
   <module amount="2" index="222"/>
   <module index="145"/>
-  <module index="160"/>
+  <module index="129"/>
   <cargo index="1" maxamount="2000" minamount="1500"/>
   <cargo index="2" maxamount="200" minamount="100"/>
   <cargo index="3" maxamount="400" minamount="300"/>
@@ -4157,7 +4157,7 @@ during combat. -->
   <module index="94"/>
   <module amount="2" index="221"/>
   <module index="113"/>
-  <module index="128"/>
+  <module index="50"/>
   <cargo index="1" maxamount="2000" minamount="1000"/>
   <cargo index="2" maxamount="200" minamount="100"/>
   <cargo index="3" maxamount="400" minamount="200"/>
@@ -4168,6 +4168,26 @@ during combat. -->
   <member index="18"/>
   <member index="58" maxamount="7" minamount="3"/>
   <description>Armored and upgraded version of independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
+ </ship>
+ <ship combatai="DISARMER" index="223" maxloot="300" minloot="150" name="Armored poleis patrol ship mk IV" owner="POLEIS">
+  <module index="135"/>
+  <module index="134"/>
+  <module index="101"/>
+  <module amount="8" index="149"/>
+  <module index="130"/>
+  <module amount="2" index="222"/>
+  <module index="145"/>
+  <module index="129"/>
+  <cargo index="1" maxamount="2000" minamount="1000"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="200"/>
+  <cargo index="25" maxamount="1000" minamount="500"/>
+  <cargo index="21" maxamount="200" minamount="100"/>
+  <member index="16"/>
+  <member index="17"/>
+  <member index="18"/>
+  <member index="58" maxamount="7" minamount="3"/>
+  <description>Armored and upgraded version of poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
 </ships>
 
