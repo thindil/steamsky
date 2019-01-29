@@ -5,7 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New ships: armored independent patrol ship mk II, armored poleis patrol
-  ship mk III and armored independent patrol ship mk III
+  ship mk III, armored independent patrol ship mk III and armored poleis
+  patrol ship mk IV
 
 ## [3.3 - 2019-01-27]
 
