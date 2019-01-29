@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash on selling ship modules in shipyard
+- Crash when waiting in place
 
 ## [3.3 - 2019-01-27]
 
