@@ -403,7 +403,7 @@ package body Ships.Movement is
          return;
       end if;
       for Module of PlayerShip.Modules loop
-         if Modules_List(Module.ProtoIndex).MType = ENGINE and
+         if Modules_List(Module.ProtoIndex).MType = ENGINE and then
            Module.Data(3) = 0 then
             FuelNeeded := FuelNeeded - 1;
          end if;
