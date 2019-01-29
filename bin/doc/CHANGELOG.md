@@ -8,6 +8,9 @@ All notable changes to this project will be documented in this file.
   ship mk III, armored independent patrol ship mk III and armored poleis
   patrol ship mk IV
 
+### Fixed
+- Crash on selling ship modules in shipyard
+
 ## [3.3 - 2019-01-27]
 
 ### Added
