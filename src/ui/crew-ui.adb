@@ -98,7 +98,7 @@ package body Crew.UI is
                      end if;
                   when TRAINING_ROOM =>
                      if PlayerShip.Modules(I).Owner /= MemberIndex and
-                       PlayerShip.Modules(I).Data(1) > 0 then
+                       PlayerShip.Modules(I).TrainedSkill > 0 then
                         AddOrder
                           ("Go on training in " &
                            To_String(PlayerShip.Modules(I).Name),
