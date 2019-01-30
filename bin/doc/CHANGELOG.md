@@ -5,8 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New ships: armored independent patrol ship mk II, armored poleis patrol
-  ship mk III, armored independent patrol ship mk III and armored poleis
-  patrol ship mk IV
+  ship mk III, armored independent patrol ship mk III, armored poleis patrol
+  ship mk IV and armored independent patrol ship mk IV
 
 ### Fixed
 - Crash on selling ship modules in shipyard
