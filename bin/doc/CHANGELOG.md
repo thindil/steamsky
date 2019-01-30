@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Crash on selling ship modules in shipyard
 - Crash when waiting in place
+- Modules in ships: poleis trader mk IV, pirates trader mk IV, independent
+  trader mk IV, poleis patrol ship mk IV and independent patrol ship mk IV
 
 ## [3.3 - 2019-01-27]
 
