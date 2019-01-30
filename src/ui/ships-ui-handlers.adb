@@ -546,7 +546,7 @@ package body Ships.UI.Handlers is
            Positive'Value
              (Get_Active_Id
                 (Gtk_Combo_Box(Get_Object(Builder, "cmbassignskill"))));
-         PlayerShip.Modules(ModuleIndex).Data(1) := AssignIndex;
+         PlayerShip.Modules(ModuleIndex).TrainedSkill := AssignIndex;
          AddMessage
            ("You prepared " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
             " for training " & To_String(Skills_List(AssignIndex).Name) & ".",

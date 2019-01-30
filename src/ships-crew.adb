@@ -175,7 +175,8 @@ package body Ships.Crew is
          Ship.Crew(MemberIndex).Loyalty < 20) then
          raise Crew_Order_Error with MemberName & " refuses to execute order.";
       end if;
-      if GivenOrder = Train and then Ship.Modules(ModuleIndex).Data(1) = 0 then
+      if GivenOrder = Train
+        and then Ship.Modules(ModuleIndex).TrainedSkill = 0 then
          raise Crew_Order_Error
            with MemberName & " can't starts training because " &
            To_String(Ship.Modules(ModuleIndex).Name) & " isn't prepared.";
@@ -186,7 +187,7 @@ package body Ships.Crew is
             RequiredTool := CleaningTools;
          elsif GivenOrder = Train then
             RequiredTool :=
-              Skills_List(Ship.Modules(ModuleIndex).Data(1)).Tool;
+              Skills_List(Ship.Modules(ModuleIndex).TrainedSkill).Tool;
          else
             RequiredTool := RepairTools;
          end if;
