@@ -332,6 +332,8 @@ package body Ships.SaveLoad is
                         MType := WORKSHOP;
                      when MEDICAL_ROOM =>
                         MType := MEDICAL_ROOM;
+                     when TRAINING_ROOM =>
+                        MType := TRAINING_ROOM;
                      when others =>
                         MType := ANY;
                   end case;
