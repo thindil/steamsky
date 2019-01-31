@@ -594,8 +594,8 @@ package body Crew is
                            end if;
                         end loop;
                         for Module of PlayerShip.Modules loop
-                           if Modules_List(Module.ProtoIndex).MType = CABIN and
-                             Module.Data(1) < Module.Data(2) then
+                           if Modules_List(Module.ProtoIndex).MType = CABIN
+                             and then Module.Data(1) < Module.Data(2) then
                               NeedCleaning := True;
                               exit;
                            end if;
