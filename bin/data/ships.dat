@@ -4251,5 +4251,26 @@ during combat. -->
   <member amount="3" index="65"/>
   <description>Advanced, upgraded version of standard indepedent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
+ <ship combatai="DISARMER" index="227" maxloot="250" minloot="200" name="Advanced poleis patrol ship mk III" owner="POLEIS">
+  <module index="108"/>
+  <module index="111"/>
+  <module index="104"/>
+  <module amount="6" index="93"/>
+  <module index="94"/>
+  <module index="96"/>
+  <module amount="2" index="221"/>
+  <module index="113"/>
+  <module index="50"/>
+  <cargo index="1" maxamount="1700" minamount="1000"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="200"/>
+  <cargo index="25" maxamount="500" minamount="300"/>
+  <cargo index="21" maxamount="40" minamount="20"/>
+  <member index="32"/>
+  <member index="33"/>
+  <member index="34"/>
+  <member amount="3" index="65"/>
+  <description>Advanced, upgraded version of standard poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
+ </ship>
 </ships>
 
