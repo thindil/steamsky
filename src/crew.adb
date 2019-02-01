@@ -244,7 +244,7 @@ package body Crew is
                   elsif Member.PreviousOrder = Craft and
                     Module.MType = WORKSHOP and
                     (Module.Owner = I or Module.Owner = 0) and
-                    Module.Data(1) /= 0 then
+                    Module.CraftingIndex /= Null_Unbounded_String then
                      BackToWork := True;
                      Module.Owner := I;
                      exit;
