@@ -169,7 +169,7 @@ package body Crew is
    begin
       for I in PlayerShip.Modules.Iterate loop
          if PlayerShip.Modules(I).Owner = MemberIndex and
-           Modules_List(PlayerShip.Modules(I).ProtoIndex).MType = CABIN then
+           PlayerShip.Modules(I).MType = CABIN then
             return Modules_Container.To_Index(I);
          end if;
       end loop;
@@ -280,8 +280,8 @@ package body Crew is
                      OrderMessage, YELLOW);
                   if FindCabin(I) = 0 then
                      for Module of PlayerShip.Modules loop
-                        if Modules_List(Module.ProtoIndex).MType = CABIN and
-                          Module.Durability > 0 and Module.Owner = 0 then
+                        if Module.MType = CABIN and Module.Durability > 0 and
+                          Module.Owner = 0 then
                            Module.Owner := I;
                            AddMessage
                              (To_String(Member.Name) & " take " &
@@ -580,12 +580,14 @@ package body Crew is
                      NeedCleaning := False;
                      if ToolIndex > 0 then
                         for Module of PlayerShip.Modules loop
-                           if Modules_List(Module.ProtoIndex).MType = CABIN and
-                             Module.Data(1) < Module.Data(2) then
-                              if Module.Data(1) + Times > Module.Data(2) then
-                                 Module.Data(1) := Module.Data(2);
+                           if Module.MType = CABIN
+                             and then Module.Cleanliness < Module.Quality then
+                              if Module.Cleanliness + Times >
+                                Module.Quality then
+                                 Module.Cleanliness := Module.Quality;
                               else
-                                 Module.Data(1) := Module.Data(1) + Times;
+                                 Module.Cleanliness :=
+                                   Module.Cleanliness + Times;
                               end if;
                               DamageItem
                                 (Inventory => PlayerShip.Crew(I).Inventory,
@@ -594,8 +596,8 @@ package body Crew is
                            end if;
                         end loop;
                         for Module of PlayerShip.Modules loop
-                           if Modules_List(Module.ProtoIndex).MType = CABIN
-                             and then Module.Data(1) < Module.Data(2) then
+                           if Module.MType = CABIN
+                             and then Module.Cleanliness < Module.Quality then
                               NeedCleaning := True;
                               exit;
                            end if;

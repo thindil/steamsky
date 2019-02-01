@@ -248,7 +248,7 @@ package body Maps.UI is
                   end if;
                end if;
             when CABIN =>
-               if Module.Data(1) /= Module.Data(2) then
+               if Module.Cleanliness /= Module.Quality then
                   NeedCleaning := True;
                end if;
             when others =>

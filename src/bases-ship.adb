@@ -295,8 +295,7 @@ package body Bases.Ship is
            (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
               .InstallTime);
          if PlayerShip.Modules(ModuleIndex).Owner > 0 and
-           Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType /=
-             CABIN then
+           PlayerShip.Modules(ModuleIndex).MType /= CABIN then
             GiveOrders
               (Ship => PlayerShip,
                MemberIndex => PlayerShip.Modules(ModuleIndex).Owner,

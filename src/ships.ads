@@ -29,7 +29,8 @@ package Ships is
    type ShipCombatAi is (NONE, BERSERKER, ATTACKER, COWARD, DISARMER);
    type ShipUpgrade is (NONE, DURABILITY, MAX_VALUE, VALUE);
    type Data_Array is array(1 .. 3) of Integer;
-   type ModuleType2 is (WORKSHOP, ANY, MEDICAL_ROOM, TRAINING_ROOM, ENGINE);
+   type ModuleType2 is
+     (WORKSHOP, ANY, MEDICAL_ROOM, TRAINING_ROOM, ENGINE, CABIN);
    type ModuleData(MType: ModuleType2 := ANY)
    is -- Data structure for ship modules
    record
@@ -46,6 +47,9 @@ package Ships is
             FuelUsage: Positive; -- Amount of fuel used for each move on map
             Power: Positive; -- Power of engine used for counting ship speed
             Disabled: Boolean; -- Did engine is disabled or not
+         when CABIN =>
+            Cleanliness: Natural; -- Cleanliness of selected cabin
+            Quality: Natural; -- Quality of selected cabin
          when WORKSHOP =>
             CraftingIndex: Unbounded_String; -- Index of crafting recipe or item which is deconstructed
             CraftingTime: Natural; -- Time needed to finish crating order
