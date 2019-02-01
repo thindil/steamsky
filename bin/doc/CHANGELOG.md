@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
   trader mk IV, poleis patrol ship mk IV and independent patrol ship mk IV
 - Crash when checking cleanlinees of cabins
 - Crash on cleaning ship
+- Crash on crew member back to work after rest
 
 ## [3.3 - 2019-01-27]
 
