@@ -147,7 +147,7 @@ package body Ships.UI is
                    (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                       .MaxValue) *
                  1.5);
-            if PlayerShip.Modules(ModuleIndex).Data(2) < MaxValue then
+            if PlayerShip.Modules(ModuleIndex).Power < MaxValue then
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
                   "Upgrade e_ngine power");
@@ -164,7 +164,7 @@ package body Ships.UI is
                    (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                       .Value) /
                  2.0);
-            if PlayerShip.Modules(ModuleIndex).Data(1) > MaxValue then
+            if PlayerShip.Modules(ModuleIndex).FuelUsage > MaxValue then
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnupgrade2")),
                   "Reduce _fuel usage");
@@ -176,7 +176,7 @@ package body Ships.UI is
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade2")));
             end if;
             Show_All(Gtk_Widget(Get_Object(Builder, "btndisableengine")));
-            if PlayerShip.Modules(ModuleIndex).Data(3) = 0 then
+            if not PlayerShip.Modules(ModuleIndex).Disabled then
                Set_Label
                  (Gtk_Button
                     (Gtk_Widget(Get_Object(Builder, "btndisableengine"))),
