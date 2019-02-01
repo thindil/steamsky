@@ -200,7 +200,7 @@ package body Ships.UI is
                    (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                       .MaxValue) *
                  1.5);
-            if PlayerShip.Modules(ModuleIndex).Data(2) < MaxValue then
+            if PlayerShip.Modules(ModuleIndex).Quality < MaxValue then
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
                   "Upgrade _quality");

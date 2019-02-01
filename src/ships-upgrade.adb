@@ -67,7 +67,7 @@ package body Ships.Upgrade is
                   end if;
                   UpgradeProgress := 10;
                when CABIN =>
-                  if PlayerShip.Modules(ModuleIndex).Data(2) = MaxValue then
+                  if PlayerShip.Modules(ModuleIndex).Quality = MaxValue then
                      raise Ship_Upgrade_Error
                        with "You can't improve more quality of " &
                        To_String(PlayerShip.Modules(ModuleIndex).Name) & ".";

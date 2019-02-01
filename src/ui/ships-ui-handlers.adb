@@ -179,27 +179,27 @@ package body Ships.UI.Handlers is
             end if;
             Show_All(Gtk_Widget(QualityBar));
             Set_Fraction
-              (Gtk_Progress_Bar(QualityBar), Gdouble(Module.Data(2)) / 100.0);
-            if Module.Data(2) < 30 then
+              (Gtk_Progress_Bar(QualityBar), Gdouble(Module.Quality) / 100.0);
+            if Module.Quality < 30 then
                Set_Text(Gtk_Progress_Bar(QualityBar), "Minimal quality");
-            elsif Module.Data(2) < 60 then
+            elsif Module.Quality < 60 then
                Set_Text(Gtk_Progress_Bar(QualityBar), "Basic quality");
-            elsif Module.Data(2) < 80 then
+            elsif Module.Quality < 80 then
                Set_Text(Gtk_Progress_Bar(QualityBar), "Extended quality");
             else
                Set_Text(Gtk_Progress_Bar(QualityBar), "Luxury");
             end if;
             MaxValue :=
               Positive(Float(Modules_List(Module.ProtoIndex).MaxValue) * 1.5);
-            if Module.Data(2) = MaxValue then
+            if Module.Quality = MaxValue then
                Set_Text
                  (Gtk_Progress_Bar(QualityBar),
                   Get_Text(Gtk_Progress_Bar(QualityBar)) & " (max upgrade)");
             end if;
-            if Module.Data(1) /= Module.Data(2) then
+            if Module.Cleanliness /= Module.Quality then
                Show_All(Gtk_Widget(CleanBar));
                DamagePercent :=
-                 1.0 - (Gdouble(Module.Data(1)) / Gdouble(Module.Data(2)));
+                 1.0 - (Gdouble(Module.Cleanliness) / Gdouble(Module.Quality));
                if DamagePercent > 0.0 and DamagePercent < 0.2 then
                   Set_Text(Gtk_Progress_Bar(CleanBar), "Bit dusty");
                elsif DamagePercent > 0.19 and DamagePercent < 0.5 then
@@ -510,8 +510,7 @@ package body Ships.UI.Handlers is
             when CABIN =>
                for I in PlayerShip.Modules.Iterate loop
                   if PlayerShip.Modules(I).Owner = AssignIndex and
-                    Modules_List(PlayerShip.Modules(I).ProtoIndex).MType =
-                      CABIN then
+                    PlayerShip.Modules(I).MType = CABIN then
                      PlayerShip.Modules(I).Owner := 0;
                   end if;
                end loop;

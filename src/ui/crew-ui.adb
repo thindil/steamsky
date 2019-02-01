@@ -89,8 +89,8 @@ package body Crew.UI is
                            4, Modules_Container.To_Index(I));
                      end if;
                   when CABIN =>
-                     if PlayerShip.Modules(I).Data(1) <
-                       PlayerShip.Modules(I).Data(2) and
+                     if PlayerShip.Modules(I).Cleanliness <
+                       PlayerShip.Modules(I).Quality and
                        PlayerShip.Crew(MemberIndex).Order /= Clean and
                        NeedClean then
                         AddOrder("Clean ship", 8, 0);
@@ -143,10 +143,8 @@ package body Crew.UI is
          if Module.Durability < Module.MaxDurability then
             NeedRepair := True;
          end if;
-         if
-           (Module.Durability > 0 and
-            Modules_List(Module.ProtoIndex).MType = CABIN)
-           and then Module.Data(1) < Module.Data(2) then
+         if (Module.Durability > 0 and Module.MType = CABIN)
+           and then Module.Cleanliness < Module.Quality then
             NeedCleaning := True;
          end if;
          exit when NeedCleaning and NeedRepair;
