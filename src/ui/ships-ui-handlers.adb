@@ -133,20 +133,21 @@ package body Ships.UI.Handlers is
       Hide(Gtk_Widget(QualityBar));
       case Modules_List(Module.ProtoIndex).MType is
          when ENGINE =>
-            Append(ModuleInfo, "Max power:" & Integer'Image(Module.Data(2)));
+            Append(ModuleInfo, "Max power:" & Integer'Image(Module.Power));
             MaxValue :=
               Positive(Float(Modules_List(Module.ProtoIndex).MaxValue) * 1.5);
-            if Module.Data(2) = MaxValue then
+            if Module.Power = MaxValue then
                Append(ModuleInfo, " (max upgrade)");
             end if;
-            if Module.Data(3) = 1 then
+            if Module.Disabled then
                Append(ModuleInfo, " (disabled)");
             end if;
             Append
-              (ModuleInfo, LF & "Fuel usage:" & Integer'Image(Module.Data(1)));
+              (ModuleInfo,
+               LF & "Fuel usage:" & Integer'Image(Module.FuelUsage));
             MaxValue :=
               Positive(Float(Modules_List(Module.ProtoIndex).Value) / 2.0);
-            if Module.Data(1) = MaxValue then
+            if Module.FuelUsage = MaxValue then
                Append(ModuleInfo, " (max upgrade)");
             end if;
          when ShipModules.CARGO =>
@@ -560,12 +561,12 @@ package body Ships.UI.Handlers is
    procedure DisableEngine(Object: access Gtkada_Builder_Record'Class) is
       CanDisable: Boolean := False;
    begin
-      if PlayerShip.Modules(ModuleIndex).Data(3) = 0 then
+      if not PlayerShip.Modules(ModuleIndex).Disabled then
          for I in PlayerShip.Modules.Iterate loop
-            if Modules_List(PlayerShip.Modules(I).ProtoIndex).MType =
-              ENGINE and
-              PlayerShip.Modules(I).Data(3) = 0 and
-              Modules_Container.To_Index(I) /= ModuleIndex then
+            if PlayerShip.Modules(I).MType = ENGINE
+              and then
+              (not PlayerShip.Modules(I).Disabled and
+               Modules_Container.To_Index(I) /= ModuleIndex) then
                CanDisable := True;
                exit;
             end if;
@@ -576,13 +577,13 @@ package body Ships.UI.Handlers is
                Gtk_Window(Get_Object(Builder, "skymapwindow")));
             return;
          end if;
-         PlayerShip.Modules(ModuleIndex).Data(3) := 1;
+         PlayerShip.Modules(ModuleIndex).Disabled := True;
          AddMessage
            ("You disabled " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
             ".",
             OrderMessage);
       else
-         PlayerShip.Modules(ModuleIndex).Data(3) := 0;
+         PlayerShip.Modules(ModuleIndex).Disabled := False;
          AddMessage
            ("You enabled " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
             ".",

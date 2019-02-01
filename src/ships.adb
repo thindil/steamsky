@@ -119,6 +119,16 @@ package body Ships is
                end if;
             end if;
             case TempModule.MType is
+               when ENGINE =>
+                  ShipModules.Append
+                    (New_Item =>
+                       (MType => ENGINE, Name => Modules_List(Module).Name,
+                        ProtoIndex => Module, Weight => TempModule.Weight,
+                        Durability => TempModule.Durability,
+                        MaxDurability => TempModule.Durability, Owner => 0,
+                        UpgradeProgress => 0, UpgradeAction => NONE,
+                        FuelUsage => TempModule.Value,
+                        Power => TempModule.MaxValue, Disabled => False));
                when ALCHEMY_LAB .. GREENHOUSE =>
                   ShipModules.Append
                     (New_Item =>

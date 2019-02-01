@@ -98,14 +98,19 @@ package body Bases.ShipyardUI is
       else
          MType :=
            Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType;
-         if MType = HULL or MType = ENGINE or MType = ShipModules.CARGO or
-           MType = CABIN or MType = GUN or MType = HARPOON_GUN then
-            MaxValue := PlayerShip.Modules(ModuleIndex).Data(2);
-         else
-            MaxValue := 0;
-         end if;
-         Value :=
-           Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Value;
+         case MType is
+            when HULL | ShipModules.CARGO | CABIN | GUN | HARPOON_GUN =>
+               MaxValue := PlayerShip.Modules(ModuleIndex).Data(2);
+               Value :=
+                 Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                   .Value;
+            when ENGINE =>
+               MaxValue := PlayerShip.Modules(ModuleIndex).Power;
+               Value := PlayerShip.Modules(ModuleIndex).FuelUsage;
+            when others =>
+               MaxValue := 0;
+               Value := 0;
+         end case;
          Size := Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Size;
          Weight :=
            Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Weight;

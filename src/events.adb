@@ -23,7 +23,6 @@ with Maps; use Maps;
 with Combat; use Combat;
 with Messages; use Messages;
 with Crew; use Crew;
-with ShipModules; use ShipModules;
 with Items; use Items;
 with Utils; use Utils;
 with Factions; use Factions;
@@ -90,10 +89,8 @@ package body Events is
                         for I in
                           PlayerShip.Modules.First_Index ..
                             PlayerShip.Modules.Last_Index loop
-                           if Modules_List(PlayerShip.Modules(I).ProtoIndex)
-                               .MType =
-                             ENGINE and
-                             PlayerShip.Modules(I).Data(3) = 0 then
+                           if PlayerShip.Modules(I).MType = ENGINE
+                             and then not PlayerShip.Modules(I).Disabled then
                               Engines.Append(New_Item => I);
                            end if;
                         end loop;

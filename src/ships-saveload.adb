@@ -97,44 +97,68 @@ package body Ships.SaveLoad is
             Set_Attribute
               (DataNode, "upgradeaction",
                To_String(Trim(RawValue, Ada.Strings.Left)));
-            if Module.MType = ANY then
-               for I in Module.Data'Range loop
+            case Module.MType is
+               when ANY =>
+                  for I in Module.Data'Range loop
+                     ModuleDataNode := Create_Element(SaveData, "data");
+                     ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
+                     RawValue :=
+                       To_Unbounded_String(Integer'Image(Module.Data(I)));
+                     Set_Attribute
+                       (ModuleDataNode, "value",
+                        To_String(Trim(RawValue, Ada.Strings.Left)));
+                  end loop;
+               when WORKSHOP =>
+                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
+                  Set_Attribute
+                    (ModuleDataNode, "value", To_String(Module.CraftingIndex));
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   RawValue :=
-                    To_Unbounded_String(Integer'Image(Module.Data(I)));
+                    To_Unbounded_String(Integer'Image(Module.CraftingTime));
                   Set_Attribute
                     (ModuleDataNode, "value",
                      To_String(Trim(RawValue, Ada.Strings.Left)));
-               end loop;
-            elsif Module.MType = WORKSHOP then
-               ModuleDataNode := Create_Element(SaveData, "data");
-               ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-               Set_Attribute
-                 (ModuleDataNode, "value", To_String(Module.CraftingIndex));
-               ModuleDataNode := Create_Element(SaveData, "data");
-               ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-               RawValue :=
-                 To_Unbounded_String(Integer'Image(Module.CraftingTime));
-               Set_Attribute
-                 (ModuleDataNode, "value",
-                  To_String(Trim(RawValue, Ada.Strings.Left)));
-               ModuleDataNode := Create_Element(SaveData, "data");
-               ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-               RawValue :=
-                 To_Unbounded_String(Integer'Image(Module.CraftingAmount));
-               Set_Attribute
-                 (ModuleDataNode, "value",
-                  To_String(Trim(RawValue, Ada.Strings.Left)));
-            elsif Module.MType = TRAINING_ROOM then
-               ModuleDataNode := Create_Element(SaveData, "data");
-               ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-               RawValue :=
-                 To_Unbounded_String(Integer'Image(Module.TrainedSkill));
-               Set_Attribute
-                 (ModuleDataNode, "value",
-                  To_String(Trim(RawValue, Ada.Strings.Left)));
-            end if;
+                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
+                  RawValue :=
+                    To_Unbounded_String(Integer'Image(Module.CraftingAmount));
+                  Set_Attribute
+                    (ModuleDataNode, "value",
+                     To_String(Trim(RawValue, Ada.Strings.Left)));
+               when TRAINING_ROOM =>
+                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
+                  RawValue :=
+                    To_Unbounded_String(Integer'Image(Module.TrainedSkill));
+                  Set_Attribute
+                    (ModuleDataNode, "value",
+                     To_String(Trim(RawValue, Ada.Strings.Left)));
+               when MEDICAL_ROOM =>
+                  null;
+               when ENGINE =>
+                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
+                  RawValue :=
+                    To_Unbounded_String(Integer'Image(Module.FuelUsage));
+                  Set_Attribute
+                    (ModuleDataNode, "value",
+                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
+                  RawValue := To_Unbounded_String(Integer'Image(Module.Power));
+                  Set_Attribute
+                    (ModuleDataNode, "value",
+                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
+                  if Module.Disabled then
+                     Set_Attribute(ModuleDataNode, "value", "1");
+                  else
+                     Set_Attribute(ModuleDataNode, "value", "0");
+                  end if;
+            end case;
          end loop;
       end;
       for Item of PlayerShip.Cargo loop
@@ -322,6 +346,8 @@ package body Ships.SaveLoad is
                         MType := MEDICAL_ROOM;
                      when TRAINING_ROOM =>
                         MType := TRAINING_ROOM;
+                     when ENGINE =>
+                        MType := ENGINE;
                      when others =>
                         MType :=
                           ModuleType2'Value(Get_Attribute(ChildNode, "mtype"));
@@ -334,6 +360,8 @@ package body Ships.SaveLoad is
                         MType := MEDICAL_ROOM;
                      when TRAINING_ROOM =>
                         MType := TRAINING_ROOM;
+                     when ENGINE =>
+                        MType := ENGINE;
                      when others =>
                         MType := ANY;
                   end case;
@@ -359,6 +387,49 @@ package body Ships.SaveLoad is
                            MaxDurability => MaxDurability, Owner => Owner,
                            UpgradeProgress => UpgradeProgress,
                            UpgradeAction => UpgradeAction, Data => Data));
+                  when ENGINE =>
+                     declare
+                        FuelUsage, Power: Positive;
+                        Disabled: Boolean;
+                     begin
+                        ModuleData := Child_Nodes(ChildNode);
+                        DataIndex := 1;
+                        for K in 0 .. Length(ModuleData) - 1 loop
+                           ModuleNode := Item(ModuleData, K);
+                           if Node_Name(ModuleNode) = "data" then
+                              case DataIndex is
+                                 when 1 =>
+                                    FuelUsage :=
+                                      Integer'Value
+                                        (Get_Attribute(ModuleNode, "value"));
+                                 when 2 =>
+                                    Power :=
+                                      Integer'Value
+                                        (Get_Attribute(ModuleNode, "value"));
+                                 when 3 =>
+                                    if Get_Attribute(ModuleNode, "value") =
+                                      "0" then
+                                       Disabled := False;
+                                    else
+                                       Disabled := True;
+                                    end if;
+                                 when others =>
+                                    null;
+                              end case;
+                              DataIndex := DataIndex + 1;
+                           end if;
+                        end loop;
+                        PlayerShip.Modules.Append
+                          (New_Item =>
+                             (MType => ENGINE, Name => Name,
+                              ProtoIndex => ProtoIndex, Weight => Weight,
+                              Durability => Durability,
+                              MaxDurability => MaxDurability, Owner => Owner,
+                              UpgradeProgress => UpgradeProgress,
+                              UpgradeAction => UpgradeAction,
+                              FuelUsage => FuelUsage, Power => Power,
+                              Disabled => Disabled));
+                     end;
                   when WORKSHOP =>
                      declare
                         CraftingIndex: Unbounded_String;
