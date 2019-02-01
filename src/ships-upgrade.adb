@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -60,7 +60,7 @@ package body Ships.Upgrade is
             case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
               .MType is
                when ENGINE =>
-                  if PlayerShip.Modules(ModuleIndex).Data(2) = MaxValue then
+                  if PlayerShip.Modules(ModuleIndex).Power = MaxValue then
                      raise Ship_Upgrade_Error
                        with "You can't improve more power of " &
                        To_String(PlayerShip.Modules(ModuleIndex).Name) & ".";
@@ -110,7 +110,7 @@ package body Ships.Upgrade is
             case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
               .MType is
                when ENGINE =>
-                  if PlayerShip.Modules(ModuleIndex).Data(1) = MaxValue then
+                  if PlayerShip.Modules(ModuleIndex).FuelUsage = MaxValue then
                      raise Ship_Upgrade_Error
                        with "You can't reduce more fuel usage of " &
                        To_String(PlayerShip.Modules(ModuleIndex).Name) & ".";

@@ -34,8 +34,8 @@ package body Ships.Movement is
          if Modules_List(Module.ProtoIndex).MType = COCKPIT and
            Module.Durability > 0 then
             HaveCockpit := True;
-         elsif Modules_List(Module.ProtoIndex).MType = ENGINE and
-           Module.Durability > 1 and Module.Data(3) = 0 then
+         elsif Module.MType = ENGINE
+           and then (Module.Durability > 1 and not Module.Disabled) then
             HaveEngine := True;
          end if;
          exit when HaveEngine and HaveCockpit;
@@ -286,8 +286,8 @@ package body Ships.Movement is
       HaveEngine: Boolean := False;
    begin
       for Module of PlayerShip.Modules loop
-         if Modules_List(Module.ProtoIndex).MType = ENGINE and
-           Module.Durability > 0 then
+         if Module.MType = ENGINE
+           and then (Module.Durability > 0 and not Module.Disabled) then
             HaveEngine := True;
             exit;
          end if;
@@ -319,9 +319,8 @@ package body Ships.Movement is
          Damage: DamageFactor := 0.0;
       begin
          for Module of Ship.Modules loop
-            if Modules_List(Module.ProtoIndex).MType = ENGINE
-              and then Module.Data(3) = 0 then
-               BaseSpeed := Module.Data(2) * 10;
+            if Module.MType = ENGINE and then not Module.Disabled then
+               BaseSpeed := Module.Power * 10;
                Damage :=
                  1.0 -
                  DamageFactor
@@ -378,15 +377,14 @@ package body Ships.Movement is
          Speed := GameSettings.UndockSpeed;
       end if;
       for Module of PlayerShip.Modules loop
-         if Modules_List(Module.ProtoIndex).MType = ENGINE
-           and then Module.Data(3) = 0 then
+         if Module.MType = ENGINE and then not Module.Disabled then
             case Speed is
                when QUARTER_SPEED =>
-                  FuelNeeded := FuelNeeded - (Module.Data(1) / 4);
+                  FuelNeeded := FuelNeeded - (Module.FuelUsage / 4);
                when HALF_SPEED =>
-                  FuelNeeded := FuelNeeded - (Module.Data(1) / 2);
+                  FuelNeeded := FuelNeeded - (Module.FuelUsage / 2);
                when FULL_SPEED =>
-                  FuelNeeded := FuelNeeded - Module.Data(1);
+                  FuelNeeded := FuelNeeded - Module.FuelUsage;
                when others =>
                   null;
             end case;
@@ -403,8 +401,7 @@ package body Ships.Movement is
          return;
       end if;
       for Module of PlayerShip.Modules loop
-         if Modules_List(Module.ProtoIndex).MType = ENGINE
-           and then Module.Data(3) = 0 then
+         if Module.MType = ENGINE and then not Module.Disabled then
             FuelNeeded := FuelNeeded - 1;
          end if;
       end loop;
