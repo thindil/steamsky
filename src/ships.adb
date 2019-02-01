@@ -129,6 +129,16 @@ package body Ships is
                         UpgradeProgress => 0, UpgradeAction => NONE,
                         FuelUsage => TempModule.Value,
                         Power => TempModule.MaxValue, Disabled => False));
+               when CABIN =>
+                  ShipModules.Append
+                    (New_Item =>
+                       (MType => CABIN, Name => Modules_List(Module).Name,
+                        ProtoIndex => Module, Weight => TempModule.Weight,
+                        Durability => TempModule.Durability,
+                        MaxDurability => TempModule.Durability, Owner => 0,
+                        UpgradeProgress => 0, UpgradeAction => NONE,
+                        Cleanliness => TempModule.Value,
+                        Quality => TempModule.MaxValue));
                when ALCHEMY_LAB .. GREENHOUSE =>
                   ShipModules.Append
                     (New_Item =>
@@ -246,8 +256,7 @@ package body Ships is
                TmpAttributes.Clear;
                TmpInventory.Clear;
                for Module of ShipModules loop
-                  if Modules_List(Module.ProtoIndex).MType = CABIN and
-                    Module.Owner = 0 then
+                  if Module.MType = CABIN and Module.Owner = 0 then
                      Module.Name :=
                        MemberName & To_Unbounded_String("'s Cabin");
                      Module.Owner := ShipCrew.Last_Index;

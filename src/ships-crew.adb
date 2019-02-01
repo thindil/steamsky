@@ -281,7 +281,7 @@ package body Ships.Crew is
                      exit;
                   end if;
                else
-                  if Modules_List(Ship.Modules(I).ProtoIndex).MType = CABIN and
+                  if Ship.Modules(I).MType = CABIN and
                     Ship.Modules(I).Durability > 0 and
                     Ship.Modules(I).Owner = MemberIndex then
                      ModuleIndex2 := Modules_Container.To_Index(I);
@@ -309,8 +309,8 @@ package body Ships.Crew is
                  " can't starts operating gun because all guns are destroyed or you don't have installed any.";
             when Rest =>
                for Module of Ship.Modules loop
-                  if Modules_List(Module.ProtoIndex).MType = CABIN and
-                    Module.Durability > 0 and Module.Owner = 0 then
+                  if Module.MType = CABIN and Module.Durability > 0 and
+                    Module.Owner = 0 then
                      Module.Owner := MemberIndex;
                      AddMessage
                        (MemberName & " take " & To_String(Module.Name) &
@@ -324,8 +324,7 @@ package body Ships.Crew is
          end case;
       end if;
       for Module of Ship.Modules loop
-         if Modules_List(Module.ProtoIndex).MType /= CABIN and
-           Module.Owner = MemberIndex then
+         if Module.MType /= CABIN and Module.Owner = MemberIndex then
             Module.Owner := 0;
             exit;
          end if;
@@ -545,7 +544,7 @@ package body Ships.Crew is
                      NeedCrafters := True;
                   end if;
                when CABIN =>
-                  if Module.Data(1) < Module.Data(2) then
+                  if Module.Cleanliness < Module.Quality then
                      NeedClean := True;
                   end if;
                when others =>

@@ -50,7 +50,6 @@ with Messages; use Messages;
 with Messages.UI; use Messages.UI;
 with Crew; use Crew;
 with Crew.UI; use Crew.UI;
-with ShipModules; use ShipModules;
 with Events; use Events;
 with Events.UI; use Events.UI;
 with Items; use Items;
@@ -839,7 +838,7 @@ package body Maps.UI.Handlers is
               PlayerShip.Crew(I).Health > 0 and
               PlayerShip.Crew(I).Order = Rest then
                for Module of PlayerShip.Modules loop
-                  if Modules_List(Module.ProtoIndex).MType = CABIN and
+                  if Module.MType = CABIN and
                     Module.Owner = Crew_Container.To_Index(I) then
                      if TimeNeeded <
                        (100 - PlayerShip.Crew(I).Health) * 15 then
@@ -1228,8 +1227,7 @@ package body Maps.UI.Handlers is
            PlayerShip.Crew(I).Health > 0 and
            PlayerShip.Crew(I).Order = Rest then
             for Module of PlayerShip.Modules loop
-               if Modules_List(Module.ProtoIndex).MType = CABIN and
-                 Module.Owner = I then
+               if Module.MType = CABIN and Module.Owner = I then
                   NeedHealing := True;
                   exit;
                end if;
