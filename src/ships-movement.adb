@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -297,7 +297,7 @@ package body Ships.Movement is
       end if;
       for Module of PlayerShip.Modules loop
          if Modules_List(Module.ProtoIndex).MType = ENGINE and
-           Module.Durability > 0 then
+           Module.Durability > 0 and Module.Data(3) = 0 then
             HaveEngine := True;
             exit;
          end if;
