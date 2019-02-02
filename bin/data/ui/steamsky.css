@@ -223,7 +223,7 @@ GtkFrame#redframe > GtkLabel {
 }
 
 /* Settings for tooltip popups */
-.tooltip, #tooltip {
+.tooltip {
    border-style:solid;
    border-width:1px;
    border-color:rgb(57,57,57);
