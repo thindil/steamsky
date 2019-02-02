@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Crash when checking cleanlinees of cabins
 - Crash on cleaning ship
 - Crash on crew member back to work after rest
+- Checking did player ship have enabled engines during changing ship speed
 
 ## [3.3 - 2019-01-27]
 
