@@ -9,7 +9,8 @@ All notable changes to this project will be documented in this file.
   ship mk IV, armored independent patrol ship mk IV, advanced poleis patrol
   ship mk II, advanced indepedent patrol ship mk II, advanced poleis patrol
   ship mk III, advanced independent patrol ship mk III, advanced poleis patrol
-  ship mk IV and advanced independent patrol ship mk IV
+  ship mk IV, advanced independent patrol ship mk IV and large poleis trader
+  mk II
 
 ### Fixed
 - Crash on selling ship modules in shipyard
