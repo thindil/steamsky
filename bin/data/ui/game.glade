@@ -713,15 +713,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="guint"/>
     </columns>
   </object>
-  <object class="GtkLabel" id="lbltooltip">
-    <property name="name">tooltip</property>
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="halign">center</property>
-    <property name="valign">center</property>
-    <property name="wrap">True</property>
-    <property name="max_width_chars">20</property>
-  </object>
   <object class="GtkListStore" id="levelslist">
     <columns>
       <!-- column-name gchararray1 -->

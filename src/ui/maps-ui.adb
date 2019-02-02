@@ -37,11 +37,9 @@ with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Overlay; use Gtk.Overlay;
 with Gtk.Text_Mark; use Gtk.Text_Mark;
-with Gtk.Container; use Gtk.Container;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
-with Glib.Main; use Glib.Main;
 with Gdk; use Gdk;
 with Gdk.Device; use Gdk.Device;
 with Gdk.Window; use Gdk.Window;
@@ -1035,40 +1033,6 @@ package body Maps.UI is
          To_String(MapInfoText));
    end UpdateMapInfo;
 
-   function AutoHideTooltip return Boolean is
-   begin
-      Hide(Gtk_Widget(Get_Object(Builder, "lbltooltip")));
-      return False;
-   end AutoHideTooltip;
-
-   function ShowTooltip(Self: access Gtk_Widget_Record'Class; X: Glib.Gint;
-      Y: Glib.Gint; Keyboard_Mode: Boolean;
-      Tooltip: not null access Glib.Object.GObject_Record'Class)
-      return Boolean is
-      pragma Unreferenced(X, Y, Keyboard_Mode, Tooltip);
-   begin
-      Set_Text
-        (Gtk_Label(Get_Object(Builder, "lbltooltip")), Get_Tooltip_Text(Self));
-      Show_All(Gtk_Widget(Get_Object(Builder, "lbltooltip")));
-      declare
-         Source_Id: G_Source_Id;
-         pragma Unreferenced(Source_Id);
-      begin
-         Source_Id := Timeout_Add(4000, AutoHideTooltip'Access);
-      end;
-      return True;
-   end ShowTooltip;
-
-   procedure SetTooltipWindow
-     (Widget: not null access Gtk.Widget.Gtk_Widget_Record'Class) is
-   begin
-      On_Query_Tooltip(Widget, ShowTooltip'Access);
-      Foreach(Gtk_Container(Widget), SetTooltipWindow'Access);
-   exception
-      when Constraint_Error =>
-         null;
-   end SetTooltipWindow;
-
    procedure CreateSkyMap is
       Error: aliased GError;
       Accelerators: Gtk_Accel_Group;
@@ -1111,9 +1075,6 @@ package body Maps.UI is
       Add_Overlay
         (Gtk_Overlay(Get_Object(Builder, "gameoverlay")),
          Gtk_Widget(Get_Object(Builder, "inforevealer")));
-      Add_Overlay
-        (Gtk_Overlay(Get_Object(Builder, "gameoverlay")),
-         Gtk_Widget(Get_Object(Builder, "lbltooltip")));
       Register_Handler(Builder, "Quit_Game", QuitGame'Access);
       Register_Handler(Builder, "Quit_Game_Menu", QuitGameMenu'Access);
       Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
@@ -1350,7 +1311,6 @@ package body Maps.UI is
          Set_Default_Size
            (Gtk_Window(MainWindow), Gint(GameSettings.WindowWidth),
             Gint(GameSettings.WindowHeight));
-         Foreach(Gtk_Container(MainWindow), SetTooltipWindow'Access);
       end;
       SetMapMoveButtons;
       ShowSkyMap;
@@ -1392,7 +1352,6 @@ package body Maps.UI is
       Hide(Gtk_Widget(Get_Object(Builder, "maprightrevealer")));
       Hide(Gtk_Widget(Get_Object(Builder, "mapuprevealer")));
       Hide(Gtk_Widget(Get_Object(Builder, "mapdownrevealer")));
-      Hide(Gtk_Widget(Get_Object(Builder, "lbltooltip")));
       if not GameSettings.ShowMapButtons then
          Hide(Gtk_Widget(Get_Object(Builder, "mapleftevent")));
          Hide(Gtk_Widget(Get_Object(Builder, "maprightevent")));
