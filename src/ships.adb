@@ -158,6 +158,33 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability, Owner => 0,
                         UpgradeProgress => 0, UpgradeAction => NONE));
+               when COCKPIT =>
+                  ShipModules.Append
+                    (New_Item =>
+                       (MType => COCKPIT, Name => Modules_List(Module).Name,
+                        ProtoIndex => Module, Weight => TempModule.Weight,
+                        Durability => TempModule.Durability,
+                        MaxDurability => TempModule.Durability, Owner => 0,
+                        UpgradeProgress => 0, UpgradeAction => NONE));
+               when TRAINING_ROOM =>
+                  ShipModules.Append
+                    (New_Item =>
+                       (MType => TRAINING_ROOM,
+                        Name => Modules_List(Module).Name,
+                        ProtoIndex => Module, Weight => TempModule.Weight,
+                        Durability => TempModule.Durability,
+                        MaxDurability => TempModule.Durability, Owner => 0,
+                        UpgradeProgress => 0, UpgradeAction => NONE,
+                        TrainedSkill => 0));
+               when TURRET =>
+                  ShipModules.Append
+                    (New_Item =>
+                       (MType => TURRET, Name => Modules_List(Module).Name,
+                        ProtoIndex => Module, Weight => TempModule.Weight,
+                        Durability => TempModule.Durability,
+                        MaxDurability => TempModule.Durability, Owner => 0,
+                        UpgradeProgress => 0, UpgradeAction => NONE,
+                        GunIndex => 0));
                when others =>
                   ShipModules.Append
                     (New_Item =>
@@ -301,23 +328,22 @@ package body Ships is
       begin
          Amount := 0;
          for I in TmpShip.Modules.Iterate loop
-            if Modules_List(TmpShip.Modules(I).ProtoIndex).MType = TURRET then
+            if TmpShip.Modules(I).MType = TURRET then
                for J in TmpShip.Modules.Iterate loop
                   if Modules_List(TmpShip.Modules(J).ProtoIndex).MType = GUN or
                     Modules_List(TmpShip.Modules(J).ProtoIndex).MType =
                       HARPOON_GUN then
                      GunAssigned := False;
                      for K in TmpShip.Modules.Iterate loop
-                        if Modules_List(TmpShip.Modules(K).ProtoIndex).MType =
-                          TURRET
-                          and then TmpShip.Modules(K).Data(1) =
+                        if TmpShip.Modules(K).MType = TURRET
+                          and then TmpShip.Modules(K).GunIndex =
                             Modules_Container.To_Index(J) then
                            GunAssigned := True;
                            exit;
                         end if;
                      end loop;
                      if not GunAssigned then
-                        TmpShip.Modules(I).Data(1) :=
+                        TmpShip.Modules(I).GunIndex :=
                           Modules_Container.To_Index(J);
                      end if;
                   end if;

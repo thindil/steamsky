@@ -30,7 +30,8 @@ package Ships is
    type ShipUpgrade is (NONE, DURABILITY, MAX_VALUE, VALUE);
    type Data_Array is array(1 .. 3) of Integer;
    type ModuleType2 is
-     (WORKSHOP, ANY, MEDICAL_ROOM, TRAINING_ROOM, ENGINE, CABIN, COCKPIT);
+     (WORKSHOP, ANY, MEDICAL_ROOM, TRAINING_ROOM, ENGINE, CABIN, COCKPIT,
+      TURRET);
    type ModuleData(MType: ModuleType2 := ANY)
    is -- Data structure for ship modules
    record
@@ -50,6 +51,8 @@ package Ships is
          when CABIN =>
             Cleanliness: Natural; -- Cleanliness of selected cabin
             Quality: Natural; -- Quality of selected cabin
+         when TURRET =>
+            GunIndex: Natural; -- Index of installed gun
          when WORKSHOP =>
             CraftingIndex: Unbounded_String; -- Index of crafting recipe or item which is deconstructed
             CraftingTime: Natural; -- Time needed to finish crating order

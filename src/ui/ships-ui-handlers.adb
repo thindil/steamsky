@@ -260,11 +260,11 @@ package body Ships.UI.Handlers is
                Append(ModuleInfo, "Gunner: none");
             end if;
          when TURRET =>
-            if Module.Data(1) > 0 then
+            if Module.GunIndex > 0 then
                Append
                  (ModuleInfo,
                   "Weapon: " &
-                  To_String(PlayerShip.Modules(Module.Data(1)).Name));
+                  To_String(PlayerShip.Modules(Module.GunIndex).Name));
             else
                Append(ModuleInfo, "Weapon: none");
             end if;
