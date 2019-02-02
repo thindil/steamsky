@@ -31,8 +31,7 @@ package body Ships.Movement is
       HaveCockpit, HaveEngine, HavePilot, HaveEngineer: Boolean := False;
    begin
       for Module of PlayerShip.Modules loop
-         if Modules_List(Module.ProtoIndex).MType = COCKPIT and
-           Module.Durability > 0 then
+         if Module.MType = COCKPIT and Module.Durability > 0 then
             HaveCockpit := True;
          elsif Module.MType = ENGINE
            and then (Module.Durability > 1 and not Module.Disabled) then

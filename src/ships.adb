@@ -270,8 +270,7 @@ package body Ships is
                      Member.Order = Gunner) then
                      Module.Owner := ShipCrew.Last_Index;
                      exit;
-                  elsif Modules_List(Module.ProtoIndex).MType = COCKPIT and
-                    Member.Order = Pilot then
+                  elsif Module.MType = COCKPIT and Member.Order = Pilot then
                      Module.Owner := ShipCrew.Last_Index;
                      exit;
                   end if;
