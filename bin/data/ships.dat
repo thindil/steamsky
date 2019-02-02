@@ -4314,5 +4314,26 @@ during combat. -->
   <member amount="3" index="65"/>
   <description>Advanced, upgraded version of standard poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
+ <ship combatai="DISARMER" index="230" maxloot="250" minloot="200" name="Advanced independent patrol ship mk IV" owner="INDEPENDENT">
+  <module index="140"/>
+  <module index="143"/>
+  <module index="136"/>
+  <module amount="6" index="93"/>
+  <module index="130"/>
+  <module index="132"/>
+  <module amount="2" index="222"/>
+  <module index="145"/>
+  <module index="160"/>
+  <cargo index="1" maxamount="1700" minamount="1000"/>
+  <cargo index="2" maxamount="200" minamount="100"/>
+  <cargo index="3" maxamount="400" minamount="200"/>
+  <cargo index="117" maxamount="500" minamount="300"/>
+  <cargo index="116" maxamount="200" minamount="100"/>
+  <member index="32"/>
+  <member index="33"/>
+  <member index="34"/>
+  <member amount="3" index="65"/>
+  <description>Advanced, upgraded version of standard independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
+ </ship>
 </ships>
 
