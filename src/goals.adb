@@ -187,7 +187,8 @@ package body Goals is
                      InsertPosition := InsertPosition - 1;
                   end if;
                   Insert
-                    (Text, InsertPosition, GetFactionName(Goal.TargetIndex, Name) & " ");
+                    (Text, InsertPosition,
+                     GetFactionName(Goal.TargetIndex, Name) & " ");
                end if;
             when CRAFT =>
                if FindRecipe(Goal.TargetIndex) > 0 then
