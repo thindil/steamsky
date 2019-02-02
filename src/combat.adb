@@ -399,13 +399,13 @@ package body Combat is
                                     when 5 =>
                                        HitLocation := 0;
                                        for J in EnemyShip.Modules.Iterate loop
-                                          if Modules_List
-                                              (EnemyShip.Modules(J).ProtoIndex)
-                                              .MType =
-                                            TURRET and
-                                            EnemyShip.Modules(J).Durability >
-                                              0 and
-                                            EnemyShip.Modules(J).Data(1) >
+                                          if
+                                            (EnemyShip.Modules(J).MType =
+                                             TURRET and
+                                             EnemyShip.Modules(J).Durability >
+                                               0)
+                                            and then
+                                              EnemyShip.Modules(J).GunIndex >
                                               0 then
                                              HitLocation :=
                                                Modules_Container.To_Index(J);
@@ -435,11 +435,8 @@ package body Combat is
                                  HitLocation := 1;
                                  for J in EnemyShip.Modules.Iterate loop
                                     if
-                                      ((Modules_List
-                                          (EnemyShip.Modules(J).ProtoIndex)
-                                          .MType =
-                                        TURRET and
-                                        EnemyShip.Modules(J).Data(1) > 0) or
+                                      ((EnemyShip.Modules(J).MType = TURRET and
+                                        EnemyShip.Modules(J).GunIndex > 0) or
                                        Modules_List
                                            (EnemyShip.Modules(J).ProtoIndex)
                                            .MType =
@@ -529,7 +526,7 @@ package body Combat is
                                  end if;
                               when TURRET =>
                                  WeaponIndex :=
-                                   EnemyShip.Modules(HitLocation).Data(1);
+                                   EnemyShip.Modules(HitLocation).GunIndex;
                                  if WeaponIndex > 0 then
                                     EnemyShip.Modules(WeaponIndex)
                                       .Durability :=

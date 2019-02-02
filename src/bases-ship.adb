@@ -89,7 +89,7 @@ package body Bases.Ship is
                HullIndex := Modules_Container.To_Index(C);
                ModulesAmount := PlayerShip.Modules(C).Data(1);
             when TURRET =>
-               if PlayerShip.Modules(C).Data(1) = 0 then
+               if PlayerShip.Modules(C).GunIndex = 0 then
                   FreeTurretIndex := Modules_Container.To_Index(C);
                end if;
             when others =>
@@ -190,6 +190,28 @@ package body Bases.Ship is
                         MaxDurability => Modules_List(ModuleIndex).Durability,
                         Owner => 0, UpgradeProgress => 0,
                         UpgradeAction => NONE, TrainedSkill => 0));
+               when COCKPIT =>
+                  PlayerShip.Modules.Append
+                    (New_Item =>
+                       (MType => COCKPIT,
+                        Name => Modules_List(ModuleIndex).Name,
+                        ProtoIndex => ModuleIndex,
+                        Weight => Modules_List(ModuleIndex).Weight,
+                        Durability => Modules_List(ModuleIndex).Durability,
+                        MaxDurability => Modules_List(ModuleIndex).Durability,
+                        Owner => 0, UpgradeProgress => 0,
+                        UpgradeAction => NONE));
+               when TURRET =>
+                  PlayerShip.Modules.Append
+                    (New_Item =>
+                       (MType => TURRET,
+                        Name => Modules_List(ModuleIndex).Name,
+                        ProtoIndex => ModuleIndex,
+                        Weight => Modules_List(ModuleIndex).Weight,
+                        Durability => Modules_List(ModuleIndex).Durability,
+                        MaxDurability => Modules_List(ModuleIndex).Durability,
+                        Owner => 0, UpgradeProgress => 0,
+                        UpgradeAction => NONE, GunIndex => 0));
                when others =>
                   PlayerShip.Modules.Append
                     (New_Item =>
@@ -220,7 +242,7 @@ package body Bases.Ship is
          end if;
          case Modules_List(ModuleIndex).MType is
             when GUN | HARPOON_GUN =>
-               PlayerShip.Modules(FreeTurretIndex).Data(1) :=
+               PlayerShip.Modules(FreeTurretIndex).GunIndex :=
                  PlayerShip.Modules.Last_Index;
             when others =>
                PlayerShip.Modules(HullIndex).Data(1) := ModulesAmount;
@@ -257,15 +279,15 @@ package body Bases.Ship is
          end if;
          case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
             when TURRET =>
-               if PlayerShip.Modules(ModuleIndex).Data(1) > 0 then
+               if PlayerShip.Modules(ModuleIndex).GunIndex > 0 then
                   raise BasesShip_Removing_Error
                     with "You have installed gun in this turret, remove it before you remove this turret.";
                end if;
             when GUN | HARPOON_GUN =>
                for Module of PlayerShip.Modules loop
-                  if Modules_List(Module.ProtoIndex).MType = TURRET and
-                    Module.Data(1) = ModuleIndex then
-                     Module.Data(1) := 0;
+                  if Module.MType = TURRET
+                    and then Module.GunIndex = ModuleIndex then
+                     Module.GunIndex := 0;
                      exit;
                   end if;
                end loop;
@@ -321,9 +343,9 @@ package body Bases.Ship is
             PlayerShip.UpgradeModule := PlayerShip.UpgradeModule - 1;
          end if;
          for Module of PlayerShip.Modules loop
-            if Modules_List(Module.ProtoIndex).MType = TURRET
-              and then Module.Data(1) > ModuleIndex then
-               Module.Data(1) := Module.Data(1) - 1;
+            if Module.MType = TURRET
+              and then Module.GunIndex > ModuleIndex then
+               Module.GunIndex := Module.GunIndex - 1;
             end if;
          end loop;
       end if;
