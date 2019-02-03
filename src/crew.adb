@@ -380,9 +380,9 @@ package body Crew is
                          (Float(PlayerShip.Modules(CabinIndex).Durability) /
                           Float(PlayerShip.Modules(CabinIndex).MaxDurability));
                      RestAmount :=
-                       PlayerShip.Modules(CabinIndex).Data(1) -
+                       PlayerShip.Modules(CabinIndex).Cleanliness -
                        Natural
-                         (Float(PlayerShip.Modules(CabinIndex).Data(1)) *
+                         (Float(PlayerShip.Modules(CabinIndex).Cleanliness) *
                           Float(Damage));
                      if RestAmount = 0 then
                         RestAmount := 1;
@@ -726,9 +726,9 @@ package body Crew is
                    (Float(PlayerShip.Modules(CabinIndex).Durability) /
                     Float(PlayerShip.Modules(CabinIndex).MaxDurability));
                CabinBonus :=
-                 PlayerShip.Modules(CabinIndex).Data(1) -
+                 PlayerShip.Modules(CabinIndex).Cleanliness -
                  Natural
-                   (Float(PlayerShip.Modules(CabinIndex).Data(1)) *
+                   (Float(PlayerShip.Modules(CabinIndex).Cleanliness) *
                     Float(Damage));
                if CabinBonus = 0 then
                   CabinBonus := 1;
