@@ -239,24 +239,27 @@ package body Combat.UI is
          for I in Guns.First_Index .. Guns.Last_Index loop
             Append(CrewList, CrewIter);
             HaveAmmo := False;
-            if
-              (PlayerShip.Modules(Guns(I)(1)).Data(1) >=
-               PlayerShip.Cargo.First_Index and
-               PlayerShip.Modules(Guns(I)(1)).Data(1) <=
-                 PlayerShip.Cargo.Last_Index)
-              and then
-                Items_List
-                  (PlayerShip.Cargo(PlayerShip.Modules(Guns(I)(1)).Data(1))
-                     .ProtoIndex)
-                  .IType =
-                Items_Types
-                  (Modules_List(PlayerShip.Modules(Guns(I)(1)).ProtoIndex)
-                     .Value) then
-               AmmoAmount :=
-                 PlayerShip.Cargo(PlayerShip.Modules(Guns(I)(1)).Data(1))
-                   .Amount;
-               HaveAmmo := True;
-            end if;
+            declare
+               AmmoIndex: Natural;
+            begin
+               if PlayerShip.Modules(Guns(I)(1)).MType = GUN then
+                  AmmoIndex := PlayerShip.Modules(Guns(I)(1)).AmmoIndex;
+               else
+                  AmmoIndex := PlayerShip.Modules(Guns(I)(1)).Data(1);
+               end if;
+               if
+                 (AmmoIndex in
+                    PlayerShip.Cargo.First_Index ..
+                          PlayerShip.Cargo.Last_Index)
+                 and then
+                   Items_List(PlayerShip.Cargo(AmmoIndex).ProtoIndex).IType =
+                   Items_Types
+                     (Modules_List(PlayerShip.Modules(Guns(I)(1)).ProtoIndex)
+                        .Value) then
+                  AmmoAmount := PlayerShip.Cargo(AmmoIndex).Amount;
+                  HaveAmmo := True;
+               end if;
+            end;
             if not HaveAmmo then
                AmmoAmount := 0;
                for J in Items_List.Iterate loop

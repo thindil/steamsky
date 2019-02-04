@@ -49,11 +49,11 @@ package body Ships.Cargo is
             if NewAmount < 1 then
                Ship.Cargo.Delete(Index => ItemIndex);
                for Module of Ship.Modules loop
-                  if Modules_List(Module.ProtoIndex).MType = GUN then
-                     if Module.Data(1) > ItemIndex then
-                        Module.Data(1) := Module.Data(1) - 1;
-                     elsif Module.Data(1) = ItemIndex then
-                        Module.Data(1) := 0;
+                  if Module.MType = GUN then
+                     if Module.AmmoIndex > ItemIndex then
+                        Module.AmmoIndex := Module.AmmoIndex - 1;
+                     elsif Module.AmmoIndex = ItemIndex then
+                        Module.AmmoIndex := 0;
                      end if;
                   end if;
                end loop;

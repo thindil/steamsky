@@ -533,12 +533,12 @@ package body Ships.Crew is
       end loop;
       for Module of Ship.Modules loop
          if Module.Durability > 0 then
-            case Modules_List(Module.ProtoIndex).MType is
+            case Module.MType is
                when GUN =>
                   if Module.Owner = 0 and not NeedGunners then
                      NeedGunners := True;
                   end if;
-               when ALCHEMY_LAB .. GREENHOUSE =>
+               when WORKSHOP =>
                   if Module.CraftingIndex /= Null_Unbounded_String and
                     Module.Owner = 0 and not NeedCrafters then
                      NeedCrafters := True;

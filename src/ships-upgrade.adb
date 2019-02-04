@@ -74,11 +74,21 @@ package body Ships.Upgrade is
                   end if;
                   UpgradeProgress := 100;
                when GUN | BATTERING_RAM =>
-                  if PlayerShip.Modules(ModuleIndex).Data(2) = MaxValue then
-                     raise Ship_Upgrade_Error
-                       with "You can't improve more damage of " &
-                       To_String(PlayerShip.Modules(ModuleIndex).Name) & ".";
-                  end if;
+                  declare
+                     Damage: Positive;
+                  begin
+                     if PlayerShip.Modules(ModuleIndex).MType = GUN then
+                        Damage := PlayerShip.Modules(ModuleIndex).Damage;
+                     else
+                        Damage := PlayerShip.Modules(ModuleIndex).Data(2);
+                     end if;
+                     if Damage = MaxValue then
+                        raise Ship_Upgrade_Error
+                          with "You can't improve more damage of " &
+                          To_String(PlayerShip.Modules(ModuleIndex).Name) &
+                          ".";
+                     end if;
+                  end;
                   UpgradeProgress := 100;
                when HULL =>
                   if PlayerShip.Modules(ModuleIndex).Data(2) = MaxValue then
