@@ -235,16 +235,16 @@ package body Crew is
               (Member.PreviousOrder = Gunner or
                Member.PreviousOrder = Craft) then
                for Module of PlayerShip.Modules loop
-                  if Member.PreviousOrder = Gunner and
-                    Modules_List(Module.ProtoIndex).MType = GUN and
+                  if Member.PreviousOrder = Gunner and Module.MType = GUN and
                     (Module.Owner = I or Module.Owner = 0) then
                      BackToWork := True;
                      Module.Owner := I;
                      exit;
-                  elsif Member.PreviousOrder = Craft and
-                    Module.MType = WORKSHOP and
-                    (Module.Owner = I or Module.Owner = 0) and
-                    Module.CraftingIndex /= Null_Unbounded_String then
+                  elsif
+                    (Member.PreviousOrder = Craft and
+                     Module.MType = WORKSHOP and
+                     (Module.Owner = I or Module.Owner = 0))
+                    and then Module.CraftingIndex /= Null_Unbounded_String then
                      BackToWork := True;
                      Module.Owner := I;
                      exit;

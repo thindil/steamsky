@@ -124,7 +124,7 @@ package body Combat is
       Guns.Clear;
       for I in PlayerShip.Modules.Iterate loop
          if
-           (Modules_List(PlayerShip.Modules(I).ProtoIndex).MType = GUN or
+           (PlayerShip.Modules(I).MType = GUN or
             Modules_List(PlayerShip.Modules(I).ProtoIndex).MType =
               HARPOON_GUN) and
            PlayerShip.Modules(I).Durability > 0 then
@@ -180,7 +180,8 @@ package body Combat is
       DamageRange: Positive := 10000;
       FreeSpace: Integer := 0;
       procedure Attack(Ship, EnemyShip: in out ShipRecord) is
-         GunnerIndex, Shoots, AmmoIndex, ArmorIndex, WeaponIndex: Natural;
+         GunnerIndex, Shoots, AmmoIndex, ArmorIndex, WeaponIndex,
+         AmmoIndex2: Natural;
          GunnerOrder: Positive;
          HitChance, HitLocation, CurrentAccuracyBonus: Integer;
          type DamageFactor is digits 2 range 0.0 .. 1.0;
@@ -226,15 +227,20 @@ package body Combat is
          Attack_Loop :
          for K in Ship.Modules.Iterate loop
             if Ship.Modules(K).Durability > 0 and
-              (Modules_List(Ship.Modules(K).ProtoIndex).MType = GUN or
+              (Ship.Modules(K).MType = GUN or
                Modules_List(Ship.Modules(K).ProtoIndex).MType =
                  BATTERING_RAM or
                Modules_List(Ship.Modules(K).ProtoIndex).MType =
                  HARPOON_GUN) then
                GunnerIndex := 0;
                AmmoIndex := 0;
+               if Modules_List(Ship.Modules(K).ProtoIndex).MType /= GUN then
+                  AmmoIndex2 := Ship.Modules(K).Data(1);
+               else
+                  AmmoIndex2 := Ship.Modules(K).AmmoIndex;
+               end if;
                if
-                 (Modules_List(Ship.Modules(K).ProtoIndex).MType = GUN or
+                 (Ship.Modules(K).MType = GUN or
                   Modules_List(Ship.Modules(K).ProtoIndex).MType =
                     HARPOON_GUN) then
                   GunnerIndex := Ship.Modules(K).Owner;
@@ -278,15 +284,13 @@ package body Combat is
                         Shoots := 0;
                      end if;
                   end if;
-                  if Ship.Modules(K).Data(1) in
+                  if AmmoIndex2 in
                       Ship.Cargo.First_Index .. Ship.Cargo.Last_Index
                     and then
-                      Items_List
-                        (Ship.Cargo(Ship.Modules(K).Data(1)).ProtoIndex)
-                        .IType =
+                      Items_List(Ship.Cargo(AmmoIndex2).ProtoIndex).IType =
                       Items_Types
                         (Modules_List(Ship.Modules(K).ProtoIndex).Value) then
-                     AmmoIndex := Ship.Modules(K).Data(1);
+                     AmmoIndex := AmmoIndex2;
                   end if;
                   if AmmoIndex = 0 then
                      for I in Items_List.Iterate loop
@@ -298,7 +302,13 @@ package body Combat is
                               if Ship.Cargo(J).ProtoIndex =
                                 Objects_Container.Key(I) then
                                  AmmoIndex := Inventory_Container.To_Index(J);
-                                 Ship.Modules(K).Data(1) := AmmoIndex;
+                                 if Modules_List(Ship.Modules(K).ProtoIndex)
+                                     .MType /=
+                                   GUN then
+                                    Ship.Modules(K).Data(1) := AmmoIndex;
+                                 else
+                                    Ship.Modules(K).AmmoIndex := AmmoIndex;
+                                 end if;
                                  exit;
                               end if;
                            end loop;
@@ -364,8 +374,7 @@ package body Combat is
                     ("Chance to hit:" & Integer'Image(HitChance), Log.Combat);
                   for I in 1 .. Shoots loop
                      if Ship = PlayerShip then
-                        if Modules_List(Ship.Modules(K).ProtoIndex).MType =
-                          GUN or
+                        if Ship.Modules(K).MType = GUN or
                           Modules_List(Ship.Modules(K).ProtoIndex).MType =
                             HARPOON_GUN then
                            ShootMessage :=
@@ -467,10 +476,19 @@ package body Combat is
                           DamageFactor
                             (Float(Ship.Modules(K).Durability) /
                              Float(Ship.Modules(K).MaxDurability));
-                        WeaponDamage :=
-                          Ship.Modules(K).Data(2) -
-                          Natural
-                            (Float(Ship.Modules(K).Data(2)) * Float(Damage));
+                        if Modules_List(Ship.Modules(K).ProtoIndex).MType /=
+                          GUN then
+                           WeaponDamage :=
+                             Ship.Modules(K).Data(2) -
+                             Natural
+                               (Float(Ship.Modules(K).Data(2)) *
+                                Float(Damage));
+                        else
+                           WeaponDamage :=
+                             Ship.Modules(K).Damage -
+                             Natural
+                               (Float(Ship.Modules(K).Damage) * Float(Damage));
+                        end if;
                         if WeaponDamage = 0 then
                            WeaponDamage := 1;
                         end if;
@@ -996,17 +1014,15 @@ package body Combat is
       EvadeBonus := EvadeBonus - SpeedBonus;
       for I in Enemy.Ship.Modules.Iterate loop
          if Enemy.Ship.Modules(I).Durability > 0 and
-           (Modules_List(Enemy.Ship.Modules(I).ProtoIndex).MType = GUN or
+           (Enemy.Ship.Modules(I).MType = GUN or
             Modules_List(Enemy.Ship.Modules(I).ProtoIndex).MType =
               BATTERING_RAM or
             Modules_List(Enemy.Ship.Modules(I).ProtoIndex).MType =
               HARPOON_GUN) then
-            if Modules_List(Enemy.Ship.Modules(I).ProtoIndex).MType = GUN or
+            if Enemy.Ship.Modules(I).MType = GUN or
               Modules_List(Enemy.Ship.Modules(I).ProtoIndex).MType =
                 HARPOON_GUN then
-               if Modules_List(Enemy.Ship.Modules(I).ProtoIndex).MType =
-                 GUN and
-                 DamageRange > 5000 then
+               if Enemy.Ship.Modules(I).MType = GUN and DamageRange > 5000 then
                   DamageRange := 5000;
                elsif DamageRange > 2000 then
                   DamageRange := 2000;

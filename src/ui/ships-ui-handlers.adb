@@ -216,20 +216,29 @@ package body Ships.UI.Handlers is
          when GUN | HARPOON_GUN =>
             Append(ModuleInfo, "Ammunition: ");
             HaveAmmo := False;
-            if
-              (Module.Data(1) >= PlayerShip.Cargo.First_Index and
-               Module.Data(1) <= PlayerShip.Cargo.Last_Index)
-              and then
-                Items_List(PlayerShip.Cargo(Module.Data(1)).ProtoIndex).IType =
-                Items_Types(Modules_List(Module.ProtoIndex).Value) then
-               Append
-                 (ModuleInfo,
-                  To_String
-                    (Items_List(PlayerShip.Cargo(Module.Data(1)).ProtoIndex)
-                       .Name) &
-                  " (assigned)");
-               HaveAmmo := True;
-            end if;
+            declare
+               AmmoIndex: Natural;
+            begin
+               if Module.MType = GUN then
+                  AmmoIndex := Module.AmmoIndex;
+               else
+                  AmmoIndex := Module.Data(1);
+               end if;
+               if
+                 (AmmoIndex >= PlayerShip.Cargo.First_Index and
+                  AmmoIndex <= PlayerShip.Cargo.Last_Index)
+                 and then
+                   Items_List(PlayerShip.Cargo(AmmoIndex).ProtoIndex).IType =
+                   Items_Types(Modules_List(Module.ProtoIndex).Value) then
+                  Append
+                    (ModuleInfo,
+                     To_String
+                       (Items_List(PlayerShip.Cargo(AmmoIndex).ProtoIndex)
+                          .Name) &
+                     " (assigned)");
+                  HaveAmmo := True;
+               end if;
+            end;
             if not HaveAmmo then
                Mamount := 0;
                for I in Items_List.Iterate loop
@@ -534,7 +543,11 @@ package body Ships.UI.Handlers is
            Positive'Value
              (Get_Active_Id
                 (Gtk_Combo_Box(Get_Object(Builder, "cmbassignammo"))));
-         PlayerShip.Modules(ModuleIndex).Data(1) := AssignIndex;
+         if PlayerShip.Modules(ModuleIndex).MType = GUN then
+            PlayerShip.Modules(ModuleIndex).AmmoIndex := AssignIndex;
+         else
+            PlayerShip.Modules(ModuleIndex).Data(1) := AssignIndex;
+         end if;
          AddMessage
            ("You assigned " &
             To_String

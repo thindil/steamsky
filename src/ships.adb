@@ -185,6 +185,15 @@ package body Ships is
                         MaxDurability => TempModule.Durability, Owner => 0,
                         UpgradeProgress => 0, UpgradeAction => NONE,
                         GunIndex => 0));
+               when GUN =>
+                  ShipModules.Append
+                    (New_Item =>
+                       (MType => GUN, Name => Modules_List(Module).Name,
+                        ProtoIndex => Module, Weight => TempModule.Weight,
+                        Durability => TempModule.Durability,
+                        MaxDurability => TempModule.Durability, Owner => 0,
+                        UpgradeProgress => 0, UpgradeAction => NONE,
+                        Damage => TempModule.MaxValue, AmmoIndex => 0));
                when others =>
                   ShipModules.Append
                     (New_Item =>
@@ -292,7 +301,7 @@ package body Ships is
                end loop;
                for Module of ShipModules loop
                   if Module.Owner = 0 and
-                    ((Modules_List(Module.ProtoIndex).MType = GUN or
+                    ((Module.MType = GUN or
                       Modules_List(Module.ProtoIndex).MType = HARPOON_GUN) and
                      Member.Order = Gunner) then
                      Module.Owner := ShipCrew.Last_Index;
@@ -330,7 +339,7 @@ package body Ships is
          for I in TmpShip.Modules.Iterate loop
             if TmpShip.Modules(I).MType = TURRET then
                for J in TmpShip.Modules.Iterate loop
-                  if Modules_List(TmpShip.Modules(J).ProtoIndex).MType = GUN or
+                  if TmpShip.Modules(J).MType = GUN or
                     Modules_List(TmpShip.Modules(J).ProtoIndex).MType =
                       HARPOON_GUN then
                      GunAssigned := False;
@@ -842,12 +851,13 @@ package body Ships is
    begin
       for Module of PlayerShip.Modules loop
          case Modules_List(Module.ProtoIndex).MType is
-            when HULL | GUN | BATTERING_RAM =>
+            when HULL | BATTERING_RAM =>
                CombatValue :=
                  CombatValue + Module.MaxDurability + (Module.Data(2) * 10);
-               if Modules_List(Module.ProtoIndex).MType = GUN then
-                  CountAmmoValue(Modules_List(Module.ProtoIndex).Value, 10);
-               end if;
+            when GUN =>
+               CombatValue :=
+                 CombatValue + Module.MaxDurability + (Module.Damage * 10);
+               CountAmmoValue(Modules_List(Module.ProtoIndex).Value, 10);
             when ARMOR =>
                CombatValue := CombatValue + Module.MaxDurability;
             when HARPOON_GUN =>
