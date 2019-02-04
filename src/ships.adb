@@ -194,6 +194,15 @@ package body Ships is
                         MaxDurability => TempModule.Durability, Owner => 0,
                         UpgradeProgress => 0, UpgradeAction => NONE,
                         Damage => TempModule.MaxValue, AmmoIndex => 0));
+               when CARGO =>
+                  ShipModules.Append
+                    (New_Item =>
+                       (MType => CARGO_ROOM, Name => Modules_List(Module).Name,
+                        ProtoIndex => Module, Weight => TempModule.Weight,
+                        Durability => TempModule.Durability,
+                        MaxDurability => TempModule.Durability, Owner => 0,
+                        UpgradeProgress => 0, UpgradeAction => NONE,
+                        MaxWeight => TempModule.MaxValue));
                when others =>
                   ShipModules.Append
                     (New_Item =>

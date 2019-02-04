@@ -196,6 +196,14 @@ package body Ships.SaveLoad is
                   Set_Attribute
                     (ModuleDataNode, "value",
                      To_String(Trim(RawValue, Ada.Strings.Left)));
+               when CARGO_ROOM =>
+                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
+                  RawValue :=
+                    To_Unbounded_String(Integer'Image(Module.MaxWeight));
+                  Set_Attribute
+                    (ModuleDataNode, "value",
+                     To_String(Trim(RawValue, Ada.Strings.Left)));
             end case;
          end loop;
       end;
@@ -394,6 +402,8 @@ package body Ships.SaveLoad is
                         MType := TURRET;
                      when GUN =>
                         MType := GUN;
+                     when CARGO =>
+                        MType := CARGO_ROOM;
                      when others =>
                         MType :=
                           ModuleType2'Value(Get_Attribute(ChildNode, "mtype"));
@@ -416,6 +426,8 @@ package body Ships.SaveLoad is
                         MType := TURRET;
                      when GUN =>
                         MType := GUN;
+                     when CARGO =>
+                        MType := CARGO_ROOM;
                      when others =>
                         MType := ANY;
                   end case;
@@ -666,6 +678,32 @@ package body Ships.SaveLoad is
                               UpgradeProgress => UpgradeProgress,
                               UpgradeAction => UpgradeAction, Damage => Damage,
                               AmmoIndex => AmmoIndex));
+                     end;
+                  when CARGO_ROOM =>
+                     declare
+                        MaxWeight: Positive;
+                     begin
+                        ModuleData := Child_Nodes(ChildNode);
+                        DataIndex := 1;
+                        for K in 0 .. Length(ModuleData) - 1 loop
+                           ModuleNode := Item(ModuleData, K);
+                           if Node_Name(ModuleNode) = "data" and
+                             DataIndex = 1 then
+                              MaxWeight :=
+                                Integer'Value
+                                  (Get_Attribute(ModuleNode, "value"));
+                              DataIndex := DataIndex + 1;
+                           end if;
+                        end loop;
+                        PlayerShip.Modules.Append
+                          (New_Item =>
+                             (MType => CARGO_ROOM, Name => Name,
+                              ProtoIndex => ProtoIndex, Weight => Weight,
+                              Durability => Durability,
+                              MaxDurability => MaxDurability, Owner => Owner,
+                              UpgradeProgress => UpgradeProgress,
+                              UpgradeAction => UpgradeAction,
+                              MaxWeight => MaxWeight));
                      end;
                end case;
             end;
