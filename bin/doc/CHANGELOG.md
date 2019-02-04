@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - RFE: allow to scroll box info (during character creation) using keyboard
   (issue #41)
 - Checking did player ship have enabled engines during changing ship speed
+- Ship overloading
 
 ## [3.0.4] - 2019-01-20
 
