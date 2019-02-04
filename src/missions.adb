@@ -108,9 +108,12 @@ package body Missions is
       SkyBases(BaseIndex).Missions.Clear;
       for Module of PlayerShip.Modules loop
          case Modules_List(Module.ProtoIndex).MType is
-            when HULL | GUN | BATTERING_RAM =>
+            when HULL | BATTERING_RAM =>
                PlayerValue :=
                  PlayerValue + Module.MaxDurability + (Module.Data(2) * 10);
+            when GUN =>
+               PlayerValue :=
+                 PlayerValue + Module.MaxDurability + (Module.Damage * 10);
             when ARMOR =>
                PlayerValue := PlayerValue + Module.MaxDurability;
             when others =>

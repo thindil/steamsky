@@ -99,7 +99,7 @@ package body Bases.ShipyardUI is
          MType :=
            Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType;
          case MType is
-            when HULL | ShipModules.CARGO | GUN | HARPOON_GUN =>
+            when HULL | ShipModules.CARGO | HARPOON_GUN =>
                MaxValue := PlayerShip.Modules(ModuleIndex).Data(2);
                Value :=
                  Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
@@ -110,6 +110,11 @@ package body Bases.ShipyardUI is
             when CABIN =>
                MaxValue := PlayerShip.Modules(ModuleIndex).Quality;
                Value := PlayerShip.Modules(ModuleIndex).Cleanliness;
+            when GUN =>
+               MaxValue := PlayerShip.Modules(ModuleIndex).Damage;
+               Value :=
+                 Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                   .Value;
             when others =>
                MaxValue := 0;
                Value := 0;

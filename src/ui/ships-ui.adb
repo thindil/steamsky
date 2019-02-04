@@ -73,14 +73,20 @@ package body Ships.UI is
       HaveAmmo: Boolean := False;
       AssignAmmoCombo: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Object(Builder, "cmbassignammo"));
+      AmmoIndex: Natural;
    begin
+      if PlayerShip.Modules(ModuleIndex).MType = GUN then
+         AmmoIndex := PlayerShip.Modules(ModuleIndex).AmmoIndex;
+      else
+         AmmoIndex := PlayerShip.Modules(ModuleIndex).Data(1);
+      end if;
       Remove_All(AssignAmmoCombo);
       for I in PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
          if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
            Items_Types
              (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                 .Value) and
-           I /= PlayerShip.Modules(ModuleIndex).Data(1) then
+           I /= AmmoIndex then
             Append
               (AssignAmmoCombo, Positive'Image(I),
                To_String(Items_List(PlayerShip.Cargo(I).ProtoIndex).Name));
@@ -228,34 +234,41 @@ package body Ships.UI is
                Show_All(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
             end if;
          when GUN | HARPOON_GUN =>
-            MaxValue :=
-              Natural
-                (Float
-                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                      .MaxValue) *
-                 1.5);
-            if PlayerShip.Modules(ModuleIndex).Data(2) < MaxValue then
-               if Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                   .MType =
-                 GUN then
-                  Set_Label
-                    (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
-                     "Upgrade da_mage");
-                  Set_Tooltip_Text
-                    (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
-                     "Start upgrading damage of gun");
+            declare
+               CurrentValue: Positive;
+            begin
+               if PlayerShip.Modules(ModuleIndex).MType = GUN then
+                  CurrentValue := PlayerShip.Modules(ModuleIndex).Damage;
                else
-                  Set_Label
-                    (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
-                     "Upgrade str_ength");
-                  Set_Tooltip_Text
-                    (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
-                     "Start upgrading strength of gun");
+                  CurrentValue := PlayerShip.Modules(ModuleIndex).Data(2);
                end if;
-               Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
-            else
-               Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
-            end if;
+               MaxValue :=
+                 Natural
+                   (Float
+                      (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                         .MaxValue) *
+                    1.5);
+               if CurrentValue < MaxValue then
+                  if PlayerShip.Modules(ModuleIndex).MType = GUN then
+                     Set_Label
+                       (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+                        "Upgrade da_mage");
+                     Set_Tooltip_Text
+                       (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+                        "Start upgrading damage of gun");
+                  else
+                     Set_Label
+                       (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+                        "Upgrade str_ength");
+                     Set_Tooltip_Text
+                       (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+                        "Start upgrading strength of gun");
+                  end if;
+                  Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
+               else
+                  Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
+               end if;
+            end;
             Set_Label
               (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
                "Assign as _gunner");

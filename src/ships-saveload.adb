@@ -181,6 +181,21 @@ package body Ships.SaveLoad is
                   Set_Attribute
                     (ModuleDataNode, "value",
                      To_String(Trim(RawValue, Ada.Strings.Left)));
+               when GUN =>
+                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
+                  RawValue :=
+                    To_Unbounded_String(Integer'Image(Module.AmmoIndex));
+                  Set_Attribute
+                    (ModuleDataNode, "value",
+                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
+                  RawValue :=
+                    To_Unbounded_String(Integer'Image(Module.Damage));
+                  Set_Attribute
+                    (ModuleDataNode, "value",
+                     To_String(Trim(RawValue, Ada.Strings.Left)));
             end case;
          end loop;
       end;
@@ -377,6 +392,8 @@ package body Ships.SaveLoad is
                         MType := COCKPIT;
                      when TURRET =>
                         MType := TURRET;
+                     when GUN =>
+                        MType := GUN;
                      when others =>
                         MType :=
                           ModuleType2'Value(Get_Attribute(ChildNode, "mtype"));
@@ -397,6 +414,8 @@ package body Ships.SaveLoad is
                         MType := COCKPIT;
                      when TURRET =>
                         MType := TURRET;
+                     when GUN =>
+                        MType := GUN;
                      when others =>
                         MType := ANY;
                   end case;
@@ -613,6 +632,40 @@ package body Ships.SaveLoad is
                               UpgradeProgress => UpgradeProgress,
                               UpgradeAction => UpgradeAction,
                               GunIndex => GunIndex));
+                     end;
+                  when GUN =>
+                     declare
+                        Damage, AmmoIndex: Natural;
+                     begin
+                        ModuleData := Child_Nodes(ChildNode);
+                        DataIndex := 1;
+                        for K in 0 .. Length(ModuleData) - 1 loop
+                           ModuleNode := Item(ModuleData, K);
+                           if Node_Name(ModuleNode) = "data" then
+                              case DataIndex is
+                                 when 1 =>
+                                    AmmoIndex :=
+                                      Integer'Value
+                                        (Get_Attribute(ModuleNode, "value"));
+                                 when 2 =>
+                                    Damage :=
+                                      Integer'Value
+                                        (Get_Attribute(ModuleNode, "value"));
+                                 when others =>
+                                    null;
+                              end case;
+                              DataIndex := DataIndex + 1;
+                           end if;
+                        end loop;
+                        PlayerShip.Modules.Append
+                          (New_Item =>
+                             (MType => GUN, Name => Name,
+                              ProtoIndex => ProtoIndex, Weight => Weight,
+                              Durability => Durability,
+                              MaxDurability => MaxDurability, Owner => Owner,
+                              UpgradeProgress => UpgradeProgress,
+                              UpgradeAction => UpgradeAction, Damage => Damage,
+                              AmmoIndex => AmmoIndex));
                      end;
                end case;
             end;
