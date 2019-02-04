@@ -153,7 +153,7 @@ package body Ships.UI.Handlers is
          when ShipModules.CARGO =>
             Append
               (ModuleInfo,
-               "Max cargo:" & Integer'Image(Module.Data(2)) & " kg");
+               "Max cargo:" & Integer'Image(Module.MaxWeight) & " kg");
          when HULL =>
             Show_All(Gtk_Widget(CleanBar));
             DamagePercent := Gdouble(Module.Data(1)) / Gdouble(Module.Data(2));

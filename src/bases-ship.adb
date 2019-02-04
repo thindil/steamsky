@@ -292,7 +292,7 @@ package body Bases.Ship is
                   end if;
                end loop;
             when ShipModules.CARGO =>
-               if FreeCargo((0 - PlayerShip.Modules(ModuleIndex).Data(2))) <
+               if FreeCargo((0 - PlayerShip.Modules(ModuleIndex).MaxWeight)) <
                  0 then
                   raise BasesShip_Removing_Error
                     with "You can't sell this cargo bay, because you have items in it.";
