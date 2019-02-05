@@ -250,6 +250,16 @@ package body Bases.Ship is
                         FuelUsage => Modules_List(ModuleIndex).Value,
                         Power => Modules_List(ModuleIndex).MaxValue,
                         Disabled => False));
+               when ARMOR =>
+                  PlayerShip.Modules.Append
+                    (New_Item =>
+                       (MType => ARMOR, Name => Modules_List(ModuleIndex).Name,
+                        ProtoIndex => ModuleIndex,
+                        Weight => Modules_List(ModuleIndex).Weight,
+                        Durability => Modules_List(ModuleIndex).Durability,
+                        MaxDurability => Modules_List(ModuleIndex).Durability,
+                        Owner => 0, UpgradeProgress => 0,
+                        UpgradeAction => NONE));
                when others =>
                   PlayerShip.Modules.Append
                     (New_Item =>

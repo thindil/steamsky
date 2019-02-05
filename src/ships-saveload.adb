@@ -135,7 +135,7 @@ package body Ships.SaveLoad is
                   Set_Attribute
                     (ModuleDataNode, "value",
                      To_String(Trim(RawValue, Ada.Strings.Left)));
-               when MEDICAL_ROOM | COCKPIT =>
+               when MEDICAL_ROOM | COCKPIT | ARMOR =>
                   null;
                when ENGINE =>
                   ModuleDataNode := Create_Element(SaveData, "data");
@@ -422,6 +422,8 @@ package body Ships.SaveLoad is
                         MType := CARGO_ROOM;
                      when HULL =>
                         MType := HULL;
+                     when ARMOR =>
+                        MType := ARMOR;
                      when others =>
                         MType :=
                           ModuleType2'Value(Get_Attribute(ChildNode, "mtype"));
@@ -448,6 +450,8 @@ package body Ships.SaveLoad is
                         MType := CARGO_ROOM;
                      when HULL =>
                         MType := HULL;
+                     when ARMOR =>
+                        MType := ARMOR;
                      when others =>
                         MType := ANY;
                   end case;
@@ -760,6 +764,15 @@ package body Ships.SaveLoad is
                               InstalledModules => InstalledModules,
                               MaxModules => MaxModules));
                      end;
+                  when ARMOR =>
+                     PlayerShip.Modules.Append
+                       (New_Item =>
+                          (MType => ARMOR, Name => Name,
+                           ProtoIndex => ProtoIndex, Weight => Weight,
+                           Durability => Durability,
+                           MaxDurability => MaxDurability, Owner => Owner,
+                           UpgradeProgress => UpgradeProgress,
+                           UpgradeAction => UpgradeAction));
                end case;
             end;
          elsif Node_Name(ChildNode) = "cargo" then
