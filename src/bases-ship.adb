@@ -84,10 +84,10 @@ package body Bases.Ship is
          raise Trade_No_Money;
       end if;
       for C in PlayerShip.Modules.Iterate loop
-         case Modules_List(PlayerShip.Modules(C).ProtoIndex).MType is
+         case PlayerShip.Modules(C).MType is
             when HULL =>
                HullIndex := Modules_Container.To_Index(C);
-               ModulesAmount := PlayerShip.Modules(C).Data(1);
+               ModulesAmount := PlayerShip.Modules(C).InstalledModules;
             when TURRET =>
                if PlayerShip.Modules(C).GunIndex = 0 then
                   FreeTurretIndex := Modules_Container.To_Index(C);
@@ -119,7 +119,7 @@ package body Bases.Ship is
                  with "You can't install this module because it is too big for this hull.";
             end if;
             ModulesAmount := ModulesAmount + Modules_List(ModuleIndex).Size;
-            if ModulesAmount > PlayerShip.Modules(HullIndex).Data(2) and
+            if ModulesAmount > PlayerShip.Modules(HullIndex).MaxModules and
               (Modules_List(ModuleIndex).MType /= GUN and
                Modules_List(ModuleIndex).MType /= HARPOON_GUN) then
                raise BasesShip_Installation_Error
@@ -212,6 +212,44 @@ package body Bases.Ship is
                         MaxDurability => Modules_List(ModuleIndex).Durability,
                         Owner => 0, UpgradeProgress => 0,
                         UpgradeAction => NONE, GunIndex => 0));
+               when CABIN =>
+                  PlayerShip.Modules.Append
+                    (New_Item =>
+                       (MType => CABIN, Name => Modules_List(ModuleIndex).Name,
+                        ProtoIndex => ModuleIndex,
+                        Weight => Modules_List(ModuleIndex).Weight,
+                        Durability => Modules_List(ModuleIndex).Durability,
+                        MaxDurability => Modules_List(ModuleIndex).Durability,
+                        Owner => 0, UpgradeProgress => 0,
+                        UpgradeAction => NONE,
+                        Cleanliness => Modules_List(ModuleIndex).Value,
+                        Quality => Modules_List(ModuleIndex).MaxValue));
+               when ShipModules.CARGO =>
+                  PlayerShip.Modules.Append
+                    (New_Item =>
+                       (MType => CARGO_ROOM,
+                        Name => Modules_List(ModuleIndex).Name,
+                        ProtoIndex => ModuleIndex,
+                        Weight => Modules_List(ModuleIndex).Weight,
+                        Durability => Modules_List(ModuleIndex).Durability,
+                        MaxDurability => Modules_List(ModuleIndex).Durability,
+                        Owner => 0, UpgradeProgress => 0,
+                        UpgradeAction => NONE,
+                        MaxWeight => Modules_List(ModuleIndex).MaxValue));
+               when ENGINE =>
+                  PlayerShip.Modules.Append
+                    (New_Item =>
+                       (MType => ENGINE,
+                        Name => Modules_List(ModuleIndex).Name,
+                        ProtoIndex => ModuleIndex,
+                        Weight => Modules_List(ModuleIndex).Weight,
+                        Durability => Modules_List(ModuleIndex).Durability,
+                        MaxDurability => Modules_List(ModuleIndex).Durability,
+                        Owner => 0, UpgradeProgress => 0,
+                        UpgradeAction => NONE,
+                        FuelUsage => Modules_List(ModuleIndex).Value,
+                        Power => Modules_List(ModuleIndex).MaxValue,
+                        Disabled => False));
                when others =>
                   PlayerShip.Modules.Append
                     (New_Item =>
@@ -230,22 +268,21 @@ package body Bases.Ship is
             PlayerShip.Modules.Insert
               (Before => HullIndex,
                New_Item =>
-                 (MType => ANY, Name => Modules_List(ModuleIndex).Name,
+                 (MType => HULL, Name => Modules_List(ModuleIndex).Name,
                   ProtoIndex => ModuleIndex,
                   Weight => Modules_List(ModuleIndex).Weight,
                   Durability => Modules_List(ModuleIndex).Durability,
                   MaxDurability => Modules_List(ModuleIndex).Durability,
                   Owner => 0, UpgradeProgress => 0, UpgradeAction => NONE,
-                  Data =>
-                    (Modules_List(ModuleIndex).Value,
-                     Modules_List(ModuleIndex).MaxValue, 0)));
+                  InstalledModules => Modules_List(ModuleIndex).Value,
+                  MaxModules => Modules_List(ModuleIndex).MaxValue));
          end if;
          case Modules_List(ModuleIndex).MType is
             when GUN | HARPOON_GUN =>
                PlayerShip.Modules(FreeTurretIndex).GunIndex :=
                  PlayerShip.Modules.Last_Index;
             when others =>
-               PlayerShip.Modules(HullIndex).Data(1) := ModulesAmount;
+               PlayerShip.Modules(HullIndex).InstalledModules := ModulesAmount;
          end case;
          AddMessage
            ("You installed " & To_String(Modules_List(ModuleIndex).Name) &
@@ -303,7 +340,7 @@ package body Bases.Ship is
          ModulesAmount :=
            ModulesAmount -
            Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Size;
-         PlayerShip.Modules(HullIndex).Data(1) := ModulesAmount;
+         PlayerShip.Modules(HullIndex).InstalledModules := ModulesAmount;
          if PlayerShip.UpgradeModule = ModuleIndex then
             PlayerShip.UpgradeModule := 0;
             for C in PlayerShip.Crew.Iterate loop
@@ -369,8 +406,8 @@ package body Bases.Ship is
          return;
       end if;
       for Module of PlayerShip.Modules loop
-         if Modules_List(Module.ProtoIndex).MType = HULL then
-            DockingCost := Module.Data(2);
+         if Module.MType = HULL then
+            DockingCost := Module.MaxModules;
             exit;
          end if;
       end loop;

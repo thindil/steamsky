@@ -156,15 +156,16 @@ package body Ships.UI.Handlers is
                "Max cargo:" & Integer'Image(Module.MaxWeight) & " kg");
          when HULL =>
             Show_All(Gtk_Widget(CleanBar));
-            DamagePercent := Gdouble(Module.Data(1)) / Gdouble(Module.Data(2));
+            DamagePercent :=
+              Gdouble(Module.InstalledModules) / Gdouble(Module.MaxModules);
             Set_Fraction(Gtk_Progress_Bar(CleanBar), DamagePercent);
             Set_Text
               (Gtk_Progress_Bar(CleanBar),
-               "Modules installed:" & Integer'Image(Module.Data(1)) & " /" &
-               Integer'Image(Module.Data(2)));
+               "Modules installed:" & Integer'Image(Module.InstalledModules) &
+               " /" & Integer'Image(Module.MaxModules));
             MaxValue :=
               Positive(Float(Modules_List(Module.ProtoIndex).MaxValue) * 1.5);
-            if Module.Data(2) = MaxValue then
+            if Module.MaxModules = MaxValue then
                Set_Text
                  (Gtk_Progress_Bar(CleanBar),
                   Get_Text(Gtk_Progress_Bar(CleanBar)) & " (max upgrade)");

@@ -91,7 +91,7 @@ package body Ships.Upgrade is
                   end;
                   UpgradeProgress := 100;
                when HULL =>
-                  if PlayerShip.Modules(ModuleIndex).Data(2) = MaxValue then
+                  if PlayerShip.Modules(ModuleIndex).MaxModules = MaxValue then
                      raise Ship_Upgrade_Error
                        with "You can't enlarge more " &
                        To_String(PlayerShip.Modules(ModuleIndex).Name) & ".";

@@ -64,8 +64,8 @@ package body Combat is
             end case;
          end loop;
          for Module of Spotted.Modules loop
-            if Modules_List(Module.ProtoIndex).MType = HULL then
-               Result := Result + Module.Data(2);
+            if Module.MType = HULL then
+               Result := Result + Module.MaxModules;
                exit;
             end if;
          end loop;
@@ -501,10 +501,9 @@ package body Combat is
                         if Modules_List(Ship.Modules(K).ProtoIndex).MType =
                           HARPOON_GUN then
                            for Module of EnemyShip.Modules loop
-                              if Modules_List(Module.ProtoIndex).MType =
-                                HULL then
+                              if Module.MType = HULL then
                                  WeaponDamage :=
-                                   WeaponDamage - (Module.Data(2) / 10);
+                                   WeaponDamage - (Module.MaxModules / 10);
                                  if WeaponDamage < 1 then
                                     WeaponDamage := 1;
                                  end if;

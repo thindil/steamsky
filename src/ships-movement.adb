@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with ShipModules; use ShipModules;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Statistics; use Statistics;
@@ -198,8 +197,8 @@ package body Ships.Movement is
                     To_String(MoneyName) & " to pay for docking.";
                end if;
                for Module of PlayerShip.Modules loop
-                  if Modules_List(Module.ProtoIndex).MType = HULL then
-                     DockingCost := Module.Data(2);
+                  if Module.MType = HULL then
+                     DockingCost := Module.MaxModules;
                      exit;
                   end if;
                end loop;
