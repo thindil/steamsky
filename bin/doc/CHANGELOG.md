@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Crash on crew member back to work after rest
 - Checking did player ship have enabled engines during changing ship speed
 - Ship overloading
+- Assigning crew member to harpoon gun
 
 ## [3.3 - 2019-01-27]
 
