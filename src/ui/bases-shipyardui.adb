@@ -99,7 +99,7 @@ package body Bases.ShipyardUI is
          MType :=
            Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType;
          case MType is
-            when HULL | HARPOON_GUN =>
+            when HARPOON_GUN =>
                MaxValue := PlayerShip.Modules(ModuleIndex).Data(2);
                Value :=
                  Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
@@ -117,6 +117,11 @@ package body Bases.ShipyardUI is
                    .Value;
             when ShipModules.CARGO =>
                MaxValue := PlayerShip.Modules(ModuleIndex).MaxWeight;
+               Value :=
+                 Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                   .Value;
+            when HULL =>
+               MaxValue := PlayerShip.Modules(ModuleIndex).MaxModules;
                Value :=
                  Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                    .Value;
@@ -176,7 +181,7 @@ package body Bases.ShipyardUI is
          Append(ModuleInfo, LF & "Size:" & Natural'Image(Size));
          if Installing then
             for Module of PlayerShip.Modules loop
-               if Modules_List(Module.ProtoIndex).MType = HULL
+               if Module.MType = HULL
                  and then Size > Modules_List(Module.ProtoIndex).Value then
                   Append
                     (ModuleInfo, " <span foreground=""red"">(too big)</span>");
@@ -269,9 +274,9 @@ package body Bases.ShipyardUI is
               " to install anything.");
       end if;
       for Module of PlayerShip.Modules loop
-         if Modules_List(Module.ProtoIndex).MType = HULL then
-            UsedSpace := Module.Data(1);
-            AllSpace := Module.Data(2);
+         if Module.MType = HULL then
+            UsedSpace := Module.InstalledModules;
+            AllSpace := Module.MaxModules;
             MaxSize := Modules_List(Module.ProtoIndex).Value;
             Append
               (InstallInfo,
@@ -391,11 +396,11 @@ package body Bases.ShipyardUI is
          end if;
       end;
       for Module of PlayerShip.Modules loop
-         if Modules_List(Module.ProtoIndex).MType = HULL then
+         if Module.MType = HULL then
             Append
               (RemoveInfo,
-               LF & "You have used" & Natural'Image(Module.Data(1)) &
-               " modules space from max" & Natural'Image(Module.Data(2)) &
+               LF & "You have used" & Natural'Image(Module.InstalledModules) &
+               " modules space from max" & Natural'Image(Module.MaxModules) &
                " allowed.");
             exit;
          end if;

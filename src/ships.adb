@@ -203,6 +203,16 @@ package body Ships is
                         MaxDurability => TempModule.Durability, Owner => 0,
                         UpgradeProgress => 0, UpgradeAction => NONE,
                         MaxWeight => TempModule.MaxValue));
+               when HULL =>
+                  ShipModules.Append
+                    (New_Item =>
+                       (MType => HULL, Name => Modules_List(Module).Name,
+                        ProtoIndex => Module, Weight => TempModule.Weight,
+                        Durability => TempModule.Durability,
+                        MaxDurability => TempModule.Durability, Owner => 0,
+                        UpgradeProgress => 0, UpgradeAction => NONE,
+                        InstalledModules => TempModule.Value,
+                        MaxModules => TempModule.MaxValue));
                when others =>
                   ShipModules.Append
                     (New_Item =>
@@ -366,13 +376,13 @@ package body Ships is
                      end if;
                   end if;
                end loop;
-            elsif Modules_List(TmpShip.Modules(I).ProtoIndex).MType = HULL then
+            elsif TmpShip.Modules(I).MType = HULL then
                HullIndex := Modules_Container.To_Index(I);
             end if;
             Amount :=
               Amount + Modules_List(TmpShip.Modules(I).ProtoIndex).Size;
          end loop;
-         TmpShip.Modules(HullIndex).Data(1) := Amount;
+         TmpShip.Modules(HullIndex).InstalledModules := Amount;
       end;
       -- Set known crafting recipes
       for Recipe of ProtoShip.KnownRecipes loop
@@ -860,7 +870,7 @@ package body Ships is
    begin
       for Module of PlayerShip.Modules loop
          case Modules_List(Module.ProtoIndex).MType is
-            when HULL | BATTERING_RAM =>
+            when BATTERING_RAM =>
                CombatValue :=
                  CombatValue + Module.MaxDurability + (Module.Data(2) * 10);
             when GUN =>
@@ -873,6 +883,9 @@ package body Ships is
                CombatValue :=
                  CombatValue + Module.MaxDurability + (Module.Data(2) * 5);
                CountAmmoValue(Modules_List(Module.ProtoIndex).Value, 5);
+            when HULL =>
+               CombatValue :=
+                 CombatValue + Module.MaxDurability + (Module.MaxModules * 10);
             when others =>
                null;
          end case;

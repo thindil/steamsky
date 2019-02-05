@@ -31,7 +31,7 @@ package Ships is
    type Data_Array is array(1 .. 3) of Integer;
    type ModuleType2 is
      (WORKSHOP, ANY, MEDICAL_ROOM, TRAINING_ROOM, ENGINE, CABIN, COCKPIT,
-      TURRET, GUN, CARGO_ROOM);
+      TURRET, GUN, CARGO_ROOM, HULL);
    type ModuleData(MType: ModuleType2 := ANY)
    is -- Data structure for ship modules
    record
@@ -58,6 +58,9 @@ package Ships is
             AmmoIndex: Natural; -- Cargo index of ammunition used by selected gun
          when CARGO_ROOM =>
             MaxWeight: Positive; -- Maximum weight in kg of items in cargo of selected module
+         when HULL =>
+            InstalledModules: Natural; -- Amount of installed modules on ship
+            MaxModules: Positive; -- Amount of maximum installed modules for this hull
          when WORKSHOP =>
             CraftingIndex: Unbounded_String; -- Index of crafting recipe or item which is deconstructed
             CraftingTime: Natural; -- Time needed to finish crating order
