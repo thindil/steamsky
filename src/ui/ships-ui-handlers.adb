@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -506,7 +506,7 @@ package body Ships.UI.Handlers is
                   To_String(PlayerShip.Modules(ModuleIndex).Name) & " to " &
                   To_String(PlayerShip.Crew(AssignIndex).Name) & ".",
                   OrderMessage);
-            when GUN =>
+            when GUN | HARPOON_GUN =>
                GiveOrders(PlayerShip, AssignIndex, Gunner, ModuleIndex);
             when ALCHEMY_LAB .. GREENHOUSE =>
                GiveOrders(PlayerShip, AssignIndex, Craft, ModuleIndex);
