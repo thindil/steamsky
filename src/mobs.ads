@@ -15,10 +15,9 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Containers.Hashed_Maps; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Strings.Unbounded.Hash;
-with Ada.Containers.Hashed_Maps;
 with DOM.Readers; use DOM.Readers;
 with Crew; use Crew;
 
@@ -28,7 +27,6 @@ package Mobs is
       Attributes_Array, Ada.Strings.Unbounded.Hash, "=");
    type ProtoMobRecord is -- Data structure for mobs prototypes
    record
-      Index: Unbounded_String; -- Index of mob
       Skills: Skills_Container
         .Vector; -- Names indexes, levels and experience in skills of mob
       Attributes: Attributes_Container
@@ -38,13 +36,11 @@ package Mobs is
       Inventory: MobInventory_Container.Map; -- List of mob inventory
       Equipment: Equipment_Array; -- Items indexes from inventory used by mob: 1 - weapon, 2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs, 7 - tool
    end record;
-   package ProtoMobs_Container is new Vectors(Positive, ProtoMobRecord);
-   ProtoMobs_List: ProtoMobs_Container.Vector;
+   package ProtoMobs_Container is new Hashed_Maps(Unbounded_String,
+      ProtoMobRecord, Ada.Strings.Unbounded.Hash, "=");
+   ProtoMobs_List: ProtoMobs_Container.Map;
    Mobs_Invalid_Data: exception; -- Raised when invalid data found in mobs file
 
    procedure LoadMobs(Reader: Tree_Reader); -- Load mobs from files
-   function FindProtoMob(Index: Unbounded_String) return Natural with
-      Pre => Index /=
-      Null_Unbounded_String; -- Return vector index of mobile or zero if mobile not found
 
 end Mobs;
