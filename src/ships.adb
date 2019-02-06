@@ -263,10 +263,11 @@ package body Ships is
          Member: ProtoMobRecord;
       begin
          for ProtoMember of ProtoShip.Crew loop
-            if ProtoMember(3) = 0 then
-               Amount := ProtoMember(2);
+            if ProtoMember.MaxAmount = 0 then
+               Amount := ProtoMember.MinAmount;
             else
-               Amount := GetRandom(ProtoMember(2), ProtoMember(3));
+               Amount :=
+                 GetRandom(ProtoMember.MinAmount, ProtoMember.MaxAmount);
             end if;
             for I in 1 .. Amount loop
                if GetRandom(1, 100) < 99 then
@@ -285,7 +286,7 @@ package body Ships is
                   Gender := 'M';
                end if;
                MemberName := GenerateMemberName(Gender, MemberFaction);
-               Member := ProtoMobs_List.Element(ProtoMember(1));
+               Member := ProtoMobs_List(ProtoMember.ProtoIndex);
                for Skill of Member.Skills loop
                   if Skill(3) = 0 then
                      TmpSkills.Append(New_Item => Skill);
@@ -461,12 +462,12 @@ package body Ships is
       TempRecord: ProtoShipData;
       TempModules: Positive_Container.Vector;
       TempCargo: MobInventory_Container.Map;
-      TempCrew: Skills_Container.Vector;
+      TempCrew: ProtoCrew_Container.Vector;
       ModuleAmount, DeleteIndex: Positive;
       Index, ShipIndex: Natural;
       Action, SubAction: DataAction;
       ShipNode, ChildNode: Node;
-      ItemIndex, RecipeIndex: Unbounded_String;
+      ItemIndex, RecipeIndex, MobIndex: Unbounded_String;
       TempRecipes: UnboundedString_Container.Vector;
       procedure CountAmmoValue(ItemTypeIndex, Multiple: Positive) is
       begin
@@ -699,10 +700,10 @@ package body Ships is
               DOM.Core.Elements.Get_Elements_By_Tag_Name(ShipNode, "member");
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
-               Index :=
-                 FindProtoMob
-                   (To_Unbounded_String(Get_Attribute(ChildNode, "index")));
-               if Index = 0 then
+               MobIndex :=
+                 To_Unbounded_String(Get_Attribute(ChildNode, "index"));
+               if not ProtoMobs_Container.Contains
+                   (ProtoMobs_List, MobIndex) then
                   raise Ships_Invalid_Data
                     with "Invalid mob index: |" &
                     Get_Attribute(ChildNode, "index") & "| in " &
@@ -719,48 +720,48 @@ package body Ships is
                      if Get_Attribute(ChildNode, "amount") /= "" then
                         TempRecord.Crew.Append
                           (New_Item =>
-                             (Index,
+                             (MobIndex,
                               Integer'Value
                                 (Get_Attribute(ChildNode, "amount")),
                               0));
                      elsif Get_Attribute(ChildNode, "minamount") /= "" then
                         TempRecord.Crew.Append
                           (New_Item =>
-                             (Index,
+                             (MobIndex,
                               Integer'Value
                                 (Get_Attribute(ChildNode, "minamount")),
                               Integer'Value
                                 (Get_Attribute(ChildNode, "maxamount"))));
                      else
-                        TempRecord.Crew.Append(New_Item => (Index, 1, 0));
+                        TempRecord.Crew.Append(New_Item => (MobIndex, 1, 0));
                      end if;
                   when UPDATE =>
                      for Member of TempRecord.Crew loop
-                        if Member(1) = Index then
+                        if Member.ProtoIndex = MobIndex then
                            if Get_Attribute(ChildNode, "amount") /= "" then
-                              Member(2) :=
+                              Member.MinAmount :=
                                 Integer'Value
                                   (Get_Attribute(ChildNode, "amount"));
-                              Member(3) := 0;
+                              Member.MaxAmount := 0;
                            elsif Get_Attribute(ChildNode, "minamount") /=
                              "" then
-                              Member(2) :=
+                              Member.MinAmount :=
                                 Integer'Value
                                   (Get_Attribute(ChildNode, "minamount"));
-                              Member(3) :=
+                              Member.MaxAmount :=
                                 Integer'Value
                                   (Get_Attribute(ChildNode, "maxamount"));
                            else
-                              Member(2) := 1;
-                              Member(3) := 0;
+                              Member.MinAmount := 1;
+                              Member.MaxAmount := 0;
                            end if;
                            exit;
                         end if;
                      end loop;
                   when REMOVE =>
                      for K in TempRecord.Crew.Iterate loop
-                        if TempRecord.Crew(K)(1) = Index then
-                           DeleteIndex := Skills_Container.To_Index(K);
+                        if TempRecord.Crew(K).ProtoIndex = MobIndex then
+                           DeleteIndex := ProtoCrew_Container.To_Index(K);
                            exit;
                         end if;
                      end loop;

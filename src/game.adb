@@ -193,9 +193,8 @@ package body Game is
       end;
       -- Add player to ship
       declare
-         PlayerIndex2: constant Positive :=
-           FindProtoMob
-             (Factions_List(FactionIndex).Careers(CareerIndex).PlayerIndex);
+         PlayerIndex2: constant Unbounded_String :=
+           Factions_List(FactionIndex).Careers(CareerIndex).PlayerIndex;
          Amount, PlayerMorale: Positive;
          TmpInventory: Inventory_Container.Vector;
       begin

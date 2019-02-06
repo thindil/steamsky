@@ -97,6 +97,13 @@ package Ships is
       HomeBase: Natural; -- Index of home base of ship
    end record;
    type ShipSkills_Array is array(1 .. 2) of Natural;
+   type ProtoMember_Data is -- Data structure for proto crew info
+   record
+      ProtoIndex: Unbounded_String; -- Index of proto mob which will be used as crew member
+      MinAmount: Positive; -- Mininum amount of that mob in crew
+      MaxAmount: Natural; -- Maximum amount of that mob in crew. If 0 then MinAmount will be amount
+   end record;
+   package ProtoCrew_Container is new Vectors(Positive, ProtoMember_Data);
    type ProtoShipData is -- Data structure for ship prototypes
    record
       Name: Unbounded_String; -- Prototype name
@@ -108,7 +115,7 @@ package Ships is
       Perception: ShipSkills_Array; -- Bonus to spot player ship first
       Cargo: MobInventory_Container.Map; -- List of ship cargo
       CombatValue: Positive; -- Combat value of ship (used to generate enemies)
-      Crew: Skills_Container.Vector; -- List of mobs indexes of ship crew
+      Crew: ProtoCrew_Container.Vector; -- List of mobs used as ship crew
       Description: Unbounded_String; -- Description of ship
       Owner: Unbounded_String; -- Index of faction to which ship belong
       Index: Unbounded_String; -- Index of ship
