@@ -46,7 +46,6 @@ package body Missions is
       BasesInRange, Cabins: Positive_Container.Vector;
       MinX, MinY, MaxX, MaxY: Integer;
       Enemies: Positive_Container.Vector;
-      PlayerValue: Natural := 0;
       MType: Missions_Types;
    begin
       if DaysDifference(SkyBases(BaseIndex).MissionsDate) < 7 or
@@ -106,31 +105,6 @@ package body Missions is
          end if;
       end loop;
       SkyBases(BaseIndex).Missions.Clear;
-      for Module of PlayerShip.Modules loop
-         case Modules_List(Module.ProtoIndex).MType is
-            when BATTERING_RAM =>
-               PlayerValue :=
-                 PlayerValue + Module.MaxDurability + (Module.Damage2 * 10);
-            when GUN =>
-               PlayerValue :=
-                 PlayerValue + Module.MaxDurability + (Module.Damage * 10);
-            when ARMOR =>
-               PlayerValue := PlayerValue + Module.MaxDurability;
-            when HULL =>
-               PlayerValue :=
-                 PlayerValue + Module.MaxDurability + (Module.MaxModules * 10);
-            when others =>
-               null;
-         end case;
-      end loop;
-      for Item of PlayerShip.Cargo loop
-         if Length(Items_List(Item.ProtoIndex).IType) >= 4
-           and then Slice(Items_List(Item.ProtoIndex).IType, 1, 4) =
-             "Ammo" then
-            PlayerValue :=
-              PlayerValue + (Items_List(Item.ProtoIndex).Value(1) * 10);
-         end if;
-      end loop;
       GenerateEnemies(Enemies);
       for I in 1 .. MissionsAmount loop
          MType :=
