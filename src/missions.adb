@@ -110,7 +110,7 @@ package body Missions is
          case Modules_List(Module.ProtoIndex).MType is
             when BATTERING_RAM =>
                PlayerValue :=
-                 PlayerValue + Module.MaxDurability + (Module.Data(2) * 10);
+                 PlayerValue + Module.MaxDurability + (Module.Damage2 * 10);
             when GUN =>
                PlayerValue :=
                  PlayerValue + Module.MaxDurability + (Module.Damage * 10);

@@ -260,6 +260,30 @@ package body Bases.Ship is
                         MaxDurability => Modules_List(ModuleIndex).Durability,
                         Owner => 0, UpgradeProgress => 0,
                         UpgradeAction => NONE));
+               when BATTERING_RAM =>
+                  PlayerShip.Modules.Append
+                    (New_Item =>
+                       (MType => BATTERING_RAM,
+                        Name => Modules_List(ModuleIndex).Name,
+                        ProtoIndex => ModuleIndex,
+                        Weight => Modules_List(ModuleIndex).Weight,
+                        Durability => Modules_List(ModuleIndex).Durability,
+                        MaxDurability => Modules_List(ModuleIndex).Durability,
+                        Owner => 0, UpgradeProgress => 0,
+                        UpgradeAction => NONE,
+                        Damage2 => Modules_List(ModuleIndex).MaxValue));
+               when GUN =>
+                  PlayerShip.Modules.Append
+                    (New_Item =>
+                       (MType => GUN, Name => Modules_List(ModuleIndex).Name,
+                        ProtoIndex => ModuleIndex,
+                        Weight => Modules_List(ModuleIndex).Weight,
+                        Durability => Modules_List(ModuleIndex).Durability,
+                        MaxDurability => Modules_List(ModuleIndex).Durability,
+                        Owner => 0, UpgradeProgress => 0,
+                        UpgradeAction => NONE,
+                        Damage => Modules_List(ModuleIndex).MaxValue,
+                        AmmoIndex => 0));
                when others =>
                   PlayerShip.Modules.Append
                     (New_Item =>
