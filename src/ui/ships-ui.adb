@@ -78,7 +78,7 @@ package body Ships.UI is
       if PlayerShip.Modules(ModuleIndex).MType = GUN then
          AmmoIndex := PlayerShip.Modules(ModuleIndex).AmmoIndex;
       else
-         AmmoIndex := PlayerShip.Modules(ModuleIndex).Data(1);
+         AmmoIndex := PlayerShip.Modules(ModuleIndex).HarpoonIndex;
       end if;
       Remove_All(AssignAmmoCombo);
       for I in PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
@@ -240,7 +240,7 @@ package body Ships.UI is
                if PlayerShip.Modules(ModuleIndex).MType = GUN then
                   CurrentValue := PlayerShip.Modules(ModuleIndex).Damage;
                else
-                  CurrentValue := PlayerShip.Modules(ModuleIndex).Data(2);
+                  CurrentValue := PlayerShip.Modules(ModuleIndex).Duration;
                end if;
                MaxValue :=
                  Natural

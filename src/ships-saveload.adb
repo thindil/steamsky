@@ -98,16 +98,6 @@ package body Ships.SaveLoad is
               (DataNode, "upgradeaction",
                To_String(Trim(RawValue, Ada.Strings.Left)));
             case Module.MType is
-               when ANY =>
-                  for I in Module.Data'Range loop
-                     ModuleDataNode := Create_Element(SaveData, "data");
-                     ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                     RawValue :=
-                       To_Unbounded_String(Integer'Image(Module.Data(I)));
-                     Set_Attribute
-                       (ModuleDataNode, "value",
-                        To_String(Trim(RawValue, Ada.Strings.Left)));
-                  end loop;
                when WORKSHOP =>
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
@@ -135,7 +125,7 @@ package body Ships.SaveLoad is
                   Set_Attribute
                     (ModuleDataNode, "value",
                      To_String(Trim(RawValue, Ada.Strings.Left)));
-               when MEDICAL_ROOM | COCKPIT | ARMOR =>
+               when MEDICAL_ROOM | COCKPIT | ARMOR | ANY =>
                   null;
                when ENGINE =>
                   ModuleDataNode := Create_Element(SaveData, "data");
@@ -225,6 +215,21 @@ package body Ships.SaveLoad is
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   RawValue :=
                     To_Unbounded_String(Integer'Image(Module.Damage2));
+                  Set_Attribute
+                    (ModuleDataNode, "value",
+                     To_String(Trim(RawValue, Ada.Strings.Left)));
+               when HARPOON_GUN =>
+                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
+                  RawValue :=
+                    To_Unbounded_String(Integer'Image(Module.HarpoonIndex));
+                  Set_Attribute
+                    (ModuleDataNode, "value",
+                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
+                  RawValue :=
+                    To_Unbounded_String(Integer'Image(Module.Duration));
                   Set_Attribute
                     (ModuleDataNode, "value",
                      To_String(Trim(RawValue, Ada.Strings.Left)));
@@ -434,6 +439,8 @@ package body Ships.SaveLoad is
                         MType := ARMOR;
                      when BATTERING_RAM =>
                         MType := BATTERING_RAM;
+                     when HARPOON_GUN =>
+                        MType := HARPOON_GUN;
                      when others =>
                         MType :=
                           ModuleType2'Value(Get_Attribute(ChildNode, "mtype"));
@@ -464,6 +471,8 @@ package body Ships.SaveLoad is
                         MType := ARMOR;
                      when BATTERING_RAM =>
                         MType := BATTERING_RAM;
+                     when HARPOON_GUN =>
+                        MType := HARPOON_GUN;
                      when others =>
                         MType := ANY;
                   end case;
@@ -810,6 +819,41 @@ package body Ships.SaveLoad is
                               UpgradeProgress => UpgradeProgress,
                               UpgradeAction => UpgradeAction,
                               Damage2 => Damage));
+                     end;
+                  when HARPOON_GUN =>
+                     declare
+                        Duration, HarpoonIndex: Natural;
+                     begin
+                        ModuleData := Child_Nodes(ChildNode);
+                        DataIndex := 1;
+                        for K in 0 .. Length(ModuleData) - 1 loop
+                           ModuleNode := Item(ModuleData, K);
+                           if Node_Name(ModuleNode) = "data" then
+                              case DataIndex is
+                                 when 1 =>
+                                    HarpoonIndex :=
+                                      Integer'Value
+                                        (Get_Attribute(ModuleNode, "value"));
+                                 when 2 =>
+                                    Duration :=
+                                      Integer'Value
+                                        (Get_Attribute(ModuleNode, "value"));
+                                 when others =>
+                                    null;
+                              end case;
+                              DataIndex := DataIndex + 1;
+                           end if;
+                        end loop;
+                        PlayerShip.Modules.Append
+                          (New_Item =>
+                             (MType => HARPOON_GUN, Name => Name,
+                              ProtoIndex => ProtoIndex, Weight => Weight,
+                              Durability => Durability,
+                              MaxDurability => MaxDurability, Owner => Owner,
+                              UpgradeProgress => UpgradeProgress,
+                              UpgradeAction => UpgradeAction,
+                              Duration => Duration,
+                              HarpoonIndex => HarpoonIndex));
                      end;
                end case;
             end;

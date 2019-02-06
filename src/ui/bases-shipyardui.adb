@@ -100,7 +100,7 @@ package body Bases.ShipyardUI is
            Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType;
          case MType is
             when HARPOON_GUN =>
-               MaxValue := PlayerShip.Modules(ModuleIndex).Data(2);
+               MaxValue := PlayerShip.Modules(ModuleIndex).Duration;
                Value :=
                  Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                    .Value;

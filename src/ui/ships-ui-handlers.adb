@@ -223,7 +223,7 @@ package body Ships.UI.Handlers is
                if Module.MType = GUN then
                   AmmoIndex := Module.AmmoIndex;
                else
-                  AmmoIndex := Module.Data(1);
+                  AmmoIndex := Module.HarpoonIndex;
                end if;
                if
                  (AmmoIndex >= PlayerShip.Cargo.First_Index and
@@ -547,7 +547,7 @@ package body Ships.UI.Handlers is
          if PlayerShip.Modules(ModuleIndex).MType = GUN then
             PlayerShip.Modules(ModuleIndex).AmmoIndex := AssignIndex;
          else
-            PlayerShip.Modules(ModuleIndex).Data(1) := AssignIndex;
+            PlayerShip.Modules(ModuleIndex).HarpoonIndex := AssignIndex;
          end if;
          AddMessage
            ("You assigned " &
