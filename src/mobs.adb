@@ -53,13 +53,12 @@ package body Mobs is
          To_Unbounded_String("Tool"));
       Action, SubAction: DataAction;
       MobNode, ChildNode: Node;
-      MobIndex, ChildIndex: Natural;
+      ChildIndex: Natural;
       DeleteIndex: Positive;
-      ItemIndex: Unbounded_String;
+      MobIndex, ItemIndex: Unbounded_String;
    begin
       TempRecord :=
-        (Index => Null_Unbounded_String, Skills => TempSkills,
-         Attributes => TempAttributes, Order => Rest,
+        (Skills => TempSkills, Attributes => TempAttributes, Order => Rest,
          Priorities => TempPriorities, Inventory => TempInventory,
          Equipment => TempEquipment);
       MobsData := Get_Tree(Reader);
@@ -67,24 +66,22 @@ package body Mobs is
         DOM.Core.Documents.Get_Elements_By_Tag_Name(MobsData, "mobile");
       for I in 0 .. Length(NodesList) - 1 loop
          MobNode := Item(NodesList, I);
-         TempRecord.Index :=
-           To_Unbounded_String(Get_Attribute(MobNode, "index"));
+         MobIndex := To_Unbounded_String(Get_Attribute(MobNode, "index"));
          if Get_Attribute(MobNode, "action")'Length > 0 then
             Action := DataAction'Value(Get_Attribute(MobNode, "action"));
          else
             Action := ADD;
          end if;
-         MobIndex := FindProtoMob(TempRecord.Index);
          if (Action = UPDATE or Action = REMOVE) then
-            if MobIndex = 0 then
+            if not ProtoMobs_Container.Contains(ProtoMobs_List, MobIndex) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
-                 " mob '" & To_String(TempRecord.Index) &
+                 " mob '" & To_String(MobIndex) &
                  "', there no mob with that index.";
             end if;
-         elsif MobIndex > 0 then
+         elsif ProtoMobs_Container.Contains(ProtoMobs_List, MobIndex) then
             raise Data_Loading_Error
-              with "Can't add mob '" & To_String(TempRecord.Index) &
+              with "Can't add mob '" & To_String(MobIndex) &
               "', there is one with that index.";
          end if;
          if Action /= REMOVE then
@@ -101,7 +98,7 @@ package body Mobs is
                if ChildIndex = 0 then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(DataAction'Image(Action)) &
-                    " mob '" & To_String(TempRecord.Index) &
+                    " mob '" & To_String(MobIndex) &
                     "', there no skill named '" &
                     Get_Attribute(ChildNode, "name") & "'.";
                end if;
@@ -206,7 +203,7 @@ package body Mobs is
                if not Objects_Container.Contains(Items_List, ItemIndex) then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(DataAction'Image(Action)) &
-                    " mob '" & To_String(TempRecord.Index) &
+                    " mob '" & To_String(MobIndex) &
                     "', there no item with index '" &
                     Get_Attribute(ChildNode, "index") & "'.";
                end if;
@@ -262,35 +259,22 @@ package body Mobs is
                end loop;
             end loop;
             if Action /= UPDATE then
-               ProtoMobs_List.Append(New_Item => TempRecord);
-               LogMessage
-                 ("Mob added: " & To_String(TempRecord.Index), Everything);
+               ProtoMobs_Container.Include
+                 (ProtoMobs_List, MobIndex, TempRecord);
+               LogMessage("Mob added: " & To_String(MobIndex), Everything);
             else
                ProtoMobs_List(MobIndex) := TempRecord;
-               LogMessage
-                 ("Mob updated: " & To_String(TempRecord.Index), Everything);
+               LogMessage("Mob updated: " & To_String(MobIndex), Everything);
             end if;
          else
-            ProtoMobs_List.Delete(Index => MobIndex);
-            LogMessage
-              ("Mob removed: " & To_String(TempRecord.Index), Everything);
+            ProtoMobs_Container.Exclude(ProtoMobs_List, MobIndex);
+            LogMessage("Mob removed: " & To_String(MobIndex), Everything);
          end if;
          TempRecord :=
-           (Index => Null_Unbounded_String, Skills => TempSkills,
-            Attributes => TempAttributes, Order => Rest,
+           (Skills => TempSkills, Attributes => TempAttributes, Order => Rest,
             Priorities => TempPriorities, Inventory => TempInventory,
             Equipment => TempEquipment);
       end loop;
    end LoadMobs;
-
-   function FindProtoMob(Index: Unbounded_String) return Natural is
-   begin
-      for I in ProtoMobs_List.Iterate loop
-         if ProtoMobs_List(I).Index = Index then
-            return ProtoMobs_Container.To_Index(I);
-         end if;
-      end loop;
-      return 0;
-   end FindProtoMob;
 
 end Mobs;
