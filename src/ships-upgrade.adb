@@ -80,7 +80,7 @@ package body Ships.Upgrade is
                      if PlayerShip.Modules(ModuleIndex).MType = GUN then
                         Damage := PlayerShip.Modules(ModuleIndex).Damage;
                      else
-                        Damage := PlayerShip.Modules(ModuleIndex).Data(2);
+                        Damage := PlayerShip.Modules(ModuleIndex).Damage2;
                      end if;
                      if Damage = MaxValue then
                         raise Ship_Upgrade_Error

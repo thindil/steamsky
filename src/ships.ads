@@ -31,7 +31,7 @@ package Ships is
    type Data_Array is array(1 .. 3) of Integer;
    type ModuleType2 is
      (WORKSHOP, ANY, MEDICAL_ROOM, TRAINING_ROOM, ENGINE, CABIN, COCKPIT,
-      TURRET, GUN, CARGO_ROOM, HULL, ARMOR);
+      TURRET, GUN, CARGO_ROOM, HULL, ARMOR, BATTERING_RAM);
    type ModuleData(MType: ModuleType2 := ANY)
    is -- Data structure for ship modules
    record
@@ -69,6 +69,8 @@ package Ships is
             null; -- Medical room, cockpit and armor don't have any special fields
          when TRAINING_ROOM =>
             TrainedSkill: Natural; -- Index of skill set to training
+         when BATTERING_RAM =>
+            Damage2: Positive; -- Damage done by battering ram
          when ANY =>
             Data: Data_Array; -- Various data for module (depends on module)
       end case;
