@@ -231,15 +231,18 @@ package body Ships is
                         MaxDurability => TempModule.Durability, Owner => 0,
                         UpgradeProgress => 0, UpgradeAction => NONE,
                         Damage2 => TempModule.MaxValue));
-               when others =>
+               when HARPOON_GUN =>
                   ShipModules.Append
                     (New_Item =>
-                       (MType => ANY, Name => Modules_List(Module).Name,
+                       (MType => HARPOON_GUN,
+                        Name => Modules_List(Module).Name,
                         ProtoIndex => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability, Owner => 0,
                         UpgradeProgress => 0, UpgradeAction => NONE,
-                        Data => (TempModule.Value, TempModule.MaxValue, 0)));
+                        Duration => TempModule.MaxValue, HarpoonIndex => 0));
+               when ANY =>
+                  null;
             end case;
          end loop;
       end;
@@ -338,8 +341,7 @@ package body Ships is
                end loop;
                for Module of ShipModules loop
                   if Module.Owner = 0 and
-                    ((Module.MType = GUN or
-                      Modules_List(Module.ProtoIndex).MType = HARPOON_GUN) and
+                    ((Module.MType = GUN or Module.MType = HARPOON_GUN) and
                      Member.Order = Gunner) then
                      Module.Owner := ShipCrew.Last_Index;
                      exit;
@@ -377,8 +379,7 @@ package body Ships is
             if TmpShip.Modules(I).MType = TURRET then
                for J in TmpShip.Modules.Iterate loop
                   if TmpShip.Modules(J).MType = GUN or
-                    Modules_List(TmpShip.Modules(J).ProtoIndex).MType =
-                      HARPOON_GUN then
+                    TmpShip.Modules(J).MType = HARPOON_GUN then
                      GunAssigned := False;
                      for K in TmpShip.Modules.Iterate loop
                         if TmpShip.Modules(K).MType = TURRET
@@ -899,7 +900,7 @@ package body Ships is
                CombatValue := CombatValue + Module.MaxDurability;
             when HARPOON_GUN =>
                CombatValue :=
-                 CombatValue + Module.MaxDurability + (Module.Data(2) * 5);
+                 CombatValue + Module.MaxDurability + (Module.Duration * 5);
                CountAmmoValue(Modules_List(Module.ProtoIndex).Value, 5);
             when HULL =>
                CombatValue :=

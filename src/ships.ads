@@ -31,7 +31,7 @@ package Ships is
    type Data_Array is array(1 .. 3) of Integer;
    type ModuleType2 is
      (WORKSHOP, ANY, MEDICAL_ROOM, TRAINING_ROOM, ENGINE, CABIN, COCKPIT,
-      TURRET, GUN, CARGO_ROOM, HULL, ARMOR, BATTERING_RAM);
+      TURRET, GUN, CARGO_ROOM, HULL, ARMOR, BATTERING_RAM, HARPOON_GUN);
    type ModuleData(MType: ModuleType2 := ANY)
    is -- Data structure for ship modules
    record
@@ -71,6 +71,9 @@ package Ships is
             TrainedSkill: Natural; -- Index of skill set to training
          when BATTERING_RAM =>
             Damage2: Positive; -- Damage done by battering ram
+         when HARPOON_GUN =>
+            Duration: Positive; -- Duration bonus for selected harpoon gun
+            HarpoonIndex: Natural; -- Cargo index of ammunition used by selected harpoon gun
          when ANY =>
             Data: Data_Array; -- Various data for module (depends on module)
       end case;

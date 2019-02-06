@@ -245,7 +245,7 @@ package body Combat.UI is
                if PlayerShip.Modules(Guns(I)(1)).MType = GUN then
                   AmmoIndex := PlayerShip.Modules(Guns(I)(1)).AmmoIndex;
                else
-                  AmmoIndex := PlayerShip.Modules(Guns(I)(1)).Data(1);
+                  AmmoIndex := PlayerShip.Modules(Guns(I)(1)).HarpoonIndex;
                end if;
                if
                  (AmmoIndex in

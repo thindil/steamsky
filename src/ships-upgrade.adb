@@ -98,7 +98,7 @@ package body Ships.Upgrade is
                   end if;
                   UpgradeProgress := 500;
                when HARPOON_GUN =>
-                  if PlayerShip.Modules(ModuleIndex).Data(2) = MaxValue then
+                  if PlayerShip.Modules(ModuleIndex).Duration = MaxValue then
                      raise Ship_Upgrade_Error
                        with "You can't improve more strength of " &
                        To_String(PlayerShip.Modules(ModuleIndex).Name) & ".";
@@ -177,7 +177,7 @@ package body Ships.Upgrade is
    procedure UpgradeShip(Minutes: Positive) is
       ResultAmount, UpgradePoints, WorkerIndex, UpgradeMaterial,
       UpgradeProgress, UpgradeTools: Natural := 0;
-      MaxValue: Positive;
+      MaxValue, UpgradeValue: Positive;
       WeightGain: Natural;
       Times: Natural := 0;
       OrderTime, CurrentMinutes: Integer;
@@ -339,15 +339,53 @@ package body Ships.Upgrade is
                        10;
                   end if;
                when MAX_VALUE =>
-                  PlayerShip.Modules(PlayerShip.UpgradeModule).Data(2) :=
-                    PlayerShip.Modules(PlayerShip.UpgradeModule).Data(2) + 1;
-                  case Modules_List
-                    (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
-                    .MType is
+                  case PlayerShip.Modules(PlayerShip.UpgradeModule).MType is
                      when HULL =>
                         WeightGain := WeightGain * 10;
+                        PlayerShip.Modules(PlayerShip.UpgradeModule)
+                          .MaxModules :=
+                          PlayerShip.Modules(PlayerShip.UpgradeModule)
+                            .MaxModules +
+                          1;
+                        UpgradeValue :=
+                          PlayerShip.Modules(PlayerShip.UpgradeModule)
+                            .MaxModules;
                      when ENGINE =>
                         WeightGain := 1;
+                        PlayerShip.Modules(PlayerShip.UpgradeModule).Power :=
+                          PlayerShip.Modules(PlayerShip.UpgradeModule).Power +
+                          1;
+                        UpgradeValue :=
+                          PlayerShip.Modules(PlayerShip.UpgradeModule).Power;
+                     when CABIN =>
+                        PlayerShip.Modules(PlayerShip.UpgradeModule).Quality :=
+                          PlayerShip.Modules(PlayerShip.UpgradeModule)
+                            .Quality +
+                          1;
+                        UpgradeValue :=
+                          PlayerShip.Modules(PlayerShip.UpgradeModule).Quality;
+                     when GUN =>
+                        PlayerShip.Modules(PlayerShip.UpgradeModule).Damage :=
+                          PlayerShip.Modules(PlayerShip.UpgradeModule).Damage +
+                          1;
+                        UpgradeValue :=
+                          PlayerShip.Modules(PlayerShip.UpgradeModule).Damage;
+                     when BATTERING_RAM =>
+                        PlayerShip.Modules(PlayerShip.UpgradeModule).Damage2 :=
+                          PlayerShip.Modules(PlayerShip.UpgradeModule)
+                            .Damage2 +
+                          1;
+                        UpgradeValue :=
+                          PlayerShip.Modules(PlayerShip.UpgradeModule).Damage2;
+                     when HARPOON_GUN =>
+                        PlayerShip.Modules(PlayerShip.UpgradeModule)
+                          .Duration :=
+                          PlayerShip.Modules(PlayerShip.UpgradeModule)
+                            .Duration +
+                          1;
+                        UpgradeValue :=
+                          PlayerShip.Modules(PlayerShip.UpgradeModule)
+                            .Duration;
                      when others =>
                         null;
                   end case;
@@ -369,8 +407,7 @@ package body Ships.Upgrade is
                                .ProtoIndex)
                             .MaxValue) *
                        1.5);
-                  if PlayerShip.Modules(PlayerShip.UpgradeModule).Data(2) =
-                    MaxValue then
+                  if UpgradeValue = MaxValue then
                      MaxUpgradeReached("You reached maximum upgrade for ");
                      return;
                   else
@@ -395,16 +432,15 @@ package body Ships.Upgrade is
                      end case;
                   end if;
                when VALUE =>
-                  PlayerShip.Modules(PlayerShip.UpgradeModule).Data(1) :=
-                    PlayerShip.Modules(PlayerShip.UpgradeModule).Data(1) - 1;
-                  case Modules_List
-                    (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
-                    .MType is
-                     when ENGINE =>
-                        WeightGain := WeightGain * 10;
-                     when others =>
-                        null;
-                  end case;
+                  if PlayerShip.Modules(PlayerShip.UpgradeModule).MType =
+                    ENGINE then
+                     WeightGain := WeightGain * 10;
+                     PlayerShip.Modules(PlayerShip.UpgradeModule).FuelUsage :=
+                       PlayerShip.Modules(PlayerShip.UpgradeModule).FuelUsage -
+                       1;
+                     UpgradeValue :=
+                       PlayerShip.Modules(PlayerShip.UpgradeModule).FuelUsage;
+                  end if;
                   PlayerShip.Modules(PlayerShip.UpgradeModule).Weight :=
                     PlayerShip.Modules(PlayerShip.UpgradeModule).Weight +
                     WeightGain;
@@ -423,8 +459,7 @@ package body Ships.Upgrade is
                                .ProtoIndex)
                             .Value) /
                        2.0);
-                  if PlayerShip.Modules(PlayerShip.UpgradeModule).Data(1) =
-                    MaxValue then
+                  if UpgradeValue = MaxValue then
                      MaxUpgradeReached("You reached maximum upgrade for ");
                      return;
                   else
