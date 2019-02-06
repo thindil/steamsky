@@ -284,19 +284,21 @@ package body Bases.Ship is
                         UpgradeAction => NONE,
                         Damage => Modules_List(ModuleIndex).MaxValue,
                         AmmoIndex => 0));
-               when others =>
+               when HARPOON_GUN =>
                   PlayerShip.Modules.Append
                     (New_Item =>
-                       (MType => ANY, Name => Modules_List(ModuleIndex).Name,
+                       (MType => HARPOON_GUN,
+                        Name => Modules_List(ModuleIndex).Name,
                         ProtoIndex => ModuleIndex,
                         Weight => Modules_List(ModuleIndex).Weight,
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
                         Owner => 0, UpgradeProgress => 0,
                         UpgradeAction => NONE,
-                        Data =>
-                          (Modules_List(ModuleIndex).Value,
-                           Modules_List(ModuleIndex).MaxValue, 0)));
+                        Duration => Modules_List(ModuleIndex).MaxValue,
+                        HarpoonIndex => 0));
+               when ANY | HULL =>
+                  null;
             end case;
          else
             PlayerShip.Modules.Insert
