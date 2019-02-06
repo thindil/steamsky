@@ -213,6 +213,24 @@ package body Ships is
                         UpgradeProgress => 0, UpgradeAction => NONE,
                         InstalledModules => TempModule.Value,
                         MaxModules => TempModule.MaxValue));
+               when ARMOR =>
+                  ShipModules.Append
+                    (New_Item =>
+                       (MType => ARMOR, Name => Modules_List(Module).Name,
+                        ProtoIndex => Module, Weight => TempModule.Weight,
+                        Durability => TempModule.Durability,
+                        MaxDurability => TempModule.Durability, Owner => 0,
+                        UpgradeProgress => 0, UpgradeAction => NONE));
+               when BATTERING_RAM =>
+                  ShipModules.Append
+                    (New_Item =>
+                       (MType => BATTERING_RAM,
+                        Name => Modules_List(Module).Name,
+                        ProtoIndex => Module, Weight => TempModule.Weight,
+                        Durability => TempModule.Durability,
+                        MaxDurability => TempModule.Durability, Owner => 0,
+                        UpgradeProgress => 0, UpgradeAction => NONE,
+                        Damage2 => TempModule.MaxValue));
                when others =>
                   ShipModules.Append
                     (New_Item =>
@@ -872,7 +890,7 @@ package body Ships is
          case Modules_List(Module.ProtoIndex).MType is
             when BATTERING_RAM =>
                CombatValue :=
-                 CombatValue + Module.MaxDurability + (Module.Data(2) * 10);
+                 CombatValue + Module.MaxDurability + (Module.Damage2 * 10);
             when GUN =>
                CombatValue :=
                  CombatValue + Module.MaxDurability + (Module.Damage * 10);

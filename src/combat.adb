@@ -173,15 +173,14 @@ package body Combat is
    procedure CombatTurn is
       AccuracyBonus, EvadeBonus: Integer := 0;
       PilotIndex, EngineerIndex, EnemyWeaponIndex, EnemyAmmoIndex,
-      EnemyPilotIndex: Natural := 0;
+      EnemyPilotIndex, AmmoIndex2: Natural := 0;
       DistanceTraveled, SpeedBonus: Integer;
       ShootMessage, Message: Unbounded_String;
       EnemyPilotOrder: Positive := 2;
       DamageRange: Positive := 10000;
       FreeSpace: Integer := 0;
       procedure Attack(Ship, EnemyShip: in out ShipRecord) is
-         GunnerIndex, Shoots, AmmoIndex, ArmorIndex, WeaponIndex,
-         AmmoIndex2: Natural;
+         GunnerIndex, Shoots, AmmoIndex, ArmorIndex, WeaponIndex: Natural;
          GunnerOrder: Positive;
          HitChance, HitLocation, CurrentAccuracyBonus: Integer;
          type DamageFactor is digits 2 range 0.0 .. 1.0;
@@ -234,9 +233,10 @@ package body Combat is
                  HARPOON_GUN) then
                GunnerIndex := 0;
                AmmoIndex := 0;
-               if Modules_List(Ship.Modules(K).ProtoIndex).MType /= GUN then
+               if Modules_List(Ship.Modules(K).ProtoIndex).MType =
+                 HARPOON_GUN then
                   AmmoIndex2 := Ship.Modules(K).Data(1);
-               else
+               elsif Ship.Modules(K).MType = GUN then
                   AmmoIndex2 := Ship.Modules(K).AmmoIndex;
                end if;
                if
@@ -444,7 +444,7 @@ package body Combat is
                                  HitLocation := 1;
                                  for J in EnemyShip.Modules.Iterate loop
                                     if
-                                      ((EnemyShip.Modules(J).MType = TURRET and
+                                      ((EnemyShip.Modules(J).MType = TURRET and then
                                         EnemyShip.Modules(J).GunIndex > 0) or
                                        Modules_List
                                            (EnemyShip.Modules(J).ProtoIndex)
@@ -476,18 +476,23 @@ package body Combat is
                           DamageFactor
                             (Float(Ship.Modules(K).Durability) /
                              Float(Ship.Modules(K).MaxDurability));
-                        if Modules_List(Ship.Modules(K).ProtoIndex).MType /=
-                          GUN then
+                        if Modules_List(Ship.Modules(K).ProtoIndex).MType =
+                          HARPOON_GUN then
                            WeaponDamage :=
                              Ship.Modules(K).Data(2) -
                              Natural
                                (Float(Ship.Modules(K).Data(2)) *
                                 Float(Damage));
-                        else
+                        elsif Ship.Modules(K).MType = GUN then
                            WeaponDamage :=
                              Ship.Modules(K).Damage -
                              Natural
                                (Float(Ship.Modules(K).Damage) * Float(Damage));
+                        elsif Ship.Modules(K).MType = BATTERING_RAM then
+                           WeaponDamage :=
+                             Ship.Modules(K).Damage2 -
+                             Natural
+                               (Float(Ship.Modules(K).Damage2) * Float(Damage));
                         end if;
                         if WeaponDamage = 0 then
                            WeaponDamage := 1;
@@ -1014,8 +1019,7 @@ package body Combat is
       for I in Enemy.Ship.Modules.Iterate loop
          if Enemy.Ship.Modules(I).Durability > 0 and
            (Enemy.Ship.Modules(I).MType = GUN or
-            Modules_List(Enemy.Ship.Modules(I).ProtoIndex).MType =
-              BATTERING_RAM or
+            Enemy.Ship.Modules(I).MType = BATTERING_RAM or
             Modules_List(Enemy.Ship.Modules(I).ProtoIndex).MType =
               HARPOON_GUN) then
             if Enemy.Ship.Modules(I).MType = GUN or
@@ -1026,18 +1030,20 @@ package body Combat is
                elsif DamageRange > 2000 then
                   DamageRange := 2000;
                end if;
-               if Enemy.Ship.Modules(I).Data(1) >=
-                 Enemy.Ship.Cargo.First_Index and
-                 Enemy.Ship.Modules(I).Data(1) <=
-                   Enemy.Ship.Cargo.Last_Index then
+               if Enemy.Ship.Modules(I).MType = GUN then
+                  AmmoIndex2 := Enemy.Ship.Modules(I).AmmoIndex;
+               else
+                  AmmoIndex2 := Enemy.Ship.Modules(I).Data(1);
+               end if;
+               if AmmoIndex2 in Enemy.Ship.Cargo.First_Index .. Enemy.Ship.Cargo.Last_Index then
                   if Items_List
-                      (Enemy.Ship.Cargo(Enemy.Ship.Modules(I).Data(1))
+                      (Enemy.Ship.Cargo(AmmoIndex2)
                          .ProtoIndex)
                       .IType =
                     Items_Types
                       (Modules_List(Enemy.Ship.Modules(I).ProtoIndex)
                          .Value) then
-                     EnemyAmmoIndex := Enemy.Ship.Modules(I).Data(1);
+                     EnemyAmmoIndex := AmmoIndex2;
                   end if;
                end if;
                if EnemyAmmoIndex = 0 then

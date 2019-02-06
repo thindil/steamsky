@@ -220,6 +220,14 @@ package body Ships.SaveLoad is
                   Set_Attribute
                     (ModuleDataNode, "value",
                      To_String(Trim(RawValue, Ada.Strings.Left)));
+               when BATTERING_RAM =>
+                  ModuleDataNode := Create_Element(SaveData, "data");
+                  ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
+                  RawValue :=
+                    To_Unbounded_String(Integer'Image(Module.Damage2));
+                  Set_Attribute
+                    (ModuleDataNode, "value",
+                     To_String(Trim(RawValue, Ada.Strings.Left)));
             end case;
          end loop;
       end;
@@ -424,6 +432,8 @@ package body Ships.SaveLoad is
                         MType := HULL;
                      when ARMOR =>
                         MType := ARMOR;
+                     when BATTERING_RAM =>
+                        MType := BATTERING_RAM;
                      when others =>
                         MType :=
                           ModuleType2'Value(Get_Attribute(ChildNode, "mtype"));
@@ -452,6 +462,8 @@ package body Ships.SaveLoad is
                         MType := HULL;
                      when ARMOR =>
                         MType := ARMOR;
+                     when BATTERING_RAM =>
+                        MType := BATTERING_RAM;
                      when others =>
                         MType := ANY;
                   end case;
@@ -773,6 +785,32 @@ package body Ships.SaveLoad is
                            MaxDurability => MaxDurability, Owner => Owner,
                            UpgradeProgress => UpgradeProgress,
                            UpgradeAction => UpgradeAction));
+                  when BATTERING_RAM =>
+                     declare
+                        Damage: Natural;
+                     begin
+                        ModuleData := Child_Nodes(ChildNode);
+                        DataIndex := 1;
+                        for K in 0 .. Length(ModuleData) - 1 loop
+                           ModuleNode := Item(ModuleData, K);
+                           if Node_Name(ModuleNode) = "data" and
+                             DataIndex = 1 then
+                              Damage :=
+                                Integer'Value
+                                  (Get_Attribute(ModuleNode, "value"));
+                              DataIndex := DataIndex + 1;
+                           end if;
+                        end loop;
+                        PlayerShip.Modules.Append
+                          (New_Item =>
+                             (MType => BATTERING_RAM, Name => Name,
+                              ProtoIndex => ProtoIndex, Weight => Weight,
+                              Durability => Durability,
+                              MaxDurability => MaxDurability, Owner => Owner,
+                              UpgradeProgress => UpgradeProgress,
+                              UpgradeAction => UpgradeAction,
+                              Damage2 => Damage));
+                     end;
                end case;
             end;
          elsif Node_Name(ChildNode) = "cargo" then
