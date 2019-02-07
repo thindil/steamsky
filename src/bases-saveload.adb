@@ -248,6 +248,8 @@ package body Bases.SaveLoad is
                         To_String(Trim(RawValue, Ada.Strings.Left)));
                      if Mission.MType = Deliver then
                         RawValue := Mission.ItemIndex;
+                     elsif Mission.MType = Passenger then
+                        RawValue := Mission.CabinIndex;
                      else
                         RawValue :=
                           To_Unbounded_String(Integer'Image(Mission.Target));
@@ -475,13 +477,13 @@ package body Bases.SaveLoad is
                   TargetX, TargetY: Natural;
                   Time, Reward: Positive;
                   Target: Integer;
-                  ItemIndex: Unbounded_String;
+                  Index: Unbounded_String;
                begin
                   MType :=
                     Missions_Types'Val
                       (Integer'Value(Get_Attribute(ChildNode, "type")));
-                  if MType = Deliver then
-                     ItemIndex :=
+                  if MType = Deliver or MType = Passenger then
+                     Index :=
                        To_Unbounded_String(Get_Attribute(ChildNode, "target"));
                   else
                      Target :=
@@ -497,7 +499,7 @@ package body Bases.SaveLoad is
                      when Deliver =>
                         SkyBases(BaseIndex).Missions.Append
                           (New_Item =>
-                             (MType => Deliver, ItemIndex => ItemIndex,
+                             (MType => Deliver, ItemIndex => Index,
                               Time => Time, TargetX => TargetX,
                               TargetY => TargetY, Reward => Reward,
                               StartBase => BaseIndex, Finished => False));
@@ -525,7 +527,7 @@ package body Bases.SaveLoad is
                      when Passenger =>
                         SkyBases(BaseIndex).Missions.Append
                           (New_Item =>
-                             (MType => Passenger, Target => Target,
+                             (MType => Passenger, CabinIndex => Index,
                               Time => Time, TargetX => TargetX,
                               TargetY => TargetY, Reward => Reward,
                               StartBase => BaseIndex, Finished => False));

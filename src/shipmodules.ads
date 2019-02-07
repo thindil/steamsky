@@ -16,7 +16,8 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Strings.Unbounded.Hash;
+with Ada.Containers.Hashed_Maps; use Ada.Containers;
 with DOM.Readers; use DOM.Readers;
 
 package ShipModules is
@@ -40,15 +41,12 @@ package ShipModules is
       Unique: Boolean; -- Did ship can have installed only one that module
       Size: Natural; -- How many space in ship this module take
       Description: Unbounded_String; -- Description of module
-      Index: Unbounded_String; -- Index of module
    end record;
-   package BaseModules_Container is new Vectors(Positive, BaseModule_Data);
+   package BaseModules_Container is new Hashed_Maps(Unbounded_String,
+      BaseModule_Data, Ada.Strings.Unbounded.Hash, "=");
    Modules_List: BaseModules_Container
-     .Vector; -- List of ship modules available in game
+     .Map; -- List of ship modules available in game
 
    procedure LoadShipModules(Reader: Tree_Reader); -- Load modules from files
-   function FindProtoModule(Index: Unbounded_String) return Natural with
-      Pre => Index /=
-      Null_Unbounded_String; -- Return vector index of module or zero if module not found
 
 end ShipModules;

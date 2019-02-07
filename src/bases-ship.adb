@@ -73,9 +73,9 @@ package body Bases.Ship is
       UpdateGame(Time);
    end RepairShip;
 
-   procedure UpgradeShip(Install: Boolean; ModuleIndex: Positive) is
+   procedure UpgradeShip(Install: Boolean; ModuleIndex: Unbounded_String) is
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
-      HullIndex, ModulesAmount, TraderIndex: Positive;
+      HullIndex, ModulesAmount, TraderIndex, ShipModuleIndex: Positive;
       FreeTurretIndex, Price: Natural := 0;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -326,6 +326,7 @@ package body Bases.Ship is
             To_String(MoneyName) & ".",
             TradeMessage);
       else
+         ShipModuleIndex := Integer'Value(To_String(ModuleIndex));
          declare
             type DamageFactor is digits 2 range 0.0 .. 1.0;
             Damage: DamageFactor := 0.0;
@@ -333,13 +334,15 @@ package body Bases.Ship is
             Damage :=
               1.0 -
               DamageFactor
-                (Float(PlayerShip.Modules(ModuleIndex).Durability) /
-                 Float(PlayerShip.Modules(ModuleIndex).MaxDurability));
+                (Float(PlayerShip.Modules(ShipModuleIndex).Durability) /
+                 Float(PlayerShip.Modules(ShipModuleIndex).MaxDurability));
             Price :=
-              Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Price -
+              Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+                .Price -
               Integer
                 (Float
-                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                   (Modules_List
+                      (PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
                       .Price) *
                  Float(Damage));
          end;
@@ -350,22 +353,24 @@ package body Bases.Ship is
          if Price > SkyBases(BaseIndex).Cargo(1).Amount then
             raise Trade_No_Money_In_Base;
          end if;
-         case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
+         case Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+           .MType is
             when TURRET =>
-               if PlayerShip.Modules(ModuleIndex).GunIndex > 0 then
+               if PlayerShip.Modules(ShipModuleIndex).GunIndex > 0 then
                   raise BasesShip_Removing_Error
                     with "You have installed gun in this turret, remove it before you remove this turret.";
                end if;
             when GUN | HARPOON_GUN =>
                for Module of PlayerShip.Modules loop
                   if Module.MType = TURRET
-                    and then Module.GunIndex = ModuleIndex then
+                    and then Module.GunIndex = ShipModuleIndex then
                      Module.GunIndex := 0;
                      exit;
                   end if;
                end loop;
             when ShipModules.CARGO =>
-               if FreeCargo((0 - PlayerShip.Modules(ModuleIndex).MaxWeight)) <
+               if FreeCargo
+                   ((0 - PlayerShip.Modules(ShipModuleIndex).MaxWeight)) <
                  0 then
                   raise BasesShip_Removing_Error
                     with "You can't sell this cargo bay, because you have items in it.";
@@ -375,9 +380,9 @@ package body Bases.Ship is
          end case;
          ModulesAmount :=
            ModulesAmount -
-           Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Size;
+           Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex).Size;
          PlayerShip.Modules(HullIndex).InstalledModules := ModulesAmount;
-         if PlayerShip.UpgradeModule = ModuleIndex then
+         if PlayerShip.UpgradeModule = ShipModuleIndex then
             PlayerShip.UpgradeModule := 0;
             for C in PlayerShip.Crew.Iterate loop
                if PlayerShip.Crew(C).Order = Upgrading then
@@ -387,13 +392,13 @@ package body Bases.Ship is
             end loop;
          end if;
          UpdateGame
-           (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+           (Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
               .InstallTime);
-         if PlayerShip.Modules(ModuleIndex).Owner > 0 and
-           PlayerShip.Modules(ModuleIndex).MType /= CABIN then
+         if PlayerShip.Modules(ShipModuleIndex).Owner > 0 and
+           PlayerShip.Modules(ShipModuleIndex).MType /= CABIN then
             GiveOrders
               (Ship => PlayerShip,
-               MemberIndex => PlayerShip.Modules(ModuleIndex).Owner,
+               MemberIndex => PlayerShip.Modules(ShipModuleIndex).Owner,
                GivenOrder => Rest, CheckPriorities => False);
          end if;
          UpdateCargo
@@ -402,22 +407,23 @@ package body Bases.Ship is
          GainExp(1, TalkingSkill, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
          AddMessage
-           ("You removed " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
+           ("You removed " &
+            To_String(PlayerShip.Modules(ShipModuleIndex).Name) &
             " from your ship and earned" & Positive'Image(Price) & " " &
             To_String(MoneyName) & ".",
             TradeMessage);
-         PlayerShip.Modules.Delete(ModuleIndex);
-         if PlayerShip.RepairModule > ModuleIndex then
+         PlayerShip.Modules.Delete(ShipModuleIndex);
+         if PlayerShip.RepairModule > ShipModuleIndex then
             PlayerShip.RepairModule := PlayerShip.RepairModule - 1;
-         elsif PlayerShip.RepairModule = ModuleIndex then
+         elsif PlayerShip.RepairModule = ShipModuleIndex then
             PlayerShip.RepairModule := 0;
          end if;
-         if PlayerShip.UpgradeModule > ModuleIndex then
+         if PlayerShip.UpgradeModule > ShipModuleIndex then
             PlayerShip.UpgradeModule := PlayerShip.UpgradeModule - 1;
          end if;
          for Module of PlayerShip.Modules loop
             if Module.MType = TURRET
-              and then Module.GunIndex > ModuleIndex then
+              and then Module.GunIndex > ShipModuleIndex then
                Module.GunIndex := Module.GunIndex - 1;
             end if;
          end loop;
