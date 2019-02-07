@@ -67,9 +67,7 @@ package body Ships.SaveLoad is
             DataNode := Create_Element(SaveData, "module");
             DataNode := Append_Child(CategoryNode, DataNode);
             Set_Attribute(DataNode, "name", To_String(Module.Name));
-            Set_Attribute
-              (DataNode, "index",
-               To_String(Modules_List(Module.ProtoIndex).Index));
+            Set_Attribute(DataNode, "index", To_String(Module.ProtoIndex));
             RawValue := To_Unbounded_String(Integer'Image(Module.Weight));
             Set_Attribute
               (DataNode, "weight",
@@ -390,8 +388,8 @@ package body Ships.SaveLoad is
          if Node_Name(ChildNode) = "module" then
             declare
                ModuleData: Node_List;
-               Name: Unbounded_String;
-               ProtoIndex, DataIndex: Positive;
+               Name, ProtoIndex: Unbounded_String;
+               DataIndex: Positive;
                Weight, Owner: Natural;
                Durability, MaxDurability, UpgradeProgress: Integer;
                UpgradeAction: ShipUpgrade;
@@ -401,8 +399,7 @@ package body Ships.SaveLoad is
             begin
                Name := To_Unbounded_String(Get_Attribute(ChildNode, "name"));
                ProtoIndex :=
-                 FindProtoModule
-                   (To_Unbounded_String(Get_Attribute(ChildNode, "index")));
+                 To_Unbounded_String(Get_Attribute(ChildNode, "index"));
                Weight := Natural'Value(Get_Attribute(ChildNode, "weight"));
                Owner := Natural'Value(Get_Attribute(ChildNode, "owner"));
                Durability :=

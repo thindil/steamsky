@@ -331,6 +331,8 @@ package body Game.SaveLoad is
            (CategoryNode, "type", To_String(Trim(RawValue, Ada.Strings.Left)));
          if Mission.MType = Deliver then
             RawValue := Mission.ItemIndex;
+         elsif Mission.MType = Passenger then
+            RawValue := Mission.CabinIndex;
          else
             RawValue := To_Unbounded_String(Integer'Image(Mission.Target));
          end if;
@@ -678,7 +680,7 @@ package body Game.SaveLoad is
          Time, Reward, MIndex: Positive;
          Finished: Boolean;
          Target: Natural;
-         ItemIndex: Unbounded_String;
+         Index: Unbounded_String;
       begin
          LogMessage("Loading accepted missions...", Everything, False);
          for I in 0 .. Length(NodesList) - 1 loop
@@ -686,8 +688,8 @@ package body Game.SaveLoad is
             MType :=
               Missions_Types'Val
                 (Integer'Value(Get_Attribute(SavedNode, "type")));
-            if MType = Deliver then
-               ItemIndex :=
+            if MType = Deliver or MType = Passenger then
+               Index :=
                  To_Unbounded_String(Get_Attribute(SavedNode, "target"));
             else
                Target := Integer'Value(Get_Attribute(SavedNode, "target"));
@@ -706,7 +708,7 @@ package body Game.SaveLoad is
                when Deliver =>
                   AcceptedMissions.Append
                     (New_Item =>
-                       (MType => Deliver, ItemIndex => ItemIndex, Time => Time,
+                       (MType => Deliver, ItemIndex => Index, Time => Time,
                         TargetX => TargetX, TargetY => TargetY,
                         Reward => Reward, StartBase => StartBase,
                         Finished => Finished));
@@ -734,7 +736,7 @@ package body Game.SaveLoad is
                when Passenger =>
                   AcceptedMissions.Append
                     (New_Item =>
-                       (MType => Passenger, Target => Target, Time => Time,
+                       (MType => Passenger, CabinIndex => Index, Time => Time,
                         TargetX => TargetX, TargetY => TargetY,
                         Reward => Reward, StartBase => StartBase,
                         Finished => Finished));

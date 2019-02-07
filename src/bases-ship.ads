@@ -24,7 +24,7 @@ package Bases.Ship is
 
    procedure RepairShip(ModuleIndex: Integer); -- Repairs playership in bases
    procedure UpgradeShip(Install: Boolean;
-      ModuleIndex: Positive); -- Install/remove modules on ship
+      ModuleIndex: Unbounded_String); -- Install/remove modules on ship
    procedure PayForDock; -- Pay daily fee for docking
    procedure RepairCost(Cost, Time: in out Natural;
       ModuleIndex: Integer); -- Count cost/time of repairs of ship

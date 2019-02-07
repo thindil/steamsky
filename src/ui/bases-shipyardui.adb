@@ -42,7 +42,7 @@ with Trades; use Trades;
 package body Bases.ShipyardUI is
 
    Builder: Gtkada_Builder;
-   ModuleIndex: Positive;
+   ModuleIndex: Unbounded_String;
 
    procedure SetInstallModulesList(ShowType: ModuleType) is
       ModulesList: constant Gtk_List_Store :=
@@ -58,7 +58,7 @@ package body Bases.ShipyardUI is
                   To_String(Modules_List(I).Name));
                Set
                  (ModulesList, ModulesIter, 1,
-                  Gint(BaseModules_Container.To_Index(I)));
+                  To_String(BaseModules_Container.Key(I)));
             end if;
          end loop;
       end AddListItems;
@@ -85,9 +85,10 @@ package body Bases.ShipyardUI is
    end ChangeType;
 
    procedure GetModuleInfo(ModuleInfo: in out Unbounded_String;
-      ModuleIndex: Positive; Installing: Boolean) is
+      Installing: Boolean) is
       MType: ModuleType;
       MAmount, Size, Weight, MaxValue, Value: Natural;
+      ShipModuleIndex: Positive;
    begin
       if Installing then
          MType := Modules_List(ModuleIndex).MType;
@@ -96,42 +97,44 @@ package body Bases.ShipyardUI is
          Size := Modules_List(ModuleIndex).Size;
          Weight := Modules_List(ModuleIndex).Weight;
       else
+         ShipModuleIndex := Integer'Value(To_String(ModuleIndex));
          MType :=
-           Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType;
+           Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex).MType;
          case MType is
             when HARPOON_GUN =>
-               MaxValue := PlayerShip.Modules(ModuleIndex).Duration;
+               MaxValue := PlayerShip.Modules(ShipModuleIndex).Duration;
                Value :=
-                 Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                 Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
                    .Value;
             when ENGINE =>
-               MaxValue := PlayerShip.Modules(ModuleIndex).Power;
-               Value := PlayerShip.Modules(ModuleIndex).FuelUsage;
+               MaxValue := PlayerShip.Modules(ShipModuleIndex).Power;
+               Value := PlayerShip.Modules(ShipModuleIndex).FuelUsage;
             when CABIN =>
-               MaxValue := PlayerShip.Modules(ModuleIndex).Quality;
-               Value := PlayerShip.Modules(ModuleIndex).Cleanliness;
+               MaxValue := PlayerShip.Modules(ShipModuleIndex).Quality;
+               Value := PlayerShip.Modules(ShipModuleIndex).Cleanliness;
             when GUN =>
-               MaxValue := PlayerShip.Modules(ModuleIndex).Damage;
+               MaxValue := PlayerShip.Modules(ShipModuleIndex).Damage;
                Value :=
-                 Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                 Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
                    .Value;
             when ShipModules.CARGO =>
-               MaxValue := PlayerShip.Modules(ModuleIndex).MaxWeight;
+               MaxValue := PlayerShip.Modules(ShipModuleIndex).MaxWeight;
                Value :=
-                 Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                 Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
                    .Value;
             when HULL =>
-               MaxValue := PlayerShip.Modules(ModuleIndex).MaxModules;
+               MaxValue := PlayerShip.Modules(ShipModuleIndex).MaxModules;
                Value :=
-                 Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                 Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
                    .Value;
             when others =>
                MaxValue := 0;
                Value := 0;
          end case;
-         Size := Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Size;
+         Size :=
+           Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex).Size;
          Weight :=
-           Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Weight;
+           Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex).Weight;
       end if;
       case MType is
          when HULL =>
@@ -238,7 +241,8 @@ package body Bases.ShipyardUI is
          if ModulesIter = Null_Iter then
             return;
          end if;
-         ModuleIndex := Positive(Get_Int(ModulesModel, ModulesIter, 1));
+         ModuleIndex :=
+           To_Unbounded_String(Get_String(ModulesModel, ModulesIter, 1));
       end;
       Cost := Modules_List(ModuleIndex).Price;
       CountPrice(Cost, FindMember(Talk));
@@ -257,7 +261,7 @@ package body Bases.ShipyardUI is
         (ModuleInfo,
          LF & "Installation time:" &
          Positive'Image(Modules_List(ModuleIndex).InstallTime) & " minutes");
-      GetModuleInfo(ModuleInfo, ModuleIndex, True);
+      GetModuleInfo(ModuleInfo, True);
       Set_Label
         (Gtk_Label(Get_Object(Object, "lblinstallinfo")),
          To_String(ModuleInfo));
@@ -307,6 +311,7 @@ package body Bases.ShipyardUI is
       Cost: Natural;
       Damage: Gdouble;
       DamageBar: constant GObject := Get_Object(Object, "removedamagebar");
+      ShipModuleIndex: Natural;
    begin
       declare
          ModulesIter: Gtk_Tree_Iter;
@@ -319,21 +324,23 @@ package body Bases.ShipyardUI is
          if ModulesIter = Null_Iter then
             return;
          end if;
-         ModuleIndex := Positive(Get_Int(ModulesModel, ModulesIter, 1));
+         ShipModuleIndex := Natural(Get_Int(ModulesModel, ModulesIter, 1));
+         ModuleIndex := To_Unbounded_String(Integer'Image(ShipModuleIndex));
       end;
-      if ModuleIndex > Positive(PlayerShip.Modules.Length) then
+      if ShipModuleIndex > Positive(PlayerShip.Modules.Length) then
          return;
       end if;
       Damage :=
         1.0 -
         Gdouble
-          (Gdouble(PlayerShip.Modules(ModuleIndex).Durability) /
-           Gdouble(PlayerShip.Modules(ModuleIndex).MaxDurability));
+          (Gdouble(PlayerShip.Modules(ShipModuleIndex).Durability) /
+           Gdouble(PlayerShip.Modules(ShipModuleIndex).MaxDurability));
       Cost :=
-        Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Price -
+        Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex).Price -
         Integer
           (Float
-             (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Price) *
+             (Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+                .Price) *
            Float(Damage));
       if Cost = 0 then
          Cost := 1;
@@ -344,10 +351,10 @@ package body Bases.ShipyardUI is
         (ModuleInfo,
          LF & "Removing time:" &
          Positive'Image
-           (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+           (Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
               .InstallTime) &
          " minutes");
-      GetModuleInfo(ModuleInfo, ModuleIndex, False);
+      GetModuleInfo(ModuleInfo, False);
       Set_Label
         (Gtk_Label(Get_Object(Object, "lblremoveinfo")),
          To_String(ModuleInfo));
@@ -368,14 +375,14 @@ package body Bases.ShipyardUI is
             Set_Text(Gtk_Progress_Bar(DamageBar), "Destroyed");
          end if;
       end if;
-      if Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+      if Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
           .Description /=
         Null_Unbounded_String then
          Set_Label
            (Gtk_Label(Get_Object(Object, "lblremovedescription")),
             LF &
             To_String
-              (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+              (Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
                  .Description));
       end if;
       declare

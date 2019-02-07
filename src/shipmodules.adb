@@ -32,38 +32,39 @@ package body ShipModules is
       TempRecord: BaseModule_Data;
       Action: DataAction;
       ModuleNode: Node;
-      ModuleIndex, SkillIndex: Natural;
+      SkillIndex: Natural;
       MaterialExists: Boolean;
+      ModuleIndex: Unbounded_String;
    begin
       TempRecord :=
         (Name => Null_Unbounded_String, MType => ENGINE, Weight => 0,
          Value => 0, MaxValue => 0, Durability => 0,
          RepairMaterial => Null_Unbounded_String, RepairSkill => 2, Price => 0,
          InstallTime => 60, Unique => False, Size => 0,
-         Description => Null_Unbounded_String, Index => Null_Unbounded_String);
+         Description => Null_Unbounded_String);
       ModulesData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(ModulesData, "module");
       for I in 0 .. Length(NodesList) - 1 loop
          ModuleNode := Item(NodesList, I);
-         TempRecord.Index :=
+         ModuleIndex :=
            To_Unbounded_String(Get_Attribute(ModuleNode, "index"));
          if Get_Attribute(ModuleNode, "action")'Length > 0 then
             Action := DataAction'Value(Get_Attribute(ModuleNode, "action"));
          else
             Action := ADD;
          end if;
-         ModuleIndex := FindProtoModule(TempRecord.Index);
          if (Action = UPDATE or Action = REMOVE) then
-            if ModuleIndex = 0 then
+            if not BaseModules_Container.Contains
+                (Modules_List, ModuleIndex) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
-                 " ship module '" & To_String(TempRecord.Index) &
+                 " ship module '" & To_String(ModuleIndex) &
                  "', there no ship module with that index.";
             end if;
-         elsif ModuleIndex > 0 then
+         elsif BaseModules_Container.Contains(Modules_List, ModuleIndex) then
             raise Data_Loading_Error
-              with "Can't add ship module '" & To_String(TempRecord.Index) &
+              with "Can't add ship module '" & To_String(ModuleIndex) &
               "', there is one with that index.";
          end if;
          if Action /= REMOVE then
@@ -107,7 +108,7 @@ package body ShipModules is
                if not MaterialExists then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(DataAction'Image(Action)) &
-                    " ship module '" & To_String(TempRecord.Index) &
+                    " ship module '" & To_String(ModuleIndex) &
                     "', there no item type '" &
                     Get_Attribute(ModuleNode, "material") & "'.";
                end if;
@@ -119,7 +120,7 @@ package body ShipModules is
                if SkillIndex = 0 then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(DataAction'Image(Action)) &
-                    " ship module '" & To_String(TempRecord.Index) &
+                    " ship module '" & To_String(ModuleIndex) &
                     "', there no skill named '" &
                     Get_Attribute(ModuleNode, "skill") & "'.";
                end if;
@@ -145,7 +146,8 @@ package body ShipModules is
                  To_Unbounded_String(Node_Value(First_Child(ModuleNode)));
             end if;
             if Action /= UPDATE then
-               Modules_List.Append(New_Item => TempRecord);
+               BaseModules_Container.Include
+                 (Modules_List, ModuleIndex, TempRecord);
                LogMessage
                  ("Module added: " & To_String(TempRecord.Name), Everything);
             else
@@ -154,28 +156,17 @@ package body ShipModules is
                  ("Module updated: " & To_String(TempRecord.Name), Everything);
             end if;
          else
-            Modules_List.Delete(Index => ModuleIndex);
+            BaseModules_Container.Exclude(Modules_List, ModuleIndex);
             LogMessage
-              ("Module removed: " & To_String(TempRecord.Index), Everything);
+              ("Module removed: " & To_String(ModuleIndex), Everything);
          end if;
          TempRecord :=
            (Name => Null_Unbounded_String, MType => ENGINE, Weight => 0,
             Value => 0, MaxValue => 0, Durability => 0,
             RepairMaterial => Null_Unbounded_String, RepairSkill => 2,
             Price => 0, InstallTime => 60, Unique => False, Size => 0,
-            Description => Null_Unbounded_String,
-            Index => Null_Unbounded_String);
+            Description => Null_Unbounded_String);
       end loop;
    end LoadShipModules;
-
-   function FindProtoModule(Index: Unbounded_String) return Natural is
-   begin
-      for I in Modules_List.Iterate loop
-         if Modules_List(I).Index = Index then
-            return BaseModules_Container.To_Index(I);
-         end if;
-      end loop;
-      return 0;
-   end FindProtoModule;
 
 end ShipModules;

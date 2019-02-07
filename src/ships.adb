@@ -460,14 +460,14 @@ package body Ships is
       NodesList, ChildNodes: Node_List;
       ShipsData: Document;
       TempRecord: ProtoShipData;
-      TempModules: Positive_Container.Vector;
+      TempModules: UnboundedString_Container.Vector;
       TempCargo: MobInventory_Container.Map;
       TempCrew: ProtoCrew_Container.Vector;
       ModuleAmount, DeleteIndex: Positive;
-      Index, ShipIndex: Natural;
+      ShipIndex: Natural;
       Action, SubAction: DataAction;
       ShipNode, ChildNode: Node;
-      ItemIndex, RecipeIndex, MobIndex: Unbounded_String;
+      ItemIndex, RecipeIndex, MobIndex, ModuleIndex: Unbounded_String;
       TempRecipes: UnboundedString_Container.Vector;
       procedure CountAmmoValue(ItemTypeIndex, Multiple: Positive) is
       begin
@@ -539,10 +539,10 @@ package body Ships is
                else
                   ModuleAmount := 1;
                end if;
-               Index :=
-                 FindProtoModule
-                   (To_Unbounded_String(Get_Attribute(ChildNode, "index")));
-               if Index = 0 then
+               ModuleIndex :=
+                 To_Unbounded_String(Get_Attribute(ChildNode, "index"));
+               if not BaseModules_Container.Contains
+                   (Modules_List, ModuleIndex) then
                   raise Ships_Invalid_Data
                     with "Invalid module index: |" &
                     Get_Attribute(ChildNode, "index") & "| in " &
@@ -556,11 +556,12 @@ package body Ships is
                end if;
                if SubAction = ADD then
                   TempRecord.Modules.Append
-                    (New_Item => Index, Count => Count_Type(ModuleAmount));
+                    (New_Item => ModuleIndex,
+                     Count => Count_Type(ModuleAmount));
                else
                   for K in TempRecord.Modules.Iterate loop
-                     if TempRecord.Modules(K) = Index then
-                        DeleteIndex := Positive_Container.To_Index(K);
+                     if TempRecord.Modules(K) = ModuleIndex then
+                        DeleteIndex := UnboundedString_Container.To_Index(K);
                         exit;
                      end if;
                   end loop;
