@@ -103,7 +103,8 @@ package body Missions.UI is
          when Destroy =>
             MissionInfo :=
               To_Unbounded_String
-                ("Target: " & To_String(ProtoShips_List(Mission.Target).Name));
+                ("Target: " &
+                 To_String(ProtoShips_List(Mission.ShipIndex).Name));
          when Explore =>
             MissionInfo := To_Unbounded_String("Explore selected area");
          when Passenger =>

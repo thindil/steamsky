@@ -96,7 +96,8 @@ package body Stories.UI is
                when DESTROYSHIP =>
                   TargetText :=
                     To_Unbounded_String(" You must find ") &
-                    ProtoShips_List(Positive'Value(Slice(Tokens, 3))).Name &
+                    ProtoShips_List(To_Unbounded_String(Slice(Tokens, 3)))
+                      .Name &
                     To_Unbounded_String(" at X:") &
                     To_Unbounded_String(Slice(Tokens, 1)) &
                     To_Unbounded_String(" Y:") &
@@ -125,10 +126,10 @@ package body Stories.UI is
                         Append(TargetText, " ship.");
                      end if;
                   else
-                     for ProtoShip of ProtoShips_List loop
-                        if ProtoShip.Index =
+                     for I in ProtoShips_List.Iterate loop
+                        if ProtoShips_Container.Key(I) =
                           To_Unbounded_String(Slice(Tokens, 2)) then
-                           Append(TargetText, ProtoShip.Name);
+                           Append(TargetText, ProtoShips_List(I).Name);
                            Append(TargetText, ".");
                            exit;
                         end if;

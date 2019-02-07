@@ -39,7 +39,7 @@ package body Combat is
 
    FactionName: Unbounded_String;
 
-   function StartCombat(EnemyIndex: Positive;
+   function StartCombat(EnemyIndex: Unbounded_String;
       NewCombat: Boolean := True) return Boolean is
       EnemyShip: ShipRecord;
       function CountPerception(Spotter, Spotted: ShipRecord) return Natural is
@@ -1319,9 +1319,7 @@ package body Combat is
                      if Step.FinishCondition = LOOT then
                         Create(Tokens, To_String(CurrentStory.Data), ";");
                         if Slice(Tokens, 2) = "any" or
-                          Slice(Tokens, 2) =
-                            To_String
-                              (ProtoShips_List(EnemyShipIndex).Index) then
+                          Slice(Tokens, 2) = To_String(EnemyShipIndex) then
                            if ProgressStory then
                               case Step.FinishCondition is
                                  when LOOT =>
@@ -1368,7 +1366,7 @@ package body Combat is
              ProtoShips_List
                (AcceptedMissions
                   (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex)
-                  .Target)
+                  .ShipIndex)
                .Name =
              Enemy.Ship.Name then
             UpdateMission
@@ -1378,7 +1376,7 @@ package body Combat is
             GainRep(Enemy.Ship.HomeBase, -100);
          end if;
          UpdateDestroyedShips(Enemy.Ship.Name);
-         UpdateGoal(DESTROY, ProtoShips_List(EnemyShipIndex).Index);
+         UpdateGoal(DESTROY, EnemyShipIndex);
          if CurrentGoal.TargetIndex /= Null_Unbounded_String then
             UpdateGoal(DESTROY, ProtoShips_List(EnemyShipIndex).Owner);
          end if;
@@ -1406,7 +1404,7 @@ package body Combat is
                Create(Tokens, To_String(CurrentStory.Data), ";");
                if PlayerShip.SkyX = Positive'Value(Slice(Tokens, 1)) and
                  PlayerShip.SkyY = Positive'Value(Slice(Tokens, 2)) and
-                 EnemyShipIndex = Positive'Value(Slice(Tokens, 3)) then
+                 EnemyShipIndex = To_Unbounded_String(Slice(Tokens, 3)) then
                   if not ProgressStory(True) then
                      return;
                   end if;

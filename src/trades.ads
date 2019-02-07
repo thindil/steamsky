@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Bases; use Bases;
 with Ships; use Ships;
 
@@ -26,9 +27,9 @@ package Trades is
       Amount: String); -- Buy items from bases or trader
    procedure SellItems(ItemIndex: Positive;
       Amount: String); -- Sell items from bases or trader
-   procedure GenerateTraderCargo(ProtoIndex: Positive) with
-      Pre => ProtoIndex <=
-      ProtoShips_List.Last_Index; -- Generate list of cargo to trade
+   procedure GenerateTraderCargo(ProtoIndex: Unbounded_String) with
+      Pre => ProtoShips_Container.Contains
+        (ProtoShips_List, ProtoIndex); -- Generate list of cargo to trade
    Trade_Cant_Buy: exception; -- Raised when items is not available to buy
    Trade_Not_For_Sale_Now: exception; -- Raised when no items available at this time for sale
    Trade_Buying_Too_Much: exception; -- Raised when player trying buy more than can

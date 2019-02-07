@@ -298,7 +298,7 @@ package body Bases is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Radius, TempX, TempY: Integer;
       Amount, TmpBaseIndex, TraderIndex: Natural;
-      ShipIndex: Positive;
+      ShipIndex: Unbounded_String;
       UnknownBases: Natural := 0;
    begin
       TraderIndex := FindMember(Talk);
@@ -324,7 +324,7 @@ package body Bases is
          Radius := 40;
          ShipIndex :=
            (Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-              .Data);
+              .ShipIndex);
          if ProtoShips_List(ShipIndex).Crew.Length < 5 then
             Amount := 3;
          elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then
@@ -405,14 +405,14 @@ package body Bases is
    procedure AskForEvents is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      MaxEvents, EventsAmount, TmpBaseIndex, ShipIndex, EventX, EventY,
-      EventTime, DiffX, DiffY: Positive;
+      MaxEvents, EventsAmount, TmpBaseIndex, EventX, EventY, EventTime, DiffX,
+      DiffY: Positive;
       Event: Events_Types;
       MinX, MinY, MaxX, MaxY: Integer;
-      Enemies: Positive_Container.Vector;
+      Enemies: UnboundedString_Container.Vector;
       Attempts, TraderIndex, ItemIndex: Natural;
       PlayerShips: UnboundedString_Container.Vector;
-      NewItemIndex: Unbounded_String;
+      NewItemIndex, ShipIndex: Unbounded_String;
    begin
       TraderIndex := FindMember(Talk);
       if BaseIndex > 0 then -- asking in base
@@ -433,7 +433,7 @@ package body Bases is
       else -- asking friendly ship
          ShipIndex :=
            Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-             .Data;
+             .ShipIndex;
          if ProtoShips_List(ShipIndex).Crew.Length < 5 then
             MaxEvents := 1;
          elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then

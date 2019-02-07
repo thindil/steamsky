@@ -480,7 +480,8 @@ package body Maps.UI.Handlers is
                           (Gtk_Button(Get_Object(Builder, "btnstory")),
                            "_Search for " &
                            To_String
-                             (ProtoShips_List(Positive'Value(Slice(Tokens, 3)))
+                             (ProtoShips_List
+                                (To_Unbounded_String(Slice(Tokens, 3)))
                                 .Name));
                         Set_No_Show_All
                           (Gtk_Widget(Get_Object(Object, "btnstory")), False);
@@ -583,7 +584,7 @@ package body Maps.UI.Handlers is
                                    (Get_Object(Object, "btnfinishmission")),
                                  "_Complete destroy " &
                                  To_String
-                                   (ProtoShips_List(Mission.Target).Name));
+                                   (ProtoShips_List(Mission.ShipIndex).Name));
                            end if;
                         when Patrol =>
                            if Mission.Finished then
@@ -696,7 +697,8 @@ package body Maps.UI.Handlers is
                                       (Get_Object(Object, "btnfinishmission")),
                                     "_Complete destroy " &
                                     To_String
-                                      (ProtoShips_List(Mission.Target).Name));
+                                      (ProtoShips_List(Mission.ShipIndex)
+                                         .Name));
                               end if;
                            when Patrol =>
                               if Mission.Finished then
@@ -739,7 +741,7 @@ package body Maps.UI.Handlers is
                                    (Get_Object(Object, "btncurrentmission")),
                                  "_Search for " &
                                  To_String
-                                   (ProtoShips_List(Mission.Target).Name));
+                                   (ProtoShips_List(Mission.ShipIndex).Name));
                            when Patrol =>
                               Set_Label
                                 (Gtk_Button
@@ -777,7 +779,7 @@ package body Maps.UI.Handlers is
                          (Events_List
                             (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
                                .EventIndex)
-                            .Data)
+                            .ShipIndex)
                          .Name,
                        To_String(TradersName)) >
                     0 then
@@ -947,7 +949,7 @@ package body Maps.UI.Handlers is
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
             GenerateTraderCargo
               (Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-                 .Data);
+                 .ShipIndex);
          end if;
          ShowTradeUI;
       elsif User_Data = Get_Object(Builder, "btnrecruit") then
@@ -1020,7 +1022,7 @@ package body Maps.UI.Handlers is
                          (AcceptedMissions
                             (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
                                .MissionIndex)
-                            .Target,
+                            .ShipIndex,
                           False);
                   end if;
                when Patrol =>
@@ -1103,7 +1105,7 @@ package body Maps.UI.Handlers is
                   case Step.FinishCondition is
                      when DESTROYSHIP =>
                         if StartCombat
-                            (Positive'Value(Slice(Tokens, 3)), False) then
+                            (To_Unbounded_String(Slice(Tokens, 3)), False) then
                            ShowCombatUI;
                            return;
                         end if;

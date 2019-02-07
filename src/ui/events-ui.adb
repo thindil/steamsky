@@ -73,7 +73,8 @@ package body Events.UI is
             Append
               (EventInfo,
                LF & "Ship type: " &
-               To_String(ProtoShips_List(Events_List(EventIndex).Data).Name));
+               To_String
+                 (ProtoShips_List(Events_List(EventIndex).ShipIndex).Name));
          when FullDocks | AttackOnBase | Disease =>
             Append
               (EventInfo,

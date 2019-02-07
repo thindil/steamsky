@@ -400,7 +400,7 @@ package body Stories is
 
    function SelectEnemy
      (StepData: StepData_Container.Vector) return Unbounded_String is
-      Enemies: Positive_Container.Vector;
+      Enemies: UnboundedString_Container.Vector;
       EnemyData, Value: Unbounded_String := Null_Unbounded_String;
    begin
       EnemyData := SelectLocation(StepData);
@@ -411,14 +411,12 @@ package body Stories is
       Value := GetStepData(StepData, "faction");
       GenerateEnemies(Enemies, Value);
       return EnemyData &
-        To_Unbounded_String
-          (Integer'Image
-             (Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index))));
+        Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index));
    end SelectEnemy;
 
    function SelectLoot
      (StepData: StepData_Container.Vector) return Unbounded_String is
-      Enemies: Positive_Container.Vector;
+      Enemies: UnboundedString_Container.Vector;
       LootData, Value: Unbounded_String := Null_Unbounded_String;
    begin
       LootData := GetStepData(StepData, "item");
@@ -430,9 +428,7 @@ package body Stories is
       Value := GetStepData(StepData, "faction");
       GenerateEnemies(Enemies, Value);
       return LootData &
-        To_Unbounded_String
-          (Integer'Image
-             (Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index))));
+        Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index));
    end SelectLoot;
 
    procedure StartStory(FactionName: Unbounded_String;

@@ -17,6 +17,8 @@
 
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Strings.Unbounded.Hash;
+with Ada.Containers.Hashed_Maps;
 with DOM.Readers; use DOM.Readers;
 with Crew; use Crew;
 with Game; use Game;
@@ -118,21 +120,22 @@ package Ships is
       Crew: ProtoCrew_Container.Vector; -- List of mobs used as ship crew
       Description: Unbounded_String; -- Description of ship
       Owner: Unbounded_String; -- Index of faction to which ship belong
-      Index: Unbounded_String; -- Index of ship
       KnownRecipes: UnboundedString_Container.Vector; -- List of known recipes
    end record;
-   package ProtoShips_Container is new Vectors(Positive, ProtoShipData);
-   ProtoShips_List: ProtoShips_Container.Vector;
+   package ProtoShips_Container is new Hashed_Maps(Unbounded_String,
+      ProtoShipData, Ada.Strings.Unbounded.Hash, "=");
+   ProtoShips_List: ProtoShips_Container.Map;
    PlayerShip: ShipRecord;
    ShipSyllablesStart: UnboundedString_Container.Vector;
    ShipSyllablesMiddle: UnboundedString_Container.Vector;
    ShipSyllablesEnd: UnboundedString_Container.Vector;
    Ships_Invalid_Data: exception; -- Raised when invalid data in ships file
 
-   function CreateShip(ProtoIndex: Positive; Name: Unbounded_String;
-      X, Y: Integer; Speed: ShipSpeed;
-      RandomUpgrades: Boolean := True) return ShipRecord with
-      Pre => (ProtoIndex <= ProtoShips_List.Last_Index); -- Create new ship
+   function CreateShip(ProtoIndex, Name: Unbounded_String; X, Y: Integer;
+      Speed: ShipSpeed; RandomUpgrades: Boolean := True) return ShipRecord with
+      Pre =>
+      (ProtoShips_Container.Contains
+         (ProtoShips_List, ProtoIndex)); -- Create new ship
    procedure LoadShips(Reader: Tree_Reader); -- Load ships from files
    function CountShipWeight
      (Ship: ShipRecord)

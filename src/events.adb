@@ -29,15 +29,16 @@ with Factions; use Factions;
 
 package body Events is
 
-   Traders, FriendlyShips: Positive_Container.Vector;
+   Traders, FriendlyShips: UnboundedString_Container.Vector;
 
    function CheckForEvent return Boolean is
       TimePassed: Integer;
       CrewIndex: Natural := 0;
       Roll, Roll2: Positive;
-      Enemies, Engines: Positive_Container.Vector;
+      Engines: Positive_Container.Vector;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      Enemies: UnboundedString_Container.Vector;
       procedure GainPerception is
       begin
          for I in PlayerShip.Crew.Iterate loop
@@ -55,7 +56,7 @@ package body Events is
                return StartCombat
                    (Events_List
                       (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
-                      .Data);
+                      .ShipIndex);
             when others =>
                return False;
          end case;
@@ -169,7 +170,8 @@ package body Events is
                              (Enemies.First_Index, Enemies.Last_Index))));
                   SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                     Events_List.Last_Index;
-                  return StartCombat(Events_List(Events_List.Last_Index).Data);
+                  return StartCombat
+                      (Events_List(Events_List.Last_Index).ShipIndex);
             end case;
          else
             if SkyBases(BaseIndex).Population = 0 then
@@ -205,7 +207,7 @@ package body Events is
                        ("You can't dock to base now, because base is under attack. You can help defend it.",
                         OtherMessage);
                      return StartCombat
-                         (Events_List(Events_List.Last_Index).Data);
+                         (Events_List(Events_List.Last_Index).ShipIndex);
                   when 21 => -- Disease in base
                      Events_List.Append
                        (New_Item =>
@@ -256,7 +258,7 @@ package body Events is
                         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                           Events_List.Last_Index;
                         return StartCombat
-                            (Events_List(Events_List.Last_Index).Data);
+                            (Events_List(Events_List.Last_Index).ShipIndex);
                      end if;
                      Events_List.Append
                        (New_Item =>
@@ -399,24 +401,20 @@ package body Events is
    end GetPlayerShips;
 
    procedure GenerateTraders is
-      TraderIndex: Positive;
       PlayerShips: UnboundedString_Container.Vector;
    begin
-      TraderIndex := ProtoShips_List.First_Index;
-      for Ship of ProtoShips_List loop
-         if Index(Ship.Name, To_String(TradersName)) > 0 then
-            Traders.Append(New_Item => TraderIndex);
+      for I in ProtoShips_List.Iterate loop
+         if Index(ProtoShips_List(I).Name, To_String(TradersName)) > 0 then
+            Traders.Append(New_Item => ProtoShips_Container.Key(I));
          end if;
-         TraderIndex := TraderIndex + 1;
       end loop;
       GetPlayerShips(PlayerShips);
-      TraderIndex := ProtoShips_List.First_Index;
-      for Ship of ProtoShips_List loop
-         if IsFriendly(PlayerShip.Crew(1).Faction, Ship.Owner) and
-           not PlayerShips.Contains(Ship.Index) then
-            FriendlyShips.Append(New_Item => TraderIndex);
+      for I in ProtoShips_List.Iterate loop
+         if IsFriendly
+             (PlayerShip.Crew(1).Faction, ProtoShips_List(I).Owner) and
+           not PlayerShips.Contains(ProtoShips_Container.Key(I)) then
+            FriendlyShips.Append(New_Item => ProtoShips_Container.Key(I));
          end if;
-         TraderIndex := TraderIndex + 1;
       end loop;
    end GenerateTraders;
 
@@ -448,28 +446,28 @@ package body Events is
          OtherMessage, CYAN);
    end RecoverBase;
 
-   procedure GenerateEnemies(Enemies: in out Positive_Container.Vector;
+   procedure GenerateEnemies(Enemies: in out UnboundedString_Container.Vector;
       Owner: Unbounded_String := To_Unbounded_String("Any");
       WithTraders: Boolean := True) is
-      EnemyIndex: Positive;
       PlayerValue: Natural := 0;
       PlayerShips: UnboundedString_Container.Vector;
    begin
-      EnemyIndex := ProtoShips_List.First_Index;
       PlayerValue := CountCombatValue;
       if GetRandom(1, 100) > 98 then
          PlayerValue := PlayerValue * 2;
       end if;
       GetPlayerShips(PlayerShips);
-      for Ship of ProtoShips_List loop
-         if Ship.CombatValue <= PlayerValue and
-           (Owner = To_Unbounded_String("Any") or Ship.Owner = Owner) and
-           not IsFriendly(PlayerShip.Crew(1).Faction, Ship.Owner) and
-           not PlayerShips.Contains(Ship.Index) and
-           (WithTraders or Index(Ship.Name, To_String(TradersName)) = 0) then
-            Enemies.Append(New_Item => EnemyIndex);
+      for I in ProtoShips_List.Iterate loop
+         if ProtoShips_List(I).CombatValue <= PlayerValue and
+           (Owner = To_Unbounded_String("Any") or
+            ProtoShips_List(I).Owner = Owner) and
+           not IsFriendly
+             (PlayerShip.Crew(1).Faction, ProtoShips_List(I).Owner) and
+           not PlayerShips.Contains(ProtoShips_Container.Key(I)) and
+           (WithTraders or
+            Index(ProtoShips_List(I).Name, To_String(TradersName)) = 0) then
+            Enemies.Append(New_Item => ProtoShips_Container.Key(I));
          end if;
-         EnemyIndex := EnemyIndex + 1;
       end loop;
    end GenerateEnemies;
 

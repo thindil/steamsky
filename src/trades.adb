@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers; use Ada.Containers;
 with Maps; use Maps;
 with Messages; use Messages;
@@ -237,7 +236,7 @@ package body Trades is
          raise Trade_Invalid_Amount;
    end SellItems;
 
-   procedure GenerateTraderCargo(ProtoIndex: Positive) is
+   procedure GenerateTraderCargo(ProtoIndex: Unbounded_String) is
       TraderShip: ShipRecord :=
         CreateShip
           (ProtoIndex, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY,
