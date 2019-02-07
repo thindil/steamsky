@@ -836,9 +836,9 @@ package body Ships is
      return Unbounded_String is -- based on name generator from libtcod
       NewName: Unbounded_String := Null_Unbounded_String;
    begin
-      for Faction of Factions_List loop
-         if To_Lower(To_String(Faction.Name)) = To_Lower(To_String(Owner)) then
-            if Faction.NamesType = ROBOTIC then
+      for I in Factions_List.Iterate loop
+         if Factions_Container.Key(I) = Owner then
+            if Factions_List(I).NamesType = ROBOTIC then
                NewName := GenerateRoboticName;
             else
                NewName :=
