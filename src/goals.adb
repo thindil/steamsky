@@ -201,7 +201,7 @@ package body Goals is
                   GetFactionName(Goal.TargetIndex, NAME) & " ");
             when DESTROY =>
                for I in ProtoShips_List.Iterate loop
-                  if ProtoShips_List(I).Index = Goal.TargetIndex then
+                  if ProtoShips_Container.Key(I) = Goal.TargetIndex then
                      Append(Text, ": " & To_String(ProtoShips_List(I).Name));
                      Added := True;
                      exit;

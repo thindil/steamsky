@@ -34,6 +34,8 @@ package Events is
       case EType is
          when DoublePrice =>
             ItemIndex: Unbounded_String; -- Index of proto item which have bonus to price
+         when AttackOnBase | EnemyShip | EnemyPatrol | Trader | FriendlyShip =>
+            ShipIndex: Unbounded_String; -- Index of proto ship which player meet
          when others =>
             Data: Natural; -- Various data for event (for example index of enemy ship)
       end case;
@@ -48,7 +50,7 @@ package Events is
       Pre => EventIndex <= Events_List.Last_Index; -- Delete selected event
    procedure GenerateTraders; -- Create list of traders needed for trader event
    procedure RecoverBase(BaseIndex: BasesRange); -- Recover abandoned base
-   procedure GenerateEnemies(Enemies: in out Positive_Container.Vector;
+   procedure GenerateEnemies(Enemies: in out UnboundedString_Container.Vector;
       Owner: Unbounded_String := To_Unbounded_String("Any");
       WithTraders: Boolean := True) with
       Pre => Owner /= Null_Unbounded_String; -- Create list of enemies ships

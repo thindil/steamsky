@@ -35,6 +35,8 @@ package Missions is
             ItemIndex: Unbounded_String; -- Index of proto item to deliver to base
          when Passenger =>
             CabinIndex: Unbounded_String; -- Index of proto cabin needed by passenger
+         when Destroy =>
+            ShipIndex: Unbounded_String; -- Index of proto ship which must be destroyed
          when others =>
             Target: Natural;  -- Target for mission (ship, item or passenger index)
       end case;

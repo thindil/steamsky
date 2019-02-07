@@ -30,9 +30,8 @@ with ShipModules; use ShipModules;
 
 package body Ships is
 
-   function CreateShip(ProtoIndex: Positive; Name: Unbounded_String;
-      X, Y: Integer; Speed: ShipSpeed;
-      RandomUpgrades: Boolean := True) return ShipRecord is
+   function CreateShip(ProtoIndex, Name: Unbounded_String; X, Y: Integer;
+      Speed: ShipSpeed; RandomUpgrades: Boolean := True) return ShipRecord is
       TmpShip: ShipRecord;
       ShipModules: Modules_Container.Vector;
       ShipCrew: Crew_Container.Vector;
@@ -464,10 +463,10 @@ package body Ships is
       TempCargo: MobInventory_Container.Map;
       TempCrew: ProtoCrew_Container.Vector;
       ModuleAmount, DeleteIndex: Positive;
-      ShipIndex: Natural;
       Action, SubAction: DataAction;
       ShipNode, ChildNode: Node;
-      ItemIndex, RecipeIndex, MobIndex, ModuleIndex: Unbounded_String;
+      ItemIndex, RecipeIndex, MobIndex, ModuleIndex,
+      ShipIndex: Unbounded_String;
       TempRecipes: UnboundedString_Container.Vector;
       procedure CountAmmoValue(ItemTypeIndex, Multiple: Positive) is
       begin
@@ -489,36 +488,29 @@ package body Ships is
          CombatValue => 1, Crew => TempCrew,
          Description => Null_Unbounded_String,
          Owner => Factions_Container.Key(Factions_List.First),
-         Index => Null_Unbounded_String, KnownRecipes => TempRecipes);
+         KnownRecipes => TempRecipes);
       ShipsData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(ShipsData, "ship");
       for I in 0 .. Length(NodesList) - 1 loop
          ShipNode := Item(NodesList, I);
-         TempRecord.Index :=
-           To_Unbounded_String(Get_Attribute(ShipNode, "index"));
+         ShipIndex := To_Unbounded_String(Get_Attribute(ShipNode, "index"));
          if Get_Attribute(ShipNode, "action")'Length > 0 then
             Action := DataAction'Value(Get_Attribute(ShipNode, "action"));
          else
             Action := ADD;
          end if;
-         ShipIndex := 0;
-         for J in ProtoShips_List.Iterate loop
-            if ProtoShips_List(J).Index = TempRecord.Index then
-               ShipIndex := ProtoShips_Container.To_Index(J);
-               exit;
-            end if;
-         end loop;
          if (Action = UPDATE or Action = REMOVE) then
-            if ShipIndex = 0 then
+            if not ProtoShips_Container.Contains
+                (ProtoShips_List, ShipIndex) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
-                 " ship '" & To_String(TempRecord.Index) &
+                 " ship '" & To_String(ShipIndex) &
                  "', there no ship with that index.";
             end if;
-         elsif ShipIndex > 0 then
+         elsif ProtoShips_Container.Contains(ProtoShips_List, ShipIndex) then
             raise Data_Loading_Error
-              with "Can't add ship '" & To_String(TempRecord.Index) &
+              with "Can't add ship '" & To_String(ShipIndex) &
               "', there is one with that index.";
          end if;
          if Action /= REMOVE then
@@ -803,16 +795,16 @@ package body Ships is
             end loop;
             TempRecord.CombatValue := TempRecord.CombatValue - 1;
             if Action /= UPDATE then
-               ProtoShips_List.Append(New_Item => TempRecord);
+               ProtoShips_Container.Include
+                 (ProtoShips_List, ShipIndex, TempRecord);
                LogMessage
                  ("Ship added: " & To_String(TempRecord.Name), Everything);
             else
                ProtoShips_List(ShipIndex) := TempRecord;
             end if;
          else
-            ProtoShips_List.Delete(Index => ShipIndex);
-            LogMessage
-              ("Ship removed: " & To_String(TempRecord.Index), Everything);
+            ProtoShips_Container.Exclude(ProtoShips_List, ShipIndex);
+            LogMessage("Ship removed: " & To_String(ShipIndex), Everything);
          end if;
          TempRecord :=
            (Name => Null_Unbounded_String, Modules => TempModules,
@@ -821,7 +813,7 @@ package body Ships is
             CombatValue => 1, Crew => TempCrew,
             Description => Null_Unbounded_String,
             Owner => Factions_Container.Key(Factions_List.First),
-            Index => Null_Unbounded_String, KnownRecipes => TempRecipes);
+            KnownRecipes => TempRecipes);
       end loop;
    end LoadShips;
 

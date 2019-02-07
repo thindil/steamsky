@@ -215,11 +215,12 @@ package body Statistics.UI is
             Clear(DestroyedList);
             for I in GameStats.DestroyedShips.Iterate loop
                Append(DestroyedList, DestroyedIter);
-               for ProtoShip of ProtoShips_List loop
-                  if ProtoShip.Index = GameStats.DestroyedShips(I).Index then
+               for J in ProtoShips_List.Iterate loop
+                  if ProtoShips_Container.Key(J) =
+                    GameStats.DestroyedShips(I).Index then
                      Set
                        (DestroyedList, DestroyedIter, 0,
-                        To_String(ProtoShip.Name));
+                        To_String(ProtoShips_List(J).Name));
                      Set
                        (DestroyedList, DestroyedIter, 1,
                         Gint(GameStats.DestroyedShips(I).Amount));

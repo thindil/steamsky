@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -25,11 +25,11 @@ package body Statistics is
       Updated: Boolean := False;
       ShipIndex: Unbounded_String;
    begin
-      for ProtoShip of ProtoShips_List loop
-         if ProtoShip.Name = ShipName then
-            ShipIndex := ProtoShip.Index;
+      for I in ProtoShips_List.Iterate loop
+         if ProtoShips_List(I).Name = ShipName then
+            ShipIndex := ProtoShips_Container.Key(I);
             GameStats.Points :=
-              GameStats.Points + (ProtoShip.CombatValue / 10);
+              GameStats.Points + (ProtoShips_List(I).CombatValue / 10);
             exit;
          end if;
       end loop;
