@@ -12,8 +12,8 @@ All notable changes to this project will be documented in this file.
   ship mk IV, advanced independent patrol ship mk IV, large poleis trader mk
   II, large independent trader mk II, large pirates trader mk II, large poleis
   patrol ship mk II, large independent patrol ship mk II, large poleis trader
-  mk III, large indepedent trader mk III, large pirates trader ship mk III and
-  larger poleis patrol ship mk III
+  mk III, large indepedent trader mk III, large pirates trader ship mk III,
+  large poleis patrol ship mk III and large independent patrol ship mk III
 
 ### Fixed
 - Crash on selling ship modules in shipyard
