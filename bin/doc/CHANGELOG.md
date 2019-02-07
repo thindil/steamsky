@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Checking did player ship have enabled engines during changing ship speed
 - Ship overloading
 - Assigning crew member to harpoon gun
+- Generating ship names
 
 ## [3.3 - 2019-01-27]
 
