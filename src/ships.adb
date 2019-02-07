@@ -601,7 +601,8 @@ package body Ships is
       subtype Numbers is Character range '0' .. '9';
    begin
       for Faction of Factions_List loop
-         if To_Lower(To_String(Faction.Name)) = To_Lower(To_String(Owner)) then
+         if To_Lower(To_String(Faction.Index)) =
+           To_Lower(To_String(Owner)) then
             if Faction.NamesType = ROBOTIC then
                LettersAmount := GetRandom(2, 5);
                for I in 1 .. LettersAmount loop
