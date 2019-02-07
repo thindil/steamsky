@@ -176,21 +176,11 @@ package body Game is
          end loop;
       end;
       -- Create player ship
-      declare
-         ShipIndex: Positive;
-      begin
-         for I in ProtoShips_List.Iterate loop
-            if ProtoShips_List(I).Index =
-              Factions_List(FactionIndex).Careers(CareerIndex).ShipIndex then
-               ShipIndex := ProtoShips_Container.To_Index(I);
-               exit;
-            end if;
-         end loop;
-         PlayerShip :=
-           CreateShip
-             (ShipIndex, ShipName, SkyBases(Integer(RandomBase)).SkyX,
-              SkyBases(Integer(RandomBase)).SkyY, DOCKED, False);
-      end;
+      PlayerShip :=
+        CreateShip
+          (Factions_List(FactionIndex).Careers(CareerIndex).ShipIndex,
+           ShipName, SkyBases(Integer(RandomBase)).SkyX,
+           SkyBases(Integer(RandomBase)).SkyY, DOCKED, False);
       -- Add player to ship
       declare
          PlayerIndex2: constant Unbounded_String :=

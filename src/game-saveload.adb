@@ -194,11 +194,15 @@ package body Game.SaveLoad is
             RawValue := To_Unbounded_String(Integer'Image(Event.Time));
             Set_Attribute
               (EventNode, "time", To_String(Trim(RawValue, Ada.Strings.Left)));
-            if Event.EType = DoublePrice then
-               RawValue := Event.ItemIndex;
-            else
-               RawValue := To_Unbounded_String(Integer'Image(Event.Data));
-            end if;
+            case Event.EType is
+               when DoublePrice =>
+                  RawValue := Event.ItemIndex;
+               when AttackOnBase | EnemyShip | EnemyPatrol | Trader |
+                 FriendlyShip =>
+                  RawValue := Event.ShipIndex;
+               when others =>
+                  RawValue := To_Unbounded_String(Integer'Image(Event.Data));
+            end case;
             Set_Attribute
               (EventNode, "data", To_String(Trim(RawValue, Ada.Strings.Left)));
          end loop;
@@ -333,6 +337,8 @@ package body Game.SaveLoad is
             RawValue := Mission.ItemIndex;
          elsif Mission.MType = Passenger then
             RawValue := Mission.CabinIndex;
+         elsif Mission.MType = Destroy then
+            RawValue := Mission.ShipIndex;
          else
             RawValue := To_Unbounded_String(Integer'Image(Mission.Target));
          end if;
@@ -486,12 +492,12 @@ package body Game.SaveLoad is
                   Events_List.Append
                     (New_Item =>
                        (EType => EnemyShip, SkyX => X, SkyY => Y, Time => Time,
-                        Data => Integer'Value(To_String(Data))));
+                        ShipIndex => Data));
                when AttackOnBase =>
                   Events_List.Append
                     (New_Item =>
                        (EType => AttackOnBase, SkyX => X, SkyY => Y,
-                        Time => Time, Data => Integer'Value(To_String(Data))));
+                        Time => Time, ShipIndex => Data));
                when Disease =>
                   Events_List.Append
                     (New_Item =>
@@ -511,17 +517,17 @@ package body Game.SaveLoad is
                   Events_List.Append
                     (New_Item =>
                        (EType => EnemyPatrol, SkyX => X, SkyY => Y,
-                        Time => Time, Data => Integer'Value(To_String(Data))));
+                        Time => Time, ShipIndex => Data));
                when Trader =>
                   Events_List.Append
                     (New_Item =>
                        (EType => Trader, SkyX => X, SkyY => Y, Time => Time,
-                        Data => Integer'Value(To_String(Data))));
+                        ShipIndex => Data));
                when FriendlyShip =>
                   Events_List.Append
                     (New_Item =>
                        (EType => FriendlyShip, SkyX => X, SkyY => Y,
-                        Time => Time, Data => Integer'Value(To_String(Data))));
+                        Time => Time, ShipIndex => Data));
                when None | BaseRecovery =>
                   null;
             end case;
@@ -688,7 +694,7 @@ package body Game.SaveLoad is
             MType :=
               Missions_Types'Val
                 (Integer'Value(Get_Attribute(SavedNode, "type")));
-            if MType = Deliver or MType = Passenger then
+            if MType = Deliver or MType = Passenger or MType = Destroy then
                Index :=
                  To_Unbounded_String(Get_Attribute(SavedNode, "target"));
             else
@@ -715,7 +721,7 @@ package body Game.SaveLoad is
                when Destroy =>
                   AcceptedMissions.Append
                     (New_Item =>
-                       (MType => Destroy, Target => Target, Time => Time,
+                       (MType => Destroy, ShipIndex => Index, Time => Time,
                         TargetX => TargetX, TargetY => TargetY,
                         Reward => Reward, StartBase => StartBase,
                         Finished => Finished));
