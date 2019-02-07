@@ -109,7 +109,7 @@ package body Missions.UI is
          when Passenger =>
             CanAccept := False;
             for Module of PlayerShip.Modules loop
-               if Module.ProtoIndex = Mission.Target then
+               if Module.ProtoIndex = Mission.CabinIndex then
                   if Module.Owner = 0 then
                      HaveCabin := True;
                      CanAccept := True;
@@ -124,18 +124,18 @@ package body Missions.UI is
             end if;
             MissionInfo := To_Unbounded_String("Needed cabin: ");
             if HaveCabin then
-               Append(MissionInfo, Modules_List(Mission.Target).Name);
+               Append(MissionInfo, Modules_List(Mission.CabinIndex).Name);
             elsif CabinTaken then
                Append
                  (MissionInfo,
                   To_Unbounded_String("<span foreground=""yellow"">") &
-                  Modules_List(Mission.Target).Name &
+                  Modules_List(Mission.CabinIndex).Name &
                   To_Unbounded_String("</span>"));
             else
                Append
                  (MissionInfo,
                   To_Unbounded_String("<span foreground=""red"">") &
-                  Modules_List(Mission.Target).Name &
+                  Modules_List(Mission.CabinIndex).Name &
                   To_Unbounded_String("</span>"));
             end if;
             Append

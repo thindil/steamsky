@@ -42,8 +42,8 @@ package body Missions is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MissionsAmount, MissionX, MissionY, TmpBaseIndex, DiffX, DiffY: Positive;
       Mission: Mission_Data;
-      MissionsItems: UnboundedString_Container.Vector;
-      BasesInRange, Cabins: Positive_Container.Vector;
+      MissionsItems, Cabins: UnboundedString_Container.Vector;
+      BasesInRange: Positive_Container.Vector;
       MinX, MinY, MaxX, MaxY: Integer;
       Enemies: Positive_Container.Vector;
       MType: Missions_Types;
@@ -79,7 +79,7 @@ package body Missions is
       end loop;
       for I in Modules_List.Iterate loop
          if Modules_List(I).MType = CABIN then
-            Cabins.Append(New_Item => BaseModules_Container.To_Index(I));
+            Cabins.Append(New_Item => BaseModules_Container.Key(I));
          end if;
       end loop;
       MinX := PlayerShip.SkyX - 100;
@@ -131,7 +131,8 @@ package body Missions is
             when Passenger =>
                Mission :=
                  (MType => Passenger, Time => 1, TargetX => 0, TargetY => 0,
-                  Reward => 1, StartBase => 1, Finished => False, Target => 0);
+                  Reward => 1, StartBase => 1, Finished => False,
+                  CabinIndex => Null_Unbounded_String);
          end case;
          case Mission.MType is
             when Deliver =>
@@ -160,7 +161,7 @@ package body Missions is
                      Target => 0);
                end if;
             when Passenger =>
-               Mission.Target :=
+               Mission.CabinIndex :=
                  Cabins(GetRandom(Cabins.First_Index, Cabins.Last_Index));
          end case;
          if Mission.MType /= Deliver and Mission.MType /= Passenger then
@@ -253,7 +254,8 @@ package body Missions is
             HaveCabin: Boolean := False;
          begin
             for Module of PlayerShip.Modules loop
-               if Module.ProtoIndex = Mission.Target and Module.Owner = 0 then
+               if Module.ProtoIndex = Mission.CabinIndex and
+                 Module.Owner = 0 then
                   HaveCabin := True;
                   exit;
                end if;
@@ -330,7 +332,8 @@ package body Missions is
                      Faction => SkyBases(PassengerBase).Owner));
             end;
             for Module of PlayerShip.Modules loop
-               if Module.ProtoIndex = Mission.Target and Module.Owner = 0 then
+               if Module.ProtoIndex = Mission.CabinIndex and
+                 Module.Owner = 0 then
                   Module.Owner := PlayerShip.Crew.Last_Index;
                   exit;
                end if;

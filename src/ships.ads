@@ -36,7 +36,7 @@ package Ships is
    is -- Data structure for ship modules
    record
       Name: Unbounded_String; -- Name of module
-      ProtoIndex: Positive; -- Index of module prototype
+      ProtoIndex: Unbounded_String; -- Index of module prototype
       Weight: Natural; -- Weight of module
       Durability: Integer; -- 0 = destroyed
       MaxDurability: Integer; -- Base durability
@@ -107,7 +107,7 @@ package Ships is
    type ProtoShipData is -- Data structure for ship prototypes
    record
       Name: Unbounded_String; -- Prototype name
-      Modules: Positive_Container.Vector; -- List of ship modules
+      Modules: UnboundedString_Container.Vector; -- List of ship modules
       Accuracy: ShipSkills_Array; -- Bonus to hit for ship
       CombatAI: ShipCombatAi; -- Behaviour of ship in combat
       Evasion: ShipSkills_Array; -- Bonus to evade attacks
