@@ -2874,13 +2874,13 @@ during combat. -->
  </ship>
  <ship index="164" name="Undead Player Ship" owner="UNDEAD">
   <module index="1"/>
-  <module index="2"/>
+  <module index="25"/>
   <module index="3"/>
   <module amount="4" index="4"/>
   <module index="5"/>
   <module index="6"/>
   <module amount="2" index="7"/>
-  <module index="12"/>
+  <module index="87"/>
   <cargo amount="2000" index="1"/>
   <cargo amount="100" index="5"/>
   <cargo amount="20" index="13"/>
@@ -3011,13 +3011,13 @@ during combat. -->
  </ship>
  <ship index="169" name="Undead Hunter Player Ship" owner="UNDEAD">
   <module index="1"/>
-  <module index="2"/>
+  <module index="25"/>
   <module index="3"/>
   <module amount="5" index="4"/>
   <module index="5"/>
   <module index="6"/>
   <module amount="1" index="7"/>
-  <module index="12"/>
+  <module index="87"/>
   <cargo amount="1500" index="1"/>
   <cargo amount="100" index="5"/>
   <cargo amount="20" index="13"/>
