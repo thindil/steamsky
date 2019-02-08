@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Ureleased]
 
+### Changed
+- Made starting ships for Undead player a bit stronger (better battering ram
+  and armor)
+
 ### Fixed
 - Name of faction in destroy ship goals
 - Deleting mob by modification files
