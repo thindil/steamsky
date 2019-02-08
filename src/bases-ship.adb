@@ -234,8 +234,7 @@ package body Bases.Ship is
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
                         Owner => 0, UpgradeProgress => 0,
-                        UpgradeAction => NONE,
-                        MaxWeight => Modules_List(ModuleIndex).MaxValue));
+                        UpgradeAction => NONE));
                when ENGINE =>
                   PlayerShip.Modules.Append
                     (New_Item =>
@@ -370,7 +369,10 @@ package body Bases.Ship is
                end loop;
             when ShipModules.CARGO =>
                if FreeCargo
-                   ((0 - PlayerShip.Modules(ShipModuleIndex).MaxWeight)) <
+                   (0 -
+                    Modules_List
+                      (PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+                      .MaxValue) <
                  0 then
                   raise BasesShip_Removing_Error
                     with "You can't sell this cargo bay, because you have items in it.";
