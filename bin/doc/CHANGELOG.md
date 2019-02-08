@@ -17,6 +17,10 @@ All notable changes to this project will be documented in this file.
   poleis trader mk IV, large independent trader mk IV and large pirates trader
   mk IV
 
+### Changed
+- Made starting ships for Undead player a bit stronger (better battering ram
+  and armor)
+
 ### Fixed
 - Crash on selling ship modules in shipyard
 - Crash when waiting in place
