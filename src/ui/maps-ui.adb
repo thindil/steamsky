@@ -554,7 +554,7 @@ package body Maps.UI is
          EndX := 1024;
          StartX := 1024 - MapWidth;
       end if;
-      if CurrentStory.Index > 0 then
+      if CurrentStory.Index /= Null_Unbounded_String then
          GetStoryLocation(StoryX, StoryY);
          if StoryX = PlayerShip.SkyX and StoryY = PlayerShip.SkyY then
             StoryX := 0;
@@ -994,7 +994,7 @@ package body Maps.UI is
             end case;
          end;
       end if;
-      if CurrentStory.Index > 0 then
+      if CurrentStory.Index /= Null_Unbounded_String then
          declare
             StoryX, StoryY: Integer := 0;
             FinishCondition: StepConditionType;
@@ -1336,7 +1336,8 @@ package body Maps.UI is
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
       Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));
       UpdateMapInfo;
-      if CurrentStory.Index > 0 and CurrentStory.ShowText then
+      if CurrentStory.Index /= Null_Unbounded_String and
+        CurrentStory.ShowText then
          if CurrentStory.CurrentStep > -2 then
             ShowDialog
               (To_String(GetCurrentStoryText),

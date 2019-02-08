@@ -255,13 +255,11 @@ package body Game.SaveLoad is
         (CategoryNode, "target", To_String(CurrentGoal.TargetIndex));
       LogMessage("done.", Everything, True, False);
       -- Save current story
-      if CurrentStory.Index /= 0 then
+      if CurrentStory.Index /= Null_Unbounded_String then
          LogMessage("Saving current story...", Everything, False);
          CategoryNode := Create_Element(SaveData, "currentstory");
          CategoryNode := Append_Child(MainNode, CategoryNode);
-         Set_Attribute
-           (CategoryNode, "index",
-            To_String(Stories_List(CurrentStory.Index).Index));
+         Set_Attribute(CategoryNode, "index", To_String(CurrentStory.Index));
          RawValue := To_Unbounded_String(Positive'Image(CurrentStory.Step));
          Set_Attribute
            (CategoryNode, "step", To_String(Trim(RawValue, Ada.Strings.Left)));
@@ -308,8 +306,7 @@ package body Game.SaveLoad is
             CategoryNode := Create_Element(SaveData, "finishedstory");
             CategoryNode := Append_Child(MainNode, CategoryNode);
             Set_Attribute
-              (CategoryNode, "index",
-               To_String(Stories_List(FinishedStory.Index).Index));
+              (CategoryNode, "index", To_String(FinishedStory.Index));
             RawValue :=
               To_Unbounded_String(Positive'Image(FinishedStory.StepsAmount));
             Set_Attribute
@@ -605,13 +602,8 @@ package body Game.SaveLoad is
       if Length(NodesList) > 0 then
          LogMessage("Loading current story...", Everything, False);
          SavedNode := Item(NodesList, 0);
-         for I in Stories_List.Iterate loop
-            if Stories_List(I).Index =
-              To_Unbounded_String(Get_Attribute(SavedNode, "index")) then
-               CurrentStory.Index := Stories_Container.To_Index(I);
-               exit;
-            end if;
-         end loop;
+         CurrentStory.Index :=
+           To_Unbounded_String(Get_Attribute(SavedNode, "index"));
          CurrentStory.Step := Positive'Value(Get_Attribute(SavedNode, "step"));
          if Get_Attribute(SavedNode, "currentstep") = "start" then
             CurrentStory.CurrentStep := 0;
@@ -647,19 +639,15 @@ package body Game.SaveLoad is
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "finishedstory");
       declare
-         StoryIndex, StepsAmount: Positive;
+         StepsAmount: Positive;
          TempTexts: UnboundedString_Container.Vector;
+         StoryIndex: Unbounded_String;
       begin
          LogMessage("Loading finished stories...", Everything, False);
          for I in 0 .. Length(NodesList) - 1 loop
             SavedNode := Item(NodesList, I);
-            for J in Stories_List.Iterate loop
-               if Stories_List(J).Index =
-                 To_Unbounded_String(Get_Attribute(SavedNode, "index")) then
-                  StoryIndex := Stories_Container.To_Index(J);
-                  exit;
-               end if;
-            end loop;
+            StoryIndex :=
+              To_Unbounded_String(Get_Attribute(SavedNode, "index"));
             StepsAmount :=
               Positive'Value(Get_Attribute(SavedNode, "stepsamount"));
             TempTexts.Clear;

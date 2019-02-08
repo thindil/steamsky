@@ -17,6 +17,8 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Strings.Unbounded.Hash;
+with Ada.Containers.Hashed_Maps;
 with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 
@@ -51,7 +53,6 @@ package Stories is
    package Steps_Container is new Vectors(Positive, Step_Data);
    type Story_Data is -- Data structure for stories
    record
-      Index: Unbounded_String; -- Index of story
       StartCondition: StartConditionType; -- Condition which must be met to start story
       StartData: UnboundedString_Container
         .Vector; -- Data for starting condition
@@ -65,10 +66,11 @@ package Stories is
       ForbiddenFactions: UnboundedString_Container
         .Vector; -- If player is in one of this factions, he/she can't start this story.
    end record;
-   package Stories_Container is new Vectors(Positive, Story_Data);
+   package Stories_Container is new Hashed_Maps(Unbounded_String, Story_Data,
+      Ada.Strings.Unbounded.Hash, "=");
    type CurrentStory_Data is -- Data structure for stories
    record
-      Index: Natural; -- Index of story or 0 if no story currently active
+      Index: Unbounded_String; -- Index of story or empty string if no story currently active
       Step: Positive; -- Number of current step in story
       CurrentStep: Integer; -- Index of current step, 0 for starting step, -1 for finish step
       MaxSteps: Positive; -- Number of maxium  amounts of steps in story
@@ -78,7 +80,7 @@ package Stories is
    end record;
    type FinishedStory_Data is -- Data structure for finished story/steps
    record
-      Index: Positive; -- Index of story
+      Index: Unbounded_String; -- Index of story
       StepsAmount: Positive; -- Amount of steps in this story
       StepsTexts: UnboundedString_Container
         .Vector; -- Texts of steps done in this story. If less than StepsAmount then it is current story.
@@ -86,7 +88,7 @@ package Stories is
    package FinishedStories_Container is new Vectors(Positive,
       FinishedStory_Data);
    CurrentStory: CurrentStory_Data; -- Contains data about current story on which player is
-   Stories_List: Stories_Container.Vector; -- List of available stories in game
+   Stories_List: Stories_Container.Map; -- List of available stories in game
    FinishedStories: FinishedStories_Container
      .Vector; -- List of finished stories (or past data of current story)
 

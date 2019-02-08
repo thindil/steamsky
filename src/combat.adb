@@ -1302,7 +1302,7 @@ package body Combat is
                   end if;
                end loop;
                AddMessage(To_String(Message) & ".", CombatMessage);
-               if CurrentStory.Index > 0 then
+               if CurrentStory.Index /= Null_Unbounded_String then
                   declare
                      Step: Step_Data;
                      Tokens: Slice_Set;
@@ -1380,7 +1380,7 @@ package body Combat is
          if CurrentGoal.TargetIndex /= Null_Unbounded_String then
             UpdateGoal(DESTROY, ProtoShips_List(EnemyShipIndex).Owner);
          end if;
-         if CurrentStory.Index > 0 then
+         if CurrentStory.Index /= Null_Unbounded_String then
             declare
                FinishCondition: StepConditionType;
                Tokens: Slice_Set;
