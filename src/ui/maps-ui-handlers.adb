@@ -441,7 +441,7 @@ package body Maps.UI.Handlers is
          HaveTrader := True;
       end if;
       Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btncloseorders")), False);
-      if CurrentStory.Index > 0 then
+      if CurrentStory.Index /= Null_Unbounded_String then
          declare
             Step: Step_Data;
          begin

@@ -41,11 +41,10 @@ package body Stories is
       TempValue: UnboundedString_Container.Vector;
       TempStep: Step_Data;
       TempSteps: Steps_Container.Vector;
-      StartStep, FinalStep, Value: Unbounded_String;
+      StartStep, FinalStep, Value, StoryIndex: Unbounded_String;
       TempTexts: StepTexts_Container.Vector;
       TempData: StepData_Container.Vector;
       Action, SubAction, SubSubAction: DataAction;
-      StoryIndex: Natural;
       StoryNode, ChildNode, StepNode: Node;
       DeleteIndex, StepIndex: Positive;
    begin
@@ -55,41 +54,32 @@ package body Stories is
          FinishData => TempData, FailText => Null_Unbounded_String,
          Texts => TempTexts);
       TempRecord :=
-        (Index => Null_Unbounded_String, StartCondition => DROPITEM,
-         StartData => TempValue, MinSteps => 1, MaxSteps => 2,
-         StartingStep => TempStep, Steps => TempSteps, FinalStep => TempStep,
-         EndText => Null_Unbounded_String, Name => Null_Unbounded_String,
-         ForbiddenFactions => TempValue);
+        (StartCondition => DROPITEM, StartData => TempValue, MinSteps => 1,
+         MaxSteps => 2, StartingStep => TempStep, Steps => TempSteps,
+         FinalStep => TempStep, EndText => Null_Unbounded_String,
+         Name => Null_Unbounded_String, ForbiddenFactions => TempValue);
       StartStep := Null_Unbounded_String;
       StoriesData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(StoriesData, "story");
       for I in 0 .. Length(NodesList) - 1 loop
          StoryNode := Item(NodesList, I);
-         TempRecord.Index :=
-           To_Unbounded_String(Get_Attribute(StoryNode, "index"));
+         StoryIndex := To_Unbounded_String(Get_Attribute(StoryNode, "index"));
          if Get_Attribute(StoryNode, "action")'Length > 0 then
             Action := DataAction'Value(Get_Attribute(StoryNode, "action"));
          else
             Action := ADD;
          end if;
-         StoryIndex := 0;
-         for J in Stories_List.Iterate loop
-            if Stories_List(J).Index = TempRecord.Index then
-               StoryIndex := Stories_Container.To_Index(J);
-               exit;
-            end if;
-         end loop;
          if (Action = UPDATE or Action = REMOVE) then
-            if StoryIndex = 0 then
+            if not Stories_Container.Contains(Stories_List, StoryIndex) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
-                 " story '" & To_String(TempRecord.Index) &
+                 " story '" & To_String(StoryIndex) &
                  "', there no story with that index.";
             end if;
-         elsif StoryIndex > 0 then
+         elsif Stories_Container.Contains(Stories_List, StoryIndex) then
             raise Data_Loading_Error
-              with "Can't add story '" & To_String(TempRecord.Index) &
+              with "Can't add story '" & To_String(StoryIndex) &
               "', there is one with that index.";
          end if;
          if Action /= REMOVE then
@@ -325,23 +315,20 @@ package body Stories is
                    (Node_Value(First_Child(Item(ChildNodes, 0))));
             end if;
             if Action /= UPDATE then
-               Stories_List.Append(New_Item => TempRecord);
-               LogMessage
-                 ("Story added: " & To_String(TempRecord.Index), Everything);
+               Stories_Container.Include(Stories_List, StoryIndex, TempRecord);
+               LogMessage("Story added: " & To_String(StoryIndex), Everything);
             else
                Stories_List(StoryIndex) := TempRecord;
                LogMessage
-                 ("Story updated: " & To_String(TempRecord.Index), Everything);
+                 ("Story updated: " & To_String(StoryIndex), Everything);
             end if;
          else
-            Stories_List.Delete(Index => StoryIndex);
-            LogMessage
-              ("Story removed: " & To_String(TempRecord.Index), Everything);
+            Stories_Container.Exclude(Stories_List, StoryIndex);
+            LogMessage("Story removed: " & To_String(StoryIndex), Everything);
          end if;
          TempRecord :=
-           (Index => Null_Unbounded_String, StartCondition => DROPITEM,
-            StartData => TempValue, MinSteps => 1, MaxSteps => 2,
-            StartingStep => TempStep, Steps => TempSteps,
+           (StartCondition => DROPITEM, StartData => TempValue, MinSteps => 1,
+            MaxSteps => 2, StartingStep => TempStep, Steps => TempSteps,
             FinalStep => TempStep, EndText => Null_Unbounded_String,
             Name => Null_Unbounded_String, ForbiddenFactions => TempValue);
       end loop;
@@ -437,7 +424,7 @@ package body Stories is
       TempTexts: UnboundedString_Container.Vector;
       CanStart: Boolean;
    begin
-      if CurrentStory.Index > 0 then
+      if CurrentStory.Index /= Null_Unbounded_String then
          return;
       end if;
       for I in Factions_List.Iterate loop
@@ -492,7 +479,7 @@ package body Stories is
                            null;
                      end case;
                      CurrentStory :=
-                       (Index => Stories_Container.To_Index(I), Step => 1,
+                       (Index => Stories_Container.Key(I), Step => 1,
                         CurrentStep => 0,
                         MaxSteps =>
                           GetRandom
@@ -516,8 +503,8 @@ package body Stories is
    procedure ClearCurrentStory is
    begin
       CurrentStory :=
-        (Index => 0, Step => 1, CurrentStep => -3, MaxSteps => 1,
-         ShowText => False, Data => Null_Unbounded_String,
+        (Index => Null_Unbounded_String, Step => 1, CurrentStep => -3,
+         MaxSteps => 1, ShowText => False, Data => Null_Unbounded_String,
          FinishedStep => ANY);
    end ClearCurrentStory;
 
