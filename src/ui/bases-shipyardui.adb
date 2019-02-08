@@ -118,7 +118,9 @@ package body Bases.ShipyardUI is
                  Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
                    .Value;
             when ShipModules.CARGO =>
-               MaxValue := PlayerShip.Modules(ShipModuleIndex).MaxWeight;
+               MaxValue :=
+                 Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+                   .MaxValue;
                Value :=
                  Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
                    .Value;

@@ -58,8 +58,6 @@ package Ships is
          when GUN =>
             Damage: Positive; -- Damage bonus for selected gun
             AmmoIndex: Natural; -- Cargo index of ammunition used by selected gun
-         when CARGO_ROOM =>
-            MaxWeight: Positive; -- Maximum weight in kg of items in cargo of selected module
          when HULL =>
             InstalledModules: Natural; -- Amount of installed modules on ship
             MaxModules: Positive; -- Amount of maximum installed modules for this hull
@@ -67,8 +65,8 @@ package Ships is
             CraftingIndex: Unbounded_String; -- Index of crafting recipe or item which is deconstructed
             CraftingTime: Natural; -- Time needed to finish crating order
             CraftingAmount: Natural; -- How many times repeat crafting order
-         when MEDICAL_ROOM | COCKPIT | ARMOR =>
-            null; -- Medical room, cockpit and armor don't have any special fields
+         when MEDICAL_ROOM | COCKPIT | ARMOR | CARGO_ROOM =>
+            null; -- Medical room, cockpit, armor and cargo bays don't have any special fields
          when TRAINING_ROOM =>
             TrainedSkill: Natural; -- Index of skill set to training
          when BATTERING_RAM =>

@@ -200,8 +200,7 @@ package body Ships is
                         ProtoIndex => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability, Owner => 0,
-                        UpgradeProgress => 0, UpgradeAction => NONE,
-                        MaxWeight => TempModule.MaxValue));
+                        UpgradeProgress => 0, UpgradeAction => NONE));
                when HULL =>
                   ShipModules.Append
                     (New_Item =>

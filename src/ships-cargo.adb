@@ -15,6 +15,8 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Shipmodules; use Shipmodules;
+
 package body Ships.Cargo is
 
    procedure UpdateCargo(Ship: in out ShipRecord;
@@ -69,7 +71,7 @@ package body Ships.Cargo is
    begin
       for Module of Ship.Modules loop
          if Module.MType = CARGO_ROOM and Module.Durability > 0 then
-            FreeCargo := FreeCargo + Module.MaxWeight;
+            FreeCargo := FreeCargo + Modules_List(Module.ProtoIndex).MaxValue;
          end if;
       end loop;
       for Item of Ship.Cargo loop
