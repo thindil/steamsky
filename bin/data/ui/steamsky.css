@@ -232,9 +232,9 @@ GtkFrame#redframe > GtkLabel {
 
 /* Sky map settings */
 GtkTextView#mapview {
-   font-family:"Font Awesome 5 Free";
+   font-family:"Hack NF";
    font-style:normal;
-   font-size:12px;
+   font-size:16px;
 }
 
 /* Font used mostly in help */
