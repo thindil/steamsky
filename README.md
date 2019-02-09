@@ -120,6 +120,10 @@ Font Rye is under Open Font License:
 
 https://fonts.google.com/specimen/Rye
 
+Font Hack Nerf Font is under MiT license:
+
+https://nerdfonts.com/
+
 
 
 More documentation about game (changelog, license) you can find in
