@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Made starting ships for Undead player a bit stronger (better battering ram
   and armor)
+- Default font for map
 
 ### Fixed
 - Crash on selling ship modules in shipyard
