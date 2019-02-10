@@ -15,7 +15,8 @@ All notable changes to this project will be documented in this file.
   mk III, large indepedent trader mk III, large pirates trader ship mk III,
   large poleis patrol ship mk III, large independent patrol ship mk III, large
   poleis trader mk IV, large independent trader mk IV, large pirates trader mk
-  IV, large poleis patrol ship mk IV and large indepdendent patrol ship mk IV
+  IV, large poleis patrol ship mk IV, large indepdendent patrol ship mk IV and
+  large poleis trader mk V
 
 ### Changed
 - Made starting ships for Undead player a bit stronger (better battering ram
