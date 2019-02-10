@@ -241,6 +241,11 @@ package body MainMenu is
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback5")));
+      elsif User_Data = Get_Object(Builder, "btnreadme") then
+         LoadFile("README.md");
+         Set_Visible_Child_Name
+           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
+         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback5")));
       end if;
    end ShowPage;
 
