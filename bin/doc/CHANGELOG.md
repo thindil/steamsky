@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Ureleased]
+## [3.0.5] - 2019-02-06
 
 ### Changed
 - Made starting ships for Undead player a bit stronger (better battering ram
