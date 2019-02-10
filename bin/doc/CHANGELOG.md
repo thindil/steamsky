@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
   poleis trader mk IV, large independent trader mk IV, large pirates trader mk
   IV, large poleis patrol ship mk IV, large indepdendent patrol ship mk IV,
   large poleis trader mk V and large independent trader mk V
+- Show README.md file in game about menu
 
 ### Changed
 - Made starting ships for Undead player a bit stronger (better battering ram
