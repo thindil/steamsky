@@ -16,8 +16,8 @@ All notable changes to this project will be documented in this file.
   large poleis patrol ship mk III, large independent patrol ship mk III, large
   poleis trader mk IV, large independent trader mk IV, large pirates trader mk
   IV, large poleis patrol ship mk IV, large indepdendent patrol ship mk IV,
-  large poleis trader mk V, large independent trader mk V and large pirates
-  trader mk V
+  large poleis trader mk V, large independent trader mk V, large pirates
+  trader mk V and large poleis patrol ship mk V
 - Show README.md file in game about menu
 
 ### Changed
