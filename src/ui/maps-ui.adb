@@ -691,7 +691,7 @@ package body Maps.UI is
                   end if;
                elsif SkyMap(X, Y).BaseIndex > 0 then
                   if SkyBases(SkyMap(X, Y).BaseIndex).Known then
-                     MapChar := Wide_Character'Val(16#fc06#);
+                     MapChar := CurrentTheme.NotVisitedBaseIcon;
                      if SkyBases(SkyMap(X, Y).BaseIndex).Visited.Year > 0 then
                         MapChar :=
                           Factions_List(SkyBases(SkyMap(X, Y).BaseIndex).Owner)
