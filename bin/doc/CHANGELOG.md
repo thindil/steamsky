@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
   and armor)
 - Default font for map
 - Updated README.md
+- Updated MODDING.md
 
 ### Fixed
 - Crash on selling ship modules in shipyard
