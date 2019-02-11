@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
   large poleis trader mk V, large independent trader mk V, large pirates
   trader mk V and large poleis patrol ship mk V
 - Show README.md file in game about menu
+- Added default icon for unvisited bases to themes
 
 ### Changed
 - Made starting ships for Undead player a bit stronger (better battering ram
