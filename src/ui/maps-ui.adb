@@ -565,7 +565,7 @@ package body Maps.UI is
       for Y in StartY .. EndY loop
          for X in StartX .. EndX loop
             if X = PlayerShip.SkyX and Y = PlayerShip.SkyY then
-               MapChar := Wide_Character'Val(16#f135#);
+               MapChar := CurrentTheme.PlayerShipIcon;
                MapColor := WhiteColor;
             else
                MapChar := Wide_Character'Val(16#f0c8#);
