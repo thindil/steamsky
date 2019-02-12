@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
   mk V and huge poleis trader mk II
 - Show README.md file in game about menu
 - Added default icon for unvisited bases to themes
+- Added default icon for player ship to themes
 
 ### Changed
 - Made starting ships for Undead player a bit stronger (better battering ram
