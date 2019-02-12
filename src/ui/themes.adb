@@ -184,7 +184,8 @@ package body Themes is
           NoFuelIcon => Wide_Character'Val(16#f2ca#),
           NoFoodIcon => Wide_Character'Val(16#f787#),
           NoDrinksIcon => Wide_Character'Val(16#f72f#),
-          NotVisitedBaseIcon => Wide_Character'Val(16#fc06#)));
+          NotVisitedBaseIcon => Wide_Character'Val(16#fc06#),
+          PlayerShipIcon => Wide_Character'Val(16#f135#)));
       Start_Search
         (Directories, To_String(ThemesDirectory), "",
          (Directory => True, others => False));
@@ -377,7 +378,8 @@ package body Themes is
                   NoFuelIcon => Wide_Character'Val(16#f2ca#),
                   NoFoodIcon => Wide_Character'Val(16#f787#),
                   NoDrinksIcon => Wide_Character'Val(16#f72f#),
-                  NotVisitedBaseIcon => Wide_Character'Val(16#fc06#));
+                  NotVisitedBaseIcon => Wide_Character'Val(16#fc06#),
+                  PlayerShipIcon => Wide_Character'Val(16#f135#));
             end loop;
             End_Search(Files);
          end if;
