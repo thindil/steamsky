@@ -185,7 +185,8 @@ package body Themes is
           NoFoodIcon => Wide_Character'Val(16#f787#),
           NoDrinksIcon => Wide_Character'Val(16#f72f#),
           NotVisitedBaseIcon => Wide_Character'Val(16#fc06#),
-          PlayerShipIcon => Wide_Character'Val(16#f135#)));
+          PlayerShipIcon => Wide_Character'Val(16#f135#),
+          EmptyMapIcon => Wide_Character'Val(16#f0c8#)));
       Start_Search
         (Directories, To_String(ThemesDirectory), "",
          (Directory => True, others => False));
@@ -341,6 +342,10 @@ package body Themes is
                         TempRecord.NotVisitedBaseIcon :=
                           Wide_Character'Val
                             (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName = To_Unbounded_String("EmptyMapIcon") then
+                        TempRecord.EmptyMapIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
                      end if;
                   end if;
                end loop;
@@ -379,7 +384,8 @@ package body Themes is
                   NoFoodIcon => Wide_Character'Val(16#f787#),
                   NoDrinksIcon => Wide_Character'Val(16#f72f#),
                   NotVisitedBaseIcon => Wide_Character'Val(16#fc06#),
-                  PlayerShipIcon => Wide_Character'Val(16#f135#));
+                  PlayerShipIcon => Wide_Character'Val(16#f135#),
+                  EmptyMapIcon => Wide_Character'Val(16#f0c8#));
             end loop;
             End_Search(Files);
          end if;
