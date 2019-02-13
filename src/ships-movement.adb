@@ -392,7 +392,7 @@ package body Ships.Movement is
    end CountFuelNeeded;
 
    procedure WaitInPlace(Minutes: Positive) is
-      FuelNeeded: Integer := 0;
+      BaseFuelNeeded, FuelNeeded: Integer := 0;
       FuelIndex: Natural;
    begin
       if PlayerShip.Speed = DOCKED then
@@ -400,10 +400,13 @@ package body Ships.Movement is
       end if;
       for Module of PlayerShip.Modules loop
          if Module.MType = ENGINE and then not Module.Disabled then
-            FuelNeeded := FuelNeeded - 1;
+            BaseFuelNeeded := BaseFuelNeeded - 1;
          end if;
       end loop;
-      FuelNeeded := FuelNeeded * Minutes;
+      FuelNeeded := BaseFuelNeeded * (Minutes / 10);
+      if GetRandom(1, 10) < (Minutes rem 10) then
+         FuelNeeded := FuelNeeded + BaseFuelNeeded;
+      end if;
       FuelIndex :=
         FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
       if FuelIndex = 0 then
