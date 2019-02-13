@@ -856,6 +856,8 @@ story.
   not visited bases on map. Optional.
 - Key `PlayerShipIcon`: Hexadecimal number on UTF-8 character used to show
   player ship on map. Optional.
+- Key `EmptyMapIcon`: Hexadecimal number on UTF-8 character used to show
+  empty spaces on map. Optional.
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
