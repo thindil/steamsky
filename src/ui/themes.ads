@@ -58,6 +58,7 @@ package Themes is
       NoDrinksIcon: Wide_Character; -- Icon used for show warning about no drinks
       NotVisitedBaseIcon: Wide_Character; -- Icon used for show not visited bases on map
       PlayerShipIcon: Wide_Character; -- Icon used for show player ship on map
+      EmptyMapIcon: Wide_Character; -- Icon used for empty map fields
    end record;
    package Themes_Container is new Ada.Containers.Indefinite_Hashed_Maps
      (String, ThemeRecord, Ada.Strings.Hash, "=");

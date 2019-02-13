@@ -568,7 +568,7 @@ package body Maps.UI is
                MapChar := CurrentTheme.PlayerShipIcon;
                MapColor := WhiteColor;
             else
-               MapChar := Wide_Character'Val(16#f0c8#);
+               MapChar := CurrentTheme.EmptyMapIcon;
                if SkyMap(X, Y).Visited then
                   MapColor := BlackColor;
                else
