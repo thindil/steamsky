@@ -858,6 +858,8 @@ story.
   player ship on map. Optional.
 - Key `EmptyMapIcon`: Hexadecimal number on UTF-8 character used to show
   empty spaces on map. Optional.
+- Key `TargetIcon`: Hexadecimal number on UTF-8 character used to show
+  current player ship destination on map. Optional.
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
