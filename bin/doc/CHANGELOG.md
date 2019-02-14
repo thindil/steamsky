@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - Default font for map
 - Updated README.md
 - Updated MODDING.md
+- Reduced fuel usaga during waiting in place outside bases
 
 ### Fixed
 - Crash on selling ship modules in shipyard
