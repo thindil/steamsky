@@ -576,7 +576,7 @@ package body Maps.UI is
                end if;
                if X = PlayerShip.DestinationX and
                  Y = PlayerShip.DestinationY then
-                  MapChar := Wide_Character'Val(16#f05b#);
+                  MapChar := CurrentTheme.TargetIcon;
                   if SkyMap(X, Y).Visited then
                      MapColor := WhiteColor;
                   else
