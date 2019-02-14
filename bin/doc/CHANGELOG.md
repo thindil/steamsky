@@ -24,7 +24,8 @@ All notable changes to this project will be documented in this file.
 - Show README.md file in game about menu
 - Added default icon for unvisited bases to themes
 - Added default icon for player ship to themes
-- Added default icon for empty space to themes
+- Added default icon for empty space on map to themes
+- Added default icon for player ship destination on map to themes
 
 ### Changed
 - Made starting ships for Undead player a bit stronger (better battering ram
