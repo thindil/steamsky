@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Possible crash when showing the game map
+
 ## [3.0.5] - 2019-02-10
 
 ### Changed
