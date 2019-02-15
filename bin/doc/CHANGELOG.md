@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Added default icon for player ship to themes
 - Added default icon for empty space on map to themes
 - Added default icon for player ship destination on map to themes
+- Added default icon for story event location on map to themes
 
 ### Changed
 - Made starting ships for Undead player a bit stronger (better battering ram
