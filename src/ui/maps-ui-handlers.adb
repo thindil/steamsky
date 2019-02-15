@@ -118,6 +118,12 @@ package body Maps.UI.Handlers is
       if (Get_Allocated_Height(Gtk_Widget(MapView)) / Location.Y) - 1 < 1 then
          return;
       end if;
+      if Location.X = 0 then
+         return;
+      end if;
+      if (Get_Allocated_Width(Gtk_Widget(MapView)) / Location.X) - 1 < 1 then
+         return;
+      end if;
       MapWidth :=
         Positive(Get_Allocated_Width(Gtk_Widget(MapView)) / Location.X) - 1;
       MapHeight :=
