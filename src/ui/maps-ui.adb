@@ -583,7 +583,7 @@ package body Maps.UI is
                      MapColor := WhiteGrayColor;
                   end if;
                elsif X = StoryX and Y = StoryY then
-                  MapChar := Wide_Character'Val(16#f059#);
+                  MapChar := CurrentTheme.StoryIcon;
                   MapColor := GreenColor;
                elsif SkyMap(X, Y).MissionIndex > 0 then
                   case AcceptedMissions(SkyMap(X, Y).MissionIndex).MType is
