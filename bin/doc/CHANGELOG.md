@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 - Updated README.md
 - Updated MODDING.md
 - Reduced fuel usaga during waiting in place outside bases
+- Updated interface
 
 ### Fixed
 - Crash on selling ship modules in shipyard
