@@ -844,7 +844,12 @@ package body Maps.UI is
         (MapInfoText,
          "X:" & Positive'Image(MapX) & " Y:" & Positive'Image(MapY));
       if PlayerShip.SkyX /= MapX or PlayerShip.SkyY /= MapY then
-         TravelInfo(MapInfoText, CountDistance(MapX, MapY));
+         declare
+            Distance: constant Positive := CountDistance(MapX, MapY);
+         begin
+            Append(MapInfoText, LF & "Distance:" & Positive'Image(Distance));
+            TravelInfo(MapInfoText, Distance);
+         end;
       end if;
       if SkyMap(MapX, MapY).BaseIndex > 0 then
          declare
