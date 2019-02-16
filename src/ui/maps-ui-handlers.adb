@@ -1495,10 +1495,10 @@ package body Maps.UI.Handlers is
       MapInfo: constant Gtk_Widget :=
         Gtk_Widget(Get_Object(Object, "eventmaptooltip"));
    begin
-      if Get_Valign(MapInfo) = Align_Start then
-         Set_Valign(MapInfo, Align_End);
+      if Get_Halign(MapInfo) = Align_Start then
+         Set_Halign(MapInfo, Align_End);
       else
-         Set_Valign(MapInfo, Align_Start);
+         Set_Halign(MapInfo, Align_Start);
       end if;
       return False;
    end MoveMapInfo;
