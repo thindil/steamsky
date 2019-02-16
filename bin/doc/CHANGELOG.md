@@ -49,6 +49,7 @@ All notable changes to this project will be documented in this file.
 - Ship overloading
 - Assigning crew member to harpoon gun
 - Generating ship names
+- Possible crash when showing the game map
 
 ## [3.3 - 2019-01-27]
 
