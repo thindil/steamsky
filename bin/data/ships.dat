@@ -4963,5 +4963,27 @@ during combat. -->
   <member index="68" maxamount="10" minamount="6"/>
   <description>Huge, well armored, upgraded version of independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
+ <ship combatai="COWARD" index="261" maxloot="1000" minloot="500" name="Huge poleis trader mk IV" owner="POLEIS">
+  <module index="155"/>
+  <module index="144"/>
+  <module amount="2" index="157"/>
+  <module amount="14" index="93"/>
+  <module index="130"/>
+  <module amount="4" index="234"/>
+  <module amount="3" index="152"/>
+  <module amount="3" index="162"/>
+  <cargo index="1" maxamount="5000" minamount="3000"/>
+  <cargo index="2" maxamount="750" minamount="500"/>
+  <cargo index="3" maxamount="1500" minamount="1000"/>
+  <cargo index="119" maxamount="1000" minamount="500"/>
+  <cargo index="116" maxamount="750" minamount="500"/>
+  <cargo index="122" maxamount="200" minamount="150"/>
+  <member index="39"/>
+  <member amount="3" index="40"/>
+  <member index="41"/>
+  <member index="42"/>
+  <member index="68" maxamount="5" minamount="3"/>
+  <description>Huge, well armored, upgraded version of poleis traders ship. Avoids any fights.</description>
+ </ship>
 </ships>
 
