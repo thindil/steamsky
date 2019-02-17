@@ -38,6 +38,7 @@ All notable changes to this project will be documented in this file.
 - Updated MODDING.md
 - Reduced fuel usaga during waiting in place outside bases
 - Updated interface
+- Raised limit of minimal ship speed
 
 ### Fixed
 - Crash on selling ship modules in shipyard
