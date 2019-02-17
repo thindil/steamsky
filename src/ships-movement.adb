@@ -115,7 +115,7 @@ package body Ships.Movement is
          return 0;
       end if;
       Speed := (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
-      if Speed < 0.25 then
+      if Speed < 0.5 then
          Message :=
            To_Unbounded_String
              ("You can't fly because your ship is overloaded.");
