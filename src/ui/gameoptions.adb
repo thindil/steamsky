@@ -249,8 +249,6 @@ package body GameOptions is
         Get_State(Gtk_Switch(Get_Object(Object, "switchautoaskforbases")));
       GameSettings.AutoAskForEvents :=
         Get_State(Gtk_Switch(Get_Object(Object, "switchautoaskforevents")));
-      GameSettings.ShowMapButtons :=
-        Get_State(Gtk_Switch(Get_Object(Object, "switchshowmapbuttons")));
       GameSettings.ShowLastMessage :=
         Get_State(Gtk_Switch(Get_Object(Object, "switchshowlastmessage")));
       GameSettings.ShowTooltips :=
@@ -453,9 +451,6 @@ package body GameOptions is
       Set_State
         (Gtk_Switch(Get_Object(Builder, "switchautoaskforevents")),
          GameSettings.AutoAskForEvents);
-      Set_State
-        (Gtk_Switch(Get_Object(Builder, "switchshowmapbuttons")),
-         GameSettings.ShowMapButtons);
       Set_State
         (Gtk_Switch(Get_Object(Builder, "switchshowlastmessage")),
          GameSettings.ShowLastMessage);
