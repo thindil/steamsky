@@ -495,15 +495,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="menumovemap">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Move map position</property>
-        <property name="use_underline">True</property>
-        <signal name="activate" handler="Show_Window" object="movemapwindow" swapped="no"/>
-      </object>
-    </child>
-    <child>
       <object class="GtkMenuItem" id="menustats">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1164,6 +1155,221 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
           </packing>
         </child>
       </object>
+    </child>
+  </object>
+  <object class="GtkBox" id="movemapbox">
+    <property name="name">movemap</property>
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="halign">end</property>
+    <property name="valign">end</property>
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkButton" id="btnmovemapup">
+        <property name="label" translatable="yes">⬆</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="tooltip_text" translatable="yes">Show move map buttons</property>
+        <signal name="clicked" handler="Move_Map_Buttons" object="btnmovemapup" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkButton" id="btnmovemapleft">
+            <property name="label" translatable="yes">⬅</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Move map buttons left</property>
+            <signal name="clicked" handler="Move_Map_Buttons" object="btnmovemapleft" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkButton" id="btnmapupleft">
+                <property name="label" translatable="yes">↖</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes">Move map up left</property>
+                <signal name="clicked" handler="Move_Map" object="btnmapupleft" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btnmapup">
+                <property name="label" translatable="yes">⬆</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes">Move map up</property>
+                <signal name="clicked" handler="Move_Map" object="btnmapup" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btnmapupright">
+                <property name="label" translatable="yes">↗</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes">Move map up right</property>
+                <signal name="clicked" handler="Move_Map" object="btnmapupright" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btnmapleft">
+                <property name="label" translatable="yes">⬅</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes">Move map left</property>
+                <signal name="clicked" handler="Move_Map" object="btnmapleft" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btnmapright">
+                <property name="label" translatable="yes">➡</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes">Move map right</property>
+                <signal name="clicked" handler="Move_Map" object="btnmapright" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btnmapdownleft">
+                <property name="label" translatable="yes">↙</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes">Move map down left</property>
+                <signal name="clicked" handler="Move_Map" object="btnmapdownleft" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btnmapdown">
+                <property name="label" translatable="yes">⬇</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="Move_Map" object="btnmapdown" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btnmapdownright">
+                <property name="label" translatable="yes">↘</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes">Move map down right</property>
+                <signal name="clicked" handler="Move_Map" object="btnmapdownright" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btnshowmovemap">
+                <property name="label" translatable="yes">...</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes">Show more move map options</property>
+                <signal name="clicked" handler="Show_Window" object="movemapwindow" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btnmovemapright">
+            <property name="label" translatable="yes">➡</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Move map buttons right</property>
+            <signal name="clicked" handler="Move_Map_Buttons" object="btnmovemapright" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btnmovemapdown">
+        <property name="label" translatable="yes">⬇</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="tooltip_text" translatable="yes">Hide move map buttons</property>
+        <signal name="clicked" handler="Move_Map_Buttons" object="btnmovemapdown" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
+      </packing>
     </child>
   </object>
   <object class="GtkAccelGroup" id="movementaccels"/>
@@ -2005,204 +2211,34 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkEventBox" id="mapupevent">
-                        <property name="height_request">30</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <signal name="enter-notify-event" handler="Show_Map_Button" object="mapuprevealer" swapped="no"/>
-                        <child>
-                          <object class="GtkRevealer" id="mapuprevealer">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="transition_type">slide-up</property>
-                            <property name="reveal_child">True</property>
-                            <child>
-                              <object class="GtkButton" id="btnmapup">
-                                <property name="name">fontawesome</property>
-                                <property name="width_request">100</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="tooltip_text" translatable="yes">Move map up</property>
-                                <signal name="clicked" handler="Move_Map" object="btnmapup" swapped="no"/>
-                                <signal name="leave-notify-event" handler="Hide_Map_Button" object="mapuprevealer" swapped="no"/>
-                                <child>
-                                  <object class="GtkLabel" id="lblmovemapup">
-                                    <property name="name">fontawesome</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="mapbox2">
+                      <object class="GtkOverlay" id="mapoverlay">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
-                          <object class="GtkEventBox" id="mapleftevent">
-                            <property name="width_request">30</property>
+                          <object class="GtkScrolledWindow">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <signal name="enter-notify-event" handler="Show_Map_Button" object="mapleftrevealer" swapped="no"/>
+                            <property name="can_focus">True</property>
+                            <property name="shadow_type">in</property>
                             <child>
-                              <object class="GtkRevealer" id="mapleftrevealer">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="transition_type">slide-left</property>
-                                <property name="reveal_child">True</property>
-                                <child>
-                                  <object class="GtkButton" id="btnmapleft">
-                                    <property name="name">vertical</property>
-                                    <property name="height_request">100</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
-                                    <property name="tooltip_text" translatable="yes">Move map left</property>
-                                    <signal name="clicked" handler="Move_Map" object="btnmapleft" swapped="no"/>
-                                    <signal name="leave-notify-event" handler="Hide_Map_Button" object="mapleftrevealer" swapped="no"/>
-                                    <child>
-                                      <object class="GtkLabel" id="lblmovemapleft">
-                                        <property name="name">fontawesome</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkOverlay" id="mapoverlay">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child>
-                              <object class="GtkScrolledWindow">
+                              <object class="GtkTextView" id="mapview">
+                                <property name="name">mapview</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="shadow_type">in</property>
-                                <child>
-                                  <object class="GtkTextView" id="mapview">
-                                    <property name="name">mapview</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="editable">False</property>
-                                    <property name="cursor_visible">False</property>
-                                    <property name="buffer">txtmap</property>
-                                    <property name="accepts_tab">False</property>
-                                    <signal name="button-press-event" handler="Set_Destination" swapped="no"/>
-                                    <signal name="motion-notify-event" handler="Update_Tooltip" swapped="no"/>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEventBox" id="maprightevent">
-                            <property name="width_request">40</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <signal name="enter-notify-event" handler="Show_Map_Button" object="maprightrevealer" swapped="no"/>
-                            <child>
-                              <object class="GtkRevealer" id="maprightrevealer">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="transition_type">slide-right</property>
-                                <property name="reveal_child">True</property>
-                                <child>
-                                  <object class="GtkButton" id="btnmapright">
-                                    <property name="name">vertical</property>
-                                    <property name="height_request">100</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
-                                    <property name="tooltip_text" translatable="yes">Move map right</property>
-                                    <signal name="clicked" handler="Move_Map" object="btnmapright" swapped="no"/>
-                                    <signal name="leave-notify-event" handler="Hide_Map_Button" object="maprightrevealer" swapped="no"/>
-                                    <child>
-                                      <object class="GtkLabel" id="lblmovemapright">
-                                        <property name="name">fontawesome</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEventBox" id="mapdownevent">
-                        <property name="height_request">30</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <signal name="enter-notify-event" handler="Show_Map_Button" object="mapdownrevealer" swapped="no"/>
-                        <child>
-                          <object class="GtkRevealer" id="mapdownrevealer">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="reveal_child">True</property>
-                            <child>
-                              <object class="GtkButton" id="btnmapdown">
-                                <property name="name">fontawesome</property>
-                                <property name="width_request">100</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="tooltip_text" translatable="yes">Move map down</property>
-                                <signal name="clicked" handler="Move_Map" object="btnmapdown" swapped="no"/>
-                                <signal name="leave-notify-event" handler="Hide_Map_Button" object="mapdownrevealer" swapped="no"/>
-                                <child>
-                                  <object class="GtkLabel" id="lblmovemapdown">
-                                    <property name="name">fontawesome</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                  </object>
-                                </child>
+                                <property name="editable">False</property>
+                                <property name="cursor_visible">False</property>
+                                <property name="buffer">txtmap</property>
+                                <property name="accepts_tab">False</property>
+                                <signal name="button-press-event" handler="Set_Destination" swapped="no"/>
+                                <signal name="motion-notify-event" handler="Update_Tooltip" swapped="no"/>
                               </object>
                             </child>
                           </object>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
+                        <property name="expand">True</property>
                         <property name="fill">True</property>
-                        <property name="position">4</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>

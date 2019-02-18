@@ -156,15 +156,14 @@ package body Utils.UI is
    procedure CloseMessages(Object: access Gtkada_Builder_Record'Class) is
       VisibleChildName: constant String :=
         Get_Visible_Child_Name(Gtk_Stack(Get_Object(Object, "gamestack")));
-      MenuArray: constant array(1 .. 11) of Unbounded_String :=
+      MenuArray: constant array(1 .. 10) of Unbounded_String :=
         (To_Unbounded_String("menuorders"),
          To_Unbounded_String("menucrafting"),
          To_Unbounded_String("menubaseslist"),
          To_Unbounded_String("menuevents"),
          To_Unbounded_String("menumissions"), To_Unbounded_String("menustory"),
-         To_Unbounded_String("menuwait"), To_Unbounded_String("menumovemap"),
-         To_Unbounded_String("menustats"), To_Unbounded_String("menuhelp"),
-         To_Unbounded_String("menuoptions"));
+         To_Unbounded_String("menuwait"), To_Unbounded_String("menustats"),
+         To_Unbounded_String("menuhelp"), To_Unbounded_String("menuoptions"));
    begin
       if VisibleChildName = "options" then
          CloseOptions(Object);

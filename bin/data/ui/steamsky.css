@@ -395,3 +395,14 @@ GtkStackSwitcher .button:checked {
    font-family:"Font Awesome 5 Free";
    font-size:12px;
 }
+
+/* Settings for move map buttons */
+*#movemap {
+   background-color:#1a130c;
+}
+
+*#movemap * {
+   font-family:"Font Awesome 5 Free";
+   font-size:0.8em;
+   border-radius: 0;
+}

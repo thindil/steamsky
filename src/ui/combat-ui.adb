@@ -461,14 +461,14 @@ package body Combat.UI is
 
    procedure ShowCombatUI(NewCombat: Boolean := True) is
       CombatStarted: Boolean;
-      MenuArray: constant array(1 .. 10) of Unbounded_String :=
+      MenuArray: constant array(1 .. 9) of Unbounded_String :=
         (To_Unbounded_String("menuorders"),
          To_Unbounded_String("menucrafting"),
          To_Unbounded_String("menubaseslist"),
          To_Unbounded_String("menuevents"),
          To_Unbounded_String("menumissions"), To_Unbounded_String("menustory"),
-         To_Unbounded_String("menuwait"), To_Unbounded_String("menumovemap"),
-         To_Unbounded_String("menustats"), To_Unbounded_String("menuoptions"));
+         To_Unbounded_String("menuwait"), To_Unbounded_String("menustats"),
+         To_Unbounded_String("menuoptions"));
    begin
       if NewCombat then
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0

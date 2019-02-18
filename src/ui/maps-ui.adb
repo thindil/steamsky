@@ -37,6 +37,7 @@ with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Overlay; use Gtk.Overlay;
 with Gtk.Text_Mark; use Gtk.Text_Mark;
+with Gtk.Button; use Gtk.Button;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -1079,6 +1080,9 @@ package body Maps.UI is
         (Gtk_Overlay(Get_Object(Builder, "mapoverlay")),
          Gtk_Widget(Get_Object(Builder, "eventmaptooltip")));
       Add_Overlay
+        (Gtk_Overlay(Get_Object(Builder, "mapoverlay")),
+         Gtk_Widget(Get_Object(Builder, "movemapbox")));
+      Add_Overlay
         (Gtk_Overlay(Get_Object(Builder, "gameoverlay")),
          Gtk_Widget(Get_Object(Builder, "inforevealer")));
       Register_Handler(Builder, "Quit_Game", QuitGame'Access);
@@ -1121,8 +1125,7 @@ package body Maps.UI is
       Register_Handler
         (Builder, "Toggle_Close_Button_Proc", ToggleCloseButtonProc'Access);
       Register_Handler(Builder, "Move_Map_Info", MoveMapInfo'Access);
-      Register_Handler(Builder, "Show_Map_Button", ShowMapButton'Access);
-      Register_Handler(Builder, "Hide_Map_Button", HideMapButton'Access);
+      Register_Handler(Builder, "Move_Map_Buttons", MoveMapButtons'Access);
       Do_Connect(Builder);
       Add_Entry("<skymapwindow>/btnupleft", GDK_KP_7, 0);
       Add_Entry("<skymapwindow>/btnup", GDK_KP_8, 0);
@@ -1240,7 +1243,7 @@ package body Maps.UI is
               (To_Unbounded_String("menumissions"),
                To_Unbounded_String("<skymapwindow>/Menu/MissionsInfo")),
             21 =>
-              (To_Unbounded_String("menumovemap"),
+              (To_Unbounded_String("btnshowmovemap"),
                To_Unbounded_String("<skymapwindow>/Menu/MoveMap")),
             22 =>
               (To_Unbounded_String("menustats"),
@@ -1327,6 +1330,18 @@ package body Maps.UI is
 
    procedure ShowSkyMap(X: Integer := PlayerShip.SkyX;
       Y: Integer := PlayerShip.SkyY) is
+      ButtonsNames: constant array(Positive range <>) of Unbounded_String :=
+        (To_Unbounded_String("btnmovemapleft"),
+         To_Unbounded_String("btnmovemapright"),
+         To_Unbounded_String("btnmovemapdown"),
+         To_Unbounded_String("btnmapupleft"), To_Unbounded_String("btnmapup"),
+         To_Unbounded_String("btnmapupright"),
+         To_Unbounded_String("btnmapleft"),
+         To_Unbounded_String("btnshowmovemap"),
+         To_Unbounded_String("btnmapright"),
+         To_Unbounded_String("btnmapdownleft"),
+         To_Unbounded_String("btnmapdown"),
+         To_Unbounded_String("btnmapdownright"));
    begin
       CenterX := X;
       CenterY := Y;
@@ -1355,18 +1370,10 @@ package body Maps.UI is
          end if;
          CurrentStory.ShowText := False;
       end if;
-      Hide(Gtk_Widget(Get_Object(Builder, "mapleftrevealer")));
-      Hide(Gtk_Widget(Get_Object(Builder, "maprightrevealer")));
-      Hide(Gtk_Widget(Get_Object(Builder, "mapuprevealer")));
-      Hide(Gtk_Widget(Get_Object(Builder, "mapdownrevealer")));
-      if not GameSettings.ShowMapButtons then
-         Hide(Gtk_Widget(Get_Object(Builder, "mapleftevent")));
-         Hide(Gtk_Widget(Get_Object(Builder, "maprightevent")));
-         Hide(Gtk_Widget(Get_Object(Builder, "mapupevent")));
-         Hide(Gtk_Widget(Get_Object(Builder, "mapdownevent")));
-      end if;
+      for I in ButtonsNames'Range loop
+         Hide(Gtk_Widget(Get_Object(Builder, To_String(ButtonsNames(I)))));
+      end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "menuwait")));
-      Show_All(Gtk_Widget(Get_Object(Builder, "menumovemap")));
       Show_All(Gtk_Widget(Get_Object(Builder, "menuorders")));
       ShowLastMessage(Builder);
    end ShowSkyMap;
@@ -1390,17 +1397,17 @@ package body Maps.UI is
       CurrentTheme: constant ThemeRecord :=
         Themes_List(To_String(GameSettings.InterfaceTheme));
    begin
-      Set_Text
-        (Gtk_Label(Get_Object(Builder, "lblmovemapup")),
+      Set_Label
+        (Gtk_Button(Get_Object(Builder, "btnmovemapup")),
          Encode("" & CurrentTheme.MoveMapUpIcon));
-      Set_Text
-        (Gtk_Label(Get_Object(Builder, "lblmovemapdown")),
+      Set_Label
+        (Gtk_Button(Get_Object(Builder, "btnmovemapdown")),
          Encode("" & CurrentTheme.MoveMapDownIcon));
-      Set_Text
-        (Gtk_Label(Get_Object(Builder, "lblmovemapleft")),
+      Set_Label
+        (Gtk_Button(Get_Object(Builder, "btnmovemapleft")),
          Encode("" & CurrentTheme.MoveMapLeftIcon));
-      Set_Text
-        (Gtk_Label(Get_Object(Builder, "lblmovemapright")),
+      Set_Label
+        (Gtk_Button(Get_Object(Builder, "btnmovemapright")),
          Encode("" & CurrentTheme.MoveMapRightIcon));
    end SetMapMoveButtons;
 
