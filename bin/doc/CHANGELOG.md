@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file.
   trader mk II, huge poleis patrol ship mk II, huge independent patrol ship mk
   II, huge poleis trader mk III, huge independent trader mk III, huge pirates
   trader mk III, huge poleis patrol ship mk III, huge independent patrol ship
-  mk III and huge poleis trader mk IV
+  mk III, huge poleis trader mk IV and huge independent trader mk IV
 - Show README.md file in game about menu
 - Added default icon for unvisited bases to themes
 - Added default icon for player ship to themes
