@@ -41,6 +41,9 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Raised limit of minimal ship speed
 
+### Removed
+- Configuration to show or hide move map buttons
+
 ### Fixed
 - Crash on selling ship modules in shipyard
 - Crash when waiting in place
