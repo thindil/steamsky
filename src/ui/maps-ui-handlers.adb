@@ -31,6 +31,7 @@ with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Accel_Map; use Gtk.Accel_Map;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
+with Gtk.Box; use Gtk.Box;
 with Glib; use Glib;
 with Gdk.Rectangle; use Gdk.Rectangle;
 with Gdk.Device; use Gdk.Device;
@@ -180,6 +181,50 @@ package body Maps.UI.Handlers is
             CenterX := CenterX - (MapWidth / 3);
          end if;
       elsif User_Data = Get_Object(Builder, "btnmapright") then
+         if CenterX + (MapWidth / 3) > 1024 then
+            CenterX := 1024 - (MapWidth / 3);
+         else
+            CenterX := CenterX + (MapWidth / 3);
+         end if;
+      elsif User_Data = Get_Object(Builder, "btnmapupleft") then
+         if CenterY - (MapHeight / 3) < 1 then
+            CenterY := MapHeight / 3;
+         else
+            CenterY := CenterY - (MapHeight / 3);
+         end if;
+         if CenterX - (MapWidth / 3) < 1 then
+            CenterX := MapWidth / 3;
+         else
+            CenterX := CenterX - (MapWidth / 3);
+         end if;
+      elsif User_Data = Get_Object(Builder, "btnmapupright") then
+         if CenterY - (MapHeight / 3) < 1 then
+            CenterY := MapHeight / 3;
+         else
+            CenterY := CenterY - (MapHeight / 3);
+         end if;
+         if CenterX + (MapWidth / 3) > 1024 then
+            CenterX := 1024 - (MapWidth / 3);
+         else
+            CenterX := CenterX + (MapWidth / 3);
+         end if;
+      elsif User_Data = Get_Object(Builder, "btnmapdownleft") then
+         if CenterY + (MapHeight / 3) > 1024 then
+            CenterY := 1024 - (MapHeight / 3);
+         else
+            CenterY := CenterY + (MapHeight / 3);
+         end if;
+         if CenterX - (MapWidth / 3) < 1 then
+            CenterX := MapWidth / 3;
+         else
+            CenterX := CenterX - (MapWidth / 3);
+         end if;
+      elsif User_Data = Get_Object(Builder, "btnmapdownright") then
+         if CenterY + (MapHeight / 3) > 1024 then
+            CenterY := 1024 - (MapHeight / 3);
+         else
+            CenterY := CenterY + (MapHeight / 3);
+         end if;
          if CenterX + (MapWidth / 3) > 1024 then
             CenterX := 1024 - (MapWidth / 3);
          else
@@ -935,7 +980,6 @@ package body Maps.UI.Handlers is
       elsif VisibleChildName = "skymap" then
          PreviousGameState := SkyMap_View;
          Hide(Gtk_Widget(Get_Object(Builder, "menuwait")));
-         Hide(Gtk_Widget(Get_Object(Builder, "menumovemap")));
          Hide(Gtk_Widget(Get_Object(Builder, "menuorders")));
       end if;
       if User_Data = Get_Object(Builder, "menumessages") then
@@ -1344,7 +1388,8 @@ package body Maps.UI.Handlers is
          To_Unbounded_String("<skymapwindow>/btnmapleft"),
          To_Unbounded_String("<skymapwindow>/btnmapright"),
          To_Unbounded_String("<skymapwindow>/btnmapup"),
-         To_Unbounded_String("<skymapwindow>/btnmapdown"));
+         To_Unbounded_String("<skymapwindow>/btnmapdown"),
+         To_Unbounded_String("<skymapwindow>/Menu/MoveMap"));
       Key: Gtk_Accel_Key;
       Found: Boolean;
    begin
@@ -1393,6 +1438,8 @@ package body Maps.UI.Handlers is
                   MoveMap(Get_Object(Builder, "btnmapup"));
                when 12 =>
                   MoveMap(Get_Object(Builder, "btnmapdown"));
+               when 13 =>
+                  Show_All(Gtk_Widget(Get_Object(Builder, "movemapwindow")));
                when others =>
                   null;
             end case;
@@ -1503,18 +1550,48 @@ package body Maps.UI.Handlers is
       return False;
    end MoveMapInfo;
 
-   function ShowMapButton
-     (User_Data: access GObject_Record'Class) return Boolean is
+   procedure MoveMapButtons(User_Data: access GObject_Record'Class) is
+      ButtonsNames: constant array(Positive range <>) of Unbounded_String :=
+        (To_Unbounded_String("btnmovemapleft"),
+         To_Unbounded_String("btnmovemapright"),
+         To_Unbounded_String("btnmapupleft"), To_Unbounded_String("btnmapup"),
+         To_Unbounded_String("btnmapupright"),
+         To_Unbounded_String("btnmapleft"),
+         To_Unbounded_String("btnshowmovemap"),
+         To_Unbounded_String("btnmapright"),
+         To_Unbounded_String("btnmapdownleft"),
+         To_Unbounded_String("btnmapdown"),
+         To_Unbounded_String("btnmapdownright"));
+      MoveMapBox: constant Gtk_Box :=
+        Gtk_Box(Get_Object(Builder, "movemapbox"));
    begin
-      Show_All(Gtk_Widget(User_Data));
-      return False;
-   end ShowMapButton;
-
-   function HideMapButton
-     (User_Data: access GObject_Record'Class) return Boolean is
-   begin
-      Hide(Gtk_Widget(User_Data));
-      return False;
-   end HideMapButton;
+      if User_Data = Get_Object(Builder, "btnmovemapup") then
+         for I in ButtonsNames'Range loop
+            Show_All
+              (Gtk_Widget(Get_Object(Builder, To_String(ButtonsNames(I)))));
+         end loop;
+         Show_All(Gtk_Widget(Get_Object(Builder, "btnmovemapdown")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnmovemapup")));
+         if Get_Halign(MoveMapBox) = Align_Start then
+            Hide(Gtk_Widget(Get_Object(Builder, "btnmovemapleft")));
+         else
+            Hide(Gtk_Widget(Get_Object(Builder, "btnmovemapright")));
+         end if;
+      elsif User_Data = Get_Object(Builder, "btnmovemapleft") then
+         Set_Halign(MoveMapBox, Align_Start);
+         Show_All(Gtk_Widget(Get_Object(Builder, "btnmovemapright")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnmovemapleft")));
+      elsif User_Data = Get_Object(Builder, "btnmovemapright") then
+         Set_Halign(MoveMapBox, Align_End);
+         Show_All(Gtk_Widget(Get_Object(Builder, "btnmovemapleft")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnmovemapright")));
+      elsif User_Data = Get_Object(Builder, "btnmovemapdown") then
+         for I in ButtonsNames'Range loop
+            Hide(Gtk_Widget(Get_Object(Builder, To_String(ButtonsNames(I)))));
+         end loop;
+         Show_All(Gtk_Widget(Get_Object(Builder, "btnmovemapup")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnmovemapdown")));
+      end if;
+   end MoveMapButtons;
 
 end Maps.UI.Handlers;
