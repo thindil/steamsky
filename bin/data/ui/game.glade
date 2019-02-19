@@ -7255,493 +7255,615 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkGrid">
+                          <object class="GtkScrolledWindow">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can_focus">True</property>
+                            <property name="hscrollbar_policy">never</property>
+                            <property name="shadow_type">in</property>
                             <child>
-                              <object class="GtkLabel">
+                              <object class="GtkViewport">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Center map on player ship:</property>
-                                <property name="xalign">0</property>
+                                <child>
+                                  <object class="GtkGrid">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Center map on player ship:</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtcentermap">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Move map to left:</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Move map to right:</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">3</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Move map up:</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">4</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Move map down:</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">5</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtmovemapleft">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtmovemapright">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">3</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtmovemapup">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">4</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtmovemapdown">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">5</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Center map on home base:</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtcentermaphomebase">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Show move map options:</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">21</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtmap">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">21</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Zoom out map:</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">20</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtzoomout">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">20</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Zoom in map:</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">19</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtzoomin">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">19</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Press mouse left button:</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">18</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtclickmouse">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">18</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Move cursor down/right:</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">17</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtmovecursordownright">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">17</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Move cursor down:</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">16</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtmovecursordown">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">16</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Move cursor down/left:</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">15</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtmovecursordownleft">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">15</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Move cursor right:</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">14</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtmovecursorright">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">14</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Move cursors left:</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">13</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtmovecursorleft">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">13</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Move cursor up/right:</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">12</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtmovecursorupright">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">12</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Move cursor up:</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">11</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtmovecursorup">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">11</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Move cursor up/left:</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">10</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtmovecursorupleft">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">10</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Move map up/left:</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">6</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Move map up/right:</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">7</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Move map down/left:</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">8</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Move map down/right:</property>
+                                        <property name="xalign">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">9</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtmovemapupleft">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">6</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtmovemapupright">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">7</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtmovemapdownleft">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">8</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="edtmovemapdownright">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="editable">False</property>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">9</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                </child>
                               </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="edtcentermap">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="editable">False</property>
-                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Move map to left:</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Move map to right:</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">3</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Move map up:</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">4</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Move map down:</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">5</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="edtmovemapleft">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="editable">False</property>
-                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="edtmovemapright">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="editable">False</property>
-                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">3</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="edtmovemapup">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="editable">False</property>
-                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">4</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="edtmovemapdown">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="editable">False</property>
-                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">5</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Move cursor up/left:</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">6</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Move cursor up:</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">7</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Move cursor up/right:</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">8</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Move cursors left:</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">9</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Move cursor right:</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">10</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Move cursor down/left:</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">11</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Move cursor down:</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">12</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Move cursor down/right:</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">13</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="edtmovecursorupleft">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="editable">False</property>
-                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">6</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="edtmovecursorup">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="editable">False</property>
-                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">7</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="edtmovecursorupright">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="editable">False</property>
-                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">8</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="edtmovecursorleft">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="editable">False</property>
-                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">9</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="edtmovecursorright">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="editable">False</property>
-                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">10</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="edtmovecursordownleft">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="editable">False</property>
-                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">11</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="edtmovecursordown">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="editable">False</property>
-                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">12</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="edtmovecursordownright">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="editable">False</property>
-                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">13</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Press mouse left button:</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">14</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="edtclickmouse">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="editable">False</property>
-                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">14</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Zoom in map:</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">15</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Zoom out map:</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">16</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="edtzoomin">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="editable">False</property>
-                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">15</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="edtzoomout">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="editable">False</property>
-                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">16</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Center map on home base:</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="edtcentermaphomebase">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="editable">False</property>
-                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="edtmap">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="editable">False</property>
-                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">17</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Show move map options:</property>
-                                <property name="xalign">0</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">17</property>
-                              </packing>
                             </child>
                           </object>
                           <packing>
@@ -8134,7 +8256,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
+                        <property name="expand">True</property>
                         <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
