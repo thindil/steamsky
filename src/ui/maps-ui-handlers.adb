@@ -1389,7 +1389,11 @@ package body Maps.UI.Handlers is
          To_Unbounded_String("<skymapwindow>/btnmapright"),
          To_Unbounded_String("<skymapwindow>/btnmapup"),
          To_Unbounded_String("<skymapwindow>/btnmapdown"),
-         To_Unbounded_String("<skymapwindow>/Menu/MoveMap"));
+         To_Unbounded_String("<skymapwindow>/Menu/MoveMap"),
+         To_Unbounded_String("<skymapwindow>/btnmapupleft"),
+         To_Unbounded_String("<skymapwindow>/btnmapupright"),
+         To_Unbounded_String("<skymapwindow>/btnmapdownleft"),
+         To_Unbounded_String("<skymapwindow>/btnmapdownright"));
       Key: Gtk_Accel_Key;
       Found: Boolean;
    begin
@@ -1440,6 +1444,14 @@ package body Maps.UI.Handlers is
                   MoveMap(Get_Object(Builder, "btnmapdown"));
                when 13 =>
                   Show_All(Gtk_Widget(Get_Object(Builder, "movemapwindow")));
+               when 14 =>
+                  MoveMap(Get_Object(Builder, "btnmapupleft"));
+               when 15 =>
+                  MoveMap(Get_Object(Builder, "btnmapupright"));
+               when 16 =>
+                  MoveMap(Get_Object(Builder, "btnmapdownleft"));
+               when 17 =>
+                  MoveMap(Get_Object(Builder, "btnmapdownright"));
                when others =>
                   null;
             end case;

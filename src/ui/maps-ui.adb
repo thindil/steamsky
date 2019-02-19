@@ -1159,6 +1159,10 @@ package body Maps.UI is
       Add_Entry("<skymapwindow>/btnmapright", GDK_Right, 1);
       Add_Entry("<skymapwindow>/btnmapup", GDK_Up, 1);
       Add_Entry("<skymapwindow>/btnmapdown", GDK_Down, 1);
+      Add_Entry("<skymapwindow>/btnmapupleft", GDK_KP_Home, 4);
+      Add_Entry("<skymapwindow>/btnmapupright", GDK_KP_Page_Up, 4);
+      Add_Entry("<skymapwindow>/btnmapdownleft", GDK_KP_End, 4);
+      Add_Entry("<skymapwindow>/btnmapdownright", GDK_KP_Page_Down, 4);
       Add_Entry("<skymapwindow>/cursorupleft", GDK_KP_Home, 1);
       Add_Entry("<skymapwindow>/cursorup", GDK_KP_Up, 1);
       Add_Entry("<skymapwindow>/cursorupright", GDK_KP_Page_Up, 1);
