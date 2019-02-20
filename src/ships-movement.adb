@@ -26,6 +26,8 @@ with Utils; use Utils;
 
 package body Ships.Movement is
 
+   type SpeedType is digits 2;
+
    function HaveOrderRequirements return String is
       HaveCockpit, HaveEngine, HavePilot, HaveEngineer: Boolean := False;
    begin
@@ -65,7 +67,6 @@ package body Ships.Movement is
       Message: in out Unbounded_String) return Natural is
       NewX, NewY: Integer;
       TimePassed, FuelNeeded: Integer := 0;
-      type SpeedType is digits 2;
       Speed: SpeedType;
       FuelIndex: Natural;
       function NeedRest(Order: Crew_Orders) return Boolean is
@@ -272,6 +273,14 @@ package body Ships.Movement is
             end if;
          end;
          PlayerShip.Speed := GameSettings.UndockSpeed;
+         declare
+            Speed: constant SpeedType :=
+              (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
+         begin
+            if Speed < 0.5 then
+               return "You can't undock because your ship is overloaded.";
+            end if;
+         end;
          AddMessage
            ("Ship undocked from base " & To_String(SkyBases(BaseIndex).Name),
             OrderMessage);
