@@ -1250,17 +1250,82 @@ Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WAR
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkLabel" id="lblerror">
+              <object class="GtkLabel">
                 <property name="name">normalfont</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Oops, something bad happens and game crashed. Game should save your progress, but better check it. Also, please, remember what you done before crash and report this problem at https://github.com/thindil/steamsky/issues (or if you prefer, on mail thindil@laeran.pl) and attach (if possible) file 'error.log'</property>
+                <property name="label" translatable="yes">Oops, something bad happens and game crashed. Game should save your progress, but better check it. Also, please, remember what you done before crash and report this problem at</property>
                 <property name="wrap">True</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLinkButton">
+                <property name="label" translatable="yes">https://github.com/thindil/steamsky/issues</property>
+                <property name="name">flatbutton</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="halign">center</property>
+                <property name="relief">none</property>
+                <property name="uri">https://github.com/thindil/steamsky/issues</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="name">normalfont</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">or if you prefer, on one of the game community options:</property>
+                <property name="wrap">True</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLinkButton">
+                <property name="label" translatable="yes">https://thindil.github.io/steamsky/community.html</property>
+                <property name="name">flatbutton</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="halign">center</property>
+                <property name="relief">none</property>
+                <property name="uri">https://thindil.github.io/steamsky/community.html</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lblerror">
+                <property name="name">normalfont</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">and attach (if possible) file 'error.log'</property>
+                <property name="wrap">True</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
               </packing>
             </child>
             <child>
@@ -1297,7 +1362,7 @@ Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WAR
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">5</property>
               </packing>
             </child>
           </object>
