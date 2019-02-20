@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - Added default icon for player ship destination on map to themes
 - Added default icon for story event location on map to themes
 - More keyboard shortcuts to move map and option to set them
+- Don't allow to undock from bases if player ship is overloaded
 
 ### Changed
 - Made starting ships for Undead player a bit stronger (better battering ram
