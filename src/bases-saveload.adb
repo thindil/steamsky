@@ -484,7 +484,8 @@ package body Bases.SaveLoad is
                   MType :=
                     Missions_Types'Val
                       (Integer'Value(Get_Attribute(ChildNode, "type")));
-                  if MType = Deliver or MType = Passenger then
+                  if MType = Deliver or MType = Passenger or
+                    MType = Destroy then
                      Index :=
                        To_Unbounded_String(Get_Attribute(ChildNode, "target"));
                   else
