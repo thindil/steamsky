@@ -79,6 +79,7 @@ with GameOptions; use GameOptions;
 with Ships.Crew; use Ships.Crew;
 with Ships.UI; use Ships.UI;
 with Ships.Cargo.UI; use Ships.Cargo.UI;
+with Ships.Movement; use Ships.Movement;
 with Trades.UI; use Trades.UI;
 with Factions; use Factions;
 with Stories; use Stories;
@@ -141,7 +142,8 @@ package body Maps.UI is
          LabelsNames: constant array(Positive range <>) of Unbounded_String :=
            (To_Unbounded_String("lblnofuel"),
             To_Unbounded_String("lblnodrink"),
-            To_Unbounded_String("lblnofood"));
+            To_Unbounded_String("lblnofood"),
+            To_Unbounded_String("lbloverloaded"));
          CheckLabel: Gtk_Widget;
       begin
          for I in LabelsNames'Range loop
@@ -229,6 +231,25 @@ package body Maps.UI is
             " left.",
             True);
       end if;
+      declare
+         type SpeedType is digits 2;
+         Speed: SpeedType;
+      begin
+         if PlayerShip.Speed /= DOCKED then
+            Speed := (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
+         else
+            Speed := (SpeedType(RealSpeed(PlayerShip, True)) / 1000.0);
+         end if;
+         if Speed < 0.5 then
+            UpdateLabel
+              ("lblnofood",
+               Encode
+                 ("<span foreground=""red"">" & Wide_Character'Val(16#f55b#) &
+                  "</span>"),
+               "You can't fly with your ship, because it is overloaded.",
+               True);
+         end if;
+      end;
       for Module of PlayerShip.Modules loop
          case Modules_List(Module.ProtoIndex).MType is
             when GUN | HARPOON_GUN =>
