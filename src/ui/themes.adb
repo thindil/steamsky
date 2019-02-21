@@ -149,46 +149,53 @@ package body Themes is
       RawData, FieldName, Value: Unbounded_String;
       EqualIndex: Natural;
       TempRecord: ThemeRecord;
+      procedure SetDefaultValues is
+      begin
+         TempRecord :=
+           (Name => Null_Unbounded_String, Filename => Null_Unbounded_String,
+            EnemyShipIcon => Wide_Character'Val(16#f51c#),
+            AttackOnBaseIcon => Wide_Character'Val(16#f543#),
+            DiseaseIcon => Wide_Character'Val(16#f5a6#),
+            DoublePriceIcon => Wide_Character'Val(16#f0d6#),
+            FullDocksIcon => Wide_Character'Val(16#f057#),
+            EnemyPatrolIcon => Wide_Character'Val(16#f51b#),
+            TraderIcon => Wide_Character'Val(16#f197#),
+            FriendlyShipIcon => Wide_Character'Val(16#f197#),
+            DeliverIcon => Wide_Character'Val(16#f53b#),
+            DestroyIcon => Wide_Character'Val(16#fc6a#),
+            PatrolIcon => Wide_Character'Val(16#f540#),
+            ExploreIcon => Wide_Character'Val(16#f707#),
+            PassengerIcon => Wide_Character'Val(16#f183#),
+            PilotIcon => Wide_Character'Val(16#f655#),
+            EngineerIcon => Wide_Character'Val(16#f013#),
+            GunnerIcon => Wide_Character'Val(16#f4fb#),
+            CrewTraderIcon => Wide_Character'Val(16#f651#),
+            RepairIcon => Wide_Character'Val(16#f54a#),
+            UpgradeIcon => Wide_Character'Val(16#f6e3#),
+            CleanIcon => Wide_Character'Val(16#f458#),
+            ManufactureIcon => Wide_Character'Val(16#f0e3#),
+            MoveMapUpIcon => Wide_Character'Val(16#f106#),
+            MoveMapDownIcon => Wide_Character'Val(16#f107#),
+            MoveMapLeftIcon => Wide_Character'Val(16#f104#),
+            MoveMapRightIcon => Wide_Character'Val(16#f105#),
+            NoFuelIcon => Wide_Character'Val(16#f2ca#),
+            NoFoodIcon => Wide_Character'Val(16#f787#),
+            NoDrinksIcon => Wide_Character'Val(16#f72f#),
+            NotVisitedBaseIcon => Wide_Character'Val(16#fc06#),
+            PlayerShipIcon => Wide_Character'Val(16#f135#),
+            EmptyMapIcon => Wide_Character'Val(16#f0c8#),
+            TargetIcon => Wide_Character'Val(16#f05b#),
+            StoryIcon => Wide_Character'Val(16#f059#),
+            OverloadedIcon => Wide_Character'Val(16#f55b#));
+      end SetDefaultValues;
    begin
-      Themes_Container.Include
-        (Themes_List, "default",
-         (Name => To_Unbounded_String("Default theme"),
-          Filename =>
-            DataDirectory &
-            To_Unbounded_String("ui" & Dir_Separator & "steamsky.css"),
-          EnemyShipIcon => Wide_Character'Val(16#f51c#),
-          AttackOnBaseIcon => Wide_Character'Val(16#f543#),
-          DiseaseIcon => Wide_Character'Val(16#f5a6#),
-          DoublePriceIcon => Wide_Character'Val(16#f0d6#),
-          FullDocksIcon => Wide_Character'Val(16#f057#),
-          EnemyPatrolIcon => Wide_Character'Val(16#f51b#),
-          TraderIcon => Wide_Character'Val(16#f197#),
-          FriendlyShipIcon => Wide_Character'Val(16#f197#),
-          DeliverIcon => Wide_Character'Val(16#f53b#),
-          DestroyIcon => Wide_Character'Val(16#fc6a#),
-          PatrolIcon => Wide_Character'Val(16#f540#),
-          ExploreIcon => Wide_Character'Val(16#f707#),
-          PassengerIcon => Wide_Character'Val(16#f183#),
-          PilotIcon => Wide_Character'Val(16#f655#),
-          EngineerIcon => Wide_Character'Val(16#f013#),
-          GunnerIcon => Wide_Character'Val(16#f4fb#),
-          CrewTraderIcon => Wide_Character'Val(16#f651#),
-          RepairIcon => Wide_Character'Val(16#f54a#),
-          UpgradeIcon => Wide_Character'Val(16#f6e3#),
-          CleanIcon => Wide_Character'Val(16#f458#),
-          ManufactureIcon => Wide_Character'Val(16#f0e3#),
-          MoveMapUpIcon => Wide_Character'Val(16#f106#),
-          MoveMapDownIcon => Wide_Character'Val(16#f107#),
-          MoveMapLeftIcon => Wide_Character'Val(16#f104#),
-          MoveMapRightIcon => Wide_Character'Val(16#f105#),
-          NoFuelIcon => Wide_Character'Val(16#f2ca#),
-          NoFoodIcon => Wide_Character'Val(16#f787#),
-          NoDrinksIcon => Wide_Character'Val(16#f72f#),
-          NotVisitedBaseIcon => Wide_Character'Val(16#fc06#),
-          PlayerShipIcon => Wide_Character'Val(16#f135#),
-          EmptyMapIcon => Wide_Character'Val(16#f0c8#),
-          TargetIcon => Wide_Character'Val(16#f05b#),
-          StoryIcon => Wide_Character'Val(16#f059#)));
+      SetDefaultValues;
+      TempRecord.Name := To_Unbounded_String("Default theme");
+      TempRecord.FileName :=
+        DataDirectory &
+        To_Unbounded_String("ui" & Dir_Separator & "steamsky.css");
+      Themes_Container.Include(Themes_List, "default", TempRecord);
+      SetDefaultValues;
       Start_Search
         (Directories, To_String(ThemesDirectory), "",
          (Directory => True, others => False));
@@ -356,48 +363,18 @@ package body Themes is
                         TempRecord.StoryIcon :=
                           Wide_Character'Val
                             (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName =
+                       To_Unbounded_String("OverloadedIcon") then
+                        TempRecord.OverloadedIcon :=
+                          Wide_Character'Val
+                            (Natural'Value("16#" & To_String(Value) & "#"));
                      end if;
                   end if;
                end loop;
                Close(ConfigFile);
                Themes_Container.Include
                  (Themes_List, Simple_Name(FoundDirectory), TempRecord);
-               TempRecord :=
-                 (Name => Null_Unbounded_String,
-                  Filename => Null_Unbounded_String,
-                  EnemyShipIcon => Wide_Character'Val(16#f51c#),
-                  AttackOnBaseIcon => Wide_Character'Val(16#f543#),
-                  DiseaseIcon => Wide_Character'Val(16#f5a6#),
-                  DoublePriceIcon => Wide_Character'Val(16#f0d6#),
-                  FullDocksIcon => Wide_Character'Val(16#f057#),
-                  EnemyPatrolIcon => Wide_Character'Val(16#f51b#),
-                  TraderIcon => Wide_Character'Val(16#f197#),
-                  FriendlyShipIcon => Wide_Character'Val(16#f197#),
-                  DeliverIcon => Wide_Character'Val(16#f53b#),
-                  DestroyIcon => Wide_Character'Val(16#fc6a#),
-                  PatrolIcon => Wide_Character'Val(16#f540#),
-                  ExploreIcon => Wide_Character'Val(16#f707#),
-                  PassengerIcon => Wide_Character'Val(16#f183#),
-                  PilotIcon => Wide_Character'Val(16#f655#),
-                  EngineerIcon => Wide_Character'Val(16#f013#),
-                  GunnerIcon => Wide_Character'Val(16#f4fb#),
-                  CrewTraderIcon => Wide_Character'Val(16#f651#),
-                  RepairIcon => Wide_Character'Val(16#f54a#),
-                  UpgradeIcon => Wide_Character'Val(16#f6e3#),
-                  CleanIcon => Wide_Character'Val(16#f458#),
-                  ManufactureIcon => Wide_Character'Val(16#f0e3#),
-                  MoveMapUpIcon => Wide_Character'Val(16#f106#),
-                  MoveMapDownIcon => Wide_Character'Val(16#f107#),
-                  MoveMapLeftIcon => Wide_Character'Val(16#f104#),
-                  MoveMapRightIcon => Wide_Character'Val(16#f105#),
-                  NoFuelIcon => Wide_Character'Val(16#f2ca#),
-                  NoFoodIcon => Wide_Character'Val(16#f787#),
-                  NoDrinksIcon => Wide_Character'Val(16#f72f#),
-                  NotVisitedBaseIcon => Wide_Character'Val(16#fc06#),
-                  PlayerShipIcon => Wide_Character'Val(16#f135#),
-                  EmptyMapIcon => Wide_Character'Val(16#f0c8#),
-                  TargetIcon => Wide_Character'Val(16#f05b#),
-                  StoryIcon => Wide_Character'Val(16#f059#));
+               SetDefaultValues;
             end loop;
             End_Search(Files);
          end if;

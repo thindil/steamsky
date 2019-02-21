@@ -244,7 +244,7 @@ package body Maps.UI is
             UpdateLabel
               ("lblnofood",
                Encode
-                 ("<span foreground=""red"">" & Wide_Character'Val(16#f55b#) &
+                 ("<span foreground=""red"">" & CurrentTheme.OverloadedIcon &
                   "</span>"),
                "You can't fly with your ship, because it is overloaded.",
                True);

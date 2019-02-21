@@ -61,6 +61,7 @@ package Themes is
       EmptyMapIcon: Wide_Character; -- Icon used for empty map fields
       TargetIcon: Wide_Character; -- Icon used for player selected target on map
       StoryIcon: Wide_Character; -- Icon used for show story event location on map
+      OverloadedIcon: Wide_Character; -- Icon used for show warning about overloaded ship
    end record;
    package Themes_Container is new Ada.Containers.Indefinite_Hashed_Maps
      (String, ThemeRecord, Ada.Strings.Hash, "=");
