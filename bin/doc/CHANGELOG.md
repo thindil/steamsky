@@ -44,6 +44,7 @@ All notable changes to this project will be documented in this file.
 - Reduced fuel usaga during waiting in place outside bases
 - Updated interface
 - Raised limit of minimal ship speed
+- Updated help
 
 ### Removed
 - Configuration to show or hide move map buttons
