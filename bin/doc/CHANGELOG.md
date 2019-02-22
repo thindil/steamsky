@@ -64,6 +64,7 @@ All notable changes to this project will be documented in this file.
 - Assigning crew member to harpoon gun
 - Generating ship names
 - Possible crash when showing the game map
+- Crash when undocking speed is set to full stop
 
 ## [3.3 - 2019-01-27]
 
