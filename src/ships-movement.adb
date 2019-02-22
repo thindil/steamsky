@@ -359,6 +359,9 @@ package body Ships.Movement is
       if Ship = PlayerShip and
         (Ship.Speed = DOCKED or Ship.Speed = FULL_STOP) and InfoOnly then
          ShipSetSpeed := GameSettings.UndockSpeed;
+         if ShipSetSpeed = FULL_STOP then
+            ShipSetSpeed := QUARTER_SPEED;
+         end if;
       else
          ShipSetSpeed := Ship.Speed;
       end if;
