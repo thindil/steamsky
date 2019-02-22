@@ -862,6 +862,8 @@ story.
   current player ship destination on map. Optional.
 - Key `StoryIcon`: Hexadecimal number on UTF-8 character used to show
   current story even location on map. Optional.
+- Key `OverloadedIcon`: Hexadecimal number on UTF-8 character used to show
+  warning about overloaded ship. Optional.
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
