@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file.
 - Added default icon for showing ship overload warning to themes
 - More keyboard shortcuts to move map and option to set them
 - Don't allow to undock from bases if player ship is overloaded
+- Keyboard shortcuts to change player ship speed
 
 ### Changed
 - Made starting ships for Undead player a bit stronger (better battering ram
