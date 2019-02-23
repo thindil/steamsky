@@ -1394,7 +1394,11 @@ package body Maps.UI.Handlers is
          To_Unbounded_String("<skymapwindow>/btnmapupleft"),
          To_Unbounded_String("<skymapwindow>/btnmapupright"),
          To_Unbounded_String("<skymapwindow>/btnmapdownleft"),
-         To_Unbounded_String("<skymapwindow>/btnmapdownright"));
+         To_Unbounded_String("<skymapwindow>/btnmapdownright"),
+         To_Unbounded_String("<skymapwindow>/fullstop"),
+         To_Unbounded_String("<skymapwindow>/quarterspeed"),
+         To_Unbounded_String("<skymapwindow>/halfspeed"),
+         To_Unbounded_String("<skymapwindow>/fullspeed"));
       Key: Gtk_Accel_Key;
       Found: Boolean;
    begin
@@ -1453,6 +1457,18 @@ package body Maps.UI.Handlers is
                   MoveMap(Get_Object(Builder, "btnmapdownleft"));
                when 17 =>
                   MoveMap(Get_Object(Builder, "btnmapdownright"));
+               when 18 =>
+                  Set_Active
+                    (Gtk_Combo_Box(Get_Object(Builder, "cmbspeed")), 0);
+               when 19 =>
+                  Set_Active
+                    (Gtk_Combo_Box(Get_Object(Builder, "cmbspeed")), 1);
+               when 20 =>
+                  Set_Active
+                    (Gtk_Combo_Box(Get_Object(Builder, "cmbspeed")), 2);
+               when 21 =>
+                  Set_Active
+                    (Gtk_Combo_Box(Get_Object(Builder, "cmbspeed")), 3);
                when others =>
                   null;
             end case;
