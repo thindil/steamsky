@@ -279,6 +279,7 @@ package body Maps.UI.Handlers is
       PlayerShip.Speed :=
         ShipSpeed'Val
           (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbspeed"))) + 1);
+      UpdateHeader;
    end ChangeSpeed;
 
    procedure MoveShip(User_Data: access GObject_Record'Class) is
