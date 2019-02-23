@@ -195,7 +195,19 @@ package body GameOptions is
          To_Unbounded_String("edtmovemapdownleft")),
       49 =>
         (To_Unbounded_String("<skymapwindow>/btnmapdownright"),
-         To_Unbounded_String("edtmovemapdownright")));
+         To_Unbounded_String("edtmovemapdownright")),
+      50 =>
+        (To_Unbounded_String("<skymapwindow>/fullstop"),
+         To_Unbounded_String("edtfullstop")),
+      51 =>
+        (To_Unbounded_String("<skymapwindow>/quarterspeed"),
+         To_Unbounded_String("edtquarterspeed")),
+      52 =>
+        (To_Unbounded_String("<skymapwindow>/halfspeed"),
+         To_Unbounded_String("edthalfspeed")),
+      53 =>
+        (To_Unbounded_String("<skymapwindow>/fullspeed"),
+         To_Unbounded_String("edtfullspeed")));
    Setting: Boolean := False;
 
    procedure CloseOptions(Object: access Gtkada_Builder_Record'Class) is
