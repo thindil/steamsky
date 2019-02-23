@@ -1197,6 +1197,10 @@ package body Maps.UI is
       Add_Entry("<skymapwindow>/zoomin", GDK_KP_Subtract, 0);
       Add_Entry("<skymapwindow>/zoomout", GDK_KP_Add, 0);
       Add_Entry("<movemapwindow>/btncenterhomebase", GDK_H, 1);
+      Add_Entry("<skymapwindow>/fullstop", GDK_1, 4);
+      Add_Entry("<skymapwindow>/quarterspeed", GDK_2, 4);
+      Add_Entry("<skymapwindow>/halfspeed", GDK_3, 4);
+      Add_Entry("<skymapwindow>/fullspeed", GDK_4, 4);
       if Exists(To_String(SaveDirectory) & "keys.cfg") then
          Load(To_String(SaveDirectory) & "keys.cfg");
       end if;
