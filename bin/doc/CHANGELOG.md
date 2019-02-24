@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.4 - 2019-02-24]
 
 ### Added
 - New ships: armored independent patrol ship mk II, armored poleis patrol
