@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -100,8 +100,8 @@ begin
                return;
             end if;
          elsif Argument(I)(1 .. 8) = "--themes" then
-            ModsDirectory :=
-              To_Unbounded_String(Argument(I)(11 .. (Argument(I)'Last)));
+            ThemesDirectory :=
+              To_Unbounded_String(Argument(I)(13 .. (Argument(I)'Last)));
             if not UpdatePath(ModsDirectory, "Themes") then
                return;
             end if;
