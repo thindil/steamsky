@@ -14,7 +14,7 @@ There are currently 2 versions of the game:
 - 3.x: "development" version of game, future version 4.0. This is where
   game feature updates will happen. Due to new features, save compatibility
   will typically break between releases. Use this version at your own risk.
-  Source code for this version is in the *master* branch.
+  Source code for this version is in the *master* branch. **This** version.
 
 ## Build game from sources
 
@@ -50,9 +50,15 @@ this file is) to compile:
 ## Running Steam Sky
 
 ### Linux
-If you use downloaded binaries, you don't need any additional libraries. Just
-run `./steamsky.sh` script or start the game by menu entry. Game will not
-works if you try to start it by binary file `steamsky`.
+If you use downloaded AppImage version, you don't need any additional
+libraries. Just run it as any AppImage file. More informations about AppImage
+files usage, you can find at:
+
+https://docs.appimage.org/user-guide/run-appimages.html
+
+When you trying to run build by yourself version of the game, use script
+`steamsky.sh`. Game will not works if you try to start it by binary file
+`steamsky` from `bin` directory.
 
 ### Windows
 If you use downloaded binaries just clicking on `steamsky.exe` in `bin`
@@ -83,8 +89,9 @@ Of course, you can set all parameters together: `./steamsky.sh --datadir=somedir
 --savedir=otherdir/ --docdir=anotherdir/`
 
 Paths to directories can be absolute or relative where file `steamsky` (Linux)
-or `steamsky.exe` (Windows) is. For Windows, use `steamsky.exe` instead
-`./steamsky.sh`.
+or `steamsky.exe` (Windows) is. For Windows, use `steamsky.exe` instead of
+`./steamsky.sh`. For Linux AppImage, use `steamsky-dev-x86_64.AppImage`
+instead of `./steamsky.sh`.
 
 ## Modding Support
 For detailed informations about modifying various game elements or debugging
@@ -128,6 +135,8 @@ https://nerdfonts.com/
 
 More documentation about game (changelog, license) you can find in
 [doc](bin/doc) directory.
+
+----
 
 That's all for now, as usual, probably I forgot about something important ;)
 
