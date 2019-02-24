@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Possible crash when showing the game map
 - Crash when undocking speed is set to full stop
+- Setting custom location for themes directory
 
 ## [3.0.5] - 2019-02-10
 
