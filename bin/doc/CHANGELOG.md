@@ -27,7 +27,8 @@ All notable changes to this project will be documented in this file.
   ship mk IV, huge poleis trader mk V, huge independent trader mk V, huge
   pirates trader mk V, huge poleis patrol ship mk V, huge independent patrol
   ship mk V, huge poleis trader mk VI, huge independent trader mk VI, huge
-  pirates trader mk VI and huge poleis patrol ship mk VI
+  pirates trader mk VI, huge poleis patrol ship mk VI and huge independent
+  patrol ship mk VI
 - Show README.md file in game about menu
 - Added default icon for unvisited bases to themes
 - Added default icon for player ship to themes
