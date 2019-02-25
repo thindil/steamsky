@@ -12,15 +12,15 @@ All notable changes to this project will be documented in this file.
 - New ships: armored independent patrol ship mk II, armored poleis patrol
   ship mk III, armored independent patrol ship mk III, armored poleis patrol
   ship mk IV, armored independent patrol ship mk IV, advanced poleis patrol
-  ship mk II, advanced indepedent patrol ship mk II, advanced poleis patrol
+  ship mk II, advanced independent patrol ship mk II, advanced poleis patrol
   ship mk III, advanced independent patrol ship mk III, advanced poleis patrol
   ship mk IV, advanced independent patrol ship mk IV, large poleis trader mk
   II, large independent trader mk II, large pirates trader mk II, large poleis
   patrol ship mk II, large independent patrol ship mk II, large poleis trader
-  mk III, large indepedent trader mk III, large pirates trader ship mk III,
+  mk III, large independent trader mk III, large pirates trader ship mk III,
   large poleis patrol ship mk III, large independent patrol ship mk III, large
   poleis trader mk IV, large independent trader mk IV, large pirates trader mk
-  IV, large poleis patrol ship mk IV, large indepdendent patrol ship mk IV,
+  IV, large poleis patrol ship mk IV, large independent patrol ship mk IV,
   large poleis trader mk V, large independent trader mk V, large pirates
   trader mk V, large poleis patrol ship mk V, large independent patrol ship
   mk V, huge poleis trader mk II, huge independent trader mk II, huge pirates
@@ -51,7 +51,7 @@ All notable changes to this project will be documented in this file.
 - Default font for map
 - Updated README.md
 - Updated MODDING.md
-- Reduced fuel usaga during waiting in place outside bases
+- Reduced fuel usage during waiting in place outside bases
 - Updated interface
 - Raised limit of minimal ship speed
 - Updated help
@@ -64,7 +64,7 @@ All notable changes to this project will be documented in this file.
 - Crash when waiting in place
 - Modules in ships: poleis trader mk IV, pirates trader mk IV, independent
   trader mk IV, poleis patrol ship mk IV and independent patrol ship mk IV
-- Crash when checking cleanlinees of cabins
+- Crash when checking cleanliness of cabins
 - Crash on cleaning ship
 - Crash on crew member back to work after rest
 - Checking did player ship have enabled engines during changing ship speed
