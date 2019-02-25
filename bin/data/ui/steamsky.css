@@ -13,7 +13,7 @@
 }
 
 /* General setting for all game windows */
-GtkWindow {
+GtkWindow, #overlay {
    border: 1px solid rgb(125,120,0);
    background-color:#1a130c;
 }

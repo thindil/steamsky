@@ -1104,6 +1104,9 @@ package body Maps.UI is
         (Gtk_Overlay(Get_Object(Builder, "mapoverlay")),
          Gtk_Widget(Get_Object(Builder, "movemapbox")));
       Add_Overlay
+        (Gtk_Overlay(Get_Object(Builder, "mapoverlay")),
+         Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
+      Add_Overlay
         (Gtk_Overlay(Get_Object(Builder, "gameoverlay")),
          Gtk_Widget(Get_Object(Builder, "inforevealer")));
       Register_Handler(Builder, "Quit_Game", QuitGame'Access);
@@ -1296,7 +1299,7 @@ package body Maps.UI is
               (To_Unbounded_String("menustory"),
                To_Unbounded_String("<skymapwindow>/Menu/Stories")),
             29 =>
-              (To_Unbounded_String("btncenter"),
+              (To_Unbounded_String("btncenteronship"),
                To_Unbounded_String("<movemapwindow>/btncenter")),
             30 =>
               (To_Unbounded_String("btncenterhomebase"),
@@ -1309,13 +1312,6 @@ package body Maps.UI is
                To_String(AccelsArray(I).AccelName), Accelerators);
          end loop;
       end;
-      Accelerators := Gtk_Accel_Group(Get_Object(Builder, "movemapaccels"));
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btncenter")),
-         "<movemapwindow>/btncenter", Accelerators);
-      Set_Accel_Path
-        (Gtk_Widget(Get_Object(Builder, "btncenterhomebase")),
-         "<movemapwindow>/btncenterhomebase", Accelerators);
       declare
          StackNames: constant array(Positive range <>) of Unbounded_String :=
            (To_Unbounded_String("gamestack"),
@@ -1381,6 +1377,7 @@ package body Maps.UI is
       UpdateMoveButtons;
       Hide(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
       Hide(Gtk_Widget(Get_Object(Builder, "btnclose")));
+      Hide(Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
       Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));
