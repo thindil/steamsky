@@ -1448,7 +1448,13 @@ package body Maps.UI.Handlers is
                when 12 =>
                   MoveMap(Get_Object(Builder, "btnmapdown"));
                when 13 =>
-                  Show_All(Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
+                  if not Get_Visible
+                      (Gtk_Widget(Get_Object(Builder, "movemovemapbox"))) then
+                     Show_All
+                       (Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
+                  else
+                     Hide(Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
+                  end if;
                when 14 =>
                   MoveMap(Get_Object(Builder, "btnmapupleft"));
                when 15 =>

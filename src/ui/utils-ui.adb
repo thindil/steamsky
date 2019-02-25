@@ -58,7 +58,11 @@ package body Utils.UI is
 
    procedure ShowWindow(User_Data: access GObject_Record'Class) is
    begin
-      Show_All(Gtk_Widget(User_Data));
+      if not Get_Visible(Gtk_Widget(User_Data)) then
+         Show_All(Gtk_Widget(User_Data));
+      else
+         Hide(Gtk_Widget(User_Data));
+      end if;
    end ShowWindow;
 
    function ShowConfirmDialog(Message: String;
