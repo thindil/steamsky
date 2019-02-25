@@ -93,7 +93,7 @@ package body Maps.UI.Handlers is
 
    procedure HideMapInfoWindow(User_Data: access GObject_Record'Class) is
    begin
-      Hide(Gtk_Window(User_Data));
+      Hide(Gtk_Widget(User_Data));
       if User_Data = Get_Object(Builder, "orderswindow") then
          UpdateMapInfo;
       end if;
@@ -236,7 +236,7 @@ package body Maps.UI.Handlers is
       end if;
       Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmap")), "");
       DrawMap;
-      Hide(Gtk_Widget(Get_Object(Builder, "movemapwindow")));
+      Hide(Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
    end MoveMap;
 
    procedure BtnDockClicked(Object: access Gtkada_Builder_Record'Class) is
@@ -1448,7 +1448,7 @@ package body Maps.UI.Handlers is
                when 12 =>
                   MoveMap(Get_Object(Builder, "btnmapdown"));
                when 13 =>
-                  Show_All(Gtk_Widget(Get_Object(Builder, "movemapwindow")));
+                  Show_All(Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
                when 14 =>
                   MoveMap(Get_Object(Builder, "btnmapupleft"));
                when 15 =>
