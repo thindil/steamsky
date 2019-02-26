@@ -43,10 +43,6 @@ package Utils.UI is
    function QuitGame
      (User_Data: access GObject_Record'Class)
      return Boolean; -- Save and quit from game
-   procedure HideLastMessage
-     (Object: access Gtkada_Builder_Record'Class); -- Hide last message window
-   procedure ShowLastMessage
-     (Object: access Gtkada_Builder_Record'Class); -- Show last message window
    function CloseWindow(Self: access Gtk_Widget_Record'Class;
       Event: Gdk_Event_Key) return Boolean; -- Close window on press Escape key
    procedure CloseMessages

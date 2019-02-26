@@ -309,7 +309,6 @@ package body Crew.UI is
       RefreshCrewInfo;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "crew");
-      ShowLastMessage(Builder);
       SetActiveMember;
       ShowOrdersForAll;
    end ShowCrewUI;
