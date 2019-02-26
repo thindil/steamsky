@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Typos in changelog
+- Default keyboard shortcut for show more move map options
 
 ## [3.4 - 2019-02-24]
 
