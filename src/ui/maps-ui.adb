@@ -804,7 +804,6 @@ package body Maps.UI is
             end if;
          end loop;
       end if;
-      ShowLastMessage(Builder);
    end UpdateMessages;
 
    procedure HideButtons(Widget: not null access Gtk_Widget_Record'Class) is
@@ -1112,12 +1111,8 @@ package body Maps.UI is
       Add_Overlay
         (Gtk_Overlay(Get_Object(Builder, "mapoverlay")),
          Gtk_Widget(Get_Object(Builder, "btnboxwait")));
-      Add_Overlay
-        (Gtk_Overlay(Get_Object(Builder, "gameoverlay")),
-         Gtk_Widget(Get_Object(Builder, "inforevealer")));
       Register_Handler(Builder, "Quit_Game", QuitGame'Access);
       Register_Handler(Builder, "Quit_Game_Menu", QuitGameMenu'Access);
-      Register_Handler(Builder, "Hide_Last_Message", HideLastMessage'Access);
       Register_Handler(Builder, "Get_New_Size", GetMapSize'Access);
       Register_Handler(Builder, "Hide_Map_Info", HideMapInfoWindow'Access);
       Register_Handler(Builder, "Show_Window", ShowWindow'Access);
@@ -1381,7 +1376,7 @@ package body Maps.UI is
       Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmap")), "X" & LF & "X");
       Show_All(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
       UpdateMoveButtons;
-      Hide(Gtk_Widget(Get_Object(Builder, "infolastmessage")));
+      UpdateHeader;
       Hide(Gtk_Widget(Get_Object(Builder, "btnclose")));
       Hide(Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
       Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
@@ -1409,7 +1404,6 @@ package body Maps.UI is
       end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "menuwait")));
       Show_All(Gtk_Widget(Get_Object(Builder, "menuorders")));
-      ShowLastMessage(Builder);
    end ShowSkyMap;
 
    procedure FinishStory is

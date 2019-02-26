@@ -201,7 +201,6 @@ package body Stories.UI is
       Set_Active(StoriesComboBox, Gint(FinishedStories.Length - 1));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "stories");
-      ShowLastMessage(Builder);
    end ShowStoriesUI;
 
 end Stories.UI;

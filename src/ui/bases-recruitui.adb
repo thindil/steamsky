@@ -33,7 +33,6 @@ with Ships; use Ships;
 with Ships.Crew; use Ships.Crew;
 with Items; use Items;
 with Bases.Trade; use Bases.Trade;
-with Utils.UI; use Utils.UI;
 with Factions; use Factions;
 with Maps.UI; use Maps.UI;
 
@@ -215,7 +214,6 @@ package body Bases.RecruitUI is
          Set_Cursor
            (Gtk_Tree_View(Get_Object(Object, "treerecruits")),
             Gtk_Tree_Path_New_From_String("0"), null, False);
-         ShowLastMessage(Object);
       else
          ShowSkyMap;
          Set_Visible_Child_Name
@@ -334,7 +332,6 @@ package body Bases.RecruitUI is
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treerecruits")),
          Gtk_Tree_Path_New_From_String("0"), null, False);
-      ShowLastMessage(Builder);
    end ShowRecruitUI;
 
 end Bases.RecruitUI;
