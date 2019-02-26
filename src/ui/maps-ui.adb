@@ -1176,7 +1176,7 @@ package body Maps.UI is
       Add_Entry("<skymapwindow>/Menu/BasesInfo", GDK_B, 0);
       Add_Entry("<skymapwindow>/Menu/EventsInfo", GDK_N, 0);
       Add_Entry("<skymapwindow>/Menu/MissionsInfo", GDK_I, 0);
-      Add_Entry("<skymapwindow>/Menu/MoveMap", GDK_V, 0);
+      Add_Entry("<skymapwindow>/Menu/MoveMap", GDK_LC_V, 0);
       Add_Entry("<skymapwindow>/Menu/GameStats", GDK_G, 0);
       Add_Entry("<skymapwindow>/Menu/Help", GDK_F1, 0);
       Add_Entry("<skymapwindow>/Menu/GameOptions", GDK_P, 0);
