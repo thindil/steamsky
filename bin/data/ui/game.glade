@@ -194,6 +194,314 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       </object>
     </child>
   </object>
+  <object class="GtkButtonBox" id="btnboxorders">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="halign">center</property>
+    <property name="valign">center</property>
+    <property name="orientation">vertical</property>
+    <property name="layout_style">center</property>
+    <child>
+      <object class="GtkButton" id="btnstory">
+        <property name="label" translatable="yes">Story</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Execute_Order" object="btnstory" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btnfinishmission">
+        <property name="label" translatable="yes">Complete mission</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Complete_Mission" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btnattack">
+        <property name="label" translatable="yes">_Attack</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Attack_Order" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btnfreemedicines">
+        <property name="label" translatable="yes">_Deliver medicines for free</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Deliver_Medicines" object="btnfreemedicines" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btnpricedmedicines">
+        <property name="label" translatable="yes">Deliver _medicines for price</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Deliver_Medicines" object="btnpricedmedicines" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">4</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btndock">
+        <property name="label" translatable="yes">_Undock</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Dock_Ship" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">5</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btntrade">
+        <property name="label" translatable="yes">_Trade</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Show_Info" object="btntrade" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">6</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btnschool">
+        <property name="label" translatable="yes">_School</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Show_Info" object="btnschool" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">7</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btnrecruit">
+        <property name="label" translatable="yes">_Recruit</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Show_Info" object="btnrecruit" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">8</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btnaskevents">
+        <property name="label" translatable="yes">Ask for _events</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Execute_Order" object="btnaskevents" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">9</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btnaskbases">
+        <property name="label" translatable="yes">Ask for _bases</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Execute_Order" object="btnaskbases" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">10</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btnheal">
+        <property name="label" translatable="yes">Heal _wounded</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Show_Info" object="btnheal" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">11</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btnrepair">
+        <property name="label" translatable="yes">Re_pair ship</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Show_Info" object="btnrepair" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">12</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btnshipyard">
+        <property name="label" translatable="yes">Sh_ipyard</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Show_Info" object="btnshipyard" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">13</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btnrecipes">
+        <property name="label" translatable="yes">Bu_y recipes</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Show_Info" object="btnrecipes" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">14</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btnmissions">
+        <property name="label" translatable="yes">_Missions</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Show_Missions" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">15</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btncurrentmission">
+        <property name="label" translatable="yes">_Patrol area</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Start_Mission" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">16</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btnloot">
+        <property name="label" translatable="yes">_Loot</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Show_Info" object="btnloot" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">17</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btnsethome">
+        <property name="label" translatable="yes">Set as _home</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Execute_Order" object="btnsethome" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">18</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btncloseorders">
+        <property name="label" translatable="yes">_Close</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Hide_Map_Info" object="btnboxorders" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">19</property>
+      </packing>
+    </child>
+  </object>
   <object class="GtkListStore" id="cargolist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -1388,332 +1696,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
   <object class="GtkMenu" id="ordersmenu">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-  </object>
-  <object class="GtkWindow" id="orderswindow">
-    <property name="can_focus">False</property>
-    <property name="resizable">False</property>
-    <property name="modal">True</property>
-    <property name="window_position">center</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="icon">images/icon.png</property>
-    <property name="type_hint">dialog</property>
-    <property name="decorated">False</property>
-    <signal name="delete-event" handler="Hide_Window" object="orderswindow" swapped="no"/>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
-    <child>
-      <object class="GtkButtonBox" id="btnboxorders">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_left">5</property>
-        <property name="margin_right">5</property>
-        <property name="margin_top">5</property>
-        <property name="margin_bottom">5</property>
-        <property name="orientation">vertical</property>
-        <property name="layout_style">center</property>
-        <child>
-          <object class="GtkButton" id="btnstory">
-            <property name="label" translatable="yes">Story</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="Execute_Order" object="btnstory" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btnfinishmission">
-            <property name="label" translatable="yes">Complete mission</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="Complete_Mission" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btnattack">
-            <property name="label" translatable="yes">_Attack</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="Attack_Order" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btnfreemedicines">
-            <property name="label" translatable="yes">_Deliver medicines for free</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="Deliver_Medicines" object="btnfreemedicines" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btnpricedmedicines">
-            <property name="label" translatable="yes">Deliver _medicines for price</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="Deliver_Medicines" object="btnpricedmedicines" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btndock">
-            <property name="label" translatable="yes">_Undock</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="Dock_Ship" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">5</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btntrade">
-            <property name="label" translatable="yes">_Trade</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="Show_Info" object="btntrade" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">6</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btnschool">
-            <property name="label" translatable="yes">_School</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="Show_Info" object="btnschool" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">7</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btnrecruit">
-            <property name="label" translatable="yes">_Recruit</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="Show_Info" object="btnrecruit" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">8</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btnaskevents">
-            <property name="label" translatable="yes">Ask for _events</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="Execute_Order" object="btnaskevents" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">9</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btnaskbases">
-            <property name="label" translatable="yes">Ask for _bases</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="Execute_Order" object="btnaskbases" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">10</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btnheal">
-            <property name="label" translatable="yes">Heal _wounded</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="Show_Info" object="btnheal" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">11</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btnrepair">
-            <property name="label" translatable="yes">Re_pair ship</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="Show_Info" object="btnrepair" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">12</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btnshipyard">
-            <property name="label" translatable="yes">Sh_ipyard</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="Show_Info" object="btnshipyard" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">13</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btnrecipes">
-            <property name="label" translatable="yes">Bu_y recipes</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="Show_Info" object="btnrecipes" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">14</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btnmissions">
-            <property name="label" translatable="yes">_Missions</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="Show_Missions" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">15</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btncurrentmission">
-            <property name="label" translatable="yes">_Patrol area</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="Start_Mission" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">16</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btnloot">
-            <property name="label" translatable="yes">_Loot</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="Show_Info" object="btnloot" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">17</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btnsethome">
-            <property name="label" translatable="yes">Set as _home</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="Execute_Order" object="btnsethome" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">18</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="btncloseorders">
-            <property name="label" translatable="yes">Close [Escape]</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <signal name="clicked" handler="Hide_Map_Info" object="orderswindow" swapped="no"/>
-            <accelerator key="Escape" signal="clicked"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">19</property>
-          </packing>
-        </child>
-      </object>
-    </child>
   </object>
   <object class="GtkListStore" id="ownerslist">
     <columns>
