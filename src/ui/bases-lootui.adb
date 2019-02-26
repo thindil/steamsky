@@ -340,7 +340,6 @@ package body Bases.LootUI is
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treeitems")),
          Gtk_Tree_Path_New_From_String("0"), null, False);
-      ShowLastMessage(Builder);
    end ShowLootUI;
 
 end Bases.LootUI;

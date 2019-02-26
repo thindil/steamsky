@@ -168,7 +168,6 @@ package body Ships.Cargo.UI is
             Price => PlayerShip.Cargo.Element(ItemIndex).Price);
       end if;
       RefreshCargoInfo;
-      ShowLastMessage(Object);
       SetActiveItem;
    end DropItem;
 
@@ -198,7 +197,6 @@ package body Ships.Cargo.UI is
         (Ship => PlayerShip, Amount => (0 - Amount), CargoIndex => ItemIndex,
          Price => Item.Price);
       RefreshCargoInfo;
-      ShowLastMessage(Object);
       SetActiveItem;
    end GiveItem;
 
@@ -229,7 +227,6 @@ package body Ships.Cargo.UI is
       RefreshCargoInfo;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "cargo");
-      ShowLastMessage(Builder);
       SetActiveItem;
       Set_Active(ComboBoxMember, 0);
    end ShowCargoUI;

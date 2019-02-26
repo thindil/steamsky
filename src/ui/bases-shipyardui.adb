@@ -457,7 +457,6 @@ package body Bases.ShipyardUI is
       Bases.Ship.UpgradeShip(Install, ModuleIndex);
       SetRemoveModulesList;
       ShowInstallInfo(Builder);
-      ShowLastMessage(Builder);
    exception
       when Trade_No_Money =>
          ShowDialog
@@ -504,7 +503,6 @@ package body Bases.ShipyardUI is
       Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbtypes")), 0);
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "shipyard");
-      ShowLastMessage(Builder);
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treeinstall")),
          Gtk_Tree_Path_New_From_String("0"), null, False);

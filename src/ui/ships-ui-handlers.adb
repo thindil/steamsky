@@ -467,7 +467,6 @@ package body Ships.UI.Handlers is
          StartUpgrading(ModuleIndex, 4);
       end if;
       UpdateOrders(PlayerShip);
-      ShowLastMessage(Builder);
       ShowShipInfo;
       ShowModuleInfo(Builder);
    exception
@@ -488,7 +487,6 @@ package body Ships.UI.Handlers is
          end if;
       end loop;
       AddMessage("You stopped current upgrade.", OrderMessage);
-      ShowLastMessage(Object);
       ShowShipInfo;
       ShowModuleInfo(Object);
    end StopUpgrading;
@@ -505,7 +503,6 @@ package body Ships.UI.Handlers is
          PlayerShip.RepairModule := 0;
          AddMessage("You removed repair priority.", OrderMessage);
       end if;
-      ShowLastMessage(Builder);
       ShowShipInfo;
       ShowModuleInfo(Builder);
    end SetRepair;
@@ -568,7 +565,6 @@ package body Ships.UI.Handlers is
             " for training " & To_String(Skills_List(AssignIndex).Name) & ".",
             OrderMessage);
       end if;
-      ShowLastMessage(Builder);
       ShowShipInfo;
       ShowModuleInfo(Builder);
    end Assign;
@@ -604,7 +600,6 @@ package body Ships.UI.Handlers is
             ".",
             OrderMessage);
       end if;
-      ShowLastMessage(Object);
       ShowShipInfo;
       ShowModuleInfo(Object);
    end DisableEngine;

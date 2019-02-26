@@ -23,10 +23,8 @@ with Gtk.Stack; use Gtk.Stack;
 with Gtk.Menu; use Gtk.Menu;
 with Gdk.Types; use Gdk.Types;
 with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
-with Glib.Main; use Glib.Main;
 with MainMenu; use MainMenu;
 with Game; use Game;
-with Messages; use Messages;
 with Maps.UI; use Maps.UI;
 with Combat.UI; use Combat.UI;
 with GameOptions; use GameOptions;
@@ -34,7 +32,6 @@ with Statistics.UI; use Statistics.UI;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
 with Items; use Items;
-with Config; use Config;
 
 package body Utils.UI is
 
@@ -89,61 +86,6 @@ package body Utils.UI is
       end if;
       return True;
    end QuitGame;
-
-   procedure HideLastMessage(Object: access Gtkada_Builder_Record'Class) is
-   begin
-      Hide(Gtk_Widget(Get_Object(Object, "inforevealer")));
-      Set_Margin_Top(Gtk_Widget(Get_Object(Object, "gamestack")), 0);
-      LastMessageIndex := 0;
-   end HideLastMessage;
-
-   function AutoHideLastMessage return Boolean is
-   begin
-      HideLastMessage(Builder);
-      UpdateHeader;
-      return False;
-   end AutoHideLastMessage;
-
-   procedure ShowLastMessage(Object: access Gtkada_Builder_Record'Class) is
-   begin
-      if not GameSettings.ShowLastMessage then
-         return;
-      end if;
-      if LastMessageIndex > 0 then
-         declare
-            LastMessage: constant Message_Data :=
-              Messages_List(LastMessageIndex);
-         begin
-            if LastMessage.Color = WHITE then
-               Set_Text
-                 (Gtk_Label(Get_Object(Object, "lbllastmessage")),
-                  To_String(LastMessage.Message));
-            else
-               Set_Markup
-                 (Gtk_Label(Get_Object(Object, "lbllastmessage")),
-                  "<span foreground=""" &
-                  Message_Color'Image(LastMessage.Color) & """>" &
-                  To_String(LastMessage.Message) & "</span>");
-            end if;
-         end;
-         Show_All(Gtk_Widget(Get_Object(Object, "inforevealer")));
-         if Get_Visible_Child_Name
-             (Gtk_Stack(Get_Object(Object, "gamestack"))) /=
-           "skymap" then
-            Set_Margin_Top
-              (Gtk_Widget(Get_Object(Object, "gamestack")),
-               Gint(GameSettings.InterfaceFontSize * 3));
-         end if;
-         LastMessageIndex := 0;
-         declare
-            Source_Id: G_Source_Id;
-            pragma Unreferenced(Source_Id);
-         begin
-            Source_Id := Timeout_Add(4000, AutoHideLastMessage'Access);
-         end;
-      end if;
-      UpdateHeader;
-   end ShowLastMessage;
 
    function CloseWindow(Self: access Gtk_Widget_Record'Class;
       Event: Gdk_Event_Key) return Boolean is

@@ -531,7 +531,6 @@ package body Combat.UI is
       Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "combat");
-      HideLastMessage(Builder);
       if (HarpoonDuration = 0 and Enemy.HarpoonDuration = 0) or
         ProtoShips_List(EnemyShipIndex).Crew.Length = 0 then
          Hide(Gtk_Widget(Get_Object(Builder, "expboard")));

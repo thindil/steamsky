@@ -111,7 +111,6 @@ package body Bases.SchoolUI is
          end if;
       end loop;
       TrainSkill(CrewIndex, SkillIndex);
-      ShowLastMessage(Object);
       ShowTrainInfo(Object);
    exception
       when Trade_No_Money =>
@@ -148,7 +147,6 @@ package body Bases.SchoolUI is
       end loop;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "school");
-      ShowLastMessage(Builder);
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treecrew")),
          Gtk_Tree_Path_New_From_String("0"),

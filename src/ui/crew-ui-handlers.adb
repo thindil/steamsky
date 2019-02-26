@@ -293,7 +293,6 @@ package body Crew.UI.Handlers is
             end;
          end if;
       end loop;
-      ShowLastMessage(Builder);
    end GiveOrdersAll;
 
    procedure ShowInventory(Object: access Gtkada_Builder_Record'Class) is
@@ -439,13 +438,11 @@ package body Crew.UI.Handlers is
          Crew_Orders'Val(Get_Int(List, New_Iter, 1)),
          Natural(Get_Int(List, New_Iter, 2)));
       RefreshCrewInfo;
-      ShowLastMessage(Builder);
       ShowOrdersForAll;
       SetActiveMember(OldMemberIndex - 1);
    exception
       when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
          AddMessage(Exception_Message(An_Exception), OrderMessage, RED);
-         ShowLastMessage(Builder);
    end GiveCrewOrders;
 
    function ReducePriority(Model: Gtk_Tree_Model; Path: Gtk_Tree_Path;
@@ -491,7 +488,6 @@ package body Crew.UI.Handlers is
       end if;
       UpdateOrders(PlayerShip);
       RefreshCrewInfo;
-      ShowLastMessage(Builder);
       ShowOrdersForAll;
       SetActiveMember(OldMemberIndex - 1);
    end SetPriority;
@@ -514,7 +510,6 @@ package body Crew.UI.Handlers is
               (PlayerShip, Crew_Container.To_Index(I), GetRandom(-5, -1));
          end loop;
          RefreshCrewInfo;
-         ShowLastMessage(Object);
          ShowOrdersForAll;
          SetActiveMember;
       end if;

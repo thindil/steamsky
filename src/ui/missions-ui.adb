@@ -284,7 +284,6 @@ package body Missions.UI is
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treemissions")),
          Gtk_Tree_Path_New_From_String("0"), null, False);
-      ShowLastMessage(Object);
    exception
       when An_Exception : Missions_Accepting_Error =>
          ShowDialog
@@ -360,7 +359,6 @@ package body Missions.UI is
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treemissions")),
          Gtk_Tree_Path_New_From_String("0"), null, False);
-      ShowLastMessage(Builder);
    end ShowMissionsUI;
 
    procedure ShowAcceptedMissions is
