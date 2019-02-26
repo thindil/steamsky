@@ -94,7 +94,7 @@ package body Maps.UI.Handlers is
    procedure HideMapInfoWindow(User_Data: access GObject_Record'Class) is
    begin
       Hide(Gtk_Widget(User_Data));
-      if User_Data = Get_Object(Builder, "orderswindow") then
+      if User_Data = Get_Object(Builder, "btnboxorders") then
          UpdateMapInfo;
       end if;
    end HideMapInfoWindow;
@@ -242,7 +242,7 @@ package body Maps.UI.Handlers is
    procedure BtnDockClicked(Object: access Gtkada_Builder_Record'Class) is
       Message: Unbounded_String := Null_Unbounded_String;
    begin
-      Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
+      Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
       if PlayerShip.Speed = DOCKED then
          Message := To_Unbounded_String(DockShip(False));
          if Length(Message) > 0 then
@@ -854,7 +854,7 @@ package body Maps.UI.Handlers is
         (Gtk_Container(Get_Object(Object, "btnboxorders")),
          CheckButtons'Access);
       if ButtonsVisible then
-         Show_All(Gtk_Widget(Get_Object(Object, "orderswindow")));
+         Show_All(Gtk_Widget(Get_Object(Object, "btnboxorders")));
       else
          ShowDialog
            ("Here are no available ship orders at this moment. Ship orders available mostly when you are at base or at event on map.",
@@ -920,7 +920,7 @@ package body Maps.UI.Handlers is
 
    procedure AttackOrder(Object: access Gtkada_Builder_Record'Class) is
    begin
-      Hide(Gtk_Widget(Get_Object(Object, "orderswindow")));
+      Hide(Gtk_Widget(Get_Object(Object, "btnboxorders")));
       ShowCombatUI;
    end AttackOrder;
 
@@ -996,7 +996,7 @@ package body Maps.UI.Handlers is
       elsif User_Data = Get_Object(Builder, "menumissions") then
          ShowAcceptedMissions;
       elsif User_Data = Get_Object(Builder, "btntrade") then
-         Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
             GenerateTraderCargo
               (Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
@@ -1004,25 +1004,25 @@ package body Maps.UI.Handlers is
          end if;
          ShowTradeUI;
       elsif User_Data = Get_Object(Builder, "btnrecruit") then
-         Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
          ShowRecruitUI;
       elsif User_Data = Get_Object(Builder, "btnrecipes") then
-         Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
          ShowBuyRecipesUI;
       elsif User_Data = Get_Object(Builder, "btnrepair") then
-         Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
          ShowRepairUI;
       elsif User_Data = Get_Object(Builder, "btnheal") then
-         Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
          ShowHealUI;
       elsif User_Data = Get_Object(Builder, "btnschool") then
-         Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
          ShowSchoolUI;
       elsif User_Data = Get_Object(Builder, "btnshipyard") then
-         Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
          ShowShipyardUI;
       elsif User_Data = Get_Object(Builder, "btnloot") then
-         Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
          ShowLootUI;
       elsif User_Data = Get_Object(Builder, "menucrafting") then
          ShowCraftsUI;
@@ -1049,7 +1049,7 @@ package body Maps.UI.Handlers is
 
    procedure ShowMissions(Object: access Gtkada_Builder_Record'Class) is
    begin
-      Hide(Gtk_Widget(Get_Object(Object, "orderswindow")));
+      Hide(Gtk_Widget(Get_Object(Object, "btnboxorders")));
       Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
       ShowMissionsUI;
    end ShowMissions;
@@ -1057,7 +1057,7 @@ package body Maps.UI.Handlers is
    procedure StartMission(Object: access Gtkada_Builder_Record'Class) is
       StartsCombat: Boolean := False;
    begin
-      Hide(Gtk_Widget(Get_Object(Object, "orderswindow")));
+      Hide(Gtk_Widget(Get_Object(Object, "btnboxorders")));
       for Mission of AcceptedMissions loop
          if Mission.TargetX = PlayerShip.SkyX and
            Mission.TargetY = PlayerShip.SkyY and not Mission.Finished then
@@ -1106,7 +1106,7 @@ package body Maps.UI.Handlers is
 
    procedure CompleteMission(Object: access Gtkada_Builder_Record'Class) is
    begin
-      Hide(Gtk_Widget(Get_Object(Object, "orderswindow")));
+      Hide(Gtk_Widget(Get_Object(Object, "btnboxorders")));
       FinishMission(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
       UpdateHeader;
       UpdateMessages;
@@ -1119,7 +1119,7 @@ package body Maps.UI.Handlers is
       Price: Positive := 1000;
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
    begin
-      Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
+      Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
       if User_Data = Get_Object(Builder, "btnaskevents") then
          AskForEvents;
       elsif User_Data = Get_Object(Builder, "btnaskbases") then
@@ -1449,7 +1449,7 @@ package body Maps.UI.Handlers is
                   MoveMap(Get_Object(Builder, "btnmapdown"));
                when 13 =>
                   if not Get_Visible
-                      (Gtk_Widget(Get_Object(Builder, "movemovemapbox"))) then
+                      (Gtk_Widget(Get_Object(Builder, "moremovemapbox"))) then
                      Show_All
                        (Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
                   else
