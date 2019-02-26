@@ -262,7 +262,6 @@ package body Bases.RecruitUI is
          Set_Sensitive
            (Gtk_Widget(Get_Object(Object, "btnhirerecruit")), False);
       end if;
-      Show_All(Gtk_Widget(Get_Object(Object, "negotiatewindow")));
    end StartNegotiations;
 
    procedure NegotiateHire(Object: access Gtkada_Builder_Record'Class) is
