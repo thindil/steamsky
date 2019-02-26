@@ -865,7 +865,7 @@ package body Maps.UI.Handlers is
    procedure WaitOrder(User_Data: access GObject_Record'Class) is
       TimeNeeded: Natural := 0;
    begin
-      Hide(Gtk_Widget(Get_Object(Builder, "waitwindow")));
+      Hide(Gtk_Widget(Get_Object(Builder, "btnboxwait")));
       if User_Data = Get_Object(Builder, "btnwait1min") then
          UpdateGame(1);
          WaitInPlace(1);
@@ -1289,7 +1289,7 @@ package body Maps.UI.Handlers is
       end loop;
       Set_Visible(Gtk_Widget(Get_Object(Object, "btnwaitheal")), NeedHealing);
       Set_Visible(Gtk_Widget(Get_Object(Object, "btnwaitrest")), NeedRest);
-      Show_All(Gtk_Widget(Get_Object(Object, "waitwindow")));
+      Show_All(Gtk_Widget(Get_Object(Object, "btnboxwait")));
    end ShowWaitOrders;
 
    function UpdateTooltip

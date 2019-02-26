@@ -1110,6 +1110,9 @@ package body Maps.UI is
         (Gtk_Overlay(Get_Object(Builder, "mapoverlay")),
          Gtk_Widget(Get_Object(Builder, "btnboxorders")));
       Add_Overlay
+        (Gtk_Overlay(Get_Object(Builder, "mapoverlay")),
+         Gtk_Widget(Get_Object(Builder, "btnboxwait")));
+      Add_Overlay
         (Gtk_Overlay(Get_Object(Builder, "gameoverlay")),
          Gtk_Widget(Get_Object(Builder, "inforevealer")));
       Register_Handler(Builder, "Quit_Game", QuitGame'Access);
@@ -1382,6 +1385,7 @@ package body Maps.UI is
       Hide(Gtk_Widget(Get_Object(Builder, "btnclose")));
       Hide(Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
       Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
+      Hide(Gtk_Widget(Get_Object(Builder, "btnboxwait")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
       Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));
