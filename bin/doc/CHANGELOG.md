@@ -10,6 +10,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated interface
 
+### Removed
+- Configuration to show or hide last message
+
 ### Fixed
 - Typos in changelog
 - Default keyboard shortcut for show more move map options
