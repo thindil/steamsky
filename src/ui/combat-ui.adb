@@ -39,7 +39,6 @@ with Glib.Object; use Glib.Object;
 with Glib.Properties; use Glib.Properties;
 with Glib.Types; use Glib.Types;
 with Game; use Game;
-with Utils.UI; use Utils.UI;
 with Bases; use Bases;
 with ShipModules; use ShipModules;
 with Events; use Events;
