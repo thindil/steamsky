@@ -58,7 +58,6 @@ package Config is
       MessagesOrder: MessagesOrderType; -- Order of showing messages
       AutoAskForBases: Boolean; -- If true, auto ask for new bases when ship docked
       AutoAskForEvents: Boolean; -- If true, auto ask for new events in bases when ship docked
-      ShowLastMessage: Boolean; -- If true, show last message to player
       ShowTooltips: Boolean; -- If true, show tooltips to player
    end record;
    NewGameSettings: NewGameRecord;
