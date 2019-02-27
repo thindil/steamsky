@@ -127,7 +127,7 @@ Font Rye is under Open Font License:
 
 https://fonts.google.com/specimen/Rye
 
-Font Hack Nerf Font is under MiT license:
+Font Hack Nerd Font is under MiT license:
 
 https://nerdfonts.com/
 
