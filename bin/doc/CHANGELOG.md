@@ -4,8 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New ships: advanced huge poleis trader mk II and advanced huge independent
-  trader mk II
+- New ships: advanced huge poleis trader mk II, advanced huge independent
+  trader mk II and advanced huge pirates trader mk II
 
 ### Changed
 - Updated interface
