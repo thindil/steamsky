@@ -59,6 +59,7 @@ package Config is
       AutoAskForBases: Boolean; -- If true, auto ask for new bases when ship docked
       AutoAskForEvents: Boolean; -- If true, auto ask for new events in bases when ship docked
       ShowTooltips: Boolean; -- If true, show tooltips to player
+      ShowLastMessages: Boolean; -- If true, show last messages window everywhere
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;
