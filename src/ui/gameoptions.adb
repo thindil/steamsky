@@ -484,6 +484,7 @@ package body GameOptions is
       SetFontsSizes;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "options");
+      Hide(Gtk_Widget(Get_Object(Builder, "lastmessagesframe")));
    end ShowGameOptions;
 
 end GameOptions;

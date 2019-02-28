@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -157,6 +157,7 @@ package body Messages.UI is
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "lastmessages");
       Grab_Focus(Gtk_Widget(Get_Object(Builder, "cmbmessages")));
+      Hide(Gtk_Widget(Get_Object(Builder, "lastmessagesframe")));
    end ShowMessagesUI;
 
 end Messages.UI;
