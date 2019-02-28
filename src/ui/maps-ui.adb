@@ -1346,6 +1346,9 @@ package body Maps.UI is
       end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "menuwait")));
       Show_All(Gtk_Widget(Get_Object(Builder, "menuorders")));
+      if not GameSettings.ShowLastMessages then
+         Hide(Gtk_Widget(Get_Object(Builder, "lastmessagesframe")));
+      end if;
    end ShowSkyMap;
 
    procedure FinishStory is
