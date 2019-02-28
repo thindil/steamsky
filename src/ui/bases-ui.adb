@@ -35,6 +35,7 @@ with Items; use Items;
 with Bases.Ship; use Bases.Ship;
 with Bases.Trade; use Bases.Trade;
 with Crafts; use Crafts;
+with Utils.UI; use Utils.UI;
 
 package body Bases.UI is
 
@@ -245,6 +246,7 @@ package body Bases.UI is
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treebases1")),
          Gtk_Tree_Path_New_From_String("0"), null, False);
+      UpdateMessages;
    end ShowBuyRecipesUI;
 
    procedure ShowRepairUI is
@@ -289,6 +291,7 @@ package body Bases.UI is
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treebases1")),
          Gtk_Tree_Path_New_From_String("0"), null, False);
+      UpdateMessages;
    end ShowRepairUI;
 
    procedure ShowHealUI is
@@ -318,6 +321,7 @@ package body Bases.UI is
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treebases1")),
          Gtk_Tree_Path_New_From_String("0"), null, False);
+      UpdateMessages;
    end ShowHealUI;
 
 end Bases.UI;

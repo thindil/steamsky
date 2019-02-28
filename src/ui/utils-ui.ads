@@ -72,5 +72,6 @@ package Utils.UI is
      return Boolean; -- Show popup menu on click of right mouse button
    procedure SetUtilsBuilder
      (NewBuilder: Gtkada_Builder); -- Set Gtk Builder for Utils package
+   procedure UpdateMessages; -- Update game messages and last message
 
 end Utils.UI;

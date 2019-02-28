@@ -21,6 +21,11 @@ with Gtk.Dialog; use Gtk.Dialog;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Menu; use Gtk.Menu;
+with Gtk.Text_Buffer; use Gtk.Text_Buffer;
+with Gtk.Text_Iter; use Gtk.Text_Iter;
+with Gtk.Text_Mark; use Gtk.Text_Mark;
+with Gtk.Text_Tag_Table; use Gtk.Text_Tag_Table;
+with Gtk.Text_View; use Gtk.Text_View;
 with Gdk.Types; use Gdk.Types;
 with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
 with MainMenu; use MainMenu;
@@ -32,6 +37,8 @@ with Statistics.UI; use Statistics.UI;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
 with Items; use Items;
+with Messages; use Messages;
+with Config; use Config;
 
 package body Utils.UI is
 
@@ -314,5 +321,62 @@ package body Utils.UI is
    begin
       Builder := NewBuilder;
    end SetUtilsBuilder;
+
+   procedure UpdateMessages is
+      MessagesBuffer: constant Gtk_Text_Buffer :=
+        Gtk_Text_Buffer(Get_Object(Builder, "txtmessages"));
+      LoopStart: Integer := 0 - MessagesAmount;
+      Message: Message_Data;
+      Iter: Gtk_Text_Iter;
+      TagNames: constant array(1 .. 5) of Unbounded_String :=
+        (To_Unbounded_String("yellow"), To_Unbounded_String("green"),
+         To_Unbounded_String("red"), To_Unbounded_String("blue"),
+         To_Unbounded_String("cyan"));
+      procedure ShowMessage is
+      begin
+         if Message.Color = WHITE then
+            Insert(MessagesBuffer, Iter, To_String(Message.Message));
+         else
+            Insert_With_Tags
+              (MessagesBuffer, Iter, To_String(Message.Message),
+               Lookup
+                 (Get_Tag_Table(MessagesBuffer),
+                  To_String(TagNames(Message_Color'Pos(Message.Color)))));
+         end if;
+      end ShowMessage;
+   begin
+      Set_Text(MessagesBuffer, "");
+      Get_Start_Iter(MessagesBuffer, Iter);
+      if LoopStart = 0 then
+         return;
+      end if;
+      if LoopStart < -10 then
+         LoopStart := -10;
+      end if;
+      if GameSettings.MessagesOrder = OLDER_FIRST then
+         for I in LoopStart .. -1 loop
+            Message := GetMessage(I + 1);
+            ShowMessage;
+            if I < -1 then
+               Insert(MessagesBuffer, Iter, "" & LF);
+            end if;
+         end loop;
+         declare
+            Mark: Gtk_Text_Mark;
+         begin
+            Mark := Create_Mark(MessagesBuffer, "end", Iter);
+            Scroll_Mark_Onscreen
+              (Gtk_Text_View(Get_Object(Builder, "messagesview")), Mark);
+         end;
+      else
+         for I in reverse LoopStart .. -1 loop
+            Message := GetMessage(I + 1);
+            ShowMessage;
+            if I > LoopStart then
+               Insert(MessagesBuffer, Iter, "" & LF);
+            end if;
+         end loop;
+      end if;
+   end UpdateMessages;
 
 end Utils.UI;

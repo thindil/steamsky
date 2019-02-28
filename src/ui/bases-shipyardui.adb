@@ -457,6 +457,7 @@ package body Bases.ShipyardUI is
       Bases.Ship.UpgradeShip(Install, ModuleIndex);
       SetRemoveModulesList;
       ShowInstallInfo(Builder);
+      UpdateMessages;
    exception
       when Trade_No_Money =>
          ShowDialog
@@ -509,6 +510,7 @@ package body Bases.ShipyardUI is
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treeremove")),
          Gtk_Tree_Path_New_From_String("0"), null, False);
+      UpdateMessages;
    end ShowShipyardUI;
 
 end Bases.ShipyardUI;

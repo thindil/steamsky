@@ -35,6 +35,7 @@ with Items; use Items;
 with Bases.Trade; use Bases.Trade;
 with Factions; use Factions;
 with Maps.UI; use Maps.UI;
+with Utils.UI; use Utils.UI;
 
 package body Bases.RecruitUI is
 
@@ -219,6 +220,7 @@ package body Bases.RecruitUI is
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
       end if;
+      UpdateMessages;
    end Hire;
 
    procedure StartNegotiations(Object: access Gtkada_Builder_Record'Class) is
@@ -332,6 +334,7 @@ package body Bases.RecruitUI is
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treerecruits")),
          Gtk_Tree_Path_New_From_String("0"), null, False);
+      UpdateMessages;
    end ShowRecruitUI;
 
 end Bases.RecruitUI;

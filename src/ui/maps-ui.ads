@@ -39,7 +39,6 @@ private
    procedure DeathConfirm; -- Show confirmation to show game stats when player died
    procedure UpdateMoveButtons; -- Update move buttons
    procedure DrawMap; -- Draw sky map
-   procedure UpdateMessages; -- Update game messages and last message
    procedure HideButtons
      (Widget: not null access Gtk_Widget_Record'Class); -- Hide selected button
    procedure CheckButtons

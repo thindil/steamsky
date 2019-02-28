@@ -311,6 +311,7 @@ package body Crew.UI is
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "crew");
       SetActiveMember;
       ShowOrdersForAll;
+      UpdateMessages;
    end ShowCrewUI;
 
 end Crew.UI;

@@ -975,6 +975,7 @@ package body Maps.UI.Handlers is
          end if;
       end if;
       Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
+      Hide(Gtk_Widget(Get_Object(Builder, "shipmovementbox")));
       if VisibleChildName = "combat" then
          PreviousGameState := Combat_View;
       elsif VisibleChildName = "skymap" then

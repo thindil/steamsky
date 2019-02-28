@@ -36,7 +36,6 @@ with Gtk.Accel_Map; use Gtk.Accel_Map;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Overlay; use Gtk.Overlay;
-with Gtk.Text_Mark; use Gtk.Text_Mark;
 with Gtk.Button; use Gtk.Button;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
@@ -748,63 +747,6 @@ package body Maps.UI is
          Set_Cursor(TextWindow, Gdk_Cursor_New(Cross));
       end if;
    end DrawMap;
-
-   procedure UpdateMessages is
-      MessagesBuffer: constant Gtk_Text_Buffer :=
-        Gtk_Text_Buffer(Get_Object(Builder, "txtmessages"));
-      LoopStart: Integer := 0 - MessagesAmount;
-      Message: Message_Data;
-      Iter: Gtk_Text_Iter;
-      TagNames: constant array(1 .. 5) of Unbounded_String :=
-        (To_Unbounded_String("yellow"), To_Unbounded_String("green"),
-         To_Unbounded_String("red"), To_Unbounded_String("blue"),
-         To_Unbounded_String("cyan"));
-      procedure ShowMessage is
-      begin
-         if Message.Color = WHITE then
-            Insert(MessagesBuffer, Iter, To_String(Message.Message));
-         else
-            Insert_With_Tags
-              (MessagesBuffer, Iter, To_String(Message.Message),
-               Lookup
-                 (Get_Tag_Table(MessagesBuffer),
-                  To_String(TagNames(Message_Color'Pos(Message.Color)))));
-         end if;
-      end ShowMessage;
-   begin
-      Set_Text(MessagesBuffer, "");
-      Get_Start_Iter(MessagesBuffer, Iter);
-      if LoopStart = 0 then
-         return;
-      end if;
-      if LoopStart < -10 then
-         LoopStart := -10;
-      end if;
-      if GameSettings.MessagesOrder = OLDER_FIRST then
-         for I in LoopStart .. -1 loop
-            Message := GetMessage(I + 1);
-            ShowMessage;
-            if I < -1 then
-               Insert(MessagesBuffer, Iter, "" & LF);
-            end if;
-         end loop;
-         declare
-            Mark: Gtk_Text_Mark;
-         begin
-            Mark := Create_Mark(MessagesBuffer, "end", Iter);
-            Scroll_Mark_Onscreen
-              (Gtk_Text_View(Get_Object(Builder, "messagesview")), Mark);
-         end;
-      else
-         for I in reverse LoopStart .. -1 loop
-            Message := GetMessage(I + 1);
-            ShowMessage;
-            if I > LoopStart then
-               Insert(MessagesBuffer, Iter, "" & LF);
-            end if;
-         end loop;
-      end if;
-   end UpdateMessages;
 
    procedure HideButtons(Widget: not null access Gtk_Widget_Record'Class) is
    begin

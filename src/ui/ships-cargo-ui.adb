@@ -167,6 +167,7 @@ package body Ships.Cargo.UI is
             Durability => PlayerShip.Cargo.Element(ItemIndex).Durability,
             Price => PlayerShip.Cargo.Element(ItemIndex).Price);
       end if;
+      UpdateMessages;
       RefreshCargoInfo;
       SetActiveItem;
    end DropItem;
@@ -196,6 +197,7 @@ package body Ships.Cargo.UI is
       UpdateCargo
         (Ship => PlayerShip, Amount => (0 - Amount), CargoIndex => ItemIndex,
          Price => Item.Price);
+      UpdateMessages;
       RefreshCargoInfo;
       SetActiveItem;
    end GiveItem;
@@ -227,6 +229,7 @@ package body Ships.Cargo.UI is
       RefreshCargoInfo;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "cargo");
+      UpdateMessages;
       SetActiveItem;
       Set_Active(ComboBoxMember, 0);
    end ShowCargoUI;
