@@ -293,6 +293,7 @@ package body Crew.UI.Handlers is
             end;
          end if;
       end loop;
+      UpdateMessages;
    end GiveOrdersAll;
 
    procedure ShowInventory(Object: access Gtkada_Builder_Record'Class) is
@@ -440,9 +441,11 @@ package body Crew.UI.Handlers is
       RefreshCrewInfo;
       ShowOrdersForAll;
       SetActiveMember(OldMemberIndex - 1);
+      UpdateMessages;
    exception
       when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
          AddMessage(Exception_Message(An_Exception), OrderMessage, RED);
+         UpdateMessages;
    end GiveCrewOrders;
 
    function ReducePriority(Model: Gtk_Tree_Model; Path: Gtk_Tree_Path;
@@ -490,6 +493,7 @@ package body Crew.UI.Handlers is
       RefreshCrewInfo;
       ShowOrdersForAll;
       SetActiveMember(OldMemberIndex - 1);
+      UpdateMessages;
    end SetPriority;
 
    procedure DismissMember(Object: access Gtkada_Builder_Record'Class) is
@@ -512,6 +516,7 @@ package body Crew.UI.Handlers is
          RefreshCrewInfo;
          ShowOrdersForAll;
          SetActiveMember;
+         UpdateMessages;
       end if;
    end DismissMember;
 

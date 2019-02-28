@@ -173,7 +173,7 @@ package body Combat.UI is
          begin
             Mark := Create_Mark(MessagesBuffer, "end", MessagesIter);
             Scroll_Mark_Onscreen
-              (Gtk_Text_View(Get_Object(Builder, "messagesview2")), Mark);
+              (Gtk_Text_View(Get_Object(Builder, "messagesview")), Mark);
          end;
       else
          for I in reverse LoopStart .. -1 loop
@@ -199,7 +199,7 @@ package body Combat.UI is
       else
          Hide(Gtk_Widget(Get_Object(Builder, "expboard")));
       end if;
-      UpdateMessages;
+      Combat.UI.UpdateMessages;
       declare
          CrewIter: Gtk_Tree_Iter;
          CrewList: constant Gtk_List_Store :=
@@ -527,6 +527,7 @@ package body Combat.UI is
       for I in MenuArray'Range loop
          Hide(Gtk_Widget(Get_Object(Builder, To_String(MenuArray(I)))));
       end loop;
+      Hide(Gtk_Widget(Get_Object(Builder, "shipmovementbox")));
       Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "combat");
@@ -725,7 +726,7 @@ package body Combat.UI is
         Gtk_List_Store(Get_Object(Builder, "orders2"));
       OrdersIter: Gtk_Tree_Iter;
    begin
-      UpdateMessages;
+      Combat.UI.UpdateMessages;
       declare
          EnemyCrewList: constant Gtk_List_Store :=
            Gtk_List_Store(Get_Object(Builder, "enemycrewlist"));
