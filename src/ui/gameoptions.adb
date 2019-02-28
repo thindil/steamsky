@@ -275,6 +275,8 @@ package body GameOptions is
         Get_State(Gtk_Switch(Get_Object(Object, "switchautoaskforevents")));
       GameSettings.ShowTooltips :=
         Get_State(Gtk_Switch(Get_Object(Object, "switchshowtooltips")));
+      GameSettings.ShowLastMessages :=
+        Get_State(Gtk_Switch(Get_Object(Object, "switchshowlastmessages")));
       SaveConfig;
       LoadTheme;
       Save(To_String(SaveDirectory) & "keys.cfg");
@@ -476,6 +478,9 @@ package body GameOptions is
       Set_State
         (Gtk_Switch(Get_Object(Builder, "switchshowtooltips")),
          GameSettings.ShowTooltips);
+      Set_State
+        (Gtk_Switch(Get_Object(Builder, "switchshowlastmessages")),
+         GameSettings.ShowLastMessages);
       SetFontsSizes;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "options");
