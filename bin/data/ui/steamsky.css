@@ -10,6 +10,7 @@
    font-family:Z003;
    font-style:italic;
    font-size:16px;
+   -GtkPaned-handle-size: 5;
 }
 
 /* General setting for all game windows */
@@ -405,4 +406,8 @@ GtkStackSwitcher .button:checked {
    font-family:"Font Awesome 5 Free";
    font-size:0.8em;
    border-radius: 0;
+}
+
+.pane-separator {
+   background:linear-gradient(to bottom, #473422 5%, #1a130c 100%);
 }

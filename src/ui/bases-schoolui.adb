@@ -111,6 +111,7 @@ package body Bases.SchoolUI is
          end if;
       end loop;
       TrainSkill(CrewIndex, SkillIndex);
+      UpdateMessages;
       ShowTrainInfo(Object);
    exception
       when Trade_No_Money =>
@@ -151,6 +152,7 @@ package body Bases.SchoolUI is
         (Gtk_Tree_View(Get_Object(Builder, "treecrew")),
          Gtk_Tree_Path_New_From_String("0"),
          Gtk_Tree_View_Column(Get_Object(Builder, "columnnames2")), False);
+      UpdateMessages;
    end ShowSchoolUI;
 
 end Bases.SchoolUI;

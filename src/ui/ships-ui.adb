@@ -528,6 +528,7 @@ package body Ships.UI is
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treemodules")),
          Gtk_Tree_Path_New_From_String("0"), null, False);
+      UpdateMessages;
       ShowShipInfo;
    end ShowShipUI;
 
