@@ -7695,6 +7695,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <object class="GtkGrid">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="halign">start</property>
                                 <property name="column_homogeneous">True</property>
                                 <child>
                                   <object class="GtkLabel">
@@ -7714,6 +7715,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="tooltip_text" translatable="yes">Did user interface should be animated or not.</property>
+                                    <property name="halign">start</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -7751,6 +7753,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="tooltip_text" translatable="yes">Select UI theme.</property>
+                                    <property name="halign">start</property>
                                     <signal name="changed" handler="Apply_Theme" swapped="no"/>
                                   </object>
                                   <packing>
@@ -7763,6 +7766,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="tooltip_text" translatable="yes">Which animation should be used to move between screens. Works only when animations are enabled.</property>
+                                    <property name="halign">start</property>
                                     <items>
                                       <item translatable="yes">Crossfade</item>
                                       <item translatable="yes">Slide right</item>
@@ -7808,6 +7812,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="tooltip_text" translatable="yes">Show help tooltips for various game elements.</property>
+                                    <property name="halign">start</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -7832,6 +7837,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="tooltip_text" translatable="yes">Size (in pixels) of font used in interface (for example, here).</property>
+                                    <property name="halign">start</property>
                                     <property name="text" translatable="yes">10</property>
                                     <property name="adjustment">adjinterfacefont</property>
                                     <property name="numeric">True</property>
@@ -7864,6 +7870,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="tooltip_text" translatable="yes">Size (in pixels) of font used mainly in help.</property>
+                                    <property name="halign">start</property>
                                     <property name="adjustment">adjhelpfont</property>
                                     <property name="numeric">True</property>
                                     <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
@@ -7894,6 +7901,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="tooltip_text" translatable="yes">Size (in pixels) of font used to draw game map.</property>
+                                    <property name="halign">start</property>
                                     <property name="adjustment">adjmapfont</property>
                                     <property name="numeric">True</property>
                                     <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
@@ -7924,6 +7932,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="tooltip_text" translatable="yes">Show last messages window in every place in the game.</property>
+                                    <property name="halign">start</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -7943,6 +7952,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="halign">start</property>
                                 <signal name="clicked" handler="Set_Default_Font_Size" swapped="no"/>
                               </object>
                               <packing>
