@@ -32,6 +32,7 @@ with Gtk.Stack; use Gtk.Stack;
 with Gtk.Accel_Map; use Gtk.Accel_Map;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Box; use Gtk.Box;
+with Gtk.Paned; use Gtk.Paned;
 with Glib; use Glib;
 with Gdk.Rectangle; use Gdk.Rectangle;
 with Gdk.Device; use Gdk.Device;
@@ -135,6 +136,10 @@ package body Maps.UI.Handlers is
       Get_Size
         (Gtk_Window(Get_Object(Object, "skymapwindow")),
          Gint(GameSettings.WindowWidth), Gint(GameSettings.WindowHeight));
+      if Get_Position(Gtk_Paned(Get_Object(Object, "gamepaned"))) > 0 then
+         GameSettings.MessagesPosition :=
+           Natural(Get_Position(Gtk_Paned(Get_Object(Object, "gamepaned"))));
+      end if;
    end GetMapSize;
 
    function SetDestination
