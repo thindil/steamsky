@@ -855,6 +855,7 @@ package body Maps.UI.Handlers is
          CheckButtons'Access);
       if ButtonsVisible then
          Show_All(Gtk_Widget(Get_Object(Object, "btnboxorders")));
+         Grab_Focus(Gtk_Widget(Get_Object(Object, "btncloseorders")));
       else
          ShowDialog
            ("Here are no available ship orders at this moment. Ship orders available mostly when you are at base or at event on map.",
@@ -1290,6 +1291,7 @@ package body Maps.UI.Handlers is
       Set_Visible(Gtk_Widget(Get_Object(Object, "btnwaitheal")), NeedHealing);
       Set_Visible(Gtk_Widget(Get_Object(Object, "btnwaitrest")), NeedRest);
       Show_All(Gtk_Widget(Get_Object(Object, "btnboxwait")));
+      Grab_Focus(Gtk_Widget(Get_Object(Object, "btnwait1min")));
    end ShowWaitOrders;
 
    function UpdateTooltip
