@@ -60,6 +60,7 @@ package Config is
       AutoAskForEvents: Boolean; -- If true, auto ask for new events in bases when ship docked
       ShowTooltips: Boolean; -- If true, show tooltips to player
       ShowLastMessages: Boolean; -- If true, show last messages window everywhere
+      MessagesPosition: Natural; -- Position of last messages window in pixels from top of the game window
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;
