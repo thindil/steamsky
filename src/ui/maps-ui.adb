@@ -37,6 +37,7 @@ with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Overlay; use Gtk.Overlay;
 with Gtk.Button; use Gtk.Button;
+with Gtk.Paned; use Gtk.Paned;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -1346,7 +1347,13 @@ package body Maps.UI is
       end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "menuwait")));
       Show_All(Gtk_Widget(Get_Object(Builder, "menuorders")));
-      if not GameSettings.ShowLastMessages then
+      if GameSettings.ShowLastMessages then
+         if GameSettings.MessagesPosition > 0 then
+            Set_Position
+              (Gtk_Paned(Get_Object(Builder, "gamepaned")),
+               Gint(GameSettings.MessagesPosition));
+         end if;
+      else
          Hide(Gtk_Widget(Get_Object(Builder, "lastmessagesframe")));
       end if;
    end ShowSkyMap;
