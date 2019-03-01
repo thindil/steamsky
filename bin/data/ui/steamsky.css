@@ -40,7 +40,7 @@ GtkWindow, #overlay {
    box-shadow:inset 0 1px 0 0 #5c4745;
    background:linear-gradient(to bottom, #372412 5%, #1a130c 100%);
    border-radius:10px;
-   border:1px solid #120c06;
+   border:1px solid black;
    color:rgb(255,223,0);
    text-shadow:0 1px 0 #120d0d;
 }
@@ -74,7 +74,7 @@ GtkWindow, #overlay {
    box-shadow:inset 0 1px 0 0 #5c4745;
    background:linear-gradient(to right, #372412 5%, #1a130c 100%);
    border-radius:10px;
-   border:1px solid #120c06;
+   border:1px solid black;
    color:rgb(255,223,0);
    text-shadow:0 1px 0 #120d0d;
 }
@@ -101,7 +101,7 @@ GtkWindow, #overlay {
 .entry {
    box-shadow:inset 0 1px 0 0 #5c4745;
    background-color:#2d2115;
-   border:1px solid #120c06;
+   border:1px solid black;
    color:rgb(255,223,0);
    text-shadow:0 1px 0 #120d0d;
 }
@@ -124,7 +124,7 @@ GtkTreeView:selected,
    box-shadow:inset 0 0 0 1px #5c4745;
    background:linear-gradient(to right, #372412 5%, #1a130c 100%);
    border-radius:10px;
-   border:1px solid #120c06;
+   border:1px solid black;
 }
 
 /* Setting for currently used slider */
@@ -143,7 +143,7 @@ GtkTreeView:selected,
    box-shadow:inset 0 0 0 1px #5c4745;
    background:linear-gradient(to bottom, #372412 5%, #1a130c 100%);
    border-radius:10px;
-   border:1px solid #120c06;
+   border:1px solid black;
 }
 
 /* Setting for currently used horizontal slider */
@@ -325,7 +325,7 @@ GtkScale {
    box-shadow:inset 0 1px 0 0 #5c4745;
    background:linear-gradient(to bottom, #372412 5%, #1a130c 100%);
    border-radius:5px;
-   border:1px solid #120c06;
+   border:1px solid black;
    color:rgb(255,223,0);
    text-shadow:0 1px 0 #120d0d;
 }
@@ -358,7 +358,7 @@ GtkStackSwitcher .button:checked {
 .spinbutton .button:focus {
    box-shadow:inset 0 1px 0 0 #5c4745;
    background:linear-gradient(to bottom, #372412 5%, #1a130c 100%);
-   border:1px solid #120c06;
+   border:1px solid black;
    color:rgb(255,223,0);
    text-shadow:0 1px 0 #120d0d;
 }
