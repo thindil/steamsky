@@ -798,8 +798,9 @@ package body Combat.UI is
          if Get_Visible_Child_Name(CombatStack) = "boarding" then
             Set_Visible_Child_Name(CombatStack, "shipcombat");
          end if;
-         Hide(Gtk_Widget(Get_Object(Object, "btnboxactions")));
+         Hide(Gtk_Widget(Get_Object(Object, "btnnextturn")));
          Hide(Gtk_Widget(Get_Object(Object, "expmoreinfo")));
+         Hide(Gtk_Widget(Get_Object(Object, "expboard")));
          Set_Sensitive(Gtk_Widget(Get_Object(Object, "treecrew1")), False);
          Show_All(Gtk_Widget(Get_Object(Object, "btnclose")));
          return;
