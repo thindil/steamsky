@@ -1356,6 +1356,13 @@ package body Maps.UI is
       else
          Hide(Gtk_Widget(Get_Object(Builder, "lastmessagesframe")));
       end if;
+      if GameSettings.FullScreen then
+         Fullscreen
+           (Get_Window(Gtk_Widget(Get_Object(Builder, "skymapwindow"))));
+      else
+         Unfullscreen
+           (Get_Window(Gtk_Widget(Get_Object(Builder, "skymapwindow"))));
+      end if;
    end ShowSkyMap;
 
    procedure FinishStory is

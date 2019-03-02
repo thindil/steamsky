@@ -61,6 +61,7 @@ package Config is
       ShowTooltips: Boolean; -- If true, show tooltips to player
       ShowLastMessages: Boolean; -- If true, show last messages window everywhere
       MessagesPosition: Natural; -- Position of last messages window in pixels from top of the game window
+      FullScreen: Boolean; -- If true, set the game window in full screen mode
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;
