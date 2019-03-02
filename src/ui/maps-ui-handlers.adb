@@ -1326,19 +1326,22 @@ package body Maps.UI.Handlers is
          return True;
       end CenterMapOn;
    begin
-      Lookup_Entry("<skymapwindow>/fullscreen", Key, Found);
-      if not Found then
-         return True;
-      end if;
-      if Key.Accel_Key = Event.Keyval and Key.Accel_Mods = KeyMods then
-         if not GameSettings.Fullscreen then
-            GameSettings.Fullscreen := True;
-            Fullscreen(Get_Window(Self));
-         else
-            GameSettings.Fullscreen := False;
-            Unfullscreen(Get_Window(Self));
+      if Get_Visible_Child_Name(Gtk_Stack(Get_Object(Builder, "gamestack"))) /=
+        "options" then
+         Lookup_Entry("<skymapwindow>/fullscreen", Key, Found);
+         if not Found then
+            return True;
          end if;
-         return False;
+         if Key.Accel_Key = Event.Keyval and Key.Accel_Mods = KeyMods then
+            if not GameSettings.Fullscreen then
+               GameSettings.Fullscreen := True;
+               Fullscreen(Get_Window(Self));
+            else
+               GameSettings.Fullscreen := False;
+               Unfullscreen(Get_Window(Self));
+            end if;
+            return False;
+         end if;
       end if;
       if Get_Visible_Child_Name(Gtk_Stack(Get_Object(Builder, "gamestack"))) /=
         "skymap" then
