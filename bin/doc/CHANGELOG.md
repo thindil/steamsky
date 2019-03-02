@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
   patrol ship mk II, advanced huge independent patrol ship mk II and advanced
   huge poleis trader mk III
 - Option to show or hide last messages window
+- Option to set the game in full screen mode
 
 ### Changed
 - Updated interface
