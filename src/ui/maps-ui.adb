@@ -1148,6 +1148,7 @@ package body Maps.UI is
       Add_Entry("<skymapwindow>/quarterspeed", GDK_2, 4);
       Add_Entry("<skymapwindow>/halfspeed", GDK_3, 4);
       Add_Entry("<skymapwindow>/fullspeed", GDK_4, 4);
+      Add_Entry("<skymapwindow>/fullscreen", GDK_F, 1);
       if Exists(To_String(SaveDirectory) & "keys.cfg") then
          Load(To_String(SaveDirectory) & "keys.cfg");
       end if;
