@@ -408,7 +408,7 @@ package body MainMenu is
          return;
       end if;
       Set_Label
-        (Gtk_Label(Get_Object(Builder, "lblfactioninfo")),
+        (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
          To_String(Factions_List(FactionIndex).Description));
       if Factions_List(FactionIndex).Flags.Contains
           (To_Unbounded_String("nogender")) then
@@ -442,7 +442,7 @@ package body MainMenu is
          return;
       end if;
       Set_Label
-        (Gtk_Label(Get_Object(Builder, "lblcareerinfo")),
+        (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
          To_String
            (Factions_List(FactionIndex).Careers(CareerIndex).Description));
    end ShowCareerDescription;
@@ -457,7 +457,7 @@ package body MainMenu is
          return;
       end if;
       Set_Label
-        (Gtk_Label(Get_Object(Builder, "lblbasetypeinfo")),
+        (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
          Get_String
            (BasesTypesList,
             Get_Iter_From_String(BasesTypesList, Integer'Image(BaseTypeIndex)),
@@ -480,6 +480,22 @@ package body MainMenu is
       end if;
       return False;
    end NewGameKeyPressed;
+
+   function UpdateInfo
+     (User_Data: access GObject_Record'Class) return Boolean is
+   begin
+      Set_Label
+        (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
+         Get_Tooltip_Text(Gtk_Widget(User_Data)));
+      return False;
+   end UpdateInfo;
+
+   procedure UpdateInfoProc(User_Data: access GObject_Record'Class) is
+   begin
+      Set_Label
+        (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
+         Get_Tooltip_Text(Gtk_Widget(User_Data)));
+   end UpdateInfoProc;
 
    procedure CreateMainMenu is
       Error: aliased GError;
@@ -511,6 +527,8 @@ package body MainMenu is
         (Builder, "Show_Career_Description", ShowCareerDescription'Access);
       Register_Handler
         (Builder, "Show_Base_Description", ShowBaseDescription'Access);
+      Register_Handler(Builder, "Update_Info", UpdateInfo'Access);
+      Register_Handler(Builder, "Update_Info_Proc", UpdateInfoProc'Access);
       Do_Connect(Builder);
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
       if HallOfFame_Array(1).Name = Null_Unbounded_String then

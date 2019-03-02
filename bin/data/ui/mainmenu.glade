@@ -253,6 +253,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="homogeneous">True</property>
                 <child>
                   <object class="GtkGrid">
                     <property name="visible">True</property>
@@ -286,6 +287,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="can_focus">True</property>
                         <property name="tooltip_text" translatable="yes">Enter character name or press Enter key for random name.</property>
                         <signal name="activate" handler="Random_Name" object="entrycharactername" swapped="no"/>
+                        <signal name="focus-in-event" handler="Update_Info" object="entrycharactername" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -298,6 +300,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="can_focus">True</property>
                         <property name="tooltip_text" translatable="yes">Enter ship name or press Enter for random ship name.</property>
                         <signal name="activate" handler="Random_Name" object="entryshipname" swapped="no"/>
+                        <signal name="focus-in-event" handler="Update_Info" object="entryshipname" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -323,6 +326,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes">Select starting goal for your character. You can change it later in game.</property>
                         <signal name="clicked" handler="Show_Goals" swapped="no"/>
+                        <signal name="focus-in-event" handler="Update_Info" object="btngoal" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -368,6 +372,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Select your career from list. Careers have some impact on gameplay (each have bonus to gaining experience in some fields plus they determine your starting ship and crew). More info about each career you may find after selecting it. You can't change career later.</property>
                         <signal name="changed" handler="Show_Career_Description" swapped="no"/>
+                        <signal name="set-focus-child" handler="Update_Info_Proc" object="cmbcareer" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -380,6 +385,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Select your faction from list. Factions have biggest impact on game. They determine amount of bases and some playing style. More information about each faction you will see after selecting it. You can't change it later.</property>
                         <signal name="changed" handler="Show_Faction_Description" swapped="no"/>
+                        <signal name="set-focus-child" handler="Update_Info_Proc" object="cmbfaction" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -396,6 +402,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <item translatable="yes">Male</item>
                           <item translatable="yes">Female</item>
                         </items>
+                        <signal name="set-focus-child" handler="Update_Info_Proc" object="cmbgender" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -422,6 +429,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="model">basesstore</property>
                         <property name="active">5</property>
                         <signal name="changed" handler="Show_Base_Description" swapped="no"/>
+                        <signal name="set-focus-child" handler="Update_Info_Proc" object="cmbbasetype" swapped="no"/>
                         <child>
                           <object class="GtkCellRendererText"/>
                           <attributes>
@@ -451,119 +459,34 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
-                          <object class="GtkBox">
+                          <object class="GtkFrame">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="margin_left">5</property>
-                            <property name="orientation">vertical</property>
+                            <property name="label_xalign">0.10000000149011612</property>
+                            <property name="shadow_type">out</property>
                             <child>
-                              <object class="GtkFrame">
+                              <object class="GtkAlignment">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label_xalign">0.10000000149011612</property>
-                                <property name="shadow_type">out</property>
+                                <property name="left_padding">5</property>
+                                <property name="right_padding">5</property>
                                 <child>
-                                  <object class="GtkAlignment">
+                                  <object class="GtkLabel" id="lblnewgameinfo">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="left_padding">5</property>
-                                    <property name="right_padding">5</property>
-                                    <child>
-                                      <object class="GtkLabel" id="lblfactioninfo">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="wrap">True</property>
-                                        <property name="xalign">0</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                                <child type="label">
-                                  <object class="GtkLabel">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Faction Info</property>
+                                    <property name="wrap">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="yalign">0</property>
                                   </object>
                                 </child>
                               </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
                             </child>
-                            <child>
-                              <object class="GtkFrame">
+                            <child type="label">
+                              <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="margin_top">5</property>
-                                <property name="label_xalign">0.10000000149011612</property>
-                                <property name="shadow_type">out</property>
-                                <child>
-                                  <object class="GtkAlignment">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="left_padding">12</property>
-                                    <child>
-                                      <object class="GtkLabel" id="lblcareerinfo">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="wrap">True</property>
-                                        <property name="xalign">0</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                                <child type="label">
-                                  <object class="GtkLabel">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Career Info</property>
-                                  </object>
-                                </child>
+                                <property name="label" translatable="yes">Info</property>
                               </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkFrame">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="margin_top">5</property>
-                                <property name="label_xalign">0.10000000149011612</property>
-                                <property name="shadow_type">out</property>
-                                <child>
-                                  <object class="GtkAlignment">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="left_padding">12</property>
-                                    <child>
-                                      <object class="GtkLabel" id="lblbasetypeinfo">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">Start game in randomly selected base type.</property>
-                                        <property name="wrap">True</property>
-                                        <property name="xalign">0</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                                <child type="label">
-                                  <object class="GtkLabel">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Base type Info</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">2</property>
-                              </packing>
                             </child>
                           </object>
                         </child>
