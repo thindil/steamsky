@@ -207,7 +207,10 @@ package body GameOptions is
          To_Unbounded_String("edthalfspeed")),
       53 =>
         (To_Unbounded_String("<skymapwindow>/fullspeed"),
-         To_Unbounded_String("edtfullspeed")));
+         To_Unbounded_String("edtfullspeed")),
+      54 =>
+        (To_Unbounded_String("<skymapwindow>/fullscreen"),
+         To_Unbounded_String("edtfullscreen")));
    Setting: Boolean := False;
 
    procedure CloseOptions(Object: access Gtkada_Builder_Record'Class) is
