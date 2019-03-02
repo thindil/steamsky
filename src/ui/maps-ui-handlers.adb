@@ -1309,7 +1309,6 @@ package body Maps.UI.Handlers is
 
    function MapKeyReleased(Self: access Gtk_Widget_Record'Class;
       Event: Gdk.Event.Gdk_Event_Key) return Boolean is
-      pragma Unreferenced(Self);
       KeyMods: constant Gdk_Modifier_Type :=
         Event.State and Get_Default_Mod_Mask;
       Key: Gtk_Accel_Key;
@@ -1327,6 +1326,20 @@ package body Maps.UI.Handlers is
          return True;
       end CenterMapOn;
    begin
+      Lookup_Entry("<skymapwindow>/fullscreen", Key, Found);
+      if not Found then
+         return True;
+      end if;
+      if Key.Accel_Key = Event.Keyval and Key.Accel_Mods = KeyMods then
+         if not GameSettings.Fullscreen then
+            GameSettings.Fullscreen := True;
+            Fullscreen(Get_Window(Self));
+         else
+            GameSettings.Fullscreen := False;
+            Unfullscreen(Get_Window(Self));
+         end if;
+         return False;
+      end if;
       if Get_Visible_Child_Name(Gtk_Stack(Get_Object(Builder, "gamestack"))) /=
         "skymap" then
          return True;
