@@ -49,7 +49,7 @@ package body Config is
          InterfaceTheme => To_Unbounded_String("default"),
          MessagesOrder => OLDER_FIRST, AutoAskForBases => False,
          AutoAskForEvents => False, ShowTooltips => True,
-         ShowLastMessages => True, MessagesPosition => 0);
+         ShowLastMessages => True, MessagesPosition => 0, FullScreen => False);
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
@@ -130,6 +130,8 @@ package body Config is
             elsif FieldName = To_Unbounded_String("MessagesPosition") then
                GameSettings.MessagesPosition :=
                  Natural'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("FullScreen") then
+               GameSettings.FullScreen := LoadBoolean;
             end if;
          end if;
       end loop;
@@ -220,6 +222,7 @@ package body Config is
       Put_Line
         (ConfigFile,
          "MessagesPosition =" & Natural'Image(GameSettings.MessagesPosition));
+      SaveBoolean(GameSettings.FullScreen, "FullScreen");
       Close(ConfigFile);
    end SaveConfig;
 
