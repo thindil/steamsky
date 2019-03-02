@@ -277,6 +277,8 @@ package body GameOptions is
         Get_State(Gtk_Switch(Get_Object(Object, "switchshowtooltips")));
       GameSettings.ShowLastMessages :=
         Get_State(Gtk_Switch(Get_Object(Object, "switchshowlastmessages")));
+      GameSettings.FullScreen :=
+        Get_State(Gtk_Switch(Get_Object(Object, "switchfullscreen")));
       SaveConfig;
       LoadTheme;
       Save(To_String(SaveDirectory) & "keys.cfg");
@@ -481,6 +483,9 @@ package body GameOptions is
       Set_State
         (Gtk_Switch(Get_Object(Builder, "switchshowlastmessages")),
          GameSettings.ShowLastMessages);
+      Set_State
+        (Gtk_Switch(Get_Object(Builder, "switchfullscreen")),
+         GameSettings.FullScreen);
       SetFontsSizes;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "options");
