@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New ships: advanced huge poleis trader mk II, advanced huge independent
   trader mk II, advanced huge pirates trader mk II, advanced huge poleis
-  patrol ship mk II and advanced huge independent patrol ship mk II
+  patrol ship mk II, advanced huge independent patrol ship mk II and advanced
+  huge poleis trader mk III
 - Option to show or hide last messages window
 
 ### Changed
