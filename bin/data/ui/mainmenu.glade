@@ -372,7 +372,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Select your career from list. Careers have some impact on gameplay (each have bonus to gaining experience in some fields plus they determine your starting ship and crew). More info about each career you may find after selecting it. You can't change career later.</property>
                         <signal name="changed" handler="Show_Career_Description" swapped="no"/>
-                        <signal name="set-focus-child" handler="Update_Info_Proc" object="cmbcareer" swapped="no"/>
+                        <signal name="set-focus-child" handler="Show_Career_Description" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -385,7 +385,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Select your faction from list. Factions have biggest impact on game. They determine amount of bases and some playing style. More information about each faction you will see after selecting it. You can't change it later.</property>
                         <signal name="changed" handler="Show_Faction_Description" swapped="no"/>
-                        <signal name="set-focus-child" handler="Update_Info_Proc" object="cmbfaction" swapped="no"/>
+                        <signal name="set-focus-child" handler="Show_Faction_Description" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -429,7 +429,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="model">basesstore</property>
                         <property name="active">5</property>
                         <signal name="changed" handler="Show_Base_Description" swapped="no"/>
-                        <signal name="set-focus-child" handler="Update_Info_Proc" object="cmbbasetype" swapped="no"/>
+                        <signal name="set-focus-child" handler="Show_Base_Description" swapped="no"/>
                         <child>
                           <object class="GtkCellRendererText"/>
                           <attributes>
@@ -453,6 +453,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkScrolledWindow" id="scrollinfo">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="margin_left">5</property>
                     <property name="shadow_type">in</property>
                     <child>
                       <object class="GtkViewport">

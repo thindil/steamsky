@@ -71,7 +71,7 @@ with Bases; use Bases;
 package body MainMenu is
 
    Builder: Gtkada_Builder;
-   AllNews: Boolean := False;
+   AllNews, Setting: Boolean := False;
 
    procedure Quit(Object: access Gtkada_Builder_Record'Class) is
    begin
@@ -409,7 +409,8 @@ package body MainMenu is
       end if;
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
-         To_String(Factions_List(FactionIndex).Description));
+         Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbfaction"))) & LF &
+         LF & To_String(Factions_List(FactionIndex).Description));
       if Factions_List(FactionIndex).Flags.Contains
           (To_Unbounded_String("nogender")) then
          Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbgender")), 0);
@@ -425,7 +426,9 @@ package body MainMenu is
            (CareerComboBox, To_String(Careers_Container.Key(I)),
             To_String(Factions_List(FactionIndex).Careers(I).Name));
       end loop;
+      Setting := True;
       Set_Active(Gtk_Combo_Box(CareerComboBox), 0);
+      Setting := False;
    end ShowFactionDescription;
 
    procedure ShowCareerDescription
@@ -438,11 +441,13 @@ package body MainMenu is
           (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbcareer"))));
    begin
       if FactionIndex = Null_Unbounded_String or
-        CareerIndex = Null_Unbounded_String then
+        CareerIndex = Null_Unbounded_String or Setting then
          return;
       end if;
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
+         Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbcareer"))) & LF &
+         LF &
          To_String
            (Factions_List(FactionIndex).Careers(CareerIndex).Description));
    end ShowCareerDescription;
@@ -458,6 +463,8 @@ package body MainMenu is
       end if;
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
+         Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbbasetype"))) & LF &
+         LF &
          Get_String
            (BasesTypesList,
             Get_Iter_From_String(BasesTypesList, Integer'Image(BaseTypeIndex)),
@@ -544,8 +551,7 @@ package body MainMenu is
       DataError := To_Unbounded_String(LoadGameData);
       if DataError /= Null_Unbounded_String then
          ShowDialog
-           ("Can't load game data files. Error: " & To_String(DataError),
-            Gtk_Window(Get_Object(Builder, "mainmenuwindow")));
+           ("Can't load game data files. Error: " & To_String(DataError));
       end if;
       declare
          FactionComboBox: constant Gtk_Combo_Box_Text :=
