@@ -24,7 +24,6 @@ with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Adjustment; use Gtk.Adjustment;
-with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
@@ -200,8 +199,7 @@ package body Bases.LootUI is
          if FreeCargo(0 - (Amount * Items_List(ProtoIndex).Weight)) < 0 then
             ShowDialog
               ("You can't take that much " &
-               To_String(Items_List(ProtoIndex).Name) & ".",
-               Gtk_Window(Get_Object(Builder, "skymapwindow")));
+               To_String(Items_List(ProtoIndex).Name) & ".");
             return;
          end if;
          if CargoIndex > 0 then

@@ -17,7 +17,6 @@
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with GNAT.String_Split; use GNAT.String_Split;
-with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
@@ -155,8 +154,7 @@ package body Stories.UI is
       GetStoryLocation(NewX, NewY);
       if NewX = PlayerShip.SkyX and NewY = PlayerShip.SkyY then
          ShowDialog
-           ("You are at this story location now.",
-            Gtk_Window(Get_Object(Object, "skymapwindow")));
+           ("You are at this story location now.");
          return;
       end if;
       PlayerShip.DestinationX := NewX;

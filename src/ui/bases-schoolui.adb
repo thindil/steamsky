@@ -21,7 +21,6 @@ with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
-with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Label; use Gtk.Label;
 with Glib; use Glib;
@@ -89,8 +88,6 @@ package body Bases.SchoolUI is
    end ShowTrainInfo;
 
    procedure TrainSelectedSkill(Object: access Gtkada_Builder_Record'Class) is
-      ParentWindow: constant Gtk_Window :=
-        Gtk_Window(Get_Object(Object, "skymapwindow"));
       SkillsIter: Gtk_Tree_Iter;
       SkillsModel: Gtk_Tree_Model;
       SkillName: Unbounded_String;
@@ -117,15 +114,13 @@ package body Bases.SchoolUI is
       when Trade_No_Money =>
          ShowDialog
            ("You don't have any " & To_String(MoneyName) &
-            " to pay for learning.",
-            ParentWindow);
+            " to pay for learning.");
       when Trade_Not_Enough_Money =>
          ShowDialog
            ("You don't have enough " & To_String(MoneyName) &
-            " to pay for learning this skill.",
-            ParentWindow);
+            " to pay for learning this skill.");
       when Trade_Cant_Train =>
-         ShowDialog("You can't train this skill any more.", ParentWindow);
+         ShowDialog("You can't train this skill any more.");
    end TrainSelectedSkill;
 
    procedure CreateBasesSchoolUI(NewBuilder: Gtkada_Builder) is

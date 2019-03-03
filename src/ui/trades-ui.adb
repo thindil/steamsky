@@ -26,7 +26,6 @@ with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Adjustment; use Gtk.Adjustment;
-with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
@@ -330,57 +329,46 @@ package body Trades.UI is
       when An_Exception : Trade_Cant_Buy =>
          ShowDialog
            ("You can't buy " & Exception_Message(An_Exception) & " in this " &
-            Trader & ".",
-            Gtk_Window(Get_Object(Builder, "skymapwindow")));
+            Trader & ".");
       when An_Exception : Trade_Not_For_Sale_Now =>
          ShowDialog
            ("You can't buy " & Exception_Message(An_Exception) &
-            " in this base at this moment.",
-            Gtk_Window(Get_Object(Builder, "skymapwindow")));
+            " in this base at this moment.");
       when An_Exception : Trade_Buying_Too_Much =>
          ShowDialog
            (Trader & " don't have that much " &
-            Exception_Message(An_Exception) & " for sale.",
-            Gtk_Window(Get_Object(Builder, "skymapwindow")));
+            Exception_Message(An_Exception) & " for sale.");
       when Trade_No_Free_Cargo =>
          ShowDialog
-           ("You don't have that much free space in your ship cargo.",
-            Gtk_Window(Get_Object(Builder, "skymapwindow")));
+           ("You don't have that much free space in your ship cargo.");
       when An_Exception : Trade_No_Money =>
          ShowDialog
            ("You don't have any " & To_String(MoneyName) & " to buy " &
-            Exception_Message(An_Exception) & ".",
-            Gtk_Window(Get_Object(Builder, "skymapwindow")));
+            Exception_Message(An_Exception) & ".");
       when An_Exception : Trade_Not_Enough_Money =>
          ShowDialog
            ("You don't have enough " & To_String(MoneyName) &
-            " to buy so much " & Exception_Message(An_Exception) & ".",
-            Gtk_Window(Get_Object(Builder, "skymapwindow")));
+            " to buy so much " & Exception_Message(An_Exception) & ".");
       when Trade_Invalid_Amount =>
          if User_Data = Get_Object(Builder, "btnbuyitem") then
             ShowDialog
-              ("You entered invalid amount to buy.",
-               Gtk_Window(Get_Object(Builder, "skymapwindow")));
+              ("You entered invalid amount to buy.");
          else
             ShowDialog
-              ("You entered invalid amount to sell.",
-               Gtk_Window(Get_Object(Builder, "skymapwindow")));
+              ("You entered invalid amount to sell.");
          end if;
       when An_Exception : Trade_Too_Much_For_Sale =>
          ShowDialog
            ("You dont have that much " & Exception_Message(An_Exception) &
-            " in ship cargo.",
-            Gtk_Window(Get_Object(Builder, "skymapwindow")));
+            " in ship cargo.");
       when An_Exception : Trade_No_Money_In_Base =>
          ShowDialog
            ("You can't sell so much " & Exception_Message(An_Exception) &
             " because " & Trader & " don't have that much " &
-            To_String(MoneyName) & " to buy it.",
-            Gtk_Window(Get_Object(Builder, "skymapwindow")));
+            To_String(MoneyName) & " to buy it.");
       when Trade_No_Trader =>
          ShowDialog
-           ("You don't have assigned anyone in crew to talk in bases duty.",
-            Gtk_Window(Get_Object(Builder, "skymapwindow")));
+           ("You don't have assigned anyone in crew to talk in bases duty.");
    end TradeItem;
 
    procedure CreateTradeUI(NewBuilder: Gtkada_Builder) is
