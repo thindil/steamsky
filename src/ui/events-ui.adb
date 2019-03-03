@@ -24,7 +24,6 @@ with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Label; use Gtk.Label;
-with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
 with Maps; use Maps;
@@ -100,8 +99,7 @@ package body Events.UI is
       if Events_List(EventIndex).SkyX = PlayerShip.SkyX and
         Events_List(EventIndex).SkyY = PlayerShip.SkyY then
          ShowDialog
-           ("You are at this event now.",
-            Gtk_Window(Get_Object(Object, "skymapwindow")));
+           ("You are at this event now.");
          return;
       end if;
       PlayerShip.DestinationX := Events_List(EventIndex).SkyX;

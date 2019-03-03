@@ -25,7 +25,6 @@ with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
-with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
@@ -186,8 +185,7 @@ package body Ships.Cargo.UI is
          ShowDialog
            ("No free space in " &
             To_String(PlayerShip.Crew(MemberIndex).Name) &
-            "'s inventory for that amount of " & GetItemName(Item),
-            Gtk_Window(Get_Object(Object, "skymapwindow")));
+            "'s inventory for that amount of " & GetItemName(Item));
          return;
       end if;
       UpdateInventory

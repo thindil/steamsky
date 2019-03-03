@@ -30,8 +30,7 @@ package Utils.UI is
    type GameStates is (SkyMap_View, Combat_View, Main_Menu); -- Game states
    PreviousGameState: GameStates; -- Current game state, needed for hide some windows
 
-   procedure ShowDialog(Message: String;
-      Parent: Gtk_Window); -- Show dialog with info
+   procedure ShowDialog(Message: String); -- Show dialog with info
    function HideWindow
      (User_Data: access GObject_Record'Class)
      return Boolean; -- Hide window instead of destroying it

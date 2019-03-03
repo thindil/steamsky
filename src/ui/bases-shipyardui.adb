@@ -25,7 +25,6 @@ with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
-with Gtk.Window; use Gtk.Window;
 with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
@@ -440,8 +439,6 @@ package body Bases.ShipyardUI is
 
    procedure ManipulateModule(User_Data: access GObject_Record'Class) is
       Install: Boolean;
-      ParentWindow: constant Gtk_Window :=
-        Gtk_Window(Get_Object(Builder, "skymapwindow"));
       ModulesIter: Gtk_Tree_Iter;
       ModulesModel: Gtk_Tree_Model;
    begin
@@ -461,31 +458,26 @@ package body Bases.ShipyardUI is
    exception
       when Trade_No_Money =>
          ShowDialog
-           ("You don't have " & To_String(MoneyName) & " to pay for modules.",
-            ParentWindow);
+           ("You don't have " & To_String(MoneyName) & " to pay for modules.");
       when An_Exception : Trade_Not_Enough_Money =>
          ShowDialog
            ("You don't have enough " & To_String(MoneyName) & " to pay for " &
-            Exception_Message(An_Exception) & ".",
-            ParentWindow);
+            Exception_Message(An_Exception) & ".");
       when An_Exception : BasesShip_Unique_Module =>
          ShowDialog
            ("You can't install another " & Exception_Message(An_Exception) &
-            " because you have installed one module that type. Remove old first.",
-            ParentWindow);
+            " because you have installed one module that type. Remove old first.");
       when An_Exception : BasesShip_Installation_Error |
         BasesShip_Removing_Error =>
-         ShowDialog(Exception_Message(An_Exception), ParentWindow);
+         ShowDialog(Exception_Message(An_Exception));
       when Trade_No_Free_Cargo =>
          ShowDialog
            ("You don't have enough free space for " & To_String(MoneyName) &
-            " in ship cargo.",
-            ParentWindow);
+            " in ship cargo.");
       when Trade_No_Money_In_Base =>
          ShowDialog
            ("Base don't have enough " & To_String(MoneyName) &
-            " for buy this module.",
-            ParentWindow);
+            " for buy this module.");
    end ManipulateModule;
 
    procedure CreateBasesShipyardUI(NewBuilder: Gtkada_Builder) is

@@ -87,8 +87,7 @@ package body Maps.UI.Handlers is
    begin
       if not QuitGame(Gtk_Window(Get_Object(Object, "skymapwindow"))) then
          ShowDialog
-           ("Can't quit game.",
-            Gtk_Window(Get_Object(Object, "skymapwindow")));
+           ("Can't quit game.");
       end if;
    end QuitGameMenu;
 
@@ -252,8 +251,7 @@ package body Maps.UI.Handlers is
          Message := To_Unbounded_String(DockShip(False));
          if Length(Message) > 0 then
             ShowDialog
-              (To_String(Message),
-               Gtk_Window(Get_Object(Object, "skymapwindow")));
+              (To_String(Message));
             return;
          end if;
       else
@@ -268,8 +266,7 @@ package body Maps.UI.Handlers is
          Message := To_Unbounded_String(DockShip(True));
          if Length(Message) > 0 then
             ShowDialog
-              (To_String(Message),
-               Gtk_Window(Get_Object(Object, "skymapwindow")));
+              (To_String(Message));
             return;
          end if;
          ShowOrders(Object);
@@ -467,8 +464,7 @@ package body Maps.UI.Handlers is
       end case;
       if Message /= Null_Unbounded_String then
          ShowDialog
-           (To_String(Message),
-            Gtk_Window(Get_Object(Builder, "skymapwindow")));
+           (To_String(Message));
       end if;
       CenterX := PlayerShip.SkyX;
       CenterY := PlayerShip.SkyY;
@@ -863,8 +859,7 @@ package body Maps.UI.Handlers is
          Grab_Focus(Gtk_Widget(Get_Object(Object, "btncloseorders")));
       else
          ShowDialog
-           ("Here are no available ship orders at this moment. Ship orders available mostly when you are at base or at event on map.",
-            Gtk_Window(Get_Object(Object, "skymapwindow")));
+           ("Here are no available ship orders at this moment. Ship orders available mostly when you are at base or at event on map.");
       end if;
    end ShowOrders;
 
@@ -961,22 +956,19 @@ package body Maps.UI.Handlers is
       if User_Data = Get_Object(Builder, "menumissions") then
          if AcceptedMissions.Length = 0 then
             ShowDialog
-              ("You didn't accepted any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.",
-               Gtk_Window(Get_Object(Builder, "skymapwindow")));
+              ("You didn't accepted any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.");
             return;
          end if;
       elsif User_Data = Get_Object(Builder, "menuevents") then
          if Events_List.Length = 0 then
             ShowDialog
-              ("You dont know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.",
-               Gtk_Window(Get_Object(Builder, "skymapwindow")));
+              ("You dont know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.");
             return;
          end if;
       elsif User_Data = Get_Object(Builder, "menustory") then
          if FinishedStories.Length = 0 then
             ShowDialog
-              ("You didn't discovered any story yet.",
-               Gtk_Window(Get_Object(Builder, "skymapwindow")));
+              ("You didn't discovered any story yet.");
             return;
          end if;
       end if;
@@ -1149,8 +1141,7 @@ package body Maps.UI.Handlers is
                Message := To_Unbounded_String(DockShip(True));
                if Message /= Null_Unbounded_String then
                   ShowDialog
-                    (To_String(Message),
-                     Gtk_Window(Get_Object(Builder, "skymapwindow")));
+                    (To_String(Message));
                   return;
                end if;
             end if;
@@ -1180,8 +1171,7 @@ package body Maps.UI.Handlers is
                      for Text of Step.Texts loop
                         if CurrentStory.FinishedStep = Text.Condition then
                            ShowDialog
-                             (To_String(Text.Text),
-                              Gtk_Window(Get_Object(Builder, "skymapwindow")));
+                             (To_String(Text.Text));
                            CurrentStory.ShowText := False;
                            exit;
                         end if;
@@ -1192,8 +1182,7 @@ package body Maps.UI.Handlers is
                end;
             else
                ShowDialog
-                 (To_String(Step.FailText),
-                  Gtk_Window(Get_Object(Builder, "skymapwindow")));
+                 (To_String(Step.FailText));
                CurrentStory.ShowText := False;
             end if;
          end;
@@ -1206,16 +1195,14 @@ package body Maps.UI.Handlers is
             if MoneyIndex2 = 0 then
                ShowDialog
                  ("You don't have any " & To_String(MoneyName) &
-                  " for change ship home base.",
-                  Gtk_Window(Get_Object(Builder, "skymapwindow")));
+                  " for change ship home base.");
                return;
             end if;
             CountPrice(Price, TraderIndex);
             if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
                ShowDialog
                  ("You don't have enough " & To_String(MoneyName) &
-                  " for change ship home base.",
-                  Gtk_Window(Get_Object(Builder, "skymapwindow")));
+                  " for change ship home base.");
                return;
             end if;
             PlayerShip.HomeBase :=

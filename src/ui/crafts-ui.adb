@@ -25,7 +25,6 @@ with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Adjustment; use Gtk.Adjustment;
-with Gtk.Window; use Gtk.Window;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Gtk.Stack; use Gtk.Stack;
@@ -80,22 +79,18 @@ package body Crafts.UI is
       when An_Exception : Crafting_No_Materials =>
          ShowDialog
            ("You don't have enough materials to start manufacturing " &
-            Exception_Message(An_Exception) & ".",
-            Gtk_Window(Get_Object(Object, "skymapwindow")));
+            Exception_Message(An_Exception) & ".");
       when An_Exception : Crafting_No_Tools =>
          ShowDialog
            ("You don't have the proper tool to start manufacturing " &
-            Exception_Message(An_Exception) & ".",
-            Gtk_Window(Get_Object(Object, "skymapwindow")));
+            Exception_Message(An_Exception) & ".");
       when Trade_No_Free_Cargo =>
          ShowDialog
-           ("You don't have that much free space in your ship's cargo.",
-            Gtk_Window(Get_Object(Object, "craftswindow")));
+           ("You don't have that much free space in your ship's cargo.");
       when An_Exception : Crafting_No_Workshop =>
          ShowDialog
            ("You don't have proper a workplace to start manufacturing " &
-            Exception_Message(An_Exception) & ".",
-            Gtk_Window(Get_Object(Object, "skymapwindow")));
+            Exception_Message(An_Exception) & ".");
    end ShowSetRecipe;
 
    procedure ShowRecipeInfo(Object: access Gtkada_Builder_Record'Class) is
