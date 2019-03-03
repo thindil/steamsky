@@ -44,6 +44,7 @@ with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Scrolled_Window; use Gtk.Scrolled_Window;
+with Gtk.Overlay; use Gtk.Overlay;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -504,6 +505,11 @@ package body MainMenu is
          Get_Tooltip_Text(Gtk_Widget(User_Data)));
    end UpdateInfoProc;
 
+   procedure HideDialog(User_Data: access GObject_Record'Class) is
+   begin
+      Hide(Gtk_Widget(User_Data));
+   end HideDialog;
+
    procedure CreateMainMenu is
       Error: aliased GError;
       DataError: Unbounded_String;
@@ -519,6 +525,9 @@ package body MainMenu is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
+      Add_Overlay
+        (Gtk_Overlay(Get_Object(Builder, "menuoverlay")),
+         Gtk_Widget(Get_Object(Builder, "messagebox")));
       Register_Handler(Builder, "Main_Quit", Quit'Access);
       Register_Handler(Builder, "Show_All_News", ShowAllNews'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
@@ -536,7 +545,9 @@ package body MainMenu is
         (Builder, "Show_Base_Description", ShowBaseDescription'Access);
       Register_Handler(Builder, "Update_Info", UpdateInfo'Access);
       Register_Handler(Builder, "Update_Info_Proc", UpdateInfoProc'Access);
+      Register_Handler(Builder, "Hide_Dialog", HideDialog'Access);
       Do_Connect(Builder);
+      SetUtilsBuilder(Builder);
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
       if HallOfFame_Array(1).Name = Null_Unbounded_String then
          Hide(Gtk_Widget(Get_Object(Builder, "btnhalloffame")));
@@ -549,10 +560,6 @@ package body MainMenu is
         (Gtk_Entry(Get_Object(Builder, "entryshipname")),
          To_String(NewGameSettings.ShipName));
       DataError := To_Unbounded_String(LoadGameData);
-      if DataError /= Null_Unbounded_String then
-         ShowDialog
-           ("Can't load game data files. Error: " & To_String(DataError));
-      end if;
       declare
          FactionComboBox: constant Gtk_Combo_Box_Text :=
            Gtk_Combo_Box_Text(Get_Object(Builder, "cmbfaction"));
@@ -574,6 +581,8 @@ package body MainMenu is
       if DataError /= Null_Unbounded_String then
          Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
          Hide(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
+         ShowDialog
+           ("Can't load game data files. Error: " & To_String(DataError));
       end if;
    end CreateMainMenu;
 
@@ -628,6 +637,7 @@ package body MainMenu is
       if not Exists(To_String(SaveDirectory) & "halloffame.dat") then
          Hide(Gtk_Widget(Get_Object(Builder, "btnhalloffame")));
       end if;
+      Hide(Gtk_Widget(Get_Object(Builder, "messagebox")));
    end ShowMainMenu;
 
    procedure SaveException(An_Exception: Exception_Occurrence;
