@@ -1054,6 +1054,9 @@ package body Maps.UI is
       Add_Overlay
         (Gtk_Overlay(Get_Object(Builder, "mapoverlay")),
          Gtk_Widget(Get_Object(Builder, "btnboxwait")));
+      Add_Overlay
+        (Gtk_Overlay(Get_Object(Builder, "gameoverlay")),
+         Gtk_Widget(Get_Object(Builder, "messagebox")));
       Register_Handler(Builder, "Quit_Game", QuitGame'Access);
       Register_Handler(Builder, "Quit_Game_Menu", QuitGameMenu'Access);
       Register_Handler(Builder, "Get_New_Size", GetMapSize'Access);
@@ -1325,6 +1328,7 @@ package body Maps.UI is
       Hide(Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
       Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
       Hide(Gtk_Widget(Get_Object(Builder, "btnboxwait")));
+      Hide(Gtk_Widget(Get_Object(Builder, "messagebox")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
       Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));
@@ -1333,8 +1337,7 @@ package body Maps.UI is
         CurrentStory.ShowText then
          if CurrentStory.CurrentStep > -2 then
             ShowDialog
-              (To_String(GetCurrentStoryText),
-               Gtk_Window(Get_Object(Builder, "skymapwindow")));
+              (To_String(GetCurrentStoryText));
          else
             FinishStory;
             if PlayerShip.Crew(1).Health = 0 then

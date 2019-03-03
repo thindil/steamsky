@@ -25,7 +25,6 @@ with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.GEntry; use Gtk.GEntry;
-with Gtk.Window; use Gtk.Window;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Messages; use Messages;
@@ -429,8 +428,7 @@ package body Ships.UI.Handlers is
    begin
       if NewName'Length = 0 then
          ShowDialog
-           ("You must enter new ship name",
-            Gtk_Window(Get_Object(Builder, "skymapwindow")));
+           ("You must enter new ship name");
          return;
       end if;
       if To_Unbounded_String(NewName) /= PlayerShip.Name then
@@ -447,8 +445,7 @@ package body Ships.UI.Handlers is
    begin
       if New_Text'Length = 0 then
          ShowDialog
-           ("You must enter new module name",
-            Gtk_Window(Get_Object(Builder, "skymapwindow")));
+           ("You must enter new module name");
          return;
       end if;
       PlayerShip.Modules(ModuleIndex).Name := To_Unbounded_String(New_Text);
@@ -473,8 +470,7 @@ package body Ships.UI.Handlers is
    exception
       when An_Exception : Ship_Upgrade_Error =>
          ShowDialog
-           (Exception_Message(An_Exception),
-            Gtk_Window(Get_Object(Builder, "skymapwindow")));
+           (Exception_Message(An_Exception));
          return;
    end SetUpgrade;
 
@@ -588,8 +584,7 @@ package body Ships.UI.Handlers is
          end loop;
          if not CanDisable then
             ShowDialog
-              ("You can't disable this engine because it is your last working engine.",
-               Gtk_Window(Get_Object(Builder, "skymapwindow")));
+              ("You can't disable this engine because it is your last working engine.");
             return;
          end if;
          PlayerShip.Modules(ModuleIndex).Disabled := True;

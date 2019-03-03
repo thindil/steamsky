@@ -27,7 +27,6 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Label; use Gtk.Label;
-with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Tree_Model_Filter; use Gtk.Tree_Model_Filter;
 with Gtk.GEntry; use Gtk.GEntry;
@@ -198,8 +197,7 @@ package body BasesList is
       if SkyBases(BaseIndex).SkyX = PlayerShip.SkyX and
         SkyBases(BaseIndex).SkyY = PlayerShip.SkyY then
          ShowDialog
-           ("You are at this base now.",
-            Gtk_Window(Get_Object(Object, "skymapwindow")));
+           ("You are at this base now.");
          return;
       end if;
       PlayerShip.DestinationX := SkyBases(BaseIndex).SkyX;
@@ -210,7 +208,7 @@ package body BasesList is
          OrderMessage);
       ShowSkyMap;
       Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
+        (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
    end SetDestinationBase;
 
    procedure ShowBase(Object: access Gtkada_Builder_Record'Class) is

@@ -44,14 +44,11 @@ package body Utils.UI is
 
    Builder: Gtkada_Builder;
 
-   procedure ShowDialog(Message: String; Parent: Gtk_Window) is
-      MessageDialog: constant Gtk_Message_Dialog :=
-        Gtk_Message_Dialog_New
-          (Parent, Modal, Message_Error, Buttons_Close, Message);
+   procedure ShowDialog(Message: String) is
    begin
-      if Run(MessageDialog) /= Gtk_Response_None then
-         Destroy(MessageDialog);
-      end if;
+      Set_Label(Gtk_Label(Get_Object(Builder, "lblmessage")), Message);
+      Show_All(Gtk_Widget(Get_Object(Builder, "messagebox")));
+      Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnclosemessage")));
    end ShowDialog;
 
    function HideWindow

@@ -352,8 +352,7 @@ package body Crew.UI.Handlers is
               Member.Equipment(2) /= 0 then
                ShowDialog
                  (To_String(Member.Name) &
-                  " can't use this weapon because have shield equiped. Take off shield first.",
-                  Gtk_Window(Get_Object(Builder, "skymapwindow")));
+                  " can't use this weapon because have shield equiped. Take off shield first.");
                return;
             end if;
             PlayerShip.Crew(MemberIndex).Equipment(1) := ItemIndex;
@@ -365,8 +364,7 @@ package body Crew.UI.Handlers is
                  2 then
                   ShowDialog
                     (To_String(Member.Name) &
-                     " can't use shield because have equiped two-hand weapon. Take off weapon first.",
-                     Gtk_Window(Get_Object(Builder, "skymapwindow")));
+                     " can't use shield because have equiped two-hand weapon. Take off weapon first.");
                   return;
                end if;
             end if;
@@ -398,8 +396,7 @@ package body Crew.UI.Handlers is
       if FreeCargo(0 - (Items_List(Item.ProtoIndex).Weight * Amount)) < 0 then
          ShowDialog
            ("No free space in ship cargo for that amount of " &
-            GetItemName(Item),
-            Gtk_Window(Get_Object(Object, "skymapwindow")));
+            GetItemName(Item));
          return;
       end if;
       UpdateCargo

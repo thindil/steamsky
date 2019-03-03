@@ -301,8 +301,7 @@ package body GameOptions is
          Lookup_Entry(To_String(Accels(I).AccelName), Key, Found);
          if Key.Accel_Key = Event.Keyval and Key.Accel_Mods = KeyMods then
             ShowDialog
-              ("This key is set for other action. Please choose a different key.",
-               Gtk_Window(Get_Object(Builder, "skymapwindow")));
+              ("This key is set for other action. Please choose a different key.");
             return False;
          end if;
       end loop;
@@ -414,8 +413,7 @@ package body GameOptions is
          if not Set_Active_Id
              (ThemesComboBox, To_String(GameSettings.InterfaceTheme)) then
             ShowDialog
-              ("Can't set current theme",
-               Gtk_Window(Get_Object(Builder, "skymapwindow")));
+              ("Can't set current theme");
          end if;
       end;
    end CreateGameOptions;
