@@ -24,7 +24,6 @@ with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Accel_Map; use Gtk.Accel_Map;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
-with Gtk.Window; use Gtk.Window;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Settings; use Gtk.Settings;
 with Gtk.Label; use Gtk.Label;
@@ -412,8 +411,7 @@ package body GameOptions is
          end loop;
          if not Set_Active_Id
              (ThemesComboBox, To_String(GameSettings.InterfaceTheme)) then
-            ShowDialog
-              ("Can't set current theme");
+            ShowDialog("Can't set current theme");
          end if;
       end;
    end CreateGameOptions;
@@ -491,6 +489,7 @@ package body GameOptions is
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "options");
       Hide(Gtk_Widget(Get_Object(Builder, "lastmessagesframe")));
+      Hide(Gtk_Widget(Get_Object(Builder, "btnmenu")));
    end ShowGameOptions;
 
 end GameOptions;
