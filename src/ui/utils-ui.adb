@@ -26,8 +26,10 @@ with Gtk.Text_Iter; use Gtk.Text_Iter;
 with Gtk.Text_Mark; use Gtk.Text_Mark;
 with Gtk.Text_Tag_Table; use Gtk.Text_Tag_Table;
 with Gtk.Text_View; use Gtk.Text_View;
+with Gtk.Button; use Gtk.Button;
 with Gdk.Types; use Gdk.Types;
 with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
+with Glib.Main; use Glib.Main;
 with MainMenu; use MainMenu;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
@@ -43,12 +45,35 @@ with Config; use Config;
 package body Utils.UI is
 
    Builder: Gtkada_Builder;
+   HideCountdown: Natural;
+
+   function AutoHideDialog return Boolean is
+   begin
+      HideCountdown := HideCountdown - 1;
+      if HideCountdown = 0 then
+         Hide(Gtk_Widget(Get_Object(Builder, "messagebox")));
+         return False;
+      end if;
+      Set_Label
+        (Gtk_Button(Get_Object(Builder, "btnclosemessage")),
+         "Close (" & Natural'Image(HideCountdown) & " )");
+      return True;
+   end AutoHideDialog;
 
    procedure ShowDialog(Message: String) is
    begin
       Set_Label(Gtk_Label(Get_Object(Builder, "lblmessage")), Message);
       Show_All(Gtk_Widget(Get_Object(Builder, "messagebox")));
+      Set_Label
+        (Gtk_Button(Get_Object(Builder, "btnclosemessage")), "Close ( 6 )");
       Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnclosemessage")));
+      declare
+         Source_Id: G_Source_Id;
+         pragma Unreferenced(Source_Id);
+      begin
+         HideCountdown := 6;
+         Source_Id := Timeout_Add(1000, AutoHideDialog'Access);
+      end;
    end ShowDialog;
 
    function HideWindow
