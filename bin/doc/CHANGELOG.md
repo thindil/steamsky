@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
   advanced huge pirates trader mk III
 - Option to show or hide last messages window
 - Option to set the game in full screen mode
+- Self-closing message boxes
 
 ### Changed
 - Updated interface
