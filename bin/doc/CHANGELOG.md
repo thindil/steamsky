@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Default keyboard shortcut for show more move map options
 - Missing AppImage .desktop file entries by probonopd #43
 - Typo in README.md
+- Showing new and load game buttons when data files are not loaded
 
 ## [3.4 - 2019-02-24]
 
