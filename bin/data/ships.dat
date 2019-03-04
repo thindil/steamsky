@@ -5384,7 +5384,7 @@ during combat. -->
   <member index="45"/>
   <member index="46"/>
   <member index="69" maxamount="8" minamount="4"/>
-  <description>Advanced and upraded version of huge, well armored poleis traders ship. Avoids any fights.</description>
+  <description>Advanced and upgraded version of huge, well armored poleis traders ship. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="282" maxloot="1200" minloot="750" name="Advanced huge independent trader mk III" owner="INDEPENDENT">
   <module index="124"/>
@@ -5405,7 +5405,28 @@ during combat. -->
   <member index="45"/>
   <member index="46"/>
   <member index="69" maxamount="8" minamount="4"/>
-  <description>Advanced and upraded version of huge, well armored independent traders ship. Avoids any fights.</description>
+  <description>Advanced and upgraded version of huge, well armored independent traders ship. Avoids any fights.</description>
+ </ship>
+ <ship combatai="COWARD" index="283" maxloot="1200" minloot="750" name="Advanced huge pirates trader mk III" owner="PIRATES">
+  <module index="124"/>
+  <module index="112"/>
+  <module amount="2" index="126"/>
+  <module amount="16" index="93"/>
+  <module index="94"/>
+  <module amount="4" index="233"/>
+  <module amount="3" index="120"/>
+  <module amount="3" index="53"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="2" maxamount="800" minamount="600"/>
+  <cargo index="3" maxamount="2000" minamount="1500"/>
+  <cargo index="34" maxamount="1000" minamount="500"/>
+  <cargo index="21" maxamount="800" minamount="600"/>
+  <member index="43"/>
+  <member amount="3" index="44"/>
+  <member index="45"/>
+  <member index="46"/>
+  <member index="69" maxamount="8" minamount="4"/>
+  <description>Advanced and upgraded version of huge, well armored pirates traders ship. Avoids any fights.</description>
  </ship>
 </ships>
 
