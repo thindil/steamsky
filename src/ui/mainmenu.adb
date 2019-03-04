@@ -73,6 +73,7 @@ package body MainMenu is
 
    Builder: Gtkada_Builder;
    AllNews, Setting: Boolean := False;
+   DataError: Unbounded_String;
 
    procedure Quit(Object: access Gtkada_Builder_Record'Class) is
    begin
@@ -175,19 +176,7 @@ package body MainMenu is
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page1");
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "entrycharactername")));
       elsif User_Data = Get_Object(Builder, "btnback") then
-         declare
-            Files: Search_Type;
-         begin
-            Start_Search(Files, To_String(SaveDirectory), "*.sav");
-            if not More_Entries(Files) then
-               Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
-            else
-               Show_All(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
-            end if;
-         end;
-         Set_Visible_Child_Name
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page0");
-         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
+         ShowMainMenu;
       elsif User_Data = Get_Object(Builder, "btnhalloffame") then
          declare
             HofList: constant Gtk_List_Store :=
@@ -512,7 +501,6 @@ package body MainMenu is
 
    procedure CreateMainMenu is
       Error: aliased GError;
-      DataError: Unbounded_String;
    begin
       LoadThemes;
       LoadTheme;
@@ -634,6 +622,10 @@ package body MainMenu is
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
       end if;
       End_Search(Files);
+      if DataError /= Null_Unbounded_String then
+         Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
+      end if;
       if not Exists(To_String(SaveDirectory) & "halloffame.dat") then
          Hide(Gtk_Widget(Get_Object(Builder, "btnhalloffame")));
       end if;
