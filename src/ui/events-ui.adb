@@ -98,8 +98,7 @@ package body Events.UI is
    begin
       if Events_List(EventIndex).SkyX = PlayerShip.SkyX and
         Events_List(EventIndex).SkyY = PlayerShip.SkyY then
-         ShowDialog
-           ("You are at this event now.");
+         ShowDialog("You are at this event now.");
          return;
       end if;
       PlayerShip.DestinationX := Events_List(EventIndex).SkyX;
