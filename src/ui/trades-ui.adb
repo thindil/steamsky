@@ -339,8 +339,7 @@ package body Trades.UI is
            (Trader & " don't have that much " &
             Exception_Message(An_Exception) & " for sale.");
       when Trade_No_Free_Cargo =>
-         ShowDialog
-           ("You don't have that much free space in your ship cargo.");
+         ShowDialog("You don't have that much free space in your ship cargo.");
       when An_Exception : Trade_No_Money =>
          ShowDialog
            ("You don't have any " & To_String(MoneyName) & " to buy " &
@@ -351,11 +350,9 @@ package body Trades.UI is
             " to buy so much " & Exception_Message(An_Exception) & ".");
       when Trade_Invalid_Amount =>
          if User_Data = Get_Object(Builder, "btnbuyitem") then
-            ShowDialog
-              ("You entered invalid amount to buy.");
+            ShowDialog("You entered invalid amount to buy.");
          else
-            ShowDialog
-              ("You entered invalid amount to sell.");
+            ShowDialog("You entered invalid amount to sell.");
          end if;
       when An_Exception : Trade_Too_Much_For_Sale =>
          ShowDialog

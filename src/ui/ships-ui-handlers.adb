@@ -427,8 +427,7 @@ package body Ships.UI.Handlers is
         Get_Text(Gtk_Entry(Get_Object(Object, "edtname")));
    begin
       if NewName'Length = 0 then
-         ShowDialog
-           ("You must enter new ship name");
+         ShowDialog("You must enter new ship name");
          return;
       end if;
       if To_Unbounded_String(NewName) /= PlayerShip.Name then
@@ -444,8 +443,7 @@ package body Ships.UI.Handlers is
         Gtk_List_Store(Get_Object(Builder, "moduleslist"));
    begin
       if New_Text'Length = 0 then
-         ShowDialog
-           ("You must enter new module name");
+         ShowDialog("You must enter new module name");
          return;
       end if;
       PlayerShip.Modules(ModuleIndex).Name := To_Unbounded_String(New_Text);
@@ -469,8 +467,7 @@ package body Ships.UI.Handlers is
       ShowModuleInfo(Builder);
    exception
       when An_Exception : Ship_Upgrade_Error =>
-         ShowDialog
-           (Exception_Message(An_Exception));
+         ShowDialog(Exception_Message(An_Exception));
          return;
    end SetUpgrade;
 

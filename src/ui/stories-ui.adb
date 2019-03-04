@@ -153,8 +153,7 @@ package body Stories.UI is
    begin
       GetStoryLocation(NewX, NewY);
       if NewX = PlayerShip.SkyX and NewY = PlayerShip.SkyY then
-         ShowDialog
-           ("You are at this story location now.");
+         ShowDialog("You are at this story location now.");
          return;
       end if;
       PlayerShip.DestinationX := NewX;

@@ -1336,8 +1336,7 @@ package body Maps.UI is
       if CurrentStory.Index /= Null_Unbounded_String and
         CurrentStory.ShowText then
          if CurrentStory.CurrentStep > -2 then
-            ShowDialog
-              (To_String(GetCurrentStoryText));
+            ShowDialog(To_String(GetCurrentStoryText));
          else
             FinishStory;
             if PlayerShip.Crew(1).Health = 0 then

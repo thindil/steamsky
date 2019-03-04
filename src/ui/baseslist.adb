@@ -196,8 +196,7 @@ package body BasesList is
    begin
       if SkyBases(BaseIndex).SkyX = PlayerShip.SkyX and
         SkyBases(BaseIndex).SkyY = PlayerShip.SkyY then
-         ShowDialog
-           ("You are at this base now.");
+         ShowDialog("You are at this base now.");
          return;
       end if;
       PlayerShip.DestinationX := SkyBases(BaseIndex).SkyX;

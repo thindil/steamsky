@@ -86,8 +86,7 @@ package body Maps.UI.Handlers is
    procedure QuitGameMenu(Object: access Gtkada_Builder_Record'Class) is
    begin
       if not QuitGame(Gtk_Window(Get_Object(Object, "skymapwindow"))) then
-         ShowDialog
-           ("Can't quit game.");
+         ShowDialog("Can't quit game.");
       end if;
    end QuitGameMenu;
 
@@ -250,8 +249,7 @@ package body Maps.UI.Handlers is
       if PlayerShip.Speed = DOCKED then
          Message := To_Unbounded_String(DockShip(False));
          if Length(Message) > 0 then
-            ShowDialog
-              (To_String(Message));
+            ShowDialog(To_String(Message));
             return;
          end if;
       else
@@ -265,8 +263,7 @@ package body Maps.UI.Handlers is
          end if;
          Message := To_Unbounded_String(DockShip(True));
          if Length(Message) > 0 then
-            ShowDialog
-              (To_String(Message));
+            ShowDialog(To_String(Message));
             return;
          end if;
          ShowOrders(Object);
@@ -463,8 +460,7 @@ package body Maps.UI.Handlers is
             null;
       end case;
       if Message /= Null_Unbounded_String then
-         ShowDialog
-           (To_String(Message));
+         ShowDialog(To_String(Message));
       end if;
       CenterX := PlayerShip.SkyX;
       CenterY := PlayerShip.SkyY;
@@ -967,8 +963,7 @@ package body Maps.UI.Handlers is
          end if;
       elsif User_Data = Get_Object(Builder, "menustory") then
          if FinishedStories.Length = 0 then
-            ShowDialog
-              ("You didn't discovered any story yet.");
+            ShowDialog("You didn't discovered any story yet.");
             return;
          end if;
       end if;
@@ -1140,8 +1135,7 @@ package body Maps.UI.Handlers is
               Step.FinishCondition = ASKINBASE then
                Message := To_Unbounded_String(DockShip(True));
                if Message /= Null_Unbounded_String then
-                  ShowDialog
-                    (To_String(Message));
+                  ShowDialog(To_String(Message));
                   return;
                end if;
             end if;
@@ -1170,8 +1164,7 @@ package body Maps.UI.Handlers is
                      end if;
                      for Text of Step.Texts loop
                         if CurrentStory.FinishedStep = Text.Condition then
-                           ShowDialog
-                             (To_String(Text.Text));
+                           ShowDialog(To_String(Text.Text));
                            CurrentStory.ShowText := False;
                            exit;
                         end if;
@@ -1181,8 +1174,7 @@ package body Maps.UI.Handlers is
                   end if;
                end;
             else
-               ShowDialog
-                 (To_String(Step.FailText));
+               ShowDialog(To_String(Step.FailText));
                CurrentStory.ShowText := False;
             end if;
          end;
