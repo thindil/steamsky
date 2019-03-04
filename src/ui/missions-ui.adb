@@ -286,8 +286,7 @@ package body Missions.UI is
       UpdateMessages;
    exception
       when An_Exception : Missions_Accepting_Error =>
-         ShowDialog
-           (Exception_Message(An_Exception));
+         ShowDialog(Exception_Message(An_Exception));
    end AcceptSelectedMission;
 
    procedure ButtonMission(User_Data: access GObject_Record'Class) is
@@ -306,8 +305,7 @@ package body Missions.UI is
             Y := SkyBases(AcceptedMissions(MissionIndex).StartBase).SkyY;
          end if;
          if X = PlayerShip.SkyX and Y = PlayerShip.SkyY then
-            ShowDialog
-              ("You are at this target now.");
+            ShowDialog("You are at this target now.");
             return;
          end if;
          PlayerShip.DestinationX := X;
