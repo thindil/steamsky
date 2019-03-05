@@ -281,6 +281,9 @@ package body GameOptions is
         Get_State(Gtk_Switch(Get_Object(Object, "switchshowlastmessages")));
       GameSettings.FullScreen :=
         Get_State(Gtk_Switch(Get_Object(Object, "switchfullscreen")));
+      GameSettings.AutoCloseMessagesTime :=
+        Positive
+          (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjclosemessages"))));
       SaveConfig;
       LoadTheme;
       Save(To_String(SaveDirectory) & "keys.cfg");
@@ -485,6 +488,9 @@ package body GameOptions is
       Set_State
         (Gtk_Switch(Get_Object(Builder, "switchfullscreen")),
          GameSettings.FullScreen);
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Builder, "adjclosemessages")),
+         Gdouble(GameSettings.AutoCloseMessagesTime));
       SetFontsSizes;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "options");
