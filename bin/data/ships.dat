@@ -5428,5 +5428,25 @@ during combat. -->
   <member index="69" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored pirates traders ship. Avoids any fights.</description>
  </ship>
+ <ship combatai="DISARMER" index="284" maxloot="1200" minloot="750" name="Advanced huge poleis patrol ship mk III" owner="POLEIS">
+  <module index="124"/>
+  <module index="112"/>
+  <module amount="2" index="126"/>
+  <module amount="16" index="93"/>
+  <module index="94"/>
+  <module amount="3" index="233"/>
+  <module amount="4" index="120"/>
+  <module amount="4" index="53"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="2" maxamount="800" minamount="600"/>
+  <cargo index="3" maxamount="2000" minamount="1500"/>
+  <cargo index="34" maxamount="1000" minamount="500"/>
+  <cargo index="21" maxamount="800" minamount="600"/>
+  <member index="43"/>
+  <member amount="4" index="44"/>
+  <member index="45"/>
+  <member index="69" maxamount="12" minamount="8"/>
+  <description>Advanced and upgraded version of huge, well armored poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
+ </ship>
 </ships>
 
