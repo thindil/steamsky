@@ -15,9 +15,11 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
@@ -27,6 +29,8 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Stack; use Gtk.Stack;
+with Gtk.Tree_Model_Filter; use Gtk.Tree_Model_Filter;
+with Gtk.GEntry; use Gtk.GEntry;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Game; use Game;
@@ -368,6 +372,28 @@ package body Trades.UI is
            ("You don't have assigned anyone in crew to talk in bases duty.");
    end TradeItem;
 
+   procedure SearchTrade(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Refilter(Gtk_Tree_Model_Filter(Get_Object(Object, "tradefilter")));
+   end SearchTrade;
+
+   function VisibleTrade(Model: Gtk_Tree_Model;
+      Iter: Gtk_Tree_Iter) return Boolean is
+      SearchEntry: constant Gtk_GEntry :=
+        Gtk_GEntry(Get_Object(Builder, "tradesearch"));
+   begin
+      if Get_Text(SearchEntry) = "" then
+         return True;
+      end if;
+      if Index
+          (To_Lower(Get_String(Model, Iter, 0)),
+           To_Lower(Get_Text(SearchEntry)), 1) >
+        0 then
+         return True;
+      end if;
+      return False;
+   end VisibleTrade;
+
    procedure CreateTradeUI(NewBuilder: Gtkada_Builder) is
    begin
       Builder := NewBuilder;
@@ -375,12 +401,19 @@ package body Trades.UI is
         (Builder, "Show_Item_Trade_Info", ShowItemTradeInfo'Access);
       Register_Handler(Builder, "Trade_Item", TradeItem'Access);
       Register_Handler(Builder, "Close_Trade", CloseTrade'Access);
+      Register_Handler(Builder, "Search_Trade", SearchTrade'Access);
       On_Key_Press_Event
         (Gtk_Widget(Get_Object(Builder, "spintradebuy")), SelectElement'Access,
          Get_Object(Builder, "btnbuyitem"));
       On_Key_Press_Event
         (Gtk_Widget(Get_Object(Builder, "spintradesell")),
          SelectElement'Access, Get_Object(Builder, "btnsellitem"));
+      Set_Visible_Func
+        (Gtk_Tree_Model_Filter(Get_Object(Builder, "tradefilter")),
+         VisibleTrade'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "tradesearch")), SelectElement'Access,
+         Get_Object(Builder, "btnmenu"));
    end CreateTradeUI;
 
    procedure ShowTradeUI is
