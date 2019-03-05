@@ -65,13 +65,15 @@ package body Utils.UI is
       Set_Label(Gtk_Label(Get_Object(Builder, "lblmessage")), Message);
       Show_All(Gtk_Widget(Get_Object(Builder, "messagebox")));
       Set_Label
-        (Gtk_Button(Get_Object(Builder, "btnclosemessage")), "Close ( 6 )");
+        (Gtk_Button(Get_Object(Builder, "btnclosemessage")),
+         "Close (" & Positive'Image(GameSettings.AutoCloseMessagesTime) &
+         " )");
       Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnclosemessage")));
       declare
          Source_Id: G_Source_Id;
          pragma Unreferenced(Source_Id);
       begin
-         HideCountdown := 6;
+         HideCountdown := GameSettings.AutoCloseMessagesTime;
          Source_Id := Timeout_Add(1000, AutoHideDialog'Access);
       end;
    end ShowDialog;

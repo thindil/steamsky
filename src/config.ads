@@ -62,6 +62,7 @@ package Config is
       ShowLastMessages: Boolean; -- If true, show last messages window everywhere
       MessagesPosition: Natural; -- Position of last messages window in pixels from top of the game window
       FullScreen: Boolean; -- If true, set the game window in full screen mode
+      AutoCloseMessagesTime: Positive; -- Amount of seconds after which message box is auto closed
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;
