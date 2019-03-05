@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Window; use Gtk.Window;
@@ -123,7 +124,10 @@ package body Messages.UI is
       if Get_Text(SearchEntry) = "" then
          return True;
       end if;
-      if Index(Get_String(Model, Iter, 0), Get_Text(SearchEntry), 1) > 0 then
+      if Index
+          (To_Lower(Get_String(Model, Iter, 0)),
+           To_Lower(Get_Text(SearchEntry)), 1) >
+        0 then
          return True;
       end if;
       return False;
