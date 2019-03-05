@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
   huge pirates trader mk III and advanced huge poleis patrol ship mk III
 - Option to show or hide last messages window
 - Option to set the game in full screen mode
-- Self-closing message boxes
+- Self-closing message boxes and option to set delay for self-closing
 
 ### Changed
 - Updated interface
