@@ -7791,6 +7791,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <property name="can_focus">True</property>
                                         <property name="tooltip_text" translatable="yes">Did user interface should be animated or not.</property>
                                         <property name="halign">start</property>
+                                        <signal name="state-set" handler="Toggle_Animation_Type" swapped="no"/>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -7798,10 +7799,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel">
+                                      <object class="GtkLabel" id="lblanimationstype">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="tooltip_text" translatable="yes">Which animation should be used to move between screens. Works only when animations are enabled.</property>
+                                        <property name="tooltip_text" translatable="yes">Which animation should be used to move between screens.</property>
                                         <property name="label" translatable="yes">Type of animations:</property>
                                         <property name="xalign">0</property>
                                       </object>
@@ -7840,7 +7841,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                       <object class="GtkComboBoxText" id="cmbanimations">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="tooltip_text" translatable="yes">Which animation should be used to move between screens. Works only when animations are enabled.</property>
+                                        <property name="tooltip_text" translatable="yes">Which animation should be used to move between screens. </property>
                                         <property name="halign">start</property>
                                         <items>
                                           <item translatable="yes">Crossfade</item>
