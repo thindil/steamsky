@@ -379,6 +379,19 @@ package body GameOptions is
       SetFontSize(ALLFONTS);
    end SetDefaultFontSize;
 
+   function ToggleAnimationType
+     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+   begin
+      if Get_Active(Gtk_Switch(Get_Object(Builder, "switchanimations"))) then
+         Show_All(Gtk_Widget(Get_Object(Object, "lblanimationstype")));
+         Show_All(Gtk_Widget(Get_Object(Object, "cmbanimations")));
+      else
+         Hide(Gtk_Widget(Get_Object(Object, "lblanimationstype")));
+         Hide(Gtk_Widget(Get_Object(Object, "cmbanimations")));
+      end if;
+      return False;
+   end ToggleAnimationType;
+
    procedure CreateGameOptions(NewBuilder: Gtkada_Builder) is
    begin
       Builder := NewBuilder;
@@ -387,6 +400,8 @@ package body GameOptions is
       Register_Handler(Builder, "Apply_Theme", ApplyTheme'Access);
       Register_Handler
         (Builder, "Set_Default_Font_Size", SetDefaultFontSize'Access);
+      Register_Handler
+        (Builder, "Toggle_Animation_Type", ToggleAnimationType'Access);
       for I in Accels'Range loop
          On_Key_Press_Event
            (Gtk_Widget(Get_Object(Builder, To_String(Accels(I).EntryName))),
@@ -496,6 +511,11 @@ package body GameOptions is
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "options");
       Hide(Gtk_Widget(Get_Object(Builder, "lastmessagesframe")));
       Hide(Gtk_Widget(Get_Object(Builder, "btnmenu")));
+      if not Get_Active
+          (Gtk_Switch(Get_Object(Builder, "switchanimations"))) then
+         Hide(Gtk_Widget(Get_Object(Builder, "lblanimationstype")));
+         Hide(Gtk_Widget(Get_Object(Builder, "cmbanimations")));
+      end if;
    end ShowGameOptions;
 
 end GameOptions;
