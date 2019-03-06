@@ -529,6 +529,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="gboolean"/>
     </columns>
   </object>
+  <object class="GtkTreeModelFilter" id="cargofilter">
+    <property name="child_model">cargolist</property>
+  </object>
   <object class="GtkListStore" id="contractlength">
     <columns>
       <!-- column-name gchararray1 -->
@@ -9509,12 +9512,46 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkLabel" id="lblfreespace">
+                          <object class="GtkBox">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="halign">center</property>
-                            <property name="wrap">True</property>
-                            <property name="xalign">0</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Type:</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="cmbcargotype">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <signal name="changed" handler="Search_Cargo" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="lblfreespace">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="wrap">True</property>
+                                <property name="xalign">0</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -9537,7 +9574,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="tooltip_text" translatable="yes">Double click or press enter to hide or show item info</property>
-                                    <property name="model">cargolist</property>
+                                    <property name="model">cargofilter</property>
                                     <property name="search_column">0</property>
                                     <signal name="cursor-changed" handler="Show_Item_Cargo_Info" swapped="no"/>
                                     <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
