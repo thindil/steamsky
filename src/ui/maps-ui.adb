@@ -231,6 +231,24 @@ package body Maps.UI is
             " left.",
             True);
       end if;
+      for Member of PlayerShip.Crew loop
+         case Member.Order is
+            when Pilot =>
+               HavePilot := True;
+            when Engineer =>
+               HaveEngineer := True;
+            when Talk =>
+               HaveTrader := True;
+            when Upgrading =>
+               HaveUpgrader := True;
+            when Clean =>
+               HaveCleaner := True;
+            when Repair =>
+               HaveRepairman := True;
+            when others =>
+               null;
+         end case;
+      end loop;
       declare
          type SpeedType is digits 2;
          Speed: SpeedType;
@@ -240,7 +258,7 @@ package body Maps.UI is
          else
             Speed := (SpeedType(RealSpeed(PlayerShip, True)) / 1000.0);
          end if;
-         if Speed < 0.5 then
+         if Speed < 0.5 and HavePilot then
             UpdateLabel
               ("lblnofood",
                Encode
@@ -277,24 +295,6 @@ package body Maps.UI is
          if Module.Durability /= Module.MaxDurability then
             NeedRepairs := True;
          end if;
-      end loop;
-      for Member of PlayerShip.Crew loop
-         case Member.Order is
-            when Pilot =>
-               HavePilot := True;
-            when Engineer =>
-               HaveEngineer := True;
-            when Talk =>
-               HaveTrader := True;
-            when Upgrading =>
-               HaveUpgrader := True;
-            when Clean =>
-               HaveCleaner := True;
-            when Repair =>
-               HaveRepairman := True;
-            when others =>
-               null;
-         end case;
       end loop;
       if HavePilot then
          UpdateLabel
