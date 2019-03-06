@@ -2915,19 +2915,18 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry" id="entrysearchbases">
+                              <object class="GtkSearchEntry" id="entrysearchbases">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="secondary_icon_stock">gtk-clear</property>
-                                <property name="secondary_icon_tooltip_text" translatable="yes">Clear search criteria</property>
-                                <property name="secondary_icon_tooltip_markup" translatable="yes">Clear search criteria</property>
+                                <property name="primary_icon_name">edit-find-symbolic</property>
+                                <property name="primary_icon_activatable">False</property>
+                                <property name="primary_icon_sensitive">False</property>
                                 <property name="placeholder_text" translatable="yes">&lt;Search bases&gt;</property>
                                 <signal name="changed" handler="Search_Bases" swapped="no"/>
                                 <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
                                 <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
                                 <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                                 <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                <signal name="icon-release" handler="Clear_Search" object="entrysearchbases" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
