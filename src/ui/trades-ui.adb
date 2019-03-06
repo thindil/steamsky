@@ -31,6 +31,7 @@ with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Tree_Model_Filter; use Gtk.Tree_Model_Filter;
 with Gtk.GEntry; use Gtk.GEntry;
+with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Game; use Game;
@@ -46,6 +47,7 @@ with Utils.UI; use Utils.UI;
 package body Trades.UI is
 
    Builder: Gtkada_Builder;
+   SettingTime: Boolean;
 
    procedure CloseTrade(Object: access Gtkada_Builder_Record'Class) is
       BaseIndex: constant Natural :=
@@ -375,20 +377,60 @@ package body Trades.UI is
    procedure SearchTrade(Object: access Gtkada_Builder_Record'Class) is
    begin
       Refilter(Gtk_Tree_Model_Filter(Get_Object(Object, "tradefilter")));
+      if N_Children
+          (Gtk_List_Store(Get_Object(Builder, "itemslist1")), Null_Iter) >
+        0 then
+         Set_Cursor
+           (Gtk_Tree_View(Get_Object(Builder, "treeitems1")),
+            Gtk_Tree_Path_New_From_String("0"), null, False);
+      end if;
    end SearchTrade;
 
    function VisibleTrade(Model: Gtk_Tree_Model;
       Iter: Gtk_Tree_Iter) return Boolean is
       SearchEntry: constant Gtk_GEntry :=
         Gtk_GEntry(Get_Object(Builder, "tradesearch"));
+      IType: constant Unbounded_String :=
+        To_Unbounded_String
+          (Get_Active_Text
+             (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbtradetype"))));
+      ProtoIndex: Unbounded_String;
+      BaseIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      BaseCargo: BaseCargo_Container.Vector;
+      ShowItem: Boolean := False;
    begin
-      if Get_Text(SearchEntry) = "" then
+      if SettingTime then
          return True;
+      end if;
+      if IType = To_Unbounded_String("All") then
+         ShowItem := True;
+      else
+         if Get_Int(Model, Iter, 1) > 0 then
+            ProtoIndex :=
+              PlayerShip.Cargo(Positive(Get_Int(Model, Iter, 1))).ProtoIndex;
+         else
+            if BaseIndex > 0 then
+               BaseCargo := SkyBases(BaseIndex).Cargo;
+            else
+               BaseCargo := TraderCargo;
+            end if;
+            ProtoIndex :=
+              BaseCargo(Positive(Get_Int(Model, Iter, 2))).ProtoIndex;
+         end if;
+         if Items_List(ProtoIndex).IType = IType or
+           Items_List(ProtoIndex).ShowType = IType then
+            ShowItem := True;
+         end if;
+      end if;
+      if Get_Text(SearchEntry) = "" then
+         return ShowItem;
       end if;
       if Index
           (To_Lower(Get_String(Model, Iter, 0)),
            To_Lower(Get_Text(SearchEntry)), 1) >
-        0 then
+        0 and
+        ShowItem then
          return True;
       end if;
       return False;
@@ -430,7 +472,20 @@ package body Trades.UI is
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       ProtoIndex: Unbounded_String;
+      ItemsTypes: UnboundedString_Container.Vector;
+      procedure AddType is
+      begin
+         if not ItemsTypes.Contains(Items_List(ProtoIndex).IType) and
+           not ItemsTypes.Contains(Items_List(ProtoIndex).ShowType) then
+            if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
+               ItemsTypes.Append(Items_List(ProtoIndex).IType);
+            else
+               ItemsTypes.Append(Items_List(ProtoIndex).ShowType);
+            end if;
+         end if;
+      end AddType;
    begin
+      ItemsTypes.Append(To_Unbounded_String("All"));
       if BaseIndex > 0 then
          BaseType := Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
          BaseCargo := SkyBases(BaseIndex).Cargo;
@@ -438,6 +493,7 @@ package body Trades.UI is
          BaseType := 1;
          BaseCargo := TraderCargo;
       end if;
+      SettingTime := True;
       Clear(ItemsList);
       for I in PlayerShip.Cargo.Iterate loop
          if Items_List(PlayerShip.Cargo(I).ProtoIndex).Prices(BaseType) >
@@ -464,6 +520,7 @@ package body Trades.UI is
                  (ItemsList, ItemsIter, 3,
                   To_String(Items_List(ProtoIndex).ShowType));
             end if;
+            AddType;
             if PlayerShip.Cargo(I).Durability < 100 then
                Set
                  (ItemsList, ItemsIter, 9,
@@ -528,6 +585,7 @@ package body Trades.UI is
                  (ItemsList, ItemsIter, 3,
                   To_String(Items_List(ProtoIndex).ShowType));
             end if;
+            AddType;
             if BaseCargo(I).Durability < 100 then
                Set
                  (ItemsList, ItemsIter, 9,
@@ -558,12 +616,23 @@ package body Trades.UI is
             end if;
          end if;
       end loop;
+      declare
+         TypesCombo: constant Gtk_Combo_Box_Text :=
+           Gtk_Combo_Box_Text(Get_Object(Builder, "cmbtradetype"));
+      begin
+         Remove_All(TypesCombo);
+         for IType of ItemsTypes loop
+            Append_Text(TypesCombo, To_String(IType));
+         end loop;
+         Set_Active(TypesCombo, 0);
+      end;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "trade");
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treeitems1")),
          Gtk_Tree_Path_New_From_String("0"), null, False);
       UpdateMessages;
+      SettingTime := False;
    end ShowTradeUI;
 
 end Trades.UI;
