@@ -26,6 +26,7 @@ with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Gtk.Stack; use Gtk.Stack;
+with Gtk.Tree_Model_Filter; use Gtk.Tree_Model_Filter;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Messages; use Messages;
@@ -38,6 +39,7 @@ package body Ships.Cargo.UI is
 
    Builder: Gtkada_Builder;
    ItemIndex: Positive;
+   SettingTime: Boolean;
 
    procedure RefreshCargoInfo is
       CargoIter: Gtk_Tree_Iter;
@@ -46,7 +48,10 @@ package body Ships.Cargo.UI is
       ItemWeight: Positive;
       Visible: Boolean := False;
       ProtoIndex: Unbounded_String;
+      ItemsTypes: UnboundedString_Container.Vector;
    begin
+      SettingTime := True;
+      ItemsTypes.Append(To_Unbounded_String("All"));
       Clear(CargoList);
       for I in PlayerShip.Cargo.Iterate loop
          Append(CargoList, CargoIter);
@@ -61,6 +66,14 @@ package body Ships.Cargo.UI is
             Set
               (CargoList, CargoIter, 2,
                To_String(Items_List(ProtoIndex).ShowType));
+         end if;
+         if not ItemsTypes.Contains(Items_List(ProtoIndex).IType) and
+           not ItemsTypes.Contains(Items_List(ProtoIndex).ShowType) then
+            if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
+               ItemsTypes.Append(Items_List(ProtoIndex).IType);
+            else
+               ItemsTypes.Append(Items_List(ProtoIndex).ShowType);
+            end if;
          end if;
          Set(CargoList, CargoIter, 3, Gint(PlayerShip.Cargo(I).Amount));
          ItemWeight :=
@@ -77,12 +90,23 @@ package body Ships.Cargo.UI is
          end if;
          Set(CargoList, CargoIter, 6, Gint(PlayerShip.Cargo(I).Durability));
       end loop;
+      declare
+         TypesCombo: constant Gtk_Combo_Box_Text :=
+           Gtk_Combo_Box_Text(Get_Object(Builder, "cmbcargotype"));
+      begin
+         Remove_All(TypesCombo);
+         for IType of ItemsTypes loop
+            Append_Text(TypesCombo, To_String(IType));
+         end loop;
+         Set_Active(TypesCombo, 0);
+      end;
       Set_Visible
         (Gtk_Tree_View_Column(Get_Object(Builder, "columncargodurability")),
          Visible);
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblfreespace")),
          "Free cargo space:" & Integer'Image(FreeCargo(0)) & " kg");
+      SettingTime := False;
    end RefreshCargoInfo;
 
    procedure SetActiveItem is
@@ -90,8 +114,7 @@ package body Ships.Cargo.UI is
       if PlayerShip.Cargo.Length > 0 then
          Set_Cursor
            (Gtk_Tree_View(Get_Object(Builder, "treecargo")),
-            Gtk_Tree_Path_New_From_String("0"),
-            Gtk_Tree_View_Column(Get_Object(Builder, "columncargo")), False);
+            Gtk_Tree_Path_New_From_String("0"), null, False);
       end if;
    end SetActiveItem;
 
@@ -200,6 +223,38 @@ package body Ships.Cargo.UI is
       SetActiveItem;
    end GiveItem;
 
+   procedure SearchCargo(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Refilter(Gtk_Tree_Model_Filter(Get_Object(Object, "cargofilter")));
+      if N_Children
+          (Gtk_List_Store(Get_Object(Builder, "cargolist")), Null_Iter) >
+        0 then
+         SetActiveItem;
+      end if;
+   end SearchCargo;
+
+   function VisibleCargo(Model: Gtk_Tree_Model;
+      Iter: Gtk_Tree_Iter) return Boolean is
+      IType: constant Unbounded_String :=
+        To_Unbounded_String
+          (Get_Active_Text
+             (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbcargotype"))));
+      ProtoIndex: Unbounded_String;
+   begin
+      if SettingTime then
+         return True;
+      end if;
+      ProtoIndex :=
+        PlayerShip.Cargo(Positive(Get_Int(Model, Iter, 1))).ProtoIndex;
+      if IType = To_Unbounded_String("All") then
+         return True;
+      elsif Items_List(ProtoIndex).IType = IType or
+        Items_List(ProtoIndex).ShowType = IType then
+         return True;
+      end if;
+      return False;
+   end VisibleCargo;
+
    procedure CreateCargoUI(NewBuilder: Gtkada_Builder) is
    begin
       Builder := NewBuilder;
@@ -208,12 +263,16 @@ package body Ships.Cargo.UI is
       Register_Handler(Builder, "Drop_Item", DropItem'Access);
       Register_Handler(Builder, "Give_Item", GiveItem'Access);
       Register_Handler(Builder, "Hide_Item_Info", HideItemInfo'Access);
+      Register_Handler(Builder, "Search_Cargo", SearchCargo'Access);
       On_Key_Press_Event
         (Gtk_Widget(Get_Object(Builder, "spincargodrop")),
          SelectElement'Access, Get_Object(Builder, "btndropitem"));
       On_Key_Press_Event
         (Gtk_Widget(Get_Object(Builder, "spincargogive")),
          SelectElement'Access, Get_Object(Builder, "cmbmember"));
+      Set_Visible_Func
+        (Gtk_Tree_Model_Filter(Get_Object(Builder, "cargofilter")),
+         VisibleCargo'Access);
    end CreateCargoUI;
 
    procedure ShowCargoUI is
