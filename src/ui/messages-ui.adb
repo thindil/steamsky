@@ -133,11 +133,6 @@ package body Messages.UI is
       return False;
    end VisibleMessages;
 
-   procedure ClearSearch(User_Data: access GObject_Record'Class) is
-   begin
-      Set_Text(Gtk_GEntry(User_Data), "");
-   end ClearSearch;
-
    procedure CreateMessagesUI(NewBuilder: Gtkada_Builder) is
    begin
       Builder := NewBuilder;
@@ -145,7 +140,6 @@ package body Messages.UI is
       Register_Handler(Builder, "Delete_Messages", DeleteMessages'Access);
       Register_Handler(Builder, "Close_Messages", CloseMessages'Access);
       Register_Handler(Builder, "Search_Messages", SearchMessages'Access);
-      Register_Handler(Builder, "Clear_Search", ClearSearch'Access);
       Set_Visible_Func
         (Gtk_Tree_Model_Filter(Get_Object(Builder, "messagesfilter")),
          VisibleMessages'Access);
