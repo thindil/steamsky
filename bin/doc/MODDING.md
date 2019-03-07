@@ -864,6 +864,10 @@ story.
   current story even location on map. Optional.
 - Key `OverloadedIcon`: Hexadecimal number on UTF-8 character used to show
   warning about overloaded ship. Optional.
+- Key `CheckButtonUnchecked`: name of image file used as a unchecked button
+  (for example, in crew member inventory).
+- Key `CheckButtonChecked`: name of image file used as a checked button
+  (for example, in crew member inventory).
 
 ## Debugging
 If you want test your changes, you may run game in debug mode. In this mode
