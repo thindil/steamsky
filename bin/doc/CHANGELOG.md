@@ -8,8 +8,9 @@ All notable changes to this project will be documented in this file.
   trader mk II, advanced huge pirates trader mk II, advanced huge poleis
   patrol ship mk II, advanced huge independent patrol ship mk II, advanced
   huge poleis trader mk III, advanced huge independent trader mk III, advanced
-  huge pirates trader mk III, advanced huge poleis patrol ship mk III and
-  advanved huge independent patrol ship mk III
+  huge pirates trader mk III, advanced huge poleis patrol ship mk III,
+  advanved huge independent patrol ship mk III and advanced huge poleis trader
+  mk IV
 - Option to show or hide last messages window
 - Option to set the game in full screen mode
 - Self-closing message boxes and option to set delay for self-closing
@@ -28,7 +29,7 @@ All notable changes to this project will be documented in this file.
 - Showing new and load game buttons when data files are not loaded
 - Showing info about overloading when pilot is on rest
 
-## [3.4 - 2019-02-24]
+## [3.4] - 2019-02-24
 
 ### Added
 - New ships: armored independent patrol ship mk II, armored poleis patrol
@@ -97,7 +98,7 @@ All notable changes to this project will be documented in this file.
 - Crash when undocking speed is set to full stop
 - Setting custom location for themes directory
 
-## [3.3 - 2019-01-27]
+## [3.3] 2019-01-27
 
 ### Added
 - Option to enable or disable tooltips
