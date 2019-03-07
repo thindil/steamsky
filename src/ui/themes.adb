@@ -51,6 +51,8 @@ package body Themes is
       CssText: Unbounded_String := LoadCssText;
       StartIndex, EndIndex: Positive;
       Error: aliased GError;
+      CurrentTheme: constant ThemeRecord :=
+        Themes_List(To_String(GameSettings.InterfaceTheme));
    begin
       if FontType = HELPFONT or FontType = ALLFONTS then
          StartIndex := Index(CssText, "*#normalfont", 1);
@@ -84,27 +86,6 @@ package body Themes is
             "font-size:" & Positive'Image(GameSettings.InterfaceFontSize - 4) &
             "px;");
       end if;
-      Gtk_New(CssProvider);
-      if not Load_From_Data(CssProvider, To_String(CssText), Error'Access) then
-         Put_Line("Error: " & Get_Message(Error));
-         return;
-      end if;
-      if OldProvider /= null then
-         Remove_Provider_For_Screen
-           (Get_Default_Screen(Get_Default), +(OldProvider));
-      end if;
-      Add_Provider_For_Screen
-        (Get_Default_Screen(Get_Default), +(CssProvider), Guint'Last);
-      OldProvider := CssProvider;
-   end SetFontSize;
-
-   procedure LoadTheme is
-      CssProvider: Gtk_Css_Provider;
-      CssText: Unbounded_String := LoadCssText;
-      Error: aliased GError;
-      CurrentTheme: constant ThemeRecord :=
-        Themes_List(To_String(GameSettings.InterfaceTheme));
-   begin
       if not GameSettings.ShowTooltips then
          Append(CssText, ".tooltip {opacity:0;}");
       else
@@ -123,8 +104,14 @@ package body Themes is
          Put_Line("Error: " & Get_Message(Error));
          return;
       end if;
-      SetFontSize(ALLFONTS);
-   end LoadTheme;
+      if OldProvider /= null then
+         Remove_Provider_For_Screen
+           (Get_Default_Screen(Get_Default), +(OldProvider));
+      end if;
+      Add_Provider_For_Screen
+        (Get_Default_Screen(Get_Default), +(CssProvider), Guint'Last);
+      OldProvider := CssProvider;
+   end SetFontSize;
 
    procedure ResetFontsSizes is
       CssText: Unbounded_String := Null_Unbounded_String;
