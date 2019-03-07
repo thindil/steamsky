@@ -503,7 +503,7 @@ package body MainMenu is
       Error: aliased GError;
    begin
       LoadThemes;
-      LoadTheme;
+      SetFontSize(ALLFONTS);
       Gtk_New(Builder);
       if Add_From_File
           (Builder,
