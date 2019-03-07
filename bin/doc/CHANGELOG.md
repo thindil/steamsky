@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Typo in README.md
 - Showing new and load game buttons when data files are not loaded
 - Showing info about overloading when pilot is on rest
+- Enabling or disabling tooltips
 
 ## [3.4] - 2019-02-24
 
