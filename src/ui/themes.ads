@@ -62,6 +62,8 @@ package Themes is
       TargetIcon: Wide_Character; -- Icon used for player selected target on map
       StoryIcon: Wide_Character; -- Icon used for show story event location on map
       OverloadedIcon: Wide_Character; -- Icon used for show warning about overloaded ship
+      CheckButtonUnchecked: Unbounded_String; -- Name of image file used for check buttons when unchecked
+      CheckButtonChecked: Unbounded_String; -- Name of image file used for check buttons when checked
    end record;
    package Themes_Container is new Ada.Containers.Indefinite_Hashed_Maps
      (String, ThemeRecord, Ada.Strings.Hash, "=");

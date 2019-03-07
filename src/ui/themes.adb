@@ -102,12 +102,22 @@ package body Themes is
       CssProvider: Gtk_Css_Provider;
       CssText: Unbounded_String := LoadCssText;
       Error: aliased GError;
+      CurrentTheme: constant ThemeRecord :=
+        Themes_List(To_String(GameSettings.InterfaceTheme));
    begin
       if not GameSettings.ShowTooltips then
          Append(CssText, ".tooltip {opacity:0;}");
       else
          Append(CssText, ".tooltip {opacity:1;}");
       end if;
+      Append
+        (CssText,
+         ".check {-gtk-icon-source: url('" &
+         CurrentTheme.CheckButtonUnchecked & "');}");
+      Append
+        (CssText,
+         ".check:checked {-gtk-icon-source: url('" &
+         CurrentTheme.CheckButtonChecked & "');}");
       Gtk_New(CssProvider);
       if not Load_From_Data(CssProvider, To_String(CssText), Error'Access) then
          Put_Line("Error: " & Get_Message(Error));
@@ -186,7 +196,17 @@ package body Themes is
             EmptyMapIcon => Wide_Character'Val(16#f0c8#),
             TargetIcon => Wide_Character'Val(16#f05b#),
             StoryIcon => Wide_Character'Val(16#f059#),
-            OverloadedIcon => Wide_Character'Val(16#f55b#));
+            OverloadedIcon => Wide_Character'Val(16#f55b#),
+            CheckButtonUnchecked =>
+              DataDirectory &
+              To_Unbounded_String
+                ("ui" & Dir_Separator & "images" & Dir_Separator &
+                 "checkbox-unchecked.svg"),
+            CheckButtonChecked =>
+              DataDirectory &
+              To_Unbounded_String
+                ("ui" & Dir_Separator & "images" & Dir_Separator &
+                 "checkbox-checked.svg"));
       end SetDefaultValues;
    begin
       SetDefaultValues;
@@ -368,6 +388,18 @@ package body Themes is
                         TempRecord.OverloadedIcon :=
                           Wide_Character'Val
                             (Natural'Value("16#" & To_String(Value) & "#"));
+                     elsif FieldName =
+                       To_Unbounded_String("CheckButtonUnchecked") then
+                        TempRecord.CheckButtonUnchecked :=
+                          To_Unbounded_String
+                            (Full_Name(FoundDirectory) & Dir_Separator) &
+                          Value;
+                     elsif FieldName =
+                       To_Unbounded_String("CheckButtonChecked") then
+                        TempRecord.CheckButtonChecked :=
+                          To_Unbounded_String
+                            (Full_Name(FoundDirectory) & Dir_Separator) &
+                          Value;
                      end if;
                   end if;
                end loop;
