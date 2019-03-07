@@ -25,6 +25,8 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Stack; use Gtk.Stack;
+with Gtk.Tree_Model_Filter; use Gtk.Tree_Model_Filter;
+with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Game; use Game;
@@ -39,6 +41,7 @@ with Utils.UI; use Utils.UI;
 package body Bases.LootUI is
 
    Builder: Gtkada_Builder;
+   SettingTime: Boolean;
 
    procedure ShowItemInfo(Object: access Gtkada_Builder_Record'Class) is
       ItemInfo, ProtoIndex: Unbounded_String;
@@ -225,17 +228,65 @@ package body Bases.LootUI is
       ShowLootUI;
    end LootItem;
 
+   procedure SearchLoot(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Refilter(Gtk_Tree_Model_Filter(Get_Object(Object, "lootfilter")));
+      if N_Children
+          (Gtk_List_Store(Get_Object(Builder, "itemslist2")), Null_Iter) >
+        0 then
+         Set_Cursor
+           (Gtk_Tree_View(Get_Object(Builder, "treeitems")),
+            Gtk_Tree_Path_New_From_String("0"), null, False);
+      end if;
+   end SearchLoot;
+
+   function VisibleLoot(Model: Gtk_Tree_Model;
+      Iter: Gtk_Tree_Iter) return Boolean is
+      IType: constant Unbounded_String :=
+        To_Unbounded_String
+          (Get_Active_Text
+             (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbloottype"))));
+      ProtoIndex: Unbounded_String;
+      BaseIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+   begin
+      if SettingTime then
+         return True;
+      end if;
+      if IType = To_Unbounded_String("All") then
+         return True;
+      else
+         if Get_Int(Model, Iter, 1) > 0 then
+            ProtoIndex :=
+              PlayerShip.Cargo(Positive(Get_Int(Model, Iter, 1))).ProtoIndex;
+         else
+            ProtoIndex :=
+              SkyBases(BaseIndex).Cargo(Positive(Get_Int(Model, Iter, 2)))
+                .ProtoIndex;
+         end if;
+         if Items_List(ProtoIndex).IType = IType or
+           Items_List(ProtoIndex).ShowType = IType then
+            return True;
+         end if;
+      end if;
+      return False;
+   end VisibleLoot;
+
    procedure CreateBasesLootUI(NewBuilder: Gtkada_Builder) is
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
       Register_Handler(Builder, "Loot_Item", LootItem'Access);
+      Register_Handler(Builder, "Search_Loot", SearchLoot'Access);
       On_Key_Press_Event
         (Gtk_Widget(Get_Object(Builder, "spinloottake")), SelectElement'Access,
          Get_Object(Builder, "btntake"));
       On_Key_Press_Event
         (Gtk_Widget(Get_Object(Builder, "spinlootdrop")), SelectElement'Access,
          Get_Object(Builder, "btndrop"));
+      Set_Visible_Func
+        (Gtk_Tree_Model_Filter(Get_Object(Builder, "lootfilter")),
+         VisibleLoot'Access);
    end CreateBasesLootUI;
 
    procedure ShowLootUI is
@@ -250,7 +301,21 @@ package body Bases.LootUI is
       BaseCargoIndex: Natural;
       ProtoIndex: Unbounded_String;
       Visible: Boolean := False;
+      ItemsTypes: UnboundedString_Container.Vector;
+      procedure AddType is
+      begin
+         if not ItemsTypes.Contains(Items_List(ProtoIndex).IType) and
+           not ItemsTypes.Contains(Items_List(ProtoIndex).ShowType) then
+            if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
+               ItemsTypes.Append(Items_List(ProtoIndex).IType);
+            else
+               ItemsTypes.Append(Items_List(ProtoIndex).ShowType);
+            end if;
+         end if;
+      end AddType;
    begin
+      SettingTime := True;
+      ItemsTypes.Append(To_Unbounded_String("All"));
       Clear(ItemsList);
       for I in PlayerShip.Cargo.Iterate loop
          if Items_List(PlayerShip.Cargo(I).ProtoIndex).Prices(BaseType) >
@@ -275,6 +340,7 @@ package body Bases.LootUI is
                  (ItemsList, ItemsIter, 3,
                   To_String(Items_List(ProtoIndex).ShowType));
             end if;
+            AddType;
             if PlayerShip.Cargo(I).Durability < 100 then
                Set
                  (ItemsList, ItemsIter, 5,
@@ -311,6 +377,7 @@ package body Bases.LootUI is
                  (ItemsList, ItemsIter, 3,
                   To_String(Items_List(ProtoIndex).ShowType));
             end if;
+            AddType;
             if SkyBases(BaseIndex).Cargo(I).Durability < 100 then
                Set
                  (ItemsList, ItemsIter, 5,
@@ -328,6 +395,16 @@ package body Bases.LootUI is
                Gint(SkyBases(BaseIndex).Cargo(I).Amount));
          end if;
       end loop;
+      declare
+         TypesCombo: constant Gtk_Combo_Box_Text :=
+           Gtk_Combo_Box_Text(Get_Object(Builder, "cmbloottype"));
+      begin
+         Remove_All(TypesCombo);
+         for IType of ItemsTypes loop
+            Append_Text(TypesCombo, To_String(IType));
+         end loop;
+         Set_Active(TypesCombo, 0);
+      end;
       Set_Visible
         (Gtk_Tree_View_Column(Get_Object(Builder, "columnlootdurability")),
          Visible);
@@ -339,6 +416,7 @@ package body Bases.LootUI is
         (Gtk_Tree_View(Get_Object(Builder, "treeitems")),
          Gtk_Tree_Path_New_From_String("0"), null, False);
       UpdateMessages;
+      SettingTime := False;
    end ShowLootUI;
 
 end Bases.LootUI;
