@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Option to show or hide last messages window
 - Option to set the game in full screen mode
 - Self-closing message boxes and option to set delay for self-closing
+- Option to set check boxes looks in themes
 
 ### Changed
 - Updated interface
