@@ -69,9 +69,7 @@ package Themes is
      (String, ThemeRecord, Ada.Strings.Hash, "=");
    Themes_List: Themes_Container.Map; -- List of all available themes
 
-   procedure SetFontSize
-     (FontType: FontTypes); -- Set size of selected font (or all if FontName is empty string)
-   procedure LoadTheme; -- Load selected UI theme
+   procedure SetFontSize(FontType: FontTypes); -- Set size of selected font
    procedure ResetFontsSizes; -- Reset size of fonts to theme default values
    procedure LoadThemes; -- Load data for all themes
 

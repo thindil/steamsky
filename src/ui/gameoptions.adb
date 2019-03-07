@@ -285,7 +285,7 @@ package body GameOptions is
         Positive
           (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjclosemessages"))));
       SaveConfig;
-      LoadTheme;
+      SetFontSize(ALLFONTS);
       Save(To_String(SaveDirectory) & "keys.cfg");
       ShowSkyMap;
       Set_Visible_Child_Name
@@ -352,7 +352,7 @@ package body GameOptions is
       GameSettings.InterfaceTheme :=
         To_Unbounded_String
           (Get_Active_Id(Gtk_Combo_Box_Text(Get_Object(Object, "cmbtheme"))));
-      LoadTheme;
+      SetFontSize(ALLFONTS);
       SetMapMoveButtons;
    end ApplyTheme;
 
