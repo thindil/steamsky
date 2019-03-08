@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - Showing new and load game buttons when data files are not loaded
 - Showing info about overloading when pilot is on rest
 - Enabling or disabling tooltips
+- Using/taking off items in crew member inventory
 
 ## [3.4] - 2019-02-24
 
