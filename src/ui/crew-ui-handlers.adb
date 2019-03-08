@@ -338,52 +338,58 @@ package body Crew.UI.Handlers is
 
    procedure UseItem(Self: access Gtk_Cell_Renderer_Toggle_Record'Class;
       Path: UTF8_String) is
-      pragma Unreferenced(Path);
       Member: constant Member_Data := PlayerShip.Crew(MemberIndex);
       ItemType: constant Unbounded_String :=
         Items_List(Member.Inventory(ItemIndex).ProtoIndex).IType;
+      InventoryList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "inventorylist"));
    begin
+      ItemIndex :=
+        Positive
+          (Get_Int
+             (InventoryList, Get_Iter_From_String(InventoryList, Path), 1));
       if Get_Active(Self) then
          TakeOffItem(MemberIndex, ItemIndex);
-      else
-         if ItemType = WeaponType then
-            if Items_List(Member.Inventory(ItemIndex).ProtoIndex).Value(4) =
-              2 and
-              Member.Equipment(2) /= 0 then
+         Set
+           (InventoryList, Get_Iter_From_String(InventoryList, Path), 2,
+            False);
+         return;
+      end if;
+      if ItemType = WeaponType then
+         if Items_List(Member.Inventory(ItemIndex).ProtoIndex).Value(4) = 2 and
+           Member.Equipment(2) /= 0 then
+            ShowDialog
+              (To_String(Member.Name) &
+               " can't use this weapon because have shield equiped. Take off shield first.");
+            return;
+         end if;
+         PlayerShip.Crew(MemberIndex).Equipment(1) := ItemIndex;
+      elsif ItemType = ShieldType then
+         if Member.Equipment(1) > 0 then
+            if Items_List(Member.Inventory(Member.Equipment(1)).ProtoIndex)
+                .Value
+                (4) =
+              2 then
                ShowDialog
                  (To_String(Member.Name) &
-                  " can't use this weapon because have shield equiped. Take off shield first.");
+                  " can't use shield because have equiped two-hand weapon. Take off weapon first.");
                return;
             end if;
-            PlayerShip.Crew(MemberIndex).Equipment(1) := ItemIndex;
-         elsif ItemType = ShieldType then
-            if Member.Equipment(1) > 0 then
-               if Items_List(Member.Inventory(Member.Equipment(1)).ProtoIndex)
-                   .Value
-                   (4) =
-                 2 then
-                  ShowDialog
-                    (To_String(Member.Name) &
-                     " can't use shield because have equiped two-hand weapon. Take off weapon first.");
-                  return;
-               end if;
-            end if;
-            PlayerShip.Crew(MemberIndex).Equipment(2) := ItemIndex;
-         elsif ItemType = HeadArmor then
-            PlayerShip.Crew(MemberIndex).Equipment(3) := ItemIndex;
-         elsif ItemType = ChestArmor then
-            PlayerShip.Crew(MemberIndex).Equipment(4) := ItemIndex;
-         elsif ItemType = ArmsArmor then
-            PlayerShip.Crew(MemberIndex).Equipment(5) := ItemIndex;
-         elsif ItemType = LegsArmor then
-            PlayerShip.Crew(MemberIndex).Equipment(6) := ItemIndex;
-         elsif Tools_List.Find_Index(Item => ItemType) /=
-           UnboundedString_Container.No_Index then
-            PlayerShip.Crew(MemberIndex).Equipment(7) := ItemIndex;
          end if;
+         PlayerShip.Crew(MemberIndex).Equipment(2) := ItemIndex;
+      elsif ItemType = HeadArmor then
+         PlayerShip.Crew(MemberIndex).Equipment(3) := ItemIndex;
+      elsif ItemType = ChestArmor then
+         PlayerShip.Crew(MemberIndex).Equipment(4) := ItemIndex;
+      elsif ItemType = ArmsArmor then
+         PlayerShip.Crew(MemberIndex).Equipment(5) := ItemIndex;
+      elsif ItemType = LegsArmor then
+         PlayerShip.Crew(MemberIndex).Equipment(6) := ItemIndex;
+      elsif Tools_List.Find_Index(Item => ItemType) /=
+        UnboundedString_Container.No_Index then
+         PlayerShip.Crew(MemberIndex).Equipment(7) := ItemIndex;
       end if;
-      RefreshInventory;
-      SetActiveItem;
+      Set(InventoryList, Get_Iter_From_String(InventoryList, Path), 2, True);
    end UseItem;
 
    procedure MoveItem(Object: access Gtkada_Builder_Record'Class) is
