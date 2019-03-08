@@ -484,6 +484,15 @@ package body Combat is
                              Natural
                                (Float(Ship.Modules(K).Damage2) *
                                 Float(Damage));
+                           if SpeedBonus < 0 then
+                              WeaponDamage :=
+                                WeaponDamage +
+                                (abs (SpeedBonus) *
+                                 (CountShipWeight(Ship) / 5000));
+                           else
+                              WeaponDamage :=
+                                WeaponDamage + (CountShipWeight(Ship) / 5000);
+                           end if;
                         end if;
                         if WeaponDamage = 0 then
                            WeaponDamage := 1;
