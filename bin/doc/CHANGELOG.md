@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Showing new and load game buttons when data files are not loaded
+- Using/taking off items in crew member inventory
 
 ## [3.0.6] - 2019-03-03
 
