@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated interface
 - Damage of battering rams depends on ship mass and speed too
+- Updated help
 
 ### Removed
 - Configuration to show or hide last message
