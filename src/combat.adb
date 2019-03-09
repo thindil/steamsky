@@ -528,6 +528,13 @@ package body Combat is
                                 HarpoonDuration + WeaponDamage;
                            end if;
                            WeaponDamage := 1;
+                        elsif Ship.Modules(K).MType = BATTERING_RAM then
+                           if Ship = PlayerShip then
+                              Enemy.HarpoonDuration :=
+                                Enemy.HarpoonDuration + 2;
+                           else
+                              HarpoonDuration := HarpoonDuration + 2;
+                           end if;
                         end if;
                         if WeaponDamage >
                           EnemyShip.Modules(HitLocation).Durability then
@@ -1127,14 +1134,13 @@ package body Combat is
       if Enemy.HarpoonDuration > 0 then
          Enemy.Ship.Speed := FULL_STOP;
          AddMessage
-           (To_String(EnemyName) & " is stopped by your harpoon.",
-            CombatMessage);
+           (To_String(EnemyName) & " is stopped by your ship.", CombatMessage);
       elsif Enemy.Ship.Speed = FULL_STOP then
          Enemy.Ship.Speed := QUARTER_SPEED;
       end if;
       if HarpoonDuration > 0 then
          PlayerShip.Speed := FULL_STOP;
-         AddMessage("You are stopped by enemy harpoon.", CombatMessage);
+         AddMessage("You are stopped by enemy ship.", CombatMessage);
       end if;
       case EnemyPilotOrder is
          when 1 =>
