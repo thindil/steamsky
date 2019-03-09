@@ -189,17 +189,18 @@ package body Game is
          TmpInventory: Inventory_Container.Vector;
       begin
          for I in ProtoMobs_List(PlayerIndex2).Inventory.Iterate loop
-            if ProtoMobs_List(PlayerIndex2).Inventory(I)(2) > 0 then
+            if ProtoMobs_List(PlayerIndex2).Inventory(I).MaxAmount > 0 then
                Amount :=
                  GetRandom
-                   (ProtoMobs_List(PlayerIndex2).Inventory(I)(1),
-                    ProtoMobs_List(PlayerIndex2).Inventory(I)(2));
+                   (ProtoMobs_List(PlayerIndex2).Inventory(I).MinAmount,
+                    ProtoMobs_List(PlayerIndex2).Inventory(I).MaxAmount);
             else
-               Amount := ProtoMobs_List(PlayerIndex2).Inventory(I)(1);
+               Amount := ProtoMobs_List(PlayerIndex2).Inventory(I).MinAmount;
             end if;
             TmpInventory.Append
               (New_Item =>
-                 (ProtoIndex => MobInventory_Container.Key(I),
+                 (ProtoIndex =>
+                    ProtoMobs_List(PlayerIndex2).Inventory(I).ProtoIndex,
                   Amount => Amount, Name => Null_Unbounded_String,
                   Durability => 100, Price => 0));
          end loop;
