@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
 - Showing info about overloading when pilot is on rest
 - Enabling or disabling tooltips
 - Using/taking off items in crew member inventory
+- Loading inventories and cargos from data files
 
 ## [3.4] - 2019-02-24
 
