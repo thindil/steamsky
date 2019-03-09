@@ -270,7 +270,8 @@ package body Bases.Ship is
                         MaxDurability => Modules_List(ModuleIndex).Durability,
                         Owner => 0, UpgradeProgress => 0,
                         UpgradeAction => NONE,
-                        Damage2 => Modules_List(ModuleIndex).MaxValue));
+                        Damage2 => Modules_List(ModuleIndex).MaxValue,
+                        CoolingDown => False));
                when GUN =>
                   PlayerShip.Modules.Append
                     (New_Item =>
