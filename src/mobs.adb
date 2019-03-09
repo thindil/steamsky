@@ -31,7 +31,7 @@ package body Mobs is
       NodesList, ChildNodes: Node_List;
       TempRecord: ProtoMobRecord;
       TempSkills: Skills_Container.Vector;
-      TempInventory: MobInventory_Container.Map;
+      TempInventory: MobInventory_Container.Vector;
       TempAttributes: Attributes_Container.Vector;
       TempPriorities: constant Orders_Array := (others => 0);
       TempEquipment: constant Equipment_Array := (others => 0);
@@ -216,33 +216,59 @@ package body Mobs is
                case SubAction is
                   when ADD =>
                      if Get_Attribute(ChildNode, "amount")'Length /= 0 then
-                        MobInventory_Container.Include
-                          (TempRecord.Inventory, ItemIndex,
-                           (Integer'Value(Get_Attribute(ChildNode, "amount")),
-                            0));
+                        TempRecord.Inventory.Append
+                          (New_Item =>
+                             (ItemIndex,
+                              Integer'Value
+                                (Get_Attribute(ChildNode, "amount")),
+                              0));
                      else
-                        MobInventory_Container.Include
-                          (TempRecord.Inventory, ItemIndex,
-                           (Integer'Value
-                              (Get_Attribute(ChildNode, "minamount")),
-                            Integer'Value
-                              (Get_Attribute(ChildNode, "maxamount"))));
+                        TempRecord.Inventory.Append
+                          (New_Item =>
+                             (ItemIndex,
+                              Integer'Value
+                                (Get_Attribute(ChildNode, "minamount")),
+                              Integer'Value
+                                (Get_Attribute(ChildNode, "maxamount"))));
                      end if;
                   when UPDATE =>
-                     if Get_Attribute(ChildNode, "amount")'Length /= 0 then
-                        TempRecord.Inventory(ItemIndex) :=
-                          (Integer'Value(Get_Attribute(ChildNode, "amount")),
-                           0);
-                     else
-                        TempRecord.Inventory(ItemIndex) :=
-                          (Integer'Value
-                             (Get_Attribute(ChildNode, "minamount")),
-                           Integer'Value
-                             (Get_Attribute(ChildNode, "maxamount")));
-                     end if;
+                     for Item of TempRecord.Inventory loop
+                        if Item.ProtoIndex = ItemIndex then
+                           if Get_Attribute(ChildNode, "amount")'Length /=
+                             0 then
+                              Item :=
+                                (ItemIndex,
+                                 Integer'Value
+                                   (Get_Attribute(ChildNode, "amount")),
+                                 0);
+                           else
+                              Item :=
+                                (ItemIndex,
+                                 Integer'Value
+                                   (Get_Attribute(ChildNode, "minamount")),
+                                 Integer'Value
+                                   (Get_Attribute(ChildNode, "maxamount")));
+                           end if;
+                           exit;
+                        end if;
+                     end loop;
                   when REMOVE =>
-                     MobInventory_Container.Exclude
-                       (TempRecord.Inventory, ItemIndex);
+                     declare
+                        DeleteIndex: Natural := 0;
+                     begin
+                        for K in
+                          TempRecord.Inventory.First_Index ..
+                            TempRecord.Inventory.Last_Index loop
+                           if TempRecord.Inventory(K).ProtoIndex =
+                             ItemIndex then
+                              DeleteIndex := K;
+                              exit;
+                           end if;
+                        end loop;
+                        if DeleteIndex > 0 then
+                           TempRecord.Inventory.Delete(DeleteIndex);
+                        end if;
+                     end;
                end case;
             end loop;
             ChildNodes :=

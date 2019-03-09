@@ -113,7 +113,7 @@ package Ships is
       Evasion: ShipSkills_Array; -- Bonus to evade attacks
       Loot: ShipSkills_Array; -- Amount of loot(moneys) gained for destroying ship
       Perception: ShipSkills_Array; -- Bonus to spot player ship first
-      Cargo: MobInventory_Container.Map; -- List of ship cargo
+      Cargo: MobInventory_Container.Vector; -- List of ship cargo
       CombatValue: Positive; -- Combat value of ship (used to generate enemies)
       Crew: ProtoCrew_Container.Vector; -- List of mobs used as ship crew
       Description: Unbounded_String; -- Description of ship
