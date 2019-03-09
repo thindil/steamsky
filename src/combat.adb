@@ -336,8 +336,14 @@ package body Combat is
                   if Enemy.Distance > 100 then
                      Shoots := 0;
                   else
-                     Shoots := 1;
+                     if Ship.Modules(K).CoolingDown then
+                        Shoots := 0;
+                     else
+                        Shoots := 1;
+                     end if;
                   end if;
+                  Ship.Modules(K).CoolingDown :=
+                    not Ship.Modules(K).CoolingDown;
                end if;
                if Shoots > 0 then
                   if Ship = PlayerShip then

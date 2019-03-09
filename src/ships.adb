@@ -228,7 +228,7 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability, Owner => 0,
                         UpgradeProgress => 0, UpgradeAction => NONE,
-                        Damage2 => TempModule.MaxValue));
+                        Damage2 => TempModule.MaxValue, CoolingDown => False));
                when HARPOON_GUN =>
                   ShipModules.Append
                     (New_Item =>

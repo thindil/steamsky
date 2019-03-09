@@ -790,7 +790,7 @@ package body Ships.SaveLoad is
                               MaxDurability => MaxDurability, Owner => Owner,
                               UpgradeProgress => UpgradeProgress,
                               UpgradeAction => UpgradeAction,
-                              Damage2 => Damage));
+                              Damage2 => Damage, CoolingDown => False));
                      end;
                   when HARPOON_GUN =>
                      declare

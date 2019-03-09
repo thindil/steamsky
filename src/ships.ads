@@ -71,6 +71,7 @@ package Ships is
             TrainedSkill: Natural; -- Index of skill set to training
          when BATTERING_RAM =>
             Damage2: Positive; -- Damage done by battering ram
+            CoolingDown: Boolean; -- If true, battering ram can't attack
          when HARPOON_GUN =>
             Duration: Positive; -- Duration bonus for selected harpoon gun
             HarpoonIndex: Natural; -- Cargo index of ammunition used by selected harpoon gun
