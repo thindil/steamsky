@@ -394,9 +394,9 @@ package body Combat is
                            HitLocation := ArmorIndex;
                         else
                            if Ship = PlayerShip then
-                              if GunnerIndex > 0 and GunnerOrder > 3 and
-                                GunnerOrder <
-                                  7 then -- aim for part of enemy ship
+                              if GunnerIndex > 0
+                                and then GunnerOrder in
+                                  4 .. 6 then -- aim for part of enemy ship
                                  HitLocation := 0;
                                  case GunnerOrder is
                                     when 4 =>
