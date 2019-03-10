@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Option to set the game in full screen mode
 - Self-closing message boxes and option to set delay for self-closing
 - Option to set check boxes looks in themes
+- Each battering ram attack cause unarmed enemy to stop for 1 combat round
 
 ### Changed
 - Updated interface
