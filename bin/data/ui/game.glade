@@ -7847,7 +7847,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="tooltip_text" translatable="yes">Did user interface should be animated or not.</property>
-                                        <property name="halign">start</property>
                                         <signal name="state-set" handler="Toggle_Animation_Type" swapped="no"/>
                                       </object>
                                       <packing>
@@ -7945,7 +7944,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="tooltip_text" translatable="yes">Show help tooltips for various game elements.</property>
-                                        <property name="halign">start</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -7970,7 +7968,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="tooltip_text" translatable="yes">Show last messages window in every place in the game.</property>
-                                        <property name="halign">start</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -7982,7 +7979,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="tooltip_text" translatable="yes">Run the game in full screen mode.</property>
-                                        <property name="halign">start</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -8046,7 +8042,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="tooltip_text" translatable="yes">Size (in pixels) of font used in interface (for example, here).</property>
-                                        <property name="halign">start</property>
                                         <property name="text" translatable="yes">10</property>
                                         <property name="adjustment">adjinterfacefont</property>
                                         <property name="numeric">True</property>
@@ -8079,7 +8074,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="tooltip_text" translatable="yes">Size (in pixels) of font used mainly in help.</property>
-                                        <property name="halign">start</property>
                                         <property name="text" translatable="yes">10</property>
                                         <property name="adjustment">adjhelpfont</property>
                                         <property name="numeric">True</property>
@@ -8112,7 +8106,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="tooltip_text" translatable="yes">Size (in pixels) of font used to draw game map.</property>
-                                        <property name="halign">start</property>
                                         <property name="text" translatable="yes">10</property>
                                         <property name="adjustment">adjmapfont</property>
                                         <property name="numeric">True</property>
@@ -8145,7 +8138,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="tooltip_text" translatable="yes">Auto close game messages after that amount of seconds.</property>
-                                        <property name="halign">start</property>
                                         <property name="adjustment">adjclosemessages</property>
                                         <property name="value">6</property>
                                         <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
