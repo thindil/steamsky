@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 - Using/taking off items in crew member inventory
 - Loading inventories and cargos from data files
 - Crash in combat when no gunner in player ship
+- Crash on adding corpse to ships
 
 ## [3.4] - 2019-02-24
 
