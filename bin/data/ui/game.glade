@@ -935,6 +935,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
   <object class="GtkTreeModelFilter" id="tradefilter">
     <property name="child_model">itemslist1</property>
   </object>
+  <object class="GtkTreeModelSort" id="tradesort">
+    <property name="model">tradefilter</property>
+  </object>
   <object class="GtkListStore" id="itemslist2">
     <columns>
       <!-- column-name gchararray1 -->
@@ -9996,7 +9999,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="name">redbar</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="model">tradefilter</property>
+                                    <property name="model">tradesort</property>
                                     <property name="enable_search">False</property>
                                     <property name="search_column">0</property>
                                     <signal name="cursor-changed" handler="Show_Item_Trade_Info" swapped="no"/>
