@@ -157,7 +157,7 @@ package body Maps.UI.Handlers is
 
    procedure MoveMap(User_Data: access GObject_Record'Class) is
    begin
-      if User_Data = Get_Object(Builder, "btncenter") then
+      if User_Data = Get_Object(Builder, "btncenteronship") then
          CenterX := PlayerShip.SkyX;
          CenterY := PlayerShip.SkyY;
       elsif User_Data = Get_Object(Builder, "btnmovemapok") then
@@ -1326,7 +1326,7 @@ package body Maps.UI.Handlers is
         "skymap" then
          return True;
       end if;
-      if not CenterMapOn("<movemapwindow>/btncenter", "btncenter") then
+      if not CenterMapOn("<movemapwindow>/btncenter", "btncenteronship") then
          return True;
       end if;
       if not CenterMapOn
