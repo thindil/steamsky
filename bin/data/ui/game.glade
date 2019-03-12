@@ -966,6 +966,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
   <object class="GtkTreeModelFilter" id="lootfilter">
     <property name="child_model">itemslist2</property>
   </object>
+  <object class="GtkTreeModelSort" id="lootsort">
+    <property name="model">lootfilter</property>
+  </object>
   <object class="GtkListStore" id="killedlist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -4253,7 +4256,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="name">redbar</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="model">lootfilter</property>
+                                    <property name="model">lootsort</property>
                                     <property name="search_column">0</property>
                                     <signal name="cursor-changed" handler="Show_Item_Info" swapped="no"/>
                                     <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
