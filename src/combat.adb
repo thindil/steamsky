@@ -388,8 +388,8 @@ package body Combat is
                         else
                            if Ship = PlayerShip then
                               if GunnerIndex > 0
-                                and then
-                                GunnerOrder in 4 .. 6 then -- aim for part of enemy ship
+                                and then GunnerOrder in
+                                  4 .. 6 then -- aim for part of enemy ship
                                  HitLocation := 0;
                                  case GunnerOrder is
                                     when 4 =>
@@ -481,8 +481,10 @@ package body Combat is
                              Items_List(Ship.Cargo(AmmoIndex).ProtoIndex).Value
                                (1);
                         end if;
-                        if Modules_List(Ship.Modules(K).ProtoIndex).MType =
-                          HARPOON_GUN then
+                        if ArmorIndex = 0
+                          and then
+                            Modules_List(Ship.Modules(K).ProtoIndex).MType =
+                            HARPOON_GUN then
                            for Module of EnemyShip.Modules loop
                               if Modules_List(Module.ProtoIndex).MType =
                                 HULL then
