@@ -109,7 +109,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         <property name="margin_right">5</property>
         <property name="margin_bottom">5</property>
         <property name="use_underline">True</property>
-        <signal name="clicked" handler="Hide_Dialog" object="messagebox" swapped="no"/>
+        <signal name="clicked" handler="Hide_Dialog" swapped="no"/>
       </object>
       <packing>
         <property name="expand">False</property>
