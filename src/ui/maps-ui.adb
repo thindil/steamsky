@@ -1101,6 +1101,7 @@ package body Maps.UI is
         (Builder, "Toggle_Close_Button_Proc", ToggleCloseButtonProc'Access);
       Register_Handler(Builder, "Move_Map_Info", MoveMapInfo'Access);
       Register_Handler(Builder, "Move_Map_Buttons", MoveMapButtons'Access);
+      Register_Handler(Builder, "Hide_Dialog", HideDialog'Access);
       Do_Connect(Builder);
       Add_Entry("<skymapwindow>/btnupleft", GDK_KP_7, 0);
       Add_Entry("<skymapwindow>/btnup", GDK_KP_8, 0);

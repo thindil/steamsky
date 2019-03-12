@@ -494,11 +494,6 @@ package body MainMenu is
          Get_Tooltip_Text(Gtk_Widget(User_Data)));
    end UpdateInfoProc;
 
-   procedure HideDialog(User_Data: access GObject_Record'Class) is
-   begin
-      Hide(Gtk_Widget(User_Data));
-   end HideDialog;
-
    procedure CreateMainMenu is
       Error: aliased GError;
    begin
