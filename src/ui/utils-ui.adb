@@ -45,12 +45,13 @@ with Config; use Config;
 package body Utils.UI is
 
    Builder: Gtkada_Builder;
-   HideCountdown: Natural;
+   HideCountdown: Integer;
+   Source_Id: G_Source_Id;
 
    function AutoHideDialog return Boolean is
    begin
       HideCountdown := HideCountdown - 1;
-      if HideCountdown = 0 then
+      if HideCountdown < 1 then
          Hide(Gtk_Widget(Get_Object(Builder, "messagebox")));
          return False;
       end if;
@@ -59,6 +60,12 @@ package body Utils.UI is
          "Close (" & Natural'Image(HideCountdown) & " )");
       return True;
    end AutoHideDialog;
+
+   procedure HideDialog(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Hide(Gtk_Widget(Get_Object(Object, "messagebox")));
+      Remove(Source_Id);
+   end HideDialog;
 
    procedure ShowDialog(Message: String) is
    begin
@@ -69,13 +76,8 @@ package body Utils.UI is
          "Close (" & Positive'Image(GameSettings.AutoCloseMessagesTime) &
          " )");
       Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnclosemessage")));
-      declare
-         Source_Id: G_Source_Id;
-         pragma Unreferenced(Source_Id);
-      begin
-         HideCountdown := GameSettings.AutoCloseMessagesTime;
-         Source_Id := Timeout_Add(1000, AutoHideDialog'Access);
-      end;
+      HideCountdown := GameSettings.AutoCloseMessagesTime;
+      Source_Id := Timeout_Add(1000, AutoHideDialog'Access);
    end ShowDialog;
 
    function HideWindow
