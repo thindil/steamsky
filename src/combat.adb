@@ -509,31 +509,33 @@ package body Combat is
                              Items_List(Ship.Cargo(AmmoIndex).ProtoIndex).Value
                                (1);
                         end if;
-                        if Ship.Modules(K).MType = HARPOON_GUN then
-                           for Module of EnemyShip.Modules loop
-                              if Module.MType = HULL then
-                                 WeaponDamage :=
-                                   WeaponDamage - (Module.MaxModules / 10);
-                                 if WeaponDamage < 1 then
-                                    WeaponDamage := 1;
+                        if ArmorIndex = 0 then
+                           if Ship.Modules(K).MType = HARPOON_GUN then
+                              for Module of EnemyShip.Modules loop
+                                 if Module.MType = HULL then
+                                    WeaponDamage :=
+                                      WeaponDamage - (Module.MaxModules / 10);
+                                    if WeaponDamage < 1 then
+                                       WeaponDamage := 1;
+                                    end if;
+                                    exit;
                                  end if;
-                                 exit;
+                              end loop;
+                              if Ship = PlayerShip then
+                                 Enemy.HarpoonDuration :=
+                                   Enemy.HarpoonDuration + WeaponDamage;
+                              else
+                                 HarpoonDuration :=
+                                   HarpoonDuration + WeaponDamage;
                               end if;
-                           end loop;
-                           if Ship = PlayerShip then
-                              Enemy.HarpoonDuration :=
-                                Enemy.HarpoonDuration + WeaponDamage;
-                           else
-                              HarpoonDuration :=
-                                HarpoonDuration + WeaponDamage;
-                           end if;
-                           WeaponDamage := 1;
-                        elsif Ship.Modules(K).MType = BATTERING_RAM then
-                           if Ship = PlayerShip then
-                              Enemy.HarpoonDuration :=
-                                Enemy.HarpoonDuration + 2;
-                           else
-                              HarpoonDuration := HarpoonDuration + 2;
+                              WeaponDamage := 1;
+                           elsif Ship.Modules(K).MType = BATTERING_RAM then
+                              if Ship = PlayerShip then
+                                 Enemy.HarpoonDuration :=
+                                   Enemy.HarpoonDuration + 2;
+                              else
+                                 HarpoonDuration := HarpoonDuration + 2;
+                              end if;
                            end if;
                         end if;
                         if WeaponDamage >
