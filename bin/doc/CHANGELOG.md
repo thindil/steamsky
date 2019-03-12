@@ -40,6 +40,7 @@ All notable changes to this project will be documented in this file.
 - Loading inventories and cargos from data files
 - Crash in combat when no gunner in player ship
 - Crash on adding corpse to ships
+- Harpoon gun work when enemy have an armor
 
 ## [3.4] - 2019-02-24
 
