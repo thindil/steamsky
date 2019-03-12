@@ -249,25 +249,29 @@ package body Maps.UI is
                null;
          end case;
       end loop;
-      declare
-         type SpeedType is digits 2;
-         Speed: SpeedType;
-      begin
-         if PlayerShip.Speed /= DOCKED then
-            Speed := (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
-         else
-            Speed := (SpeedType(RealSpeed(PlayerShip, True)) / 1000.0);
-         end if;
-         if Speed < 0.5 and HavePilot then
-            UpdateLabel
-              ("lblnofood",
-               Encode
-                 ("<span foreground=""red"">" & CurrentTheme.OverloadedIcon &
-                  "</span>"),
-               "You can't fly with your ship, because it is overloaded.",
-               True);
-         end if;
-      end;
+      if HavePilot and
+        Get_Visible_Child_Name(Gtk_Stack(Get_Object(Builder, "gamestack"))) /=
+          "combat" then
+         declare
+            type SpeedType is digits 2;
+            Speed: SpeedType;
+         begin
+            if PlayerShip.Speed /= DOCKED then
+               Speed := (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
+            else
+               Speed := (SpeedType(RealSpeed(PlayerShip, True)) / 1000.0);
+            end if;
+            if Speed < 0.5 and HavePilot then
+               UpdateLabel
+                 ("lblnofood",
+                  Encode
+                    ("<span foreground=""red"">" &
+                     CurrentTheme.OverloadedIcon & "</span>"),
+                  "You can't fly with your ship, because it is overloaded.",
+                  True);
+            end if;
+         end;
+      end if;
       for Module of PlayerShip.Modules loop
          case Modules_List(Module.ProtoIndex).MType is
             when GUN | HARPOON_GUN =>
