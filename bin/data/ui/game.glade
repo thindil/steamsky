@@ -532,6 +532,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
   <object class="GtkTreeModelFilter" id="cargofilter">
     <property name="child_model">cargolist</property>
   </object>
+  <object class="GtkTreeModelSort" id="cargosort">
+    <property name="model">cargofilter</property>
+  </object>
   <object class="GtkListStore" id="contractlength">
     <columns>
       <!-- column-name gchararray1 -->
@@ -9620,7 +9623,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="tooltip_text" translatable="yes">Double click or press enter to hide or show item info</property>
-                                    <property name="model">cargofilter</property>
+                                    <property name="model">cargosort</property>
                                     <property name="search_column">0</property>
                                     <signal name="cursor-changed" handler="Show_Item_Cargo_Info" swapped="no"/>
                                     <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
