@@ -100,7 +100,9 @@ package body Trades.UI is
       end if;
       if BaseIndex = 0 and BaseCargoIndex > Natural(TraderCargo.Length) then
          return;
-      elsif BaseCargoIndex > Natural(SkyBases(BaseIndex).Cargo.Length) then
+      elsif BaseIndex > 0
+        and then BaseCargoIndex >
+          Natural(SkyBases(BaseIndex).Cargo.Length) then
          return;
       end if;
       if CargoIndex > 0 then
@@ -137,8 +139,8 @@ package body Trades.UI is
            SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       begin
          if EventIndex > 0 then
-            if Events_List(EventIndex).EType = DoublePrice and
-              Events_List(EventIndex).ItemIndex = ProtoIndex then
+            if Events_List(EventIndex).EType = DoublePrice
+              and then Events_List(EventIndex).ItemIndex = ProtoIndex then
                Price := Price * 2;
             end if;
          end if;
@@ -539,8 +541,8 @@ package body Trades.UI is
                end if;
             end if;
             if EventIndex > 0 then
-               if Events_List(EventIndex).EType = DoublePrice and
-                 Events_List(EventIndex).ItemIndex = ProtoIndex then
+               if Events_List(EventIndex).EType = DoublePrice
+                 and then Events_List(EventIndex).ItemIndex = ProtoIndex then
                   Price := Price * 2;
                end if;
             end if;
@@ -600,8 +602,8 @@ package body Trades.UI is
                Price := TraderCargo(I).Price;
             end if;
             if EventIndex > 0 then
-               if Events_List(EventIndex).EType = DoublePrice and
-                 Events_List(EventIndex).ItemIndex = ProtoIndex then
+               if Events_List(EventIndex).EType = DoublePrice
+                 and then Events_List(EventIndex).ItemIndex = ProtoIndex then
                   Price := Price * 2;
                end if;
             end if;
