@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Using/taking off items in crew member inventory
 - Crash in combat when no gunner in player ship
 - Harpoon gun work when enemy have an armor
+- Crash on trying to trade with friendly ship
 
 ## [3.0.6] - 2019-03-03
 
