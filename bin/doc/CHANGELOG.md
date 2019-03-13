@@ -43,6 +43,7 @@ All notable changes to this project will be documented in this file.
 - Crash on adding corpse to ships
 - Harpoon gun work when enemy have an armor
 - Crash on trying to trade with friendly ship
+- Selling items to friendly ships
 
 ## [3.4] - 2019-02-24
 
