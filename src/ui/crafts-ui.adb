@@ -289,6 +289,7 @@ package body Crafts.UI is
       for I in PlayerShip.Modules.Iterate loop
          if PlayerShip.Modules(I).Name = WorkshopName then
             SetRecipe(Modules_Container.To_Index(I), Amount, RecipeIndex);
+            UpdateMessages;
             exit;
          end if;
       end loop;
