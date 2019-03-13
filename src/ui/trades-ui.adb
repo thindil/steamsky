@@ -95,7 +95,9 @@ package body Trades.UI is
       BaseCargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 2));
       if BaseIndex = 0 and BaseCargoIndex > Natural(TraderCargo.Length) then
          return;
-      elsif BaseCargoIndex > Natural(SkyBases(BaseIndex).Cargo.Length) then
+      elsif BaseIndex > 0
+        and then BaseCargoIndex >
+          Natural(SkyBases(BaseIndex).Cargo.Length) then
          return;
       end if;
       if CargoIndex > 0 then
