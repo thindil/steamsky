@@ -154,11 +154,9 @@ package body Trades is
             Price := TraderCargo(BaseItemIndex).Price;
          end if;
       end if;
-      if EventIndex > 0 then
-         if Events_List(EventIndex).EType = DoublePrice and
-           Events_List(EventIndex).ItemIndex = ProtoIndex then
-            Price := Price * 2;
-         end if;
+      if EventIndex > 0 and then Events_List(EventIndex).EType = DoublePrice
+        and then Events_List(EventIndex).ItemIndex = ProtoIndex then
+         Price := Price * 2;
       end if;
       Profit := Price * SellAmount;
       if PlayerShip.Cargo(ItemIndex).Durability < 100 then
