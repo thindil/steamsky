@@ -212,7 +212,7 @@ package body Trades is
       UpdateCargo
         (Ship => PlayerShip, CargoIndex => ItemIndex,
          Amount => (0 - SellAmount),
-         Durability => PlayerShip.Cargo.Element(ItemIndex).Durability);
+         Price => PlayerShip.Cargo.Element(ItemIndex).Price);
       UpdateCargo(PlayerShip, MoneyIndex, Profit);
       if BaseIndex > 0 then
          UpdateBaseCargo(MoneyIndex, (0 - Profit));
