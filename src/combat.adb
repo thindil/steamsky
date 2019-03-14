@@ -729,6 +729,10 @@ package body Combat is
                    .Value
                    (2);
             end if;
+            if Factions_List(Defender.Faction).Flags.Contains
+                (To_Unbounded_String("naturalarmor")) then
+               Damage := Damage / 2;
+            end if;
             if Damage < 1 then
                Damage := 1;
             end if;
