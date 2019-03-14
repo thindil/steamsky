@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -167,7 +167,8 @@ package body Help.UI is
          3 => (Tag => "i", TextTag => Lookup(Tags, "italic")));
       FlagsTags: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("diseaseimmune"),
-         To_Unbounded_String("nofatigue"), To_Unbounded_String("nomorale"));
+         To_Unbounded_String("nofatigue"), To_Unbounded_String("nomorale"),
+         To_Unbounded_String("naturalarmor"));
       FactionsWithFlag: Unbounded_String;
    begin
       NewText := Help_List(Topic).Text;
