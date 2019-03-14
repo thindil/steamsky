@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Damage of battering rams depends on ship mass and speed too
 - Updated help
 - Battering rams attack once per 2 combat rounds
+- Updated MODDING.md
 
 ### Removed
 - Configuration to show or hide last message
