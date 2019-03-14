@@ -477,9 +477,9 @@ Value must be existing skill name.
 - Inside help text you can use some tags for formatting text:
   `{u}some text{/u}` for add underline for text, `{b}some text{/b}` to made
   bold characters and `{i}some text{/i}` for italic font.
-- Inside help text you can use special variables `diseaseimmune`, `nofatigue`
-  and `nomorale` which later will be replaced by list of factions which have
-  set selected flag.
+- Inside help text you can use special variables `diseaseimmune`, `nofatigue`,
+  `nomorale` and `naturalarmor` which later will be replaced by list of
+  factions which have set selected flag.
 
 ## Goals
 
@@ -654,7 +654,7 @@ Value must be existing skill name.
       members cannot become ill, no disease event for this faction, `nofatigue`
       faction members don't get tired so, they can't rest and regenerate
       health, `nomorale` faction members don't have morale (and bonuses from
-      it).
+      it), `naturalarmor` faction members get half of damage in melee combat.
     - Optional attribute `action`: what to do with this flag. Possible values
       are: "add" (add this flag, default option) or "remove" (remove this
       flag).
