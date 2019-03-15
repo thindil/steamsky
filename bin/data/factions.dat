@@ -170,12 +170,13 @@ members take only half of the damage in melee combat.
   <relation faction="UNDEAD" reputation="-100" friendly="N" />
   <relation faction="DRONES" reputation="0" friendly="Y" />
   <relation faction="INQUISITION" reputation="-100" friendly="N" />
-  <description>Small group of connected together bases which are settled by sentient, mechanical drones. Members of this faction attacks everything except their confreres. They use ships fuel as food but don't need to drink to survive and they don't need rest but they can't self regenerate health. Additionally, they are immune to diseases. They use bronze plates and engineering skill for healing self. They morale is always that same. They have different names than other factions for everything too. Bases of this faction are much less common than Poleis. Gameplay is harder than Poleis due to less sky bases and negative reputation of Drones with other factions.</description>
+  <description>Small group of connected together bases which are settled by sentient, mechanical drones. Members of this faction attacks everything except their confreres. They use ships fuel as food but don't need to drink to survive and they don't need rest but they can't self regenerate health. Additionally, they are immune to diseases and they take less damage in melee combat. They use bronze plates and engineering skill for healing self. They morale is always that same. They have different names than other factions for everything too. Bases of this faction are much less common than Poleis. Gameplay is harder than Poleis due to less sky bases and negative reputation of Drones with other factions.</description>
   <foodtype name="Fuel" />
   <flag name="nogender" />
   <flag name="diseaseimmune" />
   <flag name="nofatigue" />
   <flag name="nomorale" />
+  <flag name="naturalarmor" />
   <career index="general" playerindex="76" shipindex="165">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
   <career index="hunter" playerindex="76" shipindex="170">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
   <career index="explorer" playerindex="76" shipindex="172">Career focused on exploring. You get average equipped small ship, with smaller cargo space than general career's ship but with water collector installed on it.</career>
