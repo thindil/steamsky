@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Option to set check boxes looks in themes
 - Each battering ram attack cause unarmed enemy to stop for 1 combat round
 - New factions flag: naturalarmor
+- Natural armor for Undead faction members
 
 ### Changed
 - Updated interface
