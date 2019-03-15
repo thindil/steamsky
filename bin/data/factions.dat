@@ -146,18 +146,20 @@ faction. Will be show to player instead of default name.
   <relation faction="UNDEAD" reputation="0" friendly="Y" />
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="-100" friendly="N" />
-  <description>Small group of connected together bases which are settled by undead beings. Members of this factions attacks everything what not belongs to it. They main advantages are that they don't need food or drinks to survive, they are immune to diseases and they don't need rest but they can't self regenerate health. They morale is always that same. Bases of this faction are much less common than Poleis. Gameplay is harder than Poleis due to less sky bases and negative reputation of Undead with other factions.</description>
+  <description>Small group of connected together bases which are settled by undead beings. Members of this factions attacks everything what not belongs to it. They main advantages are that they don't need food or drinks to survive, they are immune to diseases, they don't need rest but they can't self regenerate health and they take less damage in melee combat. They morale is always that same. Bases of this faction are much less common than Poleis. Gameplay is harder than Poleis due to less sky bases and negative reputation of Undead with other factions.</description>
 <!--
 - Tags "flags": Various info about faction (optional tag).
 - Attribute "name": name of flag. Possible values: "nogender" faction don't
 have genders and use male names as default, "diseaseimmune" faction members
 cannot become ill, no disease event for this faction, "nofatigue" faction
 members don't get tired so, they can't rest and regenerate health, "nomorale"
-faction members don't have morale (and bonuses from it)
+faction members don't have morale (and bonuses from it), "naturalarmor" faction
+members take only half of the damage in melee combat.
 -->
   <flag name="diseaseimmune" />
   <flag name="nofatigue" />
   <flag name="nomorale" />
+  <flag name="naturalarmor" />
   <career index="general" playerindex="75" shipindex="164">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
   <career index="hunter" playerindex="75" shipindex="169">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
  </faction>
