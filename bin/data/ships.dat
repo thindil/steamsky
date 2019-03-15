@@ -5587,7 +5587,7 @@ during combat. -->
   <cargo index="131" maxamount="800" minamount="600"/>
   <member index="112"/>
   <member amount="3" index="113"/>
-  <member index="45"/>
+  <member index="46"/>
   <member index="114"/>
   <member index="115" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored poleis traders ship. Avoids any fights.</description>
@@ -5608,7 +5608,7 @@ during combat. -->
   <cargo index="131" maxamount="800" minamount="600"/>
   <member index="112"/>
   <member amount="3" index="113"/>
-  <member index="45"/>
+  <member index="46"/>
   <member index="114"/>
   <member index="115" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored independent traders ship. Avoids any fights.</description>
@@ -5629,10 +5629,30 @@ during combat. -->
   <cargo index="131" maxamount="800" minamount="600"/>
   <member index="112"/>
   <member amount="3" index="113"/>
-  <member index="45"/>
+  <member index="46"/>
   <member index="114"/>
   <member index="115" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored pirates traders ship. Avoids any fights.</description>
+ </ship>
+ <ship combatai="DISARMER" index="294" maxloot="1200" minloot="750" name="Advanced huge poleis patrol ship mk V" owner="POLEIS">
+  <module index="187"/>
+  <module index="177"/>
+  <module amount="2" index="189"/>
+  <module amount="16" index="93"/>
+  <module index="169"/>
+  <module amount="3" index="235"/>
+  <module amount="4" index="184"/>
+  <module amount="4" index="193"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="2" maxamount="800" minamount="600"/>
+  <cargo index="3" maxamount="2000" minamount="1500"/>
+  <cargo index="154" maxamount="1000" minamount="500"/>
+  <cargo index="131" maxamount="800" minamount="600"/>
+  <member index="112"/>
+  <member amount="4" index="113"/>
+  <member index="114"/>
+  <member index="115" maxamount="12" minamount="8"/>
+  <description>Advanced and upgraded version of huge, well armored poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
 </ships>
 
