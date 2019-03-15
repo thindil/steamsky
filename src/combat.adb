@@ -733,6 +733,18 @@ package body Combat is
                 (To_Unbounded_String("naturalarmor")) then
                Damage := Damage / 2;
             end if;
+            if
+              (Factions_List(Attacker.Faction).Flags.Contains
+                 (To_Unbounded_String("toxicattack")) and
+               Attacker.Equipment(1) = 0) and
+              not Factions_List(Defender.Faction).Flags.Contains
+                (To_Unbounded_String("diseaseimmune")) then
+               if Damage * 10 < 30 then
+                  Damage := Damage * 10;
+               else
+                  Damage := Damage + 30;
+               end if;
+            end if;
             if Damage < 1 then
                Damage := 1;
             end if;
