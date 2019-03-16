@@ -308,12 +308,22 @@ package body Maps.UI is
                "</span>"),
             "Pilot is in position.");
       else
-         UpdateLabel
-           ("lblpilot",
-            Encode
-              ("<span foreground=""red"">" & CurrentTheme.PilotIcon &
-               "</span>"),
-            "No pilot assigned. Ship can't move.");
+         if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+             (To_Unbounded_String("sentientships")) then
+            UpdateLabel
+              ("lblpilot",
+               Encode
+                 ("<span foreground=""red"">" & CurrentTheme.PilotIcon &
+                  "</span>"),
+               "No pilot assigned. Ship can't move.");
+         else
+            UpdateLabel
+              ("lblpilot",
+               Encode
+                 ("<span foreground=""yellow"">" & CurrentTheme.PilotIcon &
+                  "</span>"),
+               "No pilot assigned. Ship fly on it own.");
+         end if;
       end if;
       if HaveEngineer then
          UpdateLabel
@@ -323,12 +333,22 @@ package body Maps.UI is
                "</span>"),
             "Engineer is in position.");
       else
-         UpdateLabel
-           ("lblengineer",
-            Encode
-              ("<span foreground=""red"">" & CurrentTheme.EngineerIcon &
-               "</span>"),
-            "No engineer assigned. Ship can't move.");
+         if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+             (To_Unbounded_String("sentientships")) then
+            UpdateLabel
+              ("lblengineer",
+               Encode
+                 ("<span foreground=""red"">" & CurrentTheme.EngineerIcon &
+                  "</span>"),
+               "No engineer assigned. Ship can't move.");
+         else
+            UpdateLabel
+              ("lblengineer",
+               Encode
+                 ("<span foreground=""yellow"">" & CurrentTheme.EngineerIcon &
+                  "</span>"),
+               "No engineer assigned. Ship can't move.");
+         end if;
       end if;
       if HaveGunner then
          UpdateLabel

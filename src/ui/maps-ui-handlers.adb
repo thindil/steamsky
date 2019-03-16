@@ -361,7 +361,10 @@ package body Maps.UI.Handlers is
             end if;
             if Result = 8 then
                WaitForRest;
-               if FindMember(Pilot) = 0 or FindMember(Engineer) = 0 then
+               if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+                   (To_Unbounded_String("sentientship"))
+                 and then
+                 (FindMember(Pilot) = 0 or FindMember(Engineer) = 0) then
                   WaitForRest;
                end if;
                Result := 1;
@@ -448,7 +451,10 @@ package body Maps.UI.Handlers is
             StartsCombat := CheckForEvent;
             if not StartsCombat then
                WaitForRest;
-               if FindMember(Pilot) = 0 or FindMember(Engineer) = 0 then
+               if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+                   (To_Unbounded_String("sentientships"))
+                 and then
+                 (FindMember(Pilot) = 0 or FindMember(Engineer) = 0) then
                   WaitForRest;
                end if;
                StartsCombat := CheckForEvent;
