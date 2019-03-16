@@ -23,6 +23,7 @@ with Messages; use Messages;
 with Config; use Config;
 with Bases; use Bases;
 with Utils; use Utils;
+with Factions; use Factions;
 
 package body Ships.Movement is
 
@@ -45,6 +46,10 @@ package body Ships.Movement is
       end if;
       if not HaveCockpit then
          return "You don't have cockpit on ship or cockpit is destroyed.";
+      end if;
+      if Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+          (To_Unbounded_String("sentientship")) then
+         return "";
       end if;
       for Member of PlayerShip.Crew loop
          if Member.Order = Pilot then
@@ -161,17 +166,20 @@ package body Ships.Movement is
             return 0;
          end if;
       end if;
-      if NeedRest(Pilot) then
-         if not GameSettings.AutoRest then
-            return 6;
+      if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+          (To_Unbounded_String("sentientships")) then
+         if NeedRest(Pilot) then
+            if not GameSettings.AutoRest then
+               return 6;
+            end if;
+            return 8;
          end if;
-         return 8;
-      end if;
-      if NeedRest(Engineer) then
-         if not GameSettings.AutoRest then
-            return 7;
+         if NeedRest(Engineer) then
+            if not GameSettings.AutoRest then
+               return 7;
+            end if;
+            return 8;
          end if;
-         return 8;
       end if;
       return 1;
    end MoveShip;
@@ -302,7 +310,9 @@ package body Ships.Movement is
       if not HaveEngine then
          return "You don't have working engine on ship or all engines are destroyed.";
       end if;
-      if FindMember(Engineer) = 0 then
+      if FindMember(Engineer) = 0 and
+        not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+          (To_Unbounded_String("sentientship")) then
          return "You don't have enginner on duty.";
       end if;
       PlayerShip.Speed := SpeedValue;
@@ -340,22 +350,38 @@ package body Ships.Movement is
       end;
       Speed :=
         Natural((Float(Speed) / Float(CountShipWeight(Ship))) * 100000.0);
-      for I in Ship.Crew.Iterate loop
-         if Ship.Crew(I).Order = Pilot then
-            Speed :=
-              Speed +
-              Natural
-                (Float(Speed) *
-                 (Float(GetSkillLevel(Ship.Crew(I), PilotingSkill)) / 300.0));
-         elsif Ship.Crew(I).Order = Engineer then
-            Speed :=
-              Speed +
-              Natural
-                (Float(Speed) *
-                 (Float(GetSkillLevel(Ship.Crew(I), EngineeringSkill)) /
-                  300.0));
+      if Ship.Crew.Length > 0 then
+         if not Factions_List(Ship.Crew(1).Faction).Flags.Contains
+             (To_Unbounded_String("sentientship")) then
+            for I in Ship.Crew.Iterate loop
+               if Ship.Crew(I).Order = Pilot then
+                  Speed :=
+                    Speed +
+                    Natural
+                      (Float(Speed) *
+                       (Float(GetSkillLevel(Ship.Crew(I), PilotingSkill)) /
+                        300.0));
+               elsif Ship.Crew(I).Order = Engineer then
+                  Speed :=
+                    Speed +
+                    Natural
+                      (Float(Speed) *
+                       (Float(GetSkillLevel(Ship.Crew(I), EngineeringSkill)) /
+                        300.0));
+               end if;
+            end loop;
+         else
+            for Module of Ship.Modules loop
+               if Module.MType = HULL then
+                  Speed :=
+                    Speed +
+                    Natural
+                      (Float(Speed) * (Float(Module.MaxModules * 2) / 300.0));
+                  exit;
+               end if;
+            end loop;
          end if;
-      end loop;
+      end if;
       if Ship = PlayerShip and
         (Ship.Speed = DOCKED or Ship.Speed = FULL_STOP) and InfoOnly then
          ShipSetSpeed := GameSettings.UndockSpeed;

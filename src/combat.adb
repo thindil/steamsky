@@ -1033,7 +1033,9 @@ package body Combat is
            AccuracyBonus -
            GetSkillLevel(Enemy.Ship.Crew(EnemyPilotIndex), PilotingSkill);
       end if;
-      if EngineerIndex > 0 then
+      if EngineerIndex > 0 or
+        Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+          (To_Unbounded_String("sentientships")) then
          Message :=
            To_Unbounded_String(ChangeShipSpeed(ShipSpeed'Val(EngineerOrder)));
          if Length(Message) > 0 then
