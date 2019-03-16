@@ -21,7 +21,8 @@ All notable changes to this project will be documented in this file.
 - Option to set check boxes looks in themes
 - Each battering ram attack cause unarmed enemy to stop for 1 combat round
 - New factions flags: naturalarmor and toxicattack
-- Natural armor for Undead and Drones faction members
+- Natural armor ability for Undead and Drones faction members
+- Toxic attack ability for Undead
 
 ### Changed
 - Updated interface
