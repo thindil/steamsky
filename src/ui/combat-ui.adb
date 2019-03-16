@@ -49,6 +49,7 @@ with Ships.Crew; use Ships.Crew;
 with Messages; use Messages;
 with Config; use Config;
 with Items; use Items;
+with Factions; use Factions;
 
 package body Combat.UI is
 
@@ -213,6 +214,10 @@ package body Combat.UI is
          MemberIndex := FindMember(Pilot);
          if MemberIndex = 0 then
             Set(CrewList, CrewIter, 0, "Pilot:");
+            if Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+                (To_Unbounded_String("sentientships")) then
+               Set(CrewList, CrewIter, 1, To_String(PilotOrders(PilotOrder)));
+            end if;
             Set(CrewList, CrewIter, 2, "Nobody");
          else
             Set(CrewList, CrewIter, 0, "Pilot:");
@@ -225,6 +230,12 @@ package body Combat.UI is
          MemberIndex := FindMember(Engineer);
          if MemberIndex = 0 then
             Set(CrewList, CrewIter, 0, "Engineer:");
+            if Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+                (To_Unbounded_String("sentientships")) then
+               Set
+                 (CrewList, CrewIter, 1,
+                  To_String(EngineerOrders(EngineerOrder)));
+            end if;
             Set(CrewList, CrewIter, 2, "Nobody");
          else
             Set(CrewList, CrewIter, 0, "Engineer:");
@@ -688,18 +699,34 @@ package body Combat.UI is
       else
          if Path_String = "0" then
             PilotOrder := Positive(Get_Int(OrdersList, New_Iter, 1));
-            AddMessage
-              ("Order for " &
-               To_String(PlayerShip.Crew(FindMember(Pilot)).Name) &
-               " was set on: " & To_String(PilotOrders(PilotOrder)),
-               CombatMessage);
+            if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+                (To_Unbounded_String("sentientships")) then
+               AddMessage
+                 ("Order for " &
+                  To_String(PlayerShip.Crew(FindMember(Pilot)).Name) &
+                  " was set on: " & To_String(PilotOrders(PilotOrder)),
+                  CombatMessage);
+            else
+               AddMessage
+                 ("Order for ship was set on: " &
+                  To_String(PilotOrders(PilotOrder)),
+                  CombatMessage);
+            end if;
          elsif Path_String = "1" then
             EngineerOrder := Positive(Get_Int(OrdersList, New_Iter, 1));
-            AddMessage
-              ("Order for " &
-               To_String(PlayerShip.Crew(FindMember(Engineer)).Name) &
-               " was set on: " & To_String(EngineerOrders(EngineerOrder)),
-               CombatMessage);
+            if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+                (To_Unbounded_String("sentientships")) then
+               AddMessage
+                 ("Order for " &
+                  To_String(PlayerShip.Crew(FindMember(Engineer)).Name) &
+                  " was set on: " & To_String(EngineerOrders(EngineerOrder)),
+                  CombatMessage);
+            else
+               AddMessage
+                 ("Order for ship was set on: " &
+                  To_String(EngineerOrders(EngineerOrder)),
+                  CombatMessage);
+            end if;
          else
             Guns(Positive'Value(Path_String) - 1)(2) :=
               Positive(Get_Int(OrdersList, New_Iter, 1));
