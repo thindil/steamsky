@@ -48,8 +48,9 @@ package body Ships.Movement is
          return "You don't have cockpit on ship or cockpit is destroyed.";
       end if;
       if Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
-          (To_Unbounded_String("sentientship")) then
-         return "";
+          (To_Unbounded_String("sentientships")) then
+          HavePilot := True;
+          HaveEngineer := True;
       end if;
       for Member of PlayerShip.Crew loop
          if Member.Order = Pilot then
@@ -63,7 +64,7 @@ package body Ships.Movement is
          return "You don't have pilot on duty.";
       end if;
       if not HaveEngineer then
-         return "You don't have enginner on duty.";
+         return "You don't have engineer on duty.";
       end if;
       return "";
    end HaveOrderRequirements;
@@ -312,8 +313,8 @@ package body Ships.Movement is
       end if;
       if FindMember(Engineer) = 0 and
         not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
-          (To_Unbounded_String("sentientship")) then
-         return "You don't have enginner on duty.";
+          (To_Unbounded_String("sentientships")) then
+         return "You don't have engineer on duty.";
       end if;
       PlayerShip.Speed := SpeedValue;
       return "";
@@ -352,7 +353,7 @@ package body Ships.Movement is
         Natural((Float(Speed) / Float(CountShipWeight(Ship))) * 100000.0);
       if Ship.Crew.Length > 0 then
          if not Factions_List(Ship.Crew(1).Faction).Flags.Contains
-             (To_Unbounded_String("sentientship")) then
+             (To_Unbounded_String("sentientships")) then
             for I in Ship.Crew.Iterate loop
                if Ship.Crew(I).Order = Pilot then
                   Speed :=

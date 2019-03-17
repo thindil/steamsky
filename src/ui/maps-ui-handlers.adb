@@ -362,7 +362,7 @@ package body Maps.UI.Handlers is
             if Result = 8 then
                WaitForRest;
                if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
-                   (To_Unbounded_String("sentientship"))
+                   (To_Unbounded_String("sentientships"))
                  and then
                  (FindMember(Pilot) = 0 or FindMember(Engineer) = 0) then
                   WaitForRest;
