@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.0.7] - 2019-03-17
 
 ### Fixed
 - Showing new and load game buttons when data files are not loaded
