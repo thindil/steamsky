@@ -347,7 +347,7 @@ package body Maps.UI is
                Encode
                  ("<span foreground=""yellow"">" & CurrentTheme.EngineerIcon &
                   "</span>"),
-               "No engineer assigned. Ship can't move.");
+               "No engineer assigned. Ship fly on it own.");
          end if;
       end if;
       if HaveGunner then

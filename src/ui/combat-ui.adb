@@ -636,7 +636,12 @@ package body Combat.UI is
          AssignedOrder: Unbounded_String;
       begin
          OrdersList.Clear;
-         if AssignedName = To_Unbounded_String("Nobody") then
+         if AssignedName = To_Unbounded_String("Nobody")
+           and then
+           (Position > 1
+            or else not Factions_List(PlayerShip.Crew(1).Faction).Flags
+              .Contains
+              (To_Unbounded_String("sentientships"))) then
             return;
          end if;
          AssignedOrder :=
