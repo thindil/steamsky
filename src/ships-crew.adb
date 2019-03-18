@@ -683,7 +683,18 @@ package body Ships.Crew is
           (To_Unbounded_String("nomorale")) then
          return;
       end if;
-      NewValue := Ship.Crew(MemberIndex).Morale(2) + Value;
+      if Factions_List(FactionIndex).Flags.Contains
+          (To_Unbounded_String("fanaticism")) then
+         if Value > 0 then
+            NewValue := Value * 5;
+         else
+            NewValue := Value / 10;
+            if NewValue = 0 then
+               NewValue := -1;
+            end if;
+         end if;
+      end if;
+      NewValue := Ship.Crew(MemberIndex).Morale(2) + NewValue;
       NewMorale := Ship.Crew(MemberIndex).Morale(1);
       while NewValue >= 5 loop
          NewValue := NewValue - 5;
