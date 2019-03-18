@@ -170,7 +170,8 @@ package body Help.UI is
          To_Unbounded_String("nofatigue"), To_Unbounded_String("nomorale"),
          To_Unbounded_String("naturalarmor"),
          To_Unbounded_String("toxicattack"),
-         To_Unbounded_String("sentientships"));
+         To_Unbounded_String("sentientships"),
+         To_Unbounded_String("fanaticism"));
       FactionsWithFlag: Unbounded_String;
    begin
       NewText := Help_List(Topic).Text;
