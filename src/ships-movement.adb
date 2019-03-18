@@ -49,8 +49,8 @@ package body Ships.Movement is
       end if;
       if Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) then
-          HavePilot := True;
-          HaveEngineer := True;
+         HavePilot := True;
+         HaveEngineer := True;
       end if;
       for Member of PlayerShip.Crew loop
          if Member.Order = Pilot then
