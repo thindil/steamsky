@@ -63,7 +63,7 @@ Some game modifications can bring own help topics too. If you are first time her
 {u}Ship info{/u}
     On most screens you can see information about needed crew positions in the top right corner. First icon is for pilot, second - engineer, third - gunner, forth - trader, fifth - repairs, sixth - upgrading ship module, seventh - clean ship and eighth - manufacturing.
 For pilots and engineers: if their letter is green, the position is taken by a crew member, and if it's red you don't have anyone assigned to this position.
-For gunners and manufacturing: a green icon mean all positions are taken (all guns, all crafting modules), a red icon means you have free positions (not all guns/crafting modules are taken), and a white icon means you don't have or don't need anyone assigned to this positions.
+For gunners and manufacturing: a green icon mean all positions are taken (all guns, all crafting modules), a red icon means you have free positions (not all guns/crafting modules are taken), and a white icon means you don't have or don't need anyone assigned to this positions. For {sentientships} yellow icon mean that you don't have assigned anyone to that position, but you don't need anyone either.
 For repairs, upgrading ship modules, trader and cleaning ship, green means you have someone assigned to this position, red means you don't have anyone on that position but need someone, and white icon means you don't have anyone assigned to this position and you don't need anyone.</entry>
  <entry title="Ship movement">{u}Undocking from bases{/u}
     Your ship starts docked to base. To move it, you must first give order {b}&quot;Undock&quot;{/b} from base, by clicking on {b}&quot;Undock&quot;{/b} button. To see other orders available for ship, press {GameKey 14} key (or first {GameKey 26} key for see game menu) for open orders menu.
@@ -71,8 +71,8 @@ Each docking operation cost some money, depending on your ship size (bigger ship
 When you undocked from base, in this same menu, you can dock again.
 
 {u}Traveling{/u}
-   To move your ship, you must set it speed, have fuel (called {FuelName}, which works as money too), and someone from ship crew assigned to pilot and engineer role. To assign crew members to selected role, open crew menu - press key {GameKey 13}, select desired crew member and give order. Your ship can't move if it is overloaded.
-Travel time depends on skills of Pilot and Engineer (current members on this positions) and selected ship speed.
+To move your ship, you must set it speed, have fuel (called {FuelName}, which works as money too), and someone from ship crew assigned to pilot and engineer role. To assign crew members to selected role, open crew menu - press key {GameKey 13}, select desired crew member and give order. Your ship can't move if it is overloaded. {sentientships} members don't need to set Pilot and Engineer to fly, but more experienced crew members on these positions can give better bonuses than flying without them.
+   Travel time depends on skills of Pilot and Engineer (current members on this positions) and selected ship speed. For {sentientships} if you don't have Pilot and or Engineer on duty, speed depends on "intelligence" of the ship - bigger ships are more "intelligent".
 Fuel cost of travel depends on selected speed (faster = more fuel usage) and each engine fuel usage installed on ship. You can check fuel usage for each engine on ship information screen.
 To move ship in desired direction, use (by default setting) keys on keypad. You may change which keys move ship in game options.
 Ship speed depends on engine power, engine damage, ship weight (with cargo) and bit on Engineer and Pilot experience.
@@ -84,7 +84,7 @@ You may disable or enable selected ship engine in ship info screen. Press key {G
 
 {u}Setting ship destination{/u}
    You can set your destination travel point on map by selecting map cell by left click on it. If you left click on map cell where your ship is, you will open orders menu.
-If you have set travel destination, press key {GameKey 5} to auto travel by one map field. If you want move further, you can press {GameKey 10} key - then you been move until you reach destination, combat happen or you can't move anymore (no pilot/engineer, too damaged engines, no fuel, etc.).
+If you have set travel destination, press key {GameKey 5} to auto travel by one map field. If you want move further, you can press {GameKey 10} key - then you been move until you reach destination, combat happen or you can't move anymore (no pilot/engineer if required, too damaged engines, no fuel, etc.).
 If destination is not set, pressing key {GameKey 5} allow you to wait 1 game minute without moving.</entry>
  <entry title="Sky bases">{u}General Information{/u}
     Sky Bases are places where you can trade items, repair ships, heal or hire crew members, get new missions or ask for other bases and events.
@@ -143,8 +143,8 @@ When enemy ship (or your) is stopped by harpoon or battering ram, you can set bo
 {u}Combat tips{/u}
 * Watch out on damage level for your ship hull and engine. If one of them will be destroyed, whole ship will be destroyed in explosion too and you die.
 * If any ship module in your ship will be destroyed, it kill crew member which is in this module too. Destroyed turret destroys mounted gun too and kill gunner which operate it, destroyed cockpit kills pilot, cabin kills resting inside crew member and workshops worker.
-* If you don't have anyone assigned as a Pilot, it is consider as a {b}&quot;Go closer&quot;{/b} order.
-* When you don't have anyone assigned as a Engineer, you can't change ship speed.
+* If you don't have anyone assigned as a Pilot (unless you are one of {sentientships}), it is consider as a {b}&quot;Go closer&quot;{/b} order.
+* When you don't have anyone assigned as a Engineer, you can't change ship speed, unless you are one of {sentientships}.
 * You (or enemy) starts hitting other parts of ship after destroying armor.
 * {GunnerySkill} skill affects chance to hit with gun or harpoon gun in combat and {PilotingSkill} skill affect chance to evade enemy attacks.
 * Amount of loot from enemies depends on each enemy. Stronger enemies gives more amount of {MoneyName}.
