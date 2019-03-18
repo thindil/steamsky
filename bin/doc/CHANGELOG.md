@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - New factions flags: naturalarmor, toxicattack and sentientships
 - Natural armor ability for Undead and Drones faction members
 - Toxic attack ability for Undead
+- Sentient ships ability for Drones
 
 ### Changed
 - Updated interface
