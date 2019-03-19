@@ -54,6 +54,7 @@ All notable changes to this project will be documented in this file.
 - Crash on trying to trade with friendly ship
 - Selling items to friendly ships
 - Selling items resets item's profit info
+- Crash on dismissing crew members
 
 ## [3.4] - 2019-02-24
 
