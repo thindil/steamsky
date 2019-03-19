@@ -5716,5 +5716,26 @@ during combat. -->
   <member index="97" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored independent traders ship. Avoids any fights.</description>
  </ship>
+ <ship combatai="COWARD" index="298" maxloot="1200" minloot="750" name="Advanced huge pirates trader mk VI" owner="PIRATES">
+  <module index="210"/>
+  <module index="201"/>
+  <module amount="2" index="212"/>
+  <module amount="16" index="93"/>
+  <module index="197"/>
+  <module amount="4" index="236"/>
+  <module amount="3" index="207"/>
+  <module amount="3" index="215"/>
+  <cargo index="1" maxamount="6000" minamount="4000"/>
+  <cargo index="2" maxamount="800" minamount="600"/>
+  <cargo index="3" maxamount="2000" minamount="1500"/>
+  <cargo index="179" maxamount="1000" minamount="500"/>
+  <cargo index="167" maxamount="800" minamount="600"/>
+  <member index="94"/>
+  <member amount="3" index="95"/>
+  <member index="46"/>
+  <member index="96"/>
+  <member index="97" maxamount="8" minamount="4"/>
+  <description>Advanced and upgraded version of huge, well armored pirates traders ship. Avoids any fights.</description>
+ </ship>
 </ships>
 
