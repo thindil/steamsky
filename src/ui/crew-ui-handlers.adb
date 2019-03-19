@@ -79,6 +79,9 @@ package body Crew.UI.Handlers is
          return;
       end if;
       MemberIndex := Positive(Get_Int(CrewModel, CrewIter, 2));
+      if MemberIndex > Positive(PlayerShip.Crew.Length) then
+         MemberIndex := PlayerShip.Crew.First_Index;
+      end if;
       Member := PlayerShip.Crew(MemberIndex);
       if Factions_List(Member.Faction).Flags.Find_Index
           (To_Unbounded_String("nogender")) =
