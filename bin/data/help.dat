@@ -197,7 +197,7 @@ Each ship hull have maximum module space and maximum allowed size of module, whi
 If crew member can't find food or drink when he/she is hungry or thirsty, will be losing morale too.
 Each crew member must be paid. It may be daily payment - constant value of {MoneyName} paid on new day or percent of profit from selling items in bases or to traders. If you don't have enough {MoneyName} to pay, unpaid crew member will lose morale.
 When your crew member die, you will stay with his/her body in your ship cargo. At this moment, you can only drop that body from cargo. Additionally, all other crew members lose some morale.
-How fast crew member gains or lose morale depends on level of morale too: with higher level it gain and lose slower than when his/her morale is low.
+How fast crew member gains or lose morale depends on level of morale too: with higher level it gain and lose slower than when his/her morale is low. {fanaticism} members gains morale faster and lose it much slower.
 
 {u}Tiredness{/u}
    Every member of crew (except this from {nofatigue} factions) getting tired when have assigned order other than {b}On break{/b} or {b}Talking in bases{/b}. When member is too tired, he/she stops working and going rest. After rest, if his/her previous position is vacant (e.g. nobody piloting ship), he/she automatically back to work.
