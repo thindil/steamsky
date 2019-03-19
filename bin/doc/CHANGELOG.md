@@ -15,7 +15,8 @@ All notable changes to this project will be documented in this file.
   ship mk IV, advanced huge poleis trader mk V, advanced huge independent
   trader mk V, advanced huge pirate trader mk V, advanced huge poleis patrol
   ship mk V, advanced huge independent patrol ship mk V, advanced huge poleis
-  trader mk VI and advanced huge independent trader mk VI
+  trader mk VI, advanced huge independent trader mk VI and advanced huge pirates
+  trader mk VI
 - Option to show or hide last messages window
 - Option to set the game in full screen mode
 - Self-closing message boxes and option to set delay for self-closing
