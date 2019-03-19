@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Natural armor ability for Undead and Drones faction members
 - Toxic attack ability for Undead
 - Sentient ships ability for Drones
+- Fanaticism ability for Inquisition
 
 ### Changed
 - Updated interface
