@@ -729,6 +729,17 @@ package body Combat is
                    .Value
                    (2);
             end if;
+            if Attacker.Equipment(1) = 0 then
+               declare
+                  DamageBonus: Integer :=
+                    GetSkillLevel(Attacker, UnarmedSkill) / 200;
+               begin
+                  if DamageBonus = 0 then
+                     DamageBonus := 1;
+                  end if;
+                  Damage := Damage + DamageBonus;
+               end;
+            end if;
             if Factions_List(Defender.Faction).Flags.Contains
                 (To_Unbounded_String("naturalarmor")) then
                Damage := Damage / 2;
