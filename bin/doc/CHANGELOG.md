@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Toxic attack ability for Undead
 - Sentient ships ability for Drones
 - Fanaticism ability for Inquisition
+- Bonus to damage from unarmed skill
 
 ### Changed
 - Updated interface
