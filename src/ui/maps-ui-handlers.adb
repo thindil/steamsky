@@ -1318,11 +1318,11 @@ package body Maps.UI.Handlers is
             return True;
          end if;
          if Key.Accel_Key = Event.Keyval and Key.Accel_Mods = KeyMods then
-            if not GameSettings.Fullscreen then
-               GameSettings.Fullscreen := True;
+            if not GameSettings.FullScreen then
+               GameSettings.FullScreen := True;
                Fullscreen(Get_Window(Self));
             else
-               GameSettings.Fullscreen := False;
+               GameSettings.FullScreen := False;
                Unfullscreen(Get_Window(Self));
             end if;
             return False;
