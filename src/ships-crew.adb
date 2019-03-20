@@ -683,6 +683,7 @@ package body Ships.Crew is
           (To_Unbounded_String("nomorale")) then
          return;
       end if;
+      NewValue := Value;
       if Factions_List(FactionIndex).Flags.Contains
           (To_Unbounded_String("fanaticism")) then
          if Value > 0 then
