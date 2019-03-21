@@ -775,6 +775,7 @@ tags `skill`. -->
  <skill attribute="Dexterity" name="Dodge" tool="SmallTraps">Used to dodge enemy attacks in combat</skill>
  <skill attribute="Strength" name="Brawling" tool="TrainingDummy">Used to determine chance to hit with bare hands in combat</skill>
  <skill attribute="Dexterity" name="Printing" tool="PrintingBook">Used in making paper and books</skill>
+ <skill attribute="Strength" name="Maces" tool="TrainingDummy">Used to dermine chance to hit with maces in combat</skill>
 <!-- To change which attribute is used to raise character condition, edit 
 attribute `value` of tag `conditionname`. Value must be existing attribute 
 name. -->
