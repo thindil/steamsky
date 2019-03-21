@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Sentient ships ability for Drones
 - Fanaticism ability for Inquisition
 - Bonus to damage from unarmed skill
+- New skill: Maces
 
 ### Changed
 - Updated interface
