@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -1190,6 +1190,7 @@ package body Maps.UI.Handlers is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
+      Hide(Gtk_Widget(Get_Object(Builder, "orderswindow")));
       EventIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       ItemIndex :=
         FindItem
@@ -1204,22 +1205,26 @@ package body Maps.UI.Handlers is
       end if;
       if User_Data = Get_Object(Builder, "btnfreemedicines") then
          GainRep(BaseIndex, (PlayerShip.Cargo(ItemIndex).Amount / 10));
-         UpdateCargo
-           (PlayerShip, PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
-            (0 - PlayerShip.Cargo.Element(ItemIndex).Amount));
          AddMessage
            ("You gave " &
             To_String
               (Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Name) &
             " for free to base.",
             TradeMessage);
+         UpdateCargo
+           (PlayerShip, PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
+            (0 - PlayerShip.Cargo.Element(ItemIndex).Amount));
       else
+         GainRep
+           (BaseIndex, ((PlayerShip.Cargo(ItemIndex).Amount / 20) * (-1)));
          SellItems
            (ItemIndex,
             Integer'Image(PlayerShip.Cargo.Element(ItemIndex).Amount));
-         GainRep
-           (BaseIndex, ((PlayerShip.Cargo(ItemIndex).Amount / 20) * (-1)));
       end if;
+      UpdateHeader;
+      UpdateMessages;
+      UpdateMoveButtons;
+      DrawMap;
    end DeliverMedicines;
 
    procedure ShowWaitOrders(Object: access Gtkada_Builder_Record'Class) is
