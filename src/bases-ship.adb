@@ -29,7 +29,6 @@ package body Bases.Ship is
    procedure RepairShip(ModuleIndex: Integer) is
       Cost, Time, MoneyIndex2: Natural := 0;
       TraderIndex: Positive;
-      ProtoMoneyIndex: Unbounded_String;
    begin
       RepairCost(Cost, Time, ModuleIndex);
       if Cost = 0 then
@@ -67,7 +66,7 @@ package body Bases.Ship is
       end if;
       UpdateCargo
         (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => (0 - Cost));
-      UpdateBaseCargo(ProtoMoneyIndex, Cost);
+      UpdateBaseCargo(MoneyIndex, Cost);
       GainExp(1, TalkingSkill, TraderIndex);
       GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
       UpdateGame(Time);
