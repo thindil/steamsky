@@ -1,31 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <recipes>
-<!-- Each recipe is between "recipe" tags. 
-- Attribute "index" is a recipe index (it can be number or text) and must be 
+<!-- Each recipe is between "recipe" tags.
+- Attribute "index" is a recipe index (it can be number or text) and must be
 unique. This value is used at this moment for set starting recipes and in Craft
-types of goals. 
+types of goals.
 - Optional attribute `action`: what to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
-- Attribute "result": item index which will be produced by recipe (you can 
-check this index in *items* directory). Attribute "crafted": amount of items 
-crafted from one recipe. 
+- Attribute "result": item index which will be produced by recipe (you can
+check this index in *items* directory). Attribute "crafted": amount of items
+crafted from one recipe.
 - Attribute "workplace": type of ship module in which recipe is made. Available
-options are: Alchemy_Lab, Furnace, Water_Collector, Workshop, Greenhouse. 
+options are: Alchemy_Lab, Furnace, Water_Collector, Workshop, Greenhouse.
 - Attribute "skill": name of skill used during crafting selected recipe (skills
-names are in *game.dat* file). 
+names are in *game.dat* file).
 - Attribute "tool": type of item used as tool in crafting selected recipe (items
-types are in *game.dat* file). 
-- Optional attribute "difficulty": how complicated recipe is. Should be between 1 
-and 100. 
-- Attribute "basetype": In which bases type recipe can be bought. If not set, 
-recipe will be know from beginning of game. Values: 1 for Industrial, 2 for 
-Agricultural, 3 for Refinery, 4 for Shipyard and 5 for Military. 
-- Optional attribute "time": how long in minutes take crafting selected recipe. 
-If not set, it take 15 minutes. 
+types are in *game.dat* file).
+- Optional attribute "difficulty": how complicated recipe is. Should be between 1
+and 100.
+- Attribute "basetype": In which bases type recipe can be bought. If not set,
+recipe will be know from beginning of game. Values: 1 for Industrial, 2 for
+Agricultural, 3 for Refinery, 4 for Shipyard and 5 for Military.
+- Optional attribute "time": how long in minutes take crafting selected recipe.
+If not set, it take 15 minutes.
 -->
  <recipe basetype="2" crafted="1" index="1" result="2" skill="Cooking" tool="CookingSet" workplace="ALCHEMY_LAB">
-<!-- Tags "material" contains data about materials used to craft selected recipe. 
+<!-- Tags "material" contains data about materials used to craft selected recipe.
 - Attribute "type" is item type of materials need for recipe.
 - Attribute "amount": Amount of crafting materials needed for recipe. Zero
 amount for updating recipe means that this material should be removed.
@@ -629,6 +629,9 @@ If you want add more materials to recipe, just add new tag "material" with prope
   <material amount="4" type="Wood"/>
  </recipe>
  <recipe basetype="1" crafted="1" index="188" result="51" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="1" type="Bronze"/>
+ </recipe>
+ <recipe basetype="5" crafted="1" index="189" result="211" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Bronze"/>
  </recipe>
 </recipes>
