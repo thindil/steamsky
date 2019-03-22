@@ -40,6 +40,7 @@ All notable changes to this project will be documented in this file.
 - Battering rams attack once per 2 combat rounds
 - Updated MODDING.md
 - Raised base strength and lowered other stats for Undead player and crew.
+- Group sky bases by factions during generating world
 
 ### Removed
 - Configuration to show or hide last message
