@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Bonus to damage from unarmed skill
 - New skill: Maces
 - New item: bronze mace
+- New crafting recipe: bronze mace
 
 ### Changed
 - Updated interface
