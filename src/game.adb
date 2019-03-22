@@ -17,6 +17,8 @@
 
 with Ada.Directories; use Ada.Directories;
 with Ada.Exceptions; use Ada.Exceptions;
+with Ada.Containers.Hashed_Maps;
+with Ada.Strings.Unbounded.Hash;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
@@ -78,47 +80,27 @@ package body Game is
                MissionIndex => 0)));
       declare
          MaxSpawnRoll: Natural := 0;
-         PosX, PosY, FactionRoll: Positive;
+         FactionRoll: Positive;
          ValidLocation: Boolean;
-         TempX, TempY, BaseReputation: Integer;
+         TempX, TempY, BaseReputation, PosX, PosY: Integer;
          TmpRecruits: Recruit_Container.Vector;
          TmpMissions: Mission_Container.Vector;
          BasePopulation: Natural;
          TmpCargo: BaseCargo_Container.Vector;
          BaseSize: Bases_Size;
          BaseOwner: Unbounded_String;
+         package Bases_Container is new Hashed_Maps(Unbounded_String,
+            Positive_Container.Vector, Ada.Strings.Unbounded.Hash, "=",
+            Positive_Container."=");
+         BasesArray: Bases_Container.Map;
       begin
-         for Faction of Factions_List loop
-            MaxSpawnRoll := MaxSpawnRoll + Faction.SpawnChance;
+         for I in Factions_List.Iterate loop
+            MaxSpawnRoll := MaxSpawnRoll + Factions_List(I).SpawnChance;
+            Bases_Container.Include
+              (BasesArray, Factions_Container.Key(I),
+               Positive_Container.Empty_Vector);
          end loop;
          for I in SkyBases'Range loop
-            loop
-               ValidLocation := True;
-               PosX := GetRandom(1, 1024);
-               PosY := GetRandom(1, 1024);
-               for J in -5 .. 5 loop
-                  TempX := Integer(PosX) + J;
-                  NormalizeCoord(TempX);
-                  for K in -5 .. 5 loop
-                     TempY := Integer(PosY) + K;
-                     NormalizeCoord(TempY, False);
-                     if SkyMap(TempX, TempY).BaseIndex > 0 then
-                        ValidLocation := False;
-                        exit;
-                     end if;
-                  end loop;
-                  if not ValidLocation then
-                     exit;
-                  end if;
-               end loop;
-               if SkyMap(Integer(PosX), Integer(PosY)).BaseIndex > 0 then
-                  ValidLocation := False;
-               end if;
-               exit when ValidLocation;
-            end loop;
-            SkyMap(Integer(PosX), Integer(PosY)) :=
-              (BaseIndex => I, Visited => False, EventIndex => 0,
-               MissionIndex => 0);
             FactionRoll := GetRandom(1, MaxSpawnRoll);
             for J in Factions_List.Iterate loop
                if FactionRoll > Factions_List(J).SpawnChance then
@@ -149,7 +131,7 @@ package body Game is
             end if;
             SkyBases(I) :=
               (Name => GenerateBaseName(BaseOwner), Visited => (others => 0),
-               SkyX => Integer(PosX), SkyY => Integer(PosY),
+               SkyX => 0, SkyY => 0,
                BaseType => Bases_Types'Val(GetRandom(0, 4)),
                Population => BasePopulation, RecruitDate => (others => 0),
                Recruits => TmpRecruits, Known => False, AskedForBases => False,
@@ -157,6 +139,64 @@ package body Game is
                Reputation => (BaseReputation, 0),
                MissionsDate => (others => 0), Missions => TmpMissions,
                Owner => BaseOwner, Cargo => TmpCargo, Size => BaseSize);
+            BasesArray(BaseOwner).Append(I);
+         end loop;
+         for FactionBases of BasesArray loop
+            for I in FactionBases.Iterate loop
+               loop
+                  ValidLocation := True;
+                  if Positive_Container.To_Index(I) =
+                    FactionBases.First_Index then
+                     PosX := GetRandom(1, 1024);
+                     PosY := GetRandom(1, 1024);
+                  else
+                     PosX :=
+                       GetRandom
+                         (SkyBases
+                            (FactionBases(Positive_Container.To_Index(I) - 1))
+                            .SkyX -
+                          20,
+                          SkyBases
+                            (FactionBases(Positive_Container.To_Index(I) - 1))
+                            .SkyX +
+                          20);
+                     NormalizeCoord(PosX);
+                     PosY :=
+                       GetRandom
+                         (SkyBases
+                            (FactionBases(Positive_Container.To_Index(I) - 1))
+                            .SkyY -
+                          20,
+                          SkyBases
+                            (FactionBases(Positive_Container.To_Index(I) - 1))
+                            .SkyY +
+                          20);
+                     NormalizeCoord(PosY);
+                  end if;
+                  for J in -5 .. 5 loop
+                     TempX := PosX + J;
+                     NormalizeCoord(TempX);
+                     for K in -5 .. 5 loop
+                        TempY := PosY + K;
+                        NormalizeCoord(TempY, False);
+                        if SkyMap(TempX, TempY).BaseIndex > 0 then
+                           ValidLocation := False;
+                           exit;
+                        end if;
+                     end loop;
+                     exit when ValidLocation = False;
+                  end loop;
+                  if SkyMap(PosX, PosY).BaseIndex > 0 then
+                     ValidLocation := False;
+                  end if;
+                  exit when ValidLocation;
+               end loop;
+               SkyMap(PosX, PosY) :=
+                 (BaseIndex => FactionBases(I), Visited => False,
+                  EventIndex => 0, MissionIndex => 0);
+               SkyBases(FactionBases(I)).SkyX := PosX;
+               SkyBases(FactionBases(I)).SkyY := PosY;
+            end loop;
          end loop;
       end;
       -- Place player ship in random large base
