@@ -62,6 +62,7 @@ All notable changes to this project will be documented in this file.
 - Selling items resets item's profit info
 - Crash on dismissing crew members
 - Crash on delivering medicines to diseased base
+- Crash on repair ship in bases
 
 ## [3.4] - 2019-02-24
 
