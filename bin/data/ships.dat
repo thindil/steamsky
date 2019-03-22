@@ -3998,7 +3998,7 @@ during combat. -->
   <module index="130"/>
   <module amount="2" index="222"/>
   <module index="145"/>
-  <module index="129"/>
+  <module index="160"/>
   <cargo index="1" maxamount="2000" minamount="1500"/>
   <cargo index="2" maxamount="200" minamount="100"/>
   <cargo index="3" maxamount="400" minamount="300"/>
@@ -4018,7 +4018,7 @@ during combat. -->
   <module index="130"/>
   <module amount="2" index="222"/>
   <module index="145"/>
-  <module index="129"/>
+  <module index="160"/>
   <cargo index="1" maxamount="2000" minamount="1500"/>
   <cargo index="2" maxamount="200" minamount="100"/>
   <cargo index="3" maxamount="400" minamount="300"/>
@@ -4038,7 +4038,7 @@ during combat. -->
   <module index="130"/>
   <module amount="2" index="222"/>
   <module index="145"/>
-  <module index="129"/>
+  <module index="160"/>
   <cargo index="1" maxamount="2000" minamount="1500"/>
   <cargo index="2" maxamount="200" minamount="100"/>
   <cargo index="3" maxamount="400" minamount="300"/>
@@ -4058,7 +4058,7 @@ during combat. -->
   <module index="130"/>
   <module amount="2" index="222"/>
   <module index="145"/>
-  <module index="129"/>
+  <module index="160"/>
   <cargo index="1" maxamount="2000" minamount="1500"/>
   <cargo index="2" maxamount="200" minamount="100"/>
   <cargo index="3" maxamount="400" minamount="300"/>
@@ -4077,7 +4077,7 @@ during combat. -->
   <module index="130"/>
   <module amount="2" index="222"/>
   <module index="145"/>
-  <module index="129"/>
+  <module index="160"/>
   <cargo index="1" maxamount="2000" minamount="1500"/>
   <cargo index="2" maxamount="200" minamount="100"/>
   <cargo index="3" maxamount="400" minamount="300"/>
@@ -4137,7 +4137,7 @@ during combat. -->
   <module index="94"/>
   <module amount="2" index="221"/>
   <module index="113"/>
-  <module index="128"/>
+  <module index="50"/>
   <cargo index="1" maxamount="2000" minamount="1000"/>
   <cargo index="2" maxamount="200" minamount="100"/>
   <cargo index="3" maxamount="400" minamount="200"/>
@@ -4177,7 +4177,7 @@ during combat. -->
   <module index="130"/>
   <module amount="2" index="222"/>
   <module index="145"/>
-  <module index="129"/>
+  <module index="160"/>
   <cargo index="1" maxamount="2000" minamount="1000"/>
   <cargo index="2" maxamount="200" minamount="100"/>
   <cargo index="3" maxamount="400" minamount="200"/>
@@ -4197,7 +4197,7 @@ during combat. -->
   <module index="130"/>
   <module amount="2" index="222"/>
   <module index="145"/>
-  <module index="129"/>
+  <module index="160"/>
   <cargo index="1" maxamount="2000" minamount="1000"/>
   <cargo index="2" maxamount="200" minamount="100"/>
   <cargo index="3" maxamount="400" minamount="200"/>
@@ -5024,7 +5024,7 @@ during combat. -->
   <module index="130"/>
   <module amount="2" index="234"/>
   <module amount="4" index="152"/>
-  <module amount="4" index="62"/>
+  <module amount="4" index="162"/>
   <cargo index="1" maxamount="5000" minamount="3000"/>
   <cargo index="2" maxamount="750" minamount="500"/>
   <cargo index="3" maxamount="1500" minamount="1000"/>
@@ -5044,7 +5044,7 @@ during combat. -->
   <module index="130"/>
   <module amount="2" index="234"/>
   <module amount="4" index="152"/>
-  <module amount="4" index="62"/>
+  <module amount="4" index="162"/>
   <cargo index="1" maxamount="5000" minamount="3000"/>
   <cargo index="2" maxamount="750" minamount="500"/>
   <cargo index="3" maxamount="1500" minamount="1000"/>
