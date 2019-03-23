@@ -139,6 +139,17 @@ package body Game is
                Reputation => (BaseReputation, 0),
                MissionsDate => (others => 0), Missions => TmpMissions,
                Owner => BaseOwner, Cargo => TmpCargo, Size => BaseSize);
+            if Factions_List(BaseOwner).Flags.Contains
+                (To_Unbounded_String("loner")) then
+               FactionRoll := GetRandom(1, MaxSpawnRoll);
+               for J in Factions_List.Iterate loop
+                  if FactionRoll > Factions_List(J).SpawnChance then
+                     FactionRoll := FactionRoll - Factions_List(J).SpawnChance;
+                  else
+                     BaseOwner := Factions_Container.Key(J);
+                  end if;
+               end loop;
+            end if;
             BasesArray(BaseOwner).Append(I);
          end loop;
          for FactionBases of BasesArray loop
@@ -146,7 +157,15 @@ package body Game is
                loop
                   ValidLocation := True;
                   if Positive_Container.To_Index(I) =
-                    FactionBases.First_Index then
+                    FactionBases.First_Index or
+                    (Factions_List
+                       (SkyBases(FactionBases(FactionBases.First_Index)).Owner)
+                       .Flags
+                       .Contains
+                       (To_Unbounded_String("loner")) and
+                     Factions_List(SkyBases(FactionBases(I)).Owner).Flags
+                       .Contains
+                       (To_Unbounded_String("loner"))) then
                      PosX := GetRandom(1, 1024);
                      PosY := GetRandom(1, 1024);
                   else
