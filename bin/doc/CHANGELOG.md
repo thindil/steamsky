@@ -30,7 +30,7 @@ All notable changes to this project will be documented in this file.
 - Fanaticism ability for Inquisition
 - Bonus to damage from unarmed skill
 - New skill: Maces
-- New item: bronze mace
+- New items: bronze mace and iron mace
 - New crafting recipe: bronze mace
 
 ### Changed
