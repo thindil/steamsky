@@ -478,8 +478,9 @@ Value must be existing skill name.
   `{u}some text{/u}` for add underline for text, `{b}some text{/b}` to made
   bold characters and `{i}some text{/i}` for italic font.
 - Inside help text you can use special variables `diseaseimmune`, `nofatigue`,
-  `nomorale`, `naturalarmor`,`toxicattack`, `sentientships`, `fanaticism`
-  which later will be replaced by list of factions which have set selected flag.
+  `nomorale`, `naturalarmor`,`toxicattack`, `sentientships`, `fanaticism`,
+  `loner` which later will be replaced by list of factions which have set
+  selected flag.
 
 ## Goals
 
@@ -659,7 +660,8 @@ Value must be existing skill name.
       to enemies who are not resistant to diseases (factions without
       `diseaseimmune` flag), `sentientships` faction ships don't need pilot and
       engineer (they are optional), `fanaticism` faction members gain faster
-      morale and lose it slower than other factions.
+      morale and lose it slower than other factions, `loner` bases of that
+      faction are not grouped near self.
     - Optional attribute `action`: what to do with this flag. Possible values
       are: "add" (add this flag, default option) or "remove" (remove this
       flag).
