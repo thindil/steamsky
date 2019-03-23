@@ -114,10 +114,24 @@ faction. Will be show to player instead of default name.
   <relation faction="UNDEAD" reputation="-100" friendly="N" />
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="-50" friendly="N" />
-  <description>Group of independent from each other sky bases, not connected in any way with self. Bases of this faction are much less common than Poleis. Gameplay is harder than Poleis due to less sky bases but generally it is very similar.</description>
+  <description>Group of independent from each other sky bases, not connected in any way with self. Bases of this faction are much less common than Poleis and rarely near other independent base. Gameplay is harder than Poleis due to less sky bases but generally it is very similar.</description>
   <foodtype name="Food" />
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
+<!--
+- Tags "flags": Various info about faction (optional tag).
+- Attribute "name": name of flag. Possible values: "nogender" faction don't
+have genders and use male names as default, "diseaseimmune" faction members
+cannot become ill, no disease event for this faction, "nofatigue" faction
+members don't get tired so, they can't rest and regenerate health, "nomorale"
+faction members don't have morale (and bonuses from it), "naturalarmor" faction
+members take only half of the damage in melee combat, `toxicattack` faction
+members do more damage when attack without weapon to enemies who are not
+resistant to diseases (factions without `diseaseimmune` flag), `sentientships`
+faction ships don't need pilot or engineer to fly (they are optional), `loner`
+bases of that faction are not grouped near self.
+-->
+  <flag name="loner" />
   <career index="general" playerindex="1" shipindex="1">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
   <career index="merchant" playerindex="1" shipindex="167">Career focused on trading. You get unarmed small ship with larger cargo space and more moneys. Your crew will be bit smaller that General. At beginning is better to avoid combat.</career>
   <career index="hunter" playerindex="1" shipindex="168">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
@@ -147,18 +161,6 @@ faction. Will be show to player instead of default name.
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="-100" friendly="N" />
   <description>Small group of connected together bases which are settled by undead beings. Members of this factions attacks everything what not belongs to it. They main advantages are that they don't need food or drinks to survive, they are immune to diseases, they don't need rest but they can't self regenerate health and they take less damage in melee combat but when they attack without weapon then, they can do a much more damage to not immune to diseases factions members. They morale is always that same. Bases of this faction are much less common than Poleis. Gameplay is harder than Poleis due to less sky bases and negative reputation of Undead with other factions.</description>
-<!--
-- Tags "flags": Various info about faction (optional tag).
-- Attribute "name": name of flag. Possible values: "nogender" faction don't
-have genders and use male names as default, "diseaseimmune" faction members
-cannot become ill, no disease event for this faction, "nofatigue" faction
-members don't get tired so, they can't rest and regenerate health, "nomorale"
-faction members don't have morale (and bonuses from it), "naturalarmor" faction
-members take only half of the damage in melee combat, `toxicattack` faction
-members do more damage when attack without weapon to enemies who are not
-resistant to diseases (factions without `diseaseimmune` flag), `sentientships`
-faction ships don't need pilot or engineer to fly (they are optional).
--->
   <flag name="diseaseimmune" />
   <flag name="nofatigue" />
   <flag name="nomorale" />
