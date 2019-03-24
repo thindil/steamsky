@@ -32,7 +32,7 @@ All notable changes to this project will be documented in this file.
 - Bonus to damage from unarmed skill
 - New skill: Maces
 - New items: bronze mace and iron mace
-- New crafting recipe: bronze mace
+- New crafting recipes: bronze mace and iron mace
 - Loner ability to Independent
 
 ### Changed
