@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
 - New items: bronze mace and iron mace
 - New crafting recipes: bronze mace and iron mace
 - Loner ability to Independent and Pirates
+- Better and worse food and drinks affect crew members morale
 
 ### Changed
 - Updated interface
