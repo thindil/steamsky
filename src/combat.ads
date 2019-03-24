@@ -18,6 +18,7 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ships; use Ships;
+with Game; use Game;
 
 package Combat is
 
@@ -27,7 +28,6 @@ package Combat is
      array(1 .. 2) of Positive; -- Data structure for guns informations
    package Guns_Container is new Vectors(Positive, GunsInfoArray);
    Guns: Guns_Container.Vector; -- List of guns installed on player ship
-   package Integer_Container is new Vectors(Positive, Integer);
    BoardingOrders: Integer_Container
      .Vector; -- List of orders for boarding party
    type Enemy_Record is -- Data structure for enemies

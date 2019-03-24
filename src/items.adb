@@ -34,7 +34,7 @@ package body Items is
       TempRecord: Object_Data;
       NodesList, ChildNodes: Node_List;
       ItemsData: Document;
-      TempValue: Natural_Container.Vector;
+      TempValue: Integer_Container.Vector;
       ItemNode, ChildNode: Node;
       ItemIndex: Unbounded_String;
       Action: DataAction;
@@ -106,7 +106,7 @@ package body Items is
             for J in 0 .. Length(ChildNodes) - 1 loop
                TempRecord.Value.Append
                  (New_Item =>
-                    Natural'Value
+                    Integer'Value
                       (Get_Attribute(Item(ChildNodes, J), "value")));
             end loop;
             ChildNodes :=
