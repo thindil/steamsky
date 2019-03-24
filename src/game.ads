@@ -35,6 +35,7 @@ package Game is
       Unbounded_String);
    package Positive_Container is new Vectors(Positive, Positive);
    package Natural_Container is new Vectors(Positive, Natural);
+   package Integer_Container is new Vectors(Positive, Integer);
    type Skill_Record is -- Data for skills
    record
       Name: Unbounded_String; -- Name of skill
