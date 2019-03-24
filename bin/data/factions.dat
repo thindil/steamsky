@@ -145,7 +145,7 @@ bases of that faction are not grouped near self.
   <relation faction="UNDEAD" reputation="-100" friendly="N" />
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="-50" friendly="N" />
-  <description>Group of independent bases which inhabitants lives from attacking other ships and stealing their cargo. Bases of this faction are much less common than Poleis. Gameplay is much harder than Poleis due to less sky bases and negative reputation of Pirates with other factions.</description>
+  <description>Group of independent bases which inhabitants lives from attacking other ships and stealing their cargo. Bases of this faction are much less common than Poleis and rarely near other Pirates base. Gameplay is much harder than Poleis due to less sky bases and negative reputation of Pirates with other factions.</description>
   <foodtype name="Food" />
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
