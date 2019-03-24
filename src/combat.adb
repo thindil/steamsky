@@ -31,7 +31,6 @@ with Ships.Movement; use Ships.Movement;
 with Utils; use Utils;
 with Log; use Log;
 with Goals; use Goals;
-with Game; use Game;
 with Factions; use Factions;
 with Stories; use Stories;
 

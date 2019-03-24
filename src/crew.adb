@@ -194,6 +194,12 @@ package body Crew is
          if ItemIndex > 0 then
             ConsumeValue :=
               Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Value(1);
+            if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Value(2) /=
+              0 then
+               UpdateMorale
+                 (PlayerShip, I,
+                  Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Value(2));
+            end if;
             UpdateCargo
               (PlayerShip, PlayerShip.Cargo.Element(ItemIndex).ProtoIndex, -1);
             return ConsumeValue;
@@ -207,6 +213,14 @@ package body Crew is
                  Items_List(PlayerShip.Crew(I).Inventory(ItemIndex).ProtoIndex)
                    .Value
                    (1);
+               if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Value
+                   (2) /=
+                 0 then
+                  UpdateMorale
+                    (PlayerShip, I,
+                     Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Value
+                       (2));
+               end if;
                UpdateInventory
                  (MemberIndex => I, Amount => -1, InventoryIndex => ItemIndex);
                return ConsumeValue;
