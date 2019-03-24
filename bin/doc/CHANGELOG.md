@@ -33,7 +33,7 @@ All notable changes to this project will be documented in this file.
 - New skill: Maces
 - New items: bronze mace and iron mace
 - New crafting recipes: bronze mace and iron mace
-- Loner ability to Independent
+- Loner ability to Independent and Pirates
 
 ### Changed
 - Updated interface
