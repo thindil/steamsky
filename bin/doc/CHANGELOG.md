@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.5] - 2019-03-24
 
 ### Added
 - New ships: advanced huge poleis trader mk II, advanced huge independent
