@@ -178,7 +178,7 @@ package body Themes is
             NoFuelIcon => Wide_Character'Val(16#f2ca#),
             NoFoodIcon => Wide_Character'Val(16#f787#),
             NoDrinksIcon => Wide_Character'Val(16#f72f#),
-            NotVisitedBaseIcon => Wide_Character'Val(16#fc06#),
+            NotVisitedBaseIcon => Wide_Character'Val(16#229b#),
             PlayerShipIcon => Wide_Character'Val(16#f135#),
             EmptyMapIcon => Wide_Character'Val(16#f0c8#),
             TargetIcon => Wide_Character'Val(16#f05b#),
