@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+- New item: steel mace
+
 ## [3.5] - 2019-03-24
 
 ### Added
