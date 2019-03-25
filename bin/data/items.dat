@@ -56,6 +56,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="3"/>
   <trade buyable="N" price="3"/>
   <data value="60"/>
+  <data value="0"/>
   <description>Standard food rations.</description>
  </item>
  <item index="3" name="Water" type="Drink" weight="1">
@@ -65,6 +66,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="2"/>
   <trade buyable="N" price="2"/>
   <data value="30"/>
+  <data value="0"/>
   <description>Clean water, used as drinks.</description>
  </item>
  <item index="4" name="Iron 20mm ammo" showtype="Ammunition" type="Ammo20" weight="1">
@@ -91,6 +93,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="2"/>
   <trade buyable="N" price="2"/>
   <data value="30"/>
+  <data value="-5"/>
   <description>Raw food used mainly for crafting rations.</description>
  </item>
  <item index="7" name="Fresh fruits" showtype="Raw Food" type="RawFood" weight="1">
@@ -100,6 +103,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="2"/>
   <trade buyable="N" price="2"/>
   <data value="30"/>
+  <data value="-5"/>
   <description>Raw food used mainly for crafting rations.</description>
  </item>
  <item index="8" name="Fresh meat" showtype="Raw Food" type="RawFood" weight="1">
@@ -109,6 +113,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="2"/>
   <trade buyable="N" price="2"/>
   <data value="30"/>
+  <data value="-5"/>
   <description>Raw food used mainly for crafting rations.</description>
  </item>
  <item index="9" name="Andrae logs" type="Wood" weight="5">
@@ -134,6 +139,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="5"/>
   <trade buyable="N" price="5"/>
   <data value="80"/>
+  <data value="5"/>
   <description>Better food rations.</description>
  </item>
  <item index="12" name="Gunpowder" type="Gunpowder" weight="1">
@@ -412,6 +418,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="3"/>
   <trade buyable="N" price="3"/>
   <data value="40"/>
+  <data value="5"/>
   <description>Standard beer, used as drink.</description>
  </item>
  <item index="45" name="Wine" type="Drink" weight="1">
@@ -421,6 +428,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="4"/>
   <trade buyable="N" price="4"/>
   <data value="50"/>
+  <data value="10"/>
   <description>Good quality wine, used as drink.</description>
  </item>
  <item index="46" name="Lavish Rations" type="Food" weight="1">
@@ -430,6 +438,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="7"/>
   <trade buyable="N" price="7"/>
   <data value="100"/>
+  <data value="10"/>
   <description>Best food rations.</description>
  </item>
  <item index="47" name="Alchemy set" showtype="Tool" type="AlchemySet" weight="5">
