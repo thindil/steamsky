@@ -194,7 +194,7 @@ Each ship hull have maximum module space and maximum allowed size of module, whi
 
 {u}Morale{/u}
    Every crew member (except this from {nomorale} factions) have morale. When he/she resting, he/she slowly gaining it (only when morale level is low), every time when he/she back to work, he/she losing a bit morale. Same with giving orders: giving new orders except resting, reduce morale a little. If member morale is very low, he/she may refuse to obey orders. Low morale reduces crew member loyalty too. If crew member loyalty will be low he/she stop obey orders and may left your crew anytime you dock to base. In other way, high morale raises crew member loyalty.
-If crew member can't find food or drink when he/she is hungry or thirsty, will be losing morale too.
+If crew member can't find food or drink when he/she is hungry or thirsty, will be losing morale too. Some consumed food and drinks can affects morale either.
 Each crew member must be paid. It may be daily payment - constant value of {MoneyName} paid on new day or percent of profit from selling items in bases or to traders. If you don't have enough {MoneyName} to pay, unpaid crew member will lose morale.
 When your crew member die, you will stay with his/her body in your ship cargo. At this moment, you can only drop that body from cargo. Additionally, all other crew members lose some morale.
 How fast crew member gains or lose morale depends on level of morale too: with higher level it gain and lose slower than when his/her morale is low. {fanaticism} members gains morale faster and lose it much slower.
