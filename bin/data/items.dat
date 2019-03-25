@@ -2029,5 +2029,18 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple sword made of iron, used in melee combat.</description>
  </item>
+ <item index="213" name="Steel mace" type="Weapon" weight="1">
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="Y" price="15"/>
+  <data value="5"/>
+  <data value="37"/>
+  <data value="21"/>
+  <data value="1"/>
+  <data value="3"/>
+  <description>Simple mace made of steel, used in melee combat.</description>
+ </item>
 </items>
 
