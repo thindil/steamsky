@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Default icon for unvisited bases
+- Updated help
 
 
 ## [3.5] - 2019-03-24
