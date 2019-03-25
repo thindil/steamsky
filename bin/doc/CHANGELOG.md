@@ -2,7 +2,13 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+### Added
 - New item: steel mace
+
+### Changed
+- Default icon for unvisited bases
+
 
 ## [3.5] - 2019-03-24
 
