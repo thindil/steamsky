@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Default icon for unvisited bases
 - Updated help
 - Crash on healing wounded crew members in bases
+- Items stats: bronze mace and iron mace
 
 
 ## [3.5] - 2019-03-24
