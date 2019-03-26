@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Crash on dismissing crew members
 - Crash on delivering medicines to diseased base
+- Crash on healing wounded crew members in bases
 
 ## [3.0.7] - 2019-03-17
 
