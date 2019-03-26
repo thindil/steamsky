@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -197,6 +197,15 @@ package body Bases.Trade is
    begin
       if MemberIndex > 0 then
          Time := 5 * (100 - PlayerShip.Crew(MemberIndex).Health);
+         Cost :=
+           (5 * (100 - PlayerShip.Crew(MemberIndex).Health)) *
+           Items_List
+             (FindProtoItem
+                (ItemType =>
+                   Factions_List(PlayerShip.Crew(MemberIndex).Faction)
+                     .HealingTools))
+             .Prices
+             (BaseType);
       else
          for Member of PlayerShip.Crew loop
             if Member.Health < 100 then
