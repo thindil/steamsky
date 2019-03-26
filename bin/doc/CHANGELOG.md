@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New item: steel mace
+- New crafting recipe: steel mace
 
 ### Changed
 - Default icon for unvisited bases
