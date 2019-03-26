@@ -313,7 +313,7 @@ package body Bases.UI is
       end loop;
       Append(HealsList, HealsIter);
       Set(HealsList, HealsIter, 0, "Heal all wounded crew members");
-      Set(HealsList, HealsIter, 1, 0);
+      Set(HealsList, HealsIter, 1, Gint'Image(0));
       Set_Label
         (Gtk_Button(Get_Object(Builder, "btnacceptbase")), "_Buy healing");
       Set_Visible_Child_Name

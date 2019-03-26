@@ -192,6 +192,15 @@ package body Bases.Trade is
    begin
       if MemberIndex > 0 then
          Time := 5 * (100 - PlayerShip.Crew(MemberIndex).Health);
+         Cost :=
+           (5 * (100 - PlayerShip.Crew(MemberIndex).Health)) *
+           Items_List
+             (FindProtoItem
+                (ItemType =>
+                   Factions_List(PlayerShip.Crew(MemberIndex).Faction)
+                     .HealingTools))
+             .Prices
+             (BaseType);
       else
          for Member of PlayerShip.Crew loop
             if Member.Health < 100 then
