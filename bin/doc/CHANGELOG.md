@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Default icon for unvisited bases
 - Updated help
+- Crash on healing wounded crew members in bases
 
 
 ## [3.5] - 2019-03-24
