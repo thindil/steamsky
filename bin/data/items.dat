@@ -2012,31 +2012,31 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="9"/>
   <description>Empty, ready to print book.</description>
  </item>
- <item index="211" name="Bronze mace" type="Weapon" weight="2">
-  <trade buyable="N" price="15"/>
-  <trade buyable="N" price="15"/>
-  <trade buyable="N" price="15"/>
-  <trade buyable="N" price="15"/>
-  <trade buyable="Y" price="10"/>
+ <item index="211" name="Bronze mace" type="Weapon" weight="1">
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="Y" price="7"/>
   <data value="15"/>
-  <data value="30"/>
+  <data value="22"/>
   <data value="21"/>
   <data value="1"/>
   <data value="3"/>
   <description>Simple mace made of bronze, used in melee combat.</description>
  </item>
- <item index="212" name="Iron mace" type="Weapon" weight="2">
-  <trade buyable="N" price="17"/>
-  <trade buyable="N" price="17"/>
-  <trade buyable="N" price="17"/>
-  <trade buyable="N" price="17"/>
-  <trade buyable="Y" price="15"/>
+ <item index="212" name="Iron mace" type="Weapon" weight="1">
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="Y" price="10"/>
   <data value="10"/>
-  <data value="37"/>
+  <data value="30"/>
   <data value="21"/>
   <data value="1"/>
   <data value="3"/>
-  <description>Simple sword made of iron, used in melee combat.</description>
+  <description>Simple mace made of iron, used in melee combat.</description>
  </item>
  <item index="213" name="Steel mace" type="Weapon" weight="1">
   <trade buyable="N" price="17"/>
