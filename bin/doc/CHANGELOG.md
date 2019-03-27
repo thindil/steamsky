@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Crash on healing wounded crew members in bases
 - Items stats: bronze mace and iron mace
 - Crafting recipes: bronze mace and iron mace
+- Updated interface
 
 
 ## [3.5] - 2019-03-24
