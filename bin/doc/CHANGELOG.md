@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New item: steel mace
+- New items: steel mace and titanium mace
 - New crafting recipe: steel mace
 
 ### Changed
