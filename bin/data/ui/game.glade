@@ -933,6 +933,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="gchararray"/>
       <!-- column-name durabilityvisible -->
       <column type="gboolean"/>
+      <!-- column-name profitcolor -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkTreeModelFilter" id="tradefilter">
@@ -10074,6 +10076,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <child>
                                           <object class="GtkCellRendererText"/>
                                           <attributes>
+                                            <attribute name="foreground">11</attribute>
                                             <attribute name="text">6</attribute>
                                           </attributes>
                                         </child>
