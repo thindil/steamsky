@@ -1423,9 +1423,17 @@ package body Combat is
             UpdateMission
               (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
          end if;
-         if GetRandom(1, 100) < 10 then
-            GainRep(Enemy.Ship.HomeBase, -100);
-         end if;
+         declare
+            LostReputationChance: Positive := 10;
+         begin
+            if ProtoShips_List(EnemyShipIndex).Owner =
+              PlayerShip.Crew(1).Faction then
+               LostReputationChance := 40;
+            end if;
+            if GetRandom(1, 100) < LostReputationChance then
+               GainRep(Enemy.Ship.HomeBase, -100);
+            end if;
+         end;
          UpdateDestroyedShips(Enemy.Ship.Name);
          UpdateGoal(DESTROY, EnemyShipIndex);
          if CurrentGoal.TargetIndex /= Null_Unbounded_String then
