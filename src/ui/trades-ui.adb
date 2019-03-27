@@ -475,6 +475,7 @@ package body Trades.UI is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       ProtoIndex: Unbounded_String;
       ItemsTypes: UnboundedString_Container.Vector;
+      Profit: Integer;
       procedure AddType is
       begin
          if not ItemsTypes.Contains(Items_List(ProtoIndex).IType) and
@@ -547,9 +548,13 @@ package body Trades.UI is
                end if;
             end if;
             Set(ItemsList, ItemsIter, 5, Gint(Price));
-            Set
-              (ItemsList, ItemsIter, 6,
-               Gint(Price - PlayerShip.Cargo(I).Price));
+            Profit := Price - PlayerShip.Cargo(I).Price;
+            Set(ItemsList, ItemsIter, 6, Gint(Profit));
+            if Profit < 0 then
+               Set(ItemsList, ItemsIter, 11, "red");
+            elsif Profit > 0 then
+               Set(ItemsList, ItemsIter, 11, "green");
+            end if;
             Set(ItemsList, ItemsIter, 7, Gint(PlayerShip.Cargo(I).Amount));
             if BaseCargoIndex > 0 and
               Items_List(ProtoIndex).Buyable(BaseType) then
@@ -609,6 +614,7 @@ package body Trades.UI is
             end if;
             Set(ItemsList, ItemsIter, 5, Gint(Price));
             Set(ItemsList, ItemsIter, 6, Gint(0 - Price));
+            Set(ItemsList, ItemsIter, 11, "red");
             if BaseIndex = 0 then
                Set(ItemsList, ItemsIter, 8, Gint(TraderCargo(I).Amount));
             else
