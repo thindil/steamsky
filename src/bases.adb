@@ -41,14 +41,14 @@ package body Bases is
       while NewPoints < 0 loop
          SkyBases(BaseIndex).Reputation(1) :=
            SkyBases(BaseIndex).Reputation(1) - 1;
-         NewPoints := NewPoints + abs (SkyBases(BaseIndex).Reputation(1) * 10);
+         NewPoints := NewPoints + abs (SkyBases(BaseIndex).Reputation(1) * 5);
          if NewPoints >= 0 then
             SkyBases(BaseIndex).Reputation(2) := NewPoints;
             return;
          end if;
       end loop;
-      while NewPoints > abs (SkyBases(BaseIndex).Reputation(1) * 10) loop
-         NewPoints := NewPoints - abs (SkyBases(BaseIndex).Reputation(1) * 10);
+      while NewPoints > abs (SkyBases(BaseIndex).Reputation(1) * 5) loop
+         NewPoints := NewPoints - abs (SkyBases(BaseIndex).Reputation(1) * 5);
          SkyBases(BaseIndex).Reputation(1) :=
            SkyBases(BaseIndex).Reputation(1) + 1;
       end loop;
