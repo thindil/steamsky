@@ -41,6 +41,7 @@ with Ships.Movement; use Ships.Movement;
 with Items; use Items;
 with Messages; use Messages;
 with Config; use Config;
+with Crew; use Crew;
 
 package body Utils.UI is
 
@@ -203,6 +204,10 @@ package body Utils.UI is
       Speed: constant SpeedType :=
         (SpeedType(RealSpeed(PlayerShip, True)) / 1000.0);
       MinutesDiff: Integer;
+      Rests, CabinIndex, RestTime: Natural := 0;
+      type DamageFactor is digits 2 range 0.0 .. 1.0;
+      Damage: DamageFactor := 0.0;
+      Tired, CabinBonus, TempTime: Natural;
    begin
       MinutesDiff := Integer(100.0 / Speed);
       case PlayerShip.Speed is
@@ -223,6 +228,54 @@ package body Utils.UI is
       end case;
       Append(InfoText, LF & "ETA:");
       MinutesDiff := MinutesDiff * Distance;
+      for I in PlayerShip.Crew.Iterate loop
+         if PlayerShip.Crew(I).Order = Pilot or
+           PlayerShip.Crew(I).Order = Engineer then
+            Tired := (MinutesDiff / 15) + PlayerShip.Crew(I).Tired;
+            if
+              (Tired /
+               (80 + PlayerShip.Crew(I).Attributes(ConditionIndex)(1))) >
+              Rests then
+               Rests :=
+                 (Tired /
+                  (80 + PlayerShip.Crew(I).Attributes(ConditionIndex)(1)));
+            end if;
+            if Rests > 0 then
+               CabinIndex := FindCabin(Crew_Container.To_Index(I));
+               if CabinIndex > 0 then
+                  Damage :=
+                    1.0 -
+                    DamageFactor
+                      (Float(PlayerShip.Modules(CabinIndex).Durability) /
+                       Float(PlayerShip.Modules(CabinIndex).MaxDurability));
+                  CabinBonus :=
+                    PlayerShip.Modules(CabinIndex).Cleanliness -
+                    Natural
+                      (Float(PlayerShip.Modules(CabinIndex).Cleanliness) *
+                       Float(Damage));
+                  if CabinBonus = 0 then
+                     CabinBonus := 1;
+                  end if;
+                  TempTime :=
+                    ((80 + PlayerShip.Crew(I).Attributes(ConditionIndex)(1)) /
+                     CabinBonus) *
+                    15;
+                  if TempTime = 0 then
+                     TempTime := 15;
+                  end if;
+               else
+                  TempTime :=
+                    (80 + PlayerShip.Crew(I).Attributes(ConditionIndex)(1)) *
+                    15;
+               end if;
+               TempTime := TempTime + 15;
+               if TempTime > RestTime then
+                  RestTime := TempTime;
+               end if;
+            end if;
+         end if;
+      end loop;
+      MinutesDiff := MinutesDiff + (Rests * RestTime);
       MinutesToDate(MinutesDiff, InfoText);
       Append
         (InfoText,
