@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file.
 - New items: steel mace and titanium mace
 - New crafting recipes: steel mace and titanium mace
 - Bigger chance to lost reputation in base after destroying friendly ship
-- Better counting for info about time needed for reach destination on map
+- Better counting for info about time and fuel needed for reach destination on
+  map
 
 ### Changed
 - Default icon for unvisited bases
