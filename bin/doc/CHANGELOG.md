@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Items stats: bronze mace and iron mace
 - Crafting recipes: bronze mace and iron mace
 - Updated interface
+- Faster gaining reputation in bases
 
 
 ## [3.5] - 2019-03-24
