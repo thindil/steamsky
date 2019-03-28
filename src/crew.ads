@@ -77,6 +77,9 @@ package Crew is
       ((Gender = 'M' or Gender = 'F') and
        FactionIndex /=
          Null_Unbounded_String); -- Generate random name for crew member
+   function FindCabin
+     (MemberIndex: Positive)
+     return Natural; -- Find index of cabin for selected crew member
    procedure UpdateCrew(Minutes: Positive;
       TiredPoints: Natural); -- Update ship crew
    procedure WaitForRest; -- Wait until whole crew is rested
