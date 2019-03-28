@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New items: steel mace and titanium mace
-- New crafting recipe: steel mace
+- New crafting recipes: steel mace and titanium mace
 - Bigger chance to lost reputation in base after destroying friendly ship
 
 ### Changed
