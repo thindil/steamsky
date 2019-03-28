@@ -280,7 +280,9 @@ package body Utils.UI is
       Append
         (InfoText,
          LF & "Approx fuel usage:" &
-         Natural'Image(abs (Distance * CountFuelNeeded)) & " ");
+         Natural'Image
+           (abs (Distance * CountFuelNeeded) + (Rests * (RestTime / 10))) &
+         " ");
       if ShowFuelName then
          Append
            (InfoText, Items_List(FindProtoItem(ItemType => FuelType)).Name);
