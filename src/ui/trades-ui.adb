@@ -39,10 +39,12 @@ with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
+with Ships.Crew; use Ships.Crew;
 with Events; use Events;
 with Items; use Items;
 with Bases.Cargo; use Bases.Cargo;
 with Utils.UI; use Utils.UI;
+with Crew; use Crew;
 
 package body Trades.UI is
 
@@ -73,8 +75,6 @@ package body Trades.UI is
       MoneyIndex2, MaxAmount: Natural;
       AmountAdj2: constant Gtk_Adjustment :=
         Gtk_Adjustment(Get_Object(Builder, "amountadj1"));
-      AmountAdj: constant Gtk_Adjustment :=
-        Gtk_Adjustment(Get_Object(Builder, "amountadj"));
    begin
       declare
          ItemsIter: Gtk_Tree_Iter;
@@ -183,27 +183,36 @@ package body Trades.UI is
       end if;
       Set_Label
         (Gtk_Label(Get_Object(Object, "lbltradeinfo")), To_String(ItemInfo));
-      if CargoIndex = 0 then
-         Hide(Gtk_Widget(Get_Object(Object, "sellbox")));
-         Hide(Gtk_Widget(Get_Object(Object, "sellbox2")));
-      else
-         Show_All(Gtk_Widget(Get_Object(Object, "sellbox")));
-         Show_All(Gtk_Widget(Get_Object(Object, "sellbox2")));
-         Set_Value(AmountAdj, 1.0);
-         MaxAmount := PlayerShip.Cargo(CargoIndex).Amount;
-         if BaseIndex > 0 then
-            if MaxAmount > (SkyBases(BaseIndex).Cargo(1).Amount / Price) then
-               MaxAmount := SkyBases(BaseIndex).Cargo(1).Amount / Price;
+      Hide(Gtk_Widget(Get_Object(Object, "sellbox")));
+      Hide(Gtk_Widget(Get_Object(Object, "sellbox2")));
+      if CargoIndex > 0 then
+         declare
+            MaxSellAmount: Natural := PlayerShip.Cargo(CargoIndex).Amount;
+            MaxPrice: Natural := MaxSellAmount * Price;
+            AmountAdj: constant Gtk_Adjustment :=
+              Gtk_Adjustment(Get_Object(Builder, "amountadj"));
+         begin
+            Set_Value(AmountAdj, 1.0);
+            CountPrice(MaxPrice, FindMember(Talk), False);
+            if BaseIndex > 0
+              and then MaxPrice > SkyBases(BaseIndex).Cargo(1).Amount then
+               MaxSellAmount :=
+                 Natural(Float'Floor(Float(MaxSellAmount) *
+                 (Float(SkyBases(BaseIndex).Cargo(1).Amount) / Float(MaxPrice))));
+            elsif BaseIndex = 0 and then MaxPrice > TraderCargo(1).Amount then
+               MaxSellAmount :=
+                 Natural(Float'Floor(Float(MaxSellAmount) *
+                 (Float(TraderCargo(1).Amount) / Float(MaxPrice))));
             end if;
-         else
-            if MaxAmount > (TraderCargo(1).Amount / Price) then
-               MaxAmount := TraderCargo(1).Amount / Price;
+            if MaxSellAmount > 0 then
+               Set_Upper(AmountAdj, Gdouble(MaxSellAmount));
+               Set_Label
+                  (Gtk_Label(Get_Object(Builder, "lblsellamount")),
+               "(max" & Natural'Image(MaxSellAmount) & "):");
+               Show_All(Gtk_Widget(Get_Object(Object, "sellbox")));
+               Show_All(Gtk_Widget(Get_Object(Object, "sellbox2")));
             end if;
-         end if;
-         Set_Upper(AmountAdj, Gdouble(MaxAmount));
-         Set_Label
-           (Gtk_Label(Get_Object(Builder, "lblsellamount")),
-            "(max" & Natural'Image(MaxAmount) & "):");
+         end;
       end if;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
       if BaseCargoIndex = 0 or MoneyIndex2 = 0 or
