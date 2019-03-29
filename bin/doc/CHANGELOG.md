@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Bigger chance to lost reputation in base after destroying friendly ship
 - Better counting for info about time and fuel needed for reach destination on
   map
+- Better counting amount of items for sale
 
 ### Changed
 - Default icon for unvisited bases
