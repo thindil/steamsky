@@ -72,9 +72,7 @@ package body Trades.UI is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: Positive;
-      MoneyIndex2, MaxAmount: Natural;
-      AmountAdj2: constant Gtk_Adjustment :=
-        Gtk_Adjustment(Get_Object(Builder, "amountadj1"));
+      MoneyIndex2: Natural;
    begin
       declare
          ItemsIter: Gtk_Tree_Iter;
@@ -197,59 +195,76 @@ package body Trades.UI is
             if BaseIndex > 0
               and then MaxPrice > SkyBases(BaseIndex).Cargo(1).Amount then
                MaxSellAmount :=
-                 Natural(Float'Floor(Float(MaxSellAmount) *
-                 (Float(SkyBases(BaseIndex).Cargo(1).Amount) / Float(MaxPrice))));
+                 Natural
+                   (Float'Floor
+                      (Float(MaxSellAmount) *
+                       (Float(SkyBases(BaseIndex).Cargo(1).Amount) /
+                        Float(MaxPrice))));
             elsif BaseIndex = 0 and then MaxPrice > TraderCargo(1).Amount then
                MaxSellAmount :=
-                 Natural(Float'Floor(Float(MaxSellAmount) *
-                 (Float(TraderCargo(1).Amount) / Float(MaxPrice))));
+                 Natural
+                   (Float'Floor
+                      (Float(MaxSellAmount) *
+                       (Float(TraderCargo(1).Amount) / Float(MaxPrice))));
             end if;
             if MaxSellAmount > 0 then
                Set_Upper(AmountAdj, Gdouble(MaxSellAmount));
                Set_Label
-                  (Gtk_Label(Get_Object(Builder, "lblsellamount")),
-               "(max" & Natural'Image(MaxSellAmount) & "):");
+                 (Gtk_Label(Get_Object(Builder, "lblsellamount")),
+                  "(max" & Natural'Image(MaxSellAmount) & "):");
                Show_All(Gtk_Widget(Get_Object(Object, "sellbox")));
                Show_All(Gtk_Widget(Get_Object(Object, "sellbox2")));
             end if;
          end;
       end if;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
-      if BaseCargoIndex = 0 or MoneyIndex2 = 0 or
-        not Items_List(ProtoIndex).Buyable(BaseType) then
-         Hide(Gtk_Widget(Get_Object(Object, "buybox")));
-      else
-         if BaseIndex > 0 then
-            if SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount > 0 then
-               Show_All(Gtk_Widget(Get_Object(Object, "buybox")));
-            else
-               Hide(Gtk_Widget(Get_Object(Object, "buybox")));
-            end if;
-         else
-            if TraderCargo(BaseCargoIndex).Amount > 0 then
-               Show_All(Gtk_Widget(Get_Object(Object, "buybox")));
-            else
-               Hide(Gtk_Widget(Get_Object(Object, "buybox")));
-            end if;
+      Hide(Gtk_Widget(Get_Object(Object, "buybox")));
+      if BaseCargoIndex > 0 and MoneyIndex2 > 0 and
+        Items_List(ProtoIndex).Buyable(BaseType) then
+         if BaseIndex > 0
+           and then SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount > 0 then
+            Show_All(Gtk_Widget(Get_Object(Object, "buybox")));
+         elsif BaseIndex = 0
+           and then TraderCargo(BaseCargoIndex).Amount > 0 then
+            Show_All(Gtk_Widget(Get_Object(Object, "buybox")));
          end if;
          if Is_Visible(Gtk_Widget(Get_Object(Object, "buybox"))) then
-            Set_Value(AmountAdj2, 1.0);
-            MaxAmount := PlayerShip.Cargo(MoneyIndex2).Amount / Price;
-            if BaseIndex > 0 then
-               if MaxAmount >
-                 SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount then
-                  MaxAmount :=
-                    SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
+            declare
+               MaxBuyAmount: Natural :=
+                 PlayerShip.Cargo(MoneyIndex2).Amount / Price;
+               MaxPrice: Natural := MaxBuyAmount * Price;
+               AmountAdj: constant Gtk_Adjustment :=
+                 Gtk_Adjustment(Get_Object(Builder, "amountadj1"));
+            begin
+               if MaxBuyAmount > 0 then
+                  Set_Value(AmountAdj, 1.0);
+                  CountPrice(MaxPrice, FindMember(Talk));
+                  if MaxPrice < (MaxBuyAmount * Price) then
+                     MaxBuyAmount :=
+                       Natural
+                         (Float'Floor
+                            (Float(MaxBuyAmount) *
+                             ((Float(MaxBuyAmount) * Float(Price)) /
+                              Float(MaxPrice))));
+                  end if;
+                  if BaseIndex > 0
+                    and then MaxBuyAmount >
+                      SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount then
+                     MaxBuyAmount :=
+                       SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
+                  elsif BaseIndex = 0
+                    and then MaxBuyAmount >
+                      TraderCargo(BaseCargoIndex).Amount then
+                     MaxBuyAmount := TraderCargo(BaseCargoIndex).Amount;
+                  end if;
+                  Set_Upper(AmountAdj, Gdouble(MaxBuyAmount));
+                  Set_Label
+                    (Gtk_Label(Get_Object(Builder, "lblbuyamount")),
+                     "(max" & Natural'Image(MaxBuyAmount) & "):");
+               else
+                  Hide(Gtk_Widget(Get_Object(Object, "buybox")));
                end if;
-            else
-               if MaxAmount > TraderCargo(BaseCargoIndex).Amount then
-                  MaxAmount := TraderCargo(BaseCargoIndex).Amount;
-               end if;
-            end if;
-            Set_Upper(AmountAdj2, Gdouble(MaxAmount));
-            Set_Label
-              (Gtk_Label(Get_Object(Builder, "lblbuyamount")),
-               "(max" & Natural'Image(MaxAmount) & "):");
+            end;
          end if;
       end if;
       if MoneyIndex2 > 0 then
