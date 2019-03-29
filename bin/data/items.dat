@@ -2064,5 +2064,18 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple mace made of titanium, used in melee combat.</description>
  </item>
+ <item index="215" name="Orichalcum mace" type="Weapon" weight="2">
+  <trade buyable="N" price="30"/>
+  <trade buyable="N" price="30"/>
+  <trade buyable="N" price="30"/>
+  <trade buyable="N" price="30"/>
+  <trade buyable="Y" price="28"/>
+  <data value="2"/>
+  <data value="52"/>
+  <data value="21"/>
+  <data value="1"/>
+  <data value="3"/>
+  <description>Simple mace made of orichalcum, used in melee combat.</description>
+ </item>
 </items>
 
