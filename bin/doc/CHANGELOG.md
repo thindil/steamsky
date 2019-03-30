@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Crafting recipes: bronze mace and iron mace
 - Updated interface
 - Faster gaining reputation in bases
+- Even slower losing morale for factions with fanaticism
 
 
 ## [3.5] - 2019-03-24
