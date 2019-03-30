@@ -189,6 +189,7 @@ package body Trades.UI is
             MaxPrice: Natural := MaxSellAmount * Price;
             AmountAdj: constant Gtk_Adjustment :=
               Gtk_Adjustment(Get_Object(Builder, "amountadj"));
+            Weight: Integer;
          begin
             Set_Value(AmountAdj, 1.0);
             CountPrice(MaxPrice, FindMember(Talk), False);
@@ -207,6 +208,25 @@ package body Trades.UI is
                       (Float(MaxSellAmount) *
                        (Float(TraderCargo(1).Amount) / Float(MaxPrice))));
             end if;
+            MaxPrice := MaxSellAmount * Price;
+            CountPrice(MaxPrice, FindMember(Talk), False);
+            Weight :=
+              FreeCargo
+                ((Items_List(ProtoIndex).Weight * MaxSellAmount) - MaxPrice);
+            while Weight < 0 loop
+               MaxSellAmount :=
+                 Natural
+                   (Float'Floor
+                      (Float(MaxSellAmount) *
+                       (Float(MaxPrice + Weight) / Float(MaxPrice))));
+               exit when MaxSellAmount = 0;
+               MaxPrice := MaxSellAmount * Price;
+               CountPrice(MaxPrice, FindMember(Talk), False);
+               Weight :=
+                 FreeCargo
+                   ((Items_List(ProtoIndex).Weight * MaxSellAmount) -
+                    MaxPrice);
+            end loop;
             if MaxSellAmount > 0 then
                Set_Upper(AmountAdj, Gdouble(MaxSellAmount));
                Set_Label
