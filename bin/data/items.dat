@@ -2077,5 +2077,18 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple mace made of orichalcum, used in melee combat.</description>
  </item>
+ <item index="216" name="Adamantium mace" type="Weapon" weight="3">
+  <trade buyable="N" price="58"/>
+  <trade buyable="N" price="58"/>
+  <trade buyable="N" price="58"/>
+  <trade buyable="N" price="58"/>
+  <trade buyable="Y" price="56"/>
+  <data value="1"/>
+  <data value="60"/>
+  <data value="21"/>
+  <data value="1"/>
+  <data value="3"/>
+  <description>Simple mace made of adamantium, used in melee combat.</description>
+ </item>
 </items>
 
