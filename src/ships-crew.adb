@@ -690,8 +690,11 @@ package body Ships.Crew is
             NewValue := Value * 5;
          else
             NewValue := Value / 10;
-            if NewValue = 0 then
+            if NewValue = 0 and then GetRandom(1, 10) <= abs (Value) then
                NewValue := -1;
+            end if;
+            if NewValue = 0 then
+               return;
             end if;
          end if;
       end if;
