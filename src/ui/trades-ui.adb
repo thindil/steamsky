@@ -255,6 +255,7 @@ package body Trades.UI is
                MaxPrice: Natural := MaxBuyAmount * Price;
                AmountAdj: constant Gtk_Adjustment :=
                  Gtk_Adjustment(Get_Object(Builder, "amountadj1"));
+               Weight: Integer;
             begin
                if MaxBuyAmount > 0 then
                   Set_Value(AmountAdj, 1.0);
@@ -277,10 +278,32 @@ package body Trades.UI is
                       TraderCargo(BaseCargoIndex).Amount then
                      MaxBuyAmount := TraderCargo(BaseCargoIndex).Amount;
                   end if;
-                  Set_Upper(AmountAdj, Gdouble(MaxBuyAmount));
-                  Set_Label
-                    (Gtk_Label(Get_Object(Builder, "lblbuyamount")),
-                     "(max" & Natural'Image(MaxBuyAmount) & "):");
+                  MaxPrice := MaxBuyAmount * Price;
+                  CountPrice(MaxPrice, FindMember(Talk));
+                  Weight :=
+                    FreeCargo
+                      (MaxPrice - (Items_List(ProtoIndex).Weight * MaxBuyAmount));
+                  while Weight < 0 loop
+                     MaxBuyAmount :=
+                       Natural
+                         (Float'Floor
+                            (Float(MaxBuyAmount) *
+                             (Float(MaxPrice + Weight) / Float(MaxPrice))));
+                     exit when MaxBuyAmount = 0;
+                     MaxPrice := MaxBuyAmount * Price;
+                     CountPrice(MaxPrice, FindMember(Talk));
+                     Weight :=
+                       FreeCargo
+                         (MaxPrice - (Items_List(ProtoIndex).Weight * MaxBuyAmount));
+                  end loop;
+                  if MaxBuyAmount > 0 then
+                     Set_Upper(AmountAdj, Gdouble(MaxBuyAmount));
+                     Set_Label
+                       (Gtk_Label(Get_Object(Builder, "lblbuyamount")),
+                        "(max" & Natural'Image(MaxBuyAmount) & "):");
+                  else
+                     Hide(Gtk_Widget(Get_Object(Object, "buybox")));
+                  end if;
                else
                   Hide(Gtk_Widget(Get_Object(Object, "buybox")));
                end if;
