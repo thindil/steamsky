@@ -2090,5 +2090,18 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple mace made of adamantium, used in melee combat.</description>
  </item>
+ <item index="217" name="Bronze dagger" type="Weapon" weight="1">
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="Y" price="7"/>
+  <data value="15"/>
+  <data value="10"/>
+  <data value="22"/>
+  <data value="1"/>
+  <data value="2"/>
+  <description>Simple dagger made of bronze, used in melee combat.</description>
+ </item>
 </items>
 
