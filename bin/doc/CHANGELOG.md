@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.0.8] - 2019-03-31
 
 ### Fixed
 - Crash on dismissing crew members
