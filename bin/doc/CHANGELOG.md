@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Better counting for info about time and fuel needed for reach destination on
   map
 - Better counting amount of items for sale and buy
+- New skill: Daggers
 
 ### Changed
 - Default icon for unvisited bases
