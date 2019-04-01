@@ -282,7 +282,8 @@ package body Trades.UI is
                   CountPrice(MaxPrice, FindMember(Talk));
                   Weight :=
                     FreeCargo
-                      (MaxPrice - (Items_List(ProtoIndex).Weight * MaxBuyAmount));
+                      (MaxPrice -
+                       (Items_List(ProtoIndex).Weight * MaxBuyAmount));
                   while Weight < 0 loop
                      MaxBuyAmount :=
                        Natural
@@ -294,7 +295,8 @@ package body Trades.UI is
                      CountPrice(MaxPrice, FindMember(Talk));
                      Weight :=
                        FreeCargo
-                         (MaxPrice - (Items_List(ProtoIndex).Weight * MaxBuyAmount));
+                         (MaxPrice -
+                          (Items_List(ProtoIndex).Weight * MaxBuyAmount));
                   end loop;
                   if MaxBuyAmount > 0 then
                      Set_Upper(AmountAdj, Gdouble(MaxBuyAmount));
@@ -701,6 +703,7 @@ package body Trades.UI is
          end loop;
          Set_Active(TypesCombo, 0);
       end;
+      Set_Text(Gtk_GEntry(Get_Object(Builder, "tradesearch")), "");
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "trade");
       Set_Cursor
