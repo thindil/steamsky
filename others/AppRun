@@ -7,6 +7,7 @@ export GDK_PIXBUF_MODULEDIR=$APPDIR/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders/
 export FONTCONFIG_FILE=$APPDIR/usr/etc/fonts/fonts.conf
 export XDG_DATA_DIRS=$XDG_DATA_DIRS:$APPDIR/usr/share
 export GSETTINGS_BACKEND=memory
+export GTK_THEME=Adwaita
 export RUNFROMSCRIPT=1
 if [ $# -eq 0 ]
 then
