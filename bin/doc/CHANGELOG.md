@@ -24,6 +24,8 @@ All notable changes to this project will be documented in this file.
 - Faster gaining reputation in bases
 - Even slower losing morale for factions with fanaticism
 
+### Fixed
+- Clearing search field in trade after buy or sell items
 
 ## [3.5] - 2019-03-24
 
