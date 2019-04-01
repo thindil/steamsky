@@ -2097,11 +2097,24 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="10"/>
   <trade buyable="Y" price="7"/>
   <data value="15"/>
-  <data value="10"/>
+  <data value="8"/>
   <data value="22"/>
   <data value="1"/>
   <data value="2"/>
   <description>Simple dagger made of bronze, used in melee combat.</description>
+ </item>
+ <item index="218" name="Iron dagger" type="Weapon" weight="1">
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="Y" price="10"/>
+  <data value="10"/>
+  <data value="10"/>
+  <data value="22"/>
+  <data value="1"/>
+  <data value="2"/>
+  <description>Simple dagger made of iron, used in melee combat.</description>
  </item>
 </items>
 
