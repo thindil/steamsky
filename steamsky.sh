@@ -16,5 +16,6 @@ else
 fi
 
 cd bin
+export GTK_THEME=Adwaita
 export RUNFROMSCRIPT=1
 ./steamsky "$@"
