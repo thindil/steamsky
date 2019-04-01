@@ -233,7 +233,9 @@ package body Trades.UI is
                  (Gtk_Label(Get_Object(Builder, "lblsellamount")),
                   "(max" & Natural'Image(MaxSellAmount) & "):");
                Show_All(Gtk_Widget(Get_Object(Object, "sellbox")));
-               Show_All(Gtk_Widget(Get_Object(Object, "sellbox2")));
+               if MaxSellAmount = PlayerShip.Cargo(CargoIndex).Amount then
+                  Show_All(Gtk_Widget(Get_Object(Object, "sellbox2")));
+               end if;
             end if;
          end;
       end if;
