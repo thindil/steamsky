@@ -28,6 +28,8 @@ All notable changes to this project will be documented in this file.
 - Clearing search field in trade after buy or sell items
 - Don't show Sell All option when possible amount to sell is smaller than
   owned amount
+- Don't show that crafting recipe is available if there are not enough
+  crafting materials
 
 ## [3.5] - 2019-03-24
 
