@@ -166,7 +166,10 @@ package body Crafts.UI is
                end if;
                CargoIndex :=
                  FindItem(PlayerShip.Cargo, Objects_Container.Key(J));
-               if CargoIndex = 0 then
+               if CargoIndex = 0 or
+                 (CargoIndex > 0
+                  and then PlayerShip.Cargo(CargoIndex).Amount <
+                    Recipe.MaterialAmounts(I)) then
                   Append(RecipeInfo, "<span foreground=""red"">");
                else
                   HaveMaterials := True;
@@ -175,7 +178,9 @@ package body Crafts.UI is
                  (RecipeInfo,
                   Integer'Image(Recipe.MaterialAmounts(I)) & "x" &
                   To_String(Items_List(J).Name));
-               if CargoIndex > 0 then
+               if CargoIndex > 0
+                 and then PlayerShip.Cargo(CargoIndex).Amount >=
+                   Recipe.MaterialAmounts(I) then
                   TextLength :=
                     Positive'Image(PlayerShip.Cargo(CargoIndex).Amount)'Length;
                   Append
@@ -363,7 +368,9 @@ package body Crafts.UI is
                   if Items_List(J).IType = Recipe.MaterialTypes(K) then
                      CargoIndex :=
                        FindItem(PlayerShip.Cargo, Objects_Container.Key(J));
-                     if CargoIndex > 0 then
+                     if CargoIndex > 0
+                       and then PlayerShip.Cargo(CargoIndex).Amount >=
+                         Recipe.MaterialAmounts(K) then
                         CanCraft := True;
                         exit;
                      end if;
