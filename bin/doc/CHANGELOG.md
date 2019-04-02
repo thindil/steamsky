@@ -26,6 +26,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Clearing search field in trade after buy or sell items
+- Don't show Sell All option when possible amount to sell is smaller than
+  owned amount
 
 ## [3.5] - 2019-03-24
 
