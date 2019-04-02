@@ -432,6 +432,10 @@ package body Crew is
                   TiredLevel :=
                     (100 + PlayerShip.Crew(I).Attributes(ConditionIndex)(1));
                end if;
+               if TiredLevel >=
+                 (50 + PlayerShip.Crew(I).Attributes(ConditionIndex)(1)) then
+                  UpdateMorale(PlayerShip, I, ((Times / 5) * (-1)));
+               end if;
                case PlayerShip.Crew(I).Order is
                   when Pilot =>
                      if PlayerShip.Speed /= DOCKED then
