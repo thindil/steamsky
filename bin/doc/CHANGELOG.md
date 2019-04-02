@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Don't show that crafting recipe is available if there are not enough
+  crafting materials
+
 ## [3.0.8] - 2019-03-31
 
 ### Fixed
