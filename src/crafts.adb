@@ -478,7 +478,8 @@ package body Crafts is
                      for J in MaterialIndexes.Iterate loop
                         HaveMaterial := False;
                         for Item of PlayerShip.Cargo loop
-                           if Item.ProtoIndex = MaterialIndexes(J) and
+                           if Items_List(Item.ProtoIndex).IType =
+                             Items_List(MaterialIndexes(J)).IType and
                              Item.Amount >=
                                Recipe.MaterialAmounts
                                  (UnboundedString_Container.To_Index(J)) then
@@ -501,8 +502,10 @@ package body Crafts is
                      for J in MaterialIndexes.Iterate loop
                         CargoIndex := 1;
                         while CargoIndex <= PlayerShip.Cargo.Last_Index loop
-                           if PlayerShip.Cargo(CargoIndex).ProtoIndex =
-                             MaterialIndexes(J) then
+                           if Items_List
+                               (PlayerShip.Cargo(CargoIndex).ProtoIndex)
+                               .IType =
+                             Items_List(MaterialIndexes(J)).IType then
                               if PlayerShip.Cargo(CargoIndex).Amount >
                                 Recipe.MaterialAmounts
                                   (UnboundedString_Container.To_Index(J)) then
