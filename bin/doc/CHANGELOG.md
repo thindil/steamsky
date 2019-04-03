@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Don't show that crafting recipe is available if there are not enough
   crafting materials
+- Check for having needed materials during crafting
 
 ## [3.0.8] - 2019-03-31
 
