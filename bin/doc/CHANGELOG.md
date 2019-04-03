@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
   map
 - Better counting amount of items for sale and buy
 - New skill: Daggers
+- Crew members lose morale with high fatigue
 
 ### Changed
 - Default icon for unvisited bases
