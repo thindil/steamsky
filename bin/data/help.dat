@@ -194,14 +194,14 @@ Each ship hull have maximum module space and maximum allowed size of module, whi
     Depending on your character faction (selected at starting game), you and your crew must eat and drink. If you don't have food or drink on board, your crew will slowly die from dehydration or starvation. Amount of reduced hunger/thirst depends on consumables - more expensive consumables can restore more.
 
 {u}Morale{/u}
-   Every crew member (except this from {nomorale} factions) have morale. When he/she resting, he/she slowly gaining it (only when morale level is low), every time when he/she back to work, he/she losing a bit morale. Same with giving orders: giving new orders except resting, reduce morale a little. If member morale is very low, he/she may refuse to obey orders. Low morale reduces crew member loyalty too. If crew member loyalty will be low he/she stop obey orders and may left your crew anytime you dock to base. In other way, high morale raises crew member loyalty.
+   Every crew member (except this from {nomorale} factions) have morale. When he/she resting, he/she slowly gaining it (only when morale level is low), every time when he/she back to work, he/she losing a bit morale. Same with giving orders: giving new orders except resting, reduce morale a little. Very high level of fatigue cause morale lost either. If member morale is very low, he/she may refuse to obey orders. Low morale reduces crew member loyalty too. If crew member loyalty will be low he/she stop obey orders and may left your crew anytime you dock to base. In other way, high morale raises crew member loyalty.
 If crew member can't find food or drink when he/she is hungry or thirsty, will be losing morale too. Some consumed food and drinks can affects morale either.
 Each crew member must be paid. It may be daily payment - constant value of {MoneyName} paid on new day or percent of profit from selling items in bases or to traders. If you don't have enough {MoneyName} to pay, unpaid crew member will lose morale.
 When your crew member die, you will stay with his/her body in your ship cargo. At this moment, you can only drop that body from cargo. Additionally, all other crew members lose some morale.
 How fast crew member gains or lose morale depends on level of morale too: with higher level it gain and lose slower than when his/her morale is low. {fanaticism} members gains morale faster and lose it much slower.
 
 {u}Tiredness{/u}
-   Every member of crew (except this from {nofatigue} factions) getting tired when have assigned order other than {b}On break{/b} or {b}Talking in bases{/b}. When member is too tired, he/she stops working and going rest. After rest, if his/her previous position is vacant (e.g. nobody piloting ship), he/she automatically back to work.
+   Every member of crew (except this from {nofatigue} factions) getting tired when have assigned order other than {b}On break{/b} or {b}Talking in bases{/b}. When member is too tired, he/she stops working and going rest. After rest, if his/her previous position is vacant (e.g. nobody piloting ship), he/she automatically back to work if no other crew member on that position.
 To assign selected crew member to position, select it from list by left click and then left click again on member order to select other.
 
 {u}Health{/b}
