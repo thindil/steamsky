@@ -2123,11 +2123,24 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="17"/>
   <trade buyable="Y" price="15"/>
   <data value="5"/>
-  <data value="13"/>
+  <data value="12"/>
   <data value="22"/>
   <data value="1"/>
   <data value="2"/>
   <description>Simple dagger made of steel, used in melee combat.</description>
+ </item>
+ <item index="220" name="Titanium dagger" type="Weapon" weight="2">
+  <trade buyable="N" price="24"/>
+  <trade buyable="N" price="24"/>
+  <trade buyable="N" price="24"/>
+  <trade buyable="N" price="24"/>
+  <trade buyable="Y" price="22"/>
+  <data value="3"/>
+  <data value="15"/>
+  <data value="22"/>
+  <data value="1"/>
+  <data value="2"/>
+  <description>Simple dagger made of titanium, used in melee combat.</description>
  </item>
 </items>
 
