@@ -560,6 +560,33 @@ package body MainMenu is
       On_Key_Press_Event
         (Gtk_Widget(Get_Object(Builder, "newgamebox")),
          NewGameKeyPressed'Access);
+      declare
+         Label: constant Gtk_Label :=
+           Gtk_Label(Get_Object(Builder, "lblerror"));
+         ErrorFileDirectory: Unbounded_String :=
+           To_Unbounded_String(Current_Directory);
+         NewDataDirectory: Unbounded_String := DataDirectory;
+         DotIndex: Natural := 1;
+         LastDirSeparator: Natural :=
+           Index(ErrorFileDirectory, "" & Dir_Separator, Backward);
+      begin
+         loop
+            DotIndex := Index(NewDataDirectory, ".." & Dir_Separator, 1);
+            exit when DotIndex = 0;
+            Delete
+              (ErrorFileDirectory, LastDirSeparator,
+               Length(ErrorFileDirectory));
+            Delete(NewDataDirectory, DotIndex, 3);
+            LastDirSeparator :=
+              Index(ErrorFileDirectory, "" & Dir_Separator, Backward);
+         end loop;
+         Append
+           (ErrorFileDirectory, Dir_Separator & To_String(NewDataDirectory));
+         Set_Label
+           (Label,
+            Get_Label(Label) & " from '" & To_String(ErrorFileDirectory) &
+            "' directory.");
+      end;
       ShowMainMenu;
       if DataError /= Null_Unbounded_String then
          Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
@@ -570,28 +597,7 @@ package body MainMenu is
    end CreateMainMenu;
 
    procedure ShowErrorInfo(Message: Unbounded_String) is
-      Label: constant Gtk_Label := Gtk_Label(Get_Object(Builder, "lblerror"));
-      ErrorFileDirectory: Unbounded_String :=
-        To_Unbounded_String(Current_Directory);
-      NewDataDirectory: Unbounded_String := DataDirectory;
-      DotIndex: Natural := 1;
-      LastDirSeparator: Natural :=
-        Index(ErrorFileDirectory, "" & Dir_Separator, Backward);
    begin
-      loop
-         DotIndex := Index(NewDataDirectory, ".." & Dir_Separator, 1);
-         exit when DotIndex = 0;
-         Delete
-           (ErrorFileDirectory, LastDirSeparator, Length(ErrorFileDirectory));
-         Delete(NewDataDirectory, DotIndex, 3);
-         LastDirSeparator :=
-           Index(ErrorFileDirectory, "" & Dir_Separator, Backward);
-      end loop;
-      Append(ErrorFileDirectory, Dir_Separator & To_String(NewDataDirectory));
-      Set_Label
-        (Label,
-         Get_Label(Label) & " from '" & To_String(ErrorFileDirectory) &
-         "' directory.");
       Set_Text
         (Gtk_Text_Buffer(Get_Object(Builder, "errorbuffer")),
          To_String(Message));
