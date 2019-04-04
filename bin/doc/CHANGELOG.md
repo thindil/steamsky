@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Faster gaining reputation in bases
 - Even slower losing morale for factions with fanaticism
+- Reduced size of save game files
 
 ### Fixed
 - Clearing search field in trade after buy or sell items
