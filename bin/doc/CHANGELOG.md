@@ -5,7 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New items: steel mace, titanium mace, orichalcum mace, adamantium mace,
-  bronze dagger, iron dagger, steel dagger and titanium dagger
+  bronze dagger, iron dagger, steel dagger, titanium dagger and orichalcum
+  dagger
 - New crafting recipes: steel mace, titanium mace, orichalcum mace, adamantium
   mace, bronze dagger, iron dagger, steel dagger and titanium dagger
 - Bigger chance to lost reputation in base after destroying friendly ship
