@@ -116,11 +116,6 @@ package body Bases.SaveLoad is
                         Set_Attribute
                           (RecruitDataNode, "level",
                            To_String(Trim(RawValue, Ada.Strings.Left)));
-                        RawValue :=
-                          To_Unbounded_String(Integer'Image(Skill(3)));
-                        Set_Attribute
-                          (RecruitDataNode, "experience",
-                           To_String(Trim(RawValue, Ada.Strings.Left)));
                      end loop;
                      for Attribute of Recruit.Attributes loop
                         RecruitDataNode :=
@@ -131,11 +126,6 @@ package body Bases.SaveLoad is
                           To_Unbounded_String(Integer'Image(Attribute(1)));
                         Set_Attribute
                           (RecruitDataNode, "level",
-                           To_String(Trim(RawValue, Ada.Strings.Left)));
-                        RawValue :=
-                          To_Unbounded_String(Integer'Image(Attribute(2)));
-                        Set_Attribute
-                          (RecruitDataNode, "experience",
                            To_String(Trim(RawValue, Ada.Strings.Left)));
                      end loop;
                      for Item of Recruit.Inventory loop
@@ -210,11 +200,13 @@ package body Bases.SaveLoad is
               To_Unbounded_String(Integer'Image(SkyBases(I).Reputation(1)));
             Set_Attribute
               (SubNode, "level", To_String(Trim(RawValue, Ada.Strings.Left)));
-            RawValue :=
-              To_Unbounded_String(Integer'Image(SkyBases(I).Reputation(2)));
-            Set_Attribute
-              (SubNode, "progress",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
+            if SkyBases(I).Reputation(2) > 0 then
+               RawValue :=
+                 To_Unbounded_String(Integer'Image(SkyBases(I).Reputation(2)));
+               Set_Attribute
+                 (SubNode, "progress",
+                  To_String(Trim(RawValue, Ada.Strings.Left)));
+            end if;
          end if;
          if SkyBases(I).Visited.Year > 0 then
             SubNode := Create_Element(SaveData, "missionsdate");
@@ -387,7 +379,7 @@ package body Bases.SaveLoad is
                   Price, Payment, HomeBase: Positive;
                   Skills: Skills_Container.Vector;
                   Attributes: Attributes_Container.Vector;
-                  Index, Level, Experience: Natural;
+                  Index, Level: Natural;
                   Inventory: UnboundedString_Container.Vector;
                   Equipment: Equipment_Array;
                   RecruitNode: Node;
@@ -410,17 +402,11 @@ package body Bases.SaveLoad is
                           Natural'Value(Get_Attribute(RecruitNode, "index"));
                         Level :=
                           Natural'Value(Get_Attribute(RecruitNode, "level"));
-                        Experience :=
-                          Natural'Value
-                            (Get_Attribute(RecruitNode, "experience"));
-                        Skills.Append(New_Item => (Index, Level, Experience));
+                        Skills.Append(New_Item => (Index, Level, 0));
                      elsif NodeName = To_Unbounded_String("attribute") then
                         Level :=
                           Natural'Value(Get_Attribute(RecruitNode, "level"));
-                        Experience :=
-                          Natural'Value
-                            (Get_Attribute(RecruitNode, "experience"));
-                        Attributes.Append(New_Item => (Level, Experience));
+                        Attributes.Append(New_Item => (Level, 0));
                      elsif NodeName = To_Unbounded_String("item") then
                         Inventory.Append
                           (New_Item =>
@@ -464,8 +450,10 @@ package body Bases.SaveLoad is
             elsif NodeName = To_Unbounded_String("reputation") then
                SkyBases(BaseIndex).Reputation(1) :=
                  Natural'Value(Get_Attribute(ChildNode, "level"));
-               SkyBases(BaseIndex).Reputation(2) :=
-                 Natural'Value(Get_Attribute(ChildNode, "progress"));
+               if Get_Attribute(ChildNode, "progress") /= "" then
+                  SkyBases(BaseIndex).Reputation(2) :=
+                    Natural'Value(Get_Attribute(ChildNode, "progress"));
+               end if;
             elsif NodeName = To_Unbounded_String("missionsdate") then
                SkyBases(BaseIndex).MissionsDate.Year :=
                  Natural'Value(Get_Attribute(ChildNode, "year"));
