@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Better counting amount of items for sale and buy
 - New skill: Daggers
 - Crew members lose morale with high fatigue
+- Option to negotiate reward during accepting missions (money or reputation)
 
 ### Changed
 - Default icon for unvisited bases
