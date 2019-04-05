@@ -27,6 +27,7 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Stack; use Gtk.Stack;
+with Gtk.Adjustment; use Gtk.Adjustment;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Maps; use Maps;
@@ -42,7 +43,7 @@ with Utils.UI; use Utils.UI;
 package body Missions.UI is
 
    Builder: Gtkada_Builder;
-   MissionIndex: Positive;
+   MissionIndex: Natural := 0;
    Cleaning: Boolean;
 
    procedure ShowMissionInfo(User_Data: access GObject_Record'Class) is
@@ -53,6 +54,7 @@ package body Missions.UI is
       HaveCabin, CabinTaken: Boolean := False;
       CanAccept: Boolean := True;
       MissionsLimit: Natural;
+      OldIndex: constant Natural := MissionIndex;
    begin
       if Cleaning then
          return;
@@ -76,6 +78,9 @@ package body Missions.UI is
            SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
              .Missions
              (MissionIndex);
+         if OldIndex /= MissionIndex then
+            Set_Value(Gtk_Adjustment(Get_Object(Builder, "adjmission")), 1.00);
+         end if;
       else
          if MissionIndex > Positive(AcceptedMissions.Length) then
             return;
@@ -147,10 +152,21 @@ package body Missions.UI is
       end case;
       Append(MissionInfo, LF & "Time limit:");
       MinutesToDate(Mission.Time, MissionInfo);
+      if User_Data = Get_Object(Builder, "treemissions") then
+         Mission.Multiplier :=
+           RewardMultiplier
+             (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjmission"))));
+         SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex).Missions
+           (MissionIndex)
+           .Multiplier :=
+           Mission.Multiplier;
+      end if;
       Append
         (MissionInfo,
-         LF & "Base reward:" & Positive'Image(Mission.Reward) & " " &
-         To_String(MoneyName));
+         LF & "Base reward:" &
+         Natural'Image
+           (Natural(Float(Mission.Reward) * Float(Mission.Multiplier))) &
+         " " & To_String(MoneyName));
       if User_Data = Get_Object(Builder, "treemissions") then
          declare
             Distance: Positive;
