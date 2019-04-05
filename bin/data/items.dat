@@ -2097,7 +2097,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="10"/>
   <trade buyable="Y" price="7"/>
   <data value="15"/>
-  <data value="8"/>
+  <data value="10"/>
   <data value="22"/>
   <data value="1"/>
   <data value="2"/>
@@ -2110,7 +2110,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="12"/>
   <trade buyable="Y" price="10"/>
   <data value="10"/>
-  <data value="10"/>
+  <data value="12"/>
   <data value="22"/>
   <data value="1"/>
   <data value="2"/>
@@ -2123,7 +2123,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="17"/>
   <trade buyable="Y" price="15"/>
   <data value="5"/>
-  <data value="12"/>
+  <data value="15"/>
   <data value="22"/>
   <data value="1"/>
   <data value="2"/>
@@ -2136,7 +2136,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="24"/>
   <trade buyable="Y" price="22"/>
   <data value="3"/>
-  <data value="15"/>
+  <data value="20"/>
   <data value="22"/>
   <data value="1"/>
   <data value="2"/>
@@ -2149,11 +2149,24 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="30"/>
   <trade buyable="Y" price="28"/>
   <data value="2"/>
-  <data value="17"/>
+  <data value="25"/>
   <data value="22"/>
   <data value="1"/>
   <data value="2"/>
   <description>Simple dagger made of orichalcum, used in melee combat.</description>
+ </item>
+ <item index="222" name="Adamantium dagger" type="Weapon" weight="3">
+  <trade buyable="N" price="58"/>
+  <trade buyable="N" price="58"/>
+  <trade buyable="N" price="58"/>
+  <trade buyable="N" price="58"/>
+  <trade buyable="Y" price="56"/>
+  <data value="1"/>
+  <data value="30"/>
+  <data value="22"/>
+  <data value="1"/>
+  <data value="2"/>
+  <description>Simple dagger made of adamantium, used in melee combat.</description>
  </item>
 </items>
 
