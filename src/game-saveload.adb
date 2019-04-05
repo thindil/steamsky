@@ -366,6 +366,13 @@ package body Game.SaveLoad is
          else
             Set_Attribute(CategoryNode, "finished", "N");
          end if;
+         if Mission.Multiplier /= 1.0 then
+            RawValue :=
+              To_Unbounded_String(RewardMultiplier'Image(Mission.Multiplier));
+            Set_Attribute
+              (CategoryNode, "multiplier",
+               To_String(Trim(RawValue, Ada.Strings.Left)));
+         end if;
       end loop;
       -- Save player career
       LogMessage("Saving player career...", Everything, False);
@@ -675,6 +682,7 @@ package body Game.SaveLoad is
          Finished: Boolean;
          Target: Natural;
          Index: Unbounded_String;
+         Multiplier: RewardMultiplier;
       begin
          LogMessage("Loading accepted missions...", Everything, False);
          for I in 0 .. Length(NodesList) - 1 loop
@@ -693,6 +701,13 @@ package body Game.SaveLoad is
             TargetY := Natural'Value(Get_Attribute(SavedNode, "targety"));
             Reward := Positive'Value(Get_Attribute(SavedNode, "reward"));
             StartBase := Natural'Value(Get_Attribute(SavedNode, "startbase"));
+            if Get_Attribute(SavedNode, "multiplier") /= "" then
+               Multiplier :=
+                 RewardMultiplier'Value
+                   (Get_Attribute(SavedNode, "multiplier"));
+            else
+               Multiplier := 1.0;
+            end if;
             if Get_Attribute(Item(NodesList, I), "finished") = "Y" then
                Finished := True;
             else
@@ -705,35 +720,35 @@ package body Game.SaveLoad is
                        (MType => Deliver, ItemIndex => Index, Time => Time,
                         TargetX => TargetX, TargetY => TargetY,
                         Reward => Reward, StartBase => StartBase,
-                        Finished => Finished));
+                        Finished => Finished, Multiplier => Multiplier));
                when Destroy =>
                   AcceptedMissions.Append
                     (New_Item =>
                        (MType => Destroy, ShipIndex => Index, Time => Time,
                         TargetX => TargetX, TargetY => TargetY,
                         Reward => Reward, StartBase => StartBase,
-                        Finished => Finished));
+                        Finished => Finished, Multiplier => Multiplier));
                when Patrol =>
                   AcceptedMissions.Append
                     (New_Item =>
                        (MType => Patrol, Target => Target, Time => Time,
                         TargetX => TargetX, TargetY => TargetY,
                         Reward => Reward, StartBase => StartBase,
-                        Finished => Finished));
+                        Finished => Finished, Multiplier => Multiplier));
                when Explore =>
                   AcceptedMissions.Append
                     (New_Item =>
                        (MType => Explore, Target => Target, Time => Time,
                         TargetX => TargetX, TargetY => TargetY,
                         Reward => Reward, StartBase => StartBase,
-                        Finished => Finished));
+                        Finished => Finished, Multiplier => Multiplier));
                when Passenger =>
                   AcceptedMissions.Append
                     (New_Item =>
                        (MType => Passenger, CabinIndex => Index, Time => Time,
                         TargetX => TargetX, TargetY => TargetY,
                         Reward => Reward, StartBase => StartBase,
-                        Finished => Finished));
+                        Finished => Finished, Multiplier => Multiplier));
             end case;
             MIndex := AcceptedMissions.Last_Index;
             if not Finished then

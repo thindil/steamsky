@@ -21,15 +21,17 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package Missions is
 
    type Missions_Types is (Deliver, Destroy, Patrol, Explore, Passenger);
+   type RewardMultiplier is digits 2 range 0.0 .. 2.0;
    type Mission_Data(MType: Missions_Types := Deliver)
    is -- Data structure for missions
    record
-      Time: Positive; -- Amount of minutes to finish mission
-      TargetX: Natural; -- Skymap X-axis for mission target
-      TargetY: Natural; -- Skymap Y-axis for mission target
-      Reward: Positive; -- Amount of moneys for mission
-      StartBase: Positive; -- Index of sky base where mission starts
-      Finished: Boolean; -- Did mission is finished
+      Time: Positive; -- Amount of minutes to finish the mission
+      TargetX: Natural; -- Skymap X-axis for the mission target
+      TargetY: Natural; -- Skymap Y-axis for the mission target
+      Reward: Positive; -- Amount of money reward for the mission
+      StartBase: Positive; -- Index of sky base where the mission starts
+      Finished: Boolean; -- Did the mission is finished
+      Multiplier: RewardMultiplier; -- Bonus to amount of money or reputation rewards for the mission
       case MType is
          when Deliver =>
             ItemIndex: Unbounded_String; -- Index of proto item to deliver to base
