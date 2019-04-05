@@ -493,35 +493,38 @@ package body Bases.SaveLoad is
                              (MType => Deliver, ItemIndex => Index,
                               Time => Time, TargetX => TargetX,
                               TargetY => TargetY, Reward => Reward,
-                              StartBase => BaseIndex, Finished => False));
+                              StartBase => BaseIndex, Finished => False,
+                              Multiplier => 1.0));
                      when Destroy =>
                         SkyBases(BaseIndex).Missions.Append
                           (New_Item =>
                              (MType => Destroy, ShipIndex => Index,
                               Time => Time, TargetX => TargetX,
                               TargetY => TargetY, Reward => Reward,
-                              StartBase => BaseIndex, Finished => False));
+                              StartBase => BaseIndex, Finished => False,
+                              Multiplier => 1.0));
                      when Patrol =>
                         SkyBases(BaseIndex).Missions.Append
                           (New_Item =>
                              (MType => Patrol, Target => Target, Time => Time,
                               TargetX => TargetX, TargetY => TargetY,
                               Reward => Reward, StartBase => BaseIndex,
-                              Finished => False));
+                              Finished => False, Multiplier => 1.0));
                      when Explore =>
                         SkyBases(BaseIndex).Missions.Append
                           (New_Item =>
                              (MType => Explore, Target => Target, Time => Time,
                               TargetX => TargetX, TargetY => TargetY,
                               Reward => Reward, StartBase => BaseIndex,
-                              Finished => False));
+                              Finished => False, Multiplier => 1.0));
                      when Passenger =>
                         SkyBases(BaseIndex).Missions.Append
                           (New_Item =>
                              (MType => Passenger, CabinIndex => Index,
                               Time => Time, TargetX => TargetX,
                               TargetY => TargetY, Reward => Reward,
-                              StartBase => BaseIndex, Finished => False));
+                              StartBase => BaseIndex, Finished => False,
+                              Multiplier => 1.0));
                   end case;
                end;
             elsif NodeName = To_Unbounded_String("item") then

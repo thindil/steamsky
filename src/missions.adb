@@ -115,25 +115,27 @@ package body Missions is
                Mission :=
                  (MType => Deliver, Time => 1, TargetX => 0, TargetY => 0,
                   Reward => 1, StartBase => 1, Finished => False,
-                  ItemIndex => Null_Unbounded_String);
+                  ItemIndex => Null_Unbounded_String, Multiplier => 1.0);
             when Destroy =>
                Mission :=
                  (MType => Destroy, Time => 1, TargetX => 0, TargetY => 0,
                   Reward => 1, StartBase => 1, Finished => False,
-                  ShipIndex => Null_Unbounded_String);
+                  Multiplier => 1.0, ShipIndex => Null_Unbounded_String);
             when Patrol =>
                Mission :=
                  (MType => Patrol, Time => 1, TargetX => 0, TargetY => 0,
-                  Reward => 1, StartBase => 1, Finished => False, Target => 0);
+                  Reward => 1, StartBase => 1, Finished => False,
+                  Multiplier => 1.0, Target => 0);
             when Explore =>
                Mission :=
                  (MType => Explore, Time => 1, TargetX => 0, TargetY => 0,
-                  Reward => 1, StartBase => 1, Finished => False, Target => 0);
+                  Reward => 1, StartBase => 1, Finished => False,
+                  Multiplier => 1.0, Target => 0);
             when Passenger =>
                Mission :=
                  (MType => Passenger, Time => 1, TargetX => 0, TargetY => 0,
                   Reward => 1, StartBase => 1, Finished => False,
-                  CabinIndex => Null_Unbounded_String);
+                  Multiplier => 1.0, CabinIndex => Null_Unbounded_String);
          end case;
          case Mission.MType is
             when Deliver =>
@@ -159,7 +161,7 @@ package body Missions is
                   Mission :=
                     (MType => Patrol, Time => 1, TargetX => 0, TargetY => 0,
                      Reward => 1, StartBase => 1, Finished => False,
-                     Target => 0);
+                     Target => 0, Multiplier => 1.0);
                end if;
             when Passenger =>
                Mission.CabinIndex :=
@@ -430,6 +432,10 @@ package body Missions is
       if Reputation < 2 then
          Reputation := 2;
       end if;
+      Reputation :=
+        Natural
+          (Float(Reputation) +
+           (Float(Reputation) * Float(Mission.Multiplier - 1.0)));
       if Failed then
          GainRep(Mission.StartBase, -Reputation);
          UpdateMorale(PlayerShip, 1, GetRandom(-10, -5));
@@ -463,10 +469,11 @@ package body Missions is
          end if;
          UpdateMorale(PlayerShip, 1, 1);
          declare
-            FreeSpace, RewardAmount: Integer;
+            FreeSpace: Integer;
             TraderIndex: constant Natural := FindMember(Talk);
+            RewardAmount: Natural :=
+              Natural(Float(Mission.Reward) * Float(Mission.Multiplier));
          begin
-            RewardAmount := Mission.Reward;
             CountPrice(RewardAmount, TraderIndex, False);
             if TraderIndex > 0 then
                GainExp(1, TalkingSkill, TraderIndex);
