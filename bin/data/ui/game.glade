@@ -107,6 +107,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="adjmission">
+    <property name="upper">2</property>
+    <property name="value">1</property>
+    <property name="step_increment">0.01</property>
+    <property name="page_increment">0.20000000000000001</property>
+  </object>
   <object class="GtkAdjustment" id="adjsavedmessages">
     <property name="lower">5</property>
     <property name="upper">200</property>
@@ -2799,6 +2805,23 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               </packing>
                             </child>
                             <child>
+                              <object class="GtkScale">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">Move left - more reputation from mission but less money, move right - more money from mission but less reputation.</property>
+                                <property name="adjustment">adjmission</property>
+                                <property name="fill_level">9.9999999999999998e+23</property>
+                                <property name="round_digits">1</property>
+                                <property name="draw_value">False</property>
+                                <signal name="value-changed" handler="Show_Mission_Info" object="treemissions" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
                               <object class="GtkButton" id="btnacceptmission">
                                 <property name="label" translatable="yes">_Accept mission</property>
                                 <property name="visible">True</property>
@@ -2811,7 +2834,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">2</property>
+                                <property name="position">3</property>
                               </packing>
                             </child>
                             <child>
@@ -2827,7 +2850,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">3</property>
+                                <property name="position">4</property>
                               </packing>
                             </child>
                           </object>
