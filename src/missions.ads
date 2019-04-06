@@ -36,7 +36,7 @@ package Missions is
          when Deliver =>
             ItemIndex: Unbounded_String; -- Index of proto item to deliver to base
          when Passenger =>
-            CabinIndex: Unbounded_String; -- Index of proto cabin needed by passenger
+            CabinQuality: Positive; -- Minimum quality of cabin needed by passenger
          when Destroy =>
             ShipIndex: Unbounded_String; -- Index of proto ship which must be destroyed
          when others =>

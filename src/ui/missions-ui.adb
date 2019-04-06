@@ -37,7 +37,6 @@ with Ships; use Ships;
 with Bases; use Bases;
 with Messages; use Messages;
 with Items; use Items;
-with ShipModules; use ShipModules;
 with Utils.UI; use Utils.UI;
 
 package body Missions.UI is
@@ -114,7 +113,8 @@ package body Missions.UI is
          when Passenger =>
             CanAccept := False;
             for Module of PlayerShip.Modules loop
-               if Module.ProtoIndex = Mission.CabinIndex then
+               if Module.MType = CABIN
+                 and then Module.Quality >= Mission.CabinQuality then
                   if Module.Owner = 0 then
                      HaveCabin := True;
                      CanAccept := True;
@@ -127,20 +127,20 @@ package body Missions.UI is
             if User_Data = Get_Object(Builder, "treemissions1") then
                HaveCabin := True;
             end if;
-            MissionInfo := To_Unbounded_String("Needed cabin: ");
+            MissionInfo := To_Unbounded_String("Needed quality of cabin: ");
             if HaveCabin then
-               Append(MissionInfo, Modules_List(Mission.CabinIndex).Name);
+               Append(MissionInfo, GetCabinQuality(Mission.CabinQuality));
             elsif CabinTaken then
                Append
                  (MissionInfo,
                   To_Unbounded_String("<span foreground=""yellow"">") &
-                  Modules_List(Mission.CabinIndex).Name &
+                  GetCabinQuality(Mission.CabinQuality) &
                   To_Unbounded_String("</span>"));
             else
                Append
                  (MissionInfo,
                   To_Unbounded_String("<span foreground=""red"">") &
-                  Modules_List(Mission.CabinIndex).Name &
+                  GetCabinQuality(Mission.CabinQuality) &
                   To_Unbounded_String("</span>"));
             end if;
             Append
