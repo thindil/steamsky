@@ -182,15 +182,8 @@ package body Ships.UI.Handlers is
             Show_All(Gtk_Widget(QualityBar));
             Set_Fraction
               (Gtk_Progress_Bar(QualityBar), Gdouble(Module.Quality) / 100.0);
-            if Module.Quality < 30 then
-               Set_Text(Gtk_Progress_Bar(QualityBar), "Minimal quality");
-            elsif Module.Quality < 60 then
-               Set_Text(Gtk_Progress_Bar(QualityBar), "Basic quality");
-            elsif Module.Quality < 80 then
-               Set_Text(Gtk_Progress_Bar(QualityBar), "Extended quality");
-            else
-               Set_Text(Gtk_Progress_Bar(QualityBar), "Luxury");
-            end if;
+            Set_Text
+              (Gtk_Progress_Bar(QualityBar), GetCabinQuality(Module.Quality));
             MaxValue :=
               Positive(Float(Modules_List(Module.ProtoIndex).MaxValue) * 1.5);
             if Module.Quality = MaxValue then
