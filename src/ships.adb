@@ -934,4 +934,30 @@ package body Ships is
       return CombatValue;
    end CountCombatValue;
 
+   function GetCabinQuality(Quality: Natural) return String is
+   begin
+      case Quality is
+         when 0 .. 10 =>
+            return "Empty room";
+         when 11 .. 20 =>
+            return "Minimal quality";
+         when 21 .. 30 =>
+            return "Basic quality";
+         when 31 .. 40 =>
+            return "Second class";
+         when 41 .. 50 =>
+            return "Medium quality";
+         when 51 .. 60 =>
+            return "First class";
+         when 61 .. 70 =>
+            return "Extended quality";
+         when 71 .. 80 =>
+            return "Encrusted room";
+         when 81 .. 90 =>
+            return "Luxury quality";
+         when others =>
+            return "Palace room";
+      end case;
+   end GetCabinQuality;
+
 end Ships;
