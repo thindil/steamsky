@@ -2168,5 +2168,18 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple dagger made of adamantium, used in melee combat.</description>
  </item>
+ <item index="223" name="Bronze greatsword" type="Weapon" weight="4">
+  <trade buyable="N" price="20"/>
+  <trade buyable="N" price="20"/>
+  <trade buyable="N" price="20"/>
+  <trade buyable="N" price="20"/>
+  <trade buyable="Y" price="15"/>
+  <data value="15"/>
+  <data value="25"/>
+  <data value="17"/>
+  <data value="2"/>
+  <data value="1"/>
+  <description>Simple, twohanded greatsword made of bronze, used in melee combat.</description>
+ </item>
 </items>
 
