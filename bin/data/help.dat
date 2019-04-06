@@ -242,7 +242,7 @@ Amount of reputation gained for finished mission or lost for failed mission depe
 If you successfully finish mission, your character gain some morale, if you fail, he/she will lose some morale.
 
 {u}Various info{/u}
-* Red color of cabin name in {i}Transport passengers{/i} missions in {b}Available Missions{/b} menu means you don't have installed that cabin on ship. Yellow means you have that type cabin but it is taken by someone else.
+* Red color of cabin quality in {i}Transport passengers{/i} missions in {b}Available Missions{/b} menu means you don't have installed cabin with that quality or higher on ship. Yellow means you have cabin with that quality or higher but it is taken by someone else.
 * Each mission have time limit - if you don't finish mission in that time, mission will fail. {i}Delivery{/i} mission will fail too if you drop mission item from your cargo. {i}Transport passengers{/i} mission will fail if you dismiss passenger from your ship. If you fail mission, you lose some reputation with that base.
 * You can see all accepted missions in {b}Missions{/b} menu (key {GameKey 19}). There you can set mission target map cell as destination for your ship.</entry>
  <entry title="Hiring crew members">{u}General info{/u}
