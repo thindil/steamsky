@@ -144,5 +144,8 @@ package Ships is
       Pre => Owner /= Null_Unbounded_String; -- Generate random name for ship
    function CountCombatValue
      return Natural; -- Count combat value of player ship
+   function GetCabinQuality
+     (Quality: Natural)
+     return String; -- Get description of quality of selected cabin in player ship
 
 end Ships;
