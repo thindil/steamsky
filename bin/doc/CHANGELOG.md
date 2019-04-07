@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New items: steel mace, titanium mace, orichalcum mace, adamantium mace,
   bronze dagger, iron dagger, steel dagger, titanium dagger, orichalcum
-  dagger, adamantium dagger and bronze greatsword
+  dagger, adamantium dagger, bronze greatsword and iron greatsword
 - New crafting recipes: steel mace, titanium mace, orichalcum mace, adamantium
   mace, bronze dagger, iron dagger, steel dagger, titanium dagger, orichalcum
   dagger, adamantium dagger and bronze greatsword
