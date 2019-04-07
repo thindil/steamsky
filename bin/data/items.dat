@@ -2176,10 +2176,23 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="Y" price="15"/>
   <data value="15"/>
   <data value="25"/>
-  <data value="17"/>
+  <data value="23"/>
   <data value="2"/>
   <data value="1"/>
   <description>Simple, twohanded greatsword made of bronze, used in melee combat.</description>
+ </item>
+ <item index="224" name="Iron greatsword" type="Weapon" weight="4">
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="Y" price="17"/>
+  <data value="10"/>
+  <data value="30"/>
+  <data value="23"/>
+  <data value="2"/>
+  <data value="1"/>
+  <description>Simple, twohanded greatsword made of iron, used in melee combat.</description>
  </item>
 </items>
 
