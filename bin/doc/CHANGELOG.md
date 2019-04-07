@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
 - Better counting for info about time and fuel needed for reach destination on
   map
 - Better counting amount of items for sale and buy
-- New skill: Daggers
+- New skills: Daggers and Two-handed swords
 - Crew members lose morale with high fatigue
 - Option to negotiate reward during accepting missions (money or reputation)
 
