@@ -294,6 +294,7 @@ package body Missions is
                Skills: Skills_Container.Vector;
                Attributes: Attributes_Container.Vector;
                Inventory: Inventory_Container.Vector;
+               MaxAttributeLevel: Integer;
             begin
                if GetRandom(1, 100) < 60 then
                   PassengerBase := BaseIndex;
@@ -317,6 +318,17 @@ package body Missions is
                else
                   Morale := 50 + SkyBases(PassengerBase).Reputation(1);
                end if;
+               MaxAttributeLevel := SkyBases(BaseIndex).Reputation(1);
+               if MaxAttributeLevel < 10 then
+                  MaxAttributeLevel := 10;
+               end if;
+               if GetRandom(1, 100) > 90 then
+                  MaxAttributeLevel := GetRandom(MaxAttributeLevel, 100);
+               end if;
+               for J in Attributes_List.Iterate loop
+                  Attributes.Append
+                    (New_Item => (GetRandom(3, MaxAttributeLevel), 0));
+               end loop;
                PlayerShip.Crew.Append
                  (New_Item =>
                     (Name =>
