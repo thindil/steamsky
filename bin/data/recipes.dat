@@ -673,5 +673,8 @@ If you want add more materials to recipe, just add new tag "material" with prope
  <recipe basetype="5" crafted="1" difficulty="5" index="202" result="224" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Iron"/>
  </recipe>
+ <recipe basetype="5" crafted="1" difficulty="10" index="203" result="225" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="2" type="Steel"/>
+ </recipe>
 </recipes>
 
