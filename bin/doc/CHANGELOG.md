@@ -41,6 +41,7 @@ All notable changes to this project will be documented in this file.
 - Check for having needed materials during crafting
 - Show invalid path to error.log file in error report
 - Crash on accepting transport passenger missions
+- Crash on lack of passenger's attributes
 
 ## [3.5] - 2019-03-24
 
