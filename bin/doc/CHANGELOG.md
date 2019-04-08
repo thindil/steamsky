@@ -40,6 +40,7 @@ All notable changes to this project will be documented in this file.
   crafting materials
 - Check for having needed materials during crafting
 - Show invalid path to error.log file in error report
+- Crash on accepting transport passenger missions
 
 ## [3.5] - 2019-03-24
 
