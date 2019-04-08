@@ -242,8 +242,7 @@ package body Bases.SaveLoad is
                         RawValue := Mission.ItemIndex;
                      elsif Mission.MType = Passenger then
                         RawValue :=
-                          To_Unbounded_String
-                            (Integer'Image(Mission.CabinQuality));
+                          To_Unbounded_String(Integer'Image(Mission.Data));
                      elsif Mission.MType = Destroy then
                         RawValue := Mission.ShipIndex;
                      else
@@ -524,11 +523,10 @@ package body Bases.SaveLoad is
                         end if;
                         SkyBases(BaseIndex).Missions.Append
                           (New_Item =>
-                             (MType => Passenger, CabinQuality => Target,
-                              Time => Time, TargetX => TargetX,
-                              TargetY => TargetY, Reward => Reward,
-                              StartBase => BaseIndex, Finished => False,
-                              Multiplier => 1.0));
+                             (MType => Passenger, Data => Target, Time => Time,
+                              TargetX => TargetX, TargetY => TargetY,
+                              Reward => Reward, StartBase => BaseIndex,
+                              Finished => False, Multiplier => 1.0));
                   end case;
                end;
             elsif NodeName = To_Unbounded_String("item") then

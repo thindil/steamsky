@@ -36,11 +36,11 @@ package Missions is
          when Deliver =>
             ItemIndex: Unbounded_String; -- Index of proto item to deliver to base
          when Passenger =>
-            CabinQuality: Positive; -- Minimum quality of cabin needed by passenger
+            Data: Positive; -- Minimum quality of cabin needed by passenger (in bases) or passenger index (in player ship)
          when Destroy =>
             ShipIndex: Unbounded_String; -- Index of proto ship which must be destroyed
          when others =>
-            Target: Natural;  -- Target for mission (ship, item or passenger index)
+            Target: Natural;  -- Target for mission (ship, item)
       end case;
    end record;
    package Mission_Container is new Vectors(Positive, Mission_Data);

@@ -333,8 +333,7 @@ package body Game.SaveLoad is
          if Mission.MType = Deliver then
             RawValue := Mission.ItemIndex;
          elsif Mission.MType = Passenger then
-            RawValue :=
-              To_Unbounded_String(Integer'Image(Mission.CabinQuality));
+            RawValue := To_Unbounded_String(Integer'Image(Mission.Data));
          elsif Mission.MType = Destroy then
             RawValue := Mission.ShipIndex;
          else
@@ -749,8 +748,8 @@ package body Game.SaveLoad is
                   end if;
                   AcceptedMissions.Append
                     (New_Item =>
-                       (MType => Passenger, CabinQuality => Target,
-                        Time => Time, TargetX => TargetX, TargetY => TargetY,
+                       (MType => Passenger, Data => Target, Time => Time,
+                        TargetX => TargetX, TargetY => TargetY,
                         Reward => Reward, StartBase => StartBase,
                         Finished => Finished, Multiplier => Multiplier));
             end case;

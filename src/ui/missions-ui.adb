@@ -114,7 +114,7 @@ package body Missions.UI is
             CanAccept := False;
             for Module of PlayerShip.Modules loop
                if Module.MType = CABIN
-                 and then Module.Quality >= Mission.CabinQuality then
+                 and then Module.Quality >= Mission.Data then
                   if Module.Owner = 0 then
                      HaveCabin := True;
                      CanAccept := True;
@@ -129,18 +129,18 @@ package body Missions.UI is
             end if;
             MissionInfo := To_Unbounded_String("Needed quality of cabin: ");
             if HaveCabin then
-               Append(MissionInfo, GetCabinQuality(Mission.CabinQuality));
+               Append(MissionInfo, GetCabinQuality(Mission.Data));
             elsif CabinTaken then
                Append
                  (MissionInfo,
                   To_Unbounded_String("<span foreground=""yellow"">") &
-                  GetCabinQuality(Mission.CabinQuality) &
+                  GetCabinQuality(Mission.Data) &
                   To_Unbounded_String("</span>"));
             else
                Append
                  (MissionInfo,
                   To_Unbounded_String("<span foreground=""red"">") &
-                  GetCabinQuality(Mission.CabinQuality) &
+                  GetCabinQuality(Mission.Data) &
                   To_Unbounded_String("</span>"));
             end if;
             Append
