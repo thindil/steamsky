@@ -10,7 +10,8 @@ All notable changes to this project will be documented in this file.
   greatsword
 - New crafting recipes: steel mace, titanium mace, orichalcum mace, adamantium
   mace, bronze dagger, iron dagger, steel dagger, titanium dagger, orichalcum
-  dagger, adamantium dagger, bronze greatsword and iron greatsword
+  dagger, adamantium dagger, bronze greatsword, iron greatsword and steel
+  greatsword
 - Bigger chance to lost reputation in base after destroying friendly ship
 - Better counting for info about time and fuel needed for reach destination on
   map
