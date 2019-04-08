@@ -2194,5 +2194,18 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Simple, twohanded greatsword made of iron, used in melee combat.</description>
  </item>
+ <item index="225" name="Steel greatsword" type="Weapon" weight="4">
+  <trade buyable="N" price="27"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="Y" price="22"/>
+  <data value="5"/>
+  <data value="35"/>
+  <data value="23"/>
+  <data value="2"/>
+  <data value="1"/>
+  <description>Simple twohanded greatsword made of steel, used in melee combat.</description>
+ </item>
 </items>
 
