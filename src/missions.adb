@@ -131,7 +131,7 @@ package body Missions is
                Mission :=
                  (MType => Passenger, Time => 1, TargetX => 0, TargetY => 0,
                   Reward => 1, StartBase => 1, Finished => False,
-                  Multiplier => 1.0, CabinQuality => 1);
+                  Multiplier => 1.0, Data => 1);
          end case;
          case Mission.MType is
             when Deliver =>
@@ -160,7 +160,7 @@ package body Missions is
                      Target => 0, Multiplier => 1.0);
                end if;
             when Passenger =>
-               Mission.CabinQuality :=
+               Mission.Data :=
                  QualitiesArray
                    (GetRandom(QualitiesArray'First, QualitiesArray'Last));
          end case;
@@ -254,8 +254,9 @@ package body Missions is
             HaveCabin: Boolean := False;
          begin
             for Module of PlayerShip.Modules loop
-               if Module.MType = CABIN and then (Module.Quality >= Mission.CabinQuality and
-                 Module.Owner = 0) then
+               if Module.MType = CABIN
+                 and then
+                 (Module.Quality >= Mission.Data and Module.Owner = 0) then
                   HaveCabin := True;
                   exit;
                end if;
@@ -332,13 +333,14 @@ package body Missions is
                      Faction => SkyBases(PassengerBase).Owner));
             end;
             for Module of PlayerShip.Modules loop
-               if Module.MType = CABIN and then (Module.Quality >= Mission.CabinQuality and
-                 Module.Owner = 0) then
+               if Module.MType = CABIN
+                 and then
+                 (Module.Quality >= Mission.Data and Module.Owner = 0) then
                   Module.Owner := PlayerShip.Crew.Last_Index;
                   exit;
                end if;
             end loop;
-            Mission.Target := PlayerShip.Crew.Last_Index;
+            Mission.Data := PlayerShip.Crew.Last_Index;
       end case;
       SkyBases(BaseIndex).Missions.Delete(Index => MissionIndex);
       AcceptedMissions.Append(New_Item => Mission);
