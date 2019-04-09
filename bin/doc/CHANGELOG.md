@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Show invalid path to error.log file in error report
 - Crash on lack of passenger's attributes
 - Crash on very low starting morale of transported passenger
+- Crash on showing info about passenger in crew view
 
 ## [3.0.8] - 2019-03-31
 
