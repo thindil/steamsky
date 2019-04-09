@@ -106,7 +106,6 @@ package body Crew.UI.Handlers is
          Hide(Gtk_Widget(Get_Object(Object, "lblstats1")));
          Hide(Gtk_Widget(Get_Object(Object, "lblskills")));
          Hide(Gtk_Widget(Get_Object(Object, "treeskills1")));
-         Hide(Gtk_Widget(Get_Object(Object, "lblcrewpay")));
          Append(MemberInfo, LF & "Passenger");
          if Member.ContractLength > 0 then
             Append(MemberInfo, LF & "Time limit:");
