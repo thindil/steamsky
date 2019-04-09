@@ -289,12 +289,12 @@ package body Missions is
          when Passenger =>
             Append(AcceptMessage, "'Transport passenger to base'.");
             declare
-               PassengerBase, Morale: Positive;
+               PassengerBase: Positive;
                Gender: Character;
                Skills: Skills_Container.Vector;
                Attributes: Attributes_Container.Vector;
                Inventory: Inventory_Container.Vector;
-               MaxAttributeLevel: Integer;
+               MaxAttributeLevel, Morale: Integer;
             begin
                if GetRandom(1, 100) < 60 then
                   PassengerBase := BaseIndex;
@@ -317,6 +317,9 @@ package body Missions is
                   Morale := 50;
                else
                   Morale := 50 + SkyBases(PassengerBase).Reputation(1);
+                  if Morale < 50 then
+                     Morale := 50;
+                  end if;
                end if;
                MaxAttributeLevel := SkyBases(BaseIndex).Reputation(1);
                if MaxAttributeLevel < 10 then
