@@ -192,13 +192,13 @@ package body Missions is
       MissionsLimit: Integer;
       Mission: Mission_Data := SkyBases(BaseIndex).Missions(MissionIndex);
       AcceptMessage: Unbounded_String;
-      TraderIndex, Morale, PassengerBase: Positive;
+      TraderIndex, PassengerBase: Positive;
       HaveCabin: Boolean := False;
       Gender: Character;
       Skills: Skills_Container.Vector;
       Attributes: Attributes_Container.Vector;
       Inventory: Inventory_Container.Vector;
-      MaxAttributeLevel: Integer;
+      MaxAttributeLevel, Morale: Integer;
    begin
       if SkyBases(BaseIndex).Reputation(1) < 0 then
          raise Missions_Accepting_Error
@@ -286,6 +286,9 @@ package body Missions is
                Morale := 50;
             else
                Morale := 50 + SkyBases(PassengerBase).Reputation(1);
+               if Morale < 50 then
+                  Morale := 50;
+               end if;
             end if;
             MaxAttributeLevel := SkyBases(BaseIndex).Reputation(1);
             if MaxAttributeLevel < 10 then
