@@ -2205,7 +2205,20 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="23"/>
   <data value="2"/>
   <data value="1"/>
-  <description>Simple twohanded greatsword made of steel, used in melee combat.</description>
+  <description>Simple, twohanded greatsword made of steel, used in melee combat.</description>
+ </item>
+ <item index="226" name="Titanium greatsword" type="Weapon" weight="6">
+  <trade buyable="N" price="32"/>
+  <trade buyable="N" price="32"/>
+  <trade buyable="N" price="32"/>
+  <trade buyable="N" price="32"/>
+  <trade buyable="Y" price="30"/>
+  <data value="3"/>
+  <data value="40"/>
+  <data value="23"/>
+  <data value="2"/>
+  <data value="1"/>
+  <description>Simple, twohanded greatsword made of titanium, used in melee combat.</description>
  </item>
 </items>
 
