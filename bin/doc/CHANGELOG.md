@@ -42,6 +42,7 @@ All notable changes to this project will be documented in this file.
 - Show invalid path to error.log file in error report
 - Crash on accepting transport passenger missions
 - Crash on lack of passenger's attributes
+- Crash on very low starting morale of transported passenger
 
 ## [3.5] - 2019-03-24
 
