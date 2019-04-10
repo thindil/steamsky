@@ -44,6 +44,7 @@ All notable changes to this project will be documented in this file.
 - Crash on lack of passenger's attributes
 - Crash on very low starting morale of transported passenger
 - Crash on showing info about passenger in crew view
+- Crash on finishing transport passenger missions
 
 ## [3.5] - 2019-03-24
 
