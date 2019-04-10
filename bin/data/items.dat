@@ -2169,56 +2169,69 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <description>Simple dagger made of adamantium, used in melee combat.</description>
  </item>
  <item index="223" name="Bronze greatsword" type="Weapon" weight="4">
-  <trade buyable="N" price="20"/>
-  <trade buyable="N" price="20"/>
-  <trade buyable="N" price="20"/>
-  <trade buyable="N" price="20"/>
-  <trade buyable="Y" price="15"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="Y" price="17"/>
   <data value="15"/>
-  <data value="25"/>
+  <data value="30"/>
   <data value="23"/>
   <data value="2"/>
   <data value="1"/>
   <description>Simple, twohanded greatsword made of bronze, used in melee combat.</description>
  </item>
  <item index="224" name="Iron greatsword" type="Weapon" weight="4">
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="Y" price="17"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="Y" price="22"/>
   <data value="10"/>
-  <data value="30"/>
+  <data value="35"/>
   <data value="23"/>
   <data value="2"/>
   <data value="1"/>
   <description>Simple, twohanded greatsword made of iron, used in melee combat.</description>
  </item>
  <item index="225" name="Steel greatsword" type="Weapon" weight="4">
-  <trade buyable="N" price="27"/>
-  <trade buyable="N" price="27"/>
-  <trade buyable="N" price="27"/>
-  <trade buyable="N" price="27"/>
-  <trade buyable="Y" price="22"/>
+  <trade buyable="N" price="32"/>
+  <trade buyable="N" price="32"/>
+  <trade buyable="N" price="32"/>
+  <trade buyable="N" price="32"/>
+  <trade buyable="Y" price="27"/>
   <data value="5"/>
-  <data value="35"/>
+  <data value="40"/>
   <data value="23"/>
   <data value="2"/>
   <data value="1"/>
   <description>Simple, twohanded greatsword made of steel, used in melee combat.</description>
  </item>
  <item index="226" name="Titanium greatsword" type="Weapon" weight="6">
-  <trade buyable="N" price="32"/>
-  <trade buyable="N" price="32"/>
-  <trade buyable="N" price="32"/>
-  <trade buyable="N" price="32"/>
-  <trade buyable="Y" price="30"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="Y" price="32"/>
   <data value="3"/>
-  <data value="40"/>
+  <data value="45"/>
   <data value="23"/>
   <data value="2"/>
   <data value="1"/>
   <description>Simple, twohanded greatsword made of titanium, used in melee combat.</description>
+ </item>
+ <item index="227" name="Orichalcum greatsword" type="Weapon" weight="6">
+  <trade buyable="N" price="42"/>
+  <trade buyable="N" price="42"/>
+  <trade buyable="N" price="42"/>
+  <trade buyable="N" price="42"/>
+  <trade buyable="Y" price="37"/>
+  <data value="2"/>
+  <data value="50"/>
+  <data value="23"/>
+  <data value="2"/>
+  <data value="1"/>
+  <description>Simple, twohanded greatsword made of orichalcum, used in melee combat.</description>
  </item>
 </items>
 
