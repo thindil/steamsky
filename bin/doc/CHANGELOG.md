@@ -45,6 +45,7 @@ All notable changes to this project will be documented in this file.
 - Crash on very low starting morale of transported passenger
 - Crash on showing info about passenger in crew view
 - Crash on finishing transport passenger missions
+- Possible crash on counting current skill level for crew members
 
 ## [3.5] - 2019-03-24
 
