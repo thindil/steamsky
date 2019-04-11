@@ -2233,5 +2233,18 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Simple, twohanded greatsword made of orichalcum, used in melee combat.</description>
  </item>
+ <item index="228" name="Adamantium greatsword" type="Weapon" weight="10">
+  <trade buyable="N" price="82"/>
+  <trade buyable="N" price="82"/>
+  <trade buyable="N" price="82"/>
+  <trade buyable="N" price="82"/>
+  <trade buyable="Y" price="77"/>
+  <data value="1"/>
+  <data value="55"/>
+  <data value="23"/>
+  <data value="2"/>
+  <data value="1"/>
+  <description>Simple, twohanded greatsword made of adamantium, used in melee combat.</description>
+ </item>
 </items>
 
