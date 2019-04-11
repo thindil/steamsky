@@ -124,17 +124,18 @@ package body Ships.Crew is
       if Ship = PlayerShip then
          for I in
            AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
-            if AcceptedMissions(I).MType = Passenger and
-              AcceptedMissions(I).Target = MemberIndex then
+            if AcceptedMissions(I).MType = Passenger
+              and then AcceptedMissions(I).Data = MemberIndex then
                DeleteMission(I);
                exit;
             end if;
          end loop;
          for Mission of AcceptedMissions loop
-            if Mission.MType = Passenger and Mission.Target > MemberIndex then
-               TempValue := Mission.Target;
+            if Mission.MType = Passenger
+              and then Mission.Data > MemberIndex then
+               TempValue := Mission.Data;
                TempValue := TempValue - 1;
-               Mission.Target := TempValue;
+               Mission.Data := TempValue;
             end if;
          end loop;
       end if;
