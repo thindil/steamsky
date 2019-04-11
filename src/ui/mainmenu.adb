@@ -68,6 +68,7 @@ with Factions; use Factions;
 with Events; use Events;
 with Themes; use Themes;
 with Bases; use Bases;
+with DebugUI; use DebugUI;
 
 package body MainMenu is
 
@@ -315,6 +316,9 @@ package body MainMenu is
       Hide(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
       CreateHelpUI;
       CreateGoalsMenu;
+      if DebugMode = Menu or DebugMode = Everything then
+         CreateDebugUI;
+      end if;
       CreateSkyMap;
    end StartGame;
 
