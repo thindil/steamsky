@@ -48,6 +48,7 @@ All notable changes to this project will be documented in this file.
 - Crash on showing info about passenger in crew view
 - Crash on finishing transport passenger missions
 - Possible crash on counting current skill level for crew members
+- Crash on dismissins passengers
 
 ## [3.5] - 2019-03-24
 
