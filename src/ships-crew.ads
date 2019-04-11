@@ -25,9 +25,8 @@ package Ships.Crew is
       Pre =>
       (MemberIndex <= Ship.Crew.Last_Index and
        Reason /= Null_Unbounded_String); -- Handle crew member death
-   procedure DeleteMember(MemberIndex: Positive; Ship: in out ShipRecord) with
-      Pre => MemberIndex <=
-      Ship.Crew.Last_Index; -- Delete selected member from crew list
+   procedure DeleteMember(MemberIndex: Positive;
+      Ship: in out ShipRecord); -- Delete selected member from crew list
    function FindMember(Order: Crew_Orders;
       Crew: Crew_Container.Vector := PlayerShip.Crew)
      return Natural; -- Find index of first crew member with selected order
