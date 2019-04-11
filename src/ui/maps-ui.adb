@@ -85,6 +85,8 @@ with Factions; use Factions;
 with Stories; use Stories;
 with Stories.UI; use Stories.UI;
 with Themes; use Themes;
+with DebugUI; use DebugUI;
+with Log; use Log;
 
 package body Maps.UI is
 
@@ -1323,6 +1325,9 @@ package body Maps.UI is
       ShowSkyMap;
       if PlayerShip.Speed = DOCKED then
          ShowOrders(Builder);
+      end if;
+      if DebugMode = Menu or DebugMode = Everything then
+         ShowDebugUI;
       end if;
    end CreateSkyMap;
 
