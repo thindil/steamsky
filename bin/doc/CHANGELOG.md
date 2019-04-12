@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Crash on showing info about passenger in crew view
 - Possible crash on counting current skill level for crew members
 - UI look on Linux for some GTK themes
+- Waiting X minutes option don't use fuel
 
 ## [3.0.8] - 2019-03-31
 
