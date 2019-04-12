@@ -417,7 +417,10 @@ package body Ships.Movement is
             FuelNeeded := FuelNeeded - 1;
          end if;
       end loop;
-      FuelNeeded := FuelNeeded * Minutes;
+      FuelNeeded := FuelNeeded * (Minutes / 4);
+      if FuelNeeded = 0 then
+         FuelNeeded := -1;
+      end if;
       FuelIndex :=
         FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
       if FuelIndex = 0 then
