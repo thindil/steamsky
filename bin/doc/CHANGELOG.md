@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Reduced fuel usage during waiting
+
 ### Fixed
 - Don't show that crafting recipe is available if there are not enough
   crafting materials
