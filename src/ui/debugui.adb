@@ -21,15 +21,18 @@ with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Adjustment; use Gtk.Adjustment;
+with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Game; use Game;
 with Ships; use Ships;
 with Maps.UI; use Maps.UI;
+with Crew; use Crew;
 
 package body DebugUI is
 
    Builder: Gtkada_Builder;
+   Setting: Boolean;
 
    procedure MoveShip(Object: access Gtkada_Builder_Record'Class) is
    begin
@@ -50,9 +53,56 @@ package body DebugUI is
          Gdouble(PlayerShip.SkyY));
    end UpdateShip;
 
+   procedure UpdateCrew(Object: access Gtkada_Builder_Record'Class) is
+      ComboBox: constant Gtk_Combo_Box_Text :=
+        Gtk_Combo_Box_Text(Get_Object(Object, "cmbmember"));
+   begin
+      Setting := True;
+      Remove_All(ComboBox);
+      for I in PlayerShip.Crew.Iterate loop
+         Append
+           (ComboBox, Positive'Image(Crew_Container.To_Index(I)),
+            To_String(PlayerShip.Crew(I).Name));
+      end loop;
+      Setting := False;
+      Set_Active(ComboBox, 0);
+   end UpdateCrew;
+
+   procedure SetMemberStats(Object: access Gtkada_Builder_Record'Class) is
+      Member: Member_Data;
+   begin
+      if Setting then
+         return;
+      end if;
+      Member :=
+        PlayerShip.Crew
+          (Positive'Value
+             (Get_Active_Id
+                (Gtk_Combo_Box_Text(Get_Object(Object, "cmbmember")))));
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Object, "adjhealth")),
+         Gdouble(Member.Health));
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Object, "adjthirst")),
+         Gdouble(Member.Thirst));
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Object, "adjhunger")),
+         Gdouble(Member.Hunger));
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Object, "adjtired")),
+         Gdouble(Member.Tired));
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Object, "adjmorale")),
+         Gdouble(Member.Morale(1)));
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Object, "adjloyalty")),
+         Gdouble(Member.Loyalty));
+   end SetMemberStats;
+
    procedure RefreshUI(Object: access Gtkada_Builder_Record'Class) is
    begin
       UpdateShip(Object);
+      UpdateCrew(Object);
    end RefreshUI;
 
    procedure CreateDebugUI is
@@ -73,12 +123,14 @@ package body DebugUI is
       Register_Handler(Builder, "Move_Ship", MoveShip'Access);
       Register_Handler(Builder, "Update_Ship", UpdateShip'Access);
       Register_Handler(Builder, "Refresh_UI", RefreshUI'Access);
+      Register_Handler(Builder, "Update_Crew", UpdateCrew'Access);
+      Register_Handler(Builder, "Set_Member_Stats", SetMemberStats'Access);
       Do_Connect(Builder);
    end CreateDebugUI;
 
    procedure ShowDebugUI is
    begin
-      UpdateShip(Builder);
+      RefreshUI(Builder);
       Show_All(Gtk_Widget(Get_Object(Builder, "debugwindow")));
    end ShowDebugUI;
 
