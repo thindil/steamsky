@@ -29,6 +29,20 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="adjshipx">
+    <property name="lower">1</property>
+    <property name="upper">1024</property>
+    <property name="value">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjshipy">
+    <property name="lower">1</property>
+    <property name="upper">1024</property>
+    <property name="value">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkAdjustment" id="adjthirst">
     <property name="upper">100</property>
     <property name="step_increment">1</property>
@@ -46,22 +60,10 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="adjx">
-    <property name="lower">1</property>
-    <property name="upper">1024</property>
-    <property name="value">1</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjy">
-    <property name="lower">1</property>
-    <property name="upper">1024</property>
-    <property name="value">1</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
   <object class="GtkWindow" id="debugwindow">
     <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Steam Sky - debug</property>
+    <property name="icon">images/icon.png</property>
     <child>
       <placeholder/>
     </child>
@@ -70,11 +72,38 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkStackSwitcher">
+          <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
-            <property name="stack">stack1</property>
+            <child>
+              <object class="GtkStackSwitcher">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <property name="stack">stack1</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="btnrefresh">
+                <property name="label" translatable="yes">_Refresh</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="Refresh_UI" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -90,6 +119,7 @@
               <object class="GtkGrid" id="shipgrid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <signal name="map" handler="Update_Ship" swapped="no"/>
                 <child>
                   <object class="GtkButton" id="btnmoveship">
                     <property name="label" translatable="yes">_Move ship</property>
@@ -97,6 +127,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <signal name="clicked" handler="Move_Ship" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -123,7 +154,7 @@
                       <object class="GtkSpinButton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="adjustment">adjx</property>
+                        <property name="adjustment">adjshipx</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -147,7 +178,7 @@
                       <object class="GtkSpinButton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="adjustment">adjy</property>
+                        <property name="adjustment">adjshipy</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
