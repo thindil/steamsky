@@ -202,6 +202,7 @@
               <object class="GtkGrid" id="crewgrid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <signal name="map" handler="Update_Crew" swapped="no"/>
                 <child>
                   <object class="GtkLabel">
                     <property name="visible">True</property>
@@ -217,6 +218,7 @@
                   <object class="GtkComboBoxText" id="cmbmember">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <signal name="changed" handler="Set_Member_Stats" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -354,6 +356,22 @@
                     <property name="left_attach">1</property>
                     <property name="top_attach">6</property>
                   </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btnchangemember">
+                    <property name="label" translatable="yes">_Change</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">7</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
