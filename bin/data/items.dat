@@ -2246,5 +2246,18 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Simple, twohanded greatsword made of adamantium, used in melee combat.</description>
  </item>
+ <item index="229" name="Bronze warhammer" type="Weapon" weight="2">
+  <trade buyable="N" price="15"/>
+  <trade buyable="N" price="15"/>
+  <trade buyable="N" price="15"/>
+  <trade buyable="N" price="15"/>
+  <trade buyable="Y" price="10"/>
+  <data value="15"/>
+  <data value="30"/>
+  <data value="21"/>
+  <data value="1"/>
+  <data value="3"/>
+  <description>Simple warhammer made of bronze, used in melee combat.</description>
+ </item>
 </items>
 
