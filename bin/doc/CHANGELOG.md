@@ -49,6 +49,7 @@ All notable changes to this project will be documented in this file.
 - Crash on finishing transport passenger missions
 - Possible crash on counting current skill level for crew members
 - Crash on dismissins passengers
+- Waiting X minutes option don't use fuel
 
 ## [3.5] - 2019-03-24
 
