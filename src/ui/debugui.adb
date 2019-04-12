@@ -20,13 +20,40 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
+with Gtk.Adjustment; use Gtk.Adjustment;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Game; use Game;
+with Ships; use Ships;
+with Maps.UI; use Maps.UI;
 
 package body DebugUI is
 
    Builder: Gtkada_Builder;
+
+   procedure MoveShip(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      PlayerShip.SkyX :=
+        Integer(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjshipx"))));
+      PlayerShip.SkyY :=
+        Integer(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjshipy"))));
+      ShowSkyMap;
+   end MoveShip;
+
+   procedure UpdateShip(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Object, "adjshipx")),
+         Gdouble(PlayerShip.SkyX));
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Object, "adjshipy")),
+         Gdouble(PlayerShip.SkyY));
+   end UpdateShip;
+
+   procedure RefreshUI(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      UpdateShip(Object);
+   end RefreshUI;
 
    procedure CreateDebugUI is
       Error: aliased GError;
@@ -43,11 +70,15 @@ package body DebugUI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
+      Register_Handler(Builder, "Move_Ship", MoveShip'Access);
+      Register_Handler(Builder, "Update_Ship", UpdateShip'Access);
+      Register_Handler(Builder, "Refresh_UI", RefreshUI'Access);
       Do_Connect(Builder);
    end CreateDebugUI;
 
    procedure ShowDebugUI is
    begin
+      UpdateShip(Builder);
       Show_All(Gtk_Widget(Get_Object(Builder, "debugwindow")));
    end ShowDebugUI;
 
