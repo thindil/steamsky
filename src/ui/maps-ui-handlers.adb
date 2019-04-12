@@ -863,6 +863,7 @@ package body Maps.UI.Handlers is
          end if;
       elsif User_Data = Get_Object(Builder, "waitxadj") then
          UpdateGame(Positive(Get_Value(Gtk_Adjustment(User_Data))));
+         WaitInPlace(Positive(Get_Value(Gtk_Adjustment(User_Data))));
       end if;
       UpdateHeader;
       UpdateMessages;
