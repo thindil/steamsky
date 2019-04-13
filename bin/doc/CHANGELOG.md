@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
   mace, bronze dagger, iron dagger, steel dagger, titanium dagger, orichalcum
   dagger, adamantium dagger, bronze greatsword, iron greatsword, steel
   greatsword, titanium greatsword, orichalcum greatsword, adamantium
-  greatsword and bronze warhammer
+  greatsword, bronze warhammer and iron warhammer
 - Bigger chance to lost reputation in base after destroying friendly ship
 - Better counting for info about time and fuel needed for reach destination on
   map
