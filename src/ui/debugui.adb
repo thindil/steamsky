@@ -114,6 +114,21 @@ package body DebugUI is
       end loop;
    end SetMemberStats;
 
+   function UpdateAttribute(Model: Gtk_Tree_Model; Path: Gtk_Tree_Path;
+      Iter: Gtk_Tree_Iter) return Boolean is
+      pragma Unreferenced(Path);
+      MemberIndex: constant Positive :=
+        Positive'Value
+          (Get_Active_Id
+             (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbmember"))));
+   begin
+      PlayerShip.Crew(MemberIndex).Attributes
+        (Positive(Get_Int(Model, Iter, 1)))
+        (1) :=
+        Positive(Get_Int(Model, Iter, 2));
+      return False;
+   end UpdateAttribute;
+
    procedure UpdateMember(Object: access Gtkada_Builder_Record'Class) is
       MemberIndex: constant Positive :=
         Positive'Value
@@ -131,6 +146,9 @@ package body DebugUI is
         Natural(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjmorale"))));
       PlayerShip.Crew(MemberIndex).Loyalty :=
         Natural(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjloyalty"))));
+      Foreach
+        (Gtk_List_Store(Get_Object(Object, "statslist")),
+         UpdateAttribute'Access);
    end UpdateMember;
 
    procedure RefreshUI(Object: access Gtkada_Builder_Record'Class) is
