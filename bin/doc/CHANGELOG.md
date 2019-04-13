@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
   bronze dagger, iron dagger, steel dagger, titanium dagger, orichalcum
   dagger, adamantium dagger, bronze greatsword, iron greatsword, steel
   greatsword, titanium greatsword, orichalcum greatsword, adamantium
-  greatsword and bronze warhammer
+  greatsword, bronze warhammer and iron warhammer
 - New crafting recipes: steel mace, titanium mace, orichalcum mace, adamantium
   mace, bronze dagger, iron dagger, steel dagger, titanium dagger, orichalcum
   dagger, adamantium dagger, bronze greatsword, iron greatsword, steel
