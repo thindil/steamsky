@@ -99,6 +99,25 @@ package body DebugUI is
          Gdouble(Member.Loyalty));
    end SetMemberStats;
 
+   procedure UpdateMember(Object: access Gtkada_Builder_Record'Class) is
+      MemberIndex: constant Positive := Positive'Value
+             (Get_Active_Id
+                (Gtk_Combo_Box_Text(Get_Object(Object, "cmbmember"))));
+   begin
+      PlayerShip.Crew(MemberIndex).Health :=
+        Natural(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjhealth"))));
+      PlayerShip.Crew(MemberIndex).Thirst :=
+        Natural(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjthirst"))));
+      PlayerShip.Crew(MemberIndex).Hunger :=
+        Natural(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjhunger"))));
+      PlayerShip.Crew(MemberIndex).Tired :=
+        Natural(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjtired"))));
+      PlayerShip.Crew(MemberIndex).Morale(1) :=
+        Natural(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjmorale"))));
+      PlayerShip.Crew(MemberIndex).Loyalty :=
+        Natural(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjloyalty"))));
+   end UpdateMember;
+
    procedure RefreshUI(Object: access Gtkada_Builder_Record'Class) is
    begin
       UpdateShip(Object);
@@ -125,6 +144,7 @@ package body DebugUI is
       Register_Handler(Builder, "Refresh_UI", RefreshUI'Access);
       Register_Handler(Builder, "Update_Crew", UpdateCrew'Access);
       Register_Handler(Builder, "Set_Member_Stats", SetMemberStats'Access);
+      Register_Handler(Builder, "Update_Member", UpdateMember'Access);
       Do_Connect(Builder);
    end CreateDebugUI;
 
