@@ -22,6 +22,9 @@ with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
+with Gtk.Tree_Model; use Gtk.Tree_Model;
+with Gtk.List_Store; use Gtk.List_Store;
+with Gtk.Cell_Renderer_Text; use Gtk.Cell_Renderer_Text;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Game; use Game;
@@ -70,6 +73,9 @@ package body DebugUI is
 
    procedure SetMemberStats(Object: access Gtkada_Builder_Record'Class) is
       Member: Member_Data;
+      StatsIter: Gtk_Tree_Iter;
+      StatsList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "statslist"));
    begin
       if Setting then
          return;
@@ -97,12 +103,21 @@ package body DebugUI is
       Set_Value
         (Gtk_Adjustment(Get_Object(Object, "adjloyalty")),
          Gdouble(Member.Loyalty));
+      Clear(StatsList);
+      for I in Member.Attributes.Iterate loop
+         Append(StatsList, StatsIter);
+         Set
+           (StatsList, StatsIter, 0,
+            To_String(Attributes_List(Attributes_Container.To_Index(I)).Name));
+         Set(StatsList, StatsIter, 1, Gint(Attributes_Container.To_Index(I)));
+         Set(StatsList, StatsIter, 2, Gint(Member.Attributes(I)(1)));
+      end loop;
    end SetMemberStats;
 
    procedure UpdateMember(Object: access Gtkada_Builder_Record'Class) is
-      MemberIndex: constant Positive := Positive'Value
-             (Get_Active_Id
-                (Gtk_Combo_Box_Text(Get_Object(Object, "cmbmember"))));
+      MemberIndex: constant Positive :=
+        Positive'Value
+          (Get_Active_Id(Gtk_Combo_Box_Text(Get_Object(Object, "cmbmember"))));
    begin
       PlayerShip.Crew(MemberIndex).Health :=
         Natural(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjhealth"))));
@@ -123,6 +138,25 @@ package body DebugUI is
       UpdateShip(Object);
       UpdateCrew(Object);
    end RefreshUI;
+
+   procedure ChangeStatLevel(Self: access Gtk_Cell_Renderer_Text_Record'Class;
+      Path: UTF8_String; New_Text: UTF8_String) is
+      pragma Unreferenced(Self);
+      StatsList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "statslist"));
+      NewValue: Gint;
+   begin
+      NewValue := Gint'Value(New_Text);
+      if NewValue < 1 then
+         NewValue := 1;
+      elsif NewValue > 50 then
+         NewValue := 50;
+      end if;
+      Set(StatsList, Get_Iter_From_String(StatsList, Path), 2, NewValue);
+   exception
+      when Constraint_Error =>
+         null;
+   end ChangeStatLevel;
 
    procedure CreateDebugUI is
       Error: aliased GError;
@@ -146,6 +180,9 @@ package body DebugUI is
       Register_Handler(Builder, "Set_Member_Stats", SetMemberStats'Access);
       Register_Handler(Builder, "Update_Member", UpdateMember'Access);
       Do_Connect(Builder);
+      On_Edited
+        (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderstat")),
+         ChangeStatLevel'Access);
    end CreateDebugUI;
 
    procedure ShowDebugUI is
