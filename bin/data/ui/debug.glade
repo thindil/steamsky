@@ -63,6 +63,8 @@
   <object class="GtkWindow" id="debugwindow">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Steam Sky - debug</property>
+    <property name="default_width">800</property>
+    <property name="default_height">600</property>
     <property name="icon">images/icon.png</property>
     <child>
       <placeholder/>
