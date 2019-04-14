@@ -2272,5 +2272,18 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple warhammer made of iron, used in melee combat.</description>
  </item>
+ <item index="231" name="Steel warhammer" type="Weapon" weight="2">
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="Y" price="20"/>
+  <data value="5"/>
+  <data value="45"/>
+  <data value="21"/>
+  <data value="1"/>
+  <data value="3"/>
+  <description>Simple warhammer made of steel, used in melee combat.</description>
+ </item>
 </items>
 
