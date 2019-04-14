@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.0.9] - 2019-04-14
 
 ### Changed
 - Reduced fuel usage during waiting
