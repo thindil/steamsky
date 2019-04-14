@@ -73,9 +73,8 @@ package body DebugUI is
 
    procedure SetMemberStats(Object: access Gtkada_Builder_Record'Class) is
       Member: Member_Data;
-      StatsIter: Gtk_Tree_Iter;
-      StatsList: constant Gtk_List_Store :=
-        Gtk_List_Store(Get_Object(Builder, "statslist"));
+      Iter: Gtk_Tree_Iter;
+      List: Gtk_List_Store := Gtk_List_Store(Get_Object(Builder, "statslist"));
    begin
       if Setting then
          return;
@@ -103,14 +102,24 @@ package body DebugUI is
       Set_Value
         (Gtk_Adjustment(Get_Object(Object, "adjloyalty")),
          Gdouble(Member.Loyalty));
-      Clear(StatsList);
+      Clear(List);
       for I in Member.Attributes.Iterate loop
-         Append(StatsList, StatsIter);
+         Append(List, Iter);
          Set
-           (StatsList, StatsIter, 0,
+           (List, Iter, 0,
             To_String(Attributes_List(Attributes_Container.To_Index(I)).Name));
-         Set(StatsList, StatsIter, 1, Gint(Attributes_Container.To_Index(I)));
-         Set(StatsList, StatsIter, 2, Gint(Member.Attributes(I)(1)));
+         Set(List, Iter, 1, Gint(Attributes_Container.To_Index(I)));
+         Set(List, Iter, 2, Gint(Member.Attributes(I)(1)));
+      end loop;
+      List := Gtk_List_Store(Get_Object(Builder, "skillslist"));
+      Clear(List);
+      for Skill of Member.Skills loop
+         Append(List, Iter);
+         Set
+           (List, Iter, 0,
+            To_String(Skills_List(Skill(1)).Name));
+         Set(List, Iter, 1, Gint(Skill(1)));
+         Set(List, Iter, 2, Gint(Skill(2)));
       end loop;
    end SetMemberStats;
 
