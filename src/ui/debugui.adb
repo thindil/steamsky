@@ -72,21 +72,6 @@ package body DebugUI is
       Set_Active(ComboBox, 0);
    end UpdateCrew;
 
-   procedure UpdateCargoInfo(Object: access Gtkada_Builder_Record'Class) is
-      ComboBox: constant Gtk_Combo_Box_Text :=
-        Gtk_Combo_Box_Text(Get_Object(Object, "cmbcargoadd"));
-   begin
-      Setting := True;
-      Remove_All(ComboBox);
-      for I in Items_List.Iterate loop
-         Append
-           (ComboBox, To_String(Objects_Container.Key(I)),
-            To_String(Items_List(I).Name));
-      end loop;
-      Set_Active(ComboBox, 0);
-      Setting := False;
-   end UpdateCargoInfo;
-
    procedure SetMemberStats(Object: access Gtkada_Builder_Record'Class) is
       Member: Member_Data;
       Iter: Gtk_Tree_Iter;
@@ -217,6 +202,29 @@ package body DebugUI is
         (Gtk_List_Store(Get_Object(Object, "skillslist")), UpdateSkill'Access);
    end UpdateMember;
 
+   procedure UpdateCargoInfo(Object: access Gtkada_Builder_Record'Class) is
+      ComboBox: Gtk_Combo_Box_Text :=
+        Gtk_Combo_Box_Text(Get_Object(Object, "cmbcargoadd"));
+   begin
+      Setting := True;
+      Remove_All(ComboBox);
+      for I in Items_List.Iterate loop
+         Append
+           (ComboBox, To_String(Objects_Container.Key(I)),
+            To_String(Items_List(I).Name));
+      end loop;
+      Set_Active(ComboBox, 0);
+      ComboBox := Gtk_Combo_Box_Text(Get_Object(Object, "cmbcargoupdate"));
+      Remove_All(ComboBox);
+      for I in PlayerShip.Cargo.Iterate loop
+         Append
+           (ComboBox, Positive'Image(Inventory_Container.To_Index(I)),
+            GetItemName(PlayerShip.Cargo(I), False));
+      end loop;
+      Setting := False;
+      Set_Active(ComboBox, 0);
+   end UpdateCargoInfo;
+
    procedure RefreshUI(Object: access Gtkada_Builder_Record'Class) is
    begin
       UpdateShip(Object);
@@ -281,6 +289,22 @@ package body DebugUI is
       end if;
    end AddSkill;
 
+   procedure SetCargoAmount(Object: access Gtkada_Builder_Record'Class) is
+      Item: InventoryData;
+   begin
+      if Setting then
+         return;
+      end if;
+      Item :=
+        PlayerShip.Cargo
+          (Positive'Value
+             (Get_Active_Id
+                (Gtk_Combo_Box_Text(Get_Object(Object, "cmbcargoupdate")))));
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Object, "adjupdatecargo")),
+         Gdouble(Item.Amount));
+   end SetCargoAmount;
+
    procedure CreateDebugUI is
       Error: aliased GError;
    begin
@@ -304,6 +328,7 @@ package body DebugUI is
       Register_Handler(Builder, "Update_Member", UpdateMember'Access);
       Register_Handler(Builder, "Add_Skill", AddSkill'Access);
       Register_Handler(Builder, "Update_Cargo_Info", UpdateCargoInfo'Access);
+      Register_Handler(Builder, "Set_Cargo_Amount", SetCargoAmount'Access);
       Do_Connect(Builder);
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderstat")),
