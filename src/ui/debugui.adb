@@ -75,6 +75,9 @@ package body DebugUI is
       Member: Member_Data;
       Iter: Gtk_Tree_Iter;
       List: Gtk_List_Store := Gtk_List_Store(Get_Object(Builder, "statslist"));
+      KnowSkills: Positive_Container.Vector;
+      ComboBox: constant Gtk_Combo_Box_Text :=
+        Gtk_Combo_Box_Text(Get_Object(Object, "cmbskill"));
    begin
       if Setting then
          return;
@@ -118,7 +121,23 @@ package body DebugUI is
          Set(List, Iter, 0, To_String(Skills_List(Member.Skills(I)(1)).Name));
          Set(List, Iter, 1, Gint(Skills_Container.To_Index(I)));
          Set(List, Iter, 2, Gint(Member.Skills(I)(2)));
+         KnowSkills.Append(Member.Skills(I)(1));
       end loop;
+      Remove_All(ComboBox);
+      for I in Skills_List.Iterate loop
+         if not KnowSkills.Contains(SkillsData_Container.To_Index(I)) then
+            Append
+              (ComboBox,
+               Integer'Image(SkillsData_Container.To_Index(I) * (-1)),
+               To_String(Skills_List(I).Name));
+         end if;
+      end loop;
+      if N_Children(Get_Model(ComboBox)) > 0 then
+         Show_All(Gtk_Widget(Get_Object(Object, "addskillbox")));
+         Set_Active(ComboBox, 0);
+      else
+         Hide(Gtk_Widget(Get_Object(Object, "addskillbox")));
+      end if;
    end SetMemberStats;
 
    function UpdateAttribute(Model: Gtk_Tree_Model; Path: Gtk_Tree_Path;
@@ -143,10 +162,18 @@ package body DebugUI is
         Positive'Value
           (Get_Active_Id
              (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbmember"))));
+      SkillIndex: constant Integer := Integer(Get_Int(Model, Iter, 1));
    begin
-      PlayerShip.Crew(MemberIndex).Skills(Positive(Get_Int(Model, Iter, 1)))
-        (2) :=
-        Positive(Get_Int(Model, Iter, 2));
+      if SkillIndex > 0 then
+         PlayerShip.Crew(MemberIndex).Skills(SkillIndex)(2) :=
+           Positive(Get_Int(Model, Iter, 2));
+      else
+         PlayerShip.Crew(MemberIndex).Skills.Append
+           ((abs (SkillIndex), Positive(Get_Int(Model, Iter, 2)), 0));
+         Set
+           (-(Model), Iter, 1,
+            Gint(PlayerShip.Crew(MemberIndex).Skills.Last_Index));
+      end if;
       return False;
    end UpdateSkill;
 
@@ -218,6 +245,25 @@ package body DebugUI is
          null;
    end ChangeSkillLevel;
 
+   procedure AddSkill(Object: access Gtkada_Builder_Record'Class) is
+      SkillsIter: Gtk_Tree_Iter;
+      SkillsList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "skillslist"));
+      ComboBox: constant Gtk_Combo_Box_Text :=
+        Gtk_Combo_Box_Text(Get_Object(Object, "cmbskill"));
+   begin
+      Append(SkillsList, SkillsIter);
+      Set(SkillsList, SkillsIter, 0, Get_Active_Text(ComboBox));
+      Set(SkillsList, SkillsIter, 1, Gint'Value(Get_Active_Id(ComboBox)));
+      Set(SkillsList, SkillsIter, 2, 1);
+      Remove(ComboBox, Get_Active(ComboBox));
+      if N_Children(Get_Model(ComboBox)) > 0 then
+         Set_Active(ComboBox, 0);
+      else
+         Hide(Gtk_Widget(Get_Object(Object, "addskillbox")));
+      end if;
+   end AddSkill;
+
    procedure CreateDebugUI is
       Error: aliased GError;
    begin
@@ -239,6 +285,7 @@ package body DebugUI is
       Register_Handler(Builder, "Update_Crew", UpdateCrew'Access);
       Register_Handler(Builder, "Set_Member_Stats", SetMemberStats'Access);
       Register_Handler(Builder, "Update_Member", UpdateMember'Access);
+      Register_Handler(Builder, "Add_Skill", AddSkill'Access);
       Do_Connect(Builder);
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderstat")),
