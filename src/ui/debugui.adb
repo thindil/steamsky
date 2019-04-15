@@ -31,6 +31,7 @@ with Game; use Game;
 with Ships; use Ships;
 with Maps.UI; use Maps.UI;
 with Crew; use Crew;
+with Items; use Items;
 
 package body DebugUI is
 
@@ -70,6 +71,21 @@ package body DebugUI is
       Setting := False;
       Set_Active(ComboBox, 0);
    end UpdateCrew;
+
+   procedure UpdateCargoInfo(Object: access Gtkada_Builder_Record'Class) is
+      ComboBox: constant Gtk_Combo_Box_Text :=
+        Gtk_Combo_Box_Text(Get_Object(Object, "cmbcargoadd"));
+   begin
+      Setting := True;
+      Remove_All(ComboBox);
+      for I in Items_List.Iterate loop
+         Append
+           (ComboBox, To_String(Objects_Container.Key(I)),
+            To_String(Items_List(I).Name));
+      end loop;
+      Set_Active(ComboBox, 0);
+      Setting := False;
+   end UpdateCargoInfo;
 
    procedure SetMemberStats(Object: access Gtkada_Builder_Record'Class) is
       Member: Member_Data;
@@ -205,6 +221,7 @@ package body DebugUI is
    begin
       UpdateShip(Object);
       UpdateCrew(Object);
+      UpdateCargoInfo(Object);
    end RefreshUI;
 
    procedure ChangeStatLevel(Self: access Gtk_Cell_Renderer_Text_Record'Class;
@@ -286,6 +303,7 @@ package body DebugUI is
       Register_Handler(Builder, "Set_Member_Stats", SetMemberStats'Access);
       Register_Handler(Builder, "Update_Member", UpdateMember'Access);
       Register_Handler(Builder, "Add_Skill", AddSkill'Access);
+      Register_Handler(Builder, "Update_Cargo_Info", UpdateCargoInfo'Access);
       Do_Connect(Builder);
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderstat")),

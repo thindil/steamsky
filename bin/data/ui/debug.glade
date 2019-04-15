@@ -612,6 +612,7 @@
               <object class="GtkGrid" id="cargogrid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <signal name="map" handler="Update_Cargo_Info" swapped="no"/>
                 <child>
                   <object class="GtkButton" id="btnaddcargo">
                     <property name="label" translatable="yes">_Add</property>
@@ -639,7 +640,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText">
+                  <object class="GtkComboBoxText" id="cmbcargoadd">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
@@ -649,7 +650,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText">
+                  <object class="GtkComboBoxText" id="cmbcargoupdate">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                   </object>
