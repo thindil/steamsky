@@ -516,7 +516,8 @@
                                     <property name="sort_indicator">True</property>
                                     <property name="sort_column_id">2</property>
                                     <child>
-                                      <object class="GtkCellRendererSpin">
+                                      <object class="GtkCellRendererSpin" id="renderskill">
+                                        <property name="editable">True</property>
                                         <property name="adjustment">adjskills</property>
                                       </object>
                                       <attributes>

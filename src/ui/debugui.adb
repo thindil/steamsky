@@ -113,13 +113,11 @@ package body DebugUI is
       end loop;
       List := Gtk_List_Store(Get_Object(Builder, "skillslist"));
       Clear(List);
-      for Skill of Member.Skills loop
+      for I in Member.Skills.Iterate loop
          Append(List, Iter);
-         Set
-           (List, Iter, 0,
-            To_String(Skills_List(Skill(1)).Name));
-         Set(List, Iter, 1, Gint(Skill(1)));
-         Set(List, Iter, 2, Gint(Skill(2)));
+         Set(List, Iter, 0, To_String(Skills_List(Member.Skills(I)(1)).Name));
+         Set(List, Iter, 1, Gint(Skills_Container.To_Index(I)));
+         Set(List, Iter, 2, Gint(Member.Skills(I)(2)));
       end loop;
    end SetMemberStats;
 
@@ -137,6 +135,20 @@ package body DebugUI is
         Positive(Get_Int(Model, Iter, 2));
       return False;
    end UpdateAttribute;
+
+   function UpdateSkill(Model: Gtk_Tree_Model; Path: Gtk_Tree_Path;
+      Iter: Gtk_Tree_Iter) return Boolean is
+      pragma Unreferenced(Path);
+      MemberIndex: constant Positive :=
+        Positive'Value
+          (Get_Active_Id
+             (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbmember"))));
+   begin
+      PlayerShip.Crew(MemberIndex).Skills(Positive(Get_Int(Model, Iter, 1)))
+        (2) :=
+        Positive(Get_Int(Model, Iter, 2));
+      return False;
+   end UpdateSkill;
 
    procedure UpdateMember(Object: access Gtkada_Builder_Record'Class) is
       MemberIndex: constant Positive :=
@@ -158,6 +170,8 @@ package body DebugUI is
       Foreach
         (Gtk_List_Store(Get_Object(Object, "statslist")),
          UpdateAttribute'Access);
+      Foreach
+        (Gtk_List_Store(Get_Object(Object, "skillslist")), UpdateSkill'Access);
    end UpdateMember;
 
    procedure RefreshUI(Object: access Gtkada_Builder_Record'Class) is
@@ -185,6 +199,25 @@ package body DebugUI is
          null;
    end ChangeStatLevel;
 
+   procedure ChangeSkillLevel(Self: access Gtk_Cell_Renderer_Text_Record'Class;
+      Path: UTF8_String; New_Text: UTF8_String) is
+      pragma Unreferenced(Self);
+      SkillsList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "skillslist"));
+      NewValue: Gint;
+   begin
+      NewValue := Gint'Value(New_Text);
+      if NewValue < 1 then
+         NewValue := 1;
+      elsif NewValue > 100 then
+         NewValue := 100;
+      end if;
+      Set(SkillsList, Get_Iter_From_String(SkillsList, Path), 2, NewValue);
+   exception
+      when Constraint_Error =>
+         null;
+   end ChangeSkillLevel;
+
    procedure CreateDebugUI is
       Error: aliased GError;
    begin
@@ -210,6 +243,9 @@ package body DebugUI is
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderstat")),
          ChangeStatLevel'Access);
+      On_Edited
+        (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderskill")),
+         ChangeSkillLevel'Access);
    end CreateDebugUI;
 
    procedure ShowDebugUI is
