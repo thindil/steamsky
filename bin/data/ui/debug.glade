@@ -653,6 +653,7 @@
                   <object class="GtkComboBoxText" id="cmbcargoupdate">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <signal name="changed" handler="Set_Cargo_Amount" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
