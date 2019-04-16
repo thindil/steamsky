@@ -22,6 +22,7 @@ with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
+with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Cell_Renderer_Text; use Gtk.Cell_Renderer_Text;
@@ -204,18 +205,10 @@ package body DebugUI is
    end UpdateMember;
 
    procedure UpdateCargoInfo(Object: access Gtkada_Builder_Record'Class) is
-      ComboBox: Gtk_Combo_Box_Text :=
-        Gtk_Combo_Box_Text(Get_Object(Object, "cmbcargoadd"));
+      ComboBox: constant Gtk_Combo_Box_Text :=
+        Gtk_Combo_Box_Text(Get_Object(Object, "cmbcargoupdate"));
    begin
       Setting := True;
-      Remove_All(ComboBox);
-      for I in Items_List.Iterate loop
-         Append
-           (ComboBox, To_String(Objects_Container.Key(I)),
-            To_String(Items_List(I).Name));
-      end loop;
-      Set_Active(ComboBox, 0);
-      ComboBox := Gtk_Combo_Box_Text(Get_Object(Object, "cmbcargoupdate"));
       Remove_All(ComboBox);
       for I in PlayerShip.Cargo.Iterate loop
          Append
@@ -307,12 +300,22 @@ package body DebugUI is
    end SetCargoAmount;
 
    procedure AddCargo(Object: access Gtkada_Builder_Record'Class) is
+      ItemIndex: Unbounded_String := Null_Unbounded_String;
+      ItemName: constant Unbounded_String :=
+        To_Unbounded_String
+          (Get_Text(Gtk_GEntry(Get_Object(Object, "edtcargoadd"))));
    begin
+      for I in Items_List.Iterate loop
+         if Items_List(I).Name = ItemName then
+            ItemIndex := Objects_Container.Key(I);
+            exit;
+         end if;
+      end loop;
+      if ItemIndex = Null_Unbounded_String then
+         return;
+      end if;
       UpdateCargo
-        (PlayerShip,
-         To_Unbounded_String
-           (Get_Active_Id
-              (Gtk_Combo_Box_Text(Get_Object(Object, "cmbcargoadd")))),
+        (PlayerShip, ItemIndex,
          Positive
            (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjaddcargo")))));
       UpdateCargoInfo(Object);
@@ -350,6 +353,17 @@ package body DebugUI is
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderskill")),
          ChangeSkillLevel'Access);
+      declare
+         ItemsList: constant Gtk_List_Store :=
+           Gtk_List_Store(Get_Object(Builder, "itemslist"));
+         ItemsIter: Gtk_Tree_Iter;
+      begin
+         Clear(ItemsList);
+         for I in Items_List.Iterate loop
+            Append(ItemsList, ItemsIter);
+            Set(ItemsList, ItemsIter, 0, To_String(Items_List(I).Name));
+         end loop;
+      end;
    end CreateDebugUI;
 
    procedure ShowDebugUI is
