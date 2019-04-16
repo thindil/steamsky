@@ -72,6 +72,22 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkListStore" id="itemslist">
+    <columns>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkEntryCompletion" id="cargocompletion">
+    <property name="model">itemslist</property>
+    <property name="text_column">0</property>
+    <child>
+      <object class="GtkCellRendererText"/>
+      <attributes>
+        <attribute name="text">0</attribute>
+      </attributes>
+    </child>
+  </object>
   <object class="GtkListStore" id="skillslist">
     <columns>
       <!-- column-name name -->
@@ -696,9 +712,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="cmbcargoadd">
+                  <object class="GtkEntry" id="edtcargoadd">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
+                    <property name="completion">cargocompletion</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
