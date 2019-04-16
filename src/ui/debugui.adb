@@ -321,6 +321,22 @@ package body DebugUI is
       UpdateCargoInfo(Object);
    end AddCargo;
 
+   procedure UpdateShipCargo(Object: access Gtkada_Builder_Record'Class) is
+      CargoIndex: constant Positive :=
+        Positive'Value
+          (Get_Active_Id
+             (Gtk_Combo_Box_Text(Get_Object(Object, "cmbcargoupdate"))));
+   begin
+      UpdateCargo
+        (Ship => PlayerShip,
+         Amount =>
+           (Integer
+              (Get_Value
+                 (Gtk_Adjustment(Get_Object(Object, "adjupdatecargo")))) -
+            PlayerShip.Cargo(CargoIndex).Amount),
+         CargoIndex => CargoIndex);
+   end UpdateShipCargo;
+
    procedure CreateDebugUI is
       Error: aliased GError;
    begin
@@ -346,6 +362,7 @@ package body DebugUI is
       Register_Handler(Builder, "Update_Cargo_Info", UpdateCargoInfo'Access);
       Register_Handler(Builder, "Set_Cargo_Amount", SetCargoAmount'Access);
       Register_Handler(Builder, "Add_Cargo", AddCargo'Access);
+      Register_Handler(Builder, "Update_Cargo", UpdateShipCargo'Access);
       Do_Connect(Builder);
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderstat")),
