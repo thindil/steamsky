@@ -29,6 +29,7 @@ with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Game; use Game;
 with Ships; use Ships;
+with Ships.Cargo; use Ships.Cargo;
 with Maps.UI; use Maps.UI;
 with Crew; use Crew;
 with Items; use Items;
@@ -305,6 +306,18 @@ package body DebugUI is
          Gdouble(Item.Amount));
    end SetCargoAmount;
 
+   procedure AddCargo(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      UpdateCargo
+        (PlayerShip,
+         To_Unbounded_String
+           (Get_Active_Id
+              (Gtk_Combo_Box_Text(Get_Object(Object, "cmbcargoadd")))),
+         Positive
+           (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjaddcargo")))));
+      UpdateCargoInfo(Object);
+   end AddCargo;
+
    procedure CreateDebugUI is
       Error: aliased GError;
    begin
@@ -329,6 +342,7 @@ package body DebugUI is
       Register_Handler(Builder, "Add_Skill", AddSkill'Access);
       Register_Handler(Builder, "Update_Cargo_Info", UpdateCargoInfo'Access);
       Register_Handler(Builder, "Set_Cargo_Amount", SetCargoAmount'Access);
+      Register_Handler(Builder, "Add_Cargo", AddCargo'Access);
       Do_Connect(Builder);
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderstat")),

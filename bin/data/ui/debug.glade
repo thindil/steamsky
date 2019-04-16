@@ -620,6 +620,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <signal name="clicked" handler="Add_Cargo" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -637,16 +638,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="cmbcargoadd">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
                   </packing>
                 </child>
                 <child>
@@ -702,6 +693,16 @@
                   <packing>
                     <property name="left_attach">3</property>
                     <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="cmbcargoadd">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
                   </packing>
                 </child>
               </object>
