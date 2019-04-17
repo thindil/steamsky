@@ -92,6 +92,12 @@
   <object class="GtkEntryCompletion" id="basescompletion">
     <property name="model">baseslist</property>
     <property name="text_column">0</property>
+    <child>
+      <object class="GtkCellRendererText"/>
+      <attributes>
+        <attribute name="text">0</attribute>
+      </attributes>
+    </child>
   </object>
   <object class="GtkListStore" id="itemslist">
     <columns>
@@ -787,6 +793,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="completion">basescompletion</property>
+                        <signal name="activate" handler="Show_Base_Info" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -837,7 +844,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText" id="cmbbasetyp">
+                      <object class="GtkComboBoxText" id="cmbbasesize">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -902,6 +909,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="halign">start</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>

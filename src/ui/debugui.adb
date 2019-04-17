@@ -16,24 +16,27 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
-with Gtk.Widget; use Gtk.Widget;
 with Gtk.Adjustment; use Gtk.Adjustment;
+with Gtk.Cell_Renderer_Text; use Gtk.Cell_Renderer_Text;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.List_Store; use Gtk.List_Store;
-with Gtk.Cell_Renderer_Text; use Gtk.Cell_Renderer_Text;
+with Gtk.Widget; use Gtk.Widget;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
+with Bases; use Bases;
+with Crew; use Crew;
+with Factions; use Factions;
 with Game; use Game;
+with Items; use Items;
+with Maps.UI; use Maps.UI;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
-with Maps.UI; use Maps.UI;
-with Crew; use Crew;
-with Items; use Items;
 
 package body DebugUI is
 
@@ -219,11 +222,41 @@ package body DebugUI is
       Set_Active(ComboBox, 0);
    end UpdateCargoInfo;
 
+   procedure ShowBaseInfo(Object: access Gtkada_Builder_Record'Class) is
+      BaseName: constant Unbounded_String :=
+        To_Unbounded_String
+          (Get_Text(Gtk_GEntry(Get_Object(Object, "edtbase"))));
+   begin
+      for I in SkyBases'Range loop
+         if SkyBases(I).Name = BaseName then
+            Set_Active
+              (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbasetype")),
+               Bases_Types'Pos(SkyBases(I).BaseType));
+            Set_Active
+              (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbasesize")),
+               Bases_Size'Pos(SkyBases(I).Size));
+            if not Set_Active_Id
+                (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbaseowner")),
+                 To_String(SkyBases(I).Owner)) then
+               return;
+            end if;
+            Set_Value
+              (Gtk_Adjustment(Get_Object(Object, "adjpopulation")),
+               Gdouble(SkyBases(I).Population));
+            Set_Value
+              (Gtk_Adjustment(Get_Object(Object, "adjreputation")),
+               Gdouble(SkyBases(I).Reputation(1)));
+            exit;
+         end if;
+      end loop;
+   end ShowBaseInfo;
+
    procedure RefreshUI(Object: access Gtkada_Builder_Record'Class) is
    begin
       UpdateShip(Object);
       UpdateCrew(Object);
       UpdateCargoInfo(Object);
+      ShowBaseInfo(Object);
    end RefreshUI;
 
    procedure ChangeStatLevel(Self: access Gtk_Cell_Renderer_Text_Record'Class;
@@ -363,6 +396,7 @@ package body DebugUI is
       Register_Handler(Builder, "Set_Cargo_Amount", SetCargoAmount'Access);
       Register_Handler(Builder, "Add_Cargo", AddCargo'Access);
       Register_Handler(Builder, "Update_Cargo", UpdateShipCargo'Access);
+      Register_Handler(Builder, "Show_Base_Info", ShowBaseInfo'Access);
       Do_Connect(Builder);
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderstat")),
@@ -371,14 +405,42 @@ package body DebugUI is
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderskill")),
          ChangeSkillLevel'Access);
       declare
-         ItemsList: constant Gtk_List_Store :=
+         List: Gtk_List_Store :=
            Gtk_List_Store(Get_Object(Builder, "itemslist"));
-         ItemsIter: Gtk_Tree_Iter;
+         Iter: Gtk_Tree_Iter;
       begin
-         Clear(ItemsList);
          for I in Items_List.Iterate loop
-            Append(ItemsList, ItemsIter);
-            Set(ItemsList, ItemsIter, 0, To_String(Items_List(I).Name));
+            Append(List, Iter);
+            Set(List, Iter, 0, To_String(Items_List(I).Name));
+         end loop;
+         List := Gtk_List_Store(Get_Object(Builder, "baseslist"));
+         for I in SkyBases'Range loop
+            Append(List, Iter);
+            Set(List, Iter, 0, To_String(SkyBases(I).Name));
+         end loop;
+      end;
+      declare
+         ComboBox: Gtk_Combo_Box_Text;
+      begin
+         ComboBox := Gtk_Combo_Box_Text(Get_Object(Builder, "cmbbasetype"));
+         for I in Bases_Types loop
+            Append_Text
+              (ComboBox,
+               Bases_Types'Image(I)(1) &
+               To_Lower(Bases_Types'Image(I)(2 .. Bases_Types'Image(I)'Last)));
+         end loop;
+         ComboBox := Gtk_Combo_Box_Text(Get_Object(Builder, "cmbbaseowner"));
+         for I in Factions_List.Iterate loop
+            Append
+              (ComboBox, To_String(Factions_Container.Key(I)),
+               To_String(Factions_List(I).Name));
+         end loop;
+         ComboBox := Gtk_Combo_Box_Text(Get_Object(Builder, "cmbbasesize"));
+         for I in Bases_Size loop
+            Append_Text
+              (ComboBox,
+               Bases_Size'Image(I)(1) &
+               To_Lower(Bases_Size'Image(I)(2 .. Bases_Size'Image(I)'Last)));
          end loop;
       end;
    end CreateDebugUI;
