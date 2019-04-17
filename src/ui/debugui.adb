@@ -387,6 +387,12 @@ package body DebugUI is
               To_Unbounded_String
                 (Get_Active_Id
                    (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbaseowner"))));
+            SkyBase.Size :=
+              Bases_Size'Val
+                (Integer
+                   (Get_Active
+                      (Gtk_Combo_Box_Text
+                         (Get_Object(Object, "cmbbasesize")))));
          end if;
       end loop;
    end UpdateBase;
