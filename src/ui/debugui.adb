@@ -383,7 +383,10 @@ package body DebugUI is
                    (Get_Active
                       (Gtk_Combo_Box_Text
                          (Get_Object(Object, "cmbbasetype")))));
-            exit;
+            SkyBase.Owner :=
+              To_Unbounded_String
+                (Get_Active_Id
+                   (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbaseowner"))));
          end if;
       end loop;
    end UpdateBase;
