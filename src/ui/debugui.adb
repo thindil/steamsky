@@ -370,6 +370,24 @@ package body DebugUI is
          CargoIndex => CargoIndex);
    end UpdateShipCargo;
 
+   procedure UpdateBase(Object: access Gtkada_Builder_Record'Class) is
+      BaseName: constant Unbounded_String :=
+        To_Unbounded_String
+          (Get_Text(Gtk_GEntry(Get_Object(Object, "edtbase"))));
+   begin
+      for SkyBase of SkyBases loop
+         if SkyBase.Name = BaseName then
+            SkyBase.BaseType :=
+              Bases_Types'Val
+                (Integer
+                   (Get_Active
+                      (Gtk_Combo_Box_Text
+                         (Get_Object(Object, "cmbbasetype")))));
+            exit;
+         end if;
+      end loop;
+   end UpdateBase;
+
    procedure CreateDebugUI is
       Error: aliased GError;
    begin
@@ -397,6 +415,7 @@ package body DebugUI is
       Register_Handler(Builder, "Add_Cargo", AddCargo'Access);
       Register_Handler(Builder, "Update_Cargo", UpdateShipCargo'Access);
       Register_Handler(Builder, "Show_Base_Info", ShowBaseInfo'Access);
+      Register_Handler(Builder, "Update_Base", UpdateBase'Access);
       Do_Connect(Builder);
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderstat")),
