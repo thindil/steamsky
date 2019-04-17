@@ -2311,5 +2311,18 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple warhammer made of orichalcum, used in melee combat.</description>
  </item>
+ <item index="234" name="Adamantium warhammer" type="Weapon" weight="5">
+  <trade buyable="N" price="72"/>
+  <trade buyable="N" price="72"/>
+  <trade buyable="N" price="72"/>
+  <trade buyable="N" price="72"/>
+  <trade buyable="Y" price="70"/>
+  <data value="1"/>
+  <data value="70"/>
+  <data value="21"/>
+  <data value="1"/>
+  <data value="3"/>
+  <description>Simple warhammer made of adamantium, used in melee combat.</description>
+ </item>
 </items>
 
