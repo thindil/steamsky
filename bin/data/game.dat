@@ -778,6 +778,7 @@ tags `skill`. -->
  <skill attribute="Strength" name="Maces" tool="TrainingDummy">Used to dermine chance to hit with maces in combat</skill>
  <skill attribute="Strength" name="Daggers" tool="TrainingDummy">Used to dermine chance to hit with daggers in combat</skill>
  <skill attribute="Strength" name="Two-handed Swords" tool="TrainingDummy">Used to dermine chance to hit with two handed swords in combat</skill>
+ <skill attribute="Strength" name="Two-handed Maces" tool="TrainingDummy">Used to dermine chance to hit with two handed, blunt weapon in combat</skill>
 <!-- To change which attribute is used to raise character condition, edit 
 attribute `value` of tag `conditionname`. Value must be existing attribute 
 name. -->
