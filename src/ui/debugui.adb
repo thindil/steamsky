@@ -437,14 +437,19 @@ package body DebugUI is
            Gtk_List_Store(Get_Object(Builder, "itemslist"));
          Iter: Gtk_Tree_Iter;
       begin
-         for I in Items_List.Iterate loop
+         for Item of Items_List loop
             Append(List, Iter);
-            Set(List, Iter, 0, To_String(Items_List(I).Name));
+            Set(List, Iter, 0, To_String(Item.Name));
          end loop;
          List := Gtk_List_Store(Get_Object(Builder, "baseslist"));
          for I in SkyBases'Range loop
             Append(List, Iter);
             Set(List, Iter, 0, To_String(SkyBases(I).Name));
+         end loop;
+         List := Gtk_List_Store(Get_Object(Builder, "shipslist"));
+         for Ship of ProtoShips_List loop
+            Append(List, Iter);
+            Set(List, Iter, 0, To_String(Ship.Name));
          end loop;
       end;
       declare
