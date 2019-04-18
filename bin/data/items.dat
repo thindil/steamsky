@@ -2324,5 +2324,18 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple warhammer made of adamantium, used in melee combat.</description>
  </item>
+ <item index="235" name="Bronze maul" type="Weapon" weight="4">
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="N" price="22"/>
+  <trade buyable="Y" price="17"/>
+  <data value="15"/>
+  <data value="45"/>
+  <data value="24"/>
+  <data value="2"/>
+  <data value="3"/>
+  <description>Simple, twohanded hammer made of bronze, used in melee combat.</description>
+ </item>
 </items>
 
