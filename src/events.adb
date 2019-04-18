@@ -29,8 +29,6 @@ with Factions; use Factions;
 
 package body Events is
 
-   Traders, FriendlyShips: UnboundedString_Container.Vector;
-
    function CheckForEvent return Boolean is
       TimePassed: Integer;
       CrewIndex: Natural := 0;

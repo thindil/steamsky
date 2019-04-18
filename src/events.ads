@@ -41,7 +41,11 @@ package Events is
       end case;
    end record;
    package Events_Container is new Vectors(Positive, EventData);
-   Events_List: Events_Container.Vector;
+   Events_List: Events_Container.Vector; -- List of all events in the game
+   Traders: UnboundedString_Container
+     .Vector; -- List of indexes of all friendly traders in the game
+   FriendlyShips: UnboundedString_Container
+     .Vector; -- List of indexes of all friendly ships in the game
 
    function CheckForEvent
      return Boolean; -- Check if event happen, returns True, if combat starts

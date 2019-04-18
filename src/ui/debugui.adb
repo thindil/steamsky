@@ -31,9 +31,11 @@ with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Bases; use Bases;
 with Crew; use Crew;
+with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
 with Items; use Items;
+with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
@@ -251,12 +253,20 @@ package body DebugUI is
       end loop;
    end ShowBaseInfo;
 
+   procedure ResetWorldUI is
+   begin
+      Set_Text(Gtk_GEntry(Get_Object(Builder, "edtship")), "");
+      Set_Value(Gtk_Adjustment(Get_Object(Builder, "adjnpcshipx")), 1.0);
+      Set_Value(Gtk_Adjustment(Get_Object(Builder, "adjnpcshipy")), 1.0);
+   end ResetWorldUI;
+
    procedure RefreshUI(Object: access Gtkada_Builder_Record'Class) is
    begin
       UpdateShip(Object);
       UpdateCrew(Object);
       UpdateCargoInfo(Object);
       ShowBaseInfo(Object);
+      ResetWorldUI;
    end RefreshUI;
 
    procedure ChangeStatLevel(Self: access Gtk_Cell_Renderer_Text_Record'Class;
@@ -397,6 +407,49 @@ package body DebugUI is
       end loop;
    end UpdateBase;
 
+   procedure AddShip(Object: access Gtkada_Builder_Record'Class) is
+      ShipName: constant Unbounded_String :=
+        To_Unbounded_String
+          (Get_Text(Gtk_GEntry(Get_Object(Object, "edtship"))));
+      NpcShipX: constant Positive :=
+        Positive(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjnpcshipx"))));
+      NpcShipY: constant Positive :=
+        Positive(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjnpcshipy"))));
+   begin
+      for I in ProtoShips_List.Iterate loop
+         if ProtoShips_List(I).Name = ShipName then
+            if Traders.Contains(ProtoShips_Container.Key(I)) then
+               Events_List.Append
+                 (New_Item =>
+                    (Trader, NpcShipX, NpcShipY,
+                     Positive
+                       (Get_Value
+                          (Gtk_Adjustment(Get_Object(Object, "adjminutes")))),
+                     ProtoShips_Container.Key(I)));
+            elsif FriendlyShips.Contains(ProtoShips_Container.Key(I)) then
+               Events_List.Append
+                 (New_Item =>
+                    (FriendlyShip, NpcShipX, NpcShipY,
+                     Positive
+                       (Get_Value
+                          (Gtk_Adjustment(Get_Object(Object, "adjminutes")))),
+                     ProtoShips_Container.Key(I)));
+            else
+               Events_List.Append
+                 (New_Item =>
+                    (EnemyShip, NpcShipX, NpcShipY,
+                     Positive
+                       (Get_Value
+                          (Gtk_Adjustment(Get_Object(Object, "adjminutes")))),
+                     ProtoShips_Container.Key(I)));
+            end if;
+            SkyMap(NpcShipX, NpcShipY).EventIndex := Events_List.Last_Index;
+            ResetWorldUI;
+            return;
+         end if;
+      end loop;
+   end AddShip;
+
    procedure CreateDebugUI is
       Error: aliased GError;
    begin
@@ -425,6 +478,7 @@ package body DebugUI is
       Register_Handler(Builder, "Update_Cargo", UpdateShipCargo'Access);
       Register_Handler(Builder, "Show_Base_Info", ShowBaseInfo'Access);
       Register_Handler(Builder, "Update_Base", UpdateBase'Access);
+      Register_Handler(Builder, "Add_Ship", AddShip'Access);
       Do_Connect(Builder);
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderstat")),
