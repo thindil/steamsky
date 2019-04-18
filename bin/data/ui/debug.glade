@@ -24,19 +24,26 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="adjminutes">
+    <property name="lower">30</property>
+    <property name="upper">45</property>
+    <property name="value">30</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkAdjustment" id="adjmorale">
     <property name="upper">100</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="adjncpshipy">
+  <object class="GtkAdjustment" id="adjnpcshipx">
     <property name="lower">1</property>
     <property name="upper">1024</property>
     <property name="value">1</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="adjnpcshipx">
+  <object class="GtkAdjustment" id="adjnpcshipy">
     <property name="lower">1</property>
     <property name="upper">1024</property>
     <property name="value">1</property>
@@ -1024,11 +1031,33 @@
                       <object class="GtkSpinButton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="adjustment">adjncpshipy</property>
+                        <property name="adjustment">adjnpcshipy</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Minutes:</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="adjustment">adjminutes</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">3</property>
                       </packing>
                     </child>
                   </object>
@@ -1046,6 +1075,7 @@
                     <property name="receives_default">True</property>
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
+                    <signal name="clicked" handler="Add_Ship" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
