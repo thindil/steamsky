@@ -54,6 +54,7 @@ All notable changes to this project will be documented in this file.
 - Possible crash on counting current skill level for crew members
 - Crash on dismissins passengers
 - Waiting X minutes option don't use fuel
+- Crash on putting on items in inventory
 
 ## [3.5] - 2019-03-24
 
