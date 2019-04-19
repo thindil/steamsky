@@ -450,6 +450,18 @@ package body DebugUI is
       end loop;
    end AddShip;
 
+   procedure ShowItemEvent(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      if Get_Active(Gtk_Combo_Box_Text(Get_Object(Object, "cmbbaseevent"))) =
+        1 then
+         Show_All(Gtk_Widget(Get_Object(Object, "lbleventitem")));
+         Show_All(Gtk_Widget(Get_Object(Object, "edteventitem")));
+      else
+         Hide(Gtk_Widget(Get_Object(Object, "lbleventitem")));
+         Hide(Gtk_Widget(Get_Object(Object, "edteventitem")));
+      end if;
+   end ShowItemEvent;
+
    procedure CreateDebugUI is
       Error: aliased GError;
    begin
@@ -479,6 +491,7 @@ package body DebugUI is
       Register_Handler(Builder, "Show_Base_Info", ShowBaseInfo'Access);
       Register_Handler(Builder, "Update_Base", UpdateBase'Access);
       Register_Handler(Builder, "Add_Ship", AddShip'Access);
+      Register_Handler(Builder, "Show_Item_Event", ShowItemEvent'Access);
       Do_Connect(Builder);
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderstat")),
@@ -536,6 +549,7 @@ package body DebugUI is
    begin
       RefreshUI(Builder);
       Show_All(Gtk_Widget(Get_Object(Builder, "debugwindow")));
+      ShowItemEvent(Builder);
    end ShowDebugUI;
 
 end DebugUI;
