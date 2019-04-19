@@ -378,8 +378,7 @@ package body Crew.UI.Handlers is
    procedure UseItem(Self: access Gtk_Cell_Renderer_Toggle_Record'Class;
       Path: UTF8_String) is
       Member: constant Member_Data := PlayerShip.Crew(MemberIndex);
-      ItemType: constant Unbounded_String :=
-        Items_List(Member.Inventory(ItemIndex).ProtoIndex).IType;
+      ItemType:  Unbounded_String;
       InventoryList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "inventorylist"));
    begin
@@ -387,6 +386,7 @@ package body Crew.UI.Handlers is
         Positive
           (Get_Int
              (InventoryList, Get_Iter_From_String(InventoryList, Path), 1));
+      ItemType := Items_List(Member.Inventory(ItemIndex).ProtoIndex).IType;
       if Get_Active(Self) then
          TakeOffItem(MemberIndex, ItemIndex);
          Set
