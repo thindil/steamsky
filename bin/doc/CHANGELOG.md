@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash on putting on items in inventory
+
 ## [3.0.9] - 2019-04-14
 
 ### Changed
