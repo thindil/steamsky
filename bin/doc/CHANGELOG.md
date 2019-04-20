@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - New skills: Daggers, Two-handed swords and Two-handed maces
 - Crew members lose morale with high fatigue
 - Option to negotiate reward during accepting missions (money or reputation)
+- Debug menu for modyfying the game data
 
 ### Changed
 - Default icon for unvisited bases
