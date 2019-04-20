@@ -258,6 +258,8 @@ package body DebugUI is
       Set_Text(Gtk_GEntry(Get_Object(Builder, "edtship")), "");
       Set_Value(Gtk_Adjustment(Get_Object(Builder, "adjnpcshipx")), 1.0);
       Set_Value(Gtk_Adjustment(Get_Object(Builder, "adjnpcshipy")), 1.0);
+      Set_Text(Gtk_GEntry(Get_Object(Builder, "edteventbase")), "");
+      Set_Text(Gtk_GEntry(Get_Object(Builder, "edteventitem")), "");
    end ResetWorldUI;
 
    procedure RefreshUI(Object: access Gtkada_Builder_Record'Class) is
@@ -462,6 +464,66 @@ package body DebugUI is
       end if;
    end ShowItemEvent;
 
+   procedure AddEvent(Object: access Gtkada_Builder_Record'Class) is
+      BaseName: constant Unbounded_String :=
+        To_Unbounded_String
+          (Get_Text(Gtk_GEntry(Get_Object(Object, "edteventbase"))));
+      ItemName: constant Unbounded_String :=
+        To_Unbounded_String
+          (Get_Text(Gtk_GEntry(Get_Object(Object, "edteventitem"))));
+      EventAdded: Boolean := True;
+   begin
+      for Base of SkyBases loop
+         if Base.Name = BaseName then
+            case Get_Active
+              (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbaseevent"))) is
+               when 0 =>
+                  Events_List.Append
+                    (New_Item =>
+                       (Disease, Base.SkyX, Base.SkyY,
+                        Positive
+                          (Get_Value
+                             (Gtk_Adjustment
+                                (Get_Object(Object, "adjminutesbase")))),
+                        1));
+               when 1 =>
+                  EventAdded := False;
+                  for I in Items_List.Iterate loop
+                     if Items_List(I).Name = ItemName then
+                        Events_List.Append
+                          (New_Item =>
+                             (DoublePrice, Base.SkyX, Base.SkyY,
+                              Positive
+                                (Get_Value
+                                   (Gtk_Adjustment
+                                      (Get_Object(Object, "adjminutesbase")))),
+                              Objects_Container.Key(I)));
+                        EventAdded := True;
+                        exit;
+                     end if;
+                  end loop;
+               when 2 =>
+                  Events_List.Append
+                    (New_Item =>
+                       (FullDocks, Base.SkyX, Base.SkyY,
+                        Positive
+                          (Get_Value
+                             (Gtk_Adjustment
+                                (Get_Object(Object, "adjminutesbase")))),
+                        1));
+               when others =>
+                  null;
+            end case;
+            if EventAdded then
+               SkyMap(Base.SkyX, Base.SkyY).EventIndex :=
+                 Events_List.Last_Index;
+               ResetWorldUI;
+            end if;
+            exit;
+         end if;
+      end loop;
+   end AddEvent;
+
    procedure CreateDebugUI is
       Error: aliased GError;
    begin
@@ -492,6 +554,7 @@ package body DebugUI is
       Register_Handler(Builder, "Update_Base", UpdateBase'Access);
       Register_Handler(Builder, "Add_Ship", AddShip'Access);
       Register_Handler(Builder, "Show_Item_Event", ShowItemEvent'Access);
+      Register_Handler(Builder, "Add_Event", AddEvent'Access);
       Do_Connect(Builder);
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderstat")),
