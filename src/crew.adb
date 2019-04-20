@@ -43,8 +43,8 @@ package body Crew is
          AttributeExp :=
            PlayerShip.Crew(CrewIndex).Attributes(Attribute)(2) + NewAmount;
          AttributeLevel := PlayerShip.Crew(CrewIndex).Attributes(Attribute)(1);
-         if AttributeExp >= (AttributeLevel * 500) then
-            AttributeExp := AttributeExp - (AttributeLevel * 500);
+         if AttributeExp >= (AttributeLevel * 250) then
+            AttributeExp := AttributeExp - (AttributeLevel * 250);
             AttributeLevel := AttributeLevel + 1;
          end if;
          PlayerShip.Crew(CrewIndex).Attributes(Attribute)(1) := AttributeLevel;
@@ -76,8 +76,8 @@ package body Crew is
          SkillExp :=
            PlayerShip.Crew(CrewIndex).Skills(SkillIndex)(3) + NewAmount;
       end if;
-      if SkillExp >= (SkillLevel * 50) then
-         SkillExp := SkillExp - (SkillLevel * 50);
+      if SkillExp >= (SkillLevel * 25) then
+         SkillExp := SkillExp - (SkillLevel * 25);
          SkillLevel := SkillLevel + 1;
       end if;
       if SkillIndex > 0 then
