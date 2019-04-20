@@ -1220,6 +1220,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="halign">start</property>
+                        <signal name="clicked" handler="Add_Event" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
