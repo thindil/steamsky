@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file.
 - Even slower losing morale for factions with fanaticism
 - Reduced size of save game files
 - Transport passenger missions depends on cabins quality not a cabin type
+- Reduced experience needed for gaining levels in skills and attributes
 
 ### Fixed
 - Clearing search field in trade after buy or sell items
