@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Reduced experience needed for gaining levels in skills and attributes
+
 ### Fixed
 - Crash on putting on items in inventory
 
