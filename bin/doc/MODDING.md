@@ -883,11 +883,14 @@ run it with parameter --debug=[debugtype]. Example:
 
 `./steamsky --debug=everything`
 
-At this moment available are two types of debug:
+At this moment available are three types of debug:
 
 - Option 'everything' mean to log each debug message to file. At this moment
   this mean informations about loading game data (ships/recipes/items/modules)
   and some combat data. This option may be useful to check correctness of data
-  of added new items, etc.
+  of added new items, etc. Additionally it spawn debug menu for modifying the
+  game data.
 - Option 'combat' mean to log debug messages only from combat.
+- Option 'menu' spawn only debug menu after start the game for modifying it
+  data.
 
