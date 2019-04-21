@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
   greatsword, titanium greatsword, orichalcum greatsword, adamantium
   greatsword, bronze warhammer, iron warhammer, steel hammer, titanium
   warhammer, orichalcum warhammer, adamantium hammer, bronze maul, iron maul,
-  steel maul
+  steel maul and titanium maul
 - New crafting recipes: steel mace, titanium mace, orichalcum mace, adamantium
   mace, bronze dagger, iron dagger, steel dagger, titanium dagger, orichalcum
   dagger, adamantium dagger, bronze greatsword, iron greatsword, steel
