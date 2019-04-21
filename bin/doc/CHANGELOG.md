@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.6] - 2019-04-21
 
 ### Added
 - New items: steel mace, titanium mace, orichalcum mace, adamantium mace,
