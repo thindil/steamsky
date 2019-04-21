@@ -2363,5 +2363,18 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple, twohanded hammer made of steel, used in melee combat.</description>
  </item>
+ <item index="238" name="Titanium maul" type="Weapon" weight="6">
+  <trade buyable="N" price="37"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="Y" price="32"/>
+  <data value="3"/>
+  <data value="67"/>
+  <data value="24"/>
+  <data value="2"/>
+  <data value="3"/>
+  <description>Simple, twohanded hammer made of titanium, used in melee combat.</description>
+ </item>
 </items>
 
