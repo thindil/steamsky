@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file.
   greatsword, titanium greatsword, orichalcum greatsword, adamantium
   greatsword, bronze warhammer, iron warhammer, steel warhammer, titanium
   warhammer, orichalcum warhammer, adamantium hammer, bronze maul, iron maul,
-  steel maul
+  steel maul and titanium maul
 - Bigger chance to lost reputation in base after destroying friendly ship
 - Better counting for info about time and fuel needed for reach destination on
   map
