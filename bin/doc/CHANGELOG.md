@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 - Reduced size of save game files
 - Transport passenger missions depends on cabins quality not a cabin type
 - Reduced experience needed for gaining levels in skills and attributes
+- Updated MODDING.md
 
 ### Fixed
 - Clearing search field in trade after buy or sell items
