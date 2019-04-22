@@ -17,6 +17,7 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Containers; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
@@ -254,12 +255,94 @@ package body DebugUI is
    end ShowBaseInfo;
 
    procedure ResetWorldUI is
+      EventsCombo: constant Gtk_Widget :=
+        Gtk_Widget(Get_Object(Builder, "cmbevents"));
    begin
       Set_Text(Gtk_GEntry(Get_Object(Builder, "edtship")), "");
       Set_Value(Gtk_Adjustment(Get_Object(Builder, "adjnpcshipx")), 1.0);
       Set_Value(Gtk_Adjustment(Get_Object(Builder, "adjnpcshipy")), 1.0);
       Set_Text(Gtk_GEntry(Get_Object(Builder, "edteventbase")), "");
       Set_Text(Gtk_GEntry(Get_Object(Builder, "edteventitem")), "");
+      if Events_List.Length = 0 then
+         Hide(EventsCombo);
+         Hide(Gtk_Widget(Get_Object(Builder, "btndeleteevent")));
+      else
+         Show_All(EventsCombo);
+         Show_All(Gtk_Widget(Get_Object(Builder, "btndeleteevent")));
+         Remove_All(Gtk_Combo_Box_Text(EventsCombo));
+         for I in Events_List.Iterate loop
+            case Events_List(I).Etype is
+               when EnemyShip =>
+                  Append
+                    (Gtk_Combo_Box_Text(EventsCombo),
+                     Positive'Image(Events_Container.To_Index(I)),
+                     "Enemy ship: " &
+                     To_String
+                       (ProtoShips_List(Events_List(I).ShipIndex).Name));
+               when AttackOnBase =>
+                  Append
+                    (Gtk_Combo_Box_Text(EventsCombo),
+                     Positive'Image(Events_Container.To_Index(I)),
+                     "Attack on base: " &
+                     To_String
+                       (ProtoShips_List(Events_List(I).ShipIndex).Name));
+               when Disease =>
+                  Append
+                    (Gtk_Combo_Box_Text(EventsCombo),
+                     Positive'Image(Events_Container.To_Index(I)),
+                     "Disease in base: " &
+                     To_String
+                       (SkyBases
+                          (SkyMap(Events_List(I).SkyX, Events_List(I).SkyY)
+                             .BaseIndex)
+                          .Name));
+               when DoublePrice =>
+                  Append
+                    (Gtk_Combo_Box_Text(EventsCombo),
+                     Positive'Image(Events_Container.To_Index(I)),
+                     "Double price in base: " &
+                     To_String
+                       (SkyBases
+                          (SkyMap(Events_List(I).SkyX, Events_List(I).SkyY)
+                             .BaseIndex)
+                          .Name));
+               when FullDocks =>
+                  Append
+                    (Gtk_Combo_Box_Text(EventsCombo),
+                     Positive'Image(Events_Container.To_Index(I)),
+                     "Full docks in base: " &
+                     To_String
+                       (SkyBases
+                          (SkyMap(Events_List(I).SkyX, Events_List(I).SkyY)
+                             .BaseIndex)
+                          .Name));
+               when EnemyPatrol =>
+                  Append
+                    (Gtk_Combo_Box_Text(EventsCombo),
+                     Positive'Image(Events_Container.To_Index(I)),
+                     "Enemy patrol: " &
+                     To_String
+                       (ProtoShips_List(Events_List(I).ShipIndex).Name));
+               when Trader =>
+                  Append
+                    (Gtk_Combo_Box_Text(EventsCombo),
+                     Positive'Image(Events_Container.To_Index(I)),
+                     "Trader: " &
+                     To_String
+                       (ProtoShips_List(Events_List(I).ShipIndex).Name));
+               when FriendlyShip =>
+                  Append
+                    (Gtk_Combo_Box_Text(EventsCombo),
+                     Positive'Image(Events_Container.To_Index(I)),
+                     "Friendly ship: " &
+                     To_String
+                       (ProtoShips_List(Events_List(I).ShipIndex).Name));
+               when others =>
+                  null;
+            end case;
+         end loop;
+         Set_Active(Gtk_Combo_Box_Text(EventsCombo), 0);
+      end if;
    end ResetWorldUI;
 
    procedure RefreshUI(Object: access Gtkada_Builder_Record'Class) is
@@ -524,6 +607,16 @@ package body DebugUI is
       end loop;
    end AddEvent;
 
+   procedure DeleteEvent(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Events_List.Delete
+        (Index =>
+           Positive'Value
+             (Get_Active_Id
+                (Gtk_Combo_Box_Text(Get_Object(Object, "cmbevents")))));
+      ResetWorldUI;
+   end DeleteEvent;
+
    procedure CreateDebugUI is
       Error: aliased GError;
    begin
@@ -555,6 +648,7 @@ package body DebugUI is
       Register_Handler(Builder, "Add_Ship", AddShip'Access);
       Register_Handler(Builder, "Show_Item_Event", ShowItemEvent'Access);
       Register_Handler(Builder, "Add_Event", AddEvent'Access);
+      Register_Handler(Builder, "Delete_Event", DeleteEvent'Access);
       Do_Connect(Builder);
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderstat")),
@@ -613,6 +707,7 @@ package body DebugUI is
       RefreshUI(Builder);
       Show_All(Gtk_Widget(Get_Object(Builder, "debugwindow")));
       ShowItemEvent(Builder);
+      ResetWorldUI;
    end ShowDebugUI;
 
 end DebugUI;
