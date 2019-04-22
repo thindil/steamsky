@@ -2376,5 +2376,18 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple, twohanded hammer made of titanium, used in melee combat.</description>
  </item>
+ <item index="239" name="Orichalcum maul" type="Weapon" weight="6">
+  <trade buyable="N" price="42"/>
+  <trade buyable="N" price="42"/>
+  <trade buyable="N" price="42"/>
+  <trade buyable="N" price="42"/>
+  <trade buyable="Y" price="37"/>
+  <data value="2"/>
+  <data value="75"/>
+  <data value="23"/>
+  <data value="2"/>
+  <data value="3"/>
+  <description>Simple, twohanded hammer made of orichalcum, used in melee combat.</description>
+ </item>
 </items>
 
