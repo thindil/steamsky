@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- New item: orichalcum maul
+
 ## [3.6] - 2019-04-21
 
 ### Added
