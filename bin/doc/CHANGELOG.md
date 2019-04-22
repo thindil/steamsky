@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 - New item: orichalcum maul
 - New crafting recipe: orichalcum maul
 
+### Fixed
+- Typos in changelog
+
 ## [3.6] - 2019-04-21
 
 ### Added
@@ -31,7 +34,7 @@ All notable changes to this project will be documented in this file.
 - New skills: Daggers, Two-handed swords and Two-handed maces
 - Crew members lose morale with high fatigue
 - Option to negotiate reward during accepting missions (money or reputation)
-- Debug menu for modyfying the game data
+- Debug menu for modifying the game data
 
 ### Changed
 - Default icon for unvisited bases
@@ -61,7 +64,7 @@ All notable changes to this project will be documented in this file.
 - Crash on showing info about passenger in crew view
 - Crash on finishing transport passenger missions
 - Possible crash on counting current skill level for crew members
-- Crash on dismissins passengers
+- Crash on dismissing passengers
 - Waiting X minutes option don't use fuel
 - Crash on putting on items in inventory
 
