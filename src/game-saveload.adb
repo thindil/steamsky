@@ -46,7 +46,7 @@ package body Game.SaveLoad is
 
    SaveData: Document;
 
-   procedure SaveGame is
+   procedure SaveGame(PrettyPrint: Boolean := False) is
       Save: DOM_Implementation;
       CategoryNode, MainNode: DOM.Core.Element;
       RawValue: Unbounded_String;
@@ -381,7 +381,9 @@ package body Game.SaveLoad is
       Set_Attribute(CategoryNode, "index", To_String(PlayerCareer));
       LogMessage("done.", Everything, True, False);
       Create(SaveFile, Out_File, To_String(SaveName));
-      Write(Stream => Stream(SaveFile), N => SaveData, Pretty_Print => False);
+      Write
+        (Stream => Stream(SaveFile), N => SaveData,
+         Pretty_Print => PrettyPrint);
       Close(SaveFile);
       LogMessage("Finished saving game.", Everything);
    end SaveGame;
