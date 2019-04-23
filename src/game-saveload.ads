@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -20,7 +20,7 @@ package Game.SaveLoad is
    SaveName: Unbounded_String; -- Full path with file name for current savegame
    SaveGame_Invalid_Data: exception; -- Raised when invalid data found in savegame
 
-   procedure SaveGame; -- Save game to file
+   procedure SaveGame(PrettyPrint: Boolean := False); -- Save game to file
    procedure LoadGame; -- Load game from file
    procedure GenerateSaveName
      (RenameSave: Boolean := False); -- Generate unique name for save game file

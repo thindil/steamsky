@@ -35,6 +35,7 @@ with Crew; use Crew;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
+with Game.SaveLoad; use Game.SaveLoad;
 with Items; use Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -617,6 +618,12 @@ package body DebugUI is
       ResetWorldUI;
    end DeleteEvent;
 
+   procedure Save_Game(Object: access Gtkada_Builder_Record'Class) is
+      pragma Unreferenced(Object);
+   begin
+      SaveGame(True);
+   end Save_Game;
+
    procedure CreateDebugUI is
       Error: aliased GError;
    begin
@@ -649,6 +656,7 @@ package body DebugUI is
       Register_Handler(Builder, "Show_Item_Event", ShowItemEvent'Access);
       Register_Handler(Builder, "Add_Event", AddEvent'Access);
       Register_Handler(Builder, "Delete_Event", DeleteEvent'Access);
+      Register_Handler(Builder, "Save_Game", Save_Game'Access);
       Do_Connect(Builder);
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderstat")),
