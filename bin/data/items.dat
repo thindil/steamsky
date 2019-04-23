@@ -2384,10 +2384,23 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="Y" price="37"/>
   <data value="2"/>
   <data value="75"/>
-  <data value="23"/>
+  <data value="24"/>
   <data value="2"/>
   <data value="3"/>
   <description>Simple, twohanded hammer made of orichalcum, used in melee combat.</description>
+ </item>
+ <item index="240" name="Adamantium maul" type="Weapon" weight="10">
+  <trade buyable="N" price="82"/>
+  <trade buyable="N" price="82"/>
+  <trade buyable="N" price="82"/>
+  <trade buyable="N" price="82"/>
+  <trade buyable="Y" price="77"/>
+  <data value="1"/>
+  <data value="82"/>
+  <data value="24"/>
+  <data value="2"/>
+  <data value="3"/>
+  <description>Simple, twohanded hammer made of adamantium, used in melee combat.</description>
  </item>
 </items>
 
