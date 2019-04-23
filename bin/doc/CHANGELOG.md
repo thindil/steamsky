@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash on putting on items in inventory
+- Crash on trying to writting to the closed debug log file
 
 ## [3.0.9] - 2019-04-14
 
