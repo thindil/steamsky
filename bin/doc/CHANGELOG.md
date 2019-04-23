@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New items: orichalcum maul and adamantium maul
-- New crafting recipe: orichalcum maul
+- New crafting recipes: orichalcum maul and adamantium maul
 - Option to delete events in debug menu
 
 ### Fixed
