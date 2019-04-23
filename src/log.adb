@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,9 +19,12 @@ with Ada.Calendar; use Ada.Calendar;
 with Ada.Calendar.Formatting;
 with Ada.Directories; use Ada.Directories;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Text_IO; use Ada.Text_IO;
 with Game; use Game;
 
 package body Log is
+
+   LogFile: File_Type; -- Debug log file
 
    procedure StartLogging is
    begin
@@ -46,6 +49,9 @@ package body Log is
         (MessageType /= DebugMode and DebugMode /= Everything) then
          return;
       end if;
+      if not Is_Open(LogFile) then
+         return;
+      end if;
       if TimeStamp then
          NewMessage := To_Unbounded_String("[");
          Append
@@ -62,7 +68,7 @@ package body Log is
 
    procedure EndLogging is
    begin
-      if DebugMode = None then
+      if DebugMode = None or not Is_Open(LogFile) then
          return;
       end if;
       LogMessage

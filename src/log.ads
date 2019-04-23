@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,15 +15,12 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
-
 package Log is
 
    type Debug_Types is
      (None, Everything,
       Combat); -- Types of debug mode, which messages log to file
    DebugMode: Debug_Types := None; -- Did game is run in debug mode
-   LogFile: File_Type; -- Debug log file
 
    procedure StartLogging; -- Open/create debug.log file
    procedure LogMessage(Message: String; MessageType: Debug_Types;
