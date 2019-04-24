@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New items: orichalcum maul and adamantium maul
+- New items: orichalcum maul, adamantium maul and bronze rapier
 - New crafting recipes: orichalcum maul and adamantium maul
 - Option to delete events in debug menu
 - Option to save game in debug menu
