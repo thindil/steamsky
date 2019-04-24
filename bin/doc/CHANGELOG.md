@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - New crafting recipes: orichalcum maul and adamantium maul
 - Option to delete events in debug menu
 - Option to save game in debug menu
+- New skill: rapiers
 
 ### Fixed
 - Typos in changelog
