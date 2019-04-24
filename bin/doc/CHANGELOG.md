@@ -10,6 +10,9 @@ All notable changes to this project will be documented in this file.
 - Option to save game in debug menu
 - New skill: rapiers
 
+### Changed
+- Updated interface
+
 ### Fixed
 - Typos in changelog
 - Crash on trying to writting to the closed debug log file
