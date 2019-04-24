@@ -10,7 +10,9 @@
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjhealth">
+    <property name="lower">1</property>
     <property name="upper">100</property>
+    <property name="value">1</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
@@ -216,6 +218,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes">Refresh all information in menu (ships, bases, items, events, cargo, etc)</property>
                 <property name="use_underline">True</property>
                 <signal name="clicked" handler="Refresh_UI" swapped="no"/>
               </object>
@@ -231,6 +234,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes">Save current game, with pretty print</property>
                 <property name="use_underline">True</property>
                 <signal name="clicked" handler="Save_Game" swapped="no"/>
               </object>
@@ -262,6 +266,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes">Move player ship to selected location on map</property>
                     <property name="use_underline">True</property>
                     <signal name="clicked" handler="Move_Ship" swapped="no"/>
                   </object>
@@ -290,6 +295,7 @@
                       <object class="GtkSpinButton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">New X coordinate on map for the player ship. Value between 1 and 1024.</property>
                         <property name="adjustment">adjshipx</property>
                       </object>
                       <packing>
@@ -314,6 +320,7 @@
                       <object class="GtkSpinButton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">New X coordinate on map for the player ship. Value between 1 and 1024.</property>
                         <property name="adjustment">adjshipy</property>
                       </object>
                       <packing>
@@ -359,6 +366,7 @@
                       <object class="GtkComboBoxText" id="cmbmember">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Select crew member to edit.</property>
                         <signal name="changed" handler="Set_Member_Stats" swapped="no"/>
                       </object>
                       <packing>
@@ -398,6 +406,7 @@
                           <object class="GtkSpinButton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Level of health of crew member. Value between 1 and 100.</property>
                             <property name="adjustment">adjhealth</property>
                           </object>
                           <packing>
@@ -420,6 +429,7 @@
                           <object class="GtkSpinButton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Level of thirst of crew member. Value between 1 and 100.</property>
                             <property name="adjustment">adjthirst</property>
                           </object>
                           <packing>
@@ -442,6 +452,7 @@
                           <object class="GtkSpinButton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Level of hunger of crew member. Value between 0 and 100.</property>
                             <property name="adjustment">adjhunger</property>
                           </object>
                           <packing>
@@ -464,6 +475,7 @@
                           <object class="GtkSpinButton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Level of tiredness of crew member. Value between 0 and 100.</property>
                             <property name="adjustment">adjtired</property>
                           </object>
                           <packing>
@@ -486,6 +498,7 @@
                           <object class="GtkSpinButton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Level of morale of crew member. Value between 0 and 100.</property>
                             <property name="adjustment">adjmorale</property>
                           </object>
                           <packing>
@@ -508,6 +521,7 @@
                           <object class="GtkSpinButton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Level of loyality of crew member. Value between 0 and 100.</property>
                             <property name="adjustment">adjloyalty</property>
                           </object>
                           <packing>
@@ -532,6 +546,7 @@
                           <object class="GtkTreeView">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">To change level of selected attribute, double left click on level column. Values between 1 and 50.</property>
                             <property name="model">statslist</property>
                             <property name="search_column">0</property>
                             <child internal-child="selection">
@@ -592,6 +607,7 @@
                               <object class="GtkTreeView">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">To change level of selected skill, double left click on level column. Values between 1 and 100.</property>
                                 <property name="model">skillslist</property>
                                 <property name="search_column">0</property>
                                 <child internal-child="selection">
@@ -647,6 +663,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <property name="tooltip_text" translatable="yes">Add new skill to selected crew member</property>
                                 <property name="use_underline">True</property>
                                 <signal name="clicked" handler="Add_Skill" swapped="no"/>
                               </object>
@@ -694,6 +711,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes">Commit changes to the crew member.</property>
                     <property name="use_underline">True</property>
                     <signal name="clicked" handler="Update_Member" swapped="no"/>
                   </object>
@@ -721,6 +739,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes">Add selected item to the player ship cargo.</property>
                     <property name="use_underline">True</property>
                     <signal name="clicked" handler="Add_Cargo" swapped="no"/>
                   </object>
@@ -735,6 +754,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes">Update amount of selected item in the player ship cargo.</property>
                     <property name="use_underline">True</property>
                     <signal name="clicked" handler="Update_Cargo" swapped="no"/>
                   </object>
@@ -747,6 +767,7 @@
                   <object class="GtkComboBoxText" id="cmbcargoupdate">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Select item from the player ship cargo.</property>
                     <signal name="changed" handler="Set_Cargo_Amount" swapped="no"/>
                   </object>
                   <packing>
@@ -780,6 +801,7 @@
                   <object class="GtkSpinButton">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="tooltip_text" translatable="yes">Add that amount of selected item to the player ship cargo.</property>
                     <property name="adjustment">adjaddcargo</property>
                   </object>
                   <packing>
@@ -791,6 +813,7 @@
                   <object class="GtkSpinButton">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="tooltip_text" translatable="yes">New amount of selected item in the player ship cargo.</property>
                     <property name="adjustment">adjupdatecargo</property>
                   </object>
                   <packing>
@@ -802,6 +825,7 @@
                   <object class="GtkEntry" id="edtcargoadd">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="tooltip_text" translatable="yes">Start typing here a name of the item to select it from the list.</property>
                     <property name="completion">cargocompletion</property>
                   </object>
                   <packing>
@@ -851,6 +875,7 @@
                       <object class="GtkEntry" id="edtbase">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Start typing here a name of the base to select it from the list. Base data will show after pressing key Enter.</property>
                         <property name="completion">basescompletion</property>
                         <signal name="activate" handler="Show_Base_Info" swapped="no"/>
                       </object>
@@ -863,6 +888,7 @@
                       <object class="GtkComboBoxText" id="cmbbasetype">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Type of selected base</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -884,6 +910,7 @@
                       <object class="GtkSpinButton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Amount of people living in selected base.</property>
                         <property name="adjustment">adjpopulation</property>
                       </object>
                       <packing>
@@ -906,6 +933,7 @@
                       <object class="GtkComboBoxText" id="cmbbasesize">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Size of selected base</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -927,6 +955,7 @@
                       <object class="GtkComboBoxText" id="cmbbaseowner">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Owner of selected base</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -948,6 +977,7 @@
                       <object class="GtkSpinButton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Player reputation in selected base. Value between -100 and 100.</property>
                         <property name="adjustment">adjreputation</property>
                       </object>
                       <packing>
@@ -968,6 +998,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes">Update selected base.</property>
                     <property name="halign">start</property>
                     <property name="use_underline">True</property>
                     <signal name="clicked" handler="Update_Base" swapped="no"/>
@@ -1035,6 +1066,7 @@
                           <object class="GtkEntry" id="edtship">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Start typing here a name of the ship to select it from the list.</property>
                             <property name="completion">shipscompletion</property>
                           </object>
                           <packing>
@@ -1046,6 +1078,7 @@
                           <object class="GtkSpinButton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">X coordinates on the map where new NPC ship will be added.</property>
                             <property name="adjustment">adjnpcshipx</property>
                           </object>
                           <packing>
@@ -1057,6 +1090,7 @@
                           <object class="GtkSpinButton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Y coordinates on the map where new NPC ship will be added.</property>
                             <property name="adjustment">adjnpcshipy</property>
                           </object>
                           <packing>
@@ -1079,6 +1113,7 @@
                           <object class="GtkSpinButton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Amount of minutes, how long selected ship will be available on the map.</property>
                             <property name="adjustment">adjminutes</property>
                           </object>
                           <packing>
@@ -1099,6 +1134,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="tooltip_text" translatable="yes">Add selected ship to the map.</property>
                         <property name="halign">start</property>
                         <property name="use_underline">True</property>
                         <signal name="clicked" handler="Add_Ship" swapped="no"/>
@@ -1113,6 +1149,7 @@
                       <object class="GtkComboBoxText" id="cmbevents">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Select event to delete.</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1126,6 +1163,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="tooltip_text" translatable="yes">Delete selected event.</property>
                         <property name="halign">start</property>
                         <signal name="clicked" handler="Delete_Event" swapped="no"/>
                       </object>
@@ -1177,6 +1215,7 @@
                           <object class="GtkEntry" id="edteventbase">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Start typing here a name of the base to select it from the list.</property>
                             <property name="completion">basescompletion</property>
                           </object>
                           <packing>
@@ -1188,6 +1227,7 @@
                           <object class="GtkComboBoxText" id="cmbbaseevent">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">Select event to add to selected base.</property>
                             <property name="active">0</property>
                             <items>
                               <item id="3" translatable="yes">Disease</item>
@@ -1216,6 +1256,7 @@
                           <object class="GtkEntry" id="edteventitem">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Start typing here a name of the item to select it from the list.</property>
                             <property name="completion">cargocompletion</property>
                           </object>
                           <packing>
@@ -1238,6 +1279,7 @@
                           <object class="GtkSpinButton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Amount of minutes, how long selected event will be available on the map.</property>
                             <property name="text" translatable="yes">30</property>
                             <property name="adjustment">adjminutesbase</property>
                             <property name="value">30</property>
@@ -1260,6 +1302,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="tooltip_text" translatable="yes">Add selected event to the map.</property>
                         <property name="halign">start</property>
                         <signal name="clicked" handler="Add_Event" swapped="no"/>
                       </object>
