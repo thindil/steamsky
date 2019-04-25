@@ -24,6 +24,48 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
   <!-- interface-license-type gplv3 -->
   <!-- interface-name Steam Sky -->
   <!-- interface-copyright 2018-2019 Bartek thindil Jasicki -->
+  <object class="GtkAdjustment" id="adjenemydamage">
+    <property name="lower">1</property>
+    <property name="upper">500</property>
+    <property name="value">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjenemymelee">
+    <property name="lower">1</property>
+    <property name="upper">500</property>
+    <property name="value">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjexperience">
+    <property name="lower">1</property>
+    <property name="upper">500</property>
+    <property name="value">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjplayerdamage">
+    <property name="lower">1</property>
+    <property name="upper">500</property>
+    <property name="value">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjplayermelee">
+    <property name="lower">1</property>
+    <property name="upper">500</property>
+    <property name="value">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjreputation">
+    <property name="lower">1</property>
+    <property name="upper">500</property>
+    <property name="value">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkListStore" id="basesstore">
     <columns>
       <!-- column-name gchararray1 -->
@@ -300,196 +342,502 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="margin_right">5</property>
                 <property name="orientation">vertical</property>
                 <child>
+                  <object class="GtkStackSwitcher">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="stack">stack1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="homogeneous">True</property>
                     <child>
-                      <object class="GtkGrid">
+                      <object class="GtkStack" id="stack1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">center</property>
                         <child>
-                          <object class="GtkLabel">
+                          <object class="GtkGrid" id="playergrid">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Character name:</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="lblgender">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Character gender:</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="entrycharactername">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip_text" translatable="yes">Enter character name or press Enter key for random name.</property>
-                            <signal name="activate" handler="Random_Name" object="entrycharactername" swapped="no"/>
-                            <signal name="focus-in-event" handler="Update_Info" object="entrycharactername" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkEntry" id="entryshipname">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip_text" translatable="yes">Enter ship name or press Enter for random ship name.</property>
-                            <signal name="activate" handler="Random_Name" object="entryshipname" swapped="no"/>
-                            <signal name="focus-in-event" handler="Update_Info" object="entryshipname" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Character goal:</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="btngoal">
-                            <property name="label" translatable="yes">Random</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="tooltip_text" translatable="yes">Select starting goal for your character. You can change it later in game.</property>
-                            <signal name="clicked" handler="Show_Goals" swapped="no"/>
-                            <signal name="focus-in-event" handler="Update_Info" object="btngoal" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">3</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Character faction:</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">4</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Ship name:</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Character career:</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">5</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="cmbcareer">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes">Select your career from list. Careers have some impact on gameplay (each have bonus to gaining experience in some fields plus they determine your starting ship and crew). More info about each career you may find after selecting it. You can't change career later.</property>
-                            <signal name="changed" handler="Show_Career_Description" swapped="no"/>
-                            <signal name="set-focus-child" handler="Show_Career_Description" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">5</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="cmbfaction">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes">Select your faction from list. Factions have biggest impact on game. They determine amount of bases and some playing style. More information about each faction you will see after selecting it. You can't change it later.</property>
-                            <signal name="changed" handler="Show_Faction_Description" swapped="no"/>
-                            <signal name="set-focus-child" handler="Show_Faction_Description" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">4</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="cmbgender">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes">Select gender of your character. </property>
-                            <property name="active">0</property>
-                            <items>
-                              <item translatable="yes">Male</item>
-                              <item translatable="yes">Female</item>
-                            </items>
-                            <signal name="set-focus-child" handler="Update_Info_Proc" object="cmbgender" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes">Select type of base in which you will start game. This may have some impact on game difficulty.</property>
-                            <property name="label" translatable="yes">Starting base type:</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">6</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBox" id="cmbbasetype">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="tooltip_text" translatable="yes">Select type of base in which you will start game. This may have some impact on game difficulty.</property>
-                            <property name="model">basesstore</property>
-                            <property name="active">5</property>
-                            <signal name="changed" handler="Show_Base_Description" swapped="no"/>
-                            <signal name="set-focus-child" handler="Show_Base_Description" swapped="no"/>
+                            <property name="halign">center</property>
+                            <signal name="map" handler="Update_Info_Proc" object="playertooltip" swapped="no"/>
                             <child>
-                              <object class="GtkCellRendererText"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Character name:</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="lblgender">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Character gender:</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="entrycharactername">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">Enter character name or press Enter key for random name.</property>
+                                <signal name="activate" handler="Random_Name" object="entrycharactername" swapped="no"/>
+                                <signal name="focus-in-event" handler="Update_Info" object="entrycharactername" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="entryshipname">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">Enter ship name or press Enter for random ship name.</property>
+                                <signal name="activate" handler="Random_Name" object="entryshipname" swapped="no"/>
+                                <signal name="focus-in-event" handler="Update_Info" object="entryshipname" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Character goal:</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="btngoal">
+                                <property name="label" translatable="yes">Random</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="tooltip_text" translatable="yes">Select starting goal for your character. You can change it later in game.</property>
+                                <signal name="clicked" handler="Show_Goals" swapped="no"/>
+                                <signal name="focus-in-event" handler="Update_Info" object="btngoal" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Character faction:</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Ship name:</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Character career:</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">5</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="cmbcareer">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Select your career from list. Careers have some impact on gameplay (each have bonus to gaining experience in some fields plus they determine your starting ship and crew). More info about each career you may find after selecting it. You can't change career later.</property>
+                                <signal name="changed" handler="Show_Career_Description" swapped="no"/>
+                                <signal name="set-focus-child" handler="Show_Career_Description" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">5</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="cmbfaction">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Select your faction from list. Factions have biggest impact on game. They determine amount of bases and some playing style. More information about each faction you will see after selecting it. You can't change it later.</property>
+                                <signal name="changed" handler="Show_Faction_Description" swapped="no"/>
+                                <signal name="set-focus-child" handler="Show_Faction_Description" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="cmbgender">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Select gender of your character. </property>
+                                <property name="active">0</property>
+                                <items>
+                                  <item translatable="yes">Male</item>
+                                  <item translatable="yes">Female</item>
+                                </items>
+                                <signal name="set-focus-child" handler="Update_Info_Proc" object="cmbgender" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Select type of base in which you will start game. This may have some impact on game difficulty.</property>
+                                <property name="label" translatable="yes">Starting base type:</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">6</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="cmbbasetype">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Select type of base in which you will start game. This may have some impact on game difficulty.</property>
+                                <property name="model">basesstore</property>
+                                <property name="active">5</property>
+                                <signal name="changed" handler="Show_Base_Description" swapped="no"/>
+                                <signal name="set-focus-child" handler="Show_Base_Description" swapped="no"/>
+                                <child>
+                                  <object class="GtkCellRendererText"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">6</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="playertooltip">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">General player character settings. Select field which you want to set to see more informations about it.</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">7</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="top_attach">6</property>
+                            <property name="name">page0</property>
+                            <property name="title" translatable="yes">Player</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkGrid" id="difficultygrid">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <signal name="map" handler="Update_Info_Proc" object="difficultytooltip" swapped="no"/>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Enemy ships damage:</property>
+                                <property name="wrap">True</property>
+                                <property name="wrap_mode">word-char</property>
+                                <property name="max_width_chars">20</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Player ship damage:</property>
+                                <property name="wrap">True</property>
+                                <property name="wrap_mode">word-char</property>
+                                <property name="max_width_chars">20</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Enemy damage in melee combat:</property>
+                                <property name="wrap">True</property>
+                                <property name="wrap_mode">word-char</property>
+                                <property name="max_width_chars">20</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Player crew damage in melee combat:</property>
+                                <property name="wrap">True</property>
+                                <property name="wrap_mode">word-char</property>
+                                <property name="max_width_chars">20</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">%</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">%</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">%</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="top_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="spinenemydamage">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">Percent of damage done by enemies ships in combat. Lowering it made game easier but lower amount of gained point too.</property>
+                                <property name="adjustment">adjenemydamage</property>
+                                <signal name="focus-in-event" handler="Update_Info" object="spinenemydamage" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="spinplayerdamage">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">Percent of damage done by player ship in combat. Raising it made game easier but lower amount of gained points.</property>
+                                <property name="adjustment">adjplayerdamage</property>
+                                <signal name="focus-in-event" handler="Update_Info" object="spinplayerdamage" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="spinenemymelee">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">Percent of damage done by enemies in melee combat. Lowering it made game easier but lower amount of gained point too.</property>
+                                <property name="adjustment">adjenemymelee</property>
+                                <signal name="focus-in-event" handler="Update_Info" object="spinenemymelee" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="spinplayermelee">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">Percent of damage done by player crew (and player character) in melee combat. Raising it made game easier but lower amount of gained points.</property>
+                                <property name="adjustment">adjplayermelee</property>
+                                <signal name="focus-in-event" handler="Update_Info" object="spinplayermelee" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Experience gained:</property>
+                                <property name="wrap">True</property>
+                                <property name="wrap_mode">word-char</property>
+                                <property name="max_width_chars">20</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Reputation gained:</property>
+                                <property name="wrap">True</property>
+                                <property name="wrap_mode">word-char</property>
+                                <property name="max_width_chars">20</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">5</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="btnrandom">
+                                <property name="label" translatable="yes">_Random</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="tooltip_text" translatable="yes">Select random values for all settings.</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">6</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="spinexperience">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">Percent of experience gained by player and crew from actions. Raising it made game easier but lower amount of gained points.</property>
+                                <property name="adjustment">adjexperience</property>
+                                <signal name="focus-in-event" handler="Update_Info" object="spinexperience" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="spinreputation">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">Percent of reputation in bases gained or lost by player in sky bases due to player actions. Raising it made game easier but lower amount of gained points.</property>
+                                <property name="adjustment">adjreputation</property>
+                                <signal name="focus-in-event" handler="Update_Info" object="spinreputation" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">5</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">%</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="top_attach">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">%</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="top_attach">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">%</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="top_attach">5</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="difficultytooltip">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Set difficulty of new game. Each value can be between 1 and 500. Each change have impact not only on game difficulty but also on amount of points gained in the game. Select field to get more information about selected setting.</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">2</property>
+                                <property name="top_attach">6</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="name">page1</property>
+                            <property name="title" translatable="yes">Difficulty</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
@@ -554,7 +902,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
