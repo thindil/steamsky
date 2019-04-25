@@ -378,7 +378,7 @@ package body Crew.UI.Handlers is
    procedure UseItem(Self: access Gtk_Cell_Renderer_Toggle_Record'Class;
       Path: UTF8_String) is
       Member: constant Member_Data := PlayerShip.Crew(MemberIndex);
-      ItemType:  Unbounded_String;
+      ItemType: Unbounded_String;
       InventoryList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "inventorylist"));
    begin
