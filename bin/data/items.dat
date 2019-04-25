@@ -2415,5 +2415,18 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple rapier made of bronze, used in melee combat.</description>
  </item>
+ <item index="242" name="Iron rapier" type="Weapon" weight="2">
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="N" price="17"/>
+  <trade buyable="Y" price="15"/>
+  <data value="10"/>
+  <data value="18"/>
+  <data value="25"/>
+  <data value="1"/>
+  <data value="2"/>
+  <description>Simple rapier made of iron, used in melee combat.</description>
+ </item>
 </items>
 
