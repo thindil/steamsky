@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Typos in changelog
 - Crash on trying to writting to the closed debug log file
+- Checking availability of crafting recipes
 
 ## [3.6] - 2019-04-21
 
