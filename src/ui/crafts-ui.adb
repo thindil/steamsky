@@ -139,59 +139,74 @@ package body Crafts.UI is
            (RecipeInfo, "Amount:" & Integer'Image(Recipe.ResultAmount) & LF);
       end if;
       Append(RecipeInfo, "Materials needed: ");
-      for I in
-        Recipe.MaterialTypes.First_Index ..
-          Recipe.MaterialTypes.Last_Index loop
-         Append(RecipeInfo, LF & "-");
-         MAmount := 0;
-         HaveMaterials := False;
-         for J in Items_List.Iterate loop
-            IsMaterial := False;
-            if RecipeIndex > 0 then
-               if Items_List(J).IType = Recipe.MaterialTypes(I) then
-                  IsMaterial := True;
-               end if;
-            else
-               if Items_List(J).Name = Items_List(Recipe.ResultIndex).Name then
-                  IsMaterial := True;
-               end if;
-            end if;
-            if IsMaterial then
-               if MAmount > 0 then
-                  Append(RecipeInfo, " or");
-               end if;
-               CargoIndex :=
-                 FindItem(PlayerShip.Cargo, Objects_Container.To_Index(J));
-               if CargoIndex = 0 or
-                 (CargoIndex > 0
-                  and then PlayerShip.Cargo(CargoIndex).Amount <
-                    Recipe.MaterialAmounts(I)) then
-                  Append(RecipeInfo, "<span foreground=""red"">");
+      declare
+         Materials: array
+           (Recipe.MaterialTypes.First_Index ..
+                Recipe.MaterialTypes.Last_Index) of Boolean :=
+           (others => False);
+      begin
+         for I in
+           Recipe.MaterialTypes.First_Index ..
+             Recipe.MaterialTypes.Last_Index loop
+            Append(RecipeInfo, LF & "-");
+            MAmount := 0;
+            for J in Items_List.Iterate loop
+               IsMaterial := False;
+               if RecipeIndex > 0 then
+                  if Items_List(J).IType = Recipe.MaterialTypes(I) then
+                     IsMaterial := True;
+                  end if;
                else
-                  HaveMaterials := True;
+                  if Items_List(J).Name =
+                    Items_List(Recipe.ResultIndex).Name then
+                     IsMaterial := True;
+                  end if;
                end if;
-               Append
-                 (RecipeInfo,
-                  Integer'Image(Recipe.MaterialAmounts(I)) & "x" &
-                  To_String(Items_List(J).Name));
-               if CargoIndex > 0
-                 and then PlayerShip.Cargo(CargoIndex).Amount >=
-                   Recipe.MaterialAmounts(I) then
-                  TextLength :=
-                    Positive'Image(PlayerShip.Cargo(CargoIndex).Amount)'Length;
+               if IsMaterial then
+                  if MAmount > 0 then
+                     Append(RecipeInfo, " or");
+                  end if;
+                  CargoIndex :=
+                    FindItem(PlayerShip.Cargo, Objects_Container.To_Index(J));
+                  if CargoIndex = 0 or
+                    (CargoIndex > 0
+                     and then PlayerShip.Cargo(CargoIndex).Amount <
+                       Recipe.MaterialAmounts(I)) then
+                     Append(RecipeInfo, "<span foreground=""red"">");
+                  else
+                     Materials(I) := True;
+                  end if;
                   Append
                     (RecipeInfo,
-                     "(owned: " &
-                     Positive'Image(PlayerShip.Cargo(CargoIndex).Amount)
-                       (2 .. TextLength) &
-                     ")");
-               else
-                  Append(RecipeInfo, "</span>");
+                     Integer'Image(Recipe.MaterialAmounts(I)) & "x" &
+                     To_String(Items_List(J).Name));
+                  if CargoIndex > 0
+                    and then PlayerShip.Cargo(CargoIndex).Amount >=
+                      Recipe.MaterialAmounts(I) then
+                     TextLength :=
+                       Positive'Image(PlayerShip.Cargo(CargoIndex).Amount)'
+                         Length;
+                     Append
+                       (RecipeInfo,
+                        "(owned: " &
+                        Positive'Image(PlayerShip.Cargo(CargoIndex).Amount)
+                          (2 .. TextLength) &
+                        ")");
+                  else
+                     Append(RecipeInfo, "</span>");
+                  end if;
+                  MAmount := MAmount + 1;
                end if;
-               MAmount := MAmount + 1;
+            end loop;
+         end loop;
+         HaveMaterials := True;
+         for I in Materials'Range loop
+            if not Materials(I) then
+               HaveMaterials := False;
+               exit;
             end if;
          end loop;
-      end loop;
+      end;
       if Recipe.Tool /= To_Unbounded_String("None") then
          Append(RecipeInfo, LF & "Tool: ");
          MAmount := 0;
@@ -357,24 +372,37 @@ package body Crafts.UI is
             end if;
          end if;
          if CanCraft then
-            for K in
-              Recipe.MaterialTypes.First_Index ..
-                Recipe.MaterialTypes.Last_Index loop
-               CanCraft := False;
-               for J in Items_List.Iterate loop
-                  if Items_List(J).IType = Recipe.MaterialTypes(K) then
-                     CargoIndex :=
-                       FindItem
-                         (PlayerShip.Cargo, Objects_Container.To_Index(J));
-                     if CargoIndex > 0
-                       and then PlayerShip.Cargo(CargoIndex).Amount >=
-                         Recipe.MaterialAmounts(K) then
-                        CanCraft := True;
-                        exit;
+            declare
+               Materials: array
+                 (Recipe.MaterialTypes.First_Index ..
+                      Recipe.MaterialTypes.Last_Index) of Boolean :=
+                 (others => False);
+            begin
+               for K in
+                 Recipe.MaterialTypes.First_Index ..
+                   Recipe.MaterialTypes.Last_Index loop
+                  CanCraft := False;
+                  for J in Items_List.Iterate loop
+                     if Items_List(J).IType = Recipe.MaterialTypes(K) then
+                        CargoIndex :=
+                          FindItem
+                            (PlayerShip.Cargo, Objects_Container.To_Index(J));
+                        if CargoIndex > 0
+                          and then PlayerShip.Cargo(CargoIndex).Amount >=
+                            Recipe.MaterialAmounts(K) then
+                           Materials(K) := True;
+                        end if;
                      end if;
+                  end loop;
+               end loop;
+               CanCraft := True;
+               for I in Materials'Range loop
+                  if not Materials(I) then
+                     CanCraft := False;
+                     exit;
                   end if;
                end loop;
-            end loop;
+            end;
          end if;
          if CanCraft then
             Set
