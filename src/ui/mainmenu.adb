@@ -345,7 +345,6 @@ package body MainMenu is
       else
          Gender := 'F';
       end if;
-      -- TODO: read difficulty setting
       NewGameSettings :=
         (PlayerName =>
            To_Unbounded_String
@@ -370,10 +369,35 @@ package body MainMenu is
                       (Get_Active
                          (Gtk_Combo_Box
                             (Get_Object(Object, "cmbbasetype"))))))),
-         EnemyDamageBonus => 1.0, PlayerDamageBonus => 1.0,
-         EnemyMeleeDamageBonus => 1.0, PlayerMeleeDamageBonus => 1.0,
-         ExperienceBonus => 1.0, ReputationBonus => 1.0,
-         UpgradeCostBonus => 1.0);
+         EnemyDamageBonus =>
+           Float
+             (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjenemydamage"))) /
+              100.0),
+         PlayerDamageBonus =>
+           Float
+             (Get_Value
+                (Gtk_Adjustment(Get_Object(Object, "adjplayerdamage"))) /
+              100.0),
+         EnemyMeleeDamageBonus =>
+           Float
+             (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjenemymelee"))) /
+              100.0),
+         PlayerMeleeDamageBonus =>
+           Float
+             (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjplayermelee"))) /
+              100.0),
+         ExperienceBonus =>
+           Float
+             (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjexperience"))) /
+              100.0),
+         ReputationBonus =>
+           Float
+             (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjreputation"))) /
+              100.0),
+         UpgradeCostBonus =>
+           Float
+             (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjupdate"))) /
+              100.0));
       NewGame;
       StartGame;
    end NewGame;
