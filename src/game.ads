@@ -100,14 +100,7 @@ package Game is
      (ADD, UPDATE, REMOVE); -- Possible actions to do when loading game data
    Data_Loading_Error: exception; -- Raised when error occurs during loading any game data
 
-   procedure NewGame
-     (CharName, ShipName, CareerIndex, FactionIndex: Unbounded_String;
-      Gender: Character; BaseTypeIndex: Natural) with
-      Pre =>
-      (CharName /= Null_Unbounded_String and
-       ShipName /= Null_Unbounded_String and
-       (Gender = 'M' or
-        Gender = 'F')); -- Start new game: create map, place ship, crew, etc
+   procedure NewGame; -- Start new game: create map, place ship, crew, etc
    procedure UpdateGame
      (Minutes: Positive); -- Game ticks (update time, crew, ship, etc)
    procedure EndGame

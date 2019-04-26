@@ -54,18 +54,10 @@ with Careers; use Careers;
 
 package body Game is
 
-   procedure NewGame
-     (CharName, ShipName, CareerIndex, FactionIndex: Unbounded_String;
-      Gender: Character; BaseTypeIndex: Natural) is
+   procedure NewGame is
       RandomBase: Positive;
    begin
-      -- Save new game configuration
-      NewGameSettings :=
-        (PlayerName => CharName, PlayerGender => Gender, ShipName => ShipName,
-         PlayerFaction => FactionIndex, PlayerCareer => CareerIndex,
-         StartingBase =>
-           To_Unbounded_String
-             (Bases_Types'Image(Bases_Types'Val(BaseTypeIndex))));
+      -- Save game configuration
       SaveConfig;
       -- Set game statistics
       ClearGameStats;
@@ -116,7 +108,9 @@ package body Game is
                           Factions_List(J).Population(2));
                   end if;
                   BaseReputation :=
-                    GetReputation(FactionIndex, Factions_Container.Key(J));
+                    GetReputation
+                      (NewGameSettings.PlayerFaction,
+                       Factions_Container.Key(J));
                   exit;
                end if;
             end loop;
@@ -220,16 +214,17 @@ package body Game is
       end;
       -- Place player ship in random large base
       declare
-         BaseType: constant Bases_Types := Bases_Types'Val(BaseTypeIndex);
+         BaseType: constant Bases_Types :=
+           Bases_Types'Value(To_String(NewGameSettings.StartingBase));
       begin
          loop
             RandomBase := GetRandom(1, 1024);
             if BaseType = Any then
                exit when SkyBases(RandomBase).Population > 299 and
-                 SkyBases(RandomBase).Owner = FactionIndex;
+                 SkyBases(RandomBase).Owner = NewGameSettings.PlayerFaction;
             else
                exit when SkyBases(RandomBase).Population > 299 and
-                 SkyBases(RandomBase).Owner = FactionIndex and
+                 SkyBases(RandomBase).Owner = NewGameSettings.PlayerFaction and
                  SkyBases(RandomBase).BaseType = BaseType;
             end if;
          end loop;
@@ -237,13 +232,17 @@ package body Game is
       -- Create player ship
       PlayerShip :=
         CreateShip
-          (Factions_List(FactionIndex).Careers(CareerIndex).ShipIndex,
-           ShipName, SkyBases(Integer(RandomBase)).SkyX,
+          (Factions_List(NewGameSettings.PlayerFaction).Careers
+             (NewGameSettings.PlayerCareer)
+             .ShipIndex,
+           NewGameSettings.ShipName, SkyBases(Integer(RandomBase)).SkyX,
            SkyBases(Integer(RandomBase)).SkyY, DOCKED, False);
       -- Add player to ship
       declare
          PlayerIndex2: constant Unbounded_String :=
-           Factions_List(FactionIndex).Careers(CareerIndex).PlayerIndex;
+           Factions_List(NewGameSettings.PlayerFaction).Careers
+             (NewGameSettings.PlayerCareer)
+             .PlayerIndex;
          Amount, PlayerMorale: Positive;
          TmpInventory: Inventory_Container.Vector;
       begin
@@ -263,7 +262,7 @@ package body Game is
                   Amount => Amount, Name => Null_Unbounded_String,
                   Durability => 100, Price => 0));
          end loop;
-         if Factions_List(FactionIndex).Flags.Contains
+         if Factions_List(NewGameSettings.PlayerFaction).Flags.Contains
              (To_Unbounded_String("nomorale")) then
             PlayerMorale := 50;
          else
@@ -271,9 +270,11 @@ package body Game is
          end if;
          PlayerShip.Crew.Prepend
            (New_Item =>
-              (Name => CharName, Gender => Gender, Health => 100, Tired => 0,
-               Skills => ProtoMobs_List(PlayerIndex2).Skills, Hunger => 0,
-               Thirst => 0, Order => ProtoMobs_List(PlayerIndex2).Order,
+              (Name => NewGameSettings.PlayerName,
+               Gender => NewGameSettings.PlayerGender, Health => 100,
+               Tired => 0, Skills => ProtoMobs_List(PlayerIndex2).Skills,
+               Hunger => 0, Thirst => 0,
+               Order => ProtoMobs_List(PlayerIndex2).Order,
                PreviousOrder => Rest, OrderTime => 15,
                Orders => ProtoMobs_List(PlayerIndex2).Priorities,
                Attributes => ProtoMobs_List(PlayerIndex2).Attributes,
@@ -281,7 +282,8 @@ package body Game is
                Equipment => ProtoMobs_List(PlayerIndex2).Equipment,
                Payment => (others => 0), ContractLength => -1,
                Morale => (PlayerMorale, 0), Loyalty => 100,
-               HomeBase => RandomBase, Faction => FactionIndex));
+               HomeBase => RandomBase,
+               Faction => NewGameSettings.PlayerFaction));
       end;
       declare
          CabinAssigned: Boolean := False;
@@ -292,7 +294,8 @@ package body Game is
             end if;
             if Modules_List(Module.ProtoIndex).MType = CABIN and
               Module.Owner = 0 and not CabinAssigned then
-               Module.Name := CharName & To_Unbounded_String("'s Cabin");
+               Module.Name :=
+                 NewGameSettings.PlayerName & To_Unbounded_String("'s Cabin");
                Module.Owner := 1;
                CabinAssigned := True;
             end if;
@@ -314,7 +317,7 @@ package body Game is
       -- Set name of savegame
       GenerateSaveName;
       -- Set player career
-      PlayerCareer := CareerIndex;
+      PlayerCareer := NewGameSettings.PlayerCareer;
       -- Add welcoming message
       AddMessage
         ("Welcome to Steam Sky. If it is your first game, please consider read help (entry 'Help' in Menu).",
