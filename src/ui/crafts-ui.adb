@@ -333,6 +333,22 @@ package body Crafts.UI is
       CanCraft: Boolean;
       Recipe: Craft_Data;
       CargoIndex: Natural;
+      procedure CheckTool(ToolNeeded: Unbounded_String) is
+      begin
+         if ToolNeeded /= To_Unbounded_String("None") then
+            CanCraft := False;
+            for I in Items_List.Iterate loop
+               if Items_List(I).IType = ToolNeeded then
+                  CargoIndex :=
+                    FindItem(PlayerShip.Cargo, Objects_Container.Key(I));
+                  if CargoIndex > 0 then
+                     CanCraft := True;
+                     exit;
+                  end if;
+               end if;
+            end loop;
+         end if;
+      end CheckTool;
    begin
       for Item of PlayerShip.Cargo loop
          for J in Recipes_List.Iterate loop
@@ -360,19 +376,7 @@ package body Crafts.UI is
             end if;
          end loop;
          if CanCraft then
-            if Recipe.Tool /= To_Unbounded_String("None") then
-               CanCraft := False;
-               for I in Items_List.Iterate loop
-                  if Items_List(I).IType = Recipe.Tool then
-                     CargoIndex :=
-                       FindItem(PlayerShip.Cargo, Objects_Container.Key(I));
-                     if CargoIndex > 0 then
-                        CanCraft := True;
-                        exit;
-                     end if;
-                  end if;
-               end loop;
-            end if;
+            CheckTool(Recipe.Tool);
          end if;
          if CanCraft then
             declare
@@ -423,10 +427,18 @@ package body Crafts.UI is
          Set(RecipesList, RecipesIter, 1, To_String(Known_Recipes.Element(I)));
       end loop;
       for I in Deconstructs.First_Index .. Deconstructs.Last_Index loop
+         CheckTool(AlchemyTools);
          Append(RecipesList, RecipesIter);
-         Set
-           (RecipesList, RecipesIter, 0,
-            "Deconstruct " & To_String(Items_List(Deconstructs(I)).Name));
+         if CanCraft then
+            Set
+              (RecipesList, RecipesIter, 0,
+               "Deconstruct " & To_String(Items_List(Deconstructs(I)).Name));
+         else
+            Set
+              (RecipesList, RecipesIter, 0,
+               "<span foreground=""gray"">Deconstruct " &
+               To_String(Items_List(Deconstructs(I)).Name) & "</span>");
+         end if;
          Set
            (RecipesList, RecipesIter, 1,
             "Deconstruct " & To_String(Deconstructs(I)));
