@@ -338,10 +338,6 @@ package body MainMenu is
    end LoadGame;
 
    procedure NewGame(Object: access Gtkada_Builder_Record'Class) is
-      CharacterName: constant String :=
-        Get_Text(Gtk_Entry(Get_Object(Object, "entrycharactername")));
-      ShipName: constant String :=
-        Get_Text(Gtk_Entry(Get_Object(Object, "entryshipname")));
       Gender: Character;
    begin
       if Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbgender"))) = 0 then
@@ -349,15 +345,36 @@ package body MainMenu is
       else
          Gender := 'F';
       end if;
-      NewGame
-        (To_Unbounded_String(CharacterName), To_Unbounded_String(ShipName),
-         To_Unbounded_String
-           (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbcareer")))),
-         To_Unbounded_String
-           (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbfaction")))),
-         Gender,
-         Natural
-           (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbbasetype")))));
+      -- TODO: read difficulty setting
+      NewGameSettings :=
+        (PlayerName =>
+           To_Unbounded_String
+             (Get_Text(Gtk_Entry(Get_Object(Object, "entrycharactername")))),
+         PlayerGender => Gender,
+         ShipName =>
+           To_Unbounded_String
+             (Get_Text(Gtk_Entry(Get_Object(Object, "entryshipname")))),
+         PlayerFaction =>
+           To_Unbounded_String
+             (Get_Active_Id
+                (Gtk_Combo_Box_Text(Get_Object(Object, "cmbfaction")))),
+         PlayerCareer =>
+           To_Unbounded_String
+             (Get_Active_Id
+                (Gtk_Combo_Box_Text(Get_Object(Object, "cmbcareer")))),
+         StartingBase =>
+           To_Unbounded_String
+             (Bases_Types'Image
+                (Bases_Types'Val
+                   (Natural
+                      (Get_Active
+                         (Gtk_Combo_Box
+                            (Get_Object(Object, "cmbbasetype"))))))),
+         EnemyDamageBonus => 1.0, PlayerDamageBonus => 1.0,
+         EnemyMeleeDamageBonus => 1.0, PlayerMeleeDamageBonus => 1.0,
+         ExperienceBonus => 1.0, ReputationBonus => 1.0,
+         UpgradeCostBonus => 1.0);
+      NewGame;
       StartGame;
    end NewGame;
 

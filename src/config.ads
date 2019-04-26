@@ -28,6 +28,13 @@ package Config is
       PlayerFaction: Unbounded_String; -- Default player faction index
       PlayerCareer: Unbounded_String; -- Default player career index
       StartingBase: Unbounded_String; -- Default starting base type
+      EnemyDamageBonus: Float; -- Default bonus for enemy ship to damage
+      PlayerDamageBonus: Float; -- Default bonus for player ship to damage
+      EnemyMeleeDamageBonus: Float; -- Default bonus for enemy to damage in melee combat
+      PlayerMeleeDamageBonus: Float; -- Default bonus for player and player's ship crew to damage in melee combat
+      ExperienceBonus: Float; -- Default bonus to gained experience
+      ReputationBonus: Float; -- Default bonus to gained or lost reputation in bases
+      UpgradeCostBonus: Float; -- Default bonus to amount of materials needed for player's ship upgrades.
    end record;
    type AutoMoveBreak is
      (NEVER, ANY, FRIENDLY,

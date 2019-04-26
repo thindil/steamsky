@@ -38,7 +38,10 @@ package body Config is
          ShipName => To_Unbounded_String("Anaria"),
          PlayerFaction => To_Unbounded_String("POLEIS"),
          PlayerCareer => To_Unbounded_String("general"),
-         StartingBase => To_Unbounded_String("ANY"));
+         StartingBase => To_Unbounded_String("ANY"), EnemyDamageBonus => 1.0,
+         PlayerDamageBonus => 1.0, EnemyMeleeDamageBonus => 1.0,
+         PlayerMeleeDamageBonus => 1.0, ExperienceBonus => 1.0,
+         ReputationBonus => 1.0, UpgradeCostBonus => 1.0);
       GameSettings :=
         (AutoRest => True, UndockSpeed => FULL_SPEED, AutoCenter => True,
          AutoReturn => True, AutoFinish => True, LowFuel => 100,
@@ -73,6 +76,28 @@ package body Config is
                NewGameSettings.PlayerCareer := Value;
             elsif FieldName = To_Unbounded_String("StartingBase") then
                NewGameSettings.StartingBase := Value;
+            elsif FieldName = To_Unbounded_String("EnemyDamageBonus") then
+               NewGameSettings.EnemyDamageBonus :=
+                 Float'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("PlayerDamageBonus") then
+               NewGameSettings.PlayerDamageBonus :=
+                 Float'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("EnemyMeleeDamageBonus") then
+               NewGameSettings.EnemyMeleeDamageBonus :=
+                 Float'Value(To_String(Value));
+            elsif FieldName =
+              To_Unbounded_String("PlayerMeleeDamageBonus") then
+               NewGameSettings.PlayerMeleeDamageBonus :=
+                 Float'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("ExperienceBonus") then
+               NewGameSettings.ExperienceBonus :=
+                 Float'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("ReputationBonus") then
+               NewGameSettings.ReputationBonus :=
+                 Float'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("UpgradeCostBonus") then
+               NewGameSettings.UpgradeCostBonus :=
+                 Float'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("AutoRest") then
                GameSettings.AutoRest := LoadBoolean;
             elsif FieldName = To_Unbounded_String("UndockSpeed") then
@@ -168,6 +193,30 @@ package body Config is
       Put_Line
         (ConfigFile,
          "StartingBase = " & To_String(NewGameSettings.StartingBase));
+      Put_Line
+        (ConfigFile,
+         "EnemyDamageBonus =" & Float'Image(NewGameSettings.EnemyDamageBonus));
+      Put_Line
+        (ConfigFile,
+         "PlayerDamageBonus =" &
+         Float'Image(NewGameSettings.PlayerDamageBonus));
+      Put_Line
+        (ConfigFile,
+         "EnemyMeleeDamageBonus =" &
+         Float'Image(NewGameSettings.EnemyMeleeDamageBonus));
+      Put_Line
+        (ConfigFile,
+         "PlayerMeleeDamageBonus =" &
+         Float'Image(NewGameSettings.PlayerMeleeDamageBonus));
+      Put_Line
+        (ConfigFile,
+         "ExperienceBonus =" & Float'Image(NewGameSettings.ExperienceBonus));
+      Put_Line
+        (ConfigFile,
+         "ReputationBonus =" & Float'Image(NewGameSettings.ReputationBonus));
+      Put_Line
+        (ConfigFile,
+         "UpgradeCostBonus =" & Float'Image(NewGameSettings.UpgradeCostBonus));
       SaveBoolean(GameSettings.AutoRest, "AutoRest");
       Put_Line
         (ConfigFile,
