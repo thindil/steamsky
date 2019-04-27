@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 - New items: orichalcum maul, adamantium maul, bronze rapier, iron rapier,
   steel rapier and titanium rapier
 - New crafting recipes: orichalcum maul, adamantium maul, bronze rapier, iron
-  rapier and steel rapier
+  rapier, steel rapier and titanium rapier
 - Option to delete events in debug menu
 - Option to save game in debug menu
 - New skill: rapiers
