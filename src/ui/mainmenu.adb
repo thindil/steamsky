@@ -61,6 +61,7 @@ with Maps.UI; use Maps.UI;
 with Help; use Help;
 with Goals; use Goals;
 with Game.SaveLoad; use Game.SaveLoad;
+with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 with Log; use Log;
 with Help.UI; use Help.UI;
@@ -539,6 +540,23 @@ package body MainMenu is
          Get_Tooltip_Text(Gtk_Widget(User_Data)));
    end UpdateInfoProc;
 
+   procedure RandomDifficulty(Object: access Gtkada_Builder_Record'Class) is
+      AdjNames: constant array(Positive range <>) of Unbounded_String :=
+        (To_Unbounded_String("adjenemydamage"),
+         To_Unbounded_String("adjplayerdamage"),
+         To_Unbounded_String("adjenemymelee"),
+         To_Unbounded_String("adjplayermelee"),
+         To_Unbounded_String("adjexperience"),
+         To_Unbounded_String("adjreputation"),
+         To_Unbounded_String("adjupdate"));
+   begin
+      for Name of AdjNames loop
+         Set_Value
+           (Gtk_Adjustment(Get_Object(Object, To_String(Name))),
+            Gdouble(GetRandom(1, 500)));
+      end loop;
+   end RandomDifficulty;
+
    procedure CreateMainMenu is
       Error: aliased GError;
    begin
@@ -574,6 +592,7 @@ package body MainMenu is
       Register_Handler(Builder, "Update_Info", UpdateInfo'Access);
       Register_Handler(Builder, "Update_Info_Proc", UpdateInfoProc'Access);
       Register_Handler(Builder, "Hide_Dialog", HideDialog'Access);
+      Register_Handler(Builder, "Random_Difficulty", RandomDifficulty'Access);
       Do_Connect(Builder);
       SetUtilsBuilder(Builder);
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
