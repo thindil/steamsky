@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -45,5 +45,8 @@ package Ships.UI.Handlers is
    procedure DisableEngine
      (Object: access Gtkada_Builder_Record'
         Class); -- Enable/disable selected engine
+   procedure ToggleSearch
+     (Object: access Gtkada_Builder_Record'
+        Class); -- Enable/disable search for ship module when start/end editing module name
 
 end Ships.UI.Handlers;
