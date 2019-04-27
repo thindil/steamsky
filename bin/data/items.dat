@@ -2441,5 +2441,18 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple rapier made of steel, used in melee combat.</description>
  </item>
+ <item index="244" name="Titanium rapier" type="Weapon" weight="3">
+  <trade buyable="N" price="27"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="N" price="27"/>
+  <trade buyable="Y" price="25"/>
+  <data value="3"/>
+  <data value="26"/>
+  <data value="25"/>
+  <data value="1"/>
+  <data value="2"/>
+  <description>Simple rapier made of titanium, used in melee combat.</description>
+ </item>
 </items>
 
