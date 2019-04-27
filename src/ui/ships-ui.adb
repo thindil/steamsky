@@ -505,6 +505,7 @@ package body Ships.UI is
       Register_Handler(Builder, "Set_Repair", SetRepair'Access);
       Register_Handler(Builder, "Assign", Assign'Access);
       Register_Handler(Builder, "Disable_Engine", DisableEngine'Access);
+      Register_Handler(Builder, "Toggle_Search", ToggleSearch'Access);
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "rendername")),
          ChangeModuleName'Access);
