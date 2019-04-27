@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Crash on trying to writting to the closed debug log file
 - Checking availability of crafting recipes
 - Check for tools for deconstructing items
+- Start searching for modules on editing module name
 
 ## [3.0.9] - 2019-04-14
 
