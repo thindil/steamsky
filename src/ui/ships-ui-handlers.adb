@@ -579,4 +579,11 @@ package body Ships.UI.Handlers is
       ShowModuleInfo(Object);
    end DisableEngine;
 
+   procedure ToggleSearch(Object: access Gtkada_Builder_Record'Class) is
+      ModulesTree: constant Gtk_Tree_View :=
+        Gtk_Tree_View(Get_Object(Object, "treemodules"));
+   begin
+      Set_Enable_Search(ModulesTree, not Get_Enable_Search(ModulesTree));
+   end ToggleSearch;
+
 end Ships.UI.Handlers;

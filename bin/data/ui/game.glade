@@ -8395,10 +8395,13 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="editable">True</property>
                                     <signal name="edited" handler="Enable_Menu_Shortcuts_Proc" swapped="no"/>
                                     <signal name="edited" handler="Toggle_Close_Button_Proc" object="btnclose" swapped="no"/>
+                                    <signal name="edited" handler="Toggle_Search" swapped="no"/>
                                     <signal name="editing-canceled" handler="Enable_Menu_Shortcuts_Proc" swapped="no"/>
                                     <signal name="editing-canceled" handler="Toggle_Close_Button_Proc" object="btnclose" swapped="no"/>
+                                    <signal name="editing-canceled" handler="Toggle_Search" swapped="no"/>
                                     <signal name="editing-started" handler="Disable_Menu_Shortcuts_Proc" swapped="no"/>
                                     <signal name="editing-started" handler="Toggle_Close_Button_Proc" object="btnclose" swapped="no"/>
+                                    <signal name="editing-started" handler="Toggle_Search" swapped="no"/>
                                   </object>
                                   <attributes>
                                     <attribute name="text">0</attribute>
