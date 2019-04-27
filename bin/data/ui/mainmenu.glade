@@ -30,6 +30,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="value">100</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
+    <signal name="value-changed" handler="Update_Summary" swapped="no"/>
   </object>
   <object class="GtkAdjustment" id="adjenemymelee">
     <property name="lower">1</property>
@@ -37,6 +38,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="value">100</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
+    <signal name="value-changed" handler="Update_Summary" swapped="no"/>
   </object>
   <object class="GtkAdjustment" id="adjexperience">
     <property name="lower">1</property>
@@ -44,6 +46,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="value">100</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
+    <signal name="value-changed" handler="Update_Summary" swapped="no"/>
   </object>
   <object class="GtkAdjustment" id="adjplayerdamage">
     <property name="lower">1</property>
@@ -51,6 +54,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="value">100</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
+    <signal name="value-changed" handler="Update_Summary" swapped="no"/>
   </object>
   <object class="GtkAdjustment" id="adjplayermelee">
     <property name="lower">1</property>
@@ -58,6 +62,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="value">100</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
+    <signal name="value-changed" handler="Update_Summary" swapped="no"/>
   </object>
   <object class="GtkAdjustment" id="adjreputation">
     <property name="lower">1</property>
@@ -65,6 +70,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="value">100</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
+    <signal name="value-changed" handler="Update_Summary" swapped="no"/>
   </object>
   <object class="GtkAdjustment" id="adjupdate">
     <property name="lower">1</property>
@@ -72,6 +78,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="value">100</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
+    <signal name="value-changed" handler="Update_Summary" swapped="no"/>
   </object>
   <object class="GtkListStore" id="basesstore">
     <columns>
@@ -903,7 +910,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="margin_top">10</property>
-                                        <property name="label" translatable="yes">Total bonus to points: 100%</property>
+                                        <property name="label" translatable="yes">Total gained points: 100%</property>
                                         <property name="wrap">True</property>
                                         <property name="wrap_mode">word-char</property>
                                         <property name="max_width_chars">20</property>

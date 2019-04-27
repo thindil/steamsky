@@ -557,6 +557,47 @@ package body MainMenu is
       end loop;
    end RandomDifficulty;
 
+   procedure UpdateSummary(Object: access Gtkada_Builder_Record'Class) is
+      AdjNames: constant array(Positive range <>) of Unbounded_String :=
+        (To_Unbounded_String("adjenemydamage"),
+         To_Unbounded_String("adjplayerdamage"),
+         To_Unbounded_String("adjenemymelee"),
+         To_Unbounded_String("adjplayermelee"),
+         To_Unbounded_String("adjexperience"),
+         To_Unbounded_String("adjreputation"),
+         To_Unbounded_String("adjupdate"));
+      MalusNames: constant array(Positive range <>) of Unbounded_String :=
+        (To_Unbounded_String("adjplayerdamage"),
+         To_Unbounded_String("adjplayermelee"),
+         To_Unbounded_String("adjexperience"),
+         To_Unbounded_String("adjreputation"));
+      Bonus, Value: Integer := 0;
+   begin
+      for Name of AdjNames loop
+         Value :=
+           Natural
+             (Get_Value(Gtk_Adjustment(Get_Object(Object, To_String(Name)))));
+         for I in MalusNames'Range loop
+            if Name = MalusNames(I) then
+               if Value < 100 then
+                  Value := 100 + ((100 - Value) * 4);
+               elsif Value > 100 then
+                  Value := 100 - Value;
+               end if;
+               exit;
+            end if;
+         end loop;
+         Bonus := Bonus + Value;
+      end loop;
+      Bonus := Bonus / AdjNames'Length;
+      if Bonus < 1 then
+         Bonus := 1;
+      end if;
+      Set_Text
+        (Gtk_Label(Get_Object(Object, "lblbonuspoints")),
+         "Total gained points:" & Integer'Image(Bonus) & "%");
+   end UpdateSummary;
+
    procedure CreateMainMenu is
       Error: aliased GError;
    begin
@@ -593,6 +634,7 @@ package body MainMenu is
       Register_Handler(Builder, "Update_Info_Proc", UpdateInfoProc'Access);
       Register_Handler(Builder, "Hide_Dialog", HideDialog'Access);
       Register_Handler(Builder, "Random_Difficulty", RandomDifficulty'Access);
+      Register_Handler(Builder, "Update_Summary", UpdateSummary'Access);
       Do_Connect(Builder);
       SetUtilsBuilder(Builder);
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
