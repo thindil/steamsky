@@ -66,12 +66,42 @@ package body Game.SaveLoad is
                To_String(Trim(RawValue, Ada.Strings.Left)));
          end loop;
       end SaveStatistics;
+      type Difficulty_Data is record
+         Name: Unbounded_String;
+         Value: Float;
+      end record;
+      Difficulties: constant array(Positive range <>) of Difficulty_Data :=
+        ((To_Unbounded_String("enemydamagebonus"),
+          NewGameSettings.EnemyDamageBonus),
+         (To_Unbounded_String("playerdamagebonus"),
+          NewGameSettings.PlayerDamageBonus),
+         (To_Unbounded_String("enemymeleedamagebonus"),
+          NewGameSettings.EnemyMeleeDamageBonus),
+         (To_Unbounded_String("playermeleedamagebonus"),
+          NewGameSettings.PlayerMeleeDamageBonus),
+         (To_Unbounded_String("experiencebonus"),
+          NewGameSettings.ExperienceBonus),
+         (To_Unbounded_String("reputationbonus"),
+          NewGameSettings.ReputationBonus),
+         (To_Unbounded_String("upgradecostbonus"),
+          NewGameSettings.UpgradeCostBonus));
    begin
       LogMessage
         ("Start saving game in file " & To_String(SaveName) & ".", Everything);
       SaveData := Create_Document(Save);
       MainNode := Create_Element(SaveData, "save");
       MainNode := Append_Child(SaveData, MainNode);
+      -- Save game difficulty settings
+      LogMessage("Saving game difficulty settings...", Everything, False);
+      CategoryNode := Create_Element(SaveData, "difficulty");
+      CategoryNode := Append_Child(MainNode, CategoryNode);
+      for Difficulty of Difficulties loop
+         RawValue := To_Unbounded_String(Float'Image(Difficulty.Value));
+         Set_Attribute
+           (CategoryNode, To_String(Difficulty.Name),
+            To_String(Trim(RawValue, Ada.Strings.Left)));
+      end loop;
+      LogMessage("done.", Everything, True, False);
       -- Save game date
       LogMessage("Saving game time...", Everything, False);
       CategoryNode := Create_Element(SaveData, "gamedate");
@@ -401,6 +431,28 @@ package body Game.SaveLoad is
       Parse(Reader, SaveFile);
       Close(SaveFile);
       SaveData := Get_Tree(Reader);
+      -- Load game difficulty settings
+      NodesList :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "difficulty");
+      if Length(NodesList) > 0 then
+         LogMessage("Loading game difficulty settings...", Everything, False);
+         SavedNode := Item(NodesList, 0);
+         NewGameSettings.EnemyDamageBonus :=
+           Float'Value(Get_Attribute(SavedNode, "enemydamagebonus"));
+         NewGameSettings.PlayerDamageBonus :=
+           Float'Value(Get_Attribute(SavedNode, "playerdamagebonus"));
+         NewGameSettings.EnemyMeleeDamageBonus :=
+           Float'Value(Get_Attribute(SavedNode, "enemymeleedamagebonus"));
+         NewGameSettings.PlayerMeleeDamageBonus :=
+           Float'Value(Get_Attribute(SavedNode, "playermeleedamagebonus"));
+         NewGameSettings.ExperienceBonus :=
+           Float'Value(Get_Attribute(SavedNode, "experiencebonus"));
+         NewGameSettings.ReputationBonus :=
+           Float'Value(Get_Attribute(SavedNode, "reputationbonus"));
+         NewGameSettings.UpgradeCostBonus :=
+           Float'Value(Get_Attribute(SavedNode, "upgradecostbonus"));
+         LogMessage("done.", Everything, True, False);
+      end if;
       -- Load game date
       LogMessage("Loading game time...", Everything, False);
       NodesList :=
