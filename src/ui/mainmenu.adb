@@ -76,6 +76,13 @@ package body MainMenu is
    Builder: Gtkada_Builder;
    AllNews, Setting: Boolean := False;
    DataError: Unbounded_String;
+   AdjNames: constant array(Positive range <>) of Unbounded_String :=
+     (To_Unbounded_String("adjenemydamage"),
+      To_Unbounded_String("adjplayerdamage"),
+      To_Unbounded_String("adjenemymelee"),
+      To_Unbounded_String("adjplayermelee"),
+      To_Unbounded_String("adjexperience"),
+      To_Unbounded_String("adjreputation"), To_Unbounded_String("adjupdate"));
 
    procedure Quit(Object: access Gtkada_Builder_Record'Class) is
    begin
@@ -541,14 +548,6 @@ package body MainMenu is
    end UpdateInfoProc;
 
    procedure RandomDifficulty(Object: access Gtkada_Builder_Record'Class) is
-      AdjNames: constant array(Positive range <>) of Unbounded_String :=
-        (To_Unbounded_String("adjenemydamage"),
-         To_Unbounded_String("adjplayerdamage"),
-         To_Unbounded_String("adjenemymelee"),
-         To_Unbounded_String("adjplayermelee"),
-         To_Unbounded_String("adjexperience"),
-         To_Unbounded_String("adjreputation"),
-         To_Unbounded_String("adjupdate"));
    begin
       for Name of AdjNames loop
          Set_Value
@@ -558,14 +557,6 @@ package body MainMenu is
    end RandomDifficulty;
 
    procedure UpdateSummary(Object: access Gtkada_Builder_Record'Class) is
-      AdjNames: constant array(Positive range <>) of Unbounded_String :=
-        (To_Unbounded_String("adjenemydamage"),
-         To_Unbounded_String("adjplayerdamage"),
-         To_Unbounded_String("adjenemymelee"),
-         To_Unbounded_String("adjplayermelee"),
-         To_Unbounded_String("adjexperience"),
-         To_Unbounded_String("adjreputation"),
-         To_Unbounded_String("adjupdate"));
       MalusNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("adjplayerdamage"),
          To_Unbounded_String("adjplayermelee"),
@@ -600,6 +591,14 @@ package body MainMenu is
 
    procedure CreateMainMenu is
       Error: aliased GError;
+      AdjValues: constant array(Positive range <>) of Gdouble :=
+        (Gdouble(NewGameSettings.EnemyDamageBonus),
+         Gdouble(NewGameSettings.PlayerDamageBonus),
+         Gdouble(NewGameSettings.EnemyMeleeDamageBonus),
+         Gdouble(NewGameSettings.PlayerMeleeDamageBonus),
+         Gdouble(NewGameSettings.ExperienceBonus),
+         Gdouble(NewGameSettings.ReputationBonus),
+         Gdouble(NewGameSettings.UpgradeCostBonus));
    begin
       LoadThemes;
       SetFontSize(ALLFONTS);
@@ -663,6 +662,11 @@ package body MainMenu is
          end loop;
          Set_Active(FactionComboBox, 0);
       end;
+      for I in AdjNames'Range loop
+         Set_Value
+           (Gtk_Adjustment(Get_Object(Builder, To_String(AdjNames(I)))),
+            (AdjValues(I) * 100.0));
+      end loop;
       On_Key_Press_Event
         (Gtk_Widget(Get_Object(Builder, "newgamebox")),
          NewGameKeyPressed'Access);
