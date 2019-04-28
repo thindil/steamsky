@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.0.10] - 2019-04-28
 
 ### Changed
 - Reduced experience needed for gaining levels in skills and attributes
