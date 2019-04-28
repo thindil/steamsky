@@ -2454,5 +2454,18 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple rapier made of titanium, used in melee combat.</description>
  </item>
+ <item index="245" name="Orichalcum rapier" type="Weapon" weight="3">
+  <trade buyable="N" price="37"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="N" price="37"/>
+  <trade buyable="Y" price="35"/>
+  <data value="2"/>
+  <data value="30"/>
+  <data value="25"/>
+  <data value="1"/>
+  <data value="2"/>
+  <description>Simple rapier made of orichalcum, used in melee combat.</description>
+ </item>
 </items>
 
