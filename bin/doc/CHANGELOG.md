@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- Always show help window maximized
+
 ## [3.0.10] - 2019-04-28
 
 ### Changed
