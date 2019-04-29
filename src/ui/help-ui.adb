@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -28,6 +28,7 @@ with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Text_Iter; use Gtk.Text_Iter;
 with Gtk.Text_Tag_Table; use Gtk.Text_Tag_Table;
 with Gtk.Text_Tag; use Gtk.Text_Tag;
+with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Game; use Game;
@@ -243,6 +244,7 @@ package body Help.UI is
         (Gtk_Label(Get_Object(Builder, "lblhelptopic")),
          To_String(Help_List(Topic).Title));
       Show_All(Gtk_Widget(Get_Object(Builder, "helpwindow")));
+      Maximize(Gtk_Window(Get_Object(Builder, "helpwindow")));
    end ShowHelpUI;
 
 end Help.UI;
