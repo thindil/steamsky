@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated interface
+- Always show help window maximized
 
 ### Fixed
 - Typos in changelog
