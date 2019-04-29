@@ -28,6 +28,7 @@ with Combat; use Combat;
 with Factions; use Factions;
 with Bases; use Bases;
 with Careers; use Careers;
+with Config; use Config;
 
 package body Crew is
 
@@ -56,6 +57,10 @@ package body Crew is
          NewAmount := Amount + (Amount / 2);
       else
          NewAmount := Amount;
+      end if;
+      NewAmount := Natural(Float(NewAmount) * NewGameSettings.ExperienceBonus);
+      if NewAmount = 0 then
+         return;
       end if;
       -- Gain experience in condition assigned attribute
       GainExpInAttribute(ConditionIndex);
@@ -281,7 +286,7 @@ package body Crew is
                CanRest: Boolean := True;
             begin
                if Member.Order = Boarding and HarpoonDuration = 0 and
-                 Enemy.HarpoonDuration = 0 then
+                 Combat.Enemy.HarpoonDuration = 0 then
                   CanRest := False;
                end if;
                if CanRest then
