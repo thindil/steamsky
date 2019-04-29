@@ -33,6 +33,7 @@ with Log; use Log;
 with Goals; use Goals;
 with Factions; use Factions;
 with Stories; use Stories;
+with Config; use Config;
 
 package body Combat is
 
@@ -508,6 +509,17 @@ package body Combat is
                              Items_List(Ship.Cargo(AmmoIndex).ProtoIndex).Value
                                (1);
                         end if;
+                        if Ship = PlayerShip then
+                           WeaponDamage :=
+                             Integer
+                               (Float(WeaponDamage) *
+                                NewGameSettings.PlayerDamageBonus);
+                        else
+                           WeaponDamage :=
+                             Integer
+                               (Float(WeaponDamage) *
+                                NewGameSettings.EnemyDamageBonus);
+                        end if;
                         if ArmorIndex = 0 then
                            if Ship.Modules(K).MType = HARPOON_GUN then
                               for Module of EnemyShip.Modules loop
@@ -684,6 +696,15 @@ package body Combat is
             if Attacker.Hunger > 80 then
                Wounds := 1.0 - DamageFactor(Float(Attacker.Hunger) / 100.0);
                Damage := Damage - (Integer(Float(BaseDamage) * Float(Wounds)));
+            end if;
+            if PlayerAttack2 then
+               Damage :=
+                 Integer
+                   (Float(Damage) * NewGameSettings.PlayerMeleeDamageBonus);
+            else
+               Damage :=
+                 Integer
+                   (Float(Damage) * NewGameSettings.EnemyMeleeDamageBonus);
             end if;
             if Attacker.Equipment(1) > 0 then
                AttackSkill :=
