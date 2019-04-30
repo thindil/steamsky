@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
   rapier
 - Option to delete events in debug menu
 - Option to save game in debug menu
-- New skill: rapiers
+- New skills: rapiers and spears
 
 ### Changed
 - Updated interface
