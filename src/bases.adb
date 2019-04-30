@@ -24,6 +24,7 @@ with Events; use Events;
 with Utils; use Utils;
 with Goals; use Goals;
 with Crafts; use Crafts;
+with Config; use Config;
 
 package body Bases is
 
@@ -34,7 +35,9 @@ package body Bases is
         SkyBases(BaseIndex).Reputation(1) = 100 then
          return;
       end if;
-      NewPoints := SkyBases(BaseIndex).Reputation(2) + Points;
+      NewPoints :=
+        SkyBases(BaseIndex).Reputation(2) +
+        Integer(Float(Points) * NewGameSettings.ReputationBonus);
       if BaseIndex = PlayerShip.HomeBase then
          NewPoints := NewPoints + Points;
       end if;
