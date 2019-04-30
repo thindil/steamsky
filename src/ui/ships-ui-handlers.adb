@@ -34,15 +34,16 @@ with Ships.Upgrade; use Ships.Upgrade;
 with Ships.Crew; use Ships.Crew;
 with Game.SaveLoad; use Game.SaveLoad;
 with Utils.UI; use Utils.UI;
+with Config; use Config;
 
 package body Ships.UI.Handlers is
 
    procedure ShowModuleInfo(Object: access Gtkada_Builder_Record'Class) is
       ModuleInfo: Unbounded_String;
       Module: ModuleData;
-      MaxValue, MaxUpgrade: Positive;
+      MaxValue: Positive;
       HaveAmmo: Boolean;
-      Mamount: Natural := 0;
+      Mamount, MaxUpgrade: Natural := 0;
       DamagePercent, UpgradePercent: Gdouble;
       CleanBar: constant GObject := Get_Object(Object, "cleanbar");
       QualityBar: constant GObject := Get_Object(Object, "qualitybar");
@@ -393,6 +394,11 @@ package body Ships.UI.Handlers is
             when others =>
                null;
          end case;
+         MaxUpgrade :=
+           Integer(Float(MaxUpgrade) * NewGameSettings.UpgradeCostBonus);
+         if MaxUpgrade = 0 then
+            MaxUpgrade := 1;
+         end if;
          UpgradePercent :=
            1.0 - (Gdouble(Module.UpgradeProgress) / Gdouble(MaxUpgrade));
          Set_Fraction(Gtk_Progress_Bar(UpgradeBar), UpgradePercent);
