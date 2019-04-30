@@ -20,6 +20,7 @@ with ShipModules; use ShipModules;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Crew.Inventory; use Crew.Inventory;
+with Config; use Config;
 
 package body Ships.Upgrade is
 
@@ -165,7 +166,11 @@ package body Ships.Upgrade is
       end;
       PlayerShip.UpgradeModule := ModuleIndex;
       if PlayerShip.Modules(ModuleIndex).UpgradeAction /= UpgradeAction then
-         PlayerShip.Modules(ModuleIndex).UpgradeProgress := UpgradeProgress;
+         PlayerShip.Modules(ModuleIndex).UpgradeProgress :=
+           Integer(Float(UpgradeProgress) * NewGameSettings.UpgradeCostBonus);
+         if PlayerShip.Modules(ModuleIndex).UpgradeProgress = 0 then
+            PlayerShip.Modules(ModuleIndex).UpgradeProgress := 1;
+         end if;
          PlayerShip.Modules(ModuleIndex).UpgradeAction := UpgradeAction;
       end if;
       AddMessage
@@ -418,18 +423,25 @@ package body Ships.Upgrade is
                         when ENGINE =>
                            PlayerShip.Modules(PlayerShip.UpgradeModule)
                              .UpgradeProgress :=
-                             10;
+                             Integer(10.0 * NewGameSettings.UpgradeCostBonus);
                         when CABIN | GUN | BATTERING_RAM | HARPOON_GUN =>
                            PlayerShip.Modules(PlayerShip.UpgradeModule)
                              .UpgradeProgress :=
-                             100;
+                             Integer(100.0 * NewGameSettings.UpgradeCostBonus);
                         when HULL =>
                            PlayerShip.Modules(PlayerShip.UpgradeModule)
                              .UpgradeProgress :=
-                             500;
+                             Integer(500.0 * NewGameSettings.UpgradeCostBonus);
                         when others =>
                            null;
                      end case;
+                     if PlayerShip.Modules(PlayerShip.UpgradeModule)
+                         .UpgradeProgress =
+                       0 then
+                        PlayerShip.Modules(PlayerShip.UpgradeModule)
+                          .UpgradeProgress :=
+                          1;
+                     end if;
                   end if;
                when VALUE =>
                   if PlayerShip.Modules(PlayerShip.UpgradeModule).MType =
@@ -470,7 +482,14 @@ package body Ships.Upgrade is
                         when ENGINE =>
                            PlayerShip.Modules(PlayerShip.UpgradeModule)
                              .UpgradeProgress :=
-                             100;
+                             Integer(100.0 * NewGameSettings.UpgradeCostBonus);
+                           if PlayerShip.Modules(PlayerShip.UpgradeModule)
+                               .UpgradeProgress =
+                             0 then
+                              PlayerShip.Modules(PlayerShip.UpgradeModule)
+                                .UpgradeProgress :=
+                                1;
+                           end if;
                         when others =>
                            null;
                      end case;

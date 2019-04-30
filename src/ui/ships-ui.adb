@@ -37,6 +37,7 @@ with Bases; use Bases;
 with Missions; use Missions;
 with Factions; use Factions;
 with Utils.UI; use Utils.UI;
+with Config; use Config;
 
 package body Ships.UI is
 
@@ -383,7 +384,7 @@ package body Ships.UI is
    procedure ShowShipInfo is
       ShipInfo, UpgradeInfo: Unbounded_String;
       UpgradePercent: Gdouble;
-      MaxUpgrade: Positive;
+      MaxUpgrade: Integer;
       UpgradeBar: constant GObject := Get_Object(Builder, "upgradebar");
    begin
       Set_Text
@@ -439,6 +440,11 @@ package body Ships.UI is
             when others =>
                null;
          end case;
+         MaxUpgrade :=
+           Integer(Float(MaxUpgrade) * NewGameSettings.UpgradeCostBonus);
+         if MaxUpgrade = 0 then
+            MaxUpgrade := 1;
+         end if;
          UpgradePercent :=
            1.0 -
            (Gdouble
