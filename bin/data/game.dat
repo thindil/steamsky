@@ -610,19 +610,19 @@
  <shipssyllableend value="ya"/>
 <!-- To change name of existing item type, edit `value` attribute for selected
 type. After change of Item Type don't forget to do proper changes in other data
-files (like items or recipes) and in this same file if item type was used in 
-one of below settings. To add new item type, just append new line with tag 
-`itemtype` and it name as `value` attribute. Each new ammunition type must 
-starts with `Ammo` (example: Ammo150). Ammunition for harpoon guns must be 
-named `Harpoon`. To remove Item type, just remove line with tag `itemtype` and 
+files (like items or recipes) and in this same file if item type was used in
+one of below settings. To add new item type, just append new line with tag
+`itemtype` and it name as `value` attribute. Each new ammunition type must
+starts with `Ammo` (example: Ammo150). Ammunition for harpoon guns must be
+named `Harpoon`. To remove Item type, just remove line with tag `itemtype` and
 selected item type name as `value` attribute. -->
  <itemtype value="Fuel"/>
  <itemtype value="Food"/>
  <itemtype value="Drink"/>
  <itemtype value="Ammo10"/>
- <itemtype value="Bronze"/> 
+ <itemtype value="Bronze"/>
  <itemtype value="RawFood"/>
- <itemtype value="Wood"/> 
+ <itemtype value="Wood"/>
  <itemtype value="Gunpowder"/>
  <itemtype value="Iron"/>
  <itemtype value="Copper"/>
@@ -698,60 +698,60 @@ selected item type name as `value` attribute. -->
  <itemtype value="PrintingSet"/>
  <itemtype value="Paper"/>
  <itemtype value="EmptyBook"/>
-<!-- To change which item type is used for repair/upgrading tools, `value` 
+<!-- To change which item type is used for repair/upgrading tools, `value`
 attribue of tag `repairtools`. Value must be existing item type. -->
  <repairtools value="RepairTools"/>
-<!-- To change which item type is used for cleaning ship, edit `value` 
+<!-- To change which item type is used for cleaning ship, edit `value`
 attribute of tag `cleaningrools`. Value must be existing item type. -->
  <cleaningtools value="Bucket"/>
-<!-- To change which item type is used for deconstruct items, edit `value` 
+<!-- To change which item type is used for deconstruct items, edit `value`
 attribute of tag `alchemytools`. Value must be existing item type. -->
  <alchemytools value="AlchemySet"/>
-<!-- To change which item is used as a body for dead, edit `value` attribute 
-of tag `corpseindex`. Value must be existing item index from any items file 
+<!-- To change which item is used as a body for dead, edit `value` attribute
+of tag `corpseindex`. Value must be existing item index from any items file
 from *data/items* directory. -->
  <corpseindex value="40"/>
-<!-- To change which item type is used for delivery missions, edit `value` 
+<!-- To change which item type is used for delivery missions, edit `value`
 attribute of tag `missionitemstype`. Value must be existing item type. -->
  <missionitemstype value="MissionItem"/>
-<!-- To change which item type is used as a fuel for ship, edit `value` 
+<!-- To change which item type is used as a fuel for ship, edit `value`
 attribute of tag `fueltype`. Value must be existing item type. -->
  <fueltype value="Fuel"/>
-<!-- To change which item is used as a money, edit `value` attribute of tag 
-`moneyindex`. Value must be existing item index from any items file from 
+<!-- To change which item is used as a money, edit `value` attribute of tag
+`moneyindex`. Value must be existing item index from any items file from
 *data/items* directory.-->
  <moneyindex value="1"/>
-<!-- To change which word in ship names is used to determine trader ship 
-(needed for friendly trader random event), edit `value` attribute for tag 
-`tradersname`. Value can be any single word (but this word must be in trader 
+<!-- To change which word in ship names is used to determine trader ship
+(needed for friendly trader random event), edit `value` attribute for tag
+`tradersname`. Value can be any single word (but this word must be in trader
 ships names).-->
  <tradersname value="trader"/>
-<!-- Each attribute starts with tag `attribute`. Attribute `name` is name of 
+<!-- Each attribute starts with tag `attribute`. Attribute `name` is name of
 selected attribute. Value between `attribute` tags is description of attribute.
 After change attribute name, don't forget to made proper changes in this same
-data file (if needed). To edit attribute name, just edit value of attribute 
-`name`. To change attribute description, just edit text between `attribute` 
-tags. To add new attribute, just append new line with tag `attribute` with 
+data file (if needed). To edit attribute name, just edit value of attribute
+`name`. To change attribute description, just edit text between `attribute`
+tags. To add new attribute, just append new line with tag `attribute` with
 it name as attribute `name` and description between tags `attribute`. -->
  <attribute name="Strength">Physical strength of character, determines damage in combat and carry capacity, used in some craftings too</attribute>
  <attribute name="Dexterity">Nimbleness of character, used in many crafts</attribute>
  <attribute name="Intelligence">Intellect and perception of character, used in many crafts</attribute>
  <attribute name="Condition">Endurance of character, determine how long he/she can works before they grow tired</attribute>
-<!-- Each skill starts with tag `skill`. 
+<!-- Each skill starts with tag `skill`.
 - Attribute `name` is name of selected skill.
-- Attribute `attribute` is name of character attribute (must be defined 
+- Attribute `attribute` is name of character attribute (must be defined
 ealier in this same file).
 - Optional attribute `tool` is item type used as tool during training (must be
 defined ealier in this same file).
 - Value between `skills` tags is description of skill.
-After change skill name, you been need to made proper changes in other game 
+After change skill name, you been need to made proper changes in other game
 data files (recipes, items and this same file) if needed. To change skill name,
-just edit value of `name` attribute of selected skill. To change assigned 
-attribute to selected skill enter new name in attribute `attribute`. Name must 
-be existing attribute name, defined ealier in this same file. To change skill 
+just edit value of `name` attribute of selected skill. To change assigned
+attribute to selected skill enter new name in attribute `attribute`. Name must
+be existing attribute name, defined ealier in this same file. To change skill
 description, just edit text between `skill` tags. To change assigned tool,
 edit value of `tool` attribute of selected skill.
-To add new skill, just append new line with tag `skill` with it name as 
+To add new skill, just append new line with tag `skill` with it name as
 attribute `name`, assigned attribute to skill as attribute `attribute`,
 assigned item type as training tool as attribute `tool` and description between
 tags `skill`. -->
@@ -780,12 +780,13 @@ tags `skill`. -->
  <skill attribute="Strength" name="Two-handed Swords" tool="TrainingDummy">Used to dermine chance to hit with two handed swords in combat</skill>
  <skill attribute="Strength" name="Two-handed Maces" tool="TrainingDummy">Used to dermine chance to hit with two handed, blunt weapon in combat</skill>
  <skill attribute="Strength" name="Rapiers" tool="TrainingDummy">Used to dermine chance to hit with rapiers in combat</skill>
-<!-- To change which attribute is used to raise character condition, edit 
-attribute `value` of tag `conditionname`. Value must be existing attribute 
+ <skill attribute="Strength" name="Spears" tool="TrainingDummy">Used to dermine chance to hit with spears in combat</skill>
+<!-- To change which attribute is used to raise character condition, edit
+attribute `value` of tag `conditionname`. Value must be existing attribute
 name. -->
  <conditionname value="Condition"/>
-<!-- To change which attribute is used to count character maximum encumbrance, 
-edit attribute `value` of tag `strenghtname`. Value must be existing attribute 
+<!-- To change which attribute is used to count character maximum encumbrance,
+edit attribute `value` of tag `strenghtname`. Value must be existing attribute
 name. -->
  <strengthname value="Strength"/>
 <!-- To change which skill is used for piloting ship, edit `value` attribute of
@@ -794,39 +795,39 @@ tag `pilotingskill`. Value must be existing skill name. -->
 <!-- To change which skill is used for engineering duty, edit `value` attribute
 of tag `engineeringskill`. Value must be existing skill name.-->
  <engineeringskill value="Engineering"/>
-<!-- To change which skill is used for operating guns on ship, `value` 
+<!-- To change which skill is used for operating guns on ship, `value`
 attribute of tag `gunneryskill`. Value must be existing skill name. -->
  <gunneryskill value="Gunnery"/>
-<!-- To change which skill is used for talking in bases or with other ships 
+<!-- To change which skill is used for talking in bases or with other ships
 (trades, repairs, recruit, etc), edit `value` attribute of tag `talkingskill`.
 Value must be existing skill name. -->
  <talkingskill value="Rhetoric"/>
 <!-- To change which skill is used for spotting things (other ships, etc), edit
 `value` attribute of tag `perceptionskill`. Value must be existing skill name. -->
  <perceptionskill value="Perception"/>
-<!-- To change which item type is used as a head armor for characters, edit 
+<!-- To change which item type is used as a head armor for characters, edit
 `value` attribute of tag `headarmor`. Value must be existing item type. -->
  <headarmor value="HeadArmor"/>
-<!-- To change which item type is used as a chest armor for characters, edit 
+<!-- To change which item type is used as a chest armor for characters, edit
 `value` attribute of tag `chestarmor`. Value must be existing item type. -->
  <chestarmor value="ChestArmor"/>
-<!-- To change which item type is used as a arms armor for characters, edit 
+<!-- To change which item type is used as a arms armor for characters, edit
 `value` attribute of tag `armsarmor`. Value must be existing item type. -->
  <armsarmor value="ArmsArmor"/>
-<!-- To change which item type is used as a legs armor for characters, edit 
+<!-- To change which item type is used as a legs armor for characters, edit
 `value` attribute of tag `legsarmor`. Value must be existing item type. -->
  <legsarmor value="LegsArmor"/>
-<!-- To change which item type is used as a shield for characters, edit 
+<!-- To change which item type is used as a shield for characters, edit
 `value` attribute of tag `shieldtype`. Value must be existing item type. -->
  <shieldtype value="Shield"/>
-<!-- To change which item type is used as a weapon by characters, edit 
+<!-- To change which item type is used as a weapon by characters, edit
 `value` attribute of tag `weapontype`. Value must be existing item type. -->
  <weapontype value="Weapon"/>
-<!-- To change which skill is used for dodges in character's combat, edit 
+<!-- To change which skill is used for dodges in character's combat, edit
 `value` attribute of tag `dodgeskill`. Value must be existing skill name. -->
  <dodgeskill value="Dodge"/>
-<!-- To change which skill is used for chance of hit enemy in character's 
-combat when character don't have weapon, edit `value` attribute of tag 
+<!-- To change which skill is used for chance of hit enemy in character's
+combat when character don't have weapon, edit `value` attribute of tag
 `unarmedskill`. Value must be existing skill name. -->
  <unarmedskill value="Brawling"/>
 </data>
