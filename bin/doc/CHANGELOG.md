@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Always show help window maximized
 
+### Fixed
+- Missing keyboard shortcuts in wait menu
+
 ## [3.0.10] - 2019-04-28
 
 ### Changed
