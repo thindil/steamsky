@@ -78,7 +78,7 @@ package body Statistics.UI is
       ProtoIndex: Positive;
    begin
       StatsText :=
-        To_Unbounded_String("Points:" & Natural'Image(GameStats.Points));
+        To_Unbounded_String("Points:" & Natural'Image(GetGamePoints));
       Append(StatsText, LF & "Time passed:");
       declare
          MinutesDiff: constant Natural :=

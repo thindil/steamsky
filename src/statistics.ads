@@ -63,5 +63,7 @@ package Statistics is
       FractionName: Unbounded_String) with
       Pre => FractionName /=
       Null_Unbounded_String; -- Add new killed mob to list
+   function GetGamePoints
+     return Natural; -- Get amount of gained points multiplied by difficulty bonus
 
 end Statistics;

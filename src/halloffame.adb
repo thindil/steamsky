@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -69,7 +69,7 @@ package body HallOfFame is
       RawValue: Unbounded_String;
    begin
       for I in HallOfFame_Array'Range loop
-         if HallOfFame_Array(I).Points < GameStats.Points then
+         if HallOfFame_Array(I).Points < GetGamePoints then
             NewIndex := I;
             exit;
          end if;
@@ -81,7 +81,7 @@ package body HallOfFame is
          HallOfFame_Array(I + 1) := HallOfFame_Array(I);
       end loop;
       HallOfFame_Array(NewIndex) :=
-        (Name => PlayerName, Points => GameStats.Points,
+        (Name => PlayerName, Points => GetGamePoints,
          DeathReason => DeathReason);
       HoFData := Create_Document(HoF);
       MainNode := Create_Element(HoFData, "halloffame");
