@@ -894,7 +894,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                       <object class="GtkSpinButton" id="spinupdate">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="tooltip_text" translatable="yes">Percent of standard materials cost for upgrade ship modules. Raising it made game easier but lower amount of gained points.</property>
+                                        <property name="tooltip_text" translatable="yes">Percent of standard materials cost and time needed for upgrade ship modules. Raising it made game easier but lower amount of gained points.</property>
                                         <property name="text" translatable="yes">100</property>
                                         <property name="adjustment">adjupdate</property>
                                         <property name="value">100</property>
