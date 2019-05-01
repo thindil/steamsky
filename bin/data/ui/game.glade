@@ -10852,10 +10852,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="layout_style">start</property>
     <child>
       <object class="GtkButton" id="btnwait1min">
-        <property name="label" translatable="yes">Wait 1 minute</property>
+        <property name="label" translatable="yes">Wait _1 minute</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
         <signal name="clicked" handler="Wait_Order" object="btnwait1min" swapped="no"/>
       </object>
       <packing>
@@ -10866,10 +10867,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     </child>
     <child>
       <object class="GtkButton" id="btnwait5min">
-        <property name="label" translatable="yes">Wait 5 minutes</property>
+        <property name="label" translatable="yes">Wait _5 minutes</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
         <signal name="clicked" handler="Wait_Order" object="btnwait5min" swapped="no"/>
       </object>
       <packing>
@@ -10880,10 +10882,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     </child>
     <child>
       <object class="GtkButton" id="btnwait10min">
-        <property name="label" translatable="yes">Wait 10 minutes</property>
+        <property name="label" translatable="yes">Wait 1_0 minutes</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
         <signal name="clicked" handler="Wait_Order" object="btnwait10min" swapped="no"/>
       </object>
       <packing>
@@ -10894,10 +10897,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     </child>
     <child>
       <object class="GtkButton" id="btnwait15min">
-        <property name="label" translatable="yes">Wait 15 minutes</property>
+        <property name="label" translatable="yes">Wait 15 _minutes</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
         <signal name="clicked" handler="Wait_Order" object="btnwait15min" swapped="no"/>
       </object>
       <packing>
@@ -10908,10 +10912,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     </child>
     <child>
       <object class="GtkButton" id="btnwait30min">
-        <property name="label" translatable="yes">Wait 30 minutes</property>
+        <property name="label" translatable="yes">Wait _30 minutes</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
         <signal name="clicked" handler="Wait_Order" object="btnwait30min" swapped="no"/>
       </object>
       <packing>
@@ -10922,10 +10927,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     </child>
     <child>
       <object class="GtkButton" id="btnwait1hour">
-        <property name="label" translatable="yes">Wait 1 hour</property>
+        <property name="label" translatable="yes">Wait 1 _hour</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
         <signal name="clicked" handler="Wait_Order" object="btnwait1hour" swapped="no"/>
       </object>
       <packing>
@@ -10940,10 +10946,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         <property name="can_focus">False</property>
         <child>
           <object class="GtkButton" id="btnwaitx">
-            <property name="label" translatable="yes">Wait</property>
+            <property name="label" translatable="yes">W_ait</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="use_underline">True</property>
             <signal name="clicked" handler="Wait_Order" object="waitxadj" swapped="no"/>
           </object>
           <packing>
@@ -10991,11 +10998,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     </child>
     <child>
       <object class="GtkButton" id="btnwaitrest">
-        <property name="label" translatable="yes">Wait until crew is rested</property>
+        <property name="label" translatable="yes">Wait until crew is _rested</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="no_show_all">True</property>
+        <property name="use_underline">True</property>
         <signal name="clicked" handler="Wait_Order" object="btnwaitrest" swapped="no"/>
       </object>
       <packing>
@@ -11006,11 +11014,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     </child>
     <child>
       <object class="GtkButton" id="btnwaitheal">
-        <property name="label" translatable="yes">Wait until crew is healed</property>
+        <property name="label" translatable="yes">Wait until crew is h_ealed</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="no_show_all">True</property>
+        <property name="use_underline">True</property>
         <signal name="clicked" handler="Wait_Order" object="btnwaitheal" swapped="no"/>
       </object>
       <packing>
