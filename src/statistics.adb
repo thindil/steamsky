@@ -18,6 +18,7 @@
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Goals; use Goals;
 with Ships; use Ships;
+with Config; use Config;
 
 package body Statistics is
 
@@ -149,5 +150,37 @@ package body Statistics is
                Amount => 1));
       end if;
    end UpdateKilledMobs;
+
+   function GetGamePoints return Natural is
+      MalusIndexes: constant array(Positive range <>) of Positive :=
+        (2, 4, 5, 6);
+      DifficultyValues: constant array(Positive range <>) of Float :=
+        (NewGameSettings.EnemyDamageBonus, NewGameSettings.PlayerDamageBonus,
+         NewGameSettings.EnemyMeleeDamageBonus,
+         NewGameSettings.PlayerMeleeDamageBonus,
+         NewGameSettings.ExperienceBonus, NewGameSettings.ReputationBonus,
+         NewGameSettings.UpgradeCostBonus);
+      PointsBonus, Value: Float := 0.0;
+   begin
+      for I in DifficultyValues'Range loop
+         Value := DifficultyValues(I);
+         for J in MalusIndexes'Range loop
+            if I = MalusIndexes(J) then
+               if Value < 1.0 then
+                  Value := 1.0 + ((1.0 - Value) * 4.0);
+               elsif Value > 1.0 then
+                  Value := 1.0 - Value;
+               end if;
+               exit;
+            end if;
+         end loop;
+         PointsBonus := PointsBonus + Value;
+      end loop;
+      PointsBonus := PointsBonus / Float(DifficultyValues'Length);
+      if PointsBonus < 0.01 then
+         PointsBonus := 0.01;
+      end if;
+      return Natural(Float(GameStats.Points) * PointsBonus);
+   end GetGamePoints;
 
 end Statistics;
