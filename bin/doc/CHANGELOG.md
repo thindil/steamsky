@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Checking availability of crafting recipes
 - Check for tools for deconstructing items
 - Start searching for modules on editing module name
+- Missing keyboard shortcuts in wait menu
 
 ## [3.6] - 2019-04-21
 
