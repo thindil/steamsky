@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Missing keyboard shortcuts in wait menu
+- Typo in changelog
 
 ## [3.0.10] - 2019-04-28
 
@@ -16,7 +17,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash on putting on items in inventory
-- Crash on trying to writting to the closed debug log file
+- Crash on trying to writing to the closed debug log file
 - Checking availability of crafting recipes
 - Check for tools for deconstructing items
 - Start searching for modules on editing module name
