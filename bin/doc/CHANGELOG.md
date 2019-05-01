@@ -5,8 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New items: orichalcum maul, adamantium maul, bronze rapier, iron rapier,
-  steel rapier, titanium rapier, orichalcum rapier, adamantium rapier and
-  bronze spear
+  steel rapier, titanium rapier, orichalcum rapier, adamantium rapier, bronze
+  spear and iron spear
 - New crafting recipes: orichalcum maul, adamantium maul, bronze rapier, iron
   rapier, steel rapier, titanium rapier, orichalcum rapier, adamantium rapier,
   bronze spear
