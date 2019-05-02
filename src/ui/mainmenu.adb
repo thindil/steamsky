@@ -589,6 +589,13 @@ package body MainMenu is
          "Total gained points:" & Integer'Image(Bonus) & "%");
    end UpdateSummary;
 
+   procedure ResetDifficulty(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      for Name of AdjNames loop
+         Set_Value(Gtk_Adjustment(Get_Object(Object, To_String(Name))), 100.0);
+      end loop;
+   end ResetDifficulty;
+
    procedure CreateMainMenu is
       Error: aliased GError;
       AdjValues: constant array(Positive range <>) of Gdouble :=
@@ -634,6 +641,7 @@ package body MainMenu is
       Register_Handler(Builder, "Hide_Dialog", HideDialog'Access);
       Register_Handler(Builder, "Random_Difficulty", RandomDifficulty'Access);
       Register_Handler(Builder, "Update_Summary", UpdateSummary'Access);
+      Register_Handler(Builder, "Reset_Difficulty", ResetDifficulty'Access);
       Do_Connect(Builder);
       SetUtilsBuilder(Builder);
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
