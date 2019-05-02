@@ -126,9 +126,9 @@ package body Bases.Trade is
         0 then
          Cost :=
            Items_List(Recipes_List(RecipeIndex).ResultIndex).Prices(BaseType) *
-           Recipes_List(RecipeIndex).Difficulty * 100;
+           Recipes_List(RecipeIndex).Difficulty * 10;
       else
-         Cost := Recipes_List(RecipeIndex).Difficulty * 100;
+         Cost := Recipes_List(RecipeIndex).Difficulty * 10;
       end if;
       CountPrice(Cost, TraderIndex);
       ProtoMoneyIndex := FindProtoItem(MoneyIndex);
