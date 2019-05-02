@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated interface
 - Always show help window maximized
+- Reduced cost of recipes in bases
 
 ### Fixed
 - Typos in changelog
