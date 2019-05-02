@@ -64,6 +64,14 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="page_increment">10</property>
     <signal name="value-changed" handler="Update_Summary" swapped="no"/>
   </object>
+  <object class="GtkAdjustment" id="adjprices">
+    <property name="lower">1</property>
+    <property name="upper">500</property>
+    <property name="value">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+    <signal name="value-changed" handler="Update_Summary" swapped="no"/>
+  </object>
   <object class="GtkAdjustment" id="adjreputation">
     <property name="lower">1</property>
     <property name="upper">500</property>
@@ -851,6 +859,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="label" translatable="yes">Upgrade cost:</property>
+                                            <property name="max_width_chars">20</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
@@ -881,6 +890,44 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           <packing>
                                             <property name="left_attach">1</property>
                                             <property name="top_attach">6</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="label" translatable="yes">%</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">2</property>
+                                            <property name="top_attach">7</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkSpinButton" id="spinprices">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="tooltip_text" translatable="yes">Percent of standard prices for services in bases (docking, repairing ship, recruiting new crew members, etc). Lowering it made game easier but lower amount of gained points.</property>
+                                            <property name="text" translatable="yes">100</property>
+                                            <property name="adjustment">adjprices</property>
+                                            <property name="value">100</property>
+                                            <signal name="focus-in-event" handler="Update_Info" object="spinprices" swapped="no"/>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">1</property>
+                                            <property name="top_attach">7</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="label" translatable="yes">Prices in bases:</property>
+                                            <property name="max_width_chars">20</property>
+                                          </object>
+                                          <packing>
+                                            <property name="left_attach">0</property>
+                                            <property name="top_attach">7</property>
                                           </packing>
                                         </child>
                                       </object>

@@ -82,7 +82,8 @@ package body MainMenu is
       To_Unbounded_String("adjenemymelee"),
       To_Unbounded_String("adjplayermelee"),
       To_Unbounded_String("adjexperience"),
-      To_Unbounded_String("adjreputation"), To_Unbounded_String("adjupdate"));
+      To_Unbounded_String("adjreputation"), To_Unbounded_String("adjupdate"),
+      To_Unbounded_String("adjprices"));
 
    procedure Quit(Object: access Gtkada_Builder_Record'Class) is
    begin
@@ -405,6 +406,10 @@ package body MainMenu is
          UpgradeCostBonus =>
            Float
              (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjupdate"))) /
+              100.0),
+         PricesBonus =>
+           Float
+             (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjprices"))) /
               100.0));
       NewGame;
       StartGame;
@@ -605,7 +610,8 @@ package body MainMenu is
          Gdouble(NewGameSettings.PlayerMeleeDamageBonus),
          Gdouble(NewGameSettings.ExperienceBonus),
          Gdouble(NewGameSettings.ReputationBonus),
-         Gdouble(NewGameSettings.UpgradeCostBonus));
+         Gdouble(NewGameSettings.UpgradeCostBonus),
+         Gdouble(NewGameSettings.PricesBonus));
    begin
       LoadThemes;
       SetFontSize(ALLFONTS);

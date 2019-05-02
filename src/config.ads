@@ -35,6 +35,7 @@ package Config is
       ExperienceBonus: Float; -- Default bonus to gained experience
       ReputationBonus: Float; -- Default bonus to gained or lost reputation in bases
       UpgradeCostBonus: Float; -- Default bonus to amount of materials needed for player's ship upgrades.
+      PricesBonus: Float; -- Default bonus to prices for services in bases
    end record;
    type AutoMoveBreak is
      (NEVER, ANY, FRIENDLY,
