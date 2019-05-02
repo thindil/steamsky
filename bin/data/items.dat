@@ -2506,5 +2506,18 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple spear made of iron, used in melee combat.</description>
  </item>
+ <item index="249" name="Steel spear" type="Weapon" weight="4">
+  <trade buyable="N" price="32"/>
+  <trade buyable="N" price="32"/>
+  <trade buyable="N" price="32"/>
+  <trade buyable="N" price="32"/>
+  <trade buyable="Y" price="27"/>
+  <data value="5"/>
+  <data value="32"/>
+  <data value="26"/>
+  <data value="2"/>
+  <data value="2"/>
+  <description>Simple spear made of steel, used in melee combat.</description>
+ </item>
 </items>
 
