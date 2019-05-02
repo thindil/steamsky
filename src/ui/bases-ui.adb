@@ -131,9 +131,9 @@ package body Bases.UI is
                Cost :=
                  Items_List(Recipes_List(ObjectIndex).ResultIndex).Prices
                    (BaseType) *
-                 Recipes_List(ObjectIndex).Difficulty * 100;
+                 Recipes_List(ObjectIndex).Difficulty * 10;
             else
-               Cost := Recipes_List(ObjectIndex).Difficulty * 100;
+               Cost := Recipes_List(ObjectIndex).Difficulty * 10;
             end if;
             CountPrice(Cost, FindMember(Talk));
             Set_Label
