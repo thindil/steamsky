@@ -199,7 +199,7 @@ package body Ships.Movement is
             declare
                MoneyIndex2: constant Natural :=
                  FindItem(PlayerShip.Cargo, MoneyIndex);
-               DockingCost: Positive;
+               DockingCost: Natural;
                TraderIndex: constant Natural := FindMember(Talk);
             begin
                if MoneyIndex2 = 0 then
@@ -212,6 +212,11 @@ package body Ships.Movement is
                      exit;
                   end if;
                end loop;
+               DockingCost :=
+                 Natural(Float(DockingCost) * NewGameSettings.PricesBonus);
+               if DockingCost = 0 then
+                  DockingCost := 1;
+               end if;
                CountPrice(DockingCost, TraderIndex);
                if DockingCost > PlayerShip.Cargo(MoneyIndex2).Amount then
                   return "You can't dock to base because you don't have enough " &

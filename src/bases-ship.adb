@@ -23,6 +23,7 @@ with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Trades; use Trades;
 with Bases.Cargo; use Bases.Cargo;
+with Config; use Config;
 
 package body Bases.Ship is
 
@@ -436,7 +437,7 @@ package body Bases.Ship is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
-      DockingCost: Positive;
+      DockingCost: Natural;
       TraderIndex: constant Natural := FindMember(Talk);
    begin
       if SkyBases(BaseIndex).Population = 0 then
@@ -455,6 +456,10 @@ package body Bases.Ship is
             exit;
          end if;
       end loop;
+      DockingCost := Natural(Float(DockingCost) * NewGameSettings.PricesBonus);
+      if DockingCost = 0 then
+         DockingCost := 1;
+      end if;
       CountPrice(DockingCost, TraderIndex);
       if DockingCost > PlayerShip.Cargo(MoneyIndex2).Amount then
          DockingCost := PlayerShip.Cargo(MoneyIndex2).Amount;
@@ -514,6 +519,10 @@ package body Bases.Ship is
       end if;
       if Bases_Types'Val(BaseType - 1) = Shipyard then
          Cost := Cost / 2;
+      end if;
+      Cost := Natural(Float(Cost) * NewGameSettings.PricesBonus);
+      if Cost = 0 then
+         Cost := 1;
       end if;
       if Time = 0 then
          Time := 1;
