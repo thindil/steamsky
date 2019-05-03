@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Check for tools for deconstructing items
 - Start searching for modules on editing module name
 - Missing keyboard shortcuts in wait menu
+- Crash on counting max items to trade in bases
 
 ## [3.6] - 2019-04-21
 
