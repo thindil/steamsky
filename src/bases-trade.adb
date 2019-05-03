@@ -24,6 +24,7 @@ with Crafts; use Crafts;
 with Trades; use Trades;
 with Utils; use Utils;
 with Bases.Cargo; use Bases.Cargo;
+with Config; use Config;
 
 package body Bases.Trade is
 
@@ -127,6 +128,10 @@ package body Bases.Trade is
       else
          Cost := Recipes_List(RecipeIndex).Difficulty * 10;
       end if;
+      Cost := Natural(Float(Cost) * NewGameSettings.PricesBonus);
+      if Cost = 0 then
+         Cost := 1;
+      end if;
       CountPrice(Cost, TraderIndex);
       MoneyIndex2 := CheckMoney(Cost, RecipeName);
       UpdateCargo
@@ -217,6 +222,10 @@ package body Bases.Trade is
             end if;
          end loop;
       end if;
+      Cost := Natural(Float(Cost) * NewGameSettings.PricesBonus);
+      if Cost = 0 then
+         Cost := 1;
+      end if;
       CountPrice(Cost, FindMember(Talk));
       if Time = 0 then
          Time := 1;
@@ -224,12 +233,17 @@ package body Bases.Trade is
    end HealCost;
 
    function TrainCost(MemberIndex, SkillIndex: Positive) return Natural is
-      Cost: Positive := 100;
+      Cost: Natural := Natural(100.0 * NewGameSettings.PricesBonus);
    begin
       for Skill of PlayerShip.Crew(MemberIndex).Skills loop
          if Skill(1) = SkillIndex then
             if Skill(2) < 100 then
-               Cost := (Skill(2) + 1) * 100;
+               Cost :=
+                 Natural
+                   (Float((Skill(2) + 1) * 100) * NewGameSettings.PricesBonus);
+               if Cost = 0 then
+                  Cost := 1;
+               end if;
                exit;
             end if;
             return 0;

@@ -36,6 +36,7 @@ with Bases.Ship; use Bases.Ship;
 with Bases.Trade; use Bases.Trade;
 with Crafts; use Crafts;
 with Utils.UI; use Utils.UI;
+with Config; use Config;
 
 package body Bases.UI is
 
@@ -134,6 +135,10 @@ package body Bases.UI is
                  Recipes_List(ObjectIndex).Difficulty * 10;
             else
                Cost := Recipes_List(ObjectIndex).Difficulty * 10;
+            end if;
+            Cost := Natural(Float(Cost) * NewGameSettings.PricesBonus);
+            if Cost = 0 then
+               Cost := 1;
             end if;
             CountPrice(Cost, FindMember(Talk));
             Set_Label
