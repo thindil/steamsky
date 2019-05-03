@@ -278,7 +278,10 @@ package body Bases is
                exit;
             end if;
          end loop;
-         Price := Price * 100;
+         Price := Natural(Float(Price * 100) * NewGameSettings.PricesBonus);
+         if Price = 0 then
+            Price := 1;
+         end if;
          if GetRandom(1, 100) < 99 then
             RecruitBase := BaseIndex;
          else
