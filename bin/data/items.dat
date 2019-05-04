@@ -2532,5 +2532,18 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple spear made of titanium, used in melee combat.</description>
  </item>
+ <item index="251" name="Orichalcum spear" type="Weapon" weight="6">
+  <trade buyable="N" price="42"/>
+  <trade buyable="N" price="42"/>
+  <trade buyable="N" price="42"/>
+  <trade buyable="N" price="42"/>
+  <trade buyable="Y" price="37"/>
+  <data value="2"/>
+  <data value="42"/>
+  <data value="26"/>
+  <data value="2"/>
+  <data value="2"/>
+  <description>Simple spear made of orichalcum, used in melee combat.</description>
+ </item>
 </items>
 
