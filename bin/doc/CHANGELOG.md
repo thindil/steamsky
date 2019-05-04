@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Missing keyboard shortcuts in wait menu
 - Typo in changelog
+- Minimal level of skill after maluses from health, hunger, thirst and fatigue
 
 ## [3.0.10] - 2019-04-28
 
