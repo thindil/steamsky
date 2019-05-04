@@ -308,6 +308,9 @@ package body Bases is
       UnknownBases: Natural := 0;
    begin
       TraderIndex := FindMember(Talk);
+      if TraderIndex = 0 then
+         return;
+      end if;
       if BaseIndex > 0 then -- asking in base
          if SkyBases(BaseIndex).Population < 150 then
             Amount := 10;
@@ -421,6 +424,9 @@ package body Bases is
       NewItemIndex, ShipIndex: Unbounded_String;
    begin
       TraderIndex := FindMember(Talk);
+      if TraderIndex = 0 then
+         return;
+      end if;
       if BaseIndex > 0 then -- asking in base
          if SkyBases(BaseIndex).Population < 150 then
             MaxEvents := 5;

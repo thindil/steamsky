@@ -53,13 +53,16 @@ package body Bases.Trade is
       DailyPayment, TradePayment: Natural; ContractLenght: Integer) is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      MoneyIndex2, Price: Natural;
+      MoneyIndex2, Price, TraderIndex: Natural;
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
-      TraderIndex, Morale: Positive;
+      Morale: Positive;
       Inventory: Inventory_Container.Vector;
    begin
       TraderIndex := FindMember(Talk);
+      if TraderIndex = 0 then
+         raise Trade_No_Trader;
+      end if;
       Price := Cost;
       CountPrice(Price, TraderIndex);
       MoneyIndex2 := CheckMoney(Price, To_String(Recruit.Name));
@@ -110,7 +113,7 @@ package body Bases.Trade is
         To_String(Items_List(Recipes_List(RecipeIndex).ResultIndex).Name);
       BaseType: constant Positive :=
         Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
-      TraderIndex: Positive;
+      TraderIndex: Natural;
    begin
       if BaseType /= Recipes_List(RecipeIndex).BaseType then
          raise Trade_Cant_Buy;
@@ -120,6 +123,9 @@ package body Bases.Trade is
          raise Trade_Already_Known;
       end if;
       TraderIndex := FindMember(Talk);
+      if TraderIndex = 0 then
+         raise Trade_No_Trader;
+      end if;
       if Items_List(Recipes_List(RecipeIndex).ResultIndex).Prices(BaseType) >
         0 then
          Cost :=
@@ -151,13 +157,16 @@ package body Bases.Trade is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Cost, Time, MoneyIndex2: Natural := 0;
-      TraderIndex: Positive;
+      TraderIndex: Natural;
    begin
       HealCost(Cost, Time, MemberIndex);
       if Cost = 0 then
          raise Trade_Cant_Heal;
       end if;
       TraderIndex := FindMember(Talk);
+      if TraderIndex = 0 then
+         raise Trade_No_Trader;
+      end if;
       MoneyIndex2 := CheckMoney(Cost);
       if MemberIndex > 0 then
          PlayerShip.Crew(MemberIndex).Health := 100;
