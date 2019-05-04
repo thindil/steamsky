@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - Start searching for modules on editing module name
 - Missing keyboard shortcuts in wait menu
 - Crash on counting max items to trade in bases
+- Minimal level of skill after maluses from health, hunger, thirst and fatigue
 
 ## [3.6] - 2019-04-21
 
