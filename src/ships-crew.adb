@@ -60,8 +60,8 @@ package body Ships.Crew is
                SkillLevel :=
                  SkillLevel - (Integer(Float(BaseSkillLevel) * Float(Damage)));
             end if;
-            if SkillLevel < 0 then
-               SkillLevel := 0;
+            if SkillLevel < 1 then
+               SkillLevel := 1;
             end if;
             if Member.Morale(1) > 90 then
                Damage := DamageFactor(Float(SkillLevel) / 100.0);
