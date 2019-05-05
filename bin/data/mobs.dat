@@ -817,7 +817,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <equipment index="4" slot="Legs"/>
  </mobile>
  <mobile index="37" order="PILOT">
-  <skill maxlevel="2" minlevel="7" name="Piloting"/>
+  <skill maxlevel="17" minlevel="7" name="Piloting"/>
   <skill maxlevel="15" minlevel="5" name="Perception"/>
   <skill maxlevel="20" minlevel="10" name="Swords"/>
   <skill maxlevel="20" minlevel="10" name="Dodge"/>
