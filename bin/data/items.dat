@@ -2545,5 +2545,18 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple spear made of orichalcum, used in melee combat.</description>
  </item>
+ <item index="252" name="Adamantium spear" type="Weapon" weight="10">
+  <trade buyable="N" price="82"/>
+  <trade buyable="N" price="82"/>
+  <trade buyable="N" price="82"/>
+  <trade buyable="N" price="82"/>
+  <trade buyable="Y" price="77"/>
+  <data value="1"/>
+  <data value="47"/>
+  <data value="26"/>
+  <data value="2"/>
+  <data value="2"/>
+  <description>Simple spear made of adamantium, used in melee combat.</description>
+ </item>
 </items>
 
