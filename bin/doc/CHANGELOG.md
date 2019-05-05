@@ -10,7 +10,8 @@ All notable changes to this project will be documented in this file.
   adamantium spear
 - New crafting recipes: orichalcum maul, adamantium maul, bronze rapier, iron
   rapier, steel rapier, titanium rapier, orichalcum rapier, adamantium rapier,
-  bronze spear, iron spear, steel spear, titanium spear and orichalcum spear
+  bronze spear, iron spear, steel spear, titanium spear, orichalcum spear and
+  adamantium spear
 - Option to delete events in debug menu
 - Option to save game in debug menu
 - New skills: rapiers and spears
