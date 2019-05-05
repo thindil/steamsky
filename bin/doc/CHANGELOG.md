@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - Crash on counting max items to trade in bases
 - Minimal level of skill after maluses from health, hunger, thirst and fatigue
 - Possible crash on talking in bases
+- Skills for one of Inquisition pilots
 
 ## [3.6] - 2019-04-21
 
