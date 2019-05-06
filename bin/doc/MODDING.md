@@ -2,47 +2,52 @@ Some general informations about adding/editing some game elements (skills,
 ships, ships modules, etc.)
 
 ## General informations about modifications
-To add new thing(item, ship, module, etc) to game, you must create first new
-directory inside game modifications directory (by default it is *data/mods*).
-For example, create directory *mymod* (full path then will be
-*data/mods/mymod*). Inside create file (or files) with extension *dat* which
-will have that same structure like file with things which you want to add to
-game (so, for adding new item to game, create file which will be looks like
-*items.dat* file from *data* directory). More detailed informations about
-selected data structures, you can find below.
-Of course, you can edit default files with data too, just remember that all
-modification there can be overwritten with new version of game.
+To add new things (item, ship, module, etc) to the game, you must create
+a new
+directory inside the game's mod directory which is *data/mods* by default.
+
+For example, create the directory *mymod* as *data/mods/mymod*
+and place your work into a file or files with the extension *dat*
+patterned on the structure of the shipped files there.
+
+For example, to add new item to game, create a file which looks like
+*data/items.dat*.
+
+Below you will find more detailed information about the
+XML data structures understood by the program.
+
+You may can edit the shipped files as well of course, but modification
+you make there will be overwritten when you update the game.
 
 ## Items types
 
 ### General informations
 - Open file *game.dat* in *data* directory or better, create new file in
-  modifications directory. New file must start with tag `data`. Each item
-  type is one line entry with tag `itemtype`.
+  modifications directory.
+- A file providing new items must start with tag `data`. Each item type is one
+  line entry with tag `itemtype`. Pattern your work on what you see in
+  *data/game.dat*.
 
 ### Changing existing items types
-- If editing *game.dat* file: To change name of existing item type, edit
-  `value` attribute for selected type.
-- If editing own file: need to remove first selected item type then add new.
-- After change of Item Type don't forget to do proper changes in other data
-  files (like items or recipes) and in this same file if item type was used in
-  one of below settings.
+- By editing *data/game.dat* you can change the name of an existing item type
+  by changing the `value` attribute.
+- When editing own file: need to remove first selected item type then add new.
+- Item types are referenced in the specifications of items and recipes. Don't
+  forget to do change any reference to your type in these files as well.
 
 ### Adding new items types
-- To add new item type, just append new line with tag `itemtype` and it name
-  as `value` attribute. Same for editing *game.dat* file and own file.
-- Each new ammunition type must starts with `Ammo` (example: *Ammo150*).
-- Ammunition for harpoon guns must be named `Harpoon`.
+- Add a new item type, by appending a new line with tag `itemtype`. Store the
+  Name of your new type in the `value` attribute.
+- All Gun ammunition must have a name beginning with `Ammo`, for example:
+  *Ammo150*.
+- All Harpoon Gun Ammunition types must have a name beginning with `Harpoon`.
 
 ### Removing item types
-- If editing *game.dat* file: Just remove line with tag `itemtype` and
-  selected item type name as `value` attribute.
-- If editing own file: append new line with tag `remove` which have attribute
-  `name` set to `itemtype` and value with name of item type which will be
-  removed.
-- After delete of Item Type don't forget to do proper changes in other data
-  files (like items or recipes) and in this same file if item type was used in
-  one of below settings.
+- You can remove item types from *data/game.dat* by removing their tag.
+- Alternatively, your mod may have a `remove` tag with the attributes `name`
+  set to `itemtype` and `value` set to the name of type to be removed.
+- After deleting item types, don't forget remove any references to it in other
+  data files.
 
 ## Characters attributes
 
