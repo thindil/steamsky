@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Option to save game in debug menu
 - New skills: rapiers and spears
 - Ability to set difficulty levels for new game
+- Added few new mobs
 
 ### Changed
 - Updated interface
