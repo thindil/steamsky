@@ -63,7 +63,7 @@ enemy ships.
 <!--
 - Tag "description": In game description of item. Can have any value.
 -->
-  <description>Federation of independents sky bases. This is biggest faction from all, almost all bases belongs to this faction. Easiest to play, recommended especially for new players.</description>
+  <description>Federation of independent sky bases. This is biggest faction from all, almost all bases belongs to this faction. They favorite melee weapons are swords. Easiest to play, recommended especially for new players.</description>
 <!--
 - Tags "foodtype": Types of items used as food by this faction members. If
 no "foodtype" tags inside faction, that faction members can't be hungry.
