@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Always show help window maximized
 - Reduced cost of recipes in bases
+- Updated MODDING.md (author: Michael Ax)
 
 ### Fixed
 - Missing keyboard shortcuts in wait menu
