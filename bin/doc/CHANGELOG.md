@@ -38,6 +38,7 @@ All notable changes to this project will be documented in this file.
 - Possible crash on talking in bases
 - Skills for one of Inquisition pilots
 - Setting command line arguments in AppImage running script
+- A lot of in-game messages (author: Michael Ax)
 
 ## [3.6] - 2019-04-21
 
