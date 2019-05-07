@@ -1764,11 +1764,11 @@ during combat. -->
   <cargo index="20" maxamount="1000" minamount="750"/>
   <cargo index="5" maxamount="200" minamount="150"/>
   <cargo index="13" maxamount="40" minamount="10"/>
-  <member index="125"/>
-  <member index="126"/>
-  <member index="127"/>
-  <member index="128"/>
-  <member amount="2" index="129"/>
+  <member index="12"/>
+  <member index="13"/>
+  <member index="14"/>
+  <member index="15"/>
+  <member amount="2" index="57"/>
   <description>Standard independent traders vessel. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="102" maxloot="250" minloot="200" name="Advanced poleis trader" owner="POLEIS">
@@ -1786,11 +1786,11 @@ during combat. -->
   <cargo index="20" maxamount="500" minamount="300"/>
   <cargo index="5" maxamount="200" minamount="100"/>
   <cargo index="13" maxamount="40" minamount="20"/>
-  <member index="32"/>
-  <member index="33"/>
-  <member index="34"/>
-  <member index="35"/>
-  <member amount="2" index="65"/>
+  <member index="130"/>
+  <member index="131"/>
+  <member index="132"/>
+  <member index="133"/>
+  <member amount="2" index="134"/>
   <description>Advanced version of standard poleis traders vessel. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="103" maxloot="250" minloot="200" name="Advanced independent trader" owner="INDEPENDENT">
@@ -2114,10 +2114,10 @@ during combat. -->
   <cargo index="20" maxamount="500" minamount="300"/>
   <cargo index="5" maxamount="200" minamount="100"/>
   <cargo index="13" maxamount="40" minamount="20"/>
-  <member index="32"/>
-  <member index="33"/>
-  <member index="34"/>
-  <member amount="3" index="65"/>
+  <member index="130"/>
+  <member index="131"/>
+  <member index="132"/>
+  <member amount="3" index="134"/>
   <description>Advanced version of standard poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="119" maxloot="250" minloot="200" name="Advanced independent patrol ship" owner="INDEPENDENT">
@@ -4224,10 +4224,10 @@ during combat. -->
   <cargo index="3" maxamount="400" minamount="200"/>
   <cargo index="20" maxamount="500" minamount="300"/>
   <cargo index="13" maxamount="40" minamount="20"/>
-  <member index="32"/>
-  <member index="33"/>
-  <member index="34"/>
-  <member amount="3" index="65"/>
+  <member index="130"/>
+  <member index="131"/>
+  <member index="132"/>
+  <member amount="3" index="134"/>
   <description>Advanced, upgraded version of standard poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="226" maxloot="250" minloot="200" name="Advanced independent patrol ship mk II" owner="INDEPENDENT">
@@ -4266,10 +4266,10 @@ during combat. -->
   <cargo index="3" maxamount="400" minamount="200"/>
   <cargo index="25" maxamount="500" minamount="300"/>
   <cargo index="21" maxamount="40" minamount="20"/>
-  <member index="32"/>
-  <member index="33"/>
-  <member index="34"/>
-  <member amount="3" index="65"/>
+  <member index="130"/>
+  <member index="131"/>
+  <member index="132"/>
+  <member amount="3" index="134"/>
   <description>Advanced, upgraded version of standard poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="228" maxloot="250" minloot="200" name="Advanced independent patrol ship mk III" owner="INDEPENDENT">
@@ -4308,10 +4308,10 @@ during combat. -->
   <cargo index="3" maxamount="400" minamount="200"/>
   <cargo index="117" maxamount="500" minamount="300"/>
   <cargo index="116" maxamount="200" minamount="100"/>
-  <member index="32"/>
-  <member index="33"/>
-  <member index="34"/>
-  <member amount="3" index="65"/>
+  <member index="130"/>
+  <member index="131"/>
+  <member index="132"/>
+  <member amount="3" index="134"/>
   <description>Advanced, upgraded version of standard poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="230" maxloot="250" minloot="200" name="Advanced independent patrol ship mk IV" owner="INDEPENDENT">
