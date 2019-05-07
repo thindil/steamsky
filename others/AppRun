@@ -9,9 +9,25 @@ export XDG_DATA_DIRS=$XDG_DATA_DIRS:$APPDIR/usr/share
 export GSETTINGS_BACKEND=memory
 export GTK_THEME=Adwaita
 export RUNFROMSCRIPT=1
-if [ $# -eq 0 ]
-then
-   ./steamsky --savedir="$HOME"/.local/share/steamsky/saves --themesdir="$HOME"/.local/share/steamsky/themes --modsdir="$HOME"/.local/share/steamsky/mods --datadir=$APPDIR/usr/share/data --docdir=$APPDIR/usr/share/doc
-else
-   ./steamsky "$@"
-fi
+savedir="$HOME"/.local/share/steamsky/saves
+themesdir="$HOME"/.local/share/steamsky/themes
+modsdir="$HOME"/.local/share/steamsky/mods
+datadir="$APPDIR"/usr/share/data
+docdir="$APPDIR"/usr/share/doc
+while test $# -gt 0
+do
+   case "$1" in
+      --savedir*) savedir=`echo $1 | sed -e 's/^[^=]*=//g'`
+         ;;
+      --themesdir*) themesdir=`echo $1 | sed -e 's/^[^=]*=//g'`
+         ;;
+      --modsdir*) modsdir=`echo $1 | sed -e 's/^[^=]*=//g'`
+         ;;
+      --datadir*) datadir=`echo $1 | sed -e 's/^[^=]*=//g'`
+         ;;
+      --docdir*) docdir=`echo $1 | sed -e 's/^[^=]*=//g'`
+         ;;
+   esac
+   shift
+done
+./steamsky --savedir="$savedir" --themesdir="$themesdir" --modsdir="$modsdir" --datadir="$datadir" --docdir="$docdir"
