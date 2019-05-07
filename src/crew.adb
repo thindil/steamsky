@@ -274,7 +274,7 @@ package body Crew is
                Member.Order := Member.PreviousOrder;
                Member.OrderTime := 15;
                AddMessage
-                 (To_String(Member.Name) & " back to work, fully rested.",
+                 (To_String(Member.Name) & " returns to work fully rested.",
                   OrderMessage, YELLOW);
                UpdateMorale(PlayerShip, I, 1);
             end if;
@@ -295,7 +295,7 @@ package body Crew is
                   Member.OrderTime := 15;
                   AddMessage
                     (To_String(Member.Name) &
-                     " is too tired to work, going rest.",
+                     " is too tired to work, going to rest.",
                      OrderMessage, YELLOW);
                   if FindCabin(I) = 0 then
                      for Module of PlayerShip.Modules loop
