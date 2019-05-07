@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file.
 - Minimal level of skill after maluses from health, hunger, thirst and fatigue
 - Possible crash on talking in bases
 - Skills for one of Inquisition pilots
+- Setting command line arguments in AppImage running script
 
 ## [3.6] - 2019-04-21
 
