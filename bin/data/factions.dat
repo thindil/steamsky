@@ -63,7 +63,7 @@ enemy ships.
 <!--
 - Tag "description": In game description of item. Can have any value.
 -->
-  <description>Federation of independent sky bases. This is biggest faction from all, almost all bases belongs to this faction. They favorite melee weapons are swords. Easiest to play, recommended especially for new players.</description>
+  <description>Federation of independent sky bases. This is biggest faction from all, almost all bases belongs to this faction. They favorite melee weapons are one handed swords. Easiest to play, recommended especially for new players.</description>
 <!--
 - Tags "foodtype": Types of items used as food by this faction members. If
 no "foodtype" tags inside faction, that faction members can't be hungry.
@@ -114,7 +114,7 @@ faction. Will be show to player instead of default name.
   <relation faction="UNDEAD" reputation="-100" friendly="N" />
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="-50" friendly="N" />
-  <description>Group of independent from each other sky bases, not connected in any way with self. Bases of this faction are much less common than Poleis and rarely near other independent base. Gameplay is harder than Poleis due to less sky bases but generally it is very similar.</description>
+  <description>Group of independent from each other sky bases, not connected in any way with self. They favorite melee weapons are spears. Bases of this faction are much less common than Poleis and rarely near other independent base. Gameplay is harder than Poleis due to less sky bases but generally it is very similar.</description>
   <foodtype name="Food" />
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
