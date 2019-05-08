@@ -3,16 +3,16 @@
 Steam Sky is an open source roguelike with a steampunk setting. You are a
 commander of a flying ship, as leader you will be traveling across floating
 bases, engaging in combat, trading goods etc. There is no mandatory ending
-to this game, you may freely play until your character die. The game is
+to the game, you may freely play until your character dies. The game is
 currently under heavy development, but is in a playable state. Steam Sky is
-available on Linux and Windows 64 bit platforms.
+available for Linux and Windows.
 
 ## Game versions
 There are currently 2 versions of the game:
 - 3.0.x: "stable" version of game. This version will receive bug fixes but
   no new features. Source code for this version is in *3.0* branch.
 - 3.x: "development" version of game, future version 4.0. This is where
-  game feature updates will happen. Due to new features, save compatibility
+  game feature updates happen. Due to new features, save compatibility
   will typically break between releases. Use this version at your own risk.
   Source code for this version is in the *master* branch.
 
@@ -50,37 +50,42 @@ this file is) to compile:
 ## Running Steam Sky
 
 ### Linux
-If you use downloaded binaries, you don't need any additional libraries. Just
-run `./steamsky.sh` script to start game. Game will not works if you try to
-start it by binary file `steamsky`.
+If you downloaded the binaries, you're set. Just run the `./steamsky.sh`
+script to start the game. The game will not work without some variables
+set in that script.
+
 
 ### Windows
-If you compiled the game or use downloaded binaries just clicking on
-`steamsky.exe` in `bin` directory should run it.
+If you compiled the game or downloaded the binaries just clicking on
+`steamsky.exe` in the `bin` directory should run it.
 
 ### Starting parameters
-You can set game directories by starting parameters. Possible options are:
+You can specify the game directories through command-line parameters.
+Possible options are:
 
-* --datadir=[directory] set directory where all game data files (and
-  directories like ships, items, etc.) are. Example: `./steamsky.sh
-  --datadir=/home/user/game/tmp`. Default value is *data/*
+* --datadir=[directory] This is where the game data files are kept.
+   Example: `./steamsky.sh --datadir=/home/user/game/tmp`.
+   Default value is *data/*
 
-* --savedir=[directory] set directory where game (or logs) will be saved. Game
-  must have write permission to this directory. Example: `./steamsky.sh
-  --savedir=/home/user/.saves`. Default value is *data/saves/*
+* --savedir=[directory] This is where savegames and logs are kept.
+   The Game must have write permission to this directory.
+   Example: `./steamsky.sh --savedir=/home/user/.saves`.
+   Default value is *data/saves/*
 
-* --docdir=[directory] set directory where game documentation is (at this
-  moment important only for license and changelog files). Example `./steamsky.sh
-  --docdir=/usr/share/steamsky/doc`. Default value is *doc/*.
+* --docdir=[directory] This is where the game documentation is.
+   Example `./steamsky.sh --docdir=/usr/share/steamsky/doc`.
+   Default value is *doc/*.
 
-* --modsdir=[directory] set directory where game modifications are. Example:
-  `./steamsky.sh --modsdir=/home/user/.mods`. Default value is *data/mods/*
+* --modsdir=[directory] This is where mods are loaded from.
+   Example:`./steamsky.sh --modsdir=/home/user/.mods`.
+   Default value is *data/mods/*
 
-* --themesdir=[directory] set directory where game themes are. Example:
-  `./steamsky.sh --themesdir=/home/user/.mods`. Default value is *data/themes/*
+* --themesdir=[directory] This is where custom themes are loaded from.
+   Example: `./steamsky.sh --themesdir=/home/user/.mods`.
+   Default value is *data/themes/*
 
-Of course, you can set all parameters together: `./steamsky.sh --datadir=somedir/
---savedir=otherdir/ --docdir=anotherdir/`
+Of course, you can set all parameters together:
+`./steamsky.sh --datadir=somedir/ --savedir=otherdir/ --docdir=anotherdir/`
 
 Paths to directories can be absolute or relative where file `steamsky` is. For
 Windows, use `steamsky.exe` instead `./steamsky.sh`.
@@ -90,39 +95,27 @@ For detailed informations about modifying various game elements or debugging
 game, see [MODDING.md](bin/doc/MODDING.md)
 
 ## Contributing to project
-For detailed informations about contributing to the project (bugs reporting,
-ideas propositions, code conduct, etc), see
-[CONTRIBUTING.md](bin/doc/CONTRIBUTING.md)
+For detailed informations about contributing to the project
+(bugs reporting, ideas propositions, code conduct, etc),
+see [CONTRIBUTING.md](bin/doc/CONTRIBUTING.md)
 
 ## Licenses
-Game is available under [GPLv3](bin/doc/COPYING) license.
+The game is made available under the [GPLv3](bin/doc/COPYING) license.
 
-GtkAda and XmlAda libraries distributed with game are under GPLv3 license.
+The GtkAda and XmlAda libraries distributed with game are also under the GPLv3 license.
 
-Gtk library distributed with game is under LGPLv2.1 license:
+The Gtk library distributed with game is under the LGPLv2.1 license: https://www.gtk.org/
 
-https://www.gtk.org/
+The Licensing for the fonts distributed with the game is as follows:
 
-Font Roboto is under Apache v2.0 license:
-
-https://fonts.google.com/specimen/Roboto
-
-Font Hack is under MIT license:
-
-https://sourcefoundry.org/hack/
-
-Font Z003 is under AGPL v3 license:
-
-https://github.com/ArtifexSoftware/urw-base35-fonts
-
-Font Rye is under Open Font License:
-
-https://fonts.google.com/specimen/Rye
+* Font Roboto is under Apache v2.0 license: https://fonts.google.com/specimen/Roboto
+* Font Hack is under MIT license: https://sourcefoundry.org/hack/
+* Font Z003 is under AGPL v3 license: https://github.com/ArtifexSoftware/urw-base35-fonts
+* Font Rye is under Open Font License: https://fonts.google.com/specimen/Rye
 
 
+The changelog and a copy of the GPLv3 license can be found in the [doc](bin/doc) directory.
 
-More documentation about game (changelog, license) you can find in
-[doc](bin/doc) directory.
 
 That's all for now, as usual, probably I forgot about something important ;)
 
