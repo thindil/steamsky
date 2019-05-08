@@ -1918,11 +1918,11 @@ during combat. -->
   <cargo index="33" maxamount="1000" minamount="500"/>
   <cargo index="5" maxamount="800" minamount="600"/>
   <cargo index="13" maxamount="500" minamount="300"/>
-  <member index="43"/>
-  <member amount="3" index="44"/>
-  <member index="45"/>
-  <member index="46"/>
-  <member index="69" maxamount="8" minamount="4"/>
+  <member index="145"/>
+  <member amount="3" index="146"/>
+  <member index="147"/>
+  <member index="148"/>
+  <member index="149" maxamount="8" minamount="4"/>
   <description>Advanced version of huge, well armored poleis traders ship. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="109" maxloot="1200" minloot="750" name="Advanced huge independent trader" owner="INDEPENDENT">
@@ -2240,10 +2240,10 @@ during combat. -->
   <cargo index="33" maxamount="1000" minamount="500"/>
   <cargo index="5" maxamount="800" minamount="600"/>
   <cargo index="13" maxamount="500" minamount="300"/>
-  <member index="43"/>
-  <member amount="4" index="44"/>
-  <member index="45"/>
-  <member index="69" maxamount="12" minamount="8"/>
+  <member index="145"/>
+  <member amount="4" index="146"/>
+  <member index="147"/>
+  <member index="149" maxamount="12" minamount="8"/>
   <description>Advanced version of huge, well armored poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="125" maxloot="1200" minloot="750" name="Advanced huge independent patrol ship" owner="INDEPENDENT">
@@ -5276,11 +5276,11 @@ during combat. -->
   <cargo index="3" maxamount="2000" minamount="1500"/>
   <cargo index="33" maxamount="1000" minamount="500"/>
   <cargo index="13" maxamount="800" minamount="600"/>
-  <member index="43"/>
-  <member amount="3" index="44"/>
-  <member index="45"/>
-  <member index="46"/>
-  <member index="69" maxamount="8" minamount="4"/>
+  <member index="145"/>
+  <member amount="3" index="146"/>
+  <member index="147"/>
+  <member index="148"/>
+  <member index="149" maxamount="8" minamount="4"/>
   <description>Advanced and upraded version of huge, well armored poleis traders ship. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="277" maxloot="1200" minloot="750" name="Advanced huge independent trader mk II" owner="INDEPENDENT">
@@ -5339,10 +5339,10 @@ during combat. -->
   <cargo index="3" maxamount="2000" minamount="1500"/>
   <cargo index="33" maxamount="1000" minamount="500"/>
   <cargo index="13" maxamount="800" minamount="600"/>
-  <member index="43"/>
-  <member amount="4" index="44"/>
-  <member index="45"/>
-  <member index="69" maxamount="12" minamount="8"/>
+  <member index="145"/>
+  <member amount="4" index="146"/>
+  <member index="147"/>
+  <member index="149" maxamount="12" minamount="8"/>
   <description>Advanced and upgraded version of huge, well armored poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="280" maxloot="1200" minloot="750" name="Advanced huge independent patrol ship mk II" owner="INDEPENDENT">
@@ -5379,11 +5379,11 @@ during combat. -->
   <cargo index="3" maxamount="2000" minamount="1500"/>
   <cargo index="34" maxamount="1000" minamount="500"/>
   <cargo index="21" maxamount="800" minamount="600"/>
-  <member index="43"/>
-  <member amount="3" index="44"/>
-  <member index="45"/>
-  <member index="46"/>
-  <member index="69" maxamount="8" minamount="4"/>
+  <member index="145"/>
+  <member amount="3" index="146"/>
+  <member index="147"/>
+  <member index="148"/>
+  <member index="149" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored poleis traders ship. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="282" maxloot="1200" minloot="750" name="Advanced huge independent trader mk III" owner="INDEPENDENT">
@@ -5442,10 +5442,10 @@ during combat. -->
   <cargo index="3" maxamount="2000" minamount="1500"/>
   <cargo index="34" maxamount="1000" minamount="500"/>
   <cargo index="21" maxamount="800" minamount="600"/>
-  <member index="43"/>
-  <member amount="4" index="44"/>
-  <member index="45"/>
-  <member index="69" maxamount="12" minamount="8"/>
+  <member index="145"/>
+  <member amount="4" index="146"/>
+  <member index="147"/>
+  <member index="149" maxamount="12" minamount="8"/>
   <description>Advanced and upgraded version of huge, well armored poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="285" maxloot="1200" minloot="750" name="Advanced huge independent patrol ship mk III" owner="INDEPENDENT">
@@ -5482,11 +5482,11 @@ during combat. -->
   <cargo index="3" maxamount="2000" minamount="1500"/>
   <cargo index="120" maxamount="1000" minamount="500"/>
   <cargo index="116" maxamount="800" minamount="600"/>
-  <member index="43"/>
-  <member amount="3" index="44"/>
-  <member index="45"/>
-  <member index="46"/>
-  <member index="69" maxamount="8" minamount="4"/>
+  <member index="145"/>
+  <member amount="3" index="146"/>
+  <member index="147"/>
+  <member index="148"/>
+  <member index="149" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored poleis traders ship. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="287" maxloot="1200" minloot="750" name="Advanced huge indepenedent trader mk IV" owner="INDEPENDENT">
@@ -5545,10 +5545,10 @@ during combat. -->
   <cargo index="3" maxamount="2000" minamount="1500"/>
   <cargo index="120" maxamount="1000" minamount="500"/>
   <cargo index="116" maxamount="800" minamount="600"/>
-  <member index="43"/>
-  <member amount="4" index="44"/>
-  <member index="45"/>
-  <member index="69" maxamount="12" minamount="8"/>
+  <member index="145"/>
+  <member amount="4" index="146"/>
+  <member index="147"/>
+  <member index="149" maxamount="12" minamount="8"/>
   <description>Advanced and upgraded version of huge, well armored poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="290" maxloot="1200" minloot="750" name="Advanced huge independent patrol ship mk IV" owner="INDEPENDENT">
