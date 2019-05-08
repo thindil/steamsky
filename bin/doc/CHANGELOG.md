@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Possible crash on talking in bases
 - Skills for one of Inquisition pilots
 - A lot of in-game messages (author: Michael Ax)
+- Starting script for Linux (author: Michael Ax)
 
 ## [3.0.10] - 2019-04-28
 
