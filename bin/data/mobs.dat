@@ -3227,5 +3227,51 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <equipment index="4" slot="Arms"/>
   <equipment index="5" slot="Legs"/>
  </mobile>
+ <mobile index="150" order="PILOT">
+  <skill level="1" name="Piloting"/>
+  <skill level="1" name="Perception"/>
+  <skill level="1" name="Swords"/>
+  <skill level="1" name="Dodge"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="74"/>
+  <item amount="1" index="67"/>
+  <item amount="1" index="68"/>
+  <item amount="1" index="69"/>
+  <item amount="1" index="71"/>
+  <item amount="1" index="73"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="151" order="GUNNER">
+  <skill level="1" name="Gunnery"/>
+  <skill level="1" name="Perception"/>
+  <skill level="1" name="Swords"/>
+  <skill level="1" name="Dodge"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <attribute level="3"/>
+  <priority name="Operating guns" value="Normal"/>
+  <item amount="1" index="74"/>
+  <item amount="1" index="67"/>
+  <item amount="1" index="68"/>
+  <item amount="1" index="69"/>
+  <item amount="1" index="71"/>
+  <item amount="1" index="73"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="6" slot="Shield"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
 </mobiles>
 
