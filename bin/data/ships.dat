@@ -1808,11 +1808,11 @@ during combat. -->
   <cargo index="20" maxamount="500" minamount="300"/>
   <cargo index="5" maxamount="200" minamount="100"/>
   <cargo index="13" maxamount="40" minamount="20"/>
-  <member index="32"/>
-  <member index="33"/>
-  <member index="34"/>
-  <member index="35"/>
-  <member amount="2" index="65"/>
+  <member index="162"/>
+  <member index="163"/>
+  <member index="164"/>
+  <member index="165"/>
+  <member amount="2" index="166"/>
   <description>Advanced version of standard independent traders vessel. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="104" maxloot="500" minloot="300" name="Large poleis trader" owner="POLEIS">
@@ -2135,10 +2135,10 @@ during combat. -->
   <cargo index="20" maxamount="500" minamount="300"/>
   <cargo index="5" maxamount="200" minamount="100"/>
   <cargo index="13" maxamount="40" minamount="20"/>
-  <member index="32"/>
-  <member index="33"/>
-  <member index="34"/>
-  <member amount="3" index="65"/>
+  <member index="162"/>
+  <member index="163"/>
+  <member index="164"/>
+  <member amount="3" index="166"/>
   <description>Advanced version of standard independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="120" maxloot="500" minloot="300" name="Large poleis patrol ship" owner="POLEIS">
@@ -4245,10 +4245,10 @@ during combat. -->
   <cargo index="3" maxamount="400" minamount="200"/>
   <cargo index="20" maxamount="500" minamount="300"/>
   <cargo index="13" maxamount="40" minamount="20"/>
-  <member index="32"/>
-  <member index="33"/>
-  <member index="34"/>
-  <member amount="3" index="65"/>
+  <member index="162"/>
+  <member index="163"/>
+  <member index="164"/>
+  <member amount="3" index="166"/>
   <description>Advanced, upgraded version of standard indepedent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="227" maxloot="250" minloot="200" name="Advanced poleis patrol ship mk III" owner="POLEIS">
@@ -4287,10 +4287,10 @@ during combat. -->
   <cargo index="3" maxamount="400" minamount="200"/>
   <cargo index="25" maxamount="500" minamount="300"/>
   <cargo index="21" maxamount="40" minamount="20"/>
-  <member index="32"/>
-  <member index="33"/>
-  <member index="34"/>
-  <member amount="3" index="65"/>
+  <member index="162"/>
+  <member index="163"/>
+  <member index="164"/>
+  <member amount="3" index="166"/>
   <description>Advanced, upgraded version of standard independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="229" maxloot="250" minloot="200" name="Advanced poleis patrol ship mk IV" owner="POLEIS">
@@ -4329,10 +4329,10 @@ during combat. -->
   <cargo index="3" maxamount="400" minamount="200"/>
   <cargo index="117" maxamount="500" minamount="300"/>
   <cargo index="116" maxamount="200" minamount="100"/>
-  <member index="32"/>
-  <member index="33"/>
-  <member index="34"/>
-  <member amount="3" index="65"/>
+  <member index="162"/>
+  <member index="163"/>
+  <member index="164"/>
+  <member amount="3" index="166"/>
   <description>Advanced, upgraded version of standard independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="COWARD" index="231" maxloot="500" minloot="300" name="Large poleis trader mk II" owner="POLEIS">
