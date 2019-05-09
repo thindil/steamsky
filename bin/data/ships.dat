@@ -1687,8 +1687,8 @@ during combat. -->
   <cargo index="2" maxamount="100" minamount="80"/>
   <cargo index="3" maxamount="200" minamount="150"/>
   <cargo index="14" maxamount="200" minamount="100"/>
-  <member index="5"/>
-  <member index="6"/>
+  <member index="152"/>
+  <member index="153"/>
   <description>Smallest known independent trader. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="98" maxloot="200" minloot="20" name="Small poleis trader" owner="POLEIS">
@@ -1975,8 +1975,8 @@ during combat. -->
   <cargo index="2" maxamount="100" minamount="80"/>
   <cargo index="3" maxamount="200" minamount="150"/>
   <cargo index="14" maxamount="500" minamount="300"/>
-  <member index="5"/>
-  <member index="6"/>
+  <member index="152"/>
+  <member index="153"/>
   <description>Smallest known independent patrol ship. As law enforcers they trying to dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="112" maxloot="200" minloot="20" name="Small poleis patrol ship" owner="POLEIS">
