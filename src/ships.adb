@@ -572,6 +572,11 @@ package body Ships is
                  Integer'Value(Get_Attribute(ShipNode, "minaccuracy"));
                TempRecord.Accuracy(2) :=
                  Integer'Value(Get_Attribute(ShipNode, "maxaccuracy"));
+               if TempRecord.Accuracy(2) < TempRecord.Accuracy(1) then
+                  raise Ships_Invalid_Data
+                    with "Can't add ship '" & To_String(ShipIndex) &
+                    "', invalid range for accuracy.";
+               end if;
             end if;
             if Get_Attribute(ShipNode, "combatai") /= "" then
                TempRecord.CombatAI :=
@@ -586,6 +591,11 @@ package body Ships is
                  Integer'Value(Get_Attribute(ShipNode, "minevasion"));
                TempRecord.Evasion(2) :=
                  Integer'Value(Get_Attribute(ShipNode, "maxevasion"));
+               if TempRecord.Evasion(2) < TempRecord.Evasion(1) then
+                  raise Ships_Invalid_Data
+                    with "Can't add ship '" & To_String(ShipIndex) &
+                    "', invalid range for evasion.";
+               end if;
             end if;
             if Get_Attribute(ShipNode, "loot") /= "" then
                TempRecord.Loot(1) :=
@@ -596,6 +606,11 @@ package body Ships is
                  Integer'Value(Get_Attribute(ShipNode, "minloot"));
                TempRecord.Loot(2) :=
                  Integer'Value(Get_Attribute(ShipNode, "maxloot"));
+               if TempRecord.Loot(2) < TempRecord.Loot(1) then
+                  raise Ships_Invalid_Data
+                    with "Can't add ship '" & To_String(ShipIndex) &
+                    "', invalid range for loot.";
+               end if;
             end if;
             if Get_Attribute(ShipNode, "perception") /= "" then
                TempRecord.Perception(1) :=
@@ -606,6 +621,11 @@ package body Ships is
                  Integer'Value(Get_Attribute(ShipNode, "minperception"));
                TempRecord.Perception(2) :=
                  Integer'Value(Get_Attribute(ShipNode, "maxperception"));
+               if TempRecord.Perception(2) < TempRecord.Perception(1) then
+                  raise Ships_Invalid_Data
+                    with "Can't add ship '" & To_String(ShipIndex) &
+                    "', invalid range for perception.";
+               end if;
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(ShipNode, "cargo");
@@ -635,6 +655,15 @@ package body Ships is
                                 (Get_Attribute(ChildNode, "amount")),
                               0));
                      else
+                        if Integer'Value
+                            (Get_Attribute(ChildNode, "maxamount")) <
+                          Integer'Value
+                            (Get_Attribute(ChildNode, "minamount")) then
+                           raise Ships_Invalid_Data
+                             with "Invalid amount range for item : |" &
+                             Get_Attribute(ChildNode, "index") & "| in " &
+                             To_String(TempRecord.Name) & ".";
+                        end if;
                         TempRecord.Cargo.Append
                           (New_Item =>
                              (ItemIndex,
@@ -654,6 +683,15 @@ package body Ships is
                                    (Get_Attribute(ChildNode, "amount")),
                                  0);
                            else
+                              if Integer'Value
+                                  (Get_Attribute(ChildNode, "maxamount")) <
+                                Integer'Value
+                                  (Get_Attribute(ChildNode, "minamount")) then
+                                 raise Ships_Invalid_Data
+                                   with "Invalid amount range for item : |" &
+                                   Get_Attribute(ChildNode, "index") &
+                                   "| in " & To_String(TempRecord.Name) & ".";
+                              end if;
                               Item :=
                                 (ItemIndex,
                                  Integer'Value
@@ -746,6 +784,15 @@ package body Ships is
                                 (Get_Attribute(ChildNode, "amount")),
                               0));
                      elsif Get_Attribute(ChildNode, "minamount") /= "" then
+                        if Integer'Value
+                            (Get_Attribute(ChildNode, "maxamount")) <
+                          Integer'Value
+                            (Get_Attribute(ChildNode, "minamount")) then
+                           raise Ships_Invalid_Data
+                             with "Invalid amount range for member : |" &
+                             Get_Attribute(ChildNode, "index") & "| in " &
+                             To_String(TempRecord.Name) & ".";
+                        end if;
                         TempRecord.Crew.Append
                           (New_Item =>
                              (MobIndex,
@@ -766,6 +813,15 @@ package body Ships is
                               Member.MaxAmount := 0;
                            elsif Get_Attribute(ChildNode, "minamount") /=
                              "" then
+                              if Integer'Value
+                                  (Get_Attribute(ChildNode, "maxamount")) <
+                                Integer'Value
+                                  (Get_Attribute(ChildNode, "minamount")) then
+                                 raise Ships_Invalid_Data
+                                   with "Invalid amount range for member : |" &
+                                   Get_Attribute(ChildNode, "index") &
+                                   "| in " & To_String(TempRecord.Name) & ".";
+                              end if;
                               Member.MinAmount :=
                                 Integer'Value
                                   (Get_Attribute(ChildNode, "minamount"));
