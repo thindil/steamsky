@@ -369,7 +369,7 @@ package body Ships.Crew is
                AddMessage(MemberName & " starts operating gun.", OrderMessage);
                Ship.Modules(ModuleIndex2).Owner := MemberIndex;
             when Rest =>
-               AddMessage(MemberName & " going on break.", OrderMessage);
+               AddMessage(MemberName & " is going on break.", OrderMessage);
             when Repair =>
                AddMessage(MemberName & " starts repair ship.", OrderMessage);
             when Craft =>
@@ -382,7 +382,7 @@ package body Ships.Crew is
                   OrderMessage);
             when Talk =>
                AddMessage
-                 (MemberName & " was assigned to talking in bases.",
+                 (MemberName & " is now assigned to talking in bases.",
                   OrderMessage);
             when Heal =>
                AddMessage
