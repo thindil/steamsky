@@ -383,12 +383,12 @@ package body Combat is
                         end if;
                      else
                         ShootMessage :=
-                          EnemyNameOwner & To_Unbounded_String(" attacks you");
+                          EnemyNameOwner & To_Unbounded_String(" attacks");
                      end if;
                      if HitChance + GetRandom(1, 50) >
                        GetRandom(1, HitChance + 50) then
                         ShootMessage :=
-                          ShootMessage & To_Unbounded_String(" and hit ");
+                          ShootMessage & To_Unbounded_String(" and hits ");
                         ArmorIndex := FindEnemyModule(ARMOR);
                         if ArmorIndex > 0 then
                            HitLocation := ArmorIndex;
@@ -797,7 +797,7 @@ package body Combat is
             end if;
             if HitChance < 1 then
                AttackMessage :=
-                 AttackMessage & To_Unbounded_String(" and miss.");
+                 AttackMessage & To_Unbounded_String(" and misses.");
                if PlayerAttack then
                   MessageColor := BLUE;
                else
@@ -1244,8 +1244,7 @@ package body Combat is
       if Enemy.Distance >= 15000 then
          if PilotOrder = 4 then
             AddMessage
-              ("You escaped from " & To_String(EnemyName) & ".",
-               CombatMessage);
+              ("You escaped the " & To_String(EnemyName) & ".", CombatMessage);
          else
             AddMessage
               (To_String(EnemyName) & " escaped from you.", CombatMessage);
