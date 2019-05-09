@@ -115,7 +115,7 @@ package body Events is
                   CrewIndex := FindMember(Pilot);
                   if CrewIndex > 0 then
                      AddMessage
-                       ("Sudden bad weather makes your travel takes longer.",
+                       ("Sudden bad weather makes your travel take longer.",
                         OtherMessage, RED);
                      TimePassed :=
                        60 -
@@ -140,7 +140,7 @@ package body Events is
                              (Traders.First_Index, Traders.Last_Index))));
                   SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                     Events_List.Last_Index;
-                  AddMessage("You meet friendly trader.", OtherMessage);
+                  AddMessage("You meet a friendly trader.", OtherMessage);
                   GainPerception;
                   UpdateOrders(PlayerShip);
                when 24 .. 30 => -- Friendly ship
@@ -154,7 +154,7 @@ package body Events is
                               FriendlyShips.Last_Index))));
                   SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                     Events_List.Last_Index;
-                  AddMessage("You spotted friendly ship.", OtherMessage);
+                  AddMessage("You spotted a friendly ship.", OtherMessage);
                   GainPerception;
                   UpdateOrders(PlayerShip);
                when others => -- Combat
@@ -316,7 +316,7 @@ package body Events is
                         LostCargo := PlayerShip.Cargo(Roll2).Amount;
                      end if;
                      AddMessage
-                       ("During checking ship cargo, you noticed that you lost" &
+                       ("During checking ship's cargo, you noticed that you lost" &
                         Positive'Image(LostCargo) & " " &
                         GetItemName(PlayerShip.Cargo(Roll2)) & ".",
                         OtherMessage, RED);
