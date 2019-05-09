@@ -117,6 +117,17 @@ package body Mobs is
                               Integer'Value(Get_Attribute(ChildNode, "level")),
                               0));
                      else
+                        if Integer'Value
+                            (Get_Attribute(ChildNode, "minlevel")) >
+                          Integer'Value
+                            (Get_Attribute(ChildNode, "maxlevel")) then
+                           raise Data_Loading_Error
+                             with "Can't " &
+                             To_Lower(DataAction'Image(Action)) & " mob '" &
+                             To_String(MobIndex) &
+                             " invalid range for skill '" &
+                             Get_Attribute(ChildNode, "name") & "'";
+                        end if;
                         TempRecord.Skills.Append
                           (New_Item =>
                              (ChildIndex,
@@ -136,6 +147,17 @@ package body Mobs is
                                    (Get_Attribute(ChildNode, "level")),
                                  0);
                            else
+                              if Integer'Value
+                                  (Get_Attribute(ChildNode, "minlevel")) >
+                                Integer'Value
+                                  (Get_Attribute(ChildNode, "maxlevel")) then
+                                 raise Data_Loading_Error
+                                   with "Can't " &
+                                   To_Lower(DataAction'Image(Action)) &
+                                   " mob '" & To_String(MobIndex) &
+                                   " invalid range for skill '" &
+                                   Get_Attribute(ChildNode, "name") & "'";
+                              end if;
                               Skill :=
                                 (ChildIndex,
                                  Integer'Value
@@ -168,6 +190,13 @@ package body Mobs is
                     (New_Item =>
                        (Integer'Value(Get_Attribute(ChildNode, "level")), 0));
                else
+                  if Integer'Value(Get_Attribute(ChildNode, "minlevel")) >
+                    Integer'Value(Get_Attribute(ChildNode, "maxlevel")) then
+                     raise Data_Loading_Error
+                       with "Can't " & To_Lower(DataAction'Image(Action)) &
+                       " mob '" & To_String(MobIndex) &
+                       " invalid range for attribute.";
+                  end if;
                   TempRecord.Attributes.Append
                     (New_Item =>
                        (Integer'Value(Get_Attribute(ChildNode, "minlevel")),
@@ -223,6 +252,17 @@ package body Mobs is
                                 (Get_Attribute(ChildNode, "amount")),
                               0));
                      else
+                        if Integer'Value
+                            (Get_Attribute(ChildNode, "minamount")) >
+                          Integer'Value
+                            (Get_Attribute(ChildNode, "maxamount")) then
+                           raise Data_Loading_Error
+                             with "Can't " &
+                             To_Lower(DataAction'Image(Action)) & " mob '" &
+                             To_String(MobIndex) &
+                             " invalid range for amount of '" &
+                             Get_Attribute(ChildNode, "index") & "'.";
+                        end if;
                         TempRecord.Inventory.Append
                           (New_Item =>
                              (ItemIndex,
@@ -242,6 +282,17 @@ package body Mobs is
                                    (Get_Attribute(ChildNode, "amount")),
                                  0);
                            else
+                              if Integer'Value
+                                  (Get_Attribute(ChildNode, "minamount")) >
+                                Integer'Value
+                                  (Get_Attribute(ChildNode, "maxamount")) then
+                                 raise Data_Loading_Error
+                                   with "Can't " &
+                                   To_Lower(DataAction'Image(Action)) &
+                                   " mob '" & To_String(MobIndex) &
+                                   " invalid range for amount of '" &
+                                   Get_Attribute(ChildNode, "index") & "'.";
+                              end if;
                               Item :=
                                 (ItemIndex,
                                  Integer'Value
