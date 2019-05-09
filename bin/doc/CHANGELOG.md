@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Ability to set difficulty levels for new game
 - Added few new mobs
 - Updated crews on poleis and independent ships
+- Check for correctness of value ranges in data files
 
 ### Changed
 - Updated interface
