@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file.
 - New skills: rapiers and spears
 - Ability to set difficulty levels for new game
 - Added few new mobs
-- Updated crews on few poleis ships
+- Updated crews on poleis and independent ships
 
 ### Changed
 - Updated interface
