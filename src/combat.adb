@@ -376,12 +376,12 @@ package body Combat is
                         end if;
                      else
                         ShootMessage :=
-                          EnemyNameOwner & To_Unbounded_String(" attacks you");
+                          EnemyNameOwner & To_Unbounded_String(" attacks");
                      end if;
                      if HitChance + GetRandom(1, 50) >
                        GetRandom(1, HitChance + 50) then
                         ShootMessage :=
-                          ShootMessage & To_Unbounded_String(" and hit ");
+                          ShootMessage & To_Unbounded_String(" and hits ");
                         ArmorIndex := FindEnemyModule(Armor);
                         if ArmorIndex > 0 then
                            HitLocation := ArmorIndex;
@@ -716,7 +716,7 @@ package body Combat is
             end if;
             if HitChance < 1 then
                AttackMessage :=
-                 AttackMessage & To_Unbounded_String(" and miss.");
+                 AttackMessage & To_Unbounded_String(" and misses.");
                if PlayerAttack then
                   MessageColor := 4;
                else
