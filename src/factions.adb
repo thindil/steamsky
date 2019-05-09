@@ -147,6 +147,12 @@ package body Factions is
                  Natural'Value(Get_Attribute(FactionNode, "minpopulation"));
                TempRecord.Population(2) :=
                  Natural'Value(Get_Attribute(FactionNode, "maxpopulation"));
+               if TempRecord.Population(2) < TempRecord.Population(1) then
+                  raise Data_Loading_Error
+                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    " faction '" & To_String(FactionIndex) &
+                    "', invalid range for faction's population.";
+               end if;
             end if;
             if Get_Attribute(FactionNode, "namestype") /= "" then
                TempRecord.NamesType :=
@@ -198,6 +204,13 @@ package body Factions is
                   TmpRelation.Reputation :=
                     (Integer'Value(Get_Attribute(ChildNode, "minreputation")),
                      Integer'Value(Get_Attribute(ChildNode, "maxreputation")));
+                  if TmpRelation.Reputation(2) < TmpRelation.Reputation(1) then
+                     raise Data_Loading_Error
+                       with "Can't " & To_Lower(DataAction'Image(Action)) &
+                       " faction '" & To_String(FactionIndex) &
+                       "', invalid range for faction's reputation with '" &
+                       To_String(RelationIndex) & "'.";
+                  end if;
                end if;
                if Get_Attribute(ChildNode, "friendly") = "Y" then
                   TmpRelation.Friendly := True;
