@@ -18,35 +18,56 @@
 with Ada.Text_IO; use Ada.Text_IO;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
-with Gtk.Label; use Gtk.Label;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
 with Gtk.Widget; use Gtk.Widget;
-with Gtk.Menu_Item; use Gtk.Menu_Item;
-with Gtk.Menu_Shell; use Gtk.Menu_Shell;
 with Gtk.Accel_Map; use Gtk.Accel_Map;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Text_Iter; use Gtk.Text_Iter;
 with Gtk.Text_Tag_Table; use Gtk.Text_Tag_Table;
 with Gtk.Text_Tag; use Gtk.Text_Tag;
 with Gtk.Window; use Gtk.Window;
+with Gtk.List_Store; use Gtk.List_Store;
+with Gtk.Tree_Model; use Gtk.Tree_Model;
+with Gtk.Tree_Selection; use Gtk.Tree_Selection;
+with Gtk.Tree_View; use Gtk.Tree_View;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Game; use Game;
 with Utils.UI; use Utils.UI;
 with Items; use Items;
 with Factions; use Factions;
+with Config; use Config;
 
 package body Help.UI is
 
    Builder: Gtkada_Builder;
+   Setting: Boolean := False;
 
-   procedure SelectTopic(Self: access Gtk_Menu_Item_Record'Class) is
-      TopicName: constant Unbounded_String :=
-        To_Unbounded_String(Get_Label(Self));
+   procedure SelectTopic(Object: access Gtkada_Builder_Record'Class) is
+      TopicName: Unbounded_String;
    begin
+      if Setting then
+         return;
+      end if;
+      declare
+         TopicIter: Gtk_Tree_Iter;
+         TopicModel: Gtk_Tree_Model;
+      begin
+         Get_Selected
+           (Gtk.Tree_View.Get_Selection
+              (Gtk_Tree_View(Get_Object(Object, "treetopics"))),
+            TopicModel, TopicIter);
+         if TopicIter = Null_Iter then
+            return;
+         end if;
+         TopicName :=
+           To_Unbounded_String(Get_String(TopicModel, TopicIter, 0));
+      end;
       for I in Help_List.Iterate loop
          if TopicName = Help_List(I).Title then
+            Setting := True;
             ShowHelpUI(Help_Container.To_Index(I));
+            Setting := False;
             exit;
          end if;
       end loop;
@@ -54,8 +75,8 @@ package body Help.UI is
 
    procedure CreateHelpUI is
       Error: aliased GError;
-      MenuTopic: Gtk_Menu_Item;
-      TopicList: Gtk_Menu_Shell;
+      TopicsIter: Gtk_Tree_Iter;
+      TopicsList: Gtk_List_Store;
    begin
       if Builder /= null then
          return;
@@ -69,14 +90,14 @@ package body Help.UI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      TopicList := Gtk_Menu_Shell(Get_Object(Builder, "helpmenu"));
+      TopicsList := Gtk_List_Store(Get_Object(Builder, "topicslist"));
+      Clear(TopicsList);
       for Help of Help_List loop
-         Gtk_New_With_Label(MenuTopic, To_String(Help.Title));
-         Append(TopicList, MenuTopic);
-         Show(MenuTopic);
-         On_Activate(MenuTopic, SelectTopic'Access);
+         Append(TopicsList, TopicsIter);
+         Set(TopicsList, TopicsIter, 0, To_String(Help.Title));
       end loop;
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
+      Register_Handler(Builder, "Select_Topic", SelectTopic'Access);
       Do_Connect(Builder);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "helpwindow")), CloseWindow'Access);
@@ -244,11 +265,15 @@ package body Help.UI is
          end loop;
          OldIndex := EndIndex + 2;
       end loop;
-      Set_Text
-        (Gtk_Label(Get_Object(Builder, "lblhelptopic")),
-         To_String(Help_List(Topic).Title));
       Show_All(Gtk_Widget(Get_Object(Builder, "helpwindow")));
-      Maximize(Gtk_Window(Get_Object(Builder, "helpwindow")));
+      Resize
+        (Gtk_Window(Get_Object(Builder, "helpwindow")),
+         Gint(GameSettings.WindowWidth), Gint(GameSettings.WindowHeight));
+      Setting := True;
+      Set_Cursor
+        (Gtk_Tree_View(Get_Object(Builder, "treetopics")),
+         Gtk_Tree_Path_New_From_String(Natural'Image(Topic - 1)), null, False);
+      Setting := False;
    end ShowHelpUI;
 
 end Help.UI;
