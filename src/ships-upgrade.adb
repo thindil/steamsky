@@ -318,7 +318,8 @@ package body Ships.Upgrade is
                   if PlayerShip.Modules(PlayerShip.UpgradeModule)
                       .MaxDurability =
                     MaxValue then
-                     MaxUpgradeReached("You reached maximum durability for the ");
+                     MaxUpgradeReached
+                       ("You reached maximum durability for the ");
                      return;
                   else
                      PlayerShip.Modules(PlayerShip.UpgradeModule)
