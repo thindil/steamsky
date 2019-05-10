@@ -4789,7 +4789,7 @@ during combat. -->
   <member index="176" maxamount="5" minamount="3"/>
   <description>Huge, well armored, upgraded version of independent traders ship. Avoids any fights.</description>
  </ship>
- <ship combatai="COWARD" index="253" maxloot="1000" minloot="500" name="Huge pirates mk II" owner="PIRATES">
+ <ship combatai="COWARD" index="253" maxloot="1000" minloot="500" name="Huge pirates trader mk II" owner="PIRATES">
   <module index="70"/>
   <module index="57"/>
   <module amount="2" index="78"/>
