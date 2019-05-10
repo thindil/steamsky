@@ -570,7 +570,8 @@ package body Missions is
       if GameSettings.AutoReturn then
          PlayerShip.DestinationX := SkyBases(Mission.StartBase).SkyX;
          PlayerShip.DestinationY := SkyBases(Mission.StartBase).SkyY;
-         AddMessage("You set travel destination for your ship.", OrderMessage);
+         AddMessage
+           ("You set the travel destination for your ship.", OrderMessage);
       end if;
    end UpdateMission;
 

@@ -149,7 +149,8 @@ package body Maps.UI.Handlers is
       end if;
       PlayerShip.DestinationX := MapX;
       PlayerShip.DestinationY := MapY;
-      AddMessage("You set travel destination for your ship.", OrderMessage);
+      AddMessage
+        ("You set the travel destination for your ship.", OrderMessage);
       UpdateMessages;
       UpdateMoveButtons;
       return True;
