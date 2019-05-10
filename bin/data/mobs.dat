@@ -3690,5 +3690,108 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <equipment index="4" slot="Arms"/>
   <equipment index="5" slot="Legs"/>
  </mobile>
+ <mobile index="172" order="PILOT">
+  <skill maxlevel="50" minlevel="30" name="Piloting"/>
+  <skill maxlevel="12" minlevel="4" name="Perception"/>
+  <skill maxlevel="50" minlevel="30" name="Spears"/>
+  <skill maxlevel="50" minlevel="30" name="Dodge"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <priority name="Piloting" value="Normal"/>
+  <item amount="1" index="249"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="173" order="GUNNER">
+  <skill maxlevel="50" minlevel="30" name="Gunnery"/>
+  <skill maxlevel="12" minlevel="4" name="Perception"/>
+  <skill maxlevel="50" minlevel="30" name="Spears"/>
+  <skill maxlevel="50" minlevel="30" name="Dodge"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <priority name="Operating guns" value="Normal"/>
+  <item amount="1" index="249"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="174" order="ENGINEER">
+  <skill maxlevel="50" minlevel="30" name="Engineering"/>
+  <skill maxlevel="50" minlevel="30" name="Spears"/>
+  <skill maxlevel="50" minlevel="30" name="Dodge"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <priority name="Engineering" value="Normal"/>
+  <item amount="1" index="249"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="175" order="TALK">
+  <skill maxlevel="20" minlevel="10" name="Rhetoric"/>
+  <skill maxlevel="50" minlevel="30" name="Spears"/>
+  <skill maxlevel="50" minlevel="30" name="Dodge"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <priority name="Talking in bases" value="Normal"/>
+  <priority name="Defend ship" value="Normal"/>
+  <item amount="1" index="249"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
+ <mobile index="176" order="DEFEND">
+  <skill maxlevel="50" minlevel="30" name="Spears"/>
+  <skill maxlevel="50" minlevel="30" name="Dodge"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <attribute maxlevel="25" minlevel="15"/>
+  <priority name="Defend ship" value="High"/>
+  <priority name="Board enemy ship" value="Normal"/>
+  <item amount="1" index="249"/>
+  <item amount="1" index="90"/>
+  <item amount="1" index="91"/>
+  <item amount="1" index="92"/>
+  <item amount="1" index="93"/>
+  <equipment index="1" slot="Weapon"/>
+  <equipment index="3" slot="Head"/>
+  <equipment index="2" slot="Torso"/>
+  <equipment index="4" slot="Arms"/>
+  <equipment index="5" slot="Legs"/>
+ </mobile>
 </mobiles>
 
