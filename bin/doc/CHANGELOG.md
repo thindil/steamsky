@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Updated poleis and independent factions description
 - Updated MODDING.md (author: Michael Ax)
 - Updated README.md (author: Michael Ax)
+- Updated help UI
 
 ### Fixed
 - Typos in changelog
