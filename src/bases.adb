@@ -465,7 +465,7 @@ package body Bases is
          SkyBases(BaseIndex).AskedForEvents := GameDate;
          AddMessage
            (To_String(PlayerShip.Crew(TraderIndex).Name) &
-            " asked for events in base '" &
+            " asked for recent events known at base '" &
             To_String(SkyBases(BaseIndex).Name) & "'.",
             OrderMessage);
          GainRep(BaseIndex, 1);
@@ -485,7 +485,7 @@ package body Bases is
             To_String
               (GenerateShipName
                  (Factions_List(ProtoShips_List(ShipIndex).Owner).Name)) &
-            "' for events.",
+            "' for recent events.",
             OrderMessage);
          DeleteEvent(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex);
          UpdateOrders(PlayerShip);
