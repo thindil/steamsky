@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -104,5 +104,8 @@ package Maps.UI.Handlers is
    procedure ToggleCloseButtonProc
      (User_Data: access GObject_Record'
         Class); -- Toggle sensitive of close button
+   -- Disable mouse clicking on selected UI element
+   function DisableMouse
+     (Object: access Gtkada_Builder_Record'Class) return Boolean;
 
 end Maps.UI.Handlers;
