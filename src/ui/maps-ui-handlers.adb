@@ -489,6 +489,10 @@ package body Maps.UI.Handlers is
       Event: Events_Types := None;
       ItemIndex: Natural;
    begin
+      if Is_Visible(Gtk_Widget(Get_Object(Object, "btnboxorders"))) then
+         Hide(Gtk_Widget(Get_Object(Object, "btnboxorders")));
+         return;
+      end if;
       UpdateMapInfo(True);
       Foreach
         (Gtk_Container(Get_Object(Object, "btnboxorders")),
@@ -956,6 +960,24 @@ package body Maps.UI.Handlers is
    procedure ShowInfo(User_Data: access GObject_Record'Class) is
       VisibleChildName: constant String :=
         Get_Visible_Child_Name(Gtk_Stack(Get_Object(Builder, "gamestack")));
+      function HideInfo(StageName: String) return Boolean is
+      begin
+         if Get_Visible_Child_Name
+             (Gtk_Stack(Get_Object(Builder, "gamestack"))) =
+           StageName then
+            if PreviousGameState = Combat_View then
+               Set_Visible_Child_Name
+                 (Gtk_Stack(Get_Object(Builder, "gamestack")), "combat");
+            else
+               Show_All(Gtk_Widget(Get_Object(Builder, "menuwait")));
+               Show_All(Gtk_Widget(Get_Object(Builder, "menuorders")));
+               Set_Visible_Child_Name
+                 (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
+            end if;
+            return True;
+         end if;
+         return False;
+      end HideInfo;
    begin
       if User_Data = Get_Object(Builder, "menumissions") then
          if AcceptedMissions.Length = 0 then
@@ -985,18 +1007,39 @@ package body Maps.UI.Handlers is
          Hide(Gtk_Widget(Get_Object(Builder, "menuorders")));
       end if;
       if User_Data = Get_Object(Builder, "menumessages") then
+         if HideInfo("lastmessages") then
+            return;
+         end if;
          ShowMessagesUI;
       elsif User_Data = Get_Object(Builder, "menucargo") then
+         if HideInfo("cargo") then
+            return;
+         end if;
          ShowCargoUI;
       elsif User_Data = Get_Object(Builder, "menuship") then
+         if HideInfo("ship") then
+            return;
+         end if;
          ShowShipUI;
       elsif User_Data = Get_Object(Builder, "menucrew") then
+         if HideInfo("crew") then
+            return;
+         end if;
          ShowCrewUI;
       elsif User_Data = Get_Object(Builder, "menustats") then
+         if HideInfo("gamestats") then
+            return;
+         end if;
          ShowStatsUI;
       elsif User_Data = Get_Object(Builder, "menumissions") then
+         if HideInfo("acceptedmissions") then
+            return;
+         end if;
          ShowAcceptedMissions;
       elsif User_Data = Get_Object(Builder, "btntrade") then
+         if HideInfo("trade") then
+            return;
+         end if;
          Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
             GenerateTraderCargo
@@ -1005,6 +1048,9 @@ package body Maps.UI.Handlers is
          end if;
          ShowTradeUI;
       elsif User_Data = Get_Object(Builder, "btnrecruit") then
+         if HideInfo("recruit") then
+            return;
+         end if;
          Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
          ShowRecruitUI;
       elsif User_Data = Get_Object(Builder, "btnrecipes") then
@@ -1017,23 +1063,47 @@ package body Maps.UI.Handlers is
          Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
          ShowHealUI;
       elsif User_Data = Get_Object(Builder, "btnschool") then
+         if HideInfo("school") then
+            return;
+         end if;
          Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
          ShowSchoolUI;
       elsif User_Data = Get_Object(Builder, "btnshipyard") then
+         if HideInfo("shipyard") then
+            return;
+         end if;
          Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
          ShowShipyardUI;
       elsif User_Data = Get_Object(Builder, "btnloot") then
+         if HideInfo("loot") then
+            return;
+         end if;
          Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
          ShowLootUI;
       elsif User_Data = Get_Object(Builder, "menucrafting") then
+         if HideInfo("crafts") then
+            return;
+         end if;
          ShowCraftsUI;
       elsif User_Data = Get_Object(Builder, "menubaseslist") then
+         if HideInfo("baseslist") then
+            return;
+         end if;
          ShowBasesListUI;
       elsif User_Data = Get_Object(Builder, "menuevents") then
+         if HideInfo("eventslist") then
+            return;
+         end if;
          ShowEventsUI;
       elsif User_Data = Get_Object(Builder, "menuoptions") then
+         if HideInfo("options") then
+            return;
+         end if;
          ShowGameOptions;
       elsif User_Data = Get_Object(Builder, "menustory") then
+         if HideInfo("stories") then
+            return;
+         end if;
          ShowStoriesUI;
       end if;
    end ShowInfo;
@@ -1269,6 +1339,10 @@ package body Maps.UI.Handlers is
    procedure ShowWaitOrders(Object: access Gtkada_Builder_Record'Class) is
       NeedHealing, NeedRest: Boolean := False;
    begin
+      if Is_Visible(Gtk_Widget(Get_Object(Object, "btnboxwait"))) then
+         Hide(Gtk_Widget(Get_Object(Object, "btnboxwait")));
+         return;
+      end if;
       for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
          if PlayerShip.Crew(I).Tired > 0 and
            PlayerShip.Crew(I).Order = Rest then
