@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -978,6 +978,7 @@ package body Maps.UI is
         (Builder, "Toggle_Close_Button", ToggleCloseButton'Access);
       Register_Handler
         (Builder, "Toggle_Close_Button_Proc", ToggleCloseButtonProc'Access);
+      Register_Handler(Builder, "Disable_Mouse", DisableMouse'Access);
       Do_Connect(Builder);
       Add_Entry("<skymapwindow>/btnupleft", GDK_KP_7, 0);
       Add_Entry("<skymapwindow>/btnup", GDK_KP_8, 0);

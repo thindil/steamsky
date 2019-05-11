@@ -52,6 +52,13 @@ package body Help.UI is
       end loop;
    end SelectTopic;
 
+   function DisableMouse
+     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+      pragma Unreferenced(Object);
+   begin
+      return True;
+   end DisableMouse;
+
    procedure CreateHelpUI is
       Error: aliased GError;
       MenuTopic: Gtk_Menu_Item;
@@ -77,6 +84,7 @@ package body Help.UI is
          On_Activate(MenuTopic, SelectTopic'Access);
       end loop;
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
+      Register_Handler(Builder, "Disable_Mouse", DisableMouse'Access);
       Do_Connect(Builder);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "helpwindow")), CloseWindow'Access);

@@ -1876,6 +1876,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="wrap_mode">word</property>
                                 <property name="cursor_visible">False</property>
                                 <property name="buffer">txtmessages</property>
+                                <signal name="button-press-event" handler="Disable_Mouse" swapped="no"/>
                               </object>
                             </child>
                           </object>
