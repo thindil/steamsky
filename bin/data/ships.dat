@@ -5777,5 +5777,157 @@ during combat. -->
   <member index="97" maxamount="12" minamount="8"/>
   <description>Advanced and upgraded version of huge, well armored independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
+ <ship index="301" name="Player Independent Ship" owner="INDEPENDENT">
+  <module index="1"/>
+  <module index="2"/>
+  <module index="3"/>
+  <module amount="4" index="4"/>
+  <module index="5"/>
+  <module index="6"/>
+  <module amount="2" index="7"/>
+  <module index="8"/>
+  <module index="9"/>
+  <cargo amount="2000" index="1"/>
+  <cargo amount="100" index="2"/>
+  <cargo amount="200" index="3"/>
+  <cargo amount="500" index="4"/>
+  <cargo amount="100" index="5"/>
+  <cargo amount="20" index="13"/>
+  <cargo amount="1" index="47"/>
+  <cargo amount="1" index="49"/>
+  <cargo amount="1" index="50"/>
+  <cargo amount="4" index="61"/>
+  <cargo amount="1" index="53"/>
+  <cargo amount="10" index="22"/>
+  <recipe index="1"/>
+  <recipe index="2"/>
+  <recipe index="4"/>
+  <recipe index="20"/>
+  <member index="185"/>
+  <member index="186"/>
+  <member index="187"/>
+ </ship>
+ <ship index="302" name="Merchant Independent Player Ship" owner="INDEPENDENT">
+  <module index="1"/>
+  <module index="2"/>
+  <module index="3"/>
+  <module amount="3" index="4"/>
+  <module index="5"/>
+  <module index="6"/>
+  <module amount="4" index="7"/>
+  <cargo amount="4000" index="1"/>
+  <cargo amount="100" index="2"/>
+  <cargo amount="200" index="3"/>
+  <cargo amount="200" index="5"/>
+  <cargo amount="20" index="13"/>
+  <cargo amount="1" index="47"/>
+  <cargo amount="1" index="49"/>
+  <cargo amount="1" index="50"/>
+  <cargo amount="4" index="61"/>
+  <cargo amount="1" index="53"/>
+  <cargo amount="10" index="22"/>
+  <recipe index="1"/>
+  <recipe index="2"/>
+  <recipe index="20"/>
+  <member index="185"/>
+  <member index="186"/>
+ </ship>
+ <ship index="303" name="Hunter Independent Player Ship" owner="INDEPENDENT">
+  <module index="1"/>
+  <module index="2"/>
+  <module index="3"/>
+  <module amount="4" index="4"/>
+  <module index="5"/>
+  <module index="6"/>
+  <module index="7"/>
+  <module amount="2" index="8"/>
+  <module amount="2" index="9"/>
+  <cargo amount="1000" index="1"/>
+  <cargo amount="100" index="2"/>
+  <cargo amount="200" index="3"/>
+  <cargo amount="500" index="4"/>
+  <cargo amount="100" index="5"/>
+  <cargo amount="20" index="13"/>
+  <cargo amount="1" index="47"/>
+  <cargo amount="1" index="49"/>
+  <cargo amount="1" index="50"/>
+  <cargo amount="4" index="61"/>
+  <cargo amount="1" index="53"/>
+  <cargo amount="10" index="22"/>
+  <recipe index="1"/>
+  <recipe index="2"/>
+  <recipe index="4"/>
+  <recipe index="20"/>
+  <member index="185"/>
+  <member index="186"/>
+  <member index="187"/>
+ </ship>
+ <ship index="304" name="Explorer Independent Player Ship" owner="INDEPENDENT">
+  <module index="1"/>
+  <module index="2"/>
+  <module index="3"/>
+  <module amount="4" index="4"/>
+  <module index="5"/>
+  <module index="6"/>
+  <module index="7"/>
+  <module index="8"/>
+  <module index="9"/>
+  <module index="31"/>
+  <cargo amount="1000" index="1"/>
+  <cargo amount="100" index="2"/>
+  <cargo amount="200" index="3"/>
+  <cargo amount="500" index="4"/>
+  <cargo amount="100" index="5"/>
+  <cargo amount="20" index="13"/>
+  <cargo amount="1" index="47"/>
+  <cargo amount="1" index="49"/>
+  <cargo amount="1" index="50"/>
+  <cargo amount="4" index="61"/>
+  <cargo amount="1" index="53"/>
+  <cargo amount="10" index="22"/>
+  <recipe index="1"/>
+  <recipe index="2"/>
+  <recipe index="4"/>
+  <recipe index="20"/>
+  <member index="185"/>
+  <member index="186"/>
+  <member index="187"/>
+ </ship>
+ <ship index="305" name="Crafter Independent Player Ship" owner="INDEPENDENT">
+  <module index="1"/>
+  <module index="2"/>
+  <module index="3"/>
+  <module amount="4" index="4"/>
+  <module index="5"/>
+  <module index="6"/>
+  <module index="7"/>
+  <module index="8"/>
+  <module index="9"/>
+  <module index="21"/>
+  <cargo amount="1000" index="1"/>
+  <cargo amount="100" index="2"/>
+  <cargo amount="200" index="3"/>
+  <cargo amount="500" index="4"/>
+  <cargo amount="100" index="5"/>
+  <cargo amount="20" index="13"/>
+  <cargo amount="1" index="47"/>
+  <cargo amount="1" index="49"/>
+  <cargo amount="1" index="50"/>
+  <cargo amount="4" index="61"/>
+  <cargo amount="1" index="53"/>
+  <cargo amount="10" index="22"/>
+  <cargo amount="1" index="48"/>
+  <recipe index="1"/>
+  <recipe index="2"/>
+  <recipe index="4"/>
+  <recipe index="6"/>
+  <recipe index="7"/>
+  <recipe index="8"/>
+  <recipe index="9"/>
+  <recipe index="20"/>
+  <member index="185"/>
+  <member index="186"/>
+  <member index="187"/>
+ </ship>
 </ships>
 
