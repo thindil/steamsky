@@ -45,6 +45,7 @@ All notable changes to this project will be documented in this file.
 - A lot of in-game messages (author: Michael Ax)
 - Starting script for Linux (author: Michael Ax)
 - Name of Huge pirates trader ship mk II
+- Removed unneeded menu from messages and help
 
 ## [3.6] - 2019-04-21
 
