@@ -1718,4 +1718,11 @@ package body Maps.UI.Handlers is
       end if;
    end MoveMapButtons;
 
+   function DisableMouse
+     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+      pragma Unreferenced(Object);
+   begin
+      return True;
+   end DisableMouse;
+
 end Maps.UI.Handlers;
