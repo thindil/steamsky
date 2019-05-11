@@ -3553,8 +3553,8 @@ during combat. -->
   <cargo index="2" maxamount="100" minamount="80"/>
   <cargo index="3" maxamount="200" minamount="150"/>
   <cargo index="14" maxamount="200" minamount="100"/>
-  <member index="53"/>
-  <member index="54"/>
+  <member index="182"/>
+  <member index="183"/>
   <description>Smallest known independent trader, upgraded version. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="191" maxloot="100" minloot="10" name="Tiny pirates trader mk II" owner="PIRATES">
@@ -3601,8 +3601,8 @@ during combat. -->
   <cargo index="2" maxamount="100" minamount="80"/>
   <cargo index="3" maxamount="200" minamount="150"/>
   <cargo index="14" maxamount="500" minamount="300"/>
-  <member index="53"/>
-  <member index="54"/>
+  <member index="182"/>
+  <member index="183"/>
   <description>Smallest known independent patrol ship, upgraded version. As law enforcers they trying to dismarm enemies first.</description>
  </ship>
  <ship combatai="COWARD" index="194" maxloot="200" minloot="20" name="Small poleis trader mk II" owner="POLEIS">
