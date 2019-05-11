@@ -110,5 +110,8 @@ package Maps.UI.Handlers is
    procedure MoveMapButtons
      (User_Data: access GObject_Record'
         Class); -- Move map buttons to selected position
+   -- Disable mouse clicking on selected UI element
+   function DisableMouse
+     (Object: access Gtkada_Builder_Record'Class) return Boolean;
 
 end Maps.UI.Handlers;
