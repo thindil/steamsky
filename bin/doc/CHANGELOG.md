@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Skills for one of Inquisition pilots
 - A lot of in-game messages (author: Michael Ax)
 - Starting script for Linux (author: Michael Ax)
+- Removed unneeded menu from messages and help
 
 ## [3.0.10] - 2019-04-28
 
