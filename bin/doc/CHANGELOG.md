@@ -24,7 +24,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Always show help window maximized
 - Reduced cost of recipes in bases
-- Updated poleis and independent factions description
+- Updated poleis, independent and pirates factions descriptions
 - Updated MODDING.md (author: Michael Ax)
 - Updated README.md (author: Michael Ax)
 - Updated help UI
