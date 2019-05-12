@@ -18,7 +18,6 @@
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
-with Ada.Containers; use Ada.Containers;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings.UTF_Encoding.Wide_Strings;
 use Ada.Strings.UTF_Encoding.Wide_Strings;
@@ -78,6 +77,7 @@ with Crafts.UI; use Crafts.UI;
 with GameOptions; use GameOptions;
 with Ships.Crew; use Ships.Crew;
 with Ships.UI; use Ships.UI;
+with Ships.Cargo; use Ships.Cargo;
 with Ships.Cargo.UI; use Ships.Cargo.UI;
 with Ships.Movement; use Ships.Movement;
 with Trades.UI; use Trades.UI;
@@ -113,16 +113,6 @@ package body Maps.UI is
       ItemAmount: Natural := 0;
       CurrentTheme: constant ThemeRecord :=
         Themes_List(To_String(GameSettings.InterfaceTheme));
-      function GetItemAmount(ItemType: Unbounded_String) return Natural is
-         Amount: Natural := 0;
-      begin
-         for Item of PlayerShip.Cargo loop
-            if Items_List(Item.ProtoIndex).IType = ItemType then
-               Amount := Amount + Item.Amount;
-            end if;
-         end loop;
-         return Amount;
-      end GetItemAmount;
       procedure UpdateLabel(LabelName, TextMarkup, TooltipText: String;
          ShowLabel: Boolean := False) is
          Label: constant Gtk_Widget :=
@@ -175,17 +165,7 @@ package body Maps.UI is
             " left.",
             True);
       end if;
-      for Member of PlayerShip.Crew loop
-         if Factions_List(Member.Faction).DrinksTypes.Length = 0 then
-            ItemAmount := GameSettings.LowDrinks + 1;
-         else
-            ItemAmount := 0;
-            for DrinkType of Factions_List(Member.Faction).DrinksTypes loop
-               ItemAmount := ItemAmount + GetItemAmount(DrinkType);
-            end loop;
-            exit when ItemAmount < GameSettings.LowDrinks;
-         end if;
-      end loop;
+      ItemAmount := GetItemsAmount("Drinks");
       if ItemAmount = 0 then
          UpdateLabel
            ("lblnodrink",
@@ -204,17 +184,7 @@ package body Maps.UI is
             " left.",
             True);
       end if;
-      for Member of PlayerShip.Crew loop
-         if Factions_List(Member.Faction).FoodTypes.Length = 0 then
-            ItemAmount := GameSettings.LowFood + 1;
-         else
-            ItemAmount := 0;
-            for FoodType of Factions_List(Member.Faction).FoodTypes loop
-               ItemAmount := ItemAmount + GetItemAmount(FoodType);
-            end loop;
-            exit when ItemAmount < GameSettings.LowFood;
-         end if;
-      end loop;
+      ItemAmount := GetItemsAmount("Food");
       if ItemAmount = 0 then
          UpdateLabel
            ("lblnofood",
