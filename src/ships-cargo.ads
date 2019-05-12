@@ -25,5 +25,9 @@ package Ships.Cargo is
    function FreeCargo(Amount: Integer;
       Ship: ShipRecord := PlayerShip)
      return Integer; -- Return available space in cargo after adding/extracting Amount
+   -- Return amount of items of selected type on player ship
+   function GetItemAmount(ItemType: Unbounded_String) return Natural;
+   -- Return amount of drinks or food (depends on IType) on player ship
+   function GetItemsAmount(IType: String) return Natural;
 
 end Ships.Cargo;

@@ -16,6 +16,8 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with ShipModules; use ShipModules;
+with Factions; use Factions;
+with Config; use Config;
 
 package body Ships.Cargo is
 
@@ -81,5 +83,47 @@ package body Ships.Cargo is
       FreeCargo := FreeCargo + Amount;
       return FreeCargo;
    end FreeCargo;
+
+   function GetItemAmount(ItemType: Unbounded_String) return Natural is
+      Amount: Natural := 0;
+   begin
+      for Item of PlayerShip.Cargo loop
+         if Items_List(Item.ProtoIndex).IType = ItemType then
+            Amount := Amount + Item.Amount;
+         end if;
+      end loop;
+      return Amount;
+   end GetItemAmount;
+
+   function GetItemsAmount(IType: String) return Natural is
+      ItemsAmount: Natural;
+   begin
+      if IType = "Drinks" then
+         for Member of PlayerShip.Crew loop
+            if Factions_List(Member.Faction).DrinksTypes.Length = 0 then
+               ItemsAmount := GameSettings.LowDrinks + 1;
+            else
+               ItemsAmount := 0;
+               for DrinkType of Factions_List(Member.Faction).DrinksTypes loop
+                  ItemsAmount := ItemsAmount + GetItemAmount(DrinkType);
+               end loop;
+               exit when ItemsAmount < GameSettings.LowDrinks;
+            end if;
+         end loop;
+      else
+         for Member of PlayerShip.Crew loop
+            if Factions_List(Member.Faction).FoodTypes.Length = 0 then
+               ItemsAmount := GameSettings.LowFood + 1;
+            else
+               ItemsAmount := 0;
+               for FoodType of Factions_List(Member.Faction).FoodTypes loop
+                  ItemsAmount := ItemsAmount + GetItemAmount(FoodType);
+               end loop;
+               exit when ItemsAmount < GameSettings.LowFood;
+            end if;
+         end loop;
+      end if;
+      return ItemsAmount;
+   end GetItemsAmount;
 
 end Ships.Cargo;
