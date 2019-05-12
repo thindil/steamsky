@@ -34,6 +34,7 @@ with Crew.Inventory; use Crew.Inventory;
 with Stories; use Stories;
 with Missions; use Missions;
 with Utils.UI; use Utils.UI;
+with Maps.UI; use Maps.UI;
 
 package body Ships.Cargo.UI is
 
@@ -189,6 +190,7 @@ package body Ships.Cargo.UI is
             Durability => PlayerShip.Cargo.Element(ItemIndex).Durability,
             Price => PlayerShip.Cargo.Element(ItemIndex).Price);
       end if;
+      UpdateHeader;
       UpdateMessages;
       RefreshCargoInfo;
       SetActiveItem;
