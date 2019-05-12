@@ -38,6 +38,7 @@ with Gdk.Rectangle; use Gdk.Rectangle;
 with Gdk.Device; use Gdk.Device;
 with Gdk.Window; use Gdk.Window;
 with Gdk.Types; use Gdk.Types;
+with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
 with Gdk.Device_Manager; use Gdk.Device_Manager;
 with Gdk.Screen; use Gdk.Screen;
 with Game; use Game;
@@ -1574,6 +1575,11 @@ package body Maps.UI.Handlers is
          Warp(Mouse, Screen, NewX, NewY);
          UpdateMapInfo;
          return True;
+      end if;
+      if Event.Keyval = GDK_Escape then
+         Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
+         Hide(Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnboxwait")));
       end if;
       return False;
    end MapKeyPressed;
