@@ -140,7 +140,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="5" order="PILOT">
   <skill level="1" name="Piloting"/>
   <skill level="1" name="Perception"/>
-  <skill level="1" name="Swords"/>
+  <skill level="1" name="Rapiers"/>
   <skill level="1" name="Dodge"/>
   <attribute level="2"/>
   <attribute level="2"/>
@@ -161,7 +161,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="6" order="GUNNER">
   <skill level="1" name="Gunnery"/>
   <skill level="1" name="Perception"/>
-  <skill level="1" name="Swords"/>
+  <skill level="1" name="Rapiers"/>
   <skill level="1" name="Dodge"/>
   <attribute level="2"/>
   <attribute level="2"/>
@@ -203,14 +203,14 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="8" order="PILOT">
   <skill level="1" name="Piloting"/>
   <skill maxlevel="4" minlevel="2" name="Perception"/>
-  <skill maxlevel="4" minlevel="2" name="Swords"/>
+  <skill maxlevel="4" minlevel="2" name="Rapiers"/>
   <skill maxlevel="4" minlevel="2" name="Dodge"/>
   <attribute level="3"/>
   <attribute level="3"/>
   <attribute level="3"/>
   <attribute level="3"/>
   <priority name="Piloting" value="Normal"/>
-  <item amount="1" index="66"/>
+  <item amount="1" index="241"/>
   <item amount="1" index="67"/>
   <item amount="1" index="68"/>
   <item amount="1" index="69"/>
@@ -224,14 +224,14 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="9" order="GUNNER">
   <skill level="3" name="Gunnery"/>
   <skill maxlevel="4" minlevel="2" name="Perception"/>
-  <skill maxlevel="4" minlevel="2" name="Swords"/>
+  <skill maxlevel="4" minlevel="2" name="Rapiers"/>
   <skill maxlevel="4" minlevel="2" name="Dodge"/>
   <attribute level="3"/>
   <attribute level="3"/>
   <attribute level="3"/>
   <attribute level="3"/>
   <priority name="Operating guns" value="Normal"/>
-  <item amount="1" index="66"/>
+  <item amount="1" index="241"/>
   <item amount="1" index="67"/>
   <item amount="1" index="68"/>
   <item amount="1" index="69"/>
@@ -246,14 +246,14 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  </mobile>
  <mobile index="10" order="ENGINEER">
   <skill maxlevel="6" minlevel="3" name="Engineering"/>
-  <skill maxlevel="6" minlevel="3" name="Swords"/>
+  <skill maxlevel="6" minlevel="3" name="Rapiers"/>
   <skill maxlevel="6" minlevel="3" name="Dodge"/>
   <attribute level="3"/>
   <attribute level="3"/>
   <attribute level="3"/>
   <attribute level="3"/>
   <priority name="Engineering" value="Normal"/>
-  <item amount="1" index="66"/>
+  <item amount="1" index="241"/>
   <item amount="1" index="67"/>
   <item amount="1" index="68"/>
   <item amount="1" index="69"/>
