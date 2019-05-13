@@ -292,6 +292,7 @@ package body Ships.Cargo.UI is
       UpdateMessages;
       SetActiveItem;
       Set_Active(ComboBoxMember, 0);
+      Hide(Gtk_Widget(Get_Object(Builder, "lbldropwarning")));
    end ShowCargoUI;
 
 end Ships.Cargo.UI;

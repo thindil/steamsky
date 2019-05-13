@@ -9830,6 +9830,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                             <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
                                             <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                                             <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                            <signal name="value-changed" handler="Check_Amount" object="spincargodrop" swapped="no"/>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -9842,6 +9843,22 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <property name="expand">False</property>
                                         <property name="fill">True</property>
                                         <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="lbldropwarning">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">label</property>
+                                        <property name="max_width_chars">40</property>
+                                        <attributes>
+                                          <attribute name="foreground" value="#efef29292929"/>
+                                        </attributes>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -9875,6 +9892,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                             <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
                                             <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                                             <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                            <signal name="value-changed" handler="Check_Amount" object="spincargogive" swapped="no"/>
                                           </object>
                                           <packing>
                                             <property name="expand">True</property>
@@ -9886,7 +9904,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">True</property>
-                                        <property name="position">1</property>
+                                        <property name="position">2</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -9921,7 +9939,23 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">True</property>
-                                        <property name="position">2</property>
+                                        <property name="position">3</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="lblgivewarning">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">label</property>
+                                        <property name="max_width_chars">40</property>
+                                        <attributes>
+                                          <attribute name="foreground" value="#efef29292929"/>
+                                        </attributes>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">4</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -10333,7 +10367,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
                                         <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                                         <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                        <signal name="value-changed" handler="Check_Amount" swapped="no"/>
+                                        <signal name="value-changed" handler="Check_Amount" object="spintradesell" swapped="no"/>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
