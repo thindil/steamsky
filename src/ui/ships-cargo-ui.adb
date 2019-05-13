@@ -220,6 +220,7 @@ package body Ships.Cargo.UI is
       UpdateCargo
         (Ship => PlayerShip, Amount => (0 - Amount), CargoIndex => ItemIndex,
          Price => Item.Price);
+      UpdateHeader;
       UpdateMessages;
       RefreshCargoInfo;
       SetActiveItem;
