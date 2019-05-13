@@ -46,7 +46,7 @@ All notable changes to this project will be documented in this file.
 - Starting script for Linux (author: Michael Ax)
 - Name of Huge pirates trader ship mk II
 - Removed unneeded menu from messages and help
-- Refresh game header information on drop items from ship cargo
+- Refresh game header information on drop and give items from ship cargo
 - Closing windows with Escape key
 
 ## [3.6] - 2019-04-21
