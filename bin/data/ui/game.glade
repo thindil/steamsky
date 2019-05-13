@@ -9850,7 +9850,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="label" translatable="yes">label</property>
-                                        <property name="max_width_chars">40</property>
+                                        <property name="wrap">True</property>
+                                        <property name="wrap_mode">word-char</property>
+                                        <property name="max_width_chars">35</property>
                                         <attributes>
                                           <attribute name="foreground" value="#efef29292929"/>
                                         </attributes>
@@ -9947,7 +9949,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="label" translatable="yes">label</property>
-                                        <property name="max_width_chars">40</property>
+                                        <property name="wrap">True</property>
+                                        <property name="wrap_mode">word-char</property>
+                                        <property name="max_width_chars">35</property>
                                         <attributes>
                                           <attribute name="foreground" value="#efef29292929"/>
                                         </attributes>
