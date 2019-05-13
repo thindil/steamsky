@@ -19,6 +19,8 @@ All notable changes to this project will be documented in this file.
 - Added few new mobs
 - Updated crews on poleis and independent ships
 - Check for correctness of value ranges in data files
+- Warning when fuel/food/drinks can drop below low level on player actions
+  (trade, drop, give)
 
 ### Changed
 - Updated interface
