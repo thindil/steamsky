@@ -145,6 +145,8 @@ package body Ships.Cargo.UI is
          Hide(Gtk_Widget(Get_Object(Builder, "givebox")));
       else
          Show_All(Gtk_Widget(Get_Object(Builder, "givebox")));
+         CheckAmount(Get_Object(Object, "spincargodrop"));
+         CheckAmount(Get_Object(Object, "spincargogive"));
       end if;
       Set_Upper(AmountAdj, Gdouble(PlayerShip.Cargo(ItemIndex).Amount));
       Set_Value(AmountAdj, 1.0);
@@ -293,6 +295,7 @@ package body Ships.Cargo.UI is
       SetActiveItem;
       Set_Active(ComboBoxMember, 0);
       Hide(Gtk_Widget(Get_Object(Builder, "lbldropwarning")));
+      Hide(Gtk_Widget(Get_Object(Builder, "lblgivewarning")));
    end ShowCargoUI;
 
 end Ships.Cargo.UI;

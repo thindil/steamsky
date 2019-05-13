@@ -75,5 +75,7 @@ package Utils.UI is
    procedure SetUtilsBuilder
      (NewBuilder: Gtkada_Builder); -- Set Gtk Builder for Utils package
    procedure UpdateMessages; -- Update game messages and last message
+-- Check did entered amount in text field don't drop below low level warnings
+   procedure CheckAmount(User_Data: access GObject_Record'Class);
 
 end Utils.UI;
