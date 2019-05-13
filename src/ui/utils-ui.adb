@@ -27,6 +27,10 @@ with Gtk.Text_Mark; use Gtk.Text_Mark;
 with Gtk.Text_Tag_Table; use Gtk.Text_Tag_Table;
 with Gtk.Text_View; use Gtk.Text_View;
 with Gtk.Button; use Gtk.Button;
+with Gtk.Tree_Model; use Gtk.Tree_Model;
+with Gtk.Tree_Selection; use Gtk.Tree_Selection;
+with Gtk.Tree_View; use Gtk.Tree_View;
+with Gtk.Adjustment; use Gtk.Adjustment;
 with Gdk.Types; use Gdk.Types;
 with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
 with Glib.Main; use Glib.Main;
@@ -38,10 +42,12 @@ with GameOptions; use GameOptions;
 with Statistics.UI; use Statistics.UI;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
+with Ships.Cargo; use Ships.Cargo;
 with Items; use Items;
 with Messages; use Messages;
 with Config; use Config;
 with Crew; use Crew;
+with Factions; use Factions;
 
 package body Utils.UI is
 
@@ -468,5 +474,100 @@ package body Utils.UI is
          end loop;
       end if;
    end UpdateMessages;
+
+   procedure CheckAmount(User_Data: access GObject_Record'Class) is
+      CargoIndex, Amount: Natural;
+      TreeName, AdjustmentName, LabelName, WarningText: Unbounded_String;
+   begin
+      if User_Data = Get_Object(Builder, "spintradesell") then
+         TreeName := To_Unbounded_String("treeitems1");
+         AdjustmentName := To_Unbounded_String("amountadj");
+         LabelName := To_Unbounded_String("lblsellwarning");
+         WarningText :=
+           To_Unbounded_String("You will sell amount below low level of ");
+      elsif User_Data = Get_Object(Builder, "spincargodrop") then
+         TreeName := To_Unbounded_String("treecargo");
+         AdjustmentName := To_Unbounded_String("amountadj");
+         LabelName := To_Unbounded_String("lbldropwarning");
+         WarningText :=
+           To_Unbounded_String("You will drop amount below low level of ");
+      else
+         TreeName := To_Unbounded_String("treecargo");
+         AdjustmentName := To_Unbounded_String("amountadj1");
+         LabelName := To_Unbounded_String("lblgivewarning");
+         WarningText :=
+           To_Unbounded_String("You will drop amount below low level of ");
+      end if;
+      declare
+         ItemsIter: Gtk_Tree_Iter;
+         ItemsModel: Gtk_Tree_Model;
+      begin
+         Get_Selected
+           (Gtk.Tree_View.Get_Selection
+              (Gtk_Tree_View(Get_Object(Builder, To_String(TreeName)))),
+            ItemsModel, ItemsIter);
+         if ItemsIter = Null_Iter then
+            return;
+         end if;
+         CargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 1));
+      end;
+      if CargoIndex not in
+          PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index then
+         return;
+      end if;
+      if User_Data /= Get_Object(Builder, "spintradesell")
+        and then Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType =
+          FuelType then
+         Amount :=
+           GetItemAmount(FuelType) -
+           Natural
+             (Get_Value
+                (Gtk_Adjustment
+                   (Get_Object(Builder, To_String(AdjustmentName)))));
+         if Amount <= GameSettings.LowFuel then
+            Set_Label
+              (Gtk_Label(Get_Object(Builder, To_String(LabelName))),
+               To_String(WarningText) & "fuel.");
+            Show_All(Gtk_Widget(Get_Object(Builder, To_String(LabelName))));
+            return;
+         end if;
+      end if;
+      for Member of PlayerShip.Crew loop
+         if Factions_List(Member.Faction).DrinksTypes.Contains
+             (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
+            Amount :=
+              GetItemsAmount("Drinks") -
+              Natural
+                (Get_Value
+                   (Gtk_Adjustment
+                      (Get_Object(Builder, To_String(AdjustmentName)))));
+            if Amount <= GameSettings.LowDrinks then
+               Set_Label
+                 (Gtk_Label(Get_Object(Builder, To_String(LabelName))),
+                  To_String(WarningText) & "drinks.");
+               Show_All(Gtk_Widget(Get_Object(Builder, To_String(LabelName))));
+               return;
+            end if;
+            exit;
+         elsif Factions_List(Member.Faction).FoodTypes.Contains
+             (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
+            Amount :=
+              GetItemsAmount("Food") -
+              Natural
+                (Get_Value
+                   (Gtk_Adjustment
+                      (Get_Object(Builder, To_String(AdjustmentName)))));
+            if Amount <= GameSettings.LowFood then
+               Set_Label
+                 (Gtk_Label(Get_Object(Builder, To_String(LabelName))),
+                  To_String(WarningText) & "food.");
+               Show_All(Gtk_Widget(Get_Object(Builder, To_String(LabelName))));
+               return;
+            end if;
+            exit;
+         end if;
+      end loop;
+      Hide(Gtk_Widget(Get_Object(Builder, To_String(LabelName))));
+   end CheckAmount;
 
 end Utils.UI;
