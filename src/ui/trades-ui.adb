@@ -45,6 +45,8 @@ with Items; use Items;
 with Bases.Cargo; use Bases.Cargo;
 with Utils.UI; use Utils.UI;
 with Crew; use Crew;
+with Factions; use Factions;
+with Config; use Config;
 
 package body Trades.UI is
 
@@ -64,6 +66,60 @@ package body Trades.UI is
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
    end CloseTrade;
+
+   procedure CheckAmount(Object: access Gtkada_Builder_Record'Class) is
+      CargoIndex, Amount: Natural;
+   begin
+      declare
+         ItemsIter: Gtk_Tree_Iter;
+         ItemsModel: Gtk_Tree_Model;
+      begin
+         Get_Selected
+           (Gtk.Tree_View.Get_Selection
+              (Gtk_Tree_View(Get_Object(Object, "treeitems1"))),
+            ItemsModel, ItemsIter);
+         if ItemsIter = Null_Iter then
+            return;
+         end if;
+         CargoIndex := Natural(Get_Int(ItemsModel, ItemsIter, 1));
+      end;
+      if CargoIndex not in
+          PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index then
+         return;
+      end if;
+      for Member of PlayerShip.Crew loop
+         if Factions_List(Member.Faction).DrinksTypes.Contains
+             (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
+            Amount :=
+              GetItemsAmount("Drinks") -
+              Natural
+                (Get_Value(Gtk_Adjustment(Get_Object(Object, "amountadj"))));
+            if Amount <= GameSettings.LowDrinks then
+               Set_Label
+                 (Gtk_Label(Get_Object(Object, "lblsellwarning")),
+                  "You will sell amount below low level of drinks.");
+               Show_All(Gtk_Widget(Get_Object(Object, "lblsellwarning")));
+               return;
+            end if;
+            exit;
+         elsif Factions_List(Member.Faction).FoodTypes.Contains
+             (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
+            Amount :=
+              GetItemsAmount("Food") -
+              Natural
+                (Get_Value(Gtk_Adjustment(Get_Object(Object, "amountadj"))));
+            if Amount <= GameSettings.LowFood then
+               Set_Label
+                 (Gtk_Label(Get_Object(Object, "lblsellwarning")),
+                  "You will sell amount below low level of food.");
+               Show_All(Gtk_Widget(Get_Object(Object, "lblsellwarning")));
+               return;
+            end if;
+            exit;
+         end if;
+      end loop;
+      Hide(Gtk_Widget(Get_Object(Object, "lblsellwarning")));
+   end CheckAmount;
 
    procedure ShowItemTradeInfo(Object: access Gtkada_Builder_Record'Class) is
       ItemInfo, ProtoIndex: Unbounded_String;
@@ -235,6 +291,7 @@ package body Trades.UI is
                Show_All(Gtk_Widget(Get_Object(Object, "sellbox")));
                if MaxSellAmount = PlayerShip.Cargo(CargoIndex).Amount then
                   Show_All(Gtk_Widget(Get_Object(Object, "sellbox2")));
+                  CheckAmount(Object);
                end if;
             end if;
          end;
@@ -520,6 +577,7 @@ package body Trades.UI is
       Register_Handler(Builder, "Trade_Item", TradeItem'Access);
       Register_Handler(Builder, "Close_Trade", CloseTrade'Access);
       Register_Handler(Builder, "Search_Trade", SearchTrade'Access);
+      Register_Handler(Builder, "Check_Amount", CheckAmount'Access);
       On_Key_Press_Event
         (Gtk_Widget(Get_Object(Builder, "spintradebuy")), SelectElement'Access,
          Get_Object(Builder, "btnbuyitem"));
@@ -715,6 +773,7 @@ package body Trades.UI is
         (Gtk_Tree_View(Get_Object(Builder, "treeitems1")),
          Gtk_Tree_Path_New_From_String("0"), null, False);
       UpdateMessages;
+      Hide(Gtk_Widget(Get_Object(Builder, "lblsellwarning")));
       SettingTime := False;
    end ShowTradeUI;
 

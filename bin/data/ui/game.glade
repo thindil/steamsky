@@ -10333,6 +10333,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
                                         <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
                                         <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="value-changed" handler="Check_Amount" swapped="no"/>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -10384,6 +10385,24 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="expand">False</property>
                                     <property name="fill">True</property>
                                     <property name="position">6</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="lblsellwarning">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">label</property>
+                                    <property name="wrap">True</property>
+                                    <property name="wrap_mode">word-char</property>
+                                    <property name="max_width_chars">40</property>
+                                    <attributes>
+                                      <attribute name="foreground" value="#efef29292929"/>
+                                    </attributes>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">7</property>
                                   </packing>
                                 </child>
                               </object>
