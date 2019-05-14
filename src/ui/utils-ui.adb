@@ -26,7 +26,6 @@ with Gtk.Text_Iter; use Gtk.Text_Iter;
 with Gtk.Text_Mark; use Gtk.Text_Mark;
 with Gtk.Text_Tag_Table; use Gtk.Text_Tag_Table;
 with Gtk.Text_View; use Gtk.Text_View;
-with Gtk.Button; use Gtk.Button;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Tree_View; use Gtk.Tree_View;
@@ -52,21 +51,13 @@ with Factions; use Factions;
 package body Utils.UI is
 
    Builder: Gtkada_Builder;
-   HideCountdown: Integer;
    Source_Id: G_Source_Id := No_Source_Id;
 
    function AutoHideDialog return Boolean is
    begin
-      HideCountdown := HideCountdown - 1;
-      if HideCountdown < 1 then
-         Hide(Gtk_Widget(Get_Object(Builder, "messagebox")));
-         Source_Id := No_Source_Id;
-         return False;
-      end if;
-      Set_Label
-        (Gtk_Button(Get_Object(Builder, "btnclosemessage")),
-         "Close (" & Natural'Image(HideCountdown) & " )");
-      return True;
+      Hide(Gtk_Widget(Get_Object(Builder, "messagebox")));
+      Source_Id := No_Source_Id;
+      return False;
    end AutoHideDialog;
 
    procedure HideDialog(Object: access Gtkada_Builder_Record'Class) is
@@ -80,17 +71,14 @@ package body Utils.UI is
    begin
       Set_Label(Gtk_Label(Get_Object(Builder, "lblmessage")), Message);
       Show_All(Gtk_Widget(Get_Object(Builder, "messagebox")));
-      Set_Label
-        (Gtk_Button(Get_Object(Builder, "btnclosemessage")),
-         "Close (" & Positive'Image(GameSettings.AutoCloseMessagesTime) &
-         " )");
-      Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnclosemessage")));
-      HideCountdown := GameSettings.AutoCloseMessagesTime;
       if Source_Id /= No_Source_Id then
          Remove(Source_Id);
          Source_Id := No_Source_Id;
       end if;
-      Source_Id := Timeout_Add(1000, AutoHideDialog'Access);
+      Source_Id :=
+        Timeout_Add
+          (Guint(GameSettings.AutoCloseMessagesTime) * 1000,
+           AutoHideDialog'Access);
    end ShowDialog;
 
    function HideWindow
