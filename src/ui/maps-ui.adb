@@ -155,7 +155,7 @@ package body Maps.UI is
                "</span>"),
             "You can't travel anymore, because you don't have any fuel for ship.",
             True);
-      elsif ItemAmount < GameSettings.LowFuel then
+      elsif ItemAmount <= GameSettings.LowFuel then
          UpdateLabel
            ("lblnofuel",
             Encode
@@ -174,7 +174,7 @@ package body Maps.UI is
                "</span>"),
             "You don't have any drinks in ship but your crew needs them to live.",
             True);
-      elsif ItemAmount < GameSettings.LowDrinks then
+      elsif ItemAmount <= GameSettings.LowDrinks then
          UpdateLabel
            ("lblnodrink",
             Encode
@@ -193,7 +193,7 @@ package body Maps.UI is
                "</span>"),
             "You don't have any food in ship but your crew needs it to live.",
             True);
-      elsif ItemAmount < GameSettings.LowFood then
+      elsif ItemAmount <= GameSettings.LowFood then
          UpdateLabel
            ("lblnofood",
             Encode
