@@ -1354,49 +1354,67 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       </packing>
     </child>
   </object>
-  <object class="GtkBox" id="messagebox">
-    <property name="name">overlay</property>
+  <object class="GtkInfoBar" id="messagebox">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="halign">center</property>
-    <property name="valign">center</property>
-    <property name="orientation">vertical</property>
-    <child>
-      <object class="GtkLabel" id="lblmessage">
-        <property name="visible">True</property>
+    <property name="valign">start</property>
+    <property name="show_close_button">True</property>
+    <signal name="response" handler="Hide_Dialog" swapped="no"/>
+    <child internal-child="action_area">
+      <object class="GtkButtonBox">
         <property name="can_focus">False</property>
-        <property name="halign">center</property>
-        <property name="valign">center</property>
-        <property name="margin_left">5</property>
-        <property name="margin_right">5</property>
-        <property name="margin_top">5</property>
-        <property name="use_markup">True</property>
-        <property name="wrap">True</property>
-        <property name="width_chars">40</property>
-        <property name="max_width_chars">40</property>
+        <property name="spacing">6</property>
+        <property name="layout_style">end</property>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>
-        <property name="fill">True</property>
+        <property name="fill">False</property>
         <property name="position">0</property>
       </packing>
     </child>
-    <child>
-      <object class="GtkButton" id="btnclosemessage">
-        <property name="label" translatable="yes">_Close</property>
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="margin_left">5</property>
-        <property name="margin_right">5</property>
-        <property name="margin_bottom">5</property>
-        <property name="use_underline">True</property>
-        <signal name="clicked" handler="Hide_Dialog" swapped="no"/>
+    <child internal-child="content_area">
+      <object class="GtkBox">
+        <property name="can_focus">False</property>
+        <property name="spacing">16</property>
+        <child>
+          <object class="GtkLabel" id="lblmessage">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="margin_top">5</property>
+            <property name="use_markup">True</property>
+            <property name="wrap">True</property>
+            <property name="width_chars">40</property>
+            <property name="max_width_chars">40</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
+        <property name="fill">False</property>
+        <property name="position">0</property>
       </packing>
     </child>
   </object>
