@@ -411,3 +411,10 @@ GtkStackSwitcher .button:checked {
 .pane-separator {
    background:linear-gradient(to bottom, #372412 5%, #1a130c 100%);
 }
+
+/* Setting for messages bar */
+GtkInfoBar {
+   border: 1px solid rgb(125,120,0);
+   background-color:#1a130c;
+   border-radius:10px;
+}
