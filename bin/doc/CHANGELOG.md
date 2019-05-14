@@ -51,6 +51,7 @@ All notable changes to this project will be documented in this file.
 - Refresh game header information on drop and give items from ship cargo
 - Closing windows with Escape key
 - Info about low level of fuel/food/drinks
+- Refresh game header information on trading items
 
 ## [3.6] - 2019-04-21
 
