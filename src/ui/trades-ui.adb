@@ -408,6 +408,7 @@ package body Trades.UI is
          end if;
       end if;
       ShowTradeUI;
+      UpdateHeader;
    exception
       when An_Exception : Trade_Cant_Buy =>
          ShowDialog
