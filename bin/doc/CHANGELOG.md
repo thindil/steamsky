@@ -50,6 +50,7 @@ All notable changes to this project will be documented in this file.
 - Removed unneeded menu from messages and help
 - Refresh game header information on drop and give items from ship cargo
 - Closing windows with Escape key
+- Info about low level of fuel/food/drinks
 
 ## [3.6] - 2019-04-21
 
