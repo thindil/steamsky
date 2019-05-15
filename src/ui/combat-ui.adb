@@ -533,6 +533,42 @@ package body Combat.UI is
                Set(EnemyList, EnemyIter, 1, Gint(DamagePercent));
             end loop;
          end;
+         declare
+            CrewList: constant Gtk_List_Store :=
+              Gtk_List_Store(Get_Object(Builder, "crewlist1"));
+            CrewIter: Gtk_Tree_Iter := Get_Iter_First(CrewList);
+            Index: Positive := 1;
+         begin
+            loop
+               exit when CrewIter = Null_Iter;
+               if Get_String(CrewList, CrewIter, 0) = "Pilot:" then
+                  for I in PilotOrders'Range loop
+                     if Get_String(CrewList, CrewIter, 1) = PilotOrders(I) then
+                        PilotOrder := I;
+                        exit;
+                     end if;
+                  end loop;
+               elsif Get_String(CrewList, CrewIter, 0) = "Engineer:" then
+                  for I in EngineerOrders'Range loop
+                     if Get_String(CrewList, CrewIter, 1) =
+                       EngineerOrders(I) then
+                        EngineerOrder := I;
+                        exit;
+                     end if;
+                  end loop;
+               else
+                  for I in EngineerOrders'Range loop
+                     if Get_String(CrewList, CrewIter, 1) =
+                       GunnerOrders(I) then
+                        Guns(Index - 2)(2) := I;
+                        exit;
+                     end if;
+                  end loop;
+               end if;
+               Next(CrewList, CrewIter);
+               Index := Index + 1;
+            end loop;
+         end;
       end if;
       Hide(Gtk_Widget(Get_Object(Builder, "btnclose")));
       for I in MenuArray'Range loop
