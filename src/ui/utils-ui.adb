@@ -464,8 +464,9 @@ package body Utils.UI is
    end UpdateMessages;
 
    procedure CheckAmount(User_Data: access GObject_Record'Class) is
-      CargoIndex, Amount: Natural;
+      CargoIndex: Natural;
       TreeName, AdjustmentName, LabelName, WarningText: Unbounded_String;
+      Amount: Integer;
    begin
       if User_Data = Get_Object(Builder, "spintradesell") then
          TreeName := To_Unbounded_String("treeitems1");
