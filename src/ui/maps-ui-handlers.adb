@@ -408,6 +408,22 @@ package body Maps.UI.Handlers is
                   end case;
                end;
             end if;
+            if not Is_Visible
+                (Gtk_Widget(Get_Object(Builder, "messagebox"))) then
+               if GetItemAmount(FuelType) <= GameSettings.LowFuel then
+                  ShowDialog("Your fuel level is dangerously low.");
+                  Result := 4;
+                  exit;
+               elsif GetItemsAmount("Food") <= GameSettings.LowFood then
+                  ShowDialog("Your food level is dangerously low.");
+                  Result := 4;
+                  exit;
+               elsif GetItemsAmount("Drinks") <= GameSettings.LowDrinks then
+                  ShowDialog("Your drinks level is dangerously low.");
+                  Result := 4;
+                  exit;
+               end if;
+            end if;
             if PlayerShip.DestinationX = PlayerShip.SkyX and
               PlayerShip.DestinationY = PlayerShip.SkyY then
                AddMessage
