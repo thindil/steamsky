@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Check for correctness of value ranges in data files
 - Warning when fuel/food/drinks can drop below low level on player actions
   (trade, drop, give)
+- Stop automovement when fuel/food/drinks drops below low level
 
 ### Changed
 - Updated interface
