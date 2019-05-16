@@ -2896,9 +2896,9 @@ during combat. -->
   <recipe index="2"/>
   <recipe index="4"/>
   <recipe index="20"/>
-  <member index="2"/>
-  <member index="3"/>
-  <member index="4"/>
+  <member index="189"/>
+  <member index="190"/>
+  <member index="191"/>
  </ship>
  <ship combatai="ATTACKER" index="162" maxloot="1000" minloot="750" name="Huge inquisition ship mk V" owner="INQUISITION">
   <module index="186"/>
@@ -5928,6 +5928,61 @@ during combat. -->
   <member index="185"/>
   <member index="186"/>
   <member index="187"/>
+ </ship>
+ <ship index="306" name="Merchant Pirates Player Ship" owner="PIRATES">
+  <module index="1"/>
+  <module index="2"/>
+  <module index="3"/>
+  <module amount="3" index="4"/>
+  <module index="5"/>
+  <module index="6"/>
+  <module amount="4" index="7"/>
+  <cargo amount="4000" index="1"/>
+  <cargo amount="100" index="2"/>
+  <cargo amount="200" index="3"/>
+  <cargo amount="200" index="5"/>
+  <cargo amount="20" index="13"/>
+  <cargo amount="1" index="47"/>
+  <cargo amount="1" index="49"/>
+  <cargo amount="1" index="50"/>
+  <cargo amount="4" index="61"/>
+  <cargo amount="1" index="53"/>
+  <cargo amount="10" index="22"/>
+  <recipe index="1"/>
+  <recipe index="2"/>
+  <recipe index="20"/>
+  <member index="189"/>
+  <member index="190"/>
+ </ship>
+ <ship index="307" name="Hunter PIRATES Player Ship" owner="PIRATES">
+  <module index="1"/>
+  <module index="2"/>
+  <module index="3"/>
+  <module amount="4" index="4"/>
+  <module index="5"/>
+  <module index="6"/>
+  <module index="7"/>
+  <module amount="2" index="8"/>
+  <module amount="2" index="9"/>
+  <cargo amount="1000" index="1"/>
+  <cargo amount="100" index="2"/>
+  <cargo amount="200" index="3"/>
+  <cargo amount="500" index="4"/>
+  <cargo amount="100" index="5"/>
+  <cargo amount="20" index="13"/>
+  <cargo amount="1" index="47"/>
+  <cargo amount="1" index="49"/>
+  <cargo amount="1" index="50"/>
+  <cargo amount="4" index="61"/>
+  <cargo amount="1" index="53"/>
+  <cargo amount="10" index="22"/>
+  <recipe index="1"/>
+  <recipe index="2"/>
+  <recipe index="4"/>
+  <recipe index="20"/>
+  <member index="189"/>
+  <member index="190"/>
+  <member index="191"/>
  </ship>
 </ships>
 
