@@ -150,9 +150,9 @@ bases of that faction are not grouped near self.
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
   <flag name="loner" />
-  <career index="general" playerindex="1" shipindex="161">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
-  <career index="merchant" playerindex="1" shipindex="167">Career focused on trading. You get unarmed small ship with larger cargo space and more moneys. Your crew will be bit smaller that General. At beginning is better to avoid combat.</career>
-  <career index="hunter" playerindex="1" shipindex="168">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
+  <career index="general" playerindex="188" shipindex="161">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
+  <career index="merchant" playerindex="188" shipindex="306">Career focused on trading. You get unarmed small ship with larger cargo space and more moneys. Your crew will be bit smaller that General. At beginning is better to avoid combat.</career>
+  <career index="hunter" playerindex="188" shipindex="307">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
  </faction>
  <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" spawn="8" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine" baseicon="fb8a">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
