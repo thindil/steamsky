@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - Updated README.md (author: Michael Ax)
 - Updated help UI
 - Updated player's characters and player's ships for independent faction
+- Updated player's characters and starting crew for pirates faction
 
 ### Fixed
 - Typos in changelog
