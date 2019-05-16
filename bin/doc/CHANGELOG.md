@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
   (trade, drop, give)
 - Stop automovement when fuel/food/drinks drops below low level
 - Remembering orders from last combat
+- New starting ships for player from pirates faction
 
 ### Changed
 - Updated interface
