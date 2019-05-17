@@ -80,8 +80,9 @@ package Crew is
    function FindCabin
      (MemberIndex: Positive)
      return Natural; -- Find index of cabin for selected crew member
-   procedure UpdateCrew(Minutes: Positive;
-      TiredPoints: Natural); -- Update ship crew
+   -- Update player ship crew
+   procedure UpdateCrew(Minutes: Positive; TiredPoints: Natural;
+      InCombat: Boolean := False);
    procedure WaitForRest; -- Wait until whole crew is rested
    function GetSkillLevelName
      (SkillLevel: Positive) return String; -- Get member skill level name
