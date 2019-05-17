@@ -197,7 +197,7 @@ bases of that faction are not grouped near self.
   <relation faction="UNDEAD" reputation="-100" friendly="N" />
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="0" friendly="Y" />
-  <description>Group of connected together sky bases which inhabitants are devoted to destroy all infidels around the world. Bases of this faction are much less common than Poleis. They are know for they very high morale, easily go into euphoria and almost never into despair. Gameplay is much harder than Poleis due to less sky bases and negative reputation of Inquisition with other factions.</description>
+  <description>Group of connected together sky bases which inhabitants are devoted to destroy all infidels around the world. Bases of this faction are much less common than Poleis. They favorite melee weapons are two handed swords. They are know for they very high morale, easily go into euphoria and almost never into despair. Gameplay is much harder than Poleis due to less sky bases and negative reputation of Inquisition with other factions.</description>
   <foodtype name="Food" />
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
