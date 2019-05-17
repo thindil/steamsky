@@ -120,7 +120,7 @@ Same with buying items from bases - they have limited amount of items for sale. 
    From time to time you can meet friendly trader ship in space with which you can trade too. It is very similar to trade with bases, you need someone assigned to Talk in bases duty, etc.</entry>
 <entry title="Combat">{u}General info{/u}
    To start combat, you must first be in this same map cell where desired target is. Then, from orders menu, select option {b}Attack{/b}.
-Combat can start automatically if enemy ship spots your ship first and is faster than you. Your chance to see enemy first depends on your ship pilot and gunners {PerceptionSkill} skill and size of ships. If you have smaller ship than enemy, it is bigger chance that you spot them first.
+Combat can start automatically if enemy ship spots your ship first and is faster than you. Your chance to see enemy first depends on your ship pilot and gunners {PerceptionSkill} skill and size of ships. If you have smaller ship than enemy, it is bigger chance that you spot them first. When combat starts, all resting crew members back on their positions and don't go to rest until combat ends, unless you order them to rest.
 
 {u}Giving orders during combat{/u}
    In combat, first you must set crew members to selected position and give each orders then hit space for made one combat turn. Each combat turn take 1 minute of game time. To set crew member to selected position, left click on proper position (like Pilot, Engineer, etc) and then left click on column with crew member name. To set order for selected position, first left click on proper position, then again left click on order column to select proper order.
@@ -201,7 +201,7 @@ When your crew member die, you will stay with his/her body in your ship cargo. A
 How fast crew member gains or lose morale depends on level of morale too: with higher level it gain and lose slower than when his/her morale is low. {fanaticism} members gains morale faster and lose it much slower.
 
 {u}Tiredness{/u}
-   Every member of crew (except this from {nofatigue} factions) getting tired when have assigned order other than {b}On break{/b} or {b}Talking in bases{/b}. When member is too tired, he/she stops working and going rest. After rest, if his/her previous position is vacant (e.g. nobody piloting ship), he/she automatically back to work if no other crew member on that position.
+   Every member of crew (except this from {nofatigue} factions) getting tired when have assigned order other than {b}On break{/b} or {b}Talking in bases{/b}. When member is too tired, he/she stops working and going rest (only outside combat). After rest, if his/her previous position is vacant (e.g. nobody piloting ship), he/she automatically back to work if no other crew member on that position.
 To assign selected crew member to position, select it from list by left click and then left click again on member order to select other.
 
 {u}Health{/b}
