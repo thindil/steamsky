@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Stop automovement when fuel/food/drinks drops below low level
 - Remembering orders from last combat
 - New starting ships for player from pirates faction
+- Wake up crew on start combat and don't allow them to go sleep during it
 
 ### Changed
 - Updated interface
