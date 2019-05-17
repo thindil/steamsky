@@ -181,7 +181,8 @@ package body Crew is
       return 0;
    end FindCabin;
 
-   procedure UpdateCrew(Minutes: Positive; TiredPoints: Natural) is
+   procedure UpdateCrew(Minutes: Positive; TiredPoints: Natural;
+      InCombat: Boolean := False) is
       TiredLevel, HungerLevel, ThirstLevel: Integer := 0;
       HealthLevel: Integer := 100;
       DeathReason: Unbounded_String;
@@ -281,7 +282,7 @@ package body Crew is
             Member.PreviousOrder := Rest;
          end if;
          if TiredLevel > (80 + Member.Attributes(ConditionIndex)(1)) and
-           Member.Order /= Rest then
+           Member.Order /= Rest and not InCombat then
             declare
                CanRest: Boolean := True;
             begin

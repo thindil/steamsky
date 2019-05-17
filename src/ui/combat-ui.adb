@@ -533,6 +533,19 @@ package body Combat.UI is
                Set(EnemyList, EnemyIter, 1, Gint(DamagePercent));
             end loop;
          end;
+         for Member of PlayerShip.Crew loop
+            if Member.Order = Rest
+              and then
+              (Member.PreviousOrder = Pilot or
+               Member.PreviousOrder = Engineer or
+               Member.PreviousOrder = Gunner) then
+               Member.Order := Member.PreviousOrder;
+               Member.OrderTime := 15;
+               AddMessage
+                 (To_String(Member.Name) & " back to work for combat.",
+                  OrderMessage);
+            end if;
+         end loop;
          declare
             CrewList: constant Gtk_List_Store :=
               Gtk_List_Store(Get_Object(Builder, "crewlist1"));
