@@ -437,14 +437,14 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="19" order="PILOT">
   <skill level="1" name="Piloting"/>
   <skill maxlevel="2" minlevel="1" name="Perception"/>
-  <skill maxlevel="2" minlevel="1" name="Swords"/>
+  <skill maxlevel="2" minlevel="1" name="Two-handed Swords"/>
   <skill maxlevel="2" minlevel="1" name="Dodge"/>
   <attribute level="3"/>
   <attribute level="3"/>
   <attribute level="3"/>
   <attribute level="3"/>
   <priority name="Piloting" value="Normal"/>
-  <item amount="1" index="74"/>
+  <item amount="1" index="223"/>
   <item amount="1" index="67"/>
   <item amount="1" index="68"/>
   <item amount="1" index="69"/>
@@ -458,13 +458,13 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="20" order="PILOT">
   <skill maxlevel="7" minlevel="3" name="Piloting"/>
   <skill maxlevel="7" minlevel="3" name="Perception"/>
-  <skill maxlevel="7" minlevel="3" name="Swords"/>
+  <skill maxlevel="7" minlevel="3" name="Two-handed Swords"/>
   <skill maxlevel="7" minlevel="3" name="Dodge"/>
   <attribute maxlevel="5" minlevel="3"/>
   <attribute maxlevel="5" minlevel="3"/>
   <attribute maxlevel="5" minlevel="3"/>
   <attribute maxlevel="5" minlevel="3"/>
-  <item amount="1" index="66"/>
+  <item amount="1" index="223"/>
   <item amount="1" index="67"/>
   <item amount="1" index="68"/>
   <item amount="1" index="69"/>
@@ -1310,7 +1310,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="59" order="DEFEND">
-  <skill maxlevel="7" minlevel="3" name="Swords"/>
+  <skill maxlevel="7" minlevel="3" name="Two-handed Swords"/>
   <skill maxlevel="7" minlevel="3" name="Dodge"/>
   <attribute maxlevel="5" minlevel="3"/>
   <attribute maxlevel="5" minlevel="3"/>
@@ -1318,7 +1318,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="5" minlevel="3"/>
   <priority name="Defend ship" value="High"/>
   <priority name="Board enemy ship" value="Normal"/>
-  <item amount="1" index="66"/>
+  <item amount="1" index="223"/>
   <item amount="1" index="67"/>
   <item amount="1" index="68"/>
   <item amount="1" index="69"/>
