@@ -663,9 +663,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <item amount="1" index="84"/>
   <item amount="1" index="85"/>
   <item amount="1" index="86"/>
-  <item amount="1" index="82"/>
   <equipment index="1" slot="Weapon"/>
-  <equipment index="6" slot="Shield"/>
   <equipment index="3" slot="Head"/>
   <equipment index="2" slot="Torso"/>
   <equipment index="4" slot="Arms"/>
@@ -686,9 +684,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <item amount="1" index="84"/>
   <item amount="1" index="85"/>
   <item amount="1" index="86"/>
-  <item amount="1" index="82"/>
   <equipment index="1" slot="Weapon"/>
-  <equipment index="6" slot="Shield"/>
   <equipment index="3" slot="Head"/>
   <equipment index="2" slot="Torso"/>
   <equipment index="4" slot="Arms"/>
@@ -1343,9 +1339,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <item amount="1" index="79"/>
   <item amount="1" index="80"/>
   <item amount="1" index="81"/>
-  <item amount="1" index="72"/>
   <equipment index="1" slot="Weapon"/>
-  <equipment index="6" slot="Shield"/>
   <equipment index="3" slot="Head"/>
   <equipment index="2" slot="Torso"/>
   <equipment index="4" slot="Arms"/>
