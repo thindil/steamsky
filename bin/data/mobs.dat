@@ -478,14 +478,14 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="21" order="PILOT">
   <skill maxlevel="15" minlevel="5" name="Piloting"/>
   <skill maxlevel="7" minlevel="3" name="Perception"/>
-  <skill maxlevel="15" minlevel="5" name="Swords"/>
+  <skill maxlevel="15" minlevel="5" name="Two-handed Swords"/>
   <skill maxlevel="15" minlevel="5" name="Dodge"/>
   <attribute maxlevel="10" minlevel="5"/>
   <attribute maxlevel="10" minlevel="5"/>
   <attribute maxlevel="10" minlevel="5"/>
   <attribute maxlevel="10" minlevel="5"/>
   <priority name="Piloting" value="Normal"/>
-  <item amount="1" index="77"/>
+  <item amount="1" index="224"/>
   <item amount="1" index="78"/>
   <item amount="1" index="79"/>
   <item amount="1" index="80"/>
@@ -499,14 +499,14 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="22" order="GUNNER">
   <skill maxlevel="15" minlevel="5" name="Gunnery"/>
   <skill maxlevel="7" minlevel="3" name="Perception"/>
-  <skill maxlevel="15" minlevel="5" name="Swords"/>
+  <skill maxlevel="15" minlevel="5" name="Two-handed Swords"/>
   <skill maxlevel="15" minlevel="5" name="Dodge"/>
   <attribute maxlevel="10" minlevel="5"/>
   <attribute maxlevel="10" minlevel="5"/>
   <attribute maxlevel="10" minlevel="5"/>
   <attribute maxlevel="10" minlevel="5"/>
   <priority name="Operating guns" value="Normal"/>
-  <item amount="1" index="76"/>
+  <item amount="1" index="224"/>
   <item amount="1" index="78"/>
   <item amount="1" index="79"/>
   <item amount="1" index="80"/>
@@ -1330,7 +1330,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="60" order="DEFEND">
-  <skill maxlevel="15" minlevel="5" name="Swords"/>
+  <skill maxlevel="15" minlevel="5" name="Two-handed Swords"/>
   <skill maxlevel="15" minlevel="5" name="Dodge"/>
   <attribute maxlevel="10" minlevel="5"/>
   <attribute maxlevel="10" minlevel="5"/>
@@ -1338,7 +1338,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="10" minlevel="5"/>
   <priority name="Defend ship" value="High"/>
   <priority name="Board enemy ship" value="Normal"/>
-  <item amount="1" index="76"/>
+  <item amount="1" index="224"/>
   <item amount="1" index="78"/>
   <item amount="1" index="79"/>
   <item amount="1" index="80"/>
