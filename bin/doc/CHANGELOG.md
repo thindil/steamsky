@@ -17,7 +17,6 @@ All notable changes to this project will be documented in this file.
 - New skills: rapiers and spears
 - Ability to set difficulty levels for new game
 - Added few new mobs
-- Updated crews on poleis, independent and pirates ships
 - Check for correctness of value ranges in data files
 - Warning when fuel/food/drinks can drop below low level on player actions
   (trade, drop, give)
@@ -38,6 +37,7 @@ All notable changes to this project will be documented in this file.
 - Updated player's characters and player's ships for independent faction
 - Updated player's characters and starting crew for pirates and drones faction
 - Updated help
+- Updated crews on poleis, independent, pirates and inquisition ships
 
 ### Fixed
 - Typos in changelog
