@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.7] - 2019-05-19
 
 ### Added
 - New items: orichalcum maul, adamantium maul, bronze rapier, iron rapier,
