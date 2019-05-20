@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Updated
+- Updated crews on inquisition ships
+
 ## [3.7] - 2019-05-19
 
 ### Added
