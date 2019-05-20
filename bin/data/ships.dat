@@ -3020,8 +3020,8 @@ during combat. -->
   <recipe index="2"/>
   <recipe index="4"/>
   <recipe index="20"/>
-  <member index="2"/>
-  <member index="3"/>
+  <member index="193"/>
+  <member index="194"/>
   <member index="83"/>
  </ship>
  <ship index="167" name="Merchant Player Ship" owner="POLEIS">
