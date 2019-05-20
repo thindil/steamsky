@@ -24,9 +24,6 @@ you prefer, on mail <thindil@laeran.pl>
 
   `addr2line -e steamsky [here full list of memory addresses from error.log]`
 
-  This command may not works if you use "release" version of game due to
-  removed some debug informations from executable file.
-
 ### Example of bug report:
 
 Title: "Game crashed when entering base"
