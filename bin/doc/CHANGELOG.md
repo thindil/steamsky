@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- New player's ships for inquisition faction
+
 ### Updated
 - Updated crews on inquisition ships
 - Updated player's character and starting crew for inquisition faction
