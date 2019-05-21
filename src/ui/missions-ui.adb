@@ -112,18 +112,21 @@ package body Missions.UI is
             MissionInfo := To_Unbounded_String("Explore selected area");
          when Passenger =>
             CanAccept := False;
+            Modules_Loop:
             for Module of PlayerShip.Modules loop
                if Module.MType = CABIN
                  and then Module.Quality >= Mission.Data then
-                  if Module.Owner = 0 then
-                     HaveCabin := True;
-                     CanAccept := True;
-                     exit;
-                  else
-                     CabinTaken := True;
-                  end if;
+                  for I in Module.Owner'Range loop
+                     if Module.Owner(I) = 0 then
+                        HaveCabin := True;
+                        CanAccept := True;
+                        CabinTaken := False;
+                        exit Modules_Loop;
+                     end if;
+                  end loop;
+                  CabinTaken := True;
                end if;
-            end loop;
+            end loop Modules_Loop;
             if User_Data = Get_Object(Builder, "treemissions1") then
                HaveCabin := True;
             end if;

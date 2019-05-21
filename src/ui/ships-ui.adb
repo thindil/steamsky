@@ -46,25 +46,33 @@ package body Ships.UI is
    procedure ShowAssignMember is
       AssignCrewCombo: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Object(Builder, "cmbassigncrew"));
+      Assigned: Boolean;
    begin
       Remove_All(AssignCrewCombo);
       for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-         if PlayerShip.Modules(ModuleIndex).Owner /= I and
-           PlayerShip.Crew(I).Skills.Length > 0 and
-           PlayerShip.Crew(I).ContractLength /= 0 then
+         Assigned := False;
+         for J in PlayerShip.Modules(ModuleIndex).Owner'Range loop
+            if PlayerShip.Modules(ModuleIndex).Owner(J) = I then
+               Assigned := True;
+               exit;
+            end if;
+         end loop;
+         if not Assigned and
+            PlayerShip.Crew(I).Skills.Length > 0 and
+            PlayerShip.Crew(I).ContractLength /= 0 then
             case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-              .MType is
+                  .MType is
                when MEDICAL_ROOM =>
                   if PlayerShip.Crew(I).Health = 100 then
                      Append
-                       (AssignCrewCombo, Positive'Image(I),
-                        To_String(PlayerShip.Crew(I).Name));
+                        (AssignCrewCombo, Positive'Image(I),
+                     To_String(PlayerShip.Crew(I).Name));
                   end if;
                when others =>
                   Append
-                    (AssignCrewCombo, Positive'Image(I),
-                     To_String(PlayerShip.Crew(I).Name));
-            end case;
+                     (AssignCrewCombo, Positive'Image(I),
+                  To_String(PlayerShip.Crew(I).Name));
+                  end case;
          end if;
       end loop;
       Set_Active(AssignCrewCombo, 0);
@@ -218,13 +226,17 @@ package body Ships.UI is
             else
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             end if;
+            Missions_Loop:
             for Mission of AcceptedMissions loop
-               if Mission.MType = Passenger and
-                 Mission.Target = PlayerShip.Modules(ModuleIndex).Owner then
-                  IsPassenger := True;
-                  exit;
+               if Mission.MType = Passenger then
+                  for I in PlayerShip.Modules(ModuleIndex).Owner'Range loop
+                     if Mission.Target = PlayerShip.Modules(ModuleIndex).Owner(I) then
+                        IsPassenger := True;
+                        exit Missions_Loop;
+                     end if;
+                  end loop;
                end if;
-            end loop;
+            end loop Missions_Loop;
             if not IsPassenger then
                Set_Label
                  (Gtk_Button(Get_Object(Builder, "btnassigncrew")),

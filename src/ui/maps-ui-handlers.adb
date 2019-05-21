@@ -916,16 +916,20 @@ package body Maps.UI.Handlers is
             if PlayerShip.Crew(I).Health < 100 and
               PlayerShip.Crew(I).Health > 0 and
               PlayerShip.Crew(I).Order = Rest then
+               Modules_Loop:
                for Module of PlayerShip.Modules loop
-                  if Module.MType = CABIN and
-                    Module.Owner = Crew_Container.To_Index(I) then
-                     if TimeNeeded <
-                       (100 - PlayerShip.Crew(I).Health) * 15 then
-                        TimeNeeded := (100 - PlayerShip.Crew(I).Health) * 15;
-                     end if;
-                     exit;
+                  if Module.MType = CABIN then
+                     for J in Module.Owner'Range loop
+                        if Module.Owner(J) = Crew_Container.To_Index(I) then
+                           if TimeNeeded <
+                              (100 - PlayerShip.Crew(I).Health) * 15 then
+                              TimeNeeded := (100 - PlayerShip.Crew(I).Health) * 15;
+                           end if;
+                           exit Modules_Loop;
+                        end if;
+                     end loop;
                   end if;
-               end loop;
+               end loop Modules_Loop;
             end if;
          end loop;
          if TimeNeeded > 0 then
@@ -1368,12 +1372,17 @@ package body Maps.UI.Handlers is
          if PlayerShip.Crew(I).Health < 100 and
            PlayerShip.Crew(I).Health > 0 and
            PlayerShip.Crew(I).Order = Rest then
+           Modules_Loop:
             for Module of PlayerShip.Modules loop
-               if Module.MType = CABIN and Module.Owner = I then
-                  NeedHealing := True;
-                  exit;
+               if Module.MType = CABIN then
+                  for J in Module.Owner'Range loop
+                     if Module.Owner(J) = I then
+                        NeedHealing := True;
+                        exit Modules_Loop;
+                     end if;
+                  end loop;
                end if;
-            end loop;
+            end loop Modules_Loop;
          end if;
       end loop;
       Set_Visible(Gtk_Widget(Get_Object(Object, "btnwaitheal")), NeedHealing);
