@@ -51,28 +51,27 @@ package body Ships.UI is
       Remove_All(AssignCrewCombo);
       for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
          Assigned := False;
-         for J in PlayerShip.Modules(ModuleIndex).Owner'Range loop
-            if PlayerShip.Modules(ModuleIndex).Owner(J) = I then
+         for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
+            if Owner = I then
                Assigned := True;
                exit;
             end if;
          end loop;
-         if not Assigned and
-            PlayerShip.Crew(I).Skills.Length > 0 and
-            PlayerShip.Crew(I).ContractLength /= 0 then
+         if not Assigned and PlayerShip.Crew(I).Skills.Length > 0 and
+           PlayerShip.Crew(I).ContractLength /= 0 then
             case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                  .MType is
+              .MType is
                when MEDICAL_ROOM =>
                   if PlayerShip.Crew(I).Health = 100 then
                      Append
-                        (AssignCrewCombo, Positive'Image(I),
-                     To_String(PlayerShip.Crew(I).Name));
+                       (AssignCrewCombo, Positive'Image(I),
+                        To_String(PlayerShip.Crew(I).Name));
                   end if;
                when others =>
                   Append
-                     (AssignCrewCombo, Positive'Image(I),
-                  To_String(PlayerShip.Crew(I).Name));
-                  end case;
+                    (AssignCrewCombo, Positive'Image(I),
+                     To_String(PlayerShip.Crew(I).Name));
+            end case;
          end if;
       end loop;
       Set_Active(AssignCrewCombo, 0);
@@ -226,11 +225,11 @@ package body Ships.UI is
             else
                Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
             end if;
-            Missions_Loop:
+            Missions_Loop :
             for Mission of AcceptedMissions loop
                if Mission.MType = Passenger then
-                  for I in PlayerShip.Modules(ModuleIndex).Owner'Range loop
-                     if Mission.Target = PlayerShip.Modules(ModuleIndex).Owner(I) then
+                  for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
+                     if Mission.Target = Owner then
                         IsPassenger := True;
                         exit Missions_Loop;
                      end if;

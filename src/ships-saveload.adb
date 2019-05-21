@@ -81,10 +81,10 @@ package body Ships.SaveLoad is
             Set_Attribute
               (DataNode, "maxdurability",
                To_String(Trim(RawValue, Ada.Strings.Left)));
-            for I in Module.Owner'Range loop
+            for Owner of Module.Owner loop
                ModuleDataNode := Create_Element(SaveData, "owner");
                ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-               RawValue := To_Unbounded_String(Integer'Image(Module.Owner(I)));
+               RawValue := To_Unbounded_String(Integer'Image(Owner));
                Set_Attribute
                  (ModuleDataNode, "value",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
@@ -405,20 +405,22 @@ package body Ships.SaveLoad is
                Data: Data_Array;
                ModuleNode: Node;
                MType: ModuleType2;
-               Owners: Integer_Container.Vector;
+               Owners: Natural_Container.Vector;
             begin
                Name := To_Unbounded_String(Get_Attribute(ChildNode, "name"));
                ProtoIndex :=
                  To_Unbounded_String(Get_Attribute(ChildNode, "index"));
                Weight := Natural'Value(Get_Attribute(ChildNode, "weight"));
                if Get_Attribute(ChildNode, "owner") /= "" then
-                  Owners.Append(Natural'Value(Get_Attribute(ChildNode, "owner")));
+                  Owners.Append
+                    (Natural'Value(Get_Attribute(ChildNode, "owner")));
                else
                   ModuleData := Child_Nodes(ChildNode);
                   for K in 0 .. Length(ModuleData) - 1 loop
                      ModuleNode := Item(ModuleData, K);
                      if Node_Name(ModuleNode) = "owner" then
-                        Owners.Append(Integer'Value(Get_Attribute(ModuleNode, "value")));
+                        Owners.Append
+                          (Integer'Value(Get_Attribute(ModuleNode, "value")));
                      end if;
                   end loop;
                end if;
@@ -517,13 +519,9 @@ package body Ships.SaveLoad is
                           (MType => ANY, Name => Name,
                            ProtoIndex => ProtoIndex, Weight => Weight,
                            Durability => Durability,
-                           MaxDurability => MaxDurability, Owners => Integer(Owners.Length),
-                           Owner => (others => 0),
+                           MaxDurability => MaxDurability, Owner => Owners,
                            UpgradeProgress => UpgradeProgress,
                            UpgradeAction => UpgradeAction, Data => Data));
-                     for I in Owners.First_Index .. Owners.Last_Index loop
-                        PlayerShip.Modules(PlayerShip.Modules.Last_Index).Owner(I) := Owners(I);
-                     end loop;
                   when ENGINE =>
                      declare
                         FuelUsage, Power: Positive;
@@ -561,15 +559,11 @@ package body Ships.SaveLoad is
                              (MType => ENGINE, Name => Name,
                               ProtoIndex => ProtoIndex, Weight => Weight,
                               Durability => Durability,
-                              MaxDurability => MaxDurability, Owners => Integer(Owners.Length),
-                              Owner => (others => 0),
+                              MaxDurability => MaxDurability, Owner => Owners,
                               UpgradeProgress => UpgradeProgress,
                               UpgradeAction => UpgradeAction,
                               FuelUsage => FuelUsage, Power => Power,
                               Disabled => Disabled));
-                        for I in Owners.First_Index .. Owners.Last_Index loop
-                           PlayerShip.Modules(PlayerShip.Modules.Last_Index).Owner(I) := Owners(I);
-                        end loop;
                      end;
                   when CABIN =>
                      declare
@@ -600,14 +594,10 @@ package body Ships.SaveLoad is
                              (MType => CABIN, Name => Name,
                               ProtoIndex => ProtoIndex, Weight => Weight,
                               Durability => Durability,
-                              MaxDurability => MaxDurability, Owners => Integer(Owners.Length),
-                              Owner => (others => 0),
+                              MaxDurability => MaxDurability, Owner => Owners,
                               UpgradeProgress => UpgradeProgress,
                               UpgradeAction => UpgradeAction,
                               Cleanliness => Cleanliness, Quality => Quality));
-                        for I in Owners.First_Index .. Owners.Last_Index loop
-                           PlayerShip.Modules(PlayerShip.Modules.Last_Index).Owner(I) := Owners(I);
-                        end loop;
                      end;
                   when COCKPIT =>
                      PlayerShip.Modules.Append
@@ -615,13 +605,9 @@ package body Ships.SaveLoad is
                           (MType => COCKPIT, Name => Name,
                            ProtoIndex => ProtoIndex, Weight => Weight,
                            Durability => Durability,
-                           MaxDurability => MaxDurability, Owners => Integer(Owners.Length),
-                              Owner => (others => 0),
+                           MaxDurability => MaxDurability, Owner => Owners,
                            UpgradeProgress => UpgradeProgress,
                            UpgradeAction => UpgradeAction));
-                     for I in Owners.First_Index .. Owners.Last_Index loop
-                        PlayerShip.Modules(PlayerShip.Modules.Last_Index).Owner(I) := Owners(I);
-                     end loop;
                   when WORKSHOP =>
                      declare
                         CraftingIndex: Unbounded_String;
@@ -660,16 +646,12 @@ package body Ships.SaveLoad is
                              (MType => WORKSHOP, Name => Name,
                               ProtoIndex => ProtoIndex, Weight => Weight,
                               Durability => Durability,
-                              MaxDurability => MaxDurability, Owners => Integer(Owners.Length),
-                              Owner => (others => 0),
+                              MaxDurability => MaxDurability, Owner => Owners,
                               UpgradeProgress => UpgradeProgress,
                               UpgradeAction => UpgradeAction,
                               CraftingIndex => CraftingIndex,
                               CraftingTime => CraftingTime,
                               CraftingAmount => CraftingAmount));
-                        for I in Owners.First_Index .. Owners.Last_Index loop
-                           PlayerShip.Modules(PlayerShip.Modules.Last_Index).Owner(I) := Owners(I);
-                        end loop;
                      end;
                   when MEDICAL_ROOM =>
                      PlayerShip.Modules.Append
@@ -677,13 +659,9 @@ package body Ships.SaveLoad is
                           (MType => MEDICAL_ROOM, Name => Name,
                            ProtoIndex => ProtoIndex, Weight => Weight,
                            Durability => Durability,
-                           MaxDurability => MaxDurability, Owners => Integer(Owners.Length),
-                              Owner => (others => 0),
+                           MaxDurability => MaxDurability, Owner => Owners,
                            UpgradeProgress => UpgradeProgress,
                            UpgradeAction => UpgradeAction));
-                        for I in Owners.First_Index .. Owners.Last_Index loop
-                           PlayerShip.Modules(PlayerShip.Modules.Last_Index).Owner(I) := Owners(I);
-                        end loop;
                   when TRAINING_ROOM =>
                      declare
                         TrainedSkill: Natural;
@@ -705,14 +683,10 @@ package body Ships.SaveLoad is
                              (MType => TRAINING_ROOM, Name => Name,
                               ProtoIndex => ProtoIndex, Weight => Weight,
                               Durability => Durability,
-                              MaxDurability => MaxDurability, Owners => Integer(Owners.Length),
-                              Owner => (others => 0),
+                              MaxDurability => MaxDurability, Owner => Owners,
                               UpgradeProgress => UpgradeProgress,
                               UpgradeAction => UpgradeAction,
                               TrainedSkill => TrainedSkill));
-                        for I in Owners.First_Index .. Owners.Last_Index loop
-                           PlayerShip.Modules(PlayerShip.Modules.Last_Index).Owner(I) := Owners(I);
-                        end loop;
                      end;
                   when TURRET =>
                      declare
@@ -735,14 +709,10 @@ package body Ships.SaveLoad is
                              (MType => TURRET, Name => Name,
                               ProtoIndex => ProtoIndex, Weight => Weight,
                               Durability => Durability,
-                              MaxDurability => MaxDurability, Owners => Integer(Owners.Length),
-                              Owner => (others => 0),
+                              MaxDurability => MaxDurability, Owner => Owners,
                               UpgradeProgress => UpgradeProgress,
                               UpgradeAction => UpgradeAction,
                               GunIndex => GunIndex));
-                        for I in Owners.First_Index .. Owners.Last_Index loop
-                           PlayerShip.Modules(PlayerShip.Modules.Last_Index).Owner(I) := Owners(I);
-                        end loop;
                      end;
                   when GUN =>
                      declare
@@ -773,14 +743,10 @@ package body Ships.SaveLoad is
                              (MType => GUN, Name => Name,
                               ProtoIndex => ProtoIndex, Weight => Weight,
                               Durability => Durability,
-                              MaxDurability => MaxDurability, Owners => Integer(Owners.Length),
-                              Owner => (others => 0),
+                              MaxDurability => MaxDurability, Owner => Owners,
                               UpgradeProgress => UpgradeProgress,
                               UpgradeAction => UpgradeAction, Damage => Damage,
                               AmmoIndex => AmmoIndex));
-                        for I in Owners.First_Index .. Owners.Last_Index loop
-                           PlayerShip.Modules(PlayerShip.Modules.Last_Index).Owner(I) := Owners(I);
-                        end loop;
                      end;
                   when CARGO_ROOM =>
                      PlayerShip.Modules.Append
@@ -788,13 +754,9 @@ package body Ships.SaveLoad is
                           (MType => CARGO_ROOM, Name => Name,
                            ProtoIndex => ProtoIndex, Weight => Weight,
                            Durability => Durability,
-                           MaxDurability => MaxDurability, Owners => Integer(Owners.Length),
-                              Owner => (others => 0),
+                           MaxDurability => MaxDurability, Owner => Owners,
                            UpgradeProgress => UpgradeProgress,
                            UpgradeAction => UpgradeAction));
-                        for I in Owners.First_Index .. Owners.Last_Index loop
-                           PlayerShip.Modules(PlayerShip.Modules.Last_Index).Owner(I) := Owners(I);
-                        end loop;
                   when HULL =>
                      declare
                         InstalledModules, MaxModules: Natural;
@@ -824,15 +786,11 @@ package body Ships.SaveLoad is
                              (MType => HULL, Name => Name,
                               ProtoIndex => ProtoIndex, Weight => Weight,
                               Durability => Durability,
-                              MaxDurability => MaxDurability, Owners => Integer(Owners.Length),
-                              Owner => (others => 0),
+                              MaxDurability => MaxDurability, Owner => Owners,
                               UpgradeProgress => UpgradeProgress,
                               UpgradeAction => UpgradeAction,
                               InstalledModules => InstalledModules,
                               MaxModules => MaxModules));
-                        for I in Owners.First_Index .. Owners.Last_Index loop
-                           PlayerShip.Modules(PlayerShip.Modules.Last_Index).Owner(I) := Owners(I);
-                        end loop;
                      end;
                   when ARMOR =>
                      PlayerShip.Modules.Append
@@ -840,13 +798,9 @@ package body Ships.SaveLoad is
                           (MType => ARMOR, Name => Name,
                            ProtoIndex => ProtoIndex, Weight => Weight,
                            Durability => Durability,
-                           MaxDurability => MaxDurability, Owners => Integer(Owners.Length),
-                              Owner => (others => 0),
+                           MaxDurability => MaxDurability, Owner => Owners,
                            UpgradeProgress => UpgradeProgress,
                            UpgradeAction => UpgradeAction));
-                        for I in Owners.First_Index .. Owners.Last_Index loop
-                           PlayerShip.Modules(PlayerShip.Modules.Last_Index).Owner(I) := Owners(I);
-                        end loop;
                   when BATTERING_RAM =>
                      declare
                         Damage: Natural;
@@ -868,14 +822,10 @@ package body Ships.SaveLoad is
                              (MType => BATTERING_RAM, Name => Name,
                               ProtoIndex => ProtoIndex, Weight => Weight,
                               Durability => Durability,
-                              MaxDurability => MaxDurability, Owners => Integer(Owners.Length),
-                              Owner => (others => 0),
+                              MaxDurability => MaxDurability, Owner => Owners,
                               UpgradeProgress => UpgradeProgress,
                               UpgradeAction => UpgradeAction,
                               Damage2 => Damage, CoolingDown => False));
-                        for I in Owners.First_Index .. Owners.Last_Index loop
-                           PlayerShip.Modules(PlayerShip.Modules.Last_Index).Owner(I) := Owners(I);
-                        end loop;
                      end;
                   when HARPOON_GUN =>
                      declare
@@ -906,15 +856,11 @@ package body Ships.SaveLoad is
                              (MType => HARPOON_GUN, Name => Name,
                               ProtoIndex => ProtoIndex, Weight => Weight,
                               Durability => Durability,
-                              MaxDurability => MaxDurability, Owners => Integer(Owners.Length),
-                              Owner => (others => 0),
+                              MaxDurability => MaxDurability, Owner => Owners,
                               UpgradeProgress => UpgradeProgress,
                               UpgradeAction => UpgradeAction,
                               Duration => Duration,
                               HarpoonIndex => HarpoonIndex));
-                        for I in Owners.First_Index .. Owners.Last_Index loop
-                           PlayerShip.Modules(PlayerShip.Modules.Last_Index).Owner(I) := Owners(I);
-                        end loop;
                      end;
                end case;
             end;

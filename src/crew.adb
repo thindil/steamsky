@@ -174,8 +174,8 @@ package body Crew is
    begin
       for I in PlayerShip.Modules.Iterate loop
          if PlayerShip.Modules(I).MType = CABIN then
-            for J in PlayerShip.Modules(I).Owner'Range loop
-               if PlayerShip.Modules(I).Owner(J) = MemberIndex then
+            for Owner of PlayerShip.Modules(I).Owner loop
+               if Owner = MemberIndex then
                   return Modules_Container.To_Index(I);
                end if;
             end loop;
@@ -257,7 +257,7 @@ package body Crew is
             if
               (Member.PreviousOrder = Gunner or
                Member.PreviousOrder = Craft) then
-               Module_Loop:
+               Module_Loop :
                for Module of PlayerShip.Modules loop
                   if Member.PreviousOrder = Gunner and Module.MType = GUN and
                     (Module.Owner(1) = I or Module.Owner(1) = 0) then
@@ -265,19 +265,19 @@ package body Crew is
                      Module.Owner(1) := I;
                      exit;
                   elsif
-                    (Member.PreviousOrder = Craft and
-                     Module.MType = WORKSHOP) and then Module.CraftingIndex /= Null_Unbounded_String then
-                     for J in Module.Owner'Range loop
-                        if Module.Owner(J) = I then
+                    (Member.PreviousOrder = Craft and Module.MType = WORKSHOP)
+                    and then Module.CraftingIndex /= Null_Unbounded_String then
+                     for Owner of Module.Owner loop
+                        if Owner = I then
                            BackToWork := True;
-                           Module.Owner(J) := I;
+                           Owner := I;
                            exit Module_Loop;
                         end if;
                      end loop;
-                     for J in Module.Owner'Range loop
-                        if Module.Owner(J) = 0 then
+                     for Owner of Module.Owner loop
+                        if Owner = 0 then
                            BackToWork := True;
-                           Module.Owner(J) := I;
+                           Owner := I;
                            exit Module_Loop;
                         end if;
                      end loop;
@@ -312,14 +312,14 @@ package body Crew is
                      " is too tired to work, going to rest.",
                      OrderMessage, YELLOW);
                   if FindCabin(I) = 0 then
-                     Modules_Loop:
+                     Modules_Loop :
                      for Module of PlayerShip.Modules loop
                         if Module.MType = CABIN and Module.Durability > 0 then
-                           for J in Module.Owner'Range loop
-                              if Module.Owner(J) = 0 then
-                                 Module.Owner(J) := I;
+                           for Owner of Module.Owner loop
+                              if Owner = 0 then
+                                 Owner := I;
                                  AddMessage
-                                    (To_String(Member.Name) & " take " &
+                                   (To_String(Member.Name) & " take " &
                                     To_String(Module.Name) & " as own cabin.",
                                     OtherMessage);
                                  exit Modules_Loop;

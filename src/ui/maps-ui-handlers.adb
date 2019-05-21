@@ -916,14 +916,15 @@ package body Maps.UI.Handlers is
             if PlayerShip.Crew(I).Health < 100 and
               PlayerShip.Crew(I).Health > 0 and
               PlayerShip.Crew(I).Order = Rest then
-               Modules_Loop:
+               Modules_Loop :
                for Module of PlayerShip.Modules loop
                   if Module.MType = CABIN then
-                     for J in Module.Owner'Range loop
-                        if Module.Owner(J) = Crew_Container.To_Index(I) then
+                     for Owner of Module.Owner loop
+                        if Owner = Crew_Container.To_Index(I) then
                            if TimeNeeded <
-                              (100 - PlayerShip.Crew(I).Health) * 15 then
-                              TimeNeeded := (100 - PlayerShip.Crew(I).Health) * 15;
+                             (100 - PlayerShip.Crew(I).Health) * 15 then
+                              TimeNeeded :=
+                                (100 - PlayerShip.Crew(I).Health) * 15;
                            end if;
                            exit Modules_Loop;
                         end if;
@@ -1372,11 +1373,11 @@ package body Maps.UI.Handlers is
          if PlayerShip.Crew(I).Health < 100 and
            PlayerShip.Crew(I).Health > 0 and
            PlayerShip.Crew(I).Order = Rest then
-           Modules_Loop:
+            Modules_Loop :
             for Module of PlayerShip.Modules loop
                if Module.MType = CABIN then
-                  for J in Module.Owner'Range loop
-                     if Module.Owner(J) = I then
+                  for Owner of Module.Owner loop
+                     if Owner = I then
                         NeedHealing := True;
                         exit Modules_Loop;
                      end if;

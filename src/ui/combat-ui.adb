@@ -291,7 +291,8 @@ package body Combat.UI is
                To_String(PlayerShip.Modules(Guns(I)(1)).Name) & LF & "(Ammo:" &
                Natural'Image(AmmoAmount) & ")");
             if PlayerShip.Modules(Guns(I)(1)).Owner(1) /= 0 then
-               if PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner(1)).Order =
+               if PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner(1))
+                   .Order =
                  Gunner then
                   Set
                     (CrewList, CrewIter, 1,
@@ -299,7 +300,8 @@ package body Combat.UI is
                   Set
                     (CrewList, CrewIter, 2,
                      To_String
-                       (PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner(1))
+                       (PlayerShip.Crew
+                          (PlayerShip.Modules(Guns(I)(1)).Owner(1))
                           .Name));
                else
                   Set(CrewList, CrewIter, 2, "Nobody");
@@ -790,7 +792,8 @@ package body Combat.UI is
                  (PlayerShip.Crew
                     (PlayerShip.Modules
                        (Guns(Positive'Value(Path_String) - 1)(1))
-                       .Owner(1))
+                       .Owner
+                       (1))
                     .Name) &
                " was set on: " &
                To_String

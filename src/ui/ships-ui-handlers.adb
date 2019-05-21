@@ -173,14 +173,14 @@ package body Ships.UI.Handlers is
             end if;
          when CABIN =>
             HaveOwner := False;
-            Append
-               (ModuleInfo,
-               "Owner: ");
-            for I in Module.Owner'Range loop
+            Append(ModuleInfo, "Owner: ");
+            for I in Module.Owner.First_Index .. Module.Owner.Last_Index loop
                if Module.Owner(I) > 0 then
                   HaveOwner := True;
-                  Append(ModuleInfo, To_String(PlayerShip.Crew(Module.Owner(I)).Name));
-                  if I < Module.Owner'Last then
+                  Append
+                    (ModuleInfo,
+                     To_String(PlayerShip.Crew(Module.Owner(I)).Name));
+                  if I < Module.Owner.Last_Index then
                      Append(ModuleInfo, ", ");
                   end if;
                end if;
@@ -268,7 +268,8 @@ package body Ships.UI.Handlers is
             if Module.Owner(1) > 0 then
                Append
                  (ModuleInfo,
-                  "Gunner: " & To_String(PlayerShip.Crew(Module.Owner(1)).Name));
+                  "Gunner: " &
+                  To_String(PlayerShip.Crew(Module.Owner(1)).Name));
             else
                Append(ModuleInfo, "Gunner: none");
             end if;
@@ -284,11 +285,13 @@ package body Ships.UI.Handlers is
          when ALCHEMY_LAB .. GREENHOUSE =>
             HaveOwner := False;
             Append(ModuleInfo, "Worker: ");
-            for I in Module.Owner'Range loop
+            for I in Module.Owner.First_Index .. Module.Owner.Last_Index loop
                if Module.Owner(I) > 0 then
                   HaveOwner := True;
-                  Append(ModuleInfo, To_String(PlayerShip.Crew(Module.Owner(I)).Name));
-                  if I < Module.Owner'Last then
+                  Append
+                    (ModuleInfo,
+                     To_String(PlayerShip.Crew(Module.Owner(I)).Name));
+                  if I < Module.Owner.Last_Index then
                      Append(ModuleInfo, ", ");
                   end if;
                end if;
@@ -331,7 +334,8 @@ package body Ships.UI.Handlers is
             if Module.Owner(1) > 0 then
                Append
                  (ModuleInfo,
-                  "Medic: " & To_String(PlayerShip.Crew(Module.Owner(1)).Name));
+                  "Medic: " &
+                  To_String(PlayerShip.Crew(Module.Owner(1)).Name));
             else
                Append(ModuleInfo, "Medic: none");
             end if;
@@ -527,20 +531,20 @@ package body Ships.UI.Handlers is
                 (Gtk_Combo_Box(Get_Object(Builder, "cmbassigncrew"))));
          case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
             when CABIN =>
-               Modules_Loop:
+               Modules_Loop :
                for Module of PlayerShip.Modules loop
                   if Module.MType = CABIN then
-                     for I in Module.Owner'Range loop
-                        if Module.Owner(I) = AssignIndex then
-                           Module.Owner(I) := 0;
+                     for Owner of Module.Owner loop
+                        if Owner = AssignIndex then
+                           Owner := 0;
                            exit Modules_Loop;
                         end if;
                      end loop;
                   end if;
                end loop Modules_Loop;
-               for I in PlayerShip.Modules(ModuleIndex).Owner'Range loop
-                  if PlayerShip.Modules(ModuleIndex).Owner(I) = 0 then
-                     PlayerShip.Modules(ModuleIndex).Owner(I) := AssignIndex;
+               for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
+                  if Owner = 0 then
+                     Owner := AssignIndex;
                      exit;
                   end if;
                end loop;

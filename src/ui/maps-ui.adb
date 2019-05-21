@@ -255,10 +255,10 @@ package body Maps.UI is
             when ALCHEMY_LAB .. GREENHOUSE =>
                if Module.CraftingIndex /= Null_Unbounded_String then
                   NeedWorker := True;
-                  for I in Module.Owner'Range loop
-                     if Module.Owner(I) = 0 then
+                  for Owner of Module.Owner loop
+                     if Owner = 0 then
                         HaveWorker := False;
-                     elsif PlayerShip.Crew(Module.Owner(I)).Order /= Craft then
+                     elsif PlayerShip.Crew(Owner).Order /= Craft then
                         HaveWorker := False;
                      end if;
                      exit when not HaveWorker;

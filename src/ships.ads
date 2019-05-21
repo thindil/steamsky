@@ -34,8 +34,7 @@ package Ships is
    type ModuleType2 is
      (WORKSHOP, ANY, MEDICAL_ROOM, TRAINING_ROOM, ENGINE, CABIN, COCKPIT,
       TURRET, GUN, CARGO_ROOM, HULL, ARMOR, BATTERING_RAM, HARPOON_GUN);
-   type Owners_Array is array(Positive range<>) of Integer;
-   type ModuleData(MType: ModuleType2 := ANY; Owners: Positive := 1)
+   type ModuleData(MType: ModuleType2 := ANY)
    is -- Data structure for ship modules
    record
       Name: Unbounded_String; -- Name of module
@@ -43,7 +42,8 @@ package Ships is
       Weight: Natural; -- Weight of module
       Durability: Integer; -- 0 = destroyed
       MaxDurability: Integer; -- Base durability
-      Owner: Owners_Array(1..Owners); -- Crew member indexes for owners of module
+      Owner: Natural_Container
+        .Vector; -- Crew member indexes for owners of module
       UpgradeProgress: Integer; -- Progress of module upgrade
       UpgradeAction: ShipUpgrade; -- Type of module upgrade
       case MType is
