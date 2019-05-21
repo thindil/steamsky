@@ -203,7 +203,7 @@ bases of that faction are not grouped near self.
   <drinktype name="Drink" />
   <flag name="fanaticism" />
   <career index="general" playerindex="192" shipindex="166">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
-  <career index="hunter" playerindex="192" shipindex="168">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
+  <career index="hunter" playerindex="192" shipindex="308">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
  </faction>
 </factions>
 
