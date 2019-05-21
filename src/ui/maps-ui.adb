@@ -247,19 +247,22 @@ package body Maps.UI is
       for Module of PlayerShip.Modules loop
          case Modules_List(Module.ProtoIndex).MType is
             when GUN | HARPOON_GUN =>
-               if Module.Owner = 0 then
+               if Module.Owner(1) = 0 then
                   HaveGunner := False;
-               elsif PlayerShip.Crew(Module.Owner).Order /= Gunner then
+               elsif PlayerShip.Crew(Module.Owner(1)).Order /= Gunner then
                   HaveGunner := False;
                end if;
             when ALCHEMY_LAB .. GREENHOUSE =>
                if Module.CraftingIndex /= Null_Unbounded_String then
                   NeedWorker := True;
-                  if Module.Owner = 0 then
-                     HaveWorker := False;
-                  elsif PlayerShip.Crew(Module.Owner).Order /= Craft then
-                     HaveWorker := False;
-                  end if;
+                  for I in Module.Owner'Range loop
+                     if Module.Owner(I) = 0 then
+                        HaveWorker := False;
+                     elsif PlayerShip.Crew(Module.Owner(I)).Order /= Craft then
+                        HaveWorker := False;
+                     end if;
+                     exit when not HaveWorker;
+                  end loop;
                end if;
             when CABIN =>
                if Module.Cleanliness /= Module.Quality then

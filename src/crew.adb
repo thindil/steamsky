@@ -173,9 +173,12 @@ package body Crew is
    function FindCabin(MemberIndex: Positive) return Natural is
    begin
       for I in PlayerShip.Modules.Iterate loop
-         if PlayerShip.Modules(I).Owner = MemberIndex and
-           PlayerShip.Modules(I).MType = CABIN then
-            return Modules_Container.To_Index(I);
+         if PlayerShip.Modules(I).MType = CABIN then
+            for J in PlayerShip.Modules(I).Owner'Range loop
+               if PlayerShip.Modules(I).Owner(J) = MemberIndex then
+                  return Modules_Container.To_Index(I);
+               end if;
+            end loop;
          end if;
       end loop;
       return 0;
@@ -254,22 +257,32 @@ package body Crew is
             if
               (Member.PreviousOrder = Gunner or
                Member.PreviousOrder = Craft) then
+               Module_Loop:
                for Module of PlayerShip.Modules loop
                   if Member.PreviousOrder = Gunner and Module.MType = GUN and
-                    (Module.Owner = I or Module.Owner = 0) then
+                    (Module.Owner(1) = I or Module.Owner(1) = 0) then
                      BackToWork := True;
-                     Module.Owner := I;
+                     Module.Owner(1) := I;
                      exit;
                   elsif
                     (Member.PreviousOrder = Craft and
-                     Module.MType = WORKSHOP and
-                     (Module.Owner = I or Module.Owner = 0))
-                    and then Module.CraftingIndex /= Null_Unbounded_String then
-                     BackToWork := True;
-                     Module.Owner := I;
-                     exit;
+                     Module.MType = WORKSHOP) and then Module.CraftingIndex /= Null_Unbounded_String then
+                     for J in Module.Owner'Range loop
+                        if Module.Owner(J) = I then
+                           BackToWork := True;
+                           Module.Owner(J) := I;
+                           exit Module_Loop;
+                        end if;
+                     end loop;
+                     for J in Module.Owner'Range loop
+                        if Module.Owner(J) = 0 then
+                           BackToWork := True;
+                           Module.Owner(J) := I;
+                           exit Module_Loop;
+                        end if;
+                     end loop;
                   end if;
-               end loop;
+               end loop Module_Loop;
             end if;
             if BackToWork then
                Member.Order := Member.PreviousOrder;
@@ -299,17 +312,21 @@ package body Crew is
                      " is too tired to work, going to rest.",
                      OrderMessage, YELLOW);
                   if FindCabin(I) = 0 then
+                     Modules_Loop:
                      for Module of PlayerShip.Modules loop
-                        if Module.MType = CABIN and Module.Durability > 0 and
-                          Module.Owner = 0 then
-                           Module.Owner := I;
-                           AddMessage
-                             (To_String(Member.Name) & " take " &
-                              To_String(Module.Name) & " as own cabin.",
-                              OtherMessage);
-                           exit;
+                        if Module.MType = CABIN and Module.Durability > 0 then
+                           for J in Module.Owner'Range loop
+                              if Module.Owner(J) = 0 then
+                                 Module.Owner(J) := I;
+                                 AddMessage
+                                    (To_String(Member.Name) & " take " &
+                                    To_String(Module.Name) & " as own cabin.",
+                                    OtherMessage);
+                                 exit Modules_Loop;
+                              end if;
+                           end loop;
                         end if;
-                     end loop;
+                     end loop Modules_Loop;
                   end if;
                else
                   AddMessage
@@ -648,7 +665,7 @@ package body Crew is
                   when Train =>
                      for Module of PlayerShip.Modules loop
                         if Module.MType = TRAINING_ROOM and
-                          Module.Owner = I then
+                          Module.Owner(1) = I then
                            SkillIndex := Module.TrainedSkill;
                            exit;
                         end if;

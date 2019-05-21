@@ -191,9 +191,9 @@ package body Combat is
            To_Unbounded_String(")");
          procedure RemoveGun(ModuleIndex: Positive) is
          begin
-            if EnemyShip.Modules(ModuleIndex).Owner > 0 then
+            if EnemyShip.Modules(ModuleIndex).Owner(1) > 0 then
                Death
-                 (EnemyShip.Modules(ModuleIndex).Owner, DeathReason,
+                 (EnemyShip.Modules(ModuleIndex).Owner(1), DeathReason,
                   EnemyShip);
             end if;
             if EnemyShip = PlayerShip then
@@ -238,7 +238,7 @@ package body Combat is
                if
                  (Ship.Modules(K).MType = GUN or
                   Ship.Modules(K).MType = HARPOON_GUN) then
-                  GunnerIndex := Ship.Modules(K).Owner;
+                  GunnerIndex := Ship.Modules(K).Owner(1);
                   LogMessage
                     ("Gunner index:" & Natural'Image(GunnerIndex) & ".",
                      Log.Combat);
@@ -583,26 +583,25 @@ package body Combat is
                               when GUN =>
                                  RemoveGun(HitLocation);
                               when CABIN =>
-                                 if EnemyShip.Modules(HitLocation).Owner >
-                                   0 then
-                                    if EnemyShip.Crew
-                                        (EnemyShip.Modules(HitLocation).Owner)
-                                        .Order =
-                                      Rest then
-                                       Death
-                                         (EnemyShip.Modules(HitLocation).Owner,
-                                          DeathReason, EnemyShip);
+                                 for OwnerIndex in EnemyShip.Modules(HitLocation).Owner'Range loop
+                                    if EnemyShip.Modules(HitLocation).Owner(OwnerIndex) >
+                                       0 and then EnemyShip.Crew(EnemyShip.Modules(HitLocation).Owner(OwnerIndex))
+                                          .Order =
+                                             Rest then
+                                             Death
+                                                (EnemyShip.Modules(HitLocation).Owner(OwnerIndex),
+                                                DeathReason, EnemyShip);
                                     end if;
-                                 end if;
+                                 end loop;
                               when others =>
-                                 if EnemyShip.Modules(HitLocation).Owner > 0
+                                 if EnemyShip.Modules(HitLocation).Owner(1) > 0
                                    and then
                                      EnemyShip.Crew
-                                       (EnemyShip.Modules(HitLocation).Owner)
+                                       (EnemyShip.Modules(HitLocation).Owner(1))
                                        .Order /=
                                      Rest then
                                     Death
-                                      (EnemyShip.Modules(HitLocation).Owner,
+                                      (EnemyShip.Modules(HitLocation).Owner(1),
                                        DeathReason, EnemyShip);
                                  end if;
                            end case;

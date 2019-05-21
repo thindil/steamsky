@@ -337,7 +337,6 @@ package body Crafts is
          Module.CraftingIndex := Null_Unbounded_String;
          Module.CraftingTime := 0;
          Module.CraftingAmount := 0;
-         Module.Owner := 0;
          if ToolIndex > 0 then
             TakeOffItem(CrafterIndex, ToolIndex);
             UpdateCargo
@@ -349,13 +348,24 @@ package body Crafts is
               (MemberIndex => CrafterIndex, Amount => -1,
                InventoryIndex => ToolIndex);
          end if;
-         GiveOrders(PlayerShip, CrafterIndex, Rest);
+         for J in Module.Owner'Range loop
+            GiveOrders(PlayerShip, Module.Owner(J), Rest);
+            Module.Owner(J) := 0;
+         end loop;
       end ResetOrder;
    begin
       for Module of PlayerShip.Modules loop
-         if (Module.Owner > 0 and Module.MType = WORKSHOP)
-           and then Module.CraftingIndex /= Null_Unbounded_String then
-            CrafterIndex := Module.Owner;
+         if Module.MType /= WORKSHOP then
+            goto End_Of_Loop;
+         end if;
+         if Module.CraftingIndex = Null_Unbounded_String then
+            goto End_Of_Loop;
+         end if;
+         for I in Module.Owner'Range loop
+            if Module.Owner(I) = 0 then
+               goto End_of_Owners_Loop;
+            end if;
+            CrafterIndex := Module.Owner(I);
             if PlayerShip.Crew(CrafterIndex).Order = Craft then
                CurrentMinutes := Minutes;
                RecipeTime := Module.CraftingTime;
@@ -634,7 +644,9 @@ package body Crafts is
                   end if;
                end if;
             end if;
-         end if;
+            <<End_Of_Owners_Loop>>
+         end loop;
+         <<End_Of_Loop>>
       end loop;
    exception
       when An_Exception : Crew_No_Space_Error =>
