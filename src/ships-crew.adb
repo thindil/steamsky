@@ -115,11 +115,11 @@ package body Ships.Crew is
    begin
       Ship.Crew.Delete(Index => MemberIndex);
       for Module of Ship.Modules loop
-         for I in Module.Owner'Range loop
-            if Module.Owner(I) = MemberIndex then
-               Module.Owner(I) := 0;
-            elsif Module.Owner(I) > MemberIndex then
-               Module.Owner(I) := Module.Owner(I) - 1;
+         for Owner of Module.Owner loop
+            if Owner = MemberIndex then
+               Owner := 0;
+            elsif Owner > MemberIndex then
+               Owner := Owner - 1;
             end if;
          end loop;
       end loop;
@@ -165,8 +165,8 @@ package body Ships.Crew is
          if GivenOrder = Craft or GivenOrder = Gunner then
             for I in Ship.Modules.Iterate loop
                if Modules_Container.To_Index(I) = ModuleIndex then
-                  for J in Ship.Modules(I).Owner'Range loop
-                     if Ship.Modules(I).Owner(J) = MemberIndex then
+                  for Owner of Ship.Modules(I).Owner loop
+                     if Owner = MemberIndex then
                         return;
                      end if;
                   end loop;
@@ -258,15 +258,16 @@ package body Ships.Crew is
          declare
             FreePosition: Boolean := False;
          begin
-            for I in Ship.Modules(ModuleIndex).Owner'Range loop
-               if Ship.Modules(ModuleIndex).Owner(I) = 0 then
+            for Owner of Ship.Modules(ModuleIndex).Owner loop
+               if Owner = 0 then
                   FreePosition := True;
                   exit;
                end if;
             end loop;
             if not FreePosition then
                GiveOrders
-                  (PlayerShip, Ship.Modules(ModuleIndex).Owner(1), Rest, 0, False);
+                 (PlayerShip, Ship.Modules(ModuleIndex).Owner(1), Rest, 0,
+                  False);
             end if;
          end;
       end if;
@@ -285,14 +286,15 @@ package body Ships.Crew is
                when others =>
                   null;
             end case;
-            Modules_Loop:
+            Modules_Loop :
             for I in Ship.Modules.Iterate loop
                if MType /= CABIN then
                   if Modules_List(Ship.Modules(I).ProtoIndex).MType = MType and
                     Ship.Modules(I).Durability > 0 then
                      if Ship.Modules(I).Owner(1) /= 0 then
                         GiveOrders
-                          (PlayerShip, Ship.Modules(I).Owner(1), Rest, 0, False);
+                          (PlayerShip, Ship.Modules(I).Owner(1), Rest, 0,
+                           False);
                      end if;
                      ModuleIndex2 := Modules_Container.To_Index(I);
                      exit;
@@ -300,12 +302,12 @@ package body Ships.Crew is
                else
                   if Ship.Modules(I).MType = CABIN and
                     Ship.Modules(I).Durability > 0 then
-                    for J in Ship.Modules(I).Owner'Range loop
-                       if MemberIndex = Ship.Modules(I).Owner(J) then
-                          ModuleIndex2 := Modules_Container.To_Index(I);
-                          exit Modules_Loop;
-                       end if;
-                    end loop;
+                     for Owner of Ship.Modules(I).Owner loop
+                        if MemberIndex = Owner then
+                           ModuleIndex2 := Modules_Container.To_Index(I);
+                           exit Modules_Loop;
+                        end if;
+                     end loop;
                   end if;
                end if;
             end loop Modules_Loop;
@@ -328,14 +330,14 @@ package body Ships.Crew is
                  with MemberName &
                  " can't starts operating gun because all guns are destroyed or you don't have installed any.";
             when Rest =>
-               Modules_Loop2:
+               Modules_Loop2 :
                for Module of Ship.Modules loop
                   if Module.MType = CABIN and Module.Durability > 0 then
-                     for I in Module.Owner'Range loop
-                        if Module.Owner(I) = 0 then
-                           Module.Owner(I) := MemberIndex;
+                     for Owner of Module.Owner loop
+                        if Owner = 0 then
+                           Owner := MemberIndex;
                            AddMessage
-                              (MemberName & " take " & To_String(Module.Name) &
+                             (MemberName & " take " & To_String(Module.Name) &
                               " as own cabin.",
                               OtherMessage);
                            exit Modules_Loop2;
@@ -347,12 +349,12 @@ package body Ships.Crew is
                null;
          end case;
       end if;
-      Modules_Loop3:
+      Modules_Loop3 :
       for Module of Ship.Modules loop
          if Module.MType /= CABIN then
-            for I in Module.Owner'Range loop
-               if Module.Owner(I) = MemberIndex then
-                  Module.Owner(I) := 0;
+            for Owner of Module.Owner loop
+               if Owner = MemberIndex then
+                  Owner := 0;
                   exit Modules_Loop3;
                end if;
             end loop;
@@ -404,9 +406,9 @@ package body Ships.Crew is
                AddMessage(MemberName & " starts repair ship.", OrderMessage);
             when Craft =>
                AddMessage(MemberName & " starts manufacturing.", OrderMessage);
-               for I in Ship.Modules(ModuleIndex2).Owner'Range loop
-                  if Ship.Modules(ModuleIndex2).Owner(I) = 0 then
-                     Ship.Modules(ModuleIndex2).Owner(I) := MemberIndex;
+               for Owner of Ship.Modules(ModuleIndex2).Owner loop
+                  if Owner = 0 then
+                     Owner := MemberIndex;
                      exit;
                   end if;
                end loop;
@@ -500,9 +502,11 @@ package body Ships.Crew is
                            exit;
                         end if;
                      when ALCHEMY_LAB .. GREENHOUSE =>
-                        if Order = Craft and Ship.Modules(I).CraftingIndex /= Null_Unbounded_String then
-                           for J in Ship.Modules(I).Owner'Range loop
-                              if Ship.Modules(I).Owner(J) = 0 then
+                        if Order = Craft and
+                          Ship.Modules(I).CraftingIndex /=
+                            Null_Unbounded_String then
+                           for Owner of Ship.Modules(I).Owner loop
+                              if Owner = 0 then
                                  ModuleIndex := Modules_Container.To_Index(I);
                                  exit;
                               end if;
@@ -576,9 +580,10 @@ package body Ships.Crew is
                      NeedGunners := True;
                   end if;
                when WORKSHOP =>
-                  if Module.CraftingIndex /= Null_Unbounded_String and not NeedCrafters then
-                     for I in Module.Owner'Range loop
-                        if Module.Owner(I) = 0 then
+                  if Module.CraftingIndex /= Null_Unbounded_String and
+                    not NeedCrafters then
+                     for Owner of Module.Owner loop
+                        if Owner = 0 then
                            NeedCrafters := True;
                            exit;
                         end if;

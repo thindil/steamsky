@@ -82,16 +82,16 @@ package body Crew.UI is
                      end if;
                   when ALCHEMY_LAB .. GREENHOUSE =>
                      IsWorking := False;
-                     for J in PlayerShip.Modules(I).Owner'Range loop
-                        if PlayerShip.Modules(I).Owner(J) = MemberIndex then
-                              IsWorking := True;
-                              exit;
+                     for Owner of PlayerShip.Modules(I).Owner loop
+                        if Owner = MemberIndex then
+                           IsWorking := True;
+                           exit;
                         end if;
                      end loop;
                      if not IsWorking then
                         AddOrder
-                           ("Work in " & To_String(PlayerShip.Modules(I).Name),
-                        4, Modules_Container.To_Index(I));
+                          ("Work in " & To_String(PlayerShip.Modules(I).Name),
+                           4, Modules_Container.To_Index(I));
                      end if;
                   when CABIN =>
                      if PlayerShip.Modules(I).Cleanliness <
