@@ -348,9 +348,9 @@ package body Crafts is
               (MemberIndex => CrafterIndex, Amount => -1,
                InventoryIndex => ToolIndex);
          end if;
-         for J in Module.Owner'Range loop
-            GiveOrders(PlayerShip, Module.Owner(J), Rest);
-            Module.Owner(J) := 0;
+         for Owner of Module.Owner loop
+            GiveOrders(PlayerShip, Owner, Rest);
+            Owner := 0;
          end loop;
       end ResetOrder;
    begin
@@ -361,11 +361,11 @@ package body Crafts is
          if Module.CraftingIndex = Null_Unbounded_String then
             goto End_Of_Loop;
          end if;
-         for I in Module.Owner'Range loop
-            if Module.Owner(I) = 0 then
-               goto End_of_Owners_Loop;
+         for Owner of Module.Owner loop
+            if Owner = 0 then
+               goto End_Of_Owners_Loop;
             end if;
-            CrafterIndex := Module.Owner(I);
+            CrafterIndex := Owner;
             if PlayerShip.Crew(CrafterIndex).Order = Craft then
                CurrentMinutes := Minutes;
                RecipeTime := Module.CraftingTime;

@@ -583,21 +583,20 @@ package body Combat is
                               when GUN =>
                                  RemoveGun(HitLocation);
                               when CABIN =>
-                                 for OwnerIndex in EnemyShip.Modules(HitLocation).Owner'Range loop
-                                    if EnemyShip.Modules(HitLocation).Owner(OwnerIndex) >
-                                       0 and then EnemyShip.Crew(EnemyShip.Modules(HitLocation).Owner(OwnerIndex))
-                                          .Order =
-                                             Rest then
-                                             Death
-                                                (EnemyShip.Modules(HitLocation).Owner(OwnerIndex),
-                                                DeathReason, EnemyShip);
+                                 for Owner of EnemyShip.Modules(HitLocation)
+                                   .Owner loop
+                                    if Owner > 0
+                                      and then EnemyShip.Crew(Owner).Order =
+                                        Rest then
+                                       Death(Owner, DeathReason, EnemyShip);
                                     end if;
                                  end loop;
                               when others =>
                                  if EnemyShip.Modules(HitLocation).Owner(1) > 0
                                    and then
                                      EnemyShip.Crew
-                                       (EnemyShip.Modules(HitLocation).Owner(1))
+                                       (EnemyShip.Modules(HitLocation).Owner
+                                          (1))
                                        .Order /=
                                      Rest then
                                     Death

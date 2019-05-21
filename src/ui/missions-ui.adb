@@ -112,12 +112,12 @@ package body Missions.UI is
             MissionInfo := To_Unbounded_String("Explore selected area");
          when Passenger =>
             CanAccept := False;
-            Modules_Loop:
+            Modules_Loop :
             for Module of PlayerShip.Modules loop
                if Module.MType = CABIN
                  and then Module.Quality >= Mission.Data then
-                  for I in Module.Owner'Range loop
-                     if Module.Owner(I) = 0 then
+                  for Owner of Module.Owner loop
+                     if Owner = 0 then
                         HaveCabin := True;
                         CanAccept := True;
                         CabinTaken := False;
