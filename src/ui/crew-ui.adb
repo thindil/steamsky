@@ -39,7 +39,7 @@ package body Crew.UI is
    procedure SetOrdersList is
       OrdersList: Gtk_List_Store;
       OrdersIter: Gtk_Tree_Iter;
-      NeedClean, NeedRepair: Boolean := True;
+      NeedClean, NeedRepair, IsWorking: Boolean := True;
       procedure AddOrder(OrderText: String;
          OrderIndex, ModuleIndex: Natural) is
       begin
@@ -75,18 +75,23 @@ package body Crew.UI is
             if PlayerShip.Modules(I).Durability > 0 then
                case Modules_List(PlayerShip.Modules(I).ProtoIndex).MType is
                   when GUN | HARPOON_GUN =>
-                     if PlayerShip.Modules(I).Owner /= MemberIndex then
+                     if PlayerShip.Modules(I).Owner(1) /= MemberIndex then
                         AddOrder
                           ("Operate " & To_String(PlayerShip.Modules(I).Name),
                            2, Modules_Container.To_Index(I));
                      end if;
                   when ALCHEMY_LAB .. GREENHOUSE =>
-                     if PlayerShip.Modules(I).Owner /= MemberIndex and
-                       PlayerShip.Modules(I).CraftingIndex /=
-                         Null_Unbounded_String then
+                     IsWorking := False;
+                     for J in PlayerShip.Modules(I).Owner'Range loop
+                        if PlayerShip.Modules(I).Owner(J) = MemberIndex then
+                              IsWorking := True;
+                              exit;
+                        end if;
+                     end loop;
+                     if not IsWorking then
                         AddOrder
-                          ("Work in " & To_String(PlayerShip.Modules(I).Name),
-                           4, Modules_Container.To_Index(I));
+                           ("Work in " & To_String(PlayerShip.Modules(I).Name),
+                        4, Modules_Container.To_Index(I));
                      end if;
                   when CABIN =>
                      if PlayerShip.Modules(I).Cleanliness <
@@ -97,7 +102,7 @@ package body Crew.UI is
                         NeedClean := False;
                      end if;
                   when TRAINING_ROOM =>
-                     if PlayerShip.Modules(I).Owner /= MemberIndex and
+                     if PlayerShip.Modules(I).Owner(1) /= MemberIndex and
                        PlayerShip.Modules(I).TrainedSkill > 0 then
                         AddOrder
                           ("Go on training in " &
