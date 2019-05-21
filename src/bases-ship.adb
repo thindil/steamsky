@@ -75,7 +75,7 @@ package body Bases.Ship is
 
    procedure UpgradeShip(Install: Boolean; ModuleIndex: Unbounded_String) is
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
-      HullIndex, ModulesAmount, TraderIndex, ShipModuleIndex: Positive;
+      HullIndex, ModulesAmount, TraderIndex, ShipModuleIndex, Owners: Positive;
       FreeTurretIndex, Price: Natural := 0;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -154,6 +154,11 @@ package body Bases.Ship is
          GainExp(1, TalkingSkill, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
          if Modules_List(ModuleIndex).MType /= HULL then
+            if Modules_List(ModuleIndex).MaxValue = 0 then
+               Owners := 1;
+            else
+               Owners := Modules_List(ModuleIndex).MaxValue;
+            end if;
             case Modules_List(ModuleIndex).MType is
                when ALCHEMY_LAB .. GREENHOUSE =>
                   PlayerShip.Modules.Append
@@ -164,7 +169,8 @@ package body Bases.Ship is
                         Weight => Modules_List(ModuleIndex).Weight,
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
-                        Owner => 0, UpgradeProgress => 0,
+                        Owners => Owners,
+                        Owner => (others => 0), UpgradeProgress => 0,
                         UpgradeAction => NONE,
                         CraftingIndex => Null_Unbounded_String,
                         CraftingTime => 0, CraftingAmount => 0));
@@ -177,7 +183,8 @@ package body Bases.Ship is
                         Weight => Modules_List(ModuleIndex).Weight,
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
-                        Owner => 0, UpgradeProgress => 0,
+                        Owners => 1,
+                        Owner => (others => 0), UpgradeProgress => 0,
                         UpgradeAction => NONE));
                when TRAINING_ROOM =>
                   PlayerShip.Modules.Append
@@ -188,7 +195,8 @@ package body Bases.Ship is
                         Weight => Modules_List(ModuleIndex).Weight,
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
-                        Owner => 0, UpgradeProgress => 0,
+                        Owners => 1,
+                        Owner => (others => 0), UpgradeProgress => 0,
                         UpgradeAction => NONE, TrainedSkill => 0));
                when COCKPIT =>
                   PlayerShip.Modules.Append
@@ -199,7 +207,8 @@ package body Bases.Ship is
                         Weight => Modules_List(ModuleIndex).Weight,
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
-                        Owner => 0, UpgradeProgress => 0,
+                        Owners => 1,
+                        Owner => (others => 0), UpgradeProgress => 0,
                         UpgradeAction => NONE));
                when TURRET =>
                   PlayerShip.Modules.Append
@@ -210,7 +219,8 @@ package body Bases.Ship is
                         Weight => Modules_List(ModuleIndex).Weight,
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
-                        Owner => 0, UpgradeProgress => 0,
+                        Owners => 1,
+                        Owner => (others => 0), UpgradeProgress => 0,
                         UpgradeAction => NONE, GunIndex => 0));
                when CABIN =>
                   PlayerShip.Modules.Append
@@ -220,7 +230,8 @@ package body Bases.Ship is
                         Weight => Modules_List(ModuleIndex).Weight,
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
-                        Owner => 0, UpgradeProgress => 0,
+                        Owners => Owners,
+                        Owner => (others => 0), UpgradeProgress => 0,
                         UpgradeAction => NONE,
                         Cleanliness => Modules_List(ModuleIndex).Value,
                         Quality => Modules_List(ModuleIndex).MaxValue));
@@ -233,7 +244,8 @@ package body Bases.Ship is
                         Weight => Modules_List(ModuleIndex).Weight,
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
-                        Owner => 0, UpgradeProgress => 0,
+                        Owners => 1,
+                        Owner => (others => 0), UpgradeProgress => 0,
                         UpgradeAction => NONE));
                when ENGINE =>
                   PlayerShip.Modules.Append
@@ -244,7 +256,8 @@ package body Bases.Ship is
                         Weight => Modules_List(ModuleIndex).Weight,
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
-                        Owner => 0, UpgradeProgress => 0,
+                        Owners => 1,
+                        Owner => (others => 0), UpgradeProgress => 0,
                         UpgradeAction => NONE,
                         FuelUsage => Modules_List(ModuleIndex).Value,
                         Power => Modules_List(ModuleIndex).MaxValue,
@@ -257,7 +270,8 @@ package body Bases.Ship is
                         Weight => Modules_List(ModuleIndex).Weight,
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
-                        Owner => 0, UpgradeProgress => 0,
+                        Owners => 1,
+                        Owner => (others => 0), UpgradeProgress => 0,
                         UpgradeAction => NONE));
                when BATTERING_RAM =>
                   PlayerShip.Modules.Append
@@ -268,7 +282,8 @@ package body Bases.Ship is
                         Weight => Modules_List(ModuleIndex).Weight,
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
-                        Owner => 0, UpgradeProgress => 0,
+                        Owners => 1,
+                        Owner => (others => 0), UpgradeProgress => 0,
                         UpgradeAction => NONE,
                         Damage2 => Modules_List(ModuleIndex).MaxValue,
                         CoolingDown => False));
@@ -280,7 +295,8 @@ package body Bases.Ship is
                         Weight => Modules_List(ModuleIndex).Weight,
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
-                        Owner => 0, UpgradeProgress => 0,
+                        Owners => 1,
+                        Owner => (others => 0), UpgradeProgress => 0,
                         UpgradeAction => NONE,
                         Damage => Modules_List(ModuleIndex).MaxValue,
                         AmmoIndex => 0));
@@ -293,7 +309,8 @@ package body Bases.Ship is
                         Weight => Modules_List(ModuleIndex).Weight,
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
-                        Owner => 0, UpgradeProgress => 0,
+                        Owners => 1,
+                        Owner => (others => 0), UpgradeProgress => 0,
                         UpgradeAction => NONE,
                         Duration => Modules_List(ModuleIndex).MaxValue,
                         HarpoonIndex => 0));
@@ -309,7 +326,8 @@ package body Bases.Ship is
                   Weight => Modules_List(ModuleIndex).Weight,
                   Durability => Modules_List(ModuleIndex).Durability,
                   MaxDurability => Modules_List(ModuleIndex).Durability,
-                  Owner => 0, UpgradeProgress => 0, UpgradeAction => NONE,
+                  Owners => 1,
+                        Owner => (others => 0), UpgradeProgress => 0, UpgradeAction => NONE,
                   InstalledModules => Modules_List(ModuleIndex).Value,
                   MaxModules => Modules_List(ModuleIndex).MaxValue));
          end if;
@@ -397,12 +415,15 @@ package body Bases.Ship is
          UpdateGame
            (Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
               .InstallTime);
-         if PlayerShip.Modules(ShipModuleIndex).Owner > 0 and
-           PlayerShip.Modules(ShipModuleIndex).MType /= CABIN then
-            GiveOrders
-              (Ship => PlayerShip,
-               MemberIndex => PlayerShip.Modules(ShipModuleIndex).Owner,
-               GivenOrder => Rest, CheckPriorities => False);
+         if PlayerShip.Modules(ShipModuleIndex).MType /= CABIN then
+           for I in PlayerShip.Modules(ShipModuleIndex).Owner'Range loop
+              if PlayerShip.Modules(ShipModuleIndex).Owner(I) > 0 then
+                 GiveOrders
+                    (Ship => PlayerShip,
+                    MemberIndex => PlayerShip.Modules(ShipModuleIndex).Owner(I),
+                    GivenOrder => Rest, CheckPriorities => False);
+              end if;
+           end loop;
          end if;
          UpdateCargo
            (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => Price);

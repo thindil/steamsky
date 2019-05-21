@@ -39,6 +39,7 @@ package body Ships is
       HullIndex, Amount: Natural := 0;
       ProtoShip: constant ProtoShipData := ProtoShips_List(ProtoIndex);
       ShipCargo: Inventory_Container.Vector;
+      Owners: Positive := 1;
    begin
       -- Set ship modules
       declare
@@ -117,6 +118,11 @@ package body Ships is
                   UpgradesAmount := UpgradesAmount - 1;
                end if;
             end if;
+            if TempModule.MaxValue = 0 then
+               Owners := 1;
+            else
+               Owners := TempModule.MaxValue;
+            end if;
             case TempModule.MType is
                when ENGINE =>
                   ShipModules.Append
@@ -124,7 +130,8 @@ package body Ships is
                        (MType => ENGINE, Name => Modules_List(Module).Name,
                         ProtoIndex => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability, Owner => 0,
+                        MaxDurability => TempModule.Durability, Owners => 1,
+                        Owner => (others => 0),
                         UpgradeProgress => 0, UpgradeAction => NONE,
                         FuelUsage => TempModule.Value,
                         Power => TempModule.MaxValue, Disabled => False));
@@ -134,7 +141,8 @@ package body Ships is
                        (MType => CABIN, Name => Modules_List(Module).Name,
                         ProtoIndex => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability, Owner => 0,
+                        MaxDurability => TempModule.Durability, Owners => Owners,
+                        Owner => (others => 0),
                         UpgradeProgress => 0, UpgradeAction => NONE,
                         Cleanliness => TempModule.Value,
                         Quality => TempModule.MaxValue));
@@ -144,7 +152,8 @@ package body Ships is
                        (MType => WORKSHOP, Name => Modules_List(Module).Name,
                         ProtoIndex => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability, Owner => 0,
+                        MaxDurability => TempModule.Durability, Owners => Owners,
+                        Owner => (others => 0),
                         UpgradeProgress => 0, UpgradeAction => NONE,
                         CraftingIndex => Null_Unbounded_String,
                         CraftingTime => 0, CraftingAmount => 0));
@@ -155,7 +164,8 @@ package body Ships is
                         Name => Modules_List(Module).Name,
                         ProtoIndex => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability, Owner => 0,
+                        MaxDurability => TempModule.Durability, Owners => 1,
+                        Owner => (others => 0),
                         UpgradeProgress => 0, UpgradeAction => NONE));
                when COCKPIT =>
                   ShipModules.Append
@@ -163,7 +173,8 @@ package body Ships is
                        (MType => COCKPIT, Name => Modules_List(Module).Name,
                         ProtoIndex => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability, Owner => 0,
+                        MaxDurability => TempModule.Durability, Owners => 1,
+                        Owner => (others => 0),
                         UpgradeProgress => 0, UpgradeAction => NONE));
                when TRAINING_ROOM =>
                   ShipModules.Append
@@ -172,7 +183,8 @@ package body Ships is
                         Name => Modules_List(Module).Name,
                         ProtoIndex => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability, Owner => 0,
+                        MaxDurability => TempModule.Durability, Owners => 1,
+                        Owner => (others => 0),
                         UpgradeProgress => 0, UpgradeAction => NONE,
                         TrainedSkill => 0));
                when TURRET =>
@@ -181,7 +193,8 @@ package body Ships is
                        (MType => TURRET, Name => Modules_List(Module).Name,
                         ProtoIndex => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability, Owner => 0,
+                        MaxDurability => TempModule.Durability, Owners => 1,
+                        Owner => (others => 0),
                         UpgradeProgress => 0, UpgradeAction => NONE,
                         GunIndex => 0));
                when GUN =>
@@ -190,7 +203,8 @@ package body Ships is
                        (MType => GUN, Name => Modules_List(Module).Name,
                         ProtoIndex => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability, Owner => 0,
+                        MaxDurability => TempModule.Durability, Owners => 1,
+                        Owner => (others => 0),
                         UpgradeProgress => 0, UpgradeAction => NONE,
                         Damage => TempModule.MaxValue, AmmoIndex => 0));
                when CARGO =>
@@ -199,7 +213,8 @@ package body Ships is
                        (MType => CARGO_ROOM, Name => Modules_List(Module).Name,
                         ProtoIndex => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability, Owner => 0,
+                        MaxDurability => TempModule.Durability, Owners => 1,
+                        Owner => (others => 0),
                         UpgradeProgress => 0, UpgradeAction => NONE));
                when HULL =>
                   ShipModules.Append
@@ -207,7 +222,8 @@ package body Ships is
                        (MType => HULL, Name => Modules_List(Module).Name,
                         ProtoIndex => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability, Owner => 0,
+                        MaxDurability => TempModule.Durability, Owners => 1,
+                        Owner => (others => 0),
                         UpgradeProgress => 0, UpgradeAction => NONE,
                         InstalledModules => TempModule.Value,
                         MaxModules => TempModule.MaxValue));
@@ -217,7 +233,8 @@ package body Ships is
                        (MType => ARMOR, Name => Modules_List(Module).Name,
                         ProtoIndex => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability, Owner => 0,
+                        MaxDurability => TempModule.Durability, Owners => 1,
+                        Owner => (others => 0),
                         UpgradeProgress => 0, UpgradeAction => NONE));
                when BATTERING_RAM =>
                   ShipModules.Append
@@ -226,7 +243,8 @@ package body Ships is
                         Name => Modules_List(Module).Name,
                         ProtoIndex => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability, Owner => 0,
+                        MaxDurability => TempModule.Durability, Owners => 1,
+                        Owner => (others => 0),
                         UpgradeProgress => 0, UpgradeAction => NONE,
                         Damage2 => TempModule.MaxValue, CoolingDown => False));
                when HARPOON_GUN =>
@@ -236,7 +254,8 @@ package body Ships is
                         Name => Modules_List(Module).Name,
                         ProtoIndex => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability, Owner => 0,
+                        MaxDurability => TempModule.Durability, Owners => 1,
+                        Owner => (others => 0),
                         UpgradeProgress => 0, UpgradeAction => NONE,
                         Duration => TempModule.MaxValue, HarpoonIndex => 0));
                when ANY =>
@@ -332,21 +351,27 @@ package body Ships is
                TmpAttributes.Clear;
                TmpInventory.Clear;
                for Module of ShipModules loop
-                  if Module.MType = CABIN and Module.Owner = 0 then
-                     Module.Name :=
-                       MemberName & To_Unbounded_String("'s Cabin");
-                     Module.Owner := ShipCrew.Last_Index;
-                     exit;
+                  if Module.MType = CABIN then
+                     for I in Module.Owner'Range loop
+                        if Module.Owner(I) = 0 then
+                           Module.Owner(I) := ShipCrew.Last_Index;
+                           if I = 1 then
+                              Module.Name :=
+                                 MemberName & To_Unbounded_String("'s Cabin");
+                           end if;
+                           exit;
+                        end if;
+                     end loop;
                   end if;
                end loop;
                for Module of ShipModules loop
-                  if Module.Owner = 0 and
+                  if Module.Owner(1) = 0 and
                     ((Module.MType = GUN or Module.MType = HARPOON_GUN) and
                      Member.Order = Gunner) then
-                     Module.Owner := ShipCrew.Last_Index;
+                     Module.Owner(1) := ShipCrew.Last_Index;
                      exit;
                   elsif Module.MType = COCKPIT and Member.Order = Pilot then
-                     Module.Owner := ShipCrew.Last_Index;
+                     Module.Owner(1) := ShipCrew.Last_Index;
                      exit;
                   end if;
                end loop;
