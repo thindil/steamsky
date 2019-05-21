@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Updated
 - Updated crews on inquisition ships
 - Updated player's character and starting crew for inquisition faction
+- Contributing guide
 
 ## [3.7] - 2019-05-19
 
