@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Updated player's character and starting crew for inquisition faction
 - Contributing guide
 - Maximum allowed owners for cabins and workers for all workshops
+- Updated MODDING.md
 
 ## [3.7] - 2019-05-19
 
