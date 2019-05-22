@@ -119,13 +119,7 @@ package body Ships is
                end if;
             end if;
             Owners.Clear;
-            if TempModule.MaxValue = 0 then
-               Owners.Append(0);
-            else
-               for I in 1 .. TempModule.MaxValue loop
-                  Owners.Append(0);
-               end loop;
-            end if;
+            Owners.Append(0);
             case TempModule.MType is
                when ENGINE =>
                   ShipModules.Append
@@ -138,6 +132,9 @@ package body Ships is
                         UpgradeAction => NONE, FuelUsage => TempModule.Value,
                         Power => TempModule.MaxValue, Disabled => False));
                when CABIN =>
+                  for I in 2 .. TempModule.MaxValue loop
+                     Owners.Append(0);
+                  end loop;
                   ShipModules.Append
                     (New_Item =>
                        (MType => CABIN, Name => Modules_List(Module).Name,
@@ -146,8 +143,11 @@ package body Ships is
                         MaxDurability => TempModule.Durability,
                         Owner => Owners, UpgradeProgress => 0,
                         UpgradeAction => NONE, Cleanliness => TempModule.Value,
-                        Quality => TempModule.MaxValue));
+                        Quality => TempModule.Value));
                when ALCHEMY_LAB .. GREENHOUSE =>
+                  for I in 2 .. TempModule.MaxValue loop
+                     Owners.Append(0);
+                  end loop;
                   ShipModules.Append
                     (New_Item =>
                        (MType => WORKSHOP, Name => Modules_List(Module).Name,
@@ -349,6 +349,7 @@ package body Ships is
                TmpSkills.Clear;
                TmpAttributes.Clear;
                TmpInventory.Clear;
+               Modules_Loop :
                for Module of ShipModules loop
                   if Module.MType = CABIN then
                      for I in Module.Owner.Iterate loop
@@ -358,11 +359,11 @@ package body Ships is
                               Module.Name :=
                                 MemberName & To_Unbounded_String("'s Cabin");
                            end if;
-                           exit;
+                           exit Modules_Loop;
                         end if;
                      end loop;
                   end if;
-               end loop;
+               end loop Modules_Loop;
                for Module of ShipModules loop
                   if Module.Owner(1) = 0 and
                     ((Module.MType = GUN or Module.MType = HARPOON_GUN) and
