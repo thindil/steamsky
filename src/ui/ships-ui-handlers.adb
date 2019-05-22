@@ -173,7 +173,13 @@ package body Ships.UI.Handlers is
             end if;
          when CABIN =>
             HaveOwner := False;
-            Append(ModuleInfo, "Owner: ");
+            Append(ModuleInfo, "Owner");
+            if Module.Owner.Length > 1 then
+               Append(ModuleInfo, "s");
+            end if;
+            Append
+              (ModuleInfo,
+               " (max" & Count_Type'Image(Module.Owner.Length) & "): ");
             for I in Module.Owner.First_Index .. Module.Owner.Last_Index loop
                if Module.Owner(I) > 0 then
                   HaveOwner := True;
@@ -284,7 +290,13 @@ package body Ships.UI.Handlers is
             end if;
          when ALCHEMY_LAB .. GREENHOUSE =>
             HaveOwner := False;
-            Append(ModuleInfo, "Worker: ");
+            Append(ModuleInfo, "Worker");
+            if Module.Owner.Length > 1 then
+               Append(ModuleInfo, "s");
+            end if;
+            Append
+              (ModuleInfo,
+               " (max" & Count_Type'Image(Module.Owner.Length) & "): ");
             for I in Module.Owner.First_Index .. Module.Owner.Last_Index loop
                if Module.Owner(I) > 0 then
                   HaveOwner := True;
