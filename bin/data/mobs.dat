@@ -2617,6 +2617,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute level="3"/>
   <attribute level="3"/>
   <priority name="Engineering" value="Normal"/>
+  <priority name="Repair ship" value="High"/>
   <item amount="1" index="66"/>
   <item amount="1" index="67"/>
   <item amount="1" index="68"/>
@@ -2681,6 +2682,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="5" minlevel="3"/>
   <attribute maxlevel="5" minlevel="3"/>
   <priority name="Engineering" value="Normal"/>
+  <priority name="Repair ship" value="High"/>
   <item amount="1" index="77"/>
   <item amount="1" index="78"/>
   <item amount="1" index="79"/>
@@ -2792,6 +2794,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="15" minlevel="7"/>
   <attribute maxlevel="15" minlevel="7"/>
   <priority name="Engineering" value="Normal"/>
+  <priority name="Repair ship" value="High"/>
   <item amount="1" index="76"/>
   <item amount="1" index="83"/>
   <item amount="1" index="84"/>
@@ -2905,6 +2908,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="20" minlevel="10"/>
   <attribute maxlevel="20" minlevel="10"/>
   <priority name="Engineering" value="Normal"/>
+  <priority name="Repair ship" value="High"/>
   <item amount="1" index="76"/>
   <item amount="1" index="83"/>
   <item amount="1" index="84"/>
@@ -3018,6 +3022,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="25" minlevel="15"/>
   <attribute maxlevel="25" minlevel="15"/>
   <priority name="Engineering" value="Normal"/>
+  <priority name="Repair ship" value="High"/>
   <item amount="1" index="88"/>
   <item amount="1" index="90"/>
   <item amount="1" index="91"/>
@@ -3131,6 +3136,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="35" minlevel="25"/>
   <attribute maxlevel="35" minlevel="25"/>
   <priority name="Engineering" value="Normal"/>
+  <priority name="Repair ship" value="High"/>
   <item amount="1" index="88"/>
   <item amount="1" index="90"/>
   <item amount="1" index="91"/>
