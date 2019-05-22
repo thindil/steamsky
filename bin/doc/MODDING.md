@@ -333,13 +333,14 @@ Value must be existing skill name.
   used as ammunition (item types are in *game.dat* file). For 'Hull' it is
   maximum allowed size of installed module. For any other type of modules
   should be 0.
-- Attribute `maxvalue`: Depends on type of module. For 'Hull' it is max free
-  module space. For 'Engine' it is engine power. For 'Cabin' should be that
-  same like attribute `value` value. For 'Cargo' it is maximum capacity in
-  kilograms for cargo for that module. For 'Gun', 'Battering\_ram' it is amount
-  of damage done by selected weapon. For 'Harpoon\_Gun' it is amount of combat
-  rounds by how long harpoon is stuck in enemy ship. For any other type of
-  modules should be 0 (zero).
+- Attribute `maxvalue`: Depends on type of module. For 'Hull' it is max
+  free module space. For 'Engine' it is engine power. For 'Cargo' it is maximum
+  capacity in kilograms for cargo for that module. For 'Gun', 'Battering\_ram' it
+  is amount of damage done by selected weapon. For 'Harpoon\_Gun' it is amount of
+  combat rounds by how long harpoon is stuck in enemy ship. For 'Cabin' it is the
+  amount of possible owners. For 'Alchemy\_Lab', 'Furnace', 'Water\_Collector',
+  'Workshop' and 'Greenhouse' it is the amount of workers who can work together
+  in this same module. For any other type of modules should be 0 (zero).
 - Attribute `durability`: Base durability of module. How many damage module can
   take before will be destroyed.
 - Attribute `material`: Type of item which will be used to repair or upgrade
