@@ -41,7 +41,7 @@ package body ShipModules is
          Value => 0, MaxValue => 0, Durability => 0,
          RepairMaterial => Null_Unbounded_String, RepairSkill => 2, Price => 0,
          InstallTime => 60, Unique => False, Size => 0,
-         Description => Null_Unbounded_String);
+         Description => Null_Unbounded_String, MaxOwners => 1);
       ModulesData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(ModulesData, "module");
@@ -141,6 +141,10 @@ package body ShipModules is
                TempRecord.Size :=
                  Integer'Value(Get_Attribute(ModuleNode, "size"));
             end if;
+            if Get_Attribute(ModuleNode, "maxowners")'Length > 0 then
+               TempRecord.MaxOwners :=
+                 Integer'Value(Get_Attribute(ModuleNode, "maxowners"));
+            end if;
             if Has_Child_Nodes(ModuleNode) then
                TempRecord.Description :=
                  To_Unbounded_String(Node_Value(First_Child(ModuleNode)));
@@ -165,7 +169,7 @@ package body ShipModules is
             Value => 0, MaxValue => 0, Durability => 0,
             RepairMaterial => Null_Unbounded_String, RepairSkill => 2,
             Price => 0, InstallTime => 60, Unique => False, Size => 0,
-            Description => Null_Unbounded_String);
+            Description => Null_Unbounded_String, MaxOwners => 1);
       end loop;
    end LoadShipModules;
 

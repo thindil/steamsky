@@ -119,7 +119,11 @@ package body Ships is
                end if;
             end if;
             Owners.Clear;
-            Owners.Append(0);
+            if TempModule.MaxOwners > 0 then
+               for I in 1 .. TempModule.MaxOwners loop
+                  Owners.Append(0);
+               end loop;
+            end if;
             case TempModule.MType is
                when ENGINE =>
                   ShipModules.Append
@@ -132,9 +136,6 @@ package body Ships is
                         UpgradeAction => NONE, FuelUsage => TempModule.Value,
                         Power => TempModule.MaxValue, Disabled => False));
                when CABIN =>
-                  for I in 2 .. TempModule.MaxValue loop
-                     Owners.Append(0);
-                  end loop;
                   ShipModules.Append
                     (New_Item =>
                        (MType => CABIN, Name => Modules_List(Module).Name,
@@ -145,9 +146,6 @@ package body Ships is
                         UpgradeAction => NONE, Cleanliness => TempModule.Value,
                         Quality => TempModule.Value));
                when ALCHEMY_LAB .. GREENHOUSE =>
-                  for I in 2 .. TempModule.MaxValue loop
-                     Owners.Append(0);
-                  end loop;
                   ShipModules.Append
                     (New_Item =>
                        (MType => WORKSHOP, Name => Modules_List(Module).Name,
