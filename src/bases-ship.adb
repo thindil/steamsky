@@ -155,13 +155,9 @@ package body Bases.Ship is
          GainExp(1, TalkingSkill, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
          if Modules_List(ModuleIndex).MType /= HULL then
-            if Modules_List(ModuleIndex).MaxValue = 0 then
+            for I in 1 .. Modules_List(ModuleIndex).MaxOwners loop
                Owners.Append(0);
-            else
-               for I in 1 .. Modules_List(ModuleIndex).MaxValue loop
-                  Owners.Append(0);
-               end loop;
-            end if;
+            end loop;
             case Modules_List(ModuleIndex).MType is
                when ALCHEMY_LAB .. GREENHOUSE =>
                   PlayerShip.Modules.Append

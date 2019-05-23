@@ -41,6 +41,7 @@ package ShipModules is
       Unique: Boolean; -- Did ship can have installed only one that module
       Size: Natural; -- How many space in ship this module take
       Description: Unbounded_String; -- Description of module
+      MaxOwners: Natural; -- How many owners module can have
    end record;
    package BaseModules_Container is new Hashed_Maps(Unbounded_String,
       BaseModule_Data, Ada.Strings.Unbounded.Hash, "=");
