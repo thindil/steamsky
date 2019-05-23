@@ -337,10 +337,9 @@ Value must be existing skill name.
   free module space. For 'Engine' it is engine power. For 'Cargo' it is maximum
   capacity in kilograms for cargo for that module. For 'Gun', 'Battering\_ram' it
   is amount of damage done by selected weapon. For 'Harpoon\_Gun' it is amount of
-  combat rounds by how long harpoon is stuck in enemy ship. For 'Cabin' it is the
-  amount of possible owners. For 'Alchemy\_Lab', 'Furnace', 'Water\_Collector',
-  'Workshop' and 'Greenhouse' it is the amount of workers who can work together
-  in this same module. For any other type of modules should be 0 (zero).
+  combat rounds by how long harpoon is stuck in enemy ship. For `Cabin` it must
+  be that same as "value" attribute.For any other type of modules should be 0
+  (zero).
 - Attribute `durability`: Base durability of module. How many damage module can
   take before will be destroyed.
 - Attribute `material`: Type of item which will be used to repair or upgrade
@@ -353,6 +352,8 @@ Value must be existing skill name.
 - Optional attribute `unique`: If set to 'Y' then each ship can have only one
   module of that type.
 - Optional attribute `size`: Amount of hull module space used by module.
+- Optional attribute `maxowners`: How many owners or workers (for workshop's
+  types of modules) the module can have. Default value is 1.
 - Text between `module` tags is module description.
 
 ## Ships
