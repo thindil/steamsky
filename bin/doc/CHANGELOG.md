@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New player's ships for inquisition faction
-- Self repair ships during combat for pirates and poleis factions
+- Self repair ships during combat for pirates, poleis and independent factions
 
 ### Updated
 - Updated crews on inquisition ships
