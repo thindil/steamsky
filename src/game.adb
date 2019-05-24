@@ -289,15 +289,25 @@ package body Game is
          CabinAssigned: Boolean := False;
       begin
          for Module of PlayerShip.Modules loop
-            if Module.Owner(1) > 0 then
-               Module.Owner(1) := Module.Owner(1) + 1;
-            end if;
+            for Owner of Module.Owner loop
+               if Owner > 0 then
+                  Owner := Owner + 1;
+               end if;
+            end loop;
             if Modules_List(Module.ProtoIndex).MType = CABIN and
-              Module.Owner(1) = 0 and not CabinAssigned then
-               Module.Name :=
-                 NewGameSettings.PlayerName & To_Unbounded_String("'s Cabin");
-               Module.Owner(1) := 1;
-               CabinAssigned := True;
+              not CabinAssigned then
+               for I in Module.Owner.Iterate loop
+                  if Module.Owner(I) = 0 then
+                     Module.Owner(I) := 1;
+                     if Natural_Container.To_Index(I) = 1 then
+                        Module.Name :=
+                          NewGameSettings.PlayerName &
+                          To_Unbounded_String("'s Cabin");
+                     end if;
+                     CabinAssigned := True;
+                     exit;
+                  end if;
+               end loop;
             end if;
          end loop;
       end;
