@@ -182,13 +182,13 @@ package body Ships.UI.Handlers is
                " (max" & Count_Type'Image(Module.Owner.Length) & "): ");
             for I in Module.Owner.First_Index .. Module.Owner.Last_Index loop
                if Module.Owner(I) > 0 then
+                  if HaveOwner then
+                     Append(ModuleInfo, ", ");
+                  end if;
                   HaveOwner := True;
                   Append
                     (ModuleInfo,
                      To_String(PlayerShip.Crew(Module.Owner(I)).Name));
-                  if I < Module.Owner.Last_Index then
-                     Append(ModuleInfo, ", ");
-                  end if;
                end if;
             end loop;
             if not HaveOwner then
@@ -299,13 +299,13 @@ package body Ships.UI.Handlers is
                " (max" & Count_Type'Image(Module.Owner.Length) & "): ");
             for I in Module.Owner.First_Index .. Module.Owner.Last_Index loop
                if Module.Owner(I) > 0 then
+                  if HaveOwner then
+                     Append(ModuleInfo, ", ");
+                  end if;
                   HaveOwner := True;
                   Append
                     (ModuleInfo,
                      To_String(PlayerShip.Crew(Module.Owner(I)).Name));
-                  if I < Module.Owner.Last_Index then
-                     Append(ModuleInfo, ", ");
-                  end if;
                end if;
             end loop;
             if not HaveOwner then
