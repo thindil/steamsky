@@ -16,7 +16,9 @@ All notable changes to this project will be documented in this file.
 - Updated MODDING.md
 
 ### Fixed
-- Crews for Advanced poleis patrol ship mk VI and advanced poleis trader mk VI
+- Crews for Advanced poleis patrol ship mk VI, advanced poleis trader mk VI,
+  advanced poleis patrol ship mk V, advanced poleis trader mk V, huge poleis
+  patrol ship mk V and huge poleis trader mk V
 
 ## [3.7] - 2019-05-19
 
