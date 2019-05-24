@@ -18,7 +18,10 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Crews for Advanced poleis patrol ship mk VI, advanced poleis trader mk VI,
   advanced poleis patrol ship mk V, advanced poleis trader mk V, huge poleis
-  patrol ship mk V and huge poleis trader mk V
+  patrol ship mk V, huge poleis trader mk V, Advanced independent patrol ship
+  mk VI, advanced independent trader mk VI, advaced independent patrol ship mk
+  V, advanced independent trader mk V, huge independent patrol ship mk V and
+  huge independent trader mk V
 
 ## [3.7] - 2019-05-19
 
