@@ -363,14 +363,16 @@ package body Ships is
                   end if;
                end loop Modules_Loop;
                for Module of ShipModules loop
-                  if Module.Owner(1) = 0 and
-                    ((Module.MType = GUN or Module.MType = HARPOON_GUN) and
-                     Member.Order = Gunner) then
-                     Module.Owner(1) := ShipCrew.Last_Index;
-                     exit;
-                  elsif Module.MType = COCKPIT and Member.Order = Pilot then
-                     Module.Owner(1) := ShipCrew.Last_Index;
-                     exit;
+                  if Module.Owner.Length > 0 then
+                     if Module.Owner(1) = 0 and
+                       ((Module.MType = GUN or Module.MType = HARPOON_GUN) and
+                        Member.Order = Gunner) then
+                        Module.Owner(1) := ShipCrew.Last_Index;
+                        exit;
+                     elsif Module.MType = COCKPIT and Member.Order = Pilot then
+                        Module.Owner(1) := ShipCrew.Last_Index;
+                        exit;
+                     end if;
                   end if;
                end loop;
             end loop;
