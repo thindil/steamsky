@@ -5091,11 +5091,11 @@ during combat. -->
   <cargo index="3" maxamount="1500" minamount="1000"/>
   <cargo index="153" maxamount="1000" minamount="500"/>
   <cargo index="131" maxamount="750" minamount="500"/>
-  <member index="116"/>
-  <member amount="3" index="117"/>
-  <member index="118"/>
-  <member index="42"/>
-  <member index="119" maxamount="5" minamount="3"/>
+  <member index="215"/>
+  <member amount="3" index="216"/>
+  <member index="217"/>
+  <member index="175"/>
+  <member index="218" maxamount="5" minamount="3"/>
   <description>Huge, well armored, upgraded version of independent traders ship. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="268" maxloot="1000" minloot="500" name="Huge pirates trader mk V" owner="PIRATES">
@@ -5153,10 +5153,10 @@ during combat. -->
   <cargo index="3" maxamount="1500" minamount="1000"/>
   <cargo index="153" maxamount="1000" minamount="500"/>
   <cargo index="131" maxamount="750" minamount="500"/>
-  <member index="116"/>
-  <member amount="4" index="117"/>
-  <member index="118"/>
-  <member index="119" maxamount="10" minamount="6"/>
+  <member index="215"/>
+  <member amount="4" index="216"/>
+  <member index="217"/>
+  <member index="218" maxamount="10" minamount="6"/>
   <description>Huge, well armored, upgraded version of independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="COWARD" index="271" maxloot="1000" minloot="500" name="Huge poleis trader mk VI" owner="POLEIS">
@@ -5606,11 +5606,11 @@ during combat. -->
   <cargo index="3" maxamount="2000" minamount="1500"/>
   <cargo index="154" maxamount="1000" minamount="500"/>
   <cargo index="131" maxamount="800" minamount="600"/>
-  <member index="112"/>
-  <member amount="3" index="113"/>
-  <member index="46"/>
-  <member index="114"/>
-  <member index="115" maxamount="8" minamount="4"/>
+  <member index="211"/>
+  <member amount="3" index="212"/>
+  <member index="180"/>
+  <member index="213"/>
+  <member index="214" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored independent traders ship. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="293" maxloot="1200" minloot="750" name="Advanced huge pirates trader mk V" owner="PIRATES">
@@ -5668,10 +5668,10 @@ during combat. -->
   <cargo index="3" maxamount="2000" minamount="1500"/>
   <cargo index="154" maxamount="1000" minamount="500"/>
   <cargo index="131" maxamount="800" minamount="600"/>
-  <member index="112"/>
-  <member amount="4" index="113"/>
-  <member index="114"/>
-  <member index="115" maxamount="12" minamount="8"/>
+  <member index="211"/>
+  <member amount="4" index="212"/>
+  <member index="213"/>
+  <member index="214" maxamount="12" minamount="8"/>
   <description>Advanced and upgraded version of huge, well armored independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="COWARD" index="296" maxloot="1200" minloot="750" name="Advanced huge poleis trader mk VI" owner="POLEIS">
@@ -5709,11 +5709,11 @@ during combat. -->
   <cargo index="3" maxamount="2000" minamount="1500"/>
   <cargo index="179" maxamount="1000" minamount="500"/>
   <cargo index="167" maxamount="800" minamount="600"/>
-  <member index="94"/>
-  <member amount="3" index="95"/>
-  <member index="46"/>
-  <member index="96"/>
-  <member index="97" maxamount="8" minamount="4"/>
+  <member index="207"/>
+  <member amount="3" index="208"/>
+  <member index="180"/>
+  <member index="209"/>
+  <member index="210" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored independent traders ship. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="298" maxloot="1200" minloot="750" name="Advanced huge pirates trader mk VI" owner="PIRATES">
@@ -5771,10 +5771,10 @@ during combat. -->
   <cargo index="3" maxamount="2000" minamount="1500"/>
   <cargo index="179" maxamount="1000" minamount="500"/>
   <cargo index="167" maxamount="800" minamount="600"/>
-  <member index="94"/>
-  <member amount="4" index="95"/>
-  <member index="96"/>
-  <member index="97" maxamount="12" minamount="8"/>
+  <member index="207"/>
+  <member amount="4" index="208"/>
+  <member index="209"/>
+  <member index="210" maxamount="12" minamount="8"/>
   <description>Advanced and upgraded version of huge, well armored independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship index="301" name="Player Independent Ship" owner="INDEPENDENT">
