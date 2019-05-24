@@ -4210,6 +4210,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="45" minlevel="35"/>
   <attribute maxlevel="45" minlevel="35"/>
   <priority name="Engineering" value="Normal"/>
+  <priority name="Repair ship" value="High"/>
   <item amount="1" index="183"/>
   <item amount="1" index="185"/>
   <item amount="1" index="187"/>
@@ -4300,6 +4301,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="35" minlevel="25"/>
   <attribute maxlevel="35" minlevel="25"/>
   <priority name="Engineering" value="Normal"/>
+  <priority name="Repair ship" value="High"/>
   <item amount="1" index="158"/>
   <item amount="1" index="160"/>
   <item amount="1" index="161"/>
@@ -4390,6 +4392,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="25" minlevel="15"/>
   <attribute maxlevel="25" minlevel="15"/>
   <priority name="Engineering" value="Normal"/>
+  <priority name="Repair ship" value="High"/>
   <item amount="1" index="124"/>
   <item amount="1" index="126"/>
   <item amount="1" index="127"/>
