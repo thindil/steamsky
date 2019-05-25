@@ -592,16 +592,23 @@ package body Combat is
                                     end if;
                                  end loop;
                               when others =>
-                                 if EnemyShip.Modules(HitLocation).Owner(1) > 0
-                                   and then
-                                     EnemyShip.Crew
-                                       (EnemyShip.Modules(HitLocation).Owner
-                                          (1))
-                                       .Order /=
-                                     Rest then
-                                    Death
-                                      (EnemyShip.Modules(HitLocation).Owner(1),
-                                       DeathReason, EnemyShip);
+                                 if EnemyShip.Modules(HitLocation).Owner
+                                     .Length >
+                                   0 then
+                                    if EnemyShip.Modules(HitLocation).Owner
+                                        (1) >
+                                      0
+                                      and then
+                                        EnemyShip.Crew
+                                          (EnemyShip.Modules(HitLocation).Owner
+                                             (1))
+                                          .Order /=
+                                        Rest then
+                                       Death
+                                         (EnemyShip.Modules(HitLocation).Owner
+                                            (1),
+                                          DeathReason, EnemyShip);
+                                    end if;
                                  end if;
                            end case;
                         end if;
