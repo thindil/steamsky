@@ -332,11 +332,9 @@ package body Crafts is
       RecipeName: Unbounded_String;
       HaveMaterial: Boolean;
       CraftingMaterial: Natural;
-      procedure ResetOrder(Module: in out ModuleData) is
+      procedure ResetOrder(Module: in out ModuleData; ModuleOwner: Natural) is
+         HaveWorker: Boolean := False;
       begin
-         Module.CraftingIndex := Null_Unbounded_String;
-         Module.CraftingTime := 0;
-         Module.CraftingAmount := 0;
          if ToolIndex > 0 then
             TakeOffItem(CrafterIndex, ToolIndex);
             UpdateCargo
@@ -349,9 +347,19 @@ package body Crafts is
                InventoryIndex => ToolIndex);
          end if;
          for Owner of Module.Owner loop
-            GiveOrders(PlayerShip, Owner, Rest);
-            Owner := 0;
+            if Owner = ModuleOwner or ModuleOwner = 0 then
+               GiveOrders(PlayerShip, Owner, Rest);
+               Owner := 0;
+            end if;
+            if Owner > 0 then
+               HaveWorker := True;
+            end if;
          end loop;
+         if not HaveWorker then
+            Module.CraftingIndex := Null_Unbounded_String;
+            Module.CraftingTime := 0;
+            Module.CraftingAmount := 0;
+         end if;
       end ResetOrder;
    begin
       for Module of PlayerShip.Modules loop
@@ -387,7 +395,7 @@ package body Crafts is
                      To_String(PlayerShip.Crew(CrafterIndex).Name) &
                      " can't work on " & To_String(RecipeName) & ".",
                      CraftMessage, RED);
-                  ResetOrder(Module);
+                  ResetOrder(Module, Owner);
                   CurrentMinutes := 0;
                end if;
                WorkTime := PlayerShip.Crew(CrafterIndex).OrderTime;
@@ -434,7 +442,7 @@ package body Crafts is
                              ("You don't have crafting materials for " &
                               To_String(RecipeName) & ".",
                               CraftMessage, RED);
-                           ResetOrder(Module);
+                           ResetOrder(Module, Owner);
                            exit Craft_Loop;
                         elsif PlayerShip.Cargo(CraftingMaterial).ProtoIndex /=
                           MaterialIndex then
@@ -450,7 +458,7 @@ package body Crafts is
                              ("You don't have tool for " &
                               To_String(RecipeName) & ".",
                               CraftMessage, RED);
-                           ResetOrder(Module);
+                           ResetOrder(Module, Owner);
                            exit Craft_Loop;
                         end if;
                      else
@@ -504,7 +512,7 @@ package body Crafts is
                           ("You don't have enough crafting materials for " &
                            To_String(RecipeName) & ".",
                            CraftMessage, RED);
-                        ResetOrder(Module);
+                        ResetOrder(Module, Owner);
                         exit Craft_Loop;
                      end if;
                      CraftedAmount := CraftedAmount + ResultAmount;
@@ -561,7 +569,7 @@ package body Crafts is
                              ("You don't have free cargo space for " &
                               To_String(RecipeName) & ".",
                               CraftMessage, RED);
-                           ResetOrder(Module);
+                           ResetOrder(Module, Owner);
                            exit Craft_Loop;
                         end if;
                         UpdateCargo
@@ -640,7 +648,7 @@ package body Crafts is
                   end if;
                   PlayerShip.Crew(CrafterIndex).OrderTime := WorkTime;
                   if Module.CraftingAmount = 0 then
-                     ResetOrder(Module);
+                     ResetOrder(Module, Owner);
                   end if;
                end if;
             end if;
