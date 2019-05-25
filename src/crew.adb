@@ -259,8 +259,8 @@ package body Crew is
                Member.PreviousOrder = Craft) then
                Module_Loop :
                for Module of PlayerShip.Modules loop
-                  if Member.PreviousOrder = Gunner and Module.MType = GUN and
-                    (Module.Owner(1) = I or Module.Owner(1) = 0) then
+                  if (Member.PreviousOrder = Gunner and Module.MType = GUN)
+                    and then (Module.Owner(1) = I or Module.Owner(1) = 0) then
                      BackToWork := True;
                      Module.Owner(1) := I;
                      exit;
