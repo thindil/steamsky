@@ -50,7 +50,7 @@ package body Missions.UI is
       MissionsModel: Gtk_Tree_Model;
       MissionInfo: Unbounded_String;
       Mission: Mission_Data;
-      HaveCabin, CabinTaken: Boolean := False;
+      CabinTaken: Boolean := False;
       CanAccept: Boolean := True;
       MissionsLimit: Natural;
       OldIndex: constant Natural := MissionIndex;
@@ -114,24 +114,25 @@ package body Missions.UI is
             CanAccept := False;
             Modules_Loop :
             for Module of PlayerShip.Modules loop
-               if Module.MType = CABIN
+               if (Module.MType = CABIN and not CanAccept)
                  and then Module.Quality >= Mission.Data then
+                  CanAccept := True;
+                  CabinTaken := False;
                   for Owner of Module.Owner loop
-                     if Owner = 0 then
-                        HaveCabin := True;
-                        CanAccept := True;
-                        CabinTaken := False;
-                        exit Modules_Loop;
+                     if Owner > 0 then
+                        CabinTaken := True;
+                        CanAccept := False;
+                        exit;
                      end if;
                   end loop;
-                  CabinTaken := True;
+                  exit when CanAccept;
                end if;
             end loop Modules_Loop;
             if User_Data = Get_Object(Builder, "treemissions1") then
-               HaveCabin := True;
+               CanAccept := True;
             end if;
             MissionInfo := To_Unbounded_String("Needed quality of cabin: ");
-            if HaveCabin then
+            if CanAccept then
                Append(MissionInfo, GetCabinQuality(Mission.Data));
             elsif CabinTaken then
                Append

@@ -255,14 +255,16 @@ package body Missions is
          begin
             Modules_Loop :
             for Module of PlayerShip.Modules loop
-               if Module.MType = CABIN
+               if (Module.MType = CABIN and not HaveCabin)
                  and then Module.Quality >= Mission.Data then
+                  HaveCabin := True;
                   for Owner of Module.Owner loop
-                     if Owner = 0 then
-                        HaveCabin := True;
-                        exit Modules_Loop;
+                     if Owner > 0 then
+                        HaveCabin := False;
+                        exit;
                      end if;
                   end loop;
+                  exit when HaveCabin;
                end if;
             end loop Modules_Loop;
             if not HaveCabin then
