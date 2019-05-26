@@ -26,8 +26,9 @@ All notable changes to this project will be documented in this file.
   pirates ship mk V, huge pirates trader mk V, armored poleis patrol ship,
   armored poleis patrol ship mk II, armored poleis patrol ship mk III, armored
   poleis patrol ship mk IV, armored independent patrol ship, armored
-  indepedent patrol ship mk II, armored independent patrol ship mk III and
-  armored independent patrol ship mk IV
+  indepedent patrol ship mk II, armored independent patrol ship mk III,
+  armored independent patrol ship mk IV, armored pirates ship, armored pirates
+  ship mk II, armored pirates ship mk III and armored pirates ship mk IV
 
 ## [3.7] - 2019-05-19
 
