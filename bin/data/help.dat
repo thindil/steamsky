@@ -231,7 +231,7 @@ To set orders priorities, click button {b}'Set orders priorities'{/b} and select
 
 {u}Some details about different types of missions{/u}
 - {b}Deliver items{/b}: you don't need to dock to base to finish this mission, you can select proper order before docking. But you must have someone assigned to 'Talk in bases' position. Additionally, deliver missions gives reputation to both bases (base where mission was started and base where mission was ended).
-- {b}Transport passengers{/b}: generally similar to {b}Deliver items{/b} missions - gives reputation to both bases, etc. Passengers are special crew members - you can't assign them to work, you can't change they cabin. They need food and drinks during transport. Same as normal crew members they can die during combat if they cabin will be destroyed.
+- {b}Transport passengers{/b}: generally similar to {b}Deliver items{/b} missions - gives reputation to both bases, etc. Passengers are special crew members - you can't assign them to work, you can't change they cabin. They need food and drinks during transport. Same as normal crew members they can die during combat if they cabin will be destroyed. Each passenger always demands whole cabin for self.
 - {b}Patrol{/b} or {b}Explore area{/b}: If you been attacked by enemy during exploring or patrolling, after fight you need to patrol or explore area again (again select proper order from {b}Orders{/b} menu).
 - {b}Destroy ship{/b}: Same as {b}Patrol area{/b} - if you been attacked by other ship during searching for target, first you must finish this fight before you can start search again. If you escape from fight with mission target, you been need to search for it again.
 
