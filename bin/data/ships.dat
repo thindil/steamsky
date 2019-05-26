@@ -2093,10 +2093,10 @@ during combat. -->
   <cargo index="20" maxamount="1000" minamount="500"/>
   <cargo index="5" maxamount="200" minamount="100"/>
   <cargo index="13" maxamount="40" minamount="20"/>
-  <member index="16"/>
-  <member index="17"/>
-  <member index="18"/>
-  <member index="58" maxamount="7" minamount="3"/>
+  <member index="223"/>
+  <member index="224"/>
+  <member index="225"/>
+  <member index="226" maxamount="7" minamount="3"/>
   <description>Armored version of independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="118" maxloot="250" minloot="200" name="Advanced poleis patrol ship" owner="POLEIS">
@@ -4123,10 +4123,10 @@ during combat. -->
   <cargo index="3" maxamount="400" minamount="200"/>
   <cargo index="20" maxamount="1000" minamount="500"/>
   <cargo index="13" maxamount="200" minamount="100"/>
-  <member index="16"/>
-  <member index="17"/>
-  <member index="18"/>
-  <member index="58" maxamount="7" minamount="3"/>
+  <member index="223"/>
+  <member index="224"/>
+  <member index="225"/>
+  <member index="226" maxamount="7" minamount="3"/>
   <description>Armored and upgraded version of independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="221" maxloot="300" minloot="150" name="Armored poleis patrol ship mk III" owner="POLEIS">
@@ -4163,10 +4163,10 @@ during combat. -->
   <cargo index="3" maxamount="400" minamount="200"/>
   <cargo index="25" maxamount="1000" minamount="500"/>
   <cargo index="21" maxamount="200" minamount="100"/>
-  <member index="16"/>
-  <member index="17"/>
-  <member index="18"/>
-  <member index="58" maxamount="7" minamount="3"/>
+  <member index="223"/>
+  <member index="224"/>
+  <member index="225"/>
+  <member index="226" maxamount="7" minamount="3"/>
   <description>Armored and upgraded version of independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="223" maxloot="300" minloot="150" name="Armored poleis patrol ship mk IV" owner="POLEIS">
@@ -4203,10 +4203,10 @@ during combat. -->
   <cargo index="3" maxamount="400" minamount="200"/>
   <cargo index="25" maxamount="1000" minamount="500"/>
   <cargo index="21" maxamount="200" minamount="100"/>
-  <member index="16"/>
-  <member index="17"/>
-  <member index="18"/>
-  <member index="58" maxamount="7" minamount="3"/>
+  <member index="223"/>
+  <member index="224"/>
+  <member index="225"/>
+  <member index="226" maxamount="7" minamount="3"/>
   <description>Armored and upgraded version of independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="225" maxloot="250" minloot="200" name="Advanced poleis patrol ship mk II" owner="POLEIS">
