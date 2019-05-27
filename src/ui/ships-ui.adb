@@ -229,7 +229,7 @@ package body Ships.UI is
             for Mission of AcceptedMissions loop
                if Mission.MType = Passenger then
                   for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
-                     if Mission.Target = Owner then
+                     if Mission.Data = Owner then
                         IsPassenger := True;
                         exit Missions_Loop;
                      end if;
