@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
   indepedent patrol ship mk II, armored independent patrol ship mk III,
   armored independent patrol ship mk IV, armored pirates ship, armored pirates
   ship mk II, armored pirates ship mk III and armored pirates ship mk IV
+- Name for small extended adamantium cabin
 
 ## [3.7] - 2019-05-19
 
