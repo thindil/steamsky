@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
   armored independent patrol ship mk IV, armored pirates ship, armored pirates
   ship mk II, armored pirates ship mk III and armored pirates ship mk IV
 - Name for small extended adamantium cabin
+- Crash on showing passenger info in ship info screen
 
 ## [3.7] - 2019-05-19
 
