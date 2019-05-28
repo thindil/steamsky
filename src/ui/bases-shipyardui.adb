@@ -86,7 +86,7 @@ package body Bases.ShipyardUI is
    procedure GetModuleInfo(ModuleInfo: in out Unbounded_String;
       Installing: Boolean) is
       MType: ModuleType;
-      MAmount, Size, Weight, MaxValue, Value: Natural;
+      MAmount, Size, Weight, MaxValue, Value, MaxOwners: Natural;
       ShipModuleIndex: Positive;
    begin
       if Installing then
@@ -95,6 +95,7 @@ package body Bases.ShipyardUI is
          Value := Modules_List(ModuleIndex).Value;
          Size := Modules_List(ModuleIndex).Size;
          Weight := Modules_List(ModuleIndex).Weight;
+         MaxOwners := Modules_List(ModuleIndex).MaxOwners;
       else
          ShipModuleIndex := Integer'Value(To_String(ModuleIndex));
          MType :=
@@ -136,6 +137,9 @@ package body Bases.ShipyardUI is
            Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex).Size;
          Weight :=
            Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex).Weight;
+         MaxOwners :=
+           Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+             .MaxOwners;
       end if;
       case MType is
          when HULL =>
@@ -166,6 +170,9 @@ package body Bases.ShipyardUI is
             else
                Append(ModuleInfo, "luxury");
             end if;
+            Append(ModuleInfo, LF & "Max owners:" & Natural'Image(MaxOwners));
+         when ALCHEMY_LAB .. GREENHOUSE =>
+            Append(ModuleInfo, LF & "Max workers:" & Natural'Image(MaxOwners));
          when GUN | HARPOON_GUN =>
             Append(ModuleInfo, LF & "Ammunition: ");
             MAmount := 0;
