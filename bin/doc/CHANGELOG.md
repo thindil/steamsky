@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Contributing guide
 - Maximum allowed owners for cabins and workers for all workshops
 - Updated MODDING.md
+- Updated interface
 
 ### Fixed
 - Crews for Advanced poleis patrol ship mk VI, advanced poleis trader mk VI,
