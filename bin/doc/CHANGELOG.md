@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
 - Self repair ships during combat for pirates, poleis and independent factions
 - Ability to have many owners to cabins and many workers to worshops
 - New ship modules: medium basic bronze cabin, medium advanced bronze cabin,
-  medium extended bronze cabin
+  medium extended bronze cabin and medium luxury bronze cabin
 
 ### Updated
 - Updated crews on inquisition ships
