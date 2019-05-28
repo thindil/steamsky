@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Name for small extended adamantium cabin
+- Giving orders to passengers
 
 ## [3.0.11] - 2019-05-12
 
