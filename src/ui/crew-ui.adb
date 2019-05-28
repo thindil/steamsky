@@ -59,10 +59,12 @@ package body Crew.UI is
       end;
       OrdersList.Clear;
       if
-        (PlayerShip.Crew(MemberIndex).Tired = 100 or
-         PlayerShip.Crew(MemberIndex).Hunger = 100 or
-         PlayerShip.Crew(MemberIndex).Thirst = 100) and
-        PlayerShip.Crew(MemberIndex).Order /= Rest then
+        ((PlayerShip.Crew(MemberIndex).Tired = 100 or
+          PlayerShip.Crew(MemberIndex).Hunger = 100 or
+          PlayerShip.Crew(MemberIndex).Thirst = 100) and
+         PlayerShip.Crew(MemberIndex).Order /= Rest) or
+        (PlayerShip.Crew(MemberIndex).Skills.Length = 0 or
+         PlayerShip.Crew(MemberIndex).ContractLength = 0) then
          AddOrder("Go on break", 9, 0);
       else
          if PlayerShip.Crew(MemberIndex).Order /= Pilot then
