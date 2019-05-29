@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 - Ability to have many owners to cabins and many workers to worshops
 - New ship modules: medium basic bronze cabin, medium advanced bronze cabin,
   medium extended bronze cabin, medium luxury bronze cabin, medium basic iron
-  cabin
+  cabin and medium advanced iron cabin
 
 ### Updated
 - Updated crews on inquisition ships
