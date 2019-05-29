@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file.
 - Name for small extended adamantium cabin
 - Crash on showing passenger info in ship info screen
 - Giving orders to passengers
+- Send previous trainee on break when new is assigned
 
 ## [3.7] - 2019-05-19
 
