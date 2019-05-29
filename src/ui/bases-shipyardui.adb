@@ -17,6 +17,8 @@
 
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
@@ -27,6 +29,8 @@ with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Gtk.Stack; use Gtk.Stack;
+with Gtk.GEntry; use Gtk.GEntry;
+with Gtk.Tree_Model_Filter; use Gtk.Tree_Model_Filter;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Game; use Game;
@@ -43,48 +47,8 @@ package body Bases.ShipyardUI is
    Builder: Gtkada_Builder;
    ModuleIndex: Unbounded_String;
 
-   procedure SetInstallModulesList(ShowType: ModuleType) is
-      ModulesList: constant Gtk_List_Store :=
-        Gtk_List_Store(Get_Object(Builder, "installmoduleslist"));
-      procedure AddListItems(MType: ModuleType) is
-         ModulesIter: Gtk_Tree_Iter;
-      begin
-         for I in Modules_List.Iterate loop
-            if Modules_List(I).Price > 0 and Modules_List(I).MType = MType then
-               Append(ModulesList, ModulesIter);
-               Set
-                 (ModulesList, ModulesIter, 0,
-                  To_String(Modules_List(I).Name));
-               Set
-                 (ModulesList, ModulesIter, 1,
-                  To_String(BaseModules_Container.Key(I)));
-            end if;
-         end loop;
-      end AddListItems;
-   begin
-      Clear(ModulesList);
-      if ShowType = ANY then
-         for I in ModuleType'Range loop
-            AddListItems(I);
-         end loop;
-      else
-         AddListItems(ShowType);
-      end if;
-   end SetInstallModulesList;
-
-   procedure ChangeType(Object: access Gtkada_Builder_Record'Class) is
-   begin
-      SetInstallModulesList
-        (ModuleType'Val
-           (Natural
-              (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbtypes"))))));
-      Set_Cursor
-        (Gtk_Tree_View(Get_Object(Builder, "treeinstall")),
-         Gtk_Tree_Path_New_From_String("0"), null, False);
-   end ChangeType;
-
-   procedure GetModuleInfo(ModuleInfo: in out Unbounded_String;
-      Installing: Boolean) is
+   procedure GetModuleInfo
+     (ModuleInfo: in out Unbounded_String; Installing: Boolean) is
       MType: ModuleType;
       MAmount, Size, Weight, MaxValue, Value, MaxOwners: Natural;
       ShipModuleIndex: Positive;
@@ -487,19 +451,85 @@ package body Bases.ShipyardUI is
             " for buy this module.");
    end ManipulateModule;
 
+   procedure SearchShipyard(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      Refilter
+        (Gtk_Tree_Model_Filter(Get_Object(Object, "installmodulesfilter")));
+      if N_Children
+          (Gtk_List_Store(Get_Object(Builder, "installmoduleslist")),
+           Null_Iter) >
+        0 then
+         Set_Cursor
+           (Gtk_Tree_View(Get_Object(Builder, "treeinstall")),
+            Gtk_Tree_Path_New_From_String("0"), null, False);
+      end if;
+   end SearchShipyard;
+
+   function VisibleShipyard
+     (Model: Gtk_Tree_Model; Iter: Gtk_Tree_Iter) return Boolean is
+      SearchEntry: constant Gtk_GEntry :=
+        Gtk_GEntry(Get_Object(Builder, "shipyardsearch"));
+      MType: constant ModuleType :=
+        ModuleType'Val
+          (Natural
+             (Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbtypes")))));
+      ShowModule: Boolean := False;
+   begin
+      if MType = ANY then
+         ShowModule := True;
+      else
+         if Modules_List(To_Unbounded_String(Get_String(Model, Iter, 1)))
+             .Price >
+           0 and
+           Modules_List(To_Unbounded_String(Get_String(Model, Iter, 1)))
+               .MType =
+             MType then
+            ShowModule := True;
+         end if;
+      end if;
+      if Get_Text(SearchEntry) = "" then
+         return ShowModule;
+      end if;
+      if Index
+          (To_Lower(Get_String(Model, Iter, 0)),
+           To_Lower(Get_Text(SearchEntry)), 1) >
+        0 and
+        ShowModule then
+         return True;
+      end if;
+      return False;
+   end VisibleShipyard;
+
    procedure CreateBasesShipyardUI(NewBuilder: Gtkada_Builder) is
+      ModulesList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(NewBuilder, "installmoduleslist"));
+      ModulesIter: Gtk_Tree_Iter;
    begin
       Builder := NewBuilder;
-      Register_Handler(Builder, "Change_Type", ChangeType'Access);
       Register_Handler(Builder, "Show_Install_Info", ShowInstallInfo'Access);
       Register_Handler(Builder, "Manipulate_Module", ManipulateModule'Access);
       Register_Handler(Builder, "Show_Remove_Info", ShowRemoveInfo'Access);
+      Register_Handler(Builder, "Search_Shipyard", SearchShipyard'Access);
+      Set_Visible_Func
+        (Gtk_Tree_Model_Filter(Get_Object(Builder, "installmodulesfilter")),
+         VisibleShipyard'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "shipyardsearch")),
+         SelectElement'Access, Get_Object(Builder, "btnmenu"));
+      for I in Modules_List.Iterate loop
+         if Modules_List(I).Price > 0 then
+            Append(ModulesList, ModulesIter);
+            Set(ModulesList, ModulesIter, 0, To_String(Modules_List(I).Name));
+            Set
+              (ModulesList, ModulesIter, 1,
+               To_String(BaseModules_Container.Key(I)));
+         end if;
+      end loop;
    end CreateBasesShipyardUI;
 
    procedure ShowShipyardUI is
    begin
       SetRemoveModulesList;
-      SetInstallModulesList(ANY);
       Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbtypes")), 0);
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "shipyard");
