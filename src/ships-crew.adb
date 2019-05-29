@@ -250,7 +250,8 @@ package body Ships.Crew is
                exit;
             end if;
          end loop;
-      elsif GivenOrder = Gunner or GivenOrder = Craft then
+      elsif GivenOrder = Gunner or GivenOrder = Craft or
+        GivenOrder = Train then
          if Ship.Modules(ModuleIndex).Owner > 0 then
             GiveOrders
               (PlayerShip, Ship.Modules(ModuleIndex).Owner, Rest, 0, False);
