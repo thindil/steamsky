@@ -663,13 +663,17 @@ package body Crew is
                         GiveOrders(PlayerShip, I, Rest);
                      end if;
                   when Train =>
+                     Modules_Loop :
                      for Module of PlayerShip.Modules loop
-                        if Module.MType = TRAINING_ROOM and
-                          Module.Owner(1) = I then
-                           SkillIndex := Module.TrainedSkill;
-                           exit;
+                        if Module.MType = TRAINING_ROOM then
+                           for Owner of Module.Owner loop
+                              if Owner = I then
+                                 SkillIndex := Module.TrainedSkill;
+                                 exit Modules_Loop;
+                              end if;
+                           end loop;
                         end if;
-                     end loop;
+                     end loop Modules_Loop;
                      if Skills_List(SkillIndex).Tool /=
                        Null_Unbounded_String then
                         ToolIndex :=
