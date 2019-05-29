@@ -42,12 +42,37 @@ package body Ships.UI.Handlers is
       ModuleInfo: Unbounded_String;
       Module: ModuleData;
       MaxValue: Positive;
-      HaveAmmo, HaveOwner: Boolean;
+      HaveAmmo: Boolean;
       Mamount, MaxUpgrade: Natural := 0;
       DamagePercent, UpgradePercent: Gdouble;
       CleanBar: constant GObject := Get_Object(Object, "cleanbar");
       QualityBar: constant GObject := Get_Object(Object, "qualitybar");
       UpgradeBar: constant GObject := Get_Object(Object, "upgradebar2");
+      procedure AddOwnersInfo(OwnersName: String) is
+         HaveOwner: Boolean := False;
+      begin
+         Append(ModuleInfo, OwnersName);
+         if Module.Owner.Length > 1 then
+            Append(ModuleInfo, "s");
+         end if;
+         Append
+           (ModuleInfo,
+            " (max" & Count_Type'Image(Module.Owner.Length) & "): ");
+         for I in Module.Owner.First_Index .. Module.Owner.Last_Index loop
+            if Module.Owner(I) > 0 then
+               if HaveOwner then
+                  Append(ModuleInfo, ", ");
+               end if;
+               HaveOwner := True;
+               Append
+                 (ModuleInfo,
+                  To_String(PlayerShip.Crew(Module.Owner(I)).Name));
+            end if;
+         end loop;
+         if not HaveOwner then
+            Append(ModuleInfo, "none");
+         end if;
+      end AddOwnersInfo;
    begin
       declare
          ModulesIter: Gtk_Tree_Iter;
@@ -172,28 +197,7 @@ package body Ships.UI.Handlers is
                   Get_Text(Gtk_Progress_Bar(CleanBar)) & " (max upgrade)");
             end if;
          when CABIN =>
-            HaveOwner := False;
-            Append(ModuleInfo, "Owner");
-            if Module.Owner.Length > 1 then
-               Append(ModuleInfo, "s");
-            end if;
-            Append
-              (ModuleInfo,
-               " (max" & Count_Type'Image(Module.Owner.Length) & "): ");
-            for I in Module.Owner.First_Index .. Module.Owner.Last_Index loop
-               if Module.Owner(I) > 0 then
-                  if HaveOwner then
-                     Append(ModuleInfo, ", ");
-                  end if;
-                  HaveOwner := True;
-                  Append
-                    (ModuleInfo,
-                     To_String(PlayerShip.Crew(Module.Owner(I)).Name));
-               end if;
-            end loop;
-            if not HaveOwner then
-               Append(ModuleInfo, "none");
-            end if;
+            AddOwnersInfo("Owner");
             Show_All(Gtk_Widget(QualityBar));
             Set_Fraction
               (Gtk_Progress_Bar(QualityBar), Gdouble(Module.Quality) / 100.0);
@@ -289,28 +293,7 @@ package body Ships.UI.Handlers is
                Append(ModuleInfo, "Weapon: none");
             end if;
          when ALCHEMY_LAB .. GREENHOUSE =>
-            HaveOwner := False;
-            Append(ModuleInfo, "Worker");
-            if Module.Owner.Length > 1 then
-               Append(ModuleInfo, "s");
-            end if;
-            Append
-              (ModuleInfo,
-               " (max" & Count_Type'Image(Module.Owner.Length) & "): ");
-            for I in Module.Owner.First_Index .. Module.Owner.Last_Index loop
-               if Module.Owner(I) > 0 then
-                  if HaveOwner then
-                     Append(ModuleInfo, ", ");
-                  end if;
-                  HaveOwner := True;
-                  Append
-                    (ModuleInfo,
-                     To_String(PlayerShip.Crew(Module.Owner(I)).Name));
-               end if;
-            end loop;
-            if not HaveOwner then
-               Append(ModuleInfo, "none");
-            end if;
+            AddOwnersInfo("Worker");
             Append(ModuleInfo, LF);
             if Module.CraftingIndex /= Null_Unbounded_String then
                if Length(Module.CraftingIndex) > 12
@@ -360,14 +343,8 @@ package body Ships.UI.Handlers is
             else
                Append(ModuleInfo, "Must be set for training.");
             end if;
-            if Module.Owner(1) > 0 then
-               Append
-                 (ModuleInfo,
-                  LF & "Trainee: " &
-                  To_String(PlayerShip.Crew(Module.Owner(1)).Name));
-            else
-               Append(ModuleInfo, LF & "Trainee: none");
-            end if;
+            Append(ModuleInfo, LF);
+            AddOwnersInfo("Trainee");
          when others =>
             null;
       end case;

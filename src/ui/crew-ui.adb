@@ -39,7 +39,7 @@ package body Crew.UI is
    procedure SetOrdersList is
       OrdersList: Gtk_List_Store;
       OrdersIter: Gtk_Tree_Iter;
-      NeedClean, NeedRepair, IsWorking: Boolean := True;
+      NeedClean, NeedRepair: Boolean := True;
       procedure AddOrder(OrderText: String;
          OrderIndex, ModuleIndex: Natural) is
       begin
@@ -48,6 +48,15 @@ package body Crew.UI is
          Set(OrdersList, OrdersIter, 1, Gint(OrderIndex));
          Set(OrdersList, OrdersIter, 2, Gint(ModuleIndex));
       end AddOrder;
+      function IsWorking(Owners: Natural_Container.Vector) return Boolean is
+      begin
+         for Owner of Owners loop
+            if Owner = MemberIndex then
+               return True;
+            end if;
+         end loop;
+         return False;
+      end IsWorking;
    begin
       declare
          OrdersModel: constant Glib.Types.GType_Interface :=
@@ -83,14 +92,7 @@ package body Crew.UI is
                            2, Modules_Container.To_Index(I));
                      end if;
                   when ALCHEMY_LAB .. GREENHOUSE =>
-                     IsWorking := False;
-                     for Owner of PlayerShip.Modules(I).Owner loop
-                        if Owner = MemberIndex then
-                           IsWorking := True;
-                           exit;
-                        end if;
-                     end loop;
-                     if not IsWorking then
+                     if not IsWorking(PlayerShip.Modules(I).Owner) then
                         AddOrder
                           ("Work in " & To_String(PlayerShip.Modules(I).Name),
                            4, Modules_Container.To_Index(I));
@@ -104,8 +106,7 @@ package body Crew.UI is
                         NeedClean := False;
                      end if;
                   when TRAINING_ROOM =>
-                     if PlayerShip.Modules(I).Owner(1) /= MemberIndex and
-                       PlayerShip.Modules(I).TrainedSkill > 0 then
+                     if not IsWorking(PlayerShip.Modules(I).Owner) then
                         AddOrder
                           ("Go on training in " &
                            To_String(PlayerShip.Modules(I).Name),
