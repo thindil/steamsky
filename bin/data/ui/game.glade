@@ -883,6 +883,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="gchararray"/>
     </columns>
   </object>
+  <object class="GtkTreeModelFilter" id="installmodulesfilter">
+    <property name="child_model">installmoduleslist</property>
+  </object>
+  <object class="GtkTreeModelSort" id="installmodulessort">
+    <property name="model">installmodulesfilter</property>
+  </object>
   <object class="GtkListStore" id="inventorylist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -4840,7 +4846,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                   <object class="GtkBox">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="halign">center</property>
                                     <child>
                                       <object class="GtkLabel">
                                         <property name="visible">True</property>
@@ -4878,12 +4883,32 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           <item translatable="yes">Harpoon guns</item>
                                           <item translatable="yes">Training rooms</item>
                                         </items>
-                                        <signal name="changed" handler="Change_Type" swapped="no"/>
+                                        <signal name="changed" handler="Search_Shipyard" swapped="no"/>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">True</property>
                                         <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSearchEntry" id="shipyardsearch">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="primary_icon_name">edit-find-symbolic</property>
+                                        <property name="primary_icon_activatable">False</property>
+                                        <property name="primary_icon_sensitive">False</property>
+                                        <property name="placeholder_text" translatable="yes">&lt;Seach modules&gt;</property>
+                                        <signal name="changed" handler="Search_Shipyard" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                        <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">True</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">2</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -4908,7 +4933,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           <object class="GtkTreeView" id="treeinstall">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
-                                            <property name="model">installmoduleslist</property>
+                                            <property name="model">installmodulessort</property>
+                                            <property name="enable_search">False</property>
                                             <property name="search_column">0</property>
                                             <signal name="cursor-changed" handler="Show_Install_Info" swapped="no"/>
                                             <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
