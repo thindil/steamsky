@@ -254,7 +254,8 @@ package body Ships.Crew is
                exit;
             end if;
          end loop;
-      elsif GivenOrder = Gunner or GivenOrder = Craft then
+      elsif GivenOrder = Gunner or GivenOrder = Craft or
+        GivenOrder = Train then
          declare
             FreePosition: Boolean := False;
          begin
@@ -436,7 +437,12 @@ package body Ships.Crew is
             when Train =>
                AddMessage
                  (MemberName & " starts personal training.", OrderMessage);
-               Ship.Modules(ModuleIndex2).Owner(1) := MemberIndex;
+               for Owner of Ship.Modules(ModuleIndex2).Owner loop
+                  if Owner = 0 then
+                     Owner := MemberIndex;
+                     exit;
+                  end if;
+               end loop;
          end case;
       end if;
       Ship.Crew(MemberIndex).Order := GivenOrder;
