@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
   training rooms
 - New ship modules: medium basic bronze cabin, medium advanced bronze cabin,
   medium extended bronze cabin, medium luxury bronze cabin, medium basic iron
-  cabin and medium advanced iron cabin
+  cabin, medium advanced iron cabin, medium extended iron cabin
 
 ### Updated
 - Updated crews on inquisition ships
