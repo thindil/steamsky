@@ -43,7 +43,7 @@ package Goals is
       Goals_List
         .Last_Index; -- Return info about selected goal or current goal if Index = 0
    procedure ClearCurrentGoal; -- Reset current goal
-   procedure UpdateGoal(GType: GoalTypes; TargetIndex: Unbounded_String;
+   procedure UpdateGoal
+     (GType: GoalTypes; TargetIndex: Unbounded_String;
       Amount: Positive := 1); -- Update current goal
-
 end Goals;

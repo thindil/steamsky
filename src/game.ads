@@ -65,7 +65,8 @@ package Game is
         Dir_Separator); -- Path to directory where are savegame and logs
    DataDirectory: Unbounded_String :=
      To_Unbounded_String
-       ("data" & Dir_Separator); -- Path to directory where are game data files
+       ("data" &
+        Dir_Separator); -- Path to directory where are game data files
    TradersName: Unbounded_String; -- Word used in ships names for traders ships (for events)
    Attributes_List: AttributesData_Container
      .Vector; -- Contains data for all characters attributes

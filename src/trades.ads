@@ -23,10 +23,11 @@ package Trades is
 
    TraderCargo: BaseCargo_Container.Vector; -- List of all cargo in trader ship
 
-   procedure BuyItems(BaseItemIndex: Positive;
+   procedure BuyItems
+     (BaseItemIndex: Positive;
       Amount: String); -- Buy items from bases or trader
-   procedure SellItems(ItemIndex: Positive;
-      Amount: String); -- Sell items from bases or trader
+   procedure SellItems
+     (ItemIndex: Positive; Amount: String); -- Sell items from bases or trader
    procedure GenerateTraderCargo(ProtoIndex: Unbounded_String) with
       Pre => ProtoShips_Container.Contains
         (ProtoShips_List, ProtoIndex); -- Generate list of cargo to trade

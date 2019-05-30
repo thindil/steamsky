@@ -149,7 +149,7 @@ package body Themes is
       procedure SetDefaultValues is
       begin
          TempRecord :=
-           (Name => Null_Unbounded_String, Filename => Null_Unbounded_String,
+           (Name => Null_Unbounded_String, FileName => Null_Unbounded_String,
             EnemyShipIcon => Wide_Character'Val(16#f51c#),
             AttackOnBaseIcon => Wide_Character'Val(16#f543#),
             DiseaseIcon => Wide_Character'Val(16#f5a6#),

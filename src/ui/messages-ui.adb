@@ -116,8 +116,8 @@ package body Messages.UI is
       Refilter(Gtk_Tree_Model_Filter(Get_Object(Object, "messagesfilter")));
    end SearchMessages;
 
-   function VisibleMessages(Model: Gtk_Tree_Model;
-      Iter: Gtk_Tree_Iter) return Boolean is
+   function VisibleMessages
+     (Model: Gtk_Tree_Model; Iter: Gtk_Tree_Iter) return Boolean is
       SearchEntry: constant Gtk_GEntry :=
         Gtk_GEntry(Get_Object(Builder, "entrysearch"));
    begin

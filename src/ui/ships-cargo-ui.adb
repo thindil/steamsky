@@ -238,8 +238,8 @@ package body Ships.Cargo.UI is
       end if;
    end SearchCargo;
 
-   function VisibleCargo(Model: Gtk_Tree_Model;
-      Iter: Gtk_Tree_Iter) return Boolean is
+   function VisibleCargo
+     (Model: Gtk_Tree_Model; Iter: Gtk_Tree_Iter) return Boolean is
       IType: constant Unbounded_String :=
         To_Unbounded_String
           (Get_Active_Text

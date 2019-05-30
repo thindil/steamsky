@@ -443,8 +443,9 @@ package body Ships.UI.Handlers is
       end if;
    end ChangeShipName;
 
-   procedure ChangeModuleName(Self: access Gtk_Cell_Renderer_Text_Record'Class;
-      Path: UTF8_String; New_Text: UTF8_String) is
+   procedure ChangeModuleName
+     (Self: access Gtk_Cell_Renderer_Text_Record'Class; Path: UTF8_String;
+      New_Text: UTF8_String) is
       pragma Unreferenced(Self);
       ModulesList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "moduleslist"));

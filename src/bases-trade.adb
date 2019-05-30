@@ -28,8 +28,8 @@ with Config; use Config;
 
 package body Bases.Trade is
 
-   function CheckMoney(Price: Positive;
-      Message: String := "") return Positive is
+   function CheckMoney
+     (Price: Positive; Message: String := "") return Positive is
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
    begin
       if MoneyIndex2 = 0 then
@@ -49,8 +49,9 @@ package body Bases.Trade is
       return MoneyIndex2;
    end CheckMoney;
 
-   procedure HireRecruit(RecruitIndex, Cost: Positive;
-      DailyPayment, TradePayment: Natural; ContractLenght: Integer) is
+   procedure HireRecruit
+     (RecruitIndex, Cost: Positive; DailyPayment, TradePayment: Natural;
+      ContractLenght: Integer) is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MoneyIndex2, Price, TraderIndex: Natural;

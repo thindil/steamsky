@@ -21,7 +21,8 @@ with Config; use Config;
 
 package body Ships.Cargo is
 
-   procedure UpdateCargo(Ship: in out ShipRecord;
+   procedure UpdateCargo
+     (Ship: in out ShipRecord;
       ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Natural := 100; CargoIndex, Price: Natural := 0) is
       ItemIndex: Natural := 0;
@@ -67,8 +68,8 @@ package body Ships.Cargo is
       end if;
    end UpdateCargo;
 
-   function FreeCargo(Amount: Integer;
-      Ship: ShipRecord := PlayerShip) return Integer is
+   function FreeCargo
+     (Amount: Integer; Ship: ShipRecord := PlayerShip) return Integer is
       FreeCargo: Integer := 0;
    begin
       for Module of Ship.Modules loop

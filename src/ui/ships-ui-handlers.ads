@@ -27,8 +27,8 @@ package Ships.UI.Handlers is
    procedure ChangeShipName
      (Object: access Gtkada_Builder_Record'
         Class); -- Change name of player's ship
-   procedure ChangeModuleName(Self: access Gtk_Cell_Renderer_Text_Record'Class;
-      Path: UTF8_String;
+   procedure ChangeModuleName
+     (Self: access Gtk_Cell_Renderer_Text_Record'Class; Path: UTF8_String;
       New_Text: UTF8_String); -- Change name of selected module
    procedure SetUpgrade
      (User_Data: access GObject_Record'

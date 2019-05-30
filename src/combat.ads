@@ -48,8 +48,9 @@ package Combat is
    HarpoonDuration: Natural; -- How long (amount of rounds) player ship will be stopped by enemy harpoon
    EnemyShipIndex: Unbounded_String; -- Prototype index of enemy ship
 
-   function StartCombat(EnemyIndex: Unbounded_String;
-      NewCombat: Boolean := True) return Boolean with
+   function StartCombat
+     (EnemyIndex: Unbounded_String; NewCombat: Boolean := True)
+      return Boolean with
       Pre => ProtoShips_Container.Contains
         (ProtoShips_List,
          EnemyIndex); -- Generate enemy and start battle, return True if combat starts
