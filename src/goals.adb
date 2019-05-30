@@ -121,8 +121,9 @@ package body Goals is
       InsertPosition: Positive;
       Added: Boolean := False;
       type FactionNameType is (NAME, MEMBERNAME, PLURALMEMBERNAME);
-      function GetFactionName(FactionIndex: Unbounded_String;
-         FType: FactionNameType) return String is
+      function GetFactionName
+        (FactionIndex: Unbounded_String; FType: FactionNameType)
+         return String is
       begin
          case FType is
             when NAME =>
@@ -214,7 +215,7 @@ package body Goals is
                   end if;
                   Insert
                     (Text, InsertPosition,
-                     GetFactionName(Goal.TargetIndex, Name) & " ");
+                     GetFactionName(Goal.TargetIndex, NAME) & " ");
                end if;
             when CRAFT =>
                if Recipes_Container.Contains
@@ -275,7 +276,8 @@ package body Goals is
          TargetIndex => Null_Unbounded_String, Multiplier => 1);
    end ClearCurrentGoal;
 
-   procedure UpdateGoal(GType: GoalTypes; TargetIndex: Unbounded_String;
+   procedure UpdateGoal
+     (GType: GoalTypes; TargetIndex: Unbounded_String;
       Amount: Positive := 1) is
    begin
       if GType /= CurrentGoal.GType then

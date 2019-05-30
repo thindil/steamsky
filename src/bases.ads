@@ -83,10 +83,12 @@ package Bases is
    BaseSyllablesEnd: UnboundedString_Container.Vector;
    BaseSyllablesPost: UnboundedString_Container.Vector;
 
-   procedure GainRep(BaseIndex: BasesRange;
+   procedure GainRep
+     (BaseIndex: BasesRange;
       Points: Integer); -- Gain reputation in selected base
-   procedure CountPrice(Price: in out Positive;
-      TraderIndex: Crew_Container.Extended_Index; Reduce: Boolean := True) with
+   procedure CountPrice
+     (Price: in out Positive; TraderIndex: Crew_Container.Extended_Index;
+      Reduce: Boolean := True) with
       Pre => TraderIndex <=
       PlayerShip.Crew
         .Last_Index; -- Count price for actions with bases (buying/selling/docking/ect)

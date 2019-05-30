@@ -444,7 +444,8 @@ package body Events is
          OtherMessage, CYAN);
    end RecoverBase;
 
-   procedure GenerateEnemies(Enemies: in out UnboundedString_Container.Vector;
+   procedure GenerateEnemies
+     (Enemies: in out UnboundedString_Container.Vector;
       Owner: Unbounded_String := To_Unbounded_String("Any");
       WithTraders: Boolean := True) is
       PlayerValue: Natural := 0;

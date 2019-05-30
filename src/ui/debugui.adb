@@ -150,8 +150,9 @@ package body DebugUI is
       end if;
    end SetMemberStats;
 
-   function UpdateAttribute(Model: Gtk_Tree_Model; Path: Gtk_Tree_Path;
-      Iter: Gtk_Tree_Iter) return Boolean is
+   function UpdateAttribute
+     (Model: Gtk_Tree_Model; Path: Gtk_Tree_Path; Iter: Gtk_Tree_Iter)
+      return Boolean is
       pragma Unreferenced(Path);
       MemberIndex: constant Positive :=
         Positive'Value
@@ -165,8 +166,9 @@ package body DebugUI is
       return False;
    end UpdateAttribute;
 
-   function UpdateSkill(Model: Gtk_Tree_Model; Path: Gtk_Tree_Path;
-      Iter: Gtk_Tree_Iter) return Boolean is
+   function UpdateSkill
+     (Model: Gtk_Tree_Model; Path: Gtk_Tree_Path; Iter: Gtk_Tree_Iter)
+      return Boolean is
       pragma Unreferenced(Path);
       MemberIndex: constant Positive :=
         Positive'Value
@@ -272,7 +274,7 @@ package body DebugUI is
          Show_All(Gtk_Widget(Get_Object(Builder, "btndeleteevent")));
          Remove_All(Gtk_Combo_Box_Text(EventsCombo));
          for I in Events_List.Iterate loop
-            case Events_List(I).Etype is
+            case Events_List(I).EType is
                when EnemyShip =>
                   Append
                     (Gtk_Combo_Box_Text(EventsCombo),
@@ -355,8 +357,9 @@ package body DebugUI is
       ResetWorldUI;
    end RefreshUI;
 
-   procedure ChangeStatLevel(Self: access Gtk_Cell_Renderer_Text_Record'Class;
-      Path: UTF8_String; New_Text: UTF8_String) is
+   procedure ChangeStatLevel
+     (Self: access Gtk_Cell_Renderer_Text_Record'Class; Path: UTF8_String;
+      New_Text: UTF8_String) is
       pragma Unreferenced(Self);
       StatsList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "statslist"));
@@ -374,8 +377,9 @@ package body DebugUI is
          null;
    end ChangeStatLevel;
 
-   procedure ChangeSkillLevel(Self: access Gtk_Cell_Renderer_Text_Record'Class;
-      Path: UTF8_String; New_Text: UTF8_String) is
+   procedure ChangeSkillLevel
+     (Self: access Gtk_Cell_Renderer_Text_Record'Class; Path: UTF8_String;
+      New_Text: UTF8_String) is
       pragma Unreferenced(Self);
       SkillsList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "skillslist"));

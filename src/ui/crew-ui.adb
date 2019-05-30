@@ -40,8 +40,8 @@ package body Crew.UI is
       OrdersList: Gtk_List_Store;
       OrdersIter: Gtk_Tree_Iter;
       NeedClean, NeedRepair: Boolean := True;
-      procedure AddOrder(OrderText: String;
-         OrderIndex, ModuleIndex: Natural) is
+      procedure AddOrder
+        (OrderText: String; OrderIndex, ModuleIndex: Natural) is
       begin
          Append(OrdersList, OrdersIter);
          Set(OrdersList, OrdersIter, 0, OrderText);

@@ -34,7 +34,8 @@ package Ships is
    type ModuleType2 is
      (WORKSHOP, ANY, MEDICAL_ROOM, TRAINING_ROOM, ENGINE, CABIN, COCKPIT,
       TURRET, GUN, CARGO_ROOM, HULL, ARMOR, BATTERING_RAM, HARPOON_GUN);
-   type ModuleData(MType: ModuleType2 := ANY)
+   type ModuleData
+     (MType: ModuleType2 := ANY)
    is -- Data structure for ship modules
    record
       Name: Unbounded_String; -- Name of module
@@ -131,22 +132,23 @@ package Ships is
    ShipSyllablesEnd: UnboundedString_Container.Vector;
    Ships_Invalid_Data: exception; -- Raised when invalid data in ships file
 
-   function CreateShip(ProtoIndex, Name: Unbounded_String; X, Y: Integer;
-      Speed: ShipSpeed; RandomUpgrades: Boolean := True) return ShipRecord with
+   function CreateShip
+     (ProtoIndex, Name: Unbounded_String; X, Y: Integer; Speed: ShipSpeed;
+      RandomUpgrades: Boolean := True) return ShipRecord with
       Pre =>
       (ProtoShips_Container.Contains
          (ProtoShips_List, ProtoIndex)); -- Create new ship
    procedure LoadShips(Reader: Tree_Reader); -- Load ships from files
    function CountShipWeight
      (Ship: ShipRecord)
-     return Positive; -- Count weight of ship (with modules and cargo)
+      return Positive; -- Count weight of ship (with modules and cargo)
    function GenerateShipName
      (Owner: Unbounded_String) return Unbounded_String with
       Pre => Owner /= Null_Unbounded_String; -- Generate random name for ship
    function CountCombatValue
-     return Natural; -- Count combat value of player ship
+      return Natural; -- Count combat value of player ship
    function GetCabinQuality
      (Quality: Natural)
-     return String; -- Get description of quality of selected cabin in player ship
+      return String; -- Get description of quality of selected cabin in player ship
 
 end Ships;

@@ -99,8 +99,8 @@ package body Utils.UI is
       end if;
    end ShowWindow;
 
-   function ShowConfirmDialog(Message: String;
-      Parent: Gtk_Window) return Boolean is
+   function ShowConfirmDialog
+     (Message: String; Parent: Gtk_Window) return Boolean is
       MessageDialog: constant Gtk_Message_Dialog :=
         Gtk_Message_Dialog_New
           (Parent, Modal, Message_Question, Buttons_Yes_No, Message);
@@ -124,8 +124,9 @@ package body Utils.UI is
       return True;
    end QuitGame;
 
-   function CloseWindow(Self: access Gtk_Widget_Record'Class;
-      Event: Gdk_Event_Key) return Boolean is
+   function CloseWindow
+     (Self: access Gtk_Widget_Record'Class; Event: Gdk_Event_Key)
+      return Boolean is
       KeyMods: constant Gdk_Modifier_Type :=
         Event.State and Get_Default_Mod_Mask;
    begin
@@ -179,8 +180,9 @@ package body Utils.UI is
       end case;
    end CloseMessages;
 
-   function SelectElement(Self: access GObject_Record'Class;
-      Event: Gdk_Event_Key) return Boolean is
+   function SelectElement
+     (Self: access GObject_Record'Class; Event: Gdk_Event_Key)
+      return Boolean is
       KeyMods: constant Gdk_Modifier_Type :=
         Event.State and Get_Default_Mod_Mask;
    begin
@@ -192,7 +194,8 @@ package body Utils.UI is
       return False;
    end SelectElement;
 
-   procedure TravelInfo(InfoText: in out Unbounded_String; Distance: Positive;
+   procedure TravelInfo
+     (InfoText: in out Unbounded_String; Distance: Positive;
       ShowFuelName: Boolean := False) is
       type SpeedType is digits 2;
       Speed: constant SpeedType :=
@@ -283,8 +286,8 @@ package body Utils.UI is
       end if;
    end TravelInfo;
 
-   procedure MinutesToDate(Minutes: Natural;
-      InfoText: in out Unbounded_String) is
+   procedure MinutesToDate
+     (Minutes: Natural; InfoText: in out Unbounded_String) is
       TravelTime: Date_Record := (others => 0);
       MinutesDiff: Integer := Minutes;
    begin
@@ -323,8 +326,8 @@ package body Utils.UI is
       end if;
    end MinutesToDate;
 
-   procedure ShowInventoryItemInfo(Label: Gtk_Label; ItemIndex: Positive;
-      MemberIndex: Natural) is
+   procedure ShowInventoryItemInfo
+     (Label: Gtk_Label; ItemIndex: Positive; MemberIndex: Natural) is
       ProtoIndex: Unbounded_String;
       ItemInfo: Unbounded_String;
    begin
@@ -384,8 +387,9 @@ package body Utils.UI is
       return False;
    end ShowPopupMenu;
 
-   function ShowPopupMenuButton(Self: access Gtk_Widget_Record'Class;
-      Event: Gdk_Event_Button) return Boolean is
+   function ShowPopupMenuButton
+     (Self: access Gtk_Widget_Record'Class; Event: Gdk_Event_Button)
+      return Boolean is
    begin
       if Event.Button = 3 then
          if Self = Gtk_Widget(Get_Object(Builder, "treebases")) then

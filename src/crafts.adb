@@ -662,8 +662,8 @@ package body Crafts is
          GiveOrders(PlayerShip, CrafterIndex, Rest);
    end Manufacturing;
 
-   procedure SetRecipe(Workshop, Amount: Positive;
-      RecipeIndex: Unbounded_String) is
+   procedure SetRecipe
+     (Workshop, Amount: Positive; RecipeIndex: Unbounded_String) is
       RecipeName, ItemIndex: Unbounded_String;
    begin
       PlayerShip.Modules(Workshop).CraftingAmount := Amount;

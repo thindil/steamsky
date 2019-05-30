@@ -70,21 +70,22 @@ package Items is
    procedure LoadItems(Reader: Tree_Reader); -- Load items from files
    function FindProtoItem
      (ItemType: Unbounded_String)
-     return Unbounded_String; -- Return map index of item or empty string if item not found
-   function GetItemDamage(ItemDurability: Natural;
-      ToLower: Boolean := False)
-     return String; -- Get description of item damage
-   function GetItemName(Item: InventoryData;
-      DamageInfo, ToLower: Boolean := True)
-     return String; -- Get name of item in ship cargo or character inventory
-   procedure DamageItem(Inventory: in out Inventory_Container.Vector;
-      ItemIndex: Positive;
+      return Unbounded_String; -- Return map index of item or empty string if item not found
+   function GetItemDamage
+     (ItemDurability: Natural; ToLower: Boolean := False)
+      return String; -- Get description of item damage
+   function GetItemName
+     (Item: InventoryData; DamageInfo, ToLower: Boolean := True)
+      return String; -- Get name of item in ship cargo or character inventory
+   procedure DamageItem
+     (Inventory: in out Inventory_Container.Vector; ItemIndex: Positive;
       SkillLevel, MemberIndex: Natural :=
         0); -- Check if item in ship cargo or character inventory was damaged
-   function FindItem(Inventory: Inventory_Container.Vector;
+   function FindItem
+     (Inventory: Inventory_Container.Vector;
       ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
       Durability: Natural := 101)
-     return Natural; -- Find item in ship cargo or character inventory, return item index or 0 if item not found
+      return Natural; -- Find item in ship cargo or character inventory, return item index or 0 if item not found
    procedure SetToolsList; -- Fill tools types list
 
 end Items;

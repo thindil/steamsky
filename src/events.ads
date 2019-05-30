@@ -25,7 +25,8 @@ package Events is
    type Events_Types is
      (None, EnemyShip, AttackOnBase, Disease, DoublePrice, BaseRecovery,
       FullDocks, EnemyPatrol, Trader, FriendlyShip); -- Types of events
-   type EventData(EType: Events_Types := None)
+   type EventData
+     (EType: Events_Types := None)
    is -- Data structure for random events
    record
       SkyX: Integer; -- X coordinate on sky map
@@ -48,13 +49,14 @@ package Events is
      .Vector; -- List of indexes of all friendly ships in the game
 
    function CheckForEvent
-     return Boolean; -- Check if event happen, returns True, if combat starts
+      return Boolean; -- Check if event happen, returns True, if combat starts
    procedure UpdateEvents(Minutes: Positive); -- Update all events timers
    procedure DeleteEvent(EventIndex: Positive) with
       Pre => EventIndex <= Events_List.Last_Index; -- Delete selected event
    procedure GenerateTraders; -- Create list of traders needed for trader event
    procedure RecoverBase(BaseIndex: BasesRange); -- Recover abandoned base
-   procedure GenerateEnemies(Enemies: in out UnboundedString_Container.Vector;
+   procedure GenerateEnemies
+     (Enemies: in out UnboundedString_Container.Vector;
       Owner: Unbounded_String := To_Unbounded_String("Any");
       WithTraders: Boolean := True) with
       Pre => Owner /= Null_Unbounded_String; -- Create list of enemies ships

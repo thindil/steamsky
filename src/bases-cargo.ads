@@ -22,8 +22,7 @@ package Bases.Cargo is
      (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Natural := 100;
       CargoIndex: Natural := 0); -- Update cargo in base
-   function FindBaseCargo(ProtoIndex: Unbounded_String;
-      Durability: Natural := 101)
-     return Natural; -- Find index of item in base cargo, return 0 if no item found
-
+   function FindBaseCargo
+     (ProtoIndex: Unbounded_String; Durability: Natural := 101)
+      return Natural; -- Find index of item in base cargo, return 0 if no item found
 end Bases.Cargo;
