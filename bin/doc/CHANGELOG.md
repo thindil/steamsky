@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 - Crash on showing passenger info in ship info screen
 - Giving orders to passengers
 - Send previous trainee on break when new is assigned
+- Return training tools back on going on break
 
 ## [3.7] - 2019-05-19
 
