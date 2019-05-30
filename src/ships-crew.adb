@@ -29,8 +29,8 @@ with Factions; use Factions;
 
 package body Ships.Crew is
 
-   function GetSkillLevel(Member: Member_Data;
-      SkillIndex: Positive) return Natural is
+   function GetSkillLevel
+     (Member: Member_Data; SkillIndex: Positive) return Natural is
       SkillLevel: Integer := 0;
       type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
@@ -77,8 +77,9 @@ package body Ships.Crew is
       return SkillLevel;
    end GetSkillLevel;
 
-   procedure Death(MemberIndex: Positive; Reason: Unbounded_String;
-      Ship: in out ShipRecord; CreateBody: Boolean := True) is
+   procedure Death
+     (MemberIndex: Positive; Reason: Unbounded_String; Ship: in out ShipRecord;
+      CreateBody: Boolean := True) is
    begin
       if MemberIndex > 1 then
          if Ship = PlayerShip then
@@ -139,8 +140,9 @@ package body Ships.Crew is
       end if;
    end DeleteMember;
 
-   function FindMember(Order: Crew_Orders;
-      Crew: Crew_Container.Vector := PlayerShip.Crew) return Natural is
+   function FindMember
+     (Order: Crew_Orders; Crew: Crew_Container.Vector := PlayerShip.Crew)
+      return Natural is
    begin
       for I in Crew.Iterate loop
          if Crew(I).Order = Order then
@@ -150,9 +152,9 @@ package body Ships.Crew is
       return 0;
    end FindMember;
 
-   procedure GiveOrders(Ship: in out ShipRecord; MemberIndex: Positive;
-      GivenOrder: Crew_Orders; ModuleIndex: Natural := 0;
-      CheckPriorities: Boolean := True) is
+   procedure GiveOrders
+     (Ship: in out ShipRecord; MemberIndex: Positive; GivenOrder: Crew_Orders;
+      ModuleIndex: Natural := 0; CheckPriorities: Boolean := True) is
       MemberName: constant String := To_String(Ship.Crew(MemberIndex).Name);
       ModuleIndex2, ToolsIndex: Natural := 0;
       MType: ModuleType := ENGINE;
@@ -344,7 +346,8 @@ package body Ships.Crew is
          Ship.Crew(MemberIndex).PreviousOrder := Rest;
          if Ship.Crew(MemberIndex).Order = Repair or
            Ship.Crew(MemberIndex).Order = Clean or
-           Ship.Crew(MemberIndex).Order = Upgrading then
+           Ship.Crew(MemberIndex).Order = Upgrading or
+           Ship.Crew(MemberIndex).Order = Train then
             ToolsIndex := Ship.Crew(MemberIndex).Equipment(7);
             if ToolsIndex > 0 then
                TakeOffItem(MemberIndex, ToolsIndex);
@@ -424,8 +427,8 @@ package body Ships.Crew is
       HavePilot, HaveEngineer, HaveUpgrade, HaveTrader, NeedClean, NeedRepairs,
       NeedGunners, NeedCrafters, CanHeal, NeedTrader: Boolean := False;
       EventIndex: constant Natural := SkyMap(Ship.SkyX, Ship.SkyY).EventIndex;
-      function UpdatePosition(Order: Crew_Orders;
-         MaxPriority: Boolean := True) return Boolean is
+      function UpdatePosition
+        (Order: Crew_Orders; MaxPriority: Boolean := True) return Boolean is
          ModuleIndex, MemberIndex, OrderIndex: Natural := 0;
       begin
          if Crew_Orders'Pos(Order) < Crew_Orders'Pos(Defend) then
@@ -708,8 +711,8 @@ package body Ships.Crew is
       end if;
    end UpdateOrders;
 
-   procedure UpdateMorale(Ship: in out ShipRecord; MemberIndex: Positive;
-      Value: Integer) is
+   procedure UpdateMorale
+     (Ship: in out ShipRecord; MemberIndex: Positive; Value: Integer) is
       NewMorale, NewLoyalty, NewValue: Integer;
       FactionIndex: constant Positive := Ship.Crew(MemberIndex).Faction;
    begin
