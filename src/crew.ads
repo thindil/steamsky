@@ -71,24 +71,25 @@ package Crew is
    procedure GainExp(Amount: Natural; SkillNumber, CrewIndex: Positive) with
       Pre => SkillNumber <=
       Skills_List.Last_Index; -- Gain experience in selected skill.
-   function GenerateMemberName(Gender: Character;
-      FactionIndex: Unbounded_String) return Unbounded_String with
+   function GenerateMemberName
+     (Gender: Character; FactionIndex: Unbounded_String)
+      return Unbounded_String with
       Pre =>
       ((Gender = 'M' or Gender = 'F') and
        FactionIndex /=
          Null_Unbounded_String); -- Generate random name for crew member
    function FindCabin
      (MemberIndex: Positive)
-     return Natural; -- Find index of cabin for selected crew member
+      return Natural; -- Find index of cabin for selected crew member
    -- Update player ship crew
-   procedure UpdateCrew(Minutes: Positive; TiredPoints: Natural;
-      InCombat: Boolean := False);
+   procedure UpdateCrew
+     (Minutes: Positive; TiredPoints: Natural; InCombat: Boolean := False);
    procedure WaitForRest; -- Wait until whole crew is rested
    function GetSkillLevelName
      (SkillLevel: Positive) return String; -- Get member skill level name
    function GetAttributeLevelName
      (AttributeLevel: Positive)
-     return String; -- Get member attribute level name
+      return String; -- Get member attribute level name
    procedure DailyPayment; -- Daily payment and upgrade contracts length for player ship crew members
 
 end Crew;

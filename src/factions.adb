@@ -42,8 +42,9 @@ package body Factions is
       FactionNode, ChildNode: Node;
       DeleteIndex: Positive;
       Action, SubAction: DataAction;
-      procedure AddChildNode(Data: in out UnboundedString_Container.Vector;
-         Name: String; Index: Natural; CheckItemType: Boolean := True) is
+      procedure AddChildNode
+        (Data: in out UnboundedString_Container.Vector; Name: String;
+         Index: Natural; CheckItemType: Boolean := True) is
          Value: Unbounded_String;
       begin
          ChildNodes :=
@@ -300,7 +301,7 @@ package body Factions is
          TempRecord :=
            (Name => Null_Unbounded_String, MemberName => Null_Unbounded_String,
             PluralMemberName => Null_Unbounded_String, SpawnChance => 0,
-            Population => (0, 0), NamesType => Standard,
+            Population => (0, 0), NamesType => STANDARD,
             Relations => TmpRelations, Description => Null_Unbounded_String,
             FoodTypes => TmpFood, DrinksTypes => TmpFood,
             HealingTools => Null_Unbounded_String, HealingSkill => 1,

@@ -38,17 +38,18 @@ package Messages is
    LastMessageIndex: Natural := 0; -- Index of last message to show
    function FormatedTime
      (Time: Date_Record := GameDate) return String; -- Format game time
-   procedure AddMessage(Message: String; MType: Message_Type;
+   procedure AddMessage
+     (Message: String; MType: Message_Type;
       Color: Message_Color := WHITE); -- Add new message to list
-   function GetMessage(MessageIndex: Integer;
-      MType: Message_Type := Default)
-     return Message_Data; -- Return selected message
+   function GetMessage
+     (MessageIndex: Integer; MType: Message_Type := Default)
+      return Message_Data; -- Return selected message
    procedure ClearMessages; -- Remove all messages;
    function MessagesAmount
      (MType: Message_Type := Default)
-     return Natural; -- Return amount of selected type messages
-   procedure RestoreMessage(Message: Unbounded_String;
-      MType: Message_Type := Default;
+      return Natural; -- Return amount of selected type messages
+   procedure RestoreMessage
+     (Message: Unbounded_String; MType: Message_Type := Default;
       Color: Message_Color := WHITE); -- Restore message from save file
    function GetLastMessageIndex return Natural; -- Return last message index
 

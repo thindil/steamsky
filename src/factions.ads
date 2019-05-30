@@ -86,6 +86,6 @@ package Factions is
          (Factions_List,
           TargetFaction)); -- Check if TargetFaction is friendly for SourceFaction. Returns true if yes, otherwise false.
    function GetRandomFaction
-     return Unbounded_String; -- Select random faction from list
+      return Unbounded_String; -- Select random faction from list
 
 end Factions;

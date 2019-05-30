@@ -113,7 +113,8 @@ package body Maps.UI is
       ItemAmount: Natural := 0;
       CurrentTheme: constant ThemeRecord :=
         Themes_List(To_String(GameSettings.InterfaceTheme));
-      procedure UpdateLabel(LabelName, TextMarkup, TooltipText: String;
+      procedure UpdateLabel
+        (LabelName, TextMarkup, TooltipText: String;
          ShowLabel: Boolean := False) is
          Label: constant Gtk_Widget :=
            Gtk_Widget(Get_Object(Builder, LabelName));
@@ -1118,7 +1119,7 @@ package body Maps.UI is
       Add_Entry("<skymapwindow>/Menu/BasesInfo", GDK_B, 0);
       Add_Entry("<skymapwindow>/Menu/EventsInfo", GDK_N, 0);
       Add_Entry("<skymapwindow>/Menu/MissionsInfo", GDK_I, 0);
-      Add_Entry("<skymapwindow>/Menu/MoveMap", GDK_LC_V, 0);
+      Add_Entry("<skymapwindow>/Menu/MoveMap", GDK_LC_v, 0);
       Add_Entry("<skymapwindow>/Menu/GameStats", GDK_G, 0);
       Add_Entry("<skymapwindow>/Menu/Help", GDK_F1, 0);
       Add_Entry("<skymapwindow>/Menu/GameOptions", GDK_P, 0);
@@ -1305,8 +1306,8 @@ package body Maps.UI is
       end if;
    end CreateSkyMap;
 
-   procedure ShowSkyMap(X: Integer := PlayerShip.SkyX;
-      Y: Integer := PlayerShip.SkyY) is
+   procedure ShowSkyMap
+     (X: Integer := PlayerShip.SkyX; Y: Integer := PlayerShip.SkyY) is
       ButtonsNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("btnmovemapleft"),
          To_Unbounded_String("btnmovemapright"),

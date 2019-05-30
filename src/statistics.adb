@@ -123,8 +123,8 @@ package body Statistics is
       GameStats.Points := GameStats.Points + 5;
    end UpdateCraftingOrders;
 
-   procedure UpdateKilledMobs(Mob: Member_Data;
-      FractionName: Unbounded_String) is
+   procedure UpdateKilledMobs
+     (Mob: Member_Data; FractionName: Unbounded_String) is
       Updated: Boolean := False;
    begin
       for Attribute of Mob.Attributes loop

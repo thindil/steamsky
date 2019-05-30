@@ -37,5 +37,4 @@ package HallOfFame is
       (PlayerName /= Null_Unbounded_String and
        DeathReason /=
          Null_Unbounded_String); -- Check did new entry should enter hall of fame
-
 end HallOfFame;

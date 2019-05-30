@@ -168,8 +168,8 @@ package body Items is
       return Null_Unbounded_String;
    end FindProtoItem;
 
-   function GetItemDamage(ItemDurability: Natural;
-      ToLower: Boolean := False) return String is
+   function GetItemDamage
+     (ItemDurability: Natural; ToLower: Boolean := False) return String is
       DamagePercent: Float;
       DamageText: Unbounded_String;
    begin
@@ -189,8 +189,9 @@ package body Items is
       return To_String(DamageText);
    end GetItemDamage;
 
-   function GetItemName(Item: InventoryData;
-      DamageInfo, ToLower: Boolean := True) return String is
+   function GetItemName
+     (Item: InventoryData; DamageInfo, ToLower: Boolean := True)
+      return String is
       ItemName: Unbounded_String;
    begin
       if Item.Name /= Null_Unbounded_String then
@@ -205,8 +206,9 @@ package body Items is
       return To_String(ItemName);
    end GetItemName;
 
-   procedure DamageItem(Inventory: in out Inventory_Container.Vector;
-      ItemIndex: Positive; SkillLevel, MemberIndex: Natural := 0) is
+   procedure DamageItem
+     (Inventory: in out Inventory_Container.Vector; ItemIndex: Positive;
+      SkillLevel, MemberIndex: Natural := 0) is
       DamageChance: Integer :=
         Items_List(Inventory(ItemIndex).ProtoIndex).Value(1);
       I: Natural := Inventory.First_Index;
@@ -273,7 +275,8 @@ package body Items is
       end loop;
    end DamageItem;
 
-   function FindItem(Inventory: Inventory_Container.Vector;
+   function FindItem
+     (Inventory: Inventory_Container.Vector;
       ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
       Durability: Natural := 101) return Natural is
    begin

@@ -518,7 +518,7 @@ package body Missions is
         0;
       AcceptedMissions.Delete(Index => MissionIndex);
       if Mission.MType = Deliver then
-         UpdateCargo(PlayerShip, Mission.ItemINdex, -1);
+         UpdateCargo(PlayerShip, Mission.ItemIndex, -1);
       elsif Mission.MType = Passenger then
          DeleteMember(Mission.Data, PlayerShip);
       end if;
@@ -555,7 +555,7 @@ package body Missions is
               (MessageText,
                "'Deliver " &
                To_String
-                 (Items_List(AcceptedMissions(MissionIndex).ItemINdex).Name) &
+                 (Items_List(AcceptedMissions(MissionIndex).ItemIndex).Name) &
                "'.");
          when Destroy =>
             Append

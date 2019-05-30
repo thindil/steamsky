@@ -22,7 +22,8 @@ package Missions is
 
    type Missions_Types is (Deliver, Destroy, Patrol, Explore, Passenger);
    type RewardMultiplier is digits 2 range 0.0 .. 2.0;
-   type Mission_Data(MType: Missions_Types := Deliver)
+   type Mission_Data
+     (MType: Missions_Types := Deliver)
    is -- Data structure for missions
    record
       Time: Positive; -- Amount of minutes to finish the mission
@@ -56,14 +57,14 @@ package Missions is
    procedure FinishMission(MissionIndex: Positive) with
       Pre => MissionIndex <=
       AcceptedMissions.Last_Index; -- Finish selected mission
-   procedure DeleteMission(MissionIndex: Positive;
-      Failed: Boolean := True) with
+   procedure DeleteMission
+     (MissionIndex: Positive; Failed: Boolean := True) with
       Pre => MissionIndex <=
       AcceptedMissions.Last_Index; -- Delete selected mission
    procedure UpdateMission(MissionIndex: Positive) with
       Pre => MissionIndex <=
       AcceptedMissions.Last_Index; -- Update status of mission
    function AutoFinishMissions
-     return String; -- Finish all possible missions, return empty string if all ok
+      return String; -- Finish all possible missions, return empty string if all ok
 
 end Missions;

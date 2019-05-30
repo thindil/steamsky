@@ -519,8 +519,9 @@ package body MainMenu is
             1));
    end ShowBaseDescription;
 
-   function NewGameKeyPressed(Self: access Gtk_Widget_Record'Class;
-      Event: Gdk.Event.Gdk_Event_Key) return Boolean is
+   function NewGameKeyPressed
+     (Self: access Gtk_Widget_Record'Class; Event: Gdk.Event.Gdk_Event_Key)
+      return Boolean is
       pragma Unreferenced(Self);
       ScrollBar: constant Gtk_Adjustment :=
         Get_Vadjustment
@@ -757,8 +758,8 @@ package body MainMenu is
       Hide(Gtk_Widget(Get_Object(Builder, "messagebox")));
    end ShowMainMenu;
 
-   procedure SaveException(An_Exception: Exception_Occurrence;
-      PrintToTerminal: Boolean) is
+   procedure SaveException
+     (An_Exception: Exception_Occurrence; PrintToTerminal: Boolean) is
       ErrorFile: File_Type;
       ErrorText: Unbounded_String;
    begin

@@ -464,8 +464,8 @@ package body Trades.UI is
       end if;
    end SearchTrade;
 
-   function VisibleTrade(Model: Gtk_Tree_Model;
-      Iter: Gtk_Tree_Iter) return Boolean is
+   function VisibleTrade
+     (Model: Gtk_Tree_Model; Iter: Gtk_Tree_Iter) return Boolean is
       SearchEntry: constant Gtk_GEntry :=
         Gtk_GEntry(Get_Object(Builder, "tradesearch"));
       IType: constant Unbounded_String :=

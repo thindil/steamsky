@@ -180,7 +180,7 @@ package body Mobs is
             end loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "attribute");
-            if Length(ChildNodes) > 0 and ACTION = UPDATE then
+            if Length(ChildNodes) > 0 and Action = UPDATE then
                TempRecord.Attributes.Clear;
             end if;
             for J in 0 .. Length(ChildNodes) - 1 loop

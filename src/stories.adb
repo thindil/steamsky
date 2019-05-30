@@ -418,8 +418,8 @@ package body Stories is
         Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index));
    end SelectLoot;
 
-   procedure StartStory(FactionName: Unbounded_String;
-      Condition: StartConditionType) is
+   procedure StartStory
+     (FactionName: Unbounded_String; Condition: StartConditionType) is
       FactionIndex, StepData: Unbounded_String := Null_Unbounded_String;
       TempTexts: UnboundedString_Container.Vector;
       CanStart: Boolean;
@@ -666,8 +666,9 @@ package body Stories is
       return Null_Unbounded_String;
    end GetCurrentStoryText;
 
-   function GetStepData(FinishData: StepData_Container.Vector;
-      Name: String) return Unbounded_String is
+   function GetStepData
+     (FinishData: StepData_Container.Vector; Name: String)
+      return Unbounded_String is
    begin
       for Data of FinishData loop
          if Data.Name = To_Unbounded_String(Name) then

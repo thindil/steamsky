@@ -59,11 +59,11 @@ package Statistics is
    procedure UpdateCraftingOrders(Index: Unbounded_String) with
       Pre => Index /=
       Null_Unbounded_String; -- Add new finished crafting order to list
-   procedure UpdateKilledMobs(Mob: Member_Data;
-      FractionName: Unbounded_String) with
+   procedure UpdateKilledMobs
+     (Mob: Member_Data; FractionName: Unbounded_String) with
       Pre => FractionName /=
       Null_Unbounded_String; -- Add new killed mob to list
    function GetGamePoints
-     return Natural; -- Get amount of gained points multiplied by difficulty bonus
+      return Natural; -- Get amount of gained points multiplied by difficulty bonus
 
 end Statistics;

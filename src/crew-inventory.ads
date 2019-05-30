@@ -19,7 +19,8 @@ with Ships; use Ships;
 
 package Crew.Inventory is
 
-   procedure UpdateInventory(MemberIndex: Positive; Amount: Integer;
+   procedure UpdateInventory
+     (MemberIndex: Positive; Amount: Integer;
       ProtoIndex: Unbounded_String := Null_Unbounded_String;
       Durability, InventoryIndex, Price: Natural := 0) with
       Pre =>
@@ -27,8 +28,8 @@ package Crew.Inventory is
        InventoryIndex <=
          PlayerShip.Crew(MemberIndex).Inventory
            .Last_Index); -- Update member inventory
-   function FreeInventory(MemberIndex: Positive;
-      Amount: Integer) return Integer with
+   function FreeInventory
+     (MemberIndex: Positive; Amount: Integer) return Integer with
       Pre => MemberIndex <=
       PlayerShip.Crew
         .Last_Index; -- Return available space in crew member inventory after adding/extracting Amount
@@ -44,11 +45,11 @@ package Crew.Inventory is
        ItemIndex <=
          PlayerShip.Crew(MemberIndex).Inventory
            .Last_Index); -- Check if selected crew member use this item
-   function FindTools(MemberIndex: Positive; ItemType: Unbounded_String;
-      Order: Crew_Orders) return Natural with
+   function FindTools
+     (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders)
+      return Natural with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
        ItemType /=
          Null_Unbounded_String); -- Search for specified tools in character and ship cargo, return 0 if tools not found otherwise index of tool in character inventory
-
 end Crew.Inventory;

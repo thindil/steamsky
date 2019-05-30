@@ -23,7 +23,8 @@ package Log is
    DebugMode: Debug_Types := None; -- Did game is run in debug mode
 
    procedure StartLogging; -- Open/create debug.log file
-   procedure LogMessage(Message: String; MessageType: Debug_Types;
+   procedure LogMessage
+     (Message: String; MessageType: Debug_Types;
       NewLine, TimeStamp: Boolean :=
         True); -- Log message (if proper type) to file in debug mode
    procedure EndLogging; -- Close debug.file

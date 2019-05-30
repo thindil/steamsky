@@ -24,7 +24,8 @@ package MainMenu is
    procedure UpdateGoalButton(Message: String) with
       Pre => Message'Length > 0; -- Update label on character goal button
    procedure ShowMainMenu; -- Show main menu window
-   procedure SaveException(An_Exception: Exception_Occurrence;
+   procedure SaveException
+     (An_Exception: Exception_Occurrence;
       PrintToTerminal: Boolean); -- Save data exception to file
    procedure On_Exception
      (An_Exception: Exception_Occurrence); -- Handle GUI exceptions

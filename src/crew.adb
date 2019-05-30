@@ -94,9 +94,9 @@ package body Crew is
       end if;
    end GainExp;
 
-   function GenerateMemberName(Gender: Character;
-      FactionIndex: Unbounded_String)
-     return Unbounded_String is -- based on name generator from libtcod
+   function GenerateMemberName
+     (Gender: Character; FactionIndex: Unbounded_String)
+      return Unbounded_String is -- based on name generator from libtcod
       NewName: Unbounded_String;
       NameType: NamesTypes;
    begin
@@ -184,8 +184,8 @@ package body Crew is
       return 0;
    end FindCabin;
 
-   procedure UpdateCrew(Minutes: Positive; TiredPoints: Natural;
-      InCombat: Boolean := False) is
+   procedure UpdateCrew
+     (Minutes: Positive; TiredPoints: Natural; InCombat: Boolean := False) is
       TiredLevel, HungerLevel, ThirstLevel: Integer := 0;
       HealthLevel: Integer := 100;
       DeathReason: Unbounded_String;
