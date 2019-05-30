@@ -29,7 +29,7 @@ package Maps.UI.Handlers is
      (Object: access Gtkada_Builder_Record'Class); -- Get size of map cell
    function SetDestination
      (Object: access Gtkada_Builder_Record'Class)
-     return Boolean; -- Set ship destination
+      return Boolean; -- Set ship destination
    procedure MoveMap
      (User_Data: access GObject_Record'Class); -- Move map to selected position
    procedure BtnDockClicked
@@ -76,22 +76,22 @@ package Maps.UI.Handlers is
         Class); -- Show available wait orders
    function UpdateTooltip
      (Object: access Gtkada_Builder_Record'Class)
-     return Boolean; -- Update map tooltip with information about cell on mouse movement
-   function MapKeyReleased(Self: access Gtk_Widget_Record'Class;
-      Event: Gdk.Event.Gdk_Event_Key)
-     return Boolean; -- Center map on player ship
-   function MapKeyPressed(Self: access Gtk_Widget_Record'Class;
-      Event: Gdk.Event.Gdk_Event_Key)
-     return Boolean; -- Move mouse cursor on map by keyboard
-   function ZoomMap(Self: access Gtk_Widget_Record'Class;
-      Event: Gdk.Event.Gdk_Event_Scroll)
-     return Boolean; -- Resize sky map font with mouse wheel
+      return Boolean; -- Update map tooltip with information about cell on mouse movement
+   function MapKeyReleased
+     (Self: access Gtk_Widget_Record'Class; Event: Gdk.Event.Gdk_Event_Key)
+      return Boolean; -- Center map on player ship
+   function MapKeyPressed
+     (Self: access Gtk_Widget_Record'Class; Event: Gdk.Event.Gdk_Event_Key)
+      return Boolean; -- Move mouse cursor on map by keyboard
+   function ZoomMap
+     (Self: access Gtk_Widget_Record'Class; Event: Gdk.Event.Gdk_Event_Scroll)
+      return Boolean; -- Resize sky map font with mouse wheel
    function DisableMenuShortcuts
      (Object: access Gtkada_Builder_Record'Class)
-     return Boolean; -- Disable menu shortcuts keys
+      return Boolean; -- Disable menu shortcuts keys
    function EnableMenuShortcuts
      (Object: access Gtkada_Builder_Record'Class)
-     return Boolean; -- Enable menu shortcuts keys
+      return Boolean; -- Enable menu shortcuts keys
    procedure DisableMenuShortcutsProc
      (Object: access Gtkada_Builder_Record'
         Class); -- Disable menu shortcuts keys
@@ -100,7 +100,7 @@ package Maps.UI.Handlers is
         Class); -- Enable menu shortcuts keys
    function ToggleCloseButton
      (User_Data: access GObject_Record'Class)
-     return Boolean; -- Toggle sensitive of close button
+      return Boolean; -- Toggle sensitive of close button
    procedure ToggleCloseButtonProc
      (User_Data: access GObject_Record'
         Class); -- Toggle sensitive of close button

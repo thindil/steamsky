@@ -34,16 +34,19 @@ package Crew.UI.Handlers is
    procedure ShowItemInfo2
      (Object: access Gtkada_Builder_Record'
         Class); -- Show informations about selected item
-   procedure UseItem(Self: access Gtk_Cell_Renderer_Toggle_Record'Class;
+   procedure UseItem
+     (Self: access Gtk_Cell_Renderer_Toggle_Record'Class;
       Path: UTF8_String); -- Set selected item as used by crew member or take it down
    procedure MoveItem
      (Object: access Gtkada_Builder_Record'
         Class); -- Move item from inventory to ship cargo
-   procedure GiveCrewOrders(Self: access Gtk_Cell_Renderer_Combo_Record'Class;
+   procedure GiveCrewOrders
+     (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
       Path_String: UTF8_String;
       New_Iter: Gtk.Tree_Model
         .Gtk_Tree_Iter); -- Show give orders for all crew members
-   procedure SetPriority(Self: access Gtk_Cell_Renderer_Combo_Record'Class;
+   procedure SetPriority
+     (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
       Path_String: UTF8_String;
       New_Iter: Gtk.Tree_Model
         .Gtk_Tree_Iter); -- Set selected priority (and reduce others if needed)

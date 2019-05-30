@@ -22,7 +22,8 @@ with Ships.Crew; use Ships.Crew;
 
 package body Crew.Inventory is
 
-   procedure UpdateInventory(MemberIndex: Positive; Amount: Integer;
+   procedure UpdateInventory
+     (MemberIndex: Positive; Amount: Integer;
       ProtoIndex, Durability, InventoryIndex: Natural := 0) is
       ItemIndex: Natural := 0;
       NewAmount: Natural;
@@ -87,8 +88,8 @@ package body Crew.Inventory is
       end if;
    end UpdateInventory;
 
-   function FreeInventory(MemberIndex: Positive;
-      Amount: Integer) return Integer is
+   function FreeInventory
+     (MemberIndex: Positive; Amount: Integer) return Integer is
       FreeSpace: Integer :=
         50 + PlayerShip.Crew(MemberIndex).Attributes(StrengthIndex)(1);
    begin
@@ -119,8 +120,9 @@ package body Crew.Inventory is
       return False;
    end ItemIsUsed;
 
-   function FindTools(MemberIndex: Positive; ItemType: Unbounded_String;
-      Order: Crew_Orders) return Natural is
+   function FindTools
+     (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders)
+      return Natural is
       ToolsIndex: Natural;
    begin
       ToolsIndex := PlayerShip.Crew(MemberIndex).Equipment(7);

@@ -19,7 +19,8 @@ with DOM.Core; use DOM.Core;
 
 package Ships.SaveLoad is
 
-   procedure SavePlayerShip(SaveData: Document;
+   procedure SavePlayerShip
+     (SaveData: Document;
       MainNode: DOM.Core.Element); -- Save player ship to file
    procedure LoadPlayerShip
      (SaveData: Document); -- Load saved player ship from file

@@ -34,8 +34,8 @@ with MainMenu; use MainMenu;
 
 procedure SteamSky is
 
-   function UpdatePath(Path: in out Unbounded_String;
-      PathName: String) return Boolean is
+   function UpdatePath
+     (Path: in out Unbounded_String; PathName: String) return Boolean is
    begin
       if Element(Path, Length(Path)) /= Dir_Separator then
          Append(Path, Dir_Separator);

@@ -52,11 +52,12 @@ package Crafts is
    procedure Manufacturing(Minutes: Positive); -- Craft selected items
    function CheckRecipe
      (RecipeIndex: Integer)
-     return Positive; -- Check if player have all requirements for selected recipe, return max amount of items which can be craft
+      return Positive; -- Check if player have all requirements for selected recipe, return max amount of items which can be craft
    function FindRecipe
      (Index: Unbounded_String)
-     return Natural; -- Return vector index of recipe or zero if recipe not found
-   procedure SetRecipe(Workshop, Amount: Positive;
+      return Natural; -- Return vector index of recipe or zero if recipe not found
+   procedure SetRecipe
+     (Workshop, Amount: Positive;
       RecipeIndex: Integer); -- Set crafting recipe for selected workshop
 
 end Crafts;

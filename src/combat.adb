@@ -39,8 +39,8 @@ package body Combat is
 
    FactionName: Unbounded_String;
 
-   function StartCombat(EnemyIndex: Positive;
-      NewCombat: Boolean := True) return Boolean is
+   function StartCombat
+     (EnemyIndex: Positive; NewCombat: Boolean := True) return Boolean is
       EnemyShip: ShipRecord;
       PlayerPerception, EnemyPerception: Natural := 0;
       function CountPerception(Spotter, Spotted: ShipRecord) return Natural is
@@ -382,14 +382,15 @@ package body Combat is
                        GetRandom(1, HitChance + 50) then
                         ShootMessage :=
                           ShootMessage & To_Unbounded_String(" and hits ");
-                        ArmorIndex := FindEnemyModule(Armor);
+                        ArmorIndex := FindEnemyModule(ARMOR);
                         if ArmorIndex > 0 then
                            HitLocation := ArmorIndex;
                         else
                            if Ship = PlayerShip then
                               if GunnerIndex > 0
                                 and then GunnerOrder in
-                                  4 .. 6 then -- aim for part of enemy ship
+                                  4 ..
+                                        6 then -- aim for part of enemy ship
                                  HitLocation := 0;
                                  case GunnerOrder is
                                     when 4 =>
@@ -598,13 +599,15 @@ package body Combat is
             end if;
          end loop Attack_Loop;
       end Attack;
-      procedure MeleeCombat(Attackers, Defenders: in out Crew_Container.Vector;
+      procedure MeleeCombat
+        (Attackers, Defenders: in out Crew_Container.Vector;
          PlayerAttack: Boolean) is
          AttackDone, Riposte: Boolean;
          AttackerIndex, DefenderIndex: Positive;
          OrderIndex: Natural;
-         function CharacterAttack(AttackerIndex, DefenderIndex: Positive;
-            PlayerAttack2: Boolean) return Boolean is
+         function CharacterAttack
+           (AttackerIndex, DefenderIndex: Positive; PlayerAttack2: Boolean)
+            return Boolean is
             Attacker, Defender: Member_Data;
             HitChance, Damage: Integer;
             HitLocation: constant Positive := GetRandom(3, 6);

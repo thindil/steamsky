@@ -31,9 +31,9 @@ with Bases; use Bases;
 
 package body Ships is
 
-   function CreateShip(ProtoIndex: Positive; Name: Unbounded_String;
-      X, Y: Integer; Speed: ShipSpeed;
-      RandomUpgrades: Boolean := True) return ShipRecord is
+   function CreateShip
+     (ProtoIndex: Positive; Name: Unbounded_String; X, Y: Integer;
+      Speed: ShipSpeed; RandomUpgrades: Boolean := True) return ShipRecord is
       TmpShip: ShipRecord;
       ShipModules: Modules_Container.Vector;
       ShipCrew: Crew_Container.Vector;
@@ -594,7 +594,7 @@ package body Ships is
 
    function GenerateShipName
      (Owner: Unbounded_String)
-     return Unbounded_String is -- based on name generator from libtcod
+      return Unbounded_String is -- based on name generator from libtcod
       NewName: Unbounded_String := Null_Unbounded_String;
       LettersAmount, NumbersAmount: Positive;
       subtype Letters is Character range 'A' .. 'Z';

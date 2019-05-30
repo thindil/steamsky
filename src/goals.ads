@@ -40,9 +40,9 @@ package Goals is
    procedure LoadGoals(Reader: Tree_Reader); -- Load player goals from files
    function GoalText
      (Index: Natural)
-     return String; -- Return info about selected goal or current goal if Index = 0
+      return String; -- Return info about selected goal or current goal if Index = 0
    procedure ClearCurrentGoal; -- Reset current goal
-   procedure UpdateGoal(GType: GoalTypes; TargetIndex: Unbounded_String;
+   procedure UpdateGoal
+     (GType: GoalTypes; TargetIndex: Unbounded_String;
       Amount: Positive := 1); -- Update current goal
-
 end Goals;

@@ -1262,8 +1262,9 @@ package body Maps.UI.Handlers is
       return False;
    end UpdateTooltip;
 
-   function MapKeyReleased(Self: access Gtk_Widget_Record'Class;
-      Event: Gdk.Event.Gdk_Event_Key) return Boolean is
+   function MapKeyReleased
+     (Self: access Gtk_Widget_Record'Class; Event: Gdk.Event.Gdk_Event_Key)
+      return Boolean is
       pragma Unreferenced(Self);
       KeyMods: constant Gdk_Modifier_Type :=
         Event.State and Get_Default_Mod_Mask;
@@ -1316,8 +1317,9 @@ package body Maps.UI.Handlers is
       return True;
    end MapKeyReleased;
 
-   function MapKeyPressed(Self: access Gtk_Widget_Record'Class;
-      Event: Gdk.Event.Gdk_Event_Key) return Boolean is
+   function MapKeyPressed
+     (Self: access Gtk_Widget_Record'Class; Event: Gdk.Event.Gdk_Event_Key)
+      return Boolean is
       pragma Unreferenced(Self);
       KeyMods: constant Gdk_Modifier_Type :=
         Event.State and Get_Default_Mod_Mask;
@@ -1403,8 +1405,9 @@ package body Maps.UI.Handlers is
       return False;
    end MapKeyPressed;
 
-   function ZoomMap(Self: access Gtk_Widget_Record'Class;
-      Event: Gdk.Event.Gdk_Event_Scroll) return Boolean is
+   function ZoomMap
+     (Self: access Gtk_Widget_Record'Class; Event: Gdk.Event.Gdk_Event_Scroll)
+      return Boolean is
       pragma Unreferenced(Self);
    begin
       if Event.Direction = Scroll_Down then

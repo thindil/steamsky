@@ -36,13 +36,13 @@ package Events is
    Events_List: Events_Container.Vector;
 
    function CheckForEvent
-     return Boolean; -- Check if event happen, returns True, if combat starts
+      return Boolean; -- Check if event happen, returns True, if combat starts
    procedure UpdateEvents(Minutes: Positive); -- Update all events timers
    procedure DeleteEvent(EventIndex: Positive); -- Delete selected event
    procedure GenerateTraders; -- Create list of traders needed for trader event
    procedure RecoverBase(BaseIndex: Positive); -- Recover abandoned base
-   procedure GenerateEnemies(Enemies: in out Positive_Container.Vector;
+   procedure GenerateEnemies
+     (Enemies: in out Positive_Container.Vector;
       Owner: Unbounded_String := To_Unbounded_String("Any");
       WithTraders: Boolean := True); -- Create list of enemies ships
-
 end Events;

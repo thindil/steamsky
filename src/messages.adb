@@ -49,8 +49,8 @@ package body Messages is
       return To_String(Result);
    end FormatedTime;
 
-   procedure AddMessage(Message: String; MType: Message_Type;
-      Color: Natural := 0) is
+   procedure AddMessage
+     (Message: String; MType: Message_Type; Color: Natural := 0) is
    begin
       if Natural(Messages_List.Length) = GameSettings.MessagesLimit then
          Messages_List.Delete_First;
@@ -66,8 +66,9 @@ package body Messages is
       LastMessage := To_Unbounded_String(Message);
    end AddMessage;
 
-   function GetMessage(MessageIndex: Integer;
-      MType: Message_Type := Default) return Message_Data is
+   function GetMessage
+     (MessageIndex: Integer; MType: Message_Type := Default)
+      return Message_Data is
       Index: Integer;
    begin
       if MessageIndex > Integer(Messages_List.Length) then
@@ -123,8 +124,9 @@ package body Messages is
       end if;
    end MessagesAmount;
 
-   procedure RestoreMessage(Message: Unbounded_String;
-      MType: Message_Type := Default; Color: Natural := 0) is
+   procedure RestoreMessage
+     (Message: Unbounded_String; MType: Message_Type := Default;
+      Color: Natural := 0) is
    begin
       LastIndex := LastIndex + 1;
       Messages_List.Append

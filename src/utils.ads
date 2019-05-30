@@ -21,9 +21,9 @@ package Utils is
 
    function GetRandom
      (Min, Max: Integer)
-     return Integer; -- Return random number from Min to Max range
+      return Integer; -- Return random number from Min to Max range
    function DaysDifference
      (DateToCompare: Date_Record)
-     return Natural; -- Return days difference between selected date and current game date
+      return Natural; -- Return days difference between selected date and current game date
 
 end Utils;

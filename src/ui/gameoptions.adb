@@ -255,8 +255,9 @@ package body GameOptions is
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
    end CloseOptions;
 
-   function SetAccelerator(Self: access Gtk_Widget_Record'Class;
-      Event: Gdk.Event.Gdk_Event_Key) return Boolean is
+   function SetAccelerator
+     (Self: access Gtk_Widget_Record'Class; Event: Gdk.Event.Gdk_Event_Key)
+      return Boolean is
       KeyMods: constant Gdk_Modifier_Type :=
         Event.State and Get_Default_Mod_Mask;
       Changed, Found: Boolean := False;

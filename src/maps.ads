@@ -28,6 +28,6 @@ package Maps is
 
    function CountDistance
      (DestinationX, DestinationY: Positive)
-     return Natural; -- Return distance between player ship and destination point
+      return Natural; -- Return distance between player ship and destination point
 
 end Maps;
