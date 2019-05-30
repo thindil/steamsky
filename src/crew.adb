@@ -90,9 +90,9 @@ package body Crew is
       end if;
    end GainExp;
 
-   function GenerateMemberName(Gender: Character;
-      FactionIndex: Unbounded_String)
-     return Unbounded_String is -- based on name generator from libtcod
+   function GenerateMemberName
+     (Gender: Character; FactionIndex: Unbounded_String)
+      return Unbounded_String is -- based on name generator from libtcod
       NewName: Unbounded_String;
       LettersAmount, NumbersAmount: Positive;
       NameType: NamesTypes;

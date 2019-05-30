@@ -52,7 +52,8 @@ with Careers; use Careers;
 
 package body Game is
 
-   procedure NewGame(CharName, ShipName: Unbounded_String; Gender: Character;
+   procedure NewGame
+     (CharName, ShipName: Unbounded_String; Gender: Character;
       FactionIndex, CareerIndex: Positive) is
       PosX, PosY, RandomBase, ShipIndex, Amount, FactionRoll, BaseOwner,
       PlayerIndex2, PlayerMorale: Positive;

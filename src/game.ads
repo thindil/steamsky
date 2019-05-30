@@ -64,7 +64,8 @@ package Game is
         Dir_Separator); -- Path to directory where are savegame and logs
    DataDirectory: Unbounded_String :=
      To_Unbounded_String
-       ("data" & Dir_Separator); -- Path to directory where are game data files
+       ("data" &
+        Dir_Separator); -- Path to directory where are game data files
    TradersName: Unbounded_String; -- Word used in ships names for traders ships (for events)
    Attributes_List: AttributesData_Container
      .Vector; -- Contains data for all characters attributes
@@ -96,7 +97,8 @@ package Game is
        ("data" & Dir_Separator & "themes" &
         Dir_Separator); -- Path to directory where are ui themes
 
-   procedure NewGame(CharName, ShipName: Unbounded_String; Gender: Character;
+   procedure NewGame
+     (CharName, ShipName: Unbounded_String; Gender: Character;
       FactionIndex,
       CareerIndex: Positive); -- Start new game: create map, place ship, crew, etc
    procedure UpdateGame
@@ -105,7 +107,7 @@ package Game is
      (Save: Boolean); -- Save (or not) game and clear all temporary data
    function FindSkillIndex
      (SkillName: Unbounded_String)
-     return Natural; -- Return vector index of selected skill
+      return Natural; -- Return vector index of selected skill
    function LoadGameData return String; -- Load game data from files
 
 end Game;

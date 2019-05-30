@@ -56,10 +56,10 @@ package body BasesList is
       TimeDiff: Integer;
       procedure SetReputationText(ReputationText: String) is
       begin
-         Set_ToolTip_Text
+         Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Object, "negativereputationbar")),
             ReputationText);
-         Set_ToolTip_Text
+         Set_Tooltip_Text
            (Gtk_Widget(Get_Object(Object, "positivereputationbar")),
             ReputationText);
       end SetReputationText;
@@ -233,8 +233,8 @@ package body BasesList is
       end if;
    end SearchBases;
 
-   function VisibleBases(Model: Gtk_Tree_Model;
-      Iter: Gtk_Tree_Iter) return Boolean is
+   function VisibleBases
+     (Model: Gtk_Tree_Model; Iter: Gtk_Tree_Iter) return Boolean is
       SearchEntry: constant Gtk_GEntry :=
         Gtk_GEntry(Get_Object(Builder, "entrysearchbases"));
       ShowBase: Boolean := False;

@@ -61,8 +61,8 @@ package body Bases is
       end if;
    end GainRep;
 
-   procedure CountPrice(Price: in out Positive; TraderIndex: Natural;
-      Reduce: Boolean := True) is
+   procedure CountPrice
+     (Price: in out Positive; TraderIndex: Natural; Reduce: Boolean := True) is
       Bonus: Integer := 0;
    begin
       if TraderIndex > 0 then
@@ -106,7 +106,7 @@ package body Bases is
 
    function GenerateBaseName
      (FactionIndex: Positive)
-     return Unbounded_String is -- based on name generator from libtcod
+      return Unbounded_String is -- based on name generator from libtcod
       NewName: Unbounded_String;
       LettersAmount, NumbersAmount: Positive;
       NameType: NamesTypes;
@@ -177,8 +177,8 @@ package body Bases is
       Inventory, TempTools: Positive_Container.Vector;
       Equipment: Equipment_Array;
       MaxSkillLevel: Integer;
-      procedure AddInventory(ItemsIndexes: Positive_Container.Vector;
-         EquipIndex: Positive) is
+      procedure AddInventory
+        (ItemsIndexes: Positive_Container.Vector; EquipIndex: Positive) is
          ItemIndex: Positive;
       begin
          if GetRandom(1, 100) > 80 then

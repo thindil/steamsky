@@ -49,6 +49,6 @@ package ShipModules is
    procedure LoadShipModules(Reader: Tree_Reader); -- Load modules from files
    function FindProtoModule
      (Index: Unbounded_String)
-     return Natural; -- Return vector index of module or zero if module not found
+      return Natural; -- Return vector index of module or zero if module not found
 
 end ShipModules;

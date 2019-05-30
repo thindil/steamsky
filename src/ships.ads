@@ -84,17 +84,18 @@ package Ships is
    ShipSyllablesEnd: UnboundedString_Container.Vector;
    Ships_Invalid_Data: exception; -- Raised when invalid data in ships file
 
-   function CreateShip(ProtoIndex: Positive; Name: Unbounded_String;
-      X, Y: Integer; Speed: ShipSpeed;
-      RandomUpgrades: Boolean := True) return ShipRecord; -- Create new ship
+   function CreateShip
+     (ProtoIndex: Positive; Name: Unbounded_String; X, Y: Integer;
+      Speed: ShipSpeed; RandomUpgrades: Boolean := True)
+      return ShipRecord; -- Create new ship
    procedure LoadShips(Reader: Tree_Reader); -- Load ships from files
    function CountShipWeight
      (Ship: ShipRecord)
-     return Positive; -- Count weight of ship (with modules and cargo)
+      return Positive; -- Count weight of ship (with modules and cargo)
    function GenerateShipName
      (Owner: Unbounded_String)
-     return Unbounded_String; -- Generate random name for ship
+      return Unbounded_String; -- Generate random name for ship
    function CountCombatValue
-     return Natural; -- Count combat value of player ship
+      return Natural; -- Count combat value of player ship
 
 end Ships;

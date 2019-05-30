@@ -23,10 +23,12 @@ package Bases.Ship is
    BasesShip_Removing_Error: exception; -- Raised when problems with removing ship module occurs
 
    procedure RepairShip(ModuleIndex: Integer); -- Repairs playership in bases
-   procedure UpgradeShip(Install: Boolean;
+   procedure UpgradeShip
+     (Install: Boolean;
       ModuleIndex: Positive); -- Install/remove modules on ship
    procedure PayForDock; -- Pay daily fee for docking
-   procedure RepairCost(Cost, Time: in out Natural;
+   procedure RepairCost
+     (Cost, Time: in out Natural;
       ModuleIndex: Integer); -- Count cost/time of repairs of ship
 
 end Bases.Ship;

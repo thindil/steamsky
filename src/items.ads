@@ -70,16 +70,16 @@ package Items is
       return Natural; -- Return vector index of item or zero if item not found
    function GetItemName
      (Item: InventoryData)
-     return String; -- Get name of item in ship cargo or character inventory
-   procedure DamageItem(Inventory: in out Inventory_Container.Vector;
-      ItemIndex: Positive;
+      return String; -- Get name of item in ship cargo or character inventory
+   procedure DamageItem
+     (Inventory: in out Inventory_Container.Vector; ItemIndex: Positive;
       SkillLevel, MemberIndex: Natural :=
         0); -- Check if item in ship cargo or character inventory was damaged
-   function FindItem(Inventory: Inventory_Container.Vector;
-      ProtoIndex: Natural := 0;
+   function FindItem
+     (Inventory: Inventory_Container.Vector; ProtoIndex: Natural := 0;
       ItemType: Unbounded_String := Null_Unbounded_String;
       Durability: Natural := 101)
-     return Natural; -- Find item in ship cargo or character inventory, return item index or 0 if item not found
+      return Natural; -- Find item in ship cargo or character inventory, return item index or 0 if item not found
    procedure SetToolsList; -- Fill tools types list
 
 end Items;

@@ -165,8 +165,9 @@ package body Items is
       return To_String(ItemName);
    end GetItemName;
 
-   procedure DamageItem(Inventory: in out Inventory_Container.Vector;
-      ItemIndex: Positive; SkillLevel, MemberIndex: Natural := 0) is
+   procedure DamageItem
+     (Inventory: in out Inventory_Container.Vector; ItemIndex: Positive;
+      SkillLevel, MemberIndex: Natural := 0) is
       DamageChance: Integer :=
         Items_List(Inventory(ItemIndex).ProtoIndex).Value(1);
       I: Natural := Inventory.First_Index;
@@ -232,8 +233,8 @@ package body Items is
       end loop;
    end DamageItem;
 
-   function FindItem(Inventory: Inventory_Container.Vector;
-      ProtoIndex: Natural := 0;
+   function FindItem
+     (Inventory: Inventory_Container.Vector; ProtoIndex: Natural := 0;
       ItemType: Unbounded_String := Null_Unbounded_String;
       Durability: Natural := 101) return Natural is
    begin

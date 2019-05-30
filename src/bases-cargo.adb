@@ -89,8 +89,9 @@ package body Bases.Cargo is
       end if;
    end GenerateCargo;
 
-   procedure UpdateBaseCargo(ProtoIndex: Natural := 0; Amount: Integer;
-      Durability: Natural := 100; CargoIndex: Natural := 0) is
+   procedure UpdateBaseCargo
+     (ProtoIndex: Natural := 0; Amount: Integer; Durability: Natural := 100;
+      CargoIndex: Natural := 0) is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=
@@ -126,8 +127,8 @@ package body Bases.Cargo is
       end if;
    end UpdateBaseCargo;
 
-   function FindBaseCargo(ProtoIndex: Positive;
-      Durability: Natural := 101) return Natural is
+   function FindBaseCargo
+     (ProtoIndex: Positive; Durability: Natural := 101) return Natural is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       function FindCargo(Cargo: BaseCargo_Container.Vector) return Natural is

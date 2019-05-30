@@ -68,19 +68,20 @@ package Crew is
    Crew_Order_Error: exception; -- Raised when new order can't be set for selected crew member
    Crew_No_Space_Error: exception; -- Raised when no space for new item in crew member inventory
 
-   procedure GainExp(Amount: Natural;
+   procedure GainExp
+     (Amount: Natural;
       SkillNumber, CrewIndex: Positive); -- Gain experience in selected skill.
-   function GenerateMemberName(Gender: Character;
-      FactionIndex: Unbounded_String)
-     return Unbounded_String; -- Generate random name for crew member
-   procedure UpdateCrew(Minutes: Positive;
-      TiredPoints: Natural); -- Update ship crew
+   function GenerateMemberName
+     (Gender: Character; FactionIndex: Unbounded_String)
+      return Unbounded_String; -- Generate random name for crew member
+   procedure UpdateCrew
+     (Minutes: Positive; TiredPoints: Natural); -- Update ship crew
    procedure WaitForRest; -- Wait until whole crew is rested
    function GetSkillLevelName
      (SkillLevel: Positive) return String; -- Get member skill level name
    function GetAttributeLevelName
      (AttributeLevel: Positive)
-     return String; -- Get member attribute level name
+      return String; -- Get member attribute level name
    procedure DailyPayment; -- Daily payment and upgrade contracts length for player ship crew members
 
 end Crew;

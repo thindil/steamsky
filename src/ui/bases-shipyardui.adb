@@ -90,8 +90,9 @@ package body Bases.ShipyardUI is
       SetActiveModule("treeinstall", "columnnames3");
    end ChangeType;
 
-   procedure GetModuleInfo(ModuleInfo: in out Unbounded_String;
-      ModuleIndex: Positive; Installing: Boolean) is
+   procedure GetModuleInfo
+     (ModuleInfo: in out Unbounded_String; ModuleIndex: Positive;
+      Installing: Boolean) is
       MType: ModuleType;
       MAmount, Size, Weight, MaxValue, Value: Natural;
    begin

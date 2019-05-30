@@ -48,9 +48,9 @@ package Combat is
    HarpoonDuration: Natural; -- How long (amount of rounds) player ship will be stopped by enemy harpoon
    EnemyShipIndex: Positive; -- Prototype index of enemy ship
 
-   function StartCombat(EnemyIndex: Positive;
-      NewCombat: Boolean := True)
-     return Boolean; -- Generate enemy and start battle, return True if combat starts
+   function StartCombat
+     (EnemyIndex: Positive; NewCombat: Boolean := True)
+      return Boolean; -- Generate enemy and start battle, return True if combat starts
    procedure CombatTurn; -- Count damage/ships actions, etc
 
 end Combat;

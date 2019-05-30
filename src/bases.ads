@@ -80,14 +80,16 @@ package Bases is
    BaseSyllablesEnd: UnboundedString_Container.Vector;
    BaseSyllablesPost: UnboundedString_Container.Vector;
 
-   procedure GainRep(BaseIndex: Positive;
+   procedure GainRep
+     (BaseIndex: Positive;
       Points: Integer); -- Gain reputation in selected base
-   procedure CountPrice(Price: in out Positive; TraderIndex: Natural;
+   procedure CountPrice
+     (Price: in out Positive; TraderIndex: Natural;
       Reduce: Boolean :=
         True); -- Count price for actions with bases (buying/selling/docking/ect)
    function GenerateBaseName
      (FactionIndex: Positive)
-     return Unbounded_String; -- Generate random name for base based on faction
+      return Unbounded_String; -- Generate random name for base based on faction
    procedure GenerateRecruits; -- Generate if needed new recruits in base
    procedure AskForBases; -- Ask in base for direction for other bases
    procedure AskForEvents; -- Ask in base for direction for random events

@@ -63,8 +63,9 @@ package body Ships.Movement is
       return "";
    end HaveOrderRequirements;
 
-   function MoveShip(ShipIndex, X, Y: Integer;
-      Message: in out Unbounded_String) return Natural is
+   function MoveShip
+     (ShipIndex, X, Y: Integer; Message: in out Unbounded_String)
+      return Natural is
       NewX, NewY: Integer;
       TimePassed, FuelNeeded: Integer := 0;
       type SpeedType is digits 2;
@@ -312,8 +313,8 @@ package body Ships.Movement is
       return "";
    end ChangeShipSpeed;
 
-   function RealSpeed(Ship: ShipRecord;
-      InfoOnly: Boolean := False) return Natural is
+   function RealSpeed
+     (Ship: ShipRecord; InfoOnly: Boolean := False) return Natural is
       BaseSpeed, Speed: Natural := 0;
       type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;

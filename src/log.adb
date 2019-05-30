@@ -41,7 +41,8 @@ package body Log is
          DebugMode);
    end StartLogging;
 
-   procedure LogMessage(Message: String; MessageType: Debug_Types;
+   procedure LogMessage
+     (Message: String; MessageType: Debug_Types;
       NewLine, TimeStamp: Boolean := True) is
       NewMessage: Unbounded_String;
    begin

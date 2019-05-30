@@ -44,8 +44,9 @@ with Utils.UI; use Utils.UI;
 
 package body Crew.UI.Handlers is
 
-   function UpdatePriorities(Model: Gtk_Tree_Model; Path: Gtk_Tree_Path;
-      Iter: Gtk_Tree_Iter) return Boolean is
+   function UpdatePriorities
+     (Model: Gtk_Tree_Model; Path: Gtk_Tree_Path; Iter: Gtk_Tree_Iter)
+      return Boolean is
    begin
       case PlayerShip.Crew(MemberIndex).Orders
         (Positive'Value(To_String(Path)) + 1) is
@@ -375,8 +376,8 @@ package body Crew.UI.Handlers is
       Set_Value(AmountAdj, 1.0);
    end ShowItemInfo2;
 
-   procedure UseItem(Self: access Gtk_Cell_Renderer_Toggle_Record'Class;
-      Path: UTF8_String) is
+   procedure UseItem
+     (Self: access Gtk_Cell_Renderer_Toggle_Record'Class; Path: UTF8_String) is
       Member: constant Member_Data := PlayerShip.Crew(MemberIndex);
       ItemType: Unbounded_String;
       InventoryList: constant Gtk_List_Store :=
@@ -469,7 +470,8 @@ package body Crew.UI.Handlers is
       SetActiveItem;
    end MoveItem;
 
-   procedure GiveCrewOrders(Self: access Gtk_Cell_Renderer_Combo_Record'Class;
+   procedure GiveCrewOrders
+     (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
       Path_String: UTF8_String; New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
       Model: Glib.Types.GType_Interface;
       List: Gtk_List_Store;
@@ -491,8 +493,9 @@ package body Crew.UI.Handlers is
          ShowLastMessage(Builder);
    end GiveCrewOrders;
 
-   function ReducePriority(Model: Gtk_Tree_Model; Path: Gtk_Tree_Path;
-      Iter: Gtk_Tree_Iter) return Boolean is
+   function ReducePriority
+     (Model: Gtk_Tree_Model; Path: Gtk_Tree_Path; Iter: Gtk_Tree_Iter)
+      return Boolean is
    begin
       if Get_String(Model, Iter, 1) = "Highest" then
          Set(-(Model), Iter, 1, "Normal");
@@ -504,7 +507,8 @@ package body Crew.UI.Handlers is
       return False;
    end ReducePriority;
 
-   procedure SetPriority(Self: access Gtk_Cell_Renderer_Combo_Record'Class;
+   procedure SetPriority
+     (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
       Path_String: UTF8_String; New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
       Model: Glib.Types.GType_Interface;
       PriorityLevel: Unbounded_String;

@@ -41,6 +41,6 @@ package Mobs is
    procedure LoadMobs(Reader: Tree_Reader); -- Load mobs from files
    function FindProtoMob
      (Index: Unbounded_String)
-     return Natural; -- Return vector index of mobile or zero if mobile not found
+      return Natural; -- Return vector index of mobile or zero if mobile not found
 
 end Mobs;

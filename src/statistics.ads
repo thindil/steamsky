@@ -56,7 +56,7 @@ package Statistics is
      (MType: Unbounded_String); -- Add new finished mission to list
    procedure UpdateCraftingOrders
      (Index: Unbounded_String); -- Add new finished crafting order to list
-   procedure UpdateKilledMobs(Mob: Member_Data;
+   procedure UpdateKilledMobs
+     (Mob: Member_Data;
       FractionName: Unbounded_String); -- Add new killed mob to list
-
 end Statistics;

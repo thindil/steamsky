@@ -115,7 +115,8 @@ package body Maps.UI is
          end loop;
          return Amount;
       end GetItemAmount;
-      procedure UpdateLabel(LabelName, TextMarkup, TooltipText: String;
+      procedure UpdateLabel
+        (LabelName, TextMarkup, TooltipText: String;
          ShowLabel: Boolean := False) is
          Label: constant Gtk_Widget :=
            Gtk_Widget(Get_Object(Builder, LabelName));
@@ -1170,8 +1171,8 @@ package body Maps.UI is
       ShowSkyMap;
    end CreateSkyMap;
 
-   procedure ShowSkyMap(X: Integer := PlayerShip.SkyX;
-      Y: Integer := PlayerShip.SkyY) is
+   procedure ShowSkyMap
+     (X: Integer := PlayerShip.SkyX; Y: Integer := PlayerShip.SkyY) is
    begin
       CenterX := X;
       CenterY := Y;

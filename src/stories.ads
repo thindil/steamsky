@@ -91,17 +91,18 @@ package Stories is
      .Vector; -- List of finished stories (or past data of current story)
 
    procedure LoadStories(Reader: Tree_Reader); -- Load stories data from files
-   procedure StartStory(FactionName: Unbounded_String;
+   procedure StartStory
+     (FactionName: Unbounded_String;
       Condition: StartConditionType); -- Check if any story can starts
    procedure ClearCurrentStory; -- Resets current story
    function ProgressStory
      (NextStep: Boolean := False)
-     return Boolean; -- Returns true if story goes to next step, otherwise false
+      return Boolean; -- Returns true if story goes to next step, otherwise false
    function GetCurrentStoryText
-     return Unbounded_String; -- Get text of current step in story
-   function GetStepData(FinishData: StepData_Container.Vector;
-      Name: String)
-     return Unbounded_String; -- Get step finish data with selected name
+      return Unbounded_String; -- Get text of current step in story
+   function GetStepData
+     (FinishData: StepData_Container.Vector; Name: String)
+      return Unbounded_String; -- Get step finish data with selected name
    procedure GetStoryLocation
      (StoryX, StoryY: in out Positive); -- Get target location of current story
 
