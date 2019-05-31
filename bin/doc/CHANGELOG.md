@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Giving orders to passengers
 - Send previous trainee on break when new is assigned
 - Return training tools back on going on break
+- Assigning crew members to medical rooms
 
 ## [3.0.11] - 2019-05-12
 
