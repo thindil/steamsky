@@ -288,5 +288,6 @@ types of modules) the module can have. Default value is 1.
  <module durability="240" index="243" installtime="200" material="Iron" maxowners="2" maxvalue="60" name="Medium extended iron cabin" price="8800" size="2" skill="Engineering" type="CABIN" value="60" weight="1500">Medium, decorated cabin made of iron with few better quality furnitures.</module>
  <module durability="240" index="244" installtime="250" material="Iron" maxowners="2" maxvalue="80" name="Medium luxury iron cabin" price="9000" size="2" skill="Engineering" type="CABIN" value="80" weight="2200">Medium, decorated, cabin made of iron, well equiped with hight quality furniture.</module>
  <module durability="300" index="245" installtime="100" material="Steel" maxowners="2" maxvalue="20" name="Medium basic steel cabin" price="1600" size="2" skill="Engineering" type="CABIN" value="20" weight="600">Medium cabin made of steel with just few furnitures.</module>
+ <module durability="300" index="246" installtime="150" material="Steel" maxowners="2" maxvalue="40" name="Medium advanced steel cabin" price="3000" size="2" skill="Engineering" type="CABIN" value="40" weight="1000">Medium, decorated cabin made of steel.</module>
 </modules>
 
