@@ -253,7 +253,7 @@ package body Ships.Crew is
             end if;
          end loop;
       elsif GivenOrder = Gunner or GivenOrder = Craft or
-        GivenOrder = Train then
+        GivenOrder = Train or (GivenOrder = Heal and ModuleIndex > 0) then
          if Ship.Modules(ModuleIndex).Owner > 0 then
             GiveOrders
               (PlayerShip, Ship.Modules(ModuleIndex).Owner, Rest, 0, False);
@@ -392,6 +392,9 @@ package body Ships.Crew is
                AddMessage
                  (MemberName & " starts healing wounded crew members.",
                   OrderMessage);
+               if ModuleIndex > 0 then
+                  Ship.Modules(ModuleIndex).Owner := MemberIndex;
+               end if;
             when Clean =>
                AddMessage(MemberName & " starts cleaning ship.", OrderMessage);
             when Boarding =>
