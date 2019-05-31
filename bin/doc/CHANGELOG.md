@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 - New ship modules: medium basic bronze cabin, medium advanced bronze cabin,
   medium extended bronze cabin, medium luxury bronze cabin, medium basic iron
   cabin, medium advanced iron cabin, medium extended iron cabin, medium luxury
-  iron cabin, medium basic steel cabin
+  iron cabin, medium basic steel cabin, medium advanced steel cabin
 
 ### Updated
 - Updated crews on inquisition ships
