@@ -326,14 +326,7 @@ package body Ships.UI.Handlers is
                Append(ModuleInfo, "Manufacturing: nothing");
             end if;
          when MEDICAL_ROOM =>
-            if Module.Owner(1) > 0 then
-               Append
-                 (ModuleInfo,
-                  "Medic: " &
-                  To_String(PlayerShip.Crew(Module.Owner(1)).Name));
-            else
-               Append(ModuleInfo, "Medic: none");
-            end if;
+            AddOwnersInfo("Medic");
          when TRAINING_ROOM =>
             if Module.TrainedSkill > 0 then
                Append
