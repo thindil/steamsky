@@ -6,8 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New player's ships for inquisition faction
 - Self repair ships during combat for pirates, poleis and independent factions
-- Ability to have many owners to cabins and many workers to worshops and
-  training rooms
+- Ability to have many owners to cabins and many workers to worshops, training
+  rooms and medical rooms
 - New ship modules: medium basic bronze cabin, medium advanced bronze cabin,
   medium extended bronze cabin, medium luxury bronze cabin, medium basic iron
   cabin, medium advanced iron cabin, medium extended iron cabin, medium luxury
