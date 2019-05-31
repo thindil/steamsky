@@ -481,7 +481,8 @@ package body Crew is
                      for Module of PlayerShip.Modules loop
                         if Modules_List(Module.ProtoIndex).MType =
                           MEDICAL_ROOM and
-                          Module.Durability > 0 then
+                          Module.Durability > 0 and
+                          Module.Owner.Contains(I) then
                            HaveMedicalRoom := True;
                            exit;
                         end if;

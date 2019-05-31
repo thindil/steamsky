@@ -256,8 +256,9 @@ package body Ships.Crew is
                exit;
             end if;
          end loop;
-      elsif GivenOrder = Gunner or GivenOrder = Craft or
-        GivenOrder = Train then
+      elsif
+        (GivenOrder = Gunner or GivenOrder = Craft or GivenOrder = Train) or
+        (GivenOrder = Heal and ModuleIndex > 0) then
          declare
             FreePosition: Boolean := False;
          begin
@@ -429,6 +430,14 @@ package body Ships.Crew is
                AddMessage
                  (MemberName & " starts healing wounded crew members.",
                   OrderMessage);
+               if ModuleIndex > 0 then
+                  for Owner of Ship.Modules(ModuleIndex).Owner loop
+                     if Owner = 0 then
+                        Owner := MemberIndex;
+                        exit;
+                     end if;
+                  end loop;
+               end if;
             when Clean =>
                AddMessage(MemberName & " starts cleaning ship.", OrderMessage);
             when Boarding =>
