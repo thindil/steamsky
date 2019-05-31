@@ -523,9 +523,14 @@ package body Ships.Crew is
                            exit when ModuleIndex > 0;
                         end if;
                      when MEDICAL_ROOM =>
-                        if Order = Heal and Ship.Modules(I).Owner(1) = 0 then
-                           ModuleIndex := Modules_Container.To_Index(I);
-                           exit;
+                        if Order = Heal then
+                           for Owner of Ship.Modules(I).Owner loop
+                              if Owner = 0 then
+                                 ModuleIndex := Modules_Container.To_Index(I);
+                                 exit;
+                              end if;
+                           end loop;
+                           exit when ModuleIndex > 0;
                         end if;
                      when COCKPIT =>
                         if Order = Pilot then
