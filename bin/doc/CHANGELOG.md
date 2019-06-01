@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updated help
+
 ### Fixed
 - Name for small extended adamantium cabin
 - Giving orders to passengers
