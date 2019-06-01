@@ -43,6 +43,8 @@ All notable changes to this project will be documented in this file.
 - Send previous trainee on break when new is assigned
 - Return training tools back on going on break
 - Assigning crew members to medical rooms
+- Durability for small advanced steel cabin, small extended steel cabin and
+  small luxury steel cabin
 
 ## [3.7] - 2019-05-19
 
