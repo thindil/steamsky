@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Updated MODDING.md
 - Updated interface
 - Updated help
+- Updated README.md
 
 ### Fixed
 - Crews for Advanced poleis patrol ship mk VI, advanced poleis trader mk VI,
