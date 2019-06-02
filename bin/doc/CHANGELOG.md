@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.0.12] - 2019-06-02
 
 ### Changed
 - Updated help
