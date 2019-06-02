@@ -24,7 +24,7 @@ To build(works on Linux and Windows too) you need:
 
   https://www.adacore.com/download/
 
-  It is recommended to use GNAT GPL 2018 to compile the game on Linux.
+  It is recommended to use GNAT GPL 2019 to compile the game on Linux.
   Game does not work with old compilers (like GCC 4.9) since it
   lacks full support for Ada 2012
 
@@ -33,7 +33,7 @@ To build(works on Linux and Windows too) you need:
 
   https://www.adacore.com/download/more
 
-  At this moment tested version of GtkAda is 2018 and game require GTK library
+  At this moment tested version of GtkAda is 2019 and game require GTK library
   in version 3.14 (may not works with other versions).
 
 If you have all the required packages, navigate to the main directory(where
