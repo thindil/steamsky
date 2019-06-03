@@ -474,6 +474,7 @@ package body MainMenu is
            (CareerComboBox, To_String(Careers_Container.Key(I)),
             To_String(Factions_List(FactionIndex).Careers(I).Name));
       end loop;
+      Append(CareerComboBox, "random", "Random");
       Setting := True;
       Set_Active(Gtk_Combo_Box(CareerComboBox), 0);
       Setting := False;
@@ -492,12 +493,20 @@ package body MainMenu is
         CareerIndex = Null_Unbounded_String or Setting then
          return;
       end if;
-      Set_Label
-        (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
-         Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbcareer"))) & LF &
-         LF &
-         To_String
-           (Factions_List(FactionIndex).Careers(CareerIndex).Description));
+      if CareerIndex /= To_Unbounded_String("random") then
+         Set_Label
+           (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
+            Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbcareer"))) &
+            LF & LF &
+            To_String
+              (Factions_List(FactionIndex).Careers(CareerIndex).Description));
+      else
+         Set_Label
+           (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
+            Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbcareer"))) &
+            LF & LF &
+            "Career will be randomly selected for you during creating new game. Not recommended for the new player.");
+      end if;
    end ShowCareerDescription;
 
    procedure ShowBaseDescription(Object: access Gtkada_Builder_Record'Class) is

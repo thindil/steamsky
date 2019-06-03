@@ -61,6 +61,29 @@ package body Game is
       SaveConfig;
       -- Set game statistics
       ClearGameStats;
+      declare
+         Roll, Index: Positive;
+      begin
+         -- Set player career if random option was selected
+         if NewGameSettings.PlayerCareer = To_Unbounded_String("random") then
+            Roll :=
+              GetRandom
+                (1,
+                 Positive
+                   (Factions_List(NewGameSettings.PlayerFaction).Careers
+                      .Length));
+            Index := 1;
+            for I in Factions_List(NewGameSettings.PlayerFaction).Careers
+              .Iterate loop
+               if Index = Roll then
+                  NewGameSettings.PlayerCareer :=
+                    Factions.Careers_Container.Key(I);
+                  exit;
+               end if;
+               Index := Index + 1;
+            end loop;
+         end if;
+      end;
       -- Set Game time
       GameDate :=
         (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 0);
