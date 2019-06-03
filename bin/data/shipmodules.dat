@@ -294,5 +294,6 @@ types of modules) the module can have. Default value is 1.
  <module durability="400" index="249" installtime="200" material="Titanium" maxowners="2" maxvalue="40" name="Medium advanced titanium cabin" price="5000" size="2" skill="Engineering" type="CABIN" value="40" weight="2000">Medium, decorated cabin made of titanium.</module>
  <module durability="400" index="250" installtime="250" material="Titanium" maxowners="2" maxvalue="60" name="Medium extended titanium cabin" price="8000" size="2" skill="Engineering" type="CABIN" value="60" weight="3200">Medium, decorated cabin made of titanium with some better quality furniture.</module>
  <module durability="400" index="251" installtime="320" material="Titanium" maxowners="2" maxvalue="80" name="Medium luxury titanium cabin" price="18000" size="2" skill="Engineering" type="CABIN" value="80" weight="4800">Medium, decorated, cabin made of titanium.  Well equipped with high quality furniture.</module>
+ <module durability="500" index="252" installtime="200" material="Orichalcum" maxowners="2" maxvalue="40" name="Medium advanced orichalcum cabin" price="8000" size="2" skill="Engineering" type="CABIN" value="40" weight="2000">Medium, decorated cabin made of orichalcum.</module>
 </modules>
 
