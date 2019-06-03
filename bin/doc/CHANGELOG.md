@@ -13,7 +13,8 @@ All notable changes to this project will be documented in this file.
   cabin, medium advanced iron cabin, medium extended iron cabin, medium luxury
   iron cabin, medium basic steel cabin, medium advanced steel cabin, medium
   extended steel cabin, medium luxury steel cabin, medium advanced titanium
-  cabin, medium extended titanium cabin, medium luxury titanium cabin
+  cabin, medium extended titanium cabin, medium luxury titanium cabin, medium
+  advanced orichalcum cabin
 
 ### Changed
 - Updated crews on inquisition ships
