@@ -455,6 +455,28 @@ package body MainMenu is
       if FactionIndex = Null_Unbounded_String then
          return;
       end if;
+      if FactionIndex = To_Unbounded_String("random") then
+         Hide(Gtk_Widget(Get_Object(Object, "cmbcareer")));
+         Hide(Gtk_Widget(Get_Object(Object, "lblcareer")));
+         Set_Label
+           (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
+            Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbfaction"))) &
+            LF & LF &
+            "Faction and career will be randomly selected for you during creating new game. Not recommended for new player.");
+         return;
+      end if;
+      Remove_All(CareerComboBox);
+      for I in Factions_List(FactionIndex).Careers.Iterate loop
+         Append
+           (CareerComboBox, To_String(Careers_Container.Key(I)),
+            To_String(Factions_List(FactionIndex).Careers(I).Name));
+      end loop;
+      Append(CareerComboBox, "random", "Random");
+      Setting := True;
+      Set_Active(Gtk_Combo_Box(CareerComboBox), 0);
+      Setting := False;
+      Show_All(Gtk_Widget(Get_Object(Object, "cmbcareer")));
+      Show_All(Gtk_Widget(Get_Object(Object, "lblcareer")));
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
          Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbfaction"))) & LF &
@@ -468,16 +490,6 @@ package body MainMenu is
          Show_All(Gtk_Widget(Get_Object(Object, "cmbgender")));
          Show_All(Gtk_Widget(Get_Object(Object, "lblgender")));
       end if;
-      Remove_All(CareerComboBox);
-      for I in Factions_List(FactionIndex).Careers.Iterate loop
-         Append
-           (CareerComboBox, To_String(Careers_Container.Key(I)),
-            To_String(Factions_List(FactionIndex).Careers(I).Name));
-      end loop;
-      Append(CareerComboBox, "random", "Random");
-      Setting := True;
-      Set_Active(Gtk_Combo_Box(CareerComboBox), 0);
-      Setting := False;
    end ShowFactionDescription;
 
    procedure ShowCareerDescription
@@ -505,7 +517,7 @@ package body MainMenu is
            (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
             Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbcareer"))) &
             LF & LF &
-            "Career will be randomly selected for you during creating new game. Not recommended for the new player.");
+            "Career will be randomly selected for you during creating new game. Not recommended for new player.");
       end if;
    end ShowCareerDescription;
 
@@ -684,6 +696,7 @@ package body MainMenu is
                   To_String(Factions_List(I).Name));
             end if;
          end loop;
+         Append(FactionComboBox, "random", "Random");
          Set_Active(FactionComboBox, 0);
       end;
       for I in AdjNames'Range loop

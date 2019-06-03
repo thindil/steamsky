@@ -64,6 +64,19 @@ package body Game is
       declare
          Roll, Index: Positive;
       begin
+         -- Set player faction if random option was selected
+         if NewGameSettings.PlayerFaction = To_Unbounded_String("random") then
+            NewGameSettings.PlayerCareer := To_Unbounded_String("random");
+            Roll := GetRandom(1, Positive(Factions_List.Length));
+            Index := 1;
+            for I in Factions_List.Iterate loop
+               if Index = Roll then
+                  NewGameSettings.PlayerFaction := Factions_Container.Key(I);
+                  exit;
+               end if;
+               Index := Index + 1;
+            end loop;
+         end if;
          -- Set player career if random option was selected
          if NewGameSettings.PlayerCareer = To_Unbounded_String("random") then
             Roll :=
