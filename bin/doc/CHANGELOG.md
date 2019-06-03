@@ -15,7 +15,8 @@ All notable changes to this project will be documented in this file.
   extended steel cabin, medium luxury steel cabin, medium advanced titanium
   cabin, medium extended titanium cabin, medium luxury titanium cabin, medium
   advanced orichalcum cabin
-- Ability to set random career for a new game
+- Ability to set random career for new game
+- Ability to set random faction for new game
 
 ### Changed
 - Updated crews on inquisition ships
