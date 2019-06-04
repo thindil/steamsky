@@ -944,7 +944,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <property name="layout_style">start</property>
                                         <child>
                                           <object class="GtkButton" id="btnrandom">
-                                            <property name="label" translatable="yes">_Random</property>
+                                            <property name="label" translatable="yes">_Roll</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">True</property>
@@ -984,6 +984,22 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                       </packing>
                                     </child>
                                     <child>
+                                      <object class="GtkCheckButton" id="cbtndifficulty">
+                                        <property name="label" translatable="yes">Randomize difficulty at game start</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="tooltip_text" translatable="yes">If you select this option, all difficulty settings will be randomized during start new game. Not recommended for new player.</property>
+                                        <property name="draw_indicator">True</property>
+                                        <signal name="toggled" handler="Random_Difficulty_Toggled" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
                                       <object class="GtkBox">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
@@ -1018,7 +1034,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">True</property>
-                                        <property name="position">2</property>
+                                        <property name="position">3</property>
                                       </packing>
                                     </child>
                                   </object>
