@@ -51,6 +51,7 @@ All notable changes to this project will be documented in this file.
 - Assigning crew members to medical rooms
 - Durability for small advanced steel cabin, small extended steel cabin and
   small luxury steel cabin
+- Hide other menus on map when new appear
 
 ## [3.7] - 2019-05-19
 
