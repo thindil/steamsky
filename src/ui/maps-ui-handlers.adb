@@ -879,6 +879,8 @@ package body Maps.UI.Handlers is
         (Gtk_Container(Get_Object(Object, "btnboxorders")),
          CheckButtons'Access);
       if ButtonsVisible then
+         Hide(Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnboxwait")));
          Show_All(Gtk_Widget(Get_Object(Object, "btnboxorders")));
          Grab_Focus(Gtk_Widget(Get_Object(Object, "btncloseorders")));
       else
@@ -1386,6 +1388,8 @@ package body Maps.UI.Handlers is
             end loop Modules_Loop;
          end if;
       end loop;
+      Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
+      Hide(Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
       Set_Visible(Gtk_Widget(Get_Object(Object, "btnwaitheal")), NeedHealing);
       Set_Visible(Gtk_Widget(Get_Object(Object, "btnwaitrest")), NeedRest);
       Show_All(Gtk_Widget(Get_Object(Object, "btnboxwait")));
@@ -1568,6 +1572,8 @@ package body Maps.UI.Handlers is
                when 13 =>
                   if not Get_Visible
                       (Gtk_Widget(Get_Object(Builder, "moremovemapbox"))) then
+                     Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
+                     Hide(Gtk_Widget(Get_Object(Builder, "btnboxwait")));
                      Show_All
                        (Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
                   else
