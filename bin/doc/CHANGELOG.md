@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
   orichalcum cabin
 - Ability to set random career for new game
 - Ability to set random faction for new game
+- Ability to set random difficulty level for new game
 
 ### Changed
 - Updated crews on inquisition ships
