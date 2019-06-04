@@ -45,6 +45,7 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Scrolled_Window; use Gtk.Scrolled_Window;
 with Gtk.Overlay; use Gtk.Overlay;
+with Gtk.Toggle_Button; use Gtk.Toggle_Button;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -346,6 +347,15 @@ package body MainMenu is
       StartGame;
    end LoadGame;
 
+   procedure RandomDifficulty(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      for Name of AdjNames loop
+         Set_Value
+           (Gtk_Adjustment(Get_Object(Object, To_String(Name))),
+            Gdouble(GetRandom(1, 500)));
+      end loop;
+   end RandomDifficulty;
+
    procedure NewGame(Object: access Gtkada_Builder_Record'Class) is
       Gender: Character;
    begin
@@ -353,6 +363,10 @@ package body MainMenu is
          Gender := 'M';
       else
          Gender := 'F';
+      end if;
+      if Get_Active
+          (Gtk_Toggle_Button(Get_Object(Object, "cbtndifficulty"))) then
+         RandomDifficulty(Object);
       end if;
       NewGameSettings :=
         (PlayerName =>
@@ -574,15 +588,6 @@ package body MainMenu is
          Get_Tooltip_Text(Gtk_Widget(User_Data)));
    end UpdateInfoProc;
 
-   procedure RandomDifficulty(Object: access Gtkada_Builder_Record'Class) is
-   begin
-      for Name of AdjNames loop
-         Set_Value
-           (Gtk_Adjustment(Get_Object(Object, To_String(Name))),
-            Gdouble(GetRandom(1, 500)));
-      end loop;
-   end RandomDifficulty;
-
    procedure UpdateSummary(Object: access Gtkada_Builder_Record'Class) is
       MalusNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("adjplayerdamage"),
@@ -622,6 +627,22 @@ package body MainMenu is
          Set_Value(Gtk_Adjustment(Get_Object(Object, To_String(Name))), 100.0);
       end loop;
    end ResetDifficulty;
+
+   procedure RandomDifficultyToggled
+     (Object: access Gtkada_Builder_Record'Class) is
+      ToggleButton: constant GObject := Get_Object(Object, "cbtndifficulty");
+   begin
+      Set_Label
+        (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
+         Get_Tooltip_Text(Gtk_Widget(ToggleButton)));
+      if Get_Active(Gtk_Toggle_Button(ToggleButton)) then
+         Set_Text
+           (Gtk_Label(Get_Object(Object, "lblbonuspoints")),
+            "Total gained points: unknown");
+      else
+         UpdateSummary(Object);
+      end if;
+   end RandomDifficultyToggled;
 
    procedure CreateMainMenu is
       Error: aliased GError;
@@ -670,6 +691,8 @@ package body MainMenu is
       Register_Handler(Builder, "Random_Difficulty", RandomDifficulty'Access);
       Register_Handler(Builder, "Update_Summary", UpdateSummary'Access);
       Register_Handler(Builder, "Reset_Difficulty", ResetDifficulty'Access);
+      Register_Handler
+        (Builder, "Random_Difficulty_Toggled", RandomDifficultyToggled'Access);
       Do_Connect(Builder);
       SetUtilsBuilder(Builder);
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
