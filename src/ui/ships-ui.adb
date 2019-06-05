@@ -422,7 +422,12 @@ package body Ships.UI is
                  .MType is
                   when ENGINE =>
                      Append(UpgradeInfo, "(power)");
-                     MaxUpgrade := 10;
+                     MaxUpgrade :=
+                       Modules_List
+                         (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                            .ProtoIndex)
+                         .MaxValue /
+                       20;
                   when CABIN =>
                      Append(UpgradeInfo, "(quality)");
                      MaxUpgrade := 100;
