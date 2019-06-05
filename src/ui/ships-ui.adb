@@ -430,7 +430,11 @@ package body Ships.UI is
                        20;
                   when CABIN =>
                      Append(UpgradeInfo, "(quality)");
-                     MaxUpgrade := 100;
+                     MaxUpgrade :=
+                       Modules_List
+                         (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                            .ProtoIndex)
+                         .MaxValue;
                   when GUN | BATTERING_RAM =>
                      Append(UpgradeInfo, "(damage)");
                      MaxUpgrade := 100;
