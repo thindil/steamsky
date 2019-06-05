@@ -371,7 +371,8 @@ package body Ships.UI.Handlers is
                case Modules_List(Module.ProtoIndex).MType is
                   when ENGINE =>
                      Append(ModuleInfo, "power");
-                     MaxUpgrade := 10;
+                     MaxUpgrade :=
+                       Modules_List(Module.ProtoIndex).MaxValue / 20;
                   when CABIN =>
                      Append(ModuleInfo, "quality");
                      MaxUpgrade := 100;

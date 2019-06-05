@@ -66,7 +66,14 @@ package body Ships.Upgrade is
                        with "You can't improve more power of the " &
                        To_String(PlayerShip.Modules(ModuleIndex).Name) & ".";
                   end if;
-                  UpgradeProgress := 10;
+                  UpgradeProgress :=
+                    Integer
+                      (Float
+                         (Modules_List
+                            (PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                            .MaxValue /
+                          20) *
+                       NewGameSettings.UpgradeCostBonus);
                when CABIN =>
                   if PlayerShip.Modules(ModuleIndex).Quality = MaxValue then
                      raise Ship_Upgrade_Error
@@ -181,7 +188,7 @@ package body Ships.Upgrade is
 
    procedure UpgradeShip(Minutes: Positive) is
       ResultAmount, UpgradePoints, WorkerIndex, UpgradeMaterial,
-      UpgradeProgress, UpgradeTools: Natural := 0;
+      UpgradeProgress, UpgradeTools, MaterialCost: Natural := 0;
       MaxValue, UpgradeValue: Positive;
       WeightGain: Natural;
       Times: Natural := 0;
@@ -273,8 +280,22 @@ package body Ships.Upgrade is
             GiveOrders(PlayerShip, WorkerIndex, Rest);
             exit;
          end if;
-         if ResultAmount > PlayerShip.Cargo(UpgradeMaterial).Amount then
-            ResultAmount := PlayerShip.Cargo(UpgradeMaterial).Amount;
+         if PlayerShip.Modules(PlayerShip.UpgradeModule).MType = ENGINE and
+           PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeAction =
+             MAX_VALUE then
+            if ResultAmount >
+              PlayerShip.Cargo(UpgradeMaterial).Amount * 200 then
+               ResultAmount := PlayerShip.Cargo(UpgradeMaterial).Amount * 200;
+            end if;
+            MaterialCost := ResultAmount / 200;
+            if MaterialCost < Times then
+               MaterialCost := Times;
+            end if;
+         else
+            if ResultAmount > PlayerShip.Cargo(UpgradeMaterial).Amount then
+               ResultAmount := PlayerShip.Cargo(UpgradeMaterial).Amount;
+            end if;
+            MaterialCost := ResultAmount;
          end if;
          GainExp
            (ResultAmount,
@@ -297,7 +318,7 @@ package body Ships.Upgrade is
          UpgradePoints := UpgradePoints - ResultAmount;
          UpdateCargo
            (PlayerShip, PlayerShip.Cargo.Element(UpgradeMaterial).ProtoIndex,
-            (0 - ResultAmount));
+            (0 - MaterialCost));
          if UpgradeProgress = 0 then
             WeightGain :=
               Modules_List
@@ -357,10 +378,19 @@ package body Ships.Upgrade is
                           PlayerShip.Modules(PlayerShip.UpgradeModule)
                             .MaxModules;
                      when ENGINE =>
-                        WeightGain := 1;
+                        WeightGain :=
+                          (Modules_List
+                             (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                                .ProtoIndex)
+                             .MaxValue /
+                           40);
                         PlayerShip.Modules(PlayerShip.UpgradeModule).Power :=
                           PlayerShip.Modules(PlayerShip.UpgradeModule).Power +
-                          1;
+                          (Modules_List
+                             (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                                .ProtoIndex)
+                             .MaxValue /
+                           20);
                         UpgradeValue :=
                           PlayerShip.Modules(PlayerShip.UpgradeModule).Power;
                      when CABIN =>
@@ -413,7 +443,7 @@ package body Ships.Upgrade is
                                .ProtoIndex)
                             .MaxValue) *
                        1.5);
-                  if UpgradeValue = MaxValue then
+                  if UpgradeValue >= MaxValue then
                      MaxUpgradeReached("You reached maximum upgrade for the ");
                      return;
                   else
@@ -424,7 +454,15 @@ package body Ships.Upgrade is
                         when ENGINE =>
                            PlayerShip.Modules(PlayerShip.UpgradeModule)
                              .UpgradeProgress :=
-                             Integer(10.0 * NewGameSettings.UpgradeCostBonus);
+                             Integer
+                               (Float
+                                  (Modules_List
+                                     (PlayerShip.Modules
+                                        (PlayerShip.UpgradeModule)
+                                        .ProtoIndex)
+                                     .MaxValue /
+                                   20) *
+                                NewGameSettings.UpgradeCostBonus);
                         when CABIN | GUN | BATTERING_RAM | HARPOON_GUN =>
                            PlayerShip.Modules(PlayerShip.UpgradeModule)
                              .UpgradeProgress :=
