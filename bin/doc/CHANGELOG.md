@@ -30,7 +30,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Updated help
 - Updated README.md
-- Upgrading ship engines power
+- Upgrading ship engines power and cabins quality
 
 ### Fixed
 - Crews for Advanced poleis patrol ship mk VI, advanced poleis trader mk VI,
