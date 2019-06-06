@@ -378,7 +378,7 @@ package body Ships.UI.Handlers is
                      MaxUpgrade := Modules_List(Module.ProtoIndex).MaxValue;
                   when GUN | BATTERING_RAM =>
                      Append(ModuleInfo, "damage");
-                     MaxUpgrade := 100;
+                     MaxUpgrade := Modules_List(Module.ProtoIndex).MaxValue;
                   when HULL =>
                      Append(ModuleInfo, "enlarge");
                      MaxUpgrade := 500;
