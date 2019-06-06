@@ -103,7 +103,13 @@ package body Ships.Upgrade is
                           ".";
                      end if;
                   end;
-                  UpgradeProgress := 100;
+                  UpgradeProgress :=
+                    Integer
+                      (Float
+                         (Modules_List
+                            (PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                            .MaxValue) *
+                       NewGameSettings.UpgradeCostBonus);
                when HULL =>
                   if PlayerShip.Modules(ModuleIndex).MaxModules = MaxValue then
                      raise Ship_Upgrade_Error
@@ -296,9 +302,6 @@ package body Ships.Upgrade is
                        PlayerShip.Cargo(UpgradeMaterial).Amount * 200;
                   end if;
                   MaterialCost := ResultAmount / 200;
-                  if MaterialCost < Times then
-                     MaterialCost := Times;
-                  end if;
                when CABIN =>
                   if ResultAmount >
                     PlayerShip.Cargo(UpgradeMaterial).Amount * 20 then
@@ -306,9 +309,6 @@ package body Ships.Upgrade is
                        PlayerShip.Cargo(UpgradeMaterial).Amount * 20;
                   end if;
                   MaterialCost := ResultAmount / 20;
-                  if MaterialCost < Times then
-                     MaterialCost := Times;
-                  end if;
                when others =>
                   if ResultAmount >
                     PlayerShip.Cargo(UpgradeMaterial).Amount then
@@ -316,6 +316,9 @@ package body Ships.Upgrade is
                   end if;
                   MaterialCost := ResultAmount;
             end case;
+            if MaterialCost < Times then
+               MaterialCost := Times;
+            end if;
          else
             if ResultAmount > PlayerShip.Cargo(UpgradeMaterial).Amount then
                ResultAmount := PlayerShip.Cargo(UpgradeMaterial).Amount;
@@ -430,16 +433,55 @@ package body Ships.Upgrade is
                         UpgradeValue :=
                           PlayerShip.Modules(PlayerShip.UpgradeModule).Quality;
                      when GUN =>
-                        PlayerShip.Modules(PlayerShip.UpgradeModule).Damage :=
-                          PlayerShip.Modules(PlayerShip.UpgradeModule).Damage +
-                          1;
+                        if
+                          (Modules_List
+                             (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                                .ProtoIndex)
+                             .MaxValue /
+                           20) >
+                          0 then
+                           PlayerShip.Modules(PlayerShip.UpgradeModule)
+                             .Damage :=
+                             PlayerShip.Modules(PlayerShip.UpgradeModule)
+                               .Damage +
+                             (Modules_List
+                                (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                                   .ProtoIndex)
+                                .MaxValue /
+                              20);
+                        else
+                           PlayerShip.Modules(PlayerShip.UpgradeModule)
+                             .Damage :=
+                             PlayerShip.Modules(PlayerShip.UpgradeModule)
+                               .Damage +
+                             1;
+                        end if;
                         UpgradeValue :=
                           PlayerShip.Modules(PlayerShip.UpgradeModule).Damage;
                      when BATTERING_RAM =>
-                        PlayerShip.Modules(PlayerShip.UpgradeModule).Damage2 :=
-                          PlayerShip.Modules(PlayerShip.UpgradeModule)
-                            .Damage2 +
-                          1;
+                        if
+                          (Modules_List
+                             (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                                .ProtoIndex)
+                             .MaxValue /
+                           20) >
+                          0 then
+                           PlayerShip.Modules(PlayerShip.UpgradeModule)
+                             .Damage2 :=
+                             PlayerShip.Modules(PlayerShip.UpgradeModule)
+                               .Damage2 +
+                             (Modules_List
+                                (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                                   .ProtoIndex)
+                                .MaxValue /
+                              20);
+                        else
+                           PlayerShip.Modules(PlayerShip.UpgradeModule)
+                             .Damage2 :=
+                             PlayerShip.Modules(PlayerShip.UpgradeModule)
+                               .Damage2 +
+                             1;
+                        end if;
                         UpgradeValue :=
                           PlayerShip.Modules(PlayerShip.UpgradeModule).Damage2;
                      when HARPOON_GUN =>
@@ -492,7 +534,7 @@ package body Ships.Upgrade is
                                      .MaxValue /
                                    20) *
                                 NewGameSettings.UpgradeCostBonus);
-                        when CABIN =>
+                        when CABIN | GUN | BATTERING_RAM =>
                            PlayerShip.Modules(PlayerShip.UpgradeModule)
                              .UpgradeProgress :=
                              Integer
@@ -503,7 +545,7 @@ package body Ships.Upgrade is
                                         .ProtoIndex)
                                      .MaxValue) *
                                 NewGameSettings.UpgradeCostBonus);
-                        when GUN | BATTERING_RAM | HARPOON_GUN =>
+                        when HARPOON_GUN =>
                            PlayerShip.Modules(PlayerShip.UpgradeModule)
                              .UpgradeProgress :=
                              Integer(100.0 * NewGameSettings.UpgradeCostBonus);
