@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file.
   cabin, medium extended titanium cabin, medium luxury titanium cabin, medium
   advanced orichalcum cabin, medium extended orichalcum cabin, medium luxury
   orichalcum cabin, medium extended adamanium cabin, medium luxury adamantium
-  cabin
+  cabin, large basic bronze cabin
 - Ability to set random career for new game
 - Ability to set random faction for new game
 - Ability to set random difficulty level for new game
@@ -30,7 +30,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Updated help
 - Updated README.md
-- Upgrading ship engines
+- Upgrading ship engines power
 
 ### Fixed
 - Crews for Advanced poleis patrol ship mk VI, advanced poleis trader mk VI,
