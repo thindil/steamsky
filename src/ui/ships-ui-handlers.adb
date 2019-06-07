@@ -381,7 +381,8 @@ package body Ships.UI.Handlers is
                      MaxUpgrade := Modules_List(Module.ProtoIndex).MaxValue;
                   when HULL =>
                      Append(ModuleInfo, "enlarge");
-                     MaxUpgrade := 500;
+                     MaxUpgrade :=
+                       Modules_List(Module.ProtoIndex).MaxValue * 40;
                   when others =>
                      null;
                end case;
