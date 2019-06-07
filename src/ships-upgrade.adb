@@ -116,7 +116,14 @@ package body Ships.Upgrade is
                        with "You can't enlarge more the " &
                        To_String(PlayerShip.Modules(ModuleIndex).Name) & ".";
                   end if;
-                  UpgradeProgress := 500;
+                  UpgradeProgress :=
+                    Integer
+                      (Float
+                         (Modules_List
+                            (PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                            .MaxValue *
+                          40) *
+                       NewGameSettings.UpgradeCostBonus);
                when HARPOON_GUN =>
                   if PlayerShip.Modules(ModuleIndex).Duration = MaxValue then
                      raise Ship_Upgrade_Error
@@ -309,6 +316,13 @@ package body Ships.Upgrade is
                        PlayerShip.Cargo(UpgradeMaterial).Amount * 20;
                   end if;
                   MaterialCost := ResultAmount / 20;
+               when HULL =>
+                  if ResultAmount >
+                    PlayerShip.Cargo(UpgradeMaterial).Amount * 2 then
+                     ResultAmount :=
+                       PlayerShip.Cargo(UpgradeMaterial).Amount * 2;
+                  end if;
+                  MaterialCost := ResultAmount / 2;
                when others =>
                   if ResultAmount >
                     PlayerShip.Cargo(UpgradeMaterial).Amount then
@@ -552,7 +566,15 @@ package body Ships.Upgrade is
                         when HULL =>
                            PlayerShip.Modules(PlayerShip.UpgradeModule)
                              .UpgradeProgress :=
-                             Integer(500.0 * NewGameSettings.UpgradeCostBonus);
+                             Integer
+                               (Float
+                                  (Modules_List
+                                     (PlayerShip.Modules
+                                        (PlayerShip.UpgradeModule)
+                                        .ProtoIndex)
+                                     .MaxValue *
+                                   40) *
+                                NewGameSettings.UpgradeCostBonus);
                         when others =>
                            null;
                      end case;
