@@ -31,7 +31,8 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Updated help
 - Updated README.md
-- Upgrading ship engines power and cabins quality
+- Upgrading ship engines power, cabins quality and guns and battering rams
+  damage
 
 ### Fixed
 - Crews for Advanced poleis patrol ship mk VI, advanced poleis trader mk VI,
