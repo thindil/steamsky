@@ -303,5 +303,6 @@ types of modules) the module can have. Default value is 1.
  <module durability="400" index="258" installtime="320" material="Bronze" maxowners="4" maxvalue="40" name="Large advanced bronze cabin" price="4000" size="4" skill="Engineering" type="CABIN" value="40" weight="1600">Large, decorated cabin made of bronze.</module>
  <module durability="400" index="259" installtime="440" material="Bronze" maxowners="4" maxvalue="60" name="Large extended bronze cabin" price="8000" size="4" skill="Engineering" type="CABIN" value="60" weight="2800">Large, decorated cabin made of bronze with few better quality furnitures.</module>
  <module durability="400" index="260" installtime="500" material="Bronze" maxowners="4" maxvalue="80" name="Large luxury bronze cabin" price="16000" size="4" skill="Engineering" type="CABIN" value="80" weight="4000">Large, decorated, cabin made of bronze, well equiped with hight quality furniture.</module>
+ <module durability="480" index="261" installtime="200" material="Iron" maxowners="4" maxvalue="20" name="Large basic iron cabin" price="2600" size="4" skill="Engineering" type="CABIN" value="20" weight="1000">Large cabin made of iron with just few furnitures.</module>
 </modules>
 
