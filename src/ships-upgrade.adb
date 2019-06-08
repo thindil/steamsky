@@ -50,7 +50,9 @@ package body Ships.Upgrade is
                  To_String(PlayerShip.Modules(ModuleIndex).Name) & ".";
             end if;
             UpgradeAction := DURABILITY;
-            UpgradeProgress := 10;
+            UpgradeProgress :=
+              Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                .Durability;
          when 2 => -- Upgrade various max value of selected module
             MaxValue :=
               Natural
@@ -336,14 +338,24 @@ package body Ships.Upgrade is
                   end if;
                   MaterialCost := ResultAmount;
             end case;
-            if MaterialCost < Times then
-               MaterialCost := Times;
+         elsif PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeAction =
+           DURABILITY then
+            if ResultAmount >
+              PlayerShip.Cargo(UpgradeMaterial).Amount * 10 then
+               ResultAmount := PlayerShip.Cargo(UpgradeMaterial).Amount * 10;
             end if;
+            MaterialCost := ResultAmount / 10;
          else
             if ResultAmount > PlayerShip.Cargo(UpgradeMaterial).Amount then
                ResultAmount := PlayerShip.Cargo(UpgradeMaterial).Amount;
             end if;
             MaterialCost := ResultAmount;
+         end if;
+         if MaterialCost < Times then
+            MaterialCost := Times;
+         end if;
+         if MaterialCost > PlayerShip.Cargo(UpgradeMaterial).Amount then
+            MaterialCost := PlayerShip.Cargo(UpgradeMaterial).Amount;
          end if;
          GainExp
            (ResultAmount,
@@ -380,13 +392,40 @@ package body Ships.Upgrade is
             end if;
             case PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeAction is
                when DURABILITY =>
-                  PlayerShip.Modules(PlayerShip.UpgradeModule).MaxDurability :=
-                    PlayerShip.Modules(PlayerShip.UpgradeModule)
-                      .MaxDurability +
-                    1;
-                  PlayerShip.Modules(PlayerShip.UpgradeModule).Weight :=
-                    PlayerShip.Modules(PlayerShip.UpgradeModule).Weight +
-                    WeightGain;
+                  if
+                    (Modules_List
+                       (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                          .ProtoIndex)
+                       .Durability /
+                     20) >
+                    0 then
+                     PlayerShip.Modules(PlayerShip.UpgradeModule)
+                       .MaxDurability :=
+                       PlayerShip.Modules(PlayerShip.UpgradeModule)
+                         .MaxDurability +
+                       (Modules_List
+                          (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                             .ProtoIndex)
+                          .Durability /
+                        20);
+                     PlayerShip.Modules(PlayerShip.UpgradeModule).Weight :=
+                       PlayerShip.Modules(PlayerShip.UpgradeModule).Weight +
+                       (WeightGain *
+                        (Modules_List
+                           (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                              .ProtoIndex)
+                           .Durability /
+                         20));
+                  else
+                     PlayerShip.Modules(PlayerShip.UpgradeModule)
+                       .MaxDurability :=
+                       PlayerShip.Modules(PlayerShip.UpgradeModule)
+                         .MaxDurability +
+                       1;
+                     PlayerShip.Modules(PlayerShip.UpgradeModule).Weight :=
+                       PlayerShip.Modules(PlayerShip.UpgradeModule).Weight +
+                       WeightGain;
+                  end if;
                   AddMessage
                     (To_String(PlayerShip.Crew(WorkerIndex).Name) &
                      " was upgraded durability of the " &
@@ -411,7 +450,10 @@ package body Ships.Upgrade is
                   else
                      PlayerShip.Modules(PlayerShip.UpgradeModule)
                        .UpgradeProgress :=
-                       10;
+                       Modules_List
+                         (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                            .ProtoIndex)
+                         .Durability;
                   end if;
                when MAX_VALUE =>
                   case PlayerShip.Modules(PlayerShip.UpgradeModule).MType is
