@@ -366,7 +366,7 @@ package body Ships.UI.Handlers is
          case Module.UpgradeAction is
             when DURABILITY =>
                Append(ModuleInfo, "durability");
-               MaxUpgrade := 10;
+               MaxUpgrade := Modules_List(Module.ProtoIndex).Durability;
             when MAX_VALUE =>
                case Modules_List(Module.ProtoIndex).MType is
                   when ENGINE =>

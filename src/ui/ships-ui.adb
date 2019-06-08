@@ -415,7 +415,10 @@ package body Ships.UI is
          case PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeAction is
             when DURABILITY =>
                Append(UpgradeInfo, "(durability)");
-               MaxUpgrade := 10;
+               MaxUpgrade :=
+                 Modules_List
+                   (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
+                   .Durability;
             when MAX_VALUE =>
                case Modules_List
                  (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
