@@ -130,7 +130,13 @@ package body Ships.Upgrade is
                        with "You can't improve more strength of the " &
                        To_String(PlayerShip.Modules(ModuleIndex).Name) & ".";
                   end if;
-                  UpgradeProgress := 100;
+                  UpgradeProgress :=
+                    Integer
+                      (Float
+                         (Modules_List
+                            (PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                            .MaxValue) *
+                       NewGameSettings.UpgradeCostBonus);
                when others =>
                   raise Ship_Upgrade_Error
                     with To_String(PlayerShip.Modules(ModuleIndex).Name) &
@@ -499,11 +505,29 @@ package body Ships.Upgrade is
                         UpgradeValue :=
                           PlayerShip.Modules(PlayerShip.UpgradeModule).Damage2;
                      when HARPOON_GUN =>
-                        PlayerShip.Modules(PlayerShip.UpgradeModule)
-                          .Duration :=
-                          PlayerShip.Modules(PlayerShip.UpgradeModule)
-                            .Duration +
-                          1;
+                        if
+                          (Modules_List
+                             (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                                .ProtoIndex)
+                             .MaxValue /
+                           20) >
+                          0 then
+                           PlayerShip.Modules(PlayerShip.UpgradeModule)
+                             .Duration :=
+                             PlayerShip.Modules(PlayerShip.UpgradeModule)
+                               .Duration +
+                             (Modules_List
+                                (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                                   .ProtoIndex)
+                                .MaxValue /
+                              20);
+                        else
+                           PlayerShip.Modules(PlayerShip.UpgradeModule)
+                             .Duration :=
+                             PlayerShip.Modules(PlayerShip.UpgradeModule)
+                               .Duration +
+                             1;
+                        end if;
                         UpgradeValue :=
                           PlayerShip.Modules(PlayerShip.UpgradeModule)
                             .Duration;
@@ -548,7 +572,7 @@ package body Ships.Upgrade is
                                      .MaxValue /
                                    20) *
                                 NewGameSettings.UpgradeCostBonus);
-                        when CABIN | GUN | BATTERING_RAM =>
+                        when CABIN | GUN | BATTERING_RAM | HARPOON_GUN =>
                            PlayerShip.Modules(PlayerShip.UpgradeModule)
                              .UpgradeProgress :=
                              Integer
@@ -559,10 +583,6 @@ package body Ships.Upgrade is
                                         .ProtoIndex)
                                      .MaxValue) *
                                 NewGameSettings.UpgradeCostBonus);
-                        when HARPOON_GUN =>
-                           PlayerShip.Modules(PlayerShip.UpgradeModule)
-                             .UpgradeProgress :=
-                             Integer(100.0 * NewGameSettings.UpgradeCostBonus);
                         when HULL =>
                            PlayerShip.Modules(PlayerShip.UpgradeModule)
                              .UpgradeProgress :=
