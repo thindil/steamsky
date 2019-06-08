@@ -452,7 +452,11 @@ package body Ships.UI is
                        40;
                   when HARPOON_GUN =>
                      Append(UpgradeInfo, "(strength)");
-                     MaxUpgrade := 100;
+                     MaxUpgrade :=
+                       Modules_List
+                         (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                            .ProtoIndex)
+                         .MaxValue;
                   when others =>
                      null;
                end case;
