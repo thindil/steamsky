@@ -1364,7 +1364,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="halign">center</property>
-    <property name="valign">start</property>
+    <property name="valign">center</property>
     <property name="show_close_button">True</property>
     <signal name="response" handler="Hide_Dialog" swapped="no"/>
     <child internal-child="action_area">
