@@ -160,7 +160,14 @@ package body Ships.Upgrade is
                        with "You can't reduce more fuel usage of the " &
                        To_String(PlayerShip.Modules(ModuleIndex).Name) & ".";
                   end if;
-                  UpgradeProgress := 100;
+                  UpgradeProgress :=
+                    Integer
+                      (Float
+                         (Modules_List
+                            (PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                            .Value *
+                          20) *
+                       NewGameSettings.UpgradeCostBonus);
                when others =>
                   raise Ship_Upgrade_Error
                     with To_String(PlayerShip.Modules(ModuleIndex).Name) &
@@ -687,7 +694,15 @@ package body Ships.Upgrade is
                         when ENGINE =>
                            PlayerShip.Modules(PlayerShip.UpgradeModule)
                              .UpgradeProgress :=
-                             Integer(100.0 * NewGameSettings.UpgradeCostBonus);
+                             Integer
+                               (Float
+                                  (Modules_List
+                                     (PlayerShip.Modules
+                                        (PlayerShip.UpgradeModule)
+                                        .ProtoIndex)
+                                     .Value *
+                                   20) *
+                                NewGameSettings.UpgradeCostBonus);
                            if PlayerShip.Modules(PlayerShip.UpgradeModule)
                                .UpgradeProgress =
                              0 then
