@@ -469,7 +469,12 @@ package body Ships.UI is
                  .MType is
                   when ENGINE =>
                      Append(UpgradeInfo, "(fuel usage)");
-                     MaxUpgrade := 100;
+                     MaxUpgrade :=
+                       Modules_List
+                         (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                            .ProtoIndex)
+                         .Value *
+                       20;
                   when others =>
                      null;
                end case;
