@@ -59,6 +59,7 @@ All notable changes to this project will be documented in this file.
 - Durability for small advanced steel cabin, small extended steel cabin and
   small luxury steel cabin
 - Hide other menus on map when new appear
+- Info about upgrading strength of harpoon guns in ship info
 
 ## [3.7] - 2019-05-19
 
