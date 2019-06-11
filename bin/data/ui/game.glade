@@ -3953,6 +3953,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                       <object class="GtkExpander">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="expanded">True</property>
                                         <child>
                                           <object class="GtkBox">
                                             <property name="visible">True</property>
@@ -8677,6 +8678,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           <object class="GtkExpander" id="exppriorities">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
+                                            <property name="expanded">True</property>
                                             <child>
                                               <object class="GtkTreeView">
                                                 <property name="visible">True</property>
@@ -9345,6 +9347,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <object class="GtkExpander">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="expanded">True</property>
                                 <child>
                                   <object class="GtkBox">
                                     <property name="visible">True</property>
