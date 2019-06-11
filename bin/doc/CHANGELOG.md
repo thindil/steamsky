@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Info about upgrading strength of harpoon guns in ship info
+
 ## [3.0.12] - 2019-06-02
 
 ### Changed
