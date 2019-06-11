@@ -360,6 +360,9 @@ package body Ships.UI.Handlers is
                   when HULL =>
                      Append(ModuleInfo, "enlarge");
                      MaxUpgrade := 500;
+                  when HARPOON_GUN =>
+                     Append(ModuleInfo, "strength");
+                     MaxUpgrade := 100;
                   when others =>
                      null;
                end case;
