@@ -110,7 +110,8 @@ package body Ships.Upgrade is
                       (Float
                          (Modules_List
                             (PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                            .MaxValue) *
+                            .MaxValue *
+                          2) *
                        NewGameSettings.UpgradeCostBonus);
                when HULL =>
                   if PlayerShip.Modules(ModuleIndex).MaxModules = MaxValue then
@@ -137,7 +138,8 @@ package body Ships.Upgrade is
                       (Float
                          (Modules_List
                             (PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                            .MaxValue) *
+                            .MaxValue *
+                          10) *
                        NewGameSettings.UpgradeCostBonus);
                when others =>
                   raise Ship_Upgrade_Error
@@ -331,6 +333,13 @@ package body Ships.Upgrade is
                        PlayerShip.Cargo(UpgradeMaterial).Amount * 20;
                   end if;
                   MaterialCost := ResultAmount / 20;
+               when GUN | BATTERING_RAM | HARPOON_GUN =>
+                  if ResultAmount >
+                    PlayerShip.Cargo(UpgradeMaterial).Amount * 10 then
+                     ResultAmount :=
+                       PlayerShip.Cargo(UpgradeMaterial).Amount * 10;
+                  end if;
+                  MaterialCost := ResultAmount / 10;
                when HULL =>
                   if ResultAmount >
                     PlayerShip.Cargo(UpgradeMaterial).Amount * 2 then
@@ -621,7 +630,31 @@ package body Ships.Upgrade is
                                      .MaxValue /
                                    20) *
                                 NewGameSettings.UpgradeCostBonus);
-                        when CABIN | GUN | BATTERING_RAM | HARPOON_GUN =>
+                        when HARPOON_GUN =>
+                           PlayerShip.Modules(PlayerShip.UpgradeModule)
+                             .UpgradeProgress :=
+                             Integer
+                               (Float
+                                  (Modules_List
+                                     (PlayerShip.Modules
+                                        (PlayerShip.UpgradeModule)
+                                        .ProtoIndex)
+                                     .MaxValue *
+                                   10) *
+                                NewGameSettings.UpgradeCostBonus);
+                        when GUN | BATTERING_RAM =>
+                           PlayerShip.Modules(PlayerShip.UpgradeModule)
+                             .UpgradeProgress :=
+                             Integer
+                               (Float
+                                  (Modules_List
+                                     (PlayerShip.Modules
+                                        (PlayerShip.UpgradeModule)
+                                        .ProtoIndex)
+                                     .MaxValue *
+                                   2) *
+                                NewGameSettings.UpgradeCostBonus);
+                        when CABIN =>
                            PlayerShip.Modules(PlayerShip.UpgradeModule)
                              .UpgradeProgress :=
                              Integer

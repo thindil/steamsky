@@ -444,7 +444,8 @@ package body Ships.UI is
                        Modules_List
                          (PlayerShip.Modules(PlayerShip.UpgradeModule)
                             .ProtoIndex)
-                         .MaxValue;
+                         .MaxValue *
+                       2;
                   when HULL =>
                      Append(UpgradeInfo, "(enlarge)");
                      MaxUpgrade :=
@@ -459,7 +460,8 @@ package body Ships.UI is
                        Modules_List
                          (PlayerShip.Modules(PlayerShip.UpgradeModule)
                             .ProtoIndex)
-                         .MaxValue;
+                         .MaxValue *
+                       10;
                   when others =>
                      null;
                end case;
