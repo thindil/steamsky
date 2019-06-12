@@ -61,6 +61,7 @@ All notable changes to this project will be documented in this file.
   small luxury steel cabin
 - Hide other menus on map when new appear
 - Info about upgrading strength of harpoon guns in ship info
+- Counting max fuel reduction upgrade for engines
 
 ## [3.7] - 2019-05-19
 
