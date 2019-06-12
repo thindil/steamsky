@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Info about upgrading strength of harpoon guns in ship info
+- Counting max fuel reduction upgrade for engines
 
 ## [3.0.12] - 2019-06-02
 
