@@ -312,5 +312,6 @@ types of modules) the module can have. Default value is 1.
  <module durability="450" index="267" installtime="310" material="Steel" maxowners="3" maxvalue="60" name="Large extended steel cabin" price="7500" size="3" skill="Engineering" type="CABIN" value="60" weight="2400">Large, decorated cabin made of steel with few better quality furnitures.</module>
  <module durability="450" index="268" installtime="400" material="Steel" maxowners="3" maxvalue="80" name="Large luxury steel cabin" price="15000" size="3" skill="Engineering" type="CABIN" value="80" weight="3600">Large, decorated, cabin made of steel, well equiped with hight quality furniture.</module>
  <module durability="600" index="269" installtime="310" material="Titanium" maxowners="3" maxvalue="40" name="Large advanced titanium cabin" price="7500" size="3" skill="Engineering" type="CABIN" value="40" weight="3000">Large, decorated cabin made of titanium.</module>
+ <module durability="600" index="270" installtime="400" material="Titanium" maxowners="3" maxvalue="60" name="Large extended titanium cabin" price="12000" size="3" skill="Engineering" type="CABIN" value="60" weight="4800">Large, decorated cabin made of titanium with some better quality furniture.</module>
 </modules>
 
