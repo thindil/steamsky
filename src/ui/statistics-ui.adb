@@ -24,6 +24,7 @@ with Gtk.Button; use Gtk.Button;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Stack; use Gtk.Stack;
+with Gtk.Expander; use Gtk.Expander;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Game; use Game;
@@ -207,6 +208,7 @@ package body Statistics.UI is
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "gamestats");
       if GameStats.DestroyedShips.Length > 0 then
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expdestroyed")), True);
+         Set_Expanded(Gtk_Expander(Get_Object(Builder, "expdestroyed")), True);
          declare
             DestroyedList: constant Gtk_List_Store :=
               Gtk_List_Store(Get_Object(Builder, "destroyedlist"));
@@ -243,6 +245,7 @@ package body Statistics.UI is
       TotalFinished := 0;
       if GameStats.FinishedGoals.Length > 0 then
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expgoals")), True);
+         Set_Expanded(Gtk_Expander(Get_Object(Builder, "expgoals")), True);
          declare
             GoalsList: constant Gtk_List_Store :=
               Gtk_List_Store(Get_Object(Builder, "goalslist"));
@@ -277,11 +280,13 @@ package body Statistics.UI is
       end if;
       if GameStats.CraftingOrders.Length > 0 then
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expcrafts")), True);
+         Set_Expanded(Gtk_Expander(Get_Object(Builder, "expcrafts")), True);
       else
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expcrafts")), False);
       end if;
       if GameStats.FinishedMissions.Length > 0 then
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expmissions")), True);
+         Set_Expanded(Gtk_Expander(Get_Object(Builder, "expmissions")), True);
       else
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expmissions")), False);
       end if;
@@ -292,6 +297,8 @@ package body Statistics.UI is
       end if;
       if GameStats.KilledMobs.Length > 0 then
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "expkilledmobs")), True);
+         Set_Expanded
+           (Gtk_Expander(Get_Object(Builder, "expkilledmobs")), True);
          TotalDestroyed := 0;
          declare
             KillsList: constant Gtk_List_Store :=
