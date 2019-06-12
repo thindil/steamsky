@@ -101,15 +101,19 @@ package body Ships.Upgrade is
             end case;
             UpgradeAction := MAX_VALUE;
          when 3 => -- Upgrade various value of selected module
-            MaxValue :=
-              Natural
-                (Float
-                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                      .Value) *
-                 1.5);
             case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
               .MType is
                when ENGINE =>
+                  MaxValue :=
+                    Natural
+                      (Float
+                         (Modules_List
+                            (PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                            .Value) /
+                       2.0);
+                  if MaxValue < 1 then
+                     MaxValue := 1;
+                  end if;
                   if PlayerShip.Modules(ModuleIndex).Data(1) = MaxValue then
                      raise Ship_Upgrade_Error
                        with "You can't reduce more fuel usage of the " &
@@ -163,8 +167,7 @@ package body Ships.Upgrade is
 
    procedure UpgradeShip(Minutes: Positive) is
       ResultAmount, UpgradePoints, WorkerIndex, UpgradeMaterial,
-      UpgradeProgress, UpgradeTools: Natural := 0;
-      MaxValue: Positive;
+      UpgradeProgress, UpgradeTools, MaxValue: Natural := 0;
       WeightGain: Natural;
       Times: Natural := 0;
       OrderTime, CurrentMinutes: Integer;
@@ -404,13 +407,16 @@ package body Ships.Upgrade is
                      ".",
                      OrderMessage, 2);
                   MaxValue :=
-                    Positive
+                    Natural
                       (Float
                          (Modules_List
                             (PlayerShip.Modules(PlayerShip.UpgradeModule)
                                .ProtoIndex)
                             .Value) /
                        2.0);
+                  if MaxValue < 1 then
+                     MaxValue := 1;
+                  end if;
                   if PlayerShip.Modules(PlayerShip.UpgradeModule).Data(1) =
                     MaxValue then
                      MaxUpgradeReached("You reached maximum upgrade for the ");
