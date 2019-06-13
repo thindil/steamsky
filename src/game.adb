@@ -407,14 +407,23 @@ package body Game is
             PayForDock;
          end if;
          DailyPayment;
+         if GameSettings.AutoSave = DAILY then
+            SaveGame;
+         end if;
       end if;
       if GameDate.Day > 30 then
          GameDate.Day := 1;
          GameDate.Month := GameDate.Month + 1;
+         if GameSettings.AutoSave = MONTHLY then
+            SaveGame;
+         end if;
       end if;
       if GameDate.Month > 12 then
          GameDate.Month := 1;
          GameDate.Year := GameDate.Year + 1;
+         if GameSettings.AutoSave = YEARLY then
+            SaveGame;
+         end if;
       end if;
       -- Update crew
       UpdateCrew(Minutes, TiredPoints);
