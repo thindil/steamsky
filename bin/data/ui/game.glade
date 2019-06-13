@@ -6412,6 +6412,38 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="top_attach">6</property>
                                   </packing>
                                 </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="tooltip_text" translatable="yes">How often game should be automatically saved to disk.</property>
+                                    <property name="label" translatable="yes">Autosave game:</property>
+                                    <property name="xalign">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">0</property>
+                                    <property name="top_attach">14</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBoxText" id="cmbautosave">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="tooltip_text" translatable="yes">How often game should be automatically saved to disk.</property>
+                                    <items>
+                                      <item translatable="yes">Never</item>
+                                      <item translatable="yes">After dock to base</item>
+                                      <item translatable="yes">After undock from base</item>
+                                      <item translatable="yes">Every game day</item>
+                                      <item translatable="yes">Every game month</item>
+                                      <item translatable="yes">Every game year</item>
+                                    </items>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">14</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="name">page0</property>
