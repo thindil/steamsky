@@ -24,6 +24,7 @@ with Config; use Config;
 with Bases; use Bases;
 with Utils; use Utils;
 with Factions; use Factions;
+with Game.SaveLoad; use Game.SaveLoad;
 
 package body Ships.Movement is
 
@@ -234,6 +235,9 @@ package body Ships.Movement is
                if TraderIndex > 0 then
                   GainExp(1, TalkingSkill, TraderIndex);
                end if;
+               if GameSettings.AutoSave = DOCK then
+                  SaveGame;
+               end if;
             end;
             declare
                MemberIndex: Positive := 1;
@@ -299,6 +303,9 @@ package body Ships.Movement is
            ("Ship undocked from base " & To_String(SkyBases(BaseIndex).Name),
             OrderMessage);
          UpdateGame(5);
+         if GameSettings.AutoSave = UNDOCK then
+            SaveGame;
+         end if;
       end if;
       return "";
    end DockShip;
