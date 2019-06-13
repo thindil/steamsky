@@ -284,6 +284,9 @@ package body GameOptions is
       GameSettings.AutoCloseMessagesTime :=
         Positive
           (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjclosemessages"))));
+      GameSettings.AutoSave :=
+        AutoSaveType'Val
+          (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbautosave"))));
       SaveConfig;
       SetFontSize(ALLFONTS);
       Save(To_String(SaveDirectory) & "keys.cfg");
@@ -507,6 +510,9 @@ package body GameOptions is
       Set_Value
         (Gtk_Adjustment(Get_Object(Builder, "adjclosemessages")),
          Gdouble(GameSettings.AutoCloseMessagesTime));
+      Set_Active
+        (Gtk_Combo_Box(Get_Object(Builder, "cmbautosave")),
+         (AutoSaveType'Pos(GameSettings.AutoSave)));
       SetFontsSizes;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "options");
