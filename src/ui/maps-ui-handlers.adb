@@ -1524,6 +1524,10 @@ package body Maps.UI.Handlers is
       Key: Gtk_Accel_Key;
       Found: Boolean;
    begin
+      if Is_Visible(Gtk_Widget(Get_Object(Builder, "messagebox"))) then
+         HideDialog(Builder);
+         return False;
+      end if;
       if Get_Visible_Child_Name(Gtk_Stack(Get_Object(Builder, "gamestack"))) /=
         "skymap" then
          return False;

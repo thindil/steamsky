@@ -30,12 +30,14 @@ with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Adjustment; use Gtk.Adjustment;
+with Gtk.Button; use Gtk.Button;
 with Gdk.Types; use Gdk.Types;
 with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
 with Glib.Main; use Glib.Main;
 with MainMenu; use MainMenu;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
+with Maps.UI.Handlers; use Maps.UI.Handlers;
 with Combat.UI; use Combat.UI;
 with GameOptions; use GameOptions;
 with Statistics.UI; use Statistics.UI;
@@ -57,6 +59,8 @@ package body Utils.UI is
    begin
       Hide(Gtk_Widget(Get_Object(Builder, "messagebox")));
       Source_Id := No_Source_Id;
+      EnableMenuShortcutsProc(Builder);
+      Set_Sensitive(Gtk_Button(Get_Object(Builder, "btnclose")), True);
       return False;
    end AutoHideDialog;
 
@@ -65,12 +69,16 @@ package body Utils.UI is
       Hide(Gtk_Widget(Get_Object(Object, "messagebox")));
       Remove(Source_Id);
       Source_Id := No_Source_Id;
+      EnableMenuShortcutsProc(Builder);
+      Set_Sensitive(Gtk_Button(Get_Object(Builder, "btnclose")), True);
    end HideDialog;
 
    procedure ShowDialog(Message: String) is
    begin
       Set_Label(Gtk_Label(Get_Object(Builder, "lblmessage")), Message);
       Show_All(Gtk_Widget(Get_Object(Builder, "messagebox")));
+      DisableMenuShortcutsProc(Builder);
+      Set_Sensitive(Gtk_Button(Get_Object(Builder, "btnclose")), False);
       if Source_Id /= No_Source_Id then
          Remove(Source_Id);
          Source_Id := No_Source_Id;
