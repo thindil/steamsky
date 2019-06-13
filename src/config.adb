@@ -53,7 +53,7 @@ package body Config is
          MessagesOrder => OLDER_FIRST, AutoAskForBases => False,
          AutoAskForEvents => False, ShowTooltips => True,
          ShowLastMessages => True, MessagesPosition => 0, FullScreen => False,
-         AutoCloseMessagesTime => 6);
+         AutoCloseMessagesTime => 6, AutoSave => NONE);
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
@@ -163,6 +163,8 @@ package body Config is
             elsif FieldName = To_Unbounded_String("AutoCloseMessagesTime") then
                GameSettings.AutoCloseMessagesTime :=
                  Positive'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("AutoSave") then
+               GameSettings.AutoSave := AutoSaveType'Value(To_String(Value));
             end if;
          end if;
       end loop;
@@ -285,6 +287,9 @@ package body Config is
         (ConfigFile,
          "AutoCloseMessagesTime =" &
          Positive'Image(GameSettings.AutoCloseMessagesTime));
+      Put_Line
+        (ConfigFile,
+         "AutoSave = " & AutoSaveType'Image(GameSettings.AutoSave));
       Close(ConfigFile);
    end SaveConfig;
 

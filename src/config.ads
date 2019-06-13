@@ -42,6 +42,8 @@ package Config is
       ENEMY); -- Options when stop auto move of player ship
    type MessagesOrderType is
      (OLDER_FIRST, NEWER_FIRST); -- Options to set showing messages order
+   -- Type used to set how often autosave is done
+   type AutoSaveType is (NONE, DOCK, UNDOCK, DAILY, MONTHLY, YEARLY);
    type GameSettingsRecord is -- Data for game settings
    record
       AutoRest: Boolean; -- If true, rest when pilot/engineer need rest
@@ -71,6 +73,7 @@ package Config is
       MessagesPosition: Natural; -- Position of last messages window in pixels from top of the game window
       FullScreen: Boolean; -- If true, set the game window in full screen mode
       AutoCloseMessagesTime: Positive; -- Amount of seconds after which message box is auto closed
+      AutoSave: AutoSaveType; -- How often game is autosaved
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;
