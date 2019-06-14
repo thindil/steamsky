@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - Ability to set random faction for new game
 - Ability to set random difficulty level for new game
 - Ability to make autosaves
+- Index to help entries
 
 ### Changed
 - Updated crews on inquisition ships
