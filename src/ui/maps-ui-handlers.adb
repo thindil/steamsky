@@ -962,22 +962,22 @@ package body Maps.UI.Handlers is
         Get_Visible_Child_Name(Gtk_Stack(Get_Object(Object, "gamestack")));
    begin
       if VisibleChildName = "combat" then
-         ShowHelpUI(5);
+         ShowHelpUI(To_Unbounded_String("combat"));
       elsif VisibleChildName = "crafts" then
-         ShowHelpUI(6);
+         ShowHelpUI(To_Unbounded_String("crafts"));
       elsif VisibleChildName = "crew" then
-         ShowHelpUI(8);
+         ShowHelpUI(To_Unbounded_String("crew"));
       elsif VisibleChildName = "ship" then
-         ShowHelpUI(7);
+         ShowHelpUI(To_Unbounded_String("ship"));
       elsif VisibleChildName = "trade" then
-         ShowHelpUI(4);
+         ShowHelpUI(To_Unbounded_String("trade"));
       elsif VisibleChildName = "availablemissions" or
         VisibleChildName = "acceptedmissions" then
-         ShowHelpUI(9);
+         ShowHelpUI(To_Unbounded_String("missions"));
       elsif VisibleChildName = "recruit" then
-         ShowHelpUI(10);
+         ShowHelpUI(To_Unbounded_String("recruit"));
       else
-         ShowHelpUI(1);
+         ShowHelpUI(To_Unbounded_String("general"));
       end if;
    end ShowHelp;
 

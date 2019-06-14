@@ -66,7 +66,7 @@ package body Help.UI is
       for I in Help_List.Iterate loop
          if TopicName = Help_List(I).Title then
             Setting := True;
-            ShowHelpUI(Help_Container.To_Index(I));
+            ShowHelpUI(Help_Container.Key(I));
             Setting := False;
             exit;
          end if;
@@ -111,9 +111,9 @@ package body Help.UI is
         (Gtk_Widget(Get_Object(Builder, "helpwindow")), CloseWindow'Access);
    end CreateHelpUI;
 
-   procedure ShowHelpUI(Topic: Positive) is
+   procedure ShowHelpUI(HelpIndex: Unbounded_String) is
       NewText, TagText: Unbounded_String;
-      StartIndex, EndIndex, OldIndex: Natural;
+      StartIndex, EndIndex, OldIndex, TopicIndex: Natural;
       Key: Gtk_Accel_Key;
       Found: Boolean;
       type Variables_Data is record
@@ -204,7 +204,7 @@ package body Help.UI is
          To_Unbounded_String("fanaticism"), To_Unbounded_String("loner"));
       FactionsWithFlag: Unbounded_String;
    begin
-      NewText := Help_List(Topic).Text;
+      NewText := Help_List(HelpIndex).Text;
       OldIndex := 1;
       Set_Text(HelpBuffer, "");
       Get_Start_Iter(HelpBuffer, Iter);
@@ -277,11 +277,17 @@ package body Help.UI is
       Resize
         (Gtk_Window(Get_Object(Builder, "helpwindow")),
          Gint(GameSettings.WindowWidth), Gint(GameSettings.WindowHeight));
-      Setting := True;
+      TopicIndex := 0;
+      for I in Help_List.Iterate loop
+         if Help_List(HelpIndex).Title = Help_List(I).Title then
+            exit;
+         end if;
+         TopicIndex := TopicIndex + 1;
+      end loop;
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treetopics")),
-         Gtk_Tree_Path_New_From_String(Natural'Image(Topic - 1)), null, False);
-      Setting := False;
+         Gtk_Tree_Path_New_From_String(Natural'Image(TopicIndex)), null,
+         False);
    end ShowHelpUI;
 
 end Help.UI;
