@@ -22,7 +22,8 @@ All notable changes to this project will be documented in this file.
   large basic steel cabin, large advanced steel cabin, large extended steel
   cabin, large luxury steel cabin, large advanced titaniu cabin, large
   extended titanium cabin, large luxury titanium cabin, large advanced
-  orichalcum cabin, large extended orichalcum cabin
+  orichalcum cabin, large extended orichalcum cabin, large luxury orichalcum
+  cabin
 - Ability to set random career for new game
 - Ability to set random faction for new game
 - Ability to set random difficulty level for new game
