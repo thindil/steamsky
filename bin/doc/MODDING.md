@@ -440,12 +440,14 @@ Value must be existing skill name.
 - Default game help entries are in *help.dat* file which is in *data* directory.
 - If you want remove or update any existing help topic, you can do it in
   *help.dat* file in *data* directory or in modification file (better option)
-  add tag `entry` with attribute `title` which value will be title of selected
+  add tag `entry` with attribute `index` which value will be index of selected
   help topic and attribute `action`. Then if you modify existing help topic,
   add changed values.
 
 ### Help data structure
 - Each help entry is between `entry` tags.
+- Attribute `index` is the help index, used mostly in showing help for
+  selected part of the game. It can be number or text.
 - Attribute `title` is help menu entry in main help menu. It can be number or
   text.
 - Optional attribute `action`: what to do with this entry. Possible values
