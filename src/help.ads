@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -16,7 +16,8 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Containers.Vectors; use Ada.Containers;
+with Ada.Containers.Hashed_Maps; use Ada.Containers;
+with Ada.Strings.Unbounded.Hash;
 with DOM.Readers; use DOM.Readers;
 
 package Help is
@@ -26,8 +27,9 @@ package Help is
       Title: Unbounded_String; -- Title of help topic
       Text: Unbounded_String; -- Text of help
    end record;
-   package Help_Container is new Vectors(Positive, Help_Data);
-   Help_List: Help_Container.Vector; -- List of all help topics
+   package Help_Container is new Hashed_Maps(Unbounded_String, Help_Data,
+      Ada.Strings.Unbounded.Hash, "=");
+   Help_List: Help_Container.Map; -- List of all help topics
 
    procedure LoadHelp(Reader: Tree_Reader); -- Load help text from file
 

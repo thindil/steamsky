@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -30,7 +30,7 @@ package body Help is
       NodesList: Node_List;
       HelpData: Document;
       Action: DataAction;
-      HelpIndex: Natural;
+      HelpIndex: Unbounded_String;
       HelpNode: Node;
    begin
       TmpHelp :=
@@ -40,33 +40,27 @@ package body Help is
         DOM.Core.Documents.Get_Elements_By_Tag_Name(HelpData, "entry");
       for I in 0 .. Length(NodesList) - 1 loop
          HelpNode := Item(NodesList, I);
-         TmpHelp.Title :=
-           To_Unbounded_String(Get_Attribute(HelpNode, "title"));
          if Get_Attribute(HelpNode, "action")'Length > 0 then
             Action := DataAction'Value(Get_Attribute(HelpNode, "action"));
          else
             Action := ADD;
          end if;
-         HelpIndex := 0;
-         for J in Help_List.Iterate loop
-            if Help_List(J).Title = TmpHelp.Title then
-               HelpIndex := Help_Container.To_Index(J);
-               exit;
-            end if;
-         end loop;
+         HelpIndex := To_Unbounded_String(Get_Attribute(HelpNode, "index"));
          if (Action = UPDATE or Action = REMOVE) then
-            if HelpIndex = 0 then
+            if not Help_Container.Contains(Help_List, HelpIndex) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
-                 " help '" & To_String(TmpHelp.Title) &
-                 "', there no help with that title.";
+                 " help '" & To_String(HelpIndex) &
+                 "', there no help with that index.";
             end if;
-         elsif HelpIndex > 0 then
+         elsif Help_Container.Contains(Help_List, HelpIndex) then
             raise Data_Loading_Error
-              with "Can't add help '" & To_String(TmpHelp.Title) &
-              "', there is one with that title.";
+              with "Can't add help '" & To_String(HelpIndex) &
+              "', there is one with that index.";
          end if;
          if Action /= REMOVE then
+            TmpHelp.Title :=
+              To_Unbounded_String(Get_Attribute(HelpNode, "title"));
             if Action = UPDATE then
                TmpHelp := Help_List(HelpIndex);
             end if;
@@ -75,16 +69,14 @@ package body Help is
                  To_Unbounded_String(Node_Value(First_Child(HelpNode)));
             end if;
             if Action /= UPDATE then
-               Help_List.Append(New_Item => TmpHelp);
-               LogMessage
-                 ("Help added: " & To_String(TmpHelp.Title), Everything);
+               Help_Container.Include(Help_List, HelpIndex, TmpHelp);
+               LogMessage("Help added: " & To_String(HelpIndex), Everything);
             else
                Help_List(HelpIndex) := TmpHelp;
             end if;
          else
-            Help_List.Delete(Index => HelpIndex);
-            LogMessage
-              ("Help removed: " & To_String(TmpHelp.Title), Everything);
+            Help_Container.Exclude(Help_List, HelpIndex);
+            LogMessage("Help removed: " & To_String(HelpIndex), Everything);
          end if;
          TmpHelp :=
            (Title => Null_Unbounded_String, Text => Null_Unbounded_String);

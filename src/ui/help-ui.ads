@@ -18,7 +18,7 @@
 package Help.UI is
 
    procedure CreateHelpUI; -- Create help user interface
-   procedure ShowHelpUI(Topic: Positive) with
-      Pre => Topic <= Help_List.Last_Index; -- Show help user interface
+   procedure ShowHelpUI
+     (HelpIndex: Unbounded_String); -- Show help user interface
 
 end Help.UI;
