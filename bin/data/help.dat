@@ -2,6 +2,8 @@
 <help>
 <!--
 - Each help entry is between "entry" tags.
+- Attribute "index" is the help index, used mostly in showing help for
+  selected part of the game. It can be number or text.
 - Attribute "title" is help menu entry in main help menu. It can be number or
   text.
 - Optional attribute `action`: what to do with this entry. Possible values
@@ -43,7 +45,7 @@
   and `nomorale` which later will be replaced by list of factions which have
   set selected flag.
 -->
- <entry title="General Informations">{u}Overview{/u}
+ <entry index="general" title="General Informations">{u}Overview{/u}
     Steam Sky is a roguelike game where you are commandeer of a flying ship. You must take care of ship and crew. You can trade items between sky bases, fight with enemies or manufacture items. The game ends when your character dies. At this moment, help is under development (as whole game). To see other help topics, click on topic title (for example {b}&quot;General Informations&quot;{/b} for this screen) above help text. Some informations about game mechanics can depends on your character's faction.
 
 {u}Content of help topics{/u}
@@ -65,7 +67,7 @@ Some game modifications can bring own help topics too. If you are first time her
 For pilots and engineers: if their letter is green, the position is taken by a crew member, and if it's red you don't have anyone assigned to this position.
 For gunners and manufacturing: a green icon mean all positions are taken (all guns, all crafting modules), a red icon means you have free positions (not all guns/crafting modules are taken), and a white icon means you don't have or don't need anyone assigned to this positions. For {sentientships} yellow icon mean that you don't have assigned anyone to that position, but you don't need anyone either.
 For repairs, upgrading ship modules, trader and cleaning ship, green means you have someone assigned to this position, red means you don't have anyone on that position but need someone, and white icon means you don't have anyone assigned to this position and you don't need anyone.</entry>
- <entry title="Ship movement">{u}Undocking from bases{/u}
+ <entry index="movement" title="Ship movement">{u}Undocking from bases{/u}
     Your ship starts docked to base. To move it, you must first give order {b}&quot;Undock&quot;{/b} from base, by clicking on {b}&quot;Undock&quot;{/b} button. To see other orders available for ship, press {GameKey 14} key (or first {GameKey 26} key for see game menu) for open orders menu.
 Each docking operation cost some money, depending on your ship size (bigger ships have bigger docking cost) and your reputation in that base. Same is with staying longer in base - for each day you pay this same price as for docking. Undocking from bases is free. You can't undock from the base if your ship is overloaded.
 When you undocked from base, in this same menu, you can dock again.
@@ -86,7 +88,7 @@ You may disable or enable selected ship engine in ship info screen. Press key {G
    You can set your destination travel point on map by selecting map cell by left click on it. If you left click on map cell where your ship is, you will open orders menu.
 If you have set travel destination, press key {GameKey 5} to auto travel by one map field. If you want move further, you can press {GameKey 10} key - then you been move until you reach destination, combat happen or you can't move anymore (no pilot/engineer if required, too damaged engines, no fuel, etc.).
 If destination is not set, pressing key {GameKey 5} allow you to wait 1 game minute without moving.</entry>
- <entry title="Sky bases">{u}General Information{/u}
+ <entry index="bases" title="Sky bases">{u}General Information{/u}
     Sky Bases are places where you can trade items, repair ships, heal or hire crew members, get new missions or ask for other bases and events.
 
 {u}Discovering new bases{/u}
@@ -105,7 +107,7 @@ Reputation levels, starting from lowest: Hated, Outlaw, Hostile, Unfriendly, Unk
 - Shipyard (light blue color): don't produce anything they only buys everything. But in this base you can install or remove modules from your ship.
 - Military (green color): produces ammunition to guns, weapons and armors for melee combat and buys other things. Same as refinery it is perfect start for trade route with industrial base.
 More informations about trading you may find in {b}Trading{/b} help topic and about installing new ship modules in {b}Repair/upgrade ship{/b} topic.</entry>
- <entry title="Trading">{u}General info{/u}
+ <entry index="trade" title="Trading">{u}General info{/u}
     To buy/sell items from bases you must first dock to base and having assigned crew member to talking in bases. All bases buy all items, but which items are sold, depends on base type.
 Prices in bases depends on skill {TalkingSkill} of assigned to trade crew member - with higher skill you can sell items for more and buy for less. Additionally, prices depends on your reputation in base. With high reputation you earn more or pay less for goods, new recruits or services.
 From time to time, base prices of items can change a little (raise or fall). Chance for change depends on size of base and it is higher when you visit that base less often.
@@ -118,7 +120,7 @@ Same with buying items from bases - they have limited amount of items for sale. 
 
 {u}Friendly traders{/u}
    From time to time you can meet friendly trader ship in space with which you can trade too. It is very similar to trade with bases, you need someone assigned to Talk in bases duty, etc.</entry>
-<entry title="Combat">{u}General info{/u}
+<entry index="combat" title="Combat">{u}General info{/u}
    To start combat, you must first be in this same map cell where desired target is. Then, from orders menu, select option {b}Attack{/b}.
 Combat can start automatically if enemy ship spots your ship first and is faster than you. Your chance to see enemy first depends on your ship pilot and gunners {PerceptionSkill} skill and size of ships. If you have smaller ship than enemy, it is bigger chance that you spot them first. When combat starts, all resting crew members back on their positions and don't go to rest until combat ends, unless you order them to rest.
 
@@ -157,7 +159,7 @@ When enemy ship (or your) is stopped by harpoon or battering ram, you can set bo
 * After destroying enemy ship, you have small chance to lose some reputation with home sky base of enemy ship.
 * If you destroy ship from your faction, chance to lose some reputation with home sky base of destroyed ship is much bigger.
 * Info about amount of ammunition to selected gun show: assigned ammo amount (if any ammunition is assigned to this gun) or all ammunition to this gun which you have in your ship cargo.</entry>
- <entry title="Crafting">{u}Setting crafting orders{/u}
+ <entry index="crafts" title="Crafting">{u}Setting crafting orders{/u}
     To start manufacturing items, first you must have enough material, proper module installed on ship and proper tool in ship cargo or in designed crew member inventory. Then you must set proper crafting order in {b}Craft{/b} menu and give crew member order to start crafting. What ship module and which items are needed for crafting, you can check in crafting menu (key {GameKey 15}). If you don't have items or workplace needed for crafting, they will be written in red in selected recipe information. Each recipe have own crafting time after which item is created, but crafter gains experience in crafting skill each 15 minutes. If after creating item, you don't have enough materials or tools to craft next item, crew member going on break and crafting order is cleared.
 For crafting items you can set how many times you want to craft it. For deconstructing items, you may choice only workshop.
 Grayed name of recipe on list mean that you don't have enough material, proper tool or proper module installed thus you can't craft that recipe.
@@ -172,7 +174,7 @@ Grayed name of recipe on list mean that you don't have enough material, proper t
 * Crafting skills and level of damage of workplace determine amount of manufactured items. More damaged modules causes less crafted items.
 * Each crafting module have separated crafting order. This mean, you can produce few types of items (or few times this same item) in this same time, if you have few crafting modules installed on ship and all have assigned work orders and workers.
 </entry>
-<entry title="Repair/Upgrade ship">{u}Self repair of ship{/u}
+<entry index="repair" title="Repair/Upgrade ship">{u}Self repair of ship{/u}
    To start repairing ship, you must assign crew member to repair duty. If you don't have available {b}'Repair'{/b} order, it means, you don't have materials needed for repair module. You may assign more than one crew member or give order to repair for whole crew. Each additional member assigned made repair faster. Each damaged (or destroyed) module need specific material to repair and repair tools for each member assigned to repair duty. You can check which material is needed in {i}ship info{/i} screen. Ship is repaired every 15 minutes of work of assigned crew members. Speed of repairs depends on skills of assigned crew. You can check which skills are used in ship info screen.
 
 {u}Repair ship in bases{/u}
@@ -190,7 +192,7 @@ Each upgraded module gains some weight. Amount of gain depends on base module we
    In {i}shipyard{/i} bases you can install new modules or remove old from ship. Each installation/removing take some time. Installation cost {MoneyName}, removing modules gives you {MoneyName}. There is some limitations to installation/removing modules: you can only replace ship hull module, you can have only one armor, cockpit, battering ram module installed on your ship. If you want replace armor, cockpit or battering ram, first you must remove old module from ship.
 How much you get {MoneyName} from removing module depends on damage of selected module. If is it destroyed, removing will take only time and give no {MoneyName}.
 Each ship hull have maximum module space and maximum allowed size of module, which limit what and how much modules can be installed on it. Armor and weapons don't count to this limit. Most of basic modules use only one module space, but this most expensive modules, may use a lot of space. You can check how much each module space use on {i}ship info{/i} screen or in {i}shipyard{/i} screen in bases.</entry>
- <entry title="Ship crew">{u}Hunger and thirst{/u}
+ <entry index="crew" title="Ship crew">{u}Hunger and thirst{/u}
     Depending on your character faction (selected at starting game), you and your crew must eat and drink. If you don't have food or drink on board, your crew will slowly die from dehydration or starvation. Amount of reduced hunger/thirst depends on consumables - more expensive consumables can restore more.
 
 {u}Morale{/u}
@@ -225,7 +227,7 @@ To set orders priorities, click button {b}'Set orders priorities'{/b} and select
 * Crew members attributes levels, starting from lowest: {i}Very low, Low, Below average, Average, Above average, High, Very high, Outstanding{/i}.
 * Each skill is associated with one attribute. It means that real skill level is sum of skill level and associated attribute level. Gaining experience in skill cause gaining experience in associated attribute too. Attributes levels grows much slower than skills levels. Additionally, if you gain experience in any skill, you gain experience in {ConditionName} too.
 * If contract of crew member will ends, he/she will be treated like passenger (you can't give orders to that crew member anymore) and will leave your ship in next not abandoned base to which you dock. Until this, you must still feed him/her with food and drinks.</entry>
- <entry title="Missions">{u}Starting missions{/u}
+ <entry index="missions" title="Missions">{u}Starting missions{/u}
     You can ask for missions in bases where you have reputation level Unknown or above. Each base offers different missions - they amount depends on base size (in bigger bases you can get more missions) and on player reputation in that base (better reputation, more missions available). To see what missions are available in selected base, first you must dock to it then select option {b}Missions{/b} from {b}Orders{/b} menu (key {GameKey 14}). How many missions you can accept in base, depends on your reputation - with higher level, you can get more missions. You may reduce amount of money for reward for selected mission in exchange to earn more reputation in base. But one warning: if you fail that missions, you will lose more reputation either. To do this, move slider below mission info to the left. If you want more money but less reputation for mission, move slider to the right.
 {b}Note:{/b} Information about estimated time to achievement (ETA) and approximately fuel usage is based on your ship full speed and fuel consumption by your engines. It may be different than final usage and time spend on mission.
 
@@ -245,7 +247,7 @@ If you successfully finish mission, your character gain some morale, if you fail
 * Red color of cabin quality in {i}Transport passengers{/i} missions in {b}Available Missions{/b} menu means you don't have installed cabin with that quality or higher on ship. Yellow means you have cabin with that quality or higher but it is taken by someone else.
 * Each mission have time limit - if you don't finish mission in that time, mission will fail. {i}Delivery{/i} mission will fail too if you drop mission item from your cargo. {i}Transport passengers{/i} mission will fail if you dismiss passenger from your ship. If you fail mission, you lose some reputation with that base.
 * You can see all accepted missions in {b}Missions{/b} menu (key {GameKey 19}). There you can set mission target map cell as destination for your ship.</entry>
- <entry title="Hiring crew members">{u}General info{/u}
+ <entry index="recruit" title="Hiring crew members">{u}General info{/u}
     You can hire new crew members in bases. First you must dock to base, then you choice {b}Recruit{/b} option from {b}Orders{/b} menu. Amount of available recruits depends on size of base. They hire cost and future payment, depends on amount of knowledge (amount of skills and attributes and levels of skills and attributes) and equipment. Skills and attributes of recruits depends on your reputation in selected base, but from time to time, you can find very experienced recruits in bases too.
 
 {u}Negotiating employment{/u}
@@ -255,7 +257,7 @@ If you successfully finish mission, your character gain some morale, if you fail
 * Here no limit how much crew members you can have on ship, just remember, all of them needs food, drinks, place to rest and payment.
 * Hiring new crew members reduce population of base. New recruits are available every 30 days between visits of base.
 * Starting morale of recruit depends on player reputation in selected base, except members of {nomorale} factions.</entry>
- <entry title="Tips">* All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press {GameKey 22} key on sky map (no need to press {GameKey 26} first to show menu).
+ <entry index="tips" title="Tips">* All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press {GameKey 22} key on sky map (no need to press {GameKey 26} first to show menu).
 * If you want travel faster (for example, for escape from fight), you can drop some items from your cargo. Go to cargo information screen, select desired item and select proper option from item options menu.
 * Each crew member need proper module for work. If that module is destroyed, member cannot start selected work (for example, can't start piloting when cockpit is destroyed).
 * You can assign crew members to selected module (cabins, guns, workplaces) on ship info screen. All workplaces first must have set crafting order, before you can assign someone.
