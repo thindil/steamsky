@@ -64,9 +64,9 @@ package body Help.UI is
            To_Unbounded_String(Get_String(TopicModel, TopicIter, 0));
       end;
       for I in Help_List.Iterate loop
-         if TopicName = Help_List(I).Title then
+         if TopicName = Help_Container.Key(I) then
             Setting := True;
-            ShowHelpUI(Help_Container.Key(I));
+            ShowHelpUI(Help_List(I).Index);
             Setting := False;
             exit;
          end if;
@@ -99,9 +99,9 @@ package body Help.UI is
       end if;
       TopicsList := Gtk_List_Store(Get_Object(Builder, "topicslist"));
       Clear(TopicsList);
-      for Help of Help_List loop
+      for I in Help_List.Iterate loop
          Append(TopicsList, TopicsIter);
-         Set(TopicsList, TopicsIter, 0, To_String(Help.Title));
+         Set(TopicsList, TopicsIter, 0, To_String(Help_Container.Key(I)));
       end loop;
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Select_Topic", SelectTopic'Access);
@@ -204,7 +204,12 @@ package body Help.UI is
          To_Unbounded_String("fanaticism"), To_Unbounded_String("loner"));
       FactionsWithFlag: Unbounded_String;
    begin
-      NewText := Help_List(HelpIndex).Text;
+      for Help of Help_List loop
+         if Help.Index = HelpIndex then
+            NewText := Help.Text;
+            exit;
+         end if;
+      end loop;
       OldIndex := 1;
       Set_Text(HelpBuffer, "");
       Get_Start_Iter(HelpBuffer, Iter);
@@ -279,7 +284,7 @@ package body Help.UI is
          Gint(GameSettings.WindowWidth), Gint(GameSettings.WindowHeight));
       TopicIndex := 0;
       for I in Help_List.Iterate loop
-         if Help_List(HelpIndex).Title = Help_List(I).Title then
+         if HelpIndex = Help_List(I).Index then
             exit;
          end if;
          TopicIndex := TopicIndex + 1;
