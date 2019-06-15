@@ -16,19 +16,17 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Containers.Hashed_Maps; use Ada.Containers;
-with Ada.Strings.Unbounded.Hash;
+with Ada.Containers.Ordered_Maps; use Ada.Containers;
 with DOM.Readers; use DOM.Readers;
 
 package Help is
 
    type Help_Data is -- Data structure for help topic
    record
-      Title: Unbounded_String; -- Title of help topic
+      Index: Unbounded_String; -- Index of help topic
       Text: Unbounded_String; -- Text of help
    end record;
-   package Help_Container is new Hashed_Maps(Unbounded_String, Help_Data,
-      Ada.Strings.Unbounded.Hash, "=");
+   package Help_Container is new Ordered_Maps(Unbounded_String, Help_Data);
    Help_List: Help_Container.Map; -- List of all help topics
 
    procedure LoadHelp(Reader: Tree_Reader); -- Load help text from file

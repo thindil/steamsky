@@ -30,11 +30,11 @@ package body Help is
       NodesList: Node_List;
       HelpData: Document;
       Action: DataAction;
-      HelpIndex: Unbounded_String;
+      HelpIndex, HelpTitle: Unbounded_String;
       HelpNode: Node;
    begin
       TmpHelp :=
-        (Title => Null_Unbounded_String, Text => Null_Unbounded_String);
+        (Index => Null_Unbounded_String, Text => Null_Unbounded_String);
       HelpData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(HelpData, "entry");
@@ -46,40 +46,40 @@ package body Help is
             Action := ADD;
          end if;
          HelpIndex := To_Unbounded_String(Get_Attribute(HelpNode, "index"));
+         HelpTitle := To_Unbounded_String(Get_Attribute(HelpNode, "title"));
          if (Action = UPDATE or Action = REMOVE) then
-            if not Help_Container.Contains(Help_List, HelpIndex) then
+            if not Help_Container.Contains(Help_List, HelpTitle) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
-                 " help '" & To_String(HelpIndex) &
-                 "', there no help with that index.";
+                 " help '" & To_String(HelpTitle) &
+                 "', there no help with that title.";
             end if;
-         elsif Help_Container.Contains(Help_List, HelpIndex) then
+         elsif Help_Container.Contains(Help_List, HelpTitle) then
             raise Data_Loading_Error
-              with "Can't add help '" & To_String(HelpIndex) &
-              "', there is one with that index.";
+              with "Can't add help '" & To_String(HelpTitle) &
+              "', there is one with that title.";
          end if;
          if Action /= REMOVE then
-            TmpHelp.Title :=
-              To_Unbounded_String(Get_Attribute(HelpNode, "title"));
+            TmpHelp.Index := HelpIndex;
             if Action = UPDATE then
-               TmpHelp := Help_List(HelpIndex);
+               TmpHelp := Help_List(HelpTitle);
             end if;
             if Has_Child_Nodes(HelpNode) then
                TmpHelp.Text :=
                  To_Unbounded_String(Node_Value(First_Child(HelpNode)));
             end if;
             if Action /= UPDATE then
-               Help_Container.Include(Help_List, HelpIndex, TmpHelp);
-               LogMessage("Help added: " & To_String(HelpIndex), Everything);
+               Help_Container.Include(Help_List, HelpTitle, TmpHelp);
+               LogMessage("Help added: " & To_String(HelpTitle), Everything);
             else
-               Help_List(HelpIndex) := TmpHelp;
+               Help_List(HelpTitle) := TmpHelp;
             end if;
          else
-            Help_Container.Exclude(Help_List, HelpIndex);
-            LogMessage("Help removed: " & To_String(HelpIndex), Everything);
+            Help_Container.Exclude(Help_List, HelpTitle);
+            LogMessage("Help removed: " & To_String(HelpTitle), Everything);
          end if;
          TmpHelp :=
-           (Title => Null_Unbounded_String, Text => Null_Unbounded_String);
+           (Index => Null_Unbounded_String, Text => Null_Unbounded_String);
       end loop;
    end LoadHelp;
 
