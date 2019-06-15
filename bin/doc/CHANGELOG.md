@@ -66,6 +66,7 @@ All notable changes to this project will be documented in this file.
 - Hide other menus on map when new appear
 - Info about upgrading strength of harpoon guns in ship info
 - Counting max fuel reduction upgrade for engines
+- Help window resizes outside screen
 
 ## [3.7] - 2019-05-19
 
