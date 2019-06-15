@@ -153,7 +153,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
           <object class="GtkScrolledWindow">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="hscrollbar_policy">never</property>
             <property name="shadow_type">in</property>
             <child>
               <object class="GtkTextView" id="helpview">
