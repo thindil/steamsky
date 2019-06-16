@@ -68,6 +68,7 @@ All notable changes to this project will be documented in this file.
 - Info about upgrading strength of harpoon guns in ship info
 - Counting max fuel reduction upgrade for engines
 - Help window resizes outside screen
+- Crash on repair player ship in bases
 
 ## [3.7] - 2019-05-19
 
