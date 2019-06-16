@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.8] - 2019-06-16
 
 ### Added
 - New player's ships for inquisition faction
