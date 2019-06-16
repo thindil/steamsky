@@ -278,16 +278,16 @@ package body Bases.UI is
       end loop;
       Append(RepairsList, RepairsIter);
       Set(RepairsList, RepairsIter, 0, "Slowly repair the whole ship");
-      Set(RepairsList, RepairsIter, 1, 0);
+      Set(RepairsList, RepairsIter, 1, "0");
       if SkyBases(BaseIndex).Population > 149 then
          Append(RepairsList, RepairsIter);
          Set(RepairsList, RepairsIter, 0, "Repair the whole ship");
-         Set(RepairsList, RepairsIter, 1, -1);
+         Set(RepairsList, RepairsIter, 1, "-1");
       end if;
       if SkyBases(BaseIndex).Population > 299 then
          Append(RepairsList, RepairsIter);
          Set(RepairsList, RepairsIter, 0, "Quickly repair the whole ship");
-         Set(RepairsList, RepairsIter, 1, -2);
+         Set(RepairsList, RepairsIter, 1, "-2");
       end if;
       Set_Label
         (Gtk_Button(Get_Object(Builder, "btnacceptbase")), "_Buy repairs");
