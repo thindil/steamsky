@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New ship modules: huge extended bronze cabin
+- New ship modules: huge extended bronze cabin, huge luxury bronze cabin
 
 ## [3.8] - 2019-06-16
 
