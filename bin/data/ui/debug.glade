@@ -113,6 +113,16 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkEntryCompletion" id="basescompletion1">
+    <property name="model">baseslist</property>
+    <property name="text_column">0</property>
+    <child>
+      <object class="GtkCellRendererText"/>
+      <attributes>
+        <attribute name="text">0</attribute>
+      </attributes>
+    </child>
+  </object>
   <object class="GtkListStore" id="baseslist">
     <columns>
       <!-- column-name name -->
@@ -180,6 +190,16 @@
       <!-- column-name level -->
       <column type="guint"/>
     </columns>
+  </object>
+  <object class="GtkEntryCompletion" id="tradecompletion">
+    <property name="model">itemslist</property>
+    <property name="text_column">0</property>
+    <child>
+      <object class="GtkCellRendererText"/>
+      <attributes>
+        <attribute name="text">0</attribute>
+      </attributes>
+    </child>
   </object>
   <object class="GtkWindow" id="debugwindow">
     <property name="can_focus">False</property>
@@ -876,7 +896,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="tooltip_text" translatable="yes">Start typing here a name of the base to select it from the list. Base data will show after pressing key Enter.</property>
-                        <property name="completion">basescompletion</property>
+                        <property name="completion">basescompletion1</property>
                         <signal name="activate" handler="Show_Base_Info" swapped="no"/>
                       </object>
                       <packing>
@@ -1257,7 +1277,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="tooltip_text" translatable="yes">Start typing here a name of the item to select it from the list.</property>
-                            <property name="completion">cargocompletion</property>
+                            <property name="completion">tradecompletion</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
