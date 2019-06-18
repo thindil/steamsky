@@ -10,6 +10,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated help
 
+### Fixed
+- Completing lists for bases and items names in debug menu
+
 ## [3.8] - 2019-06-16
 
 ### Added
