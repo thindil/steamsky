@@ -27,7 +27,7 @@ package Crew is
    type Crew_Orders is
      (Pilot, Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean,
       Rest, Defend, Boarding, Train);
-   type Orders_Array is array(1 .. 11) of Natural;
+   type Orders_Array is array(1 .. 12) of Natural;
    type Attributes_Array is array(1 .. 2) of Natural;
    type Equipment_Array is array(1 .. 7) of Natural;
    package Attributes_Container is new Vectors(Positive, Attributes_Array);
