@@ -510,7 +510,7 @@ package body Ships.Crew is
             return False;
          end if;
          if Order = Gunner or Order = Craft or Order = Heal or Order = Pilot or
-           Order = Engineer then
+           Order = Engineer or Order = Train then
             for I in Ship.Modules.Iterate loop
                if Ship.Modules(I).Durability > 0 then
                   case Modules_List(Ship.Modules(I).ProtoIndex).MType is
@@ -550,6 +550,17 @@ package body Ships.Crew is
                         if Order = Engineer then
                            ModuleIndex := Modules_Container.To_Index(I);
                            exit;
+                        end if;
+                     when TRAINING_ROOM =>
+                        if Order = Train and
+                          Ship.Modules(I).TrainedSkill > 0 then
+                           for Owner of Ship.Modules(I).Owner loop
+                              if Owner = 0 then
+                                 ModuleIndex := Modules_Container.To_Index(I);
+                                 exit;
+                              end if;
+                           end loop;
+                           exit when ModuleIndex > 0;
                         end if;
                      when others =>
                         null;
@@ -689,6 +700,9 @@ package body Ships.Crew is
             UpdateOrders(Ship);
          end if;
       end if;
+      if UpdatePosition(Train) then
+         UpdateOrders(Ship);
+      end if;
       if not HavePilot and then UpdatePosition(Pilot, False) then
          UpdateOrders(Ship);
       end if;
@@ -739,6 +753,9 @@ package body Ships.Crew is
          if UpdatePosition(Boarding, False) then
             UpdateOrders(Ship);
          end if;
+      end if;
+      if UpdatePosition(Train, False) then
+         UpdateOrders(Ship, False);
       end if;
    end UpdateOrders;
 
