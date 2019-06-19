@@ -21,7 +21,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New player's ships for inquisition faction
 - Self repair ships during combat for pirates, poleis and independent factions
-- Ability to have many owners to cabins and many workers to worshops, training
+- Ability to have many owners to cabins and many workers to workshops, training
   rooms and medical rooms
 - New ship modules: medium basic bronze cabin, medium advanced bronze cabin,
   medium extended bronze cabin, medium luxury bronze cabin, medium basic iron
@@ -68,7 +68,7 @@ All notable changes to this project will be documented in this file.
   pirates ship mk V, huge pirates trader mk V, armored poleis patrol ship,
   armored poleis patrol ship mk II, armored poleis patrol ship mk III, armored
   poleis patrol ship mk IV, armored independent patrol ship, armored
-  indepedent patrol ship mk II, armored independent patrol ship mk III,
+  independent patrol ship mk II, armored independent patrol ship mk III,
   armored independent patrol ship mk IV, armored pirates ship, armored pirates
   ship mk II, armored pirates ship mk III and armored pirates ship mk IV
 - Name for small extended adamantium cabin
@@ -125,7 +125,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Typos in changelog
-- Crash on trying to writting to the closed debug log file
+- Crash on trying to writing to the closed debug log file
 - Checking availability of crafting recipes
 - Check for tools for deconstructing items
 - Start searching for modules on editing module name
@@ -258,7 +258,7 @@ All notable changes to this project will be documented in this file.
 - Showing info about overloading when pilot is on rest
 - Enabling or disabling tooltips
 - Using/taking off items in crew member inventory
-- Loading inventories and cargos from data files
+- Loading inventories and cargo from data files
 - Crash in combat when no gunner in player ship
 - Crash on adding corpse to ships
 - Harpoon gun work when enemy have an armor
@@ -463,7 +463,7 @@ All notable changes to this project will be documented in this file.
 - Updated MODDING.md
 - Final enemy for story with undead
 - Updated interface
-- Crews for advanced huge inquistition ship mk V, huge inquisition ship mk V,
+- Crews for advanced huge inquisition ship mk V, huge inquisition ship mk V,
   advanced huge undead ship mk V, huge undead ship mk V, advanced huge pirate
   ship mk V and huge pirate ship mk V
 
