@@ -80,30 +80,26 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <placeholder/>
     </child>
     <child>
-      <object class="GtkBox">
+      <object class="GtkPaned">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_left">5</property>
-        <property name="margin_right">5</property>
-        <property name="margin_top">5</property>
-        <property name="margin_bottom">5</property>
+        <property name="can_focus">True</property>
         <property name="orientation">vertical</property>
+        <property name="position">125</property>
+        <property name="position_set">True</property>
         <child>
-          <object class="GtkExpander">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="expanded">True</property>
+            <property name="shadow_type">in</property>
             <child>
               <object class="GtkViewport">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkScrolledWindow">
+                  <object class="GtkExpander">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="hscrollbar_policy">never</property>
-                    <property name="shadow_type">in</property>
-                    <property name="min_content_height">150</property>
+                    <property name="expanded">True</property>
                     <child>
                       <object class="GtkTreeView" id="treetopics">
                         <property name="name">normalfont</property>
@@ -130,23 +126,22 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                         </child>
                       </object>
                     </child>
+                    <child type="label">
+                      <object class="GtkLabel">
+                        <property name="name">normalfont</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Table of content:</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
             </child>
-            <child type="label">
-              <object class="GtkLabel">
-                <property name="name">normalfont</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Table of content:</property>
-              </object>
-            </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
+            <property name="resize">True</property>
+            <property name="shrink">True</property>
           </packing>
         </child>
         <child>
@@ -169,9 +164,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="resize">True</property>
+            <property name="shrink">True</property>
           </packing>
         </child>
       </object>
