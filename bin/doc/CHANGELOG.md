@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Completing lists for bases and items names in debug menu
+- Some typos in changelog
 
 ## [3.8] - 2019-06-16
 
