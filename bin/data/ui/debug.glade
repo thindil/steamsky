@@ -195,6 +195,22 @@
       </attributes>
     </child>
   </object>
+  <object class="GtkListStore" id="moduleslist">
+    <columns>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkEntryCompletion" id="modulescompletion">
+    <property name="model">moduleslist</property>
+    <property name="text_column">0</property>
+    <child>
+      <object class="GtkCellRendererText"/>
+      <attributes>
+        <attribute name="text">0</attribute>
+      </attributes>
+    </child>
+  </object>
   <object class="GtkListStore" id="shipslist">
     <columns>
       <!-- column-name name -->
@@ -426,6 +442,7 @@
                       <object class="GtkEntry" id="edtprototype">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="completion">modulescompletion</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
