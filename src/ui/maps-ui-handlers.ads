@@ -113,5 +113,8 @@ package Maps.UI.Handlers is
    -- Disable mouse clicking on selected UI element
    function DisableMouse
      (Object: access Gtkada_Builder_Record'Class) return Boolean;
+   -- Set new message window size setting on resize it
+   function SetMessagesPosition
+     (Object: access Gtkada_Builder_Record'Class) return Boolean;
 
 end Maps.UI.Handlers;

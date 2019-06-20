@@ -1099,6 +1099,8 @@ package body Maps.UI is
       Register_Handler(Builder, "Move_Map_Buttons", MoveMapButtons'Access);
       Register_Handler(Builder, "Hide_Dialog", HideDialog'Access);
       Register_Handler(Builder, "Disable_Mouse", DisableMouse'Access);
+      Register_Handler
+        (Builder, "Set_Messages_Position", SetMessagesPosition'Access);
       Do_Connect(Builder);
       Add_Entry("<skymapwindow>/btnupleft", GDK_KP_7, 0);
       Add_Entry("<skymapwindow>/btnup", GDK_KP_8, 0);
