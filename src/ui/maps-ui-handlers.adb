@@ -135,10 +135,6 @@ package body Maps.UI.Handlers is
       Get_Size
         (Gtk_Window(Get_Object(Object, "skymapwindow")),
          Gint(GameSettings.WindowWidth), Gint(GameSettings.WindowHeight));
-      if Get_Position(Gtk_Paned(Get_Object(Object, "gamepaned"))) > 0 then
-         GameSettings.MessagesPosition :=
-           Natural(Get_Position(Gtk_Paned(Get_Object(Object, "gamepaned"))));
-      end if;
    end GetMapSize;
 
    function SetDestination
@@ -1769,5 +1765,18 @@ package body Maps.UI.Handlers is
    begin
       return True;
    end DisableMouse;
+
+   function SetMessagesPosition
+     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+      VisibleChildName: constant String :=
+        Get_Visible_Child_Name(Gtk_Stack(Get_Object(Object, "gamestack")));
+   begin
+      if VisibleChildName /= "lastmessages" and
+        VisibleChildName /= "options" then
+         GameSettings.MessagesPosition :=
+           Integer(Get_Position(Gtk_Paned(Get_Object(Object, "gamepaned"))));
+      end if;
+      return False;
+   end SetMessagesPosition;
 
 end Maps.UI.Handlers;

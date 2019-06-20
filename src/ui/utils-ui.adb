@@ -31,6 +31,7 @@ with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Button; use Gtk.Button;
+with Gtk.Paned; use Gtk.Paned;
 with Gdk.Types; use Gdk.Types;
 with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
 with Glib.Main; use Glib.Main;
@@ -157,6 +158,11 @@ package body Utils.UI is
          To_Unbounded_String("menuwait"), To_Unbounded_String("menustats"),
          To_Unbounded_String("menuhelp"), To_Unbounded_String("menuoptions"));
    begin
+      if VisibleChildName = "options" or VisibleChildName = "lastmessages" then
+         Set_Position
+           (Gtk_Paned(Get_Object(Builder, "gamepaned")),
+            Gint(GameSettings.MessagesPosition));
+      end if;
       if VisibleChildName = "options" then
          CloseOptions(Object);
          return;
