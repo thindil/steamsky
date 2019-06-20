@@ -23,6 +23,7 @@ with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Cell_Renderer_Text; use Gtk.Cell_Renderer_Text;
+with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
@@ -57,7 +58,19 @@ package body DebugUI is
    end MoveShip;
 
    procedure UpdateShip(Object: access Gtkada_Builder_Record'Class) is
+      CrewList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Object, "crewlist"));
+      CrewIter: Gtk_Tree_Iter;
    begin
+      Setting := True;
+      Clear(CrewList);
+      CrewIter := Get_Iter_First(CrewList);
+      for I in PlayerShip.Crew.Iterate loop
+         Append(CrewList, CrewIter);
+         Set(CrewList, CrewIter, 0, To_String(PlayerShip.Crew(I).Name));
+         Set(CrewList, CrewIter, 1, Gint(Crew_Container.To_Index(I)));
+      end loop;
+      Setting := False;
       Set_Value
         (Gtk_Adjustment(Get_Object(Object, "adjshipx")),
          Gdouble(PlayerShip.SkyX));
@@ -67,17 +80,9 @@ package body DebugUI is
    end UpdateShip;
 
    procedure UpdateCrew(Object: access Gtkada_Builder_Record'Class) is
-      ComboBox: constant Gtk_Combo_Box_Text :=
-        Gtk_Combo_Box_Text(Get_Object(Object, "cmbmember"));
+      ComboBox: constant Gtk_Combo_Box :=
+        Gtk_Combo_Box(Get_Object(Object, "cmbmember"));
    begin
-      Setting := True;
-      Remove_All(ComboBox);
-      for I in PlayerShip.Crew.Iterate loop
-         Append
-           (ComboBox, Positive'Image(Crew_Container.To_Index(I)),
-            To_String(PlayerShip.Crew(I).Name));
-      end loop;
-      Setting := False;
       Set_Active(ComboBox, 0);
    end UpdateCrew;
 
@@ -95,8 +100,7 @@ package body DebugUI is
       Member :=
         PlayerShip.Crew
           (Positive'Value
-             (Get_Active_Id
-                (Gtk_Combo_Box_Text(Get_Object(Object, "cmbmember")))));
+             (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbmember")))));
       Set_Value
         (Gtk_Adjustment(Get_Object(Object, "adjhealth")),
          Gdouble(Member.Health));
@@ -156,8 +160,7 @@ package body DebugUI is
       pragma Unreferenced(Path);
       MemberIndex: constant Positive :=
         Positive'Value
-          (Get_Active_Id
-             (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbmember"))));
+          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Builder, "cmbmember"))));
    begin
       PlayerShip.Crew(MemberIndex).Attributes
         (Positive(Get_Int(Model, Iter, 1)))
@@ -172,8 +175,7 @@ package body DebugUI is
       pragma Unreferenced(Path);
       MemberIndex: constant Positive :=
         Positive'Value
-          (Get_Active_Id
-             (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbmember"))));
+          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Builder, "cmbmember"))));
       SkillIndex: constant Integer := Integer(Get_Int(Model, Iter, 1));
    begin
       if SkillIndex > 0 then
@@ -192,7 +194,7 @@ package body DebugUI is
    procedure UpdateMember(Object: access Gtkada_Builder_Record'Class) is
       MemberIndex: constant Positive :=
         Positive'Value
-          (Get_Active_Id(Gtk_Combo_Box_Text(Get_Object(Object, "cmbmember"))));
+          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbmember"))));
    begin
       PlayerShip.Crew(MemberIndex).Health :=
         Natural(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjhealth"))));
