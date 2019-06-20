@@ -28,6 +28,7 @@ with Gtk.Stack; use Gtk.Stack;
 with Gtk.Settings; use Gtk.Settings;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
+with Gtk.Paned; use Gtk.Paned;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Gdk.Event;
@@ -442,6 +443,10 @@ package body GameOptions is
       Key: Gtk_Accel_Key;
       Found: Boolean;
    begin
+      Set_Position
+        (Gtk_Paned(Get_Object(Builder, "gamepaned")),
+         Get_Allocated_Height
+           (Gtk_Widget(Get_Object(Builder, "skymapwindow"))));
       Set_State
         (Gtk_Switch(Get_Object(Builder, "switchautorest")),
          GameSettings.AutoRest);

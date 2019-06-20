@@ -25,6 +25,7 @@ with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Tree_Model_Filter; use Gtk.Tree_Model_Filter;
 with Gtk.GEntry; use Gtk.GEntry;
+with Gtk.Paned; use Gtk.Paned;
 with Glib.Object; use Glib.Object;
 with Config; use Config;
 with Utils.UI; use Utils.UI;
@@ -150,6 +151,10 @@ package body Messages.UI is
 
    procedure ShowMessagesUI is
    begin
+      Set_Position
+        (Gtk_Paned(Get_Object(Builder, "gamepaned")),
+         Get_Allocated_Height
+           (Gtk_Widget(Get_Object(Builder, "skymapwindow"))));
       ShowMessages(Default);
       Set_Text(Gtk_GEntry(Get_Object(Builder, "entrysearch")), "");
       Set_Visible_Child_Name
