@@ -42,6 +42,7 @@ with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
+with ShipModules; use ShipModules;
 
 package body DebugUI is
 
@@ -61,6 +62,8 @@ package body DebugUI is
       CrewList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Object, "crewlist"));
       CrewIter: Gtk_Tree_Iter;
+      ComboBox: constant Gtk_Combo_Box_Text :=
+        Gtk_Combo_Box_Text(Get_Object(Object, "cmbmodules"));
    begin
       Setting := True;
       Clear(CrewList);
@@ -70,7 +73,14 @@ package body DebugUI is
          Set(CrewList, CrewIter, 0, To_String(PlayerShip.Crew(I).Name));
          Set(CrewList, CrewIter, 1, Gint(Crew_Container.To_Index(I)));
       end loop;
+      Remove_All(ComboBox);
+      for I in PlayerShip.Modules.Iterate loop
+         Append
+           (ComboBox, Positive'Image(Modules_Container.To_Index(I)),
+            To_String(PlayerShip.Modules(I).Name));
+      end loop;
       Setting := False;
+      Set_Active(ComboBox, 0);
       Set_Value
         (Gtk_Adjustment(Get_Object(Object, "adjshipx")),
          Gdouble(PlayerShip.SkyX));
@@ -688,6 +698,11 @@ package body DebugUI is
          for Ship of ProtoShips_List loop
             Append(List, Iter);
             Set(List, Iter, 0, To_String(Ship.Name));
+         end loop;
+         List := Gtk_List_Store(Get_Object(Builder, "moduleslist"));
+         for Module of Modules_List loop
+            Append(List, Iter);
+            Set(List, Iter, 0, To_String(Module.Name));
          end loop;
       end;
       declare
