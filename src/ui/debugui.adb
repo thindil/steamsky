@@ -71,7 +71,7 @@ package body DebugUI is
       for I in PlayerShip.Crew.Iterate loop
          Append(CrewList, CrewIter);
          Set(CrewList, CrewIter, 0, To_String(PlayerShip.Crew(I).Name));
-         Set(CrewList, CrewIter, 1, Gint(Crew_Container.To_Index(I)));
+         Set(CrewList, CrewIter, 1, Positive'Image(Crew_Container.To_Index(I)));
       end loop;
       Remove_All(ComboBox);
       for I in PlayerShip.Modules.Iterate loop
