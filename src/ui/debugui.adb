@@ -71,7 +71,8 @@ package body DebugUI is
       for I in PlayerShip.Crew.Iterate loop
          Append(CrewList, CrewIter);
          Set(CrewList, CrewIter, 0, To_String(PlayerShip.Crew(I).Name));
-         Set(CrewList, CrewIter, 1, Positive'Image(Crew_Container.To_Index(I)));
+         Set
+           (CrewList, CrewIter, 1, Positive'Image(Crew_Container.To_Index(I)));
       end loop;
       Remove_All(ComboBox);
       for I in PlayerShip.Modules.Iterate loop
@@ -640,6 +641,61 @@ package body DebugUI is
       SaveGame(True);
    end Save_Game;
 
+   procedure SetModuleStats(Object: access Gtkada_Builder_Record'Class) is
+      Module: ModuleData;
+   begin
+      if Setting then
+         return;
+      end if;
+      Module :=
+        PlayerShip.Modules
+          (Positive'Value
+             (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbmodules")))));
+      Set_Text
+        (Gtk_GEntry(Get_Object(Object, "edtprototype")),
+         To_String(Modules_List(Module.ProtoIndex).Name));
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Object, "adjmoduleweight")),
+         Gdouble(Module.Weight));
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Object, "adjmoduledur")),
+         Gdouble(Module.Durability));
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Object, "adjmodulemaxdur")),
+         Gdouble(Module.MaxDurability));
+      Set_Value
+        (Gtk_Adjustment(Get_Object(Object, "adjmoduleupgrade")),
+         Gdouble(Module.UpgradeProgress));
+   end SetModuleStats;
+
+   procedure UpdateModule(Object: access Gtkada_Builder_Record'Class) is
+      ModuleIndex: constant Positive :=
+        Positive'Value
+          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbmodules"))));
+      ProtoName: constant Unbounded_String :=
+        To_Unbounded_String
+          (Get_Text(Gtk_GEntry(Get_Object(Object, "edtprototype"))));
+   begin
+      for I in Modules_List.Iterate loop
+         if Modules_List(I).Name = ProtoName then
+            PlayerShip.Modules(ModuleIndex).ProtoIndex :=
+              BaseModules_Container.Key(I);
+            exit;
+         end if;
+      end loop;
+      PlayerShip.Modules(ModuleIndex).Weight :=
+        Natural
+          (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjmoduleweight"))));
+      PlayerShip.Modules(ModuleIndex).Durability :=
+        Natural(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjmoduledur"))));
+      PlayerShip.Modules(ModuleIndex).MaxDurability :=
+        Natural
+          (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjmodulemaxdur"))));
+      PlayerShip.Modules(ModuleIndex).UpgradeProgress :=
+        Natural
+          (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjmoduleupgrade"))));
+   end UpdateModule;
+
    procedure CreateDebugUI is
       Error: aliased GError;
    begin
@@ -673,6 +729,8 @@ package body DebugUI is
       Register_Handler(Builder, "Add_Event", AddEvent'Access);
       Register_Handler(Builder, "Delete_Event", DeleteEvent'Access);
       Register_Handler(Builder, "Save_Game", Save_Game'Access);
+      Register_Handler(Builder, "Set_Module_Stats", SetModuleStats'Access);
+      Register_Handler(Builder, "Update_Module", UpdateModule'Access);
       Do_Connect(Builder);
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderstat")),
