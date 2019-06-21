@@ -421,6 +421,7 @@
                       <object class="GtkComboBoxText" id="cmbmodules">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <signal name="changed" handler="Set_Module_Stats" swapped="no"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -519,40 +520,11 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Owner</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">6</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBox" id="cmbmoduleowner">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="model">crewlist</property>
-                        <property name="id_column">1</property>
-                        <child>
-                          <object class="GtkCellRendererText"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">6</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Upgrade Progress</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">7</property>
+                        <property name="top_attach">6</property>
                       </packing>
                     </child>
                     <child>
@@ -563,7 +535,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
-                        <property name="top_attach">7</property>
+                        <property name="top_attach">6</property>
                       </packing>
                     </child>
                   </object>
@@ -579,6 +551,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="Update_Module" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
