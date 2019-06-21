@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 - New ship modules: huge extended bronze cabin, huge luxury bronze cabin, huge
   basic iron cabin, huge advanced iron cabin, huge extended iron cabin, huge
   luxury iron cabin, huge basic steel cabin, huge advanced steel cabin, huge
-  extended steel cabin
+  extended steel cabin, huge luxury steel cabin
 - Order priority for training
 
 ### Changed
