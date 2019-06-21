@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Completing lists for bases and items names in debug menu
 - Some typos in changelog
 - Setting size of last messages window
+- Debug argument not working with AppImage version
 
 ## [3.8] - 2019-06-16
 
