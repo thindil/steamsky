@@ -14,6 +14,7 @@ themesdir="$HOME"/.local/share/steamsky/themes
 modsdir="$HOME"/.local/share/steamsky/mods
 datadir="$APPDIR"/usr/share/data
 docdir="$APPDIR"/usr/share/doc
+debug=none
 while test $# -gt 0
 do
    case "$1" in
@@ -27,7 +28,8 @@ do
          ;;
       --docdir*) docdir=`echo $1 | sed -e 's/^[^=]*=//g'`
          ;;
+      --debug*) debug=`echo $1 | sed -e 's/^[^=]*=//g'`
    esac
    shift
 done
-./steamsky --savedir="$savedir" --themesdir="$themesdir" --modsdir="$modsdir" --datadir="$datadir" --docdir="$docdir"
+./steamsky --savedir="$savedir" --themesdir="$themesdir" --modsdir="$modsdir" --datadir="$datadir" --docdir="$docdir" --debug="$debug"
