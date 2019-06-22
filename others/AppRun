@@ -1,5 +1,8 @@
 #!/bin/sh
 
+if [ -z ${APPDIR+x} ]; then
+   export APPDIR=$(pwd)
+fi
 cd $APPDIR/usr/bin
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$APPDIR/usr/lib
 export GDK_PIXBUF_MODULE_FILE=$APPDIR/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
