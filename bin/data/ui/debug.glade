@@ -421,6 +421,7 @@
                       <object class="GtkComboBoxText" id="cmbmodules">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Select module to edit.</property>
                         <signal name="changed" handler="Set_Module_Stats" swapped="no"/>
                       </object>
                       <packing>
@@ -443,6 +444,7 @@
                       <object class="GtkEntry" id="edtprototype">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Select prototype module for this module. Start typying to select name of proto module. WARNING: If you select other type of module than previous (for example from Cabin to Workshop) the game can crash.</property>
                         <property name="completion">modulescompletion</property>
                       </object>
                       <packing>
@@ -465,6 +467,7 @@
                       <object class="GtkSpinButton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Set new weight of the module.</property>
                         <property name="adjustment">adjmoduleweight</property>
                       </object>
                       <packing>
@@ -487,6 +490,7 @@
                       <object class="GtkSpinButton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Set new durability of the module.</property>
                         <property name="adjustment">adjmoduledur</property>
                       </object>
                       <packing>
@@ -509,6 +513,7 @@
                       <object class="GtkSpinButton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Set new maximum durablity for the module.</property>
                         <property name="adjustment">adjmodulemaxdur</property>
                       </object>
                       <packing>
@@ -531,6 +536,7 @@
                       <object class="GtkSpinButton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Set upgrade progress for the module. No effect unless any ugrade is set for selected module.</property>
                         <property name="adjustment">adjmoduleupgrade</property>
                       </object>
                       <packing>
@@ -551,6 +557,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes">Commit changes to the ship module.</property>
                     <signal name="clicked" handler="Update_Module" swapped="no"/>
                   </object>
                   <packing>
@@ -590,6 +597,7 @@
                       <object class="GtkComboBox" id="cmbmember">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Select crew member to edit.</property>
                         <property name="model">crewlist</property>
                         <property name="id_column">1</property>
                         <signal name="changed" handler="Set_Member_Stats" swapped="no"/>
@@ -908,6 +916,7 @@
                               <object class="GtkComboBoxText" id="cmbskill">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Select skill to add.</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
