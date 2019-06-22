@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
   extended steel cabin, huge luxury steel cabin, huge advanced titanium cabin,
   huge extended titanium cabin
 - Order priority for training
+- Option to edit player ship modules in debug menu
 
 ### Changed
 - Updated help
