@@ -50,8 +50,6 @@ procedure SteamSky is
             return False;
          end if;
       end if;
-      LogMessage
-        (PathName & " directory sets to: " & To_String(Path), Everything);
       return True;
    end UpdatePath;
 
@@ -74,7 +72,6 @@ begin
                   exit;
                end if;
             end loop;
-            StartLogging;
          elsif Argument(I)(1 .. 8) = "--datadi" then
             DataDirectory :=
               To_Unbounded_String(Argument(I)(11 .. (Argument(I)'Last)));
@@ -118,6 +115,8 @@ begin
    if not Exists(To_String(ThemesDirectory)) then
       Create_Path(To_String(ThemesDirectory));
    end if;
+
+   StartLogging;
 
    LoadConfig;
    LoadHallOfFame;
