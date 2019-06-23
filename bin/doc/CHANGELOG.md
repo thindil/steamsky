@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Info about upgrading strength of harpoon guns in ship info
 - Counting max fuel reduction upgrade for engines
 - Help window resizes outside screen
+- Crash when starting the game in debug mode with not existing save directory
 
 ## [3.0.12] - 2019-06-02
 
