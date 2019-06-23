@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Setting size of last messages window
 - Debug argument not working with AppImage version
 - Running the game after extracting AppImage
+- Crash when starting the game in debug mode with not existing save directory
 
 ## [3.8] - 2019-06-16
 
