@@ -265,6 +265,9 @@ package body DebugUI is
             Set_Value
               (Gtk_Adjustment(Get_Object(Object, "adjreputation")),
                Gdouble(SkyBases(I).Reputation(1)));
+            Set_Value
+              (Gtk_Adjustment(Get_Object(Object, "adjbasemoney")),
+               Gdouble(SkyBases(I).Cargo(1).Amount));
             exit;
          end if;
       end loop;
@@ -506,6 +509,10 @@ package body DebugUI is
                    (Get_Active
                       (Gtk_Combo_Box_Text
                          (Get_Object(Object, "cmbbasesize")))));
+            SkyBase.Cargo(1).Amount :=
+              Natural
+                (Get_Value
+                   (Gtk_Adjustment(Get_Object(Object, "adjbasemoney"))));
          end if;
       end loop;
    end UpdateBase;
