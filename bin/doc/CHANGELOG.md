@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
   cabin
 - Order priority for training
 - Option to edit player ship modules in debug menu
+- Option to edit amount of money owned by bases in debug menu
 
 ### Changed
 - Updated help
