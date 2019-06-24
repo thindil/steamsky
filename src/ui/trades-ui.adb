@@ -209,7 +209,9 @@ package body Trades.UI is
                        (Float(TraderCargo(1).Amount) / Float(MaxPrice))));
             end if;
             MaxPrice := MaxSellAmount * Price;
-            CountPrice(MaxPrice, FindMember(Talk), False);
+            if MaxPrice > 0 then
+               CountPrice(MaxPrice, FindMember(Talk), False);
+            end if;
             Weight :=
               FreeCargo
                 ((Items_List(ProtoIndex).Weight * MaxSellAmount) - MaxPrice);
