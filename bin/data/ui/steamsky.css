@@ -7,9 +7,8 @@
    border-style:none;
    box-shadow:none;
    text-shadow:none;
-   font-family:Z003;
-   font-style:italic;
-   font-size:16px;
+   font-family:Amarante;
+   font-size:14px;
    -GtkPaned-handle-size: 5;
 }
 
@@ -240,9 +239,9 @@ GtkTextView#mapview {
 
 /* Font used mostly in help */
 *#normalfont {
-   font-family:Roboto;
+   font-family:Amarante;
    font-style:normal;
-   font-size:12px;
+   font-size:14px;
 }
 
 /* Red progress bars settings */
@@ -394,7 +393,7 @@ GtkStackSwitcher .button:checked {
 /* Font used for icons in UI */
 *#fontawesome {
    font-family:"Font Awesome 5 Free";
-   font-size:12px;
+   font-size:14px;
 }
 
 /* Settings for move map buttons */
