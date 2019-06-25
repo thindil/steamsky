@@ -513,6 +513,14 @@ package body DebugUI is
               Natural
                 (Get_Value
                    (Gtk_Adjustment(Get_Object(Object, "adjbasemoney"))));
+            SkyBase.Population :=
+              Natural
+                (Get_Value
+                   (Gtk_Adjustment(Get_Object(Object, "adjpopulation"))));
+            SkyBase.Reputation(1) :=
+              Natural
+                (Get_Value
+                   (Gtk_Adjustment(Get_Object(Object, "adjreputation"))));
          end if;
       end loop;
    end UpdateBase;
