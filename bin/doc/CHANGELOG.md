@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Running the game after extracting AppImage
 - Crash when starting the game in debug mode with not existing save directory
 - Crash when base don't have more money to buying something
+- Editing bases population and reputation in debug menu
 
 ## [3.8] - 2019-06-16
 
