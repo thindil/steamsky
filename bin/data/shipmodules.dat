@@ -339,5 +339,6 @@ types of modules) the module can have. Default value is 1.
  <module durability="1000" index="294" installtime="670" material="Orichalcum" maxowners="4" maxvalue="80" name="Huge luxury orichalcum cabin" price="52000" size="4" skill="Engineering" type="CABIN" value="80" weight="9600">Huge, decorated, cabin made of orichalcum.  Well equipped with high quality furniture.</module>
  <module durability="1200" index="295" installtime="550" material="Adamantium" maxowners="4" maxvalue="60" name="Huge extended adamantium cabin" price="32000" size="4" skill="Engineering" type="CABIN" value="60" weight="6400">Huge, decorated cabin made of adamantium with some better quality furniture.</module>
  <module durability="1200" index="296" installtime="670" material="Adamantium" maxowners="4" maxvalue="80" name="Huge luxury adamantium cabin" price="80000" size="4" skill="Engineering" type="CABIN" value="80" weight="9600">Huge, decorated, cabin made of adamantium.  Well equipped with high quality furniture.</module>
+ <module durability="100" index="297" installtime="60" material="Bronze" maxowners="2" maxvalue="10" name="Small double basic bronze cabin" price="500" size="1" skill="Engineering" type="CABIN" value="10" weight="200">Small cabin made of bronze with just few furnitures with lower quality but more space for residents.</module>
 </modules>
 
