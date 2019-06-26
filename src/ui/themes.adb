@@ -83,7 +83,7 @@ package body Themes is
          EndIndex := Index(CssText, ";", StartIndex);
          Replace_Slice
            (CssText, StartIndex, EndIndex,
-            "font-size:" & Positive'Image(GameSettings.InterfaceFontSize - 4) &
+            "font-size:" & Positive'Image(GameSettings.InterfaceFontSize) &
             "px;");
       end if;
       if not GameSettings.ShowTooltips then
