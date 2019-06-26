@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated help
 - Updated UI
+- Updated README.md
 
 ### Fixed
 - Completing lists for bases and items names in debug menu
