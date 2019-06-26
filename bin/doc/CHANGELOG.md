@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Crash when starting the game in debug mode with not existing save directory
 - Crash when base don't have more money to buying something
 - Editing bases population and reputation in debug menu
+- Setting size of ship info icon
 
 ## [3.8] - 2019-06-16
 
