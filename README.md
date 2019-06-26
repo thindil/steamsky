@@ -113,9 +113,8 @@ The Gtk library distributed with game is under the LGPLv2.1 license: https://www
 
 The Licensing for the fonts distributed with the game is as follows:
 
-* Font Roboto is under Apache v2.0 license: https://fonts.google.com/specimen/Roboto
+* Font Amarante is under SIL Open Font License: https://fonts.google.com/specimen/Amarante
 * Font Awesome is under SIL Open Font License: https://fontawesome.com
-* Font Z003 is under AGPL v3 license: https://github.com/ArtifexSoftware/urw-base35-fonts
 * Font Rye is under Open Font License: https://fonts.google.com/specimen/Rye
 * Font Hack Nerd Font is under MiT license: https://nerdfonts.com/
 
