@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - Crash when base don't have more money to buying something
 - Editing bases population and reputation in debug menu
 - Setting size of ship info icon
+- Infinite resizing of game window on enter crafting info
 
 ## [3.8] - 2019-06-16
 
