@@ -101,6 +101,8 @@ package body Utils.UI is
       if not Get_Visible(Gtk_Widget(User_Data)) then
          Show_All(Gtk_Widget(User_Data));
          if User_Data = Get_Object(Builder, "moremovemapbox") then
+            Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
+            Hide(Gtk_Widget(Get_Object(Builder, "btnboxwait")));
             Grab_Focus(Gtk_Widget(Get_Object(Builder, "spinx")));
          end if;
       else
