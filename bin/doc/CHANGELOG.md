@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
 - Editing bases population and reputation in debug menu
 - Setting size of ship info icon
 - Infinite resizing of game window on enter crafting info
+- Hide other windows on show more move map options
 
 ## [3.8] - 2019-06-16
 
