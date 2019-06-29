@@ -403,7 +403,6 @@ GtkStackSwitcher .button:checked {
 
 *#movemap * {
    font-family:"Font Awesome 5 Free";
-   font-size:0.8em;
    border-radius: 0;
 }
 
