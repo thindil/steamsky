@@ -1623,6 +1623,9 @@ package body Maps.UI.Handlers is
       return Boolean is
       pragma Unreferenced(Self);
    begin
+      if (Event.State and Get_Default_Mod_Mask) /= Shift_Mask then
+         return False;
+      end if;
       if Event.Direction = Scroll_Down then
          GameSettings.MapFontSize := GameSettings.MapFontSize - 1;
          if GameSettings.MapFontSize < 3 then
