@@ -292,7 +292,7 @@ If you successfully finish mission, your character gain some morale, if you fail
 * During combat with undead ships, it is good to send boarding party on enemy ship. After combat they may find interesting thing...
 * Your career determine not only your starting ship and crew, but mainly gaining experience by you and your crew members in skills during game. Those who choice combat based career will be learn combat skills faster than those who choice crafting based career.
 * When you waiting in place outside sky bases, your ship will be use fuel too. Watch out on it, because if you will not have enough fuel, you may fall from sky and die.
-* You may "zoom in" or "zoom out" map with mouse wheel (it changing size of font used for map) or with {GameKey 28} and {GameKey 29} keys.
+* You may "zoom in" or "zoom out" map with mouse wheel, while holding SHIFT key (it changing size of font used for map) or with {GameKey 28} and {GameKey 29} keys.
 * You may change all keyboard shortcuts in 'Game Options' menu (key {GameKey 23}).</entry>
 </help>
 
