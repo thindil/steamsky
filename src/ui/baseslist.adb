@@ -33,6 +33,7 @@ with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Gtk.Menu; use Gtk.Menu;
+with Gtk.Menu_Item; use Gtk.Menu_Item;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Bases; use Bases;
@@ -62,6 +63,9 @@ package body BasesList is
             ReputationText);
       end SetReputationText;
    begin
+      if not Is_Visible(Gtk_Widget(Get_Object(Object, "baseinfoscroll"))) then
+         return;
+      end if;
       declare
          BasesIter: Gtk_Tree_Iter;
          BasesModel: Gtk_Tree_Model;
@@ -312,6 +316,22 @@ package body BasesList is
       return False;
    end VisibleBases;
 
+   procedure ToggleBaseInfo(Object: access Gtkada_Builder_Record'Class) is
+      InfoWidget: constant Gtk_Widget :=
+        Gtk_Widget(Get_Object(Object, "baseinfoscroll"));
+      MenuItem: constant Gtk_Menu_Item :=
+        Gtk_Menu_Item(Get_Object(Object, "hidebaseinfomenu"));
+   begin
+      if Is_Visible(InfoWidget) then
+         Hide(InfoWidget);
+         Set_Label(MenuItem, "S_how base info");
+      else
+         Show_All(InfoWidget);
+         Set_Label(MenuItem, "_Hide base info");
+         ShowBaseInfo(Object);
+      end if;
+   end ToggleBaseInfo;
+
    procedure CreateBasesListUI(NewBuilder: Gtkada_Builder) is
       ComboBox: Gtk_Combo_Box_Text;
    begin
@@ -322,6 +342,7 @@ package body BasesList is
       Register_Handler(Builder, "Show_Base", ShowBase'Access);
       Register_Handler(Builder, "Search_Bases", SearchBases'Access);
       Register_Handler(Builder, "Show_Popup_Menu", ShowPopupMenu'Access);
+      Register_Handler(Builder, "Toggle_Base_Info", ToggleBaseInfo'Access);
       ComboBox := Gtk_Combo_Box_Text(Get_Object(Builder, "cmbtype"));
       for I in Bases_Types loop
          Append_Text
