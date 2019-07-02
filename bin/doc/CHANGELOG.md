@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file.
   iron cabin, small double advanced iron cabin, small double extended iron
   cabin, small double luxury iron cabin, small double basic steel cabin, small
   double advanced steel cabin, small double extended steel cabin, small double
-  luxury steel cabin
+  luxury steel cabin, small double advanced titanium cabin
 - Order priority for training
 - Option to edit player ship modules in debug menu
 - Option to edit amount of money owned by bases in debug menu
