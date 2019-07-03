@@ -80,7 +80,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <placeholder/>
     </child>
     <child>
-      <object class="GtkPaned">
+      <object class="GtkPaned" id="helppaned">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="orientation">vertical</property>

@@ -53,7 +53,7 @@ package body Config is
          MessagesOrder => OLDER_FIRST, AutoAskForBases => False,
          AutoAskForEvents => False, ShowTooltips => True,
          ShowLastMessages => True, MessagesPosition => 0, FullScreen => False,
-         AutoCloseMessagesTime => 6, AutoSave => NONE);
+         AutoCloseMessagesTime => 6, AutoSave => NONE, TopicsPosition => 0);
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
@@ -165,6 +165,8 @@ package body Config is
                  Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("AutoSave") then
                GameSettings.AutoSave := AutoSaveType'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("TopicsPosition") then
+               GameSettings.TopicsPosition := Natural'Value(To_String(Value));
             end if;
          end if;
       end loop;
@@ -290,6 +292,9 @@ package body Config is
       Put_Line
         (ConfigFile,
          "AutoSave = " & AutoSaveType'Image(GameSettings.AutoSave));
+      Put_Line
+        (ConfigFile,
+         "TopicsPosition =" & Natural'Image(GameSettings.TopicsPosition));
       Close(ConfigFile);
    end SaveConfig;
 

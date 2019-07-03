@@ -30,13 +30,15 @@ with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Tree_View; use Gtk.Tree_View;
+with Gtk.Paned; use Gtk.Paned;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
+with Glib.Object; use Glib.Object;
 with Game; use Game;
-with Utils.UI; use Utils.UI;
 with Items; use Items;
 with Factions; use Factions;
 with Config; use Config;
+with Utils.UI; use Utils.UI;
 
 package body Help.UI is
 
@@ -80,6 +82,15 @@ package body Help.UI is
       return True;
    end DisableMouse;
 
+   function HideHelpWindow
+     (User_Data: access GObject_Record'Class) return Boolean is
+   begin
+      GameSettings.TopicsPosition :=
+        Natural(Get_Position(Gtk_Paned(Get_Object(Builder, "helppaned"))));
+      SaveConfig;
+      return Hide_On_Delete(Gtk_Widget(User_Data));
+   end HideHelpWindow;
+
    procedure CreateHelpUI is
       Error: aliased GError;
       TopicsIter: Gtk_Tree_Iter;
@@ -103,7 +114,7 @@ package body Help.UI is
          Append(TopicsList, TopicsIter);
          Set(TopicsList, TopicsIter, 0, To_String(Help_Container.Key(I)));
       end loop;
-      Register_Handler(Builder, "Hide_Window", HideWindow'Access);
+      Register_Handler(Builder, "Hide_Window", HideHelpWindow'Access);
       Register_Handler(Builder, "Select_Topic", SelectTopic'Access);
       Register_Handler(Builder, "Disable_Mouse", DisableMouse'Access);
       Do_Connect(Builder);
@@ -289,6 +300,11 @@ package body Help.UI is
          end if;
          TopicIndex := TopicIndex + 1;
       end loop;
+      if GameSettings.TopicsPosition > 0 then
+         Set_Position
+           (Gtk_Paned(Get_Object(Builder, "helppaned")),
+            Gint(GameSettings.TopicsPosition));
+      end if;
       Set_Cursor
         (Gtk_Tree_View(Get_Object(Builder, "treetopics")),
          Gtk_Tree_Path_New_From_String(Natural'Image(TopicIndex)), null,
