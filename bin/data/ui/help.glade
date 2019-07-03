@@ -96,10 +96,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkExpander">
+                  <object class="GtkExpander" id="helpexpander">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="expanded">True</property>
+                    <signal name="activate" handler="Toggle_Topics" swapped="no"/>
                     <child>
                       <object class="GtkTreeView" id="treetopics">
                         <property name="name">normalfont</property>

@@ -31,6 +31,7 @@ with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Paned; use Gtk.Paned;
+with Gtk.Expander; use Gtk.Expander;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -91,6 +92,20 @@ package body Help.UI is
       return Hide_On_Delete(Gtk_Widget(User_Data));
    end HideHelpWindow;
 
+   procedure ToggleTopics(Object: access Gtkada_Builder_Record'Class) is
+   begin
+      if not Get_Expanded(Gtk_Expander(Get_Object(Object, "helpexpander"))) and
+        GameSettings.TopicsPosition > 0 then
+         Set_Position
+           (Gtk_Paned(Get_Object(Builder, "helppaned")),
+            Gint(GameSettings.TopicsPosition));
+      else
+         GameSettings.TopicsPosition :=
+           Natural(Get_Position(Gtk_Paned(Get_Object(Builder, "helppaned"))));
+         Set_Position(Gtk_Paned(Get_Object(Builder, "helppaned")), 60);
+      end if;
+   end ToggleTopics;
+
    procedure CreateHelpUI is
       Error: aliased GError;
       TopicsIter: Gtk_Tree_Iter;
@@ -117,6 +132,7 @@ package body Help.UI is
       Register_Handler(Builder, "Hide_Window", HideHelpWindow'Access);
       Register_Handler(Builder, "Select_Topic", SelectTopic'Access);
       Register_Handler(Builder, "Disable_Mouse", DisableMouse'Access);
+      Register_Handler(Builder, "Toggle_Topics", ToggleTopics'Access);
       Do_Connect(Builder);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "helpwindow")), CloseWindow'Access);
