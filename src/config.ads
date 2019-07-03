@@ -74,6 +74,7 @@ package Config is
       FullScreen: Boolean; -- If true, set the game window in full screen mode
       AutoCloseMessagesTime: Positive; -- Amount of seconds after which message box is auto closed
       AutoSave: AutoSaveType; -- How often game is autosaved
+      TopicsPosition: Natural; -- Position of help topics window in pixels from top of the help window
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;
