@@ -41,6 +41,7 @@ All notable changes to this project will be documented in this file.
 - Setting size of ship info icon
 - Infinite resizing of game window on enter crafting info
 - Hide other windows on show more move map options
+- Info about abandoned bases
 
 ## [3.8] - 2019-06-16
 
