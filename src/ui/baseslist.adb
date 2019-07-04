@@ -44,6 +44,7 @@ with Ships; use Ships;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 with Factions; use Factions;
+with Config; use Config;
 
 package body BasesList is
 
@@ -325,10 +326,12 @@ package body BasesList is
       if Is_Visible(InfoWidget) then
          Hide(InfoWidget);
          Set_Label(MenuItem, "S_how base info");
+         GameSettings.ShowBaseInfo := False;
       else
          Show_All(InfoWidget);
          Set_Label(MenuItem, "_Hide base info");
          ShowBaseInfo(Object);
+         GameSettings.ShowBaseInfo := True;
       end if;
    end ToggleBaseInfo;
 
@@ -426,6 +429,17 @@ package body BasesList is
             end if;
          end if;
       end loop;
+      if GameSettings.ShowBaseInfo then
+         Show_All(Gtk_Widget(Get_Object(Builder, "baseinfoscroll")));
+         Set_Label
+           (Gtk_Menu_Item(Get_Object(Builder, "hidebaseinfomenu")),
+            "_Hide base info");
+      else
+         Hide(Gtk_Widget(Get_Object(Builder, "baseinfoscroll")));
+         Set_Label
+           (Gtk_Menu_Item(Get_Object(Builder, "hidebaseinfomenu")),
+            "S_how base info");
+      end if;
       if N_Children(BaseList, Null_Iter) > 0 then
          Set_Cursor
            (Gtk_Tree_View(Get_Object(Builder, "treebases")),
