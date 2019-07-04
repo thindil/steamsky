@@ -833,7 +833,9 @@ package body Maps.UI is
                  (MapInfoText,
                   "Type: " &
                   To_Lower(Bases_Types'Image(SkyBases(BaseIndex).BaseType)));
-               Append(MapInfoText, LF);
+               if SkyBases(BaseIndex).Population > 0 then
+                  Append(MapInfoText, LF);
+               end if;
                if SkyBases(BaseIndex).Population > 0 and
                  SkyBases(BaseIndex).Population < 150 then
                   Append(MapInfoText, "Population: small");
@@ -846,9 +848,8 @@ package body Maps.UI is
                Append
                  (MapInfoText,
                   LF & "Size: " &
-                  To_Lower(Bases_Size'Image(SkyBases(BaseIndex).Size)));
+                  To_Lower(Bases_Size'Image(SkyBases(BaseIndex).Size)) & LF);
                if SkyBases(BaseIndex).Population > 0 then
-                  Append(MapInfoText, LF);
                   Append
                     (MapInfoText,
                      "Owner: " &
