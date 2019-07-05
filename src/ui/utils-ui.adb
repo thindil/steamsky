@@ -396,6 +396,8 @@ package body Utils.UI is
       Set_Visible(ItemInfoBox, not Get_Visible(ItemInfoBox));
       if User_Data = Get_Object(Builder, "boxcargoiteminfo") then
          GameSettings.ShowCargoInfo := not GameSettings.ShowCargoInfo;
+      elsif User_Data = Get_Object(Builder, "boxinventoryiteminfo") then
+         GameSettings.ShowInventoryInfo := not GameSettings.ShowInventoryInfo;
       end if;
    end HideItemInfo;
 
