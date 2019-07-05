@@ -2304,7 +2304,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <signal name="changed" handler="Select_Messages" swapped="no"/>
                               </object>
                               <packing>
-                                <property name="expand">True</property>
+                                <property name="expand">False</property>
                                 <property name="fill">True</property>
                                 <property name="position">0</property>
                               </packing>
@@ -2355,7 +2355,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           <object class="GtkScrolledWindow">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="hscrollbar_policy">never</property>
                             <property name="shadow_type">in</property>
                             <child>
                               <object class="GtkTreeView">
@@ -3364,7 +3363,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkBox" id="gamestatsbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="homogeneous">True</property>
                         <child>
                           <object class="GtkScrolledWindow">
                             <property name="visible">True</property>
@@ -3608,7 +3606,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
+                            <property name="expand">True</property>
                             <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
