@@ -41,6 +41,7 @@ with Bases; use Bases;
 with Utils; use Utils;
 with Factions; use Factions;
 with Utils.UI; use Utils.UI;
+with Config; use Config;
 
 package body Crew.UI.Handlers is
 
@@ -304,6 +305,11 @@ package body Crew.UI.Handlers is
       RefreshInventory;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Object, "gamestack")), "inventory");
+      if GameSettings.ShowInventoryInfo then
+         Show_All(Gtk_Widget(Get_Object(Builder, "boxinventoryiteminfo")));
+      else
+         Hide(Gtk_Widget(Get_Object(Builder, "boxinventoryiteminfo")));
+      end if;
       SetActiveItem;
    end ShowInventory;
 
