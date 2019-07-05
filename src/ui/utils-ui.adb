@@ -394,6 +394,9 @@ package body Utils.UI is
       ItemInfoBox: constant Gtk_Widget := Gtk_Widget(User_Data);
    begin
       Set_Visible(ItemInfoBox, not Get_Visible(ItemInfoBox));
+      if User_Data = Get_Object(Builder, "boxcargoiteminfo") then
+         GameSettings.ShowCargoInfo := not GameSettings.ShowCargoInfo;
+      end if;
    end HideItemInfo;
 
    function ShowPopupMenu
