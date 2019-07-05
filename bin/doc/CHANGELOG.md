@@ -19,7 +19,7 @@ All notable changes to this project will be documented in this file.
   luxury steel cabin, small double advanced titanium cabin, small double
   extented titanium cabin, small double luxury titanium cabin, small double
   advanced orichalcum cabin, small double extended orichalcum cabin, small
-  double luxury orichalcum cabin
+  double luxury orichalcum cabin, small double extended adamantium cabin
 - Order priority for training
 - Option to edit player ship modules in debug menu
 - Option to edit amount of money owned by bases in debug menu
