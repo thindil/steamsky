@@ -5031,7 +5031,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                   <object class="GtkBox">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="homogeneous">True</property>
                                     <child>
                                       <object class="GtkScrolledWindow">
                                         <property name="visible">True</property>
@@ -5161,7 +5160,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="expand">False</property>
+                                        <property name="expand">True</property>
                                         <property name="fill">True</property>
                                         <property name="position">1</property>
                                       </packing>
@@ -5183,7 +5182,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <object class="GtkBox">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="homogeneous">True</property>
                                 <child>
                                   <object class="GtkScrolledWindow">
                                     <property name="visible">True</property>
@@ -5767,7 +5765,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <object class="GtkBox">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="homogeneous">True</property>
                                 <child>
                                   <object class="GtkScrolledWindow">
                                     <property name="visible">True</property>
@@ -5831,7 +5828,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     </child>
                                   </object>
                                   <packing>
-                                    <property name="expand">False</property>
+                                    <property name="expand">True</property>
                                     <property name="fill">True</property>
                                     <property name="position">0</property>
                                   </packing>
@@ -5900,7 +5897,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     </child>
                                   </object>
                                   <packing>
-                                    <property name="expand">False</property>
+                                    <property name="expand">True</property>
                                     <property name="fill">True</property>
                                     <property name="position">1</property>
                                   </packing>
@@ -8111,7 +8108,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="halign">start</property>
-                                            <property name="column_homogeneous">True</property>
                                             <child>
                                               <object class="GtkLabel">
                                                 <property name="visible">True</property>
@@ -8594,7 +8590,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkBox" id="crewbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="homogeneous">True</property>
                         <child>
                           <object class="GtkScrolledWindow">
                             <property name="visible">True</property>
@@ -8650,7 +8645,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
+                            <property name="expand">True</property>
                             <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
@@ -9316,7 +9311,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                       <object class="GtkBox" id="shipinfobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="homogeneous">True</property>
                         <child>
                           <object class="GtkBox">
                             <property name="visible">True</property>
@@ -9442,7 +9436,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
+                            <property name="expand">True</property>
                             <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
@@ -9858,7 +9852,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
+                            <property name="expand">True</property>
                             <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
