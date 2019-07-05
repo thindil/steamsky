@@ -35,6 +35,7 @@ with Stories; use Stories;
 with Missions; use Missions;
 with Utils.UI; use Utils.UI;
 with Maps.UI; use Maps.UI;
+with Config; use Config;
 
 package body Ships.Cargo.UI is
 
@@ -294,6 +295,11 @@ package body Ships.Cargo.UI is
       UpdateMessages;
       SetActiveItem;
       Set_Active(ComboBoxMember, 0);
+      if GameSettings.ShowCargoInfo then
+         Show_All(Gtk_Widget(Get_Object(Builder, "boxcargoiteminfo")));
+      else
+         Hide(Gtk_Widget(Get_Object(Builder, "boxcargoiteminfo")));
+      end if;
       Hide(Gtk_Widget(Get_Object(Builder, "lbldropwarning")));
       Hide(Gtk_Widget(Get_Object(Builder, "lblgivewarning")));
    end ShowCargoUI;

@@ -76,6 +76,7 @@ package Config is
       AutoSave: AutoSaveType; -- How often game is autosaved
       TopicsPosition: Natural; -- Position of help topics window in pixels from top of the help window
       ShowBaseInfo: Boolean; -- If true, show detailed information about selected base in bases list
+      ShowCargoInfo: Boolean; -- If true, show detailed information about selected intem in player ship cargo
    end record;
    NewGameSettings: NewGameRecord;
    GameSettings: GameSettingsRecord;
