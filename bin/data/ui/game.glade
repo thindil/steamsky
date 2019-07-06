@@ -1837,6 +1837,22 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="guint"/>
     </columns>
   </object>
+  <object class="GtkListStore" id="shipcrewinfolist">
+    <columns>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+      <!-- column-name health -->
+      <column type="gdouble"/>
+      <!-- column-name thirst -->
+      <column type="gdouble"/>
+      <!-- column-name hunger -->
+      <column type="gdouble"/>
+      <!-- column-name tired -->
+      <column type="gdouble"/>
+      <!-- column-name morale -->
+      <column type="gdouble"/>
+    </columns>
+  </object>
   <object class="GtkListStore" id="skillslist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -9403,83 +9419,328 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkScrolledWindow">
+                          <object class="GtkBox">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="shadow_type">in</property>
+                            <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkViewport">
+                              <object class="GtkScrolledWindow">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="shadow_type">in</property>
                                 <child>
-                                  <object class="GtkBox">
+                                  <object class="GtkViewport">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="orientation">vertical</property>
                                     <child>
                                       <object class="GtkFrame">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="margin_top">5</property>
-                                        <property name="margin_bottom">5</property>
                                         <property name="label_xalign">0.10000000149011612</property>
                                         <property name="shadow_type">out</property>
                                         <child>
-                                          <object class="GtkAlignment">
+                                          <object class="GtkTreeView">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="model">shipcrewinfolist</property>
+                                            <property name="headers_visible">False</property>
+                                            <child internal-child="selection">
+                                              <object class="GtkTreeSelection"/>
+                                            </child>
+                                            <child>
+                                              <object class="GtkTreeViewColumn">
+                                                <property name="title" translatable="yes">Name</property>
+                                                <child>
+                                                  <object class="GtkCellRendererText"/>
+                                                  <attributes>
+                                                    <attribute name="text">0</attribute>
+                                                  </attributes>
+                                                </child>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkTreeViewColumn">
+                                                <child>
+                                                  <object class="GtkCellRendererProgress">
+                                                    <property name="text">Health</property>
+                                                  </object>
+                                                  <attributes>
+                                                    <attribute name="value">1</attribute>
+                                                  </attributes>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkCellRendererProgress">
+                                                    <property name="text">Tiredness</property>
+                                                  </object>
+                                                  <attributes>
+                                                    <attribute name="value">4</attribute>
+                                                  </attributes>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkCellRendererProgress">
+                                                    <property name="text">Thirst</property>
+                                                  </object>
+                                                  <attributes>
+                                                    <attribute name="value">2</attribute>
+                                                  </attributes>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkCellRendererProgress">
+                                                    <property name="text">Hunger</property>
+                                                  </object>
+                                                  <attributes>
+                                                    <attribute name="value">3</attribute>
+                                                  </attributes>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkCellRendererProgress">
+                                                    <property name="text">Morale</property>
+                                                  </object>
+                                                  <attributes>
+                                                    <attribute name="value">5</attribute>
+                                                  </attributes>
+                                                </child>
+                                              </object>
+                                            </child>
+                                          </object>
+                                        </child>
+                                        <child type="label">
+                                          <object class="GtkLabel">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="left_padding">12</property>
-                                            <property name="right_padding">12</property>
+                                            <property name="label" translatable="yes">Crew Info:</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkScrolledWindow">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="shadow_type">in</property>
+                                <child>
+                                  <object class="GtkViewport">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <child>
+                                      <object class="GtkBox">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="orientation">vertical</property>
+                                        <child>
+                                          <object class="GtkFrame">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="margin_top">5</property>
+                                            <property name="margin_bottom">5</property>
+                                            <property name="label_xalign">0.10000000149011612</property>
+                                            <property name="shadow_type">out</property>
+                                            <child>
+                                              <object class="GtkAlignment">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="left_padding">12</property>
+                                                <property name="right_padding">12</property>
+                                                <child>
+                                                  <object class="GtkBox">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="orientation">vertical</property>
+                                                    <child>
+                                                      <object class="GtkProgressBar" id="moduledamagebar">
+                                                        <property name="name">redbar</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="show_text">True</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">0</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkLabel" id="lblmoduleinfo">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="use_markup">True</property>
+                                                        <property name="wrap">True</property>
+                                                        <property name="xalign">0</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">1</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkProgressBar" id="cleanbar">
+                                                        <property name="name">yellowbar</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="show_text">True</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">2</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkProgressBar" id="qualitybar">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="show_text">True</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">3</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkProgressBar" id="upgradebar2">
+                                                        <property name="name">greenbar</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="show_text">True</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">4</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkLabel" id="lblmoduleinfo2">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="wrap">True</property>
+                                                        <property name="xalign">0</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">5</property>
+                                                      </packing>
+                                                    </child>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                            </child>
+                                            <child type="label">
+                                              <object class="GtkLabel">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="label" translatable="yes">Module Info:</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkExpander">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="expanded">True</property>
                                             <child>
                                               <object class="GtkBox">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="orientation">vertical</property>
                                                 <child>
-                                                  <object class="GtkProgressBar" id="moduledamagebar">
-                                                    <property name="name">redbar</property>
+                                                  <object class="GtkButton" id="btnupgradedur">
+                                                    <property name="label" translatable="yes">Upgrade _durabilty</property>
                                                     <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="show_text">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="tooltip_text" translatable="yes">Start upgrading module durability</property>
+                                                    <property name="halign">center</property>
+                                                    <property name="use_underline">True</property>
+                                                    <signal name="clicked" handler="Set_Upgrade" object="btnupgradedur" swapped="no"/>
                                                   </object>
                                                   <packing>
-                                                    <property name="expand">False</property>
+                                                    <property name="expand">True</property>
                                                     <property name="fill">True</property>
                                                     <property name="position">0</property>
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkLabel" id="lblmoduleinfo">
+                                                  <object class="GtkButton" id="btnupgrade1">
+                                                    <property name="label" translatable="yes">button1</property>
                                                     <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="use_markup">True</property>
-                                                    <property name="wrap">True</property>
-                                                    <property name="xalign">0</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="halign">center</property>
+                                                    <property name="use_underline">True</property>
+                                                    <signal name="clicked" handler="Set_Upgrade" object="btnupgrade1" swapped="no"/>
                                                   </object>
                                                   <packing>
-                                                    <property name="expand">False</property>
+                                                    <property name="expand">True</property>
                                                     <property name="fill">True</property>
                                                     <property name="position">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkProgressBar" id="cleanbar">
-                                                    <property name="name">yellowbar</property>
+                                                  <object class="GtkButton" id="btnupgrade2">
+                                                    <property name="label" translatable="yes">button2</property>
                                                     <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="show_text">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="halign">center</property>
+                                                    <property name="use_underline">True</property>
+                                                    <signal name="clicked" handler="Set_Upgrade" object="btnupgrade2" swapped="no"/>
                                                   </object>
                                                   <packing>
-                                                    <property name="expand">False</property>
+                                                    <property name="expand">True</property>
                                                     <property name="fill">True</property>
                                                     <property name="position">2</property>
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkProgressBar" id="qualitybar">
+                                                  <object class="GtkBox" id="boxassigncrew">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
-                                                    <property name="show_text">True</property>
+                                                    <property name="halign">center</property>
+                                                    <child>
+                                                      <object class="GtkButton" id="btnassigncrew">
+                                                        <property name="label" translatable="yes">Assign _crew</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">True</property>
+                                                        <property name="receives_default">True</property>
+                                                        <property name="use_underline">True</property>
+                                                        <signal name="clicked" handler="Assign" object="btnassigncrew" swapped="no"/>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">0</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkComboBoxText" id="cmbassigncrew">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">1</property>
+                                                      </packing>
+                                                    </child>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">False</property>
@@ -9488,11 +9749,37 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkProgressBar" id="upgradebar2">
-                                                    <property name="name">greenbar</property>
+                                                  <object class="GtkBox" id="boxassignammo">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
-                                                    <property name="show_text">True</property>
+                                                    <property name="halign">center</property>
+                                                    <child>
+                                                      <object class="GtkButton" id="btnassignammo">
+                                                        <property name="label" translatable="yes">Assign as _ammo</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">True</property>
+                                                        <property name="receives_default">True</property>
+                                                        <property name="tooltip_text" translatable="yes">Assign selected ammo to gun</property>
+                                                        <property name="use_underline">True</property>
+                                                        <signal name="clicked" handler="Assign" object="btnassignammo" swapped="no"/>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">0</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkComboBoxText" id="cmbassignammo">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">1</property>
+                                                      </packing>
+                                                    </child>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">False</property>
@@ -9501,11 +9788,37 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkLabel" id="lblmoduleinfo2">
+                                                  <object class="GtkBox" id="boxassignskill">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
-                                                    <property name="wrap">True</property>
-                                                    <property name="xalign">0</property>
+                                                    <property name="halign">center</property>
+                                                    <child>
+                                                      <object class="GtkButton" id="btnassignskill">
+                                                        <property name="label" translatable="yes">Tra_in</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">True</property>
+                                                        <property name="receives_default">True</property>
+                                                        <property name="tooltip_text" translatable="yes">Train selected skill in this module</property>
+                                                        <property name="use_underline">True</property>
+                                                        <signal name="clicked" handler="Assign" object="btnassignskill" swapped="no"/>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">0</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkComboBoxText" id="cmbassignskill">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">1</property>
+                                                      </packing>
+                                                    </child>
                                                   </object>
                                                   <packing>
                                                     <property name="expand">False</property>
@@ -9513,303 +9826,117 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                                     <property name="position">5</property>
                                                   </packing>
                                                 </child>
+                                                <child>
+                                                  <object class="GtkButton" id="btndisableengine">
+                                                    <property name="label" translatable="yes">Disable _engine</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="halign">center</property>
+                                                    <property name="use_underline">True</property>
+                                                    <signal name="clicked" handler="Disable_Engine" swapped="no"/>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">False</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">6</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkButton" id="btncontinue">
+                                                    <property name="label" translatable="yes">C_ontinue upgrading</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="tooltip_text" translatable="yes">Continue previous module upgrade</property>
+                                                    <property name="halign">center</property>
+                                                    <property name="use_underline">True</property>
+                                                    <signal name="clicked" handler="Set_Upgrade" object="btncontinue" swapped="no"/>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">True</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">7</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkButton" id="btnstop">
+                                                    <property name="label" translatable="yes">_Stop upgrading</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="tooltip_text" translatable="yes">Stop current module upgrade</property>
+                                                    <property name="halign">center</property>
+                                                    <property name="use_underline">True</property>
+                                                    <signal name="clicked" handler="Stop_Upgrading" swapped="no"/>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">True</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">8</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkButton" id="btnrepairfirst">
+                                                    <property name="label" translatable="yes">_Repair as first</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="tooltip_text" translatable="yes">Repair selected module as first when damaged</property>
+                                                    <property name="halign">center</property>
+                                                    <property name="use_underline">True</property>
+                                                    <signal name="clicked" handler="Set_Repair" object="btnrepairfirst" swapped="no"/>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">True</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">9</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkButton" id="btnremovepriority">
+                                                    <property name="label" translatable="yes">Remove repair _priority</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">True</property>
+                                                    <property name="tooltip_text" translatable="yes">Remove previous repair priority from this module</property>
+                                                    <property name="halign">center</property>
+                                                    <property name="use_underline">True</property>
+                                                    <signal name="clicked" handler="Set_Repair" object="btnremovepriority" swapped="no"/>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="expand">True</property>
+                                                    <property name="fill">True</property>
+                                                    <property name="position">10</property>
+                                                  </packing>
+                                                </child>
+                                              </object>
+                                            </child>
+                                            <child type="label">
+                                              <object class="GtkLabel">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="label" translatable="yes">_Module options</property>
+                                                <property name="use_underline">True</property>
                                               </object>
                                             </child>
                                           </object>
-                                        </child>
-                                        <child type="label">
-                                          <object class="GtkLabel">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="label" translatable="yes">Module Info:</property>
-                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">1</property>
+                                          </packing>
                                         </child>
                                       </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkExpander">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="expanded">True</property>
-                                        <child>
-                                          <object class="GtkBox">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="orientation">vertical</property>
-                                            <child>
-                                              <object class="GtkButton" id="btnupgradedur">
-                                                <property name="label" translatable="yes">Upgrade _durabilty</property>
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="receives_default">True</property>
-                                                <property name="tooltip_text" translatable="yes">Start upgrading module durability</property>
-                                                <property name="halign">center</property>
-                                                <property name="use_underline">True</property>
-                                                <signal name="clicked" handler="Set_Upgrade" object="btnupgradedur" swapped="no"/>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">True</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">0</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkButton" id="btnupgrade1">
-                                                <property name="label" translatable="yes">button1</property>
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="receives_default">True</property>
-                                                <property name="halign">center</property>
-                                                <property name="use_underline">True</property>
-                                                <signal name="clicked" handler="Set_Upgrade" object="btnupgrade1" swapped="no"/>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">True</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">1</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkButton" id="btnupgrade2">
-                                                <property name="label" translatable="yes">button2</property>
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="receives_default">True</property>
-                                                <property name="halign">center</property>
-                                                <property name="use_underline">True</property>
-                                                <signal name="clicked" handler="Set_Upgrade" object="btnupgrade2" swapped="no"/>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">True</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">2</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkBox" id="boxassigncrew">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="halign">center</property>
-                                                <child>
-                                                  <object class="GtkButton" id="btnassigncrew">
-                                                    <property name="label" translatable="yes">Assign _crew</property>
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">True</property>
-                                                    <property name="receives_default">True</property>
-                                                    <property name="use_underline">True</property>
-                                                    <signal name="clicked" handler="Assign" object="btnassigncrew" swapped="no"/>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="expand">False</property>
-                                                    <property name="fill">True</property>
-                                                    <property name="position">0</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkComboBoxText" id="cmbassigncrew">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="expand">False</property>
-                                                    <property name="fill">True</property>
-                                                    <property name="position">1</property>
-                                                  </packing>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">3</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkBox" id="boxassignammo">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="halign">center</property>
-                                                <child>
-                                                  <object class="GtkButton" id="btnassignammo">
-                                                    <property name="label" translatable="yes">Assign as _ammo</property>
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">True</property>
-                                                    <property name="receives_default">True</property>
-                                                    <property name="tooltip_text" translatable="yes">Assign selected ammo to gun</property>
-                                                    <property name="use_underline">True</property>
-                                                    <signal name="clicked" handler="Assign" object="btnassignammo" swapped="no"/>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="expand">False</property>
-                                                    <property name="fill">True</property>
-                                                    <property name="position">0</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkComboBoxText" id="cmbassignammo">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="expand">False</property>
-                                                    <property name="fill">True</property>
-                                                    <property name="position">1</property>
-                                                  </packing>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">4</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkBox" id="boxassignskill">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="halign">center</property>
-                                                <child>
-                                                  <object class="GtkButton" id="btnassignskill">
-                                                    <property name="label" translatable="yes">Tra_in</property>
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">True</property>
-                                                    <property name="receives_default">True</property>
-                                                    <property name="tooltip_text" translatable="yes">Train selected skill in this module</property>
-                                                    <property name="use_underline">True</property>
-                                                    <signal name="clicked" handler="Assign" object="btnassignskill" swapped="no"/>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="expand">False</property>
-                                                    <property name="fill">True</property>
-                                                    <property name="position">0</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkComboBoxText" id="cmbassignskill">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="expand">False</property>
-                                                    <property name="fill">True</property>
-                                                    <property name="position">1</property>
-                                                  </packing>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">5</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkButton" id="btndisableengine">
-                                                <property name="label" translatable="yes">Disable _engine</property>
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="receives_default">True</property>
-                                                <property name="halign">center</property>
-                                                <property name="use_underline">True</property>
-                                                <signal name="clicked" handler="Disable_Engine" swapped="no"/>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">6</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkButton" id="btncontinue">
-                                                <property name="label" translatable="yes">C_ontinue upgrading</property>
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="receives_default">True</property>
-                                                <property name="tooltip_text" translatable="yes">Continue previous module upgrade</property>
-                                                <property name="halign">center</property>
-                                                <property name="use_underline">True</property>
-                                                <signal name="clicked" handler="Set_Upgrade" object="btncontinue" swapped="no"/>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">True</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">7</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkButton" id="btnstop">
-                                                <property name="label" translatable="yes">_Stop upgrading</property>
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="receives_default">True</property>
-                                                <property name="tooltip_text" translatable="yes">Stop current module upgrade</property>
-                                                <property name="halign">center</property>
-                                                <property name="use_underline">True</property>
-                                                <signal name="clicked" handler="Stop_Upgrading" swapped="no"/>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">True</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">8</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkButton" id="btnrepairfirst">
-                                                <property name="label" translatable="yes">_Repair as first</property>
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="receives_default">True</property>
-                                                <property name="tooltip_text" translatable="yes">Repair selected module as first when damaged</property>
-                                                <property name="halign">center</property>
-                                                <property name="use_underline">True</property>
-                                                <signal name="clicked" handler="Set_Repair" object="btnrepairfirst" swapped="no"/>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">True</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">9</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkButton" id="btnremovepriority">
-                                                <property name="label" translatable="yes">Remove repair _priority</property>
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="receives_default">True</property>
-                                                <property name="tooltip_text" translatable="yes">Remove previous repair priority from this module</property>
-                                                <property name="halign">center</property>
-                                                <property name="use_underline">True</property>
-                                                <signal name="clicked" handler="Set_Repair" object="btnremovepriority" swapped="no"/>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">True</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">10</property>
-                                              </packing>
-                                            </child>
-                                          </object>
-                                        </child>
-                                        <child type="label">
-                                          <object class="GtkLabel">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="label" translatable="yes">_Module options</property>
-                                            <property name="use_underline">True</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">1</property>
-                                      </packing>
                                     </child>
                                   </object>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
                             </child>
                           </object>
                           <packing>
