@@ -564,14 +564,29 @@ package body Ships.UI is
    end CreateShipUI;
 
    procedure ShowShipUI is
-      ModulesIter: Gtk_Tree_Iter;
-      ModulesList: constant Gtk_List_Store :=
+      ListIter: Gtk_Tree_Iter;
+      List: Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "moduleslist"));
    begin
-      Clear(ModulesList);
+      Clear(List);
       for Module of PlayerShip.Modules loop
-         Append(ModulesList, ModulesIter);
-         Set(ModulesList, ModulesIter, 0, To_String(Module.Name));
+         Append(List, ListIter);
+         Set(List, ListIter, 0, To_String(Module.Name));
+      end loop;
+      List := Gtk_List_Store(Get_Object(Builder, "shipcrewinfolist"));
+      Clear(List);
+      for Member of PlayerShip.Crew loop
+         Append(List, ListIter);
+         Set(List, ListIter, 0, To_String(Member.Name));
+         Set(List, ListIter, 1, Gint(Member.Health));
+         if Member.Tired - Member.Attributes(ConditionIndex)(1) > 0 then
+            Set(List, ListIter, 2, Gint(Member.Tired - Member.Attributes(ConditionIndex)(1)));
+         else
+            Set(List, ListIter, 2, 0);
+         end if;
+         Set(List, ListIter, 3, Gint(Member.Thirst));
+         Set(List, ListIter, 4, Gint(Member.Hunger));
+         Set(List, ListIter, 5, Gint(Member.Morale(1)));
       end loop;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "ship");
