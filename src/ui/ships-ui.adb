@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
@@ -580,13 +581,16 @@ package body Ships.UI is
          Set(List, ListIter, 0, To_String(Member.Name));
          Set(List, ListIter, 1, Gint(Member.Health));
          if Member.Tired - Member.Attributes(ConditionIndex)(1) > 0 then
-            Set(List, ListIter, 2, Gint(Member.Tired - Member.Attributes(ConditionIndex)(1)));
+            Set
+              (List, ListIter, 2,
+               Gint(Member.Tired - Member.Attributes(ConditionIndex)(1)));
          else
             Set(List, ListIter, 2, 0);
          end if;
          Set(List, ListIter, 3, Gint(Member.Thirst));
          Set(List, ListIter, 4, Gint(Member.Hunger));
          Set(List, ListIter, 5, Gint(Member.Morale(1)));
+         Set(List, ListIter, 6, To_Lower(Crew_Orders'Image(Member.Order)));
       end loop;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "ship");
