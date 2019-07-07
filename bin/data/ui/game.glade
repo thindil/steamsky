@@ -1842,15 +1842,15 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <!-- column-name name -->
       <column type="gchararray"/>
       <!-- column-name health -->
-      <column type="gdouble"/>
-      <!-- column-name thirst -->
-      <column type="gdouble"/>
-      <!-- column-name hunger -->
-      <column type="gdouble"/>
+      <column type="gint"/>
       <!-- column-name tired -->
-      <column type="gdouble"/>
+      <column type="gint"/>
+      <!-- column-name thirst -->
+      <column type="gint"/>
+      <!-- column-name hunger -->
+      <column type="gint"/>
       <!-- column-name morale -->
-      <column type="gdouble"/>
+      <column type="gint"/>
     </columns>
   </object>
   <object class="GtkListStore" id="skillslist">
@@ -9440,16 +9440,19 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <property name="shadow_type">out</property>
                                         <child>
                                           <object class="GtkTreeView">
+                                            <property name="name">crewinfo</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="model">shipcrewinfolist</property>
-                                            <property name="headers_visible">False</property>
+                                            <property name="headers_clickable">False</property>
                                             <child internal-child="selection">
-                                              <object class="GtkTreeSelection"/>
+                                              <object class="GtkTreeSelection">
+                                                <property name="mode">none</property>
+                                              </object>
                                             </child>
                                             <child>
                                               <object class="GtkTreeViewColumn">
-                                                <property name="title" translatable="yes">Name</property>
+                                                <property name="expand">True</property>
                                                 <child>
                                                   <object class="GtkCellRendererText"/>
                                                   <attributes>
@@ -9460,41 +9463,63 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                             </child>
                                             <child>
                                               <object class="GtkTreeViewColumn">
+                                                <property name="title" translatable="yes">Health</property>
                                                 <child>
                                                   <object class="GtkCellRendererProgress">
-                                                    <property name="text">Health</property>
+                                                    <property name="height">10</property>
+                                                    <property name="text"> </property>
                                                   </object>
                                                   <attributes>
                                                     <attribute name="value">1</attribute>
                                                   </attributes>
                                                 </child>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkTreeViewColumn">
+                                                <property name="title" translatable="yes">Fatigue</property>
                                                 <child>
                                                   <object class="GtkCellRendererProgress">
-                                                    <property name="text">Tiredness</property>
-                                                  </object>
-                                                  <attributes>
-                                                    <attribute name="value">4</attribute>
-                                                  </attributes>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkCellRendererProgress">
-                                                    <property name="text">Thirst</property>
+                                                    <property name="text"> </property>
                                                   </object>
                                                   <attributes>
                                                     <attribute name="value">2</attribute>
                                                   </attributes>
                                                 </child>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkTreeViewColumn">
+                                                <property name="title" translatable="yes">Thirst</property>
                                                 <child>
                                                   <object class="GtkCellRendererProgress">
-                                                    <property name="text">Hunger</property>
+                                                    <property name="text"> </property>
                                                   </object>
                                                   <attributes>
                                                     <attribute name="value">3</attribute>
                                                   </attributes>
                                                 </child>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkTreeViewColumn">
+                                                <property name="title" translatable="yes">Hunger</property>
                                                 <child>
                                                   <object class="GtkCellRendererProgress">
-                                                    <property name="text">Morale</property>
+                                                    <property name="text"> </property>
+                                                  </object>
+                                                  <attributes>
+                                                    <attribute name="value">4</attribute>
+                                                  </attributes>
+                                                </child>
+                                              </object>
+                                            </child>
+                                            <child>
+                                              <object class="GtkTreeViewColumn">
+                                                <property name="title" translatable="yes">Morale</property>
+                                                <child>
+                                                  <object class="GtkCellRendererProgress">
+                                                    <property name="text"> </property>
                                                   </object>
                                                   <attributes>
                                                     <attribute name="value">5</attribute>
@@ -9646,7 +9671,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                             </child>
                                           </object>
                                           <packing>
-                                            <property name="expand">False</property>
+                                            <property name="expand">True</property>
                                             <property name="fill">True</property>
                                             <property name="position">0</property>
                                           </packing>
@@ -9922,7 +9947,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                             </child>
                                           </object>
                                           <packing>
-                                            <property name="expand">False</property>
+                                            <property name="expand">True</property>
                                             <property name="fill">True</property>
                                             <property name="position">1</property>
                                           </packing>
