@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file.
   double luxury orichalcum cabin, small double extended adamantium cabin,
   small double luxury adamantiu cabin, medium double basic bronze cabin,
   medium double advanced bronze cabin, medium double extended bronze cabin,
-  medium double luxury bronze cabin
+  medium double luxury bronze cabin, medium double iron basic cabin
 - Order priority for training
 - Option to edit player ship modules in debug menu
 - Option to edit amount of money owned by bases in debug menu
