@@ -3926,6 +3926,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                             </child>
                                             <child>
                                               <object class="GtkTreeView">
+                                                <property name="name">goldbar</property>
                                                 <property name="visible">True</property>
                                                 <property name="sensitive">False</property>
                                                 <property name="can_focus">True</property>
@@ -8812,6 +8813,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                                     </child>
                                                     <child>
                                                       <object class="GtkTreeView" id="treeskills1">
+                                                        <property name="name">goldbar</property>
                                                         <property name="visible">True</property>
                                                         <property name="sensitive">False</property>
                                                         <property name="can_focus">True</property>
