@@ -8765,6 +8765,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                                     </child>
                                                     <child>
                                                       <object class="GtkTreeView" id="treestats1">
+                                                        <property name="name">redbar</property>
                                                         <property name="visible">True</property>
                                                         <property name="sensitive">False</property>
                                                         <property name="can_focus">True</property>
