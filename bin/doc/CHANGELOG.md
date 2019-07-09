@@ -49,6 +49,7 @@ All notable changes to this project will be documented in this file.
 - Hide other windows on show more move map options
 - Info about abandoned bases
 - Resizing of the main game window
+- Double opening help
 
 ## [3.8] - 2019-06-16
 
