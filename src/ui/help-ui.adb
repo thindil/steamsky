@@ -68,9 +68,7 @@ package body Help.UI is
       end;
       for I in Help_List.Iterate loop
          if TopicName = Help_Container.Key(I) then
-            Setting := True;
             ShowHelpUI(Help_List(I).Index);
-            Setting := False;
             exit;
          end if;
       end loop;
@@ -231,6 +229,10 @@ package body Help.UI is
          To_Unbounded_String("fanaticism"), To_Unbounded_String("loner"));
       FactionsWithFlag: Unbounded_String;
    begin
+      if Setting then
+         return;
+      end if;
+      Setting := True;
       for Help of Help_List loop
          if Help.Index = HelpIndex then
             NewText := Help.Text;
@@ -325,6 +327,7 @@ package body Help.UI is
         (Gtk_Tree_View(Get_Object(Builder, "treetopics")),
          Gtk_Tree_Path_New_From_String(Natural'Image(TopicIndex)), null,
          False);
+      Setting := False;
    end ShowHelpUI;
 
 end Help.UI;
