@@ -28,6 +28,7 @@ with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Gtk.Stack; use Gtk.Stack;
+with Gtk.Container; use Gtk.Container;
 with Glib.Types; use Glib.Types;
 with Glib.Properties; use Glib.Properties;
 with Game; use Game;
@@ -62,6 +63,12 @@ package body Crew.UI.Handlers is
       end case;
       return False;
    end UpdatePriorities;
+
+   procedure RemoveProgressBars
+     (Widget: not null access Gtk_Widget_Record'Class) is
+   begin
+      Destroy(Widget);
+   end RemoveProgressBars;
 
    procedure ShowMemberInfo(Object: access Gtkada_Builder_Record'Class) is
       Member: Member_Data;
@@ -103,7 +110,7 @@ package body Crew.UI.Handlers is
         (Gtk_List_Store(Get_Object(Builder, "prioritieslist")),
          UpdatePriorities'Access);
       if Member.Skills.Length = 0 or Member.ContractLength = 0 then
-         Hide(Gtk_Widget(Get_Object(Object, "treestats1")));
+         Hide(Gtk_Widget(Get_Object(Object, "boxcrewstats")));
          Hide(Gtk_Widget(Get_Object(Object, "btninventory")));
          Hide(Gtk_Widget(Get_Object(Object, "exppriorities")));
          Hide(Gtk_Widget(Get_Object(Object, "lblstats1")));
@@ -115,7 +122,6 @@ package body Crew.UI.Handlers is
             MinutesToDate(Member.ContractLength, MemberInfo);
          end if;
       else
-         Show_All(Gtk_Widget(Get_Object(Object, "treestats1")));
          Show_All(Gtk_Widget(Get_Object(Object, "btninventory")));
          Show_All(Gtk_Widget(Get_Object(Object, "exppriorities")));
          Show_All(Gtk_Widget(Get_Object(Object, "lblstats1")));
@@ -220,24 +226,37 @@ package body Crew.UI.Handlers is
       end if;
       if Member.Skills.Length > 0 and Member.ContractLength /= 0 then
          declare
-            StatsIter: Gtk_Tree_Iter;
-            StatsList: constant Gtk_List_Store :=
-              Gtk_List_Store(Get_Object(Object, "statslist"));
+            StatisticBar, ExperienceBar: Gtk_Progress_Bar;
+            StatsBox: constant Gtk_Container :=
+              Gtk_Container(Get_Object(Object, "boxcrewstats"));
          begin
-            Clear(StatsList);
+            Foreach(StatsBox, RemoveProgressBars'Access);
             for I in Member.Attributes.Iterate loop
-               Append(StatsList, StatsIter);
-               Set
-                 (StatsList, StatsIter, 0,
+               Gtk_New(StatisticBar);
+               Set_Show_Text(StatisticBar, True);
+               Set_Fraction
+                 (StatisticBar, Gdouble(Member.Attributes(I)(1) * 2) / 100.0);
+               Set_Text
+                 (StatisticBar,
                   To_String
                     (Attributes_List(Attributes_Container.To_Index(I)).Name));
-               Set(StatsList, StatsIter, 1, Gint(Member.Attributes(I)(1) * 2));
-               Set
-                 (StatsList, StatsIter, 2,
+               Set_Tooltip_Text
+                 (Gtk_Widget(StatisticBar),
                   To_String
                     (Attributes_List(Attributes_Container.To_Index(I))
                        .Description));
+               Add(StatsBox, Gtk_Widget(StatisticBar));
+               Gtk_New(ExperienceBar);
+               Set_Fraction
+                 (ExperienceBar,
+                  Gdouble(Member.Attributes(I)(2)) /
+                  (Gdouble(Member.Attributes(I)(1) * 250)));
+               Set_Tooltip_Text
+                 (Gtk_Widget(ExperienceBar),
+                  "Experience needed to reach next level");
+               Add(StatsBox, Gtk_Widget(ExperienceBar));
             end loop;
+            Show_All(Gtk_Widget(StatsBox));
          end;
          declare
             SkillsList: constant Gtk_List_Store :=
