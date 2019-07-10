@@ -366,7 +366,7 @@ package body Game is
       PlayerCareer := NewGameSettings.PlayerCareer;
       -- Add welcoming message
       AddMessage
-        ("Welcome to Steam Sky. If it is your first game, please consider read help (entry 'Help' in Menu).",
+        ("Welcome to Steam Sky. If it is your first game, please consider read help (entry 'Help' in Menu), especially topic 'First Steps'.",
          OtherMessage);
    end NewGame;
 
