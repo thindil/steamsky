@@ -32,6 +32,7 @@ with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Paned; use Gtk.Paned;
 with Gtk.Expander; use Gtk.Expander;
+with Gtk.Main; use Gtk.Main;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -311,6 +312,11 @@ package body Help.UI is
       Resize
         (Gtk_Window(Get_Object(Builder, "helpwindow")),
          Gint(GameSettings.WindowWidth), Gint(GameSettings.WindowHeight));
+      while Events_Pending loop
+         if Main_Iteration_Do(False) then
+            return;
+         end if;
+      end loop;
       TopicIndex := 0;
       for I in Help_List.Iterate loop
          if HelpIndex = Help_List(I).Index then
