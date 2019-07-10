@@ -115,7 +115,7 @@ package body Crew.UI.Handlers is
          Hide(Gtk_Widget(Get_Object(Object, "exppriorities")));
          Hide(Gtk_Widget(Get_Object(Object, "lblstats1")));
          Hide(Gtk_Widget(Get_Object(Object, "lblskills")));
-         Hide(Gtk_Widget(Get_Object(Object, "treeskills1")));
+         Hide(Gtk_Widget(Get_Object(Object, "boxcrewskills")));
          Append(MemberInfo, LF & "Passenger");
          if Member.ContractLength > 0 then
             Append(MemberInfo, LF & "Time limit:");
@@ -126,7 +126,6 @@ package body Crew.UI.Handlers is
          Show_All(Gtk_Widget(Get_Object(Object, "exppriorities")));
          Show_All(Gtk_Widget(Get_Object(Object, "lblstats1")));
          Show_All(Gtk_Widget(Get_Object(Object, "lblskills")));
-         Show_All(Gtk_Widget(Get_Object(Object, "treeskills1")));
          if MemberIndex > 1 then
             Append(MemberInfo, LF & "Contract length:");
             if Member.ContractLength > 0 then
@@ -259,19 +258,20 @@ package body Crew.UI.Handlers is
             Show_All(Gtk_Widget(StatsBox));
          end;
          declare
-            SkillsList: constant Gtk_List_Store :=
-              Gtk_List_Store(Get_Object(Builder, "skillslist"));
-            SkillsIter: Gtk_Tree_Iter;
+            SkillBar, ExperienceBar: Gtk_Progress_Bar;
+            SkillBox: constant Gtk_Container :=
+              Gtk_Container(Get_Object(Object, "boxcrewskills"));
             ItemIndex, TooltipText: Unbounded_String;
          begin
-            Clear(SkillsList);
+            Foreach(SkillBox, RemoveProgressBars'Access);
             for Skill of Member.Skills loop
-               Append(SkillsList, SkillsIter);
-               Set
-                 (SkillsList, SkillsIter, 0,
+               Gtk_New(SkillBar);
+               Set_Show_Text(SkillBar, True);
+               Set_Fraction(SkillBar, Gdouble(Skill(2)) / 100.0);
+               Set_Text
+                 (SkillBar,
                   To_String(Skills_List(Skill(1)).Name) & ": " &
                   GetSkillLevelName(Skill(2)));
-               Set(SkillsList, SkillsIter, 1, Gint(Skill(2)));
                TooltipText := Null_Unbounded_String;
                Append(TooltipText, "Related statistic: ");
                Append
@@ -290,8 +290,17 @@ package body Crew.UI.Handlers is
                end if;
                Append(TooltipText, ". ");
                Append(TooltipText, Skills_List(Skill(1)).Description);
-               Set(SkillsList, SkillsIter, 2, To_String(TooltipText));
+               Set_Tooltip_Text(Gtk_Widget(SkillBar), To_String(TooltipText));
+               Add(SkillBox, Gtk_Widget(SkillBar));
+               Gtk_New(ExperienceBar);
+               Set_Fraction
+                 (ExperienceBar, Gdouble(Skill(3)) / (Gdouble(Skill(2) * 25)));
+               Set_Tooltip_Text
+                 (Gtk_Widget(ExperienceBar),
+                  "Experience needed to reach next level");
+               Add(SkillBox, Gtk_Widget(ExperienceBar));
             end loop;
+            Show_All(Gtk_Widget(SkillBox));
          end;
       end if;
       SetOrdersList;
