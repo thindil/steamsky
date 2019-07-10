@@ -8792,32 +8792,12 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                                       </packing>
                                                     </child>
                                                     <child>
-                                                      <object class="GtkTreeView" id="treeskills1">
-                                                        <property name="name">goldbar</property>
+                                                      <object class="GtkBox" id="boxcrewskills">
                                                         <property name="visible">True</property>
-                                                        <property name="sensitive">False</property>
-                                                        <property name="can_focus">True</property>
-                                                        <property name="model">skillslist</property>
-                                                        <property name="headers_visible">False</property>
-                                                        <property name="headers_clickable">False</property>
-                                                        <property name="search_column">0</property>
-                                                        <property name="tooltip_column">2</property>
-                                                        <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                                        <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                                        <child internal-child="selection">
-                                                          <object class="GtkTreeSelection"/>
-                                                        </child>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="orientation">vertical</property>
                                                         <child>
-                                                          <object class="GtkTreeViewColumn">
-                                                            <property name="title" translatable="yes">column</property>
-                                                            <child>
-                                                            <object class="GtkCellRendererProgress"/>
-                                                            <attributes>
-                                                            <attribute name="text">0</attribute>
-                                                            <attribute name="value">1</attribute>
-                                                            </attributes>
-                                                            </child>
-                                                          </object>
+                                                          <placeholder/>
                                                         </child>
                                                       </object>
                                                       <packing>
