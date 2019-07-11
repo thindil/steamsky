@@ -302,6 +302,9 @@ package body Ships.Cargo.UI is
       end if;
       Hide(Gtk_Widget(Get_Object(Builder, "lbldropwarning")));
       Hide(Gtk_Widget(Get_Object(Builder, "lblgivewarning")));
+      if PlayerShip.Crew(1).Health = 0 then
+         Hide(Gtk_Widget(Get_Object(Builder, "boxcargoactions")));
+      end if;
    end ShowCargoUI;
 
 end Ships.Cargo.UI;

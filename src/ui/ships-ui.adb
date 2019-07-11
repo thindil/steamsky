@@ -599,6 +599,10 @@ package body Ships.UI is
          Gtk_Tree_Path_New_From_String("0"), null, False);
       UpdateMessages;
       ShowShipInfo;
+      if PlayerShip.Crew(1).Health = 0 then
+         Hide(Gtk_Widget(Get_Object(Builder, "expmoduleoptions")));
+         Set_Sensitive(Gtk_Widget(Get_Object(Builder, "edtname")), False);
+      end if;
    end ShowShipUI;
 
 end Ships.UI;
