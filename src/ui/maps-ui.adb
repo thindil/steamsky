@@ -91,12 +91,24 @@ with Log; use Log;
 package body Maps.UI is
 
    procedure DeathConfirm is
+      MenuArray: constant array(1 .. 12) of Unbounded_String :=
+        (To_Unbounded_String("menuorders"),
+         To_Unbounded_String("menucrafting"),
+         To_Unbounded_String("menubaseslist"),
+         To_Unbounded_String("menuevents"),
+         To_Unbounded_String("menumissions"), To_Unbounded_String("menustory"),
+         To_Unbounded_String("menuwait"), To_Unbounded_String("menustats"),
+         To_Unbounded_String("menuoptions"), To_Unbounded_String("menuhelp"),
+         To_Unbounded_String("menuquit"), To_Unbounded_String("menuresign"));
    begin
       if ShowConfirmDialog
           ("You are dead. Would you like to see your game statistics?",
            Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
          Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
-         Hide(Gtk_Widget(Get_Object(Builder, "btnmenu")));
+         Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));
+         for I in MenuArray'Range loop
+            Hide(Gtk_Widget(Get_Object(Builder, To_String(MenuArray(I)))));
+         end loop;
          PreviousGameState := Main_Menu;
          ShowStatsUI;
       else

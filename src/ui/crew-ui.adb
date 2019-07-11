@@ -23,6 +23,7 @@ with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Cell_Renderer_Combo; use Gtk.Cell_Renderer_Combo;
 with Gtk.Cell_Renderer_Toggle; use Gtk.Cell_Renderer_Toggle;
+with Gtk.Cell_Renderer_Text;
 with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
@@ -320,6 +321,11 @@ package body Crew.UI is
       SetActiveMember;
       ShowOrdersForAll;
       UpdateMessages;
+      if PlayerShip.Crew(1).Health = 0 then
+         Set_Property
+           (Get_Object(Builder, "renderorders1"),
+            Gtk.Cell_Renderer_Text.Editable_Property, False);
+      end if;
    end ShowCrewUI;
 
 end Crew.UI;
