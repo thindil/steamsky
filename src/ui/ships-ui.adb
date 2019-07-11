@@ -569,6 +569,7 @@ package body Ships.UI is
       List: Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "moduleslist"));
    begin
+      Set_Sensitive(Gtk_Widget(Get_Object(Builder, "edtname")), True);
       Clear(List);
       for Module of PlayerShip.Modules loop
          Append(List, ListIter);
