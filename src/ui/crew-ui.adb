@@ -325,6 +325,16 @@ package body Crew.UI is
          Set_Property
            (Get_Object(Builder, "renderorders1"),
             Gtk.Cell_Renderer_Text.Editable_Property, False);
+         Set_Property
+           (Get_Object(Builder, "renderpriorities"),
+            Gtk.Cell_Renderer_Text.Editable_Property, False);
+         Set_Property
+           (Get_Object(Builder, "renderused"),
+            Gtk.Cell_Renderer_Toggle.Activatable_Property, False);
+         Hide(Gtk_Widget(Get_Object(Builder, "btndismiss")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnclearall")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnrepairall")));
+         Hide(Gtk_Widget(Get_Object(Builder, "boxitemtocargo")));
       end if;
    end ShowCrewUI;
 
