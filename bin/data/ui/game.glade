@@ -9167,7 +9167,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkBox">
+                                          <object class="GtkBox" id="boxitemtocargo">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <child>
