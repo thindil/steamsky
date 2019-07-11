@@ -1335,7 +1335,21 @@ package body Maps.UI is
          To_Unbounded_String("btnmapdownleft"),
          To_Unbounded_String("btnmapdown"),
          To_Unbounded_String("btnmapdownright"));
+      MenuArray: constant array(1 .. 12) of Unbounded_String :=
+        (To_Unbounded_String("menuorders"),
+         To_Unbounded_String("menucrafting"),
+         To_Unbounded_String("menubaseslist"),
+         To_Unbounded_String("menuevents"),
+         To_Unbounded_String("menumissions"), To_Unbounded_String("menustory"),
+         To_Unbounded_String("menuwait"), To_Unbounded_String("menustats"),
+         To_Unbounded_String("menuoptions"), To_Unbounded_String("menuhelp"),
+         To_Unbounded_String("menuquit"), To_Unbounded_String("menuresign"));
    begin
+      if not Is_Visible(Gtk_Widget(Get_Object(Builder, "menuorders"))) then
+         for MenuName of MenuArray loop
+            Show_All(Gtk_Widget(Get_Object(Builder, To_String(MenuName))));
+         end loop;
+      end if;
       CenterX := X;
       CenterY := Y;
       Set_Margin_Top(Gtk_Widget(Get_Object(Builder, "gamestack")), 0);
