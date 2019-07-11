@@ -174,7 +174,7 @@ package body Utils.UI is
            (Gtk_Stack(Get_Object(Object, "gamestack")), "crew");
          return;
       end if;
-      if VisibleChildName = "gamestats" then
+      if VisibleChildName = "gamestats" or PlayerShip.Crew(1).Health = 0 then
          HideStatistics;
          return;
       end if;
