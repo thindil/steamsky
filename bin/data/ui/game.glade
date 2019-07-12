@@ -10264,6 +10264,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                                   <object class="GtkSpinButton" id="spincargogive">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
+                                                    <property name="halign">start</property>
                                                     <property name="width_chars">6</property>
                                                     <property name="text" translatable="yes">1</property>
                                                     <property name="adjustment">amountadj1</property>
