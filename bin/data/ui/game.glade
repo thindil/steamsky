@@ -9211,6 +9211,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="label" translatable="yes">to ship cargo.</property>
+                                                <property name="wrap">True</property>
+                                                <property name="wrap_mode">char</property>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
