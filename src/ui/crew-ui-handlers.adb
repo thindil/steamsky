@@ -232,6 +232,7 @@ package body Crew.UI.Handlers is
             Foreach(StatsBox, RemoveProgressBars'Access);
             for I in Member.Attributes.Iterate loop
                Gtk_New(StatisticBar);
+               Set_Name(Gtk_Widget(StatisticBar), "redbar");
                Set_Show_Text(StatisticBar, True);
                Set_Fraction
                  (StatisticBar, Gdouble(Member.Attributes(I)(1) * 2) / 100.0);
@@ -246,13 +247,16 @@ package body Crew.UI.Handlers is
                        .Description));
                Add(StatsBox, Gtk_Widget(StatisticBar));
                Gtk_New(ExperienceBar);
+               Set_Name(Gtk_Widget(ExperienceBar), "experience");
                Set_Fraction
                  (ExperienceBar,
                   Gdouble(Member.Attributes(I)(2)) /
                   (Gdouble(Member.Attributes(I)(1) * 250)));
                Set_Tooltip_Text
                  (Gtk_Widget(ExperienceBar),
-                  "Experience needed to reach next level");
+                  "Experience needed to reach next level in " &
+                  To_String
+                    (Attributes_List(Attributes_Container.To_Index(I)).Name));
                Add(StatsBox, Gtk_Widget(ExperienceBar));
             end loop;
             Show_All(Gtk_Widget(StatsBox));
