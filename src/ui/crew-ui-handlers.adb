@@ -270,6 +270,7 @@ package body Crew.UI.Handlers is
             Foreach(SkillBox, RemoveProgressBars'Access);
             for Skill of Member.Skills loop
                Gtk_New(SkillBar);
+               Set_Name(Gtk_Widget(SkillBar), "goldbar");
                Set_Show_Text(SkillBar, True);
                Set_Fraction(SkillBar, Gdouble(Skill(2)) / 100.0);
                Set_Text
@@ -297,11 +298,13 @@ package body Crew.UI.Handlers is
                Set_Tooltip_Text(Gtk_Widget(SkillBar), To_String(TooltipText));
                Add(SkillBox, Gtk_Widget(SkillBar));
                Gtk_New(ExperienceBar);
+               Set_Name(Gtk_Widget(ExperienceBar), "experience");
                Set_Fraction
                  (ExperienceBar, Gdouble(Skill(3)) / (Gdouble(Skill(2) * 25)));
                Set_Tooltip_Text
                  (Gtk_Widget(ExperienceBar),
-                  "Experience needed to reach next level");
+                  "Experience needed to reach next level in " &
+                  To_String(Skills_List(Skill(1)).Name));
                Add(SkillBox, Gtk_Widget(ExperienceBar));
             end loop;
             Show_All(Gtk_Widget(SkillBox));
