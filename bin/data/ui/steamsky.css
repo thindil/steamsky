@@ -424,3 +424,16 @@ GtkInfoBar {
    background:linear-gradient(to bottom, gold, black);
    border-radius:10px;
 }
+
+/* Crew member experience progress bars settings */
+.progressbar#experience,
+   .progressbar#experience:selected,
+   .progressbar#experience:selected:focus {
+   background:gold;
+   border-radius:0;
+}
+
+.progressbar.trough#experience {
+  border-radius:0;
+  background:linear-gradient(to bottom, rgb(53,53,53), transparent);
+}
