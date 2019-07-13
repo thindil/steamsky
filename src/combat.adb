@@ -1326,7 +1326,7 @@ package body Combat is
              0 then -- Set defenders/boarding party on player ship
             UpdateOrders(PlayerShip, True);
          end if;
-         UpdateGame(1);
+         UpdateGame(1, True);
       elsif PlayerShip.Crew(1).Health > 0 then
          declare
             WasBoarded: Boolean := False;

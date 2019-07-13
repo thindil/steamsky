@@ -370,7 +370,7 @@ package body Game is
          OtherMessage);
    end NewGame;
 
-   procedure UpdateGame(Minutes: Positive) is
+   procedure UpdateGame(Minutes: Positive; InCombat: Boolean := False) is
       AddedHours, AddedMinutes: Natural;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -426,7 +426,7 @@ package body Game is
          end if;
       end if;
       -- Update crew
-      UpdateCrew(Minutes, TiredPoints);
+      UpdateCrew(Minutes, TiredPoints, InCombat);
       -- Repair ship (if needed)
       Ships.Repairs.RepairShip(Minutes);
       -- Craft items
