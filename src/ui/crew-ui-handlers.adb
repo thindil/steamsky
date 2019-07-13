@@ -248,6 +248,7 @@ package body Crew.UI.Handlers is
                Add(StatsBox, Gtk_Widget(StatisticBar));
                Gtk_New(ExperienceBar);
                Set_Name(Gtk_Widget(ExperienceBar), "experience");
+               Set_Margin_Bottom(Gtk_Widget(ExperienceBar), 10);
                Set_Fraction
                  (ExperienceBar,
                   Gdouble(Member.Attributes(I)(2)) /
@@ -299,6 +300,7 @@ package body Crew.UI.Handlers is
                Add(SkillBox, Gtk_Widget(SkillBar));
                Gtk_New(ExperienceBar);
                Set_Name(Gtk_Widget(ExperienceBar), "experience");
+               Set_Margin_Bottom(Gtk_Widget(ExperienceBar), 10);
                Set_Fraction
                  (ExperienceBar, Gdouble(Skill(3)) / (Gdouble(Skill(2) * 25)));
                Set_Tooltip_Text
