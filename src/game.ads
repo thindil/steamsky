@@ -103,7 +103,8 @@ package Game is
 
    procedure NewGame; -- Start new game: create map, place ship, crew, etc
    procedure UpdateGame
-     (Minutes: Positive); -- Game ticks (update time, crew, ship, etc)
+     (Minutes: Positive;
+      InCombat: Boolean := False); -- Game ticks (update time, crew, ship, etc)
    procedure EndGame
      (Save: Boolean); -- Save (or not) game and clear all temporary data
    function FindSkillIndex(SkillName: Unbounded_String) return Natural with
