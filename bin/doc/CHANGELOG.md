@@ -55,6 +55,7 @@ All notable changes to this project will be documented in this file.
 - Info about abandoned bases
 - Resizing of the main game window
 - Double opening help
+- Crew members are going on rest during combat
 
 ## [3.8] - 2019-06-16
 
