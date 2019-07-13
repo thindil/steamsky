@@ -64,9 +64,6 @@ package body BasesList is
             ReputationText);
       end SetReputationText;
    begin
-      if not Is_Visible(Gtk_Widget(Get_Object(Object, "baseinfoscroll"))) then
-         return;
-      end if;
       declare
          BasesIter: Gtk_Tree_Iter;
          BasesModel: Gtk_Tree_Model;
@@ -89,6 +86,9 @@ package body BasesList is
            (Gtk_Widget(Get_Object(Object, "btndestinationbase")), True);
          BaseIndex := Natural(Get_Int(BasesModel, BasesIter, 1));
       end;
+      if not Is_Visible(Gtk_Widget(Get_Object(Object, "baseinfoscroll"))) then
+         return;
+      end if;
       if SkyBases(BaseIndex).Visited.Year > 0 then
          BaseInfo :=
            To_Unbounded_String
