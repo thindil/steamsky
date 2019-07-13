@@ -429,11 +429,9 @@ GtkInfoBar {
 .progressbar#experience,
    .progressbar#experience:selected,
    .progressbar#experience:selected:focus {
-   background:gold;
-   border-radius:0;
+   background:linear-gradient(to bottom, darkgoldenrod, black);
 }
 
-.progressbar.trough#experience {
-  border-radius:0;
-  background:linear-gradient(to bottom, rgb(53,53,53), transparent);
+GtkProgressBar.trough#experience {
+  background:linear-gradient(to bottom, rgb(25,25,25), transparent);
 }
