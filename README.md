@@ -117,6 +117,7 @@ The Licensing for the fonts distributed with the game is as follows:
 * Font Awesome is under SIL Open Font License: https://fontawesome.com
 * Font Rye is under Open Font License: https://fonts.google.com/specimen/Rye
 * Font Hack Nerd Font is under MiT license: https://nerdfonts.com/
+* Font Roboto is under Apache v2.0 license: https://fonts.google.com/specimen/Roboto
 
 
 The changelog and a copy of the GPLv3 license can be found in the [doc](bin/doc) directory.
