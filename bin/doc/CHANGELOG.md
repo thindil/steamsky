@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 - New ship modules: medium double extended adamantium cabin, medium double
   luxury adamantium cabin
 
+### Changed
+- Updated help
+
 ## [3.9] - 2019-07-14
 
 ### Added
