@@ -19,37 +19,34 @@ with Ships; use Ships;
 
 package Crew.Inventory is
 
+   -- Update member inventory
    procedure UpdateInventory
      (MemberIndex: Positive; Amount: Integer;
       ProtoIndex: Unbounded_String := Null_Unbounded_String;
       Durability, InventoryIndex, Price: Natural := 0) with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
-       InventoryIndex <=
-         PlayerShip.Crew(MemberIndex).Inventory
-           .Last_Index); -- Update member inventory
+       InventoryIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index);
+      -- Return available space in crew member inventory after adding/extracting Amount
    function FreeInventory
      (MemberIndex: Positive; Amount: Integer) return Integer with
-      Pre => MemberIndex <=
-      PlayerShip.Crew
-        .Last_Index; -- Return available space in crew member inventory after adding/extracting Amount
+      Pre => MemberIndex <= PlayerShip.Crew.Last_Index;
+      -- Remove selected item from character equipment
    procedure TakeOffItem(MemberIndex, ItemIndex: Positive) with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
-       ItemIndex <=
-         PlayerShip.Crew(MemberIndex).Inventory
-           .Last_Index); -- Remove selected item from character equipment
+       ItemIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index);
+      -- Check if selected crew member use this item
    function ItemIsUsed(MemberIndex, ItemIndex: Positive) return Boolean with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
-       ItemIndex <=
-         PlayerShip.Crew(MemberIndex).Inventory
-           .Last_Index); -- Check if selected crew member use this item
+       ItemIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index);
+      -- Search for specified tools in character and ship cargo, return 0 if tools not found otherwise index of tool in character inventory
    function FindTools
      (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders)
       return Natural with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
-       ItemType /=
-         Null_Unbounded_String); -- Search for specified tools in character and ship cargo, return 0 if tools not found otherwise index of tool in character inventory
+       ItemType /= Null_Unbounded_String);
+
 end Crew.Inventory;

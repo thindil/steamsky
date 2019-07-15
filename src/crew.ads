@@ -31,8 +31,8 @@ package Crew is
    type Attributes_Array is array(1 .. 2) of Natural;
    type Equipment_Array is array(1 .. 7) of Natural;
    package Attributes_Container is new Vectors(Positive, Attributes_Array);
-   type Member_Data is -- Data structure for ship crew member
-   record
+   -- Data structure for ship crew member
+   type Member_Data is record
       Name: Unbounded_String; -- Name of member
       Gender: Character; -- Gender of member
       Health: Natural; -- Level of health of member
@@ -65,31 +65,33 @@ package Crew is
    FemaleSyllablesMiddle: UnboundedString_Container.Vector;
    FemaleSyllablesEnd: UnboundedString_Container.Vector;
    FemaleVocals: UnboundedString_Container.Vector;
-   Crew_Order_Error: exception; -- Raised when new order can't be set for selected crew member
-   Crew_No_Space_Error: exception; -- Raised when no space for new item in crew member inventory
+   -- Raised when new order can't be set for selected crew member
+   Crew_Order_Error: exception;
+   -- Raised when no space for new item in crew member inventory
+   Crew_No_Space_Error: exception;
 
+   -- Gain experience in selected skill.
    procedure GainExp(Amount: Natural; SkillNumber, CrewIndex: Positive) with
-      Pre => SkillNumber <=
-      Skills_List.Last_Index; -- Gain experience in selected skill.
+      Pre => SkillNumber <= Skills_List.Last_Index;
+      -- Generate random name for crew member
    function GenerateMemberName
      (Gender: Character; FactionIndex: Unbounded_String)
       return Unbounded_String with
       Pre =>
       ((Gender = 'M' or Gender = 'F') and
-       FactionIndex /=
-         Null_Unbounded_String); -- Generate random name for crew member
-   function FindCabin
-     (MemberIndex: Positive)
-      return Natural; -- Find index of cabin for selected crew member
+       FactionIndex /= Null_Unbounded_String);
+      -- Find index of cabin for selected crew member
+   function FindCabin(MemberIndex: Positive) return Natural;
    -- Update player ship crew
    procedure UpdateCrew
      (Minutes: Positive; TiredPoints: Natural; InCombat: Boolean := False);
-   procedure WaitForRest; -- Wait until whole crew is rested
-   function GetSkillLevelName
-     (SkillLevel: Positive) return String; -- Get member skill level name
-   function GetAttributeLevelName
-     (AttributeLevel: Positive)
-      return String; -- Get member attribute level name
-   procedure DailyPayment; -- Daily payment and upgrade contracts length for player ship crew members
+   -- Wait until whole crew is rested
+   procedure WaitForRest;
+   -- Get member skill level name
+   function GetSkillLevelName(SkillLevel: Positive) return String;
+   -- Get member attribute level name
+   function GetAttributeLevelName(AttributeLevel: Positive) return String;
+   -- Daily payment and upgrade contracts length for player ship crew members
+   procedure DailyPayment;
 
 end Crew;

@@ -17,18 +17,22 @@
 
 package Bases.Ship is
 
-   BasesShip_Nothing_To_Repair: exception; -- Raised when there is nothing to repair
-   BasesShip_Unique_Module: exception; -- Raised when player try install another same unique module
-   BasesShip_Installation_Error: exception; -- Raised when problems with installing ship module occurs
-   BasesShip_Removing_Error: exception; -- Raised when problems with removing ship module occurs
+   -- Raised when there is nothing to repair
+   BasesShip_Nothing_To_Repair: exception;
+   -- Raised when player try install another same unique module
+   BasesShip_Unique_Module: exception;
+   -- Raised when problems with installing ship module occurs
+   BasesShip_Installation_Error: exception;
+   -- Raised when problems with removing ship module occurs
+   BasesShip_Removing_Error: exception;
 
-   procedure RepairShip(ModuleIndex: Integer); -- Repairs playership in bases
-   procedure UpgradeShip
-     (Install: Boolean;
-      ModuleIndex: Unbounded_String); -- Install/remove modules on ship
-   procedure PayForDock; -- Pay daily fee for docking
-   procedure RepairCost
-     (Cost, Time: in out Natural;
-      ModuleIndex: Integer); -- Count cost/time of repairs of ship
+   -- Repairs playership in bases
+   procedure RepairShip(ModuleIndex: Integer);
+   -- Install/remove modules on ship
+   procedure UpgradeShip(Install: Boolean; ModuleIndex: Unbounded_String);
+   -- Pay daily fee for docking
+   procedure PayForDock;
+   -- Count cost/time of repairs of ship
+   procedure RepairCost(Cost, Time: in out Natural; ModuleIndex: Integer);
 
 end Bases.Ship;

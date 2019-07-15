@@ -23,17 +23,18 @@ with Game; use Game;
 
 package Careers is
 
-   type CareerRecord is -- Data structure for player career
-   record
+   -- Data structure for player career
+   type CareerRecord is record
       Name: Unbounded_String; -- Name of career, displayed to player
       Skills: UnboundedString_Container
         .Vector; -- List of skills which have bonuses to experience if player select this career
    end record;
    package Careers_Container is new Hashed_Maps(Unbounded_String, CareerRecord,
       Ada.Strings.Unbounded.Hash, "=");
-   Careers_List: Careers_Container
-     .Map; -- List of all available careers for player
+   -- List of all available careers for player
+   Careers_List: Careers_Container.Map;
 
-   procedure LoadCareers(Reader: Tree_Reader); -- Load player careers from file
+   -- Load player careers from file
+   procedure LoadCareers(Reader: Tree_Reader);
 
 end Careers;
