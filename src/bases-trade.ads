@@ -17,25 +17,29 @@
 
 package Bases.Trade is
 
+   -- Raised when player known selected recipe
+   Trade_Already_Known: exception;
+   -- Raised when no crew members are wounded
+   Trade_Cant_Heal: exception;
+   -- Raised when skill is maxed and can't be trained
+   Trade_Cant_Train: exception;
+
+   -- Hire selected recruit from bases
    procedure HireRecruit
      (RecruitIndex, Cost: Positive; DailyPayment, TradePayment: Natural;
-      ContractLenght: Integer); -- Hire selected recruit from bases
-   procedure BuyRecipe
-     (RecipeIndex: Unbounded_String); -- Buy new crafting recipe
-   procedure HealWounded
-     (MemberIndex: Natural); -- Heals wounded crew members in bases
-   procedure HealCost
-     (Cost, Time: in out Natural;
-      MemberIndex: Natural); -- Count cost of healing action
-   function TrainCost
-     (MemberIndex, SkillIndex: Positive)
-      return Natural; -- Count cost of training action
+      ContractLenght: Integer);
+   -- Buy new crafting recipe
+   procedure BuyRecipe(RecipeIndex: Unbounded_String);
+   -- Heals wounded crew members in bases
+   procedure HealWounded(MemberIndex: Natural);
+   -- Count cost of healing action
+   procedure HealCost(Cost, Time: in out Natural; MemberIndex: Natural);
+   -- Count cost of training action
+   function TrainCost(MemberIndex, SkillIndex: Positive) return Natural;
+   -- Train selected skill
    procedure TrainSkill(MemberIndex, SkillIndex: Positive) with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
-       SkillIndex < Skills_List.Last_Index); -- Train selected skill
-   Trade_Already_Known: exception; -- Raised when player known selected recipe
-   Trade_Cant_Heal: exception; -- Raised when no crew members are wounded
-   Trade_Cant_Train: exception; -- Raised when skill is maxed and can't be trained
+       SkillIndex < Skills_List.Last_Index);
 
 end Bases.Trade;

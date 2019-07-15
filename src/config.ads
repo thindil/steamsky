@@ -20,8 +20,8 @@ with Ships; use Ships;
 
 package Config is
 
-   type NewGameRecord is -- Data for new game settings
-   record
+   -- Data for new game settings
+   type NewGameRecord is record
       PlayerName: Unbounded_String; -- Default player name
       PlayerGender: Character; -- Default player gender
       ShipName: Unbounded_String; -- Default ship name
@@ -37,15 +37,14 @@ package Config is
       UpgradeCostBonus: Float; -- Default bonus to amount of materials needed for player's ship upgrades.
       PricesBonus: Float; -- Default bonus to prices for services in bases
    end record;
-   type AutoMoveBreak is
-     (NEVER, ANY, FRIENDLY,
-      ENEMY); -- Options when stop auto move of player ship
-   type MessagesOrderType is
-     (OLDER_FIRST, NEWER_FIRST); -- Options to set showing messages order
+   -- Options when stop auto move of player ship
+   type AutoMoveBreak is (NEVER, ANY, FRIENDLY, ENEMY);
+   -- Options to set showing messages order
+   type MessagesOrderType is (OLDER_FIRST, NEWER_FIRST);
    -- Type used to set how often autosave is done
    type AutoSaveType is (NONE, DOCK, UNDOCK, DAILY, MONTHLY, YEARLY);
-   type GameSettingsRecord is -- Data for game settings
-   record
+   -- Data for game settings
+   type GameSettingsRecord is record
       AutoRest: Boolean; -- If true, rest when pilot/engineer need rest
       UndockSpeed: ShipSpeed; -- Default player ship speed after undock
       AutoCenter: Boolean; -- If true, back to ship after sets destination for it
@@ -79,10 +78,14 @@ package Config is
       ShowCargoInfo: Boolean; -- If true, show detailed information about selected item in player ship cargo
       ShowInventoryInfo: Boolean; -- If true, show detailed information about selected item in crew member inventory
    end record;
+   -- Settings for the new game
    NewGameSettings: NewGameRecord;
+   -- General settings for the game
    GameSettings: GameSettingsRecord;
 
-   procedure LoadConfig; -- Load game configuration from file
-   procedure SaveConfig; -- Save game configuration to file
+   -- Load game configuration from file
+   procedure LoadConfig;
+   -- Save game configuration to file
+   procedure SaveConfig;
 
 end Config;

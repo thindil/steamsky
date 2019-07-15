@@ -25,10 +25,11 @@ with Factions; use Factions;
 
 package Bases is
 
+   -- Types of bases
    type Bases_Types is
      (Industrial, Agricultural, Refinery, Shipyard, Military, Any);
-   type Recruit_Data is -- Data structure for recruits
-   record
+   -- Data structure for recruits
+   type Recruit_Data is record
       Name: Unbounded_String; -- Name of recruit
       Gender: Character; -- Gender of recruit
       Skills: Skills_Container
@@ -43,21 +44,20 @@ package Bases is
       Faction: Unbounded_String; -- Index of faction to which recruit belongs
    end record;
    package Recruit_Container is new Vectors(Positive, Recruit_Data);
-   type Reputation_Array is
-     array
-       (1 ..
-            2) of Integer; -- Data structure for reputation, 1 = level, 2 = points to next level
-   type Base_Cargo is -- Data structure for bases cargo
-   record
+   -- Data structure for reputation, 1 = level, 2 = points to next level
+   type Reputation_Array is array(1 .. 2) of Integer;
+   -- Data structure for bases cargo
+   type Base_Cargo is record
       ProtoIndex: Unbounded_String; -- Index of item prototype
       Amount: Natural; -- Amount of items
       Durability: Positive; -- Durability of items
       Price: Natural; -- Current price of item
    end record;
    package BaseCargo_Container is new Vectors(Positive, Base_Cargo);
+   -- Bases sizes
    type Bases_Size is (Small, Medium, Big);
-   type BaseRecord is -- Data structure for bases
-   record
+   -- Data structure for bases
+   type BaseRecord is record
       Name: Unbounded_String; -- Base name
       Visited: Date_Record; -- Time when player last visited base
       SkyX: Integer; -- X coordinate on sky map
@@ -76,31 +76,39 @@ package Bases is
       Cargo: BaseCargo_Container.Vector; -- List of all cargo in base
       Size: Bases_Size; -- Size of base
    end record;
-   subtype BasesRange is Positive range 1 .. 1024; -- Amount of sky bases
-   SkyBases: array(BasesRange) of BaseRecord; -- List of sky bases
+   -- Amount of sky bases
+   subtype BasesRange is Positive range 1 .. 1024;
+   -- List of sky bases
+   SkyBases: array(BasesRange) of BaseRecord;
+   -- List of pre syllables for generating bases names
    BaseSyllablesPre: UnboundedString_Container.Vector;
+   -- List of first syllables for generating bases names
    BaseSyllablesStart: UnboundedString_Container.Vector;
+   -- List of second syllables for generating bases names
    BaseSyllablesEnd: UnboundedString_Container.Vector;
+   -- List of post syllables for generating bases names
    BaseSyllablesPost: UnboundedString_Container.Vector;
 
-   procedure GainRep
-     (BaseIndex: BasesRange;
-      Points: Integer); -- Gain reputation in selected base
+   -- Gain reputation in selected base
+   procedure GainRep(BaseIndex: BasesRange; Points: Integer);
+   -- Count price for actions with bases (buying/selling/docking/ect)
    procedure CountPrice
      (Price: in out Positive; TraderIndex: Crew_Container.Extended_Index;
       Reduce: Boolean := True) with
-      Pre => TraderIndex <=
-      PlayerShip.Crew
-        .Last_Index; -- Count price for actions with bases (buying/selling/docking/ect)
+      Pre => TraderIndex <= PlayerShip.Crew.Last_Index;
+      -- Generate random name for base based on faction
    function GenerateBaseName
      (FactionIndex: Unbounded_String) return Unbounded_String with
-      Pre => Factions_Container.Contains
-        (Factions_List,
-         FactionIndex); -- Generate random name for base based on faction
-   procedure GenerateRecruits; -- Generate if needed new recruits in base
-   procedure AskForBases; -- Ask in base for direction for other bases
-   procedure AskForEvents; -- Ask in base for direction for random events
-   procedure UpdatePopulation; -- Update base population if needed
-   procedure UpdatePrices; -- Random changes of items prices in base
+      Pre => Factions_Container.Contains(Factions_List, FactionIndex);
+      -- Generate if needed new recruits in base
+   procedure GenerateRecruits;
+   -- Ask in base for direction for other bases
+   procedure AskForBases;
+   -- Ask in base for direction for random events
+   procedure AskForEvents;
+   -- Update base population if needed
+   procedure UpdatePopulation;
+   -- Random changes of items prices in base
+   procedure UpdatePrices;
 
 end Bases;

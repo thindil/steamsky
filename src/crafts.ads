@@ -25,8 +25,8 @@ with Ships; use Ships;
 
 package Crafts is
 
-   type Craft_Data is -- Data structure for recipes
-   record
+   -- Data structure for recipes
+   type Craft_Data is record
       MaterialTypes: UnboundedString_Container
         .Vector; -- Types of material needed for recipe
       MaterialAmounts: Positive_Container
@@ -42,22 +42,29 @@ package Crafts is
    end record;
    package Recipes_Container is new Hashed_Maps(Unbounded_String, Craft_Data,
       Ada.Strings.Unbounded.Hash, "=");
-   Recipes_List: Recipes_Container.Map; -- List of recipes available in game
-   Known_Recipes: UnboundedString_Container
-     .Vector; -- List of all know by player recipes
-   Crafting_No_Materials: exception; -- Raised when no materials needed for selected recipe
-   Crafting_No_Tools: exception; -- Raised when no tool needed for selected recipe
-   Crafting_No_Workshop: exception; -- Raised when no workshop needed for selected recipe
+   -- List of recipes available in game
+   Recipes_List: Recipes_Container.Map;
+   -- List of all know by player recipes
+   Known_Recipes: UnboundedString_Container.Vector;
+   -- Raised when no materials needed for selected recipe
+   Crafting_No_Materials: exception;
+   -- Raised when no tool needed for selected recipe
+   Crafting_No_Tools: exception;
+   -- Raised when no workshop needed for selected recipe
+   Crafting_No_Workshop: exception;
 
-   procedure LoadRecipes(Reader: Tree_Reader); -- Load recipes from files
-   procedure Manufacturing(Minutes: Positive); -- Craft selected items
+   -- Load recipes from files
+   procedure LoadRecipes(Reader: Tree_Reader);
+   -- Craft selected items
+   procedure Manufacturing(Minutes: Positive);
+   -- Check if player have all requirements for selected recipe, return max amount of items which can be craft
    function CheckRecipe(RecipeIndex: Unbounded_String) return Positive with
-      Pre => RecipeIndex /=
-      Null_Unbounded_String; -- Check if player have all requirements for selected recipe, return max amount of items which can be craft
+      Pre => RecipeIndex /= Null_Unbounded_String;
+      -- Set crafting recipe for selected workshop
    procedure SetRecipe
      (Workshop, Amount: Positive; RecipeIndex: Unbounded_String) with
       Pre =>
       (Workshop <= PlayerShip.Modules.Last_Index and
-       RecipeIndex /=
-         Null_Unbounded_String); -- Set crafting recipe for selected workshop
+       RecipeIndex /= Null_Unbounded_String);
+
 end Crafts;

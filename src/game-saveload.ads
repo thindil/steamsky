@@ -17,12 +17,16 @@
 
 package Game.SaveLoad is
 
-   SaveName: Unbounded_String; -- Full path with file name for current savegame
-   SaveGame_Invalid_Data: exception; -- Raised when invalid data found in savegame
+   -- Full path with file name for current savegame
+   SaveName: Unbounded_String;
+   -- Raised when invalid data found in savegame
+   SaveGame_Invalid_Data: exception;
 
-   procedure SaveGame(PrettyPrint: Boolean := False); -- Save game to file
-   procedure LoadGame; -- Load game from file
-   procedure GenerateSaveName
-     (RenameSave: Boolean := False); -- Generate unique name for save game file
+   -- Save game to file
+   procedure SaveGame(PrettyPrint: Boolean := False);
+   -- Load game from file
+   procedure LoadGame;
+   -- Generate unique name for save game file
+   procedure GenerateSaveName(RenameSave: Boolean := False);
 
 end Game.SaveLoad;

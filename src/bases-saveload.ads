@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,9 +19,9 @@ with DOM.Core; use DOM.Core;
 
 package Bases.SaveLoad is
 
-   procedure SaveBases
-     (SaveData: Document;
-      MainNode: DOM.Core.Element); -- Save bases from current game in file
-   procedure LoadBases(SaveData: Document); -- Load bases from file
+   -- Save bases from current game in file
+   procedure SaveBases(SaveData: Document; MainNode: DOM.Core.Element);
+   -- Load bases from file
+   procedure LoadBases(SaveData: Document);
 
 end Bases.SaveLoad;
