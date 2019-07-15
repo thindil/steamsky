@@ -17,12 +17,14 @@
 
 package Bases.Cargo is
 
-   procedure GenerateCargo; -- Generate base cargo
+   -- Generate base cargo
+   procedure GenerateCargo;
+   -- Update cargo in base
    procedure UpdateBaseCargo
      (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
-      Durability: Natural := 100;
-      CargoIndex: Natural := 0); -- Update cargo in base
+      Durability: Natural := 100; CargoIndex: Natural := 0);
+   -- Find index of item in base cargo, return 0 if no item found
    function FindBaseCargo
-     (ProtoIndex: Unbounded_String; Durability: Natural := 101)
-      return Natural; -- Find index of item in base cargo, return 0 if no item found
+     (ProtoIndex: Unbounded_String; Durability: Natural := 101) return Natural;
+
 end Bases.Cargo;

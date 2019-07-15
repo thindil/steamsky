@@ -24,18 +24,18 @@ with Game; use Game;
 
 package Factions is
 
-   type NamesTypes is
-     (STANDARD, ROBOTIC); -- Types of names of members and bases factions
+   -- Types of names of members and bases factions
+   type NamesTypes is (STANDARD, ROBOTIC);
    type Reputation_Array is array(1 .. 2) of Integer;
-   type RelationsRecord is -- Data structure for relations between factions
-   record
+   -- Data structure for relations between factions
+   type RelationsRecord is record
       Reputation: Reputation_Array; -- Min and max value for starting reputation in bases owned by target faction
       Friendly: Boolean; -- Did target faction is friendly or enemy to this faction
    end record;
    package Relations_Container is new Hashed_Maps(Unbounded_String,
       RelationsRecord, Ada.Strings.Unbounded.Hash, "=");
-   type CareerRecord is -- Data structure for player career in faction
-   record
+   -- Data structure for player career in faction
+   type CareerRecord is record
       ShipIndex: Unbounded_String; -- Index of proto ship which will be used as starting ship for player
       PlayerIndex: Unbounded_String; -- Index of mobile which will be used as starting character for player
       Description: Unbounded_String; -- Description of career, displayed to player
@@ -43,8 +43,8 @@ package Factions is
    end record;
    package Careers_Container is new Hashed_Maps(Unbounded_String, CareerRecord,
       Ada.Strings.Unbounded.Hash, "=");
-   type FactionRecord is -- Data structure for faction
-   record
+   -- Data structure for faction
+   type FactionRecord is record
       Name: Unbounded_String; -- Name of faction, displayed to player
       MemberName: Unbounded_String; -- Name of single member of faction
       PluralMemberName: Unbounded_String; -- Plural name of members of faction
@@ -70,22 +70,21 @@ package Factions is
       FactionRecord, Ada.Strings.Unbounded.Hash, "=");
    Factions_List: Factions_Container.Map;
 
-   procedure LoadFactions(Reader: Tree_Reader); -- Load NPC factions from file
+   -- Load NPC factions from file
+   procedure LoadFactions(Reader: Tree_Reader);
+   -- Get reputation between SourceFaction and TargetFaction
    function GetReputation
      (SourceFaction, TargetFaction: Unbounded_String) return Integer with
       Pre =>
       (Factions_Container.Contains(Factions_List, SourceFaction) and
-       Factions_Container.Contains
-         (Factions_List,
-          TargetFaction)); -- Get reputation between SourceFaction and TargetFaction
+       Factions_Container.Contains(Factions_List, TargetFaction));
+      -- Check if TargetFaction is friendly for SourceFaction. Returns true if yes, otherwise false.
    function IsFriendly
      (SourceFaction, TargetFaction: Unbounded_String) return Boolean with
       Pre =>
       (Factions_Container.Contains(Factions_List, SourceFaction) and
-       Factions_Container.Contains
-         (Factions_List,
-          TargetFaction)); -- Check if TargetFaction is friendly for SourceFaction. Returns true if yes, otherwise false.
-   function GetRandomFaction
-      return Unbounded_String; -- Select random faction from list
+       Factions_Container.Contains(Factions_List, TargetFaction));
+      -- Select random faction from list
+   function GetRandomFaction return Unbounded_String;
 
 end Factions;
