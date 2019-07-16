@@ -19,22 +19,23 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package HallOfFame is
 
-   type HallOfFame_Data is -- Data structure for hall of fame
-   record
+   -- Data structure for hall of fame
+   type HallOfFame_Data is record
       Name: Unbounded_String; -- Name of player
       Points: Natural; -- Amount of points earned
       DeathReason: Unbounded_String; -- What caused player death
    end record;
+   -- Store all hall of fame entries
    HallOfFame_Array: array(1 .. 10) of HallOfFame_Data :=
      (others =>
         (Name => Null_Unbounded_String, Points => 0,
-         DeathReason =>
-           Null_Unbounded_String)); -- Store all hall of fame entries
+         DeathReason => Null_Unbounded_String));
 
-   procedure LoadHallOfFame; -- Read hall of fame data from file
+   -- Read hall of fame data from file
+   procedure LoadHallOfFame;
+   -- Check did new entry should enter hall of fame
    procedure UpdateHallOfFame(PlayerName, DeathReason: Unbounded_String) with
       Pre =>
       (PlayerName /= Null_Unbounded_String and
-       DeathReason /=
-         Null_Unbounded_String); -- Check did new entry should enter hall of fame
+       DeathReason /= Null_Unbounded_String);
 end HallOfFame;

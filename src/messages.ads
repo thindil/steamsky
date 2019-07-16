@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -21,36 +21,42 @@ with Game; use Game;
 
 package Messages is
 
+   -- Types of messages
    type Message_Type is
      (Default, CombatMessage, TradeMessage, OrderMessage, CraftMessage,
-      OtherMessage, MissionMessage); -- Types of messages
-   type Message_Color is
-     (WHITE, YELLOW, GREEN, RED, BLUE, CYAN); -- Colors of messages
-   type Message_Data is -- Data structure for messages
-   record
+      OtherMessage, MissionMessage);
+   -- Colors of messages
+   type Message_Color is (WHITE, YELLOW, GREEN, RED, BLUE, CYAN);
+   -- Data structure for messages
+   type Message_Data is record
       Message: Unbounded_String; -- Text of message
       MType: Message_Type; -- Type of message
       Color: Message_Color; -- Color used for show message
    end record;
    package Messages_Container is new Vectors(Positive, Message_Data);
-   Messages_List: Messages_Container.Vector; -- List of all messages
+   -- List of all messages
+   Messages_List: Messages_Container.Vector;
+   -- Index of last message to show
+   LastMessageIndex: Natural := 0;
 
-   LastMessageIndex: Natural := 0; -- Index of last message to show
-   function FormatedTime
-     (Time: Date_Record := GameDate) return String; -- Format game time
+   -- Format game time
+   function FormatedTime(Time: Date_Record := GameDate) return String;
+   -- Add new message to list
    procedure AddMessage
-     (Message: String; MType: Message_Type;
-      Color: Message_Color := WHITE); -- Add new message to list
+     (Message: String; MType: Message_Type; Color: Message_Color := WHITE);
+   -- Return selected message
    function GetMessage
      (MessageIndex: Integer; MType: Message_Type := Default)
-      return Message_Data; -- Return selected message
-   procedure ClearMessages; -- Remove all messages;
-   function MessagesAmount
-     (MType: Message_Type := Default)
-      return Natural; -- Return amount of selected type messages
+      return Message_Data;
+   -- Remove all messages
+   procedure ClearMessages;
+   -- Return amount of selected type messages
+   function MessagesAmount(MType: Message_Type := Default) return Natural;
+   -- Restore message from save file
    procedure RestoreMessage
      (Message: Unbounded_String; MType: Message_Type := Default;
-      Color: Message_Color := WHITE); -- Restore message from save file
-   function GetLastMessageIndex return Natural; -- Return last message index
+      Color: Message_Color := WHITE);
+   -- Return last message index
+   function GetLastMessageIndex return Natural;
 
 end Messages;

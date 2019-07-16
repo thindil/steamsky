@@ -21,14 +21,14 @@ with Crew; use Crew;
 
 package Statistics is
 
-   type Statistics_Data is -- Data for finished goals, destroyed ships and killed mobs
-   record
+   -- Data for finished goals, destroyed ships and killed mobs
+   type Statistics_Data is record
       Index: Unbounded_String; -- Index of goal or ship name or name of fraction of killed mobs
       Amount: Positive; -- Amount of finished goals or ships or mobs of that type
    end record;
    package Statistics_Container is new Vectors(Positive, Statistics_Data);
-   type GameStats_Data is -- Data for game statistics
-   record
+   -- Data for game statistics
+   type GameStats_Data is record
       DestroyedShips: Statistics_Container
         .Vector; -- Data for all destroyed ships by player
       BasesVisited: Positive; -- Amount of visited bases
@@ -45,25 +45,28 @@ package Statistics is
         .Vector; -- Data for all mobs killed by player
       Points: Natural; -- Amount of gained points
    end record;
-   GameStats: GameStats_Data; -- Game statistics
+   -- Game statistics
+   GameStats: GameStats_Data;
 
+   -- Add new destroyed ship to list
    procedure UpdateDestroyedShips(ShipName: Unbounded_String) with
-      Pre => ShipName /=
-      Null_Unbounded_String; -- Add new destroyed ship to list
-   procedure ClearGameStats; -- Clear game statistics
+      Pre => ShipName /= Null_Unbounded_String;
+      -- Clear game statistics
+   procedure ClearGameStats;
+   -- Add new finished goal to list
    procedure UpdateFinishedGoals(Index: Unbounded_String) with
-      Pre => Index /= Null_Unbounded_String; -- Add new finished goal to list
+      Pre => Index /= Null_Unbounded_String;
+      -- Add new finished mission to list
    procedure UpdateFinishedMissions(MType: Unbounded_String) with
-      Pre => MType /=
-      Null_Unbounded_String; -- Add new finished mission to list
+      Pre => MType /= Null_Unbounded_String;
+      -- Add new finished crafting order to list
    procedure UpdateCraftingOrders(Index: Unbounded_String) with
-      Pre => Index /=
-      Null_Unbounded_String; -- Add new finished crafting order to list
+      Pre => Index /= Null_Unbounded_String;
+      -- Add new killed mob to list
    procedure UpdateKilledMobs
      (Mob: Member_Data; FractionName: Unbounded_String) with
-      Pre => FractionName /=
-      Null_Unbounded_String; -- Add new killed mob to list
-   function GetGamePoints
-      return Natural; -- Get amount of gained points multiplied by difficulty bonus
+      Pre => FractionName /= Null_Unbounded_String;
+      -- Get amount of gained points multiplied by difficulty bonus
+   function GetGamePoints return Natural;
 
 end Statistics;

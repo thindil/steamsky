@@ -24,12 +24,14 @@ with Game; use Game;
 
 package Items is
 
-   Items_Types: UnboundedString_Container.Vector; -- Types of items
-   type Object_Prices is array(1 .. 5) of Natural; -- Prices of item in bases
-   type Object_Buyable is
-     array(1 .. 5) of Boolean; -- Did item is buyable in bases
-   type Object_Data is -- Data structure for objects prototypes
-   record
+   -- Types of items
+   Items_Types: UnboundedString_Container.Vector;
+   -- Prices of item in bases
+   type Object_Prices is array(1 .. 5) of Natural;
+   -- Did item is buyable in bases
+   type Object_Buyable is array(1 .. 5) of Boolean;
+   -- Data structure for objects prototypes
+   type Object_Data is record
       Name: Unbounded_String; -- Name of item
       Weight: Positive; -- Weight of item
       IType: Unbounded_String; -- Type of item
@@ -42,8 +44,8 @@ package Items is
    end record;
    package Objects_Container is new Hashed_Maps(Unbounded_String, Object_Data,
       Ada.Strings.Unbounded.Hash, "=");
-   type InventoryData is -- Data structure for item in inventory
-   record
+   -- Data structure for item in inventory
+   type InventoryData is record
       ProtoIndex: Unbounded_String; -- Index of prototype
       Amount: Positive; -- Amount of item
       Name: Unbounded_String; -- Name of item if different than default
@@ -51,41 +53,43 @@ package Items is
       Price: Natural; -- Price for which item was bought
    end record;
    package Inventory_Container is new Vectors(Positive, InventoryData);
-   Items_List: Objects_Container.Map; -- List of item available in game
-   Tools_List: UnboundedString_Container
-     .Vector; -- List of all tools types in game
-   Weapons_List: UnboundedString_Container
-     .Vector; -- List of indexes of all weapons in game
-   Shields_List: UnboundedString_Container
-     .Vector; -- List of indexes of all shields in game
-   HeadArmors_List: UnboundedString_Container
-     .Vector; -- List of indexes of all head armors in game
-   ChestArmors_List: UnboundedString_Container
-     .Vector; -- List of indexes of all chest armors in game
-   ArmsArmors_List: UnboundedString_Container
-     .Vector; -- List of indexes of all arms armors in game
-   LegsArmors_List: UnboundedString_Container
-     .Vector; -- List of indexes of all legs armors in game
+   -- List of item available in game
+   Items_List: Objects_Container.Map;
+   -- List of all tools types in game
+   Tools_List: UnboundedString_Container.Vector;
+   -- List of indexes of all weapons in game
+   Weapons_List: UnboundedString_Container.Vector;
+   -- List of indexes of all shields in game
+   Shields_List: UnboundedString_Container.Vector;
+   -- List of indexes of all head armors in game
+   HeadArmors_List: UnboundedString_Container.Vector;
+   -- List of indexes of all chest armors in game
+   ChestArmors_List: UnboundedString_Container.Vector;
+   -- List of indexes of all arms armors in game
+   ArmsArmors_List: UnboundedString_Container.Vector;
+   -- List of indexes of all legs armors in game
+   LegsArmors_List: UnboundedString_Container.Vector;
 
-   procedure LoadItems(Reader: Tree_Reader); -- Load items from files
-   function FindProtoItem
-     (ItemType: Unbounded_String)
-      return Unbounded_String; -- Return map index of item or empty string if item not found
+   -- Load items from files
+   procedure LoadItems(Reader: Tree_Reader);
+   -- Return map index of item or empty string if item not found
+   function FindProtoItem(ItemType: Unbounded_String) return Unbounded_String;
+   -- Get description of item damage
    function GetItemDamage
-     (ItemDurability: Natural; ToLower: Boolean := False)
-      return String; -- Get description of item damage
+     (ItemDurability: Natural; ToLower: Boolean := False) return String;
+   -- Get name of item in ship cargo or character inventory
    function GetItemName
-     (Item: InventoryData; DamageInfo, ToLower: Boolean := True)
-      return String; -- Get name of item in ship cargo or character inventory
+     (Item: InventoryData; DamageInfo, ToLower: Boolean := True) return String;
+   -- Check if item in ship cargo or character inventory was damaged
    procedure DamageItem
      (Inventory: in out Inventory_Container.Vector; ItemIndex: Positive;
-      SkillLevel, MemberIndex: Natural :=
-        0); -- Check if item in ship cargo or character inventory was damaged
+      SkillLevel, MemberIndex: Natural := 0);
+   -- Find item in ship cargo or character inventory, return item index or 0 if item not found
    function FindItem
      (Inventory: Inventory_Container.Vector;
       ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
-      Durability: Natural := 101)
-      return Natural; -- Find item in ship cargo or character inventory, return item index or 0 if item not found
-   procedure SetToolsList; -- Fill tools types list
+      Durability: Natural := 101) return Natural;
+   -- Fill tools types list
+   procedure SetToolsList;
 
 end Items;

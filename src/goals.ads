@@ -21,11 +21,11 @@ with DOM.Readers; use DOM.Readers;
 
 package Goals is
 
+   -- Types of goals
    type GoalTypes is
-     (RANDOM, REPUTATION, DESTROY, DISCOVER, VISIT, CRAFT, MISSION,
-      KILL); -- Types of goals
-   type Goal_Data is -- Data structure for each goal
-   record
+     (RANDOM, REPUTATION, DESTROY, DISCOVER, VISIT, CRAFT, MISSION, KILL);
+   -- Data structure for each goal
+   type Goal_Data is record
       Index: Unbounded_String; -- Index of goal
       GType: GoalTypes; -- Type of goal
       Amount: Natural; -- Amount of targets needed for finish goal
@@ -33,17 +33,18 @@ package Goals is
       Multiplier: Positive; -- Multiplier for points awarded for finish this goal.
    end record;
    package Goals_Container is new Vectors(Positive, Goal_Data);
-   Goals_List: Goals_Container
-     .Vector; -- List of player goals available in game
-   CurrentGoal: Goal_Data; -- Player current goal
-
-   procedure LoadGoals(Reader: Tree_Reader); -- Load player goals from files
+   -- List of player goals available in game
+   Goals_List: Goals_Container.Vector;
+   -- Player current goal
+   CurrentGoal: Goal_Data;
+   -- Load player goals from files
+   procedure LoadGoals(Reader: Tree_Reader);
+   -- Return info about selected goal or current goal if Index = 0
    function GoalText(Index: Goals_Container.Extended_Index) return String with
-      Pre => Index <=
-      Goals_List
-        .Last_Index; -- Return info about selected goal or current goal if Index = 0
-   procedure ClearCurrentGoal; -- Reset current goal
+      Pre => Index <= Goals_List.Last_Index;
+      -- Reset current goal
+   procedure ClearCurrentGoal;
+   -- Update current goal
    procedure UpdateGoal
-     (GType: GoalTypes; TargetIndex: Unbounded_String;
-      Amount: Positive := 1); -- Update current goal
+     (GType: GoalTypes; TargetIndex: Unbounded_String; Amount: Positive := 1);
 end Goals;

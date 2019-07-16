@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,10 +19,9 @@ with DOM.Core; use DOM.Core;
 
 package Ships.SaveLoad is
 
-   procedure SavePlayerShip
-     (SaveData: Document;
-      MainNode: DOM.Core.Element); -- Save player ship to file
-   procedure LoadPlayerShip
-     (SaveData: Document); -- Load saved player ship from file
+   -- Save player ship to file
+   procedure SavePlayerShip(SaveData: Document; MainNode: DOM.Core.Element);
+   -- Load saved player ship from file
+   procedure LoadPlayerShip(SaveData: Document);
 
 end Ships.SaveLoad;

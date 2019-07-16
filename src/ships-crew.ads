@@ -17,35 +17,34 @@
 
 package Ships.Crew is
 
+   -- Get level of skill of selected crew member
    function GetSkillLevel
-     (Member: Member_Data; SkillIndex: Positive)
-      return Natural; -- Get level of skill of selected crew member
+     (Member: Member_Data; SkillIndex: Positive) return Natural;
+   -- Handle crew member death
    procedure Death
      (MemberIndex: Positive; Reason: Unbounded_String; Ship: in out ShipRecord;
       CreateBody: Boolean := True) with
       Pre =>
       (MemberIndex <= Ship.Crew.Last_Index and
-       Reason /= Null_Unbounded_String); -- Handle crew member death
-   procedure DeleteMember
-     (MemberIndex: Positive;
-      Ship: in out ShipRecord); -- Delete selected member from crew list
+       Reason /= Null_Unbounded_String);
+      -- Delete selected member from crew list
+   procedure DeleteMember(MemberIndex: Positive; Ship: in out ShipRecord);
+   -- Find index of first crew member with selected order
    function FindMember
      (Order: Crew_Orders; Crew: Crew_Container.Vector := PlayerShip.Crew)
-      return Natural; -- Find index of first crew member with selected order
+      return Natural;
+   -- Change order for selected crew member
    procedure GiveOrders
      (Ship: in out ShipRecord; MemberIndex: Positive; GivenOrder: Crew_Orders;
       ModuleIndex: Natural := 0; CheckPriorities: Boolean := True) with
       Pre =>
       (MemberIndex <= Ship.Crew.Last_Index and
-       ModuleIndex <=
-         Ship.Modules.Last_Index); -- Change order for selected crew member
-   procedure UpdateOrders
-     (Ship: in out ShipRecord;
-      Combat: Boolean :=
-        False); -- Update crew orders based on their orders priorities
+       ModuleIndex <= Ship.Modules.Last_Index);
+      -- Update crew orders based on their orders priorities
+   procedure UpdateOrders(Ship: in out ShipRecord; Combat: Boolean := False);
+   -- Update morale of selected crew member by value
    procedure UpdateMorale
      (Ship: in out ShipRecord; MemberIndex: Positive; Value: Integer) with
-      Pre => MemberIndex <=
-      Ship.Crew.Last_Index; -- Update morale of selected crew member by value
+      Pre => MemberIndex <= Ship.Crew.Last_Index;
 
 end Ships.Crew;

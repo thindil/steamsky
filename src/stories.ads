@@ -24,25 +24,24 @@ with Game; use Game;
 
 package Stories is
 
-   type StartConditionType is
-     (DROPITEM); -- Types of conditions to start stories
-   type StepConditionType is
-     (ASKINBASE, DESTROYSHIP, EXPLORE, ANY,
-      LOOT); -- Types of conditions to finish story step
-   type StepText_Data is -- Data structure for stories steps texts
-   record
+   -- Types of conditions to start stories
+   type StartConditionType is (DROPITEM);
+   -- Types of conditions to finish story step
+   type StepConditionType is (ASKINBASE, DESTROYSHIP, EXPLORE, ANY, LOOT);
+   -- Data structure for stories steps texts
+   type StepText_Data is record
       Condition: StepConditionType; -- Finish condition of previous step
       Text: Unbounded_String; -- Text which will be show to player when step starts.
    end record;
    package StepTexts_Container is new Vectors(Positive, StepText_Data);
-   type StepFinish_Data is -- Structure for finish condition data
-   record
+   -- Structure for finish condition data
+   type StepFinish_Data is record
       Name: Unbounded_String; -- Name of data
       Value: Unbounded_String; -- Value of data
    end record;
    package StepData_Container is new Vectors(Positive, StepFinish_Data);
-   type Step_Data is -- Data structure for stories steps
-   record
+   -- Data structure for stories steps
+   type Step_Data is record
       Index: Unbounded_String; -- Index of step
       FinishCondition: StepConditionType; -- Condition which must be met to finish selected step and process to next
       FinishData: StepData_Container.Vector; -- Data for finish condition
@@ -51,8 +50,8 @@ package Stories is
       FailText: Unbounded_String; -- Text which will be show to player when step fails to progress.
    end record;
    package Steps_Container is new Vectors(Positive, Step_Data);
-   type Story_Data is -- Data structure for stories
-   record
+   -- Data structure for stories
+   type Story_Data is record
       StartCondition: StartConditionType; -- Condition which must be met to start story
       StartData: UnboundedString_Container
         .Vector; -- Data for starting condition
@@ -68,8 +67,8 @@ package Stories is
    end record;
    package Stories_Container is new Hashed_Maps(Unbounded_String, Story_Data,
       Ada.Strings.Unbounded.Hash, "=");
-   type CurrentStory_Data is -- Data structure for stories
-   record
+   -- Data structure for stories
+   type CurrentStory_Data is record
       Index: Unbounded_String; -- Index of story or empty string if no story currently active
       Step: Positive; -- Number of current step in story
       CurrentStep: Integer; -- Index of current step, 0 for starting step, -1 for finish step
@@ -78,8 +77,8 @@ package Stories is
       Data: Unbounded_String; -- Various data for current step, depends on step
       FinishedStep: StepConditionType; -- Finish condition for previous step
    end record;
-   type FinishedStory_Data is -- Data structure for finished story/steps
-   record
+   -- Data structure for finished story/steps
+   type FinishedStory_Data is record
       Index: Unbounded_String; -- Index of story
       StepsAmount: Positive; -- Amount of steps in this story
       StepsTexts: UnboundedString_Container
@@ -87,27 +86,31 @@ package Stories is
    end record;
    package FinishedStories_Container is new Vectors(Positive,
       FinishedStory_Data);
-   CurrentStory: CurrentStory_Data; -- Contains data about current story on which player is
-   Stories_List: Stories_Container.Map; -- List of available stories in game
-   FinishedStories: FinishedStories_Container
-     .Vector; -- List of finished stories (or past data of current story)
+   -- Contains data about current story on which player is
+   CurrentStory: CurrentStory_Data;
+   -- List of available stories in game
+   Stories_List: Stories_Container.Map;
+   -- List of finished stories (or past data of current story)
+   FinishedStories: FinishedStories_Container.Vector;
 
-   procedure LoadStories(Reader: Tree_Reader); -- Load stories data from files
+   -- Load stories data from files
+   procedure LoadStories(Reader: Tree_Reader);
+   -- Check if any story can starts
    procedure StartStory
      (FactionName: Unbounded_String; Condition: StartConditionType) with
-      Pre => FactionName /=
-      Null_Unbounded_String; -- Check if any story can starts
-   procedure ClearCurrentStory; -- Resets current story
-   function ProgressStory
-     (NextStep: Boolean := False)
-      return Boolean; -- Returns true if story goes to next step, otherwise false
-   function GetCurrentStoryText
-      return Unbounded_String; -- Get text of current step in story
+      Pre => FactionName /= Null_Unbounded_String;
+      -- Resets current story
+   procedure ClearCurrentStory;
+   -- Returns true if story goes to next step, otherwise false
+   function ProgressStory(NextStep: Boolean := False) return Boolean;
+   -- Get text of current step in story
+   function GetCurrentStoryText return Unbounded_String;
+   -- Get step finish data with selected name
    function GetStepData
      (FinishData: StepData_Container.Vector; Name: String)
       return Unbounded_String with
-      Pre => Name /= ""; -- Get step finish data with selected name
-   procedure GetStoryLocation
-     (StoryX, StoryY: in out Positive); -- Get target location of current story
+      Pre => Name /= "";
+      -- Get target location of current story
+   procedure GetStoryLocation(StoryX, StoryY: in out Positive);
 
 end Stories;

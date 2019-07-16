@@ -21,14 +21,16 @@ with DOM.Readers; use DOM.Readers;
 
 package Help is
 
-   type Help_Data is -- Data structure for help topic
-   record
+   -- Data structure for help topic
+   type Help_Data is record
       Index: Unbounded_String; -- Index of help topic
       Text: Unbounded_String; -- Text of help
    end record;
    package Help_Container is new Ordered_Maps(Unbounded_String, Help_Data);
-   Help_List: Help_Container.Map; -- List of all help topics
+   -- List of all help topics
+   Help_List: Help_Container.Map;
 
-   procedure LoadHelp(Reader: Tree_Reader); -- Load help text from file
+   -- Load help text from file
+   procedure LoadHelp(Reader: Tree_Reader);
 
 end Help;

@@ -17,12 +17,14 @@
 
 package Ships.Upgrade is
 
-   Ship_Upgrade_Error: exception; -- Raised when player can't start upgrading module
+   -- Raised when player can't start upgrading module
+   Ship_Upgrade_Error: exception;
 
+   -- Set upgrading order
    procedure StartUpgrading(ModuleIndex, UpgradeType: Positive) with
       Pre =>
-      (ModuleIndex <= PlayerShip.Modules.Last_Index and
-       UpgradeType < 5); -- Set upgrading order
-   procedure UpgradeShip(Minutes: Positive); -- Upgrade selected module on ship
+      (ModuleIndex <= PlayerShip.Modules.Last_Index and UpgradeType < 5);
+      -- Upgrade selected module on ship
+   procedure UpgradeShip(Minutes: Positive);
 
 end Ships.Upgrade;
