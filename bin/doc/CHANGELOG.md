@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated help
+- Fonts size after first run of the game
 
 ## [3.9] - 2019-07-14
 
