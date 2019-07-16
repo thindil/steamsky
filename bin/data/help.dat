@@ -80,6 +80,14 @@ For repairs, upgrading ship modules, trader and cleaning ship, green means you h
 Thus if you find Agricultural base near Refinery, start travelling between them and transport Raw Meat from Agricultural to Refinery and in second way, Andrae Seeds from Refinery to Agricultural. Try not trade with Shipyard bases at beginning. They don't produce anything thus you may end with empty cargo travel. Trading between bases raise reputation in them too.
     4. From start go to {i}ship info{/i} screen and set {i}Reduce fuel usage{/i} as a current ship upgrade. With time your ship will be use twice time less fuel for travel, which made it a lot cheaper and all other thing a lot more profitable.
     5. After finishing upgrading engine, upgrade ship hull size by one. Then find a shipyard base and install second engine. And of course, upgrade it that same like first. This allow you to not only travel faster, but also escape from stronger enemies or catch them faster in the battle.
+    6. Select one base as a your home base (best is probably Agricultural if you need food and drinks to live, otherwise select Industrial), and start working on maximize reputation there. Best place for that main base should have one short trading route (one of described above) and shipyard base for buying upgrades to the ship.
+    7. Sources of money are (from the best to the worst): Trading -> Missions (especially when selected only money as reward for them) -> Crafting -> Combat with boarding enemy ships -> Only ship combat.
+    8. Read other sections of this help, you can find a lot useful informations.
+    9. Enjoy the game and try to find your own, better way to play :)
+{u}Combat{/u}
+    1. Fastest way to destroy enemy ship is to destroy one of its engines. If enemy is unarmored, set your Gunner order to {i}Aim for their engine{/i}. When enemy is armored, destroy they armor first by setting Gunner to {i}Fire at will{/i}.
+    2. If the only weapon of enemy is battering ram and you have installed gun, try to stay outside they attack range. Go closer to enemy ship until your gun will start shooting and then set Pilot order on {i}Keep distance{/i} and Engineer on {i}Full speed{/i}. If you are faster than enemy, you can end combat even without damage to your ship.
+    3. Some factions will escape if you destroy weapon on theirs ships. This is useful if you meet a lot bigger ship than your.
 </entry>
  <entry index="movement" title=" 3. Ship movement">{u}Undocking from bases{/u}
     Your ship starts docked to base. To move it, you must first give order {b}&quot;Undock&quot;{/b} from base, by clicking on {b}&quot;Undock&quot;{/b} button. To see other orders available for ship, press {GameKey 14} key (or first {GameKey 26} key for see game menu) for open orders menu.
