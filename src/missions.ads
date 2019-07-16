@@ -22,10 +22,8 @@ package Missions is
 
    type Missions_Types is (Deliver, Destroy, Patrol, Explore, Passenger);
    type RewardMultiplier is digits 2 range 0.0 .. 2.0;
-   type Mission_Data
-     (MType: Missions_Types := Deliver)
-   is -- Data structure for missions
-   record
+   -- Data structure for missions
+   type Mission_Data(MType: Missions_Types := Deliver) is record
       Time: Positive; -- Amount of minutes to finish the mission
       TargetX: Natural; -- Skymap X-axis for the mission target
       TargetY: Natural; -- Skymap Y-axis for the mission target
@@ -45,26 +43,30 @@ package Missions is
       end case;
    end record;
    package Mission_Container is new Vectors(Positive, Mission_Data);
-   AcceptedMissions: Mission_Container
-     .Vector; -- List of missions accepted by player
-   Missions_Accepting_Error: exception; -- Raised when mission can't be accepted
-   Missions_Finishing_Error: exception; -- Raised when mission can't be finished
+   -- List of missions accepted by player
+   AcceptedMissions: Mission_Container.Vector;
+   -- Raised when mission can't be accepted
+   Missions_Accepting_Error: exception;
+   -- Raised when mission can't be finished
+   Missions_Finishing_Error: exception;
 
-   procedure GenerateMissions; -- Generate if needed new missions in base
-   procedure AcceptMission
-     (MissionIndex: Positive); -- Accept selected mission from base
-   procedure UpdateMissions(Minutes: Positive); -- Update accepted missions
+   -- Generate if needed new missions in base
+   procedure GenerateMissions;
+   -- Accept selected mission from base
+   procedure AcceptMission(MissionIndex: Positive);
+   -- Update accepted missions
+   procedure UpdateMissions(Minutes: Positive);
+   -- Finish selected mission
    procedure FinishMission(MissionIndex: Positive) with
-      Pre => MissionIndex <=
-      AcceptedMissions.Last_Index; -- Finish selected mission
+      Pre => MissionIndex <= AcceptedMissions.Last_Index;
+      -- Delete selected mission
    procedure DeleteMission
      (MissionIndex: Positive; Failed: Boolean := True) with
-      Pre => MissionIndex <=
-      AcceptedMissions.Last_Index; -- Delete selected mission
+      Pre => MissionIndex <= AcceptedMissions.Last_Index;
+      -- Update status of mission
    procedure UpdateMission(MissionIndex: Positive) with
-      Pre => MissionIndex <=
-      AcceptedMissions.Last_Index; -- Update status of mission
-   function AutoFinishMissions
-      return String; -- Finish all possible missions, return empty string if all ok
+      Pre => MissionIndex <= AcceptedMissions.Last_Index;
+      -- Finish all possible missions, return empty string if all ok
+   function AutoFinishMissions return String;
 
 end Missions;

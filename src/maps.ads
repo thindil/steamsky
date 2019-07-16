@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -17,20 +17,19 @@
 
 package Maps is
 
-   type SkyCell is -- Data structure for cells in game map
-   record
+   -- Data structure for cells in game map
+   type SkyCell is record
       BaseIndex: Natural;  -- If sky base is in cell > 0
       Visited: Boolean; -- True if player was in this cell
       EventIndex: Natural; -- If event is in cell > 0
       MissionIndex: Natural; -- If accepted mission is in cell > 0
    end record;
-   SkyMap: array(1 .. 1024, 1 .. 1024) of SkyCell; -- Game map
+   -- Game map
+   SkyMap: array(1 .. 1024, 1 .. 1024) of SkyCell;
 
-   function CountDistance
-     (DestinationX, DestinationY: Positive)
-      return Natural; -- Return distance between player ship and destination point
-   procedure NormalizeCoord
-     (Coord: in out Integer;
-      IsXAxis: Boolean := True); -- Normalize map coordinates
+   -- Return distance between player ship and destination point
+   function CountDistance(DestinationX, DestinationY: Positive) return Natural;
+   -- Normalize map coordinates
+   procedure NormalizeCoord(Coord: in out Integer; IsXAxis: Boolean := True);
 
 end Maps;

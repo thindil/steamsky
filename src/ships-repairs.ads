@@ -1,4 +1,4 @@
---    Copyright 2017 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -17,6 +17,7 @@
 
 package Ships.Repairs is
 
-   procedure RepairShip(Minutes: Positive); -- Repair ship modules
+   -- Repair ship modules
+   procedure RepairShip(Minutes: Positive);
 
 end Ships.Repairs;

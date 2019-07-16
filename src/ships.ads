@@ -34,10 +34,8 @@ package Ships is
    type ModuleType2 is
      (WORKSHOP, ANY, MEDICAL_ROOM, TRAINING_ROOM, ENGINE, CABIN, COCKPIT,
       TURRET, GUN, CARGO_ROOM, HULL, ARMOR, BATTERING_RAM, HARPOON_GUN);
-   type ModuleData
-     (MType: ModuleType2 := ANY)
-   is -- Data structure for ship modules
-   record
+   -- Data structure for ship modules
+   type ModuleData(MType: ModuleType2 := ANY) is record
       Name: Unbounded_String; -- Name of module
       ProtoIndex: Unbounded_String; -- Index of module prototype
       Weight: Natural; -- Weight of module
@@ -83,8 +81,8 @@ package Ships is
    end record;
    package Modules_Container is new Vectors(Positive, ModuleData);
    package Crew_Container is new Vectors(Positive, Member_Data);
-   type ShipRecord is -- Data structure for ships
-   record
+   -- Data structure for ships
+   type ShipRecord is record
       Name: Unbounded_String; -- Ship name
       SkyX: Integer; -- X coordinate on sky map
       SkyY: Integer; -- Y coordinate on sky map
@@ -100,15 +98,15 @@ package Ships is
       HomeBase: Natural; -- Index of home base of ship
    end record;
    type ShipSkills_Array is array(1 .. 2) of Natural;
-   type ProtoMember_Data is -- Data structure for proto crew info
-   record
+   -- Data structure for proto crew info
+   type ProtoMember_Data is record
       ProtoIndex: Unbounded_String; -- Index of proto mob which will be used as crew member
       MinAmount: Positive; -- Mininum amount of that mob in crew
       MaxAmount: Natural; -- Maximum amount of that mob in crew. If 0 then MinAmount will be amount
    end record;
    package ProtoCrew_Container is new Vectors(Positive, ProtoMember_Data);
-   type ProtoShipData is -- Data structure for ship prototypes
-   record
+   -- Data structure for ship prototypes
+   type ProtoShipData is record
       Name: Unbounded_String; -- Prototype name
       Modules: UnboundedString_Container.Vector; -- List of ship modules
       Accuracy: ShipSkills_Array; -- Bonus to hit for ship
@@ -130,25 +128,25 @@ package Ships is
    ShipSyllablesStart: UnboundedString_Container.Vector;
    ShipSyllablesMiddle: UnboundedString_Container.Vector;
    ShipSyllablesEnd: UnboundedString_Container.Vector;
-   Ships_Invalid_Data: exception; -- Raised when invalid data in ships file
+   -- Raised when invalid data in ships file
+   Ships_Invalid_Data: exception;
 
+   -- Create new ship
    function CreateShip
      (ProtoIndex, Name: Unbounded_String; X, Y: Integer; Speed: ShipSpeed;
       RandomUpgrades: Boolean := True) return ShipRecord with
-      Pre =>
-      (ProtoShips_Container.Contains
-         (ProtoShips_List, ProtoIndex)); -- Create new ship
-   procedure LoadShips(Reader: Tree_Reader); -- Load ships from files
-   function CountShipWeight
-     (Ship: ShipRecord)
-      return Positive; -- Count weight of ship (with modules and cargo)
+      Pre => (ProtoShips_Container.Contains(ProtoShips_List, ProtoIndex));
+      -- Load ships from files
+   procedure LoadShips(Reader: Tree_Reader);
+   -- Count weight of ship (with modules and cargo)
+   function CountShipWeight(Ship: ShipRecord) return Positive;
+   -- Generate random name for ship
    function GenerateShipName
      (Owner: Unbounded_String) return Unbounded_String with
-      Pre => Owner /= Null_Unbounded_String; -- Generate random name for ship
-   function CountCombatValue
-      return Natural; -- Count combat value of player ship
-   function GetCabinQuality
-     (Quality: Natural)
-      return String; -- Get description of quality of selected cabin in player ship
+      Pre => Owner /= Null_Unbounded_String;
+      -- Count combat value of player ship
+   function CountCombatValue return Natural;
+   -- Get description of quality of selected cabin in player ship
+   function GetCabinQuality(Quality: Natural) return String;
 
 end Ships;

@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -17,21 +17,19 @@
 
 package Ships.Movement is
 
+   -- Move player ship
    function MoveShip
-     (X, Y: Integer; Message: in out Unbounded_String)
-      return Natural; -- Move player ship
-   function DockShip
-     (Docking: Boolean)
-      return String; -- Dock/Undock ship at base, returns empty string if all ok otherwise error message
-   function ChangeShipSpeed
-     (SpeedValue: ShipSpeed)
-      return String; -- Change speed of ship, returns empty string if all ok otherwise error message
+     (X, Y: Integer; Message: in out Unbounded_String) return Natural;
+   -- Dock/Undock ship at base, returns empty string if all ok otherwise error message
+   function DockShip(Docking: Boolean) return String;
+-- Change speed of ship, returns empty string if all ok otherwise error message
+   function ChangeShipSpeed(SpeedValue: ShipSpeed) return String;
+   -- Return real ship speed in meters per minute
    function RealSpeed
-     (Ship: ShipRecord; InfoOnly: Boolean := False)
-      return Natural; -- Return real ship speed in meters per minute
-   function CountFuelNeeded
-      return Integer; -- Return fuel needed by player ship to travel
-   procedure WaitInPlace
-     (Minutes: Positive); -- Use fuel when ship wait in place
+     (Ship: ShipRecord; InfoOnly: Boolean := False) return Natural;
+   -- Return fuel needed by player ship to travel
+   function CountFuelNeeded return Integer;
+   -- Use fuel when ship wait in place
+   procedure WaitInPlace(Minutes: Positive);
 
 end Ships.Movement;
