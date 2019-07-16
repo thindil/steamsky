@@ -26,8 +26,8 @@ package ShipModules is
      (ANY, ENGINE, CABIN, COCKPIT, TURRET, GUN, CARGO, HULL, ARMOR,
       BATTERING_RAM, ALCHEMY_LAB, FURNACE, WATER_COLLECTOR, WORKSHOP,
       GREENHOUSE, MEDICAL_ROOM, HARPOON_GUN, TRAINING_ROOM);
-   type BaseModule_Data is -- Data structure for prototypes of ship modules
-   record
+   -- Data structure for prototypes of ship modules
+   type BaseModule_Data is record
       Name: Unbounded_String; -- Name of module
       MType: ModuleType; -- Type of module
       Weight: Natural; -- Base weight of module
@@ -45,9 +45,10 @@ package ShipModules is
    end record;
    package BaseModules_Container is new Hashed_Maps(Unbounded_String,
       BaseModule_Data, Ada.Strings.Unbounded.Hash, "=");
-   Modules_List: BaseModules_Container
-     .Map; -- List of ship modules available in game
+   -- List of ship modules available in game
+   Modules_List: BaseModules_Container.Map;
 
-   procedure LoadShipModules(Reader: Tree_Reader); -- Load modules from files
+   -- Load modules from files
+   procedure LoadShipModules(Reader: Tree_Reader);
 
 end ShipModules;

@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -20,13 +20,11 @@ with Game; use Game;
 
 package Utils is
 
-   function GetRandom
-     (Min, Max: Integer)
-      return Integer; -- Return random number from Min to Max range
-   function DaysDifference
-     (DateToCompare: Date_Record)
-      return Natural; -- Return days difference between selected date and current game date
-   function GenerateRoboticName
-      return Unbounded_String; -- Generate robotic type name for bases, mobs, ships, etc
+   -- Return random number from Min to Max range
+   function GetRandom(Min, Max: Integer) return Integer;
+   -- Return days difference between selected date and current game date
+   function DaysDifference(DateToCompare: Date_Record) return Natural;
+   -- Generate robotic type name for bases, mobs, ships, etc
+   function GenerateRoboticName return Unbounded_String;
 
 end Utils;

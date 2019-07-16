@@ -24,15 +24,15 @@ with Crew; use Crew;
 
 package Mobs is
 
-   type MobInventoryRecord is -- Data structure for mobs inventory
-   record
+   -- Data structure for mobs inventory
+   type MobInventoryRecord is record
       ProtoIndex: Unbounded_String; -- Proto index of item in mob inventory
       MinAmount: Natural; -- Minimal amount of item in mob inventory
       MaxAmount: Natural; -- Maximum amount of item in mob inventory
    end record;
    package MobInventory_Container is new Vectors(Positive, MobInventoryRecord);
-   type ProtoMobRecord is -- Data structure for mobs prototypes
-   record
+   -- Data structure for mobs prototypes
+   type ProtoMobRecord is record
       Skills: Skills_Container
         .Vector; -- Names indexes, levels and experience in skills of mob
       Attributes: Attributes_Container
@@ -45,8 +45,10 @@ package Mobs is
    package ProtoMobs_Container is new Hashed_Maps(Unbounded_String,
       ProtoMobRecord, Ada.Strings.Unbounded.Hash, "=");
    ProtoMobs_List: ProtoMobs_Container.Map;
-   Mobs_Invalid_Data: exception; -- Raised when invalid data found in mobs file
+   -- Raised when invalid data found in mobs file
+   Mobs_Invalid_Data: exception;
 
-   procedure LoadMobs(Reader: Tree_Reader); -- Load mobs from files
+   -- Load mobs from files
+   procedure LoadMobs(Reader: Tree_Reader);
 
 end Mobs;
