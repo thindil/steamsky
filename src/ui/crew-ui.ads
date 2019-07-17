@@ -20,29 +20,69 @@ with Ships; use Ships;
 
 package Crew.UI is
 
-   -- Create infterace for show player ship crew info
+-- ****f* Crew.UI/CreateCrewUI
+-- FUNCTION
+-- Create infterace for show player ship crew info
+-- SOURCE
    procedure CreateCrewUI(NewBuilder: Gtkada_Builder);
-   -- Show interface for show player ship crew info
+-- ****
+-- ****f* Crew.UI/ShowCrewUI;
+-- FUNCTION
+-- Show interface for show player ship crew info
+-- SOURCE
    procedure ShowCrewUI;
+-- ****
 
 private
 
-   -- Gtk builder for user interface
+-- ****v* Crew.UI/Builder
+-- FUNCTION
+-- Gtk builder for user interface
+-- SOURCE
    Builder: Gtkada_Builder;
-   -- Crew member and item from inventory indexes
+-- ****
+-- ****v* Crew.UI/MemberIndex, ItemIndex
+-- FUNCTION
+-- Crew member and item from inventory indexes
+-- SOURCE
    MemberIndex, ItemIndex: Positive;
-   -- Set orders for selected crew member
+-- ****
+-- ****f* Crew.UI/SetOrdersList;
+-- FUNCTION
+-- Set orders for selected crew member
+-- SOURCE
    procedure SetOrdersList;
-   -- Show list of orders for all crew members
+-- ****
+-- ****f* Crew.UI/ShowOrdersForAll;
+-- FUNCTION
+-- Show list of orders for all crew members
+-- SOURCE
    procedure ShowOrdersForAll;
-   -- Refresh informations about selected crew member inventory
+-- ****
+-- ****f* Crew.UI/RefreshInventory;
+-- FUNCTION
+-- Refresh informations about selected crew member inventory
+-- SOURCE
    procedure RefreshInventory;
-   -- Set active item in inventory list
+-- ****
+-- ****f* Crew.UI/SetActiveItem;
+-- FUNCTION
+-- Set active item in inventory list
+-- SOURCE
    procedure SetActiveItem;
-   -- Refresh crew list
+-- ****
+-- ****f* Crew.UI/RefreshCrewInfo;
+-- FUNCTION
+-- Refresh crew list
+-- SOURCE
    procedure RefreshCrewInfo;
-   -- Set active crew member in crew list
+-- ****
+-- ****f* Crew.UI/SetActiveMember
+-- FUNCTION
+-- Set active crew member in crew list
+-- SOURCE
    procedure SetActiveMember(NewMemberIndex: Natural := 0) with
       Pre => NewMemberIndex <= PlayerShip.Crew.Last_Index;
+-- ****
 
 end Crew.UI;

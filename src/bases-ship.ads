@@ -17,22 +17,54 @@
 
 package Bases.Ship is
 
-   -- Raised when there is nothing to repair
+-- ****v* Bases.Ship/BasesShip_Nothing_To_Repair
+-- FUNCTION
+-- Raised when there is nothing to repair
+-- SOURCE
    BasesShip_Nothing_To_Repair: exception;
-   -- Raised when player try install another same unique module
+-- ****
+-- ****v* Bases.Ship/BasesShip_Unique_Module
+-- FUNCTION
+-- Raised when player try install another same unique module
+-- SOURCE
    BasesShip_Unique_Module: exception;
-   -- Raised when problems with installing ship module occurs
+-- ****
+-- ****v* Bases.Ship/BasesShip_Installation_Error
+-- FUNCTION
+-- Raised when problems with installing ship module occurs
+-- SOURCE
    BasesShip_Installation_Error: exception;
-   -- Raised when problems with removing ship module occurs
+-- ****
+-- ****v* Bases.Ship/BasesShip_Removing_Error
+-- FUNCTION
+-- Raised when problems with removing ship module occurs
+-- SOURCE
    BasesShip_Removing_Error: exception;
+-- ****
 
-   -- Repairs playership in bases
+-- ****f* Bases.Ship/RepairShip
+-- FUNCTION
+-- Repairs playership in bases
+-- SOURCE
    procedure RepairShip(ModuleIndex: Integer);
-   -- Install/remove modules on ship
+-- ****
+-- ****f* Bases.Ship/UpgradeShip
+-- FUNCTION
+-- Install/remove modules on ship
+-- SOURCE
    procedure UpgradeShip(Install: Boolean; ModuleIndex: Unbounded_String);
-   -- Pay daily fee for docking
+-- ****
+-- ****f* Bases.Ship/PayForDock;
+-- FUNCTION
+-- Pay daily fee for docking
+-- SOURCE
    procedure PayForDock;
-   -- Count cost/time of repairs of ship
+-- ****
+-- ****f* Bases.Ship/RepairCost
+-- FUNCTION
+-- Count cost/time of repairs of ship
+-- SOURCE
    procedure RepairCost(Cost, Time: in out Natural; ModuleIndex: Integer);
+-- ****
 
 end Bases.Ship;

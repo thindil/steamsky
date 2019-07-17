@@ -28,7 +28,10 @@ with Config; use Config;
 
 package body Bases is
 
+-- ****if* Bases/GainRep
+-- SOURCE
    procedure GainRep(BaseIndex: BasesRange; Points: Integer) is
+-- ****
       NewPoints: Integer;
    begin
       if SkyBases(BaseIndex).Reputation(1) = -100 or
@@ -61,9 +64,12 @@ package body Bases is
       end if;
    end GainRep;
 
+-- ****if* Bases/CountPrice
+-- SOURCE
    procedure CountPrice
      (Price: in out Positive; TraderIndex: Crew_Container.Extended_Index;
       Reduce: Boolean := True) is
+-- ****
       Bonus: Integer := 0;
    begin
       if TraderIndex /= Crew_Container.No_Index then
@@ -105,10 +111,14 @@ package body Bases is
       end if;
    end CountPrice;
 
-   -- based on name generator from libtcod
+-- ****if* Bases/GenerateBaseName
+-- FUNCTION
+-- based on name generator from libtcod
+-- SOURCE
    function GenerateBaseName
      (FactionIndex: Unbounded_String)
       return Unbounded_String is
+-- ****
       NewName: Unbounded_String;
    begin
       NewName := Null_Unbounded_String;
@@ -144,7 +154,10 @@ package body Bases is
       return NewName;
    end GenerateBaseName;
 
+-- ****if* Bases/GenerateRecruits
+-- SOURCE
    procedure GenerateRecruits is
+-- ****
       BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MaxRecruits, RecruitsAmount, SkillsAmount, SkillNumber, SkillLevel,
@@ -302,7 +315,10 @@ package body Bases is
       SkyBases(BaseIndex).Recruits := BaseRecruits;
    end GenerateRecruits;
 
+-- ****if* Bases/AskForBases
+-- SOURCE
    procedure AskForBases is
+-- ****
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Radius, TempX, TempY: Integer;
@@ -414,7 +430,10 @@ package body Bases is
       UpdateGame(30);
    end AskForBases;
 
+-- ****if* Bases/AskForEvents
+-- SOURCE
    procedure AskForEvents is
+-- ****
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MaxEvents, EventsAmount, TmpBaseIndex, EventX, EventY, EventTime, DiffX,
@@ -597,7 +616,10 @@ package body Bases is
       UpdateGame(30);
    end AskForEvents;
 
+-- ****if* Bases/UpdatePopulation
+-- SOURCE
    procedure UpdatePopulation is
+-- ****
       BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       PopulationDiff: Integer;
@@ -631,7 +653,10 @@ package body Bases is
       end if;
    end UpdatePopulation;
 
+-- ****if* Bases/UpdatePrices
+-- SOURCE
    procedure UpdatePrices is
+-- ****
       BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Chance, Roll: Positive;

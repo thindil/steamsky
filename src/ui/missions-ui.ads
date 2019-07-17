@@ -19,11 +19,23 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Missions.UI is
 
-   -- Create infterace for show available missions
+-- ****f* Missions.UI/CreateMissionsUI
+-- FUNCTION
+-- Create infterace for show available missions
+-- SOURCE
    procedure CreateMissionsUI(NewBuilder: Gtkada_Builder);
-   -- Show interface for show available missions
+-- ****
+-- ****f* Missions.UI/ShowMissionsUI;
+-- FUNCTION
+-- Show interface for show available missions
+-- SOURCE
    procedure ShowMissionsUI;
-   -- Show interface for show accepted missions
+-- ****
+-- ****f* Missions.UI/ShowAcceptedMissions;
+-- FUNCTION
+-- Show interface for show accepted missions
+-- SOURCE
    procedure ShowAcceptedMissions;
+-- ****
 
 end Missions.UI;

@@ -19,9 +19,17 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Bases.RecruitUI is
 
-   -- Create infterace for recruit new crew members
+-- ****f* Bases.RecruitUI/CreateRecruitUI
+-- FUNCTION
+-- Create infterace for recruit new crew members
+-- SOURCE
    procedure CreateRecruitUI(NewBuilder: Gtkada_Builder);
-   -- Show interface for recruit new crew members
+-- ****
+-- ****f* Bases.RecruitUI/ShowRecruitUI;
+-- FUNCTION
+-- Show interface for recruit new crew members
+-- SOURCE
    procedure ShowRecruitUI;
+-- ****
 
 end Bases.RecruitUI;

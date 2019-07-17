@@ -90,7 +90,10 @@ with Log; use Log;
 
 package body Maps.UI is
 
+-- ****if* Maps.UI/DeathConfirm
+-- SOURCE
    procedure DeathConfirm is
+-- ****
       MenuArray: constant array(1 .. 12) of Unbounded_String :=
         (To_Unbounded_String("menuorders"),
          To_Unbounded_String("menucrafting"),
@@ -118,7 +121,10 @@ package body Maps.UI is
       end if;
    end DeathConfirm;
 
+-- ****if* Maps.UI/UpdateHeader
+-- SOURCE
    procedure UpdateHeader is
+-- ****
       HaveWorker, HaveGunner: Boolean := True;
       NeedCleaning, NeedRepairs, NeedWorker, HavePilot, HaveEngineer,
       HaveTrader, HaveUpgrader, HaveCleaner, HaveRepairman: Boolean := False;
@@ -473,7 +479,10 @@ package body Maps.UI is
       end if;
    end UpdateHeader;
 
+-- ****if* Maps.UI/UpdateMoveButtons
+-- SOURCE
    procedure UpdateMoveButtons is
+-- ****
       MoveButtonsNames: constant array
         (Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("btnupleft"), To_Unbounded_String("btnup"),
@@ -534,7 +543,10 @@ package body Maps.UI is
       end if;
    end UpdateMoveButtons;
 
+-- ****if* Maps.UI/DrawMap
+-- SOURCE
    procedure DrawMap is
+-- ****
       Iter: Gtk_Text_Iter;
       MapBuffer: constant Gtk_Text_Buffer :=
         Gtk_Text_Buffer(Get_Object(Builder, "txtmap"));
@@ -761,13 +773,19 @@ package body Maps.UI is
       end if;
    end DrawMap;
 
+-- ****if* Maps.UI/HideButtons
+-- SOURCE
    procedure HideButtons(Widget: not null access Gtk_Widget_Record'Class) is
+-- ****
    begin
       Set_No_Show_All(Widget, True);
       Hide(Widget);
    end HideButtons;
 
+-- ****if* Maps.UI/CheckButtons
+-- SOURCE
    procedure CheckButtons(Widget: not null access Gtk_Widget_Record'Class) is
+-- ****
    begin
       if Widget = Gtk_Widget(Get_Object(Builder, "btncloseorders")) then
          return;
@@ -777,7 +795,10 @@ package body Maps.UI is
       end if;
    end CheckButtons;
 
+-- ****if* Maps.UI/GetCurrentCellCoords
+-- SOURCE
    procedure GetCurrentCellCoords is
+-- ****
       Mask: Gdk_Modifier_Type;
       MouseX, MouseY: Gint;
       DeviceManager: constant Gdk_Device_Manager :=
@@ -807,7 +828,10 @@ package body Maps.UI is
       end if;
    end GetCurrentCellCoords;
 
+-- ****if* Maps.UI/UpdateMapInfo
+-- SOURCE
    procedure UpdateMapInfo(ShowOrdersInfo: Boolean := False) is
+-- ****
       MapInfoText: Unbounded_String;
    begin
       if not ShowOrdersInfo then
@@ -1016,7 +1040,10 @@ package body Maps.UI is
          To_String(MapInfoText));
    end UpdateMapInfo;
 
+-- ****if* Maps.UI/CreateSkyMap
+-- SOURCE
    procedure CreateSkyMap is
+-- ****
       Error: aliased GError;
       Accelerators: Gtk_Accel_Group;
    begin
@@ -1321,8 +1348,11 @@ package body Maps.UI is
       end if;
    end CreateSkyMap;
 
+-- ****if* Maps.UI/ShowSkyMap
+-- SOURCE
    procedure ShowSkyMap
      (X: Integer := PlayerShip.SkyX; Y: Integer := PlayerShip.SkyY) is
+-- ****
       ButtonsNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("btnmovemapleft"),
          To_Unbounded_String("btnmovemapright"),
@@ -1402,7 +1432,10 @@ package body Maps.UI is
       end if;
    end ShowSkyMap;
 
+-- ****if* Maps.UI/FinishStory
+-- SOURCE
    procedure FinishStory is
+-- ****
       Message: constant String :=
         To_String(Stories_List(CurrentStory.Index).EndText) &
         " Are you want to finish game?";
@@ -1417,7 +1450,10 @@ package body Maps.UI is
       end if;
    end FinishStory;
 
+-- ****if* Maps.UI/SetMapMoveButtons
+-- SOURCE
    procedure SetMapMoveButtons is
+-- ****
       CurrentTheme: constant ThemeRecord :=
         Themes_List(To_String(GameSettings.InterfaceTheme));
    begin

@@ -22,18 +22,46 @@ with Game; use Game;
 
 package Combat is
 
-   -- Name of enemy
+-- ****v* Combat/EnemyName
+-- FUNCTION
+-- Name of enemy
+-- SOURCE
    EnemyName: Unbounded_String := Null_Unbounded_String;
-   -- Orders for crew members
+-- ****
+-- ****v* Combat/PilotOrder, EngineerOrder
+-- FUNCTION
+-- Orders for crew members
+-- SOURCE
    PilotOrder, EngineerOrder: Positive;
-   -- Data structure for guns informations
+-- ****
+-- ****t* Combat/GunsInfoArray
+-- FUNCTION
+-- Data structure for guns informations
+-- SOURCE
    type GunsInfoArray is array(1 .. 2) of Positive;
+-- ****
+
+-- ****t* Combat/Guns_Container
+-- SOURCE
    package Guns_Container is new Vectors(Positive, GunsInfoArray);
-   -- List of guns installed on player ship
+-- ****
+
+-- ****v* Combat/Guns
+-- FUNCTION
+-- List of guns installed on player ship
+-- SOURCE
    Guns: Guns_Container.Vector;
-   -- List of orders for boarding party
+-- ****
+-- ****v* Combat/BoardingOrders
+-- FUNCTION
+-- List of orders for boarding party
+-- SOURCE
    BoardingOrders: Integer_Container.Vector;
-   -- Data structure for enemies
+-- ****
+-- ****t* Combat/Enemy_Record
+-- FUNCTION
+-- Data structure for enemies
+-- SOURCE
    type Enemy_Record is record
       Ship: ShipRecord; -- Ship data for enemy
       Accuracy: Natural; -- Bonus to accuracy
@@ -44,25 +72,58 @@ package Combat is
       Perception: Natural; -- Bonus to perception
       HarpoonDuration: Natural; -- How long (amount of rounds) ship will be stopped by player harpoon
    end record;
-   -- Enemy informations
+-- ****
+-- ****v* Combat/Enemy
+-- FUNCTION
+-- Enemy informations
+-- SOURCE
    Enemy: Enemy_Record;
-   -- True if combat ends
+-- ****
+-- ****v* Combat/EndCombat
+-- FUNCTION
+-- True if combat ends
+-- SOURCE
    EndCombat: Boolean;
-   -- Start index for showing messages
+-- ****
+-- ****v* Combat/MessagesStarts
+-- FUNCTION
+-- Start index for showing messages
+-- SOURCE
    MessagesStarts: Natural;
-   -- Speed of player ship before combat
+-- ****
+-- ****v* Combat/OldSpeed
+-- FUNCTION
+-- Speed of player ship before combat
+-- SOURCE
    OldSpeed: ShipSpeed;
-   -- How long (amount of rounds) player ship will be stopped by enemy harpoon
+-- ****
+-- ****v* Combat/HarpoonDuration
+-- FUNCTION
+-- How long (amount of rounds) player ship will be stopped by enemy harpoon
+-- SOURCE
    HarpoonDuration: Natural;
-   -- Prototype index of enemy ship
+-- ****
+-- ****v* Combat/EnemyShipIndex
+-- FUNCTION
+-- Prototype index of enemy ship
+-- SOURCE
    EnemyShipIndex: Unbounded_String;
+-- ****
 
-   -- Generate enemy and start battle, return True if combat starts
+-- ****f* Combat/StartCombat
+-- FUNCTION
+-- Generate enemy and start battle, return True if combat starts
+-- SOURCE
    function StartCombat
      (EnemyIndex: Unbounded_String; NewCombat: Boolean := True)
       return Boolean with
       Pre => ProtoShips_Container.Contains(ProtoShips_List, EnemyIndex);
-      -- Count damage/ships actions, etc
+-- ****
+-- ****f* Combat/CombatTurn;
+-- FUNCTION
+-- Count damage/ships actions, etc
+-- SOURCE
    procedure CombatTurn;
+-- ****
 
 end Combat;

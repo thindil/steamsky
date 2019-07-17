@@ -21,7 +21,10 @@ with Game; use Game;
 
 package body Config is
 
+-- ****if* Config/LoadConfig
+-- SOURCE
    procedure LoadConfig is
+-- ****
       ConfigFile: File_Type;
       RawData, FieldName, Value: Unbounded_String;
       EqualIndex: Natural;
@@ -181,7 +184,10 @@ package body Config is
       Close(ConfigFile);
    end LoadConfig;
 
+-- ****if* Config/SaveConfig
+-- SOURCE
    procedure SaveConfig is
+-- ****
       ConfigFile: File_Type;
       procedure SaveBoolean(Value: Boolean; Name: String) is
       begin

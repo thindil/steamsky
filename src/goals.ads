@@ -21,10 +21,17 @@ with DOM.Readers; use DOM.Readers;
 
 package Goals is
 
-   -- Types of goals
+-- ****t* Goals/GoalTypes
+-- FUNCTION
+-- Types of goals
+-- SOURCE
    type GoalTypes is
      (RANDOM, REPUTATION, DESTROY, DISCOVER, VISIT, CRAFT, MISSION, KILL);
-   -- Data structure for each goal
+-- ****
+-- ****t* Goals/Goal_Data
+-- FUNCTION
+-- Data structure for each goal
+-- SOURCE
    type Goal_Data is record
       Index: Unbounded_String; -- Index of goal
       GType: GoalTypes; -- Type of goal
@@ -32,19 +39,50 @@ package Goals is
       TargetIndex: Unbounded_String; -- Index of target needed for finish goal. If empty, mean all targets selected type (bases, ships, etc)
       Multiplier: Positive; -- Multiplier for points awarded for finish this goal.
    end record;
+-- ****
+
+-- ****t* Goals/Goals_Container
+-- SOURCE
    package Goals_Container is new Vectors(Positive, Goal_Data);
-   -- List of player goals available in game
+-- ****
+
+-- ****v* Goals/Goals_List
+-- FUNCTION
+-- List of player goals available in game
+-- SOURCE
    Goals_List: Goals_Container.Vector;
-   -- Player current goal
+-- ****
+-- ****v* Goals/CurrentGoal
+-- FUNCTION
+-- Player current goal
+-- SOURCE
    CurrentGoal: Goal_Data;
-   -- Load player goals from files
+-- ****
+
+-- ****f* Goals/LoadGoals
+-- FUNCTION
+-- Load player goals from files
+-- SOURCE
    procedure LoadGoals(Reader: Tree_Reader);
-   -- Return info about selected goal or current goal if Index = 0
+-- ****
+-- ****f* Goals/GoalText
+-- FUNCTION
+-- Return info about selected goal or current goal if Index = 0
+-- SOURCE
    function GoalText(Index: Goals_Container.Extended_Index) return String with
       Pre => Index <= Goals_List.Last_Index;
-      -- Reset current goal
+-- ****
+-- ****f* Goals/ClearCurrentGoal;
+-- FUNCTION
+-- Reset current goal
+-- SOURCE
    procedure ClearCurrentGoal;
-   -- Update current goal
+-- ****
+-- ****f* Goals/UpdateGoal
+-- FUNCTION
+-- Update current goal
+-- SOURCE
    procedure UpdateGoal
      (GType: GoalTypes; TargetIndex: Unbounded_String; Amount: Positive := 1);
+-- ****
 end Goals;

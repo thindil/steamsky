@@ -20,7 +20,10 @@ with Ships; use Ships;
 
 package Config is
 
-   -- Data for new game settings
+-- ****t* Config/NewGameRecord
+-- FUNCTION
+-- Data for new game settings
+-- SOURCE
    type NewGameRecord is record
       PlayerName: Unbounded_String; -- Default player name
       PlayerGender: Character; -- Default player gender
@@ -37,13 +40,29 @@ package Config is
       UpgradeCostBonus: Float; -- Default bonus to amount of materials needed for player's ship upgrades.
       PricesBonus: Float; -- Default bonus to prices for services in bases
    end record;
-   -- Options when stop auto move of player ship
+-- ****
+-- ****t* Config/AutoMoveBreak
+-- FUNCTION
+-- Options when stop auto move of player ship
+-- SOURCE
    type AutoMoveBreak is (NEVER, ANY, FRIENDLY, ENEMY);
-   -- Options to set showing messages order
+-- ****
+-- ****t* Config/MessagesOrderType
+-- FUNCTION
+-- Options to set showing messages order
+-- SOURCE
    type MessagesOrderType is (OLDER_FIRST, NEWER_FIRST);
-   -- Type used to set how often autosave is done
+-- ****
+-- ****t* Config/AutoSaveType
+-- FUNCTION
+-- Type used to set how often autosave is done
+-- SOURCE
    type AutoSaveType is (NONE, DOCK, UNDOCK, DAILY, MONTHLY, YEARLY);
-   -- Data for game settings
+-- ****
+-- ****t* Config/GameSettingsRecord
+-- FUNCTION
+-- Data for game settings
+-- SOURCE
    type GameSettingsRecord is record
       AutoRest: Boolean; -- If true, rest when pilot/engineer need rest
       UndockSpeed: ShipSpeed; -- Default player ship speed after undock
@@ -78,14 +97,31 @@ package Config is
       ShowCargoInfo: Boolean; -- If true, show detailed information about selected item in player ship cargo
       ShowInventoryInfo: Boolean; -- If true, show detailed information about selected item in crew member inventory
    end record;
-   -- Settings for the new game
+-- ****
+-- ****v* Config/NewGameSettings
+-- FUNCTION
+-- Settings for the new game
+-- SOURCE
    NewGameSettings: NewGameRecord;
-   -- General settings for the game
+-- ****
+-- ****v* Config/GameSettings
+-- FUNCTION
+-- General settings for the game
+-- SOURCE
    GameSettings: GameSettingsRecord;
+-- ****
 
-   -- Load game configuration from file
+-- ****f* Config/LoadConfig;
+-- FUNCTION
+-- Load game configuration from file
+-- SOURCE
    procedure LoadConfig;
-   -- Save game configuration to file
+-- ****
+-- ****f* Config/SaveConfig;
+-- FUNCTION
+-- Save game configuration to file
+-- SOURCE
    procedure SaveConfig;
+-- ****
 
 end Config;

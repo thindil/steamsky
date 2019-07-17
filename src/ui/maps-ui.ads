@@ -22,40 +22,101 @@ with Ships; use Ships;
 
 package Maps.UI is
 
-   -- Create sky map
+-- ****f* Maps.UI/CreateSkyMap;
+-- FUNCTION
+-- Create sky map
+-- SOURCE
    procedure CreateSkyMap;
-   -- Show sky map
+-- ****
+-- ****f* Maps.UI/ShowSkyMap
+-- FUNCTION
+-- Show sky map
+-- SOURCE
    procedure ShowSkyMap
      (X: Integer := PlayerShip.SkyX; Y: Integer := PlayerShip.SkyY);
-   -- Update game header informations
+-- ****
+-- ****f* Maps.UI/UpdateHeader;
+-- FUNCTION
+-- Update game header informations
+-- SOURCE
    procedure UpdateHeader;
-   -- Set icons on move map buttons
+-- ****
+-- ****f* Maps.UI/SetMapMoveButtons;
+-- FUNCTION
+-- Set icons on move map buttons
+-- SOURCE
    procedure SetMapMoveButtons;
+-- ****
 
 private
 
-   -- Gtk builder for user interface
+-- ****v* Maps.UI/Builder
+-- FUNCTION
+-- Gtk builder for user interface
+-- SOURCE
    Builder: Gtkada_Builder;
+-- ****
    MapWidth, MapHeight, CenterX, CenterY, MapCellWidth, MapCellHeight, MapX,
+-- ****v* Maps.UI/MapY
+-- SOURCE
    MapY: Positive;
+-- ****
+-- ****v* Maps.UI/StartX, StartY
+-- SOURCE
    StartX, StartY: Integer;
+-- ****
+-- ****v* Maps.UI/ButtonsVisible
+-- SOURCE
    ButtonsVisible: Boolean := False;
+-- ****
 
-   -- Show confirmation to show game stats when player died
+-- ****f* Maps.UI/DeathConfirm;
+-- FUNCTION
+-- Show confirmation to show game stats when player died
+-- SOURCE
    procedure DeathConfirm;
-   -- Update move buttons
+-- ****
+-- ****f* Maps.UI/UpdateMoveButtons;
+-- FUNCTION
+-- Update move buttons
+-- SOURCE
    procedure UpdateMoveButtons;
-   -- Draw sky map
+-- ****
+-- ****f* Maps.UI/DrawMap;
+-- FUNCTION
+-- Draw sky map
+-- SOURCE
    procedure DrawMap;
-   -- Hide selected button
+-- ****
+-- ****f* Maps.UI/HideButtons
+-- FUNCTION
+-- Hide selected button
+-- SOURCE
    procedure HideButtons(Widget: not null access Gtk_Widget_Record'Class);
-   -- Check selected button
+-- ****
+-- ****f* Maps.UI/CheckButtons
+-- FUNCTION
+-- Check selected button
+-- SOURCE
    procedure CheckButtons(Widget: not null access Gtk_Widget_Record'Class);
-   -- Get current map cell coordinates based on mouse position
+-- ****
+-- ****f* Maps.UI/GetCurrentCellCoords;
+-- FUNCTION
+-- Get current map cell coordinates based on mouse position
+-- SOURCE
    procedure GetCurrentCellCoords;
-   -- Update info about current map cell
+-- ****
+-- ****f* Maps.UI/UpdateMapInfo
+-- FUNCTION
+-- Update info about current map cell
+-- SOURCE
    procedure UpdateMapInfo(ShowOrdersInfo: Boolean := False);
-   -- Finish current story and show confirm dialog to player
+-- ****
+-- ****f* Maps.UI/FinishStory;
+-- FUNCTION
+-- Finish current story and show confirm dialog to player
+-- SOURCE
    procedure FinishStory;
+-- ****
 
 end Maps.UI;

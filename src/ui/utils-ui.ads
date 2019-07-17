@@ -27,58 +27,138 @@ with Ships; use Ships;
 
 package Utils.UI is
 
-   -- Game states
+-- ****t* Utils.UI/GameStates
+-- FUNCTION
+-- Game states
+-- SOURCE
    type GameStates is (SkyMap_View, Combat_View, Main_Menu);
-   -- Current game state, needed for hide some windows
+-- ****
+-- ****v* Utils.UI/PreviousGameState
+-- FUNCTION
+-- Current game state, needed for hide some windows
+-- SOURCE
    PreviousGameState: GameStates;
+-- ****
 
-   -- Close dialog window and stop auto close timer
+-- ****f* Utils.UI/HideDialog
+-- FUNCTION
+-- Close dialog window and stop auto close timer
+-- SOURCE
    procedure HideDialog(Object: access Gtkada_Builder_Record'Class);
-   -- Show dialog with info
+-- ****
+-- ****f* Utils.UI/ShowDialog
+-- FUNCTION
+-- Show dialog with info
+-- SOURCE
    procedure ShowDialog(Message: String);
-   -- Hide window instead of destroying it
+-- ****
+-- ****f* Utils.UI/HideWindow
+-- FUNCTION
+-- Hide window instead of destroying it
+-- SOURCE
    function HideWindow(User_Data: access GObject_Record'Class) return Boolean;
-   -- Show selected window
+-- ****
+-- ****f* Utils.UI/ShowWindow
+-- FUNCTION
+-- Show selected window
+-- SOURCE
    procedure ShowWindow(User_Data: access GObject_Record'Class);
-   -- Show confirmation dialog to player, return True, if player choice 'Yes' option
+-- ****
+-- ****f* Utils.UI/ShowConfirmDialog
+-- FUNCTION
+-- Show confirmation dialog to player, return True, if player choice 'Yes' option
+-- SOURCE
    function ShowConfirmDialog
      (Message: String; Parent: Gtk_Window) return Boolean;
-   -- Save and quit from game
+-- ****
+-- ****f* Utils.UI/QuitGame
+-- FUNCTION
+-- Save and quit from game
+-- SOURCE
    function QuitGame(User_Data: access GObject_Record'Class) return Boolean;
-   -- Close window on press Escape key
+-- ****
+-- ****f* Utils.UI/CloseWindow
+-- FUNCTION
+-- Close window on press Escape key
+-- SOURCE
    function CloseWindow
      (Self: access Gtk_Widget_Record'Class; Event: Gdk_Event_Key)
       return Boolean;
-   -- Switch back to skymap or combat from info
+-- ****
+-- ****f* Utils.UI/CloseMessages
+-- FUNCTION
+-- Switch back to skymap or combat from info
+-- SOURCE
    procedure CloseMessages(Object: access Gtkada_Builder_Record'Class);
-   -- Select other element on press Return key
+-- ****
+-- ****f* Utils.UI/SelectElement
+-- FUNCTION
+-- Select other element on press Return key
+-- SOURCE
    function SelectElement
      (Self: access GObject_Record'Class; Event: Gdk_Event_Key) return Boolean;
-   -- Add info about travel eta and approx fuel usage
+-- ****
+-- ****f* Utils.UI/TravelInfo
+-- FUNCTION
+-- Add info about travel eta and approx fuel usage
+-- SOURCE
    procedure TravelInfo
      (InfoText: in out Unbounded_String; Distance: Positive;
       ShowFuelName: Boolean := False);
-   -- Convert minutes to game date and add it to text
+-- ****
+-- ****f* Utils.UI/MinutesToDate
+-- FUNCTION
+-- Convert minutes to game date and add it to text
+-- SOURCE
    procedure MinutesToDate
      (Minutes: Natural; InfoText: in out Unbounded_String);
-   -- Show info about selected item in ship cargo or crew member inventory
+-- ****
+-- ****f* Utils.UI/ShowInventoryItemInfo
+-- FUNCTION
+-- Show info about selected item in ship cargo or crew member inventory
+-- SOURCE
    procedure ShowInventoryItemInfo
      (Label: Gtk_Label; ItemIndex: Positive; MemberIndex: Natural) with
       Pre => MemberIndex <= PlayerShip.Crew.Last_Index;
-      -- Hide or show detailed item info
+-- ****
+-- ****f* Utils.UI/HideItemInfo
+-- FUNCTION
+-- Hide or show detailed item info
+-- SOURCE
    procedure HideItemInfo(User_Data: access GObject_Record'Class);
-   -- Show popup menu for selected widget
+-- ****
+-- ****f* Utils.UI/ShowPopupMenu
+-- FUNCTION
+-- Show popup menu for selected widget
+-- SOURCE
    function ShowPopupMenu
      (User_Data: access GObject_Record'Class) return Boolean;
-   -- Show popup menu on click of right mouse button
+-- ****
+-- ****f* Utils.UI/ShowPopupMenuButton
+-- FUNCTION
+-- Show popup menu on click of right mouse button
+-- SOURCE
    function ShowPopupMenuButton
      (Self: access Gtk_Widget_Record'Class; Event: Gdk_Event_Button)
       return Boolean;
-   -- Set Gtk Builder for Utils package
+-- ****
+-- ****f* Utils.UI/SetUtilsBuilder
+-- FUNCTION
+-- Set Gtk Builder for Utils package
+-- SOURCE
    procedure SetUtilsBuilder(NewBuilder: Gtkada_Builder);
-   -- Update game messages and last message
+-- ****
+-- ****f* Utils.UI/UpdateMessages;
+-- FUNCTION
+-- Update game messages and last message
+-- SOURCE
    procedure UpdateMessages;
+-- ****
+-- ****f* Utils.UI/CheckAmount
+-- FUNCTION
 -- Check did entered amount in text field don't drop below low level warnings
+-- SOURCE
    procedure CheckAmount(User_Data: access GObject_Record'Class);
+-- ****
 
 end Utils.UI;

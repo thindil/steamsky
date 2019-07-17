@@ -24,23 +24,52 @@ with Game; use Game;
 
 package Stories is
 
-   -- Types of conditions to start stories
+-- ****t* Stories/StartConditionType
+-- FUNCTION
+-- Types of conditions to start stories
+-- SOURCE
    type StartConditionType is (DROPITEM);
-   -- Types of conditions to finish story step
+-- ****
+-- ****t* Stories/StepConditionType
+-- FUNCTION
+-- Types of conditions to finish story step
+-- SOURCE
    type StepConditionType is (ASKINBASE, DESTROYSHIP, EXPLORE, ANY, LOOT);
-   -- Data structure for stories steps texts
+-- ****
+-- ****t* Stories/StepText_Data
+-- FUNCTION
+-- Data structure for stories steps texts
+-- SOURCE
    type StepText_Data is record
       Condition: StepConditionType; -- Finish condition of previous step
       Text: Unbounded_String; -- Text which will be show to player when step starts.
    end record;
+-- ****
+
+-- ****t* Stories/StepTexts_Container
+-- SOURCE
    package StepTexts_Container is new Vectors(Positive, StepText_Data);
-   -- Structure for finish condition data
+-- ****
+
+-- ****t* Stories/StepFinish_Data
+-- FUNCTION
+-- Structure for finish condition data
+-- SOURCE
    type StepFinish_Data is record
       Name: Unbounded_String; -- Name of data
       Value: Unbounded_String; -- Value of data
    end record;
+-- ****
+
+-- ****t* Stories/StepData_Container
+-- SOURCE
    package StepData_Container is new Vectors(Positive, StepFinish_Data);
-   -- Data structure for stories steps
+-- ****
+
+-- ****t* Stories/Step_Data
+-- FUNCTION
+-- Data structure for stories steps
+-- SOURCE
    type Step_Data is record
       Index: Unbounded_String; -- Index of step
       FinishCondition: StepConditionType; -- Condition which must be met to finish selected step and process to next
@@ -49,8 +78,17 @@ package Stories is
         .Vector; -- Texts which will be show to player when step starts, depends on finish condition of previous step.
       FailText: Unbounded_String; -- Text which will be show to player when step fails to progress.
    end record;
+-- ****
+
+-- ****t* Stories/Steps_Container
+-- SOURCE
    package Steps_Container is new Vectors(Positive, Step_Data);
-   -- Data structure for stories
+-- ****
+
+-- ****t* Stories/Story_Data
+-- FUNCTION
+-- Data structure for stories
+-- SOURCE
    type Story_Data is record
       StartCondition: StartConditionType; -- Condition which must be met to start story
       StartData: UnboundedString_Container
@@ -65,9 +103,18 @@ package Stories is
       ForbiddenFactions: UnboundedString_Container
         .Vector; -- If player is in one of this factions, he/she can't start this story.
    end record;
+-- ****
+
+-- ****t* Stories/Stories_Container
+-- SOURCE
    package Stories_Container is new Hashed_Maps(Unbounded_String, Story_Data,
       Ada.Strings.Unbounded.Hash, "=");
-   -- Data structure for stories
+-- ****
+
+-- ****t* Stories/CurrentStory_Data
+-- FUNCTION
+-- Data structure for stories
+-- SOURCE
    type CurrentStory_Data is record
       Index: Unbounded_String; -- Index of story or empty string if no story currently active
       Step: Positive; -- Number of current step in story
@@ -77,40 +124,90 @@ package Stories is
       Data: Unbounded_String; -- Various data for current step, depends on step
       FinishedStep: StepConditionType; -- Finish condition for previous step
    end record;
-   -- Data structure for finished story/steps
+-- ****
+-- ****t* Stories/FinishedStory_Data
+-- FUNCTION
+-- Data structure for finished story/steps
+-- SOURCE
    type FinishedStory_Data is record
       Index: Unbounded_String; -- Index of story
       StepsAmount: Positive; -- Amount of steps in this story
       StepsTexts: UnboundedString_Container
         .Vector; -- Texts of steps done in this story. If less than StepsAmount then it is current story.
    end record;
+-- ****
+
+-- ****t* Stories/FinishedStories_Container
+-- SOURCE
    package FinishedStories_Container is new Vectors(Positive,
       FinishedStory_Data);
-   -- Contains data about current story on which player is
-   CurrentStory: CurrentStory_Data;
-   -- List of available stories in game
-   Stories_List: Stories_Container.Map;
-   -- List of finished stories (or past data of current story)
-   FinishedStories: FinishedStories_Container.Vector;
+-- ****
 
-   -- Load stories data from files
+-- ****v* Stories/CurrentStory
+-- FUNCTION
+-- Contains data about current story on which player is
+-- SOURCE
+   CurrentStory: CurrentStory_Data;
+-- ****
+-- ****v* Stories/Stories_List
+-- FUNCTION
+-- List of available stories in game
+-- SOURCE
+   Stories_List: Stories_Container.Map;
+-- ****
+-- ****v* Stories/FinishedStories
+-- FUNCTION
+-- List of finished stories (or past data of current story)
+-- SOURCE
+   FinishedStories: FinishedStories_Container.Vector;
+-- ****
+
+-- ****f* Stories/LoadStories
+-- FUNCTION
+-- Load stories data from files
+-- SOURCE
    procedure LoadStories(Reader: Tree_Reader);
-   -- Check if any story can starts
+-- ****
+-- ****f* Stories/StartStory
+-- FUNCTION
+-- Check if any story can starts
+-- SOURCE
    procedure StartStory
      (FactionName: Unbounded_String; Condition: StartConditionType) with
       Pre => FactionName /= Null_Unbounded_String;
-      -- Resets current story
+-- ****
+-- ****f* Stories/ClearCurrentStory;
+-- FUNCTION
+-- Resets current story
+-- SOURCE
    procedure ClearCurrentStory;
-   -- Returns true if story goes to next step, otherwise false
+-- ****
+-- ****f* Stories/ProgressStory
+-- FUNCTION
+-- Returns true if story goes to next step, otherwise false
+-- SOURCE
    function ProgressStory(NextStep: Boolean := False) return Boolean;
-   -- Get text of current step in story
+-- ****
+-- ****f* Stories/GetCurrentStoryText
+-- FUNCTION
+-- Get text of current step in story
+-- SOURCE
    function GetCurrentStoryText return Unbounded_String;
-   -- Get step finish data with selected name
+-- ****
+-- ****f* Stories/GetStepData
+-- FUNCTION
+-- Get step finish data with selected name
+-- SOURCE
    function GetStepData
      (FinishData: StepData_Container.Vector; Name: String)
       return Unbounded_String with
       Pre => Name /= "";
-      -- Get target location of current story
+-- ****
+-- ****f* Stories/GetStoryLocation
+-- FUNCTION
+-- Get target location of current story
+-- SOURCE
    procedure GetStoryLocation(StoryX, StoryY: in out Positive);
+-- ****
 
 end Stories;

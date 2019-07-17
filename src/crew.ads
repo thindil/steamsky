@@ -22,16 +22,47 @@ with Game; use Game;
 
 package Crew is
 
+-- ****t* Crew/Skill_Array
+-- SOURCE
    type Skill_Array is array(1 .. 3) of Natural;
+-- ****
+
+-- ****t* Crew/Skills_Container
+-- SOURCE
    package Skills_Container is new Vectors(Positive, Skill_Array);
+-- ****
+
+-- ****t* Crew/Crew_Orders
+-- SOURCE
    type Crew_Orders is
      (Pilot, Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean,
       Rest, Defend, Boarding, Train);
+-- ****
+
+-- ****t* Crew/Orders_Array
+-- SOURCE
    type Orders_Array is array(1 .. 12) of Natural;
+-- ****
+
+-- ****t* Crew/Attributes_Array
+-- SOURCE
    type Attributes_Array is array(1 .. 2) of Natural;
+-- ****
+
+-- ****t* Crew/Equipment_Array
+-- SOURCE
    type Equipment_Array is array(1 .. 7) of Natural;
+-- ****
+
+-- ****t* Crew/Attributes_Container
+-- SOURCE
    package Attributes_Container is new Vectors(Positive, Attributes_Array);
-   -- Data structure for ship crew member
+-- ****
+
+-- ****t* Crew/Member_Data
+-- FUNCTION
+-- Data structure for ship crew member
+-- SOURCE
    type Member_Data is record
       Name: Unbounded_String; -- Name of member
       Gender: Character; -- Gender of member
@@ -56,42 +87,120 @@ package Crew is
       HomeBase: Positive; -- Index of base from which crew member is
       Faction: Unbounded_String; -- Index of faction to which crew member belongs
    end record;
-   MaleSyllablesStart: UnboundedString_Container.Vector;
-   MaleSyllablesMiddle: UnboundedString_Container.Vector;
-   MaleSyllablesEnd: UnboundedString_Container.Vector;
-   MaleVocals: UnboundedString_Container.Vector;
-   MaleConsonants: UnboundedString_Container.Vector;
-   FemaleSyllablesStart: UnboundedString_Container.Vector;
-   FemaleSyllablesMiddle: UnboundedString_Container.Vector;
-   FemaleSyllablesEnd: UnboundedString_Container.Vector;
-   FemaleVocals: UnboundedString_Container.Vector;
-   -- Raised when new order can't be set for selected crew member
-   Crew_Order_Error: exception;
-   -- Raised when no space for new item in crew member inventory
-   Crew_No_Space_Error: exception;
+-- ****
 
-   -- Gain experience in selected skill.
+-- ****v* Crew/MaleSyllablesStart
+-- SOURCE
+   MaleSyllablesStart: UnboundedString_Container.Vector;
+-- ****
+
+-- ****v* Crew/MaleSyllablesMiddle
+-- SOURCE
+   MaleSyllablesMiddle: UnboundedString_Container.Vector;
+-- ****
+
+-- ****v* Crew/MaleSyllablesEnd
+-- SOURCE
+   MaleSyllablesEnd: UnboundedString_Container.Vector;
+-- ****
+
+-- ****v* Crew/MaleVocals
+-- SOURCE
+   MaleVocals: UnboundedString_Container.Vector;
+-- ****
+
+-- ****v* Crew/MaleConsonants
+-- SOURCE
+   MaleConsonants: UnboundedString_Container.Vector;
+-- ****
+
+-- ****v* Crew/FemaleSyllablesStart
+-- SOURCE
+   FemaleSyllablesStart: UnboundedString_Container.Vector;
+-- ****
+
+-- ****v* Crew/FemaleSyllablesMiddle
+-- SOURCE
+   FemaleSyllablesMiddle: UnboundedString_Container.Vector;
+-- ****
+
+-- ****v* Crew/FemaleSyllablesEnd
+-- SOURCE
+   FemaleSyllablesEnd: UnboundedString_Container.Vector;
+-- ****
+
+-- ****v* Crew/FemaleVocals
+-- SOURCE
+   FemaleVocals: UnboundedString_Container.Vector;
+-- ****
+
+-- ****v* Crew/Crew_Order_Error
+-- FUNCTION
+-- Raised when new order can't be set for selected crew member
+-- SOURCE
+   Crew_Order_Error: exception;
+-- ****
+-- ****v* Crew/Crew_No_Space_Error
+-- FUNCTION
+-- Raised when no space for new item in crew member inventory
+-- SOURCE
+   Crew_No_Space_Error: exception;
+-- ****
+
+-- ****f* Crew/GainExp
+-- FUNCTION
+-- Gain experience in selected skill.
+-- SOURCE
    procedure GainExp(Amount: Natural; SkillNumber, CrewIndex: Positive) with
       Pre => SkillNumber <= Skills_List.Last_Index;
-      -- Generate random name for crew member
+-- ****
+-- ****f* Crew/GenerateMemberName
+-- FUNCTION
+-- Generate random name for crew member
+-- SOURCE
    function GenerateMemberName
      (Gender: Character; FactionIndex: Unbounded_String)
       return Unbounded_String with
       Pre =>
       ((Gender = 'M' or Gender = 'F') and
        FactionIndex /= Null_Unbounded_String);
-      -- Find index of cabin for selected crew member
+-- ****
+-- ****f* Crew/FindCabin
+-- FUNCTION
+-- Find index of cabin for selected crew member
+-- SOURCE
    function FindCabin(MemberIndex: Positive) return Natural;
-   -- Update player ship crew
+-- ****
+-- ****f* Crew/UpdateCrew
+-- FUNCTION
+-- Update player ship crew
+-- SOURCE
    procedure UpdateCrew
      (Minutes: Positive; TiredPoints: Natural; InCombat: Boolean := False);
-   -- Wait until whole crew is rested
+-- ****
+-- ****f* Crew/WaitForRest;
+-- FUNCTION
+-- Wait until whole crew is rested
+-- SOURCE
    procedure WaitForRest;
-   -- Get member skill level name
+-- ****
+-- ****f* Crew/GetSkillLevelName
+-- FUNCTION
+-- Get member skill level name
+-- SOURCE
    function GetSkillLevelName(SkillLevel: Positive) return String;
-   -- Get member attribute level name
+-- ****
+-- ****f* Crew/GetAttributeLevelName
+-- FUNCTION
+-- Get member attribute level name
+-- SOURCE
    function GetAttributeLevelName(AttributeLevel: Positive) return String;
-   -- Daily payment and upgrade contracts length for player ship crew members
+-- ****
+-- ****f* Crew/DailyPayment;
+-- FUNCTION
+-- Daily payment and upgrade contracts length for player ship crew members
+-- SOURCE
    procedure DailyPayment;
+-- ****
 
 end Crew;

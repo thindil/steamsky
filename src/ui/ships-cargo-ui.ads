@@ -19,9 +19,17 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Ships.Cargo.UI is
 
-   -- Create infterace for show player ship cargo
+-- ****f* Ships.Cargo.UI/CreateCargoUI
+-- FUNCTION
+-- Create infterace for show player ship cargo
+-- SOURCE
    procedure CreateCargoUI(NewBuilder: Gtkada_Builder);
-   -- Show interface for show player ship cargo
+-- ****
+-- ****f* Ships.Cargo.UI/ShowCargoUI;
+-- FUNCTION
+-- Show interface for show player ship cargo
+-- SOURCE
    procedure ShowCargoUI;
+-- ****
 
 end Ships.Cargo.UI;

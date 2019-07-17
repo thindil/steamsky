@@ -17,18 +17,34 @@
 
 package Ships.Cargo is
 
-   -- Update selected item in ship cargo
+-- ****f* Ships.Cargo/UpdateCargo
+-- FUNCTION
+-- Update selected item in ship cargo
+-- SOURCE
    procedure UpdateCargo
      (Ship: in out ShipRecord;
       ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Natural := 100; CargoIndex, Price: Natural := 0) with
       Pre => CargoIndex <= Ship.Cargo.Last_Index;
-      -- Return available space in cargo after adding/extracting Amount
+-- ****
+-- ****f* Ships.Cargo/FreeCargo
+-- FUNCTION
+-- Return available space in cargo after adding/extracting Amount
+-- SOURCE
    function FreeCargo
      (Amount: Integer; Ship: ShipRecord := PlayerShip) return Integer;
-   -- Return amount of items of selected type on player ship
+-- ****
+-- ****f* Ships.Cargo/GetItemAmount
+-- FUNCTION
+-- Return amount of items of selected type on player ship
+-- SOURCE
    function GetItemAmount(ItemType: Unbounded_String) return Natural;
-   -- Return amount of drinks or food (depends on IType) on player ship
+-- ****
+-- ****f* Ships.Cargo/GetItemsAmount
+-- FUNCTION
+-- Return amount of drinks or food (depends on IType) on player ship
+-- SOURCE
    function GetItemsAmount(IType: String) return Natural;
+-- ****
 
 end Ships.Cargo;

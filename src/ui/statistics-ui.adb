@@ -40,9 +40,15 @@ with Utils.UI; use Utils.UI;
 
 package body Statistics.UI is
 
+-- ****iv* Statistics.UI/Builder
+-- SOURCE
    Builder: Gtkada_Builder;
+-- ****
 
+-- ****if* Statistics.UI/HideStatistics
+-- SOURCE
    procedure HideStatistics is
+-- ****
    begin
       Hide(Gtk_Widget(Get_Object(Builder, "btnclose")));
       if PreviousGameState = SkyMap_View then
@@ -56,24 +62,36 @@ package body Statistics.UI is
       end if;
    end HideStatistics;
 
+-- ****if* Statistics.UI/ShowGoals
+-- SOURCE
    procedure ShowGoals(Object: access Gtkada_Builder_Record'Class) is
       pragma Unreferenced(Object);
+-- ****
    begin
       ShowGoalsMenu(False);
    end ShowGoals;
 
+-- ****if* Statistics.UI/UpdateGoalsButton
+-- SOURCE
    procedure UpdateGoalsButton(Message: String) is
+-- ****
    begin
       Set_Label(Gtk_Button(Get_Object(Builder, "btngoals")), Message);
    end UpdateGoalsButton;
 
+-- ****if* Statistics.UI/CreateStatsUI
+-- SOURCE
    procedure CreateStatsUI(NewBuilder: Gtkada_Builder) is
+-- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Goals", ShowGoals'Access);
    end CreateStatsUI;
 
+-- ****if* Statistics.UI/ShowStatsUI
+-- SOURCE
    procedure ShowStatsUI is
+-- ****
       TotalFinished, TotalDestroyed: Natural := 0;
       StatsText: Unbounded_String;
       ProtoIndex: Positive;

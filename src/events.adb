@@ -29,7 +29,10 @@ with Factions; use Factions;
 
 package body Events is
 
+-- ****if* Events/CheckForEvent
+-- SOURCE
    function CheckForEvent return Boolean is
+-- ****
       TimePassed: Integer;
       CrewIndex: Natural := 0;
       Roll, Roll2: Positive;
@@ -331,7 +334,10 @@ package body Events is
       return False;
    end CheckForEvent;
 
+-- ****if* Events/UpdateEvents
+-- SOURCE
    procedure UpdateEvents(Minutes: Positive) is
+-- ****
       CurrentIndex: Positive := Events_List.First_Index;
       NewTime: Integer;
       EventsAmount: constant Natural := Natural(Events_List.Length);
@@ -377,7 +383,10 @@ package body Events is
       end if;
    end UpdateEvents;
 
+-- ****if* Events/DeleteEvent
+-- SOURCE
    procedure DeleteEvent(EventIndex: Positive) is
+-- ****
    begin
       SkyMap(Events_List(EventIndex).SkyX, Events_List(EventIndex).SkyY)
         .EventIndex :=
@@ -388,8 +397,11 @@ package body Events is
       end loop;
    end DeleteEvent;
 
+-- ****if* Events/GetPlayerShips
+-- SOURCE
    procedure GetPlayerShips
      (PlayerShips: in out UnboundedString_Container.Vector) is
+-- ****
    begin
       for Faction of Factions_List loop
          for Career of Faction.Careers loop
@@ -398,7 +410,10 @@ package body Events is
       end loop;
    end GetPlayerShips;
 
+-- ****if* Events/GenerateTraders
+-- SOURCE
    procedure GenerateTraders is
+-- ****
       PlayerShips: UnboundedString_Container.Vector;
    begin
       for I in ProtoShips_List.Iterate loop
@@ -416,7 +431,10 @@ package body Events is
       end loop;
    end GenerateTraders;
 
+-- ****if* Events/RecoverBase
+-- SOURCE
    procedure RecoverBase(BaseIndex: BasesRange) is
+-- ****
       MaxSpawnChance: Natural := 0;
       FactionRoll: Positive;
    begin
@@ -444,10 +462,13 @@ package body Events is
          OtherMessage, CYAN);
    end RecoverBase;
 
+-- ****if* Events/GenerateEnemies
+-- SOURCE
    procedure GenerateEnemies
      (Enemies: in out UnboundedString_Container.Vector;
       Owner: Unbounded_String := To_Unbounded_String("Any");
       WithTraders: Boolean := True) is
+-- ****
       PlayerValue: Natural := 0;
       PlayerShips: UnboundedString_Container.Vector;
    begin

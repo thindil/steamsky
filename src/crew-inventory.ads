@@ -19,7 +19,10 @@ with Ships; use Ships;
 
 package Crew.Inventory is
 
-   -- Update member inventory
+-- ****f* Crew.Inventory/UpdateInventory
+-- FUNCTION
+-- Update member inventory
+-- SOURCE
    procedure UpdateInventory
      (MemberIndex: Positive; Amount: Integer;
       ProtoIndex: Unbounded_String := Null_Unbounded_String;
@@ -27,26 +30,43 @@ package Crew.Inventory is
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
        InventoryIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index);
-      -- Return available space in crew member inventory after adding/extracting Amount
+-- ****
+-- ****f* Crew.Inventory/FreeInventory
+-- FUNCTION
+-- Return available space in crew member inventory after adding/extracting Amount
+-- SOURCE
    function FreeInventory
      (MemberIndex: Positive; Amount: Integer) return Integer with
       Pre => MemberIndex <= PlayerShip.Crew.Last_Index;
-      -- Remove selected item from character equipment
+-- ****
+-- ****f* Crew.Inventory/TakeOffItem
+-- FUNCTION
+-- Remove selected item from character equipment
+-- SOURCE
    procedure TakeOffItem(MemberIndex, ItemIndex: Positive) with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
        ItemIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index);
-      -- Check if selected crew member use this item
+-- ****
+-- ****f* Crew.Inventory/ItemIsUsed
+-- FUNCTION
+-- Check if selected crew member use this item
+-- SOURCE
    function ItemIsUsed(MemberIndex, ItemIndex: Positive) return Boolean with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
        ItemIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index);
-      -- Search for specified tools in character and ship cargo, return 0 if tools not found otherwise index of tool in character inventory
+-- ****
+-- ****f* Crew.Inventory/FindTools
+-- FUNCTION
+-- Search for specified tools in character and ship cargo, return 0 if tools not found otherwise index of tool in character inventory
+-- SOURCE
    function FindTools
      (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders)
       return Natural with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
        ItemType /= Null_Unbounded_String);
+-- ****
 
 end Crew.Inventory;

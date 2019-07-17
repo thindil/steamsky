@@ -29,8 +29,11 @@ with Factions; use Factions;
 
 package body Ships.Crew is
 
+-- ****if* Ships.Crew/GetSkillLevel
+-- SOURCE
    function GetSkillLevel
      (Member: Member_Data; SkillIndex: Positive) return Natural is
+-- ****
       SkillLevel: Integer := 0;
       type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
@@ -77,9 +80,12 @@ package body Ships.Crew is
       return SkillLevel;
    end GetSkillLevel;
 
+-- ****if* Ships.Crew/Death
+-- SOURCE
    procedure Death
      (MemberIndex: Positive; Reason: Unbounded_String; Ship: in out ShipRecord;
       CreateBody: Boolean := True) is
+-- ****
    begin
       if Ship = PlayerShip then
          if MemberIndex > 1 then
@@ -111,7 +117,10 @@ package body Ships.Crew is
       end loop;
    end Death;
 
+-- ****if* Ships.Crew/DeleteMember
+-- SOURCE
    procedure DeleteMember(MemberIndex: Positive; Ship: in out ShipRecord) is
+-- ****
       TempValue: Integer;
    begin
       Ship.Crew.Delete(Index => MemberIndex);
@@ -144,9 +153,12 @@ package body Ships.Crew is
       end if;
    end DeleteMember;
 
+-- ****if* Ships.Crew/FindMember
+-- SOURCE
    function FindMember
      (Order: Crew_Orders; Crew: Crew_Container.Vector := PlayerShip.Crew)
       return Natural is
+-- ****
    begin
       for I in Crew.Iterate loop
          if Crew(I).Order = Order then
@@ -156,9 +168,12 @@ package body Ships.Crew is
       return 0;
    end FindMember;
 
+-- ****if* Ships.Crew/GiveOrders
+-- SOURCE
    procedure GiveOrders
      (Ship: in out ShipRecord; MemberIndex: Positive; GivenOrder: Crew_Orders;
       ModuleIndex: Natural := 0; CheckPriorities: Boolean := True) is
+-- ****
       MemberName: constant String := To_String(Ship.Crew(MemberIndex).Name);
       ModuleIndex2, ToolsIndex: Natural := 0;
       RequiredTool: Unbounded_String;
@@ -474,7 +489,10 @@ package body Ships.Crew is
          end if;
    end GiveOrders;
 
+-- ****if* Ships.Crew/UpdateOrders
+-- SOURCE
    procedure UpdateOrders(Ship: in out ShipRecord; Combat: Boolean := False) is
+-- ****
       HavePilot, HaveEngineer, HaveUpgrade, HaveTrader, NeedClean, NeedRepairs,
       NeedGunners, NeedCrafters, CanHeal, NeedTrader: Boolean := False;
       EventIndex: constant Natural := SkyMap(Ship.SkyX, Ship.SkyY).EventIndex;
@@ -759,8 +777,11 @@ package body Ships.Crew is
       end if;
    end UpdateOrders;
 
+-- ****if* Ships.Crew/UpdateMorale
+-- SOURCE
    procedure UpdateMorale
      (Ship: in out ShipRecord; MemberIndex: Positive; Value: Integer) is
+-- ****
       NewMorale, NewLoyalty, NewValue: Integer;
       FactionIndex: constant Unbounded_String :=
         Ship.Crew(MemberIndex).Faction;

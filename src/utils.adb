@@ -19,7 +19,10 @@ with Ada.Numerics.Discrete_Random; use Ada.Numerics;
 
 package body Utils is
 
+-- ****if* Utils/GetRandom
+-- SOURCE
    function GetRandom(Min, Max: Integer) return Integer is
+-- ****
       subtype Rand_Range is Integer range Min .. Max;
       package Rand_Roll is new Discrete_Random(Rand_Range);
       Generator: Rand_Roll.Generator;
@@ -28,14 +31,20 @@ package body Utils is
       return Rand_Roll.Random(Generator);
    end GetRandom;
 
+-- ****if* Utils/DaysDifference
+-- SOURCE
    function DaysDifference(DateToCompare: Date_Record) return Natural is
+-- ****
    begin
       return (GameDate.Day + (30 * GameDate.Month) + (GameDate.Year * 360)) -
         (DateToCompare.Day + (30 * DateToCompare.Month) +
          (DateToCompare.Year * 360));
    end DaysDifference;
 
+-- ****if* Utils/GenerateRoboticName
+-- SOURCE
    function GenerateRoboticName return Unbounded_String is
+-- ****
       NewName: Unbounded_String;
       LettersAmount: constant Positive := GetRandom(2, 5);
       NumbersAmount: constant Positive := GetRandom(2, 4);

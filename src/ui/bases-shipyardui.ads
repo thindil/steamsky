@@ -19,9 +19,17 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Bases.ShipyardUI is
 
-   -- Create infterace for installing/remove modules in bases
+-- ****f* Bases.ShipyardUI/CreateBasesShipyardUI
+-- FUNCTION
+-- Create infterace for installing/remove modules in bases
+-- SOURCE
    procedure CreateBasesShipyardUI(NewBuilder: Gtkada_Builder);
-   -- Show interface for installing/remove modules in bases
+-- ****
+-- ****f* Bases.ShipyardUI/ShowShipyardUI;
+-- FUNCTION
+-- Show interface for installing/remove modules in bases
+-- SOURCE
    procedure ShowShipyardUI;
+-- ****
 
 end Bases.ShipyardUI;

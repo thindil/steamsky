@@ -29,9 +29,15 @@ with Game; use Game;
 
 package body Themes is
 
+-- ****iv* Themes/OldProvider
+-- SOURCE
    OldProvider: Gtk_Css_Provider;
+-- ****
 
+-- ****if* Themes/LoadCssText
+-- SOURCE
    function LoadCssText return Unbounded_String is
+-- ****
       CssText: Unbounded_String;
       ThemeFile: File_Type;
    begin
@@ -46,7 +52,10 @@ package body Themes is
       return CssText;
    end LoadCssText;
 
+-- ****if* Themes/SetFontSize
+-- SOURCE
    procedure SetFontSize(FontType: FontTypes) is
+-- ****
       CssProvider: Gtk_Css_Provider;
       CssText: Unbounded_String := LoadCssText;
       StartIndex, EndIndex: Positive;
@@ -113,7 +122,10 @@ package body Themes is
       OldProvider := CssProvider;
    end SetFontSize;
 
+-- ****if* Themes/ResetFontsSizes
+-- SOURCE
    procedure ResetFontsSizes is
+-- ****
       CssText: Unbounded_String := Null_Unbounded_String;
       CssFile: File_Type;
       function GetFontSize(FontName: String) return Positive is
@@ -139,7 +151,10 @@ package body Themes is
       GameSettings.InterfaceFontSize := GetFontSize("* {");
    end ResetFontsSizes;
 
+-- ****if* Themes/LoadThemes
+-- SOURCE
    procedure LoadThemes is
+-- ****
       Directories, Files: Search_Type;
       FoundDirectory, FoundFile: Directory_Entry_Type;
       ConfigFile: File_Type;

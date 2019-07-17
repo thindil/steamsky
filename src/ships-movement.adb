@@ -28,9 +28,15 @@ with Game.SaveLoad; use Game.SaveLoad;
 
 package body Ships.Movement is
 
+-- ****it* Ships.Movement/SpeedType
+-- SOURCE
    type SpeedType is digits 2;
+-- ****
 
+-- ****if* Ships.Movement/HaveOrderRequirements
+-- SOURCE
    function HaveOrderRequirements return String is
+-- ****
       HaveCockpit, HaveEngine, HavePilot, HaveEngineer: Boolean := False;
    begin
       for Module of PlayerShip.Modules loop
@@ -70,8 +76,11 @@ package body Ships.Movement is
       return "";
    end HaveOrderRequirements;
 
+-- ****if* Ships.Movement/MoveShip
+-- SOURCE
    function MoveShip
      (X, Y: Integer; Message: in out Unbounded_String) return Natural is
+-- ****
       NewX, NewY: Integer;
       TimePassed, FuelNeeded: Integer := 0;
       Speed: SpeedType;
@@ -186,7 +195,10 @@ package body Ships.Movement is
       return 1;
    end MoveShip;
 
+-- ****if* Ships.Movement/DockShip
+-- SOURCE
    function DockShip(Docking: Boolean) return String is
+-- ****
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Message: Unbounded_String;
@@ -310,7 +322,10 @@ package body Ships.Movement is
       return "";
    end DockShip;
 
+-- ****if* Ships.Movement/ChangeShipSpeed
+-- SOURCE
    function ChangeShipSpeed(SpeedValue: ShipSpeed) return String is
+-- ****
       HaveEngine: Boolean := False;
    begin
       for Module of PlayerShip.Modules loop
@@ -332,8 +347,11 @@ package body Ships.Movement is
       return "";
    end ChangeShipSpeed;
 
+-- ****if* Ships.Movement/RealSpeed
+-- SOURCE
    function RealSpeed
      (Ship: ShipRecord; InfoOnly: Boolean := False) return Natural is
+-- ****
       BaseSpeed, Speed: Natural := 0;
       Message: Unbounded_String;
       ShipSetSpeed: ShipSpeed;
@@ -418,7 +436,10 @@ package body Ships.Movement is
       return Speed;
    end RealSpeed;
 
+-- ****if* Ships.Movement/CountFuelNeeded
+-- SOURCE
    function CountFuelNeeded return Integer is
+-- ****
       FuelNeeded: Integer := 0;
       Speed: ShipSpeed := PlayerShip.Speed;
    begin
@@ -442,7 +463,10 @@ package body Ships.Movement is
       return FuelNeeded;
    end CountFuelNeeded;
 
+-- ****if* Ships.Movement/WaitInPlace
+-- SOURCE
    procedure WaitInPlace(Minutes: Positive) is
+-- ****
       BaseFuelNeeded, FuelNeeded: Integer := 0;
       FuelIndex: Natural;
    begin

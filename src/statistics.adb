@@ -22,7 +22,10 @@ with Config; use Config;
 
 package body Statistics is
 
+-- ****if* Statistics/UpdateDestroyedShips
+-- SOURCE
    procedure UpdateDestroyedShips(ShipName: Unbounded_String) is
+-- ****
       Updated: Boolean := False;
       ShipIndex: Unbounded_String;
    begin
@@ -47,7 +50,10 @@ package body Statistics is
       end if;
    end UpdateDestroyedShips;
 
+-- ****if* Statistics/ClearGameStats
+-- SOURCE
    procedure ClearGameStats is
+-- ****
    begin
       GameStats.DestroyedShips.Clear;
       GameStats.BasesVisited := 1;
@@ -61,7 +67,10 @@ package body Statistics is
       GameStats.Points := 0;
    end ClearGameStats;
 
+-- ****if* Statistics/UpdateFinishedGoals
+-- SOURCE
    procedure UpdateFinishedGoals(Index: Unbounded_String) is
+-- ****
       Updated: Boolean := False;
    begin
       for Goal of Goals_List loop
@@ -89,7 +98,10 @@ package body Statistics is
       end if;
    end UpdateFinishedGoals;
 
+-- ****if* Statistics/UpdateFinishedMissions
+-- SOURCE
    procedure UpdateFinishedMissions(MType: Unbounded_String) is
+-- ****
       Updated: Boolean := False;
    begin
       for FinishedMission of GameStats.FinishedMissions loop
@@ -106,7 +118,10 @@ package body Statistics is
       GameStats.Points := GameStats.Points + 50;
    end UpdateFinishedMissions;
 
+-- ****if* Statistics/UpdateCraftingOrders
+-- SOURCE
    procedure UpdateCraftingOrders(Index: Unbounded_String) is
+-- ****
       Updated: Boolean := False;
    begin
       for CraftingOrder of GameStats.CraftingOrders loop
@@ -123,8 +138,11 @@ package body Statistics is
       GameStats.Points := GameStats.Points + 5;
    end UpdateCraftingOrders;
 
+-- ****if* Statistics/UpdateKilledMobs
+-- SOURCE
    procedure UpdateKilledMobs
      (Mob: Member_Data; FractionName: Unbounded_String) is
+-- ****
       Updated: Boolean := False;
    begin
       for Attribute of Mob.Attributes loop
@@ -151,7 +169,10 @@ package body Statistics is
       end if;
    end UpdateKilledMobs;
 
+-- ****if* Statistics/GetGamePoints
+-- SOURCE
    function GetGamePoints return Natural is
+-- ****
       MalusIndexes: constant array(Positive range <>) of Positive :=
         (2, 4, 5, 6);
       DifficultyValues: constant array(Positive range <>) of Float :=

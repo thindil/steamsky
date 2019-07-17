@@ -44,11 +44,20 @@ with Trades; use Trades;
 
 package body Bases.ShipyardUI is
 
+-- ****iv* Bases.ShipyardUI/Builder
+-- SOURCE
    Builder: Gtkada_Builder;
+-- ****
+-- ****iv* Bases.ShipyardUI/ModuleIndex
+-- SOURCE
    ModuleIndex: Unbounded_String;
+-- ****
 
+-- ****if* Bases.ShipyardUI/GetModuleInfo
+-- SOURCE
    procedure GetModuleInfo
      (ModuleInfo: in out Unbounded_String; Installing: Boolean) is
+-- ****
       MType: ModuleType;
       MAmount, Size, Weight, MaxValue, Value, MaxOwners: Natural;
       ShipModuleIndex: Positive;
@@ -197,7 +206,10 @@ package body Bases.ShipyardUI is
       end if;
    end GetModuleInfo;
 
+-- ****if* Bases.ShipyardUI/ShowInstallInfo
+-- SOURCE
    procedure ShowInstallInfo(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       ModuleInfo, InstallInfo: Unbounded_String;
       Cost: Positive;
       MoneyIndex2, UsedSpace, AllSpace, MaxSize: Natural;
@@ -278,7 +290,10 @@ package body Bases.ShipyardUI is
       end if;
    end ShowInstallInfo;
 
+-- ****if* Bases.ShipyardUI/ShowRemoveInfo
+-- SOURCE
    procedure ShowRemoveInfo(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       ModuleInfo, RemoveInfo: Unbounded_String;
       Cost: Natural;
       Damage: Gdouble;
@@ -389,7 +404,10 @@ package body Bases.ShipyardUI is
          To_String(RemoveInfo));
    end ShowRemoveInfo;
 
+-- ****if* Bases.ShipyardUI/SetRemoveModulesList
+-- SOURCE
    procedure SetRemoveModulesList is
+-- ****
       ModulesList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "removemodulelist"));
       ModulesIter: Gtk_Tree_Iter;
@@ -408,7 +426,10 @@ package body Bases.ShipyardUI is
       end loop;
    end SetRemoveModulesList;
 
+-- ****if* Bases.ShipyardUI/ManipulateModule
+-- SOURCE
    procedure ManipulateModule(User_Data: access GObject_Record'Class) is
+-- ****
       Install: Boolean;
       ModulesIter: Gtk_Tree_Iter;
       ModulesModel: Gtk_Tree_Model;
@@ -451,7 +472,10 @@ package body Bases.ShipyardUI is
             " for buy this module.");
    end ManipulateModule;
 
+-- ****if* Bases.ShipyardUI/SearchShipyard
+-- SOURCE
    procedure SearchShipyard(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       Refilter
         (Gtk_Tree_Model_Filter(Get_Object(Object, "installmodulesfilter")));
@@ -465,8 +489,11 @@ package body Bases.ShipyardUI is
       end if;
    end SearchShipyard;
 
+-- ****if* Bases.ShipyardUI/VisibleShipyard
+-- SOURCE
    function VisibleShipyard
      (Model: Gtk_Tree_Model; Iter: Gtk_Tree_Iter) return Boolean is
+-- ****
       SearchEntry: constant Gtk_GEntry :=
         Gtk_GEntry(Get_Object(Builder, "shipyardsearch"));
       MType: constant ModuleType :=
@@ -500,7 +527,10 @@ package body Bases.ShipyardUI is
       return False;
    end VisibleShipyard;
 
+-- ****if* Bases.ShipyardUI/CreateBasesShipyardUI
+-- SOURCE
    procedure CreateBasesShipyardUI(NewBuilder: Gtkada_Builder) is
+-- ****
       ModulesList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(NewBuilder, "installmoduleslist"));
       ModulesIter: Gtk_Tree_Iter;
@@ -527,7 +557,10 @@ package body Bases.ShipyardUI is
       end loop;
    end CreateBasesShipyardUI;
 
+-- ****if* Bases.ShipyardUI/ShowShipyardUI
+-- SOURCE
    procedure ShowShipyardUI is
+-- ****
    begin
       SetRemoveModulesList;
       Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbtypes")), 0);

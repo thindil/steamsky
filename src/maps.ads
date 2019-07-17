@@ -17,19 +17,35 @@
 
 package Maps is
 
-   -- Data structure for cells in game map
+-- ****t* Maps/SkyCell
+-- FUNCTION
+-- Data structure for cells in game map
+-- SOURCE
    type SkyCell is record
       BaseIndex: Natural;  -- If sky base is in cell > 0
       Visited: Boolean; -- True if player was in this cell
       EventIndex: Natural; -- If event is in cell > 0
       MissionIndex: Natural; -- If accepted mission is in cell > 0
    end record;
-   -- Game map
+-- ****
+-- ****v* Maps/SkyMap
+-- FUNCTION
+-- Game map
+-- SOURCE
    SkyMap: array(1 .. 1024, 1 .. 1024) of SkyCell;
+-- ****
 
-   -- Return distance between player ship and destination point
+-- ****f* Maps/CountDistance
+-- FUNCTION
+-- Return distance between player ship and destination point
+-- SOURCE
    function CountDistance(DestinationX, DestinationY: Positive) return Natural;
-   -- Normalize map coordinates
+-- ****
+-- ****f* Maps/NormalizeCoord
+-- FUNCTION
+-- Normalize map coordinates
+-- SOURCE
    procedure NormalizeCoord(Coord: in out Integer; IsXAxis: Boolean := True);
+-- ****
 
 end Maps;

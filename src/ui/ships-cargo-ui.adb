@@ -39,11 +39,23 @@ with Config; use Config;
 
 package body Ships.Cargo.UI is
 
+-- ****iv* Ships.Cargo.UI/Builder
+-- SOURCE
    Builder: Gtkada_Builder;
+-- ****
+-- ****iv* Ships.Cargo.UI/ItemIndex
+-- SOURCE
    ItemIndex: Positive;
+-- ****
+-- ****iv* Ships.Cargo.UI/SettingTime
+-- SOURCE
    SettingTime: Boolean;
+-- ****
 
+-- ****if* Ships.Cargo.UI/RefreshCargoInfo
+-- SOURCE
    procedure RefreshCargoInfo is
+-- ****
       CargoIter: Gtk_Tree_Iter;
       CargoList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "cargolist"));
@@ -111,7 +123,10 @@ package body Ships.Cargo.UI is
       SettingTime := False;
    end RefreshCargoInfo;
 
+-- ****if* Ships.Cargo.UI/SetActiveItem
+-- SOURCE
    procedure SetActiveItem is
+-- ****
    begin
       if PlayerShip.Cargo.Length > 0 then
          Set_Cursor
@@ -120,7 +135,10 @@ package body Ships.Cargo.UI is
       end if;
    end SetActiveItem;
 
+-- ****if* Ships.Cargo.UI/ShowItemCargoInfo
+-- SOURCE
    procedure ShowItemCargoInfo(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       CargoIter: Gtk_Tree_Iter;
       CargoModel: Gtk_Tree_Model;
       AmountAdj: constant Gtk_Adjustment :=
@@ -155,7 +173,10 @@ package body Ships.Cargo.UI is
       Set_Value(AmountAdj2, 1.0);
    end ShowItemCargoInfo;
 
+-- ****if* Ships.Cargo.UI/DropItem
+-- SOURCE
    procedure DropItem(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       DropAmount: Natural :=
         Natural(Get_Value(Gtk_Adjustment(Get_Object(Object, "amountadj"))));
       DropAmount2: constant Natural := DropAmount;
@@ -199,7 +220,10 @@ package body Ships.Cargo.UI is
       SetActiveItem;
    end DropItem;
 
+-- ****if* Ships.Cargo.UI/GiveItem
+-- SOURCE
    procedure GiveItem(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       MemberIndex: constant Positive :=
         Positive
           (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbmember"))) + 1);
@@ -229,7 +253,10 @@ package body Ships.Cargo.UI is
       SetActiveItem;
    end GiveItem;
 
+-- ****if* Ships.Cargo.UI/SearchCargo
+-- SOURCE
    procedure SearchCargo(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       Refilter(Gtk_Tree_Model_Filter(Get_Object(Object, "cargofilter")));
       if N_Children
@@ -239,8 +266,11 @@ package body Ships.Cargo.UI is
       end if;
    end SearchCargo;
 
+-- ****if* Ships.Cargo.UI/VisibleCargo
+-- SOURCE
    function VisibleCargo
      (Model: Gtk_Tree_Model; Iter: Gtk_Tree_Iter) return Boolean is
+-- ****
       IType: constant Unbounded_String :=
         To_Unbounded_String
           (Get_Active_Text
@@ -261,7 +291,10 @@ package body Ships.Cargo.UI is
       return False;
    end VisibleCargo;
 
+-- ****if* Ships.Cargo.UI/CreateCargoUI
+-- SOURCE
    procedure CreateCargoUI(NewBuilder: Gtkada_Builder) is
+-- ****
    begin
       Builder := NewBuilder;
       Register_Handler
@@ -281,7 +314,10 @@ package body Ships.Cargo.UI is
          VisibleCargo'Access);
    end CreateCargoUI;
 
+-- ****if* Ships.Cargo.UI/ShowCargoUI
+-- SOURCE
    procedure ShowCargoUI is
+-- ****
       ComboBoxMember: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Object(Builder, "cmbmember"));
    begin

@@ -17,34 +17,62 @@
 
 package Ships.Crew is
 
-   -- Get level of skill of selected crew member
+-- ****f* Ships.Crew/GetSkillLevel
+-- FUNCTION
+-- Get level of skill of selected crew member
+-- SOURCE
    function GetSkillLevel
      (Member: Member_Data; SkillIndex: Positive) return Natural;
-   -- Handle crew member death
+-- ****
+-- ****f* Ships.Crew/Death
+-- FUNCTION
+-- Handle crew member death
+-- SOURCE
    procedure Death
      (MemberIndex: Positive; Reason: Unbounded_String; Ship: in out ShipRecord;
       CreateBody: Boolean := True) with
       Pre =>
       (MemberIndex <= Ship.Crew.Last_Index and
        Reason /= Null_Unbounded_String);
-      -- Delete selected member from crew list
+-- ****
+-- ****f* Ships.Crew/DeleteMember
+-- FUNCTION
+-- Delete selected member from crew list
+-- SOURCE
    procedure DeleteMember(MemberIndex: Positive; Ship: in out ShipRecord);
-   -- Find index of first crew member with selected order
+-- ****
+-- ****f* Ships.Crew/FindMember
+-- FUNCTION
+-- Find index of first crew member with selected order
+-- SOURCE
    function FindMember
      (Order: Crew_Orders; Crew: Crew_Container.Vector := PlayerShip.Crew)
       return Natural;
-   -- Change order for selected crew member
+-- ****
+-- ****f* Ships.Crew/GiveOrders
+-- FUNCTION
+-- Change order for selected crew member
+-- SOURCE
    procedure GiveOrders
      (Ship: in out ShipRecord; MemberIndex: Positive; GivenOrder: Crew_Orders;
       ModuleIndex: Natural := 0; CheckPriorities: Boolean := True) with
       Pre =>
       (MemberIndex <= Ship.Crew.Last_Index and
        ModuleIndex <= Ship.Modules.Last_Index);
-      -- Update crew orders based on their orders priorities
+-- ****
+-- ****f* Ships.Crew/UpdateOrders
+-- FUNCTION
+-- Update crew orders based on their orders priorities
+-- SOURCE
    procedure UpdateOrders(Ship: in out ShipRecord; Combat: Boolean := False);
-   -- Update morale of selected crew member by value
+-- ****
+-- ****f* Ships.Crew/UpdateMorale
+-- FUNCTION
+-- Update morale of selected crew member by value
+-- SOURCE
    procedure UpdateMorale
      (Ship: in out ShipRecord; MemberIndex: Positive; Value: Integer) with
       Pre => MemberIndex <= Ship.Crew.Last_Index;
+-- ****
 
 end Ships.Crew;

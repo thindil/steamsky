@@ -41,11 +41,23 @@ with Utils.UI; use Utils.UI;
 
 package body Missions.UI is
 
+-- ****iv* Missions.UI/Builder
+-- SOURCE
    Builder: Gtkada_Builder;
+-- ****
+-- ****iv* Missions.UI/MissionIndex
+-- SOURCE
    MissionIndex: Natural := 0;
+-- ****
+-- ****iv* Missions.UI/Cleaning
+-- SOURCE
    Cleaning: Boolean;
+-- ****
 
+-- ****if* Missions.UI/ShowMissionInfo
+-- SOURCE
    procedure ShowMissionInfo(User_Data: access GObject_Record'Class) is
+-- ****
       MissionsIter: Gtk_Tree_Iter;
       MissionsModel: Gtk_Tree_Model;
       MissionInfo: Unbounded_String;
@@ -242,7 +254,10 @@ package body Missions.UI is
       end if;
    end ShowMissionInfo;
 
+-- ****if* Missions.UI/RefreshMissionsList
+-- SOURCE
    procedure RefreshMissionsList is
+-- ****
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MissionsIter: Gtk_Tree_Iter;
@@ -280,8 +295,11 @@ package body Missions.UI is
       end loop;
    end RefreshMissionsList;
 
+-- ****if* Missions.UI/AcceptSelectedMission
+-- SOURCE
    procedure AcceptSelectedMission
      (Object: access Gtkada_Builder_Record'Class) is
+-- ****
       MissionsIter: Gtk_Tree_Iter;
       MissionsModel: Gtk_Tree_Model;
    begin
@@ -309,7 +327,10 @@ package body Missions.UI is
          ShowDialog(Exception_Message(An_Exception));
    end AcceptSelectedMission;
 
+-- ****if* Missions.UI/ButtonMission
+-- SOURCE
    procedure ButtonMission(User_Data: access GObject_Record'Class) is
+-- ****
       X, Y: Integer;
    begin
       if User_Data = Get_Object(Builder, "btnmissioncenter") then
@@ -338,8 +359,11 @@ package body Missions.UI is
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
    end ButtonMission;
 
+-- ****if* Missions.UI/ShowAvailableMission
+-- SOURCE
    procedure ShowAvailableMission
      (Object: access Gtkada_Builder_Record'Class) is
+-- ****
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
@@ -350,7 +374,10 @@ package body Missions.UI is
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
    end ShowAvailableMission;
 
+-- ****if* Missions.UI/CreateMissionsUI
+-- SOURCE
    procedure CreateMissionsUI(NewBuilder: Gtkada_Builder) is
+-- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Mission_Info", ShowMissionInfo'Access);
@@ -367,7 +394,10 @@ package body Missions.UI is
          ShowPopupMenuButton'Access);
    end CreateMissionsUI;
 
+-- ****if* Missions.UI/ShowMissionsUI
+-- SOURCE
    procedure ShowMissionsUI is
+-- ****
    begin
       RefreshMissionsList;
       Set_Visible_Child_Name
@@ -378,7 +408,10 @@ package body Missions.UI is
       UpdateMessages;
    end ShowMissionsUI;
 
+-- ****if* Missions.UI/ShowAcceptedMissions
+-- SOURCE
    procedure ShowAcceptedMissions is
+-- ****
       MissionsIter: Gtk_Tree_Iter;
       MissionsList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "missionslist"));

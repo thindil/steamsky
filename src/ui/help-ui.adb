@@ -44,10 +44,19 @@ with Utils.UI; use Utils.UI;
 
 package body Help.UI is
 
+-- ****iv* Help.UI/Builder
+-- SOURCE
    Builder: Gtkada_Builder;
+-- ****
+-- ****iv* Help.UI/Setting
+-- SOURCE
    Setting: Boolean := False;
+-- ****
 
+-- ****if* Help.UI/SelectTopic
+-- SOURCE
    procedure SelectTopic(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       TopicName: Unbounded_String;
    begin
       if Setting then
@@ -75,15 +84,21 @@ package body Help.UI is
       end loop;
    end SelectTopic;
 
+-- ****if* Help.UI/DisableMouse
+-- SOURCE
    function DisableMouse
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
       pragma Unreferenced(Object);
+-- ****
    begin
       return True;
    end DisableMouse;
 
+-- ****if* Help.UI/HideHelpWindow
+-- SOURCE
    function HideHelpWindow
      (User_Data: access GObject_Record'Class) return Boolean is
+-- ****
    begin
       GameSettings.TopicsPosition :=
         Natural(Get_Position(Gtk_Paned(Get_Object(Builder, "helppaned"))));
@@ -91,7 +106,10 @@ package body Help.UI is
       return Hide_On_Delete(Gtk_Widget(User_Data));
    end HideHelpWindow;
 
+-- ****if* Help.UI/ToggleTopics
+-- SOURCE
    procedure ToggleTopics(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       if not Get_Expanded(Gtk_Expander(Get_Object(Object, "helpexpander"))) and
         GameSettings.TopicsPosition > 0 then
@@ -105,7 +123,10 @@ package body Help.UI is
       end if;
    end ToggleTopics;
 
+-- ****if* Help.UI/CreateHelpUI
+-- SOURCE
    procedure CreateHelpUI is
+-- ****
       Error: aliased GError;
       TopicsIter: Gtk_Tree_Iter;
       TopicsList: Gtk_List_Store;
@@ -137,7 +158,10 @@ package body Help.UI is
         (Gtk_Widget(Get_Object(Builder, "helpwindow")), CloseWindow'Access);
    end CreateHelpUI;
 
+-- ****if* Help.UI/ShowHelpUI
+-- SOURCE
    procedure ShowHelpUI(HelpIndex: Unbounded_String) is
+-- ****
       NewText, TagText: Unbounded_String;
       StartIndex, EndIndex, OldIndex, TopicIndex: Natural;
       Key: Gtk_Accel_Key;

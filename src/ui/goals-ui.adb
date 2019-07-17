@@ -34,22 +34,37 @@ with Utils; use Utils;
 
 package body Goals.UI is
 
+-- ****iv* Goals.UI/Builder
+-- SOURCE
    Builder: Gtkada_Builder;
+-- ****
+-- ****iv* Goals.UI/FromMainMenu
+-- SOURCE
    FromMainMenu: Boolean := True;
+-- ****
 
+-- ****if* Goals.UI/HideGoals
+-- SOURCE
    function HideGoals
      (User_Data: access Gtkada_Builder_Record'Class) return Boolean is
+-- ****
    begin
       return Hide_On_Delete(Gtk_Widget(Get_Object(User_Data, "goalswindow")));
    end HideGoals;
 
+-- ****if* Goals.UI/ShowGoalsMenu
+-- SOURCE
    procedure ShowGoalsMenu(InMainMenu: Boolean := True) is
+-- ****
    begin
       FromMainMenu := InMainMenu;
       Show_All(Gtk_Widget(Get_Object(Builder, "goalswindow")));
    end ShowGoalsMenu;
 
+-- ****if* Goals.UI/GoalSelected
+-- SOURCE
    procedure GoalSelected(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       Iter: Gtk_Tree_Iter;
       GoalsView: constant Gtk_Tree_View :=
         Gtk_Tree_View(Get_Object(Object, "treegoals"));
@@ -64,7 +79,10 @@ package body Goals.UI is
       end if;
    end GoalSelected;
 
+-- ****if* Goals.UI/SelectGoal
+-- SOURCE
    procedure SelectGoal(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       Iter: Gtk_Tree_Iter;
       GoalsView: constant Gtk_Tree_View :=
         Gtk_Tree_View(Get_Object(Object, "treegoals"));
@@ -105,12 +123,18 @@ package body Goals.UI is
       Hide(Gtk_Widget(Get_Object(Object, "goalswindow")));
    end SelectGoal;
 
+-- ****if* Goals.UI/CloseGoals
+-- SOURCE
    procedure CloseGoals(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       Hide(Gtk_Widget(Get_Object(Object, "goalswindow")));
    end CloseGoals;
 
+-- ****if* Goals.UI/CreateGoalsMenu
+-- SOURCE
    procedure CreateGoalsMenu is
+-- ****
       Error: aliased GError;
       GoalsList: Gtk_Tree_Store;
       CategoryIter: Gtk_Tree_Iter;

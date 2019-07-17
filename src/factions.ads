@@ -24,26 +24,56 @@ with Game; use Game;
 
 package Factions is
 
-   -- Types of names of members and bases factions
+-- ****t* Factions/NamesTypes
+-- FUNCTION
+-- Types of names of members and bases factions
+-- SOURCE
    type NamesTypes is (STANDARD, ROBOTIC);
+-- ****
+
+-- ****t* Factions/Reputation_Array
+-- SOURCE
    type Reputation_Array is array(1 .. 2) of Integer;
-   -- Data structure for relations between factions
+-- ****
+
+-- ****t* Factions/RelationsRecord
+-- FUNCTION
+-- Data structure for relations between factions
+-- SOURCE
    type RelationsRecord is record
       Reputation: Reputation_Array; -- Min and max value for starting reputation in bases owned by target faction
       Friendly: Boolean; -- Did target faction is friendly or enemy to this faction
    end record;
+-- ****
+
+-- ****t* Factions/Relations_Container
+-- SOURCE
    package Relations_Container is new Hashed_Maps(Unbounded_String,
       RelationsRecord, Ada.Strings.Unbounded.Hash, "=");
-   -- Data structure for player career in faction
+-- ****
+
+-- ****t* Factions/CareerRecord
+-- FUNCTION
+-- Data structure for player career in faction
+-- SOURCE
    type CareerRecord is record
       ShipIndex: Unbounded_String; -- Index of proto ship which will be used as starting ship for player
       PlayerIndex: Unbounded_String; -- Index of mobile which will be used as starting character for player
       Description: Unbounded_String; -- Description of career, displayed to player
       Name: Unbounded_String; -- Name of career, may be different for each faction
    end record;
+-- ****
+
+-- ****t* Factions/Careers_Container
+-- SOURCE
    package Careers_Container is new Hashed_Maps(Unbounded_String, CareerRecord,
       Ada.Strings.Unbounded.Hash, "=");
-   -- Data structure for faction
+-- ****
+
+-- ****t* Factions/FactionRecord
+-- FUNCTION
+-- Data structure for faction
+-- SOURCE
    type FactionRecord is record
       Name: Unbounded_String; -- Name of faction, displayed to player
       MemberName: Unbounded_String; -- Name of single member of faction
@@ -66,25 +96,50 @@ package Factions is
         .Map; -- List of possible careers for that faction
       BaseIcon: Wide_Character; -- Character used as base icon on map for this faction
    end record;
+-- ****
+
+-- ****t* Factions/Factions_Container
+-- SOURCE
    package Factions_Container is new Hashed_Maps(Unbounded_String,
       FactionRecord, Ada.Strings.Unbounded.Hash, "=");
-   Factions_List: Factions_Container.Map;
+-- ****
 
-   -- Load NPC factions from file
+-- ****v* Factions/Factions_List
+-- SOURCE
+   Factions_List: Factions_Container.Map;
+-- ****
+
+-- ****f* Factions/LoadFactions
+-- FUNCTION
+-- Load NPC factions from file
+-- SOURCE
    procedure LoadFactions(Reader: Tree_Reader);
-   -- Get reputation between SourceFaction and TargetFaction
+-- ****
+-- ****f* Factions/GetReputation
+-- FUNCTION
+-- Get reputation between SourceFaction and TargetFaction
+-- SOURCE
    function GetReputation
      (SourceFaction, TargetFaction: Unbounded_String) return Integer with
       Pre =>
       (Factions_Container.Contains(Factions_List, SourceFaction) and
        Factions_Container.Contains(Factions_List, TargetFaction));
-      -- Check if TargetFaction is friendly for SourceFaction. Returns true if yes, otherwise false.
+-- ****
+-- ****f* Factions/IsFriendly
+-- FUNCTION
+-- Check if TargetFaction is friendly for SourceFaction. Returns true if yes, otherwise false.
+-- SOURCE
    function IsFriendly
      (SourceFaction, TargetFaction: Unbounded_String) return Boolean with
       Pre =>
       (Factions_Container.Contains(Factions_List, SourceFaction) and
        Factions_Container.Contains(Factions_List, TargetFaction));
-      -- Select random faction from list
+-- ****
+-- ****f* Factions/GetRandomFaction
+-- FUNCTION
+-- Select random faction from list
+-- SOURCE
    function GetRandomFaction return Unbounded_String;
+-- ****
 
 end Factions;

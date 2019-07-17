@@ -19,7 +19,10 @@ with Config; use Config;
 
 package body Messages is
 
+-- ****if* Messages/FormatedTime
+-- SOURCE
    function FormatedTime(Time: Date_Record := GameDate) return String is
+-- ****
       Result: Unbounded_String := To_Unbounded_String("");
       RawImage: Unbounded_String;
       TimeArray: constant array(1 .. 5) of Natural :=
@@ -47,8 +50,11 @@ package body Messages is
       return To_String(Result);
    end FormatedTime;
 
+-- ****if* Messages/AddMessage
+-- SOURCE
    procedure AddMessage
      (Message: String; MType: Message_Type; Color: Message_Color := WHITE) is
+-- ****
    begin
       if Natural(Messages_List.Length) = GameSettings.MessagesLimit then
          Messages_List.Delete_First;
@@ -62,9 +68,12 @@ package body Messages is
       LastMessageIndex := GetLastMessageIndex;
    end AddMessage;
 
+-- ****if* Messages/GetMessage
+-- SOURCE
    function GetMessage
      (MessageIndex: Integer; MType: Message_Type := Default)
       return Message_Data is
+-- ****
       Index: Integer;
    begin
       if MessageIndex > Integer(Messages_List.Length) then
@@ -99,12 +108,18 @@ package body Messages is
          Color => WHITE);
    end GetMessage;
 
+-- ****if* Messages/ClearMessages
+-- SOURCE
    procedure ClearMessages is
+-- ****
    begin
       Messages_List.Clear;
    end ClearMessages;
 
+-- ****if* Messages/MessagesAmount
+-- SOURCE
    function MessagesAmount(MType: Message_Type := Default) return Natural is
+-- ****
       Amount: Natural := 0;
    begin
       if MType = Default then
@@ -119,15 +134,21 @@ package body Messages is
       end if;
    end MessagesAmount;
 
+-- ****if* Messages/RestoreMessage
+-- SOURCE
    procedure RestoreMessage
      (Message: Unbounded_String; MType: Message_Type := Default;
       Color: Message_Color := WHITE) is
+-- ****
    begin
       Messages_List.Append
         (New_Item => (Message => Message, MType => MType, Color => Color));
    end RestoreMessage;
 
+-- ****if* Messages/GetLastMessageIndex
+-- SOURCE
    function GetLastMessageIndex return Natural is
+-- ****
    begin
       return Messages_List.Last_Index;
    end GetLastMessageIndex;

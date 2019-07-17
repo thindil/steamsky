@@ -19,9 +19,17 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Trades.UI is
 
-   -- Create infterace for trades
+-- ****f* Trades.UI/CreateTradeUI
+-- FUNCTION
+-- Create infterace for trades
+-- SOURCE
    procedure CreateTradeUI(NewBuilder: Gtkada_Builder);
-   -- Show interface for trades
+-- ****
+-- ****f* Trades.UI/ShowTradeUI;
+-- FUNCTION
+-- Show interface for trades
+-- SOURCE
    procedure ShowTradeUI;
+-- ****
 
 end Trades.UI;

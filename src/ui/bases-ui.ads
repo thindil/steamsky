@@ -19,13 +19,29 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Bases.UI is
 
-   -- Create infterace for various bases options
+-- ****f* Bases.UI/CreateBasesUI
+-- FUNCTION
+-- Create infterace for various bases options
+-- SOURCE
    procedure CreateBasesUI(NewBuilder: Gtkada_Builder);
-   -- Show interface for buying crafting recipes
+-- ****
+-- ****f* Bases.UI/ShowBuyRecipesUI;
+-- FUNCTION
+-- Show interface for buying crafting recipes
+-- SOURCE
    procedure ShowBuyRecipesUI;
-   -- Show interface for buying ship repairs in bases
+-- ****
+-- ****f* Bases.UI/ShowRepairUI;
+-- FUNCTION
+-- Show interface for buying ship repairs in bases
+-- SOURCE
    procedure ShowRepairUI;
-   -- Show interface for buying crew members healing in bases
+-- ****
+-- ****f* Bases.UI/ShowHealUI;
+-- FUNCTION
+-- Show interface for buying crew members healing in bases
+-- SOURCE
    procedure ShowHealUI;
+-- ****
 
 end Bases.UI;

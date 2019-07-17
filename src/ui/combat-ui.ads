@@ -19,9 +19,17 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Combat.UI is
 
-   -- Create combat user interface
+-- ****f* Combat.UI/CreateCombatUI
+-- FUNCTION
+-- Create combat user interface
+-- SOURCE
    procedure CreateCombatUI(NewBuilder: Gtkada_Builder);
-   -- Show combat interface
+-- ****
+-- ****f* Combat.UI/ShowCombatUI
+-- FUNCTION
+-- Show combat interface
+-- SOURCE
    procedure ShowCombatUI(NewCombat: Boolean := True);
+-- ****
 
 end Combat.UI;

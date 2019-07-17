@@ -21,34 +21,91 @@ with Ships; use Ships;
 
 package Trades is
 
-   -- List of all cargo in trader ship
+-- ****v* Trades/TraderCargo
+-- FUNCTION
+-- List of all cargo in trader ship
+-- SOURCE
    TraderCargo: BaseCargo_Container.Vector;
-   -- Raised when items is not available to buy
+-- ****
+-- ****v* Trades/Trade_Cant_Buy
+-- FUNCTION
+-- Raised when items is not available to buy
+-- SOURCE
    Trade_Cant_Buy: exception;
-   -- Raised when no items available at this time for sale
+-- ****
+-- ****v* Trades/Trade_Not_For_Sale_Now
+-- FUNCTION
+-- Raised when no items available at this time for sale
+-- SOURCE
    Trade_Not_For_Sale_Now: exception;
-   -- Raised when player trying buy more than can
+-- ****
+-- ****v* Trades/Trade_Buying_Too_Much
+-- FUNCTION
+-- Raised when player trying buy more than can
+-- SOURCE
    Trade_Buying_Too_Much: exception;
-   -- Raised when no enough free cargo in ship
+-- ****
+-- ****v* Trades/Trade_No_Free_Cargo
+-- FUNCTION
+-- Raised when no enough free cargo in ship
+-- SOURCE
    Trade_No_Free_Cargo: exception;
-   -- Raised when player don't have money
+-- ****
+-- ****v* Trades/Trade_No_Money
+-- FUNCTION
+-- Raised when player don't have money
+-- SOURCE
    Trade_No_Money: exception;
-   -- Raised when player don't have enough money
+-- ****
+-- ****v* Trades/Trade_Not_Enough_Money
+-- FUNCTION
+-- Raised when player don't have enough money
+-- SOURCE
    Trade_Not_Enough_Money: exception;
-   -- Raised when player enter invalid amount
+-- ****
+-- ****v* Trades/Trade_Invalid_Amount
+-- FUNCTION
+-- Raised when player enter invalid amount
+-- SOURCE
    Trade_Invalid_Amount: exception;
-   -- Raised when player try sell more than have
+-- ****
+-- ****v* Trades/Trade_Too_Much_For_Sale
+-- FUNCTION
+-- Raised when player try sell more than have
+-- SOURCE
    Trade_Too_Much_For_Sale: exception;
-   -- Raised when base don't have enough money for buy item
+-- ****
+-- ****v* Trades/Trade_No_Money_In_Base
+-- FUNCTION
+-- Raised when base don't have enough money for buy item
+-- SOURCE
    Trade_No_Money_In_Base: exception;
-   -- Raised when no one is assigned to talk in bases duty
+-- ****
+-- ****v* Trades/Trade_No_Trader
+-- FUNCTION
+-- Raised when no one is assigned to talk in bases duty
+-- SOURCE
    Trade_No_Trader: exception;
-   -- Buy items from bases or trader
+-- ****
+
+-- ****f* Trades/BuyItems
+-- FUNCTION
+-- Buy items from bases or trader
+-- SOURCE
    procedure BuyItems(BaseItemIndex: Positive; Amount: String);
-   -- Sell items from bases or trader
+-- ****
+-- ****f* Trades/SellItems
+-- FUNCTION
+-- Sell items from bases or trader
+-- SOURCE
    procedure SellItems(ItemIndex: Positive; Amount: String);
-   -- Generate list of cargo to trade
+-- ****
+-- ****f* Trades/GenerateTraderCargo
+-- FUNCTION
+-- Generate list of cargo to trade
+-- SOURCE
    procedure GenerateTraderCargo(ProtoIndex: Unbounded_String) with
       Pre => ProtoShips_Container.Contains(ProtoShips_List, ProtoIndex);
+-- ****
 
 end Trades;

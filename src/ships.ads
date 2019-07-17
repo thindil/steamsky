@@ -26,15 +26,39 @@ with Items; use Items;
 with Mobs; use Mobs;
 
 package Ships is
+
+-- ****t* Ships/ShipSpeed
+-- SOURCE
    type ShipSpeed is
      (DOCKED, FULL_STOP, QUARTER_SPEED, HALF_SPEED, FULL_SPEED);
+-- ****
+
+-- ****t* Ships/ShipCombatAi
+-- SOURCE
    type ShipCombatAi is (NONE, BERSERKER, ATTACKER, COWARD, DISARMER);
+-- ****
+
+-- ****t* Ships/ShipUpgrade
+-- SOURCE
    type ShipUpgrade is (NONE, DURABILITY, MAX_VALUE, VALUE);
+-- ****
+
+-- ****t* Ships/Data_Array
+-- SOURCE
    type Data_Array is array(1 .. 3) of Integer;
+-- ****
+
+-- ****t* Ships/ModuleType2
+-- SOURCE
    type ModuleType2 is
      (WORKSHOP, ANY, MEDICAL_ROOM, TRAINING_ROOM, ENGINE, CABIN, COCKPIT,
       TURRET, GUN, CARGO_ROOM, HULL, ARMOR, BATTERING_RAM, HARPOON_GUN);
-   -- Data structure for ship modules
+-- ****
+
+-- ****t* Ships/ModuleData(MType:
+-- FUNCTION
+-- Data structure for ship modules
+-- SOURCE
    type ModuleData(MType: ModuleType2 := ANY) is record
       Name: Unbounded_String; -- Name of module
       ProtoIndex: Unbounded_String; -- Index of module prototype
@@ -79,9 +103,22 @@ package Ships is
             Data: Data_Array; -- Various data for module (depends on module)
       end case;
    end record;
+-- ****
+
+-- ****t* Ships/Modules_Container
+-- SOURCE
    package Modules_Container is new Vectors(Positive, ModuleData);
+-- ****
+
+-- ****t* Ships/Crew_Container
+-- SOURCE
    package Crew_Container is new Vectors(Positive, Member_Data);
-   -- Data structure for ships
+-- ****
+
+-- ****t* Ships/ShipRecord
+-- FUNCTION
+-- Data structure for ships
+-- SOURCE
    type ShipRecord is record
       Name: Unbounded_String; -- Ship name
       SkyX: Integer; -- X coordinate on sky map
@@ -97,15 +134,33 @@ package Ships is
       Description: Unbounded_String; -- Description of ship
       HomeBase: Natural; -- Index of home base of ship
    end record;
+-- ****
+
+-- ****t* Ships/ShipSkills_Array
+-- SOURCE
    type ShipSkills_Array is array(1 .. 2) of Natural;
-   -- Data structure for proto crew info
+-- ****
+
+-- ****t* Ships/ProtoMember_Data
+-- FUNCTION
+-- Data structure for proto crew info
+-- SOURCE
    type ProtoMember_Data is record
       ProtoIndex: Unbounded_String; -- Index of proto mob which will be used as crew member
       MinAmount: Positive; -- Mininum amount of that mob in crew
       MaxAmount: Natural; -- Maximum amount of that mob in crew. If 0 then MinAmount will be amount
    end record;
+-- ****
+
+-- ****t* Ships/ProtoCrew_Container
+-- SOURCE
    package ProtoCrew_Container is new Vectors(Positive, ProtoMember_Data);
-   -- Data structure for ship prototypes
+-- ****
+
+-- ****t* Ships/ProtoShipData
+-- FUNCTION
+-- Data structure for ship prototypes
+-- SOURCE
    type ProtoShipData is record
       Name: Unbounded_String; -- Prototype name
       Modules: UnboundedString_Container.Vector; -- List of ship modules
@@ -121,32 +176,86 @@ package Ships is
       Owner: Unbounded_String; -- Index of faction to which ship belong
       KnownRecipes: UnboundedString_Container.Vector; -- List of known recipes
    end record;
+-- ****
+
+-- ****t* Ships/ProtoShips_Container
+-- SOURCE
    package ProtoShips_Container is new Hashed_Maps(Unbounded_String,
       ProtoShipData, Ada.Strings.Unbounded.Hash, "=");
-   ProtoShips_List: ProtoShips_Container.Map;
-   PlayerShip: ShipRecord;
-   ShipSyllablesStart: UnboundedString_Container.Vector;
-   ShipSyllablesMiddle: UnboundedString_Container.Vector;
-   ShipSyllablesEnd: UnboundedString_Container.Vector;
-   -- Raised when invalid data in ships file
-   Ships_Invalid_Data: exception;
+-- ****
 
-   -- Create new ship
+-- ****v* Ships/ProtoShips_List
+-- SOURCE
+   ProtoShips_List: ProtoShips_Container.Map;
+-- ****
+
+-- ****v* Ships/PlayerShip
+-- SOURCE
+   PlayerShip: ShipRecord;
+-- ****
+
+-- ****v* Ships/ShipSyllablesStart
+-- SOURCE
+   ShipSyllablesStart: UnboundedString_Container.Vector;
+-- ****
+
+-- ****v* Ships/ShipSyllablesMiddle
+-- SOURCE
+   ShipSyllablesMiddle: UnboundedString_Container.Vector;
+-- ****
+
+-- ****v* Ships/ShipSyllablesEnd
+-- SOURCE
+   ShipSyllablesEnd: UnboundedString_Container.Vector;
+-- ****
+
+-- ****v* Ships/Ships_Invalid_Data
+-- FUNCTION
+-- Raised when invalid data in ships file
+-- SOURCE
+   Ships_Invalid_Data: exception;
+-- ****
+
+-- ****f* Ships/CreateShip
+-- FUNCTION
+-- Create new ship
+-- SOURCE
    function CreateShip
      (ProtoIndex, Name: Unbounded_String; X, Y: Integer; Speed: ShipSpeed;
       RandomUpgrades: Boolean := True) return ShipRecord with
       Pre => (ProtoShips_Container.Contains(ProtoShips_List, ProtoIndex));
-      -- Load ships from files
+-- ****
+-- ****f* Ships/LoadShips
+-- FUNCTION
+-- Load ships from files
+-- SOURCE
    procedure LoadShips(Reader: Tree_Reader);
-   -- Count weight of ship (with modules and cargo)
+-- ****
+-- ****f* Ships/CountShipWeight
+-- FUNCTION
+-- Count weight of ship (with modules and cargo)
+-- SOURCE
    function CountShipWeight(Ship: ShipRecord) return Positive;
-   -- Generate random name for ship
+-- ****
+-- ****f* Ships/GenerateShipName
+-- FUNCTION
+-- Generate random name for ship
+-- SOURCE
    function GenerateShipName
      (Owner: Unbounded_String) return Unbounded_String with
       Pre => Owner /= Null_Unbounded_String;
-      -- Count combat value of player ship
+-- ****
+-- ****f* Ships/CountCombatValue
+-- FUNCTION
+-- Count combat value of player ship
+-- SOURCE
    function CountCombatValue return Natural;
-   -- Get description of quality of selected cabin in player ship
+-- ****
+-- ****f* Ships/GetCabinQuality
+-- FUNCTION
+-- Get description of quality of selected cabin in player ship
+-- SOURCE
    function GetCabinQuality(Quality: Natural) return String;
+-- ****
 
 end Ships;

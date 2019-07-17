@@ -17,19 +17,39 @@
 
 package Log is
 
-   -- Did game is run in debug mode
+-- ****t* Log/Debug_Types
+-- FUNCTION
+-- Did game is run in debug mode
+-- SOURCE
    type Debug_Types is
      (None, Everything, Combat,
       Menu); -- Types of debug mode, which messages log to file
-   DebugMode: Debug_Types := None;
+-- ****
 
-   -- Open/create debug.log file
+-- ****v* Log/DebugMode
+-- SOURCE
+   DebugMode: Debug_Types := None;
+-- ****
+
+-- ****f* Log/StartLogging;
+-- FUNCTION
+-- Open/create debug.log file
+-- SOURCE
    procedure StartLogging;
-   -- Log message (if proper type) to file in debug mode
+-- ****
+-- ****f* Log/LogMessage
+-- FUNCTION
+-- Log message (if proper type) to file in debug mode
+-- SOURCE
    procedure LogMessage
      (Message: String; MessageType: Debug_Types;
       NewLine, TimeStamp: Boolean := True);
-   -- Close debug.file
+-- ****
+-- ****f* Log/EndLogging;
+-- FUNCTION
+-- Close debug.file
+-- SOURCE
    procedure EndLogging;
+-- ****
 
 end Log;

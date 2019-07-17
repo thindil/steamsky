@@ -29,9 +29,15 @@ with Statistics; use Statistics;
 
 package body HallOfFame is
 
+-- ****iv* HallOfFame/HoFData
+-- SOURCE
    HoFData: Document;
+-- ****
 
+-- ****if* HallOfFame/LoadHallOfFame
+-- SOURCE
    procedure LoadHallOfFame is
+-- ****
       HoFFile: File_Input;
       Reader: Tree_Reader;
       EntriesList: Node_List;
@@ -61,7 +67,10 @@ package body HallOfFame is
       Free(Reader);
    end LoadHallOfFame;
 
+-- ****if* HallOfFame/UpdateHallOfFame
+-- SOURCE
    procedure UpdateHallOfFame(PlayerName, DeathReason: Unbounded_String) is
+-- ****
       NewIndex: Natural := 0;
       HoFFile: File_Type;
       HoF: DOM_Implementation;
