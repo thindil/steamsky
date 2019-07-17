@@ -20,22 +20,29 @@ with Ships; use Ships;
 
 package Crew.UI is
 
-   procedure CreateCrewUI
-     (NewBuilder: Gtkada_Builder); -- Create infterace for show player ship crew info
-   procedure ShowCrewUI; -- Show interface for show player ship crew info
+   -- Create infterace for show player ship crew info
+   procedure CreateCrewUI(NewBuilder: Gtkada_Builder);
+   -- Show interface for show player ship crew info
+   procedure ShowCrewUI;
 
 private
 
-   Builder: Gtkada_Builder; -- Gtk builder for user interface
-   MemberIndex,
-   ItemIndex: Positive; -- Crew member and item from inventory indexes
-   procedure SetOrdersList; -- Set orders for selected crew member
-   procedure ShowOrdersForAll; -- Show list of orders for all crew members
-   procedure RefreshInventory; -- Refresh informations about selected crew member inventory
-   procedure SetActiveItem; -- Set active item in inventory list
-   procedure RefreshCrewInfo; -- Refresh crew list
+   -- Gtk builder for user interface
+   Builder: Gtkada_Builder;
+   -- Crew member and item from inventory indexes
+   MemberIndex, ItemIndex: Positive;
+   -- Set orders for selected crew member
+   procedure SetOrdersList;
+   -- Show list of orders for all crew members
+   procedure ShowOrdersForAll;
+   -- Refresh informations about selected crew member inventory
+   procedure RefreshInventory;
+   -- Set active item in inventory list
+   procedure SetActiveItem;
+   -- Refresh crew list
+   procedure RefreshCrewInfo;
+   -- Set active crew member in crew list
    procedure SetActiveMember(NewMemberIndex: Natural := 0) with
-      Pre => NewMemberIndex <=
-      PlayerShip.Crew.Last_Index; -- Set active crew member in crew list
+      Pre => NewMemberIndex <= PlayerShip.Crew.Last_Index;
 
 end Crew.UI;

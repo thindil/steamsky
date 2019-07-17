@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,9 +19,11 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Missions.UI is
 
-   procedure CreateMissionsUI
-     (NewBuilder: Gtkada_Builder); -- Create infterace for show available missions
-   procedure ShowMissionsUI; -- Show interface for show available missions
-   procedure ShowAcceptedMissions; -- Show interface for show accepted missions
+   -- Create infterace for show available missions
+   procedure CreateMissionsUI(NewBuilder: Gtkada_Builder);
+   -- Show interface for show available missions
+   procedure ShowMissionsUI;
+   -- Show interface for show accepted missions
+   procedure ShowAcceptedMissions;
 
 end Missions.UI;

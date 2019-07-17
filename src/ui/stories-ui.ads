@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,7 +19,9 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Stories.UI is
 
-   procedure CreateStoriesUI(NewBuilder: Gtkada_Builder); -- Create stories ui
-   procedure ShowStoriesUI; -- Show stories informations to player
+   -- Create stories ui
+   procedure CreateStoriesUI(NewBuilder: Gtkada_Builder);
+   -- Show stories informations to player
+   procedure ShowStoriesUI;
 
 end Stories.UI;

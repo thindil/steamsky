@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,8 +19,9 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Messages.UI is
 
-   procedure CreateMessagesUI
-     (NewBuilder: Gtkada_Builder); -- Create infterace for show messages
-   procedure ShowMessagesUI; -- Show interface for show messages
+   -- Create infterace for show messages
+   procedure CreateMessagesUI(NewBuilder: Gtkada_Builder);
+   -- Show interface for show messages
+   procedure ShowMessagesUI;
 
 end Messages.UI;

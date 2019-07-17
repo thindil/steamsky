@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,14 +19,20 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Ships.UI is
 
-   procedure CreateShipUI
-     (NewBuilder: Gtkada_Builder); -- Create infterace for show player ship info
-   procedure ShowShipUI; -- Show interface for show player ship info
+   -- Create infterace for show player ship info
+   procedure CreateShipUI(NewBuilder: Gtkada_Builder);
+   -- Show interface for show player ship info
+   procedure ShowShipUI;
 
 private
-   Builder: Gtkada_Builder; -- Gtk builder for user interface
-   ModuleIndex: Positive; -- Index of selected module
 
-   procedure ShowModuleOptions; -- Show options for selected module
-   procedure ShowShipInfo; -- Show general info about player's ship
+   -- Gtk builder for user interface
+   Builder: Gtkada_Builder;
+   -- Index of selected module
+   ModuleIndex: Positive;
+   -- Show options for selected module
+   procedure ShowModuleOptions;
+   -- Show general info about player's ship
+   procedure ShowShipInfo;
+
 end Ships.UI;

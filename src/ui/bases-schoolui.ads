@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,8 +19,9 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Bases.SchoolUI is
 
-   procedure CreateBasesSchoolUI
-     (NewBuilder: Gtkada_Builder); -- Create infterace for training skills in bases
-   procedure ShowSchoolUI; -- Show interface for training skills in bases
+   -- Create infterace for training skills in bases
+   procedure CreateBasesSchoolUI(NewBuilder: Gtkada_Builder);
+   -- Show interface for training skills in bases
+   procedure ShowSchoolUI;
 
 end Bases.SchoolUI;

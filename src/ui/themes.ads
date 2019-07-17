@@ -21,11 +21,10 @@ with Ada.Strings.Hash;
 
 package Themes is
 
-   type FontTypes is
-     (HELPFONT, MAPFONT, INTERFACEFONT,
-      ALLFONTS); -- Types of font available in game
-   type ThemeRecord is -- Data structure for themes settings
-   record
+   -- Types of font available in game
+   type FontTypes is (HELPFONT, MAPFONT, INTERFACEFONT, ALLFONTS);
+   -- Data structure for themes settings
+   type ThemeRecord is record
       Name: Unbounded_String; -- Name of theme
       FileName: Unbounded_String; -- Name of .css file of theme
       EnemyShipIcon: Wide_Character; -- Icon used for Enemy Ship event
@@ -67,10 +66,14 @@ package Themes is
    end record;
    package Themes_Container is new Ada.Containers.Indefinite_Hashed_Maps
      (String, ThemeRecord, Ada.Strings.Hash, "=");
-   Themes_List: Themes_Container.Map; -- List of all available themes
+   -- List of all available themes
+   Themes_List: Themes_Container.Map;
 
-   procedure SetFontSize(FontType: FontTypes); -- Set size of selected font
-   procedure ResetFontsSizes; -- Reset size of fonts to theme default values
-   procedure LoadThemes; -- Load data for all themes
+   -- Set size of selected font
+   procedure SetFontSize(FontType: FontTypes);
+   -- Reset size of fonts to theme default values
+   procedure ResetFontsSizes;
+   -- Load data for all themes
+   procedure LoadThemes;
 
 end Themes;

@@ -941,9 +941,10 @@ package body Ships is
       return Weight;
    end CountShipWeight;
 
+   -- based on name generator from libtcod
    function GenerateShipName
      (Owner: Unbounded_String)
-      return Unbounded_String is -- based on name generator from libtcod
+      return Unbounded_String is
       NewName: Unbounded_String := Null_Unbounded_String;
    begin
       for I in Factions_List.Iterate loop

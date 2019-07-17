@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,8 +19,9 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Crafts.UI is
 
-   procedure CreateCraftsUI
-     (NewBuilder: Gtkada_Builder); -- Create infterace for manufacturing
-   procedure ShowCraftsUI; -- Show interface for manufacturing
+   -- Create infterace for manufacturing
+   procedure CreateCraftsUI(NewBuilder: Gtkada_Builder);
+   -- Show interface for manufacturing
+   procedure ShowCraftsUI;
 
 end Crafts.UI;
