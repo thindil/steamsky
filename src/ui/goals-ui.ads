@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -17,8 +17,9 @@
 
 package Goals.UI is
 
-   procedure CreateGoalsMenu; -- Create goals menu
-   procedure ShowGoalsMenu
-     (InMainMenu: Boolean := True); -- Show goals selection menu to player
+   -- Create goals menu
+   procedure CreateGoalsMenu;
+   -- Show goals selection menu to player
+   procedure ShowGoalsMenu(InMainMenu: Boolean := True);
 
 end Goals.UI;

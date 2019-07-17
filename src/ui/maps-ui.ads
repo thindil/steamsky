@@ -22,32 +22,40 @@ with Ships; use Ships;
 
 package Maps.UI is
 
-   procedure CreateSkyMap; -- Create sky map
+   -- Create sky map
+   procedure CreateSkyMap;
+   -- Show sky map
    procedure ShowSkyMap
-     (X: Integer := PlayerShip.SkyX;
-      Y: Integer := PlayerShip.SkyY); -- Show sky map
-   procedure UpdateHeader; -- Update game header informations
-   procedure SetMapMoveButtons; -- Set icons on move map buttons
+     (X: Integer := PlayerShip.SkyX; Y: Integer := PlayerShip.SkyY);
+   -- Update game header informations
+   procedure UpdateHeader;
+   -- Set icons on move map buttons
+   procedure SetMapMoveButtons;
 
 private
 
-   Builder: Gtkada_Builder; -- Gtk builder for user interface
+   -- Gtk builder for user interface
+   Builder: Gtkada_Builder;
    MapWidth, MapHeight, CenterX, CenterY, MapCellWidth, MapCellHeight, MapX,
    MapY: Positive;
    StartX, StartY: Integer;
    ButtonsVisible: Boolean := False;
 
-   procedure DeathConfirm; -- Show confirmation to show game stats when player died
-   procedure UpdateMoveButtons; -- Update move buttons
-   procedure DrawMap; -- Draw sky map
-   procedure HideButtons
-     (Widget: not null access Gtk_Widget_Record'Class); -- Hide selected button
-   procedure CheckButtons
-     (Widget: not null access Gtk_Widget_Record'
-        Class); -- Check selected button
-   procedure GetCurrentCellCoords; -- Get current map cell coordinates based on mouse position
-   procedure UpdateMapInfo
-     (ShowOrdersInfo: Boolean := False); -- Update info about current map cell
-   procedure FinishStory; -- Finish current story and show confirm dialog to player
+   -- Show confirmation to show game stats when player died
+   procedure DeathConfirm;
+   -- Update move buttons
+   procedure UpdateMoveButtons;
+   -- Draw sky map
+   procedure DrawMap;
+   -- Hide selected button
+   procedure HideButtons(Widget: not null access Gtk_Widget_Record'Class);
+   -- Check selected button
+   procedure CheckButtons(Widget: not null access Gtk_Widget_Record'Class);
+   -- Get current map cell coordinates based on mouse position
+   procedure GetCurrentCellCoords;
+   -- Update info about current map cell
+   procedure UpdateMapInfo(ShowOrdersInfo: Boolean := False);
+   -- Finish current story and show confirm dialog to player
+   procedure FinishStory;
 
 end Maps.UI;

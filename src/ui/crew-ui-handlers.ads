@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -23,35 +23,28 @@ with Glib.Object; use Glib.Object;
 
 package Crew.UI.Handlers is
 
-   procedure ShowMemberInfo
-     (Object: access Gtkada_Builder_Record'Class); -- Show selected member info
-   procedure GiveOrdersAll
-     (User_Data: access GObject_Record'
-        Class); -- Give orders to all crew members
-   procedure ShowInventory
-     (Object: access Gtkada_Builder_Record'
-        Class); -- Refresh informations about selected member inventory
-   procedure ShowItemInfo2
-     (Object: access Gtkada_Builder_Record'
-        Class); -- Show informations about selected item
+   -- Show selected member info
+   procedure ShowMemberInfo(Object: access Gtkada_Builder_Record'Class);
+   -- Give orders to all crew members
+   procedure GiveOrdersAll(User_Data: access GObject_Record'Class);
+   -- Refresh informations about selected member inventory
+   procedure ShowInventory(Object: access Gtkada_Builder_Record'Class);
+   -- Show informations about selected item
+   procedure ShowItemInfo2(Object: access Gtkada_Builder_Record'Class);
+   -- Set selected item as used by crew member or take it down
    procedure UseItem
-     (Self: access Gtk_Cell_Renderer_Toggle_Record'Class;
-      Path: UTF8_String); -- Set selected item as used by crew member or take it down
-   procedure MoveItem
-     (Object: access Gtkada_Builder_Record'
-        Class); -- Move item from inventory to ship cargo
+     (Self: access Gtk_Cell_Renderer_Toggle_Record'Class; Path: UTF8_String);
+   -- Move item from inventory to ship cargo
+   procedure MoveItem(Object: access Gtkada_Builder_Record'Class);
+   -- Show give orders for all crew members
    procedure GiveCrewOrders
      (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
-      Path_String: UTF8_String;
-      New_Iter: Gtk.Tree_Model
-        .Gtk_Tree_Iter); -- Show give orders for all crew members
+      Path_String: UTF8_String; New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter);
+   -- Set selected priority (and reduce others if needed)
    procedure SetPriority
      (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
-      Path_String: UTF8_String;
-      New_Iter: Gtk.Tree_Model
-        .Gtk_Tree_Iter); -- Set selected priority (and reduce others if needed)
-   procedure DismissMember
-     (Object: access Gtkada_Builder_Record'
-        Class); -- Dismiss selected crew member
+      Path_String: UTF8_String; New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter);
+   -- Dismiss selected crew member
+   procedure DismissMember(Object: access Gtkada_Builder_Record'Class);
 
 end Crew.UI.Handlers;
