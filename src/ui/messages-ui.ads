@@ -19,9 +19,17 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Messages.UI is
 
-   -- Create infterace for show messages
+-- ****f* Messages.UI/CreateMessagesUI
+-- FUNCTION
+-- Create infterace for show messages
+-- SOURCE
    procedure CreateMessagesUI(NewBuilder: Gtkada_Builder);
-   -- Show interface for show messages
+-- ****
+-- ****f* Messages.UI/ShowMessagesUI;
+-- FUNCTION
+-- Show interface for show messages
+-- SOURCE
    procedure ShowMessagesUI;
+-- ****
 
 end Messages.UI;

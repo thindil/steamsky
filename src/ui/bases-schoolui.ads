@@ -19,9 +19,17 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Bases.SchoolUI is
 
-   -- Create infterace for training skills in bases
+-- ****f* Bases.SchoolUI/CreateBasesSchoolUI
+-- FUNCTION
+-- Create infterace for training skills in bases
+-- SOURCE
    procedure CreateBasesSchoolUI(NewBuilder: Gtkada_Builder);
-   -- Show interface for training skills in bases
+-- ****
+-- ****f* Bases.SchoolUI/ShowSchoolUI;
+-- FUNCTION
+-- Show interface for training skills in bases
+-- SOURCE
    procedure ShowSchoolUI;
+-- ****
 
 end Bases.SchoolUI;

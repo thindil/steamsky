@@ -40,11 +40,23 @@ with Config; use Config;
 
 package body Bases.UI is
 
+-- ****iv* Bases.UI/Builder
+-- SOURCE
    Builder: Gtkada_Builder;
+-- ****
+-- ****it* Bases.UI/States
+-- SOURCE
    type States is (RECIPES, REPAIRS, HEAL, CLEARING);
+-- ****
+-- ****iv* Bases.UI/CurrentState
+-- SOURCE
    CurrentState: States;
+-- ****
 
+-- ****if* Bases.UI/ObjectSelected
+-- SOURCE
    procedure ObjectSelected(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       Iter: Gtk_Tree_Iter;
       Model: Gtk_Tree_Model;
       Cost, Time: Natural := 0;
@@ -186,7 +198,10 @@ package body Bases.UI is
       end if;
    end ObjectSelected;
 
+-- ****if* Bases.UI/AcceptAction
+-- SOURCE
    procedure AcceptAction(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       Iter: Gtk_Tree_Iter;
       Model: Gtk_Tree_Model;
    begin
@@ -212,14 +227,20 @@ package body Bases.UI is
       end case;
    end AcceptAction;
 
+-- ****if* Bases.UI/CreateBasesUI
+-- SOURCE
    procedure CreateBasesUI(NewBuilder: Gtkada_Builder) is
+-- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Object_Selected", ObjectSelected'Access);
       Register_Handler(Builder, "Accept_Action", AcceptAction'Access);
    end CreateBasesUI;
 
+-- ****if* Bases.UI/ShowBuyRecipesUI
+-- SOURCE
    procedure ShowBuyRecipesUI is
+-- ****
       RecipesIter: Gtk_Tree_Iter;
       RecipesList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "itemslist"));
@@ -254,7 +275,10 @@ package body Bases.UI is
       UpdateMessages;
    end ShowBuyRecipesUI;
 
+-- ****if* Bases.UI/ShowRepairUI
+-- SOURCE
    procedure ShowRepairUI is
+-- ****
       RepairsIter: Gtk_Tree_Iter;
       RepairsList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "itemslist"));
@@ -299,7 +323,10 @@ package body Bases.UI is
       UpdateMessages;
    end ShowRepairUI;
 
+-- ****if* Bases.UI/ShowHealUI
+-- SOURCE
    procedure ShowHealUI is
+-- ****
       HealsIter: Gtk_Tree_Iter;
       HealsList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "itemslist"));

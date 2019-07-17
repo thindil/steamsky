@@ -20,17 +20,37 @@ with Ada.Exceptions; use Ada.Exceptions;
 
 package MainMenu is
 
-   -- Create main menu and show it
+-- ****f* MainMenu/CreateMainMenu;
+-- FUNCTION
+-- Create main menu and show it
+-- SOURCE
    procedure CreateMainMenu;
-   -- Update label on character goal button
+-- ****
+-- ****f* MainMenu/UpdateGoalButton
+-- FUNCTION
+-- Update label on character goal button
+-- SOURCE
    procedure UpdateGoalButton(Message: String) with
       Pre => Message'Length > 0;
-      -- Show main menu window
+-- ****
+-- ****f* MainMenu/ShowMainMenu;
+-- FUNCTION
+-- Show main menu window
+-- SOURCE
    procedure ShowMainMenu;
-   -- Save data exception to file
+-- ****
+-- ****f* MainMenu/SaveException
+-- FUNCTION
+-- Save data exception to file
+-- SOURCE
    procedure SaveException
      (An_Exception: Exception_Occurrence; PrintToTerminal: Boolean);
-   -- Handle GUI exceptions
+-- ****
+-- ****f* MainMenu/On_Exception
+-- FUNCTION
+-- Handle GUI exceptions
+-- SOURCE
    procedure On_Exception(An_Exception: Exception_Occurrence);
+-- ****
 
 end MainMenu;

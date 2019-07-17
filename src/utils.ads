@@ -20,11 +20,23 @@ with Game; use Game;
 
 package Utils is
 
-   -- Return random number from Min to Max range
+-- ****f* Utils/GetRandom
+-- FUNCTION
+-- Return random number from Min to Max range
+-- SOURCE
    function GetRandom(Min, Max: Integer) return Integer;
-   -- Return days difference between selected date and current game date
+-- ****
+-- ****f* Utils/DaysDifference
+-- FUNCTION
+-- Return days difference between selected date and current game date
+-- SOURCE
    function DaysDifference(DateToCompare: Date_Record) return Natural;
-   -- Generate robotic type name for bases, mobs, ships, etc
+-- ****
+-- ****f* Utils/GenerateRoboticName
+-- FUNCTION
+-- Generate robotic type name for bases, mobs, ships, etc
+-- SOURCE
    function GenerateRoboticName return Unbounded_String;
+-- ****
 
 end Utils;

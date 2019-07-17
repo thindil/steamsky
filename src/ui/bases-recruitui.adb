@@ -39,10 +39,19 @@ with Utils.UI; use Utils.UI;
 
 package body Bases.RecruitUI is
 
+-- ****iv* Bases.RecruitUI/Builder
+-- SOURCE
    Builder: Gtkada_Builder;
+-- ****
+-- ****iv* Bases.RecruitUI/RecruitIndex
+-- SOURCE
    RecruitIndex: Natural;
+-- ****
 
+-- ****if* Bases.RecruitUI/ShowRecruitInfo
+-- SOURCE
    procedure ShowRecruitInfo(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       RecruitInfo: Unbounded_String;
       Recruit: Recruit_Data;
       BaseIndex: constant Positive :=
@@ -153,7 +162,10 @@ package body Bases.RecruitUI is
         (Gtk_Label(Get_Object(Object, "lblpayment")), To_String(RecruitInfo));
    end ShowRecruitInfo;
 
+-- ****if* Bases.RecruitUI/UpdateRecruitList
+-- SOURCE
    procedure UpdateRecruitList is
+-- ****
       RecruitIter: Gtk_Tree_Iter;
       RecruitList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "recruitlist"));
@@ -170,7 +182,10 @@ package body Bases.RecruitUI is
       end loop;
    end UpdateRecruitList;
 
+-- ****if* Bases.RecruitUI/Hire
+-- SOURCE
    procedure Hire(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       DailyPayment: constant Natural :=
         Natural
           (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjdailypayment"))));
@@ -223,7 +238,10 @@ package body Bases.RecruitUI is
       UpdateMessages;
    end Hire;
 
+-- ****if* Bases.RecruitUI/StartNegotiations
+-- SOURCE
    procedure StartNegotiations(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
       Cost: Positive;
       Recruit: Recruit_Data;
@@ -264,7 +282,10 @@ package body Bases.RecruitUI is
       end if;
    end StartNegotiations;
 
+-- ****if* Bases.RecruitUI/NegotiateHire
+-- SOURCE
    procedure NegotiateHire(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
       Recruit: Recruit_Data;
       BaseIndex: constant Positive :=
@@ -316,7 +337,10 @@ package body Bases.RecruitUI is
       end if;
    end NegotiateHire;
 
+-- ****if* Bases.RecruitUI/CreateRecruitUI
+-- SOURCE
    procedure CreateRecruitUI(NewBuilder: Gtkada_Builder) is
+-- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Recruit_Info", ShowRecruitInfo'Access);
@@ -326,7 +350,10 @@ package body Bases.RecruitUI is
       Register_Handler(Builder, "Negotiate_Hire", NegotiateHire'Access);
    end CreateRecruitUI;
 
+-- ****if* Bases.RecruitUI/ShowRecruitUI
+-- SOURCE
    procedure ShowRecruitUI is
+-- ****
    begin
       UpdateRecruitList;
       Set_Visible_Child_Name

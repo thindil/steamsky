@@ -19,20 +19,44 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Ships.UI is
 
-   -- Create infterace for show player ship info
+-- ****f* Ships.UI/CreateShipUI
+-- FUNCTION
+-- Create infterace for show player ship info
+-- SOURCE
    procedure CreateShipUI(NewBuilder: Gtkada_Builder);
-   -- Show interface for show player ship info
+-- ****
+-- ****f* Ships.UI/ShowShipUI;
+-- FUNCTION
+-- Show interface for show player ship info
+-- SOURCE
    procedure ShowShipUI;
+-- ****
 
 private
 
-   -- Gtk builder for user interface
+-- ****v* Ships.UI/Builder
+-- FUNCTION
+-- Gtk builder for user interface
+-- SOURCE
    Builder: Gtkada_Builder;
-   -- Index of selected module
+-- ****
+-- ****v* Ships.UI/ModuleIndex
+-- FUNCTION
+-- Index of selected module
+-- SOURCE
    ModuleIndex: Positive;
-   -- Show options for selected module
+-- ****
+-- ****f* Ships.UI/ShowModuleOptions;
+-- FUNCTION
+-- Show options for selected module
+-- SOURCE
    procedure ShowModuleOptions;
-   -- Show general info about player's ship
+-- ****
+-- ****f* Ships.UI/ShowShipInfo;
+-- FUNCTION
+-- Show general info about player's ship
+-- SOURCE
    procedure ShowShipInfo;
+-- ****
 
 end Ships.UI;

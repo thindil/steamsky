@@ -19,9 +19,17 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Bases.LootUI is
 
-   -- Create infterace for looting bases
+-- ****f* Bases.LootUI/CreateBasesLootUI
+-- FUNCTION
+-- Create infterace for looting bases
+-- SOURCE
    procedure CreateBasesLootUI(NewBuilder: Gtkada_Builder);
-   -- Show interface for looting bases
+-- ****
+-- ****f* Bases.LootUI/ShowLootUI;
+-- FUNCTION
+-- Show interface for looting bases
+-- SOURCE
    procedure ShowLootUI;
+-- ****
 
 end Bases.LootUI;

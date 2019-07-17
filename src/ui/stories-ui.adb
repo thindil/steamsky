@@ -35,10 +35,19 @@ with Factions; use Factions;
 
 package body Stories.UI is
 
+-- ****iv* Stories.UI/Builder
+-- SOURCE
    Builder: Gtkada_Builder;
+-- ****
+-- ****iv* Stories.UI/Setting
+-- SOURCE
    Setting: Boolean;
+-- ****
 
+-- ****if* Stories.UI/ShowStoryInfo
+-- SOURCE
    procedure ShowStoryInfo(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       StoryIndex: Positive;
       StoryBuffer: constant Gtk_Text_Buffer :=
         Gtk_Text_Buffer(Get_Object(Object, "txtstory"));
@@ -147,8 +156,11 @@ package body Stories.UI is
       end if;
    end ShowStoryInfo;
 
+-- ****if* Stories.UI/SetStoryAsDestination
+-- SOURCE
    procedure SetStoryAsDestination
      (Object: access Gtkada_Builder_Record'Class) is
+-- ****
       NewX, NewY: Positive := 1;
    begin
       GetStoryLocation(NewX, NewY);
@@ -165,7 +177,10 @@ package body Stories.UI is
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
    end SetStoryAsDestination;
 
+-- ****if* Stories.UI/ShowStory
+-- SOURCE
    procedure ShowStory(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       NewX, NewY: Positive := 1;
    begin
       GetStoryLocation(NewX, NewY);
@@ -174,7 +189,10 @@ package body Stories.UI is
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
    end ShowStory;
 
+-- ****if* Stories.UI/CreateStoriesUI
+-- SOURCE
    procedure CreateStoriesUI(NewBuilder: Gtkada_Builder) is
+-- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Story_Info", ShowStoryInfo'Access);
@@ -183,7 +201,10 @@ package body Stories.UI is
       Register_Handler(Builder, "Show_Story", ShowStory'Access);
    end CreateStoriesUI;
 
+-- ****if* Stories.UI/ShowStoriesUI
+-- SOURCE
    procedure ShowStoriesUI is
+-- ****
       StoriesComboBox: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Object(Builder, "cmbstories"));
    begin

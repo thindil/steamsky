@@ -22,7 +22,10 @@ with Items; use Items;
 
 package body Bases.Cargo is
 
+-- ****if* Bases.Cargo/GenerateCargo
+-- SOURCE
    procedure GenerateCargo is
+-- ****
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Chance: Positive;
@@ -95,9 +98,12 @@ package body Bases.Cargo is
       end if;
    end GenerateCargo;
 
+-- ****if* Bases.Cargo/UpdateBaseCargo
+-- SOURCE
    procedure UpdateBaseCargo
      (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Natural := 100; CargoIndex: Natural := 0) is
+-- ****
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=
@@ -133,9 +139,12 @@ package body Bases.Cargo is
       end if;
    end UpdateBaseCargo;
 
+-- ****if* Bases.Cargo/FindBaseCargo
+-- SOURCE
    function FindBaseCargo
      (ProtoIndex: Unbounded_String; Durability: Natural := 101)
       return Natural is
+-- ****
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       function FindCargo(Cargo: BaseCargo_Container.Vector) return Natural is

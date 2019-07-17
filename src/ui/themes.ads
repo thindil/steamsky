@@ -21,9 +21,16 @@ with Ada.Strings.Hash;
 
 package Themes is
 
-   -- Types of font available in game
+-- ****t* Themes/FontTypes
+-- FUNCTION
+-- Types of font available in game
+-- SOURCE
    type FontTypes is (HELPFONT, MAPFONT, INTERFACEFONT, ALLFONTS);
-   -- Data structure for themes settings
+-- ****
+-- ****t* Themes/ThemeRecord
+-- FUNCTION
+-- Data structure for themes settings
+-- SOURCE
    type ThemeRecord is record
       Name: Unbounded_String; -- Name of theme
       FileName: Unbounded_String; -- Name of .css file of theme
@@ -64,16 +71,36 @@ package Themes is
       CheckButtonUnchecked: Unbounded_String; -- Name of image file used for check buttons when unchecked
       CheckButtonChecked: Unbounded_String; -- Name of image file used for check buttons when checked
    end record;
+-- ****
+-- ****t* Themes/Themes_Container
+-- SOURCE
    package Themes_Container is new Ada.Containers.Indefinite_Hashed_Maps
      (String, ThemeRecord, Ada.Strings.Hash, "=");
-   -- List of all available themes
+-- FUNCTION
+-- List of all available themes
+-- ****
+-- ****v* Themes/Themes_List
+-- SOURCE
    Themes_List: Themes_Container.Map;
+-- ****
 
-   -- Set size of selected font
+-- ****f* Themes/SetFontSize
+-- FUNCTION
+-- Set size of selected font
+-- SOURCE
    procedure SetFontSize(FontType: FontTypes);
-   -- Reset size of fonts to theme default values
+-- ****
+-- ****f* Themes/ResetFontsSizes;
+-- FUNCTION
+-- Reset size of fonts to theme default values
+-- SOURCE
    procedure ResetFontsSizes;
-   -- Load data for all themes
+-- ****
+-- ****f* Themes/LoadThemes;
+-- FUNCTION
+-- Load data for all themes
+-- SOURCE
    procedure LoadThemes;
+-- ****
 
 end Themes;

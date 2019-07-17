@@ -36,11 +36,23 @@ with Messages; use Messages;
 
 package body Events.UI is
 
+-- ****iv* Events.UI/Builder
+-- SOURCE
    Builder: Gtkada_Builder;
+-- ****
+-- ****iv* Events.UI/EventIndex
+-- SOURCE
    EventIndex: Positive;
+-- ****
+-- ****iv* Events.UI/Cleaning
+-- SOURCE
    Cleaning: Boolean;
+-- ****
 
+-- ****if* Events.UI/ShowEventInfo
+-- SOURCE
    procedure ShowEventInfo(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       EventInfo: Unbounded_String;
       BaseIndex: Integer;
    begin
@@ -93,8 +105,11 @@ package body Events.UI is
         (Gtk_Label(Get_Object(Object, "lbleventinfo")), To_String(EventInfo));
    end ShowEventInfo;
 
+-- ****if* Events.UI/SetEventAsDestination
+-- SOURCE
    procedure SetEventAsDestination
      (Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       if Events_List(EventIndex).SkyX = PlayerShip.SkyX and
         Events_List(EventIndex).SkyY = PlayerShip.SkyY then
@@ -110,14 +125,20 @@ package body Events.UI is
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
    end SetEventAsDestination;
 
+-- ****if* Events.UI/ShowEvent
+-- SOURCE
    procedure ShowEvent(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       ShowSkyMap(Events_List(EventIndex).SkyX, Events_List(EventIndex).SkyY);
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
    end ShowEvent;
 
+-- ****if* Events.UI/CreateEventsUI
+-- SOURCE
    procedure CreateEventsUI(NewBuilder: Gtkada_Builder) is
+-- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Event_Info", ShowEventInfo'Access);
@@ -129,7 +150,10 @@ package body Events.UI is
          ShowPopupMenuButton'Access);
    end CreateEventsUI;
 
+-- ****if* Events.UI/ShowEventsUI
+-- SOURCE
    procedure ShowEventsUI is
+-- ****
       EventsIter: Gtk_Tree_Iter;
       EventsList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "eventslist"));

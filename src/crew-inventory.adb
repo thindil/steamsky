@@ -21,10 +21,13 @@ with Ships.Crew; use Ships.Crew;
 
 package body Crew.Inventory is
 
+-- ****if* Crew.Inventory/UpdateInventory
+-- SOURCE
    procedure UpdateInventory
      (MemberIndex: Positive; Amount: Integer;
       ProtoIndex: Unbounded_String := Null_Unbounded_String;
       Durability, InventoryIndex, Price: Natural := 0) is
+-- ****
       ItemIndex: Natural := 0;
    begin
       if InventoryIndex = 0 then
@@ -97,8 +100,11 @@ package body Crew.Inventory is
       end if;
    end UpdateInventory;
 
+-- ****if* Crew.Inventory/FreeInventory
+-- SOURCE
    function FreeInventory
      (MemberIndex: Positive; Amount: Integer) return Integer is
+-- ****
       FreeSpace: Integer :=
         50 + PlayerShip.Crew(MemberIndex).Attributes(StrengthIndex)(1);
    begin
@@ -109,7 +115,10 @@ package body Crew.Inventory is
       return FreeSpace + Amount;
    end FreeInventory;
 
+-- ****if* Crew.Inventory/TakeOffItem
+-- SOURCE
    procedure TakeOffItem(MemberIndex, ItemIndex: Positive) is
+-- ****
    begin
       for I in PlayerShip.Crew(MemberIndex).Equipment'Range loop
          if PlayerShip.Crew(MemberIndex).Equipment(I) = ItemIndex then
@@ -119,7 +128,10 @@ package body Crew.Inventory is
       end loop;
    end TakeOffItem;
 
+-- ****if* Crew.Inventory/ItemIsUsed
+-- SOURCE
    function ItemIsUsed(MemberIndex, ItemIndex: Positive) return Boolean is
+-- ****
    begin
       for I in PlayerShip.Crew(MemberIndex).Equipment'Range loop
          if PlayerShip.Crew(MemberIndex).Equipment(I) = ItemIndex then
@@ -129,9 +141,12 @@ package body Crew.Inventory is
       return False;
    end ItemIsUsed;
 
+-- ****if* Crew.Inventory/FindTools
+-- SOURCE
    function FindTools
      (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders)
       return Natural is
+-- ****
       ToolsIndex: Natural;
    begin
       ToolsIndex := PlayerShip.Crew(MemberIndex).Equipment(7);

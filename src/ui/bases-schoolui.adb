@@ -32,10 +32,19 @@ with Items; use Items;
 
 package body Bases.SchoolUI is
 
+-- ****iv* Bases.SchoolUI/Builder
+-- SOURCE
    Builder: Gtkada_Builder;
+-- ****
+-- ****iv* Bases.SchoolUI/CrewIndex
+-- SOURCE
    CrewIndex: Positive;
+-- ****
 
+-- ****if* Bases.SchoolUI/ShowTrainInfo
+-- SOURCE
    procedure ShowTrainInfo(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       CrewIter, SkillsIter: Gtk_Tree_Iter;
       CrewModel: Gtk_Tree_Model;
       SkillsList: constant Gtk_List_Store :=
@@ -87,7 +96,10 @@ package body Bases.SchoolUI is
       end if;
    end ShowTrainInfo;
 
+-- ****if* Bases.SchoolUI/TrainSelectedSkill
+-- SOURCE
    procedure TrainSelectedSkill(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       SkillsIter: Gtk_Tree_Iter;
       SkillsModel: Gtk_Tree_Model;
       SkillName: Unbounded_String;
@@ -123,7 +135,10 @@ package body Bases.SchoolUI is
          ShowDialog("You can't train this skill any more.");
    end TrainSelectedSkill;
 
+-- ****if* Bases.SchoolUI/CreateBasesSchoolUI
+-- SOURCE
    procedure CreateBasesSchoolUI(NewBuilder: Gtkada_Builder) is
+-- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Train_Info", ShowTrainInfo'Access);
@@ -131,7 +146,10 @@ package body Bases.SchoolUI is
         (Builder, "Train_Selected_Skill", TrainSelectedSkill'Access);
    end CreateBasesSchoolUI;
 
+-- ****if* Bases.SchoolUI/ShowSchoolUI
+-- SOURCE
    procedure ShowSchoolUI is
+-- ****
       CrewIter: Gtk_Tree_Iter;
       CrewList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "crewlist"));

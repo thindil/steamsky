@@ -48,11 +48,23 @@ with Config; use Config;
 
 package body BasesList is
 
+-- ****iv* BasesList/Builder
+-- SOURCE
    Builder: Gtkada_Builder;
+-- ****
+-- ****iv* BasesList/SettingTime
+-- SOURCE
    SettingTime: Boolean;
+-- ****
+-- ****iv* BasesList/BaseIndex
+-- SOURCE
    BaseIndex: Positive;
+-- ****
 
+-- ****if* BasesList/ShowBaseInfo
+-- SOURCE
    procedure ShowBaseInfo(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       BaseInfo: Unbounded_String;
       procedure SetReputationText(ReputationText: String) is
       begin
@@ -197,7 +209,10 @@ package body BasesList is
         (Gtk_Label(Get_Object(Object, "lblbaseinfo")), To_String(BaseInfo));
    end ShowBaseInfo;
 
+-- ****if* BasesList/SetDestinationBase
+-- SOURCE
    procedure SetDestinationBase(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       if SkyBases(BaseIndex).SkyX = PlayerShip.SkyX and
         SkyBases(BaseIndex).SkyY = PlayerShip.SkyY then
@@ -215,14 +230,20 @@ package body BasesList is
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
    end SetDestinationBase;
 
+-- ****if* BasesList/ShowBase
+-- SOURCE
    procedure ShowBase(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       ShowSkyMap(SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY);
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
    end ShowBase;
 
+-- ****if* BasesList/SearchBases
+-- SOURCE
    procedure SearchBases(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       Refilter(Gtk_Tree_Model_Filter(Get_Object(Object, "basesfilter")));
       if N_Children
@@ -235,8 +256,11 @@ package body BasesList is
       end if;
    end SearchBases;
 
+-- ****if* BasesList/VisibleBases
+-- SOURCE
    function VisibleBases
      (Model: Gtk_Tree_Model; Iter: Gtk_Tree_Iter) return Boolean is
+-- ****
       ShowBase: Boolean := False;
       BasesType: Bases_Types;
       BasesStatus: Natural;
@@ -317,7 +341,10 @@ package body BasesList is
       return False;
    end VisibleBases;
 
+-- ****if* BasesList/ToggleBaseInfo
+-- SOURCE
    procedure ToggleBaseInfo(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       InfoWidget: constant Gtk_Widget :=
         Gtk_Widget(Get_Object(Object, "baseinfoscroll"));
       MenuItem: constant Gtk_Menu_Item :=
@@ -335,7 +362,10 @@ package body BasesList is
       end if;
    end ToggleBaseInfo;
 
+-- ****if* BasesList/CreateBasesListUI
+-- SOURCE
    procedure CreateBasesListUI(NewBuilder: Gtkada_Builder) is
+-- ****
       ComboBox: Gtk_Combo_Box_Text;
    begin
       Builder := NewBuilder;
@@ -375,7 +405,10 @@ package body BasesList is
          ShowPopupMenuButton'Access);
    end CreateBasesListUI;
 
+-- ****if* BasesList/ShowBasesListUI
+-- SOURCE
    procedure ShowBasesListUI is
+-- ****
       BaseIter: Gtk_Tree_Iter;
       BaseList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "baseslist"));

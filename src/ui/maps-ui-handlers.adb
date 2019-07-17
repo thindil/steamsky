@@ -82,16 +82,25 @@ with Themes; use Themes;
 
 package body Maps.UI.Handlers is
 
+-- ****iv* Maps.UI.Handlers/AccelsRemoved
+-- SOURCE
    AccelsRemoved: Boolean := False;
+-- ****
 
+-- ****if* Maps.UI.Handlers/QuitGameMenu
+-- SOURCE
    procedure QuitGameMenu(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       if not QuitGame(Gtk_Window(Get_Object(Object, "skymapwindow"))) then
          ShowDialog("Can't quit game.");
       end if;
    end QuitGameMenu;
 
+-- ****if* Maps.UI.Handlers/HideMapInfoWindow
+-- SOURCE
    procedure HideMapInfoWindow(User_Data: access GObject_Record'Class) is
+-- ****
    begin
       Hide(Gtk_Widget(User_Data));
       if User_Data = Get_Object(Builder, "btnboxorders") then
@@ -99,7 +108,10 @@ package body Maps.UI.Handlers is
       end if;
    end HideMapInfoWindow;
 
+-- ****if* Maps.UI.Handlers/GetMapSize
+-- SOURCE
    procedure GetMapSize(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       MapBuffer: constant Gtk_Text_Buffer :=
         Gtk_Text_Buffer(Get_Object(Object, "txtmap"));
       MapView: constant Gtk_Text_View :=
@@ -137,8 +149,11 @@ package body Maps.UI.Handlers is
          Gint(GameSettings.WindowWidth), Gint(GameSettings.WindowHeight));
    end GetMapSize;
 
+-- ****if* Maps.UI.Handlers/SetDestination
+-- SOURCE
    function SetDestination
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
+-- ****
    begin
       if PlayerShip.SkyX = MapX and PlayerShip.SkyY = MapY then
          ShowOrders(Object);
@@ -153,7 +168,10 @@ package body Maps.UI.Handlers is
       return True;
    end SetDestination;
 
+-- ****if* Maps.UI.Handlers/MoveMap
+-- SOURCE
    procedure MoveMap(User_Data: access GObject_Record'Class) is
+-- ****
    begin
       if User_Data = Get_Object(Builder, "btncenteronship") then
          CenterX := PlayerShip.SkyX;
@@ -240,7 +258,10 @@ package body Maps.UI.Handlers is
       Hide(Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
    end MoveMap;
 
+-- ****if* Maps.UI.Handlers/BtnDockClicked
+-- SOURCE
    procedure BtnDockClicked(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       Message: Unbounded_String := Null_Unbounded_String;
    begin
       Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
@@ -271,7 +292,10 @@ package body Maps.UI.Handlers is
       UpdateMoveButtons;
    end BtnDockClicked;
 
+-- ****if* Maps.UI.Handlers/ChangeSpeed
+-- SOURCE
    procedure ChangeSpeed(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       PlayerShip.Speed :=
         ShipSpeed'Val
@@ -279,7 +303,10 @@ package body Maps.UI.Handlers is
       UpdateHeader;
    end ChangeSpeed;
 
+-- ****if* Maps.UI.Handlers/MoveShip
+-- SOURCE
    procedure MoveShip(User_Data: access GObject_Record'Class) is
+-- ****
       Message: Unbounded_String;
       Result: Natural;
       StartsCombat: Boolean := False;
@@ -494,7 +521,10 @@ package body Maps.UI.Handlers is
       end if;
    end MoveShip;
 
+-- ****if* Maps.UI.Handlers/ShowOrders
+-- SOURCE
    procedure ShowOrders(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       HaveTrader: Boolean := False;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -885,7 +915,10 @@ package body Maps.UI.Handlers is
       end if;
    end ShowOrders;
 
+-- ****if* Maps.UI.Handlers/WaitOrder
+-- SOURCE
    procedure WaitOrder(User_Data: access GObject_Record'Class) is
+-- ****
       TimeNeeded: Natural := 0;
    begin
       Hide(Gtk_Widget(Get_Object(Builder, "btnboxwait")));
@@ -947,13 +980,19 @@ package body Maps.UI.Handlers is
       DrawMap;
    end WaitOrder;
 
+-- ****if* Maps.UI.Handlers/AttackOrder
+-- SOURCE
    procedure AttackOrder(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       Hide(Gtk_Widget(Get_Object(Object, "btnboxorders")));
       ShowCombatUI;
    end AttackOrder;
 
+-- ****if* Maps.UI.Handlers/ShowHelp
+-- SOURCE
    procedure ShowHelp(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       VisibleChildName: constant String :=
         Get_Visible_Child_Name(Gtk_Stack(Get_Object(Object, "gamestack")));
    begin
@@ -977,7 +1016,10 @@ package body Maps.UI.Handlers is
       end if;
    end ShowHelp;
 
+-- ****if* Maps.UI.Handlers/ShowInfo
+-- SOURCE
    procedure ShowInfo(User_Data: access GObject_Record'Class) is
+-- ****
       VisibleChildName: constant String :=
         Get_Visible_Child_Name(Gtk_Stack(Get_Object(Builder, "gamestack")));
       function HideInfo(StageName: String) return Boolean is
@@ -1128,7 +1170,10 @@ package body Maps.UI.Handlers is
       end if;
    end ShowInfo;
 
+-- ****if* Maps.UI.Handlers/ResignFromGame
+-- SOURCE
    procedure ResignFromGame(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       if ShowConfirmDialog
           ("Are you sure want to resign from game?",
@@ -1138,14 +1183,20 @@ package body Maps.UI.Handlers is
       end if;
    end ResignFromGame;
 
+-- ****if* Maps.UI.Handlers/ShowMissions
+-- SOURCE
    procedure ShowMissions(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       Hide(Gtk_Widget(Get_Object(Object, "btnboxorders")));
       Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
       ShowMissionsUI;
    end ShowMissions;
 
+-- ****if* Maps.UI.Handlers/StartMission
+-- SOURCE
    procedure StartMission(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       StartsCombat: Boolean := False;
    begin
       Hide(Gtk_Widget(Get_Object(Object, "btnboxorders")));
@@ -1195,7 +1246,10 @@ package body Maps.UI.Handlers is
       DrawMap;
    end StartMission;
 
+-- ****if* Maps.UI.Handlers/CompleteMission
+-- SOURCE
    procedure CompleteMission(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       Hide(Gtk_Widget(Get_Object(Object, "btnboxorders")));
       FinishMission(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
@@ -1205,7 +1259,10 @@ package body Maps.UI.Handlers is
       DrawMap;
    end CompleteMission;
 
+-- ****if* Maps.UI.Handlers/ExecuteOrder
+-- SOURCE
    procedure ExecuteOrder(User_Data: access GObject_Record'Class) is
+-- ****
       TraderIndex: constant Natural := FindMember(Talk);
       Price: Positive := 1000;
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
@@ -1314,7 +1371,10 @@ package body Maps.UI.Handlers is
       DrawMap;
    end ExecuteOrder;
 
+-- ****if* Maps.UI.Handlers/DeliverMedicines
+-- SOURCE
    procedure DeliverMedicines(User_Data: access GObject_Record'Class) is
+-- ****
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       EventIndex: constant Natural :=
@@ -1356,7 +1416,10 @@ package body Maps.UI.Handlers is
       DrawMap;
    end DeliverMedicines;
 
+-- ****if* Maps.UI.Handlers/ShowWaitOrders
+-- SOURCE
    procedure ShowWaitOrders(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       NeedHealing, NeedRest: Boolean := False;
    begin
       if Is_Visible(Gtk_Widget(Get_Object(Object, "btnboxwait"))) then
@@ -1392,17 +1455,23 @@ package body Maps.UI.Handlers is
       Grab_Focus(Gtk_Widget(Get_Object(Object, "btnwait1min")));
    end ShowWaitOrders;
 
+-- ****if* Maps.UI.Handlers/UpdateTooltip
+-- SOURCE
    function UpdateTooltip
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
       pragma Unreferenced(Object);
+-- ****
    begin
       UpdateMapInfo;
       return False;
    end UpdateTooltip;
 
+-- ****if* Maps.UI.Handlers/MapKeyReleased
+-- SOURCE
    function MapKeyReleased
      (Self: access Gtk_Widget_Record'Class; Event: Gdk.Event.Gdk_Event_Key)
       return Boolean is
+-- ****
       KeyMods: constant Gdk_Modifier_Type :=
         Event.State and Get_Default_Mod_Mask;
       Key: Gtk_Accel_Key;
@@ -1482,10 +1551,13 @@ package body Maps.UI.Handlers is
       return True;
    end MapKeyReleased;
 
+-- ****if* Maps.UI.Handlers/MapKeyPressed
+-- SOURCE
    function MapKeyPressed
      (Self: access Gtk_Widget_Record'Class; Event: Gdk.Event.Gdk_Event_Key)
       return Boolean is
       pragma Unreferenced(Self);
+-- ****
       KeyMods: constant Gdk_Modifier_Type :=
         Event.State and Get_Default_Mod_Mask;
       MouseX, MouseY, NewX, NewY: Gint;
@@ -1618,10 +1690,13 @@ package body Maps.UI.Handlers is
       return False;
    end MapKeyPressed;
 
+-- ****if* Maps.UI.Handlers/ZoomMap
+-- SOURCE
    function ZoomMap
      (Self: access Gtk_Widget_Record'Class; Event: Gdk.Event.Gdk_Event_Scroll)
       return Boolean is
       pragma Unreferenced(Self);
+-- ****
    begin
       if (Event.State and Get_Default_Mod_Mask) /= Shift_Mask then
          return False;
@@ -1641,8 +1716,11 @@ package body Maps.UI.Handlers is
       return False;
    end ZoomMap;
 
+-- ****if* Maps.UI.Handlers/DisableMenuShortcuts
+-- SOURCE
    function DisableMenuShortcuts
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
+-- ****
    begin
       if AccelsRemoved then
          return False;
@@ -1654,8 +1732,11 @@ package body Maps.UI.Handlers is
       return False;
    end DisableMenuShortcuts;
 
+-- ****if* Maps.UI.Handlers/EnableMenuShortcuts
+-- SOURCE
    function EnableMenuShortcuts
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
+-- ****
    begin
       if not AccelsRemoved then
          return False;
@@ -1667,8 +1748,11 @@ package body Maps.UI.Handlers is
       return False;
    end EnableMenuShortcuts;
 
+-- ****if* Maps.UI.Handlers/DisableMenuShortcutsProc
+-- SOURCE
    procedure DisableMenuShortcutsProc
      (Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       if AccelsRemoved then
          return;
@@ -1679,8 +1763,11 @@ package body Maps.UI.Handlers is
       AccelsRemoved := True;
    end DisableMenuShortcutsProc;
 
+-- ****if* Maps.UI.Handlers/EnableMenuShortcutsProc
+-- SOURCE
    procedure EnableMenuShortcutsProc
      (Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       if not AccelsRemoved then
          return;
@@ -1691,22 +1778,31 @@ package body Maps.UI.Handlers is
       AccelsRemoved := False;
    end EnableMenuShortcutsProc;
 
+-- ****if* Maps.UI.Handlers/ToggleCloseButton
+-- SOURCE
    function ToggleCloseButton
      (User_Data: access GObject_Record'Class) return Boolean is
+-- ****
       Button: constant Gtk_Widget := Gtk_Widget(User_Data);
    begin
       Set_Sensitive(Button, not Get_Sensitive(Button));
       return False;
    end ToggleCloseButton;
 
+-- ****if* Maps.UI.Handlers/ToggleCloseButtonProc
+-- SOURCE
    procedure ToggleCloseButtonProc(User_Data: access GObject_Record'Class) is
+-- ****
       Button: constant Gtk_Widget := Gtk_Widget(User_Data);
    begin
       Set_Sensitive(Button, not Get_Sensitive(Button));
    end ToggleCloseButtonProc;
 
+-- ****if* Maps.UI.Handlers/MoveMapInfo
+-- SOURCE
    function MoveMapInfo
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
+-- ****
       MapInfo: constant Gtk_Widget :=
         Gtk_Widget(Get_Object(Object, "eventmaptooltip"));
    begin
@@ -1718,7 +1814,10 @@ package body Maps.UI.Handlers is
       return False;
    end MoveMapInfo;
 
+-- ****if* Maps.UI.Handlers/MoveMapButtons
+-- SOURCE
    procedure MoveMapButtons(User_Data: access GObject_Record'Class) is
+-- ****
       ButtonsNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("btnmovemapleft"),
          To_Unbounded_String("btnmovemapright"),
@@ -1762,15 +1861,21 @@ package body Maps.UI.Handlers is
       end if;
    end MoveMapButtons;
 
+-- ****if* Maps.UI.Handlers/DisableMouse
+-- SOURCE
    function DisableMouse
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
       pragma Unreferenced(Object);
+-- ****
    begin
       return True;
    end DisableMouse;
 
+-- ****if* Maps.UI.Handlers/SetMessagesPosition
+-- SOURCE
    function SetMessagesPosition
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
+-- ****
       VisibleChildName: constant String :=
         Get_Visible_Child_Name(Gtk_Stack(Get_Object(Object, "gamestack")));
    begin

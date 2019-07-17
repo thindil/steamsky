@@ -17,9 +17,17 @@
 
 package DebugUI is
 
-   -- Create debug user interface
+-- ****f* DebugUI/CreateDebugUI;
+-- FUNCTION
+-- Create debug user interface
+-- SOURCE
    procedure CreateDebugUI;
-   -- Show debug user interface
+-- ****
+-- ****f* DebugUI/ShowDebugUI;
+-- FUNCTION
+-- Show debug user interface
+-- SOURCE
    procedure ShowDebugUI;
+-- ****
 
 end DebugUI;

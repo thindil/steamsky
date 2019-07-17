@@ -17,7 +17,11 @@
 
 package Ships.Repairs is
 
-   -- Repair ship modules
+-- ****f* Ships.Repairs/RepairShip
+-- FUNCTION
+-- Repair ship modules
+-- SOURCE
    procedure RepairShip(Minutes: Positive);
+-- ****
 
 end Ships.Repairs;

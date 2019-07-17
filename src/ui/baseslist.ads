@@ -19,9 +19,17 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package BasesList is
 
-   -- Create infterace for list of bases
+-- ****f* BasesList/CreateBasesListUI
+-- FUNCTION
+-- Create infterace for list of bases
+-- SOURCE
    procedure CreateBasesListUI(NewBuilder: Gtkada_Builder);
-   -- Show interface for list of bases
+-- ****
+-- ****f* BasesList/ShowBasesListUI;
+-- FUNCTION
+-- Show interface for list of bases
+-- SOURCE
    procedure ShowBasesListUI;
+-- ****
 
 end BasesList;

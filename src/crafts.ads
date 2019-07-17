@@ -25,7 +25,10 @@ with Ships; use Ships;
 
 package Crafts is
 
-   -- Data structure for recipes
+-- ****t* Crafts/Craft_Data
+-- FUNCTION
+-- Data structure for recipes
+-- SOURCE
    type Craft_Data is record
       MaterialTypes: UnboundedString_Container
         .Vector; -- Types of material needed for recipe
@@ -40,31 +43,73 @@ package Crafts is
       BaseType: Natural; -- Sky base type in which recipe can be bought
       Tool: Unbounded_String; -- Type of tool used to craft item
    end record;
-   package Recipes_Container is new Hashed_Maps(Unbounded_String, Craft_Data,
-      Ada.Strings.Unbounded.Hash, "=");
-   -- List of recipes available in game
-   Recipes_List: Recipes_Container.Map;
-   -- List of all know by player recipes
-   Known_Recipes: UnboundedString_Container.Vector;
-   -- Raised when no materials needed for selected recipe
-   Crafting_No_Materials: exception;
-   -- Raised when no tool needed for selected recipe
-   Crafting_No_Tools: exception;
-   -- Raised when no workshop needed for selected recipe
-   Crafting_No_Workshop: exception;
+-- ****
 
-   -- Load recipes from files
+-- ****t* Crafts/Recipes_Container
+-- SOURCE
+   package Recipes_Container is new Hashed_Maps(Unbounded_String, Craft_Data,
+
+      Ada.Strings.Unbounded.Hash, "=");
+-- FUNCTION
+-- List of recipes available in game
+-- ****
+-- ****v* Crafts/Recipes_List
+-- SOURCE
+   Recipes_List: Recipes_Container.Map;
+-- FUNCTION
+-- List of all know by player recipes
+-- ****
+-- ****v* Crafts/Known_Recipes
+-- SOURCE
+   Known_Recipes: UnboundedString_Container.Vector;
+-- FUNCTION
+-- Raised when no materials needed for selected recipe
+-- ****
+-- ****v* Crafts/Crafting_No_Materials
+-- SOURCE
+   Crafting_No_Materials: exception;
+-- FUNCTION
+-- Raised when no tool needed for selected recipe
+-- ****
+-- ****v* Crafts/Crafting_No_Tools
+-- SOURCE
+   Crafting_No_Tools: exception;
+-- FUNCTION
+-- Raised when no workshop needed for selected recipe
+-- ****
+-- ****v* Crafts/Crafting_No_Workshop
+-- SOURCE
+   Crafting_No_Workshop: exception;
+-- ****
+
+-- ****f* Crafts/LoadRecipes
+-- FUNCTION
+-- Load recipes from files
+-- SOURCE
    procedure LoadRecipes(Reader: Tree_Reader);
-   -- Craft selected items
+-- ****
+-- ****f* Crafts/Manufacturing
+-- FUNCTION
+-- Craft selected items
+-- SOURCE
    procedure Manufacturing(Minutes: Positive);
-   -- Check if player have all requirements for selected recipe, return max amount of items which can be craft
+-- ****
+-- ****f* Crafts/CheckRecipe
+-- FUNCTION
+-- Check if player have all requirements for selected recipe, return max amount of items which can be craft
+-- SOURCE
    function CheckRecipe(RecipeIndex: Unbounded_String) return Positive with
       Pre => RecipeIndex /= Null_Unbounded_String;
-      -- Set crafting recipe for selected workshop
+-- ****
+-- ****f* Crafts/SetRecipe
+-- FUNCTION
+-- Set crafting recipe for selected workshop
+-- SOURCE
    procedure SetRecipe
      (Workshop, Amount: Positive; RecipeIndex: Unbounded_String) with
       Pre =>
       (Workshop <= PlayerShip.Modules.Last_Index and
        RecipeIndex /= Null_Unbounded_String);
+-- ****
 
 end Crafts;

@@ -37,11 +37,17 @@ with Config; use Config;
 
 package body Combat is
 
+-- ****iv* Combat/FactionName
+-- SOURCE
    FactionName: Unbounded_String;
+-- ****
 
+-- ****if* Combat/StartCombat
+-- SOURCE
    function StartCombat
      (EnemyIndex: Unbounded_String; NewCombat: Boolean := True)
       return Boolean is
+-- ****
       EnemyShip: ShipRecord;
       function CountPerception(Spotter, Spotted: ShipRecord) return Natural is
          Result: Natural := 0;
@@ -170,7 +176,10 @@ package body Combat is
       return True;
    end StartCombat;
 
+-- ****if* Combat/CombatTurn
+-- SOURCE
    procedure CombatTurn is
+-- ****
       AccuracyBonus, EvadeBonus: Integer := 0;
       PilotIndex, EngineerIndex, EnemyWeaponIndex, EnemyAmmoIndex,
       EnemyPilotIndex, AmmoIndex2: Natural := 0;

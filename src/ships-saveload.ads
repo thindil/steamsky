@@ -19,9 +19,17 @@ with DOM.Core; use DOM.Core;
 
 package Ships.SaveLoad is
 
-   -- Save player ship to file
+-- ****f* Ships.SaveLoad/SavePlayerShip
+-- FUNCTION
+-- Save player ship to file
+-- SOURCE
    procedure SavePlayerShip(SaveData: Document; MainNode: DOM.Core.Element);
-   -- Load saved player ship from file
+-- ****
+-- ****f* Ships.SaveLoad/LoadPlayerShip
+-- FUNCTION
+-- Load saved player ship from file
+-- SOURCE
    procedure LoadPlayerShip(SaveData: Document);
+-- ****
 
 end Ships.SaveLoad;

@@ -17,19 +17,43 @@
 
 package Ships.Movement is
 
-   -- Move player ship
+-- ****f* Ships.Movement/MoveShip
+-- FUNCTION
+-- Move player ship
+-- SOURCE
    function MoveShip
      (X, Y: Integer; Message: in out Unbounded_String) return Natural;
-   -- Dock/Undock ship at base, returns empty string if all ok otherwise error message
+-- ****
+-- ****f* Ships.Movement/DockShip
+-- FUNCTION
+-- Dock/Undock ship at base, returns empty string if all ok otherwise error message
+-- SOURCE
    function DockShip(Docking: Boolean) return String;
+-- ****
+-- ****f* Ships.Movement/ChangeShipSpeed
+-- FUNCTION
 -- Change speed of ship, returns empty string if all ok otherwise error message
+-- SOURCE
    function ChangeShipSpeed(SpeedValue: ShipSpeed) return String;
-   -- Return real ship speed in meters per minute
+-- ****
+-- ****f* Ships.Movement/RealSpeed
+-- FUNCTION
+-- Return real ship speed in meters per minute
+-- SOURCE
    function RealSpeed
      (Ship: ShipRecord; InfoOnly: Boolean := False) return Natural;
-   -- Return fuel needed by player ship to travel
+-- ****
+-- ****f* Ships.Movement/CountFuelNeeded
+-- FUNCTION
+-- Return fuel needed by player ship to travel
+-- SOURCE
    function CountFuelNeeded return Integer;
-   -- Use fuel when ship wait in place
+-- ****
+-- ****f* Ships.Movement/WaitInPlace
+-- FUNCTION
+-- Use fuel when ship wait in place
+-- SOURCE
    procedure WaitInPlace(Minutes: Positive);
+-- ****
 
 end Ships.Movement;

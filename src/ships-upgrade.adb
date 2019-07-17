@@ -24,7 +24,10 @@ with Config; use Config;
 
 package body Ships.Upgrade is
 
+-- ****if* Ships.Upgrade/StartUpgrading
+-- SOURCE
    procedure StartUpgrading(ModuleIndex, UpgradeType: Positive) is
+-- ****
       MaxValue: Natural;
       UpgradeProgress: Positive;
       UpgradeAction: ShipUpgrade;
@@ -226,7 +229,10 @@ package body Ships.Upgrade is
          OrderMessage);
    end StartUpgrading;
 
+-- ****if* Ships.Upgrade/UpgradeShip
+-- SOURCE
    procedure UpgradeShip(Minutes: Positive) is
+-- ****
       ResultAmount, UpgradePoints, WorkerIndex, UpgradeMaterial,
       UpgradeProgress, UpgradeTools, MaterialCost, MaxValue: Natural := 0;
       UpgradeValue: Positive;

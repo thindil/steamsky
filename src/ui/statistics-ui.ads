@@ -19,14 +19,30 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Statistics.UI is
 
-   -- Hide stats and show sky map or main menu
+-- ****f* Statistics.UI/HideStatistics;
+-- FUNCTION
+-- Hide stats and show sky map or main menu
+-- SOURCE
    procedure HideStatistics;
-   -- Create infterace for show game statistics
+-- ****
+-- ****f* Statistics.UI/CreateStatsUI
+-- FUNCTION
+-- Create infterace for show game statistics
+-- SOURCE
    procedure CreateStatsUI(NewBuilder: Gtkada_Builder);
-   -- Show interface for show game statistics
+-- ****
+-- ****f* Statistics.UI/ShowStatsUI;
+-- FUNCTION
+-- Show interface for show game statistics
+-- SOURCE
    procedure ShowStatsUI;
-   -- Update label on character goal button
+-- ****
+-- ****f* Statistics.UI/UpdateGoalsButton
+-- FUNCTION
+-- Update label on character goal button
+-- SOURCE
    procedure UpdateGoalsButton(Message: String) with
       Pre => Message'Length > 0;
+-- ****
 
 end Statistics.UI;

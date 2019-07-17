@@ -21,7 +21,10 @@ with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 
 package Game is
 
-   -- Data for game date/time
+-- ****t* Game/Date_Record
+-- FUNCTION
+-- Data for game date/time
+-- SOURCE
    type Date_Record is record
       Year: Natural;
       Month: Natural;
@@ -29,111 +32,311 @@ package Game is
       Hour: Natural;
       Minutes: Natural;
    end record;
+-- ****
+
+-- ****v* Game/GameDate
+-- SOURCE
    GameDate: Date_Record;
+-- ****
+
+-- ****v* Game/GameVersion
+-- SOURCE
    GameVersion: constant String := "Version: 4.0";
+-- ****
+
+-- ****t* Game/UnboundedString_Container
+-- SOURCE
    package UnboundedString_Container is new Vectors(Positive,
       Unbounded_String);
+-- ****
+
+-- ****t* Game/Positive_Container
+-- SOURCE
    package Positive_Container is new Vectors(Positive, Positive);
+-- ****
+
+-- ****t* Game/Natural_Container
+-- SOURCE
    package Natural_Container is new Vectors(Positive, Natural);
+-- ****
+
+-- ****t* Game/Integer_Container
+-- SOURCE
    package Integer_Container is new Vectors(Positive, Integer);
-   -- Data for skills
+-- ****
+
+-- ****t* Game/Skill_Record
+-- FUNCTION
+-- Data for skills
+-- SOURCE
    type Skill_Record is record
       Name: Unbounded_String; -- Name of skill
       Attribute: Positive; -- Attribute used with that skill
       Description: Unbounded_String; -- Description of skill
       Tool: Unbounded_String; -- Item type used as tool for training that skill
    end record;
+-- ****
+
+-- ****t* Game/SkillsData_Container
+-- SOURCE
    package SkillsData_Container is new Vectors(Positive, Skill_Record);
-   -- Data for attributes
+-- ****
+
+-- ****t* Game/Attribute_Record
+-- FUNCTION
+-- Data for attributes
+-- SOURCE
    type Attribute_Record is record
       Name: Unbounded_String; -- Name of attribute
       Description: Unbounded_String; -- Description of attribute
    end record;
+-- ****
+
+-- ****t* Game/AttributesData_Container
+-- SOURCE
    package AttributesData_Container is new Vectors(Positive, Attribute_Record);
-   -- Contains data for all skills
+-- ****
+
+-- ****v* Game/Skills_List
+-- FUNCTION
+-- Contains data for all skills
+-- SOURCE
    Skills_List: SkillsData_Container.Vector;
-   -- Name of item type used as tool in repairing/upgrading ship
+-- ****
+-- ****v* Game/RepairTools
+-- FUNCTION
+-- Name of item type used as tool in repairing/upgrading ship
+-- SOURCE
    RepairTools: Unbounded_String;
-   -- Name of item type used as tool in cleaning ship
+-- ****
+-- ****v* Game/CleaningTools
+-- FUNCTION
+-- Name of item type used as tool in cleaning ship
+-- SOURCE
    CleaningTools: Unbounded_String;
-   -- Name of item type used as alchemy tools (mainly in deconstructing orders)
+-- ****
+-- ****v* Game/AlchemyTools
+-- FUNCTION
+-- Name of item type used as alchemy tools (mainly in deconstructing orders)
+-- SOURCE
    AlchemyTools: Unbounded_String;
-   -- Index of item used to create mobs corpses
+-- ****
+-- ****v* Game/CorpseIndex
+-- FUNCTION
+-- Index of item used to create mobs corpses
+-- SOURCE
    CorpseIndex: Unbounded_String;
-   -- Name of item type used for delivery missions
+-- ****
+-- ****v* Game/MissionItemsType
+-- FUNCTION
+-- Name of item type used for delivery missions
+-- SOURCE
    MissionItemsType: Unbounded_String;
-   -- Name of item type used as fuel for ships
+-- ****
+-- ****v* Game/FuelType
+-- FUNCTION
+-- Name of item type used as fuel for ships
+-- SOURCE
    FuelType: Unbounded_String;
-   -- Index of item used as money
+-- ****
+-- ****v* Game/MoneyIndex
+-- FUNCTION
+-- Index of item used as money
+-- SOURCE
    MoneyIndex: Unbounded_String;
-   -- Name of money (taken from MoneyIndex)
+-- ****
+-- ****v* Game/MoneyName
+-- FUNCTION
+-- Name of money (taken from MoneyIndex)
+-- SOURCE
    MoneyName: Unbounded_String;
-   -- Path to directory where are savegame and logs
+-- ****
+-- ****v* Game/SaveDirectory
+-- FUNCTION
+-- Path to directory where are savegame and logs
+-- SOURCE
    SaveDirectory: Unbounded_String :=
      To_Unbounded_String("data" & Dir_Separator & "saves" & Dir_Separator);
-   -- Path to directory where are game data files
+-- ****
+-- ****v* Game/DataDirectory
+-- FUNCTION
+-- Path to directory where are game data files
+-- SOURCE
    DataDirectory: Unbounded_String :=
      To_Unbounded_String("data" & Dir_Separator);
-   -- Word used in ships names for traders ships (for events)
+-- ****
+-- ****v* Game/TradersName
+-- FUNCTION
+-- Word used in ships names for traders ships (for events)
+-- SOURCE
    TradersName: Unbounded_String;
-   -- Contains data for all characters attributes
+-- ****
+-- ****v* Game/Attributes_List
+-- FUNCTION
+-- Contains data for all characters attributes
+-- SOURCE
    Attributes_List: AttributesData_Container.Vector;
-   -- Index of attribute used as bonus to character condition
+-- ****
+-- ****v* Game/ConditionIndex
+-- FUNCTION
+-- Index of attribute used as bonus to character condition
+-- SOURCE
    ConditionIndex: Positive;
-   -- Index of attribute used to count max character encumbrance
+-- ****
+-- ****v* Game/StrengthIndex
+-- FUNCTION
+-- Index of attribute used to count max character encumbrance
+-- SOURCE
    StrengthIndex: Positive;
-   -- Index of skill used to piloting ship
+-- ****
+-- ****v* Game/PilotingSkill
+-- FUNCTION
+-- Index of skill used to piloting ship
+-- SOURCE
    PilotingSkill: Positive;
-   -- Index of skill used by engineer on ship
+-- ****
+-- ****v* Game/EngineeringSkill
+-- FUNCTION
+-- Index of skill used by engineer on ship
+-- SOURCE
    EngineeringSkill: Positive;
-   -- Index of skill used by gunners
+-- ****
+-- ****v* Game/GunnerySkill
+-- FUNCTION
+-- Index of skill used by gunners
+-- SOURCE
    GunnerySkill: Positive;
-   -- Index of skill used for talk in bases or with other ships
+-- ****
+-- ****v* Game/TalkingSkill
+-- FUNCTION
+-- Index of skill used for talk in bases or with other ships
+-- SOURCE
    TalkingSkill: Positive;
-   -- Index of skill used for spoting
+-- ****
+-- ****v* Game/PerceptionSkill
+-- FUNCTION
+-- Index of skill used for spoting
+-- SOURCE
    PerceptionSkill: Positive;
-   -- Index of skill used for dodge in character's combat
+-- ****
+-- ****v* Game/DodgeSkill
+-- FUNCTION
+-- Index of skill used for dodge in character's combat
+-- SOURCE
    DodgeSkill: Positive;
-   -- Index of skill used for unarmed attacks in character's combat
+-- ****
+-- ****v* Game/UnarmedSkill
+-- FUNCTION
+-- Index of skill used for unarmed attacks in character's combat
+-- SOURCE
    UnarmedSkill: Positive;
-   -- Name of item type used as characters head armor
+-- ****
+-- ****v* Game/HeadArmor
+-- FUNCTION
+-- Name of item type used as characters head armor
+-- SOURCE
    HeadArmor: Unbounded_String;
-   -- Name of item type used as characters torso armor
+-- ****
+-- ****v* Game/ChestArmor
+-- FUNCTION
+-- Name of item type used as characters torso armor
+-- SOURCE
    ChestArmor: Unbounded_String;
-   -- Name of item type used as characters arms armor
+-- ****
+-- ****v* Game/ArmsArmor
+-- FUNCTION
+-- Name of item type used as characters arms armor
+-- SOURCE
    ArmsArmor: Unbounded_String;
-   -- Name of item type used as characters legs armor
+-- ****
+-- ****v* Game/LegsArmor
+-- FUNCTION
+-- Name of item type used as characters legs armor
+-- SOURCE
    LegsArmor: Unbounded_String;
-   -- Name of item type used as characters shield
+-- ****
+-- ****v* Game/ShieldType
+-- FUNCTION
+-- Name of item type used as characters shield
+-- SOURCE
    ShieldType: Unbounded_String;
-   -- Name of item type used as characters weapon
+-- ****
+-- ****v* Game/WeaponType
+-- FUNCTION
+-- Name of item type used as characters weapon
+-- SOURCE
    WeaponType: Unbounded_String;
-   -- Path to directory where documentation is
+-- ****
+-- ****v* Game/DocDirectory
+-- FUNCTION
+-- Path to directory where documentation is
+-- SOURCE
    DocDirectory: Unbounded_String :=
      To_Unbounded_String("doc" & Dir_Separator);
-   -- Path to directory where are game modifications
+-- ****
+-- ****v* Game/ModsDirectory
+-- FUNCTION
+-- Path to directory where are game modifications
+-- SOURCE
    ModsDirectory: Unbounded_String :=
      To_Unbounded_String("data" & Dir_Separator & "mods" & Dir_Separator);
-   -- Index of career selected by player during starting game
+-- ****
+-- ****v* Game/PlayerCareer
+-- FUNCTION
+-- Index of career selected by player during starting game
+-- SOURCE
    PlayerCareer: Unbounded_String;
-   -- Path to directory where are ui themes
+-- ****
+-- ****v* Game/ThemesDirectory
+-- FUNCTION
+-- Path to directory where are ui themes
+-- SOURCE
    ThemesDirectory: Unbounded_String :=
      To_Unbounded_String("data" & Dir_Separator & "themes" & Dir_Separator);
-   -- Possible actions to do when loading game data
+-- ****
+-- ****t* Game/DataAction
+-- FUNCTION
+-- Possible actions to do when loading game data
+-- SOURCE
    type DataAction is (ADD, UPDATE, REMOVE);
-   -- Raised when error occurs during loading any game data
+-- ****
+-- ****v* Game/Data_Loading_Error
+-- FUNCTION
+-- Raised when error occurs during loading any game data
+-- SOURCE
    Data_Loading_Error: exception;
+-- ****
 
-   -- Start new game: create map, place ship, crew, etc
+-- ****f* Game/NewGame;
+-- FUNCTION
+-- Start new game: create map, place ship, crew, etc
+-- SOURCE
    procedure NewGame;
-   -- Game ticks (update time, crew, ship, etc)
+-- ****
+-- ****f* Game/UpdateGame
+-- FUNCTION
+-- Game ticks (update time, crew, ship, etc)
+-- SOURCE
    procedure UpdateGame(Minutes: Positive; InCombat: Boolean := False);
-   -- Save (or not) game and clear all temporary data
+-- ****
+-- ****f* Game/EndGame
+-- FUNCTION
+-- Save (or not) game and clear all temporary data
+-- SOURCE
    procedure EndGame(Save: Boolean);
-   -- Return vector index of selected skill
+-- ****
+-- ****f* Game/FindSkillIndex
+-- FUNCTION
+-- Return vector index of selected skill
+-- SOURCE
    function FindSkillIndex(SkillName: Unbounded_String) return Natural with
       Pre => SkillName /= Null_Unbounded_String;
-      -- Load game data from files
+-- ****
+-- ****f* Game/LoadGameData
+-- FUNCTION
+-- Load game data from files
+-- SOURCE
    function LoadGameData return String;
+-- ****
 
 end Game;
