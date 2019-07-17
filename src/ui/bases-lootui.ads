@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,8 +19,9 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Bases.LootUI is
 
-   procedure CreateBasesLootUI
-     (NewBuilder: Gtkada_Builder); -- Create infterace for looting bases
-   procedure ShowLootUI; -- Show interface for looting bases
+   -- Create infterace for looting bases
+   procedure CreateBasesLootUI(NewBuilder: Gtkada_Builder);
+   -- Show interface for looting bases
+   procedure ShowLootUI;
 
 end Bases.LootUI;

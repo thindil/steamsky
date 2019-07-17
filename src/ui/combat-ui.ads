@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,8 +19,9 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Combat.UI is
 
-   procedure CreateCombatUI
-     (NewBuilder: Gtkada_Builder); -- Create combat user interface
-   procedure ShowCombatUI(NewCombat: Boolean := True); -- Show combat interface
+   -- Create combat user interface
+   procedure CreateCombatUI(NewBuilder: Gtkada_Builder);
+   -- Show combat interface
+   procedure ShowCombatUI(NewCombat: Boolean := True);
 
 end Combat.UI;

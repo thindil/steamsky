@@ -20,14 +20,17 @@ with Ada.Exceptions; use Ada.Exceptions;
 
 package MainMenu is
 
-   procedure CreateMainMenu; -- Create main menu and show it
+   -- Create main menu and show it
+   procedure CreateMainMenu;
+   -- Update label on character goal button
    procedure UpdateGoalButton(Message: String) with
-      Pre => Message'Length > 0; -- Update label on character goal button
-   procedure ShowMainMenu; -- Show main menu window
+      Pre => Message'Length > 0;
+      -- Show main menu window
+   procedure ShowMainMenu;
+   -- Save data exception to file
    procedure SaveException
-     (An_Exception: Exception_Occurrence;
-      PrintToTerminal: Boolean); -- Save data exception to file
-   procedure On_Exception
-     (An_Exception: Exception_Occurrence); -- Handle GUI exceptions
+     (An_Exception: Exception_Occurrence; PrintToTerminal: Boolean);
+   -- Handle GUI exceptions
+   procedure On_Exception(An_Exception: Exception_Occurrence);
 
 end MainMenu;

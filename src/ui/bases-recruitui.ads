@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,8 +19,9 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Bases.RecruitUI is
 
-   procedure CreateRecruitUI
-     (NewBuilder: Gtkada_Builder); -- Create infterace for recruit new crew members
-   procedure ShowRecruitUI; -- Show interface for recruit new crew members
+   -- Create infterace for recruit new crew members
+   procedure CreateRecruitUI(NewBuilder: Gtkada_Builder);
+   -- Show interface for recruit new crew members
+   procedure ShowRecruitUI;
 
 end Bases.RecruitUI;

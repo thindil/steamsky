@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,8 +19,9 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Events.UI is
 
-   procedure CreateEventsUI
-     (NewBuilder: Gtkada_Builder); -- Create infterace for show known events
-   procedure ShowEventsUI; -- Show interface for show known events
+   -- Create infterace for show known events
+   procedure CreateEventsUI(NewBuilder: Gtkada_Builder);
+   -- Show interface for show known events
+   procedure ShowEventsUI;
 
 end Events.UI;

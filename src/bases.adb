@@ -105,9 +105,10 @@ package body Bases is
       end if;
    end CountPrice;
 
+   -- based on name generator from libtcod
    function GenerateBaseName
      (FactionIndex: Unbounded_String)
-      return Unbounded_String is -- based on name generator from libtcod
+      return Unbounded_String is
       NewName: Unbounded_String;
    begin
       NewName := Null_Unbounded_String;

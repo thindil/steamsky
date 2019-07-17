@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,11 +19,11 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package GameOptions is
 
-   procedure CreateGameOptions
-     (NewBuilder: Gtkada_Builder); -- Create infterace for game options
-   procedure ShowGameOptions; -- Show interface for game options
-   procedure CloseOptions
-     (Object: access Gtkada_Builder_Record'
-        Class); -- Close options, save them and back to sky map view
+   -- Create infterace for game options
+   procedure CreateGameOptions(NewBuilder: Gtkada_Builder);
+   -- Show interface for game options
+   procedure ShowGameOptions;
+   -- Close options, save them and back to sky map view
+   procedure CloseOptions(Object: access Gtkada_Builder_Record'Class);
 
 end GameOptions;

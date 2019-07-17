@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,8 +19,9 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Trades.UI is
 
-   procedure CreateTradeUI
-     (NewBuilder: Gtkada_Builder); -- Create infterace for trades
-   procedure ShowTradeUI; -- Show interface for trades
+   -- Create infterace for trades
+   procedure CreateTradeUI(NewBuilder: Gtkada_Builder);
+   -- Show interface for trades
+   procedure ShowTradeUI;
 
 end Trades.UI;

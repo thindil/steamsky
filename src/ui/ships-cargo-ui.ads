@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,8 +19,9 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Ships.Cargo.UI is
 
-   procedure CreateCargoUI
-     (NewBuilder: Gtkada_Builder); -- Create infterace for show player ship cargo
-   procedure ShowCargoUI; -- Show interface for show player ship cargo
+   -- Create infterace for show player ship cargo
+   procedure CreateCargoUI(NewBuilder: Gtkada_Builder);
+   -- Show interface for show player ship cargo
+   procedure ShowCargoUI;
 
 end Ships.Cargo.UI;

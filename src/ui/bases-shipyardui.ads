@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,8 +19,9 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Bases.ShipyardUI is
 
-   procedure CreateBasesShipyardUI
-     (NewBuilder: Gtkada_Builder); -- Create infterace for installing/remove modules in bases
-   procedure ShowShipyardUI; -- Show interface for installing/remove modules in bases
+   -- Create infterace for installing/remove modules in bases
+   procedure CreateBasesShipyardUI(NewBuilder: Gtkada_Builder);
+   -- Show interface for installing/remove modules in bases
+   procedure ShowShipyardUI;
 
 end Bases.ShipyardUI;

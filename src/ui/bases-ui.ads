@@ -1,4 +1,4 @@
---    Copyright 2018 Bartek thindil Jasicki
+--    Copyright 2018-2019 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,10 +19,13 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Bases.UI is
 
-   procedure CreateBasesUI
-     (NewBuilder: Gtkada_Builder); -- Create infterace for various bases options
-   procedure ShowBuyRecipesUI; -- Show interface for buying crafting recipes
-   procedure ShowRepairUI; -- Show interface for buying ship repairs in bases
-   procedure ShowHealUI; -- Show interface for buying crew members healing in bases
+   -- Create infterace for various bases options
+   procedure CreateBasesUI(NewBuilder: Gtkada_Builder);
+   -- Show interface for buying crafting recipes
+   procedure ShowBuyRecipesUI;
+   -- Show interface for buying ship repairs in bases
+   procedure ShowRepairUI;
+   -- Show interface for buying crew members healing in bases
+   procedure ShowHealUI;
 
 end Bases.UI;
