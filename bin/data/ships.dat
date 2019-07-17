@@ -2946,7 +2946,7 @@ during combat. -->
   <module index="1"/>
   <module index="25"/>
   <module index="3"/>
-  <module amount="4" index="4"/>
+  <module amount="4" index="297"/>
   <module index="5"/>
   <module index="6"/>
   <module amount="2" index="7"/>
@@ -2966,7 +2966,7 @@ during combat. -->
   <recipe index="20"/>
   <member index="77"/>
   <member index="78"/>
-  <member index="79"/>
+  <member amount="5" index="79"/>
  </ship>
  <ship index="165" name="Drones Player Ship" owner="DRONES">
   <module index="1"/>
@@ -3083,7 +3083,7 @@ during combat. -->
   <module index="1"/>
   <module index="25"/>
   <module index="3"/>
-  <module amount="5" index="4"/>
+  <module amount="5" index="297"/>
   <module index="5"/>
   <module index="6"/>
   <module index="7"/>
@@ -3103,7 +3103,7 @@ during combat. -->
   <recipe index="20"/>
   <member index="77"/>
   <member index="78"/>
-  <member amount="2" index="79"/>
+  <member amount="7" index="79"/>
  </ship>
  <ship index="170" name="Drones Hunter Player Ship" owner="DRONES">
   <module index="1"/>
