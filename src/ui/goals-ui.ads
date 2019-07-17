@@ -17,9 +17,17 @@
 
 package Goals.UI is
 
-   -- Create goals menu
+-- ****f* Goals.UI/CreateGoalsMenu;
+-- FUNCTION
+-- Create goals menu
+-- SOURCE
    procedure CreateGoalsMenu;
-   -- Show goals selection menu to player
+-- ****
+-- ****f* Goals.UI/ShowGoalsMenu
+-- FUNCTION
+-- Show goals selection menu to player
+-- SOURCE
    procedure ShowGoalsMenu(InMainMenu: Boolean := True);
+-- ****
 
 end Goals.UI;

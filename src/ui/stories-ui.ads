@@ -19,9 +19,17 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Stories.UI is
 
-   -- Create stories ui
+-- ****f* Stories.UI/CreateStoriesUI
+-- FUNCTION
+-- Create stories ui
+-- SOURCE
    procedure CreateStoriesUI(NewBuilder: Gtkada_Builder);
-   -- Show stories informations to player
+-- ****
+-- ****f* Stories.UI/ShowStoriesUI;
+-- FUNCTION
+-- Show stories informations to player
+-- SOURCE
    procedure ShowStoriesUI;
+-- ****
 
 end Stories.UI;

@@ -21,13 +21,25 @@ with Crew; use Crew;
 
 package Statistics is
 
-   -- Data for finished goals, destroyed ships and killed mobs
+-- ****t* Statistics/Statistics_Data
+-- FUNCTION
+-- Data for finished goals, destroyed ships and killed mobs
+-- SOURCE
    type Statistics_Data is record
       Index: Unbounded_String; -- Index of goal or ship name or name of fraction of killed mobs
       Amount: Positive; -- Amount of finished goals or ships or mobs of that type
    end record;
+-- ****
+
+-- ****t* Statistics/Statistics_Container
+-- SOURCE
    package Statistics_Container is new Vectors(Positive, Statistics_Data);
-   -- Data for game statistics
+-- ****
+
+-- ****t* Statistics/GameStats_Data
+-- FUNCTION
+-- Data for game statistics
+-- SOURCE
    type GameStats_Data is record
       DestroyedShips: Statistics_Container
         .Vector; -- Data for all destroyed ships by player
@@ -45,28 +57,61 @@ package Statistics is
         .Vector; -- Data for all mobs killed by player
       Points: Natural; -- Amount of gained points
    end record;
-   -- Game statistics
+-- ****
+-- ****v* Statistics/GameStats
+-- FUNCTION
+-- Game statistics
+-- SOURCE
    GameStats: GameStats_Data;
+-- ****
 
-   -- Add new destroyed ship to list
+-- ****f* Statistics/UpdateDestroyedShips
+-- FUNCTION
+-- Add new destroyed ship to list
+-- SOURCE
    procedure UpdateDestroyedShips(ShipName: Unbounded_String) with
       Pre => ShipName /= Null_Unbounded_String;
-      -- Clear game statistics
+-- ****
+-- ****f* Statistics/ClearGameStats;
+-- FUNCTION
+-- Clear game statistics
+-- SOURCE
    procedure ClearGameStats;
-   -- Add new finished goal to list
+-- ****
+-- ****f* Statistics/UpdateFinishedGoals
+-- FUNCTION
+-- Add new finished goal to list
+-- SOURCE
    procedure UpdateFinishedGoals(Index: Unbounded_String) with
       Pre => Index /= Null_Unbounded_String;
-      -- Add new finished mission to list
+-- ****
+-- ****f* Statistics/UpdateFinishedMissions
+-- FUNCTION
+-- Add new finished mission to list
+-- SOURCE
    procedure UpdateFinishedMissions(MType: Unbounded_String) with
       Pre => MType /= Null_Unbounded_String;
-      -- Add new finished crafting order to list
+-- ****
+-- ****f* Statistics/UpdateCraftingOrders
+-- FUNCTION
+-- Add new finished crafting order to list
+-- SOURCE
    procedure UpdateCraftingOrders(Index: Unbounded_String) with
       Pre => Index /= Null_Unbounded_String;
-      -- Add new killed mob to list
+-- ****
+-- ****f* Statistics/UpdateKilledMobs
+-- FUNCTION
+-- Add new killed mob to list
+-- SOURCE
    procedure UpdateKilledMobs
      (Mob: Member_Data; FractionName: Unbounded_String) with
       Pre => FractionName /= Null_Unbounded_String;
-      -- Get amount of gained points multiplied by difficulty bonus
+-- ****
+-- ****f* Statistics/GetGamePoints
+-- FUNCTION
+-- Get amount of gained points multiplied by difficulty bonus
+-- SOURCE
    function GetGamePoints return Natural;
+-- ****
 
 end Statistics;

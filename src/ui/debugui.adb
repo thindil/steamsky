@@ -46,10 +46,19 @@ with ShipModules; use ShipModules;
 
 package body DebugUI is
 
+-- ****iv* DebugUI/Builder
+-- SOURCE
    Builder: Gtkada_Builder;
+-- ****
+-- ****iv* DebugUI/Setting
+-- SOURCE
    Setting: Boolean;
+-- ****
 
+-- ****if* DebugUI/MoveShip
+-- SOURCE
    procedure MoveShip(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       PlayerShip.SkyX :=
         Integer(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjshipx"))));
@@ -58,7 +67,10 @@ package body DebugUI is
       ShowSkyMap;
    end MoveShip;
 
+-- ****if* DebugUI/UpdateShip
+-- SOURCE
    procedure UpdateShip(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       CrewList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Object, "crewlist"));
       CrewIter: Gtk_Tree_Iter;
@@ -90,14 +102,20 @@ package body DebugUI is
          Gdouble(PlayerShip.SkyY));
    end UpdateShip;
 
+-- ****if* DebugUI/UpdateCrew
+-- SOURCE
    procedure UpdateCrew(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       ComboBox: constant Gtk_Combo_Box :=
         Gtk_Combo_Box(Get_Object(Object, "cmbmember"));
    begin
       Set_Active(ComboBox, 0);
    end UpdateCrew;
 
+-- ****if* DebugUI/SetMemberStats
+-- SOURCE
    procedure SetMemberStats(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       Member: Member_Data;
       Iter: Gtk_Tree_Iter;
       List: Gtk_List_Store := Gtk_List_Store(Get_Object(Builder, "statslist"));
@@ -165,10 +183,13 @@ package body DebugUI is
       end if;
    end SetMemberStats;
 
+-- ****if* DebugUI/UpdateAttribute
+-- SOURCE
    function UpdateAttribute
      (Model: Gtk_Tree_Model; Path: Gtk_Tree_Path; Iter: Gtk_Tree_Iter)
       return Boolean is
       pragma Unreferenced(Path);
+-- ****
       MemberIndex: constant Positive :=
         Positive'Value
           (Get_Active_Id(Gtk_Combo_Box(Get_Object(Builder, "cmbmember"))));
@@ -180,10 +201,13 @@ package body DebugUI is
       return False;
    end UpdateAttribute;
 
+-- ****if* DebugUI/UpdateSkill
+-- SOURCE
    function UpdateSkill
      (Model: Gtk_Tree_Model; Path: Gtk_Tree_Path; Iter: Gtk_Tree_Iter)
       return Boolean is
       pragma Unreferenced(Path);
+-- ****
       MemberIndex: constant Positive :=
         Positive'Value
           (Get_Active_Id(Gtk_Combo_Box(Get_Object(Builder, "cmbmember"))));
@@ -202,7 +226,10 @@ package body DebugUI is
       return False;
    end UpdateSkill;
 
+-- ****if* DebugUI/UpdateMember
+-- SOURCE
    procedure UpdateMember(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       MemberIndex: constant Positive :=
         Positive'Value
           (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbmember"))));
@@ -226,7 +253,10 @@ package body DebugUI is
         (Gtk_List_Store(Get_Object(Object, "skillslist")), UpdateSkill'Access);
    end UpdateMember;
 
+-- ****if* DebugUI/UpdateCargoInfo
+-- SOURCE
    procedure UpdateCargoInfo(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       ComboBox: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Object(Object, "cmbcargoupdate"));
    begin
@@ -241,7 +271,10 @@ package body DebugUI is
       Set_Active(ComboBox, 0);
    end UpdateCargoInfo;
 
+-- ****if* DebugUI/ShowBaseInfo
+-- SOURCE
    procedure ShowBaseInfo(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       BaseName: constant Unbounded_String :=
         To_Unbounded_String
           (Get_Text(Gtk_GEntry(Get_Object(Object, "edtbase"))));
@@ -273,7 +306,10 @@ package body DebugUI is
       end loop;
    end ShowBaseInfo;
 
+-- ****if* DebugUI/ResetWorldUI
+-- SOURCE
    procedure ResetWorldUI is
+-- ****
       EventsCombo: constant Gtk_Widget :=
         Gtk_Widget(Get_Object(Builder, "cmbevents"));
    begin
@@ -364,7 +400,10 @@ package body DebugUI is
       end if;
    end ResetWorldUI;
 
+-- ****if* DebugUI/RefreshUI
+-- SOURCE
    procedure RefreshUI(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       UpdateShip(Object);
       UpdateCrew(Object);
@@ -373,10 +412,13 @@ package body DebugUI is
       ResetWorldUI;
    end RefreshUI;
 
+-- ****if* DebugUI/ChangeStatLevel
+-- SOURCE
    procedure ChangeStatLevel
      (Self: access Gtk_Cell_Renderer_Text_Record'Class; Path: UTF8_String;
       New_Text: UTF8_String) is
       pragma Unreferenced(Self);
+-- ****
       StatsList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "statslist"));
       NewValue: Gint;
@@ -393,10 +435,13 @@ package body DebugUI is
          null;
    end ChangeStatLevel;
 
+-- ****if* DebugUI/ChangeSkillLevel
+-- SOURCE
    procedure ChangeSkillLevel
      (Self: access Gtk_Cell_Renderer_Text_Record'Class; Path: UTF8_String;
       New_Text: UTF8_String) is
       pragma Unreferenced(Self);
+-- ****
       SkillsList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "skillslist"));
       NewValue: Gint;
@@ -413,7 +458,10 @@ package body DebugUI is
          null;
    end ChangeSkillLevel;
 
+-- ****if* DebugUI/AddSkill
+-- SOURCE
    procedure AddSkill(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       SkillsIter: Gtk_Tree_Iter;
       SkillsList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "skillslist"));
@@ -432,7 +480,10 @@ package body DebugUI is
       end if;
    end AddSkill;
 
+-- ****if* DebugUI/SetCargoAmount
+-- SOURCE
    procedure SetCargoAmount(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       Item: InventoryData;
    begin
       if Setting then
@@ -448,7 +499,10 @@ package body DebugUI is
          Gdouble(Item.Amount));
    end SetCargoAmount;
 
+-- ****if* DebugUI/AddCargo
+-- SOURCE
    procedure AddCargo(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       ItemIndex: Unbounded_String := Null_Unbounded_String;
       ItemName: constant Unbounded_String :=
         To_Unbounded_String
@@ -470,7 +524,10 @@ package body DebugUI is
       UpdateCargoInfo(Object);
    end AddCargo;
 
+-- ****if* DebugUI/UpdateShipCargo
+-- SOURCE
    procedure UpdateShipCargo(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       CargoIndex: constant Positive :=
         Positive'Value
           (Get_Active_Id
@@ -486,7 +543,10 @@ package body DebugUI is
          CargoIndex => CargoIndex);
    end UpdateShipCargo;
 
+-- ****if* DebugUI/UpdateBase
+-- SOURCE
    procedure UpdateBase(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       BaseName: constant Unbounded_String :=
         To_Unbounded_String
           (Get_Text(Gtk_GEntry(Get_Object(Object, "edtbase"))));
@@ -525,7 +585,10 @@ package body DebugUI is
       end loop;
    end UpdateBase;
 
+-- ****if* DebugUI/AddShip
+-- SOURCE
    procedure AddShip(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       ShipName: constant Unbounded_String :=
         To_Unbounded_String
           (Get_Text(Gtk_GEntry(Get_Object(Object, "edtship"))));
@@ -568,7 +631,10 @@ package body DebugUI is
       end loop;
    end AddShip;
 
+-- ****if* DebugUI/ShowItemEvent
+-- SOURCE
    procedure ShowItemEvent(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       if Get_Active(Gtk_Combo_Box_Text(Get_Object(Object, "cmbbaseevent"))) =
         1 then
@@ -580,7 +646,10 @@ package body DebugUI is
       end if;
    end ShowItemEvent;
 
+-- ****if* DebugUI/AddEvent
+-- SOURCE
    procedure AddEvent(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       BaseName: constant Unbounded_String :=
         To_Unbounded_String
           (Get_Text(Gtk_GEntry(Get_Object(Object, "edteventbase"))));
@@ -640,7 +709,10 @@ package body DebugUI is
       end loop;
    end AddEvent;
 
+-- ****if* DebugUI/DeleteEvent
+-- SOURCE
    procedure DeleteEvent(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       Events_List.Delete
         (Index =>
@@ -650,13 +722,19 @@ package body DebugUI is
       ResetWorldUI;
    end DeleteEvent;
 
+-- ****if* DebugUI/Save_Game
+-- SOURCE
    procedure Save_Game(Object: access Gtkada_Builder_Record'Class) is
       pragma Unreferenced(Object);
+-- ****
    begin
       SaveGame(True);
    end Save_Game;
 
+-- ****if* DebugUI/SetModuleStats
+-- SOURCE
    procedure SetModuleStats(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       Module: ModuleData;
    begin
       if Setting then
@@ -683,7 +761,10 @@ package body DebugUI is
          Gdouble(Module.UpgradeProgress));
    end SetModuleStats;
 
+-- ****if* DebugUI/UpdateModule
+-- SOURCE
    procedure UpdateModule(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       ModuleIndex: constant Positive :=
         Positive'Value
           (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbmodules"))));
@@ -711,7 +792,10 @@ package body DebugUI is
           (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjmoduleupgrade"))));
    end UpdateModule;
 
+-- ****if* DebugUI/CreateDebugUI
+-- SOURCE
    procedure CreateDebugUI is
+-- ****
       Error: aliased GError;
    begin
       if Builder /= null then
@@ -804,7 +888,10 @@ package body DebugUI is
       end;
    end CreateDebugUI;
 
+-- ****if* DebugUI/ShowDebugUI
+-- SOURCE
    procedure ShowDebugUI is
+-- ****
    begin
       RefreshUI(Builder);
       Show_All(Gtk_Widget(Get_Object(Builder, "debugwindow")));

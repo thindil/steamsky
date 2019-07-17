@@ -53,28 +53,49 @@ with Factions; use Factions;
 
 package body Combat.UI is
 
+-- ****iv* Combat.UI/Builder
+-- SOURCE
    Builder: Gtkada_Builder;
+-- ****
+-- ****iv* Combat.UI/PilotOrders
+-- SOURCE
    PilotOrders: constant array(1 .. 4) of Unbounded_String :=
      (To_Unbounded_String("Go closer"), To_Unbounded_String("Keep distance"),
       To_Unbounded_String("Evade"), To_Unbounded_String("Escape"));
+-- ****
+-- ****iv* Combat.UI/EngineerOrders
+-- SOURCE
    EngineerOrders: constant array(1 .. 4) of Unbounded_String :=
      (To_Unbounded_String("All stop"), To_Unbounded_String("Quarter speed"),
       To_Unbounded_String("Half speed"), To_Unbounded_String("Full speed"));
+-- ****
+-- ****iv* Combat.UI/GunnerOrders
+-- SOURCE
    GunnerOrders: constant array(1 .. 6) of Unbounded_String :=
      (To_Unbounded_String("Don't shoot"), To_Unbounded_String("Precise fire"),
       To_Unbounded_String("Fire at will"),
       To_Unbounded_String("Aim for their engine"),
       To_Unbounded_String("Aim for their weapon"),
       To_Unbounded_String("Aim for their hull"));
+-- ****
 
+-- ****if* Combat.UI/RefreshCombatUI;
+-- SOURCE
    procedure RefreshCombatUI;
+-- ****
 
+-- ****if* Combat.UI/RemoveButton
+-- SOURCE
    procedure RemoveButton(Widget: not null access Gtk_Widget_Record'Class) is
+-- ****
    begin
       Destroy(Widget);
    end RemoveButton;
 
+-- ****if* Combat.UI/SetBoardingOrder
+-- SOURCE
    procedure SetBoardingOrder(Self: access Gtk_Toggle_Button_Record'Class) is
+-- ****
       MemberName: Unbounded_String;
       OrderIndex: Natural := 0;
    begin
@@ -98,8 +119,11 @@ package body Combat.UI is
       RefreshCombatUI;
    end SetBoardingOrder;
 
+-- ****if* Combat.UI/SetBoardingParty
+-- SOURCE
    procedure SetBoardingParty
      (Widget: not null access Gtk_Widget_Record'Class) is
+-- ****
       MemberName: Unbounded_String;
    begin
       MemberName := To_Unbounded_String(Get_Label(Gtk_Button(Widget)));
@@ -113,7 +137,10 @@ package body Combat.UI is
       Show_All(Widget);
    end SetBoardingParty;
 
+-- ****if* Combat.UI/UpdateMessages
+-- SOURCE
    procedure UpdateMessages is
+-- ****
       MessagesBuffer: constant Gtk_Text_Buffer :=
         Gtk_Text_Buffer(Get_Object(Builder, "txtmessages"));
       LoopStart: Integer := 0 - MessagesAmount;
@@ -188,7 +215,10 @@ package body Combat.UI is
       end if;
    end UpdateMessages;
 
+-- ****if* Combat.UI/RefreshCombatUI
+-- SOURCE
    procedure RefreshCombatUI is
+-- ****
       DamagePercent: Gint;
       EnemyInfo, ModuleName: Unbounded_String;
       ButtonBox: constant Gtk_Container :=
@@ -471,7 +501,10 @@ package body Combat.UI is
       UpdateHeader;
    end RefreshCombatUI;
 
+-- ****if* Combat.UI/ShowCombatUI
+-- SOURCE
    procedure ShowCombatUI(NewCombat: Boolean := True) is
+-- ****
       CombatStarted: Boolean;
       MenuArray: constant array(1 .. 9) of Unbounded_String :=
         (To_Unbounded_String("menuorders"),
@@ -600,7 +633,10 @@ package body Combat.UI is
       RefreshCombatUI;
    end ShowCombatUI;
 
+-- ****if* Combat.UI/SetOrdersList
+-- SOURCE
    procedure SetOrdersList(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       CrewIter, NamesIter: Gtk_Tree_Iter;
       CrewModel: Gtk_Tree_Model;
       Position: Natural;
@@ -729,9 +765,12 @@ package body Combat.UI is
       end;
    end SetOrdersList;
 
+-- ****if* Combat.UI/GiveCombatOrders
+-- SOURCE
    procedure GiveCombatOrders
      (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
       Path_String: UTF8_String; New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
+-- ****
       Model: constant Glib.Types.GType_Interface :=
         Get_Property(Self, Gtk.Cell_Renderer_Combo.Model_Property);
       OrdersList: constant Gtk_List_Store := -(Gtk_Tree_Model(Model));
@@ -804,7 +843,10 @@ package body Combat.UI is
       RefreshCombatUI;
    end GiveCombatOrders;
 
+-- ****if* Combat.UI/RefreshBoardingUI
+-- SOURCE
    procedure RefreshBoardingUI is
+-- ****
       OrderIndex: Positive := 1;
       OrdersList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "orders2"));
@@ -872,7 +914,10 @@ package body Combat.UI is
       end;
    end RefreshBoardingUI;
 
+-- ****if* Combat.UI/NextTurn
+-- SOURCE
    procedure NextTurn(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       CombatStack: constant Gtk_Stack :=
         Gtk_Stack(Get_Object(Object, "combatstack"));
    begin
@@ -904,9 +949,12 @@ package body Combat.UI is
       end if;
    end NextTurn;
 
+-- ****if* Combat.UI/GiveBoardingOrders
+-- SOURCE
    procedure GiveBoardingOrders
      (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
       Path_String: UTF8_String; New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
+-- ****
       OrdersList: Gtk_List_Store;
       Model: Glib.Types.GType_Interface;
       NewOrder: Integer;
@@ -925,7 +973,10 @@ package body Combat.UI is
       BoardingOrders(Positive'Value(Path_String) + 1) := NewOrder;
    end GiveBoardingOrders;
 
+-- ****if* Combat.UI/CreateCombatUI
+-- SOURCE
    procedure CreateCombatUI(NewBuilder: Gtkada_Builder) is
+-- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Set_Orders_List", SetOrdersList'Access);

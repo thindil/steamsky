@@ -38,7 +38,10 @@ with Config; use Config;
 
 package body Ships.UI.Handlers is
 
+-- ****if* Ships.UI.Handlers/ShowModuleInfo
+-- SOURCE
    procedure ShowModuleInfo(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       ModuleInfo: Unbounded_String;
       Module: ModuleData;
       MaxValue: Positive;
@@ -429,7 +432,10 @@ package body Ships.UI.Handlers is
       ShowModuleOptions;
    end ShowModuleInfo;
 
+-- ****if* Ships.UI.Handlers/ChangeShipName
+-- SOURCE
    procedure ChangeShipName(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       NewName: constant String :=
         Get_Text(Gtk_Entry(Get_Object(Object, "edtname")));
    begin
@@ -443,10 +449,13 @@ package body Ships.UI.Handlers is
       end if;
    end ChangeShipName;
 
+-- ****if* Ships.UI.Handlers/ChangeModuleName
+-- SOURCE
    procedure ChangeModuleName
      (Self: access Gtk_Cell_Renderer_Text_Record'Class; Path: UTF8_String;
       New_Text: UTF8_String) is
       pragma Unreferenced(Self);
+-- ****
       ModulesList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "moduleslist"));
    begin
@@ -458,7 +467,10 @@ package body Ships.UI.Handlers is
       Set(ModulesList, Get_Iter_From_String(ModulesList, Path), 0, New_Text);
    end ChangeModuleName;
 
+-- ****if* Ships.UI.Handlers/SetUpgrade
+-- SOURCE
    procedure SetUpgrade(User_Data: access GObject_Record'Class) is
+-- ****
    begin
       if User_Data = Get_Object(Builder, "btnupgradedur") then
          StartUpgrading(ModuleIndex, 1);
@@ -479,7 +491,10 @@ package body Ships.UI.Handlers is
          return;
    end SetUpgrade;
 
+-- ****if* Ships.UI.Handlers/StopUpgrading
+-- SOURCE
    procedure StopUpgrading(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       PlayerShip.UpgradeModule := 0;
       for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
@@ -494,7 +509,10 @@ package body Ships.UI.Handlers is
       ShowModuleInfo(Object);
    end StopUpgrading;
 
+-- ****if* Ships.UI.Handlers/SetRepair
+-- SOURCE
    procedure SetRepair(User_Data: access GObject_Record'Class) is
+-- ****
    begin
       if User_Data = Get_Object(Builder, "btnrepairfirst") then
          PlayerShip.RepairModule := ModuleIndex;
@@ -511,7 +529,10 @@ package body Ships.UI.Handlers is
       ShowModuleInfo(Builder);
    end SetRepair;
 
+-- ****if* Ships.UI.Handlers/Assign
+-- SOURCE
    procedure Assign(User_Data: access GObject_Record'Class) is
+-- ****
       AssignIndex: Positive;
    begin
       if User_Data = Get_Object(Builder, "btnassigncrew") then
@@ -584,7 +605,10 @@ package body Ships.UI.Handlers is
       ShowModuleInfo(Builder);
    end Assign;
 
+-- ****if* Ships.UI.Handlers/DisableEngine
+-- SOURCE
    procedure DisableEngine(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       CanDisable: Boolean := False;
    begin
       if not PlayerShip.Modules(ModuleIndex).Disabled then
@@ -619,7 +643,10 @@ package body Ships.UI.Handlers is
       ShowModuleInfo(Object);
    end DisableEngine;
 
+-- ****if* Ships.UI.Handlers/ToggleSearch
+-- SOURCE
    procedure ToggleSearch(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       ModulesTree: constant Gtk_Tree_View :=
         Gtk_Tree_View(Get_Object(Object, "treemodules"));
    begin

@@ -43,11 +43,19 @@ with Themes; use Themes;
 
 package body GameOptions is
 
+-- ****iv* GameOptions/Builder
+-- SOURCE
    Builder: Gtkada_Builder;
+-- ****
+-- ****it* GameOptions/Accel_Data
+-- SOURCE
    type Accel_Data is record
       AccelName: Unbounded_String;
       EntryName: Unbounded_String;
    end record;
+-- ****
+-- ****iv* GameOptions/Accels
+-- SOURCE
    Accels: constant array(Positive range <>) of Accel_Data :=
      (1 =>
         (To_Unbounded_String("<skymapwindow>/btnupleft"),
@@ -211,9 +219,16 @@ package body GameOptions is
       54 =>
         (To_Unbounded_String("<skymapwindow>/fullscreen"),
          To_Unbounded_String("edtfullscreen")));
+-- ****
+-- ****iv* GameOptions/Setting
+-- SOURCE
    Setting: Boolean := False;
+-- ****
 
+-- ****if* GameOptions/CloseOptions
+-- SOURCE
    procedure CloseOptions(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       GameSettings.AutoRest :=
         Get_State(Gtk_Switch(Get_Object(Object, "switchautorest")));
@@ -296,9 +311,12 @@ package body GameOptions is
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
    end CloseOptions;
 
+-- ****if* GameOptions/SetAccelerator
+-- SOURCE
    function SetAccelerator
      (Self: access Gtk_Widget_Record'Class; Event: Gdk.Event.Gdk_Event_Key)
       return Boolean is
+-- ****
       KeyMods: constant Gdk_Modifier_Type :=
         Event.State and Get_Default_Mod_Mask;
       Changed, Found: Boolean := False;
@@ -328,7 +346,10 @@ package body GameOptions is
       return False;
    end SetAccelerator;
 
+-- ****if* GameOptions/ResizeFont
+-- SOURCE
    procedure ResizeFont(User_Data: access GObject_Record'Class) is
+-- ****
    begin
       if Setting then
          return;
@@ -352,7 +373,10 @@ package body GameOptions is
       end if;
    end ResizeFont;
 
+-- ****if* GameOptions/ApplyTheme
+-- SOURCE
    procedure ApplyTheme(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       GameSettings.InterfaceTheme :=
         To_Unbounded_String
@@ -361,7 +385,10 @@ package body GameOptions is
       SetMapMoveButtons;
    end ApplyTheme;
 
+-- ****if* GameOptions/SetFontsSizes
+-- SOURCE
    procedure SetFontsSizes is
+-- ****
    begin
       Setting := True;
       Set_Value
@@ -376,16 +403,22 @@ package body GameOptions is
       Setting := False;
    end SetFontsSizes;
 
+-- ****if* GameOptions/SetDefaultFontSize
+-- SOURCE
    procedure SetDefaultFontSize(Object: access Gtkada_Builder_Record'Class) is
       pragma Unreferenced(Object);
+-- ****
    begin
       ResetFontsSizes;
       SetFontsSizes;
       SetFontSize(ALLFONTS);
    end SetDefaultFontSize;
 
+-- ****if* GameOptions/ToggleAnimationType
+-- SOURCE
    function ToggleAnimationType
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
+-- ****
    begin
       if Get_Active(Gtk_Switch(Get_Object(Builder, "switchanimations"))) then
          Show_All(Gtk_Widget(Get_Object(Object, "lblanimationstype")));
@@ -397,7 +430,10 @@ package body GameOptions is
       return False;
    end ToggleAnimationType;
 
+-- ****if* GameOptions/CreateGameOptions
+-- SOURCE
    procedure CreateGameOptions(NewBuilder: Gtkada_Builder) is
+-- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Close_Options", CloseOptions'Access);
@@ -439,7 +475,10 @@ package body GameOptions is
       end;
    end CreateGameOptions;
 
+-- ****if* GameOptions/ShowGameOptions
+-- SOURCE
    procedure ShowGameOptions is
+-- ****
       Key: Gtk_Accel_Key;
       Found: Boolean;
    begin

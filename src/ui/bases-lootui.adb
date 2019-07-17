@@ -40,10 +40,19 @@ with Utils.UI; use Utils.UI;
 
 package body Bases.LootUI is
 
+-- ****iv* Bases.LootUI/Builder
+-- SOURCE
    Builder: Gtkada_Builder;
+-- ****
+-- ****iv* Bases.LootUI/SettingTime
+-- SOURCE
    SettingTime: Boolean;
+-- ****
 
+-- ****if* Bases.LootUI/ShowItemInfo
+-- SOURCE
    procedure ShowItemInfo(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       ItemInfo, ProtoIndex: Unbounded_String;
       CargoIndex, BaseCargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
@@ -140,7 +149,10 @@ package body Bases.LootUI is
       end;
    end ShowItemInfo;
 
+-- ****if* Bases.LootUI/LootItem
+-- SOURCE
    procedure LootItem(User_Data: access GObject_Record'Class) is
+-- ****
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Amount: Positive;
@@ -228,7 +240,10 @@ package body Bases.LootUI is
       ShowLootUI;
    end LootItem;
 
+-- ****if* Bases.LootUI/SearchLoot
+-- SOURCE
    procedure SearchLoot(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       Refilter(Gtk_Tree_Model_Filter(Get_Object(Object, "lootfilter")));
       if N_Children
@@ -240,8 +255,11 @@ package body Bases.LootUI is
       end if;
    end SearchLoot;
 
+-- ****if* Bases.LootUI/VisibleLoot
+-- SOURCE
    function VisibleLoot
      (Model: Gtk_Tree_Model; Iter: Gtk_Tree_Iter) return Boolean is
+-- ****
       IType: constant Unbounded_String :=
         To_Unbounded_String
           (Get_Active_Text
@@ -272,7 +290,10 @@ package body Bases.LootUI is
       return False;
    end VisibleLoot;
 
+-- ****if* Bases.LootUI/CreateBasesLootUI
+-- SOURCE
    procedure CreateBasesLootUI(NewBuilder: Gtkada_Builder) is
+-- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
@@ -289,7 +310,10 @@ package body Bases.LootUI is
          VisibleLoot'Access);
    end CreateBasesLootUI;
 
+-- ****if* Bases.LootUI/ShowLootUI
+-- SOURCE
    procedure ShowLootUI is
+-- ****
       ItemsIter: Gtk_Tree_Iter;
       ItemsList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "itemslist2"));

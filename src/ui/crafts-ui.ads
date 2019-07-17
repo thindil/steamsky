@@ -19,9 +19,17 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Crafts.UI is
 
-   -- Create infterace for manufacturing
+-- ****f* Crafts.UI/CreateCraftsUI
+-- FUNCTION
+-- Create infterace for manufacturing
+-- SOURCE
    procedure CreateCraftsUI(NewBuilder: Gtkada_Builder);
-   -- Show interface for manufacturing
+-- ****
+-- ****f* Crafts.UI/ShowCraftsUI;
+-- FUNCTION
+-- Show interface for manufacturing
+-- SOURCE
    procedure ShowCraftsUI;
+-- ****
 
 end Crafts.UI;

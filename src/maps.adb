@@ -20,8 +20,11 @@ with Ships; use Ships;
 
 package body Maps is
 
+-- ****if* Maps/CountDistance
+-- SOURCE
    function CountDistance
      (DestinationX, DestinationY: Positive) return Natural is
+-- ****
       DiffX, DiffY: Natural;
       Distance: Float;
    begin
@@ -31,7 +34,10 @@ package body Maps is
       return Natural(Float'Floor(Distance));
    end CountDistance;
 
+-- ****if* Maps/NormalizeCoord
+-- SOURCE
    procedure NormalizeCoord(Coord: in out Integer; IsXAxis: Boolean := True) is
+-- ****
    begin
       if IsXAxis then
          if Coord < SkyMap'First(1) then

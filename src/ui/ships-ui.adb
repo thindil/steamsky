@@ -42,9 +42,15 @@ with Config; use Config;
 
 package body Ships.UI is
 
+-- ****iv* Ships.UI/SkillsListSet
+-- SOURCE
    SkillsListSet: Boolean := False;
+-- ****
 
+-- ****if* Ships.UI/ShowAssignMember
+-- SOURCE
    procedure ShowAssignMember is
+-- ****
       AssignCrewCombo: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Object(Builder, "cmbassigncrew"));
       Assigned: Boolean;
@@ -78,7 +84,10 @@ package body Ships.UI is
       Set_Active(AssignCrewCombo, 0);
    end ShowAssignMember;
 
+-- ****if* Ships.UI/ShowAssignAmmo
+-- SOURCE
    procedure ShowAssignAmmo is
+-- ****
       HaveAmmo: Boolean := False;
       AssignAmmoCombo: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Object(Builder, "cmbassignammo"));
@@ -109,7 +118,10 @@ package body Ships.UI is
       Set_Active(AssignAmmoCombo, 0);
    end ShowAssignAmmo;
 
+-- ****if* Ships.UI/ShowModuleOptions
+-- SOURCE
    procedure ShowModuleOptions is
+-- ****
       MaxValue: Positive;
       IsPassenger: Boolean := False;
       procedure ShowAssignSkill is
@@ -393,7 +405,10 @@ package body Ships.UI is
       end if;
    end ShowModuleOptions;
 
+-- ****if* Ships.UI/ShowShipInfo
+-- SOURCE
    procedure ShowShipInfo is
+-- ****
       ShipInfo, UpgradeInfo: Unbounded_String;
       UpgradePercent: Gdouble;
       MaxUpgrade: Integer;
@@ -545,7 +560,10 @@ package body Ships.UI is
         (Gtk_Label(Get_Object(Builder, "lblshipinfo")), To_String(ShipInfo));
    end ShowShipInfo;
 
+-- ****if* Ships.UI/CreateShipUI
+-- SOURCE
    procedure CreateShipUI(NewBuilder: Gtkada_Builder) is
+-- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Module_Info", ShowModuleInfo'Access);
@@ -564,7 +582,10 @@ package body Ships.UI is
          Get_Object(Builder, "btnmenu"));
    end CreateShipUI;
 
+-- ****if* Ships.UI/ShowShipUI
+-- SOURCE
    procedure ShowShipUI is
+-- ****
       ListIter: Gtk_Tree_Iter;
       List: Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "moduleslist"));

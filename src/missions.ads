@@ -20,9 +20,20 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package Missions is
 
+-- ****t* Missions/Missions_Types
+-- SOURCE
    type Missions_Types is (Deliver, Destroy, Patrol, Explore, Passenger);
+-- ****
+
+-- ****t* Missions/RewardMultiplier
+-- SOURCE
    type RewardMultiplier is digits 2 range 0.0 .. 2.0;
-   -- Data structure for missions
+-- ****
+
+-- ****t* Missions/Mission_Data(MType:
+-- FUNCTION
+-- Data structure for missions
+-- SOURCE
    type Mission_Data(MType: Missions_Types := Deliver) is record
       Time: Positive; -- Amount of minutes to finish the mission
       TargetX: Natural; -- Skymap X-axis for the mission target
@@ -42,31 +53,77 @@ package Missions is
             Target: Natural;  -- Target for mission (ship, item)
       end case;
    end record;
-   package Mission_Container is new Vectors(Positive, Mission_Data);
-   -- List of missions accepted by player
-   AcceptedMissions: Mission_Container.Vector;
-   -- Raised when mission can't be accepted
-   Missions_Accepting_Error: exception;
-   -- Raised when mission can't be finished
-   Missions_Finishing_Error: exception;
+-- ****
 
-   -- Generate if needed new missions in base
+-- ****t* Missions/Mission_Container
+-- SOURCE
+   package Mission_Container is new Vectors(Positive, Mission_Data);
+-- ****
+
+-- ****v* Missions/AcceptedMissions
+-- FUNCTION
+-- List of missions accepted by player
+-- SOURCE
+   AcceptedMissions: Mission_Container.Vector;
+-- ****
+-- ****v* Missions/Missions_Accepting_Error
+-- FUNCTION
+-- Raised when mission can't be accepted
+-- SOURCE
+   Missions_Accepting_Error: exception;
+-- ****
+-- ****v* Missions/Missions_Finishing_Error
+-- FUNCTION
+-- Raised when mission can't be finished
+-- SOURCE
+   Missions_Finishing_Error: exception;
+-- ****
+
+-- ****f* Missions/GenerateMissions;
+-- FUNCTION
+-- Generate if needed new missions in base
+-- SOURCE
    procedure GenerateMissions;
-   -- Accept selected mission from base
+-- ****
+-- ****f* Missions/AcceptMission
+-- FUNCTION
+-- Accept selected mission from base
+-- SOURCE
    procedure AcceptMission(MissionIndex: Positive);
-   -- Update accepted missions
+-- ****
+-- ****f* Missions/UpdateMissions
+-- FUNCTION
+-- Update accepted missions
+-- SOURCE
    procedure UpdateMissions(Minutes: Positive);
-   -- Finish selected mission
+-- ****
+-- ****f* Missions/FinishMission
+-- FUNCTION
+-- Finish selected mission
+-- SOURCE
    procedure FinishMission(MissionIndex: Positive) with
       Pre => MissionIndex <= AcceptedMissions.Last_Index;
-      -- Delete selected mission
+-- ****
+-- ****f* Missions/DeleteMission
+-- FUNCTION
+-- Delete selected mission
+-- SOURCE
    procedure DeleteMission
      (MissionIndex: Positive; Failed: Boolean := True) with
       Pre => MissionIndex <= AcceptedMissions.Last_Index;
-      -- Update status of mission
+-- ****
+-- ****f* Missions/UpdateMission
+-- FUNCTION
+-- Update status of mission
+-- SOURCE
    procedure UpdateMission(MissionIndex: Positive) with
       Pre => MissionIndex <= AcceptedMissions.Last_Index;
-      -- Finish all possible missions, return empty string if all ok
+-- ****
+-- ****f* Missions/AutoFinishMissions
+-- FUNCTION
+-- Finish all possible missions, return empty string if all ok
+-- SOURCE
    function AutoFinishMissions return String;
+-- ****
 
 end Missions;

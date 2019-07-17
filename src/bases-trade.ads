@@ -17,29 +17,65 @@
 
 package Bases.Trade is
 
-   -- Raised when player known selected recipe
+-- ****v* Bases.Trade/Trade_Already_Known
+-- FUNCTION
+-- Raised when player known selected recipe
+-- SOURCE
    Trade_Already_Known: exception;
-   -- Raised when no crew members are wounded
+-- ****
+-- ****v* Bases.Trade/Trade_Cant_Heal
+-- FUNCTION
+-- Raised when no crew members are wounded
+-- SOURCE
    Trade_Cant_Heal: exception;
-   -- Raised when skill is maxed and can't be trained
+-- ****
+-- ****v* Bases.Trade/Trade_Cant_Train
+-- FUNCTION
+-- Raised when skill is maxed and can't be trained
+-- SOURCE
    Trade_Cant_Train: exception;
+-- ****
 
-   -- Hire selected recruit from bases
+-- ****f* Bases.Trade/HireRecruit
+-- FUNCTION
+-- Hire selected recruit from bases
+-- SOURCE
    procedure HireRecruit
      (RecruitIndex, Cost: Positive; DailyPayment, TradePayment: Natural;
       ContractLenght: Integer);
-   -- Buy new crafting recipe
+-- ****
+-- ****f* Bases.Trade/BuyRecipe
+-- FUNCTION
+-- Buy new crafting recipe
+-- SOURCE
    procedure BuyRecipe(RecipeIndex: Unbounded_String);
-   -- Heals wounded crew members in bases
+-- ****
+-- ****f* Bases.Trade/HealWounded
+-- FUNCTION
+-- Heals wounded crew members in bases
+-- SOURCE
    procedure HealWounded(MemberIndex: Natural);
-   -- Count cost of healing action
+-- ****
+-- ****f* Bases.Trade/HealCost
+-- FUNCTION
+-- Count cost of healing action
+-- SOURCE
    procedure HealCost(Cost, Time: in out Natural; MemberIndex: Natural);
-   -- Count cost of training action
+-- ****
+-- ****f* Bases.Trade/TrainCost
+-- FUNCTION
+-- Count cost of training action
+-- SOURCE
    function TrainCost(MemberIndex, SkillIndex: Positive) return Natural;
-   -- Train selected skill
+-- ****
+-- ****f* Bases.Trade/TrainSkill
+-- FUNCTION
+-- Train selected skill
+-- SOURCE
    procedure TrainSkill(MemberIndex, SkillIndex: Positive) with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
        SkillIndex < Skills_List.Last_Index);
+-- ****
 
 end Bases.Trade;

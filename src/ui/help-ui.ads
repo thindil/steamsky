@@ -17,9 +17,17 @@
 
 package Help.UI is
 
-   -- Create help user interface
+-- ****f* Help.UI/CreateHelpUI;
+-- FUNCTION
+-- Create help user interface
+-- SOURCE
    procedure CreateHelpUI;
-   -- Show help user interface
+-- ****
+-- ****f* Help.UI/ShowHelpUI
+-- FUNCTION
+-- Show help user interface
+-- SOURCE
    procedure ShowHelpUI(HelpIndex: Unbounded_String);
+-- ****
 
 end Help.UI;

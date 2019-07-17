@@ -21,42 +21,95 @@ with Game; use Game;
 
 package Messages is
 
-   -- Types of messages
+-- ****t* Messages/Message_Type
+-- FUNCTION
+-- Types of messages
+-- SOURCE
    type Message_Type is
      (Default, CombatMessage, TradeMessage, OrderMessage, CraftMessage,
       OtherMessage, MissionMessage);
-   -- Colors of messages
+-- ****
+-- ****t* Messages/Message_Color
+-- FUNCTION
+-- Colors of messages
+-- SOURCE
    type Message_Color is (WHITE, YELLOW, GREEN, RED, BLUE, CYAN);
-   -- Data structure for messages
+-- ****
+-- ****t* Messages/Message_Data
+-- FUNCTION
+-- Data structure for messages
+-- SOURCE
    type Message_Data is record
       Message: Unbounded_String; -- Text of message
       MType: Message_Type; -- Type of message
       Color: Message_Color; -- Color used for show message
    end record;
-   package Messages_Container is new Vectors(Positive, Message_Data);
-   -- List of all messages
-   Messages_List: Messages_Container.Vector;
-   -- Index of last message to show
-   LastMessageIndex: Natural := 0;
+-- ****
 
-   -- Format game time
+-- ****t* Messages/Messages_Container
+-- SOURCE
+   package Messages_Container is new Vectors(Positive, Message_Data);
+-- ****
+
+-- ****v* Messages/Messages_List
+-- FUNCTION
+-- List of all messages
+-- SOURCE
+   Messages_List: Messages_Container.Vector;
+-- ****
+-- ****v* Messages/LastMessageIndex
+-- FUNCTION
+-- Index of last message to show
+-- SOURCE
+   LastMessageIndex: Natural := 0;
+-- ****
+
+-- ****f* Messages/FormatedTime
+-- FUNCTION
+-- Format game time
+-- SOURCE
    function FormatedTime(Time: Date_Record := GameDate) return String;
-   -- Add new message to list
+-- ****
+-- ****f* Messages/AddMessage
+-- FUNCTION
+-- Add new message to list
+-- SOURCE
    procedure AddMessage
      (Message: String; MType: Message_Type; Color: Message_Color := WHITE);
-   -- Return selected message
+-- ****
+-- ****f* Messages/GetMessage
+-- FUNCTION
+-- Return selected message
+-- SOURCE
    function GetMessage
      (MessageIndex: Integer; MType: Message_Type := Default)
       return Message_Data;
-   -- Remove all messages
+-- ****
+-- ****f* Messages/ClearMessages;
+-- FUNCTION
+-- Remove all messages
+-- SOURCE
    procedure ClearMessages;
-   -- Return amount of selected type messages
+-- ****
+-- ****f* Messages/MessagesAmount
+-- FUNCTION
+-- Return amount of selected type messages
+-- SOURCE
    function MessagesAmount(MType: Message_Type := Default) return Natural;
-   -- Restore message from save file
+-- ****
+-- ****f* Messages/RestoreMessage
+-- FUNCTION
+-- Restore message from save file
+-- SOURCE
    procedure RestoreMessage
      (Message: Unbounded_String; MType: Message_Type := Default;
       Color: Message_Color := WHITE);
-   -- Return last message index
+-- ****
+-- ****f* Messages/GetLastMessageIndex
+-- FUNCTION
+-- Return last message index
+-- SOURCE
    function GetLastMessageIndex return Natural;
+-- ****
 
 end Messages;

@@ -74,9 +74,20 @@ with DebugUI; use DebugUI;
 
 package body MainMenu is
 
+-- ****iv* MainMenu/Builder
+-- SOURCE
    Builder: Gtkada_Builder;
+-- ****
+-- ****iv* MainMenu/AllNews, Setting
+-- SOURCE
    AllNews, Setting: Boolean := False;
+-- ****
+-- ****iv* MainMenu/DataError
+-- SOURCE
    DataError: Unbounded_String;
+-- ****
+-- ****iv* MainMenu/AdjNames
+-- SOURCE
    AdjNames: constant array(Positive range <>) of Unbounded_String :=
      (To_Unbounded_String("adjenemydamage"),
       To_Unbounded_String("adjplayerdamage"),
@@ -85,14 +96,21 @@ package body MainMenu is
       To_Unbounded_String("adjexperience"),
       To_Unbounded_String("adjreputation"), To_Unbounded_String("adjupdate"),
       To_Unbounded_String("adjprices"));
+-- ****
 
+-- ****if* MainMenu/Quit
+-- SOURCE
    procedure Quit(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       Unref(Object);
       Gtk.Main.Main_Quit;
    end Quit;
 
+-- ****if* MainMenu/RefreshSavesList
+-- SOURCE
    procedure RefreshSavesList is
+-- ****
       SavesList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "saveslist"));
       Iter: Gtk_Tree_Iter;
@@ -117,7 +135,10 @@ package body MainMenu is
       End_Search(Files);
    end RefreshSavesList;
 
+-- ****if* MainMenu/LoadFile
+-- SOURCE
    procedure LoadFile(FileName: String) is
+-- ****
       LicenseFile: File_Type;
       LicenseText: Unbounded_String := Null_Unbounded_String;
    begin
@@ -139,7 +160,10 @@ package body MainMenu is
          To_String(LicenseText));
    end LoadFile;
 
+-- ****if* MainMenu/ShowPage
+-- SOURCE
    procedure ShowPage(User_Data: access GObject_Record'Class) is
+-- ****
    begin
       if User_Data = Get_Object(Builder, "btnnewgame") then
          if Get_Text(Gtk_GEntry(Get_Object(Builder, "entrycharactername"))) =
@@ -250,7 +274,10 @@ package body MainMenu is
       end if;
    end ShowPage;
 
+-- ****if* MainMenu/UpdateNews
+-- SOURCE
    procedure UpdateNews is
+-- ****
       ChangesFile: File_Type;
       NewsText: Unbounded_String := Null_Unbounded_String;
       FileText: Unbounded_String;
@@ -278,7 +305,10 @@ package body MainMenu is
          To_String(NewsText));
    end UpdateNews;
 
+-- ****if* MainMenu/ShowAllNews
+-- SOURCE
    procedure ShowAllNews(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       AllNews := not AllNews;
       UpdateNews;
@@ -292,7 +322,10 @@ package body MainMenu is
       end if;
    end ShowAllNews;
 
+-- ****if* MainMenu/RandomName
+-- SOURCE
    procedure RandomName(User_Data: access GObject_Record'Class) is
+-- ****
       FactionIndex: constant Unbounded_String :=
         To_Unbounded_String
           (Get_Active_Id(Gtk_Combo_Box(Get_Object(Builder, "cmbfaction"))));
@@ -314,13 +347,19 @@ package body MainMenu is
       end if;
    end RandomName;
 
+-- ****if* MainMenu/ShowGoals
+-- SOURCE
    procedure ShowGoals(Object: access Gtkada_Builder_Record'Class) is
       pragma Unreferenced(Object);
+-- ****
    begin
       ShowGoalsMenu;
    end ShowGoals;
 
+-- ****if* MainMenu/StartGame
+-- SOURCE
    procedure StartGame is
+-- ****
    begin
       GenerateTraders;
       Hide(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
@@ -332,7 +371,10 @@ package body MainMenu is
       CreateSkyMap;
    end StartGame;
 
+-- ****if* MainMenu/LoadGame
+-- SOURCE
    procedure LoadGame(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       SavesIter: Gtk_Tree_Iter;
       SavesModel: Gtk_Tree_Model;
    begin
@@ -347,7 +389,10 @@ package body MainMenu is
       StartGame;
    end LoadGame;
 
+-- ****if* MainMenu/RandomDifficulty
+-- SOURCE
    procedure RandomDifficulty(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       for Name of AdjNames loop
          Set_Value
@@ -356,7 +401,10 @@ package body MainMenu is
       end loop;
    end RandomDifficulty;
 
+-- ****if* MainMenu/NewGame
+-- SOURCE
    procedure NewGame(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       Gender: Character;
    begin
       if Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbgender"))) = 0 then
@@ -429,7 +477,10 @@ package body MainMenu is
       StartGame;
    end NewGame;
 
+-- ****if* MainMenu/DeleteGame
+-- SOURCE
    procedure DeleteGame(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       SavesIter: Gtk_Tree_Iter;
       SavesModel: Gtk_Tree_Model;
    begin
@@ -458,8 +509,11 @@ package body MainMenu is
       end if;
    end DeleteGame;
 
+-- ****if* MainMenu/ShowFactionDescription
+-- SOURCE
    procedure ShowFactionDescription
      (Object: access Gtkada_Builder_Record'Class) is
+-- ****
       FactionIndex: constant Unbounded_String :=
         To_Unbounded_String
           (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbfaction"))));
@@ -506,8 +560,11 @@ package body MainMenu is
       end if;
    end ShowFactionDescription;
 
+-- ****if* MainMenu/ShowCareerDescription
+-- SOURCE
    procedure ShowCareerDescription
      (Object: access Gtkada_Builder_Record'Class) is
+-- ****
       FactionIndex: constant Unbounded_String :=
         To_Unbounded_String
           (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbfaction"))));
@@ -535,7 +592,10 @@ package body MainMenu is
       end if;
    end ShowCareerDescription;
 
+-- ****if* MainMenu/ShowBaseDescription
+-- SOURCE
    procedure ShowBaseDescription(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       BaseTypeIndex: constant Integer :=
         Integer(Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbbasetype"))));
       BasesTypesList: constant Gtk_List_Store :=
@@ -554,10 +614,13 @@ package body MainMenu is
             1));
    end ShowBaseDescription;
 
+-- ****if* MainMenu/NewGameKeyPressed
+-- SOURCE
    function NewGameKeyPressed
      (Self: access Gtk_Widget_Record'Class; Event: Gdk.Event.Gdk_Event_Key)
       return Boolean is
       pragma Unreferenced(Self);
+-- ****
       ScrollBar: constant Gtk_Adjustment :=
         Get_Vadjustment
           (Gtk_Scrolled_Window(Get_Object(Builder, "scrollinfo")));
@@ -572,8 +635,11 @@ package body MainMenu is
       return False;
    end NewGameKeyPressed;
 
+-- ****if* MainMenu/UpdateInfo
+-- SOURCE
    function UpdateInfo
      (User_Data: access GObject_Record'Class) return Boolean is
+-- ****
    begin
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
@@ -581,14 +647,20 @@ package body MainMenu is
       return False;
    end UpdateInfo;
 
+-- ****if* MainMenu/UpdateInfoProc
+-- SOURCE
    procedure UpdateInfoProc(User_Data: access GObject_Record'Class) is
+-- ****
    begin
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
          Get_Tooltip_Text(Gtk_Widget(User_Data)));
    end UpdateInfoProc;
 
+-- ****if* MainMenu/UpdateSummary
+-- SOURCE
    procedure UpdateSummary(Object: access Gtkada_Builder_Record'Class) is
+-- ****
       MalusNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("adjplayerdamage"),
          To_Unbounded_String("adjplayermelee"),
@@ -621,15 +693,21 @@ package body MainMenu is
          "Total gained points:" & Integer'Image(Bonus) & "%");
    end UpdateSummary;
 
+-- ****if* MainMenu/ResetDifficulty
+-- SOURCE
    procedure ResetDifficulty(Object: access Gtkada_Builder_Record'Class) is
+-- ****
    begin
       for Name of AdjNames loop
          Set_Value(Gtk_Adjustment(Get_Object(Object, To_String(Name))), 100.0);
       end loop;
    end ResetDifficulty;
 
+-- ****if* MainMenu/RandomDifficultyToggled
+-- SOURCE
    procedure RandomDifficultyToggled
      (Object: access Gtkada_Builder_Record'Class) is
+-- ****
       ToggleButton: constant GObject := Get_Object(Object, "cbtndifficulty");
    begin
       Set_Label
@@ -644,7 +722,10 @@ package body MainMenu is
       end if;
    end RandomDifficultyToggled;
 
+-- ****if* MainMenu/CreateMainMenu
+-- SOURCE
    procedure CreateMainMenu is
+-- ****
       Error: aliased GError;
       AdjValues: constant array(Positive range <>) of Gdouble :=
         (Gdouble(NewGameSettings.EnemyDamageBonus),
@@ -766,7 +847,10 @@ package body MainMenu is
       end if;
    end CreateMainMenu;
 
+-- ****if* MainMenu/ShowErrorInfo
+-- SOURCE
    procedure ShowErrorInfo(Message: Unbounded_String) is
+-- ****
    begin
       Set_Text
         (Gtk_Text_Buffer(Get_Object(Builder, "errorbuffer")),
@@ -774,12 +858,18 @@ package body MainMenu is
       Show_All(Gtk_Widget(Get_Object(Builder, "errordialog")));
    end ShowErrorInfo;
 
+-- ****if* MainMenu/UpdateGoalButton
+-- SOURCE
    procedure UpdateGoalButton(Message: String) is
+-- ****
    begin
       Set_Label(Gtk_Button(Get_Object(Builder, "btngoal")), Message);
    end UpdateGoalButton;
 
+-- ****if* MainMenu/ShowMainMenu
+-- SOURCE
    procedure ShowMainMenu is
+-- ****
       Files: Search_Type;
    begin
       Show_All(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
@@ -803,8 +893,11 @@ package body MainMenu is
       Hide(Gtk_Widget(Get_Object(Builder, "messagebox")));
    end ShowMainMenu;
 
+-- ****if* MainMenu/SaveException
+-- SOURCE
    procedure SaveException
      (An_Exception: Exception_Occurrence; PrintToTerminal: Boolean) is
+-- ****
       ErrorFile: File_Type;
       ErrorText: Unbounded_String;
    begin
@@ -840,7 +933,10 @@ package body MainMenu is
       EndLogging;
    end SaveException;
 
+-- ****if* MainMenu/On_Exception
+-- SOURCE
    procedure On_Exception(An_Exception: Exception_Occurrence) is
+-- ****
    begin
       SaveException(An_Exception, False);
    end On_Exception;

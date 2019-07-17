@@ -37,7 +37,10 @@ with Utils.UI; use Utils.UI;
 
 package body Crew.UI is
 
+-- ****if* Crew.UI/SetOrdersList
+-- SOURCE
    procedure SetOrdersList is
+-- ****
       OrdersList: Gtk_List_Store;
       OrdersIter: Gtk_Tree_Iter;
       NeedClean, NeedRepair: Boolean := True;
@@ -145,7 +148,10 @@ package body Crew.UI is
       end if;
    end SetOrdersList;
 
+-- ****if* Crew.UI/ShowOrdersForAll
+-- SOURCE
    procedure ShowOrdersForAll is
+-- ****
       NeedCleaning, NeedRepair: Boolean := False;
    begin
       for Module of PlayerShip.Modules loop
@@ -170,7 +176,10 @@ package body Crew.UI is
       end if;
    end ShowOrdersForAll;
 
+-- ****if* Crew.UI/RefreshInventory
+-- SOURCE
    procedure RefreshInventory is
+-- ****
       InventoryIter: Gtk_Tree_Iter;
       InventoryList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "inventorylist"));
@@ -245,7 +254,10 @@ package body Crew.UI is
          Integer'Image(FreeInventory(MemberIndex, 0)) & " kg");
    end RefreshInventory;
 
+-- ****if* Crew.UI/SetActiveItem
+-- SOURCE
    procedure SetActiveItem is
+-- ****
    begin
       if PlayerShip.Crew(MemberIndex).Inventory.Length > 0 then
          Set_Cursor
@@ -254,7 +266,10 @@ package body Crew.UI is
       end if;
    end SetActiveItem;
 
+-- ****if* Crew.UI/RefreshCrewInfo
+-- SOURCE
    procedure RefreshCrewInfo is
+-- ****
       CrewIter: Gtk_Tree_Iter;
       CrewList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "crewlist2"));
@@ -281,7 +296,10 @@ package body Crew.UI is
       end loop;
    end RefreshCrewInfo;
 
+-- ****if* Crew.UI/SetActiveMember
+-- SOURCE
    procedure SetActiveMember(NewMemberIndex: Natural := 0) is
+-- ****
    begin
       MemberIndex := NewMemberIndex + 1;
       Set_Cursor
@@ -290,7 +308,10 @@ package body Crew.UI is
          False);
    end SetActiveMember;
 
+-- ****if* Crew.UI/CreateCrewUI
+-- SOURCE
    procedure CreateCrewUI(NewBuilder: Gtkada_Builder) is
+-- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Member_Info", ShowMemberInfo'Access);
@@ -313,7 +334,10 @@ package body Crew.UI is
          SelectElement'Access, Get_Object(Builder, "btnmove"));
    end CreateCrewUI;
 
+-- ****if* Crew.UI/ShowCrewUI
+-- SOURCE
    procedure ShowCrewUI is
+-- ****
    begin
       RefreshCrewInfo;
       Set_Visible_Child_Name

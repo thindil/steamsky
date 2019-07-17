@@ -23,7 +23,10 @@ with Crew.Inventory; use Crew.Inventory;
 
 package body Ships.Repairs is
 
+-- ****if* Ships.Repairs/RepairShip
+-- SOURCE
    procedure RepairShip(Minutes: Positive) is
+-- ****
       OrderTime, CurrentMinutes, RepairPoints: Integer;
       RepairNeeded, RepairStopped: Boolean := False;
       CrewRepairPoints: Natural_Container.Vector;

@@ -23,18 +23,35 @@ with Game; use Game;
 
 package Careers is
 
-   -- Data structure for player career
+-- ****t* Careers/CareerRecord
+-- FUNCTION
+-- Data structure for player career
+-- SOURCE
    type CareerRecord is record
       Name: Unbounded_String; -- Name of career, displayed to player
       Skills: UnboundedString_Container
         .Vector; -- List of skills which have bonuses to experience if player select this career
    end record;
+-- ****
+
+-- ****t* Careers/Careers_Container
+-- SOURCE
    package Careers_Container is new Hashed_Maps(Unbounded_String, CareerRecord,
       Ada.Strings.Unbounded.Hash, "=");
-   -- List of all available careers for player
-   Careers_List: Careers_Container.Map;
+-- ****
 
-   -- Load player careers from file
+-- ****v* Careers/Careers_List
+-- FUNCTION
+-- List of all available careers for player
+-- SOURCE
+   Careers_List: Careers_Container.Map;
+-- ****
+
+-- ****f* Careers/LoadCareers
+-- FUNCTION
+-- Load player careers from file
+-- SOURCE
    procedure LoadCareers(Reader: Tree_Reader);
+-- ****
 
 end Careers;

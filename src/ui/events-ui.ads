@@ -19,9 +19,17 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package Events.UI is
 
-   -- Create infterace for show known events
+-- ****f* Events.UI/CreateEventsUI
+-- FUNCTION
+-- Create infterace for show known events
+-- SOURCE
    procedure CreateEventsUI(NewBuilder: Gtkada_Builder);
-   -- Show interface for show known events
+-- ****
+-- ****f* Events.UI/ShowEventsUI;
+-- FUNCTION
+-- Show interface for show known events
+-- SOURCE
    procedure ShowEventsUI;
+-- ****
 
 end Events.UI;

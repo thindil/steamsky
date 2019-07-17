@@ -19,11 +19,23 @@ with Gtkada.Builder; use Gtkada.Builder;
 
 package GameOptions is
 
-   -- Create infterace for game options
+-- ****f* GameOptions/CreateGameOptions
+-- FUNCTION
+-- Create infterace for game options
+-- SOURCE
    procedure CreateGameOptions(NewBuilder: Gtkada_Builder);
-   -- Show interface for game options
+-- ****
+-- ****f* GameOptions/ShowGameOptions;
+-- FUNCTION
+-- Show interface for game options
+-- SOURCE
    procedure ShowGameOptions;
-   -- Close options, save them and back to sky map view
+-- ****
+-- ****f* GameOptions/CloseOptions
+-- FUNCTION
+-- Close options, save them and back to sky map view
+-- SOURCE
    procedure CloseOptions(Object: access Gtkada_Builder_Record'Class);
+-- ****
 
 end GameOptions;

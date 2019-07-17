@@ -22,11 +22,18 @@ with DOM.Readers; use DOM.Readers;
 
 package ShipModules is
 
+-- ****t* ShipModules/ModuleType
+-- SOURCE
    type ModuleType is
      (ANY, ENGINE, CABIN, COCKPIT, TURRET, GUN, CARGO, HULL, ARMOR,
       BATTERING_RAM, ALCHEMY_LAB, FURNACE, WATER_COLLECTOR, WORKSHOP,
       GREENHOUSE, MEDICAL_ROOM, HARPOON_GUN, TRAINING_ROOM);
-   -- Data structure for prototypes of ship modules
+-- ****
+
+-- ****t* ShipModules/BaseModule_Data
+-- FUNCTION
+-- Data structure for prototypes of ship modules
+-- SOURCE
    type BaseModule_Data is record
       Name: Unbounded_String; -- Name of module
       MType: ModuleType; -- Type of module
@@ -43,12 +50,26 @@ package ShipModules is
       Description: Unbounded_String; -- Description of module
       MaxOwners: Natural; -- How many owners module can have
    end record;
+-- ****
+
+-- ****t* ShipModules/BaseModules_Container
+-- SOURCE
    package BaseModules_Container is new Hashed_Maps(Unbounded_String,
       BaseModule_Data, Ada.Strings.Unbounded.Hash, "=");
-   -- List of ship modules available in game
-   Modules_List: BaseModules_Container.Map;
+-- ****
 
-   -- Load modules from files
+-- ****v* ShipModules/Modules_List
+-- FUNCTION
+-- List of ship modules available in game
+-- SOURCE
+   Modules_List: BaseModules_Container.Map;
+-- ****
+
+-- ****f* ShipModules/LoadShipModules
+-- FUNCTION
+-- Load modules from files
+-- SOURCE
    procedure LoadShipModules(Reader: Tree_Reader);
+-- ****
 
 end ShipModules;

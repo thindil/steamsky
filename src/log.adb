@@ -24,9 +24,15 @@ with Game; use Game;
 
 package body Log is
 
+-- ****iv* Log/LogFile
+-- SOURCE
    LogFile: File_Type; -- Debug log file
+-- ****
 
+-- ****if* Log/StartLogging
+-- SOURCE
    procedure StartLogging is
+-- ****
    begin
       if DebugMode = None then
          return;
@@ -41,9 +47,12 @@ package body Log is
          DebugMode);
    end StartLogging;
 
+-- ****if* Log/LogMessage
+-- SOURCE
    procedure LogMessage
      (Message: String; MessageType: Debug_Types;
       NewLine, TimeStamp: Boolean := True) is
+-- ****
       NewMessage: Unbounded_String;
    begin
       if DebugMode = None or
@@ -67,7 +76,10 @@ package body Log is
       end if;
    end LogMessage;
 
+-- ****if* Log/EndLogging
+-- SOURCE
    procedure EndLogging is
+-- ****
    begin
       if DebugMode = None or not Is_Open(LogFile) then
          return;
