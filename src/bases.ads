@@ -23,19 +23,24 @@ with Missions; use Missions;
 with Ships; use Ships;
 with Factions; use Factions;
 
-package Bases is
-
--- ****t* Bases/Bases_Types
+-- ****h* Steamsky/Bases
 -- FUNCTION
--- Types of bases
+-- Provide code for manipulate sky bases
 -- SOURCE
+package Bases is
+-- ****
+
+   -- ****t* Bases/Bases_Types
+   -- FUNCTION
+   -- Types of bases
+   -- SOURCE
    type Bases_Types is
      (Industrial, Agricultural, Refinery, Shipyard, Military, Any);
--- ****
--- ****t* Bases/Recruit_Data
--- FUNCTION
--- Data structure for recruits
--- SOURCE
+   -- ****
+   -- ****t* Bases/Recruit_Data
+   -- FUNCTION
+   -- Data structure for recruits
+   -- SOURCE
    type Recruit_Data is record
       Name: Unbounded_String; -- Name of recruit
       Gender: Character; -- Gender of recruit
@@ -50,46 +55,44 @@ package Bases is
       HomeBase: Positive; -- Index of base from which recruit is
       Faction: Unbounded_String; -- Index of faction to which recruit belongs
    end record;
--- ****
+   -- ****
 
--- ****t* Bases/Recruit_Container
--- SOURCE
+   -- ****t* Bases/Recruit_Container
+   -- SOURCE
    package Recruit_Container is new Vectors(Positive, Recruit_Data);
--- ****
+   -- ****
 
--- ****t* Bases/Reputation_Array
--- FUNCTION
--- Data structure for reputation, 1 = level, 2 = points to next level
--- SOURCE
+   -- ****t* Bases/Reputation_Array
+   -- FUNCTION
+   -- Data structure for reputation, 1 = level, 2 = points to next level
+   -- SOURCE
    type Reputation_Array is array(1 .. 2) of Integer;
--- ****
--- ****t* Bases/Base_Cargo
--- FUNCTION
--- Data structure for bases cargo
--- SOURCE
+   -- ****
+   -- ****t* Bases/Base_Cargo
+   -- FUNCTION
+   -- Data structure for bases cargo
+   -- SOURCE
    type Base_Cargo is record
       ProtoIndex: Unbounded_String; -- Index of item prototype
       Amount: Natural; -- Amount of items
       Durability: Positive; -- Durability of items
       Price: Natural; -- Current price of item
    end record;
--- ****
-
--- ****t* Bases/BaseCargo_Container
--- SOURCE
+   -- ****
+   -- ****t* Bases/BaseCargo_Container
+   -- SOURCE
    package BaseCargo_Container is new Vectors(Positive, Base_Cargo);
--- ****
-
--- ****t* Bases/Bases_Size
--- FUNCTION
--- Bases sizes
--- SOURCE
+   -- ****
+   -- ****t* Bases/Bases_Size
+   -- FUNCTION
+   -- Bases sizes
+   -- SOURCE
    type Bases_Size is (Small, Medium, Big);
--- ****
--- ****t* Bases/BaseRecord
--- FUNCTION
--- Data structure for bases
--- SOURCE
+   -- ****
+   -- ****t* Bases/BaseRecord
+   -- FUNCTION
+   -- Data structure for bases
+   -- SOURCE
    type BaseRecord is record
       Name: Unbounded_String; -- Base name
       Visited: Date_Record; -- Time when player last visited base
@@ -109,96 +112,96 @@ package Bases is
       Cargo: BaseCargo_Container.Vector; -- List of all cargo in base
       Size: Bases_Size; -- Size of base
    end record;
--- ****
--- ****t* Bases/BasesRange
--- FUNCTION
--- Amount of sky bases
--- SOURCE
+   -- ****
+   -- ****t* Bases/BasesRange
+   -- FUNCTION
+   -- Amount of sky bases
+   -- SOURCE
    subtype BasesRange is Positive range 1 .. 1024;
--- ****
--- ****v* Bases/SkyBases
--- FUNCTION
--- List of sky bases
--- SOURCE
+   -- ****
+   -- ****v* Bases/SkyBases
+   -- FUNCTION
+   -- List of sky bases
+   -- SOURCE
    SkyBases: array(BasesRange) of BaseRecord;
--- ****
--- ****v* Bases/BaseSyllablesPre
--- FUNCTION
--- List of pre syllables for generating bases names
--- SOURCE
+   -- ****
+   -- ****v* Bases/BaseSyllablesPre
+   -- FUNCTION
+   -- List of pre syllables for generating bases names
+   -- SOURCE
    BaseSyllablesPre: UnboundedString_Container.Vector;
--- ****
--- ****v* Bases/BaseSyllablesStart
--- FUNCTION
--- List of first syllables for generating bases names
--- SOURCE
+   -- ****
+   -- ****v* Bases/BaseSyllablesStart
+   -- FUNCTION
+   -- List of first syllables for generating bases names
+   -- SOURCE
    BaseSyllablesStart: UnboundedString_Container.Vector;
--- ****
--- ****v* Bases/BaseSyllablesEnd
--- FUNCTION
--- List of second syllables for generating bases names
--- SOURCE
+   -- ****
+   -- ****v* Bases/BaseSyllablesEnd
+   -- FUNCTION
+   -- List of second syllables for generating bases names
+   -- SOURCE
    BaseSyllablesEnd: UnboundedString_Container.Vector;
--- ****
--- ****v* Bases/BaseSyllablesPost
--- FUNCTION
--- List of post syllables for generating bases names
--- SOURCE
+   -- ****
+   -- ****v* Bases/BaseSyllablesPost
+   -- FUNCTION
+   -- List of post syllables for generating bases names
+   -- SOURCE
    BaseSyllablesPost: UnboundedString_Container.Vector;
--- ****
+   -- ****
 
--- ****f* Bases/GainRep
--- FUNCTION
--- Gain reputation in selected base
--- SOURCE
+   -- ****f* Bases/GainRep
+   -- FUNCTION
+   -- Gain reputation in selected base
+   -- SOURCE
    procedure GainRep(BaseIndex: BasesRange; Points: Integer);
--- ****
--- ****f* Bases/CountPrice
--- FUNCTION
--- Count price for actions with bases (buying/selling/docking/ect)
--- SOURCE
+   -- ****
+   -- ****f* Bases/CountPrice
+   -- FUNCTION
+   -- Count price for actions with bases (buying/selling/docking/ect)
+   -- SOURCE
    procedure CountPrice
      (Price: in out Positive; TraderIndex: Crew_Container.Extended_Index;
       Reduce: Boolean := True) with
       Pre => TraderIndex <= PlayerShip.Crew.Last_Index;
--- ****
--- ****f* Bases/GenerateBaseName
--- FUNCTION
--- Generate random name for base based on faction
--- SOURCE
+      -- ****
+      -- ****f* Bases/GenerateBaseName
+      -- FUNCTION
+      -- Generate random name for base based on faction
+      -- SOURCE
    function GenerateBaseName
      (FactionIndex: Unbounded_String) return Unbounded_String with
       Pre => Factions_Container.Contains(Factions_List, FactionIndex);
--- ****
--- ****f* Bases/GenerateRecruits;
--- FUNCTION
--- Generate if needed new recruits in base
--- SOURCE
+      -- ****
+      -- ****f* Bases/GenerateRecruits;
+      -- FUNCTION
+      -- Generate if needed new recruits in base
+      -- SOURCE
    procedure GenerateRecruits;
--- ****
--- ****f* Bases/AskForBases;
--- FUNCTION
--- Ask in base for direction for other bases
--- SOURCE
+   -- ****
+   -- ****f* Bases/AskForBases;
+   -- FUNCTION
+   -- Ask in base for direction for other bases
+   -- SOURCE
    procedure AskForBases;
--- ****
--- ****f* Bases/AskForEvents;
--- FUNCTION
--- Ask in base for direction for random events
--- SOURCE
+   -- ****
+   -- ****f* Bases/AskForEvents;
+   -- FUNCTION
+   -- Ask in base for direction for random events
+   -- SOURCE
    procedure AskForEvents;
--- ****
--- ****f* Bases/UpdatePopulation;
--- FUNCTION
--- Update base population if needed
--- SOURCE
+   -- ****
+   -- ****f* Bases/UpdatePopulation;
+   -- FUNCTION
+   -- Update base population if needed
+   -- SOURCE
    procedure UpdatePopulation;
--- ****
--- ****f* Bases/UpdatePrices;
--- FUNCTION
--- Random changes of items prices in base
--- SOURCE
+   -- ****
+   -- ****f* Bases/UpdatePrices;
+   -- FUNCTION
+   -- Random changes of items prices in base
+   -- SOURCE
    procedure UpdatePrices;
--- ****
+   -- ****
 
 end Bases;
