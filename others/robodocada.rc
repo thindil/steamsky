@@ -1,0 +1,53 @@
+header markers:
+  -- ****
+remark markers:
+  --
+end markers:
+  -- ****
+options:
+  --src src
+  --doc docs
+  --html
+  --multidoc
+  --index
+  --internal
+  --documenttitle "Steamsky 4.0 code documentation"
+  --syntaxcolors
+  --sections
+  --toc
+  --masterindex "Index,index"
+  --sourceindex "Source files,sources"
+headertypes:
+  h Packages robo_packages 4
+  t Types robo_types 3
+  v Variables robo_variables 2
+  e Exceptions robo_exceptions 1
+  f Subprograms robo_subprograms 0
+item order:
+  FUNCTION
+  SOURCE
+  OPTIONS
+  PARAMETERS
+  RESULT
+keywords:
+  procedure
+  function
+  return
+  is
+  type
+  record
+  pragma
+  end
+  package
+  new
+  access
+  not
+  null
+  subtype
+  renames
+  range
+  out
+  in
+  constant
+  private
+  exception
