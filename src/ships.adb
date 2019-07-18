@@ -955,8 +955,7 @@ package body Ships is
 -- based on name generator from libtcod
 -- SOURCE
    function GenerateShipName
-     (Owner: Unbounded_String)
-      return Unbounded_String is
+     (Owner: Unbounded_String) return Unbounded_String is
 -- ****
       NewName: Unbounded_String := Null_Unbounded_String;
    begin

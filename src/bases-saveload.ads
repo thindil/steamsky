@@ -17,19 +17,29 @@
 
 with DOM.Core; use DOM.Core;
 
+-- ****h* Steamsky/Bases.SaveLoad
+-- FUNCTION
+-- Provide code to save and load sky bases data from file
+-- SOURCE
 package Bases.SaveLoad is
+-- ****
 
--- ****f* Bases.SaveLoad/SaveBases
--- FUNCTION
--- Save bases from current game in file
--- SOURCE
+   -- ****f* Bases.SaveLoad/SaveBases
+   -- FUNCTION
+   -- Save bases from current game in file
+   -- PARAMETERS
+   -- SaveData - XML structure to which sky bases data will be saved
+   -- MainNode - XML main node to which sky bases data will be saved
+   -- SOURCE
    procedure SaveBases(SaveData: Document; MainNode: DOM.Core.Element);
--- ****
--- ****f* Bases.SaveLoad/LoadBases
--- FUNCTION
--- Load bases from file
--- SOURCE
+   -- ****
+   -- ****f* Bases.SaveLoad/LoadBases
+   -- FUNCTION
+   -- Load bases from file
+   -- PARAMETERS
+   -- SaveData - XML structure from which sky bases data will be loaded
+   -- SOURCE
    procedure LoadBases(SaveData: Document);
--- ****
+   -- ****
 
 end Bases.SaveLoad;

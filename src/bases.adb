@@ -116,8 +116,7 @@ package body Bases is
 -- based on name generator from libtcod
 -- SOURCE
    function GenerateBaseName
-     (FactionIndex: Unbounded_String)
-      return Unbounded_String is
+     (FactionIndex: Unbounded_String) return Unbounded_String is
 -- ****
       NewName: Unbounded_String;
    begin

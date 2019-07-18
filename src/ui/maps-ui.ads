@@ -59,6 +59,7 @@ private
    MapWidth, MapHeight, CenterX, CenterY, MapCellWidth, MapCellHeight, MapX,
 -- ****v* Maps.UI/MapY
 -- SOURCE
+
    MapY: Positive;
 -- ****
 -- ****v* Maps.UI/StartX, StartY
