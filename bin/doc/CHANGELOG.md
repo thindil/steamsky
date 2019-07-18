@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file.
 - New ship modules: medium double extended adamantium cabin, medium double
   luxury adamantium cabin, large double basic bronze cabin, large double
   advanced bronze cabin, large double extended bronze cabin, large double
-  luxury bronze cabin, large double basic bronze cabin
+  luxury bronze cabin, large double basic bronze cabin, large double advanced
+  iron cabin
 
 ### Changed
 - Updated help
