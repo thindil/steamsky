@@ -2972,7 +2972,7 @@ during combat. -->
   <module index="1"/>
   <module index="2"/>
   <module index="3"/>
-  <module amount="4" index="4"/>
+  <module amount="2" index="297"/>
   <module index="5"/>
   <module index="6"/>
   <module amount="2" index="7"/>
@@ -3109,7 +3109,7 @@ during combat. -->
   <module index="1"/>
   <module index="2"/>
   <module index="3"/>
-  <module amount="4" index="4"/>
+  <module amount="2" index="297"/>
   <module index="5"/>
   <module index="6"/>
   <module index="7"/>
@@ -3168,7 +3168,7 @@ during combat. -->
   <module index="1"/>
   <module index="2"/>
   <module index="3"/>
-  <module amount="4" index="4"/>
+  <module amount="2" index="297"/>
   <module index="5"/>
   <module index="6"/>
   <module index="7"/>
@@ -3233,7 +3233,7 @@ during combat. -->
   <module index="1"/>
   <module index="2"/>
   <module index="3"/>
-  <module amount="4" index="4"/>
+  <module amount="2" index="297"/>
   <module index="5"/>
   <module index="6"/>
   <module index="7"/>
