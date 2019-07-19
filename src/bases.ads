@@ -40,28 +40,40 @@ package Bases is
    -- ****t* Bases/Recruit_Data
    -- FUNCTION
    -- Data structure for recruits
+   -- PARAMETERS
+   -- Name       - Name of recruit
+   -- Gender     - Gender of recruit
+   -- Skills     - Names indexes, levels and experience in skills of recruit
+   -- Cost       - Cost of enlist of recruit
+   -- Attributes - Names indexes, levels and experience in attributes of
+   --              recruit
+   -- Inventory  - Owned items by recruit
+   -- Equipment  - Items indexes from inventory used by recruit: 1 - weapon,
+   --              2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs,
+   --              7 - tool
+   -- Payment    - How much money recruit will take as payment each day.
+   -- HomeBase   - Index of base from which recruit is
+   -- Faction    - Index of faction to which recruit belongs
    -- SOURCE
    type Recruit_Data is record
-      Name: Unbounded_String; -- Name of recruit
-      Gender: Character; -- Gender of recruit
-      Skills: Skills_Container
-        .Vector; -- Names indexes, levels and experience in skills of recruit
-      Price: Positive; -- Cost of enlist of recruit
-      Attributes: Attributes_Container
-        .Vector; -- Names indexes, levels and experience in attributes of recruit
-      Inventory: UnboundedString_Container.Vector; -- Owned items by recruit
-      Equipment: Equipment_Array; -- Items indexes from inventory used by recruit: 1 - weapon, 2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs, 7 - tool
-      Payment: Positive; -- How much money recruit will take as payment each day.
-      HomeBase: Positive; -- Index of base from which recruit is
-      Faction: Unbounded_String; -- Index of faction to which recruit belongs
+      Name: Unbounded_String;
+      Gender: Character;
+      Skills: Skills_Container.Vector;
+      Price: Positive;
+      Attributes: Attributes_Container.Vector;
+      Inventory: UnboundedString_Container.Vector;
+      Equipment: Equipment_Array;
+      Payment: Positive;
+      HomeBase: Positive;
+      Faction: Unbounded_String;
    end record;
    -- ****
-
    -- ****t* Bases/Recruit_Container
+   -- FUNCTION
+   -- Used to store sky bases recruits data
    -- SOURCE
    package Recruit_Container is new Vectors(Positive, Recruit_Data);
    -- ****
-
    -- ****t* Bases/Reputation_Array
    -- FUNCTION
    -- Data structure for reputation, 1 = level, 2 = points to next level
@@ -71,15 +83,22 @@ package Bases is
    -- ****t* Bases/Base_Cargo
    -- FUNCTION
    -- Data structure for bases cargo
+   -- PARAMETERS
+   -- ProtoIndex - Index of item prototype
+   -- Amount     - Amount of items
+   -- Durability - Durability of items
+   -- Price      - Current price of item
    -- SOURCE
    type Base_Cargo is record
-      ProtoIndex: Unbounded_String; -- Index of item prototype
-      Amount: Natural; -- Amount of items
-      Durability: Positive; -- Durability of items
-      Price: Natural; -- Current price of item
+      ProtoIndex: Unbounded_String;
+      Amount: Natural;
+      Durability: Positive;
+      Price: Natural;
    end record;
    -- ****
    -- ****t* Bases/BaseCargo_Container
+   -- FUNCTION
+   -- Used to store sky bases cargos
    -- SOURCE
    package BaseCargo_Container is new Vectors(Positive, Base_Cargo);
    -- ****
@@ -92,25 +111,43 @@ package Bases is
    -- ****t* Bases/BaseRecord
    -- FUNCTION
    -- Data structure for bases
+   -- PARAMETERS
+   -- Name           - Base name
+   -- Visited        - Time when player last visited base
+   -- SkyX           - X coordinate on sky map
+   -- SkyY           - Y coordinate on sky map
+   -- BaseType       - Type of base
+   -- Population     - Amount of people in base
+   -- RecruitDate    - Time when recruits was generated
+   -- Recruits       - List of available recruits
+   -- Known          - Did base is know to player
+   -- AskedForBases  - Did player asked for bases in this base
+   -- AskedForEvents - Time when players asked for events in this base
+   -- Reputation     - Reputation level and progress of player
+   -- MissionsDate   - Time when missions was generated
+   -- Missions       - List of available missions
+   -- Owner          - Index of faction which own base
+   -- Cargo          - List of all cargo in base
+   -- Size           - Size of base
    -- SOURCE
    type BaseRecord is record
-      Name: Unbounded_String; -- Base name
-      Visited: Date_Record; -- Time when player last visited base
-      SkyX: Integer; -- X coordinate on sky map
-      SkyY: Integer; -- Y coordinate on sky map
-      BaseType: Bases_Types; -- Type of base
-      Population: Natural; -- Amount of people in base
-      RecruitDate: Date_Record; -- Time when recruits was generated
-      Recruits: Recruit_Container.Vector; -- List of available recruits
-      Known: Boolean; -- Did base is know to player
-      AskedForBases: Boolean; -- Did player asked for bases in this base
-      AskedForEvents: Date_Record; -- Time when players asked for events in this base
-      Reputation: Reputation_Array; -- Reputation level and progress of player
-      MissionsDate: Date_Record; -- Time when missions was generated
-      Missions: Mission_Container.Vector; -- List of available missions
-      Owner: Unbounded_String; -- Index of faction which own base
-      Cargo: BaseCargo_Container.Vector; -- List of all cargo in base
-      Size: Bases_Size; -- Size of base
+      Name: Unbounded_String;
+      Visited: Date_Record;
+      SkyX: Integer;
+      SkyY: Integer;
+      BaseType: Bases_Types;
+      Population: Natural;
+      RecruitDate: Date_Record;
+      Recruits: Recruit_Container.Vector;
+      Known: Boolean;
+      AskedForBases: Boolean;
+      AskedForEvents: Date_Record;
+      Reputation: Reputation_Array;
+      MissionsDate: Date_Record;
+      Missions: Mission_Container.Vector;
+      Owner: Unbounded_String;
+      Cargo: BaseCargo_Container.Vector;
+      Size: Bases_Size;
    end record;
    -- ****
    -- ****t* Bases/BasesRange
@@ -153,12 +190,23 @@ package Bases is
    -- ****f* Bases/GainRep
    -- FUNCTION
    -- Gain reputation in selected base
+   -- PARAMETERS
+   -- BaseIndex - Index of the base in which player gained or lose reputation
+   -- Points    - Amount of reputation points to gain or lose
    -- SOURCE
    procedure GainRep(BaseIndex: BasesRange; Points: Integer);
    -- ****
    -- ****f* Bases/CountPrice
    -- FUNCTION
    -- Count price for actions with bases (buying/selling/docking/ect)
+   -- PARAMETERS
+   -- Price       - Cost of action with the base
+   -- TraderIndex - Index of crew member assigned as trader or 0 if noone is
+   --               assigned
+   -- Reduce      - If true, reduce cost of action, otherwise raise. Default
+   --               is true
+   -- RESULT
+   -- Parameter Cost
    -- SOURCE
    procedure CountPrice
      (Price: in out Positive; TraderIndex: Crew_Container.Extended_Index;
@@ -168,6 +216,10 @@ package Bases is
       -- ****f* Bases/GenerateBaseName
       -- FUNCTION
       -- Generate random name for base based on faction
+      -- PARAMETERS
+      -- FactionIndex - Index of faction to which base belong
+      -- RESULT
+      -- Random name for the sky base
       -- SOURCE
    function GenerateBaseName
      (FactionIndex: Unbounded_String) return Unbounded_String with
