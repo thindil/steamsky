@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
   luxury adamantium cabin, large double basic bronze cabin, large double
   advanced bronze cabin, large double extended bronze cabin, large double
   luxury bronze cabin, large double basic bronze cabin, large double advanced
-  iron cabin
+  iron cabin, large double extended iron cabin
 
 ### Changed
 - Updated help
