@@ -56,11 +56,11 @@ package Bases.Ship is
    -- SOURCE
    procedure RepairShip(ModuleIndex: Integer);
    -- ****
-   -- ****f* Bases.Ship/UpgradeShip
-   -- FUNCTION
-   -- Install or remove modules on player ship
-   -- PARAMETERS
-   -- Install     - If True, perform module installation on player ship. On False,
+-- ****f* Bases.Ship/UpgradeShip
+-- FUNCTION
+-- Install or remove modules on player ship
+-- PARAMETERS
+-- Install     - If True, perform module installation on player ship. On False,
    --           remove module
    -- ModuleIndex - Index of prototype module to install or remove
    -- SOURCE
