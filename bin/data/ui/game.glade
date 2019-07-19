@@ -9456,7 +9456,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                               </object>
                                             </child>
                                             <child>
-                                              <object class="GtkTreeViewColumn">
+                                              <object class="GtkTreeViewColumn" id="columnshipfatigue">
                                                 <property name="title" translatable="yes">Fatigue</property>
                                                 <child>
                                                   <object class="GtkCellRendererProgress">
@@ -9469,7 +9469,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                               </object>
                                             </child>
                                             <child>
-                                              <object class="GtkTreeViewColumn">
+                                              <object class="GtkTreeViewColumn" id="columnshipthirst">
                                                 <property name="title" translatable="yes">Thirst</property>
                                                 <child>
                                                   <object class="GtkCellRendererProgress">
@@ -9482,7 +9482,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                               </object>
                                             </child>
                                             <child>
-                                              <object class="GtkTreeViewColumn">
+                                              <object class="GtkTreeViewColumn" id="columnshiphunger">
                                                 <property name="title" translatable="yes">Hunger</property>
                                                 <child>
                                                   <object class="GtkCellRendererProgress">
@@ -9495,7 +9495,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                               </object>
                                             </child>
                                             <child>
-                                              <object class="GtkTreeViewColumn">
+                                              <object class="GtkTreeViewColumn" id="columnshipmorale">
                                                 <property name="title" translatable="yes">Morale</property>
                                                 <child>
                                                   <object class="GtkCellRendererProgress">
