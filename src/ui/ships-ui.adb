@@ -589,6 +589,12 @@ package body Ships.UI is
       ListIter: Gtk_Tree_Iter;
       List: Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "moduleslist"));
+      Visible: array(1 .. 4) of Boolean := (others => False);
+      ColumnNames: constant array(1 .. 4) of Unbounded_String :=
+        (To_Unbounded_String("columnshipfatigue"),
+         To_Unbounded_String("columnshipthirst"),
+         To_Unbounded_String("columnshiphunger"),
+         To_Unbounded_String("columnshipmorale"));
    begin
       Set_Sensitive(Gtk_Widget(Get_Object(Builder, "edtname")), True);
       Clear(List);
@@ -613,6 +619,18 @@ package body Ships.UI is
          Set(List, ListIter, 4, Gint(Member.Hunger));
          Set(List, ListIter, 5, Gint(Member.Morale(1)));
          Set(List, ListIter, 6, To_Lower(Crew_Orders'Image(Member.Order)));
+         if Member.Tired - Member.Attributes(ConditionIndex)(1) > 0 then
+            Visible(1) := True;
+         end if;
+         if Member.Thirst > 0 then
+            Visible(2) := True;
+         end if;
+         if Member.Hunger > 0 then
+            Visible(3) := True;
+         end if;
+         if Member.Morale(1) /= 50 then
+            Visible(4) := True;
+         end if;
       end loop;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "ship");
@@ -625,6 +643,12 @@ package body Ships.UI is
          Hide(Gtk_Widget(Get_Object(Builder, "expmoduleoptions")));
          Set_Sensitive(Gtk_Widget(Get_Object(Builder, "edtname")), False);
       end if;
+      for I in Visible'Range loop
+         Set_Visible
+           (Gtk_Tree_View_Column
+              (Get_Object(Builder, To_String(ColumnNames(I)))),
+            Visible(I));
+      end loop;
    end ShowShipUI;
 
 end Ships.UI;
