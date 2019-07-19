@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Updated help
 - Fonts size after first run of the game
 - Starting ships for player from Undead and Drones factions
+- Updated UI
 
 ## [3.9] - 2019-07-14
 
