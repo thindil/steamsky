@@ -1756,7 +1756,7 @@ Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WAR
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="btnclose">
+              <object class="GtkButton" id="btnclosedialog">
                 <property name="label" translatable="yes">Close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
