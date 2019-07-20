@@ -53,6 +53,6 @@ package Bases.Cargo is
    -- SOURCE
    function FindBaseCargo
      (ProtoIndex: Unbounded_String; Durability: Natural := 101) return Natural;
-     -- ****
+   -- ****
 
 end Bases.Cargo;

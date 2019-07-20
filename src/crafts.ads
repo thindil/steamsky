@@ -46,10 +46,8 @@ package Crafts is
    -- Tool            - Type of tool used to craft item
    -- SOURCE
    type Craft_Data is record
-      MaterialTypes: UnboundedString_Container
-        .Vector;
-      MaterialAmounts: Positive_Container
-        .Vector;
+      MaterialTypes: UnboundedString_Container.Vector;
+      MaterialAmounts: Positive_Container.Vector;
       ResultIndex: Unbounded_String;
       ResultAmount: Natural;
       Workplace: ModuleType;

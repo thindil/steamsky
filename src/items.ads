@@ -22,164 +22,219 @@ with Ada.Containers.Hashed_Maps;
 with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 
+-- ****h* Items/Items
+-- FUNCTION
+-- Provice code for manipulate items
+-- SOURCE
 package Items is
+-- ****
 
--- ****v* Items/Items_Types
--- FUNCTION
--- Types of items
--- SOURCE
+   -- ****v* Items/Items_Types
+   -- FUNCTION
+   -- Types of items
+   -- SOURCE
    Items_Types: UnboundedString_Container.Vector;
--- ****
--- ****t* Items/Object_Prices
--- FUNCTION
--- Prices of item in bases
--- SOURCE
+   -- ****
+   -- ****t* Items/Object_Prices
+   -- FUNCTION
+   -- Prices of item in bases
+   -- SOURCE
    type Object_Prices is array(1 .. 5) of Natural;
--- ****
--- ****t* Items/Object_Buyable
--- FUNCTION
--- Did item is buyable in bases
--- SOURCE
+   -- ****
+   -- ****t* Items/Object_Buyable
+   -- FUNCTION
+   -- Did item is buyable in bases
+   -- SOURCE
    type Object_Buyable is array(1 .. 5) of Boolean;
--- ****
--- ****t* Items/Object_Data
--- FUNCTION
--- Data structure for objects prototypes
--- SOURCE
+   -- ****
+   -- ****t* Items/Object_Data
+   -- FUNCTION
+   -- Data structure for objects prototypes
+   -- PARAMETERS
+   -- Name        - Name of item
+   -- Weight      - Weight of item
+   -- IType       - Type of item
+   -- Prices      - Prices of item in bases
+   -- Buyable     - Did item is buyable in selected bases
+   -- Value       - Additional item data (damage for ammo, etc)
+   -- ShowType    - Displayed type of item (can be group of items, renamed
+   --               type, etc)
+   -- Description - Description of item
+   -- SOURCE
    type Object_Data is record
-      Name: Unbounded_String; -- Name of item
-      Weight: Positive; -- Weight of item
-      IType: Unbounded_String; -- Type of item
-      Prices: Object_Prices; -- Prices of item in bases
-      Buyable: Object_Buyable; -- Did item is buyable in selected bases
-      Value: Integer_Container
-        .Vector; -- Additional item data (damage for ammo, etc)
-      ShowType: Unbounded_String; -- Displayed type of item (can be group of items, renamed type, etc)
-      Description: Unbounded_String; -- Description of item
+      Name: Unbounded_String;
+      Weight: Positive;
+      IType: Unbounded_String;
+      Prices: Object_Prices;
+      Buyable: Object_Buyable;
+      Value: Integer_Container.Vector;
+      ShowType: Unbounded_String;
+      Description: Unbounded_String;
    end record;
--- ****
-
--- ****t* Items/Objects_Container
--- SOURCE
+   -- ****
+   -- ****t* Items/Objects_Container
+   -- FUNCTION
+   -- Used to store items data
+   -- SOURCE
    package Objects_Container is new Hashed_Maps(Unbounded_String, Object_Data,
       Ada.Strings.Unbounded.Hash, "=");
--- ****
-
--- ****t* Items/InventoryData
--- FUNCTION
--- Data structure for item in inventory
--- SOURCE
+   -- ****
+   -- ****t* Items/InventoryData
+   -- FUNCTION
+   -- Data structure for item in inventory
+   -- PARAMETERS
+   -- ProtoIndex - Index of prototype
+   -- Amount     - Amount of item
+   -- Name       - Name of item if different than default
+   -- Durability - Current durability of item
+   -- Price      - Price for which item was bought
+   -- SOURCE
    type InventoryData is record
-      ProtoIndex: Unbounded_String; -- Index of prototype
-      Amount: Positive; -- Amount of item
-      Name: Unbounded_String; -- Name of item if different than default
-      Durability: Natural; -- Current durability of item
-      Price: Natural; -- Price for which item was bought
+      ProtoIndex: Unbounded_String;
+      Amount: Positive;
+      Name: Unbounded_String;
+      Durability: Natural;
+      Price: Natural;
    end record;
--- ****
-
--- ****t* Items/Inventory_Container
--- SOURCE
+   -- ****
+   -- ****t* Items/Inventory_Container
+   -- FUNCTION
+   -- Used to store inventory data
+   -- SOURCE
    package Inventory_Container is new Vectors(Positive, InventoryData);
--- ****
-
--- ****v* Items/Items_List
--- FUNCTION
--- List of item available in game
--- SOURCE
+   -- ****
+   -- ****v* Items/Items_List
+   -- FUNCTION
+   -- List of item available in game
+   -- SOURCE
    Items_List: Objects_Container.Map;
--- ****
--- ****v* Items/Tools_List
--- FUNCTION
--- List of all tools types in game
--- SOURCE
+   -- ****
+   -- ****v* Items/Tools_List
+   -- FUNCTION
+   -- List of all tools types in game
+   -- SOURCE
    Tools_List: UnboundedString_Container.Vector;
--- ****
--- ****v* Items/Weapons_List
--- FUNCTION
--- List of indexes of all weapons in game
--- SOURCE
+   -- ****
+   -- ****v* Items/Weapons_List
+   -- FUNCTION
+   -- List of indexes of all weapons in game
+   -- SOURCE
    Weapons_List: UnboundedString_Container.Vector;
--- ****
--- ****v* Items/Shields_List
--- FUNCTION
--- List of indexes of all shields in game
--- SOURCE
+   -- ****
+   -- ****v* Items/Shields_List
+   -- FUNCTION
+   -- List of indexes of all shields in game
+   -- SOURCE
    Shields_List: UnboundedString_Container.Vector;
--- ****
--- ****v* Items/HeadArmors_List
--- FUNCTION
--- List of indexes of all head armors in game
--- SOURCE
+   -- ****
+   -- ****v* Items/HeadArmors_List
+   -- FUNCTION
+   -- List of indexes of all head armors in game
+   -- SOURCE
    HeadArmors_List: UnboundedString_Container.Vector;
--- ****
--- ****v* Items/ChestArmors_List
--- FUNCTION
--- List of indexes of all chest armors in game
--- SOURCE
+   -- ****
+   -- ****v* Items/ChestArmors_List
+   -- FUNCTION
+   -- List of indexes of all chest armors in game
+   -- SOURCE
    ChestArmors_List: UnboundedString_Container.Vector;
--- ****
--- ****v* Items/ArmsArmors_List
--- FUNCTION
--- List of indexes of all arms armors in game
--- SOURCE
+   -- ****
+   -- ****v* Items/ArmsArmors_List
+   -- FUNCTION
+   -- List of indexes of all arms armors in game
+   -- SOURCE
    ArmsArmors_List: UnboundedString_Container.Vector;
--- ****
--- ****v* Items/LegsArmors_List
--- FUNCTION
--- List of indexes of all legs armors in game
--- SOURCE
+   -- ****
+   -- ****v* Items/LegsArmors_List
+   -- FUNCTION
+   -- List of indexes of all legs armors in game
+   -- SOURCE
    LegsArmors_List: UnboundedString_Container.Vector;
--- ****
+   -- ****
 
--- ****f* Items/LoadItems
--- FUNCTION
--- Load items from files
--- SOURCE
+   -- ****f* Items/LoadItems
+   -- FUNCTION
+   -- Load items from files
+   -- PARAMETERS
+   -- Reader - XML Reader from which items data will be read
+   -- SOURCE
    procedure LoadItems(Reader: Tree_Reader);
--- ****
--- ****f* Items/FindProtoItem
--- FUNCTION
--- Return map index of item or empty string if item not found
--- SOURCE
+   -- ****
+   -- ****f* Items/FindProtoItem
+   -- FUNCTION
+   -- Search for map index of selected item
+   -- PARAMETERS
+   -- ItemType - Item type of item which map index is looking for
+   -- RESULT
+   -- Map index of item or empty string if item not found
+   -- SOURCE
    function FindProtoItem(ItemType: Unbounded_String) return Unbounded_String;
--- ****
--- ****f* Items/GetItemDamage
--- FUNCTION
--- Get description of item damage
--- SOURCE
+   -- ****
+   -- ****f* Items/GetItemDamage
+   -- FUNCTION
+   -- Get description of item damage
+   -- PARAMETERS
+   -- ItemDurability - Numeric value of current durability of the item
+   -- ToLower        - If true, convert description to lower cases. Default
+   --                  is false
+   -- RESULT
+   -- Description of item damage level
+   -- SOURCE
    function GetItemDamage
      (ItemDurability: Natural; ToLower: Boolean := False) return String;
--- ****
--- ****f* Items/GetItemName
--- FUNCTION
--- Get name of item in ship cargo or character inventory
--- SOURCE
+   -- ****
+   -- ****f* Items/GetItemName
+   -- FUNCTION
+   -- Get name of item in ship cargo or character inventory
+   -- Item       - Item to get it name
+   -- DamageInfo - If true, include description of the item damage in name.
+   --              Default is true.
+   -- ToLower    - If true, convert whole result string to lower case.
+   --              Default is true
+   -- RESULT
+   -- Name of item with additional damage level info
+   -- SOURCE
    function GetItemName
      (Item: InventoryData; DamageInfo, ToLower: Boolean := True) return String;
--- ****
--- ****f* Items/DamageItem
--- FUNCTION
--- Check if item in ship cargo or character inventory was damaged
--- SOURCE
+   -- ****
+   -- ****f* Items/DamageItem
+   -- FUNCTION
+   -- Check if item in ship cargo or character inventory was damaged
+   -- PARAMETERS
+   -- Inventory   - Inventory in which selected item is
+   -- ItemIndex   - Inventory index of selected item
+   -- SkillLevel  - Level of skill character which uses that item. Default
+   --               is 0
+   -- MemberIndex - Index of crew member of player ship which uses that
+   --               item. Default is 0
+   -- RESULT
+   -- Updated inventory in which item was
+   -- SOURCE
    procedure DamageItem
      (Inventory: in out Inventory_Container.Vector; ItemIndex: Positive;
       SkillLevel, MemberIndex: Natural := 0);
--- ****
--- ****f* Items/FindItem
--- FUNCTION
--- Find item in ship cargo or character inventory, return item index or 0 if item not found
--- SOURCE
+   -- ****
+   -- ****f* Items/FindItem
+   -- FUNCTION
+   -- Find item in ship cargo or character inventory
+   -- PARAMETERS
+   -- Inventory  - Inventory in which item will be looking for
+   -- ProtoIndex - Prototype index of item. Can be empty if ItemType is set
+   -- ItemType   - Type of item to search. Can be empty if ProtoIndex is set
+   -- Durability - Durability of item to search. Can be empty
+   -- RESULT
+   -- Iventory index of item or 0 if item was not found
+   -- SOURCE
    function FindItem
      (Inventory: Inventory_Container.Vector;
       ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
       Durability: Natural := 101) return Natural;
--- ****
--- ****f* Items/SetToolsList;
--- FUNCTION
--- Fill tools types list
--- SOURCE
+   -- ****
+   -- ****f* Items/SetToolsList;
+   -- FUNCTION
+   -- Fill tools types list
+   -- SOURCE
    procedure SetToolsList;
--- ****
+   -- ****
 
 end Items;

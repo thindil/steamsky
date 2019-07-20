@@ -19,35 +19,45 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Ordered_Maps; use Ada.Containers;
 with DOM.Readers; use DOM.Readers;
 
+-- ****h* Steamsky/Help
+-- FUNCTION
+-- Provide code for manipulate help system
+-- SOURCE
 package Help is
+-- ****
 
--- ****t* Help/Help_Data
--- FUNCTION
--- Data structure for help topic
--- SOURCE
+   -- ****t* Help/Help_Data
+   -- FUNCTION
+   -- Data structure for help topic
+   -- PARAMETERS
+   -- Index - Index of help topic
+   -- Text  - Text of help
+   -- SOURCE
    type Help_Data is record
-      Index: Unbounded_String; -- Index of help topic
-      Text: Unbounded_String; -- Text of help
+      Index: Unbounded_String;
+      Text: Unbounded_String;
    end record;
--- ****
-
--- ****t* Help/Help_Container
--- SOURCE
+   -- ****
+   -- ****t* Help/Help_Container
+   -- FUNCTION
+   -- Used to store help data
+   -- SOURCE
    package Help_Container is new Ordered_Maps(Unbounded_String, Help_Data);
--- ****
-
--- ****v* Help/Help_List
--- FUNCTION
--- List of all help topics
--- SOURCE
+   -- ****
+   -- ****v* Help/Help_List
+   -- FUNCTION
+   -- List of all help topics
+   -- SOURCE
    Help_List: Help_Container.Map;
--- ****
+   -- ****
 
--- ****f* Help/LoadHelp
--- FUNCTION
--- Load help text from file
--- SOURCE
+   -- ****f* Help/LoadHelp
+   -- FUNCTION
+   -- Load help text from file
+   -- PARAMETERS
+   -- Reader - XML Reader from which help will be read
+   -- SOURCE
    procedure LoadHelp(Reader: Tree_Reader);
--- ****
+   -- ****
 
 end Help;

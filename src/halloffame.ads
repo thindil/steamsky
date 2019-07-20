@@ -17,41 +17,54 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
+-- ****h* Steamsky/HallOfFame
+-- FUNCTION
+-- Provide code to manipulate hall of fame data
+-- SOURCE
 package HallOfFame is
-
--- ****t* HallOfFame/HallOfFame_Data
--- FUNCTION
--- Data structure for hall of fame
--- SOURCE
-   type HallOfFame_Data is record
-      Name: Unbounded_String; -- Name of player
-      Points: Natural; -- Amount of points earned
-      DeathReason: Unbounded_String; -- What caused player death
-   end record;
 -- ****
--- ****v* HallOfFame/HallOfFame_Array
--- FUNCTION
--- Store all hall of fame entries
--- SOURCE
+
+   -- ****t* HallOfFame/HallOfFame_Data
+   -- FUNCTION
+   -- Data structure for hall of fame
+   -- PARAMETERS
+   -- Name        - Name of player
+   -- Points      - Amount of points earned
+   -- DeathReason - What caused player death
+   -- SOURCE
+   type HallOfFame_Data is record
+      Name: Unbounded_String;
+      Points: Natural;
+      DeathReason: Unbounded_String;
+   end record;
+   -- ****
+   -- ****v* HallOfFame/HallOfFame_Array
+   -- FUNCTION
+   -- Store all hall of fame entries
+   -- SOURCE
    HallOfFame_Array: array(1 .. 10) of HallOfFame_Data :=
      (others =>
         (Name => Null_Unbounded_String, Points => 0,
          DeathReason => Null_Unbounded_String));
--- ****
+   -- ****
 
--- ****f* HallOfFame/LoadHallOfFame;
--- FUNCTION
--- Read hall of fame data from file
--- SOURCE
+   -- ****f* HallOfFame/LoadHallOfFame;
+   -- FUNCTION
+   -- Read hall of fame data from file
+   -- SOURCE
    procedure LoadHallOfFame;
--- ****
--- ****f* HallOfFame/UpdateHallOfFame
--- FUNCTION
--- Check did new entry should enter hall of fame
--- SOURCE
+   -- ****
+   -- ****f* HallOfFame/UpdateHallOfFame
+   -- FUNCTION
+   -- Check did new entry should enter hall of fame
+   -- PARAMETERS
+   -- PlayerName  - Name of player's character to add to the hall of fame
+   -- DeathReason - Reason of death of selected character
+   -- SOURCE
    procedure UpdateHallOfFame(PlayerName, DeathReason: Unbounded_String) with
       Pre =>
       (PlayerName /= Null_Unbounded_String and
        DeathReason /= Null_Unbounded_String);
--- ****
+      -- ****
+
 end HallOfFame;
