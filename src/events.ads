@@ -20,99 +20,124 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Game; use Game;
 with Bases; use Bases;
 
-package Events is
-
--- ****t* Events/Events_Types
+-- ****h* Steamsky/Events
 -- FUNCTION
--- Types of events
+-- Provide code to generate and update random events
 -- SOURCE
+package Events is
+-- ****
+
+   -- ****t* Events/Events_Types
+   -- FUNCTION
+   -- Types of events
+   -- SOURCE
    type Events_Types is
      (None, EnemyShip, AttackOnBase, Disease, DoublePrice, BaseRecovery,
       FullDocks, EnemyPatrol, Trader, FriendlyShip);
--- ****
--- ****t* Events/EventData(EType:
--- FUNCTION
--- Data structure for random events
--- SOURCE
+   -- ****
+   -- ****t* Events/EventData
+   -- FUNCTION
+   -- Data structure for random events
+   -- PARAMETERS
+   -- SkyX      - X coordinate on sky map
+   -- SkyY      - Y coordinate on sky map
+   -- Time      - Time to end of event
+   -- ItemIndex - Index of proto item which have bonus to price
+   -- ShipIndex - Index of proto ship which player meet
+   -- Data      - Various data for event (for example index of enemy ship)
+   -- SOURCE
    type EventData(EType: Events_Types := None) is record
-      SkyX: Integer; -- X coordinate on sky map
-      SkyY: Integer; -- Y coordinate on sky map
-      Time: Integer; -- Time to end of event
+      SkyX: Integer;
+      SkyY: Integer;
+      Time: Integer;
       case EType is
          when DoublePrice =>
-            ItemIndex: Unbounded_String; -- Index of proto item which have bonus to price
+            ItemIndex: Unbounded_String;
          when AttackOnBase | EnemyShip | EnemyPatrol | Trader | FriendlyShip =>
-            ShipIndex: Unbounded_String; -- Index of proto ship which player meet
+            ShipIndex: Unbounded_String;
          when others =>
-            Data: Natural; -- Various data for event (for example index of enemy ship)
+            Data: Natural;
       end case;
    end record;
--- ****
-
--- ****t* Events/Events_Container
--- SOURCE
+   -- ****
+   -- ****t* Events/Events_Container
+   -- FUNCTION
+   -- Used to store events data
+   -- SOURCE
    package Events_Container is new Vectors(Positive, EventData);
--- ****
-
--- ****v* Events/Events_List
--- FUNCTION
--- List of all events in the game
--- SOURCE
+   -- ****
+   -- ****v* Events/Events_List
+   -- FUNCTION
+   -- List of all events in the game
+   -- SOURCE
    Events_List: Events_Container.Vector;
--- ****
--- ****v* Events/Traders
--- FUNCTION
--- List of indexes of all friendly traders in the game
--- SOURCE
+   -- ****
+   -- ****v* Events/Traders
+   -- FUNCTION
+   -- List of indexes of all friendly traders in the game
+   -- SOURCE
    Traders: UnboundedString_Container.Vector;
--- ****
--- ****v* Events/FriendlyShips
--- FUNCTION
--- List of indexes of all friendly ships in the game
--- SOURCE
+   -- ****
+   -- ****v* Events/FriendlyShips
+   -- FUNCTION
+   -- List of indexes of all friendly ships in the game
+   -- SOURCE
    FriendlyShips: UnboundedString_Container.Vector;
--- ****
+   -- ****
 
--- ****f* Events/CheckForEvent
--- FUNCTION
--- Check if event happen, returns True, if combat starts
--- SOURCE
+   -- ****f* Events/CheckForEvent
+   -- FUNCTION
+   -- Check if event happen
+   -- RESULT
+   -- Return true if combat starts, otherwise false
+   -- SOURCE
    function CheckForEvent return Boolean;
--- ****
--- ****f* Events/UpdateEvents
--- FUNCTION
--- Update all events timers
--- SOURCE
+   -- ****
+   -- ****f* Events/UpdateEvents
+   -- FUNCTION
+   -- Update all events timers
+   -- PARAMETERS
+   -- Minutes - Amount of in-game minutes which passed
+   -- SOURCE
    procedure UpdateEvents(Minutes: Positive);
--- ****
--- ****f* Events/DeleteEvent
--- FUNCTION
--- Delete selected event
--- SOURCE
+   -- ****
+   -- ****f* Events/DeleteEvent
+   -- FUNCTION
+   -- Delete selected event
+   -- PARAMETERS
+   -- EventIndex - Index of the event to delete
+   -- SOURCE
    procedure DeleteEvent(EventIndex: Positive) with
       Pre => EventIndex <= Events_List.Last_Index;
--- ****
--- ****f* Events/GenerateTraders;
--- FUNCTION
--- Create list of traders needed for trader event
--- SOURCE
+      -- ****
+      -- ****f* Events/GenerateTraders;
+      -- FUNCTION
+      -- Create list of traders needed for trader event
+      -- SOURCE
    procedure GenerateTraders;
--- ****
--- ****f* Events/RecoverBase
--- FUNCTION
--- Recover abandoned base
--- SOURCE
+   -- ****
+   -- ****f* Events/RecoverBase
+   -- FUNCTION
+   -- Recover abandoned base
+   -- PARAMETERS
+   -- BaseIndex - Index of the base where recovery happened
+   -- SOURCE
    procedure RecoverBase(BaseIndex: BasesRange);
--- ****
--- ****f* Events/GenerateEnemies
--- FUNCTION
--- Create list of enemies ships
--- SOURCE
+   -- ****
+   -- ****f* Events/GenerateEnemies
+   -- FUNCTION
+   -- Create list of enemies ships
+   -- PARAMETERS
+   -- Enemies     - List of enemies to generate
+   -- Owner       - Index of faction which enemies list should contains.
+   --               Default all factions
+   -- WithTraders - Did list should contains enemy traders too. Default true
+   -- SOURCE
    procedure GenerateEnemies
      (Enemies: in out UnboundedString_Container.Vector;
       Owner: Unbounded_String := To_Unbounded_String("Any");
       WithTraders: Boolean := True) with
       Pre => Owner /= Null_Unbounded_String;
--- ****
+      -- ****
 
 end Events;

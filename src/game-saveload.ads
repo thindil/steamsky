@@ -15,38 +15,48 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+-- ****h* Steamsky/Game.SaveLoad
+-- FUNCTION
+-- Provide code to save and load the game data from file
+-- SOURCE
 package Game.SaveLoad is
+-- ****
 
--- ****v* Game.SaveLoad/SaveName
--- FUNCTION
--- Full path with file name for current savegame
--- SOURCE
+   -- ****v* Game.SaveLoad/SaveName
+   -- FUNCTION
+   -- Full path with file name for current savegame
+   -- SOURCE
    SaveName: Unbounded_String;
--- ****
--- ****v* Game.SaveLoad/SaveGame_Invalid_Data
--- FUNCTION
--- Raised when invalid data found in savegame
--- SOURCE
+   -- ****
+   -- ****e* Game.SaveLoad/SaveGame_Invalid_Data
+   -- FUNCTION
+   -- Raised when invalid data found in savegame
+   -- SOURCE
    SaveGame_Invalid_Data: exception;
--- ****
+   -- ****
 
--- ****f* Game.SaveLoad/SaveGame
--- FUNCTION
--- Save game to file
--- SOURCE
+   -- ****f* Game.SaveLoad/SaveGame
+   -- FUNCTION
+   -- Save game to file
+   -- PARAMETERS
+   -- PrettyPrint - Did data stored in file should be pretty printed. Default
+   --               false
+   -- SOURCE
    procedure SaveGame(PrettyPrint: Boolean := False);
--- ****
--- ****f* Game.SaveLoad/LoadGame;
--- FUNCTION
--- Load game from file
--- SOURCE
+   -- ****
+   -- ****f* Game.SaveLoad/LoadGame;
+   -- FUNCTION
+   -- Load game from file
+   -- SOURCE
    procedure LoadGame;
--- ****
--- ****f* Game.SaveLoad/GenerateSaveName
--- FUNCTION
--- Generate unique name for save game file
--- SOURCE
+   -- ****
+   -- ****f* Game.SaveLoad/GenerateSaveName
+   -- FUNCTION
+   -- Generate unique name for save game file
+   -- PARAMETERS
+   -- RenameSave - If true, rename existing save game file. Default false.
+   -- SOURCE
    procedure GenerateSaveName(RenameSave: Boolean := False);
--- ****
+   -- ****
 
 end Game.SaveLoad;

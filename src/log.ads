@@ -15,41 +15,51 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+-- ****h* Steamsky/Log
+-- FUNCTION
+--  Provides code for manipulate debug log
+-- SOURCE
 package Log is
-
--- ****t* Log/Debug_Types
--- FUNCTION
--- Did game is run in debug mode
--- SOURCE
-   type Debug_Types is
-     (None, Everything, Combat,
-      Menu); -- Types of debug mode, which messages log to file
 -- ****
 
--- ****v* Log/DebugMode
--- SOURCE
+   -- ****t* Log/Debug_Types
+   -- FUNCTION
+   -- Types of debug mode, which messages log to file
+   -- SOURCE
+   type Debug_Types is (None, Everything, Combat, Menu);
+   -- ****
+   -- ****v* Log/DebugMode
+   -- FUNCTION
+   -- Did game is run in debug mode
+   -- SOURCE
    DebugMode: Debug_Types := None;
--- ****
+   -- ****
 
--- ****f* Log/StartLogging;
--- FUNCTION
--- Open/create debug.log file
--- SOURCE
+   -- ****f* Log/StartLogging;
+   -- FUNCTION
+   -- Open/create debug.log file
+   -- SOURCE
    procedure StartLogging;
--- ****
--- ****f* Log/LogMessage
--- FUNCTION
--- Log message (if proper type) to file in debug mode
--- SOURCE
+   -- ****
+   -- ****f* Log/LogMessage
+   -- FUNCTION
+   -- Log message (if proper type) to file in debug mode
+   -- PARAMETERS
+   -- Message     - Message to write to debug log file
+   -- MessageType - Type of message to write to debug log file
+   -- NewLine     - If true, add new line character after message. Default is
+   --               true
+   -- TimeStamp   - If true, add timestamp before message. Default is true
+   -- SOURCE
    procedure LogMessage
      (Message: String; MessageType: Debug_Types;
       NewLine, TimeStamp: Boolean := True);
--- ****
--- ****f* Log/EndLogging;
--- FUNCTION
--- Close debug.file
--- SOURCE
+   -- ****
+   -- ****f* Log/EndLogging;
+   -- FUNCTION
+   -- Close debug.file
+   -- SOURCE
    procedure EndLogging;
--- ****
+   -- ****
 
 end Log;
