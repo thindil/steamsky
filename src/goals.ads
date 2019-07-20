@@ -19,70 +19,93 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
 with DOM.Readers; use DOM.Readers;
 
-package Goals is
-
--- ****t* Goals/GoalTypes
+-- ****h* Steamsky/Goals
 -- FUNCTION
--- Types of goals
+-- Provide code for manipulate goals
 -- SOURCE
+package Goals is
+-- ****
+
+   -- ****t* Goals/GoalTypes
+   -- FUNCTION
+   -- Types of goals
+   -- SOURCE
    type GoalTypes is
      (RANDOM, REPUTATION, DESTROY, DISCOVER, VISIT, CRAFT, MISSION, KILL);
--- ****
--- ****t* Goals/Goal_Data
--- FUNCTION
--- Data structure for each goal
--- SOURCE
+   -- ****
+   -- ****t* Goals/Goal_Data
+   -- FUNCTION
+   -- Data structure for each goal
+   -- PARAMETERS
+   -- Index       - Index of goal
+   -- GType       - Type of goal
+   -- Amount      - Amount of targets needed for finish goal
+   -- TargetIndex - Index of target needed for finish goal. If empty, mean all targets selected type (bases, ships, etc)
+   -- Multiplier  - Multiplier for points awarded for finish this goal
+   -- SOURCE
    type Goal_Data is record
-      Index: Unbounded_String; -- Index of goal
-      GType: GoalTypes; -- Type of goal
-      Amount: Natural; -- Amount of targets needed for finish goal
-      TargetIndex: Unbounded_String; -- Index of target needed for finish goal. If empty, mean all targets selected type (bases, ships, etc)
-      Multiplier: Positive; -- Multiplier for points awarded for finish this goal.
+      Index: Unbounded_String;
+      GType: GoalTypes;
+      Amount: Natural;
+      TargetIndex: Unbounded_String;
+      Multiplier: Positive;
    end record;
--- ****
-
--- ****t* Goals/Goals_Container
--- SOURCE
+   -- ****
+   -- ****t* Goals/Goals_Container
+   -- FUNCTION
+   -- Used to store goals data
+   -- SOURCE
    package Goals_Container is new Vectors(Positive, Goal_Data);
--- ****
-
--- ****v* Goals/Goals_List
--- FUNCTION
--- List of player goals available in game
--- SOURCE
+   -- ****
+   -- ****v* Goals/Goals_List
+   -- FUNCTION
+   -- List of player goals available in game
+   -- SOURCE
    Goals_List: Goals_Container.Vector;
--- ****
--- ****v* Goals/CurrentGoal
--- FUNCTION
--- Player current goal
--- SOURCE
+   -- ****
+   -- ****v* Goals/CurrentGoal
+   -- FUNCTION
+   -- Player current goal
+   -- SOURCE
    CurrentGoal: Goal_Data;
--- ****
+   -- ****
 
--- ****f* Goals/LoadGoals
--- FUNCTION
--- Load player goals from files
--- SOURCE
+   -- ****f* Goals/LoadGoals
+   -- FUNCTION
+   -- Load player goals from files
+   -- FUNCTION
+   -- Reader - XML Reader from which goals data will be read
+   -- SOURCE
    procedure LoadGoals(Reader: Tree_Reader);
--- ****
--- ****f* Goals/GoalText
--- FUNCTION
--- Return info about selected goal or current goal if Index = 0
--- SOURCE
+   -- ****
+   -- ****f* Goals/GoalText
+   -- FUNCTION
+   -- Get info about selected goal
+   -- PARAMETERS
+   -- Index - Index of goal from which we take info. If 0 then get info for
+   --         current goal
+   -- RESULT
+   -- Info about selected goal
+   -- SOURCE
    function GoalText(Index: Goals_Container.Extended_Index) return String with
       Pre => Index <= Goals_List.Last_Index;
--- ****
--- ****f* Goals/ClearCurrentGoal;
--- FUNCTION
--- Reset current goal
--- SOURCE
+      -- ****
+      -- ****f* Goals/ClearCurrentGoal;
+      -- FUNCTION
+      -- Reset current goal
+      -- SOURCE
    procedure ClearCurrentGoal;
--- ****
--- ****f* Goals/UpdateGoal
--- FUNCTION
--- Update current goal
--- SOURCE
+   -- ****
+   -- ****f* Goals/UpdateGoal
+   -- FUNCTION
+   -- Update current goal
+   -- PARAMETERS
+   -- GType       - Type of goal to check
+   -- TargetIndex - Index of target to check
+   -- Amount      - Amount for goal to modify if both checks are valid
+   -- SOURCE
    procedure UpdateGoal
      (GType: GoalTypes; TargetIndex: Unbounded_String; Amount: Positive := 1);
--- ****
+   -- ****
+
 end Goals;

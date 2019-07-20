@@ -106,16 +106,14 @@ package Crew is
       Gender: Character;
       Health: Natural;
       Tired: Natural;
-      Skills: Skills_Container
-        .Vector;
+      Skills: Skills_Container.Vector;
       Hunger: Natural;
       Thirst: Natural;
       Order: Crew_Orders;
       PreviousOrder: Crew_Orders;
       OrderTime: Integer;
       Orders: Orders_Array;
-      Attributes: Attributes_Container
-        .Vector;
+      Attributes: Attributes_Container.Vector;
       Inventory: Inventory_Container.Vector;
       Equipment: Equipment_Array;
       Payment: Attributes_Array;
