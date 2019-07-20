@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
   advanced bronze cabin, large double extended bronze cabin, large double
   luxury bronze cabin, large double basic bronze cabin, large double advanced
   iron cabin, large double extended iron cabin, large double luxury iron
-  cabin, large double basic steel cabin
+  cabin, large double basic steel cabin, large double advanced steel cabin
 
 ### Changed
 - Updated help
