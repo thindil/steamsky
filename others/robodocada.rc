@@ -17,6 +17,7 @@ options:
   --toc
   --masterindex "Index,index"
   --sourceindex "Source files,sources"
+  --css others/robodoc.css
 headertypes:
   h Packages robo_packages 4
   t Types robo_types 3
