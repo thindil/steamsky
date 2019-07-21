@@ -19,7 +19,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
 with Game; use Game;
 
--- ****h* Messages/Messages
+-- ****h* Steamsky/Messages
 -- FUNCTION
 -- Provides code for manipulate in game messages
 -- SOURCE

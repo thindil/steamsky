@@ -18,25 +18,41 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Game; use Game;
 
+-- ****h* Utils/Utils
+-- FUNCTION
+-- Provided various uncategorized code
+-- SOURCE
 package Utils is
+-- ****
 
--- ****f* Utils/GetRandom
--- FUNCTION
--- Return random number from Min to Max range
--- SOURCE
+   -- ****f* Utils/GetRandom
+   -- FUNCTION
+   -- Return random number from Min to Max range
+   -- PARAMETERS
+   -- Min - Starting value from which generate random number
+   -- Max - End value from which generate random number
+   -- RESULT
+   -- Random number between Min and Max
+   -- SOURCE
    function GetRandom(Min, Max: Integer) return Integer;
--- ****
--- ****f* Utils/DaysDifference
--- FUNCTION
--- Return days difference between selected date and current game date
--- SOURCE
+   -- ****
+   -- ****f* Utils/DaysDifference
+   -- FUNCTION
+   -- Count days difference between selected date and current game date
+   -- PARAMETERS
+   -- DateToCompare - In game date to compare with current game date
+   -- RESULT
+   -- Amount of days difference between DateToCompare and current game date
+   -- SOURCE
    function DaysDifference(DateToCompare: Date_Record) return Natural;
--- ****
--- ****f* Utils/GenerateRoboticName
--- FUNCTION
--- Generate robotic type name for bases, mobs, ships, etc
--- SOURCE
+   -- ****
+   -- ****f* Utils/GenerateRoboticName
+   -- FUNCTION
+   -- Generate robotic type name for bases, mobs, ships, etc
+   -- RESULT
+   -- Random robotic name
+   -- SOURCE
    function GenerateRoboticName return Unbounded_String;
--- ****
+   -- ****
 
 end Utils;

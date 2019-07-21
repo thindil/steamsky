@@ -22,63 +22,82 @@ with Ada.Strings.Unbounded.Hash;
 with DOM.Readers; use DOM.Readers;
 with Crew; use Crew;
 
+-- ****h* Steamsky/Mobs
+-- FUNCTION
+-- Provides code for manipulate mobiles
+-- SOURCE
 package Mobs is
+-- ****
 
--- ****t* Mobs/MobInventoryRecord
--- FUNCTION
--- Data structure for mobs inventory
--- SOURCE
+   -- ****t* Mobs/MobInventoryRecord
+   -- FUNCTION
+   -- Data structure for mobs inventory
+   -- PARAMETERS
+   -- ProtoIndex - Proto index of item in mob inventory
+   -- MinAmount  - Minimal amount of item in mob inventory
+   -- MaxAmount  - Maximum amount of item in mob inventory
+   -- SOURCE
    type MobInventoryRecord is record
-      ProtoIndex: Unbounded_String; -- Proto index of item in mob inventory
-      MinAmount: Natural; -- Minimal amount of item in mob inventory
-      MaxAmount: Natural; -- Maximum amount of item in mob inventory
+      ProtoIndex: Unbounded_String;
+      MinAmount: Natural;
+      MaxAmount: Natural;
    end record;
--- ****
-
--- ****t* Mobs/MobInventory_Container
--- SOURCE
+   -- ****
+   -- ****t* Mobs/MobInventory_Container
+   -- FUNCTION
+   -- Used for store mobiles inventories
+   -- SOURCE
    package MobInventory_Container is new Vectors(Positive, MobInventoryRecord);
--- ****
-
--- ****t* Mobs/ProtoMobRecord
--- FUNCTION
--- Data structure for mobs prototypes
--- SOURCE
+   -- ****
+   -- ****t* Mobs/ProtoMobRecord
+   -- FUNCTION
+   -- Data structure for mobs prototypes
+   -- PARAMETERS
+   -- Skills     - Names indexes, levels and experience in skills of mob
+   -- Attributes - Levels and experience in attributes of mob
+   -- Order      - Current order for mob
+   -- Priorities - Priority of orders of mob
+   -- Inventory  - List of mob inventory
+   -- Equipment  - Items indexes from inventory used by mob: 1 - weapon,
+   --              2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs,
+   --              7 - tool
+   -- SOURCE
    type ProtoMobRecord is record
-      Skills: Skills_Container
-        .Vector; -- Names indexes, levels and experience in skills of mob
-      Attributes: Attributes_Container
-        .Vector; -- Levels and experience in attributes of mob
-      Order: Crew_Orders; -- Current order for mob
-      Priorities: Orders_Array; -- Priority of orders of mob
-      Inventory: MobInventory_Container.Vector; -- List of mob inventory
-      Equipment: Equipment_Array; -- Items indexes from inventory used by mob: 1 - weapon, 2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs, 7 - tool
+      Skills: Skills_Container.Vector;
+      Attributes: Attributes_Container.Vector;
+      Order: Crew_Orders;
+      Priorities: Orders_Array;
+      Inventory: MobInventory_Container.Vector;
+      Equipment: Equipment_Array;
    end record;
--- ****
-
--- ****t* Mobs/ProtoMobs_Container
--- SOURCE
+   -- ****
+   -- ****t* Mobs/ProtoMobs_Container
+   -- FUNCTION
+   -- Used to store mobiles
+   -- SOURCE
    package ProtoMobs_Container is new Hashed_Maps(Unbounded_String,
       ProtoMobRecord, Ada.Strings.Unbounded.Hash, "=");
--- ****
-
--- ****v* Mobs/ProtoMobs_List
--- SOURCE
+   -- ****
+   -- ****v* Mobs/ProtoMobs_List
+   -- FUNCTION
+   -- List of prototypes of all mobiles available in the game
+   -- SOURCE
    ProtoMobs_List: ProtoMobs_Container.Map;
--- ****
-
--- ****v* Mobs/Mobs_Invalid_Data
--- FUNCTION
--- Raised when invalid data found in mobs file
--- SOURCE
+   -- ****
+   -- ****e* Mobs/Mobs_Invalid_Data
+   -- FUNCTION
+   -- Raised when invalid data found in mobs file
+   -- SOURCE
    Mobs_Invalid_Data: exception;
--- ****
+   -- ****
 
--- ****f* Mobs/LoadMobs
--- FUNCTION
--- Load mobs from files
--- SOURCE
+   -- ****f* Mobs/LoadMobs
+   -- FUNCTION
+   -- Load mobs from files
+   -- PARAMETERS
+   -- Reader - XML Reader from which data will be read
+   -- SOURCE
    procedure LoadMobs(Reader: Tree_Reader);
--- ****
+   -- ****
 
 end Mobs;
