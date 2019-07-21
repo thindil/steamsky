@@ -15,28 +15,38 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-package Ships.Upgrade is
-
--- ****v* Ships.Upgrade/Ship_Upgrade_Error
+-- ****h* Steamsky/Ships.Upgrade
 -- FUNCTION
--- Raised when player can't start upgrading module
+-- Provided code for upgrade player ship modules
 -- SOURCE
-   Ship_Upgrade_Error: exception;
+package Ships.Upgrade is
 -- ****
 
--- ****f* Ships.Upgrade/StartUpgrading
--- FUNCTION
--- Set upgrading order
--- SOURCE
+   -- ****e* Ships.Upgrade/Ship_Upgrade_Error
+   -- FUNCTION
+   -- Raised when player can't start upgrading module
+   -- SOURCE
+   Ship_Upgrade_Error: exception;
+   -- ****
+
+   -- ****f* Ships.Upgrade/StartUpgrading
+   -- FUNCTION
+   -- Set upgrading order
+   -- PARAMETERS
+   -- ModuleIndex - Player ship index of module to upgrade
+   -- UpgradeType - Type of upgrade to start
+   -- SOURCE
    procedure StartUpgrading(ModuleIndex, UpgradeType: Positive) with
       Pre =>
       (ModuleIndex <= PlayerShip.Modules.Last_Index and UpgradeType < 5);
--- ****
--- ****f* Ships.Upgrade/UpgradeShip
--- FUNCTION
--- Upgrade selected module on ship
--- SOURCE
+      -- ****
+      -- ****f* Ships.Upgrade/UpgradeShip
+      -- FUNCTION
+      -- Upgrade selected module on ship
+      -- PARAMETERS
+      -- Minutes - Amount of passed in-game minutes
+      -- SOURCE
    procedure UpgradeShip(Minutes: Positive);
--- ****
+   -- ****
 
 end Ships.Upgrade;

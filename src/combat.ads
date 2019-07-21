@@ -25,6 +25,7 @@ with Game; use Game;
 -- Provide code for ship to ship combat
 -- SOURCE
 package Combat is
+-- ****
 
    -- ****v* Combat/EnemyName
    -- FUNCTION
