@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
--- ****h* Maps/Maps
+-- ****h* Steamsky/Maps
 -- FUNCTION
 -- Provide code for manipulate the game map
 -- SOURCE

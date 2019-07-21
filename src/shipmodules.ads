@@ -20,56 +20,79 @@ with Ada.Strings.Unbounded.Hash;
 with Ada.Containers.Hashed_Maps; use Ada.Containers;
 with DOM.Readers; use DOM.Readers;
 
-package ShipModules is
-
--- ****t* ShipModules/ModuleType
+-- ****h* Steamsky/ShipModules
+-- FUNCTION
+-- Provided code to manipulate ship modules prototypes
 -- SOURCE
+package ShipModules is
+-- ****
+
+   -- ****t* ShipModules/ModuleType
+   -- FUNCTION
+   -- Types of ship modules
+   -- SOURCE
    type ModuleType is
      (ANY, ENGINE, CABIN, COCKPIT, TURRET, GUN, CARGO, HULL, ARMOR,
       BATTERING_RAM, ALCHEMY_LAB, FURNACE, WATER_COLLECTOR, WORKSHOP,
       GREENHOUSE, MEDICAL_ROOM, HARPOON_GUN, TRAINING_ROOM);
--- ****
-
--- ****t* ShipModules/BaseModule_Data
--- FUNCTION
--- Data structure for prototypes of ship modules
--- SOURCE
+   -- ****
+   -- ****t* ShipModules/BaseModule_Data
+   -- FUNCTION
+   -- Data structure for prototypes of ship modules
+   -- PARAMETERS
+   -- Name           - Name of module
+   -- MType          - Type of module
+   -- Weight         - Base weight of module
+   -- Value          - For engine base power, depends on module
+   -- MaxValue       - For gun, damage, depends on module
+   -- Durability     - Base durability of module
+   -- RepairMaterial - Material needed for repair module
+   -- RepairSkill    - Skill needed for repair module
+   -- Price          - Price for module in shipyards
+   -- InstallTime    - Amount of minutes needed for install/remove module
+   -- Unique         - Did ship can have installed only one that module
+   -- Size           - How many space in ship this module take
+   -- Description    - Description of module
+   -- MaxOwners      - How many owners module can have
+   -- SOURCE
    type BaseModule_Data is record
-      Name: Unbounded_String; -- Name of module
-      MType: ModuleType; -- Type of module
-      Weight: Natural; -- Base weight of module
-      Value: Integer; -- For engine base power, depends on module
-      MaxValue: Integer; -- For gun, damage, depends on module
-      Durability: Integer; -- Base durability of module
-      RepairMaterial: Unbounded_String; -- Material needed for repair module
-      RepairSkill: Positive; -- Skill needed for repair module
-      Price: Natural; -- Price for module in shipyards
-      InstallTime: Positive; -- Amount of minutes needed for install/remove module
-      Unique: Boolean; -- Did ship can have installed only one that module
-      Size: Natural; -- How many space in ship this module take
-      Description: Unbounded_String; -- Description of module
-      MaxOwners: Natural; -- How many owners module can have
+      Name: Unbounded_String;
+      MType: ModuleType;
+      Weight: Natural;
+      Value: Integer;
+      MaxValue: Integer;
+      Durability: Integer;
+      RepairMaterial: Unbounded_String;
+      RepairSkill: Positive;
+      Price: Natural;
+      InstallTime: Positive;
+      Unique: Boolean;
+      Size: Natural;
+      Description: Unbounded_String;
+      MaxOwners: Natural;
    end record;
--- ****
-
--- ****t* ShipModules/BaseModules_Container
--- SOURCE
+   -- ****
+   -- ****t* ShipModules/BaseModules_Container
+   -- FUNCTION
+   -- Used for store prototypes of modules
+   -- SOURCE
    package BaseModules_Container is new Hashed_Maps(Unbounded_String,
       BaseModule_Data, Ada.Strings.Unbounded.Hash, "=");
--- ****
-
--- ****v* ShipModules/Modules_List
--- FUNCTION
--- List of ship modules available in game
--- SOURCE
+   -- ****
+   -- ****v* ShipModules/Modules_List
+   -- FUNCTION
+   -- List of ship modules available in game
+   -- SOURCE
    Modules_List: BaseModules_Container.Map;
--- ****
+   -- ****
 
--- ****f* ShipModules/LoadShipModules
--- FUNCTION
--- Load modules from files
--- SOURCE
+   -- ****f* ShipModules/LoadShipModules
+   -- FUNCTION
+   -- Load modules from files
+   -- PARAMETERS
+   -- Reader - XML Reader from which ship modules data will be read
+   -- SOURCE
    procedure LoadShipModules(Reader: Tree_Reader);
--- ****
+   -- ****
 
 end ShipModules;

@@ -15,13 +15,20 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-package Ships.Repairs is
-
--- ****f* Ships.Repairs/RepairShip
+-- ****h* Steamsky/Ships.Repairs
 -- FUNCTION
--- Repair ship modules
+-- Provided code for repair ships
 -- SOURCE
-   procedure RepairShip(Minutes: Positive);
+package Ships.Repairs is
 -- ****
+
+   -- ****f* Ships.Repairs/RepairShip
+   -- FUNCTION
+   -- Repair ship modules
+   -- PARAMETERS
+   -- Minutes - Amount of passed in-game minutes
+   -- SOURCE
+   procedure RepairShip(Minutes: Positive);
+   -- ****
 
 end Ships.Repairs;

@@ -22,7 +22,7 @@ with Ada.Containers.Hashed_Maps;
 with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 
--- ****h* Items/Items
+-- ****h* SteamSky/Items
 -- FUNCTION
 -- Provice code for manipulate items
 -- SOURCE

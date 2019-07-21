@@ -17,19 +17,29 @@
 
 with DOM.Core; use DOM.Core;
 
+-- ****h* Steamsky/Ships.SaveLoad
+-- FUNCTION
+-- Provides code to save and load player ship data to file
+-- SOURCE
 package Ships.SaveLoad is
+-- ****
 
--- ****f* Ships.SaveLoad/SavePlayerShip
--- FUNCTION
--- Save player ship to file
--- SOURCE
+   -- ****f* Ships.SaveLoad/SavePlayerShip
+   -- FUNCTION
+   -- Save player ship to file
+   -- PAEAMETERS
+   -- SaveData - XML structure to which player ship data will be saved
+   -- MainNode - XML main node to which player ship data will be saved
+   -- SOURCE
    procedure SavePlayerShip(SaveData: Document; MainNode: DOM.Core.Element);
--- ****
--- ****f* Ships.SaveLoad/LoadPlayerShip
--- FUNCTION
--- Load saved player ship from file
--- SOURCE
+   -- ****
+   -- ****f* Ships.SaveLoad/LoadPlayerShip
+   -- FUNCTION
+   -- Load saved player ship from file
+   -- PARAMETERS
+   -- SaveData - XML structure from which player ship data will be loaded
+   -- SOURCE
    procedure LoadPlayerShip(SaveData: Document);
--- ****
+   -- ****
 
 end Ships.SaveLoad;

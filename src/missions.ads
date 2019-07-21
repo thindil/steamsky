@@ -18,112 +18,151 @@
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
-package Missions is
-
--- ****t* Missions/Missions_Types
--- SOURCE
-   type Missions_Types is (Deliver, Destroy, Patrol, Explore, Passenger);
--- ****
-
--- ****t* Missions/RewardMultiplier
--- SOURCE
-   type RewardMultiplier is digits 2 range 0.0 .. 2.0;
--- ****
-
--- ****t* Missions/Mission_Data(MType:
+-- ****h* Steamsky/Missions
 -- FUNCTION
--- Data structure for missions
+-- Provides code for manipulate missions data
 -- SOURCE
+package Missions is
+-- ****
+
+   -- ****t* Missions/Missions_Types
+   -- FUNCTION
+   -- Types of missions
+   -- SOURCE
+   type Missions_Types is (Deliver, Destroy, Patrol, Explore, Passenger);
+   -- ****
+   -- ****t* Missions/RewardMultiplier
+   -- FUNCTION
+   -- Used for count reward for finished missions
+   -- SOURCE
+   type RewardMultiplier is digits 2 range 0.0 .. 2.0;
+   -- ****
+   -- ****t* Missions/Mission_Data(MType:
+   -- FUNCTION
+   -- Data structure for missions
+   -- PARAMETERS
+   -- Time       - Amount of minutes to finish the mission
+   -- TargetX    - Skymap X-axis for the mission target
+   -- TargetY    - Skymap Y-axis for the mission target
+   -- Reward     - Amount of money reward for the mission
+   -- StartBase  - Index of sky base where the mission starts
+   -- Finished   - Did the mission is finished
+   -- Multiplier - Bonus to amount of money or reputation rewards for the
+   --              mission
+   -- ItemIndex  - Index of proto item to deliver to base
+   -- Data       - Minimum quality of cabin needed by passenger (in bases)
+   --              or passenger index (in player ship)
+   -- ShipIndex  - Index of proto ship which must be destroyed
+   -- Target     - Target for mission (ship, item)
+   -- SOURCE
    type Mission_Data(MType: Missions_Types := Deliver) is record
-      Time: Positive; -- Amount of minutes to finish the mission
-      TargetX: Natural; -- Skymap X-axis for the mission target
-      TargetY: Natural; -- Skymap Y-axis for the mission target
-      Reward: Positive; -- Amount of money reward for the mission
-      StartBase: Positive; -- Index of sky base where the mission starts
-      Finished: Boolean; -- Did the mission is finished
-      Multiplier: RewardMultiplier; -- Bonus to amount of money or reputation rewards for the mission
+      Time: Positive;
+      TargetX: Natural;
+      TargetY: Natural;
+      Reward: Positive;
+      StartBase: Positive;
+      Finished: Boolean;
+      Multiplier: RewardMultiplier;
       case MType is
          when Deliver =>
-            ItemIndex: Unbounded_String; -- Index of proto item to deliver to base
+            ItemIndex: Unbounded_String;
          when Passenger =>
-            Data: Positive; -- Minimum quality of cabin needed by passenger (in bases) or passenger index (in player ship)
+            Data: Positive;
          when Destroy =>
-            ShipIndex: Unbounded_String; -- Index of proto ship which must be destroyed
+            ShipIndex: Unbounded_String;
          when others =>
-            Target: Natural;  -- Target for mission (ship, item)
+            Target: Natural;
       end case;
    end record;
--- ****
-
--- ****t* Missions/Mission_Container
--- SOURCE
+   -- ****
+   -- ****t* Missions/Mission_Container
+   -- FUNCTION
+   -- Used to store data for missions
+   -- SOURCE
    package Mission_Container is new Vectors(Positive, Mission_Data);
--- ****
-
--- ****v* Missions/AcceptedMissions
--- FUNCTION
--- List of missions accepted by player
--- SOURCE
+   -- ****
+   -- ****v* Missions/AcceptedMissions
+   -- FUNCTION
+   -- List of missions accepted by player
+   -- SOURCE
    AcceptedMissions: Mission_Container.Vector;
--- ****
--- ****v* Missions/Missions_Accepting_Error
--- FUNCTION
--- Raised when mission can't be accepted
--- SOURCE
+   -- ****
+   -- ****e* Missions/Missions_Accepting_Error
+   -- FUNCTION
+   -- Raised when mission can't be accepted
+   -- SOURCE
    Missions_Accepting_Error: exception;
--- ****
--- ****v* Missions/Missions_Finishing_Error
--- FUNCTION
--- Raised when mission can't be finished
--- SOURCE
+   -- ****
+   -- ****e* Missions/Missions_Finishing_Error
+   -- FUNCTION
+   -- Raised when mission can't be finished
+   -- SOURCE
    Missions_Finishing_Error: exception;
--- ****
+   -- ****
 
--- ****f* Missions/GenerateMissions;
--- FUNCTION
--- Generate if needed new missions in base
--- SOURCE
+   -- ****f* Missions/GenerateMissions;
+   -- FUNCTION
+   -- Generate if needed new missions in base
+   -- SOURCE
    procedure GenerateMissions;
--- ****
--- ****f* Missions/AcceptMission
--- FUNCTION
--- Accept selected mission from base
--- SOURCE
+   -- ****
+   -- ****f* Missions/AcceptMission
+   -- FUNCTION
+   -- Accept selected mission from base
+   -- PARAMETERS
+   -- MissionIndex - Base list of available missions index of mission to
+   --                accept
+   -- SOURCE
    procedure AcceptMission(MissionIndex: Positive);
--- ****
--- ****f* Missions/UpdateMissions
--- FUNCTION
--- Update accepted missions
--- SOURCE
+   -- ****
+   -- ****f* Missions/UpdateMissions
+   -- FUNCTION
+   -- Update accepted missions
+   -- PARAMETERS
+   -- Minutes - Amount of passed minutes
+   -- SOURCE
    procedure UpdateMissions(Minutes: Positive);
--- ****
--- ****f* Missions/FinishMission
--- FUNCTION
--- Finish selected mission
--- SOURCE
+   -- ****
+   -- ****f* Missions/FinishMission
+   -- FUNCTION
+   -- Finish selected mission
+   -- PARAMETERS
+   -- MissionIndex - Player ship list of accepted missions index of mission
+   --                to finish
+   -- SOURCE
    procedure FinishMission(MissionIndex: Positive) with
       Pre => MissionIndex <= AcceptedMissions.Last_Index;
--- ****
--- ****f* Missions/DeleteMission
--- FUNCTION
--- Delete selected mission
--- SOURCE
+      -- ****
+      -- ****f* Missions/DeleteMission
+      -- FUNCTION
+      -- Delete selected mission
+      -- PARAMETERS
+      -- MissionIndex - Player ship list of accepted missions index of mission
+      --                to delete
+      -- Failed       - If true, it is failed mission. Default is true.
+      -- SOURCE
    procedure DeleteMission
      (MissionIndex: Positive; Failed: Boolean := True) with
       Pre => MissionIndex <= AcceptedMissions.Last_Index;
--- ****
--- ****f* Missions/UpdateMission
--- FUNCTION
--- Update status of mission
--- SOURCE
+      -- ****
+      -- ****f* Missions/UpdateMission
+      -- FUNCTION
+      -- Update status of mission
+      -- PARAMETERS
+      -- MissionIndex - Player ship list of accepted missions index of mission
+      --                to update
+      -- SOURCE
    procedure UpdateMission(MissionIndex: Positive) with
       Pre => MissionIndex <= AcceptedMissions.Last_Index;
--- ****
--- ****f* Missions/AutoFinishMissions
--- FUNCTION
--- Finish all possible missions, return empty string if all ok
--- SOURCE
+      -- ****
+      -- ****f* Missions/AutoFinishMissions
+      -- FUNCTION
+      -- Finish all possible missions.
+      -- RESULT
+      -- Empty string if everything is ok, otherwise message with information
+      -- what goes wrong
+      -- SOURCE
    function AutoFinishMissions return String;
--- ****
+   -- ****
 
 end Missions;
