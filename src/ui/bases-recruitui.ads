@@ -17,19 +17,26 @@
 
 with Gtkada.Builder; use Gtkada.Builder;
 
+-- ****h* Steamsky/Bases.RecruitUI
+-- FUNCTION
+-- Provides code for show recruit UI
+-- SOURCE
 package Bases.RecruitUI is
+-- ****
 
--- ****f* Bases.RecruitUI/CreateRecruitUI
--- FUNCTION
--- Create infterace for recruit new crew members
--- SOURCE
+   -- ****f* Bases.RecruitUI/CreateRecruitUI
+   -- FUNCTION
+   -- Create infterace for recruit new crew members
+   -- PARAMETERS
+   -- NewBuilder - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure CreateRecruitUI(NewBuilder: Gtkada_Builder);
--- ****
--- ****f* Bases.RecruitUI/ShowRecruitUI;
--- FUNCTION
--- Show interface for recruit new crew members
--- SOURCE
+   -- ****
+   -- ****f* Bases.RecruitUI/ShowRecruitUI;
+   -- FUNCTION
+   -- Show interface for recruit new crew members
+   -- SOURCE
    procedure ShowRecruitUI;
--- ****
+   -- ****
 
 end Bases.RecruitUI;
