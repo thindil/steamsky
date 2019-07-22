@@ -4492,6 +4492,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <object class="GtkScrolledWindow">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="hscrollbar_policy">never</property>
                                 <property name="shadow_type">in</property>
                                 <child>
                                   <object class="GtkViewport">
@@ -4752,7 +4753,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 </child>
                               </object>
                               <packing>
-                                <property name="expand">True</property>
+                                <property name="expand">False</property>
                                 <property name="fill">True</property>
                                 <property name="position">1</property>
                               </packing>
@@ -10572,6 +10573,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <object class="GtkScrolledWindow">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="hscrollbar_policy">never</property>
                                 <property name="shadow_type">in</property>
                                 <child>
                                   <object class="GtkViewport">
@@ -10843,7 +10845,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 </child>
                               </object>
                               <packing>
-                                <property name="expand">True</property>
+                                <property name="expand">False</property>
                                 <property name="fill">True</property>
                                 <property name="position">1</property>
                               </packing>
