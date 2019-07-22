@@ -17,19 +17,26 @@
 
 with Gtkada.Builder; use Gtkada.Builder;
 
+-- ****h* BasesList/BasesList
+-- FUNCTION
+-- Provides code for bases list
+-- SOURCE
 package BasesList is
+-- ****
 
--- ****f* BasesList/CreateBasesListUI
--- FUNCTION
--- Create infterace for list of bases
--- SOURCE
+   -- ****f* BasesList/CreateBasesListUI
+   -- FUNCTION
+   -- Create infterace for list of bases
+   -- PARAMETERS
+   -- NewBuilder - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure CreateBasesListUI(NewBuilder: Gtkada_Builder);
--- ****
--- ****f* BasesList/ShowBasesListUI;
--- FUNCTION
--- Show interface for list of bases
--- SOURCE
+   -- ****
+   -- ****f* BasesList/ShowBasesListUI;
+   -- FUNCTION
+   -- Show interface for list of bases
+   -- SOURCE
    procedure ShowBasesListUI;
--- ****
+   -- ****
 
 end BasesList;

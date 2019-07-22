@@ -17,19 +17,26 @@
 
 with Gtkada.Builder; use Gtkada.Builder;
 
+-- ****h* Steamsky/Bases.SchoolUI
+-- FUNCTION
+-- Provides code to show training UI
+-- SOURCE
 package Bases.SchoolUI is
+-- ****
 
--- ****f* Bases.SchoolUI/CreateBasesSchoolUI
--- FUNCTION
--- Create infterace for training skills in bases
--- SOURCE
+   -- ****f* Bases.SchoolUI/CreateBasesSchoolUI
+   -- FUNCTION
+   -- Create infterace for training skills in bases
+   -- PARAMETERS
+   -- NewBuilder - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure CreateBasesSchoolUI(NewBuilder: Gtkada_Builder);
--- ****
--- ****f* Bases.SchoolUI/ShowSchoolUI;
--- FUNCTION
--- Show interface for training skills in bases
--- SOURCE
+   -- ****
+   -- ****f* Bases.SchoolUI/ShowSchoolUI;
+   -- FUNCTION
+   -- Show interface for training skills in bases
+   -- SOURCE
    procedure ShowSchoolUI;
--- ****
+   -- ****
 
 end Bases.SchoolUI;

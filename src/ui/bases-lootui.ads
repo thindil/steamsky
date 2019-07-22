@@ -17,19 +17,26 @@
 
 with Gtkada.Builder; use Gtkada.Builder;
 
+-- ****h* Steamsky/Bases.LootUI
+-- FUNCTION
+-- Provide code for show loot UI
+-- SOURCE
 package Bases.LootUI is
+-- ****
 
--- ****f* Bases.LootUI/CreateBasesLootUI
--- FUNCTION
--- Create infterace for looting bases
--- SOURCE
+   -- ****f* Bases.LootUI/CreateBasesLootUI
+   -- FUNCTION
+   -- Create infterace for looting bases
+   -- PARAMETERS
+   -- NewBuilder - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure CreateBasesLootUI(NewBuilder: Gtkada_Builder);
--- ****
--- ****f* Bases.LootUI/ShowLootUI;
--- FUNCTION
--- Show interface for looting bases
--- SOURCE
+   -- ****
+   -- ****f* Bases.LootUI/ShowLootUI;
+   -- FUNCTION
+   -- Show interface for looting bases
+   -- SOURCE
    procedure ShowLootUI;
--- ****
+   -- ****
 
 end Bases.LootUI;

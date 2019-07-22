@@ -18,71 +18,80 @@
 with Gtkada.Builder; use Gtkada.Builder;
 with Ships; use Ships;
 
+-- ****h* Steamsky/Crew.UI
+-- FUNCTION
+-- Provides code for crew info UI
+-- SOURCE
 package Crew.UI is
+-- ****
 
--- ****f* Crew.UI/CreateCrewUI
--- FUNCTION
--- Create infterace for show player ship crew info
--- SOURCE
+   -- ****f* Crew.UI/CreateCrewUI
+   -- FUNCTION
+   -- Create infterace for show player ship crew info
+   -- PARAMETERS
+   -- NewBuilder - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure CreateCrewUI(NewBuilder: Gtkada_Builder);
--- ****
--- ****f* Crew.UI/ShowCrewUI;
--- FUNCTION
--- Show interface for show player ship crew info
--- SOURCE
+   -- ****
+   -- ****f* Crew.UI/ShowCrewUI;
+   -- FUNCTION
+   -- Show interface for show player ship crew info
+   -- SOURCE
    procedure ShowCrewUI;
--- ****
+   -- ****
 
 private
 
--- ****v* Crew.UI/Builder
--- FUNCTION
--- Gtk builder for user interface
--- SOURCE
+   -- ****v* Crew.UI/Builder
+   -- FUNCTION
+   -- Gtk builder for user interface
+   -- SOURCE
    Builder: Gtkada_Builder;
--- ****
--- ****v* Crew.UI/MemberIndex, ItemIndex
--- FUNCTION
--- Crew member and item from inventory indexes
--- SOURCE
+   -- ****
+   -- ****v* Crew.UI/MemberIndex, ItemIndex
+   -- FUNCTION
+   -- Crew member and item from inventory indexes
+   -- SOURCE
    MemberIndex, ItemIndex: Positive;
--- ****
--- ****f* Crew.UI/SetOrdersList;
--- FUNCTION
--- Set orders for selected crew member
--- SOURCE
+   -- ****
+   -- ****f* Crew.UI/SetOrdersList;
+   -- FUNCTION
+   -- Set orders for selected crew member
+   -- SOURCE
    procedure SetOrdersList;
--- ****
--- ****f* Crew.UI/ShowOrdersForAll;
--- FUNCTION
--- Show list of orders for all crew members
--- SOURCE
+   -- ****
+   -- ****f* Crew.UI/ShowOrdersForAll;
+   -- FUNCTION
+   -- Show list of orders for all crew members
+   -- SOURCE
    procedure ShowOrdersForAll;
--- ****
--- ****f* Crew.UI/RefreshInventory;
--- FUNCTION
--- Refresh informations about selected crew member inventory
--- SOURCE
+   -- ****
+   -- ****f* Crew.UI/RefreshInventory;
+   -- FUNCTION
+   -- Refresh informations about selected crew member inventory
+   -- SOURCE
    procedure RefreshInventory;
--- ****
--- ****f* Crew.UI/SetActiveItem;
--- FUNCTION
--- Set active item in inventory list
--- SOURCE
+   -- ****
+   -- ****f* Crew.UI/SetActiveItem;
+   -- FUNCTION
+   -- Set active item in inventory list
+   -- SOURCE
    procedure SetActiveItem;
--- ****
--- ****f* Crew.UI/RefreshCrewInfo;
--- FUNCTION
--- Refresh crew list
--- SOURCE
+   -- ****
+   -- ****f* Crew.UI/RefreshCrewInfo;
+   -- FUNCTION
+   -- Refresh crew list
+   -- SOURCE
    procedure RefreshCrewInfo;
--- ****
--- ****f* Crew.UI/SetActiveMember
--- FUNCTION
--- Set active crew member in crew list
--- SOURCE
+   -- ****
+   -- ****f* Crew.UI/SetActiveMember
+   -- FUNCTION
+   -- Set active crew member in crew list
+   -- PARAMETERS
+   -- NewMemberIndex - Crew index of new active member. Default is 0.
+   -- SOURCE
    procedure SetActiveMember(NewMemberIndex: Natural := 0) with
       Pre => NewMemberIndex <= PlayerShip.Crew.Last_Index;
--- ****
+      -- ****
 
 end Crew.UI;

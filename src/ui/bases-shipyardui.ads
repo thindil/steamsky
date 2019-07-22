@@ -17,19 +17,26 @@
 
 with Gtkada.Builder; use Gtkada.Builder;
 
+-- ****h* Steamsky/Bases.ShipyardUI
+-- FUNCTION
+-- Provides code for shipyard UI
+-- SOURCE
 package Bases.ShipyardUI is
+-- ****
 
--- ****f* Bases.ShipyardUI/CreateBasesShipyardUI
--- FUNCTION
--- Create infterace for installing/remove modules in bases
--- SOURCE
+   -- ****f* Bases.ShipyardUI/CreateBasesShipyardUI
+   -- FUNCTION
+   -- Create infterace for installing/remove modules in bases
+   -- PARAMETERS
+   -- NewBuilder - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure CreateBasesShipyardUI(NewBuilder: Gtkada_Builder);
--- ****
--- ****f* Bases.ShipyardUI/ShowShipyardUI;
--- FUNCTION
--- Show interface for installing/remove modules in bases
--- SOURCE
+   -- ****
+   -- ****f* Bases.ShipyardUI/ShowShipyardUI;
+   -- FUNCTION
+   -- Show interface for installing/remove modules in bases
+   -- SOURCE
    procedure ShowShipyardUI;
--- ****
+   -- ****
 
 end Bases.ShipyardUI;

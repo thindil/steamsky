@@ -17,19 +17,26 @@
 
 with Gtkada.Builder; use Gtkada.Builder;
 
+-- ****h* Steamsky/Messages.UI
+-- FUNCTION
+-- Provides code for messages UI
+-- SOURCE
 package Messages.UI is
+-- ****
 
--- ****f* Messages.UI/CreateMessagesUI
--- FUNCTION
--- Create infterace for show messages
--- SOURCE
+   -- ****f* Messages.UI/CreateMessagesUI
+   -- FUNCTION
+   -- Create infterace for show messages
+   -- PARAMETERS
+   -- NewBuilder - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure CreateMessagesUI(NewBuilder: Gtkada_Builder);
--- ****
--- ****f* Messages.UI/ShowMessagesUI;
--- FUNCTION
--- Show interface for show messages
--- SOURCE
+   -- ****
+   -- ****f* Messages.UI/ShowMessagesUI;
+   -- FUNCTION
+   -- Show interface for show messages
+   -- SOURCE
    procedure ShowMessagesUI;
--- ****
+   -- ****
 
 end Messages.UI;

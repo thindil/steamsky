@@ -15,19 +15,24 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+-- ****h* DebugUI/DebugUI
+-- FUNCTION
+-- Provides code for debug UI
+-- SOURCE
 package DebugUI is
+-- ****
 
--- ****f* DebugUI/CreateDebugUI;
--- FUNCTION
--- Create debug user interface
--- SOURCE
+   -- ****f* DebugUI/CreateDebugUI;
+   -- FUNCTION
+   -- Create debug user interface
+   -- SOURCE
    procedure CreateDebugUI;
--- ****
--- ****f* DebugUI/ShowDebugUI;
--- FUNCTION
--- Show debug user interface
--- SOURCE
+   -- ****
+   -- ****f* DebugUI/ShowDebugUI;
+   -- FUNCTION
+   -- Show debug user interface
+   -- SOURCE
    procedure ShowDebugUI;
--- ****
+   -- ****
 
 end DebugUI;

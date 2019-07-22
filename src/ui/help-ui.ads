@@ -15,19 +15,26 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+-- ****h* Steamsky/Help.UI
+-- FUNCTION
+-- Provides code for help UI
+-- SOURCE
 package Help.UI is
+-- ****
 
--- ****f* Help.UI/CreateHelpUI;
--- FUNCTION
--- Create help user interface
--- SOURCE
+   -- ****f* Help.UI/CreateHelpUI;
+   -- FUNCTION
+   -- Create help user interface
+   -- SOURCE
    procedure CreateHelpUI;
--- ****
--- ****f* Help.UI/ShowHelpUI
--- FUNCTION
--- Show help user interface
--- SOURCE
+   -- ****
+   -- ****f* Help.UI/ShowHelpUI
+   -- FUNCTION
+   -- Show help user interface
+   -- PARAMETERS
+   -- HelpIndex - Index of help topic to show
+   -- SOURCE
    procedure ShowHelpUI(HelpIndex: Unbounded_String);
--- ****
+   -- ****
 
 end Help.UI;

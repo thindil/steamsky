@@ -17,19 +17,26 @@
 
 with Gtkada.Builder; use Gtkada.Builder;
 
+-- ****h* Steamsky/Events.UI
+-- FUNCTION
+-- Provides code for know events UI
+-- SOURCE
 package Events.UI is
+-- ****
 
--- ****f* Events.UI/CreateEventsUI
--- FUNCTION
--- Create infterace for show known events
--- SOURCE
+   -- ****f* Events.UI/CreateEventsUI
+   -- FUNCTION
+   -- Create infterace for show known events
+   -- PARAMETERS
+   -- NewBuilder - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure CreateEventsUI(NewBuilder: Gtkada_Builder);
--- ****
--- ****f* Events.UI/ShowEventsUI;
--- FUNCTION
--- Show interface for show known events
--- SOURCE
+   -- ****
+   -- ****f* Events.UI/ShowEventsUI;
+   -- FUNCTION
+   -- Show interface for show known events
+   -- SOURCE
    procedure ShowEventsUI;
--- ****
+   -- ****
 
 end Events.UI;
