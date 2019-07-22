@@ -17,31 +17,38 @@
 
 with Gtkada.Builder; use Gtkada.Builder;
 
+-- ****h* Steamsky/Bases.UI
+-- FUNCTION
+-- Provides code for buying recipes, healing and repair ship in bases
+-- SOURCE
 package Bases.UI is
+-- ****
 
--- ****f* Bases.UI/CreateBasesUI
--- FUNCTION
--- Create infterace for various bases options
--- SOURCE
+   -- ****f* Bases.UI/CreateBasesUI
+   -- FUNCTION
+   -- Create infterace for various bases options
+   -- PARAMETERS
+   -- NewBuilder - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure CreateBasesUI(NewBuilder: Gtkada_Builder);
--- ****
--- ****f* Bases.UI/ShowBuyRecipesUI;
--- FUNCTION
--- Show interface for buying crafting recipes
--- SOURCE
+   -- ****
+   -- ****f* Bases.UI/ShowBuyRecipesUI;
+   -- FUNCTION
+   -- Show interface for buying crafting recipes
+   -- SOURCE
    procedure ShowBuyRecipesUI;
--- ****
--- ****f* Bases.UI/ShowRepairUI;
--- FUNCTION
--- Show interface for buying ship repairs in bases
--- SOURCE
+   -- ****
+   -- ****f* Bases.UI/ShowRepairUI;
+   -- FUNCTION
+   -- Show interface for buying ship repairs in bases
+   -- SOURCE
    procedure ShowRepairUI;
--- ****
--- ****f* Bases.UI/ShowHealUI;
--- FUNCTION
--- Show interface for buying crew members healing in bases
--- SOURCE
+   -- ****
+   -- ****f* Bases.UI/ShowHealUI;
+   -- FUNCTION
+   -- Show interface for buying crew members healing in bases
+   -- SOURCE
    procedure ShowHealUI;
--- ****
+   -- ****
 
 end Bases.UI;

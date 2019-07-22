@@ -18,39 +18,51 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Exceptions; use Ada.Exceptions;
 
+-- ****h* Steamsky/MainMenu
+-- FUNCTION
+-- Provides code for main menu UI
+-- SOURCE
 package MainMenu is
-
--- ****f* MainMenu/CreateMainMenu;
--- FUNCTION
--- Create main menu and show it
--- SOURCE
-   procedure CreateMainMenu;
 -- ****
--- ****f* MainMenu/UpdateGoalButton
--- FUNCTION
--- Update label on character goal button
--- SOURCE
+
+   -- ****f* MainMenu/CreateMainMenu;
+   -- FUNCTION
+   -- Create main menu and show it
+   -- SOURCE
+   procedure CreateMainMenu;
+   -- ****
+   -- ****f* MainMenu/UpdateGoalButton
+   -- FUNCTION
+   -- Update label on character goal button
+   -- PARAMETERS
+   -- Message - New label for select goal button
+   -- SOURCE
    procedure UpdateGoalButton(Message: String) with
       Pre => Message'Length > 0;
--- ****
--- ****f* MainMenu/ShowMainMenu;
--- FUNCTION
--- Show main menu window
--- SOURCE
+      -- ****
+      -- ****f* MainMenu/ShowMainMenu;
+      -- FUNCTION
+      -- Show main menu window
+      -- SOURCE
    procedure ShowMainMenu;
--- ****
--- ****f* MainMenu/SaveException
--- FUNCTION
--- Save data exception to file
--- SOURCE
+   -- ****
+   -- ****f* MainMenu/SaveException
+   -- FUNCTION
+   -- Save data exception to file
+   -- PARAMETERS
+   -- An_Exception    - An exception which was occurred
+   -- PrintToTerminal - If true, print info about exception to terminal
+   -- SOURCE
    procedure SaveException
      (An_Exception: Exception_Occurrence; PrintToTerminal: Boolean);
--- ****
--- ****f* MainMenu/On_Exception
--- FUNCTION
--- Handle GUI exceptions
--- SOURCE
+   -- ****
+   -- ****f* MainMenu/On_Exception
+   -- FUNCTION
+   -- Handle GUI exceptions
+   -- PARAMETERS
+   -- An_Exception - An exception which was occurred
+   -- SOURCE
    procedure On_Exception(An_Exception: Exception_Occurrence);
--- ****
+   -- ****
 
 end MainMenu;

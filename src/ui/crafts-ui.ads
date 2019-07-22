@@ -17,19 +17,26 @@
 
 with Gtkada.Builder; use Gtkada.Builder;
 
+-- ****h* Steamsky/Crafts.UI
+-- FUNCTION
+-- Provides code for crafting UI
+-- SOURCE
 package Crafts.UI is
+-- ****
 
--- ****f* Crafts.UI/CreateCraftsUI
--- FUNCTION
--- Create infterace for manufacturing
--- SOURCE
+   -- ****f* Crafts.UI/CreateCraftsUI
+   -- FUNCTION
+   -- Create infterace for manufacturing
+   -- PARAMETERS
+   -- NewBuilder - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure CreateCraftsUI(NewBuilder: Gtkada_Builder);
--- ****
--- ****f* Crafts.UI/ShowCraftsUI;
--- FUNCTION
--- Show interface for manufacturing
--- SOURCE
+   -- ****
+   -- ****f* Crafts.UI/ShowCraftsUI;
+   -- FUNCTION
+   -- Show interface for manufacturing
+   -- SOURCE
    procedure ShowCraftsUI;
--- ****
+   -- ****
 
 end Crafts.UI;

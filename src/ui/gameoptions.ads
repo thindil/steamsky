@@ -17,25 +17,34 @@
 
 with Gtkada.Builder; use Gtkada.Builder;
 
+-- ****h* Steamsky/GameOptions
+-- FUNCTION
+-- Provides code for game options UI
+-- SOURCE
 package GameOptions is
+-- ****
 
--- ****f* GameOptions/CreateGameOptions
--- FUNCTION
--- Create infterace for game options
--- SOURCE
+   -- ****f* GameOptions/CreateGameOptions
+   -- FUNCTION
+   -- Create infterace for game options
+   -- PARAMETERS
+   -- NewBuilder - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure CreateGameOptions(NewBuilder: Gtkada_Builder);
--- ****
--- ****f* GameOptions/ShowGameOptions;
--- FUNCTION
--- Show interface for game options
--- SOURCE
+   -- ****
+   -- ****f* GameOptions/ShowGameOptions;
+   -- FUNCTION
+   -- Show interface for game options
+   -- SOURCE
    procedure ShowGameOptions;
--- ****
--- ****f* GameOptions/CloseOptions
--- FUNCTION
--- Close options, save them and back to sky map view
--- SOURCE
+   -- ****
+   -- ****f* GameOptions/CloseOptions
+   -- FUNCTION
+   -- Close options, save them and back to sky map view
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure CloseOptions(Object: access Gtkada_Builder_Record'Class);
--- ****
+   -- ****
 
 end GameOptions;

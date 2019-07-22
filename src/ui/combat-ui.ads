@@ -17,19 +17,26 @@
 
 with Gtkada.Builder; use Gtkada.Builder;
 
+-- ****h* Steamsky/Combat.UI
+-- FUNCTION
+-- Provides code for combat UI
+-- SOURCE
 package Combat.UI is
+-- ****
 
--- ****f* Combat.UI/CreateCombatUI
--- FUNCTION
--- Create combat user interface
--- SOURCE
+   -- ****f* Combat.UI/CreateCombatUI
+   -- FUNCTION
+   -- Create combat user interface
+   -- PARAMETERS
+   -- NewBuilder - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure CreateCombatUI(NewBuilder: Gtkada_Builder);
--- ****
--- ****f* Combat.UI/ShowCombatUI
--- FUNCTION
--- Show combat interface
--- SOURCE
+   -- ****
+   -- ****f* Combat.UI/ShowCombatUI
+   -- FUNCTION
+   -- Show combat interface
+   -- SOURCE
    procedure ShowCombatUI(NewCombat: Boolean := True);
--- ****
+   -- ****
 
 end Combat.UI;
