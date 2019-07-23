@@ -17,19 +17,26 @@
 
 with Gtkada.Builder; use Gtkada.Builder;
 
+-- ****h* Steamsky/Trades.UI
+-- FUNCTION
+-- Provides code for trading with bases and ships UI
+-- SOURCE
 package Trades.UI is
+-- ****
 
--- ****f* Trades.UI/CreateTradeUI
--- FUNCTION
--- Create infterace for trades
--- SOURCE
+   -- ****f* Trades.UI/CreateTradeUI
+   -- FUNCTION
+   -- Create infterace for trades
+   -- PARAMETERS
+   -- NewBuilder - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure CreateTradeUI(NewBuilder: Gtkada_Builder);
--- ****
--- ****f* Trades.UI/ShowTradeUI;
--- FUNCTION
--- Show interface for trades
--- SOURCE
+   -- ****
+   -- ****f* Trades.UI/ShowTradeUI;
+   -- FUNCTION
+   -- Show interface for trades
+   -- SOURCE
    procedure ShowTradeUI;
--- ****
+   -- ****
 
 end Trades.UI;

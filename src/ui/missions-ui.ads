@@ -17,25 +17,32 @@
 
 with Gtkada.Builder; use Gtkada.Builder;
 
+-- ****h* Steamsky/Missions.UI
+-- FUNCTION
+-- Provides code for missions UI
+-- SOURCE
 package Missions.UI is
+-- ****
 
--- ****f* Missions.UI/CreateMissionsUI
--- FUNCTION
--- Create infterace for show available missions
--- SOURCE
+   -- ****f* Missions.UI/CreateMissionsUI
+   -- FUNCTION
+   -- Create infterace for show available missions
+   -- PARAMETERS
+   -- NewBuilder - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure CreateMissionsUI(NewBuilder: Gtkada_Builder);
--- ****
--- ****f* Missions.UI/ShowMissionsUI;
--- FUNCTION
--- Show interface for show available missions
--- SOURCE
+   -- ****
+   -- ****f* Missions.UI/ShowMissionsUI;
+   -- FUNCTION
+   -- Show interface for show available missions
+   -- SOURCE
    procedure ShowMissionsUI;
--- ****
--- ****f* Missions.UI/ShowAcceptedMissions;
--- FUNCTION
--- Show interface for show accepted missions
--- SOURCE
+   -- ****
+   -- ****f* Missions.UI/ShowAcceptedMissions;
+   -- FUNCTION
+   -- Show interface for show accepted missions
+   -- SOURCE
    procedure ShowAcceptedMissions;
--- ****
+   -- ****
 
 end Missions.UI;

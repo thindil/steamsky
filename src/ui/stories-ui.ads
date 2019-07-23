@@ -17,19 +17,26 @@
 
 with Gtkada.Builder; use Gtkada.Builder;
 
+-- ****h* Steamsky/Stories.UI
+-- FUNCTION
+-- Provides code for player know stories list UI
+-- SOURCE
 package Stories.UI is
+-- ****
 
--- ****f* Stories.UI/CreateStoriesUI
--- FUNCTION
--- Create stories ui
--- SOURCE
+   -- ****f* Stories.UI/CreateStoriesUI
+   -- FUNCTION
+   -- Create stories ui
+   -- PARAMETERS
+   -- NewBuilder - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure CreateStoriesUI(NewBuilder: Gtkada_Builder);
--- ****
--- ****f* Stories.UI/ShowStoriesUI;
--- FUNCTION
--- Show stories informations to player
--- SOURCE
+   -- ****
+   -- ****f* Stories.UI/ShowStoriesUI;
+   -- FUNCTION
+   -- Show stories informations to player
+   -- SOURCE
    procedure ShowStoriesUI;
--- ****
+   -- ****
 
 end Stories.UI;

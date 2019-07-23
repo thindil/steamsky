@@ -19,88 +19,138 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Indefinite_Hashed_Maps;
 with Ada.Strings.Hash;
 
+-- ****h* Steamsky/Themes
+-- FUNCTION
+-- Provides code for manipulate the game themes
+-- SOURCE
 package Themes is
+-- ****
 
--- ****t* Themes/FontTypes
--- FUNCTION
--- Types of font available in game
--- SOURCE
+   -- ****t* Themes/FontTypes
+   -- FUNCTION
+   -- Types of font available in game
+   -- SOURCE
    type FontTypes is (HELPFONT, MAPFONT, INTERFACEFONT, ALLFONTS);
--- ****
--- ****t* Themes/ThemeRecord
--- FUNCTION
--- Data structure for themes settings
--- SOURCE
+   -- ****
+   -- ****t* Themes/ThemeRecord
+   -- FUNCTION
+   -- Data structure for themes settings
+   -- PARAMETERS
+   -- Name                 - Name of theme
+   -- FileName             - Name of .css file of theme
+   -- EnemyShipIcon        - Icon used for Enemy Ship event
+   -- AttackOnBaseIcon     - Icon used for Attack on Base event
+   -- DiseaseIcon          - Icon used for Disease event
+   -- DoublePriceIcon      - Icon used for Double Price event
+   -- FullDocksIcon        - Icon used for Full Docks event
+   -- EnemyPatrolIcon      - Icon used for Enemy Patrol event
+   -- TraderIcon           - Icon used for Trader event
+   -- FriendlyShipIcon     - Icon used for Friendly Ship event
+   -- DeliverIcon          - Icon used for Deliver Item mission
+   -- DestroyIcon          - Icon used for Destroy Ship mission
+   -- PatrolIcon           - Icon used for  Patrol Area mission
+   -- ExploreIcon          - Icon used for Explore Area mission
+   -- PassengerIcon        - Icon used for Transport Passenger mission
+   -- PilotIcon            - Icon used for Pilot info
+   -- EngineerIcon         - Icon used for Engineer info
+   -- GunnerIcon           - Icon used for Gunners info
+   -- CrewTraderIcon       - Icon used for Trader info
+   -- RepairIcon           - Icon used for Repairs info
+   -- UpgradeIcon          - Icon used for Upgrade info
+   -- CleanIcon            - Icon used for Clean Ship info
+   -- ManufactureIcon      - Icon used for Manufacturing info
+   -- MoveMapUpIcon        - Icon used for move map up button
+   -- MoveMapDownIcon      - Icon used for move map down button
+   -- MoveMapLeftIcon      - Icon used for move map left button
+   -- MoveMapRightIcon     - Icon used for move map right button
+   -- NoFuelIcon           - Icon used for show warning about no fuel
+   -- NoFoodIcon           - Icon used for show warning about no food
+   -- NoDrinksIcon         - Icon used for show warning about no drinks
+   -- NotVisitedBaseIcon   - Icon used for show not visited bases on map
+   -- PlayerShipIcon       - Icon used for show player ship on map
+   -- EmptyMapIcon         - Icon used for empty map fields
+   -- TargetIcon           - Icon used for player selected target on map
+   -- StoryIcon            - Icon used for show story event location on map
+   -- OverloadedIcon       - Icon used for show warning about overloaded ship
+   -- CheckButtonUnchecked - Name of image file used for check buttons when
+   --                        unchecked
+   -- CheckButtonChecked   - Name of image file used for check buttons when
+   --                        checked
+   -- SOURCE
    type ThemeRecord is record
-      Name: Unbounded_String; -- Name of theme
-      FileName: Unbounded_String; -- Name of .css file of theme
-      EnemyShipIcon: Wide_Character; -- Icon used for Enemy Ship event
-      AttackOnBaseIcon: Wide_Character; -- Icon used for Attack on Base event
-      DiseaseIcon: Wide_Character; -- Icon used for Disease event
-      DoublePriceIcon: Wide_Character; -- Icon used for Double Price event
-      FullDocksIcon: Wide_Character; -- Icon used for Full Docks event
-      EnemyPatrolIcon: Wide_Character; -- Icon used for Enemy Patrol event
-      TraderIcon: Wide_Character; -- Icon used for Trader event
-      FriendlyShipIcon: Wide_Character; -- Icon used for Friendly Ship event
-      DeliverIcon: Wide_Character; -- Icon used for Deliver Item mission
-      DestroyIcon: Wide_Character; -- Icon used for Destroy Ship mission
-      PatrolIcon: Wide_Character; -- Icon used for  Patrol Area mission
-      ExploreIcon: Wide_Character; -- Icon used for Explore Area mission
-      PassengerIcon: Wide_Character; -- Icon used for Transport Passenger mission
-      PilotIcon: Wide_Character; -- Icon used for Pilot info
-      EngineerIcon: Wide_Character; -- Icon used for Engineer info
-      GunnerIcon: Wide_Character; -- Icon used for Gunners info
-      CrewTraderIcon: Wide_Character; -- Icon used for Trader info
-      RepairIcon: Wide_Character; -- Icon used for Repairs info
-      UpgradeIcon: Wide_Character; -- Icon used for Upgrade info
-      CleanIcon: Wide_Character; -- Icon used for Clean Ship info
-      ManufactureIcon: Wide_Character; -- Icon used for Manufacturing info
-      MoveMapUpIcon: Wide_Character; -- Icon used for move map up button
-      MoveMapDownIcon: Wide_Character; -- Icon used for move map down button
-      MoveMapLeftIcon: Wide_Character; -- Icon used for move map left button
-      MoveMapRightIcon: Wide_Character; -- Icon used for move map right button
-      NoFuelIcon: Wide_Character; -- Icon used for show warning about no fuel
-      NoFoodIcon: Wide_Character; -- Icon used for show warning about no food
-      NoDrinksIcon: Wide_Character; -- Icon used for show warning about no drinks
-      NotVisitedBaseIcon: Wide_Character; -- Icon used for show not visited bases on map
-      PlayerShipIcon: Wide_Character; -- Icon used for show player ship on map
-      EmptyMapIcon: Wide_Character; -- Icon used for empty map fields
-      TargetIcon: Wide_Character; -- Icon used for player selected target on map
-      StoryIcon: Wide_Character; -- Icon used for show story event location on map
-      OverloadedIcon: Wide_Character; -- Icon used for show warning about overloaded ship
-      CheckButtonUnchecked: Unbounded_String; -- Name of image file used for check buttons when unchecked
-      CheckButtonChecked: Unbounded_String; -- Name of image file used for check buttons when checked
+      Name: Unbounded_String;
+      FileName: Unbounded_String;
+      EnemyShipIcon: Wide_Character;
+      AttackOnBaseIcon: Wide_Character;
+      DiseaseIcon: Wide_Character;
+      DoublePriceIcon: Wide_Character;
+      FullDocksIcon: Wide_Character;
+      EnemyPatrolIcon: Wide_Character;
+      TraderIcon: Wide_Character;
+      FriendlyShipIcon: Wide_Character;
+      DeliverIcon: Wide_Character;
+      DestroyIcon: Wide_Character;
+      PatrolIcon: Wide_Character;
+      ExploreIcon: Wide_Character;
+      PassengerIcon: Wide_Character;
+      PilotIcon: Wide_Character;
+      EngineerIcon: Wide_Character;
+      GunnerIcon: Wide_Character;
+      CrewTraderIcon: Wide_Character;
+      RepairIcon: Wide_Character;
+      UpgradeIcon: Wide_Character;
+      CleanIcon: Wide_Character;
+      ManufactureIcon: Wide_Character;
+      MoveMapUpIcon: Wide_Character;
+      MoveMapDownIcon: Wide_Character;
+      MoveMapLeftIcon: Wide_Character;
+      MoveMapRightIcon: Wide_Character;
+      NoFuelIcon: Wide_Character;
+      NoFoodIcon: Wide_Character;
+      NoDrinksIcon: Wide_Character;
+      NotVisitedBaseIcon: Wide_Character;
+      PlayerShipIcon: Wide_Character;
+      EmptyMapIcon: Wide_Character;
+      TargetIcon: Wide_Character;
+      StoryIcon: Wide_Character;
+      OverloadedIcon: Wide_Character;
+      CheckButtonUnchecked: Unbounded_String;
+      CheckButtonChecked: Unbounded_String;
    end record;
--- ****
--- ****t* Themes/Themes_Container
--- SOURCE
+   -- ****
+   -- ****t* Themes/Themes_Container
+   -- FUNCTION
+   -- Used to store themes data
+   -- SOURCE
    package Themes_Container is new Ada.Containers.Indefinite_Hashed_Maps
      (String, ThemeRecord, Ada.Strings.Hash, "=");
--- FUNCTION
--- List of all available themes
--- ****
--- ****v* Themes/Themes_List
--- SOURCE
+   -- ****
+   -- ****v* Themes/Themes_List
+   -- FUNCTION
+   -- List of all available themes
+   -- SOURCE
    Themes_List: Themes_Container.Map;
--- ****
+   -- ****
 
--- ****f* Themes/SetFontSize
--- FUNCTION
--- Set size of selected font
--- SOURCE
+   -- ****f* Themes/SetFontSize
+   -- FUNCTION
+   -- Set size of selected font
+   -- PARAMETERS
+   -- FontType - Type of font to set
+   -- SOURCE
    procedure SetFontSize(FontType: FontTypes);
--- ****
--- ****f* Themes/ResetFontsSizes;
--- FUNCTION
--- Reset size of fonts to theme default values
--- SOURCE
+   -- ****
+   -- ****f* Themes/ResetFontsSizes;
+   -- FUNCTION
+   -- Reset size of fonts to theme default values
+   -- SOURCE
    procedure ResetFontsSizes;
--- ****
--- ****f* Themes/LoadThemes;
--- FUNCTION
--- Load data for all themes
--- SOURCE
+   -- ****
+   -- ****f* Themes/LoadThemes;
+   -- FUNCTION
+   -- Load data for all themes
+   -- SOURCE
    procedure LoadThemes;
--- ****
+   -- ****
 
 end Themes;
