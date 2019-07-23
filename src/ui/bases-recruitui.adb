@@ -101,7 +101,8 @@ package body Bases.RecruitUI is
             Set
               (StatsList, StatsIter, 0,
                To_String
-                 (Attributes_List(Attributes_Container.To_Index(I)).Name));
+                 (Attributes_List(Attributes_Container.To_Index(I)).Name) &
+               ": " & GetAttributeLevelName(Recruit.Attributes(I)(1)));
             Set(StatsList, StatsIter, 1, Gint(Recruit.Attributes(I)(1) * 2));
             Set
               (StatsList, StatsIter, 2,
