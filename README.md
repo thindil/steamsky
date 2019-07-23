@@ -46,6 +46,13 @@ this file is) to compile:
 * If you prefer using console: in main source code directory type `gprbuild`
   for debug mode build or for release mode: `gprbuild -XMode=release`
 
+## Generating code documentation
+
+To generate (or regenerate) code documentation, you need [ROBODoc](https://rfsber.home.xs4all.nl/Robo/)
+and script **robofix.py** from [RoboAda](https://github.com/thindil/roboada)
+(to fix syntax colors of source code). If you have both, in main the game
+directory (where this file is) enter terminal commands: `robodoc --rc
+others/robodocada.rc` and after it `./robofix.py docs`.
 
 ## Running Steam Sky
 
