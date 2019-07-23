@@ -25,140 +25,207 @@ with Glib.Object; use Glib.Object;
 with Gdk.Event; use Gdk.Event;
 with Ships; use Ships;
 
+-- ****h* Steamsky/Utils.UI
+-- FUNCTION
+-- Provides various code for UI
+-- SOURCE
 package Utils.UI is
+-- ****
 
--- ****t* Utils.UI/GameStates
--- FUNCTION
--- Game states
--- SOURCE
+   -- ****t* Utils.UI/GameStates
+   -- FUNCTION
+   -- Game states
+   -- SOURCE
    type GameStates is (SkyMap_View, Combat_View, Main_Menu);
--- ****
--- ****v* Utils.UI/PreviousGameState
--- FUNCTION
--- Current game state, needed for hide some windows
--- SOURCE
+   -- ****
+   -- ****v* Utils.UI/PreviousGameState
+   -- FUNCTION
+   -- Current game state, needed for hide some windows
+   -- SOURCE
    PreviousGameState: GameStates;
--- ****
+   -- ****
 
--- ****f* Utils.UI/HideDialog
--- FUNCTION
--- Close dialog window and stop auto close timer
--- SOURCE
+   -- ****f* Utils.UI/HideDialog
+   -- FUNCTION
+   -- Close dialog window and stop auto close timer
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure HideDialog(Object: access Gtkada_Builder_Record'Class);
--- ****
--- ****f* Utils.UI/ShowDialog
--- FUNCTION
--- Show dialog with info
--- SOURCE
+   -- ****
+   -- ****f* Utils.UI/ShowDialog
+   -- FUNCTION
+   -- Show dialog with info
+   -- PARAMETERS
+   -- Message - Text to show
+   -- SOURCE
    procedure ShowDialog(Message: String);
--- ****
--- ****f* Utils.UI/HideWindow
--- FUNCTION
--- Hide window instead of destroying it
--- SOURCE
+   -- ****
+   -- ****f* Utils.UI/HideWindow
+   -- FUNCTION
+   -- Hide window instead of destroying it
+   -- PARAMETERS
+   -- User_Data - Window to hide
+   -- RESULT
+   -- Always return true
+   -- SOURCE
    function HideWindow(User_Data: access GObject_Record'Class) return Boolean;
--- ****
--- ****f* Utils.UI/ShowWindow
--- FUNCTION
--- Show selected window
--- SOURCE
+   -- ****
+   -- ****f* Utils.UI/ShowWindow
+   -- FUNCTION
+   -- Show selected window
+   -- PARAMETERS
+   -- User_Data - Window to show
+   -- SOURCE
    procedure ShowWindow(User_Data: access GObject_Record'Class);
--- ****
--- ****f* Utils.UI/ShowConfirmDialog
--- FUNCTION
--- Show confirmation dialog to player, return True, if player choice 'Yes' option
--- SOURCE
+   -- ****
+   -- ****f* Utils.UI/ShowConfirmDialog
+   -- FUNCTION
+   -- Show confirmation dialog to player
+   -- PARAMETERS
+   -- Message - Text to show to player
+   -- Parent  - Gtk Window which will be parent for that dialog
+   -- RESULT
+   -- True if player select 'Yes' option, otherwise false
+   -- SOURCE
    function ShowConfirmDialog
      (Message: String; Parent: Gtk_Window) return Boolean;
--- ****
--- ****f* Utils.UI/QuitGame
--- FUNCTION
--- Save and quit from game
--- SOURCE
+   -- ****
+   -- ****f* Utils.UI/QuitGame
+   -- FUNCTION
+   -- Save and quit from game
+   -- PARAMETERS
+   -- User_Data - the game window
+   -- RESULT
+   -- Always true
+   -- SOURCE
    function QuitGame(User_Data: access GObject_Record'Class) return Boolean;
--- ****
--- ****f* Utils.UI/CloseWindow
--- FUNCTION
--- Close window on press Escape key
--- SOURCE
+   -- ****
+   -- ****f* Utils.UI/CloseWindow
+   -- FUNCTION
+   -- Close window on press Escape key
+   -- PARAMETERS
+   -- Self  - Game window to close
+   -- Event - Detailed info about keyboard event
+   -- RESULT
+   -- False if window was closed otherwise true
+   -- SOURCE
    function CloseWindow
      (Self: access Gtk_Widget_Record'Class; Event: Gdk_Event_Key)
       return Boolean;
--- ****
--- ****f* Utils.UI/CloseMessages
--- FUNCTION
--- Switch back to skymap or combat from info
--- SOURCE
+   -- ****
+   -- ****f* Utils.UI/CloseMessages
+   -- FUNCTION
+   -- Switch back to skymap or combat from info
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure CloseMessages(Object: access Gtkada_Builder_Record'Class);
--- ****
--- ****f* Utils.UI/SelectElement
--- FUNCTION
--- Select other element on press Return key
--- SOURCE
+   -- ****
+   -- ****f* Utils.UI/SelectElement
+   -- FUNCTION
+   -- Select other element on press Return key
+   -- PARAMETERS
+   -- Self  - Gtk_Widget which will grab focus
+   -- Event - Detailed info about keyboard event
+   -- RESULT
+   -- True if new element was selected, otherwise false
+   -- SOURCE
    function SelectElement
      (Self: access GObject_Record'Class; Event: Gdk_Event_Key) return Boolean;
--- ****
--- ****f* Utils.UI/TravelInfo
--- FUNCTION
--- Add info about travel eta and approx fuel usage
--- SOURCE
+   -- ****
+   -- ****f* Utils.UI/TravelInfo
+   -- FUNCTION
+   -- Add info about travel eta and approx fuel usage
+   -- PARAMETERS
+   -- InfoText     - Text to which info about travel will be added
+   -- Distance     - Distance in map fields to destination point
+   -- ShowFuelName - If true, add fuel name to info. Default is false
+   -- RESULT
+   -- Parameter InfoText
+   -- SOURCE
    procedure TravelInfo
      (InfoText: in out Unbounded_String; Distance: Positive;
       ShowFuelName: Boolean := False);
--- ****
--- ****f* Utils.UI/MinutesToDate
--- FUNCTION
--- Convert minutes to game date and add it to text
--- SOURCE
+   -- ****
+   -- ****f* Utils.UI/MinutesToDate
+   -- FUNCTION
+   -- Convert minutes to game date and add it to text
+   -- PARAMETERS
+   -- Minutes  - Amount of minutes to convert
+   -- InfoText - Text to which time info will be added
+   -- RESULT
+   -- Parameter InfoText
+   -- SOURCE
    procedure MinutesToDate
      (Minutes: Natural; InfoText: in out Unbounded_String);
--- ****
--- ****f* Utils.UI/ShowInventoryItemInfo
--- FUNCTION
--- Show info about selected item in ship cargo or crew member inventory
--- SOURCE
+   -- ****
+   -- ****f* Utils.UI/ShowInventoryItemInfo
+   -- FUNCTION
+   -- Show info about selected item in ship cargo or crew member inventory
+   -- PARAMETERS
+   -- Label       - Gtk_Label which text will be set
+   -- ItemIndex   - Index of item (can be inventory or ship cargo)
+   -- MemberIndex - If item is in crew member inventory, crew index of member,
+   --               otherwise 0
+   -- SOURCE
    procedure ShowInventoryItemInfo
      (Label: Gtk_Label; ItemIndex: Positive; MemberIndex: Natural) with
       Pre => MemberIndex <= PlayerShip.Crew.Last_Index;
--- ****
--- ****f* Utils.UI/HideItemInfo
--- FUNCTION
--- Hide or show detailed item info
--- SOURCE
+      -- ****
+      -- ****f* Utils.UI/HideItemInfo
+      -- FUNCTION
+      -- Hide or show detailed item info
+      -- PARAMETERS
+      -- User_Data - Gtk_Widget to hide
+      -- SOURCE
    procedure HideItemInfo(User_Data: access GObject_Record'Class);
--- ****
--- ****f* Utils.UI/ShowPopupMenu
--- FUNCTION
--- Show popup menu for selected widget
--- SOURCE
+   -- ****
+   -- ****f* Utils.UI/ShowPopupMenu
+   -- FUNCTION
+   -- Show popup menu for selected widget
+   -- PARAMETERS
+   -- User_Data - Gtk_Menu to show
+   -- RESULT
+   -- Always false
+   -- SOURCE
    function ShowPopupMenu
      (User_Data: access GObject_Record'Class) return Boolean;
--- ****
--- ****f* Utils.UI/ShowPopupMenuButton
--- FUNCTION
--- Show popup menu on click of right mouse button
--- SOURCE
+   -- ****
+   -- ****f* Utils.UI/ShowPopupMenuButton
+   -- FUNCTION
+   -- Show popup menu on click of right mouse button
+   -- PARAMETERS
+   -- Self  - GtkTreeView to which menu will be show
+   -- Event - Detailed info about mouse event
+   -- RESULT
+   -- Always false
+   -- SOURCE
    function ShowPopupMenuButton
      (Self: access Gtk_Widget_Record'Class; Event: Gdk_Event_Button)
       return Boolean;
--- ****
--- ****f* Utils.UI/SetUtilsBuilder
--- FUNCTION
--- Set Gtk Builder for Utils package
--- SOURCE
+   -- ****
+   -- ****f* Utils.UI/SetUtilsBuilder
+   -- FUNCTION
+   -- Set Gtk Builder for Utils package
+   -- PARAMETERS
+   -- NewBuilder - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure SetUtilsBuilder(NewBuilder: Gtkada_Builder);
--- ****
--- ****f* Utils.UI/UpdateMessages;
--- FUNCTION
--- Update game messages and last message
--- SOURCE
+   -- ****
+   -- ****f* Utils.UI/UpdateMessages;
+   -- FUNCTION
+   -- Update game messages and last message
+   -- SOURCE
    procedure UpdateMessages;
--- ****
+   -- ****
 -- ****f* Utils.UI/CheckAmount
 -- FUNCTION
 -- Check did entered amount in text field don't drop below low level warnings
+-- PARAMETERS
+-- User_Data - Text field to check
 -- SOURCE
    procedure CheckAmount(User_Data: access GObject_Record'Class);
--- ****
+   -- ****
 
 end Utils.UI;

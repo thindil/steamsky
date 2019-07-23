@@ -17,32 +17,41 @@
 
 with Gtkada.Builder; use Gtkada.Builder;
 
+-- ****h* Steamsky/Statistics.UI
+-- FUNCTION
+-- Provides code for game statistics IU
+-- SOURCE
 package Statistics.UI is
+-- ****
 
--- ****f* Statistics.UI/HideStatistics;
--- FUNCTION
--- Hide stats and show sky map or main menu
--- SOURCE
+   -- ****f* Statistics.UI/HideStatistics;
+   -- FUNCTION
+   -- Hide stats and show sky map or main menu
+   -- SOURCE
    procedure HideStatistics;
--- ****
--- ****f* Statistics.UI/CreateStatsUI
--- FUNCTION
--- Create infterace for show game statistics
--- SOURCE
+   -- ****
+   -- ****f* Statistics.UI/CreateStatsUI
+   -- FUNCTION
+   -- Create infterace for show game statistics
+   -- PARAMETERS
+   -- NewBuilder - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure CreateStatsUI(NewBuilder: Gtkada_Builder);
--- ****
--- ****f* Statistics.UI/ShowStatsUI;
--- FUNCTION
--- Show interface for show game statistics
--- SOURCE
+   -- ****
+   -- ****f* Statistics.UI/ShowStatsUI;
+   -- FUNCTION
+   -- Show interface for show game statistics
+   -- SOURCE
    procedure ShowStatsUI;
--- ****
--- ****f* Statistics.UI/UpdateGoalsButton
--- FUNCTION
--- Update label on character goal button
--- SOURCE
+   -- ****
+   -- ****f* Statistics.UI/UpdateGoalsButton
+   -- FUNCTION
+   -- Update label on character goal button
+   -- PARAMETERS
+   -- Message - New label for goals button
+   -- SOURCE
    procedure UpdateGoalsButton(Message: String) with
       Pre => Message'Length > 0;
--- ****
+      -- ****
 
 end Statistics.UI;

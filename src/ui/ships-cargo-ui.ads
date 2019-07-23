@@ -17,19 +17,26 @@
 
 with Gtkada.Builder; use Gtkada.Builder;
 
+-- ****h* Steamsky/Ships.Cargo.UI
+-- FUNCTION
+-- Provides code for player ship cargo UI
+-- SOURCE
 package Ships.Cargo.UI is
+-- ****
 
--- ****f* Ships.Cargo.UI/CreateCargoUI
--- FUNCTION
--- Create infterace for show player ship cargo
--- SOURCE
+   -- ****f* Ships.Cargo.UI/CreateCargoUI
+   -- FUNCTION
+   -- Create infterace for show player ship cargo
+   -- PARAMETERS
+   -- NewBuilder - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure CreateCargoUI(NewBuilder: Gtkada_Builder);
--- ****
--- ****f* Ships.Cargo.UI/ShowCargoUI;
--- FUNCTION
--- Show interface for show player ship cargo
--- SOURCE
+   -- ****
+   -- ****f* Ships.Cargo.UI/ShowCargoUI;
+   -- FUNCTION
+   -- Show interface for show player ship cargo
+   -- SOURCE
    procedure ShowCargoUI;
--- ****
+   -- ****
 
 end Ships.Cargo.UI;
