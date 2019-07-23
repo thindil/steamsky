@@ -248,7 +248,8 @@ package body Crew.UI.Handlers is
                Set_Text
                  (StatisticBar,
                   To_String
-                    (Attributes_List(Attributes_Container.To_Index(I)).Name));
+                    (Attributes_List(Attributes_Container.To_Index(I)).Name) &
+                  ": " & GetAttributeLevelName(Member.Attributes(I)(1)));
                Set_Tooltip_Text
                  (Gtk_Widget(StatisticBar),
                   To_String
