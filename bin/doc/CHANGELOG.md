@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Updated help
 - Starting ships for player from Undead and Drones factions
 - Updated UI
+- Updated README.md
 
 ### Fixed
 - Crash after showing info dialog in main menu
