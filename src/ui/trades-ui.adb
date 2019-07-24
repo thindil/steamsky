@@ -303,10 +303,8 @@ package body Trades.UI is
                        (Items_List(ProtoIndex).Weight * MaxBuyAmount));
                   while Weight < 0 loop
                      MaxBuyAmount :=
-                       Integer
-                         (Float'Floor
-                            (Float(MaxBuyAmount) *
-                             (Float(MaxPrice + Weight) / Float(MaxPrice))));
+                       MaxBuyAmount +
+                       (Weight / Items_List(ProtoIndex).Weight) - 1;
                      if MaxBuyAmount < 0 then
                         MaxBuyAmount := 0;
                      end if;
