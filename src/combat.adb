@@ -42,12 +42,9 @@ package body Combat is
    FactionName: Unbounded_String;
 -- ****
 
--- ****if* Combat/StartCombat
--- SOURCE
    function StartCombat
      (EnemyIndex: Unbounded_String; NewCombat: Boolean := True)
       return Boolean is
--- ****
       EnemyShip: ShipRecord;
       function CountPerception(Spotter, Spotted: ShipRecord) return Natural is
          Result: Natural := 0;

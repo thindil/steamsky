@@ -25,10 +25,7 @@ with Factions; use Factions;
 
 package body Careers is
 
--- ****if* Careers/LoadCareers
--- SOURCE
    procedure LoadCareers(Reader: Tree_Reader) is
--- ****
       TempRecord: CareerRecord;
       NodesList, ChildNodes: Node_List;
       CareersData: Document;

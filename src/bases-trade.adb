@@ -52,12 +52,9 @@ package body Bases.Trade is
       return MoneyIndex2;
    end CheckMoney;
 
--- ****if* Bases.Trade/HireRecruit
--- SOURCE
    procedure HireRecruit
      (RecruitIndex, Cost: Positive; DailyPayment, TradePayment: Natural;
       ContractLenght: Integer) is
--- ****
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MoneyIndex2, Price, TraderIndex: Natural;
@@ -112,10 +109,7 @@ package body Bases.Trade is
       UpdateGame(5);
    end HireRecruit;
 
--- ****if* Bases.Trade/BuyRecipe
--- SOURCE
    procedure BuyRecipe(RecipeIndex: Unbounded_String) is
--- ****
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Cost, MoneyIndex2: Natural;
@@ -163,10 +157,7 @@ package body Bases.Trade is
       UpdateGame(5);
    end BuyRecipe;
 
--- ****if* Bases.Trade/HealWounded
--- SOURCE
    procedure HealWounded(MemberIndex: Natural) is
--- ****
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Cost, Time, MoneyIndex2: Natural := 0;
@@ -210,10 +201,7 @@ package body Bases.Trade is
       UpdateGame(Time);
    end HealWounded;
 
--- ****if* Bases.Trade/HealCost
--- SOURCE
    procedure HealCost(Cost, Time: in out Natural; MemberIndex: Natural) is
--- ****
       BaseType: constant Positive :=
         Bases_Types'Pos
           (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
@@ -257,10 +245,7 @@ package body Bases.Trade is
       end if;
    end HealCost;
 
--- ****if* Bases.Trade/TrainCost
--- SOURCE
    function TrainCost(MemberIndex, SkillIndex: Positive) return Natural is
--- ****
       Cost: Natural := Natural(100.0 * NewGameSettings.PricesBonus);
    begin
       for Skill of PlayerShip.Crew(MemberIndex).Skills loop
@@ -281,10 +266,7 @@ package body Bases.Trade is
       return Cost;
    end TrainCost;
 
--- ****if* Bases.Trade/TrainSkill
--- SOURCE
    procedure TrainSkill(MemberIndex, SkillIndex: Positive) is
--- ****
       Cost: constant Natural := TrainCost(MemberIndex, SkillIndex);
       MoneyIndex2, TraderIndex: Natural;
       GainedExp: Positive;

@@ -30,10 +30,7 @@ with Crafts; use Crafts;
 
 package body Items is
 
--- ****if* Items/LoadItems
--- SOURCE
    procedure LoadItems(Reader: Tree_Reader) is
--- ****
       TempRecord: Object_Data;
       NodesList, ChildNodes: Node_List;
       ItemsData: Document;
@@ -160,11 +157,8 @@ package body Items is
       end loop;
    end LoadItems;
 
--- ****if* Items/FindProtoItem
--- SOURCE
    function FindProtoItem
      (ItemType: Unbounded_String) return Unbounded_String is
--- ****
    begin
       for I in Items_List.Iterate loop
          if Items_List(I).IType = ItemType then
@@ -174,11 +168,8 @@ package body Items is
       return Null_Unbounded_String;
    end FindProtoItem;
 
--- ****if* Items/GetItemDamage
--- SOURCE
    function GetItemDamage
      (ItemDurability: Natural; ToLower: Boolean := False) return String is
--- ****
       DamagePercent: Float;
       DamageText: Unbounded_String;
    begin
@@ -198,12 +189,9 @@ package body Items is
       return To_String(DamageText);
    end GetItemDamage;
 
--- ****if* Items/GetItemName
--- SOURCE
    function GetItemName
      (Item: InventoryData; DamageInfo, ToLower: Boolean := True)
       return String is
--- ****
       ItemName: Unbounded_String;
    begin
       if Item.Name /= Null_Unbounded_String then
@@ -218,12 +206,9 @@ package body Items is
       return To_String(ItemName);
    end GetItemName;
 
--- ****if* Items/DamageItem
--- SOURCE
    procedure DamageItem
      (Inventory: in out Inventory_Container.Vector; ItemIndex: Positive;
       SkillLevel, MemberIndex: Natural := 0) is
--- ****
       DamageChance: Integer :=
         Items_List(Inventory(ItemIndex).ProtoIndex).Value(1);
       I: Natural := Inventory.First_Index;
@@ -290,13 +275,10 @@ package body Items is
       end loop;
    end DamageItem;
 
--- ****if* Items/FindItem
--- SOURCE
    function FindItem
      (Inventory: Inventory_Container.Vector;
       ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
       Durability: Natural := 101) return Natural is
--- ****
    begin
       if ProtoIndex /= Null_Unbounded_String then
          for I in Inventory.Iterate loop

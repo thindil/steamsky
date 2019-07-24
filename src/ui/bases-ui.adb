@@ -227,10 +227,7 @@ package body Bases.UI is
       end case;
    end AcceptAction;
 
--- ****if* Bases.UI/CreateBasesUI
--- SOURCE
    procedure CreateBasesUI(NewBuilder: Gtkada_Builder) is
--- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Object_Selected", ObjectSelected'Access);

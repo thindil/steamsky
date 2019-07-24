@@ -527,10 +527,7 @@ package body Bases.ShipyardUI is
       return False;
    end VisibleShipyard;
 
--- ****if* Bases.ShipyardUI/CreateBasesShipyardUI
--- SOURCE
    procedure CreateBasesShipyardUI(NewBuilder: Gtkada_Builder) is
--- ****
       ModulesList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(NewBuilder, "installmoduleslist"));
       ModulesIter: Gtk_Tree_Iter;

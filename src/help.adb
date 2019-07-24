@@ -25,10 +25,7 @@ with Game; use Game;
 
 package body Help is
 
--- ****if* Help/LoadHelp
--- SOURCE
    procedure LoadHelp(Reader: Tree_Reader) is
--- ****
       TmpHelp: Help_Data;
       NodesList: Node_List;
       HelpData: Document;

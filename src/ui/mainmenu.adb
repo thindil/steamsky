@@ -858,10 +858,7 @@ package body MainMenu is
       Show_All(Gtk_Widget(Get_Object(Builder, "errordialog")));
    end ShowErrorInfo;
 
--- ****if* MainMenu/UpdateGoalButton
--- SOURCE
    procedure UpdateGoalButton(Message: String) is
--- ****
    begin
       Set_Label(Gtk_Button(Get_Object(Builder, "btngoal")), Message);
    end UpdateGoalButton;
@@ -893,11 +890,8 @@ package body MainMenu is
       Hide(Gtk_Widget(Get_Object(Builder, "messagebox")));
    end ShowMainMenu;
 
--- ****if* MainMenu/SaveException
--- SOURCE
    procedure SaveException
      (An_Exception: Exception_Occurrence; PrintToTerminal: Boolean) is
--- ****
       ErrorFile: File_Type;
       ErrorText: Unbounded_String;
    begin
@@ -933,10 +927,7 @@ package body MainMenu is
       EndLogging;
    end SaveException;
 
--- ****if* MainMenu/On_Exception
--- SOURCE
    procedure On_Exception(An_Exception: Exception_Occurrence) is
--- ****
    begin
       SaveException(An_Exception, False);
    end On_Exception;

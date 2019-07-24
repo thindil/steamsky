@@ -52,10 +52,7 @@ package body Goals.UI is
       return Hide_On_Delete(Gtk_Widget(Get_Object(User_Data, "goalswindow")));
    end HideGoals;
 
--- ****if* Goals.UI/ShowGoalsMenu
--- SOURCE
    procedure ShowGoalsMenu(InMainMenu: Boolean := True) is
--- ****
    begin
       FromMainMenu := InMainMenu;
       Show_All(Gtk_Widget(Get_Object(Builder, "goalswindow")));

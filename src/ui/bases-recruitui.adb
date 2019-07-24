@@ -338,10 +338,7 @@ package body Bases.RecruitUI is
       end if;
    end NegotiateHire;
 
--- ****if* Bases.RecruitUI/CreateRecruitUI
--- SOURCE
    procedure CreateRecruitUI(NewBuilder: Gtkada_Builder) is
--- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Recruit_Info", ShowRecruitInfo'Access);

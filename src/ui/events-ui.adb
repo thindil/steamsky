@@ -135,10 +135,7 @@ package body Events.UI is
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
    end ShowEvent;
 
--- ****if* Events.UI/CreateEventsUI
--- SOURCE
    procedure CreateEventsUI(NewBuilder: Gtkada_Builder) is
--- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Event_Info", ShowEventInfo'Access);

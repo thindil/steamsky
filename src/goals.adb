@@ -33,10 +33,7 @@ with Game; use Game;
 
 package body Goals is
 
--- ****if* Goals/LoadGoals
--- SOURCE
    procedure LoadGoals(Reader: Tree_Reader) is
--- ****
       TempRecord: Goal_Data;
       NodesList: Node_List;
       GoalsData: Document;
@@ -118,10 +115,7 @@ package body Goals is
       end loop;
    end LoadGoals;
 
--- ****if* Goals/GoalText
--- SOURCE
    function GoalText(Index: Goals_Container.Extended_Index) return String is
--- ****
       Text: Unbounded_String;
       Goal: Goal_Data;
       InsertPosition: Positive;
@@ -285,12 +279,9 @@ package body Goals is
          TargetIndex => Null_Unbounded_String, Multiplier => 1);
    end ClearCurrentGoal;
 
--- ****if* Goals/UpdateGoal
--- SOURCE
    procedure UpdateGoal
      (GType: GoalTypes; TargetIndex: Unbounded_String;
       Amount: Positive := 1) is
--- ****
    begin
       if GType /= CurrentGoal.GType then
          return;

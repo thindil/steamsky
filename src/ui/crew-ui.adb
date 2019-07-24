@@ -296,10 +296,7 @@ package body Crew.UI is
       end loop;
    end RefreshCrewInfo;
 
--- ****if* Crew.UI/SetActiveMember
--- SOURCE
    procedure SetActiveMember(NewMemberIndex: Natural := 0) is
--- ****
    begin
       MemberIndex := NewMemberIndex + 1;
       Set_Cursor
@@ -308,10 +305,7 @@ package body Crew.UI is
          False);
    end SetActiveMember;
 
--- ****if* Crew.UI/CreateCrewUI
--- SOURCE
    procedure CreateCrewUI(NewBuilder: Gtkada_Builder) is
--- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Member_Info", ShowMemberInfo'Access);
