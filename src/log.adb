@@ -47,12 +47,9 @@ package body Log is
          DebugMode);
    end StartLogging;
 
--- ****if* Log/LogMessage
--- SOURCE
    procedure LogMessage
      (Message: String; MessageType: Debug_Types;
       NewLine, TimeStamp: Boolean := True) is
--- ****
       NewMessage: Unbounded_String;
    begin
       if DebugMode = None or

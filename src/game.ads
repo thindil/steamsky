@@ -113,6 +113,7 @@ package Game is
       Name: Unbounded_String;
       Description: Unbounded_String;
    end record;
+   -- ****
    -- ****t* Game/AttributesData_Container
    -- FUNCTION
    -- Used to store attributes data

@@ -225,10 +225,7 @@ package body GameOptions is
    Setting: Boolean := False;
 -- ****
 
--- ****if* GameOptions/CloseOptions
--- SOURCE
    procedure CloseOptions(Object: access Gtkada_Builder_Record'Class) is
--- ****
    begin
       GameSettings.AutoRest :=
         Get_State(Gtk_Switch(Get_Object(Object, "switchautorest")));
@@ -430,10 +427,7 @@ package body GameOptions is
       return False;
    end ToggleAnimationType;
 
--- ****if* GameOptions/CreateGameOptions
--- SOURCE
    procedure CreateGameOptions(NewBuilder: Gtkada_Builder) is
--- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Close_Options", CloseOptions'Access);

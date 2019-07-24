@@ -32,10 +32,7 @@ with Config; use Config;
 
 package body Crew is
 
--- ****if* Crew/GainExp
--- SOURCE
    procedure GainExp(Amount: Natural; SkillNumber, CrewIndex: Positive) is
--- ****
       SkillExp, SkillLevel, SkillIndex, AttributeExp, AttributeLevel,
       NewAmount: Natural := 0;
       AttributeIndex: constant Positive := Skills_List(SkillNumber).Attribute;
@@ -97,14 +94,9 @@ package body Crew is
       end if;
    end GainExp;
 
--- ****if* Crew/GenerateMemberName
--- FUNCTION
--- based on name generator from libtcod
--- SOURCE
    function GenerateMemberName
      (Gender: Character; FactionIndex: Unbounded_String)
       return Unbounded_String is
--- ****
       NewName: Unbounded_String;
       NameType: NamesTypes;
    begin
@@ -178,10 +170,7 @@ package body Crew is
       return NewName;
    end GenerateMemberName;
 
--- ****if* Crew/FindCabin
--- SOURCE
    function FindCabin(MemberIndex: Positive) return Natural is
--- ****
    begin
       for I in PlayerShip.Modules.Iterate loop
          if PlayerShip.Modules(I).MType = CABIN then
@@ -195,11 +184,8 @@ package body Crew is
       return 0;
    end FindCabin;
 
--- ****if* Crew/UpdateCrew
--- SOURCE
    procedure UpdateCrew
      (Minutes: Positive; TiredPoints: Natural; InCombat: Boolean := False) is
--- ****
       TiredLevel, HungerLevel, ThirstLevel: Integer := 0;
       HealthLevel: Integer := 100;
       DeathReason: Unbounded_String;
@@ -815,10 +801,7 @@ package body Crew is
       end if;
    end WaitForRest;
 
--- ****if* Crew/GetSkillLevelName
--- SOURCE
    function GetSkillLevelName(SkillLevel: Positive) return String is
--- ****
    begin
       case SkillLevel is
          when 1 .. 10 =>
@@ -846,10 +829,7 @@ package body Crew is
       end case;
    end GetSkillLevelName;
 
--- ****if* Crew/GetAttributeLevelName
--- SOURCE
    function GetAttributeLevelName(AttributeLevel: Positive) return String is
--- ****
    begin
       case AttributeLevel is
          when 1 .. 5 =>

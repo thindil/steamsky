@@ -49,10 +49,7 @@ package body Game.SaveLoad is
    SaveData: Document;
 -- ****
 
--- ****if* Game.SaveLoad/SaveGame
--- SOURCE
    procedure SaveGame(PrettyPrint: Boolean := False) is
--- ****
       Save: DOM_Implementation;
       CategoryNode, MainNode: DOM.Core.Element;
       RawValue: Unbounded_String;
@@ -853,10 +850,7 @@ package body Game.SaveLoad is
          raise SaveGame_Invalid_Data with Exception_Message(An_Exception);
    end LoadGame;
 
--- ****if* Game.SaveLoad/GenerateSaveName
--- SOURCE
    procedure GenerateSaveName(RenameSave: Boolean := False) is
--- ****
       OldSaveName: constant String := To_String(SaveName);
    begin
       loop

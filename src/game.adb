@@ -373,10 +373,7 @@ package body Game is
          OtherMessage);
    end NewGame;
 
--- ****if* Game/UpdateGame
--- SOURCE
    procedure UpdateGame(Minutes: Positive; InCombat: Boolean := False) is
--- ****
       AddedHours, AddedMinutes: Natural;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -694,10 +691,7 @@ package body Game is
       end loop;
    end LoadData;
 
--- ****if* Game/EndGame
--- SOURCE
    procedure EndGame(Save: Boolean) is
--- ****
    begin
       if Save then
          SaveGame;
@@ -715,10 +709,7 @@ package body Game is
       SaveConfig;
    end EndGame;
 
--- ****if* Game/FindSkillIndex
--- SOURCE
    function FindSkillIndex(SkillName: Unbounded_String) return Natural is
--- ****
    begin
       for I in Skills_List.Iterate loop
          if Skills_List(I).Name = SkillName then
@@ -728,10 +719,7 @@ package body Game is
       return 0;
    end FindSkillIndex;
 
--- ****if* Game/LoadGameData
--- SOURCE
    function LoadGameData return String is
--- ****
       type DataType_Record is record
          Name: Unbounded_String;
          FileName: Unbounded_String;

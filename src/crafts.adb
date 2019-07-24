@@ -34,10 +34,7 @@ with Trades; use Trades;
 
 package body Crafts is
 
--- ****if* Crafts/LoadRecipes
--- SOURCE
    procedure LoadRecipes(Reader: Tree_Reader) is
--- ****
       TempRecord: Craft_Data;
       TempMaterials: UnboundedString_Container.Vector;
       TempAmount: Positive_Container.Vector;
@@ -218,10 +215,7 @@ package body Crafts is
       return Recipes_List(RecipeIndex);
    end SetRecipeData;
 
--- ****if* Crafts/CheckRecipe
--- SOURCE
    function CheckRecipe(RecipeIndex: Unbounded_String) return Positive is
--- ****
       Recipe: Craft_Data;
       MaterialIndexes: Positive_Container.Vector;
       RecipeName: Unbounded_String;
@@ -329,10 +323,7 @@ package body Crafts is
       return MaxAmount;
    end CheckRecipe;
 
--- ****if* Crafts/Manufacturing
--- SOURCE
    procedure Manufacturing(Minutes: Positive) is
--- ****
       CrafterIndex, ResultAmount, CraftedAmount, GainedExp, ToolIndex,
       CargoIndex: Natural := 0;
       Amount, NewAmount: Integer := 0;
@@ -674,11 +665,8 @@ package body Crafts is
          GiveOrders(PlayerShip, CrafterIndex, Rest);
    end Manufacturing;
 
--- ****if* Crafts/SetRecipe
--- SOURCE
    procedure SetRecipe
      (Workshop, Amount: Positive; RecipeIndex: Unbounded_String) is
--- ****
       RecipeName, ItemIndex: Unbounded_String;
    begin
       PlayerShip.Modules(Workshop).CraftingAmount := Amount;
