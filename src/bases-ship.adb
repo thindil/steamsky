@@ -27,10 +27,7 @@ with Config; use Config;
 
 package body Bases.Ship is
 
--- ****if* Bases.Ship/RepairShip
--- SOURCE
    procedure RepairShip(ModuleIndex: Integer) is
--- ****
       Cost, Time, MoneyIndex2: Natural := 0;
       TraderIndex: Positive;
    begin
@@ -76,10 +73,7 @@ package body Bases.Ship is
       UpdateGame(Time);
    end RepairShip;
 
--- ****if* Bases.Ship/UpgradeShip
--- SOURCE
    procedure UpgradeShip(Install: Boolean; ModuleIndex: Unbounded_String) is
--- ****
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
       HullIndex, ModulesAmount, TraderIndex, ShipModuleIndex: Positive;
       FreeTurretIndex, Price: Natural := 0;
@@ -492,10 +486,7 @@ package body Bases.Ship is
       end if;
    end PayForDock;
 
--- ****if* Bases.Ship/RepairCost
--- SOURCE
    procedure RepairCost(Cost, Time: in out Natural; ModuleIndex: Integer) is
--- ****
       BaseType: constant Positive :=
         Bases_Types'Pos
           (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)

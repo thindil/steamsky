@@ -330,10 +330,7 @@ package body Crafts.UI is
       end loop;
    end SetCrafting;
 
--- ****if* Crafts.UI/CreateCraftsUI
--- SOURCE
    procedure CreateCraftsUI(NewBuilder: Gtkada_Builder) is
--- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Recipe_Info", ShowRecipeInfo'Access);

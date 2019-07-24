@@ -28,10 +28,7 @@ with Config; use Config;
 
 package body Bases is
 
--- ****if* Bases/GainRep
--- SOURCE
    procedure GainRep(BaseIndex: BasesRange; Points: Integer) is
--- ****
       NewPoints: Integer;
    begin
       if SkyBases(BaseIndex).Reputation(1) = -100 or
@@ -64,12 +61,9 @@ package body Bases is
       end if;
    end GainRep;
 
--- ****if* Bases/CountPrice
--- SOURCE
    procedure CountPrice
      (Price: in out Positive; TraderIndex: Crew_Container.Extended_Index;
       Reduce: Boolean := True) is
--- ****
       Bonus: Integer := 0;
    begin
       if TraderIndex /= Crew_Container.No_Index then
@@ -111,13 +105,8 @@ package body Bases is
       end if;
    end CountPrice;
 
--- ****if* Bases/GenerateBaseName
--- FUNCTION
--- based on name generator from libtcod
--- SOURCE
    function GenerateBaseName
      (FactionIndex: Unbounded_String) return Unbounded_String is
--- ****
       NewName: Unbounded_String;
    begin
       NewName := Null_Unbounded_String;

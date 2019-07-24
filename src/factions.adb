@@ -27,10 +27,7 @@ with Items; use Items;
 
 package body Factions is
 
--- ****if* Factions/LoadFactions
--- SOURCE
    procedure LoadFactions(Reader: Tree_Reader) is
--- ****
       TempRecord: FactionRecord;
       NodesList, ChildNodes: Node_List;
       FactionsData: Document;
@@ -313,11 +310,8 @@ package body Factions is
       end loop;
    end LoadFactions;
 
--- ****if* Factions/GetReputation
--- SOURCE
    function GetReputation
      (SourceFaction, TargetFaction: Unbounded_String) return Integer is
--- ****
    begin
       if Factions_List(SourceFaction).Relations(TargetFaction).Reputation(2) =
         0 then
@@ -333,19 +327,13 @@ package body Factions is
       end if;
    end GetReputation;
 
--- ****if* Factions/IsFriendly
--- SOURCE
    function IsFriendly
      (SourceFaction, TargetFaction: Unbounded_String) return Boolean is
--- ****
    begin
       return Factions_List(SourceFaction).Relations(TargetFaction).Friendly;
    end IsFriendly;
 
--- ****if* Factions/GetRandomFaction
--- SOURCE
    function GetRandomFaction return Unbounded_String is
--- ****
       FactionIndex, CurrentIndex: Positive;
    begin
       FactionIndex := GetRandom(1, Positive(Factions_List.Length));

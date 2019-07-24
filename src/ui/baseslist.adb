@@ -362,10 +362,7 @@ package body BasesList is
       end if;
    end ToggleBaseInfo;
 
--- ****if* BasesList/CreateBasesListUI
--- SOURCE
    procedure CreateBasesListUI(NewBuilder: Gtkada_Builder) is
--- ****
       ComboBox: Gtk_Combo_Box_Text;
    begin
       Builder := NewBuilder;

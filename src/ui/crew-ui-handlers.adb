@@ -76,10 +76,7 @@ package body Crew.UI.Handlers is
       Destroy(Widget);
    end RemoveProgressBars;
 
--- ****if* Crew.UI.Handlers/ShowMemberInfo
--- SOURCE
    procedure ShowMemberInfo(Object: access Gtkada_Builder_Record'Class) is
--- ****
       Member: Member_Data;
       MemberInfo: Unbounded_String;
       TiredPoints: Integer;
@@ -325,10 +322,7 @@ package body Crew.UI.Handlers is
       SetOrdersList;
    end ShowMemberInfo;
 
--- ****if* Crew.UI.Handlers/GiveOrdersAll
--- SOURCE
    procedure GiveOrdersAll(User_Data: access GObject_Record'Class) is
--- ****
       Order: Crew_Orders;
    begin
       if User_Data = Get_Object(Builder, "btnrepairall") then
@@ -350,10 +344,7 @@ package body Crew.UI.Handlers is
       UpdateMessages;
    end GiveOrdersAll;
 
--- ****if* Crew.UI.Handlers/ShowInventory
--- SOURCE
    procedure ShowInventory(Object: access Gtkada_Builder_Record'Class) is
--- ****
    begin
       RefreshInventory;
       Set_Visible_Child_Name
@@ -366,10 +357,7 @@ package body Crew.UI.Handlers is
       SetActiveItem;
    end ShowInventory;
 
--- ****if* Crew.UI.Handlers/ShowItemInfo2
--- SOURCE
    procedure ShowItemInfo2(Object: access Gtkada_Builder_Record'Class) is
--- ****
    begin
       declare
          InventoryIter: Gtk_Tree_Iter;
@@ -401,11 +389,8 @@ package body Crew.UI.Handlers is
       end;
    end ShowItemInfo2;
 
--- ****if* Crew.UI.Handlers/UseItem
--- SOURCE
    procedure UseItem
      (Self: access Gtk_Cell_Renderer_Toggle_Record'Class; Path: UTF8_String) is
--- ****
       Member: constant Member_Data := PlayerShip.Crew(MemberIndex);
       ItemType: Unbounded_String;
       InventoryList: constant Gtk_List_Store :=
@@ -460,10 +445,7 @@ package body Crew.UI.Handlers is
       Set(InventoryList, Get_Iter_From_String(InventoryList, Path), 2, True);
    end UseItem;
 
--- ****if* Crew.UI.Handlers/MoveItem
--- SOURCE
    procedure MoveItem(Object: access Gtkada_Builder_Record'Class) is
--- ****
       Amount: Positive;
       Item: constant InventoryData :=
         PlayerShip.Crew(MemberIndex).Inventory(ItemIndex);
@@ -500,12 +482,9 @@ package body Crew.UI.Handlers is
       SetActiveItem;
    end MoveItem;
 
--- ****if* Crew.UI.Handlers/GiveCrewOrders
--- SOURCE
    procedure GiveCrewOrders
      (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
       Path_String: UTF8_String; New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
--- ****
       Model: Glib.Types.GType_Interface;
       List: Gtk_List_Store;
       OldMemberIndex: constant Positive := MemberIndex;
@@ -543,12 +522,9 @@ package body Crew.UI.Handlers is
       return False;
    end ReducePriority;
 
--- ****if* Crew.UI.Handlers/SetPriority
--- SOURCE
    procedure SetPriority
      (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
       Path_String: UTF8_String; New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter) is
--- ****
       Model: Glib.Types.GType_Interface;
       PriorityLevel: Unbounded_String;
       PrioritiesList: constant Gtk_List_Store :=
@@ -582,10 +558,7 @@ package body Crew.UI.Handlers is
       UpdateMessages;
    end SetPriority;
 
--- ****if* Crew.UI.Handlers/DismissMember
--- SOURCE
    procedure DismissMember(Object: access Gtkada_Builder_Record'Class) is
--- ****
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin

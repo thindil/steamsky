@@ -67,10 +67,7 @@ package body HallOfFame is
       Free(Reader);
    end LoadHallOfFame;
 
--- ****if* HallOfFame/UpdateHallOfFame
--- SOURCE
    procedure UpdateHallOfFame(PlayerName, DeathReason: Unbounded_String) is
--- ****
       NewIndex: Natural := 0;
       HoFFile: File_Type;
       HoF: DOM_Implementation;

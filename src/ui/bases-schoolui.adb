@@ -135,10 +135,7 @@ package body Bases.SchoolUI is
          ShowDialog("You can't train this skill any more.");
    end TrainSelectedSkill;
 
--- ****if* Bases.SchoolUI/CreateBasesSchoolUI
--- SOURCE
    procedure CreateBasesSchoolUI(NewBuilder: Gtkada_Builder) is
--- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Train_Info", ShowTrainInfo'Access);

@@ -158,10 +158,7 @@ package body Help.UI is
         (Gtk_Widget(Get_Object(Builder, "helpwindow")), CloseWindow'Access);
    end CreateHelpUI;
 
--- ****if* Help.UI/ShowHelpUI
--- SOURCE
    procedure ShowHelpUI(HelpIndex: Unbounded_String) is
--- ****
       NewText, TagText: Unbounded_String;
       StartIndex, EndIndex, OldIndex, TopicIndex: Natural;
       Key: Gtk_Accel_Key;

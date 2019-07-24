@@ -501,10 +501,7 @@ package body Combat.UI is
       UpdateHeader;
    end RefreshCombatUI;
 
--- ****if* Combat.UI/ShowCombatUI
--- SOURCE
    procedure ShowCombatUI(NewCombat: Boolean := True) is
--- ****
       CombatStarted: Boolean;
       MenuArray: constant array(1 .. 9) of Unbounded_String :=
         (To_Unbounded_String("menuorders"),
@@ -973,10 +970,7 @@ package body Combat.UI is
       BoardingOrders(Positive'Value(Path_String) + 1) := NewOrder;
    end GiveBoardingOrders;
 
--- ****if* Combat.UI/CreateCombatUI
--- SOURCE
    procedure CreateCombatUI(NewBuilder: Gtkada_Builder) is
--- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Set_Orders_List", SetOrdersList'Access);

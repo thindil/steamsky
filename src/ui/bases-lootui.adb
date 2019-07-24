@@ -290,10 +290,7 @@ package body Bases.LootUI is
       return False;
    end VisibleLoot;
 
--- ****if* Bases.LootUI/CreateBasesLootUI
--- SOURCE
    procedure CreateBasesLootUI(NewBuilder: Gtkada_Builder) is
--- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
