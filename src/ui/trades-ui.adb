@@ -85,6 +85,8 @@ package body Trades.UI is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: Positive;
       MoneyIndex2: Natural;
+      ItemTypes: constant array(Positive range <>) of Unbounded_String :=
+        (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
    begin
       declare
          ItemsIter: Gtk_Tree_Iter;
@@ -186,6 +188,21 @@ package body Trades.UI is
             when others =>
                null;
          end case;
+      end if;
+      for ItemType of ItemTypes loop
+         if Items_List(ProtoIndex).IType = ItemType then
+            Append
+              (ItemInfo,
+               LF & "Damage chance: " &
+               GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
+            exit;
+         end if;
+      end loop;
+      if Tools_List.Contains(Items_List(ProtoIndex).IType) then
+         Append
+           (ItemInfo,
+            LF & "Damage chance: " &
+            GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
       end if;
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
          Append
@@ -535,10 +552,7 @@ package body Trades.UI is
       return False;
    end VisibleTrade;
 
--- ****if* Trades.UI/CreateTradeUI
--- SOURCE
    procedure CreateTradeUI(NewBuilder: Gtkada_Builder) is
--- ****
    begin
       Builder := NewBuilder;
       Register_Handler

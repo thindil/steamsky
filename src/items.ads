@@ -236,5 +236,15 @@ package Items is
    -- SOURCE
    procedure SetToolsList;
    -- ****
+   -- ****f* Items/GetItemChanceToDamage
+   -- FUNCTION
+   -- Get item chance to damage info
+   -- PARAMETERS
+   -- ItemData: Numeric chance to damage for selected item
+   -- RESULT
+   -- String with chance to damage level description
+   -- SOURCE
+   function GetItemChanceToDamage(ItemData: Natural) return String;
+   -- ****
 
 end Items;
