@@ -23,10 +23,7 @@ with Bases; use Bases;
 
 package body Ships.SaveLoad is
 
--- ****if* Ships.SaveLoad/SavePlayerShip
--- SOURCE
    procedure SavePlayerShip(SaveData: Document; MainNode: DOM.Core.Element) is
--- ****
       RawValue: Unbounded_String;
       CategoryNode, DataNode: DOM.Core.Element;
    begin
@@ -369,10 +366,7 @@ package body Ships.SaveLoad is
       end;
    end SavePlayerShip;
 
--- ****if* Ships.SaveLoad/LoadPlayerShip
--- SOURCE
    procedure LoadPlayerShip(SaveData: Document) is
--- ****
       ShipNode, ChildNodes: Node_List;
       LoadNode, ChildNode: Node;
    begin

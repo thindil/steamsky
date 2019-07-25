@@ -773,19 +773,13 @@ package body Maps.UI is
       end if;
    end DrawMap;
 
--- ****if* Maps.UI/HideButtons
--- SOURCE
    procedure HideButtons(Widget: not null access Gtk_Widget_Record'Class) is
--- ****
    begin
       Set_No_Show_All(Widget, True);
       Hide(Widget);
    end HideButtons;
 
--- ****if* Maps.UI/CheckButtons
--- SOURCE
    procedure CheckButtons(Widget: not null access Gtk_Widget_Record'Class) is
--- ****
    begin
       if Widget = Gtk_Widget(Get_Object(Builder, "btncloseorders")) then
          return;
@@ -828,10 +822,7 @@ package body Maps.UI is
       end if;
    end GetCurrentCellCoords;
 
--- ****if* Maps.UI/UpdateMapInfo
--- SOURCE
    procedure UpdateMapInfo(ShowOrdersInfo: Boolean := False) is
--- ****
       MapInfoText: Unbounded_String;
    begin
       if not ShowOrdersInfo then
@@ -1348,11 +1339,8 @@ package body Maps.UI is
       end if;
    end CreateSkyMap;
 
--- ****if* Maps.UI/ShowSkyMap
--- SOURCE
    procedure ShowSkyMap
      (X: Integer := PlayerShip.SkyX; Y: Integer := PlayerShip.SkyY) is
--- ****
       ButtonsNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("btnmovemapleft"),
          To_Unbounded_String("btnmovemapright"),

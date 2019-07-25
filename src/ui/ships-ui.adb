@@ -560,10 +560,7 @@ package body Ships.UI is
         (Gtk_Label(Get_Object(Builder, "lblshipinfo")), To_String(ShipInfo));
    end ShowShipInfo;
 
--- ****if* Ships.UI/CreateShipUI
--- SOURCE
    procedure CreateShipUI(NewBuilder: Gtkada_Builder) is
--- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Module_Info", ShowModuleInfo'Access);

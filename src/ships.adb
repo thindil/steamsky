@@ -30,12 +30,9 @@ with ShipModules; use ShipModules;
 
 package body Ships is
 
--- ****if* Ships/CreateShip
--- SOURCE
    function CreateShip
      (ProtoIndex, Name: Unbounded_String; X, Y: Integer; Speed: ShipSpeed;
       RandomUpgrades: Boolean := True) return ShipRecord is
--- ****
       TmpShip: ShipRecord;
       ShipModules: Modules_Container.Vector;
       ShipCrew: Crew_Container.Vector;
@@ -486,10 +483,7 @@ package body Ships is
       return TmpShip;
    end CreateShip;
 
--- ****if* Ships/LoadShips
--- SOURCE
    procedure LoadShips(Reader: Tree_Reader) is
--- ****
       NodesList, ChildNodes: Node_List;
       ShipsData: Document;
       TempRecord: ProtoShipData;
@@ -933,10 +927,7 @@ package body Ships is
       end loop;
    end LoadShips;
 
--- ****if* Ships/CountShipWeight
--- SOURCE
    function CountShipWeight(Ship: ShipRecord) return Positive is
--- ****
       Weight: Natural := 0;
       CargoWeight: Positive;
    begin
@@ -950,13 +941,8 @@ package body Ships is
       return Weight;
    end CountShipWeight;
 
--- ****if* Ships/GenerateShipName
--- FUNCTION
--- based on name generator from libtcod
--- SOURCE
    function GenerateShipName
      (Owner: Unbounded_String) return Unbounded_String is
--- ****
       NewName: Unbounded_String := Null_Unbounded_String;
    begin
       for I in Factions_List.Iterate loop
@@ -990,10 +976,7 @@ package body Ships is
       return NewName;
    end GenerateShipName;
 
--- ****if* Ships/CountCombatValue
--- SOURCE
    function CountCombatValue return Natural is
--- ****
       CombatValue: Natural := 0;
       procedure CountAmmoValue(ItemTypeIndex, Multiple: Positive) is
       begin
@@ -1032,10 +1015,7 @@ package body Ships is
       return CombatValue;
    end CountCombatValue;
 
--- ****if* Ships/GetCabinQuality
--- SOURCE
    function GetCabinQuality(Quality: Natural) return String is
--- ****
    begin
       case Quality is
          when 0 .. 10 =>

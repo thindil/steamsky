@@ -26,10 +26,7 @@ with Items; use Items;
 
 package body ShipModules is
 
--- ****if* ShipModules/LoadShipModules
--- SOURCE
    procedure LoadShipModules(Reader: Tree_Reader) is
--- ****
       NodesList: Node_List;
       ModulesData: Document;
       TempRecord: BaseModule_Data;

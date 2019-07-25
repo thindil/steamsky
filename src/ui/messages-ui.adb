@@ -152,10 +152,7 @@ package body Messages.UI is
       return False;
    end VisibleMessages;
 
--- ****if* Messages.UI/CreateMessagesUI
--- SOURCE
    procedure CreateMessagesUI(NewBuilder: Gtkada_Builder) is
--- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Select_Messages", SelectMessages'Access);

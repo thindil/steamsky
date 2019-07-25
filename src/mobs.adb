@@ -26,10 +26,7 @@ with Items; use Items;
 
 package body Mobs is
 
--- ****if* Mobs/LoadMobs
--- SOURCE
    procedure LoadMobs(Reader: Tree_Reader) is
--- ****
       MobsData: Document;
       NodesList, ChildNodes: Node_List;
       TempRecord: ProtoMobRecord;

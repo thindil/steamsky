@@ -21,13 +21,10 @@ with Config; use Config;
 
 package body Ships.Cargo is
 
--- ****if* Ships.Cargo/UpdateCargo
--- SOURCE
    procedure UpdateCargo
      (Ship: in out ShipRecord;
       ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Natural := 100; CargoIndex, Price: Natural := 0) is
--- ****
       ItemIndex: Natural := 0;
    begin
       if ProtoIndex /= Null_Unbounded_String and CargoIndex = 0 then
@@ -71,11 +68,8 @@ package body Ships.Cargo is
       end if;
    end UpdateCargo;
 
--- ****if* Ships.Cargo/FreeCargo
--- SOURCE
    function FreeCargo
      (Amount: Integer; Ship: ShipRecord := PlayerShip) return Integer is
--- ****
       FreeCargo: Integer := 0;
    begin
       for Module of Ship.Modules loop
@@ -91,10 +85,7 @@ package body Ships.Cargo is
       return FreeCargo;
    end FreeCargo;
 
--- ****if* Ships.Cargo/GetItemAmount
--- SOURCE
    function GetItemAmount(ItemType: Unbounded_String) return Natural is
--- ****
       Amount: Natural := 0;
    begin
       for Item of PlayerShip.Cargo loop
@@ -105,10 +96,7 @@ package body Ships.Cargo is
       return Amount;
    end GetItemAmount;
 
--- ****if* Ships.Cargo/GetItemsAmount
--- SOURCE
    function GetItemsAmount(IType: String) return Natural is
--- ****
       ItemsAmount: Natural;
    begin
       if IType = "Drinks" then

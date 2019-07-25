@@ -374,10 +374,7 @@ package body Missions.UI is
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
    end ShowAvailableMission;
 
--- ****if* Missions.UI/CreateMissionsUI
--- SOURCE
    procedure CreateMissionsUI(NewBuilder: Gtkada_Builder) is
--- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Mission_Info", ShowMissionInfo'Access);

@@ -71,18 +71,12 @@ package body Statistics.UI is
       ShowGoalsMenu(False);
    end ShowGoals;
 
--- ****if* Statistics.UI/UpdateGoalsButton
--- SOURCE
    procedure UpdateGoalsButton(Message: String) is
--- ****
    begin
       Set_Label(Gtk_Button(Get_Object(Builder, "btngoals")), Message);
    end UpdateGoalsButton;
 
--- ****if* Statistics.UI/CreateStatsUI
--- SOURCE
    procedure CreateStatsUI(NewBuilder: Gtkada_Builder) is
--- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Goals", ShowGoals'Access);

@@ -189,10 +189,7 @@ package body Stories.UI is
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
    end ShowStory;
 
--- ****if* Stories.UI/CreateStoriesUI
--- SOURCE
    procedure CreateStoriesUI(NewBuilder: Gtkada_Builder) is
--- ****
    begin
       Builder := NewBuilder;
       Register_Handler(Builder, "Show_Story_Info", ShowStoryInfo'Access);

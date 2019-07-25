@@ -209,10 +209,7 @@ package body Missions is
       SkyBases(BaseIndex).MissionsDate := GameDate;
    end GenerateMissions;
 
--- ****if* Missions/AcceptMission
--- SOURCE
    procedure AcceptMission(MissionIndex: Positive) is
--- ****
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Mission: Mission_Data := SkyBases(BaseIndex).Missions(MissionIndex);
@@ -379,10 +376,7 @@ package body Missions is
       UpdateGame(5);
    end AcceptMission;
 
--- ****if* Missions/UpdateMissions
--- SOURCE
    procedure UpdateMissions(Minutes: Positive) is
--- ****
       Time: Integer;
       I: Positive := AcceptedMissions.First_Index;
    begin
@@ -397,10 +391,7 @@ package body Missions is
       end loop;
    end UpdateMissions;
 
--- ****if* Missions/FinishMission
--- SOURCE
    procedure FinishMission(MissionIndex: Positive) is
--- ****
       Message: Unbounded_String;
       MissionsAmount: constant Positive := Positive(AcceptedMissions.Length);
    begin
@@ -454,10 +445,7 @@ package body Missions is
       DeleteMission(MissionIndex, False);
    end FinishMission;
 
--- ****if* Missions/DeleteMission
--- SOURCE
    procedure DeleteMission(MissionIndex: Positive; Failed: Boolean := True) is
--- ****
       MessageText: Unbounded_String :=
         To_Unbounded_String("You failed mission ");
       Mission: constant Mission_Data := AcceptedMissions(MissionIndex);
@@ -552,10 +540,7 @@ package body Missions is
       end loop;
    end DeleteMission;
 
--- ****if* Missions/UpdateMission
--- SOURCE
    procedure UpdateMission(MissionIndex: Positive) is
--- ****
       Mission: constant Mission_Data := AcceptedMissions(MissionIndex);
       MessageText: Unbounded_String :=
         To_Unbounded_String("Return to ") & SkyBases(Mission.StartBase).Name &
@@ -599,10 +584,7 @@ package body Missions is
       end if;
    end UpdateMission;
 
--- ****if* Missions/AutoFinishMissions
--- SOURCE
    function AutoFinishMissions return String is
--- ****
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       I: Natural := AcceptedMissions.First_Index;

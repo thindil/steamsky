@@ -29,10 +29,7 @@ with Bases.Cargo; use Bases.Cargo;
 
 package body Trades is
 
--- ****if* Trades/BuyItems
--- SOURCE
    procedure BuyItems(BaseItemIndex: Positive; Amount: String) is
--- ****
       BuyAmount, Price: Positive;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -118,10 +115,7 @@ package body Trades is
          raise Trade_Invalid_Amount;
    end BuyItems;
 
--- ****if* Trades/SellItems
--- SOURCE
    procedure SellItems(ItemIndex: Positive; Amount: String) is
--- ****
       SellAmount: Positive;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -240,10 +234,7 @@ package body Trades is
          raise Trade_Invalid_Amount;
    end SellItems;
 
--- ****if* Trades/GenerateTraderCargo
--- SOURCE
    procedure GenerateTraderCargo(ProtoIndex: Unbounded_String) is
--- ****
       TraderShip: ShipRecord :=
         CreateShip
           (ProtoIndex, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY,
