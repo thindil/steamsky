@@ -12,9 +12,9 @@ All notable changes to this project will be documented in this file.
   cabin, large double basic steel cabin, large double advanced steel cabin,
   large double extended steel cabin, large double luxury steel cabin, large
   double advanced titanium cabin, large double extended titanium cabin, large
-  double luxury titaniu cabin, large double advanced orichalcum cabin, large
+  double luxury titanium cabin, large double advanced orichalcum cabin, large
   double extended orichalcum cabin, large double luxury orichalcum cabin,
-  large double extended adamanitum cabin
+  large double extended adamanitum cabin, large double luxury adamanrium cabin
 
 ### Changed
 - Updated help
