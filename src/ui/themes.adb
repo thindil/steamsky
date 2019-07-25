@@ -52,10 +52,7 @@ package body Themes is
       return CssText;
    end LoadCssText;
 
--- ****if* Themes/SetFontSize
--- SOURCE
    procedure SetFontSize(FontType: FontTypes) is
--- ****
       CssProvider: Gtk_Css_Provider;
       CssText: Unbounded_String := LoadCssText;
       StartIndex, EndIndex: Positive;
