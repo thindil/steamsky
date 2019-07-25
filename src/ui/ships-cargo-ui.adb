@@ -291,10 +291,7 @@ package body Ships.Cargo.UI is
       return False;
    end VisibleCargo;
 
--- ****if* Ships.Cargo.UI/CreateCargoUI
--- SOURCE
    procedure CreateCargoUI(NewBuilder: Gtkada_Builder) is
--- ****
    begin
       Builder := NewBuilder;
       Register_Handler

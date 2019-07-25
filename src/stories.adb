@@ -34,10 +34,7 @@ with Ships.Crew; use Ships.Crew;
 
 package body Stories is
 
--- ****if* Stories/LoadStories
--- SOURCE
    procedure LoadStories(Reader: Tree_Reader) is
--- ****
       TempRecord: Story_Data;
       NodesList, ChildNodes, StepDataNodes: Node_List;
       StoriesData: Document;
@@ -433,11 +430,8 @@ package body Stories is
         Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index));
    end SelectLoot;
 
--- ****if* Stories/StartStory
--- SOURCE
    procedure StartStory
      (FactionName: Unbounded_String; Condition: StartConditionType) is
--- ****
       FactionIndex, StepData: Unbounded_String := Null_Unbounded_String;
       TempTexts: UnboundedString_Container.Vector;
       CanStart: Boolean;
@@ -529,10 +523,7 @@ package body Stories is
          FinishedStep => ANY);
    end ClearCurrentStory;
 
--- ****if* Stories/ProgressStory
--- SOURCE
    function ProgressStory(NextStep: Boolean := False) return Boolean is
--- ****
       Step: Step_Data;
       MaxRandom: Positive;
       FinishCondition: Unbounded_String;
@@ -670,10 +661,7 @@ package body Stories is
       return True;
    end ProgressStory;
 
--- ****if* Stories/GetCurrentStoryText
--- SOURCE
    function GetCurrentStoryText return Unbounded_String is
--- ****
       StepTexts: StepTexts_Container.Vector;
    begin
       if CurrentStory.CurrentStep = 0 then
@@ -693,12 +681,9 @@ package body Stories is
       return Null_Unbounded_String;
    end GetCurrentStoryText;
 
--- ****if* Stories/GetStepData
--- SOURCE
    function GetStepData
      (FinishData: StepData_Container.Vector; Name: String)
       return Unbounded_String is
--- ****
    begin
       for Data of FinishData loop
          if Data.Name = To_Unbounded_String(Name) then
@@ -708,10 +693,7 @@ package body Stories is
       return Null_Unbounded_String;
    end GetStepData;
 
--- ****if* Stories/GetStoryLocation
--- SOURCE
    procedure GetStoryLocation(StoryX, StoryY: in out Positive) is
--- ****
       Tokens: Slice_Set;
    begin
       if CurrentStory.Data /= Null_Unbounded_String then

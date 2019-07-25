@@ -76,10 +76,7 @@ package body Utils.UI is
       return False;
    end AutoHideDialog;
 
--- ****if* Utils.UI/HideDialog
--- SOURCE
    procedure HideDialog(Object: access Gtkada_Builder_Record'Class) is
--- ****
    begin
       Hide(Gtk_Widget(Get_Object(Object, "messagebox")));
       Remove(Source_Id);
@@ -90,10 +87,7 @@ package body Utils.UI is
       end if;
    end HideDialog;
 
--- ****if* Utils.UI/ShowDialog
--- SOURCE
    procedure ShowDialog(Message: String) is
--- ****
    begin
       Set_Label(Gtk_Label(Get_Object(Builder, "lblmessage")), Message);
       Show_All(Gtk_Widget(Get_Object(Builder, "messagebox")));
@@ -111,19 +105,13 @@ package body Utils.UI is
            AutoHideDialog'Access);
    end ShowDialog;
 
--- ****if* Utils.UI/HideWindow
--- SOURCE
    function HideWindow
      (User_Data: access GObject_Record'Class) return Boolean is
--- ****
    begin
       return Hide_On_Delete(Gtk_Widget(User_Data));
    end HideWindow;
 
--- ****if* Utils.UI/ShowWindow
--- SOURCE
    procedure ShowWindow(User_Data: access GObject_Record'Class) is
--- ****
    begin
       if not Get_Visible(Gtk_Widget(User_Data)) then
          Show_All(Gtk_Widget(User_Data));
@@ -137,11 +125,8 @@ package body Utils.UI is
       end if;
    end ShowWindow;
 
--- ****if* Utils.UI/ShowConfirmDialog
--- SOURCE
    function ShowConfirmDialog
      (Message: String; Parent: Gtk_Window) return Boolean is
--- ****
       MessageDialog: constant Gtk_Message_Dialog :=
         Gtk_Message_Dialog_New
           (Parent, Modal, Message_Question, Buttons_Yes_No, Message);
@@ -154,10 +139,7 @@ package body Utils.UI is
       return False;
    end ShowConfirmDialog;
 
--- ****if* Utils.UI/QuitGame
--- SOURCE
    function QuitGame(User_Data: access GObject_Record'Class) return Boolean is
--- ****
    begin
       if ShowConfirmDialog
           ("Are you sure want to quit?", Gtk_Window(User_Data)) then
@@ -168,12 +150,9 @@ package body Utils.UI is
       return True;
    end QuitGame;
 
--- ****if* Utils.UI/CloseWindow
--- SOURCE
    function CloseWindow
      (Self: access Gtk_Widget_Record'Class; Event: Gdk_Event_Key)
       return Boolean is
--- ****
       KeyMods: constant Gdk_Modifier_Type :=
         Event.State and Get_Default_Mod_Mask;
    begin
@@ -184,10 +163,7 @@ package body Utils.UI is
       return True;
    end CloseWindow;
 
--- ****if* Utils.UI/CloseMessages
--- SOURCE
    procedure CloseMessages(Object: access Gtkada_Builder_Record'Class) is
--- ****
       VisibleChildName: constant String :=
         Get_Visible_Child_Name(Gtk_Stack(Get_Object(Object, "gamestack")));
       MenuArray: constant array(1 .. 10) of Unbounded_String :=
@@ -235,12 +211,9 @@ package body Utils.UI is
       end case;
    end CloseMessages;
 
--- ****if* Utils.UI/SelectElement
--- SOURCE
    function SelectElement
      (Self: access GObject_Record'Class; Event: Gdk_Event_Key)
       return Boolean is
--- ****
       KeyMods: constant Gdk_Modifier_Type :=
         Event.State and Get_Default_Mod_Mask;
    begin
@@ -252,12 +225,9 @@ package body Utils.UI is
       return False;
    end SelectElement;
 
--- ****if* Utils.UI/TravelInfo
--- SOURCE
    procedure TravelInfo
      (InfoText: in out Unbounded_String; Distance: Positive;
       ShowFuelName: Boolean := False) is
--- ****
       type SpeedType is digits 2;
       Speed: constant SpeedType :=
         (SpeedType(RealSpeed(PlayerShip, True)) / 1000.0);
@@ -347,12 +317,9 @@ package body Utils.UI is
       end if;
    end TravelInfo;
 
--- ****if* Utils.UI/MinutesToDate
--- SOURCE
    procedure MinutesToDate
      (Minutes: Natural; InfoText: in out Unbounded_String) is
       TravelTime: Date_Record := (others => 0);
--- ****
       MinutesDiff: Integer := Minutes;
    begin
       while MinutesDiff > 0 loop
@@ -390,13 +357,12 @@ package body Utils.UI is
       end if;
    end MinutesToDate;
 
--- ****if* Utils.UI/ShowInventoryItemInfo
--- SOURCE
    procedure ShowInventoryItemInfo
      (Label: Gtk_Label; ItemIndex: Positive; MemberIndex: Natural) is
--- ****
       ProtoIndex: Unbounded_String;
       ItemInfo: Unbounded_String;
+      ItemTypes: constant array(Positive range <>) of Unbounded_String :=
+        (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
    begin
       if MemberIndex > 0 then
          ProtoIndex :=
@@ -434,6 +400,21 @@ package body Utils.UI is
                null;
          end case;
       end if;
+      for ItemType of ItemTypes loop
+         if Items_List(ProtoIndex).IType = ItemType then
+            Append
+              (ItemInfo,
+               LF & "Damage chance: " &
+               GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
+            exit;
+         end if;
+      end loop;
+      if Tools_List.Contains(Items_List(ProtoIndex).IType) then
+         Append
+           (ItemInfo,
+            LF & "Damage chance: " &
+            GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
+      end if;
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
          Append
            (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
@@ -441,10 +422,7 @@ package body Utils.UI is
       Set_Markup(Label, To_String(ItemInfo));
    end ShowInventoryItemInfo;
 
--- ****if* Utils.UI/HideItemInfo
--- SOURCE
    procedure HideItemInfo(User_Data: access GObject_Record'Class) is
--- ****
       ItemInfoBox: constant Gtk_Widget := Gtk_Widget(User_Data);
    begin
       Set_Visible(ItemInfoBox, not Get_Visible(ItemInfoBox));
@@ -455,22 +433,16 @@ package body Utils.UI is
       end if;
    end HideItemInfo;
 
--- ****if* Utils.UI/ShowPopupMenu
--- SOURCE
    function ShowPopupMenu
      (User_Data: access GObject_Record'Class) return Boolean is
--- ****
    begin
       Popup(Gtk_Menu(User_Data));
       return False;
    end ShowPopupMenu;
 
--- ****if* Utils.UI/ShowPopupMenuButton
--- SOURCE
    function ShowPopupMenuButton
      (Self: access Gtk_Widget_Record'Class; Event: Gdk_Event_Button)
       return Boolean is
--- ****
    begin
       if Event.Button = 3 then
          if Self = Gtk_Widget(Get_Object(Builder, "treebases")) then
@@ -486,10 +458,7 @@ package body Utils.UI is
       return False;
    end ShowPopupMenuButton;
 
--- ****if* Utils.UI/SetUtilsBuilder
--- SOURCE
    procedure SetUtilsBuilder(NewBuilder: Gtkada_Builder) is
--- ****
    begin
       Builder := NewBuilder;
    end SetUtilsBuilder;
@@ -554,10 +523,7 @@ package body Utils.UI is
       end if;
    end UpdateMessages;
 
--- ****if* Utils.UI/CheckAmount
--- SOURCE
    procedure CheckAmount(User_Data: access GObject_Record'Class) is
--- ****
       CargoIndex: Natural;
       TreeName, AdjustmentName, LabelName, WarningText: Unbounded_String;
       Amount: Integer;
