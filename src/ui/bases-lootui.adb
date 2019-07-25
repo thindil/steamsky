@@ -57,6 +57,8 @@ package body Bases.LootUI is
       CargoIndex, BaseCargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      ItemTypes: constant array(Positive range <>) of Unbounded_String :=
+        (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
    begin
       declare
          ItemsIter: Gtk_Tree_Iter;
@@ -114,6 +116,21 @@ package body Bases.LootUI is
             when others =>
                null;
          end case;
+      end if;
+      for ItemType of ItemTypes loop
+         if Items_List(ProtoIndex).IType = ItemType then
+            Append
+              (ItemInfo,
+               LF & "Damage chance: " &
+               GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
+            exit;
+         end if;
+      end loop;
+      if Tools_List.Contains(Items_List(ProtoIndex).IType) then
+         Append
+           (ItemInfo,
+            LF & "Damage chance: " &
+            GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
       end if;
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
          Append
