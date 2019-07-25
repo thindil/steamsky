@@ -70,6 +70,35 @@ command usage (in main project directory, where *steamsky.gpr* file is):
 
 `gnatpp -P steamsky.gpr`
 
+#### Code comments formatting
+
+The game uses [ROBODoc](https://rfsber.home.xs4all.nl/Robo/) for generating
+code documentation. When you write your own code, please add proper header
+documentation to it. If you use Vim/NeoVim, easiest way is to use plugin
+[RoboVim](https://github.com/thindil/robovim). Example of documentation
+header:
+
+    1 -- ****f* Utils/GetRandom
+    2 -- FUNCTION
+    3 -- Return random number from Min to Max range
+    4 -- PARAMETERS
+    5 -- Min - Starting value from which generate random number
+    6 -- Max - End value from which generate random number
+    7 -- RESULT
+    8 -- Random number between Min and Max
+    9 -- SOURCE
+    10 function GetRandom(Min, Max: Integer) return Integer;
+    11 -- ****
+
+1 - Documentation header. Steam sky uses `-- ****[letter]* [package]/[itemname]`
+format for documentation headers.
+2-9 - Documentation. For all available options, please refer to ROBODoc
+documentation. Steam sky uses `-- ` for start all documenation lines.
+10 - Source code of item .
+11 - Documentation footer. Steam sky uses `-- ****` for closing documentation.
+
+How to generate the code documentation is described in main README.md file.
+
 ### Code submission
 
 Preferred way to submit your code is clone repository and then open new pull
