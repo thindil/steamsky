@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
   double luxury titanium cabin, large double advanced orichalcum cabin, large
   double extended orichalcum cabin, large double luxury orichalcum cabin,
   large double extended adamanitum cabin, large double luxury adamanrium cabin
+- Info about chance to damage for items
 
 ### Changed
 - Updated help
