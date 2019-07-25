@@ -325,4 +325,24 @@ package body Items is
       end loop;
    end SetToolsList;
 
+   function GetItemChanceToDamage(ItemData: Natural) return String is
+   begin
+      case ItemData is
+         when 1 =>
+            return "Almost never";
+         when 2 =>
+            return "Very small";
+         when 3 =>
+            return "Small";
+         when 4 .. 9 =>
+            return "Below average";
+         when 10 .. 14 =>
+            return "Average";
+         when 15 .. 19 =>
+            return "High";
+         when others =>
+            return "Very high";
+      end case;
+   end GetItemChanceToDamage;
+
 end Items;
