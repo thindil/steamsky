@@ -33,7 +33,7 @@ package Crew.UI is
    -- SOURCE
    procedure CreateCrewUI(NewBuilder: Gtkada_Builder);
    -- ****
-   -- ****f* Crew.UI/ShowCrewUI;
+   -- ****f* Crew.UI/ShowCrewUI
    -- FUNCTION
    -- Show interface for show player ship crew info
    -- SOURCE
@@ -54,31 +54,31 @@ private
    -- SOURCE
    MemberIndex, ItemIndex: Positive;
    -- ****
-   -- ****f* Crew.UI/SetOrdersList;
+   -- ****f* Crew.UI/SetOrdersList
    -- FUNCTION
    -- Set orders for selected crew member
    -- SOURCE
    procedure SetOrdersList;
    -- ****
-   -- ****f* Crew.UI/ShowOrdersForAll;
+   -- ****f* Crew.UI/ShowOrdersForAll
    -- FUNCTION
    -- Show list of orders for all crew members
    -- SOURCE
    procedure ShowOrdersForAll;
    -- ****
-   -- ****f* Crew.UI/RefreshInventory;
+   -- ****f* Crew.UI/RefreshInventory
    -- FUNCTION
    -- Refresh informations about selected crew member inventory
    -- SOURCE
    procedure RefreshInventory;
    -- ****
-   -- ****f* Crew.UI/SetActiveItem;
+   -- ****f* Crew.UI/SetActiveItem
    -- FUNCTION
    -- Set active item in inventory list
    -- SOURCE
    procedure SetActiveItem;
    -- ****
-   -- ****f* Crew.UI/RefreshCrewInfo;
+   -- ****f* Crew.UI/RefreshCrewInfo
    -- FUNCTION
    -- Refresh crew list
    -- SOURCE

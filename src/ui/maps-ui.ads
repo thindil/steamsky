@@ -27,7 +27,7 @@ with Ships; use Ships;
 package Maps.UI is
 -- ****
 
-   -- ****f* Maps.UI/CreateSkyMap;
+   -- ****f* Maps.UI/CreateSkyMap
    -- FUNCTION
    -- Create sky map
    -- SOURCE
@@ -45,13 +45,13 @@ package Maps.UI is
    procedure ShowSkyMap
      (X: Integer := PlayerShip.SkyX; Y: Integer := PlayerShip.SkyY);
    -- ****
-   -- ****f* Maps.UI/UpdateHeader;
+   -- ****f* Maps.UI/UpdateHeader
    -- FUNCTION
    -- Update game header informations
    -- SOURCE
    procedure UpdateHeader;
    -- ****
-   -- ****f* Maps.UI/SetMapMoveButtons;
+   -- ****f* Maps.UI/SetMapMoveButtons
    -- FUNCTION
    -- Set icons on move map buttons
    -- SOURCE
@@ -84,19 +84,19 @@ private
    ButtonsVisible: Boolean := False;
    -- ****
 
-   -- ****f* Maps.UI/DeathConfirm;
+   -- ****f* Maps.UI/DeathConfirm
    -- FUNCTION
    -- Show confirmation to show game stats when player died
    -- SOURCE
    procedure DeathConfirm;
    -- ****
-   -- ****f* Maps.UI/UpdateMoveButtons;
+   -- ****f* Maps.UI/UpdateMoveButtons
    -- FUNCTION
    -- Update move buttons
    -- SOURCE
    procedure UpdateMoveButtons;
    -- ****
-   -- ****f* Maps.UI/DrawMap;
+   -- ****f* Maps.UI/DrawMap
    -- FUNCTION
    -- Draw sky map
    -- SOURCE
@@ -118,7 +118,7 @@ private
    -- SOURCE
    procedure CheckButtons(Widget: not null access Gtk_Widget_Record'Class);
    -- ****
-   -- ****f* Maps.UI/GetCurrentCellCoords;
+   -- ****f* Maps.UI/GetCurrentCellCoords
    -- FUNCTION
    -- Get current map cell coordinates based on mouse position
    -- SOURCE
@@ -133,7 +133,7 @@ private
    -- SOURCE
    procedure UpdateMapInfo(ShowOrdersInfo: Boolean := False);
    -- ****
-   -- ****f* Maps.UI/FinishStory;
+   -- ****f* Maps.UI/FinishStory
    -- FUNCTION
    -- Finish current story and show confirm dialog to player
    -- SOURCE

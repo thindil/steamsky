@@ -109,7 +109,7 @@ package Messages is
      (MessageIndex: Integer; MType: Message_Type := Default)
       return Message_Data;
    -- ****
-   -- ****f* Messages/ClearMessages;
+   -- ****f* Messages/ClearMessages
    -- FUNCTION
    -- Remove all messages
    -- SOURCE

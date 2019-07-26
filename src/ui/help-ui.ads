@@ -22,7 +22,7 @@
 package Help.UI is
 -- ****
 
-   -- ****f* Help.UI/CreateHelpUI;
+   -- ****f* Help.UI/CreateHelpUI
    -- FUNCTION
    -- Create help user interface
    -- SOURCE

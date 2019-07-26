@@ -79,7 +79,7 @@ package body Combat.UI is
       To_Unbounded_String("Aim for their hull"));
 -- ****
 
--- ****if* Combat.UI/RefreshCombatUI;
+-- ****if* Combat.UI/RefreshCombatUI
 -- SOURCE
    procedure RefreshCombatUI;
 -- ****

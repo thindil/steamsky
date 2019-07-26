@@ -32,7 +32,7 @@ package Bases.SchoolUI is
    -- SOURCE
    procedure CreateBasesSchoolUI(NewBuilder: Gtkada_Builder);
    -- ****
-   -- ****f* Bases.SchoolUI/ShowSchoolUI;
+   -- ****f* Bases.SchoolUI/ShowSchoolUI
    -- FUNCTION
    -- Show interface for training skills in bases
    -- SOURCE

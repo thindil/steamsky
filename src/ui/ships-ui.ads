@@ -32,7 +32,7 @@ package Ships.UI is
    -- SOURCE
    procedure CreateShipUI(NewBuilder: Gtkada_Builder);
    -- ****
-   -- ****f* Ships.UI/ShowShipUI;
+   -- ****f* Ships.UI/ShowShipUI
    -- FUNCTION
    -- Show interface for show player ship info
    -- SOURCE
@@ -53,13 +53,13 @@ private
 -- SOURCE
    ModuleIndex: Positive;
 -- ****
--- ****f* Ships.UI/ShowModuleOptions;
+-- ****f* Ships.UI/ShowModuleOptions
 -- FUNCTION
 -- Show options for selected module
 -- SOURCE
    procedure ShowModuleOptions;
 -- ****
--- ****f* Ships.UI/ShowShipInfo;
+-- ****f* Ships.UI/ShowShipInfo
 -- FUNCTION
 -- Show general info about player's ship
 -- SOURCE

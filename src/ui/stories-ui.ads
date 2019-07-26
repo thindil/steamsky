@@ -32,7 +32,7 @@ package Stories.UI is
    -- SOURCE
    procedure CreateStoriesUI(NewBuilder: Gtkada_Builder);
    -- ****
-   -- ****f* Stories.UI/ShowStoriesUI;
+   -- ****f* Stories.UI/ShowStoriesUI
    -- FUNCTION
    -- Show stories informations to player
    -- SOURCE

@@ -44,7 +44,7 @@ package Game.SaveLoad is
    -- SOURCE
    procedure SaveGame(PrettyPrint: Boolean := False);
    -- ****
-   -- ****f* Game.SaveLoad/LoadGame;
+   -- ****f* Game.SaveLoad/LoadGame
    -- FUNCTION
    -- Load game from file
    -- SOURCE

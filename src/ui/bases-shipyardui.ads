@@ -32,7 +32,7 @@ package Bases.ShipyardUI is
    -- SOURCE
    procedure CreateBasesShipyardUI(NewBuilder: Gtkada_Builder);
    -- ****
-   -- ****f* Bases.ShipyardUI/ShowShipyardUI;
+   -- ****f* Bases.ShipyardUI/ShowShipyardUI
    -- FUNCTION
    -- Show interface for installing/remove modules in bases
    -- SOURCE
