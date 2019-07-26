@@ -32,7 +32,7 @@ package GameOptions is
    -- SOURCE
    procedure CreateGameOptions(NewBuilder: Gtkada_Builder);
    -- ****
-   -- ****f* GameOptions/ShowGameOptions;
+   -- ****f* GameOptions/ShowGameOptions
    -- FUNCTION
    -- Show interface for game options
    -- SOURCE

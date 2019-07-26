@@ -66,7 +66,7 @@ package Bases.Ship is
    -- SOURCE
    procedure UpgradeShip(Install: Boolean; ModuleIndex: Unbounded_String);
    -- ****
-   -- ****f* Bases.Ship/PayForDock;
+   -- ****f* Bases.Ship/PayForDock
    -- FUNCTION
    -- Pay daily fee for docking
    -- SOURCE

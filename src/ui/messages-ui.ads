@@ -32,7 +32,7 @@ package Messages.UI is
    -- SOURCE
    procedure CreateMessagesUI(NewBuilder: Gtkada_Builder);
    -- ****
-   -- ****f* Messages.UI/ShowMessagesUI;
+   -- ****f* Messages.UI/ShowMessagesUI
    -- FUNCTION
    -- Show interface for show messages
    -- SOURCE

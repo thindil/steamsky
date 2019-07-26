@@ -230,7 +230,7 @@ package Items is
       ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
       Durability: Natural := 101) return Natural;
    -- ****
-   -- ****f* Items/SetToolsList;
+   -- ****f* Items/SetToolsList
    -- FUNCTION
    -- Fill tools types list
    -- SOURCE

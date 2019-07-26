@@ -240,7 +240,7 @@ package Crew is
    procedure UpdateCrew
      (Minutes: Positive; TiredPoints: Natural; InCombat: Boolean := False);
    -- ****
-   -- ****f* Crew/WaitForRest;
+   -- ****f* Crew/WaitForRest
    -- FUNCTION
    -- Wait until whole crew is rested
    -- SOURCE
@@ -266,7 +266,7 @@ package Crew is
    -- SOURCE
    function GetAttributeLevelName(AttributeLevel: Positive) return String;
    -- ****
-   -- ****f* Crew/DailyPayment;
+   -- ****f* Crew/DailyPayment
    -- FUNCTION
    -- Daily payment and upgrade contracts length for player ship crew members
    -- SOURCE

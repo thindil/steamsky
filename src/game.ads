@@ -330,7 +330,7 @@ package Game is
    Data_Loading_Error: exception;
    -- ****
 
-   -- ****f* Game/NewGame;
+   -- ****f* Game/NewGame
    -- FUNCTION
    -- Start new game: create map, place ship, crew, etc
    -- SOURCE

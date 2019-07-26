@@ -90,7 +90,7 @@ package Goals is
    function GoalText(Index: Goals_Container.Extended_Index) return String with
       Pre => Index <= Goals_List.Last_Index;
       -- ****
-      -- ****f* Goals/ClearCurrentGoal;
+      -- ****f* Goals/ClearCurrentGoal
       -- FUNCTION
       -- Reset current goal
       -- SOURCE

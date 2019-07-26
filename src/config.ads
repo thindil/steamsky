@@ -182,13 +182,13 @@ package Config is
    GameSettings: GameSettingsRecord;
    -- ****
 
-   -- ****f* Config/LoadConfig;
+   -- ****f* Config/LoadConfig
    -- FUNCTION
    -- Load game configuration from file
    -- SOURCE
    procedure LoadConfig;
    -- ****
-   -- ****f* Config/SaveConfig;
+   -- ****f* Config/SaveConfig
    -- FUNCTION
    -- Save game configuration to file
    -- SOURCE

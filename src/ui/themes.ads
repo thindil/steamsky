@@ -140,13 +140,13 @@ package Themes is
    -- SOURCE
    procedure SetFontSize(FontType: FontTypes);
    -- ****
-   -- ****f* Themes/ResetFontsSizes;
+   -- ****f* Themes/ResetFontsSizes
    -- FUNCTION
    -- Reset size of fonts to theme default values
    -- SOURCE
    procedure ResetFontsSizes;
    -- ****
-   -- ****f* Themes/LoadThemes;
+   -- ****f* Themes/LoadThemes
    -- FUNCTION
    -- Load data for all themes
    -- SOURCE

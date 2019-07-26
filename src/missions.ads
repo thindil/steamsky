@@ -100,7 +100,7 @@ package Missions is
    Missions_Finishing_Error: exception;
    -- ****
 
-   -- ****f* Missions/GenerateMissions;
+   -- ****f* Missions/GenerateMissions
    -- FUNCTION
    -- Generate if needed new missions in base
    -- SOURCE

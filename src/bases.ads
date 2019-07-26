@@ -225,31 +225,31 @@ package Bases is
      (FactionIndex: Unbounded_String) return Unbounded_String with
       Pre => Factions_Container.Contains(Factions_List, FactionIndex);
       -- ****
-      -- ****f* Bases/GenerateRecruits;
+      -- ****f* Bases/GenerateRecruits
       -- FUNCTION
       -- Generate if needed new recruits in base
       -- SOURCE
    procedure GenerateRecruits;
    -- ****
-   -- ****f* Bases/AskForBases;
+   -- ****f* Bases/AskForBases
    -- FUNCTION
    -- Ask in base for direction for other bases
    -- SOURCE
    procedure AskForBases;
    -- ****
-   -- ****f* Bases/AskForEvents;
+   -- ****f* Bases/AskForEvents
    -- FUNCTION
    -- Ask in base for direction for random events
    -- SOURCE
    procedure AskForEvents;
    -- ****
-   -- ****f* Bases/UpdatePopulation;
+   -- ****f* Bases/UpdatePopulation
    -- FUNCTION
    -- Update base population if needed
    -- SOURCE
    procedure UpdatePopulation;
    -- ****
-   -- ****f* Bases/UpdatePrices;
+   -- ****f* Bases/UpdatePrices
    -- FUNCTION
    -- Random changes of items prices in base
    -- SOURCE

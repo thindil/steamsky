@@ -213,7 +213,7 @@ package Utils.UI is
    -- SOURCE
    procedure SetUtilsBuilder(NewBuilder: Gtkada_Builder);
    -- ****
-   -- ****f* Utils.UI/UpdateMessages;
+   -- ****f* Utils.UI/UpdateMessages
    -- FUNCTION
    -- Update game messages and last message
    -- SOURCE

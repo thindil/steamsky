@@ -139,7 +139,7 @@ package Combat is
       return Boolean with
       Pre => ProtoShips_Container.Contains(ProtoShips_List, EnemyIndex);
       -- ****
-      -- ****f* Combat/CombatTurn;
+      -- ****f* Combat/CombatTurn
       -- FUNCTION
       -- Count damage/ships actions, etc
       -- SOURCE

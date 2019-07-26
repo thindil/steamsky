@@ -32,7 +32,7 @@ package Trades.UI is
    -- SOURCE
    procedure CreateTradeUI(NewBuilder: Gtkada_Builder);
    -- ****
-   -- ****f* Trades.UI/ShowTradeUI;
+   -- ****f* Trades.UI/ShowTradeUI
    -- FUNCTION
    -- Show interface for trades
    -- SOURCE

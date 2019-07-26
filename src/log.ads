@@ -35,7 +35,7 @@ package Log is
    DebugMode: Debug_Types := None;
    -- ****
 
-   -- ****f* Log/StartLogging;
+   -- ****f* Log/StartLogging
    -- FUNCTION
    -- Open/create debug.log file
    -- SOURCE
@@ -55,7 +55,7 @@ package Log is
      (Message: String; MessageType: Debug_Types;
       NewLine, TimeStamp: Boolean := True);
    -- ****
-   -- ****f* Log/EndLogging;
+   -- ****f* Log/EndLogging
    -- FUNCTION
    -- Close debug.file
    -- SOURCE

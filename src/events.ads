@@ -110,7 +110,7 @@ package Events is
    procedure DeleteEvent(EventIndex: Positive) with
       Pre => EventIndex <= Events_List.Last_Index;
       -- ****
-      -- ****f* Events/GenerateTraders;
+      -- ****f* Events/GenerateTraders
       -- FUNCTION
       -- Create list of traders needed for trader event
       -- SOURCE

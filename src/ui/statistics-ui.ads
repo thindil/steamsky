@@ -24,7 +24,7 @@ with Gtkada.Builder; use Gtkada.Builder;
 package Statistics.UI is
 -- ****
 
-   -- ****f* Statistics.UI/HideStatistics;
+   -- ****f* Statistics.UI/HideStatistics
    -- FUNCTION
    -- Hide stats and show sky map or main menu
    -- SOURCE
@@ -38,7 +38,7 @@ package Statistics.UI is
    -- SOURCE
    procedure CreateStatsUI(NewBuilder: Gtkada_Builder);
    -- ****
-   -- ****f* Statistics.UI/ShowStatsUI;
+   -- ****f* Statistics.UI/ShowStatsUI
    -- FUNCTION
    -- Show interface for show game statistics
    -- SOURCE

@@ -32,7 +32,7 @@ package Bases.LootUI is
    -- SOURCE
    procedure CreateBasesLootUI(NewBuilder: Gtkada_Builder);
    -- ****
-   -- ****f* Bases.LootUI/ShowLootUI;
+   -- ****f* Bases.LootUI/ShowLootUI
    -- FUNCTION
    -- Show interface for looting bases
    -- SOURCE

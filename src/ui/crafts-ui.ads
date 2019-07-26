@@ -32,7 +32,7 @@ package Crafts.UI is
    -- SOURCE
    procedure CreateCraftsUI(NewBuilder: Gtkada_Builder);
    -- ****
-   -- ****f* Crafts.UI/ShowCraftsUI;
+   -- ****f* Crafts.UI/ShowCraftsUI
    -- FUNCTION
    -- Show interface for manufacturing
    -- SOURCE
