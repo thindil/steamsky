@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - Crash after showing info dialog in main menu
 - Fonts size after first run of the game
 - Buying items when they price is lower than weight
+- Not adding training tools to tools category
 
 ## [3.9] - 2019-07-14
 
