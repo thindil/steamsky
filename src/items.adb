@@ -323,6 +323,12 @@ package body Items is
             Tools_List.Append(New_Item => Recipe.Tool);
          end if;
       end loop;
+      for Skill of Skills_List loop
+         if Tools_List.Find_Index(Item => Skill.Tool) =
+           UnboundedString_Container.No_Index then
+            Tools_List.Append(New_Item => Skill.Tool);
+         end if;
+      end loop;
    end SetToolsList;
 
    function GetItemChanceToDamage(ItemData: Natural) return String is
