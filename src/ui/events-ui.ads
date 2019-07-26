@@ -32,7 +32,7 @@ package Events.UI is
    -- SOURCE
    procedure CreateEventsUI(NewBuilder: Gtkada_Builder);
    -- ****
-   -- ****f* Events.UI/ShowEventsUI;
+   -- ****f* Events.UI/ShowEventsUI
    -- FUNCTION
    -- Show interface for show known events
    -- SOURCE

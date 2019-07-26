@@ -48,7 +48,7 @@ package HallOfFame is
          DeathReason => Null_Unbounded_String));
    -- ****
 
-   -- ****f* HallOfFame/LoadHallOfFame;
+   -- ****f* HallOfFame/LoadHallOfFame
    -- FUNCTION
    -- Read hall of fame data from file
    -- SOURCE

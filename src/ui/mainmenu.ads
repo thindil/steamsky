@@ -25,7 +25,7 @@ with Ada.Exceptions; use Ada.Exceptions;
 package MainMenu is
 -- ****
 
-   -- ****f* MainMenu/CreateMainMenu;
+   -- ****f* MainMenu/CreateMainMenu
    -- FUNCTION
    -- Create main menu and show it
    -- SOURCE
@@ -40,7 +40,7 @@ package MainMenu is
    procedure UpdateGoalButton(Message: String) with
       Pre => Message'Length > 0;
       -- ****
-      -- ****f* MainMenu/ShowMainMenu;
+      -- ****f* MainMenu/ShowMainMenu
       -- FUNCTION
       -- Show main menu window
       -- SOURCE

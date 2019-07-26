@@ -22,7 +22,7 @@
 package Goals.UI is
 -- ****
 
-   -- ****f* Goals.UI/CreateGoalsMenu;
+   -- ****f* Goals.UI/CreateGoalsMenu
    -- FUNCTION
    -- Create goals menu
    -- SOURCE

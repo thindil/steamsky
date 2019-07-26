@@ -22,13 +22,13 @@
 package DebugUI is
 -- ****
 
-   -- ****f* DebugUI/CreateDebugUI;
+   -- ****f* DebugUI/CreateDebugUI
    -- FUNCTION
    -- Create debug user interface
    -- SOURCE
    procedure CreateDebugUI;
    -- ****
-   -- ****f* DebugUI/ShowDebugUI;
+   -- ****f* DebugUI/ShowDebugUI
    -- FUNCTION
    -- Show debug user interface
    -- SOURCE

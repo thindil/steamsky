@@ -32,7 +32,7 @@ package BasesList is
    -- SOURCE
    procedure CreateBasesListUI(NewBuilder: Gtkada_Builder);
    -- ****
-   -- ****f* BasesList/ShowBasesListUI;
+   -- ****f* BasesList/ShowBasesListUI
    -- FUNCTION
    -- Show interface for list of bases
    -- SOURCE

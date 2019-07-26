@@ -22,7 +22,7 @@
 package Bases.Cargo is
 -- ****
 
-   -- ****f* Bases.Cargo/GenerateCargo;
+   -- ****f* Bases.Cargo/GenerateCargo
    -- FUNCTION
    -- Generate base cargo
    -- SOURCE

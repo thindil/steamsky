@@ -88,7 +88,7 @@ package Statistics is
    procedure UpdateDestroyedShips(ShipName: Unbounded_String) with
       Pre => ShipName /= Null_Unbounded_String;
       -- ****
-      -- ****f* Statistics/ClearGameStats;
+      -- ****f* Statistics/ClearGameStats
       -- FUNCTION
       -- Clear game statistics
       -- SOURCE

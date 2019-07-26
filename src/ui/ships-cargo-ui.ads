@@ -32,7 +32,7 @@ package Ships.Cargo.UI is
    -- SOURCE
    procedure CreateCargoUI(NewBuilder: Gtkada_Builder);
    -- ****
-   -- ****f* Ships.Cargo.UI/ShowCargoUI;
+   -- ****f* Ships.Cargo.UI/ShowCargoUI
    -- FUNCTION
    -- Show interface for show player ship cargo
    -- SOURCE

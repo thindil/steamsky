@@ -224,7 +224,7 @@ package Stories is
      (FactionName: Unbounded_String; Condition: StartConditionType) with
       Pre => FactionName /= Null_Unbounded_String;
       -- ****
-      -- ****f* Stories/ClearCurrentStory;
+      -- ****f* Stories/ClearCurrentStory
       -- FUNCTION
       -- Resets current story
       -- SOURCE
