@@ -722,10 +722,7 @@ package body MainMenu is
       end if;
    end RandomDifficultyToggled;
 
--- ****if* MainMenu/CreateMainMenu
--- SOURCE
    procedure CreateMainMenu is
--- ****
       Error: aliased GError;
       AdjValues: constant array(Positive range <>) of Gdouble :=
         (Gdouble(NewGameSettings.EnemyDamageBonus),
@@ -863,10 +860,7 @@ package body MainMenu is
       Set_Label(Gtk_Button(Get_Object(Builder, "btngoal")), Message);
    end UpdateGoalButton;
 
--- ****if* MainMenu/ShowMainMenu
--- SOURCE
    procedure ShowMainMenu is
--- ****
       Files: Search_Type;
    begin
       Show_All(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));

@@ -198,10 +198,7 @@ package body Stories.UI is
       Register_Handler(Builder, "Show_Story", ShowStory'Access);
    end CreateStoriesUI;
 
--- ****if* Stories.UI/ShowStoriesUI
--- SOURCE
    procedure ShowStoriesUI is
--- ****
       StoriesComboBox: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Object(Builder, "cmbstories"));
    begin

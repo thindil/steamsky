@@ -215,10 +215,7 @@ package body Combat.UI is
       end if;
    end UpdateMessages;
 
--- ****if* Combat.UI/RefreshCombatUI
--- SOURCE
    procedure RefreshCombatUI is
--- ****
       DamagePercent: Gint;
       EnemyInfo, ModuleName: Unbounded_String;
       ButtonBox: constant Gtk_Container :=

@@ -118,10 +118,7 @@ package body Ships.UI is
       Set_Active(AssignAmmoCombo, 0);
    end ShowAssignAmmo;
 
--- ****if* Ships.UI/ShowModuleOptions
--- SOURCE
    procedure ShowModuleOptions is
--- ****
       MaxValue: Positive;
       IsPassenger: Boolean := False;
       procedure ShowAssignSkill is
@@ -405,10 +402,7 @@ package body Ships.UI is
       end if;
    end ShowModuleOptions;
 
--- ****if* Ships.UI/ShowShipInfo
--- SOURCE
    procedure ShowShipInfo is
--- ****
       ShipInfo, UpgradeInfo: Unbounded_String;
       UpgradePercent: Gdouble;
       MaxUpgrade: Integer;
@@ -579,10 +573,7 @@ package body Ships.UI is
          Get_Object(Builder, "btnmenu"));
    end CreateShipUI;
 
--- ****if* Ships.UI/ShowShipUI
--- SOURCE
    procedure ShowShipUI is
--- ****
       ListIter: Gtk_Tree_Iter;
       List: Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "moduleslist"));

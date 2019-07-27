@@ -90,10 +90,7 @@ with Log; use Log;
 
 package body Maps.UI is
 
--- ****if* Maps.UI/DeathConfirm
--- SOURCE
    procedure DeathConfirm is
--- ****
       MenuArray: constant array(1 .. 12) of Unbounded_String :=
         (To_Unbounded_String("menuorders"),
          To_Unbounded_String("menucrafting"),
@@ -121,10 +118,7 @@ package body Maps.UI is
       end if;
    end DeathConfirm;
 
--- ****if* Maps.UI/UpdateHeader
--- SOURCE
    procedure UpdateHeader is
--- ****
       HaveWorker, HaveGunner: Boolean := True;
       NeedCleaning, NeedRepairs, NeedWorker, HavePilot, HaveEngineer,
       HaveTrader, HaveUpgrader, HaveCleaner, HaveRepairman: Boolean := False;
@@ -479,10 +473,7 @@ package body Maps.UI is
       end if;
    end UpdateHeader;
 
--- ****if* Maps.UI/UpdateMoveButtons
--- SOURCE
    procedure UpdateMoveButtons is
--- ****
       MoveButtonsNames: constant array
         (Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("btnupleft"), To_Unbounded_String("btnup"),
@@ -543,10 +534,7 @@ package body Maps.UI is
       end if;
    end UpdateMoveButtons;
 
--- ****if* Maps.UI/DrawMap
--- SOURCE
    procedure DrawMap is
--- ****
       Iter: Gtk_Text_Iter;
       MapBuffer: constant Gtk_Text_Buffer :=
         Gtk_Text_Buffer(Get_Object(Builder, "txtmap"));
@@ -789,10 +777,7 @@ package body Maps.UI is
       end if;
    end CheckButtons;
 
--- ****if* Maps.UI/GetCurrentCellCoords
--- SOURCE
    procedure GetCurrentCellCoords is
--- ****
       Mask: Gdk_Modifier_Type;
       MouseX, MouseY: Gint;
       DeviceManager: constant Gdk_Device_Manager :=
@@ -1031,10 +1016,7 @@ package body Maps.UI is
          To_String(MapInfoText));
    end UpdateMapInfo;
 
--- ****if* Maps.UI/CreateSkyMap
--- SOURCE
    procedure CreateSkyMap is
--- ****
       Error: aliased GError;
       Accelerators: Gtk_Accel_Group;
    begin
@@ -1420,10 +1402,7 @@ package body Maps.UI is
       end if;
    end ShowSkyMap;
 
--- ****if* Maps.UI/FinishStory
--- SOURCE
    procedure FinishStory is
--- ****
       Message: constant String :=
         To_String(Stories_List(CurrentStory.Index).EndText) &
         " Are you want to finish game?";
@@ -1438,10 +1417,7 @@ package body Maps.UI is
       end if;
    end FinishStory;
 
--- ****if* Maps.UI/SetMapMoveButtons
--- SOURCE
    procedure SetMapMoveButtons is
--- ****
       CurrentTheme: constant ThemeRecord :=
         Themes_List(To_String(GameSettings.InterfaceTheme));
    begin

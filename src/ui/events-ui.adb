@@ -147,10 +147,7 @@ package body Events.UI is
          ShowPopupMenuButton'Access);
    end CreateEventsUI;
 
--- ****if* Events.UI/ShowEventsUI
--- SOURCE
    procedure ShowEventsUI is
--- ****
       EventsIter: Gtk_Tree_Iter;
       EventsList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "eventslist"));

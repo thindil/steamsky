@@ -391,10 +391,7 @@ package body Missions.UI is
          ShowPopupMenuButton'Access);
    end CreateMissionsUI;
 
--- ****if* Missions.UI/ShowMissionsUI
--- SOURCE
    procedure ShowMissionsUI is
--- ****
    begin
       RefreshMissionsList;
       Set_Visible_Child_Name
@@ -405,10 +402,7 @@ package body Missions.UI is
       UpdateMessages;
    end ShowMissionsUI;
 
--- ****if* Missions.UI/ShowAcceptedMissions
--- SOURCE
    procedure ShowAcceptedMissions is
--- ****
       MissionsIter: Gtk_Tree_Iter;
       MissionsList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "missionslist"));

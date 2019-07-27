@@ -792,10 +792,7 @@ package body DebugUI is
           (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjmoduleupgrade"))));
    end UpdateModule;
 
--- ****if* DebugUI/CreateDebugUI
--- SOURCE
    procedure CreateDebugUI is
--- ****
       Error: aliased GError;
    begin
       if Builder /= null then
@@ -888,10 +885,7 @@ package body DebugUI is
       end;
    end CreateDebugUI;
 
--- ****if* DebugUI/ShowDebugUI
--- SOURCE
    procedure ShowDebugUI is
--- ****
    begin
       RefreshUI(Builder);
       Show_All(Gtk_Widget(Get_Object(Builder, "debugwindow")));

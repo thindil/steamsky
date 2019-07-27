@@ -512,10 +512,7 @@ package body Stories is
       end loop;
    end StartStory;
 
--- ****if* Stories/ClearCurrentStory
--- SOURCE
    procedure ClearCurrentStory is
--- ****
    begin
       CurrentStory :=
         (Index => Null_Unbounded_String, Step => 1, CurrentStep => -3,
