@@ -45,10 +45,7 @@ package body Statistics.UI is
    Builder: Gtkada_Builder;
 -- ****
 
--- ****if* Statistics.UI/HideStatistics
--- SOURCE
    procedure HideStatistics is
--- ****
    begin
       Hide(Gtk_Widget(Get_Object(Builder, "btnclose")));
       if PreviousGameState = SkyMap_View then
@@ -82,10 +79,7 @@ package body Statistics.UI is
       Register_Handler(Builder, "Show_Goals", ShowGoals'Access);
    end CreateStatsUI;
 
--- ****if* Statistics.UI/ShowStatsUI
--- SOURCE
    procedure ShowStatsUI is
--- ****
       TotalFinished, TotalDestroyed: Natural := 0;
       StatsText: Unbounded_String;
       ProtoIndex: Positive;

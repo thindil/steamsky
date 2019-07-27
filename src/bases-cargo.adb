@@ -22,10 +22,7 @@ with Items; use Items;
 
 package body Bases.Cargo is
 
--- ****if* Bases.Cargo/GenerateCargo
--- SOURCE
    procedure GenerateCargo is
--- ****
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Chance: Positive;

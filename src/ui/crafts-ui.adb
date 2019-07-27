@@ -340,10 +340,7 @@ package body Crafts.UI is
          SelectElement'Access, Get_Object(Builder, "btnsetcrafting"));
    end CreateCraftsUI;
 
--- ****if* Crafts.UI/ShowCraftsUI
--- SOURCE
    procedure ShowCraftsUI is
--- ****
       Deconstructs: UnboundedString_Container.Vector;
       RecipesIter: Gtk_Tree_Iter;
       RecipesList: constant Gtk_List_Store :=

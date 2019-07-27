@@ -402,10 +402,7 @@ package body BasesList is
          ShowPopupMenuButton'Access);
    end CreateBasesListUI;
 
--- ****if* BasesList/ShowBasesListUI
--- SOURCE
    procedure ShowBasesListUI is
--- ****
       BaseIter: Gtk_Tree_Iter;
       BaseList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "baseslist"));

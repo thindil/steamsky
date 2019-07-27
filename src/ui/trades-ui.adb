@@ -575,10 +575,7 @@ package body Trades.UI is
          Get_Object(Builder, "btnmenu"));
    end CreateTradeUI;
 
--- ****if* Trades.UI/ShowTradeUI
--- SOURCE
    procedure ShowTradeUI is
--- ****
       ItemsIter: Gtk_Tree_Iter;
       ItemsList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "itemslist1"));

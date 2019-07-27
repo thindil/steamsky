@@ -311,10 +311,7 @@ package body Ships.Cargo.UI is
          VisibleCargo'Access);
    end CreateCargoUI;
 
--- ****if* Ships.Cargo.UI/ShowCargoUI
--- SOURCE
    procedure ShowCargoUI is
--- ****
       ComboBoxMember: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Object(Builder, "cmbmember"));
    begin

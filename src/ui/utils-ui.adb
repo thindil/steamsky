@@ -463,10 +463,7 @@ package body Utils.UI is
       Builder := NewBuilder;
    end SetUtilsBuilder;
 
--- ****if* Utils.UI/UpdateMessages
--- SOURCE
    procedure UpdateMessages is
--- ****
       MessagesBuffer: constant Gtk_Text_Buffer :=
         Gtk_Text_Buffer(Get_Object(Builder, "txtmessages"));
       LoopStart: Integer := 0 - MessagesAmount;

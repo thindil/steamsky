@@ -119,10 +119,7 @@ package body Themes is
       OldProvider := CssProvider;
    end SetFontSize;
 
--- ****if* Themes/ResetFontsSizes
--- SOURCE
    procedure ResetFontsSizes is
--- ****
       CssText: Unbounded_String := Null_Unbounded_String;
       CssFile: File_Type;
       function GetFontSize(FontName: String) return Positive is
@@ -148,10 +145,7 @@ package body Themes is
       GameSettings.InterfaceFontSize := GetFontSize("* {");
    end ResetFontsSizes;
 
--- ****if* Themes/LoadThemes
--- SOURCE
    procedure LoadThemes is
--- ****
       Directories, Files: Search_Type;
       FoundDirectory, FoundFile: Directory_Entry_Type;
       ConfigFile: File_Type;

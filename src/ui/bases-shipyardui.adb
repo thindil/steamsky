@@ -554,10 +554,7 @@ package body Bases.ShipyardUI is
       end loop;
    end CreateBasesShipyardUI;
 
--- ****if* Bases.ShipyardUI/ShowShipyardUI
--- SOURCE
    procedure ShowShipyardUI is
--- ****
    begin
       SetRemoveModulesList;
       Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbtypes")), 0);

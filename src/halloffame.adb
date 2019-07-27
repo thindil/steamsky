@@ -34,10 +34,7 @@ package body HallOfFame is
    HoFData: Document;
 -- ****
 
--- ****if* HallOfFame/LoadHallOfFame
--- SOURCE
    procedure LoadHallOfFame is
--- ****
       HoFFile: File_Input;
       Reader: Tree_Reader;
       EntriesList: Node_List;

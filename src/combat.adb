@@ -173,10 +173,7 @@ package body Combat is
       return True;
    end StartCombat;
 
--- ****if* Combat/CombatTurn
--- SOURCE
    procedure CombatTurn is
--- ****
       AccuracyBonus, EvadeBonus: Integer := 0;
       PilotIndex, EngineerIndex, EnemyWeaponIndex, EnemyAmmoIndex,
       EnemyPilotIndex, AmmoIndex2: Natural := 0;

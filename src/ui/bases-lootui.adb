@@ -324,10 +324,7 @@ package body Bases.LootUI is
          VisibleLoot'Access);
    end CreateBasesLootUI;
 
--- ****if* Bases.LootUI/ShowLootUI
--- SOURCE
    procedure ShowLootUI is
--- ****
       ItemsIter: Gtk_Tree_Iter;
       ItemsList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "itemslist2"));

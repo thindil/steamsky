@@ -306,10 +306,7 @@ package body Items is
       return 0;
    end FindItem;
 
--- ****if* Items/SetToolsList
--- SOURCE
    procedure SetToolsList is
--- ****
    begin
       if Tools_List.Length > 0 then
          return;

@@ -36,10 +36,7 @@ with Factions; use Factions;
 
 package body Missions is
 
--- ****if* Missions/GenerateMissions
--- SOURCE
    procedure GenerateMissions is
--- ****
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MissionsAmount, MissionX, MissionY, TmpBaseIndex, DiffX, DiffY: Positive;

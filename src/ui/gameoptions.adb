@@ -469,10 +469,7 @@ package body GameOptions is
       end;
    end CreateGameOptions;
 
--- ****if* GameOptions/ShowGameOptions
--- SOURCE
    procedure ShowGameOptions is
--- ****
       Key: Gtk_Accel_Key;
       Found: Boolean;
    begin

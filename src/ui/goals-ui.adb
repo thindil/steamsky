@@ -128,10 +128,7 @@ package body Goals.UI is
       Hide(Gtk_Widget(Get_Object(Object, "goalswindow")));
    end CloseGoals;
 
--- ****if* Goals.UI/CreateGoalsMenu
--- SOURCE
    procedure CreateGoalsMenu is
--- ****
       Error: aliased GError;
       GoalsList: Gtk_Tree_Store;
       CategoryIter: Gtk_Tree_Iter;

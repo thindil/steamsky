@@ -439,10 +439,7 @@ package body Bases.Ship is
       end if;
    end UpgradeShip;
 
--- ****if* Bases.Ship/PayForDock
--- SOURCE
    procedure PayForDock is
--- ****
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);

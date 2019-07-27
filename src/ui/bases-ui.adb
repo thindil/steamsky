@@ -234,10 +234,7 @@ package body Bases.UI is
       Register_Handler(Builder, "Accept_Action", AcceptAction'Access);
    end CreateBasesUI;
 
--- ****if* Bases.UI/ShowBuyRecipesUI
--- SOURCE
    procedure ShowBuyRecipesUI is
--- ****
       RecipesIter: Gtk_Tree_Iter;
       RecipesList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "itemslist"));
@@ -272,10 +269,7 @@ package body Bases.UI is
       UpdateMessages;
    end ShowBuyRecipesUI;
 
--- ****if* Bases.UI/ShowRepairUI
--- SOURCE
    procedure ShowRepairUI is
--- ****
       RepairsIter: Gtk_Tree_Iter;
       RepairsList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "itemslist"));
@@ -320,10 +314,7 @@ package body Bases.UI is
       UpdateMessages;
    end ShowRepairUI;
 
--- ****if* Bases.UI/ShowHealUI
--- SOURCE
    procedure ShowHealUI is
--- ****
       HealsIter: Gtk_Tree_Iter;
       HealsList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "itemslist"));
