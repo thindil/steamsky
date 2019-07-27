@@ -35,12 +35,6 @@ package Items is
    -- SOURCE
    Items_Types: UnboundedString_Container.Vector;
    -- ****
-   -- ****t* Items/Object_Prices
-   -- FUNCTION
-   -- Prices of item in bases
-   -- SOURCE
-   type Object_Prices is array(1 .. 5) of Natural;
-   -- ****
    -- ****t* Items/Object_Buyable
    -- FUNCTION
    -- Did item is buyable in bases
@@ -65,7 +59,7 @@ package Items is
       Name: Unbounded_String;
       Weight: Positive;
       IType: Unbounded_String;
-      Prices: Object_Prices;
+      Prices: Natural_Array(1 .. 5);
       Buyable: Object_Buyable;
       Value: Integer_Container.Vector;
       ShowType: Unbounded_String;

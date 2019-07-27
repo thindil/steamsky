@@ -62,7 +62,7 @@ package Bases is
       Price: Positive;
       Attributes: Attributes_Container.Vector;
       Inventory: UnboundedString_Container.Vector;
-      Equipment: Equipment_Array;
+      Equipment: Natural_Array(1 .. 7);
       Payment: Positive;
       HomeBase: Positive;
       Faction: Unbounded_String;

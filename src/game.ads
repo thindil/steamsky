@@ -323,6 +323,12 @@ package Game is
    -- SOURCE
    type DataAction is (ADD, UPDATE, REMOVE);
    -- ****
+   -- ****t* Game/Natural_Array
+   -- FUNCTION
+   -- General purpose array of Natural
+   -- SOURCE
+   type Natural_Array is array(Positive range <>) of Natural;
+   -- ****
    -- ****e* Game/Data_Loading_Error
    -- FUNCTION
    -- Raised when error occurs during loading any game data
