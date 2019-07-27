@@ -392,7 +392,7 @@ GtkStackSwitcher .button:checked {
 
 /* Font used for icons in UI */
 *#fontawesome {
-   font-family:"Font Awesome 5 Free";
+   font-family:"Font Awesome 5 Free Solid";
    font-size:14px;
 }
 
@@ -402,7 +402,7 @@ GtkStackSwitcher .button:checked {
 }
 
 *#movemap * {
-   font-family:"Font Awesome 5 Free";
+   font-family:"Font Awesome 5 Free Solid";
    border-radius: 0;
 }
 
