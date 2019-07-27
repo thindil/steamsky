@@ -753,10 +753,7 @@ package body Crew is
       end loop;
    end UpdateCrew;
 
--- ****if* Crew/WaitForRest
--- SOURCE
    procedure WaitForRest is
--- ****
       TimeNeeded, CabinIndex, TempTimeNeeded: Natural := 0;
       type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
@@ -851,10 +848,7 @@ package body Crew is
       end case;
    end GetAttributeLevelName;
 
--- ****if* Crew/DailyPayment
--- SOURCE
    procedure DailyPayment is
--- ****
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
       PayMessage: Unbounded_String;
       MemberIndex: Positive;

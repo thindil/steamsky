@@ -143,10 +143,7 @@ package body Bases.SchoolUI is
         (Builder, "Train_Selected_Skill", TrainSelectedSkill'Access);
    end CreateBasesSchoolUI;
 
--- ****if* Bases.SchoolUI/ShowSchoolUI
--- SOURCE
    procedure ShowSchoolUI is
--- ****
       CrewIter: Gtk_Tree_Iter;
       CrewList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "crewlist"));

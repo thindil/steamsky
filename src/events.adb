@@ -401,10 +401,7 @@ package body Events is
       end loop;
    end GetPlayerShips;
 
--- ****if* Events/GenerateTraders
--- SOURCE
    procedure GenerateTraders is
--- ****
       PlayerShips: UnboundedString_Container.Vector;
    begin
       for I in ProtoShips_List.Iterate loop

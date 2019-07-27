@@ -47,10 +47,7 @@ package body Statistics is
       end if;
    end UpdateDestroyedShips;
 
--- ****if* Statistics/ClearGameStats
--- SOURCE
    procedure ClearGameStats is
--- ****
    begin
       GameStats.DestroyedShips.Clear;
       GameStats.BasesVisited := 1;

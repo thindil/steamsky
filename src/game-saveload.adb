@@ -421,10 +421,7 @@ package body Game.SaveLoad is
       LogMessage("Finished saving game.", Everything);
    end SaveGame;
 
--- ****if* Game.SaveLoad/LoadGame
--- SOURCE
    procedure LoadGame is
--- ****
       SaveFile: File_Input;
       Reader: Tree_Reader;
       NodesList, ChildNodes: Node_List;

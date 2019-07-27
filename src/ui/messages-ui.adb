@@ -167,10 +167,7 @@ package body Messages.UI is
          Get_Object(Builder, "btnmenu"));
    end CreateMessagesUI;
 
--- ****if* Messages.UI/ShowMessagesUI
--- SOURCE
    procedure ShowMessagesUI is
--- ****
    begin
       Set_Position
         (Gtk_Paned(Get_Object(Builder, "gamepaned")),

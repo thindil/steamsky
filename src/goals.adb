@@ -269,10 +269,7 @@ package body Goals is
       return To_String(Text);
    end GoalText;
 
--- ****if* Goals/ClearCurrentGoal
--- SOURCE
    procedure ClearCurrentGoal is
--- ****
    begin
       CurrentGoal :=
         (Index => Null_Unbounded_String, GType => RANDOM, Amount => 0,

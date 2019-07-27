@@ -348,10 +348,7 @@ package body Bases.RecruitUI is
       Register_Handler(Builder, "Negotiate_Hire", NegotiateHire'Access);
    end CreateRecruitUI;
 
--- ****if* Bases.RecruitUI/ShowRecruitUI
--- SOURCE
    procedure ShowRecruitUI is
--- ****
    begin
       UpdateRecruitList;
       Set_Visible_Child_Name

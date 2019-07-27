@@ -54,10 +54,7 @@ with Careers; use Careers;
 
 package body Game is
 
--- ****if* Game/NewGame
--- SOURCE
    procedure NewGame is
--- ****
       RandomBase: Positive;
    begin
       -- Save game configuration

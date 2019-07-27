@@ -123,10 +123,7 @@ package body Help.UI is
       end if;
    end ToggleTopics;
 
--- ****if* Help.UI/CreateHelpUI
--- SOURCE
    procedure CreateHelpUI is
--- ****
       Error: aliased GError;
       TopicsIter: Gtk_Tree_Iter;
       TopicsList: Gtk_List_Store;
