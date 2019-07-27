@@ -190,12 +190,6 @@ package Ships is
       HomeBase: Natural;
    end record;
    -- ****
-   -- ****t* Ships/ShipSkills_Array
-   -- FUNCTION
-   -- Used to store skill of sentient ships
-   -- SOURCE
-   type ShipSkills_Array is array(1 .. 2) of Natural;
-   -- ****
    -- ****t* Ships/ProtoMember_Data
    -- FUNCTION
    -- Data structure for proto crew info
@@ -238,11 +232,11 @@ package Ships is
    type ProtoShipData is record
       Name: Unbounded_String;
       Modules: UnboundedString_Container.Vector;
-      Accuracy: ShipSkills_Array;
+      Accuracy: Natural_Array(1 .. 2);
       CombatAI: ShipCombatAi;
-      Evasion: ShipSkills_Array;
-      Loot: ShipSkills_Array;
-      Perception: ShipSkills_Array;
+      Evasion: Natural_Array(1 .. 2);
+      Loot: Natural_Array(1 .. 2);
+      Perception: Natural_Array(1 .. 2);
       Cargo: MobInventory_Container.Vector;
       CombatValue: Positive;
       Crew: ProtoCrew_Container.Vector;

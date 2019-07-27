@@ -21,6 +21,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Strings.Unbounded.Hash;
 with DOM.Readers; use DOM.Readers;
 with Crew; use Crew;
+with Game; use Game;
 
 -- ****h* Steamsky/Mobs
 -- FUNCTION
@@ -66,9 +67,9 @@ package Mobs is
       Skills: Skills_Container.Vector;
       Attributes: Attributes_Container.Vector;
       Order: Crew_Orders;
-      Priorities: Orders_Array;
+      Priorities: Natural_Array(1 .. 12);
       Inventory: MobInventory_Container.Vector;
-      Equipment: Equipment_Array;
+      Equipment: Natural_Array(1 .. 7);
    end record;
    -- ****
    -- ****t* Mobs/ProtoMobs_Container

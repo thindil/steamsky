@@ -21,7 +21,6 @@ with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
 with Log; use Log;
-with Game; use Game;
 with Items; use Items;
 
 package body Mobs is
@@ -33,8 +32,8 @@ package body Mobs is
       TempSkills: Skills_Container.Vector;
       TempInventory: MobInventory_Container.Vector;
       TempAttributes: Attributes_Container.Vector;
-      TempPriorities: constant Orders_Array := (others => 0);
-      TempEquipment: constant Equipment_Array := (others => 0);
+      TempPriorities: constant Natural_Array(1 .. 12) := (others => 0);
+      TempEquipment: constant Natural_Array(1 .. 7) := (others => 0);
       OrdersNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("Piloting"), To_Unbounded_String("Engineering"),
          To_Unbounded_String("Operating guns"),

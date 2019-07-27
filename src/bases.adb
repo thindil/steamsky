@@ -142,10 +142,7 @@ package body Bases is
       return NewName;
    end GenerateBaseName;
 
--- ****if* Bases/GenerateRecruits
--- SOURCE
    procedure GenerateRecruits is
--- ****
       BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MaxRecruits, RecruitsAmount, SkillsAmount, SkillNumber, SkillLevel,
@@ -157,7 +154,7 @@ package body Bases is
       SkillIndex: Integer;
       Attributes: Attributes_Container.Vector;
       Inventory, TempTools: UnboundedString_Container.Vector;
-      Equipment: Equipment_Array;
+      Equipment: Natural_Array(1 .. 7);
       MaxSkillLevel: Integer;
       RecruitFaction: Unbounded_String;
       procedure AddInventory
@@ -303,10 +300,7 @@ package body Bases is
       SkyBases(BaseIndex).Recruits := BaseRecruits;
    end GenerateRecruits;
 
--- ****if* Bases/AskForBases
--- SOURCE
    procedure AskForBases is
--- ****
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Radius, TempX, TempY: Integer;
@@ -418,10 +412,7 @@ package body Bases is
       UpdateGame(30);
    end AskForBases;
 
--- ****if* Bases/AskForEvents
--- SOURCE
    procedure AskForEvents is
--- ****
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MaxEvents, EventsAmount, TmpBaseIndex, EventX, EventY, EventTime, DiffX,
@@ -604,10 +595,7 @@ package body Bases is
       UpdateGame(30);
    end AskForEvents;
 
--- ****if* Bases/UpdatePopulation
--- SOURCE
    procedure UpdatePopulation is
--- ****
       BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       PopulationDiff: Integer;
@@ -641,10 +629,7 @@ package body Bases is
       end if;
    end UpdatePopulation;
 
--- ****if* Bases/UpdatePrices
--- SOURCE
    procedure UpdatePrices is
--- ****
       BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Chance, Roll: Positive;

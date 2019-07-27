@@ -896,9 +896,9 @@ package body Ships.SaveLoad is
                Skills: Skills_Container.Vector;
                Attributes: Attributes_Container.Vector;
                Order, PreviousOrder: Crew_Orders;
-               Orders: Orders_Array;
+               Orders: Natural_Array(1 .. 12);
                Inventory: Inventory_Container.Vector;
-               Equipment: Equipment_Array;
+               Equipment: Natural_Array(1 .. 7);
                OrderTime, ContractLength: Integer;
                Amount, Durability, EquipmentIndex, PriorityIndex,
                HomeBase: Positive;
