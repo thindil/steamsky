@@ -22,7 +22,7 @@ package body Messages is
    function FormatedTime(Time: Date_Record := GameDate) return String is
       Result: Unbounded_String := To_Unbounded_String("");
       RawImage: Unbounded_String;
-      TimeArray: constant array(1 .. 5) of Natural :=
+      TimeArray: constant Natural_Array(1 .. 5) :=
         (Time.Year, Time.Month, Time.Day, Time.Hour, Time.Minutes);
    begin
       for I in TimeArray'Range loop
@@ -99,10 +99,7 @@ package body Messages is
          Color => WHITE);
    end GetMessage;
 
--- ****if* Messages/ClearMessages
--- SOURCE
    procedure ClearMessages is
--- ****
    begin
       Messages_List.Clear;
    end ClearMessages;

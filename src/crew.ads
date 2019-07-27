@@ -47,23 +47,11 @@ package Crew is
      (Pilot, Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean,
       Rest, Defend, Boarding, Train);
    -- ****
-   -- ****t* Crew/Orders_Array
-   -- FUNCTION
-   -- Data structure for orders priority
-   -- SOURCE
-   type Orders_Array is array(1 .. 12) of Natural;
-   -- ****
    -- ****t* Crew/Attributes_Array
    -- FUNCTION
    -- Data structure for attributes: 1 - Attribute level, 2 - current experience in attribute
    -- SOURCE
    type Attributes_Array is array(1 .. 2) of Natural;
-   -- ****
-   -- ****t* Crew/Equipment_Array
-   -- FUNCTION
-   -- Data structure for crew member weared equipment
-   -- SOURCE
-   type Equipment_Array is array(1 .. 7) of Natural;
    -- ****
    -- ****t* Crew/Attributes_Container
    -- Used to store attributes data
@@ -112,10 +100,10 @@ package Crew is
       Order: Crew_Orders;
       PreviousOrder: Crew_Orders;
       OrderTime: Integer;
-      Orders: Orders_Array;
+      Orders: Natural_Array(1 .. 12);
       Attributes: Attributes_Container.Vector;
       Inventory: Inventory_Container.Vector;
-      Equipment: Equipment_Array;
+      Equipment: Natural_Array(1 .. 7);
       Payment: Attributes_Array;
       ContractLength: Integer;
       Morale: Attributes_Array;
