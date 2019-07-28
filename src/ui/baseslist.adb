@@ -48,23 +48,33 @@ with Config; use Config;
 
 package body BasesList is
 
--- ****iv* BasesList/Builder
--- SOURCE
+   -- ****iv* BasesList/Builder
+   -- FUNCTION
+   -- Gtkada_Builder used for creating UI
+   -- SOURCE
    Builder: Gtkada_Builder;
--- ****
--- ****iv* BasesList/SettingTime
--- SOURCE
+   -- ****
+   -- ****iv* BasesList/SettingTime
+   -- FUNCTION
+   -- If true, UI is currently in setting state
+   -- SOURCE
    SettingTime: Boolean;
--- ****
--- ****iv* BasesList/BaseIndex
--- SOURCE
+   -- ****
+   -- ****iv* BasesList/BaseIndex
+   -- FUNCTION
+   -- Index of sky base to show
+   -- SOURCE
    BaseIndex: Positive;
--- ****
+   -- ****
 
--- ****if* BasesList/ShowBaseInfo
--- SOURCE
+   -- ****if* BasesList/ShowBaseInfo
+   -- FUNCTION
+   -- Show info about selected base
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ShowBaseInfo(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       BaseInfo: Unbounded_String;
       procedure SetReputationText(ReputationText: String) is
       begin
@@ -209,10 +219,14 @@ package body BasesList is
         (Gtk_Label(Get_Object(Object, "lblbaseinfo")), To_String(BaseInfo));
    end ShowBaseInfo;
 
--- ****if* BasesList/SetDestinationBase
--- SOURCE
+   -- ****if* BasesList/SetDestinationBase
+   -- FUNCTION
+   -- Set selected base as the destination for the player ship
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure SetDestinationBase(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
    begin
       if SkyBases(BaseIndex).SkyX = PlayerShip.SkyX and
         SkyBases(BaseIndex).SkyY = PlayerShip.SkyY then
@@ -230,20 +244,28 @@ package body BasesList is
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
    end SetDestinationBase;
 
--- ****if* BasesList/ShowBase
--- SOURCE
+   -- ****if* BasesList/ShowBase
+   -- FUNCTION
+   -- Show selected base on the map
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ShowBase(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
    begin
       ShowSkyMap(SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY);
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
    end ShowBase;
 
--- ****if* BasesList/SearchBases
--- SOURCE
+   -- ****if* BasesList/SearchBases
+   -- FUNCTION
+   -- Search base by it name
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure SearchBases(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
    begin
       Refilter(Gtk_Tree_Model_Filter(Get_Object(Object, "basesfilter")));
       if N_Children
@@ -256,11 +278,18 @@ package body BasesList is
       end if;
    end SearchBases;
 
--- ****if* BasesList/VisibleBases
--- SOURCE
+   -- ****if* BasesList/VisibleBases
+   -- FUNCTION
+   -- Check if selected base is visible on bases list
+   -- PARAMETERS
+   -- Model - Gtk_Tree_Model with bases which will be checked
+   -- Iter  - Gtk_Tree_Iter of base which will be checked
+   -- RESULT
+   -- True if base should be visible, otherwise false
+   -- SOURCE
    function VisibleBases
      (Model: Gtk_Tree_Model; Iter: Gtk_Tree_Iter) return Boolean is
--- ****
+     -- ****
       ShowBase: Boolean := False;
       BasesType: Bases_Types;
       BasesStatus: Natural;
@@ -341,10 +370,14 @@ package body BasesList is
       return False;
    end VisibleBases;
 
--- ****if* BasesList/ToggleBaseInfo
--- SOURCE
+   -- ****if* BasesList/ToggleBaseInfo
+   -- FUNCTION
+   -- Show or hide detailed info about selected base
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ToggleBaseInfo(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       InfoWidget: constant Gtk_Widget :=
         Gtk_Widget(Get_Object(Object, "baseinfoscroll"));
       MenuItem: constant Gtk_Menu_Item :=

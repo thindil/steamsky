@@ -40,19 +40,27 @@ with Utils.UI; use Utils.UI;
 
 package body Bases.LootUI is
 
--- ****iv* Bases.LootUI/Builder
--- SOURCE
+   -- ****iv* Bases.LootUI/Builder
+   -- FUNCTION
+   -- Gtkada_Builder used for creating UI
+   -- SOURCE
    Builder: Gtkada_Builder;
--- ****
--- ****iv* Bases.LootUI/SettingTime
--- SOURCE
+   -- ****
+   -- ****iv* Bases.LootUI/SettingTime
+   -- FUNCTION
+   -- If true, UI is currently in setting state
+   -- SOURCE
    SettingTime: Boolean;
--- ****
+   -- ****
 
--- ****if* Bases.LootUI/ShowItemInfo
--- SOURCE
+   -- ****if* Bases.LootUI/ShowItemInfo
+   -- FUNCTION
+   -- Show detailed information about selected item
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ShowItemInfo(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       ItemInfo, ProtoIndex: Unbounded_String;
       CargoIndex, BaseCargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
@@ -166,10 +174,15 @@ package body Bases.LootUI is
       end;
    end ShowItemInfo;
 
--- ****if* Bases.LootUI/LootItem
--- SOURCE
+   -- ****if* Bases.LootUI/LootItem
+   -- FUNCTION
+   -- Take or add selected item to the base cargo to or from the player ship
+   -- cargo
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure LootItem(User_Data: access GObject_Record'Class) is
--- ****
+      -- ****
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Amount: Positive;
@@ -257,10 +270,14 @@ package body Bases.LootUI is
       ShowLootUI;
    end LootItem;
 
--- ****if* Bases.LootUI/SearchLoot
--- SOURCE
+   -- ****if* Bases.LootUI/SearchLoot
+   -- FUNCTION
+   -- Search the item by its name
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure SearchLoot(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
    begin
       Refilter(Gtk_Tree_Model_Filter(Get_Object(Object, "lootfilter")));
       if N_Children
@@ -272,11 +289,17 @@ package body Bases.LootUI is
       end if;
    end SearchLoot;
 
--- ****if* Bases.LootUI/VisibleLoot
--- SOURCE
+   -- ****if* Bases.LootUI/VisibleLoot
+   -- FUNCTION
+   -- Check if selected item is visible on items list
+   -- Model - Gtk_Tree_Model with items list which will be checked
+   -- Iter  - Gtk_Tree_Iter of item which will be checked
+   -- RESULT
+   -- True if item should be visible, otherwise false
+   -- SOURCE
    function VisibleLoot
      (Model: Gtk_Tree_Model; Iter: Gtk_Tree_Iter) return Boolean is
--- ****
+     -- ****
       IType: constant Unbounded_String :=
         To_Unbounded_String
           (Get_Active_Text
