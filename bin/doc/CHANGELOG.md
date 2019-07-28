@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file.
   large double extended adamanitum cabin, large double luxury adamantium
   cabin, huge double basic bronze cabin, huge double advanced bronze cabin,
   huge double extended bronze cabin, huge double luxury bronze cabin, huge
-  double basic iron cabin
+  double basic iron cabin, huge double advanced iron cabin
 - Info about chance to damage for items
 
 ### Changed
