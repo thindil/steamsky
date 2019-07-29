@@ -418,9 +418,9 @@ package body Bases is
       MaxEvents, EventsAmount, TmpBaseIndex, EventX, EventY, EventTime, DiffX,
       DiffY: Positive;
       Event: Events_Types;
-      MinX, MinY, MaxX, MaxY: Integer;
+      MinX, MinY, MaxX, MaxY, ItemIndex: Integer;
       Enemies: UnboundedString_Container.Vector;
-      Attempts, TraderIndex, ItemIndex: Natural;
+      Attempts, TraderIndex: Natural;
       PlayerShips: UnboundedString_Container.Vector;
       NewItemIndex, ShipIndex: Unbounded_String;
    begin
@@ -568,14 +568,13 @@ package body Bases is
                   ItemIndex := GetRandom(1, Positive(Items_List.Length));
                   for J in Items_List.Iterate loop
                      ItemIndex := ItemIndex - 1;
-                     if ItemIndex = 0 then
-                        if Items_List(J).Prices(1) > 0 then
-                           NewItemIndex := Objects_Container.Key(J);
-                        end if;
+                     if ItemIndex <= 0
+                       and then Items_List(J).Prices(1) > 0 then
+                        NewItemIndex := Objects_Container.Key(J);
                         exit;
                      end if;
                   end loop;
-                  exit when Items_List(NewItemIndex).Prices(1) > 0;
+                  exit when NewItemIndex /= Null_Unbounded_String;
                end loop;
                Events_List.Append
                  (New_Item =>
