@@ -226,7 +226,7 @@ package body BasesList is
    -- Object - Gtkada_Builder used to create UI
    -- SOURCE
    procedure SetDestinationBase(Object: access Gtkada_Builder_Record'Class) is
-      -- ****
+   -- ****
    begin
       if SkyBases(BaseIndex).SkyX = PlayerShip.SkyX and
         SkyBases(BaseIndex).SkyY = PlayerShip.SkyY then
@@ -251,7 +251,7 @@ package body BasesList is
    -- Object - Gtkada_Builder used to create UI
    -- SOURCE
    procedure ShowBase(Object: access Gtkada_Builder_Record'Class) is
-      -- ****
+   -- ****
    begin
       ShowSkyMap(SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY);
       Set_Visible_Child_Name
@@ -265,7 +265,7 @@ package body BasesList is
    -- Object - Gtkada_Builder used to create UI
    -- SOURCE
    procedure SearchBases(Object: access Gtkada_Builder_Record'Class) is
-      -- ****
+   -- ****
    begin
       Refilter(Gtk_Tree_Model_Filter(Get_Object(Object, "basesfilter")));
       if N_Children
@@ -289,7 +289,7 @@ package body BasesList is
    -- SOURCE
    function VisibleBases
      (Model: Gtk_Tree_Model; Iter: Gtk_Tree_Iter) return Boolean is
-     -- ****
+      -- ****
       ShowBase: Boolean := False;
       BasesType: Bases_Types;
       BasesStatus: Natural;

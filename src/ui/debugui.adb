@@ -66,7 +66,7 @@ package body DebugUI is
    -- Object - Gtkada_Builder used to create UI
    -- SOURCE
    procedure MoveShip(Object: access Gtkada_Builder_Record'Class) is
-      -- ****
+   -- ****
    begin
       PlayerShip.SkyX :=
         Integer(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjshipx"))));
@@ -457,7 +457,7 @@ package body DebugUI is
    -- Object - Gtkada_Builder used to create UI
    -- SOURCE
    procedure RefreshUI(Object: access Gtkada_Builder_Record'Class) is
-      -- ****
+   -- ****
    begin
       UpdateShip(Object);
       UpdateCrew(Object);
@@ -728,7 +728,7 @@ package body DebugUI is
    -- Object - Gtkada_Builder used to create UI
    -- SOURCE
    procedure ShowItemEvent(Object: access Gtkada_Builder_Record'Class) is
-      -- ****
+   -- ****
    begin
       if Get_Active(Gtk_Combo_Box_Text(Get_Object(Object, "cmbbaseevent"))) =
         1 then
@@ -812,7 +812,7 @@ package body DebugUI is
    -- Delete selected event from the game
    -- SOURCE
    procedure DeleteEvent(Object: access Gtkada_Builder_Record'Class) is
-      -- ****
+   -- ****
    begin
       Events_List.Delete
         (Index =>
