@@ -24,10 +24,12 @@ with Game; use Game;
 
 package body Log is
 
--- ****iv* Log/LogFile
--- SOURCE
-   LogFile: File_Type; -- Debug log file
--- ****
+   -- ****iv* Log/LogFile
+   -- FUNCTION
+   -- Debug log file
+   -- SOURCE
+   LogFile: File_Type;
+   -- ****
 
    procedure StartLogging is
    begin

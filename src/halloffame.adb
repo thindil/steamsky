@@ -29,10 +29,12 @@ with Statistics; use Statistics;
 
 package body HallOfFame is
 
--- ****iv* HallOfFame/HoFData
--- SOURCE
+   -- ****iv* HallOfFame/HoFData
+   -- FUNCTION
+   -- XML structure for save or load hall of fame data from file
+   -- SOURCE
    HoFData: Document;
--- ****
+   -- ****
 
    procedure LoadHallOfFame is
       HoFFile: File_Input;

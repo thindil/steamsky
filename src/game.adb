@@ -468,10 +468,14 @@ package body Game is
       UpdateMissions(Minutes);
    end UpdateGame;
 
--- ****if* Game/LoadData
--- SOURCE
+   -- ****if* Game/LoadData
+   -- FUNCTION
+   -- Load main the game data file
+   -- PARAMETERS
+   -- Reader - XML Reader from which data will be read
+   -- SOURCE
    procedure LoadData(Reader: Tree_Reader) is
--- ****
+      -- ****
       GameData: Document;
       NodesList: Node_List;
       DeleteIndex: Natural;

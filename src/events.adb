@@ -388,11 +388,18 @@ package body Events is
       end loop;
    end DeleteEvent;
 
--- ****if* Events/GetPlayerShips
--- SOURCE
+   -- ****if* Events/GetPlayerShips
+   -- FUNCTION
+   -- Get the list of all prototypes ships which are only for the player
+   -- PARAMETERS
+   -- PlayerShips - The list with all available indexes of prototype player's
+   --               ships
+   -- RESULT
+   -- Parameter PlayerShips
+   -- SOURCE
    procedure GetPlayerShips
      (PlayerShips: in out UnboundedString_Container.Vector) is
--- ****
+   -- ****
    begin
       for Faction of Factions_List loop
          for Career of Faction.Careers loop
