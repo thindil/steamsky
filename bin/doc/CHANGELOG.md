@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
 - Buying items when they price is lower than weight
 - Not adding training tools to tools category
 - Showing ship info icons on Windows
+- Crash after asking for the events in bases
 
 ## [3.9] - 2019-07-14
 
