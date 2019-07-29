@@ -44,10 +44,12 @@ with Careers; use Careers;
 
 package body Game.SaveLoad is
 
--- ****iv* Game.SaveLoad/SaveData
--- SOURCE
+   -- ****iv* Game.SaveLoad/SaveData
+   -- FUNCTION
+   -- XML Structure for save/load the game data from file
+   -- SOURCE
    SaveData: Document;
--- ****
+   -- ****
 
    procedure SaveGame(PrettyPrint: Boolean := False) is
       Save: DOM_Implementation;

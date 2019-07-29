@@ -28,11 +28,19 @@ with Config; use Config;
 
 package body Bases.Trade is
 
--- ****if* Bases.Trade/CheckMoney
--- SOURCE
+   -- ****if* Bases.Trade/CheckMoney
+   -- FUNCTION
+   -- Check if player have enough money
+   -- PARAMETERS
+   -- Price   - Miniumum amount of money which player must have
+   -- Message - Additional message to return when player don't have enough
+   --           money
+   -- RESULT
+   -- Cargo index of money from the player ship
+   -- SOURCE
    function CheckMoney
      (Price: Positive; Message: String := "") return Positive is
--- ****
+      -- ****
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
    begin
       if MoneyIndex2 = 0 then

@@ -28,15 +28,21 @@ with Game.SaveLoad; use Game.SaveLoad;
 
 package body Ships.Movement is
 
--- ****it* Ships.Movement/SpeedType
--- SOURCE
+   -- ****it* Ships.Movement/SpeedType
+   -- FUNCTION
+   -- Used in counting ships speed
+   -- SOURCE
    type SpeedType is digits 2;
--- ****
+   -- ****
 
--- ****if* Ships.Movement/HaveOrderRequirements
--- SOURCE
+   -- ****if* Ships.Movement/HaveOrderRequirements
+   -- FUNCTION
+   -- Check if all requirements for movement orders are valid
+   -- RESULT
+   -- Empty string if everything is ok, otherwise message what is missing
+   -- SOURCE
    function HaveOrderRequirements return String is
--- ****
+      -- ****
       HaveCockpit, HaveEngine, HavePilot, HaveEngineer: Boolean := False;
    begin
       for Module of PlayerShip.Modules loop
