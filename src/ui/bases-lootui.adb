@@ -277,7 +277,7 @@ package body Bases.LootUI is
    -- Object - Gtkada_Builder used to create UI
    -- SOURCE
    procedure SearchLoot(Object: access Gtkada_Builder_Record'Class) is
-      -- ****
+   -- ****
    begin
       Refilter(Gtk_Tree_Model_Filter(Get_Object(Object, "lootfilter")));
       if N_Children
@@ -299,7 +299,7 @@ package body Bases.LootUI is
    -- SOURCE
    function VisibleLoot
      (Model: Gtk_Tree_Model; Iter: Gtk_Tree_Iter) return Boolean is
-     -- ****
+      -- ****
       IType: constant Unbounded_String :=
         To_Unbounded_String
           (Get_Active_Text
