@@ -37,10 +37,12 @@ with Config; use Config;
 
 package body Combat is
 
--- ****iv* Combat/FactionName
--- SOURCE
+   -- ****iv* Combat/FactionName
+   -- FUNCTION
+   -- Name of enemy ship (and its crew) faction
+   -- SOURCE
    FactionName: Unbounded_String;
--- ****
+   -- ****
 
    function StartCombat
      (EnemyIndex: Unbounded_String; NewCombat: Boolean := True)

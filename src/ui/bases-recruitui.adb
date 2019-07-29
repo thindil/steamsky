@@ -39,19 +39,27 @@ with Utils.UI; use Utils.UI;
 
 package body Bases.RecruitUI is
 
--- ****iv* Bases.RecruitUI/Builder
--- SOURCE
+   -- ****iv* Bases.RecruitUI/Builder
+   -- FUNCTION
+   -- Gtkada_Builder used for creating UI
+   -- SOURCE
    Builder: Gtkada_Builder;
--- ****
--- ****iv* Bases.RecruitUI/RecruitIndex
--- SOURCE
+   -- ****
+   -- ****iv* Bases.RecruitUI/RecruitIndex
+   -- FUNCTION
+   -- Currently selected recruit base recruits index
+   -- SOURCE
    RecruitIndex: Natural;
--- ****
+   -- ****
 
--- ****if* Bases.RecruitUI/ShowRecruitInfo
--- SOURCE
+   -- ****if* Bases.RecruitUI/ShowRecruitInfo
+   -- FUNCTION
+   -- Show info about seleted recruit
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ShowRecruitInfo(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       RecruitInfo: Unbounded_String;
       Recruit: Recruit_Data;
       BaseIndex: constant Positive :=
@@ -163,10 +171,12 @@ package body Bases.RecruitUI is
         (Gtk_Label(Get_Object(Object, "lblpayment")), To_String(RecruitInfo));
    end ShowRecruitInfo;
 
--- ****if* Bases.RecruitUI/UpdateRecruitList
--- SOURCE
+   -- ****if* Bases.RecruitUI/UpdateRecruitList
+   -- FUNCTION
+   -- Update list of available recruits in base
+   -- SOURCE
    procedure UpdateRecruitList is
--- ****
+      -- ****
       RecruitIter: Gtk_Tree_Iter;
       RecruitList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "recruitlist"));
@@ -183,10 +193,14 @@ package body Bases.RecruitUI is
       end loop;
    end UpdateRecruitList;
 
--- ****if* Bases.RecruitUI/Hire
--- SOURCE
+   -- ****if* Bases.RecruitUI/Hire
+   -- FUNCTION
+   -- Hire selected recruit
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure Hire(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       DailyPayment: constant Natural :=
         Natural
           (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjdailypayment"))));
@@ -239,10 +253,14 @@ package body Bases.RecruitUI is
       UpdateMessages;
    end Hire;
 
--- ****if* Bases.RecruitUI/StartNegotiations
--- SOURCE
+   -- ****if* Bases.RecruitUI/StartNegotiations
+   -- FUNCTION
+   -- Set UI for negotiations with selected recruit
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure StartNegotiations(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
       Cost: Positive;
       Recruit: Recruit_Data;
@@ -283,10 +301,14 @@ package body Bases.RecruitUI is
       end if;
    end StartNegotiations;
 
--- ****if* Bases.RecruitUI/NegotiateHire
--- SOURCE
+   -- ****if* Bases.RecruitUI/NegotiateHire
+   -- FUNCTION
+   -- Set selected recruit hire costs when player change hiring offer
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure NegotiateHire(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
       Recruit: Recruit_Data;
       BaseIndex: constant Positive :=

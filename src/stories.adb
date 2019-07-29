@@ -334,10 +334,15 @@ package body Stories is
       end loop;
    end LoadStories;
 
--- ****if* Stories/SelectBase
--- SOURCE
+   -- ****if* Stories/SelectBase
+   -- Select name of the base for story
+   -- PARAMETERS
+   -- Value - Only value "any" matters
+   -- RESULT
+   -- Empty string if Value is "any", otherwise random base name
+   -- SOURCE
    function SelectBase(Value: String) return Unbounded_String is
--- ****
+      -- ****
       BaseIndex: Positive;
    begin
       if Value = "any" then
@@ -354,11 +359,17 @@ package body Stories is
       end loop;
    end SelectBase;
 
--- ****if* Stories/SelectLocation
--- SOURCE
+   -- ****if* Stories/SelectLocation
+   -- FUNCTION
+   -- Get the map location for story step
+   -- PARAMETERS
+   -- StepData - Data for selected step
+   -- RESULT
+   -- String with X and Y coordinates for selected step location.
+   -- SOURCE
    function SelectLocation
      (StepData: StepData_Container.Vector) return Unbounded_String is
--- ****
+      -- ****
       LocationData, Value: Unbounded_String := Null_Unbounded_String;
       LocationX, LocationY: Integer;
    begin
@@ -391,11 +402,17 @@ package body Stories is
       return LocationData;
    end SelectLocation;
 
--- ****if* Stories/SelectEnemy
--- SOURCE
+   -- ****if* Stories/SelectEnemy
+   -- FUNCTION
+   -- Get enemy ship for selected story step
+   -- PARAMETERS
+   -- StepData - Data for selected step
+   -- RESULT
+   -- String with location and name for enemy ship for selected story step
+   -- SOURCE
    function SelectEnemy
      (StepData: StepData_Container.Vector) return Unbounded_String is
--- ****
+      -- ****
       Enemies: UnboundedString_Container.Vector;
       EnemyData, Value: Unbounded_String := Null_Unbounded_String;
    begin
@@ -410,11 +427,17 @@ package body Stories is
         Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index));
    end SelectEnemy;
 
--- ****if* Stories/SelectLoot
--- SOURCE
+   -- ****if* Stories/SelectLoot
+   -- FUNCTION
+   -- Get what item should be looted for this step
+   -- PARAMETERS
+   -- StepData - Data for selected step
+   -- RESULT
+   -- String with Item type and enemy prototype ship index to loot
+   -- SOURCE
    function SelectLoot
      (StepData: StepData_Container.Vector) return Unbounded_String is
--- ****
+      -- ****
       Enemies: UnboundedString_Container.Vector;
       LootData, Value: Unbounded_String := Null_Unbounded_String;
    begin
