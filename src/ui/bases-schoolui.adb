@@ -32,19 +32,27 @@ with Items; use Items;
 
 package body Bases.SchoolUI is
 
--- ****iv* Bases.SchoolUI/Builder
--- SOURCE
+   -- ****iv* Bases.SchoolUI/Builder
+   -- FUNCTION
+   -- Gtkada_Builder used for creating UI
+   -- SOURCE
    Builder: Gtkada_Builder;
--- ****
--- ****iv* Bases.SchoolUI/CrewIndex
--- SOURCE
+   -- ****
+   -- ****iv* Bases.SchoolUI/CrewIndex
+   -- FUNCTION
+   -- Crew index of currently selected member
+   -- SOURCE
    CrewIndex: Positive;
--- ****
+   -- ****
 
--- ****if* Bases.SchoolUI/ShowTrainInfo
--- SOURCE
+   -- ****if* Bases.SchoolUI/ShowTrainInfo
+   -- FUNCTION
+   -- Show information about training cost for selected crew member
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ShowTrainInfo(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       CrewIter, SkillsIter: Gtk_Tree_Iter;
       CrewModel: Gtk_Tree_Model;
       SkillsList: constant Gtk_List_Store :=
@@ -96,10 +104,14 @@ package body Bases.SchoolUI is
       end if;
    end ShowTrainInfo;
 
--- ****if* Bases.SchoolUI/TrainSelectedSkill
--- SOURCE
+   -- ****if* Bases.SchoolUI/TrainSelectedSkill
+   -- FUNCTION
+   -- Train selected skill
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure TrainSelectedSkill(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       SkillsIter: Gtk_Tree_Iter;
       SkillsModel: Gtk_Tree_Model;
       SkillName: Unbounded_String;

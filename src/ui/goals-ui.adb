@@ -34,20 +34,28 @@ with Utils; use Utils;
 
 package body Goals.UI is
 
--- ****iv* Goals.UI/Builder
--- SOURCE
+   -- ****iv* Goals.UI/Builder
+   -- FUNCTION
+   -- Gtkada_Builder used for creating UI
+   -- SOURCE
    Builder: Gtkada_Builder;
--- ****
--- ****iv* Goals.UI/FromMainMenu
--- SOURCE
+   -- ****
+   -- ****iv* Goals.UI/FromMainMenu
+   -- FUNCTION
+   -- If true, UI was called from main menu. Default true
+   -- SOURCE
    FromMainMenu: Boolean := True;
--- ****
+   -- ****
 
--- ****if* Goals.UI/HideGoals
--- SOURCE
+   -- ****if* Goals.UI/HideGoals
+   -- FUNCTION
+   -- Hide goals UI instead of destroy it
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    function HideGoals
      (User_Data: access Gtkada_Builder_Record'Class) return Boolean is
--- ****
+   -- ****
    begin
       return Hide_On_Delete(Gtk_Widget(Get_Object(User_Data, "goalswindow")));
    end HideGoals;
@@ -58,10 +66,14 @@ package body Goals.UI is
       Show_All(Gtk_Widget(Get_Object(Builder, "goalswindow")));
    end ShowGoalsMenu;
 
--- ****if* Goals.UI/GoalSelected
--- SOURCE
+   -- ****if* Goals.UI/GoalSelected
+   -- FUNCTION
+   -- Enable or disable "Select goal" button
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure GoalSelected(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       Iter: Gtk_Tree_Iter;
       GoalsView: constant Gtk_Tree_View :=
         Gtk_Tree_View(Get_Object(Object, "treegoals"));
@@ -76,10 +88,14 @@ package body Goals.UI is
       end if;
    end GoalSelected;
 
--- ****if* Goals.UI/SelectGoal
--- SOURCE
+   -- ****if* Goals.UI/SelectGoal
+   -- FUNCTION
+   -- Set currently selected goal as a current game goal
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure SelectGoal(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       Iter: Gtk_Tree_Iter;
       GoalsView: constant Gtk_Tree_View :=
         Gtk_Tree_View(Get_Object(Object, "treegoals"));
@@ -120,10 +136,14 @@ package body Goals.UI is
       Hide(Gtk_Widget(Get_Object(Object, "goalswindow")));
    end SelectGoal;
 
--- ****if* Goals.UI/CloseGoals
--- SOURCE
+   -- ****if* Goals.UI/CloseGoals
+   -- FUNCTION
+   -- Hide goals UI
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure CloseGoals(Object: access Gtkada_Builder_Record'Class) is
--- ****
+   -- ****
    begin
       Hide(Gtk_Widget(Get_Object(Object, "goalswindow")));
    end CloseGoals;

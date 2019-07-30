@@ -53,49 +53,67 @@ with Factions; use Factions;
 
 package body Combat.UI is
 
--- ****iv* Combat.UI/Builder
--- SOURCE
+   -- ****iv* Combat.UI/Builder
+   -- FUNCTION
+   -- Gtkada_Builder used for creating UI
+   -- SOURCE
    Builder: Gtkada_Builder;
--- ****
--- ****iv* Combat.UI/PilotOrders
--- SOURCE
+   -- ****
+   -- ****iv* Combat.UI/PilotOrders
+   -- FUNCTION
+   -- Array of text for each combat order for pilot
+   -- SOURCE
    PilotOrders: constant array(1 .. 4) of Unbounded_String :=
      (To_Unbounded_String("Go closer"), To_Unbounded_String("Keep distance"),
       To_Unbounded_String("Evade"), To_Unbounded_String("Escape"));
--- ****
--- ****iv* Combat.UI/EngineerOrders
--- SOURCE
+   -- ****
+   -- ****iv* Combat.UI/EngineerOrders
+   -- FUNCTION
+   -- Array of text for each combat order for engineer
+   -- SOURCE
    EngineerOrders: constant array(1 .. 4) of Unbounded_String :=
      (To_Unbounded_String("All stop"), To_Unbounded_String("Quarter speed"),
       To_Unbounded_String("Half speed"), To_Unbounded_String("Full speed"));
--- ****
--- ****iv* Combat.UI/GunnerOrders
--- SOURCE
+   -- ****
+   -- ****iv* Combat.UI/GunnerOrders
+   -- FUNCTION
+   -- Array of text for each combat order for gunners
+   -- SOURCE
    GunnerOrders: constant array(1 .. 6) of Unbounded_String :=
      (To_Unbounded_String("Don't shoot"), To_Unbounded_String("Precise fire"),
       To_Unbounded_String("Fire at will"),
       To_Unbounded_String("Aim for their engine"),
       To_Unbounded_String("Aim for their weapon"),
       To_Unbounded_String("Aim for their hull"));
--- ****
+   -- ****
 
--- ****if* Combat.UI/RefreshCombatUI
--- SOURCE
+   -- ****if* Combat.UI/RefreshCombatUI
+   -- FUNCTION
+   -- Reload information on combat screen
+   -- SOURCE
    procedure RefreshCombatUI;
--- ****
+   -- ****
 
--- ****if* Combat.UI/RemoveButton
--- SOURCE
+   -- ****if* Combat.UI/RemoveButton
+   -- FUNCTION
+   -- Remove button from UI
+   -- PARAMETERS
+   -- Widget: Button to remove
+   -- SOURCE
    procedure RemoveButton(Widget: not null access Gtk_Widget_Record'Class) is
--- ****
+   -- ****
    begin
       Destroy(Widget);
    end RemoveButton;
 
--- ****if* Combat.UI/SetBoardingOrder
--- SOURCE
+   -- ****if* Combat.UI/SetBoardingOrder
+   -- FUNCTION
+   -- Assign/remove selected crew member to boarding party
+   -- PARAMETERS
+   -- Self - Gtk_Toggle_Button checked or unchecked
+   -- SOURCE
    procedure SetBoardingOrder(Self: access Gtk_Toggle_Button_Record'Class) is
--- ****
+      -- ****
       MemberName: Unbounded_String;
       OrderIndex: Natural := 0;
    begin
@@ -119,11 +137,15 @@ package body Combat.UI is
       RefreshCombatUI;
    end SetBoardingOrder;
 
--- ****if* Combat.UI/SetBoardingParty
--- SOURCE
+   -- ****if* Combat.UI/SetBoardingParty
+   -- FUNCTION
+   -- Set boarding party buttons
+   -- PARAMETERS
+   -- Widget - Button to set
+   -- SOURCE
    procedure SetBoardingParty
      (Widget: not null access Gtk_Widget_Record'Class) is
--- ****
+      -- ****
       MemberName: Unbounded_String;
    begin
       MemberName := To_Unbounded_String(Get_Label(Gtk_Button(Widget)));
@@ -137,10 +159,12 @@ package body Combat.UI is
       Show_All(Widget);
    end SetBoardingParty;
 
--- ****if* Combat.UI/UpdateMessages
--- SOURCE
+   -- ****if* Combat.UI/UpdateMessages
+   -- FUNCTION
+   -- Update in-game messages in combat
+   -- SOURCE
    procedure UpdateMessages is
--- ****
+      -- ****
       MessagesBuffer: constant Gtk_Text_Buffer :=
         Gtk_Text_Buffer(Get_Object(Builder, "txtmessages"));
       LoopStart: Integer := 0 - MessagesAmount;

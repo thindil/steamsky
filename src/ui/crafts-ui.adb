@@ -37,19 +37,25 @@ with Trades; use Trades;
 
 package body Crafts.UI is
 
--- ****iv* Crafts.UI/Builder
--- SOURCE
+   -- ****iv* Crafts.UI/Builder
+   -- FUNCTION
+   -- Gtkada_Builder used for creating UI
+   -- SOURCE
    Builder: Gtkada_Builder;
--- ****
--- ****iv* Crafts.UI/RecipeIndex
--- SOURCE
+   -- ****
+   -- ****iv* Crafts.UI/RecipeIndex
+   -- SOURCE
    RecipeIndex: Unbounded_String;
--- ****
+   -- ****
 
--- ****if* Crafts.UI/ShowSetRecipe
--- SOURCE
+   -- ****if* Crafts.UI/ShowSetRecipe
+   -- FUNCTION
+   -- Show UI to set selected recipe as crafting order
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ShowSetRecipe(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       MaxAmount: Positive;
       AmountAdj: constant Gtk_Adjustment :=
         Gtk_Adjustment(Get_Object(Object, "amountadj"));
@@ -102,10 +108,14 @@ package body Crafts.UI is
             Exception_Message(An_Exception) & ".");
    end ShowSetRecipe;
 
--- ****if* Crafts.UI/ShowRecipeInfo
--- SOURCE
+   -- ****if* Crafts.UI/ShowRecipeInfo
+   -- FUNCTION
+   -- Show detailed information about selected crafting recipe
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ShowRecipeInfo(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       RecipeInfo, WorkplaceName: Unbounded_String := Null_Unbounded_String;
       Recipe: Craft_Data;
       MAmount, CargoIndex: Natural := 0;
@@ -309,10 +319,14 @@ package body Crafts.UI is
       end if;
    end ShowRecipeInfo;
 
--- ****if* Crafts.UI/SetCrafting
--- SOURCE
+   -- ****if* Crafts.UI/SetCrafting
+   -- FUNCTION
+   -- Set selected recipe as crafting order
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure SetCrafting(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       ModulesBox: constant Gtk_Combo_Box :=
         Gtk_Combo_Box(Get_Object(Object, "cmbmodules"));
       WorkshopName: constant Unbounded_String :=
