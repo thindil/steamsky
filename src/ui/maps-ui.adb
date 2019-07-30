@@ -496,9 +496,9 @@ package body Maps.UI is
       if PlayerShip.Speed = DOCKED then
          Hide(Gtk_Widget(Get_Object(Builder, "cmbspeed")));
          Hide(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
-         Set_Label(Gtk_Label(Get_Object(Builder, "lblmovewait")), "Wait");
+         Set_Label(Gtk_Button(Get_Object(Builder, "btnmovewait")), "Wait");
          Set_Tooltip_Text
-           (Gtk_Widget(Get_Object(Builder, "lblmovewait")), "Wait 1 minute.");
+           (Gtk_Widget(Get_Object(Builder, "btnmovewait")), "Wait 1 minute.");
          for I in MoveButtonsNames'Range loop
             MoveButton :=
               Gtk_Widget(Get_Object(Builder, To_String(MoveButtonsNames(I))));
@@ -514,15 +514,15 @@ package body Maps.UI is
          Show_All(Gtk_Widget(Get_Object(Builder, "cmbspeed")));
          if PlayerShip.DestinationX > 0 and PlayerShip.DestinationY > 0 then
             Show_All(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
-            Set_Label(Gtk_Label(Get_Object(Builder, "lblmovewait")), "Move");
+            Set_Label(Gtk_Button(Get_Object(Builder, "btnmovewait")), "Move");
             Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Builder, "lblmovewait")),
+              (Gtk_Widget(Get_Object(Builder, "btnmovewait")),
                "Move ship one map field toward destination.");
          else
             Hide(Gtk_Widget(Get_Object(Builder, "btnmoveto")));
-            Set_Label(Gtk_Label(Get_Object(Builder, "lblmovewait")), "Wait");
+            Set_Label(Gtk_Button(Get_Object(Builder, "btnmovewait")), "Wait");
             Set_Tooltip_Text
-              (Gtk_Widget(Get_Object(Builder, "lblmovewait")),
+              (Gtk_Widget(Get_Object(Builder, "btnmovewait")),
                "Wait 1 minute.");
          end if;
          for I in MoveButtonsNames'Range loop
