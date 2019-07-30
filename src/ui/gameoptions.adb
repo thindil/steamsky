@@ -43,19 +43,28 @@ with Themes; use Themes;
 
 package body GameOptions is
 
--- ****iv* GameOptions/Builder
--- SOURCE
+   -- ****iv* GameOptions/Builder
+   -- FUNCTION
+   -- Gtkada_Builder used for creating UI
+   -- SOURCE
    Builder: Gtkada_Builder;
--- ****
--- ****it* GameOptions/Accel_Data
--- SOURCE
+   -- ****
+   -- ****it* GameOptions/Accel_Data
+   -- FUNCTION
+   -- Data for showing keyboard shortcuts
+   -- PARAMETERS
+   -- AccelName - Name of the keyboard shortcut
+   -- EntryName - Name of the text entry which will be showing this shortcut
+   -- SOURCE
    type Accel_Data is record
       AccelName: Unbounded_String;
       EntryName: Unbounded_String;
    end record;
--- ****
--- ****iv* GameOptions/Accels
--- SOURCE
+   -- ****
+   -- ****iv* GameOptions/Accels
+   -- FUNCTION
+   -- Array with data to show keyboard shortcuts
+   -- SOURCE
    Accels: constant array(Positive range <>) of Accel_Data :=
      (1 =>
         (To_Unbounded_String("<skymapwindow>/btnupleft"),
@@ -219,11 +228,13 @@ package body GameOptions is
       54 =>
         (To_Unbounded_String("<skymapwindow>/fullscreen"),
          To_Unbounded_String("edtfullscreen")));
--- ****
--- ****iv* GameOptions/Setting
--- SOURCE
+   -- ****
+   -- ****iv* GameOptions/Setting
+   -- FUNCTION
+   -- If true, UI is in setting state
+   -- SOURCE
    Setting: Boolean := False;
--- ****
+   -- ****
 
    procedure CloseOptions(Object: access Gtkada_Builder_Record'Class) is
    begin
@@ -308,12 +319,19 @@ package body GameOptions is
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
    end CloseOptions;
 
--- ****if* GameOptions/SetAccelerator
--- SOURCE
+   -- ****if* GameOptions/SetAccelerator
+   -- FUNCTION
+   -- Set selected keyboard shortcut
+   -- PARAMETERS
+   -- Self  - Selected text entry for shortcut
+   -- Event - Detailed information about pressed key
+   -- RESULT
+   -- This function always return false
+   -- SOURCE
    function SetAccelerator
      (Self: access Gtk_Widget_Record'Class; Event: Gdk.Event.Gdk_Event_Key)
       return Boolean is
--- ****
+      -- ****
       KeyMods: constant Gdk_Modifier_Type :=
         Event.State and Get_Default_Mod_Mask;
       Changed, Found: Boolean := False;
@@ -343,10 +361,14 @@ package body GameOptions is
       return False;
    end SetAccelerator;
 
--- ****if* GameOptions/ResizeFont
--- SOURCE
+   -- ****if* GameOptions/ResizeFont
+   -- FUNCTION
+   -- Set new size for all in-game fonts
+   -- PARAMETERS
+   -- User_Data - Which slider with font size was changed
+   -- SOURCE
    procedure ResizeFont(User_Data: access GObject_Record'Class) is
--- ****
+   -- ****
    begin
       if Setting then
          return;
@@ -370,10 +392,14 @@ package body GameOptions is
       end if;
    end ResizeFont;
 
--- ****if* GameOptions/ApplyTheme
--- SOURCE
+   -- ****if* GameOptions/ApplyTheme
+   -- FUNCTION
+   -- Apply new theme to the game
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ApplyTheme(Object: access Gtkada_Builder_Record'Class) is
--- ****
+   -- ****
    begin
       GameSettings.InterfaceTheme :=
         To_Unbounded_String
@@ -382,10 +408,12 @@ package body GameOptions is
       SetMapMoveButtons;
    end ApplyTheme;
 
--- ****if* GameOptions/SetFontsSizes
--- SOURCE
+   -- ****if* GameOptions/SetFontsSizes
+   -- FUNCTION
+   -- Set values for UI for sizes of the game fonts
+   -- SOURCE
    procedure SetFontsSizes is
--- ****
+   -- ****
    begin
       Setting := True;
       Set_Value
@@ -400,22 +428,31 @@ package body GameOptions is
       Setting := False;
    end SetFontsSizes;
 
--- ****if* GameOptions/SetDefaultFontSize
--- SOURCE
+   -- ****if* GameOptions/SetDefaultFontSize
+   -- Reset the game fonts to default sizes
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure SetDefaultFontSize(Object: access Gtkada_Builder_Record'Class) is
       pragma Unreferenced(Object);
--- ****
+      -- ****
    begin
       ResetFontsSizes;
       SetFontsSizes;
       SetFontSize(ALLFONTS);
    end SetDefaultFontSize;
 
--- ****if* GameOptions/ToggleAnimationType
--- SOURCE
+   -- ****if* GameOptions/ToggleAnimationType
+   -- FUNCTION
+   -- Set new type of UI animations
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- RESULT
+   -- This function always return false
+   -- SOURCE
    function ToggleAnimationType
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
--- ****
+   -- ****
    begin
       if Get_Active(Gtk_Switch(Get_Object(Builder, "switchanimations"))) then
          Show_All(Gtk_Widget(Get_Object(Object, "lblanimationstype")));
