@@ -74,20 +74,34 @@ with DebugUI; use DebugUI;
 
 package body MainMenu is
 
--- ****iv* MainMenu/Builder
--- SOURCE
+   -- ****iv* MainMenu/Builder
+   -- FUNCTION
+   -- Gtkada_Builder used for creating UI
+   -- SOURCE
    Builder: Gtkada_Builder;
--- ****
--- ****iv* MainMenu/AllNews, Setting
--- SOURCE
-   AllNews, Setting: Boolean := False;
--- ****
--- ****iv* MainMenu/DataError
--- SOURCE
+   -- ****
+   -- ****iv* MainMenu/AllNews
+   -- FUNCTION
+   -- If true, show all news, not only from last version. Default is false
+   -- SOURCE
+   AllNews: Boolean := False;
+   -- ****
+   -- ****iv* MainMenu/Setting
+   -- FUNCTION
+   -- If true, UI is in setting state. Default is false
+   -- SOURCE
+   Setting: Boolean := False;
+   -- ****
+   -- ****iv* MainMenu/DataError
+   -- FUNCTION
+   -- Used to store errors related to loading the game data
+   -- SOURCE
    DataError: Unbounded_String;
--- ****
--- ****iv* MainMenu/AdjNames
--- SOURCE
+   -- ****
+   -- ****iv* MainMenu/AdjNames
+   -- FUNCTION
+   -- Array of Gtk_Adjustments names for the game difficulty
+   -- SOURCE
    AdjNames: constant array(Positive range <>) of Unbounded_String :=
      (To_Unbounded_String("adjenemydamage"),
       To_Unbounded_String("adjplayerdamage"),
@@ -96,21 +110,27 @@ package body MainMenu is
       To_Unbounded_String("adjexperience"),
       To_Unbounded_String("adjreputation"), To_Unbounded_String("adjupdate"),
       To_Unbounded_String("adjprices"));
--- ****
+   -- ****
 
--- ****if* MainMenu/Quit
--- SOURCE
+   -- ****if* MainMenu/Quit
+   -- FUNCTION
+   -- Quit from the game
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure Quit(Object: access Gtkada_Builder_Record'Class) is
--- ****
+   -- ****
    begin
       Unref(Object);
       Gtk.Main.Main_Quit;
    end Quit;
 
--- ****if* MainMenu/RefreshSavesList
--- SOURCE
+   -- ****if* MainMenu/RefreshSavesList
+   -- FUNCTION
+   -- Refresh list of available saved games
+   -- SOURCE
    procedure RefreshSavesList is
--- ****
+      -- ****
       SavesList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "saveslist"));
       Iter: Gtk_Tree_Iter;
@@ -135,10 +155,14 @@ package body MainMenu is
       End_Search(Files);
    end RefreshSavesList;
 
--- ****if* MainMenu/LoadFile
--- SOURCE
+   -- ****if* MainMenu/LoadFile
+   -- FUNCTION
+   -- Load license, readme, contributing, etc files to UI
+   -- PARAMETERS
+   -- FileName - Name of file to load
+   -- SOURCE
    procedure LoadFile(FileName: String) is
--- ****
+      -- ****
       LicenseFile: File_Type;
       LicenseText: Unbounded_String := Null_Unbounded_String;
    begin
@@ -160,10 +184,14 @@ package body MainMenu is
          To_String(LicenseText));
    end LoadFile;
 
--- ****if* MainMenu/ShowPage
--- SOURCE
+   -- ****if* MainMenu/ShowPage
+   -- FUNCTION
+   -- Show selected page to the player
+   -- PARAMETERS
+   -- User_Data - Button pressed
+   -- SOURCE
    procedure ShowPage(User_Data: access GObject_Record'Class) is
--- ****
+   -- ****
    begin
       if User_Data = Get_Object(Builder, "btnnewgame") then
          if Get_Text(Gtk_GEntry(Get_Object(Builder, "entrycharactername"))) =
@@ -274,10 +302,12 @@ package body MainMenu is
       end if;
    end ShowPage;
 
--- ****if* MainMenu/UpdateNews
--- SOURCE
+   -- ****if* MainMenu/UpdateNews
+   -- FUNCTION
+   -- Refresh list of the game news
+   -- SOURCE
    procedure UpdateNews is
--- ****
+      -- ****
       ChangesFile: File_Type;
       NewsText: Unbounded_String := Null_Unbounded_String;
       FileText: Unbounded_String;
@@ -305,10 +335,13 @@ package body MainMenu is
          To_String(NewsText));
    end UpdateNews;
 
--- ****if* MainMenu/ShowAllNews
--- SOURCE
+   -- ****if* MainMenu/ShowAllNews
+   -- Show all the game news
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ShowAllNews(Object: access Gtkada_Builder_Record'Class) is
--- ****
+   -- ****
    begin
       AllNews := not AllNews;
       UpdateNews;
@@ -322,10 +355,14 @@ package body MainMenu is
       end if;
    end ShowAllNews;
 
--- ****if* MainMenu/RandomName
--- SOURCE
+   -- ****if* MainMenu/RandomName
+   -- FUNCTION
+   -- Generate random player and ship names, baesd on selected faction
+   -- PARAMETERS
+   -- User_Data - Text entry in which Enter key was pressed
+   -- SOURCE
    procedure RandomName(User_Data: access GObject_Record'Class) is
--- ****
+      -- ****
       FactionIndex: constant Unbounded_String :=
         To_Unbounded_String
           (Get_Active_Id(Gtk_Combo_Box(Get_Object(Builder, "cmbfaction"))));
@@ -347,19 +384,24 @@ package body MainMenu is
       end if;
    end RandomName;
 
--- ****if* MainMenu/ShowGoals
--- SOURCE
+   -- ****if* MainMenu/ShowGoals
+   -- Show goal selection UI
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI (unused)
+   -- SOURCE
    procedure ShowGoals(Object: access Gtkada_Builder_Record'Class) is
       pragma Unreferenced(Object);
--- ****
+      -- ****
    begin
       ShowGoalsMenu;
    end ShowGoals;
 
--- ****if* MainMenu/StartGame
--- SOURCE
+   -- ****if* MainMenu/StartGame
+   -- FUNCTION
+   -- Initialize the game data and UI
+   -- SOURCE
    procedure StartGame is
--- ****
+   -- ****
    begin
       GenerateTraders;
       Hide(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
@@ -371,10 +413,14 @@ package body MainMenu is
       CreateSkyMap;
    end StartGame;
 
--- ****if* MainMenu/LoadGame
--- SOURCE
+   -- ****if* MainMenu/LoadGame
+   -- FUNCTION
+   -- Load selected file with the game data
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure LoadGame(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       SavesIter: Gtk_Tree_Iter;
       SavesModel: Gtk_Tree_Model;
    begin
@@ -389,10 +435,14 @@ package body MainMenu is
       StartGame;
    end LoadGame;
 
--- ****if* MainMenu/RandomDifficulty
--- SOURCE
+   -- ****if* MainMenu/RandomDifficulty
+   -- FUNCTION
+   -- Set random difficulty levels for the game
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure RandomDifficulty(Object: access Gtkada_Builder_Record'Class) is
--- ****
+   -- ****
    begin
       for Name of AdjNames loop
          Set_Value
@@ -401,10 +451,14 @@ package body MainMenu is
       end loop;
    end RandomDifficulty;
 
--- ****if* MainMenu/NewGame
--- SOURCE
+   -- ****if* MainMenu/NewGame
+   -- FUNCTION
+   -- Start a new game
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure NewGame(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       Gender: Character;
    begin
       if Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbgender"))) = 0 then
@@ -477,10 +531,14 @@ package body MainMenu is
       StartGame;
    end NewGame;
 
--- ****if* MainMenu/DeleteGame
--- SOURCE
+   -- ****if* MainMenu/DeleteGame
+   -- FUNCTION
+   -- Delete selected file with game data
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure DeleteGame(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       SavesIter: Gtk_Tree_Iter;
       SavesModel: Gtk_Tree_Model;
    begin
@@ -509,11 +567,15 @@ package body MainMenu is
       end if;
    end DeleteGame;
 
--- ****if* MainMenu/ShowFactionDescription
--- SOURCE
+   -- ****if* MainMenu/ShowFactionDescription
+   -- FUNCTION
+   -- Updated faction description when player select new faction
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ShowFactionDescription
      (Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       FactionIndex: constant Unbounded_String :=
         To_Unbounded_String
           (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbfaction"))));
@@ -560,11 +622,15 @@ package body MainMenu is
       end if;
    end ShowFactionDescription;
 
--- ****if* MainMenu/ShowCareerDescription
--- SOURCE
+   -- ****if* MainMenu/ShowCareerDescription
+   -- FUNCTION
+   -- Show selected career description
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ShowCareerDescription
      (Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       FactionIndex: constant Unbounded_String :=
         To_Unbounded_String
           (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbfaction"))));
@@ -592,10 +658,14 @@ package body MainMenu is
       end if;
    end ShowCareerDescription;
 
--- ****if* MainMenu/ShowBaseDescription
--- SOURCE
+   -- ****if* MainMenu/ShowBaseDescription
+   -- FUNCTION
+   -- Show selected base type description, when player select new type
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ShowBaseDescription(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       BaseTypeIndex: constant Integer :=
         Integer(Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbbasetype"))));
       BasesTypesList: constant Gtk_List_Store :=
@@ -614,13 +684,20 @@ package body MainMenu is
             1));
    end ShowBaseDescription;
 
--- ****if* MainMenu/NewGameKeyPressed
--- SOURCE
+   -- ****if* MainMenu/NewGameKeyPressed
+   -- FUNCTION
+   -- Use Page Up and Page Down buttons to scroll new game UI
+   -- PARAMETERS
+   -- Self  - Gtk_Widget on which key was pressed (unused)
+   -- Event - Details about key pressed event
+   -- RESULT
+   -- This function always return false
+   -- SOURCE
    function NewGameKeyPressed
      (Self: access Gtk_Widget_Record'Class; Event: Gdk.Event.Gdk_Event_Key)
       return Boolean is
       pragma Unreferenced(Self);
--- ****
+      -- ****
       ScrollBar: constant Gtk_Adjustment :=
         Get_Vadjustment
           (Gtk_Scrolled_Window(Get_Object(Builder, "scrollinfo")));
@@ -635,11 +712,19 @@ package body MainMenu is
       return False;
    end NewGameKeyPressed;
 
--- ****if* MainMenu/UpdateInfo
--- SOURCE
+   -- ****if* MainMenu/UpdateInfo
+   -- FUNCTION
+   -- Update new game info
+   -- PARAMETERS
+   -- User_Data - UI element which was selected
+   -- RESULT
+   -- This function always return false
+   -- SEE ALSO
+   -- UpdateInfoProc
+   -- SOURCE
    function UpdateInfo
      (User_Data: access GObject_Record'Class) return Boolean is
--- ****
+   -- ****
    begin
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
@@ -647,20 +732,30 @@ package body MainMenu is
       return False;
    end UpdateInfo;
 
--- ****if* MainMenu/UpdateInfoProc
--- SOURCE
+   -- ****if* MainMenu/UpdateInfoProc
+   -- FUNCTION
+   -- Update new game info
+   -- PARAMETERS
+   -- User_Data - UI element which was selected
+   -- SEE ALSO
+   -- UpdateInfo
+   -- SOURCE
    procedure UpdateInfoProc(User_Data: access GObject_Record'Class) is
--- ****
+   -- ****
    begin
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
          Get_Tooltip_Text(Gtk_Widget(User_Data)));
    end UpdateInfoProc;
 
--- ****if* MainMenu/UpdateSummary
--- SOURCE
+   -- ****if* MainMenu/UpdateSummary
+   -- FUNCTION
+   -- Update amount of bonus or malus to the game point from difficulty
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure UpdateSummary(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       MalusNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("adjplayerdamage"),
          To_Unbounded_String("adjplayermelee"),
@@ -693,21 +788,30 @@ package body MainMenu is
          "Total gained points:" & Integer'Image(Bonus) & "%");
    end UpdateSummary;
 
--- ****if* MainMenu/ResetDifficulty
--- SOURCE
+   -- ****if* MainMenu/ResetDifficulty
+   -- FUNCTION
+   -- Set difficulty levels to default
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ResetDifficulty(Object: access Gtkada_Builder_Record'Class) is
--- ****
+   -- ****
    begin
       for Name of AdjNames loop
          Set_Value(Gtk_Adjustment(Get_Object(Object, To_String(Name))), 100.0);
       end loop;
    end ResetDifficulty;
 
--- ****if* MainMenu/RandomDifficultyToggled
--- SOURCE
+   -- ****if* MainMenu/RandomDifficultyToggled
+   -- FUNCTION
+   -- Show or hide info about bonus to the game points on toggle random
+   -- difficulty
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure RandomDifficultyToggled
      (Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       ToggleButton: constant GObject := Get_Object(Object, "cbtndifficulty");
    begin
       Set_Label
@@ -844,10 +948,14 @@ package body MainMenu is
       end if;
    end CreateMainMenu;
 
--- ****if* MainMenu/ShowErrorInfo
--- SOURCE
+   -- ****if* MainMenu/ShowErrorInfo
+   -- FUNCTION
+   -- Show error dialog with information about occured error
+   -- PARAMETERS
+   -- Message - Full stack message from error
+   -- SOURCE
    procedure ShowErrorInfo(Message: Unbounded_String) is
--- ****
+   -- ****
    begin
       Set_Text
         (Gtk_Text_Buffer(Get_Object(Builder, "errorbuffer")),

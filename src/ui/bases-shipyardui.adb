@@ -44,20 +44,29 @@ with Trades; use Trades;
 
 package body Bases.ShipyardUI is
 
--- ****iv* Bases.ShipyardUI/Builder
--- SOURCE
+   -- ****iv* Bases.ShipyardUI/Builder
+   -- FUNCTION
+   -- Gtkada_Builder used for creating UI
+   -- SOURCE
    Builder: Gtkada_Builder;
--- ****
--- ****iv* Bases.ShipyardUI/ModuleIndex
--- SOURCE
+   -- ****
+   -- ****iv* Bases.ShipyardUI/ModuleIndex
+   -- SOURCE
    ModuleIndex: Unbounded_String;
--- ****
+   -- ****
 
--- ****if* Bases.ShipyardUI/GetModuleInfo
--- SOURCE
+   -- ****if* Bases.ShipyardUI/GetModuleInfo
+   -- FUNCTION
+   -- Show information about selected module
+   -- PARAMETERS
+   -- ModuleInfo - String which contains whole info about the module
+   -- Installing - If true, player looking at installing modules list
+   -- RESULT
+   -- Parameter ModuleInfo
+   -- SOURCE
    procedure GetModuleInfo
      (ModuleInfo: in out Unbounded_String; Installing: Boolean) is
--- ****
+      -- ****
       MType: ModuleType;
       MAmount, Size, Weight, MaxValue, Value, MaxOwners: Natural;
       ShipModuleIndex: Positive;
@@ -206,10 +215,14 @@ package body Bases.ShipyardUI is
       end if;
    end GetModuleInfo;
 
--- ****if* Bases.ShipyardUI/ShowInstallInfo
--- SOURCE
+   -- ****if* Bases.ShipyardUI/ShowInstallInfo
+   -- FUNCTION
+   -- Show information about selected module to install
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ShowInstallInfo(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       ModuleInfo, InstallInfo: Unbounded_String;
       Cost: Positive;
       MoneyIndex2, UsedSpace, AllSpace, MaxSize: Natural;
@@ -290,10 +303,14 @@ package body Bases.ShipyardUI is
       end if;
    end ShowInstallInfo;
 
--- ****if* Bases.ShipyardUI/ShowRemoveInfo
--- SOURCE
+   -- ****if* Bases.ShipyardUI/ShowRemoveInfo
+   -- FUNCTION
+   -- Show information about selected module to remove
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ShowRemoveInfo(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       ModuleInfo, RemoveInfo: Unbounded_String;
       Cost: Natural;
       Damage: Gdouble;
@@ -404,10 +421,12 @@ package body Bases.ShipyardUI is
          To_String(RemoveInfo));
    end ShowRemoveInfo;
 
--- ****if* Bases.ShipyardUI/SetRemoveModulesList
--- SOURCE
+   -- ****if* Bases.ShipyardUI/SetRemoveModulesList
+   -- FUNCTION
+   -- Fill remove modules list with player ship modules
+   -- SOURCE
    procedure SetRemoveModulesList is
--- ****
+      -- ****
       ModulesList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "removemodulelist"));
       ModulesIter: Gtk_Tree_Iter;
@@ -426,10 +445,14 @@ package body Bases.ShipyardUI is
       end loop;
    end SetRemoveModulesList;
 
--- ****if* Bases.ShipyardUI/ManipulateModule
--- SOURCE
+   -- ****if* Bases.ShipyardUI/ManipulateModule
+   -- FUNCTION
+   -- Install or remove selected module
+   -- PARAMETERS
+   -- User_Data - Button clicked
+   -- SOURCE
    procedure ManipulateModule(User_Data: access GObject_Record'Class) is
--- ****
+      -- ****
       Install: Boolean;
       ModulesIter: Gtk_Tree_Iter;
       ModulesModel: Gtk_Tree_Model;
@@ -472,10 +495,14 @@ package body Bases.ShipyardUI is
             " for buy this module.");
    end ManipulateModule;
 
--- ****if* Bases.ShipyardUI/SearchShipyard
--- SOURCE
+   -- ****if* Bases.ShipyardUI/SearchShipyard
+   -- FUNCTION
+   -- Search module to install by its name
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure SearchShipyard(Object: access Gtkada_Builder_Record'Class) is
--- ****
+   -- ****
    begin
       Refilter
         (Gtk_Tree_Model_Filter(Get_Object(Object, "installmodulesfilter")));
@@ -489,11 +516,18 @@ package body Bases.ShipyardUI is
       end if;
    end SearchShipyard;
 
--- ****if* Bases.ShipyardUI/VisibleShipyard
--- SOURCE
+   -- ****if* Bases.ShipyardUI/VisibleShipyard
+   -- FUNCTION
+   -- Check if selected module is visible on the list
+   -- PARAMETERS
+   -- Model - Gtk_Tree_Model with modules which will be checked
+   -- Iter  - Gtk_Tree_Iter of module which will be checked
+   -- RESULT
+   -- True if module should be visible, otherwise false
+   -- SOURCE
    function VisibleShipyard
      (Model: Gtk_Tree_Model; Iter: Gtk_Tree_Iter) return Boolean is
--- ****
+      -- ****
       SearchEntry: constant Gtk_GEntry :=
         Gtk_GEntry(Get_Object(Builder, "shipyardsearch"));
       MType: constant ModuleType :=

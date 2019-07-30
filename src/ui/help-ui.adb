@@ -44,19 +44,27 @@ with Utils.UI; use Utils.UI;
 
 package body Help.UI is
 
--- ****iv* Help.UI/Builder
--- SOURCE
+   -- ****iv* Help.UI/Builder
+   -- FUNCTION
+   -- Gtkada_Builder used for creating UI
+   -- SOURCE
    Builder: Gtkada_Builder;
--- ****
--- ****iv* Help.UI/Setting
--- SOURCE
+   -- ****
+   -- ****iv* Help.UI/Setting
+   -- FUNCTION
+   -- If true, UI is in setting mode. Default is false
+   -- SOURCE
    Setting: Boolean := False;
--- ****
+   -- ****
 
--- ****if* Help.UI/SelectTopic
--- SOURCE
+   -- ****if* Help.UI/SelectTopic
+   -- FUNCTION
+   -- Show selected from the list help topic
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure SelectTopic(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       TopicName: Unbounded_String;
    begin
       if Setting then
@@ -84,21 +92,31 @@ package body Help.UI is
       end loop;
    end SelectTopic;
 
--- ****if* Help.UI/DisableMouse
--- SOURCE
+   -- ****if* Help.UI/DisableMouse
+   -- FUNCTION
+   -- Disable mouse buttons on help text view
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI (unused)
+   -- RESULT
+   -- This function always return True
+   -- SOURCE
    function DisableMouse
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
       pragma Unreferenced(Object);
--- ****
+      -- ****
    begin
       return True;
    end DisableMouse;
 
--- ****if* Help.UI/HideHelpWindow
--- SOURCE
+   -- ****if* Help.UI/HideHelpWindow
+   -- FUNCTION
+   -- Hide help window instead of destroying it
+   -- PARAMETERS
+   -- User_Data - Window to hide
+   -- SOURCE
    function HideHelpWindow
      (User_Data: access GObject_Record'Class) return Boolean is
--- ****
+   -- ****
    begin
       GameSettings.TopicsPosition :=
         Natural(Get_Position(Gtk_Paned(Get_Object(Builder, "helppaned"))));
@@ -106,10 +124,14 @@ package body Help.UI is
       return Hide_On_Delete(Gtk_Widget(User_Data));
    end HideHelpWindow;
 
--- ****if* Help.UI/ToggleTopics
--- SOURCE
+   -- ****if* Help.UI/ToggleTopics
+   -- FUNCTION
+   -- Hide or show help topics list
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ToggleTopics(Object: access Gtkada_Builder_Record'Class) is
--- ****
+   -- ****
    begin
       if not Get_Expanded(Gtk_Expander(Get_Object(Object, "helpexpander"))) and
         GameSettings.TopicsPosition > 0 then

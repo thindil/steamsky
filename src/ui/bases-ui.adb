@@ -40,23 +40,38 @@ with Config; use Config;
 
 package body Bases.UI is
 
--- ****iv* Bases.UI/Builder
--- SOURCE
+   -- ****iv* Bases.UI/Builder
+   -- FUNCTION
+   -- Gtkada_Builder used for creating UI
+   -- SOURCE
    Builder: Gtkada_Builder;
--- ****
--- ****it* Bases.UI/States
--- SOURCE
+   -- ****
+   -- ****it* Bases.UI/States
+   -- FUNCTION
+   -- Used to determine the player action in base
+   -- OPTIONS
+   -- RECIPES  - Player is buying crafting recipes
+   -- REPAIRS  - Player is buying ship repairs
+   -- HEAL     - Player is buying healing crew members
+   -- CLEARING - Clearing list of available options
+   -- SOURCE
    type States is (RECIPES, REPAIRS, HEAL, CLEARING);
--- ****
--- ****iv* Bases.UI/CurrentState
--- SOURCE
+   -- ****
+   -- ****iv* Bases.UI/CurrentState
+   -- FUNCTION
+   -- Current UI state
+   -- SOURCE
    CurrentState: States;
--- ****
+   -- ****
 
--- ****if* Bases.UI/ObjectSelected
--- SOURCE
+   -- ****if* Bases.UI/ObjectSelected
+   -- FUNCTIONS
+   -- Show information about currently selected option
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ObjectSelected(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       Iter: Gtk_Tree_Iter;
       Model: Gtk_Tree_Model;
       Cost, Time: Natural := 0;
@@ -198,10 +213,14 @@ package body Bases.UI is
       end if;
    end ObjectSelected;
 
--- ****if* Bases.UI/AcceptAction
--- SOURCE
+   -- ****if* Bases.UI/AcceptAction
+   -- FUNCTION
+   -- Execute currently selected option
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure AcceptAction(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       Iter: Gtk_Tree_Iter;
       Model: Gtk_Tree_Model;
    begin

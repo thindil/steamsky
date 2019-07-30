@@ -82,10 +82,13 @@ with Themes; use Themes;
 
 package body Maps.UI.Handlers is
 
--- ****iv* Maps.UI.Handlers/AccelsRemoved
--- SOURCE
+   -- ****iv* Maps.UI.Handlers/AccelsRemoved
+   -- FUNCTION
+   -- If true, keyboard shortcuts was removed from the main game window.
+   -- Default is false
+   -- SOURCE
    AccelsRemoved: Boolean := False;
--- ****
+   -- ****
 
    procedure QuitGameMenu(Object: access Gtkada_Builder_Record'Class) is
    begin

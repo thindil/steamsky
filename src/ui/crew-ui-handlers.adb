@@ -46,12 +46,20 @@ with Config; use Config;
 
 package body Crew.UI.Handlers is
 
--- ****if* Crew.UI.Handlers/UpdatePriorities
--- SOURCE
+   -- ****if* Crew.UI.Handlers/UpdatePriorities
+   -- FUNCTION
+   -- Update list of orders priorities of selected crew member
+   -- PARAMETERS
+   -- Model - Gtk_Tree_Model with list of orders priorities
+   -- Path  - Gtk_Tree_Path to selected order priority
+   -- Iter  - Gtk_Tree_Iter for selected order priority
+   -- RESULT
+   -- This function always return false
+   -- SOURCE
    function UpdatePriorities
      (Model: Gtk_Tree_Model; Path: Gtk_Tree_Path; Iter: Gtk_Tree_Iter)
       return Boolean is
--- ****
+   -- ****
    begin
       case PlayerShip.Crew(MemberIndex).Orders
         (Positive'Value(To_String(Path)) + 1) is
@@ -67,11 +75,15 @@ package body Crew.UI.Handlers is
       return False;
    end UpdatePriorities;
 
--- ****if* Crew.UI.Handlers/RemoveProgressBars
--- SOURCE
+   -- ****if* Crew.UI.Handlers/RemoveProgressBars
+   -- FUNCTION
+   -- Remove selected progress bar
+   -- PARAMETERS
+   -- Widget - Progress bar to remove
+   -- SOURCE
    procedure RemoveProgressBars
      (Widget: not null access Gtk_Widget_Record'Class) is
--- ****
+   -- ****
    begin
       Destroy(Widget);
    end RemoveProgressBars;

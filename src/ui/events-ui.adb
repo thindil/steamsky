@@ -36,23 +36,33 @@ with Messages; use Messages;
 
 package body Events.UI is
 
--- ****iv* Events.UI/Builder
--- SOURCE
+   -- ****iv* Events.UI/Builder
+   -- FUNCTION
+   -- Gtkada_Builder used for creating UI
+   -- SOURCE
    Builder: Gtkada_Builder;
--- ****
--- ****iv* Events.UI/EventIndex
--- SOURCE
+   -- ****
+   -- ****iv* Events.UI/EventIndex
+   -- FUNCTION
+   -- Currently selected event index
+   -- SOURCE
    EventIndex: Positive;
--- ****
--- ****iv* Events.UI/Cleaning
--- SOURCE
+   -- ****
+   -- ****iv* Events.UI/Cleaning
+   -- FUNCTION
+   -- If true, UI is in cleaning state
+   -- SOURCE
    Cleaning: Boolean;
--- ****
+   -- ****
 
--- ****if* Events.UI/ShowEventInfo
--- SOURCE
+   -- ****if* Events.UI/ShowEventInfo
+   -- FUNCTION
+   -- Show detailed information about selected event
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ShowEventInfo(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       EventInfo: Unbounded_String;
       BaseIndex: Integer;
    begin
@@ -105,11 +115,15 @@ package body Events.UI is
         (Gtk_Label(Get_Object(Object, "lbleventinfo")), To_String(EventInfo));
    end ShowEventInfo;
 
--- ****if* Events.UI/SetEventAsDestination
--- SOURCE
+   -- ****if* Events.UI/SetEventAsDestination
+   -- FUNCTION
+   -- Set selected event as a travel destination for the player ship
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure SetEventAsDestination
      (Object: access Gtkada_Builder_Record'Class) is
--- ****
+   -- ****
    begin
       if Events_List(EventIndex).SkyX = PlayerShip.SkyX and
         Events_List(EventIndex).SkyY = PlayerShip.SkyY then
@@ -125,10 +139,14 @@ package body Events.UI is
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
    end SetEventAsDestination;
 
--- ****if* Events.UI/ShowEvent
--- SOURCE
+   -- ****if* Events.UI/ShowEvent
+   -- FUNCTION
+   -- Show selected event on the map
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ShowEvent(Object: access Gtkada_Builder_Record'Class) is
--- ****
+   -- ****
    begin
       ShowSkyMap(Events_List(EventIndex).SkyX, Events_List(EventIndex).SkyY);
       Set_Visible_Child_Name
