@@ -48,19 +48,27 @@ with Crew; use Crew;
 
 package body Trades.UI is
 
--- ****iv* Trades.UI/Builder
--- SOURCE
+   -- ****iv* Trades.UI/Builder
+   -- FUNCTION
+   -- Gtkada_Builder used for creating UI
+   -- SOURCE
    Builder: Gtkada_Builder;
--- ****
--- ****iv* Trades.UI/SettingTime
--- SOURCE
+   -- ****
+   -- ****iv* Trades.UI/SettingTime
+   -- FUNCTION
+   -- If true, UI is in setting mode
+   -- SOURCE
    SettingTime: Boolean;
--- ****
+   -- ****
 
--- ****if* Trades.UI/CloseTrade
--- SOURCE
+   -- ****if* Trades.UI/CloseTrade
+   -- FUNCTION
+   -- Close trade screen and back to the map
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure CloseTrade(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       EventIndex: constant Natural :=
@@ -74,10 +82,14 @@ package body Trades.UI is
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
    end CloseTrade;
 
--- ****if* Trades.UI/ShowItemTradeInfo
--- SOURCE
+   -- ****if* Trades.UI/ShowItemTradeInfo
+   -- FUNCTION
+   -- Show detailed information about selected item to trade
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ShowItemTradeInfo(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       ItemInfo, ProtoIndex: Unbounded_String;
       Price: Positive;
       CargoIndex, BaseCargoIndex, BaseCargoIndex2: Natural := 0;
@@ -396,10 +408,14 @@ package body Trades.UI is
       end if;
    end ShowItemTradeInfo;
 
--- ****if* Trades.UI/TradeItem
--- SOURCE
+   -- ****if* Trades.UI/TradeItem
+   -- FUNCTION
+   -- Buy or sell selected item
+   -- PARAMETERS
+   -- User_Data - Button clicked
+   -- SOURCE
    procedure TradeItem(User_Data: access GObject_Record'Class) is
--- ****
+      -- ****
       ItemsIter: Gtk_Tree_Iter;
       ItemsModel: Gtk_Tree_Model;
       BaseIndex: constant Natural :=
@@ -484,10 +500,14 @@ package body Trades.UI is
            ("You don't have assigned anyone in crew to talk in bases duty.");
    end TradeItem;
 
--- ****if* Trades.UI/SearchTrade
--- SOURCE
+   -- ****if* Trades.UI/SearchTrade
+   -- FUNCTION
+   -- Search item to trade by its name
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure SearchTrade(Object: access Gtkada_Builder_Record'Class) is
--- ****
+   -- ****
    begin
       Refilter(Gtk_Tree_Model_Filter(Get_Object(Object, "tradefilter")));
       if N_Children
@@ -499,11 +519,18 @@ package body Trades.UI is
       end if;
    end SearchTrade;
 
--- ****if* Trades.UI/VisibleTrade
--- SOURCE
+   -- ****if* Trades.UI/VisibleTrade
+   -- FUNCTION
+   -- Check if selected item is visible on trade list
+   -- PARAMETERS
+   -- Model - Gtk_Tree_Model with list of items to check
+   -- Iter  - Gtk_Tree_Iter of selected item to check
+   -- RESULT
+   -- True if selected item should be visible, otherwise false
+   -- SOURCE
    function VisibleTrade
      (Model: Gtk_Tree_Model; Iter: Gtk_Tree_Iter) return Boolean is
--- ****
+      -- ****
       SearchEntry: constant Gtk_GEntry :=
         Gtk_GEntry(Get_Object(Builder, "tradesearch"));
       IType: constant Unbounded_String :=

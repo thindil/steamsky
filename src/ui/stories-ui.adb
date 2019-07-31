@@ -35,19 +35,27 @@ with Factions; use Factions;
 
 package body Stories.UI is
 
--- ****iv* Stories.UI/Builder
--- SOURCE
+   -- ****iv* Stories.UI/Builder
+   -- FUNCTION
+   -- Gtkada_Builder used for creating UI
+   -- SOURCE
    Builder: Gtkada_Builder;
--- ****
--- ****iv* Stories.UI/Setting
--- SOURCE
+   -- ****
+   -- ****iv* Stories.UI/Setting
+   -- FUNCTION
+   -- If true UI is in setting state
+   -- SOURCE
    Setting: Boolean;
--- ****
+   -- ****
 
--- ****if* Stories.UI/ShowStoryInfo
--- SOURCE
+   -- ****if* Stories.UI/ShowStoryInfo
+   -- FUNCTION
+   -- Show detailed information about selected story
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ShowStoryInfo(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       StoryIndex: Positive;
       StoryBuffer: constant Gtk_Text_Buffer :=
         Gtk_Text_Buffer(Get_Object(Object, "txtstory"));
@@ -156,11 +164,15 @@ package body Stories.UI is
       end if;
    end ShowStoryInfo;
 
--- ****if* Stories.UI/SetStoryAsDestination
--- SOURCE
+   -- ****if* Stories.UI/SetStoryAsDestination
+   -- FUNCTION
+   -- Set current story step as a travel destination for the player ship
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure SetStoryAsDestination
      (Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       NewX, NewY: Positive := 1;
    begin
       GetStoryLocation(NewX, NewY);
@@ -177,10 +189,14 @@ package body Stories.UI is
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
    end SetStoryAsDestination;
 
--- ****if* Stories.UI/ShowStory
--- SOURCE
+   -- ****if* Stories.UI/ShowStory
+   -- FUNCTION
+   -- Show current story step on the map
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ShowStory(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       NewX, NewY: Positive := 1;
    begin
       GetStoryLocation(NewX, NewY);

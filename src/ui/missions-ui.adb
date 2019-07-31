@@ -41,23 +41,33 @@ with Utils.UI; use Utils.UI;
 
 package body Missions.UI is
 
--- ****iv* Missions.UI/Builder
--- SOURCE
+   -- ****iv* Missions.UI/Builder
+   -- FUNCTION
+   -- Gtkada_Builder used for creating UI
+   -- SOURCE
    Builder: Gtkada_Builder;
--- ****
--- ****iv* Missions.UI/MissionIndex
--- SOURCE
+   -- ****
+   -- ****iv* Missions.UI/MissionIndex
+   -- FUNCTION
+   -- Currently selected mission index. Default is 0
+   -- SOURCE
    MissionIndex: Natural := 0;
--- ****
--- ****iv* Missions.UI/Cleaning
--- SOURCE
+   -- ****
+   -- ****iv* Missions.UI/Cleaning
+   -- FUNCTION
+   -- If true, UI is in cleaning state
+   -- SOURCE
    Cleaning: Boolean;
--- ****
+   -- ****
 
--- ****if* Missions.UI/ShowMissionInfo
--- SOURCE
+   -- ****if* Missions.UI/ShowMissionInfo
+   -- FUNCTION
+   -- Show detailed information about selected mission
+   -- PARAMETERS
+   -- User_Data - Currently visible list of missions (available or accepted)
+   -- SOURCE
    procedure ShowMissionInfo(User_Data: access GObject_Record'Class) is
--- ****
+      -- ****
       MissionsIter: Gtk_Tree_Iter;
       MissionsModel: Gtk_Tree_Model;
       MissionInfo: Unbounded_String;
@@ -254,10 +264,12 @@ package body Missions.UI is
       end if;
    end ShowMissionInfo;
 
--- ****if* Missions.UI/RefreshMissionsList
--- SOURCE
+   -- ****if* Missions.UI/RefreshMissionsList
+   -- FUNCTION
+   -- Refresh list of missions
+   -- SOURCE
    procedure RefreshMissionsList is
--- ****
+      -- ****
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MissionsIter: Gtk_Tree_Iter;
@@ -295,11 +307,15 @@ package body Missions.UI is
       end loop;
    end RefreshMissionsList;
 
--- ****if* Missions.UI/AcceptSelectedMission
--- SOURCE
+   -- ****if* Missions.UI/AcceptSelectedMission
+   -- FUNCTION
+   -- Accept selected mission
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure AcceptSelectedMission
      (Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       MissionsIter: Gtk_Tree_Iter;
       MissionsModel: Gtk_Tree_Model;
    begin
@@ -327,10 +343,15 @@ package body Missions.UI is
          ShowDialog(Exception_Message(An_Exception));
    end AcceptSelectedMission;
 
--- ****if* Missions.UI/ButtonMission
--- SOURCE
+   -- ****if* Missions.UI/ButtonMission
+   -- FUNCTION
+   -- Show accepted selected mission on the map or set it as a travel
+   -- destination for the player ship
+   -- PARAMETERS
+   -- User_Data - Button clicked
+   -- SOURCE
    procedure ButtonMission(User_Data: access GObject_Record'Class) is
--- ****
+      -- ****
       X, Y: Integer;
    begin
       if User_Data = Get_Object(Builder, "btnmissioncenter") then
@@ -359,11 +380,15 @@ package body Missions.UI is
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
    end ButtonMission;
 
--- ****if* Missions.UI/ShowAvailableMission
--- SOURCE
+   -- ****if* Missions.UI/ShowAvailableMission
+   -- FUNCTION
+   -- Show available selected mission on the map
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ShowAvailableMission
      (Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin

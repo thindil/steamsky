@@ -29,15 +29,19 @@ with Game; use Game;
 
 package body Themes is
 
--- ****iv* Themes/OldProvider
--- SOURCE
+   -- ****iv* Themes/OldProvider
+   -- FUNCTION
+   -- Previous Gtk_Css_Provider used by the game
+   -- SOURCE
    OldProvider: Gtk_Css_Provider;
--- ****
+   -- ****
 
--- ****if* Themes/LoadCssText
--- SOURCE
+   -- ****if* Themes/LoadCssText
+   -- FUNCTION
+   -- Load whole theme from .css file
+   -- SOURCE
    function LoadCssText return Unbounded_String is
--- ****
+      -- ****
       CssText: Unbounded_String;
       ThemeFile: File_Type;
    begin

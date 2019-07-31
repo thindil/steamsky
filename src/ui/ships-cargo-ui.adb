@@ -39,23 +39,30 @@ with Config; use Config;
 
 package body Ships.Cargo.UI is
 
--- ****iv* Ships.Cargo.UI/Builder
--- SOURCE
+   -- ****iv* Ships.Cargo.UI/Builder
+   -- FUNCTION
+   -- Gtkada_Builder used for creating UI
+   -- SOURCE
    Builder: Gtkada_Builder;
--- ****
--- ****iv* Ships.Cargo.UI/ItemIndex
--- SOURCE
+   -- ****
+   -- ****iv* Ships.Cargo.UI/ItemIndex
+   -- FUNCTION
+   -- Player ship cargo index of currently selected item
+   -- SOURCE
    ItemIndex: Positive;
--- ****
--- ****iv* Ships.Cargo.UI/SettingTime
--- SOURCE
+   -- ****
+   -- ****iv* Ships.Cargo.UI/SettingTime
+   -- If true, UI is in setting state
+   -- SOURCE
    SettingTime: Boolean;
--- ****
+   -- ****
 
--- ****if* Ships.Cargo.UI/RefreshCargoInfo
--- SOURCE
+   -- ****if* Ships.Cargo.UI/RefreshCargoInfo
+   -- FUNCTION
+   -- Refresh player ship cargo information
+   -- SOURCE
    procedure RefreshCargoInfo is
--- ****
+      -- ****
       CargoIter: Gtk_Tree_Iter;
       CargoList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "cargolist"));
@@ -123,10 +130,12 @@ package body Ships.Cargo.UI is
       SettingTime := False;
    end RefreshCargoInfo;
 
--- ****if* Ships.Cargo.UI/SetActiveItem
--- SOURCE
+   -- ****if* Ships.Cargo.UI/SetActiveItem
+   -- FUNCTION
+   -- Select active item in cargo list
+   -- SOURCE
    procedure SetActiveItem is
--- ****
+   -- ****
    begin
       if PlayerShip.Cargo.Length > 0 then
          Set_Cursor
@@ -135,10 +144,14 @@ package body Ships.Cargo.UI is
       end if;
    end SetActiveItem;
 
--- ****if* Ships.Cargo.UI/ShowItemCargoInfo
--- SOURCE
+   -- ****if* Ships.Cargo.UI/ShowItemCargoInfo
+   -- FUNCTION
+   -- Show detailed information about selected item
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ShowItemCargoInfo(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       CargoIter: Gtk_Tree_Iter;
       CargoModel: Gtk_Tree_Model;
       AmountAdj: constant Gtk_Adjustment :=
@@ -173,10 +186,14 @@ package body Ships.Cargo.UI is
       Set_Value(AmountAdj2, 1.0);
    end ShowItemCargoInfo;
 
--- ****if* Ships.Cargo.UI/DropItem
--- SOURCE
+   -- ****if* Ships.Cargo.UI/DropItem
+   -- FUNCTION
+   -- Drop selected item from the player ship cargo
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure DropItem(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       DropAmount: Natural :=
         Natural(Get_Value(Gtk_Adjustment(Get_Object(Object, "amountadj"))));
       DropAmount2: constant Natural := DropAmount;
@@ -220,10 +237,14 @@ package body Ships.Cargo.UI is
       SetActiveItem;
    end DropItem;
 
--- ****if* Ships.Cargo.UI/GiveItem
--- SOURCE
+   -- ****if* Ships.Cargo.UI/GiveItem
+   -- FUNCTION
+   -- Give selected item to selected crew member
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure GiveItem(Object: access Gtkada_Builder_Record'Class) is
--- ****
+      -- ****
       MemberIndex: constant Positive :=
         Positive
           (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbmember"))) + 1);
@@ -253,10 +274,14 @@ package body Ships.Cargo.UI is
       SetActiveItem;
    end GiveItem;
 
--- ****if* Ships.Cargo.UI/SearchCargo
--- SOURCE
+   -- ****if* Ships.Cargo.UI/SearchCargo
+   -- FUNCTION
+   -- Search item by name in player ship cargo
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure SearchCargo(Object: access Gtkada_Builder_Record'Class) is
--- ****
+   -- ****
    begin
       Refilter(Gtk_Tree_Model_Filter(Get_Object(Object, "cargofilter")));
       if N_Children
@@ -266,11 +291,18 @@ package body Ships.Cargo.UI is
       end if;
    end SearchCargo;
 
--- ****if* Ships.Cargo.UI/VisibleCargo
--- SOURCE
+   -- ****if* Ships.Cargo.UI/VisibleCargo
+   -- FUNCTION
+   -- Check if selected item should be visible on the list
+   -- PARAMETERS
+   -- Model - Gtk_Tree_Model with list of cargo items
+   -- Iter  - Gtk_Tree_Iter of selected item
+   -- RESULT
+   -- True if item should be visible, otherwise false
+   -- SOURCE
    function VisibleCargo
      (Model: Gtk_Tree_Model; Iter: Gtk_Tree_Iter) return Boolean is
--- ****
+      -- ****
       IType: constant Unbounded_String :=
         To_Unbounded_String
           (Get_Active_Text
