@@ -53,19 +53,25 @@ with Factions; use Factions;
 
 package body Utils.UI is
 
--- ****iv* Utils.UI/Builder
--- SOURCE
+   -- ****iv* Utils.UI/Builder
+   -- FUNCTION
+   -- Gtkada_Builder used for creating UI
+   -- SOURCE
    Builder: Gtkada_Builder;
--- ****
--- ****iv* Utils.UI/Source_Id
--- SOURCE
+   -- ****
+   -- ****iv* Utils.UI/Source_Id
+   -- FUNCTION
+   -- Id of timer used to hide mesages. Default is No_Source_Id
+   -- SOURCE
    Source_Id: G_Source_Id := No_Source_Id;
--- ****
+   -- ****
 
--- ****if* Utils.UI/AutoHideDialog
--- SOURCE
+   -- ****if* Utils.UI/AutoHideDialog
+   -- FUNCTION
+   -- Auto hide message after some time
+   -- SOURCE
    function AutoHideDialog return Boolean is
--- ****
+   -- ****
    begin
       Hide(Gtk_Widget(Get_Object(Builder, "messagebox")));
       Source_Id := No_Source_Id;

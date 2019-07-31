@@ -40,10 +40,12 @@ with Utils.UI; use Utils.UI;
 
 package body Statistics.UI is
 
--- ****iv* Statistics.UI/Builder
--- SOURCE
+   -- ****iv* Statistics.UI/Builder
+   -- FUNCTION
+   -- Gtkada_Builder used for creating UI
+   -- SOURCE
    Builder: Gtkada_Builder;
--- ****
+   -- ****
 
    procedure HideStatistics is
    begin
@@ -59,11 +61,15 @@ package body Statistics.UI is
       end if;
    end HideStatistics;
 
--- ****if* Statistics.UI/ShowGoals
--- SOURCE
+   -- ****if* Statistics.UI/ShowGoals
+   -- FUNCTION
+   -- Show menu to select current goal in game
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI (unused)
+   -- SOURCE
    procedure ShowGoals(Object: access Gtkada_Builder_Record'Class) is
       pragma Unreferenced(Object);
--- ****
+      -- ****
    begin
       ShowGoalsMenu(False);
    end ShowGoals;

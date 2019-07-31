@@ -32,15 +32,20 @@ with Utils.UI; use Utils.UI;
 
 package body Messages.UI is
 
--- ****iv* Messages.UI/Builder
--- SOURCE
+   -- ****iv* Messages.UI/Builder
+   -- FUNCTION
+   -- Gtkada_Builder used for creating UI
+   -- SOURCE
    Builder: Gtkada_Builder;
--- ****
+   -- ****
 
--- ****if* Messages.UI/ShowMessages
--- SOURCE
+   -- ****if* Messages.UI/ShowMessages
+   -- FUNCTION
+   -- Show in-game messages of selected type
+   -- MessagesType - Type of messages to show
+   -- SOURCE
    procedure ShowMessages(MessagesType: Message_Type) is
--- ****
+      -- ****
       MessagesList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "messageslist"));
       MessagesIter: Gtk_Tree_Iter;
@@ -101,20 +106,28 @@ package body Messages.UI is
       end if;
    end ShowMessages;
 
--- ****if* Messages.UI/SelectMessages
--- SOURCE
+   -- ****if* Messages.UI/SelectMessages
+   -- FUNCTION
+   -- Updated messages list on selection of messages types to show
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure SelectMessages(Object: access Gtkada_Builder_Record'Class) is
--- ****
+   -- ****
    begin
       ShowMessages
         (Message_Type'Val
            (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbmessages")))));
    end SelectMessages;
 
--- ****if* Messages.UI/DeleteMessages
--- SOURCE
+   -- ****if* Messages.UI/DeleteMessages
+   -- FUNCTION
+   -- Clear all in-game messages
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure DeleteMessages(Object: access Gtkada_Builder_Record'Class) is
--- ****
+   -- ****
    begin
       if ShowConfirmDialog
           ("Are you sure you want to clear all messages?",
@@ -124,19 +137,30 @@ package body Messages.UI is
       end if;
    end DeleteMessages;
 
--- ****if* Messages.UI/SearchMessages
--- SOURCE
+   -- ****if* Messages.UI/SearchMessages
+   -- FUNCTION
+   -- Search for message
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure SearchMessages(Object: access Gtkada_Builder_Record'Class) is
--- ****
+   -- ****
    begin
       Refilter(Gtk_Tree_Model_Filter(Get_Object(Object, "messagesfilter")));
    end SearchMessages;
 
--- ****if* Messages.UI/VisibleMessages
--- SOURCE
+   -- ****if* Messages.UI/VisibleMessages
+   -- FUNCTION
+   -- Check if selected message is visible
+   -- PARAMETERS
+   -- Model - Gtk_Tree_Model with list of messages
+   -- Iter  - Gtk_Tree_Iter of selected message
+   -- RESULT
+   -- True if message should be visible, otherwise false
+   -- SOURCE
    function VisibleMessages
      (Model: Gtk_Tree_Model; Iter: Gtk_Tree_Iter) return Boolean is
--- ****
+      -- ****
       SearchEntry: constant Gtk_GEntry :=
         Gtk_GEntry(Get_Object(Builder, "entrysearch"));
    begin
