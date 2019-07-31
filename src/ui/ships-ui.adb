@@ -42,15 +42,19 @@ with Config; use Config;
 
 package body Ships.UI is
 
--- ****iv* Ships.UI/SkillsListSet
--- SOURCE
+   -- ****iv* Ships.UI/SkillsListSet
+   -- FUNCTION
+   -- If true, list of skills was set. Default is false
+   -- SOURCE
    SkillsListSet: Boolean := False;
--- ****
+   -- ****
 
--- ****if* Ships.UI/ShowAssignMember
--- SOURCE
+   -- ****if* Ships.UI/ShowAssignMember
+   -- FUNCTION
+   -- Show crew members which can be assigned to selected module
+   -- SOURCE
    procedure ShowAssignMember is
--- ****
+      -- ****
       AssignCrewCombo: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Object(Builder, "cmbassigncrew"));
       Assigned: Boolean;
@@ -84,10 +88,12 @@ package body Ships.UI is
       Set_Active(AssignCrewCombo, 0);
    end ShowAssignMember;
 
--- ****if* Ships.UI/ShowAssignAmmo
--- SOURCE
+   -- ****if* Ships.UI/ShowAssignAmmo
+   -- FUNCTION
+   -- Show ammunition which can be assigned to selected gun
+   -- SOURCE
    procedure ShowAssignAmmo is
--- ****
+      -- ****
       HaveAmmo: Boolean := False;
       AssignAmmoCombo: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Object(Builder, "cmbassignammo"));
