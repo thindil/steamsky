@@ -1555,7 +1555,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Move map up left</property>
+                <property name="tooltip_text" translatable="yes">Move map north and west</property>
                 <signal name="clicked" handler="Move_Map" object="btnmapupleft" swapped="no"/>
               </object>
               <packing>
@@ -1569,7 +1569,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Move map up</property>
+                <property name="tooltip_text" translatable="yes">Move map north</property>
                 <signal name="clicked" handler="Move_Map" object="btnmapup" swapped="no"/>
               </object>
               <packing>
@@ -1583,7 +1583,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Move map up right</property>
+                <property name="tooltip_text" translatable="yes">Move map north and east</property>
                 <signal name="clicked" handler="Move_Map" object="btnmapupright" swapped="no"/>
               </object>
               <packing>
@@ -1597,7 +1597,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Move map left</property>
+                <property name="tooltip_text" translatable="yes">Move map west</property>
                 <signal name="clicked" handler="Move_Map" object="btnmapleft" swapped="no"/>
               </object>
               <packing>
@@ -1611,7 +1611,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Move map right</property>
+                <property name="tooltip_text" translatable="yes">Move map east</property>
                 <signal name="clicked" handler="Move_Map" object="btnmapright" swapped="no"/>
               </object>
               <packing>
@@ -1625,7 +1625,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Move map down left</property>
+                <property name="tooltip_text" translatable="yes">Move map south and west</property>
                 <signal name="clicked" handler="Move_Map" object="btnmapdownleft" swapped="no"/>
               </object>
               <packing>
@@ -1639,6 +1639,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes">Move map south</property>
                 <signal name="clicked" handler="Move_Map" object="btnmapdown" swapped="no"/>
               </object>
               <packing>
@@ -1652,7 +1653,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Move map down right</property>
+                <property name="tooltip_text" translatable="yes">Move map south and east</property>
                 <signal name="clicked" handler="Move_Map" object="btnmapdownright" swapped="no"/>
               </object>
               <packing>
