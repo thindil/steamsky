@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Updated UI
 - Updated README.md
 - Updated contributing guide
+- Default installation directory on Windows
 
 ### Fixed
 - Crash after showing info dialog in main menu
