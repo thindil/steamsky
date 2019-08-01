@@ -26,6 +26,7 @@ with Ada.Strings; use Ada.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.Traceback.Symbolic; use GNAT.Traceback.Symbolic;
 with GNAT.String_Split; use GNAT.String_Split;
+with GNAT.OS_Lib; use GNAT.OS_Lib;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
@@ -945,6 +946,16 @@ package body MainMenu is
          Hide(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
          ShowDialog
            ("Can't load game data files. Error: " & To_String(DataError));
+         return;
+      end if;
+      if not Is_Write_Accessible_File(To_String(SaveDirectory)) then
+         Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
+         ShowDialog
+           ("Can't load game data files. Error: " & To_String(DataError));
+         ShowDialog
+           ("Directory " & To_String(SaveDirectory) &
+            " is not write accessible, thus save games cannot be saved.");
       end if;
    end CreateMainMenu;
 
