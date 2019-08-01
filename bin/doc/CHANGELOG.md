@@ -20,7 +20,8 @@ All notable changes to this project will be documented in this file.
   double basic iron cabin, huge double advanced iron cabin, huge double
   extended iron cabin, huge double luxury iron cabin, huge double basic steel
   cabin, huge double advanced steel cabin, huge double extended steel cabin,
-  huge double luxury steel cabin, huge double advanced titanium cabin
+  huge double luxury steel cabin, huge double advanced titanium cabin, huge
+  double extended titanium cabin
 - Info about chance to damage for items
 
 ### Changed
