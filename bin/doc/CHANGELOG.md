@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
   huge double luxury steel cabin, huge double advanced titanium cabin, huge
   double extended titanium cabin
 - Info about chance to damage for items
+- Check if the game have permission to write to save directory
 
 ### Changed
 - Updated help
