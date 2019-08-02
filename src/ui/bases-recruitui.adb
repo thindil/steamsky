@@ -28,6 +28,7 @@ with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
+with Gtkada.Builder; use Gtkada.Builder;
 with Maps; use Maps;
 with Ships; use Ships;
 with Ships.Crew; use Ships.Crew;
@@ -39,12 +40,6 @@ with Utils.UI; use Utils.UI;
 
 package body Bases.RecruitUI is
 
-   -- ****iv* Bases.RecruitUI/Builder
-   -- FUNCTION
-   -- Gtkada_Builder used for creating UI
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
    -- ****iv* Bases.RecruitUI/RecruitIndex
    -- FUNCTION
    -- Currently selected recruit base recruits index
@@ -360,9 +355,8 @@ package body Bases.RecruitUI is
       end if;
    end NegotiateHire;
 
-   procedure CreateRecruitUI(NewBuilder: Gtkada_Builder) is
+   procedure CreateRecruitUI is
    begin
-      Builder := NewBuilder;
       Register_Handler(Builder, "Show_Recruit_Info", ShowRecruitInfo'Access);
       Register_Handler(Builder, "Hire_Recruit", Hire'Access);
       Register_Handler

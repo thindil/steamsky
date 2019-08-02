@@ -20,6 +20,7 @@ with Gtk.Cell_Renderer_Combo; use Gtk.Cell_Renderer_Combo;
 with Gtk.Cell_Renderer_Toggle; use Gtk.Cell_Renderer_Toggle;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
+with Gtkada.Builder; use Gtkada.Builder;
 
 -- ****h* Steamsky/Crew.UI.Handlers
 -- FUNCTION

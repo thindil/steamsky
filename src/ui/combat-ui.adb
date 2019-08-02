@@ -38,6 +38,7 @@ with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Glib.Properties; use Glib.Properties;
 with Glib.Types; use Glib.Types;
+with Gtkada.Builder; use Gtkada.Builder;
 with Game; use Game;
 with Bases; use Bases;
 with ShipModules; use ShipModules;
@@ -53,12 +54,6 @@ with Factions; use Factions;
 
 package body Combat.UI is
 
-   -- ****iv* Combat.UI/Builder
-   -- FUNCTION
-   -- Gtkada_Builder used for creating UI
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
    -- ****iv* Combat.UI/PilotOrders
    -- FUNCTION
    -- Array of text for each combat order for pilot
@@ -991,9 +986,8 @@ package body Combat.UI is
       BoardingOrders(Positive'Value(Path_String) + 1) := NewOrder;
    end GiveBoardingOrders;
 
-   procedure CreateCombatUI(NewBuilder: Gtkada_Builder) is
+   procedure CreateCombatUI is
    begin
-      Builder := NewBuilder;
       Register_Handler(Builder, "Set_Orders_List", SetOrdersList'Access);
       Register_Handler(Builder, "Next_Turn", NextTurn'Access);
       On_Changed

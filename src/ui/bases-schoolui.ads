@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Gtkada.Builder; use Gtkada.Builder;
-
 -- ****h* Steamsky/Bases.SchoolUI
 -- FUNCTION
 -- Provides code to show training UI
@@ -27,10 +25,8 @@ package Bases.SchoolUI is
    -- ****f* Bases.SchoolUI/CreateBasesSchoolUI
    -- FUNCTION
    -- Create infterace for training skills in bases
-   -- PARAMETERS
-   -- NewBuilder - Gtkada_Builder used to create UI
    -- SOURCE
-   procedure CreateBasesSchoolUI(NewBuilder: Gtkada_Builder);
+   procedure CreateBasesSchoolUI;
    -- ****
    -- ****f* Bases.SchoolUI/ShowSchoolUI
    -- FUNCTION

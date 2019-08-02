@@ -36,6 +36,7 @@ with Gtk.Menu; use Gtk.Menu;
 with Gtk.Menu_Item; use Gtk.Menu_Item;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
+with Gtkada.Builder; use Gtkada.Builder;
 with Bases; use Bases;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -48,12 +49,6 @@ with Config; use Config;
 
 package body BasesList is
 
-   -- ****iv* BasesList/Builder
-   -- FUNCTION
-   -- Gtkada_Builder used for creating UI
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
    -- ****iv* BasesList/SettingTime
    -- FUNCTION
    -- If true, UI is currently in setting state
@@ -395,10 +390,9 @@ package body BasesList is
       end if;
    end ToggleBaseInfo;
 
-   procedure CreateBasesListUI(NewBuilder: Gtkada_Builder) is
+   procedure CreateBasesListUI is
       ComboBox: Gtk_Combo_Box_Text;
    begin
-      Builder := NewBuilder;
       Register_Handler(Builder, "Show_Base_Info", ShowBaseInfo'Access);
       Register_Handler
         (Builder, "Set_Destination_Base", SetDestinationBase'Access);

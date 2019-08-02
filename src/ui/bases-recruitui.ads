@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Gtkada.Builder; use Gtkada.Builder;
-
 -- ****h* Steamsky/Bases.RecruitUI
 -- FUNCTION
 -- Provides code for show recruit UI
@@ -27,10 +25,8 @@ package Bases.RecruitUI is
    -- ****f* Bases.RecruitUI/CreateRecruitUI
    -- FUNCTION
    -- Create infterace for recruit new crew members
-   -- PARAMETERS
-   -- NewBuilder - Gtkada_Builder used to create UI
    -- SOURCE
-   procedure CreateRecruitUI(NewBuilder: Gtkada_Builder);
+   procedure CreateRecruitUI;
    -- ****
    -- ****f* Bases.RecruitUI/ShowRecruitUI
    -- FUNCTION

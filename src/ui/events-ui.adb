@@ -26,6 +26,7 @@ with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
+with Gtkada.Builder; use Gtkada.Builder;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
@@ -36,12 +37,6 @@ with Messages; use Messages;
 
 package body Events.UI is
 
-   -- ****iv* Events.UI/Builder
-   -- FUNCTION
-   -- Gtkada_Builder used for creating UI
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
    -- ****iv* Events.UI/EventIndex
    -- FUNCTION
    -- Currently selected event index
@@ -153,9 +148,8 @@ package body Events.UI is
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
    end ShowEvent;
 
-   procedure CreateEventsUI(NewBuilder: Gtkada_Builder) is
+   procedure CreateEventsUI is
    begin
-      Builder := NewBuilder;
       Register_Handler(Builder, "Show_Event_Info", ShowEventInfo'Access);
       Register_Handler
         (Builder, "Set_Event_As_Destination", SetEventAsDestination'Access);

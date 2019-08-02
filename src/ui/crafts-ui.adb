@@ -29,20 +29,16 @@ with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
+with Gtkada.Builder; use Gtkada.Builder;
 with Game; use Game;
 with Ships; use Ships;
 with Items; use Items;
 with Utils.UI; use Utils.UI;
 with Trades; use Trades;
+with Maps.UI; use Maps.UI;
 
 package body Crafts.UI is
 
-   -- ****iv* Crafts.UI/Builder
-   -- FUNCTION
-   -- Gtkada_Builder used for creating UI
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
    -- ****iv* Crafts.UI/RecipeIndex
    -- SOURCE
    RecipeIndex: Unbounded_String;
@@ -344,9 +340,8 @@ package body Crafts.UI is
       end loop;
    end SetCrafting;
 
-   procedure CreateCraftsUI(NewBuilder: Gtkada_Builder) is
+   procedure CreateCraftsUI is
    begin
-      Builder := NewBuilder;
       Register_Handler(Builder, "Show_Recipe_Info", ShowRecipeInfo'Access);
       Register_Handler(Builder, "Set_Crafting", SetCrafting'Access);
       On_Key_Press_Event

@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Gtkada.Builder; use Gtkada.Builder;
-
 -- ****h* Steamsky/Bases.LootUI
 -- FUNCTION
 -- Provide code for show loot UI
@@ -27,10 +25,8 @@ package Bases.LootUI is
    -- ****f* Bases.LootUI/CreateBasesLootUI
    -- FUNCTION
    -- Create infterace for looting bases
-   -- PARAMETERS
-   -- NewBuilder - Gtkada_Builder used to create UI
    -- SOURCE
-   procedure CreateBasesLootUI(NewBuilder: Gtkada_Builder);
+   procedure CreateBasesLootUI;
    -- ****
    -- ****f* Bases.LootUI/ShowLootUI
    -- FUNCTION

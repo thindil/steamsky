@@ -24,20 +24,16 @@ with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Label; use Gtk.Label;
 with Glib; use Glib;
+with Gtkada.Builder; use Gtkada.Builder;
 with Ships; use Ships;
 with Bases.Trade; use Bases.Trade;
 with Utils.UI; use Utils.UI;
 with Trades; use Trades;
 with Items; use Items;
+with Maps.UI; use Maps.UI;
 
 package body Bases.SchoolUI is
 
-   -- ****iv* Bases.SchoolUI/Builder
-   -- FUNCTION
-   -- Gtkada_Builder used for creating UI
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
    -- ****iv* Bases.SchoolUI/CrewIndex
    -- FUNCTION
    -- Crew index of currently selected member
@@ -147,9 +143,8 @@ package body Bases.SchoolUI is
          ShowDialog("You can't train this skill any more.");
    end TrainSelectedSkill;
 
-   procedure CreateBasesSchoolUI(NewBuilder: Gtkada_Builder) is
+   procedure CreateBasesSchoolUI is
    begin
-      Builder := NewBuilder;
       Register_Handler(Builder, "Show_Train_Info", ShowTrainInfo'Access);
       Register_Handler
         (Builder, "Train_Selected_Skill", TrainSelectedSkill'Access);

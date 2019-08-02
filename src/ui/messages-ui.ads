@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Gtkada.Builder; use Gtkada.Builder;
-
 -- ****h* Steamsky/Messages.UI
 -- FUNCTION
 -- Provides code for messages UI
@@ -27,10 +25,8 @@ package Messages.UI is
    -- ****f* Messages.UI/CreateMessagesUI
    -- FUNCTION
    -- Create infterace for show messages
-   -- PARAMETERS
-   -- NewBuilder - Gtkada_Builder used to create UI
    -- SOURCE
-   procedure CreateMessagesUI(NewBuilder: Gtkada_Builder);
+   procedure CreateMessagesUI;
    -- ****
    -- ****f* Messages.UI/ShowMessagesUI
    -- FUNCTION
