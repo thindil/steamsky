@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Gtkada.Builder; use Gtkada.Builder;
-
 -- ****h* Steamsky/Ships.Cargo.UI
 -- FUNCTION
 -- Provides code for player ship cargo UI
@@ -27,10 +25,8 @@ package Ships.Cargo.UI is
    -- ****f* Ships.Cargo.UI/CreateCargoUI
    -- FUNCTION
    -- Create infterace for show player ship cargo
-   -- PARAMETERS
-   -- NewBuilder - Gtkada_Builder used to create UI
    -- SOURCE
-   procedure CreateCargoUI(NewBuilder: Gtkada_Builder);
+   procedure CreateCargoUI;
    -- ****
    -- ****f* Ships.Cargo.UI/ShowCargoUI
    -- FUNCTION

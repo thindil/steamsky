@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Gtkada.Builder; use Gtkada.Builder;
-
 -- ****h* Steamsky/Ships.UI
 -- FUNCTION
 -- Provides code for player ship information UI
@@ -27,10 +25,8 @@ package Ships.UI is
    -- ****f* Ships.UI/CreateShipUI
    -- FUNCTION
    -- Create infterace for show player ship info
-   -- PARAMETERS
-   -- NewBuilder - Gtkada_Builder used to create UI
    -- SOURCE
-   procedure CreateShipUI(NewBuilder: Gtkada_Builder);
+   procedure CreateShipUI;
    -- ****
    -- ****f* Ships.UI/ShowShipUI
    -- FUNCTION
@@ -41,12 +37,6 @@ package Ships.UI is
 
 private
 
--- ****v* Ships.UI/Builder
--- FUNCTION
--- Gtk builder for user interface
--- SOURCE
-   Builder: Gtkada_Builder;
--- ****
 -- ****v* Ships.UI/ModuleIndex
 -- FUNCTION
 -- Index of selected module

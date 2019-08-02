@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Gtkada.Builder; use Gtkada.Builder;
-
 -- ****h* Steamsky/Crafts.UI
 -- FUNCTION
 -- Provides code for crafting UI
@@ -27,10 +25,8 @@ package Crafts.UI is
    -- ****f* Crafts.UI/CreateCraftsUI
    -- FUNCTION
    -- Create infterace for manufacturing
-   -- PARAMETERS
-   -- NewBuilder - Gtkada_Builder used to create UI
    -- SOURCE
-   procedure CreateCraftsUI(NewBuilder: Gtkada_Builder);
+   procedure CreateCraftsUI;
    -- ****
    -- ****f* Crafts.UI/ShowCraftsUI
    -- FUNCTION

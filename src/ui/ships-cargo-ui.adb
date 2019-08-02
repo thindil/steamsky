@@ -29,6 +29,7 @@ with Gtk.Stack; use Gtk.Stack;
 with Gtk.Tree_Model_Filter; use Gtk.Tree_Model_Filter;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
+with Gtkada.Builder; use Gtkada.Builder;
 with Messages; use Messages;
 with Crew.Inventory; use Crew.Inventory;
 with Stories; use Stories;
@@ -39,12 +40,6 @@ with Config; use Config;
 
 package body Ships.Cargo.UI is
 
-   -- ****iv* Ships.Cargo.UI/Builder
-   -- FUNCTION
-   -- Gtkada_Builder used for creating UI
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
    -- ****iv* Ships.Cargo.UI/ItemIndex
    -- FUNCTION
    -- Player ship cargo index of currently selected item
@@ -323,9 +318,8 @@ package body Ships.Cargo.UI is
       return False;
    end VisibleCargo;
 
-   procedure CreateCargoUI(NewBuilder: Gtkada_Builder) is
+   procedure CreateCargoUI is
    begin
-      Builder := NewBuilder;
       Register_Handler
         (Builder, "Show_Item_Cargo_Info", ShowItemCargoInfo'Access);
       Register_Handler(Builder, "Drop_Item", DropItem'Access);

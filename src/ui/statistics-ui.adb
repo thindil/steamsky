@@ -27,6 +27,7 @@ with Gtk.Stack; use Gtk.Stack;
 with Gtk.Expander; use Gtk.Expander;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
+with Gtkada.Builder; use Gtkada.Builder;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
 with Goals; use Goals;
@@ -39,13 +40,6 @@ with MainMenu; use MainMenu;
 with Utils.UI; use Utils.UI;
 
 package body Statistics.UI is
-
-   -- ****iv* Statistics.UI/Builder
-   -- FUNCTION
-   -- Gtkada_Builder used for creating UI
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
 
    procedure HideStatistics is
    begin
@@ -79,9 +73,8 @@ package body Statistics.UI is
       Set_Label(Gtk_Button(Get_Object(Builder, "btngoals")), Message);
    end UpdateGoalsButton;
 
-   procedure CreateStatsUI(NewBuilder: Gtkada_Builder) is
+   procedure CreateStatsUI is
    begin
-      Builder := NewBuilder;
       Register_Handler(Builder, "Show_Goals", ShowGoals'Access);
    end CreateStatsUI;
 

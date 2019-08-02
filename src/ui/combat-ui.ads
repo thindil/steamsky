@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Gtkada.Builder; use Gtkada.Builder;
-
 -- ****h* Steamsky/Combat.UI
 -- FUNCTION
 -- Provides code for combat UI
@@ -27,10 +25,8 @@ package Combat.UI is
    -- ****f* Combat.UI/CreateCombatUI
    -- FUNCTION
    -- Create combat user interface
-   -- PARAMETERS
-   -- NewBuilder - Gtkada_Builder used to create UI
    -- SOURCE
-   procedure CreateCombatUI(NewBuilder: Gtkada_Builder);
+   procedure CreateCombatUI;
    -- ****
    -- ****f* Combat.UI/ShowCombatUI
    -- FUNCTION

@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Gtkada.Builder; use Gtkada.Builder;
-
 -- ****h* Steamsky/Bases.UI
 -- FUNCTION
 -- Provides code for buying recipes, healing and repair ship in bases
@@ -27,10 +25,8 @@ package Bases.UI is
    -- ****f* Bases.UI/CreateBasesUI
    -- FUNCTION
    -- Create infterace for various bases options
-   -- PARAMETERS
-   -- NewBuilder - Gtkada_Builder used to create UI
    -- SOURCE
-   procedure CreateBasesUI(NewBuilder: Gtkada_Builder);
+   procedure CreateBasesUI;
    -- ****
    -- ****f* Bases.UI/ShowBuyRecipesUI
    -- FUNCTION

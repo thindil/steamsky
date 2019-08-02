@@ -29,11 +29,13 @@ with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Glib.Types; use Glib.Types;
 with Glib.Properties; use Glib.Properties;
+with Gtkada.Builder; use Gtkada.Builder;
 with Game; use Game;
 with ShipModules; use ShipModules;
 with Crew.Inventory; use Crew.Inventory;
 with Crew.UI.Handlers; use Crew.UI.Handlers;
 with Utils.UI; use Utils.UI;
+with Maps.UI; use Maps.UI;
 
 package body Crew.UI is
 
@@ -290,9 +292,8 @@ package body Crew.UI is
          False);
    end SetActiveMember;
 
-   procedure CreateCrewUI(NewBuilder: Gtkada_Builder) is
+   procedure CreateCrewUI is
    begin
-      Builder := NewBuilder;
       Register_Handler(Builder, "Show_Member_Info", ShowMemberInfo'Access);
       Register_Handler(Builder, "Give_Orders_All", GiveOrdersAll'Access);
       Register_Handler(Builder, "Show_Inventory", ShowInventory'Access);

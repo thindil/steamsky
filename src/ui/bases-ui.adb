@@ -27,6 +27,7 @@ with Gtk.Button; use Gtk.Button;
 with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
+with Gtkada.Builder; use Gtkada.Builder;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
@@ -40,12 +41,6 @@ with Config; use Config;
 
 package body Bases.UI is
 
-   -- ****iv* Bases.UI/Builder
-   -- FUNCTION
-   -- Gtkada_Builder used for creating UI
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
    -- ****it* Bases.UI/States
    -- FUNCTION
    -- Used to determine the player action in base
@@ -246,9 +241,8 @@ package body Bases.UI is
       end case;
    end AcceptAction;
 
-   procedure CreateBasesUI(NewBuilder: Gtkada_Builder) is
+   procedure CreateBasesUI is
    begin
-      Builder := NewBuilder;
       Register_Handler(Builder, "Object_Selected", ObjectSelected'Access);
       Register_Handler(Builder, "Accept_Action", AcceptAction'Access);
    end CreateBasesUI;

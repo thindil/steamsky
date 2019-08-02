@@ -35,6 +35,7 @@ with Ships.Crew; use Ships.Crew;
 with Game.SaveLoad; use Game.SaveLoad;
 with Utils.UI; use Utils.UI;
 with Config; use Config;
+with Maps.UI; use Maps.UI;
 
 package body Ships.UI.Handlers is
 

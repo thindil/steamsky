@@ -30,6 +30,7 @@ with Gtk.Stack; use Gtk.Stack;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
+with Gtkada.Builder; use Gtkada.Builder;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Game; use Game;
@@ -41,12 +42,6 @@ with Utils.UI; use Utils.UI;
 
 package body Missions.UI is
 
-   -- ****iv* Missions.UI/Builder
-   -- FUNCTION
-   -- Gtkada_Builder used for creating UI
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
    -- ****iv* Missions.UI/MissionIndex
    -- FUNCTION
    -- Currently selected mission index. Default is 0
@@ -399,9 +394,8 @@ package body Missions.UI is
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
    end ShowAvailableMission;
 
-   procedure CreateMissionsUI(NewBuilder: Gtkada_Builder) is
+   procedure CreateMissionsUI is
    begin
-      Builder := NewBuilder;
       Register_Handler(Builder, "Show_Mission_Info", ShowMissionInfo'Access);
       Register_Handler(Builder, "Button_Mission", ButtonMission'Access);
       Register_Handler

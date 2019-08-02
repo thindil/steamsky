@@ -29,6 +29,7 @@ with Gtk.Tree_Model_Filter; use Gtk.Tree_Model_Filter;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
+with Gtkada.Builder; use Gtkada.Builder;
 with Game; use Game;
 with Maps; use Maps;
 with Messages; use Messages;
@@ -37,15 +38,10 @@ with Ships.Cargo; use Ships.Cargo;
 with Items; use Items;
 with Bases.Cargo; use Bases.Cargo;
 with Utils.UI; use Utils.UI;
+with Maps.UI; use Maps.UI;
 
 package body Bases.LootUI is
 
-   -- ****iv* Bases.LootUI/Builder
-   -- FUNCTION
-   -- Gtkada_Builder used for creating UI
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
    -- ****iv* Bases.LootUI/SettingTime
    -- FUNCTION
    -- If true, UI is currently in setting state
@@ -330,9 +326,8 @@ package body Bases.LootUI is
       return False;
    end VisibleLoot;
 
-   procedure CreateBasesLootUI(NewBuilder: Gtkada_Builder) is
+   procedure CreateBasesLootUI is
    begin
-      Builder := NewBuilder;
       Register_Handler(Builder, "Show_Item_Info", ShowItemInfo'Access);
       Register_Handler(Builder, "Loot_Item", LootItem'Access);
       Register_Handler(Builder, "Search_Loot", SearchLoot'Access);
