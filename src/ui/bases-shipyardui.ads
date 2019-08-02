@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Gtkada.Builder; use Gtkada.Builder;
-
 -- ****h* Steamsky/Bases.ShipyardUI
 -- FUNCTION
 -- Provides code for shipyard UI
@@ -27,10 +25,8 @@ package Bases.ShipyardUI is
    -- ****f* Bases.ShipyardUI/CreateBasesShipyardUI
    -- FUNCTION
    -- Create infterace for installing/remove modules in bases
-   -- PARAMETERS
-   -- NewBuilder - Gtkada_Builder used to create UI
    -- SOURCE
-   procedure CreateBasesShipyardUI(NewBuilder: Gtkada_Builder);
+   procedure CreateBasesShipyardUI;
    -- ****
    -- ****f* Bases.ShipyardUI/ShowShipyardUI
    -- FUNCTION

@@ -43,12 +43,6 @@ with Themes; use Themes;
 
 package body GameOptions is
 
-   -- ****iv* GameOptions/Builder
-   -- FUNCTION
-   -- Gtkada_Builder used for creating UI
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
    -- ****it* GameOptions/Accel_Data
    -- FUNCTION
    -- Data for showing keyboard shortcuts
@@ -464,9 +458,8 @@ package body GameOptions is
       return False;
    end ToggleAnimationType;
 
-   procedure CreateGameOptions(NewBuilder: Gtkada_Builder) is
+   procedure CreateGameOptions is
    begin
-      Builder := NewBuilder;
       Register_Handler(Builder, "Close_Options", CloseOptions'Access);
       Register_Handler(Builder, "Resize_Font", ResizeFont'Access);
       Register_Handler(Builder, "Apply_Theme", ApplyTheme'Access);
@@ -492,7 +485,7 @@ package body GameOptions is
          To_String(ModsDirectory));
       declare
          ThemesComboBox: constant Gtk_Combo_Box_Text :=
-           Gtk_Combo_Box_Text(Get_Object(NewBuilder, "cmbtheme"));
+           Gtk_Combo_Box_Text(Get_Object(Builder, "cmbtheme"));
       begin
          for I in Themes_List.Iterate loop
             Append

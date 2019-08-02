@@ -33,6 +33,7 @@ with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Tree_Model_Filter; use Gtk.Tree_Model_Filter;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
+with Gtkada.Builder; use Gtkada.Builder;
 with Game; use Game;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
@@ -41,15 +42,10 @@ with Items; use Items;
 with Bases.Ship; use Bases.Ship;
 with Utils.UI; use Utils.UI;
 with Trades; use Trades;
+with Maps.UI; use Maps.UI;
 
 package body Bases.ShipyardUI is
 
-   -- ****iv* Bases.ShipyardUI/Builder
-   -- FUNCTION
-   -- Gtkada_Builder used for creating UI
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
    -- ****iv* Bases.ShipyardUI/ModuleIndex
    -- SOURCE
    ModuleIndex: Unbounded_String;
@@ -561,12 +557,11 @@ package body Bases.ShipyardUI is
       return False;
    end VisibleShipyard;
 
-   procedure CreateBasesShipyardUI(NewBuilder: Gtkada_Builder) is
+   procedure CreateBasesShipyardUI is
       ModulesList: constant Gtk_List_Store :=
-        Gtk_List_Store(Get_Object(NewBuilder, "installmoduleslist"));
+        Gtk_List_Store(Get_Object(Builder, "installmoduleslist"));
       ModulesIter: Gtk_Tree_Iter;
    begin
-      Builder := NewBuilder;
       Register_Handler(Builder, "Show_Install_Info", ShowInstallInfo'Access);
       Register_Handler(Builder, "Manipulate_Module", ManipulateModule'Access);
       Register_Handler(Builder, "Show_Remove_Info", ShowRemoveInfo'Access);

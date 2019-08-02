@@ -31,7 +31,9 @@ with Gtk.Progress_Bar; use Gtk.Progress_Bar;
 with Gtk.Stack; use Gtk.Stack;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
+with Gtkada.Builder; use Gtkada.Builder;
 with Maps; use Maps;
+with Maps.UI; use Maps.UI;
 with ShipModules; use ShipModules;
 with Ships.UI.Handlers; use Ships.UI.Handlers;
 with Bases; use Bases;
@@ -560,9 +562,8 @@ package body Ships.UI is
         (Gtk_Label(Get_Object(Builder, "lblshipinfo")), To_String(ShipInfo));
    end ShowShipInfo;
 
-   procedure CreateShipUI(NewBuilder: Gtkada_Builder) is
+   procedure CreateShipUI is
    begin
-      Builder := NewBuilder;
       Register_Handler(Builder, "Show_Module_Info", ShowModuleInfo'Access);
       Register_Handler(Builder, "Change_Ship_Name", ChangeShipName'Access);
       Register_Handler(Builder, "Set_Upgrade", SetUpgrade'Access);

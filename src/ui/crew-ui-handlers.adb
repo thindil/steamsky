@@ -17,7 +17,6 @@
 
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
-with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
@@ -33,6 +32,7 @@ with Glib.Types; use Glib.Types;
 with Glib.Properties; use Glib.Properties;
 with Game; use Game;
 with Maps; use Maps;
+with Maps.UI; use Maps.UI;
 with Ships; use Ships;
 with Ships.Crew; use Ships.Crew;
 with Ships.Cargo; use Ships.Cargo;

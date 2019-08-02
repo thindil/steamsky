@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Gtkada.Builder; use Gtkada.Builder;
-
 -- ****h* Steamsky/Events.UI
 -- FUNCTION
 -- Provides code for know events UI
@@ -27,10 +25,8 @@ package Events.UI is
    -- ****f* Events.UI/CreateEventsUI
    -- FUNCTION
    -- Create infterace for show known events
-   -- PARAMETERS
-   -- NewBuilder - Gtkada_Builder used to create UI
    -- SOURCE
-   procedure CreateEventsUI(NewBuilder: Gtkada_Builder);
+   procedure CreateEventsUI;
    -- ****
    -- ****f* Events.UI/ShowEventsUI
    -- FUNCTION

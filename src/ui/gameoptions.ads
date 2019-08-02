@@ -27,10 +27,8 @@ package GameOptions is
    -- ****f* GameOptions/CreateGameOptions
    -- FUNCTION
    -- Create infterace for game options
-   -- PARAMETERS
-   -- NewBuilder - Gtkada_Builder used to create UI
    -- SOURCE
-   procedure CreateGameOptions(NewBuilder: Gtkada_Builder);
+   procedure CreateGameOptions;
    -- ****
    -- ****f* GameOptions/ShowGameOptions
    -- FUNCTION

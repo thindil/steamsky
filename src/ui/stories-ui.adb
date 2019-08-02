@@ -25,6 +25,7 @@ with Gtk.Text_Buffer; use Gtk.Text_Buffer;
 with Gtk.Text_Iter; use Gtk.Text_Iter;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Glib; use Glib;
+with Gtkada.Builder; use Gtkada.Builder;
 with Utils.UI; use Utils.UI;
 with Messages; use Messages;
 with Maps.UI; use Maps.UI;
@@ -35,12 +36,6 @@ with Factions; use Factions;
 
 package body Stories.UI is
 
-   -- ****iv* Stories.UI/Builder
-   -- FUNCTION
-   -- Gtkada_Builder used for creating UI
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
    -- ****iv* Stories.UI/Setting
    -- FUNCTION
    -- If true UI is in setting state
@@ -205,9 +200,8 @@ package body Stories.UI is
         (Gtk_Stack(Get_Object(Object, "gamestack")), "skymap");
    end ShowStory;
 
-   procedure CreateStoriesUI(NewBuilder: Gtkada_Builder) is
+   procedure CreateStoriesUI is
    begin
-      Builder := NewBuilder;
       Register_Handler(Builder, "Show_Story_Info", ShowStoryInfo'Access);
       Register_Handler
         (Builder, "Set_Story_As_Destination", SetStoryAsDestination'Access);

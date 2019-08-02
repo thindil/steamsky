@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Gtkada.Builder; use Gtkada.Builder;
-
 -- ****h* Steamsky/Statistics.UI
 -- FUNCTION
 -- Provides code for game statistics IU
@@ -33,10 +31,8 @@ package Statistics.UI is
    -- ****f* Statistics.UI/CreateStatsUI
    -- FUNCTION
    -- Create infterace for show game statistics
-   -- PARAMETERS
-   -- NewBuilder - Gtkada_Builder used to create UI
    -- SOURCE
-   procedure CreateStatsUI(NewBuilder: Gtkada_Builder);
+   procedure CreateStatsUI;
    -- ****
    -- ****f* Statistics.UI/ShowStatsUI
    -- FUNCTION

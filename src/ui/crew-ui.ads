@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Gtkada.Builder; use Gtkada.Builder;
 with Ships; use Ships;
 
 -- ****h* Steamsky/Crew.UI
@@ -28,10 +27,8 @@ package Crew.UI is
    -- ****f* Crew.UI/CreateCrewUI
    -- FUNCTION
    -- Create infterace for show player ship crew info
-   -- PARAMETERS
-   -- NewBuilder - Gtkada_Builder used to create UI
    -- SOURCE
-   procedure CreateCrewUI(NewBuilder: Gtkada_Builder);
+   procedure CreateCrewUI;
    -- ****
    -- ****f* Crew.UI/ShowCrewUI
    -- FUNCTION
@@ -42,12 +39,6 @@ package Crew.UI is
 
 private
 
-   -- ****v* Crew.UI/Builder
-   -- FUNCTION
-   -- Gtk builder for user interface
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
    -- ****v* Crew.UI/MemberIndex, ItemIndex
    -- FUNCTION
    -- Crew member and item from inventory indexes

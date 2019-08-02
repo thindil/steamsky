@@ -27,6 +27,13 @@ with Ships; use Ships;
 package Maps.UI is
 -- ****
 
+   -- ****v* Maps.UI/Builder
+   -- FUNCTION
+   -- Gtk builder for user interface
+   -- SOURCE
+   Builder: Gtkada_Builder;
+   -- ****
+
    -- ****f* Maps.UI/CreateSkyMap
    -- FUNCTION
    -- Create sky map
@@ -60,12 +67,6 @@ package Maps.UI is
 
 private
 
-   -- ****v* Maps.UI/Builder
-   -- FUNCTION
-   -- Gtk builder for user interface
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
    -- ****h* Maps.UI/MapWidth, MapHeight, CenterX, CenterY, MapCellWidth, MapCellHeight, MapX, MapY
    -- SOURCE
    MapWidth, MapHeight, CenterX, CenterY, MapCellWidth, MapCellHeight, MapX,

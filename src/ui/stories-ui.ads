@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Gtkada.Builder; use Gtkada.Builder;
-
 -- ****h* Steamsky/Stories.UI
 -- FUNCTION
 -- Provides code for player know stories list UI
@@ -27,10 +25,8 @@ package Stories.UI is
    -- ****f* Stories.UI/CreateStoriesUI
    -- FUNCTION
    -- Create stories ui
-   -- PARAMETERS
-   -- NewBuilder - Gtkada_Builder used to create UI
    -- SOURCE
-   procedure CreateStoriesUI(NewBuilder: Gtkada_Builder);
+   procedure CreateStoriesUI;
    -- ****
    -- ****f* Stories.UI/ShowStoriesUI
    -- FUNCTION

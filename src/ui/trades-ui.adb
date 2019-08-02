@@ -34,6 +34,7 @@ with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
+with Gtkada.Builder; use Gtkada.Builder;
 with Game; use Game;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -48,12 +49,6 @@ with Crew; use Crew;
 
 package body Trades.UI is
 
-   -- ****iv* Trades.UI/Builder
-   -- FUNCTION
-   -- Gtkada_Builder used for creating UI
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
    -- ****iv* Trades.UI/SettingTime
    -- FUNCTION
    -- If true, UI is in setting mode
@@ -579,9 +574,8 @@ package body Trades.UI is
       return False;
    end VisibleTrade;
 
-   procedure CreateTradeUI(NewBuilder: Gtkada_Builder) is
+   procedure CreateTradeUI is
    begin
-      Builder := NewBuilder;
       Register_Handler
         (Builder, "Show_Item_Trade_Info", ShowItemTradeInfo'Access);
       Register_Handler(Builder, "Trade_Item", TradeItem'Access);

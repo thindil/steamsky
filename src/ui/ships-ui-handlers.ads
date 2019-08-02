@@ -18,6 +18,7 @@
 with Gtk.Cell_Renderer_Text; use Gtk.Cell_Renderer_Text;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
+with Gtkada.Builder; use Gtkada.Builder;
 
 -- ****h* Steamsky/Ships.UI.Handlers
 -- FUNCTION

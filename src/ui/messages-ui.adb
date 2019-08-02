@@ -27,17 +27,12 @@ with Gtk.Tree_Model_Filter; use Gtk.Tree_Model_Filter;
 with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Paned; use Gtk.Paned;
 with Glib.Object; use Glib.Object;
+with Gtkada.Builder; use Gtkada.Builder;
 with Config; use Config;
 with Utils.UI; use Utils.UI;
+with Maps.UI; use Maps.UI;
 
 package body Messages.UI is
-
-   -- ****iv* Messages.UI/Builder
-   -- FUNCTION
-   -- Gtkada_Builder used for creating UI
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
 
    -- ****if* Messages.UI/ShowMessages
    -- FUNCTION
@@ -176,9 +171,8 @@ package body Messages.UI is
       return False;
    end VisibleMessages;
 
-   procedure CreateMessagesUI(NewBuilder: Gtkada_Builder) is
+   procedure CreateMessagesUI is
    begin
-      Builder := NewBuilder;
       Register_Handler(Builder, "Select_Messages", SelectMessages'Access);
       Register_Handler(Builder, "Delete_Messages", DeleteMessages'Access);
       Register_Handler(Builder, "Close_Messages", CloseMessages'Access);
