@@ -227,5 +227,13 @@ package Utils.UI is
 -- SOURCE
    procedure CheckAmount(User_Data: access GObject_Record'Class);
    -- ****
+   -- ****f* Utils.UI/RemoveWidget
+   -- FUNCTION
+   -- Remove selected widget
+   -- PARAMETERS
+   -- Widget - Gtk_Widget to remove
+   -- SOURCE
+   procedure RemoveWidget(Widget: not null access Gtk_Widget_Record'Class);
+   -- ****
 
 end Utils.UI;
