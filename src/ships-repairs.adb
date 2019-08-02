@@ -35,100 +35,96 @@ package body Ships.Repairs is
          RepairNeeded := True;
          RepairStopped := False;
          for J in PlayerShip.Crew.Iterate loop
-            if PlayerShip.Crew(J).Order = Repair then
-               PointsIndex := PointsIndex + 1;
-               if CrewRepairPoints(PointsIndex) > 0 then
-                  PointsBonus :=
-                    (GetSkillLevel
-                       (PlayerShip.Crew(J),
-                        Modules_List
-                          (PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                          .RepairSkill) /
-                     10) *
-                    CrewRepairPoints(PointsIndex);
-                  RepairPoints := CrewRepairPoints(PointsIndex) + PointsBonus;
-                  RepairMaterial :=
-                    FindItem
-                      (Inventory => PlayerShip.Cargo,
-                       ItemType =>
-                         Modules_List
-                           (PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                           .RepairMaterial);
-                  if RepairMaterial > 0
-                    and then PlayerShip.Cargo(RepairMaterial).Amount <
-                      RepairPoints then
-                     RepairPoints := PlayerShip.Cargo(RepairMaterial).Amount;
-                  end if;
-                  if RepairMaterial = 0 then
+            if PlayerShip.Crew(J).Order /= Repair then
+               goto End_Of_Loop;
+            end if;
+            PointsIndex := PointsIndex + 1;
+            if CrewRepairPoints(PointsIndex) > 0 then
+               PointsBonus :=
+                 (GetSkillLevel
+                    (PlayerShip.Crew(J),
+                     Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                       .RepairSkill) /
+                  10) *
+                 CrewRepairPoints(PointsIndex);
+               RepairPoints := CrewRepairPoints(PointsIndex) + PointsBonus;
+               RepairMaterial :=
+                 FindItem
+                   (Inventory => PlayerShip.Cargo,
+                    ItemType =>
+                      Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                        .RepairMaterial);
+               if RepairMaterial > 0
+                 and then PlayerShip.Cargo(RepairMaterial).Amount <
+                   RepairPoints then
+                  RepairPoints := PlayerShip.Cargo(RepairMaterial).Amount;
+               end if;
+               if RepairMaterial = 0 then
+                  AddMessage
+                    ("You don't have repair materials to continue repairs of " &
+                     To_String(PlayerShip.Modules(ModuleIndex).Name) & ".",
+                     OrderMessage, RED);
+                  RepairStopped := True;
+                  return;
+               end if;
+               ToolsIndex :=
+                 FindTools(Crew_Container.To_Index(J), RepairTools, Repair);
+               if ToolsIndex = 0 then
+                  if PointsIndex = 1 then
                      AddMessage
-                       ("You don't have repair materials to continue repairs of " &
+                       ("You don't have repair tools to continue repairs of " &
                         To_String(PlayerShip.Modules(ModuleIndex).Name) & ".",
                         OrderMessage, RED);
-                     RepairStopped := True;
-                     return;
-                  end if;
-                  ToolsIndex :=
-                    FindTools(Crew_Container.To_Index(J), RepairTools, Repair);
-                  if ToolsIndex = 0 then
-                     if PointsIndex = 1 then
-                        AddMessage
-                          ("You don't have repair tools to continue repairs of " &
-                           To_String(PlayerShip.Modules(ModuleIndex).Name) &
-                           ".",
-                           OrderMessage, RED);
-                     else
-                        AddMessage
-                          (To_String(PlayerShip.Crew(J).Name) &
-                           " can't continue repairs due to lack of repair tools.",
-                           OrderMessage, RED);
-                     end if;
-                     RepairStopped := True;
-                     return;
-                  end if;
-                  -- Repair module
-                  if PlayerShip.Modules(ModuleIndex).Durability +
-                    RepairPoints >=
-                    PlayerShip.Modules(ModuleIndex).MaxDurability then
-                     RepairValue :=
-                       PlayerShip.Modules(ModuleIndex).MaxDurability -
-                       PlayerShip.Modules(ModuleIndex).Durability;
-                     RepairNeeded := False;
                   else
-                     RepairValue := RepairPoints;
+                     AddMessage
+                       (To_String(PlayerShip.Crew(J).Name) &
+                        " can't continue repairs due to lack of repair tools.",
+                        OrderMessage, RED);
                   end if;
-                  if RepairValue = PlayerShip.Cargo(RepairMaterial).Amount and
-                    ToolsIndex > RepairMaterial then
-                     ToolsIndex := ToolsIndex - 1;
-                  end if;
-                  UpdateCargo
-                    (Ship => PlayerShip, CargoIndex => RepairMaterial,
-                     Amount => (0 - RepairValue));
-                  PlayerShip.Modules(ModuleIndex).Durability :=
-                    PlayerShip.Modules(ModuleIndex).Durability + RepairValue;
-                  if RepairValue > CrewRepairPoints(PointsIndex) then
-                     RepairValue := CrewRepairPoints(PointsIndex);
-                     RepairPoints := 0;
-                  else
-                     RepairPoints :=
-                       CrewRepairPoints(PointsIndex) - RepairValue;
-                  end if;
-                  GainExp
-                    (RepairValue,
-                     Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                       .RepairSkill,
-                     Crew_Container.To_Index(J));
-                  CrewRepairPoints(PointsIndex) := RepairPoints;
-                  DamageItem
-                    (PlayerShip.Crew(J).Inventory, ToolsIndex,
-                     GetSkillLevel
-                       (PlayerShip.Crew(J),
-                        Modules_List
-                          (PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                          .RepairSkill),
-                     Crew_Container.To_Index(J));
-                  exit when not RepairNeeded;
+                  RepairStopped := True;
+                  return;
                end if;
+               -- Repair module
+               if PlayerShip.Modules(ModuleIndex).Durability + RepairPoints >=
+                 PlayerShip.Modules(ModuleIndex).MaxDurability then
+                  RepairValue :=
+                    PlayerShip.Modules(ModuleIndex).MaxDurability -
+                    PlayerShip.Modules(ModuleIndex).Durability;
+                  RepairNeeded := False;
+               else
+                  RepairValue := RepairPoints;
+               end if;
+               if RepairValue = PlayerShip.Cargo(RepairMaterial).Amount and
+                 ToolsIndex > RepairMaterial then
+                  ToolsIndex := ToolsIndex - 1;
+               end if;
+               UpdateCargo
+                 (Ship => PlayerShip, CargoIndex => RepairMaterial,
+                  Amount => (0 - RepairValue));
+               PlayerShip.Modules(ModuleIndex).Durability :=
+                 PlayerShip.Modules(ModuleIndex).Durability + RepairValue;
+               if RepairValue > CrewRepairPoints(PointsIndex) then
+                  RepairValue := CrewRepairPoints(PointsIndex);
+                  RepairPoints := 0;
+               else
+                  RepairPoints := CrewRepairPoints(PointsIndex) - RepairValue;
+               end if;
+               GainExp
+                 (RepairValue,
+                  Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                    .RepairSkill,
+                  Crew_Container.To_Index(J));
+               CrewRepairPoints(PointsIndex) := RepairPoints;
+               DamageItem
+                 (PlayerShip.Crew(J).Inventory, ToolsIndex,
+                  GetSkillLevel
+                    (PlayerShip.Crew(J),
+                     Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                       .RepairSkill),
+                  Crew_Container.To_Index(J));
+               exit when not RepairNeeded;
             end if;
+            <<End_Of_Loop>>
          end loop;
       end RepairModule;
    begin
