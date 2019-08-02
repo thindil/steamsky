@@ -51,6 +51,7 @@ with Messages; use Messages;
 with Config; use Config;
 with Items; use Items;
 with Factions; use Factions;
+with Utils.UI; use Utils.UI;
 
 package body Combat.UI is
 
@@ -88,18 +89,6 @@ package body Combat.UI is
    -- SOURCE
    procedure RefreshCombatUI;
    -- ****
-
-   -- ****if* Combat.UI/RemoveButton
-   -- FUNCTION
-   -- Remove button from UI
-   -- PARAMETERS
-   -- Widget: Button to remove
-   -- SOURCE
-   procedure RemoveButton(Widget: not null access Gtk_Widget_Record'Class) is
-   -- ****
-   begin
-      Destroy(Widget);
-   end RemoveButton;
 
    -- ****if* Combat.UI/SetBoardingOrder
    -- FUNCTION
@@ -504,7 +493,7 @@ package body Combat.UI is
       if Is_Visible(Gtk_Widget(Get_Object(Builder, "expboard"))) then
          Foreach
            (Gtk_Container(Get_Object(Builder, "btnboxboard")),
-            RemoveButton'Access);
+            RemoveWidget'Access);
          for Member of PlayerShip.Crew loop
             Add
               (ButtonBox,

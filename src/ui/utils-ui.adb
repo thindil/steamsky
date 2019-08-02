@@ -622,4 +622,9 @@ package body Utils.UI is
       Hide(Gtk_Widget(Get_Object(Builder, To_String(LabelName))));
    end CheckAmount;
 
+   procedure RemoveWidget(Widget: not null access Gtk_Widget_Record'Class) is
+   begin
+      Destroy(Widget);
+   end RemoveWidget;
+
 end Utils.UI;
