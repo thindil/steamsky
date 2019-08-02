@@ -75,19 +75,6 @@ package body Crew.UI.Handlers is
       return False;
    end UpdatePriorities;
 
-   -- ****if* Crew.UI.Handlers/RemoveProgressBars
-   -- FUNCTION
-   -- Remove selected progress bar
-   -- PARAMETERS
-   -- Widget - Progress bar to remove
-   -- SOURCE
-   procedure RemoveProgressBars
-     (Widget: not null access Gtk_Widget_Record'Class) is
-   -- ****
-   begin
-      Destroy(Widget);
-   end RemoveProgressBars;
-
    procedure ShowMemberInfo(Object: access Gtkada_Builder_Record'Class) is
       Member: Member_Data;
       MemberInfo: Unbounded_String;
@@ -247,7 +234,7 @@ package body Crew.UI.Handlers is
             StatsBox: constant Gtk_Container :=
               Gtk_Container(Get_Object(Object, "boxcrewstats"));
          begin
-            Foreach(StatsBox, RemoveProgressBars'Access);
+            Foreach(StatsBox, RemoveWidget'Access);
             for I in Member.Attributes.Iterate loop
                Gtk_New(StatisticBar);
                Set_Name(Gtk_Widget(StatisticBar), "redbar");
@@ -287,7 +274,7 @@ package body Crew.UI.Handlers is
               Gtk_Container(Get_Object(Object, "boxcrewskills"));
             ItemIndex, TooltipText: Unbounded_String;
          begin
-            Foreach(SkillBox, RemoveProgressBars'Access);
+            Foreach(SkillBox, RemoveWidget'Access);
             for Skill of Member.Skills loop
                Gtk_New(SkillBar);
                Set_Name(Gtk_Widget(SkillBar), "goldbar");
