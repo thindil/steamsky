@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
   huge double luxury orichalcum cabin
 - Info about chance to damage for items
 - Check if the game have permission to write to save directory
+- Info about strength of ship's weapons
 
 ### Changed
 - Updated help
