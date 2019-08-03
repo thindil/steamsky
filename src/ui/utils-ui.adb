@@ -239,7 +239,6 @@ package body Utils.UI is
         (SpeedType(RealSpeed(PlayerShip, True)) / 1000.0);
       MinutesDiff: Integer;
       Rests, CabinIndex, RestTime: Natural := 0;
-      type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
       Tired, CabinBonus, TempTime: Natural;
    begin

@@ -188,7 +188,6 @@ package body Combat is
          GunnerIndex, Shoots, AmmoIndex, ArmorIndex, WeaponIndex: Natural;
          GunnerOrder: Positive;
          HitChance, HitLocation, CurrentAccuracyBonus: Integer;
-         type DamageFactor is digits 2 range 0.0 .. 1.0;
          Damage: DamageFactor := 0.0;
          WeaponDamage: Integer;
          DeathReason: Unbounded_String;
@@ -659,7 +658,6 @@ package body Combat is
               (To_Unbounded_String("head"), To_Unbounded_String("torso"),
                To_Unbounded_String("leg"), To_Unbounded_String("arm"));
             AttackSkill, BaseDamage: Natural;
-            type DamageFactor is digits 2 range 0.0 .. 1.0;
             Wounds: DamageFactor := 0.0;
             MessageColor: Message_Color;
          begin

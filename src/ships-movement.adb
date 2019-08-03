@@ -357,7 +357,6 @@ package body Ships.Movement is
          end if;
       end if;
       declare
-         type DamageFactor is digits 2 range 0.0 .. 1.0;
          Damage: DamageFactor := 0.0;
       begin
          for Module of Ship.Modules loop
