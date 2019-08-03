@@ -107,6 +107,9 @@ package body Bases.ShipyardUI is
                Value :=
                  Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
                    .Value;
+            when BATTERING_RAM =>
+               MaxValue := PlayerShip.Modules(ShipModuleIndex).Damage;
+               Value := 0;
             when others =>
                MaxValue := 0;
                Value := 0;
@@ -152,6 +155,7 @@ package body Bases.ShipyardUI is
          when ALCHEMY_LAB .. GREENHOUSE =>
             Append(ModuleInfo, LF & "Max workers:" & Natural'Image(MaxOwners));
          when GUN | HARPOON_GUN =>
+            Append(ModuleInfo, LF & "Strength:" & Natural'Image(MaxValue));
             Append(ModuleInfo, LF & "Ammunition: ");
             MAmount := 0;
             for Item of Items_List loop
@@ -163,6 +167,8 @@ package body Bases.ShipyardUI is
                   MAmount := MAmount + 1;
                end if;
             end loop;
+         when BATTERING_RAM =>
+            Append(ModuleInfo, LF & "Strength:" & Natural'Image(MaxValue));
          when others =>
             null;
       end case;
