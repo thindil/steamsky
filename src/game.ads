@@ -329,6 +329,12 @@ package Game is
    -- SOURCE
    type Natural_Array is array(Positive range <>) of Natural;
    -- ****
+   -- ****t* Game/DamageFactor
+   -- FUNCTION
+   -- Used mostly for count percentage of damage of modules
+   -- SOURCE
+   type DamageFactor is digits 2 range 0.0 .. 1.0;
+   -- ****
    -- ****e* Game/Data_Loading_Error
    -- FUNCTION
    -- Raised when error occurs during loading any game data

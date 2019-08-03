@@ -32,7 +32,6 @@ package body Ships.Crew is
    function GetSkillLevel
      (Member: Member_Data; SkillIndex: Positive) return Natural is
       SkillLevel: Integer := 0;
-      type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
       BaseSkillLevel: Natural;
    begin
