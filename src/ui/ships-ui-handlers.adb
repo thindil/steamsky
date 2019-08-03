@@ -229,7 +229,13 @@ package body Ships.UI.Handlers is
                Set_Fraction(Gtk_Progress_Bar(CleanBar), DamagePercent);
             end if;
          when GUN | HARPOON_GUN =>
-            Append(ModuleInfo, "Ammunition: ");
+            Append(ModuleInfo, "Strength:");
+            if Modules_List(Module.ProtoIndex).MType = GUN then
+               Append(ModuleInfo, Positive'Image(Module.Damage));
+            else
+               Append(ModuleInfo, Positive'Image(Module.Duration));
+            end if;
+            Append(ModuleInfo, LF & "Ammunition: ");
             HaveAmmo := False;
             declare
                AmmoIndex: Natural;
@@ -339,6 +345,9 @@ package body Ships.UI.Handlers is
             end if;
             Append(ModuleInfo, LF);
             AddOwnersInfo("Trainee");
+         when BATTERING_RAM =>
+            Append(ModuleInfo, "Strength:");
+            Append(ModuleInfo, Positive'Image(Module.Damage2));
          when others =>
             null;
       end case;
