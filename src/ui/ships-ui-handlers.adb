@@ -156,7 +156,7 @@ package body Ships.UI.Handlers is
       ModuleInfo := Null_Unbounded_String;
       Hide(Gtk_Widget(CleanBar));
       Hide(Gtk_Widget(QualityBar));
-      case Modules_List(Module.ProtoIndex).MType is
+      case Module.MType is
          when ENGINE =>
             Append(ModuleInfo, "Max power:" & Integer'Image(Module.Power));
             MaxValue :=
@@ -175,7 +175,7 @@ package body Ships.UI.Handlers is
             if Module.FuelUsage = MaxValue then
                Append(ModuleInfo, " (max upgrade)");
             end if;
-         when ShipModules.CARGO =>
+         when CARGO_ROOM =>
             Append
               (ModuleInfo,
                "Max cargo:" &
@@ -299,7 +299,7 @@ package body Ships.UI.Handlers is
             else
                Append(ModuleInfo, "Weapon: none");
             end if;
-         when ALCHEMY_LAB .. GREENHOUSE =>
+         when WORKSHOP =>
             AddOwnersInfo("Worker");
             Append(ModuleInfo, LF);
             if Module.CraftingIndex /= Null_Unbounded_String then
