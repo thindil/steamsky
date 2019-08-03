@@ -191,7 +191,6 @@ package body Crew is
       DeathReason: Unbounded_String;
       CabinIndex, Times, RestAmount, I, ToolIndex: Natural;
       OrderTime, CurrentMinutes, HealAmount: Integer;
-      type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
       NeedCleaning, HaveMedicalRoom: Boolean := False;
       SkillIndex: Positive;
@@ -747,7 +746,6 @@ package body Crew is
 
    procedure WaitForRest is
       TimeNeeded, CabinIndex, TempTimeNeeded: Natural := 0;
-      type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
       CabinBonus: Natural;
    begin

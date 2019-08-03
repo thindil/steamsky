@@ -337,7 +337,6 @@ package body Crafts is
       Recipe: Craft_Data;
       MaterialIndexes: UnboundedString_Container.Vector;
       WorkTime, CurrentMinutes, RecipeTime: Integer;
-      type DamageFactor is digits 2 range 0.0 .. 1.0;
       Damage: DamageFactor := 0.0;
       RecipeName: Unbounded_String;
       HaveMaterial: Boolean;
