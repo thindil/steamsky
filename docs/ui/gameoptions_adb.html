@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="../robodoc.css" type="text/css" />
+<title>./src/ui/gameoptions.adb</title>
+<!-- Source: ./src/ui/gameoptions.adb -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  2 2019) -->
+</head>
+<body>
+<div id="logo">
+<a name="robo_top_of_doc">Steamsky 4.0 code documentation</a>
+</div> <!-- logo -->
+<div id="navigation">
+<a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
+<a class="menuitem" href="../sources.html#top">Source files</a>
+<a class="menuitem" href="../index.html#top">Index</a>
+<a class="menuitem" href="../robo_exceptions.html#top">Exceptions</a>
+<a class="menuitem" href="../robo_subprograms.html#top">Subprograms</a>
+<a class="menuitem" href="../robo_packages.html#top">Packages</a>
+<a class="menuitem" href="../robo_types.html#top">Types</a>
+<a class="menuitem" href="../robo_variables.html#top">Variables</a>
+</div> <!-- navigation -->
+<div id="content">
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li>1. <a href="#robo116">GameOptions/Accel_Data</a></li>
+<li>2. <a href="#robo265">GameOptions/Accels</a></li>
+<li>3. <a href="#robo266">GameOptions/Setting</a></li>
+<li>4. <a href="#robo528">GameOptions/ApplyTheme</a></li>
+<li>5. <a href="#robo531">GameOptions/ResizeFont</a></li>
+<li>6. <a href="#robo532">GameOptions/SetAccelerator</a></li>
+<li>7. <a href="#robo533">GameOptions/SetDefaultFontSize</a></li>
+<li>8. <a href="#robo534">GameOptions/SetFontsSizes</a></li>
+<li>9. <a href="#robo536">GameOptions/ToggleAnimationType</a></li>
+</ul>
+<hr />
+<a name="GameOptions2fAccel5fData"></a>
+<a name="robo116"></a><h2>GameOptions/Accel_Data [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo28">GameOptions</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Data for showing keyboard shortcuts
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> <strong>Accel_Data</strong> <span class="keyword">is</span> <span class="keyword">record</span>
+      AccelName<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      EntryName<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+   <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> AccelName - Name of the keyboard shortcut
+ EntryName - Name of the text entry which will be showing this shortcut
+</pre>
+
+<hr />
+<a name="GameOptions2fAccels"></a>
+<a name="robo265"></a><h2>GameOptions/Accels [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo28">GameOptions</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Array with data to show keyboard shortcuts
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>Accels</strong><span class="sign">:</span> <span class="keyword">constant</span> array<span class="sign">(</span>Positive <span class="keyword">range</span> <span class="sign">&lt;</span><span class="sign">&gt;</span><span class="sign">)</span> of <a href="#robo116">Accel_Data</a> <span class="sign">:</span><span class="sign">=</span>
+     <span class="sign">(</span>1 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/btnupleft"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtupleft"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      2 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/btnup"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtup"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      3 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/btnupright"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtupright"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      4 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/btnleft"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtleft"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      5 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/btnmovewait"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmovewait"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      6 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/btnright"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtright"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      7 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/btnbottomleft"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtdownleft"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      8 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/btnbottom"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtdown"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      9 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/btnbottomright"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtdownright"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      10 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/btnmoveto"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmoveto"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      11 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/ShipInfo"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtshipinfo"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      12 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/ShipCargoInfo"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtcargo"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      13 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/CrewInfo"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtcrew"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      14 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/ShipOrders"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtorders"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      15 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/CraftInfo"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtcrafts"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      16 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/MessagesInfo"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmessages"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      17 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/BasesInfo"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtbases"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      18 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/EventsInfo"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtevents"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      19 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/MissionsInfo"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmissions"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      20 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/<a href="./maps-ui-handlers_ads.html#robo610">MoveMap</a>"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmap"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      21 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/<a href="../statistics_ads.html#robo313">GameStats</a>"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtgamestats"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      22 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/<a href="../help_ads.html#robo32">Help</a>"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edthelp"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      23 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/<a href="./gameoptions_ads.html#robo28">GameOptions</a>"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtgameoptions"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      24 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/<a href="./utils-ui_ads.html#robo777">QuitGame</a>"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtquit"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      25 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/<a href="./maps-ui-handlers_ads.html#robo615">ResignFromGame</a>"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtresign"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      26 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmenu"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      27 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/WaitOrders"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtwaitorders"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      28 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;movemapwindow&gt;/btncenter"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtcentermap"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      29 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/btnmapleft"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmovemapleft"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      30 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/btnmapright"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmovemapright"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      31 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/btnmapup"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmovemapup"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      32 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/btnmapdown"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmovemapdown"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      33 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/cursorupleft"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmovecursorupleft"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      34 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/cursorup"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmovecursorup"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      35 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/cursorupright"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmovecursorupright"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      36 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/cursorleft"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmovecursorleft"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      37 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/cursorright"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmovecursorright"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      38 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/cursordownleft"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmovecursordownleft"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      39 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/cursordown"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmovecursordown"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      40 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/cursordownright"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmovecursordownright"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      41 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/mouseclick"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtclickmouse"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      42 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/<a href="../stories_ads.html#robo58">Stories</a>"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtstories"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      43 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/zoomin"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtzoomin"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      44 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/zoomout"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtzoomout"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      45 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;movemapwindow&gt;/btncenterhomebase"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtcentermaphomebase"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      46 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/btnmapupleft"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmovemapupleft"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      47 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/btnmapupright"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmovemapupright"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      48 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/btnmapdownleft"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmovemapdownleft"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      49 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/btnmapdownright"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmovemapdownright"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      50 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/fullstop"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtfullstop"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      51 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/quarterspeed"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtquarterspeed"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      52 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/halfspeed"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edthalfspeed"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      53 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/fullspeed"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtfullspeed"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      54 <span class="sign">=</span><span class="sign">&gt;</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/fullscreen"</span><span class="sign">)</span><span class="sign">,</span>
+         To_Unbounded_String<span class="sign">(</span><span class="quote">"edtfullscreen"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="GameOptions2fSetting"></a>
+<a name="robo266"></a><h2>GameOptions/Setting [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo28">GameOptions</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> If true, UI is in setting state
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>Setting</strong><span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="GameOptions2fApplyTheme"></a>
+<a name="robo528"></a><h2>GameOptions/ApplyTheme [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo28">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Apply new theme to the game
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>ApplyTheme</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
+</span></pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Object - Gtkada_Builder used to create UI
+</pre>
+
+<hr />
+<a name="GameOptions2fResizeFont"></a>
+<a name="robo531"></a><h2>GameOptions/ResizeFont [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo28">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Set new size for all in-game fonts
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>ResizeFont</strong><span class="sign">(</span>User_Data<span class="sign">:</span> <span class="keyword">access</span> GObject_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
+</span></pre>
+<p class="item_name">PARAMETERS</p>
+<pre> User_Data - Which slider with font size was changed
+</pre>
+
+<hr />
+<a name="GameOptions2fSetAccelerator"></a>
+<a name="robo532"></a><h2>GameOptions/SetAccelerator [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo28">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Set selected keyboard shortcut
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>SetAccelerator</strong>
+     <span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Widget_Record<span class="keyword">'Class</span><span class="sign">;</span> Event<span class="sign">:</span> Gdk.Event.Gdk_Event_Key<span class="sign">)</span>
+     <span class="keyword"> return </span>Boolean<span class="keyword"> is
+</span></pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Self  - Selected text entry for shortcut
+ Event - Detailed information about pressed key
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return false
+</pre>
+
+<hr />
+<a name="GameOptions2fSetDefaultFontSize"></a>
+<a name="robo533"></a><h2>GameOptions/SetDefaultFontSize [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo28">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>SetDefaultFontSize</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
+</span>     <span class="keyword"> pragma </span>Unreferenced<span class="sign">(</span>Object<span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Object - Gtkada_Builder used to create UI
+</pre>
+
+<hr />
+<a name="GameOptions2fSetFontsSizes"></a>
+<a name="robo534"></a><h2>GameOptions/SetFontsSizes [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo28">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Set values for UI for sizes of the game fonts
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>SetFontsSizes</strong> <span class="keyword">is</span>
+</pre>
+
+<hr />
+<a name="GameOptions2fToggleAnimationType"></a>
+<a name="robo536"></a><h2>GameOptions/ToggleAnimationType [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo28">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Set new type of UI animations
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>ToggleAnimationType</strong>
+     <span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> return </span>Boolean<span class="keyword"> is
+</span></pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Object - Gtkada_Builder used to create UI
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return false
+</pre>
+
+</div> <!-- content -->
+<div id="footer">
+<p>Generated from ./src/ui/gameoptions.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 04 2019 06:25:03
+</p>
+</div> <!-- footer -->
+</body>
+</html>

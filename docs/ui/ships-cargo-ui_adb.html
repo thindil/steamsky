@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="../robodoc.css" type="text/css" />
+<title>./src/ui/ships-cargo-ui.adb</title>
+<!-- Source: ./src/ui/ships-cargo-ui.adb -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  2 2019) -->
+</head>
+<body>
+<div id="logo">
+<a name="robo_top_of_doc">Steamsky 4.0 code documentation</a>
+</div> <!-- logo -->
+<div id="navigation">
+<a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
+<a class="menuitem" href="../sources.html#top">Source files</a>
+<a class="menuitem" href="../index.html#top">Index</a>
+<a class="menuitem" href="../robo_exceptions.html#top">Exceptions</a>
+<a class="menuitem" href="../robo_subprograms.html#top">Subprograms</a>
+<a class="menuitem" href="../robo_packages.html#top">Packages</a>
+<a class="menuitem" href="../robo_types.html#top">Types</a>
+<a class="menuitem" href="../robo_variables.html#top">Variables</a>
+</div> <!-- navigation -->
+<div id="content">
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li>1. <a href="#robo304">Ships.Cargo.UI/ItemIndex</a></li>
+<li>2. <a href="#robo305">Ships.Cargo.UI/SettingTime</a></li>
+<li>3. <a href="#robo675">Ships.Cargo.UI/DropItem</a></li>
+<li>4. <a href="#robo676">Ships.Cargo.UI/GiveItem</a></li>
+<li>5. <a href="#robo677">Ships.Cargo.UI/RefreshCargoInfo</a></li>
+<li>6. <a href="#robo678">Ships.Cargo.UI/SearchCargo</a></li>
+<li>7. <a href="#robo679">Ships.Cargo.UI/SetActiveItem</a></li>
+<li>8. <a href="#robo681">Ships.Cargo.UI/ShowItemCargoInfo</a></li>
+<li>9. <a href="#robo682">Ships.Cargo.UI/VisibleCargo</a></li>
+</ul>
+<hr />
+<a name="Ships2eCargo2eUI2fItemIndex"></a>
+<a name="robo304"></a><h2>Ships.Cargo.UI/ItemIndex [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-cargo-ui_ads.html#robo48">Ships.Cargo.UI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Player ship cargo index of currently selected item
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>ItemIndex</strong><span class="sign">:</span> Positive<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Ships2eCargo2eUI2fSettingTime"></a>
+<a name="robo305"></a><h2>Ships.Cargo.UI/SettingTime [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-cargo-ui_ads.html#robo48">Ships.Cargo.UI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>SettingTime</strong><span class="sign">:</span> Boolean<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Ships2eCargo2eUI2fDropItem"></a>
+<a name="robo675"></a><h2>Ships.Cargo.UI/DropItem [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-cargo-ui_ads.html#robo48">Ships.Cargo.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Drop selected item from the player ship cargo
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>DropItem</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
+</span></pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Object - Gtkada_Builder used to create UI
+</pre>
+
+<hr />
+<a name="Ships2eCargo2eUI2fGiveItem"></a>
+<a name="robo676"></a><h2>Ships.Cargo.UI/GiveItem [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-cargo-ui_ads.html#robo48">Ships.Cargo.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Give selected item to selected crew member
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>GiveItem</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
+</span></pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Object - Gtkada_Builder used to create UI
+</pre>
+
+<hr />
+<a name="Ships2eCargo2eUI2fRefreshCargoInfo"></a>
+<a name="robo677"></a><h2>Ships.Cargo.UI/RefreshCargoInfo [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-cargo-ui_ads.html#robo48">Ships.Cargo.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Refresh player ship cargo information
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>RefreshCargoInfo</strong> <span class="keyword">is</span>
+</pre>
+
+<hr />
+<a name="Ships2eCargo2eUI2fSearchCargo"></a>
+<a name="robo678"></a><h2>Ships.Cargo.UI/SearchCargo [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-cargo-ui_ads.html#robo48">Ships.Cargo.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Search item by name in player ship cargo
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>SearchCargo</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
+</span></pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Object - Gtkada_Builder used to create UI
+</pre>
+
+<hr />
+<a name="Ships2eCargo2eUI2fSetActiveItem"></a>
+<a name="robo679"></a><h2>Ships.Cargo.UI/SetActiveItem [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-cargo-ui_ads.html#robo48">Ships.Cargo.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Select active item in cargo list
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>SetActiveItem</strong> <span class="keyword">is</span>
+</pre>
+
+<hr />
+<a name="Ships2eCargo2eUI2fShowItemCargoInfo"></a>
+<a name="robo681"></a><h2>Ships.Cargo.UI/ShowItemCargoInfo [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-cargo-ui_ads.html#robo48">Ships.Cargo.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show detailed information about selected item
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>ShowItemCargoInfo</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
+</span></pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Object - Gtkada_Builder used to create UI
+</pre>
+
+<hr />
+<a name="Ships2eCargo2eUI2fVisibleCargo"></a>
+<a name="robo682"></a><h2>Ships.Cargo.UI/VisibleCargo [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-cargo-ui_ads.html#robo48">Ships.Cargo.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Check if selected item should be visible on the list
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>VisibleCargo</strong>
+     <span class="sign">(</span>Model<span class="sign">:</span> Gtk_Tree_Model<span class="sign">;</span> Iter<span class="sign">:</span> Gtk_Tree_Iter<span class="sign">)</span> <span class="keyword">return</span> Boolean <span class="keyword">is</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Model - Gtk_Tree_Model with list of cargo items
+ Iter  - Gtk_Tree_Iter of selected item
+</pre>
+<p class="item_name">RESULT</p>
+<pre> True if item should be visible, otherwise false
+</pre>
+
+</div> <!-- content -->
+<div id="footer">
+<p>Generated from ./src/ui/ships-cargo-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 04 2019 06:25:03
+</p>
+</div> <!-- footer -->
+</body>
+</html>

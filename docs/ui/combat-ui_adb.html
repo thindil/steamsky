@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="../robodoc.css" type="text/css" />
+<title>./src/ui/combat-ui.adb</title>
+<!-- Source: ./src/ui/combat-ui.adb -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  2 2019) -->
+</head>
+<body>
+<div id="logo">
+<a name="robo_top_of_doc">Steamsky 4.0 code documentation</a>
+</div> <!-- logo -->
+<div id="navigation">
+<a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
+<a class="menuitem" href="../sources.html#top">Source files</a>
+<a class="menuitem" href="../index.html#top">Index</a>
+<a class="menuitem" href="../robo_exceptions.html#top">Exceptions</a>
+<a class="menuitem" href="../robo_subprograms.html#top">Subprograms</a>
+<a class="menuitem" href="../robo_packages.html#top">Packages</a>
+<a class="menuitem" href="../robo_types.html#top">Types</a>
+<a class="menuitem" href="../robo_variables.html#top">Variables</a>
+</div> <!-- navigation -->
+<div id="content">
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li>1. <a href="#robo192">Combat.UI/EngineerOrders</a></li>
+<li>2. <a href="#robo193">Combat.UI/GunnerOrders</a></li>
+<li>3. <a href="#robo194">Combat.UI/PilotOrders</a></li>
+<li>4. <a href="#robo420">Combat.UI/GiveBoardingOrders</a></li>
+<li>5. <a href="#robo421">Combat.UI/GiveCombatOrders</a></li>
+<li>6. <a href="#robo422">Combat.UI/NextTurn</a></li>
+<li>7. <a href="#robo423">Combat.UI/RefreshBoardingUI</a></li>
+<li>8. <a href="#robo424">Combat.UI/RefreshCombatUI</a></li>
+<li>9. <a href="#robo425">Combat.UI/SetBoardingOrder</a></li>
+<li>10. <a href="#robo426">Combat.UI/SetBoardingParty</a></li>
+<li>11. <a href="#robo427">Combat.UI/SetOrdersList</a></li>
+<li>12. <a href="#robo429">Combat.UI/UpdateMessages</a></li>
+</ul>
+<hr />
+<a name="Combat2eUI2fEngineerOrders"></a>
+<a name="robo192"></a><h2>Combat.UI/EngineerOrders [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo15">Combat.UI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Array of text for each combat order for engineer
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>EngineerOrders</strong><span class="sign">:</span> <span class="keyword">constant</span> array<span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 4<span class="sign">)</span> of Unbounded_String <span class="sign">:</span><span class="sign">=</span>
+     <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"All stop"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"Quarter speed"</span><span class="sign">)</span><span class="sign">,</span>
+      To_Unbounded_String<span class="sign">(</span><span class="quote">"Half speed"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"Full speed"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Combat2eUI2fGunnerOrders"></a>
+<a name="robo193"></a><h2>Combat.UI/GunnerOrders [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo15">Combat.UI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Array of text for each combat order for gunners
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>GunnerOrders</strong><span class="sign">:</span> <span class="keyword">constant</span> array<span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 6<span class="sign">)</span> of Unbounded_String <span class="sign">:</span><span class="sign">=</span>
+     <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"Don't shoot"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"Precise fire"</span><span class="sign">)</span><span class="sign">,</span>
+      To_Unbounded_String<span class="sign">(</span><span class="quote">"Fire at will"</span><span class="sign">)</span><span class="sign">,</span>
+      To_Unbounded_String<span class="sign">(</span><span class="quote">"Aim for their engine"</span><span class="sign">)</span><span class="sign">,</span>
+      To_Unbounded_String<span class="sign">(</span><span class="quote">"Aim for their weapon"</span><span class="sign">)</span><span class="sign">,</span>
+      To_Unbounded_String<span class="sign">(</span><span class="quote">"Aim for their hull"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Combat2eUI2fPilotOrders"></a>
+<a name="robo194"></a><h2>Combat.UI/PilotOrders [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo15">Combat.UI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Array of text for each combat order for pilot
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>PilotOrders</strong><span class="sign">:</span> <span class="keyword">constant</span> array<span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 4<span class="sign">)</span> of Unbounded_String <span class="sign">:</span><span class="sign">=</span>
+     <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"Go closer"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"Keep distance"</span><span class="sign">)</span><span class="sign">,</span>
+      To_Unbounded_String<span class="sign">(</span><span class="quote">"Evade"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"Escape"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Combat2eUI2fGiveBoardingOrders"></a>
+<a name="robo420"></a><h2>Combat.UI/GiveBoardingOrders [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo15">Combat.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>GiveBoardingOrders</strong>
+     <span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Cell_Renderer_Combo_Record<span class="keyword">'Class</span><span class="sign">;</span>
+      Path_String<span class="sign">:</span> UTF8_String<span class="sign">;</span> New_Iter<span class="sign">:</span> Gtk.Tree_Model.Gtk_Tree_Iter<span class="sign">)</span><span class="keyword"> is
+</span></pre>
+
+<hr />
+<a name="Combat2eUI2fGiveCombatOrders"></a>
+<a name="robo421"></a><h2>Combat.UI/GiveCombatOrders [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo15">Combat.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">SOURCE</p>
+<pre class="source">   procedure <strong>GiveCombatOrders</strong>
+     (Self: access Gtk_Cell_Renderer_Combo_Record'</span>Class<span class="sign">;</span>
+      Path_String<span class="sign">:</span> UTF8_String<span class="sign">;</span> New_Iter<span class="sign">:</span> Gtk<span class="sign">.</span>Tree_Model<span class="sign">.</span>Gtk_Tree_Iter<span class="sign">)</span> <span class="keyword">is</span>
+</pre>
+
+<hr />
+<a name="Combat2eUI2fNextTurn"></a>
+<a name="robo422"></a><h2>Combat.UI/NextTurn [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo15">Combat.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>NextTurn</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
+</span></pre>
+
+<hr />
+<a name="Combat2eUI2fRefreshBoardingUI"></a>
+<a name="robo423"></a><h2>Combat.UI/RefreshBoardingUI [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo15">Combat.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">SOURCE</p>
+<pre class="source">   procedure <strong>RefreshBoardingUI</strong> is
+</pre>
+
+<hr />
+<a name="Combat2eUI2fRefreshCombatUI"></a>
+<a name="robo424"></a><h2>Combat.UI/RefreshCombatUI [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo15">Combat.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Reload information on combat screen
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>RefreshCombatUI</strong><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Combat2eUI2fSetBoardingOrder"></a>
+<a name="robo425"></a><h2>Combat.UI/SetBoardingOrder [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo15">Combat.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> <a href="./ships-ui-handlers_ads.html#robo704">Assign</a>/remove selected crew member to boarding party
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>SetBoardingOrder</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Toggle_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
+</span></pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Self - Gtk_Toggle_Button checked or unchecked
+</pre>
+
+<hr />
+<a name="Combat2eUI2fSetBoardingParty"></a>
+<a name="robo426"></a><h2>Combat.UI/SetBoardingParty [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo15">Combat.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Set boarding party buttons
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>SetBoardingParty</strong>
+     <span class="sign">(</span>Widget<span class="sign">:</span> <span class="keyword">not</span> <span class="keyword">null</span> <span class="keyword">access</span> Gtk_Widget_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
+</span></pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Widget - Button to set
+</pre>
+
+<hr />
+<a name="Combat2eUI2fSetOrdersList"></a>
+<a name="robo427"></a><h2>Combat.UI/SetOrdersList [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo15">Combat.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>SetOrdersList</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
+</span></pre>
+
+<hr />
+<a name="Combat2eUI2fUpdateMessages"></a>
+<a name="robo429"></a><h2>Combat.UI/UpdateMessages [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo15">Combat.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Update in-game messages in combat
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateMessages</strong> <span class="keyword">is</span>
+</pre>
+
+</div> <!-- content -->
+<div id="footer">
+<p>Generated from ./src/ui/combat-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 04 2019 06:25:03
+</p>
+</div> <!-- footer -->
+</body>
+</html>

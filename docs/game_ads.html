@@ -1,0 +1,782 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="./robodoc.css" type="text/css" />
+<title>./src/game.ads</title>
+<!-- Source: ./src/game.ads -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  2 2019) -->
+</head>
+<body>
+<div id="logo">
+<a name="robo_top_of_doc">Steamsky 4.0 code documentation</a>
+</div> <!-- logo -->
+<div id="navigation">
+<a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
+<a class="menuitem" href="./sources.html#top">Source files</a>
+<a class="menuitem" href="./index.html#top">Index</a>
+<a class="menuitem" href="./robo_exceptions.html#top">Exceptions</a>
+<a class="menuitem" href="./robo_subprograms.html#top">Subprograms</a>
+<a class="menuitem" href="./robo_packages.html#top">Packages</a>
+<a class="menuitem" href="./robo_types.html#top">Types</a>
+<a class="menuitem" href="./robo_variables.html#top">Variables</a>
+</div> <!-- navigation -->
+<div id="content">
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li>1. <a href="#robo26">Steamsky/Game</a></li>
+<ul>
+<li>1.1. <a href="#robo104">Game/Attribute_Record</a></li>
+<li>1.2. <a href="#robo105">Game/AttributesData_Container</a></li>
+<li>1.3. <a href="#robo106">Game/DamageFactor</a></li>
+<li>1.4. <a href="#robo107">Game/DataAction</a></li>
+<li>1.5. <a href="#robo108">Game/Date_Record</a></li>
+<li>1.6. <a href="#robo109">Game/Integer_Container</a></li>
+<li>1.7. <a href="#robo110">Game/Natural_Array</a></li>
+<li>1.8. <a href="#robo111">Game/Natural_Container</a></li>
+<li>1.9. <a href="#robo112">Game/Positive_Container</a></li>
+<li>1.10. <a href="#robo113">Game/Skill_Record</a></li>
+<li>1.11. <a href="#robo114">Game/SkillsData_Container</a></li>
+<li>1.12. <a href="#robo115">Game/UnboundedString_Container</a></li>
+<li>1.13. <a href="#robo231">Game/AlchemyTools</a></li>
+<li>1.14. <a href="#robo232">Game/ArmsArmor</a></li>
+<li>1.15. <a href="#robo233">Game/Attributes_List</a></li>
+<li>1.16. <a href="#robo234">Game/ChestArmor</a></li>
+<li>1.17. <a href="#robo235">Game/CleaningTools</a></li>
+<li>1.18. <a href="#robo236">Game/ConditionIndex</a></li>
+<li>1.19. <a href="#robo237">Game/CorpseIndex</a></li>
+<li>1.20. <a href="#robo238">Game/DataDirectory</a></li>
+<li>1.21. <a href="#robo239">Game/DocDirectory</a></li>
+<li>1.22. <a href="#robo240">Game/DodgeSkill</a></li>
+<li>1.23. <a href="#robo241">Game/EngineeringSkill</a></li>
+<li>1.24. <a href="#robo242">Game/FuelType</a></li>
+<li>1.25. <a href="#robo243">Game/GameDate</a></li>
+<li>1.26. <a href="#robo244">Game/GameVersion</a></li>
+<li>1.27. <a href="#robo245">Game/GunnerySkill</a></li>
+<li>1.28. <a href="#robo246">Game/HeadArmor</a></li>
+<li>1.29. <a href="#robo247">Game/LegsArmor</a></li>
+<li>1.30. <a href="#robo248">Game/MissionItemsType</a></li>
+<li>1.31. <a href="#robo249">Game/ModsDirectory</a></li>
+<li>1.32. <a href="#robo250">Game/MoneyIndex</a></li>
+<li>1.33. <a href="#robo251">Game/MoneyName</a></li>
+<li>1.34. <a href="#robo252">Game/PerceptionSkill</a></li>
+<li>1.35. <a href="#robo253">Game/PilotingSkill</a></li>
+<li>1.36. <a href="#robo254">Game/PlayerCareer</a></li>
+<li>1.37. <a href="#robo255">Game/RepairTools</a></li>
+<li>1.38. <a href="#robo256">Game/SaveDirectory</a></li>
+<li>1.39. <a href="#robo257">Game/ShieldType</a></li>
+<li>1.40. <a href="#robo258">Game/Skills_List</a></li>
+<li>1.41. <a href="#robo259">Game/StrengthIndex</a></li>
+<li>1.42. <a href="#robo260">Game/TalkingSkill</a></li>
+<li>1.43. <a href="#robo261">Game/ThemesDirectory</a></li>
+<li>1.44. <a href="#robo262">Game/TradersName</a></li>
+<li>1.45. <a href="#robo263">Game/UnarmedSkill</a></li>
+<li>1.46. <a href="#robo264">Game/WeaponType</a></li>
+<li>1.47. <a href="#robo338">Game/Data_Loading_Error</a></li>
+<li>1.48. <a href="#robo522">Game/EndGame</a></li>
+<li>1.49. <a href="#robo523">Game/FindSkillIndex</a></li>
+<li>1.50. <a href="./game_adb.html#robo524">Game/LoadData</a></li>
+<li>1.51. <a href="#robo525">Game/LoadGameData</a></li>
+<li>1.52. <a href="#robo526">Game/NewGame</a></li>
+<li>1.53. <a href="#robo527">Game/UpdateGame</a></li>
+</ul>
+</ul>
+<hr />
+<a name="Steamsky2fGame"></a>
+<a name="robo26"></a><h2>Steamsky/Game [ Packages ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Main the game structures and data
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source"><span class="keyword">package</span> <strong>Game</strong> <span class="keyword">is</span>
+</pre>
+
+<hr />
+<a name="Game2fAttribute5fRecord"></a>
+<a name="robo104"></a><h2>Game/Attribute_Record [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Data for attributes
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> <strong>Attribute_Record</strong> <span class="keyword">is</span> <span class="keyword">record</span>
+      Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Description<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+   <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Name        - Name of attribute
+ Description - Description of attribute
+</pre>
+
+<hr />
+<a name="Game2fAttributesData5fContainer"></a>
+<a name="robo105"></a><h2>Game/AttributesData_Container [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Used to store attributes data
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">package</span> <strong>AttributesData_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> <a href="#robo104">Attribute_Record</a><span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fDamageFactor"></a>
+<a name="robo106"></a><h2>Game/DamageFactor [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Used mostly for count percentage of damage of modules
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> <strong>DamageFactor</strong> <span class="keyword">is</span> digits 2 <span class="keyword">range</span> 0<span class="sign">.</span>0 <span class="sign">.</span><span class="sign">.</span> 1<span class="sign">.</span>0<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fDataAction"></a>
+<a name="robo107"></a><h2>Game/DataAction [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Possible actions to do when loading game data
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> <strong>DataAction</strong> <span class="keyword">is</span> <span class="sign">(</span>ADD<span class="sign">,</span> UPDATE<span class="sign">,</span> REMOVE<span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fDate5fRecord"></a>
+<a name="robo108"></a><h2>Game/Date_Record [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Data for game date/time
+ Year    - Current in game year
+ Month   - Current in game month
+ Day     - Current in game day
+ Hour    - Current in game hour
+ Minutes - Current in game minutes
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> <strong>Date_Record</strong> <span class="keyword">is</span> <span class="keyword">record</span>
+      Year<span class="sign">:</span> Natural<span class="sign">;</span>
+      Month<span class="sign">:</span> Natural<span class="sign">;</span>
+      Day<span class="sign">:</span> Natural<span class="sign">;</span>
+      Hour<span class="sign">:</span> Natural<span class="sign">;</span>
+      Minutes<span class="sign">:</span> Natural<span class="sign">;</span>
+   <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fInteger5fContainer"></a>
+<a name="robo109"></a><h2>Game/Integer_Container [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Used to store Integer values as list
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">package</span> <strong>Integer_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> Integer<span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fNatural5fArray"></a>
+<a name="robo110"></a><h2>Game/Natural_Array [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> General purpose array of Natural
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> <strong>Natural_Array</strong> <span class="keyword">is</span> array<span class="sign">(</span>Positive <span class="keyword">range</span> <span class="sign">&lt;</span><span class="sign">&gt;</span><span class="sign">)</span> of Natural<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fNatural5fContainer"></a>
+<a name="robo111"></a><h2>Game/Natural_Container [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Used to store Natural values as list
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">package</span> <strong>Natural_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> Natural<span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fPositive5fContainer"></a>
+<a name="robo112"></a><h2>Game/Positive_Container [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Used to store Positive values as list
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">package</span> <strong>Positive_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> Positive<span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fSkill5fRecord"></a>
+<a name="robo113"></a><h2>Game/Skill_Record [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Data for skills
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> <strong>Skill_Record</strong> <span class="keyword">is</span> <span class="keyword">record</span>
+      Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Attribute<span class="sign">:</span> Positive<span class="sign">;</span>
+      Description<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Tool<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+   <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Name        - Name of skill
+ Attribute   - Attribute used with that skill
+ Description - Description of skill
+ Tool        - Item type used as tool for training that skill
+</pre>
+
+<hr />
+<a name="Game2fSkillsData5fContainer"></a>
+<a name="robo114"></a><h2>Game/SkillsData_Container [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Used to store skills data
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">package</span> <strong>SkillsData_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> <a href="#robo113">Skill_Record</a><span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fUnboundedString5fContainer"></a>
+<a name="robo115"></a><h2>Game/UnboundedString_Container [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Used to store Unbounded_String values as list
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">package</span> <strong>UnboundedString_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span>
+      Unbounded_String<span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fAlchemyTools"></a>
+<a name="robo231"></a><h2>Game/AlchemyTools [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Name of item type used as alchemy tools (mainly in deconstructing orders)
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>AlchemyTools</strong><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fArmsArmor"></a>
+<a name="robo232"></a><h2>Game/ArmsArmor [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Name of item type used as characters arms armor
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>ArmsArmor</strong><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fAttributes5fList"></a>
+<a name="robo233"></a><h2>Game/Attributes_List [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Contains data for all characters attributes
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>Attributes_List</strong><span class="sign">:</span> <a href="#robo105">AttributesData_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fChestArmor"></a>
+<a name="robo234"></a><h2>Game/ChestArmor [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Name of item type used as characters torso armor
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>ChestArmor</strong><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fCleaningTools"></a>
+<a name="robo235"></a><h2>Game/CleaningTools [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Name of item type used as tool in cleaning ship
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>CleaningTools</strong><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fConditionIndex"></a>
+<a name="robo236"></a><h2>Game/ConditionIndex [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Index of attribute used as bonus to character condition
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>ConditionIndex</strong><span class="sign">:</span> Positive<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fCorpseIndex"></a>
+<a name="robo237"></a><h2>Game/CorpseIndex [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Index of item used to create mobs corpses
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>CorpseIndex</strong><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fDataDirectory"></a>
+<a name="robo238"></a><h2>Game/DataDirectory [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Path to directory where are game data files
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>DataDirectory</strong><span class="sign">:</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span>
+     To_Unbounded_String<span class="sign">(</span><span class="quote">"data"</span> <span class="sign">&amp;</span> Dir_Separator<span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fDocDirectory"></a>
+<a name="robo239"></a><h2>Game/DocDirectory [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Path to directory where documentation is
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>DocDirectory</strong><span class="sign">:</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span>
+     To_Unbounded_String<span class="sign">(</span><span class="quote">"doc"</span> <span class="sign">&amp;</span> Dir_Separator<span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fDodgeSkill"></a>
+<a name="robo240"></a><h2>Game/DodgeSkill [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Index of skill used for dodge in character's combat
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>DodgeSkill</strong><span class="sign">:</span> Positive<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fEngineeringSkill"></a>
+<a name="robo241"></a><h2>Game/EngineeringSkill [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Index of skill used by engineer on ship
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>EngineeringSkill</strong><span class="sign">:</span> Positive<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fFuelType"></a>
+<a name="robo242"></a><h2>Game/FuelType [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Name of item type used as fuel for ships
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>FuelType</strong><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fGameDate"></a>
+<a name="robo243"></a><h2>Game/GameDate [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Current in game date
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>GameDate</strong><span class="sign">:</span> <a href="#robo108">Date_Record</a><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fGameVersion"></a>
+<a name="robo244"></a><h2>Game/GameVersion [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Current the game version
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>GameVersion</strong><span class="sign">:</span> <span class="keyword">constant</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">"Version: 4.0"</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fGunnerySkill"></a>
+<a name="robo245"></a><h2>Game/GunnerySkill [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Index of skill used by gunners
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>GunnerySkill</strong><span class="sign">:</span> Positive<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fHeadArmor"></a>
+<a name="robo246"></a><h2>Game/HeadArmor [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Name of item type used as characters head armor
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>HeadArmor</strong><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fLegsArmor"></a>
+<a name="robo247"></a><h2>Game/LegsArmor [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Name of item type used as characters legs armor
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>LegsArmor</strong><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fMissionItemsType"></a>
+<a name="robo248"></a><h2>Game/MissionItemsType [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Name of item type used for delivery missions
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>MissionItemsType</strong><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fModsDirectory"></a>
+<a name="robo249"></a><h2>Game/ModsDirectory [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Path to directory where are game modifications
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>ModsDirectory</strong><span class="sign">:</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span>
+     To_Unbounded_String<span class="sign">(</span><span class="quote">"data"</span> <span class="sign">&amp;</span> Dir_Separator <span class="sign">&amp;</span> <span class="quote">"mods"</span> <span class="sign">&amp;</span> Dir_Separator<span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fMoneyIndex"></a>
+<a name="robo250"></a><h2>Game/MoneyIndex [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Index of item used as money
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>MoneyIndex</strong><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fMoneyName"></a>
+<a name="robo251"></a><h2>Game/MoneyName [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Name of money (taken from <a href="#robo250">MoneyIndex</a>)
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>MoneyName</strong><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fPerceptionSkill"></a>
+<a name="robo252"></a><h2>Game/PerceptionSkill [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Index of skill used for spoting
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>PerceptionSkill</strong><span class="sign">:</span> Positive<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fPilotingSkill"></a>
+<a name="robo253"></a><h2>Game/PilotingSkill [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Index of skill used to piloting ship
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>PilotingSkill</strong><span class="sign">:</span> Positive<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fPlayerCareer"></a>
+<a name="robo254"></a><h2>Game/PlayerCareer [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Index of career selected by player during starting game
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>PlayerCareer</strong><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fRepairTools"></a>
+<a name="robo255"></a><h2>Game/RepairTools [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Name of item type used as tool in repairing/upgrading ship
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>RepairTools</strong><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fSaveDirectory"></a>
+<a name="robo256"></a><h2>Game/SaveDirectory [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Path to directory where are savegame and logs
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>SaveDirectory</strong><span class="sign">:</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span>
+     To_Unbounded_String<span class="sign">(</span><span class="quote">"data"</span> <span class="sign">&amp;</span> Dir_Separator <span class="sign">&amp;</span> <span class="quote">"saves"</span> <span class="sign">&amp;</span> Dir_Separator<span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fShieldType"></a>
+<a name="robo257"></a><h2>Game/ShieldType [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Name of item type used as characters shield
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>ShieldType</strong><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fSkills5fList"></a>
+<a name="robo258"></a><h2>Game/Skills_List [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Contains data for all skills
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>Skills_List</strong><span class="sign">:</span> <a href="#robo114">SkillsData_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fStrengthIndex"></a>
+<a name="robo259"></a><h2>Game/StrengthIndex [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Index of attribute used to count max character encumbrance
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>StrengthIndex</strong><span class="sign">:</span> Positive<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fTalkingSkill"></a>
+<a name="robo260"></a><h2>Game/TalkingSkill [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Index of skill used for talk in bases or with other ships
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>TalkingSkill</strong><span class="sign">:</span> Positive<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fThemesDirectory"></a>
+<a name="robo261"></a><h2>Game/ThemesDirectory [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Path to directory where are ui themes
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>ThemesDirectory</strong><span class="sign">:</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span>
+     To_Unbounded_String<span class="sign">(</span><span class="quote">"data"</span> <span class="sign">&amp;</span> Dir_Separator <span class="sign">&amp;</span> <span class="quote">"themes"</span> <span class="sign">&amp;</span> Dir_Separator<span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fTradersName"></a>
+<a name="robo262"></a><h2>Game/TradersName [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Word used in ships names for traders ships (for events)
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>TradersName</strong><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fUnarmedSkill"></a>
+<a name="robo263"></a><h2>Game/UnarmedSkill [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Index of skill used for unarmed attacks in character's combat
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>UnarmedSkill</strong><span class="sign">:</span> Positive<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fWeaponType"></a>
+<a name="robo264"></a><h2>Game/WeaponType [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Name of item type used as characters weapon
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>WeaponType</strong><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fData5fLoading5fError"></a>
+<a name="robo338"></a><h2>Game/Data_Loading_Error [ Exceptions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Raised when error occurs during loading any game data
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>Data_Loading_Error</strong><span class="sign">:</span> <span class="keyword">exception</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fEndGame"></a>
+<a name="robo522"></a><h2>Game/EndGame [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Save (or not) game and clear all temporary data
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>EndGame</strong><span class="sign">(</span>Save<span class="sign">:</span> Boolean<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Save - Did game should be saved to file or not
+</pre>
+
+<hr />
+<a name="Game2fFindSkillIndex"></a>
+<a name="robo523"></a><h2>Game/FindSkillIndex [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Find index of selected skill
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>FindSkillIndex</strong><span class="sign">(</span>SkillName<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Natural with
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> SkillName <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> SkillName - Name of the skill to search
+</pre>
+<p class="item_name">RESULT</p>
+<pre> Index of selected skill or 0 if skill was not found
+</pre>
+
+<hr />
+<a name="Game2fLoadGameData"></a>
+<a name="robo525"></a><h2>Game/LoadGameData [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Load game data from files
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>LoadGameData</strong> <span class="keyword">return</span> String<span class="sign">;</span>
+</pre>
+<p class="item_name">RESULT</p>
+<pre> Empty string if everything was ok, otherwise message with info what
+ goes wrong
+</pre>
+
+<hr />
+<a name="Game2fNewGame"></a>
+<a name="robo526"></a><h2>Game/NewGame [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Start new game: create map, place ship, crew, etc
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>NewGame</strong><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Game2fUpdateGame"></a>
+<a name="robo527"></a><h2>Game/UpdateGame [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Game</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> <a href="#robo26">Game</a> ticks (update time, crew, ship, etc)
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateGame</strong><span class="sign">(</span>Minutes<span class="sign">:</span> Positive<span class="sign">;</span> InCombat<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Minutes  - Amount of in-game minutes passed
+ InCombat - Did player is in combat currently. Default false
+</pre>
+
+</div> <!-- content -->
+<div id="footer">
+<p>Generated from ./src/game.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 04 2019 06:25:03
+</p>
+</div> <!-- footer -->
+</body>
+</html>
