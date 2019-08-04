@@ -23,7 +23,7 @@ All notable changes to this project will be documented in this file.
   huge double luxury steel cabin, huge double advanced titanium cabin, huge
   double extended titanium cabin, huge double luxury titanium cabin, huge
   double advanced orichalcum cabin, huge double extended orichalcum cabin,
-  huge double luxury orichalcum cabin
+  huge double luxury orichalcum cabin, huge double extended adamantium cabin
 - Info about chance to damage for items
 - Check if the game have permission to write to save directory
 - Info about strength of ship's weapons
