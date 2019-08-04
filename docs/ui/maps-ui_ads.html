@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="../robodoc.css" type="text/css" />
+<title>./src/ui/maps-ui.ads</title>
+<!-- Source: ./src/ui/maps-ui.ads -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  2 2019) -->
+</head>
+<body>
+<div id="logo">
+<a name="robo_top_of_doc">Steamsky 4.0 code documentation</a>
+</div> <!-- logo -->
+<div id="navigation">
+<a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
+<a class="menuitem" href="../sources.html#top">Source files</a>
+<a class="menuitem" href="../index.html#top">Index</a>
+<a class="menuitem" href="../robo_exceptions.html#top">Exceptions</a>
+<a class="menuitem" href="../robo_subprograms.html#top">Subprograms</a>
+<a class="menuitem" href="../robo_packages.html#top">Packages</a>
+<a class="menuitem" href="../robo_types.html#top">Types</a>
+<a class="menuitem" href="../robo_variables.html#top">Variables</a>
+</div> <!-- navigation -->
+<div id="content">
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li>1. <a href="#robo38">Steamsky/Maps.UI</a></li>
+<ul>
+<li>1.1. <a href="#robo2">Maps.UI/MapWidth</a>, <a href="#robo2">MapHeight</a>, <a href="#robo2">CenterX</a>, <a href="#robo2">CenterY</a>, <a href="#robo2">MapCellWidth</a>, <a href="#robo2">MapCellHeight</a>, <a href="#robo2">MapX</a>, <a href="#robo2">MapY</a></li>
+<li>1.2. <a href="#robo293">Maps.UI/Builder</a></li>
+<li>1.3. <a href="#robo294">Maps.UI/ButtonsVisible</a></li>
+<li>1.4. <a href="#robo295">Maps.UI/StartX</a>, <a href="#robo295">StartY</a></li>
+<li>1.5. <a href="#robo629">Maps.UI/CheckButtons</a></li>
+<li>1.6. <a href="#robo630">Maps.UI/CreateSkyMap</a></li>
+<li>1.7. <a href="#robo631">Maps.UI/DeathConfirm</a></li>
+<li>1.8. <a href="#robo632">Maps.UI/DrawMap</a></li>
+<li>1.9. <a href="#robo633">Maps.UI/FinishStory</a></li>
+<li>1.10. <a href="#robo634">Maps.UI/GetCurrentCellCoords</a></li>
+<li>1.11. <a href="#robo635">Maps.UI/HideButtons</a></li>
+<li>1.12. <a href="#robo636">Maps.UI/SetMapMoveButtons</a></li>
+<li>1.13. <a href="#robo637">Maps.UI/ShowSkyMap</a></li>
+<li>1.14. <a href="#robo638">Maps.UI/UpdateHeader</a></li>
+<li>1.15. <a href="#robo639">Maps.UI/UpdateMapInfo</a></li>
+<li>1.16. <a href="#robo640">Maps.UI/UpdateMoveButtons</a></li>
+</ul>
+</ul>
+<hr />
+<a name="Maps2eUI2fMapWidth"></a>
+<a name="robo2"></a><h2>Maps.UI/MapWidth, MapHeight,<br />CenterX, CenterY,<br />MapCellWidth, MapCellHeight,<br />MapX, MapY [ Packages ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Maps.UI</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>MapWidth</strong><span class="sign">,</span> <strong>MapHeight</strong><span class="sign">,</span> <strong>CenterX</strong><span class="sign">,</span> <strong>CenterY</strong><span class="sign">,</span> <strong>MapCellWidth</strong><span class="sign">,</span> <strong>MapCellHeight</strong><span class="sign">,</span> <strong>MapX</strong><span class="sign">,</span>
+   <strong>MapY</strong><span class="sign">:</span> Positive<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Steamsky2fMaps2eUI"></a>
+<a name="robo38"></a><h2>Steamsky/Maps.UI [ Packages ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Provides code for show main game map UI
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source"><span class="keyword">package</span> <strong>Maps.UI</strong> <span class="keyword">is</span>
+</pre>
+
+<hr />
+<a name="Maps2eUI2fBuilder"></a>
+<a name="robo293"></a><h2>Maps.UI/Builder [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Maps.UI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Gtk builder for user interface
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>Builder</strong><span class="sign">:</span> Gtkada_Builder<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Maps2eUI2fButtonsVisible"></a>
+<a name="robo294"></a><h2>Maps.UI/ButtonsVisible [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Maps.UI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> If true, buttons like menu and close are visible. Default is false
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>ButtonsVisible</strong><span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Maps2eUI2fStartX"></a>
+<a name="robo295"></a><h2>Maps.UI/StartX, StartY [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Maps.UI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Starting point for draw map
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>StartX</strong><span class="sign">,</span> <strong>StartY</strong><span class="sign">:</span> Integer<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Maps2eUI2fCheckButtons"></a>
+<a name="robo629"></a><h2>Maps.UI/CheckButtons [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Maps.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Check selected button
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>CheckButtons</strong><span class="sign">(</span>Widget<span class="sign">:</span> <span class="keyword">not</span> <span class="keyword">null</span> <span class="keyword">access</span> Gtk_Widget_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Widget - Button to check
+</pre>
+
+<hr />
+<a name="Maps2eUI2fCreateSkyMap"></a>
+<a name="robo630"></a><h2>Maps.UI/CreateSkyMap [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Maps.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Create sky map
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>CreateSkyMap</strong><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Maps2eUI2fDeathConfirm"></a>
+<a name="robo631"></a><h2>Maps.UI/DeathConfirm [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Maps.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show confirmation to show game stats when player died
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>DeathConfirm</strong><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Maps2eUI2fDrawMap"></a>
+<a name="robo632"></a><h2>Maps.UI/DrawMap [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Maps.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Draw sky map
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>DrawMap</strong><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Maps2eUI2fFinishStory"></a>
+<a name="robo633"></a><h2>Maps.UI/FinishStory [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Maps.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Finish current story and show confirm dialog to player
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>FinishStory</strong><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Maps2eUI2fGetCurrentCellCoords"></a>
+<a name="robo634"></a><h2>Maps.UI/GetCurrentCellCoords [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Maps.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Get current map cell coordinates based on mouse position
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>GetCurrentCellCoords</strong><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Maps2eUI2fHideButtons"></a>
+<a name="robo635"></a><h2>Maps.UI/HideButtons [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Maps.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Hide selected button
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>HideButtons</strong><span class="sign">(</span>Widget<span class="sign">:</span> <span class="keyword">not</span> <span class="keyword">null</span> <span class="keyword">access</span> Gtk_Widget_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Widget - Button to hide
+</pre>
+
+<hr />
+<a name="Maps2eUI2fSetMapMoveButtons"></a>
+<a name="robo636"></a><h2>Maps.UI/SetMapMoveButtons [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Maps.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Set icons on move map buttons
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>SetMapMoveButtons</strong><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Maps2eUI2fShowSkyMap"></a>
+<a name="robo637"></a><h2>Maps.UI/ShowSkyMap [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Maps.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show sky map
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>ShowSkyMap</strong>
+     <span class="sign">(</span>X<span class="sign">:</span> Integer <span class="sign">:</span><span class="sign">=</span> <a href="../ships_ads.html#robo308">PlayerShip</a><span class="sign">.</span>SkyX<span class="sign">;</span> Y<span class="sign">:</span> Integer <span class="sign">:</span><span class="sign">=</span> <a href="../ships_ads.html#robo308">PlayerShip</a><span class="sign">.</span>SkyY<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> X - X coordinate of central map point. Default is player ship X
+     coordinate
+ Y - Y coordinate of central map point. Default is player ship Y
+     coordinate
+</pre>
+
+<hr />
+<a name="Maps2eUI2fUpdateHeader"></a>
+<a name="robo638"></a><h2>Maps.UI/UpdateHeader [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Maps.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Update game header informations
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateHeader</strong><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Maps2eUI2fUpdateMapInfo"></a>
+<a name="robo639"></a><h2>Maps.UI/UpdateMapInfo [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Maps.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Update info about current map cell
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateMapInfo</strong><span class="sign">(</span>ShowOrdersInfo<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ShowOrdersInfo - If true, info about map cell should be updated too.
+                  Default is false
+</pre>
+
+<hr />
+<a name="Maps2eUI2fUpdateMoveButtons"></a>
+<a name="robo640"></a><h2>Maps.UI/UpdateMoveButtons [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Maps.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Update move buttons
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateMoveButtons</strong><span class="sign">;</span>
+</pre>
+
+</div> <!-- content -->
+<div id="footer">
+<p>Generated from ./src/ui/maps-ui.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 04 2019 06:25:03
+</p>
+</div> <!-- footer -->
+</body>
+</html>

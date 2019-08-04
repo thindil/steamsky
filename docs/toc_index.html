@@ -1,0 +1,959 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="./robodoc.css" type="text/css" />
+<title>Table of Contents</title>
+<!-- Source: ./src/ -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  2 2019) -->
+</head>
+<body>
+<div id="logo">
+<a name="robo_top_of_doc">Steamsky 4.0 code documentation</a>
+</div> <!-- logo -->
+<div id="extra">
+</div> <!-- extra -->
+<div id="navigation">
+<a class="menuitem" href="#top">Table of Contents</a>
+<a class="menuitem" href="./sources.html#top">Source files</a>
+<a class="menuitem" href="./index.html#top">Index</a>
+<a class="menuitem" href="./robo_exceptions.html#top">Exceptions</a>
+<a class="menuitem" href="./robo_subprograms.html#top">Subprograms</a>
+<a class="menuitem" href="./robo_packages.html#top">Packages</a>
+<a class="menuitem" href="./robo_types.html#top">Types</a>
+<a class="menuitem" href="./robo_variables.html#top">Variables</a>
+</div> <!-- navigation -->
+<div id="content">
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li>1. <a href="./ui/baseslist_ads.html#robo0">BasesList/BasesList</a></li>
+<ul>
+<li>1.1. <a href="./ui/baseslist_adb.html#robo189">BasesList/BaseIndex</a></li>
+<li>1.2. <a href="./ui/baseslist_adb.html#robo190">BasesList/SettingTime</a></li>
+<li>1.3. <a href="./ui/baseslist_ads.html#robo410">BasesList/CreateBasesListUI</a></li>
+<li>1.4. <a href="./ui/baseslist_adb.html#robo411">BasesList/SearchBases</a></li>
+<li>1.5. <a href="./ui/baseslist_adb.html#robo412">BasesList/SetDestinationBase</a></li>
+<li>1.6. <a href="./ui/baseslist_adb.html#robo413">BasesList/ShowBase</a></li>
+<li>1.7. <a href="./ui/baseslist_adb.html#robo414">BasesList/ShowBaseInfo</a></li>
+<li>1.8. <a href="./ui/baseslist_ads.html#robo415">BasesList/ShowBasesListUI</a></li>
+<li>1.9. <a href="./ui/baseslist_adb.html#robo416">BasesList/ToggleBaseInfo</a></li>
+<li>1.10. <a href="./ui/baseslist_adb.html#robo417">BasesList/VisibleBases</a></li>
+</ul>
+<li>2. <a href="./ui/debugui_ads.html#robo1">DebugUI/DebugUI</a></li>
+<ul>
+<li>2.1. <a href="./ui/debugui_adb.html#robo221">DebugUI/Builder</a></li>
+<li>2.2. <a href="./ui/debugui_adb.html#robo222">DebugUI/Setting</a></li>
+<li>2.3. <a href="./ui/debugui_adb.html#robo476">DebugUI/AddCargo</a></li>
+<li>2.4. <a href="./ui/debugui_adb.html#robo477">DebugUI/AddEvent</a></li>
+<li>2.5. <a href="./ui/debugui_adb.html#robo478">DebugUI/AddShip</a></li>
+<li>2.6. <a href="./ui/debugui_adb.html#robo479">DebugUI/AddSkill</a></li>
+<li>2.7. <a href="./ui/debugui_adb.html#robo480">DebugUI/ChangeSkillLevel</a></li>
+<li>2.8. <a href="./ui/debugui_adb.html#robo481">DebugUI/ChangeStatLevel</a></li>
+<li>2.9. <a href="./ui/debugui_ads.html#robo482">DebugUI/CreateDebugUI</a></li>
+<li>2.10. <a href="./ui/debugui_adb.html#robo483">DebugUI/DeleteEvent</a></li>
+<li>2.11. <a href="./ui/debugui_adb.html#robo484">DebugUI/MoveShip</a></li>
+<li>2.12. <a href="./ui/debugui_adb.html#robo485">DebugUI/RefreshUI</a></li>
+<li>2.13. <a href="./ui/debugui_adb.html#robo486">DebugUI/ResetWorldUI</a></li>
+<li>2.14. <a href="./ui/debugui_adb.html#robo487">DebugUI/Save_Game</a></li>
+<li>2.15. <a href="./ui/debugui_adb.html#robo488">DebugUI/SetCargoAmount</a></li>
+<li>2.16. <a href="./ui/debugui_adb.html#robo489">DebugUI/SetMemberStats</a></li>
+<li>2.17. <a href="./ui/debugui_adb.html#robo490">DebugUI/SetModuleStats</a></li>
+<li>2.18. <a href="./ui/debugui_adb.html#robo491">DebugUI/ShowBaseInfo</a></li>
+<li>2.19. <a href="./ui/debugui_ads.html#robo492">DebugUI/ShowDebugUI</a></li>
+<li>2.20. <a href="./ui/debugui_adb.html#robo493">DebugUI/ShowItemEvent</a></li>
+<li>2.21. <a href="./ui/debugui_adb.html#robo494">DebugUI/UpdateAttribute</a></li>
+<li>2.22. <a href="./ui/debugui_adb.html#robo495">DebugUI/UpdateBase</a></li>
+<li>2.23. <a href="./ui/debugui_adb.html#robo496">DebugUI/UpdateCargoInfo</a></li>
+<li>2.24. <a href="./ui/debugui_adb.html#robo497">DebugUI/UpdateCrew</a></li>
+<li>2.25. <a href="./ui/debugui_adb.html#robo498">DebugUI/UpdateMember</a></li>
+<li>2.26. <a href="./ui/debugui_adb.html#robo499">DebugUI/UpdateModule</a></li>
+<li>2.27. <a href="./ui/debugui_adb.html#robo500">DebugUI/UpdateShip</a></li>
+<li>2.28. <a href="./ui/debugui_adb.html#robo501">DebugUI/UpdateShipCargo</a></li>
+<li>2.29. <a href="./ui/debugui_adb.html#robo502">DebugUI/UpdateSkill</a></li>
+</ul>
+<li>3. <a href="./bases_ads.html#robo3">Steamsky/Bases</a></li>
+<ul>
+<li>3.1. <a href="./bases_ads.html#robo66">Bases/Base_Cargo</a></li>
+<li>3.2. <a href="./bases_ads.html#robo67">Bases/BaseCargo_Container</a></li>
+<li>3.3. <a href="./bases_ads.html#robo68">Bases/BaseRecord</a></li>
+<li>3.4. <a href="./bases_ads.html#robo69">Bases/Bases_Size</a></li>
+<li>3.5. <a href="./bases_ads.html#robo70">Bases/Bases_Types</a></li>
+<li>3.6. <a href="./bases_ads.html#robo71">Bases/BasesRange</a></li>
+<li>3.7. <a href="./bases_ads.html#robo72">Bases/Recruit_Container</a></li>
+<li>3.8. <a href="./bases_ads.html#robo73">Bases/Recruit_Data</a></li>
+<li>3.9. <a href="./bases_ads.html#robo74">Bases/Reputation_Array</a></li>
+<li>3.10. <a href="./bases_ads.html#robo184">Bases/BaseSyllablesEnd</a></li>
+<li>3.11. <a href="./bases_ads.html#robo185">Bases/BaseSyllablesPost</a></li>
+<li>3.12. <a href="./bases_ads.html#robo186">Bases/BaseSyllablesPre</a></li>
+<li>3.13. <a href="./bases_ads.html#robo187">Bases/BaseSyllablesStart</a></li>
+<li>3.14. <a href="./bases_ads.html#robo188">Bases/SkyBases</a></li>
+<li>3.15. <a href="./bases_ads.html#robo402">Bases/AskForBases</a></li>
+<li>3.16. <a href="./bases_ads.html#robo403">Bases/AskForEvents</a></li>
+<li>3.17. <a href="./bases_ads.html#robo404">Bases/CountPrice</a></li>
+<li>3.18. <a href="./bases_ads.html#robo405">Bases/GainRep</a></li>
+<li>3.19. <a href="./bases_ads.html#robo406">Bases/GenerateBaseName</a></li>
+<li>3.20. <a href="./bases_ads.html#robo407">Bases/GenerateRecruits</a></li>
+<li>3.21. <a href="./bases_ads.html#robo408">Bases/UpdatePopulation</a></li>
+<li>3.22. <a href="./bases_ads.html#robo409">Bases/UpdatePrices</a></li>
+</ul>
+<li>4. <a href="./bases-cargo_ads.html#robo4">Steamsky/Bases.Cargo</a></li>
+<ul>
+<li>4.1. <a href="./bases-cargo_ads.html#robo354">Bases.Cargo/FindBaseCargo</a></li>
+<li>4.2. <a href="./bases-cargo_ads.html#robo355">Bases.Cargo/GenerateCargo</a></li>
+<li>4.3. <a href="./bases-cargo_ads.html#robo356">Bases.Cargo/UpdateBaseCargo</a></li>
+</ul>
+<li>5. <a href="./ui/bases-lootui_ads.html#robo5">Steamsky/Bases.LootUI</a></li>
+<ul>
+<li>5.1. <a href="./ui/bases-lootui_adb.html#robo179">Bases.LootUI/SettingTime</a></li>
+<li>5.2. <a href="./ui/bases-lootui_ads.html#robo357">Bases.LootUI/CreateBasesLootUI</a></li>
+<li>5.3. <a href="./ui/bases-lootui_adb.html#robo358">Bases.LootUI/LootItem</a></li>
+<li>5.4. <a href="./ui/bases-lootui_adb.html#robo359">Bases.LootUI/SearchLoot</a></li>
+<li>5.5. <a href="./ui/bases-lootui_adb.html#robo360">Bases.LootUI/ShowItemInfo</a></li>
+<li>5.6. <a href="./ui/bases-lootui_ads.html#robo361">Bases.LootUI/ShowLootUI</a></li>
+<li>5.7. <a href="./ui/bases-lootui_adb.html#robo362">Bases.LootUI/VisibleLoot</a></li>
+</ul>
+<li>6. <a href="./ui/bases-recruitui_ads.html#robo6">Steamsky/Bases.RecruitUI</a></li>
+<ul>
+<li>6.1. <a href="./ui/bases-recruitui_adb.html#robo180">Bases.RecruitUI/RecruitIndex</a></li>
+<li>6.2. <a href="./ui/bases-recruitui_ads.html#robo363">Bases.RecruitUI/CreateRecruitUI</a></li>
+<li>6.3. <a href="./ui/bases-recruitui_adb.html#robo364">Bases.RecruitUI/Hire</a></li>
+<li>6.4. <a href="./ui/bases-recruitui_adb.html#robo365">Bases.RecruitUI/NegotiateHire</a></li>
+<li>6.5. <a href="./ui/bases-recruitui_adb.html#robo366">Bases.RecruitUI/ShowRecruitInfo</a></li>
+<li>6.6. <a href="./ui/bases-recruitui_ads.html#robo367">Bases.RecruitUI/ShowRecruitUI</a></li>
+<li>6.7. <a href="./ui/bases-recruitui_adb.html#robo368">Bases.RecruitUI/StartNegotiations</a></li>
+<li>6.8. <a href="./ui/bases-recruitui_adb.html#robo369">Bases.RecruitUI/UpdateRecruitList</a></li>
+</ul>
+<li>7. <a href="./bases-saveload_ads.html#robo7">Steamsky/Bases.SaveLoad</a></li>
+<ul>
+<li>7.1. <a href="./bases-saveload_ads.html#robo370">Bases.SaveLoad/LoadBases</a></li>
+<li>7.2. <a href="./bases-saveload_ads.html#robo371">Bases.SaveLoad/SaveBases</a></li>
+</ul>
+<li>8. <a href="./ui/bases-schoolui_ads.html#robo8">Steamsky/Bases.SchoolUI</a></li>
+<ul>
+<li>8.1. <a href="./ui/bases-schoolui_adb.html#robo181">Bases.SchoolUI/CrewIndex</a></li>
+<li>8.2. <a href="./ui/bases-schoolui_ads.html#robo372">Bases.SchoolUI/CreateBasesSchoolUI</a></li>
+<li>8.3. <a href="./ui/bases-schoolui_ads.html#robo373">Bases.SchoolUI/ShowSchoolUI</a></li>
+<li>8.4. <a href="./ui/bases-schoolui_adb.html#robo374">Bases.SchoolUI/ShowTrainInfo</a></li>
+<li>8.5. <a href="./ui/bases-schoolui_adb.html#robo375">Bases.SchoolUI/TrainSelectedSkill</a></li>
+</ul>
+<li>9. <a href="./bases-ship_ads.html#robo9">Steamsky/Bases.Ship</a></li>
+<ul>
+<li>9.1. <a href="./bases-ship_ads.html#robo325">Bases.Ship/BasesShip_Installation_Error</a></li>
+<li>9.2. <a href="./bases-ship_ads.html#robo326">Bases.Ship/BasesShip_Nothing_To_Repair</a></li>
+<li>9.3. <a href="./bases-ship_ads.html#robo327">Bases.Ship/BasesShip_Removing_Error</a></li>
+<li>9.4. <a href="./bases-ship_ads.html#robo328">Bases.Ship/BasesShip_Unique_Module</a></li>
+<li>9.5. <a href="./bases-ship_ads.html#robo376">Bases.Ship/PayForDock</a></li>
+<li>9.6. <a href="./bases-ship_ads.html#robo377">Bases.Ship/RepairCost</a></li>
+<li>9.7. <a href="./bases-ship_ads.html#robo378">Bases.Ship/RepairShip</a></li>
+<li>9.8. <a href="./bases-ship_ads.html#robo379">Bases.Ship/UpgradeShip</a></li>
+</ul>
+<li>10. <a href="./ui/bases-shipyardui_ads.html#robo10">Steamsky/Bases.ShipyardUI</a></li>
+<ul>
+<li>10.1. <a href="./ui/bases-shipyardui_adb.html#robo182">Bases.ShipyardUI/ModuleIndex</a></li>
+<li>10.2. <a href="./ui/bases-shipyardui_ads.html#robo380">Bases.ShipyardUI/CreateBasesShipyardUI</a></li>
+<li>10.3. <a href="./ui/bases-shipyardui_adb.html#robo381">Bases.ShipyardUI/GetModuleInfo</a></li>
+<li>10.4. <a href="./ui/bases-shipyardui_adb.html#robo382">Bases.ShipyardUI/ManipulateModule</a></li>
+<li>10.5. <a href="./ui/bases-shipyardui_adb.html#robo383">Bases.ShipyardUI/SearchShipyard</a></li>
+<li>10.6. <a href="./ui/bases-shipyardui_adb.html#robo384">Bases.ShipyardUI/SetRemoveModulesList</a></li>
+<li>10.7. <a href="./ui/bases-shipyardui_adb.html#robo385">Bases.ShipyardUI/ShowInstallInfo</a></li>
+<li>10.8. <a href="./ui/bases-shipyardui_adb.html#robo386">Bases.ShipyardUI/ShowRemoveInfo</a></li>
+<li>10.9. <a href="./ui/bases-shipyardui_ads.html#robo387">Bases.ShipyardUI/ShowShipyardUI</a></li>
+<li>10.10. <a href="./ui/bases-shipyardui_adb.html#robo388">Bases.ShipyardUI/VisibleShipyard</a></li>
+</ul>
+<li>11. <a href="./bases-trade_ads.html#robo11">Steamsky/Bases.Trade</a></li>
+<ul>
+<li>11.1. <a href="./bases-trade_ads.html#robo329">Bases.Trade/Trade_Already_Known</a></li>
+<li>11.2. <a href="./bases-trade_ads.html#robo330">Bases.Trade/Trade_Cant_Heal</a></li>
+<li>11.3. <a href="./bases-trade_ads.html#robo331">Bases.Trade/Trade_Cant_Train</a></li>
+<li>11.4. <a href="./bases-trade_ads.html#robo389">Bases.Trade/BuyRecipe</a></li>
+<li>11.5. <a href="./bases-trade_adb.html#robo390">Bases.Trade/CheckMoney</a></li>
+<li>11.6. <a href="./bases-trade_ads.html#robo391">Bases.Trade/HealCost</a></li>
+<li>11.7. <a href="./bases-trade_ads.html#robo392">Bases.Trade/HealWounded</a></li>
+<li>11.8. <a href="./bases-trade_ads.html#robo393">Bases.Trade/HireRecruit</a></li>
+<li>11.9. <a href="./bases-trade_ads.html#robo394">Bases.Trade/TrainCost</a></li>
+<li>11.10. <a href="./bases-trade_ads.html#robo395">Bases.Trade/TrainSkill</a></li>
+</ul>
+<li>12. <a href="./ui/bases-ui_ads.html#robo12">Steamsky/Bases.UI</a></li>
+<ul>
+<li>12.1. <a href="./ui/bases-ui_adb.html#robo65">Bases.UI/States</a></li>
+<li>12.2. <a href="./ui/bases-ui_adb.html#robo183">Bases.UI/CurrentState</a></li>
+<li>12.3. <a href="./ui/bases-ui_adb.html#robo396">Bases.UI/AcceptAction</a></li>
+<li>12.4. <a href="./ui/bases-ui_ads.html#robo397">Bases.UI/CreateBasesUI</a></li>
+<li>12.5. <a href="./ui/bases-ui_adb.html#robo398">Bases.UI/ObjectSelected</a></li>
+<li>12.6. <a href="./ui/bases-ui_ads.html#robo399">Bases.UI/ShowBuyRecipesUI</a></li>
+<li>12.7. <a href="./ui/bases-ui_ads.html#robo400">Bases.UI/ShowHealUI</a></li>
+<li>12.8. <a href="./ui/bases-ui_ads.html#robo401">Bases.UI/ShowRepairUI</a></li>
+</ul>
+<li>13. <a href="./careers_ads.html#robo13">Steamsky/Careers</a></li>
+<ul>
+<li>13.1. <a href="./careers_ads.html#robo75">Careers/CareerRecord</a></li>
+<li>13.2. <a href="./careers_ads.html#robo76">Careers/Careers_Container</a></li>
+<li>13.3. <a href="./careers_ads.html#robo191">Careers/Careers_List</a></li>
+<li>13.4. <a href="./careers_ads.html#robo418">Careers/LoadCareers</a></li>
+</ul>
+<li>14. <a href="./combat_ads.html#robo14">Steamsky/Combat</a></li>
+<ul>
+<li>14.1. <a href="./combat_ads.html#robo77">Combat/Enemy_Record</a></li>
+<li>14.2. <a href="./combat_ads.html#robo78">Combat/Guns_Container</a></li>
+<li>14.3. <a href="./combat_ads.html#robo79">Combat/GunsInfoArray</a></li>
+<li>14.4. <a href="./combat_ads.html#robo195">Combat/BoardingOrders</a></li>
+<li>14.5. <a href="./combat_ads.html#robo196">Combat/EndCombat</a></li>
+<li>14.6. <a href="./combat_ads.html#robo197">Combat/Enemy</a></li>
+<li>14.7. <a href="./combat_ads.html#robo198">Combat/EnemyName</a></li>
+<li>14.8. <a href="./combat_ads.html#robo199">Combat/EnemyShipIndex</a></li>
+<li>14.9. <a href="./combat_adb.html#robo200">Combat/FactionName</a></li>
+<li>14.10. <a href="./combat_ads.html#robo201">Combat/Guns</a></li>
+<li>14.11. <a href="./combat_ads.html#robo202">Combat/HarpoonDuration</a></li>
+<li>14.12. <a href="./combat_ads.html#robo203">Combat/MessagesStarts</a></li>
+<li>14.13. <a href="./combat_ads.html#robo204">Combat/OldSpeed</a></li>
+<li>14.14. <a href="./combat_ads.html#robo205">Combat/PilotOrder</a>, <a href="./combat_ads.html#robo205">EngineerOrder</a></li>
+<li>14.15. <a href="./combat_ads.html#robo430">Combat/CombatTurn</a></li>
+<li>14.16. <a href="./combat_ads.html#robo431">Combat/StartCombat</a></li>
+</ul>
+<li>15. <a href="./ui/combat-ui_ads.html#robo15">Steamsky/Combat.UI</a></li>
+<ul>
+<li>15.1. <a href="./ui/combat-ui_adb.html#robo192">Combat.UI/EngineerOrders</a></li>
+<li>15.2. <a href="./ui/combat-ui_adb.html#robo193">Combat.UI/GunnerOrders</a></li>
+<li>15.3. <a href="./ui/combat-ui_adb.html#robo194">Combat.UI/PilotOrders</a></li>
+<li>15.4. <a href="./ui/combat-ui_ads.html#robo419">Combat.UI/CreateCombatUI</a></li>
+<li>15.5. <a href="./ui/combat-ui_adb.html#robo420">Combat.UI/GiveBoardingOrders</a></li>
+<li>15.6. <a href="./ui/combat-ui_adb.html#robo421">Combat.UI/GiveCombatOrders</a></li>
+<li>15.7. <a href="./ui/combat-ui_adb.html#robo422">Combat.UI/NextTurn</a></li>
+<li>15.8. <a href="./ui/combat-ui_adb.html#robo423">Combat.UI/RefreshBoardingUI</a></li>
+<li>15.9. <a href="./ui/combat-ui_adb.html#robo424">Combat.UI/RefreshCombatUI</a></li>
+<li>15.10. <a href="./ui/combat-ui_adb.html#robo425">Combat.UI/SetBoardingOrder</a></li>
+<li>15.11. <a href="./ui/combat-ui_adb.html#robo426">Combat.UI/SetBoardingParty</a></li>
+<li>15.12. <a href="./ui/combat-ui_adb.html#robo427">Combat.UI/SetOrdersList</a></li>
+<li>15.13. <a href="./ui/combat-ui_ads.html#robo428">Combat.UI/ShowCombatUI</a></li>
+<li>15.14. <a href="./ui/combat-ui_adb.html#robo429">Combat.UI/UpdateMessages</a></li>
+</ul>
+<li>16. <a href="./config_ads.html#robo16">Steamsky/Config</a></li>
+<ul>
+<li>16.1. <a href="./config_ads.html#robo80">Config/AutoMoveBreak</a></li>
+<li>16.2. <a href="./config_ads.html#robo81">Config/AutoSaveType</a></li>
+<li>16.3. <a href="./config_ads.html#robo82">Config/GameSettingsRecord</a></li>
+<li>16.4. <a href="./config_ads.html#robo83">Config/MessagesOrderType</a></li>
+<li>16.5. <a href="./config_ads.html#robo84">Config/NewGameRecord</a></li>
+<li>16.6. <a href="./config_ads.html#robo206">Config/GameSettings</a></li>
+<li>16.7. <a href="./config_ads.html#robo207">Config/NewGameSettings</a></li>
+<li>16.8. <a href="./config_ads.html#robo432">Config/LoadConfig</a></li>
+<li>16.9. <a href="./config_ads.html#robo433">Config/SaveConfig</a></li>
+</ul>
+<li>17. <a href="./crafts_ads.html#robo17">Steamsky/Crafts</a></li>
+<ul>
+<li>17.1. <a href="./crafts_ads.html#robo85">Crafts/Craft_Data</a></li>
+<li>17.2. <a href="./crafts_ads.html#robo86">Crafts/Recipes_Container</a></li>
+<li>17.3. <a href="./crafts_ads.html#robo209">Crafts/Known_Recipes</a></li>
+<li>17.4. <a href="./crafts_ads.html#robo210">Crafts/Recipes_List</a></li>
+<li>17.5. <a href="./crafts_ads.html#robo332">Crafts/Crafting_No_Materials</a></li>
+<li>17.6. <a href="./crafts_ads.html#robo333">Crafts/Crafting_No_Tools</a></li>
+<li>17.7. <a href="./crafts_ads.html#robo334">Crafts/Crafting_No_Workshop</a></li>
+<li>17.8. <a href="./crafts_ads.html#robo439">Crafts/CheckRecipe</a></li>
+<li>17.9. <a href="./crafts_ads.html#robo440">Crafts/LoadRecipes</a></li>
+<li>17.10. <a href="./crafts_ads.html#robo441">Crafts/Manufacturing</a></li>
+<li>17.11. <a href="./crafts_ads.html#robo442">Crafts/SetRecipe</a></li>
+<li>17.12. <a href="./crafts_adb.html#robo443">Crafts/SetRecipeData</a></li>
+</ul>
+<li>18. <a href="./ui/crafts-ui_ads.html#robo18">Steamsky/Crafts.UI</a></li>
+<ul>
+<li>18.1. <a href="./ui/crafts-ui_adb.html#robo208">Crafts.UI/RecipeIndex</a></li>
+<li>18.2. <a href="./ui/crafts-ui_ads.html#robo434">Crafts.UI/CreateCraftsUI</a></li>
+<li>18.3. <a href="./ui/crafts-ui_adb.html#robo435">Crafts.UI/SetCrafting</a></li>
+<li>18.4. <a href="./ui/crafts-ui_ads.html#robo436">Crafts.UI/ShowCraftsUI</a></li>
+<li>18.5. <a href="./ui/crafts-ui_adb.html#robo437">Crafts.UI/ShowRecipeInfo</a></li>
+<li>18.6. <a href="./ui/crafts-ui_adb.html#robo438">Crafts.UI/ShowSetRecipe</a></li>
+</ul>
+<li>19. <a href="./crew_ads.html#robo19">Steamsky/Crew</a></li>
+<ul>
+<li>19.1. <a href="./crew_ads.html#robo87">Crew/Attributes_Array</a></li>
+<li>19.2. <a href="./crew_ads.html#robo88">Crew/Attributes_Container</a></li>
+<li>19.3. <a href="./crew_ads.html#robo89">Crew/Crew_Orders</a></li>
+<li>19.4. <a href="./crew_ads.html#robo90">Crew/Member_Data</a></li>
+<li>19.5. <a href="./crew_ads.html#robo91">Crew/Skill_Array</a></li>
+<li>19.6. <a href="./crew_ads.html#robo92">Crew/Skills_Container</a></li>
+<li>19.7. <a href="./crew_ads.html#robo212">Crew/FemaleSyllablesEnd</a></li>
+<li>19.8. <a href="./crew_ads.html#robo213">Crew/FemaleSyllablesMiddle</a></li>
+<li>19.9. <a href="./crew_ads.html#robo214">Crew/FemaleSyllablesStart</a></li>
+<li>19.10. <a href="./crew_ads.html#robo215">Crew/FemaleVocals</a></li>
+<li>19.11. <a href="./crew_ads.html#robo216">Crew/MaleConsonants</a></li>
+<li>19.12. <a href="./crew_ads.html#robo217">Crew/MaleSyllablesEnd</a></li>
+<li>19.13. <a href="./crew_ads.html#robo218">Crew/MaleSyllablesMiddle</a></li>
+<li>19.14. <a href="./crew_ads.html#robo219">Crew/MaleSyllablesStart</a></li>
+<li>19.15. <a href="./crew_ads.html#robo220">Crew/MaleVocals</a></li>
+<li>19.16. <a href="./crew_ads.html#robo335">Crew/Crew_No_Space_Error</a></li>
+<li>19.17. <a href="./crew_ads.html#robo336">Crew/Crew_Order_Error</a></li>
+<li>19.18. <a href="./crew_ads.html#robo468">Crew/DailyPayment</a></li>
+<li>19.19. <a href="./crew_ads.html#robo469">Crew/FindCabin</a></li>
+<li>19.20. <a href="./crew_ads.html#robo470">Crew/GainExp</a></li>
+<li>19.21. <a href="./crew_ads.html#robo471">Crew/GenerateMemberName</a></li>
+<li>19.22. <a href="./crew_ads.html#robo472">Crew/GetAttributeLevelName</a></li>
+<li>19.23. <a href="./crew_ads.html#robo473">Crew/GetSkillLevelName</a></li>
+<li>19.24. <a href="./crew_ads.html#robo474">Crew/UpdateCrew</a></li>
+<li>19.25. <a href="./crew_ads.html#robo475">Crew/WaitForRest</a></li>
+</ul>
+<li>20. <a href="./crew-inventory_ads.html#robo20">Steamsky/Crew.Inventory</a></li>
+<ul>
+<li>20.1. <a href="./crew-inventory_ads.html#robo444">Crew.Inventory/FindTools</a></li>
+<li>20.2. <a href="./crew-inventory_ads.html#robo445">Crew.Inventory/FreeInventory</a></li>
+<li>20.3. <a href="./crew-inventory_ads.html#robo446">Crew.Inventory/ItemIsUsed</a></li>
+<li>20.4. <a href="./crew-inventory_ads.html#robo447">Crew.Inventory/TakeOffItem</a></li>
+<li>20.5. <a href="./crew-inventory_ads.html#robo448">Crew.Inventory/UpdateInventory</a></li>
+</ul>
+<li>21. <a href="./ui/crew-ui_ads.html#robo21">Steamsky/Crew.UI</a></li>
+<ul>
+<li>21.1. <a href="./ui/crew-ui_ads.html#robo211">Crew.UI/MemberIndex</a>, <a href="./ui/crew-ui_ads.html#robo211">ItemIndex</a></li>
+<li>21.2. <a href="./ui/crew-ui_ads.html#robo460">Crew.UI/CreateCrewUI</a></li>
+<li>21.3. <a href="./ui/crew-ui_ads.html#robo461">Crew.UI/RefreshCrewInfo</a></li>
+<li>21.4. <a href="./ui/crew-ui_ads.html#robo462">Crew.UI/RefreshInventory</a></li>
+<li>21.5. <a href="./ui/crew-ui_ads.html#robo463">Crew.UI/SetActiveItem</a></li>
+<li>21.6. <a href="./ui/crew-ui_ads.html#robo464">Crew.UI/SetActiveMember</a></li>
+<li>21.7. <a href="./ui/crew-ui_ads.html#robo465">Crew.UI/SetOrdersList</a></li>
+<li>21.8. <a href="./ui/crew-ui_ads.html#robo466">Crew.UI/ShowCrewUI</a></li>
+<li>21.9. <a href="./ui/crew-ui_ads.html#robo467">Crew.UI/ShowOrdersForAll</a></li>
+</ul>
+<li>22. <a href="./ui/crew-ui-handlers_ads.html#robo22">Steamsky/Crew.UI.Handlers</a></li>
+<ul>
+<li>22.1. <a href="./ui/crew-ui-handlers_ads.html#robo449">Crew.UI.Handlers/DismissMember</a></li>
+<li>22.2. <a href="./ui/crew-ui-handlers_ads.html#robo450">Crew.UI.Handlers/GiveCrewOrders</a></li>
+<li>22.3. <a href="./ui/crew-ui-handlers_ads.html#robo451">Crew.UI.Handlers/GiveOrdersAll</a></li>
+<li>22.4. <a href="./ui/crew-ui-handlers_ads.html#robo452">Crew.UI.Handlers/MoveItem</a></li>
+<li>22.5. <a href="./ui/crew-ui-handlers_adb.html#robo453">Crew.UI.Handlers/ReducePriority</a></li>
+<li>22.6. <a href="./ui/crew-ui-handlers_ads.html#robo454">Crew.UI.Handlers/SetPriority</a></li>
+<li>22.7. <a href="./ui/crew-ui-handlers_ads.html#robo455">Crew.UI.Handlers/ShowInventory</a></li>
+<li>22.8. <a href="./ui/crew-ui-handlers_ads.html#robo456">Crew.UI.Handlers/ShowItemInfo2</a></li>
+<li>22.9. <a href="./ui/crew-ui-handlers_ads.html#robo457">Crew.UI.Handlers/ShowMemberInfo</a></li>
+<li>22.10. <a href="./ui/crew-ui-handlers_adb.html#robo458">Crew.UI.Handlers/UpdatePriorities</a></li>
+<li>22.11. <a href="./ui/crew-ui-handlers_ads.html#robo459">Crew.UI.Handlers/UseItem</a></li>
+</ul>
+<li>23. <a href="./events_ads.html#robo23">Steamsky/Events</a></li>
+<ul>
+<li>23.1. <a href="./events_ads.html#robo93">Events/EventData</a></li>
+<li>23.2. <a href="./events_ads.html#robo94">Events/Events_Container</a></li>
+<li>23.3. <a href="./events_ads.html#robo95">Events/Events_Types</a></li>
+<li>23.4. <a href="./events_ads.html#robo225">Events/Events_List</a></li>
+<li>23.5. <a href="./events_ads.html#robo226">Events/FriendlyShips</a></li>
+<li>23.6. <a href="./events_ads.html#robo227">Events/Traders</a></li>
+<li>23.7. <a href="./events_ads.html#robo508">Events/CheckForEvent</a></li>
+<li>23.8. <a href="./events_ads.html#robo509">Events/DeleteEvent</a></li>
+<li>23.9. <a href="./events_ads.html#robo510">Events/GenerateEnemies</a></li>
+<li>23.10. <a href="./events_ads.html#robo511">Events/GenerateTraders</a></li>
+<li>23.11. <a href="./events_adb.html#robo512">Events/GetPlayerShips</a></li>
+<li>23.12. <a href="./events_ads.html#robo513">Events/RecoverBase</a></li>
+<li>23.13. <a href="./events_ads.html#robo514">Events/UpdateEvents</a></li>
+</ul>
+<li>24. <a href="./ui/events-ui_ads.html#robo24">Steamsky/Events.UI</a></li>
+<ul>
+<li>24.1. <a href="./ui/events-ui_adb.html#robo223">Events.UI/Cleaning</a></li>
+<li>24.2. <a href="./ui/events-ui_adb.html#robo224">Events.UI/EventIndex</a></li>
+<li>24.3. <a href="./ui/events-ui_ads.html#robo503">Events.UI/CreateEventsUI</a></li>
+<li>24.4. <a href="./ui/events-ui_adb.html#robo504">Events.UI/SetEventAsDestination</a></li>
+<li>24.5. <a href="./ui/events-ui_adb.html#robo505">Events.UI/ShowEvent</a></li>
+<li>24.6. <a href="./ui/events-ui_adb.html#robo506">Events.UI/ShowEventInfo</a></li>
+<li>24.7. <a href="./ui/events-ui_ads.html#robo507">Events.UI/ShowEventsUI</a></li>
+</ul>
+<li>25. <a href="./factions_ads.html#robo25">Steamsky/Factions</a></li>
+<ul>
+<li>25.1. <a href="./factions_ads.html#robo96">Factions/CareerRecord</a></li>
+<li>25.2. <a href="./factions_ads.html#robo97">Factions/Careers_Container</a></li>
+<li>25.3. <a href="./factions_ads.html#robo98">Factions/FactionRecord</a></li>
+<li>25.4. <a href="./factions_ads.html#robo99">Factions/Factions_Container</a></li>
+<li>25.5. <a href="./factions_ads.html#robo100">Factions/NamesTypes</a></li>
+<li>25.6. <a href="./factions_ads.html#robo101">Factions/Relations_Container</a></li>
+<li>25.7. <a href="./factions_ads.html#robo102">Factions/RelationsRecord</a></li>
+<li>25.8. <a href="./factions_ads.html#robo103">Factions/Reputation_Array</a></li>
+<li>25.9. <a href="./factions_ads.html#robo228">Factions/Factions_List</a></li>
+<li>25.10. <a href="./factions_ads.html#robo515">Factions/GetRandomFaction</a></li>
+<li>25.11. <a href="./factions_ads.html#robo516">Factions/GetReputation</a></li>
+<li>25.12. <a href="./factions_ads.html#robo517">Factions/IsFriendly</a></li>
+<li>25.13. <a href="./factions_ads.html#robo518">Factions/LoadFactions</a></li>
+</ul>
+<li>26. <a href="./game_ads.html#robo26">Steamsky/Game</a></li>
+<ul>
+<li>26.1. <a href="./game_ads.html#robo104">Game/Attribute_Record</a></li>
+<li>26.2. <a href="./game_ads.html#robo105">Game/AttributesData_Container</a></li>
+<li>26.3. <a href="./game_ads.html#robo106">Game/DamageFactor</a></li>
+<li>26.4. <a href="./game_ads.html#robo107">Game/DataAction</a></li>
+<li>26.5. <a href="./game_ads.html#robo108">Game/Date_Record</a></li>
+<li>26.6. <a href="./game_ads.html#robo109">Game/Integer_Container</a></li>
+<li>26.7. <a href="./game_ads.html#robo110">Game/Natural_Array</a></li>
+<li>26.8. <a href="./game_ads.html#robo111">Game/Natural_Container</a></li>
+<li>26.9. <a href="./game_ads.html#robo112">Game/Positive_Container</a></li>
+<li>26.10. <a href="./game_ads.html#robo113">Game/Skill_Record</a></li>
+<li>26.11. <a href="./game_ads.html#robo114">Game/SkillsData_Container</a></li>
+<li>26.12. <a href="./game_ads.html#robo115">Game/UnboundedString_Container</a></li>
+<li>26.13. <a href="./game_ads.html#robo231">Game/AlchemyTools</a></li>
+<li>26.14. <a href="./game_ads.html#robo232">Game/ArmsArmor</a></li>
+<li>26.15. <a href="./game_ads.html#robo233">Game/Attributes_List</a></li>
+<li>26.16. <a href="./game_ads.html#robo234">Game/ChestArmor</a></li>
+<li>26.17. <a href="./game_ads.html#robo235">Game/CleaningTools</a></li>
+<li>26.18. <a href="./game_ads.html#robo236">Game/ConditionIndex</a></li>
+<li>26.19. <a href="./game_ads.html#robo237">Game/CorpseIndex</a></li>
+<li>26.20. <a href="./game_ads.html#robo238">Game/DataDirectory</a></li>
+<li>26.21. <a href="./game_ads.html#robo239">Game/DocDirectory</a></li>
+<li>26.22. <a href="./game_ads.html#robo240">Game/DodgeSkill</a></li>
+<li>26.23. <a href="./game_ads.html#robo241">Game/EngineeringSkill</a></li>
+<li>26.24. <a href="./game_ads.html#robo242">Game/FuelType</a></li>
+<li>26.25. <a href="./game_ads.html#robo243">Game/GameDate</a></li>
+<li>26.26. <a href="./game_ads.html#robo244">Game/GameVersion</a></li>
+<li>26.27. <a href="./game_ads.html#robo245">Game/GunnerySkill</a></li>
+<li>26.28. <a href="./game_ads.html#robo246">Game/HeadArmor</a></li>
+<li>26.29. <a href="./game_ads.html#robo247">Game/LegsArmor</a></li>
+<li>26.30. <a href="./game_ads.html#robo248">Game/MissionItemsType</a></li>
+<li>26.31. <a href="./game_ads.html#robo249">Game/ModsDirectory</a></li>
+<li>26.32. <a href="./game_ads.html#robo250">Game/MoneyIndex</a></li>
+<li>26.33. <a href="./game_ads.html#robo251">Game/MoneyName</a></li>
+<li>26.34. <a href="./game_ads.html#robo252">Game/PerceptionSkill</a></li>
+<li>26.35. <a href="./game_ads.html#robo253">Game/PilotingSkill</a></li>
+<li>26.36. <a href="./game_ads.html#robo254">Game/PlayerCareer</a></li>
+<li>26.37. <a href="./game_ads.html#robo255">Game/RepairTools</a></li>
+<li>26.38. <a href="./game_ads.html#robo256">Game/SaveDirectory</a></li>
+<li>26.39. <a href="./game_ads.html#robo257">Game/ShieldType</a></li>
+<li>26.40. <a href="./game_ads.html#robo258">Game/Skills_List</a></li>
+<li>26.41. <a href="./game_ads.html#robo259">Game/StrengthIndex</a></li>
+<li>26.42. <a href="./game_ads.html#robo260">Game/TalkingSkill</a></li>
+<li>26.43. <a href="./game_ads.html#robo261">Game/ThemesDirectory</a></li>
+<li>26.44. <a href="./game_ads.html#robo262">Game/TradersName</a></li>
+<li>26.45. <a href="./game_ads.html#robo263">Game/UnarmedSkill</a></li>
+<li>26.46. <a href="./game_ads.html#robo264">Game/WeaponType</a></li>
+<li>26.47. <a href="./game_ads.html#robo338">Game/Data_Loading_Error</a></li>
+<li>26.48. <a href="./game_ads.html#robo522">Game/EndGame</a></li>
+<li>26.49. <a href="./game_ads.html#robo523">Game/FindSkillIndex</a></li>
+<li>26.50. <a href="./game_adb.html#robo524">Game/LoadData</a></li>
+<li>26.51. <a href="./game_ads.html#robo525">Game/LoadGameData</a></li>
+<li>26.52. <a href="./game_ads.html#robo526">Game/NewGame</a></li>
+<li>26.53. <a href="./game_ads.html#robo527">Game/UpdateGame</a></li>
+</ul>
+<li>27. <a href="./game-saveload_ads.html#robo27">Steamsky/Game.SaveLoad</a></li>
+<ul>
+<li>27.1. <a href="./game-saveload_adb.html#robo229">Game.SaveLoad/SaveData</a></li>
+<li>27.2. <a href="./game-saveload_ads.html#robo230">Game.SaveLoad/SaveName</a></li>
+<li>27.3. <a href="./game-saveload_ads.html#robo337">Game.SaveLoad/SaveGame_Invalid_Data</a></li>
+<li>27.4. <a href="./game-saveload_ads.html#robo519">Game.SaveLoad/GenerateSaveName</a></li>
+<li>27.5. <a href="./game-saveload_ads.html#robo520">Game.SaveLoad/LoadGame</a></li>
+<li>27.6. <a href="./game-saveload_ads.html#robo521">Game.SaveLoad/SaveGame</a></li>
+</ul>
+<li>28. <a href="./ui/gameoptions_ads.html#robo28">Steamsky/GameOptions</a></li>
+<ul>
+<li>28.1. <a href="./ui/gameoptions_adb.html#robo116">GameOptions/Accel_Data</a></li>
+<li>28.2. <a href="./ui/gameoptions_adb.html#robo265">GameOptions/Accels</a></li>
+<li>28.3. <a href="./ui/gameoptions_adb.html#robo266">GameOptions/Setting</a></li>
+<li>28.4. <a href="./ui/gameoptions_adb.html#robo528">GameOptions/ApplyTheme</a></li>
+<li>28.5. <a href="./ui/gameoptions_ads.html#robo529">GameOptions/CloseOptions</a></li>
+<li>28.6. <a href="./ui/gameoptions_ads.html#robo530">GameOptions/CreateGameOptions</a></li>
+<li>28.7. <a href="./ui/gameoptions_adb.html#robo531">GameOptions/ResizeFont</a></li>
+<li>28.8. <a href="./ui/gameoptions_adb.html#robo532">GameOptions/SetAccelerator</a></li>
+<li>28.9. <a href="./ui/gameoptions_adb.html#robo533">GameOptions/SetDefaultFontSize</a></li>
+<li>28.10. <a href="./ui/gameoptions_adb.html#robo534">GameOptions/SetFontsSizes</a></li>
+<li>28.11. <a href="./ui/gameoptions_ads.html#robo535">GameOptions/ShowGameOptions</a></li>
+<li>28.12. <a href="./ui/gameoptions_adb.html#robo536">GameOptions/ToggleAnimationType</a></li>
+</ul>
+<li>29. <a href="./goals_ads.html#robo29">Steamsky/Goals</a></li>
+<ul>
+<li>29.1. <a href="./goals_ads.html#robo117">Goals/Goal_Data</a></li>
+<li>29.2. <a href="./goals_ads.html#robo118">Goals/Goals_Container</a></li>
+<li>29.3. <a href="./goals_ads.html#robo119">Goals/GoalTypes</a></li>
+<li>29.4. <a href="./goals_ads.html#robo269">Goals/CurrentGoal</a></li>
+<li>29.5. <a href="./goals_ads.html#robo270">Goals/Goals_List</a></li>
+<li>29.6. <a href="./goals_ads.html#robo543">Goals/ClearCurrentGoal</a></li>
+<li>29.7. <a href="./goals_ads.html#robo544">Goals/GoalText</a></li>
+<li>29.8. <a href="./goals_ads.html#robo545">Goals/LoadGoals</a></li>
+<li>29.9. <a href="./goals_ads.html#robo546">Goals/UpdateGoal</a></li>
+</ul>
+<li>30. <a href="./ui/goals-ui_ads.html#robo30">Steamsky/Goals.UI</a></li>
+<ul>
+<li>30.1. <a href="./ui/goals-ui_adb.html#robo267">Goals.UI/Builder</a></li>
+<li>30.2. <a href="./ui/goals-ui_adb.html#robo268">Goals.UI/FromMainMenu</a></li>
+<li>30.3. <a href="./ui/goals-ui_adb.html#robo537">Goals.UI/CloseGoals</a></li>
+<li>30.4. <a href="./ui/goals-ui_ads.html#robo538">Goals.UI/CreateGoalsMenu</a></li>
+<li>30.5. <a href="./ui/goals-ui_adb.html#robo539">Goals.UI/GoalSelected</a></li>
+<li>30.6. <a href="./ui/goals-ui_adb.html#robo540">Goals.UI/HideGoals</a></li>
+<li>30.7. <a href="./ui/goals-ui_adb.html#robo541">Goals.UI/SelectGoal</a></li>
+<li>30.8. <a href="./ui/goals-ui_ads.html#robo542">Goals.UI/ShowGoalsMenu</a></li>
+</ul>
+<li>31. <a href="./halloffame_ads.html#robo31">Steamsky/HallOfFame</a></li>
+<ul>
+<li>31.1. <a href="./halloffame_ads.html#robo120">HallOfFame/HallOfFame_Data</a></li>
+<li>31.2. <a href="./halloffame_ads.html#robo271">HallOfFame/HallOfFame_Array</a></li>
+<li>31.3. <a href="./halloffame_adb.html#robo272">HallOfFame/HoFData</a></li>
+<li>31.4. <a href="./halloffame_ads.html#robo547">HallOfFame/LoadHallOfFame</a></li>
+<li>31.5. <a href="./halloffame_ads.html#robo548">HallOfFame/UpdateHallOfFame</a></li>
+</ul>
+<li>32. <a href="./help_ads.html#robo32">Steamsky/Help</a></li>
+<ul>
+<li>32.1. <a href="./help_ads.html#robo121">Help/Help_Container</a></li>
+<li>32.2. <a href="./help_ads.html#robo122">Help/Help_Data</a></li>
+<li>32.3. <a href="./help_ads.html#robo275">Help/Help_List</a></li>
+<li>32.4. <a href="./help_ads.html#robo555">Help/LoadHelp</a></li>
+</ul>
+<li>33. <a href="./ui/help-ui_ads.html#robo33">Steamsky/Help.UI</a></li>
+<ul>
+<li>33.1. <a href="./ui/help-ui_adb.html#robo273">Help.UI/Builder</a></li>
+<li>33.2. <a href="./ui/help-ui_adb.html#robo274">Help.UI/Setting</a></li>
+<li>33.3. <a href="./ui/help-ui_ads.html#robo549">Help.UI/CreateHelpUI</a></li>
+<li>33.4. <a href="./ui/help-ui_adb.html#robo550">Help.UI/DisableMouse</a></li>
+<li>33.5. <a href="./ui/help-ui_adb.html#robo551">Help.UI/HideHelpWindow</a></li>
+<li>33.6. <a href="./ui/help-ui_adb.html#robo552">Help.UI/SelectTopic</a></li>
+<li>33.7. <a href="./ui/help-ui_ads.html#robo553">Help.UI/ShowHelpUI</a></li>
+<li>33.8. <a href="./ui/help-ui_adb.html#robo554">Help.UI/ToggleTopics</a></li>
+</ul>
+<li>34. <a href="./items_ads.html#robo34">SteamSky/Items</a></li>
+<ul>
+<li>34.1. <a href="./items_ads.html#robo123">Items/Inventory_Container</a></li>
+<li>34.2. <a href="./items_ads.html#robo124">Items/InventoryData</a></li>
+<li>34.3. <a href="./items_ads.html#robo125">Items/Object_Buyable</a></li>
+<li>34.4. <a href="./items_ads.html#robo126">Items/Object_Data</a></li>
+<li>34.5. <a href="./items_ads.html#robo127">Items/Objects_Container</a></li>
+<li>34.6. <a href="./items_ads.html#robo276">Items/ArmsArmors_List</a></li>
+<li>34.7. <a href="./items_ads.html#robo277">Items/ChestArmors_List</a></li>
+<li>34.8. <a href="./items_ads.html#robo278">Items/HeadArmors_List</a></li>
+<li>34.9. <a href="./items_ads.html#robo279">Items/Items_List</a></li>
+<li>34.10. <a href="./items_ads.html#robo280">Items/Items_Types</a></li>
+<li>34.11. <a href="./items_ads.html#robo281">Items/LegsArmors_List</a></li>
+<li>34.12. <a href="./items_ads.html#robo282">Items/Shields_List</a></li>
+<li>34.13. <a href="./items_ads.html#robo283">Items/Tools_List</a></li>
+<li>34.14. <a href="./items_ads.html#robo284">Items/Weapons_List</a></li>
+<li>34.15. <a href="./items_ads.html#robo556">Items/DamageItem</a></li>
+<li>34.16. <a href="./items_ads.html#robo557">Items/FindItem</a></li>
+<li>34.17. <a href="./items_ads.html#robo558">Items/FindProtoItem</a></li>
+<li>34.18. <a href="./items_ads.html#robo559">Items/GetItemChanceToDamage</a></li>
+<li>34.19. <a href="./items_ads.html#robo560">Items/GetItemDamage</a></li>
+<li>34.20. <a href="./items_ads.html#robo561">Items/GetItemName</a></li>
+<li>34.21. <a href="./items_ads.html#robo562">Items/LoadItems</a></li>
+<li>34.22. <a href="./items_ads.html#robo563">Items/SetToolsList</a></li>
+</ul>
+<li>35. <a href="./log_ads.html#robo35">Steamsky/Log</a></li>
+<ul>
+<li>35.1. <a href="./log_ads.html#robo128">Log/Debug_Types</a></li>
+<li>35.2. <a href="./log_ads.html#robo285">Log/DebugMode</a></li>
+<li>35.3. <a href="./log_adb.html#robo286">Log/LogFile</a></li>
+<li>35.4. <a href="./log_ads.html#robo564">Log/EndLogging</a></li>
+<li>35.5. <a href="./log_ads.html#robo565">Log/LogMessage</a></li>
+<li>35.6. <a href="./log_ads.html#robo566">Log/StartLogging</a></li>
+</ul>
+<li>36. <a href="./ui/mainmenu_ads.html#robo36">Steamsky/MainMenu</a></li>
+<ul>
+<li>36.1. <a href="./ui/mainmenu_adb.html#robo287">MainMenu/AdjNames</a></li>
+<li>36.2. <a href="./ui/mainmenu_adb.html#robo288">MainMenu/AllNews</a></li>
+<li>36.3. <a href="./ui/mainmenu_adb.html#robo289">MainMenu/Builder</a></li>
+<li>36.4. <a href="./ui/mainmenu_adb.html#robo290">MainMenu/DataError</a></li>
+<li>36.5. <a href="./ui/mainmenu_adb.html#robo291">MainMenu/Setting</a></li>
+<li>36.6. <a href="./ui/mainmenu_ads.html#robo567">MainMenu/CreateMainMenu</a></li>
+<li>36.7. <a href="./ui/mainmenu_adb.html#robo568">MainMenu/DeleteGame</a></li>
+<li>36.8. <a href="./ui/mainmenu_adb.html#robo569">MainMenu/LoadFile</a></li>
+<li>36.9. <a href="./ui/mainmenu_adb.html#robo570">MainMenu/LoadGame</a></li>
+<li>36.10. <a href="./ui/mainmenu_adb.html#robo571">MainMenu/NewGame</a></li>
+<li>36.11. <a href="./ui/mainmenu_adb.html#robo572">MainMenu/NewGameKeyPressed</a></li>
+<li>36.12. <a href="./ui/mainmenu_ads.html#robo573">MainMenu/On_Exception</a></li>
+<li>36.13. <a href="./ui/mainmenu_adb.html#robo574">MainMenu/Quit</a></li>
+<li>36.14. <a href="./ui/mainmenu_adb.html#robo575">MainMenu/RandomDifficulty</a></li>
+<li>36.15. <a href="./ui/mainmenu_adb.html#robo576">MainMenu/RandomDifficultyToggled</a></li>
+<li>36.16. <a href="./ui/mainmenu_adb.html#robo577">MainMenu/RandomName</a></li>
+<li>36.17. <a href="./ui/mainmenu_adb.html#robo578">MainMenu/RefreshSavesList</a></li>
+<li>36.18. <a href="./ui/mainmenu_adb.html#robo579">MainMenu/ResetDifficulty</a></li>
+<li>36.19. <a href="./ui/mainmenu_ads.html#robo580">MainMenu/SaveException</a></li>
+<li>36.20. <a href="./ui/mainmenu_adb.html#robo581">MainMenu/ShowAllNews</a></li>
+<li>36.21. <a href="./ui/mainmenu_adb.html#robo582">MainMenu/ShowBaseDescription</a></li>
+<li>36.22. <a href="./ui/mainmenu_adb.html#robo583">MainMenu/ShowCareerDescription</a></li>
+<li>36.23. <a href="./ui/mainmenu_adb.html#robo584">MainMenu/ShowErrorInfo</a></li>
+<li>36.24. <a href="./ui/mainmenu_adb.html#robo585">MainMenu/ShowFactionDescription</a></li>
+<li>36.25. <a href="./ui/mainmenu_adb.html#robo586">MainMenu/ShowGoals</a></li>
+<li>36.26. <a href="./ui/mainmenu_ads.html#robo587">MainMenu/ShowMainMenu</a></li>
+<li>36.27. <a href="./ui/mainmenu_adb.html#robo588">MainMenu/ShowPage</a></li>
+<li>36.28. <a href="./ui/mainmenu_adb.html#robo589">MainMenu/StartGame</a></li>
+<li>36.29. <a href="./ui/mainmenu_ads.html#robo590">MainMenu/UpdateGoalButton</a></li>
+<li>36.30. <a href="./ui/mainmenu_adb.html#robo591">MainMenu/UpdateInfo</a></li>
+<li>36.31. <a href="./ui/mainmenu_adb.html#robo592">MainMenu/UpdateInfoProc</a></li>
+<li>36.32. <a href="./ui/mainmenu_adb.html#robo593">MainMenu/UpdateNews</a></li>
+<li>36.33. <a href="./ui/mainmenu_adb.html#robo594">MainMenu/UpdateSummary</a></li>
+</ul>
+<li>37. <a href="./maps_ads.html#robo37">Steamsky/Maps</a></li>
+<ul>
+<li>37.1. <a href="./maps_ads.html#robo129">Maps/SkyCell</a></li>
+<li>37.2. <a href="./maps_ads.html#robo296">Maps/SkyMap</a></li>
+<li>37.3. <a href="./maps_ads.html#robo641">Maps/CountDistance</a></li>
+<li>37.4. <a href="./maps_ads.html#robo642">Maps/NormalizeCoord</a></li>
+</ul>
+<li>38. <a href="./ui/maps-ui_ads.html#robo38">Steamsky/Maps.UI</a></li>
+<ul>
+<li>38.1. <a href="./ui/maps-ui_ads.html#robo2">Maps.UI/MapWidth</a>, <a href="./ui/maps-ui_ads.html#robo2">MapHeight</a>, <a href="./ui/maps-ui_ads.html#robo2">CenterX</a>, <a href="./ui/maps-ui_ads.html#robo2">CenterY</a>, <a href="./ui/maps-ui_ads.html#robo2">MapCellWidth</a>, <a href="./ui/maps-ui_ads.html#robo2">MapCellHeight</a>, <a href="./ui/maps-ui_ads.html#robo2">MapX</a>, <a href="./ui/maps-ui_ads.html#robo2">MapY</a></li>
+<li>38.2. <a href="./ui/maps-ui_ads.html#robo293">Maps.UI/Builder</a></li>
+<li>38.3. <a href="./ui/maps-ui_ads.html#robo294">Maps.UI/ButtonsVisible</a></li>
+<li>38.4. <a href="./ui/maps-ui_ads.html#robo295">Maps.UI/StartX</a>, <a href="./ui/maps-ui_ads.html#robo295">StartY</a></li>
+<li>38.5. <a href="./ui/maps-ui_ads.html#robo629">Maps.UI/CheckButtons</a></li>
+<li>38.6. <a href="./ui/maps-ui_ads.html#robo630">Maps.UI/CreateSkyMap</a></li>
+<li>38.7. <a href="./ui/maps-ui_ads.html#robo631">Maps.UI/DeathConfirm</a></li>
+<li>38.8. <a href="./ui/maps-ui_ads.html#robo632">Maps.UI/DrawMap</a></li>
+<li>38.9. <a href="./ui/maps-ui_ads.html#robo633">Maps.UI/FinishStory</a></li>
+<li>38.10. <a href="./ui/maps-ui_ads.html#robo634">Maps.UI/GetCurrentCellCoords</a></li>
+<li>38.11. <a href="./ui/maps-ui_ads.html#robo635">Maps.UI/HideButtons</a></li>
+<li>38.12. <a href="./ui/maps-ui_ads.html#robo636">Maps.UI/SetMapMoveButtons</a></li>
+<li>38.13. <a href="./ui/maps-ui_ads.html#robo637">Maps.UI/ShowSkyMap</a></li>
+<li>38.14. <a href="./ui/maps-ui_ads.html#robo638">Maps.UI/UpdateHeader</a></li>
+<li>38.15. <a href="./ui/maps-ui_ads.html#robo639">Maps.UI/UpdateMapInfo</a></li>
+<li>38.16. <a href="./ui/maps-ui_ads.html#robo640">Maps.UI/UpdateMoveButtons</a></li>
+</ul>
+<li>39. <a href="./ui/maps-ui-handlers_ads.html#robo39">Steamsky/Maps.UI.Handlers</a></li>
+<ul>
+<li>39.1. <a href="./ui/maps-ui-handlers_adb.html#robo292">Maps.UI.Handlers/AccelsRemoved</a></li>
+<li>39.2. <a href="./ui/maps-ui-handlers_ads.html#robo595">Maps.UI.Handlers/AttackOrder</a></li>
+<li>39.3. <a href="./ui/maps-ui-handlers_ads.html#robo596">Maps.UI.Handlers/BtnDockClicked</a></li>
+<li>39.4. <a href="./ui/maps-ui-handlers_ads.html#robo597">Maps.UI.Handlers/ChangeSpeed</a></li>
+<li>39.5. <a href="./ui/maps-ui-handlers_ads.html#robo598">Maps.UI.Handlers/CompleteMission</a></li>
+<li>39.6. <a href="./ui/maps-ui-handlers_ads.html#robo599">Maps.UI.Handlers/DeliverMedicines</a></li>
+<li>39.7. <a href="./ui/maps-ui-handlers_ads.html#robo600">Maps.UI.Handlers/DisableMenuShortcuts</a></li>
+<li>39.8. <a href="./ui/maps-ui-handlers_ads.html#robo601">Maps.UI.Handlers/DisableMenuShortcutsProc</a></li>
+<li>39.9. <a href="./ui/maps-ui-handlers_ads.html#robo602">Maps.UI.Handlers/DisableMouse</a></li>
+<li>39.10. <a href="./ui/maps-ui-handlers_ads.html#robo603">Maps.UI.Handlers/EnableMenuShortcuts</a></li>
+<li>39.11. <a href="./ui/maps-ui-handlers_ads.html#robo604">Maps.UI.Handlers/EnableMenuShortcutsProc</a></li>
+<li>39.12. <a href="./ui/maps-ui-handlers_ads.html#robo605">Maps.UI.Handlers/ExecuteOrder</a></li>
+<li>39.13. <a href="./ui/maps-ui-handlers_ads.html#robo606">Maps.UI.Handlers/GetMapSize</a></li>
+<li>39.14. <a href="./ui/maps-ui-handlers_ads.html#robo607">Maps.UI.Handlers/HideMapInfoWindow</a></li>
+<li>39.15. <a href="./ui/maps-ui-handlers_ads.html#robo608">Maps.UI.Handlers/MapKeyPressed</a></li>
+<li>39.16. <a href="./ui/maps-ui-handlers_ads.html#robo609">Maps.UI.Handlers/MapKeyReleased</a></li>
+<li>39.17. <a href="./ui/maps-ui-handlers_ads.html#robo610">Maps.UI.Handlers/MoveMap</a></li>
+<li>39.18. <a href="./ui/maps-ui-handlers_ads.html#robo611">Maps.UI.Handlers/MoveMapButtons</a></li>
+<li>39.19. <a href="./ui/maps-ui-handlers_ads.html#robo612">Maps.UI.Handlers/MoveMapInfo</a></li>
+<li>39.20. <a href="./ui/maps-ui-handlers_ads.html#robo613">Maps.UI.Handlers/MoveShip</a></li>
+<li>39.21. <a href="./ui/maps-ui-handlers_ads.html#robo614">Maps.UI.Handlers/QuitGameMenu</a></li>
+<li>39.22. <a href="./ui/maps-ui-handlers_ads.html#robo615">Maps.UI.Handlers/ResignFromGame</a></li>
+<li>39.23. <a href="./ui/maps-ui-handlers_ads.html#robo616">Maps.UI.Handlers/SetDestination</a></li>
+<li>39.24. <a href="./ui/maps-ui-handlers_ads.html#robo617">Maps.UI.Handlers/SetMessagesPosition</a></li>
+<li>39.25. <a href="./ui/maps-ui-handlers_ads.html#robo618">Maps.UI.Handlers/ShowHelp</a></li>
+<li>39.26. <a href="./ui/maps-ui-handlers_ads.html#robo619">Maps.UI.Handlers/ShowInfo</a></li>
+<li>39.27. <a href="./ui/maps-ui-handlers_ads.html#robo620">Maps.UI.Handlers/ShowMissions</a></li>
+<li>39.28. <a href="./ui/maps-ui-handlers_ads.html#robo621">Maps.UI.Handlers/ShowOrders</a></li>
+<li>39.29. <a href="./ui/maps-ui-handlers_ads.html#robo622">Maps.UI.Handlers/ShowWaitOrders</a></li>
+<li>39.30. <a href="./ui/maps-ui-handlers_ads.html#robo623">Maps.UI.Handlers/StartMission</a></li>
+<li>39.31. <a href="./ui/maps-ui-handlers_ads.html#robo624">Maps.UI.Handlers/ToggleCloseButton</a></li>
+<li>39.32. <a href="./ui/maps-ui-handlers_ads.html#robo625">Maps.UI.Handlers/ToggleCloseButtonProc</a></li>
+<li>39.33. <a href="./ui/maps-ui-handlers_ads.html#robo626">Maps.UI.Handlers/UpdateTooltip</a></li>
+<li>39.34. <a href="./ui/maps-ui-handlers_ads.html#robo627">Maps.UI.Handlers/WaitOrder</a></li>
+<li>39.35. <a href="./ui/maps-ui-handlers_ads.html#robo628">Maps.UI.Handlers/ZoomMap</a></li>
+</ul>
+<li>40. <a href="./messages_ads.html#robo40">Steamsky/Messages</a></li>
+<ul>
+<li>40.1. <a href="./messages_ads.html#robo130">Messages/Message_Color</a></li>
+<li>40.2. <a href="./messages_ads.html#robo131">Messages/Message_Data</a></li>
+<li>40.3. <a href="./messages_ads.html#robo132">Messages/Message_Type</a></li>
+<li>40.4. <a href="./messages_ads.html#robo133">Messages/Messages_Container</a></li>
+<li>40.5. <a href="./messages_ads.html#robo297">Messages/LastMessageIndex</a></li>
+<li>40.6. <a href="./messages_ads.html#robo298">Messages/Messages_List</a></li>
+<li>40.7. <a href="./messages_ads.html#robo650">Messages/AddMessage</a></li>
+<li>40.8. <a href="./messages_ads.html#robo651">Messages/ClearMessages</a></li>
+<li>40.9. <a href="./messages_ads.html#robo652">Messages/FormatedTime</a></li>
+<li>40.10. <a href="./messages_ads.html#robo653">Messages/GetLastMessageIndex</a></li>
+<li>40.11. <a href="./messages_ads.html#robo654">Messages/GetMessage</a></li>
+<li>40.12. <a href="./messages_ads.html#robo655">Messages/MessagesAmount</a></li>
+<li>40.13. <a href="./messages_ads.html#robo656">Messages/RestoreMessage</a></li>
+</ul>
+<li>41. <a href="./ui/messages-ui_ads.html#robo41">Steamsky/Messages.UI</a></li>
+<ul>
+<li>41.1. <a href="./ui/messages-ui_ads.html#robo643">Messages.UI/CreateMessagesUI</a></li>
+<li>41.2. <a href="./ui/messages-ui_adb.html#robo644">Messages.UI/DeleteMessages</a></li>
+<li>41.3. <a href="./ui/messages-ui_adb.html#robo645">Messages.UI/SearchMessages</a></li>
+<li>41.4. <a href="./ui/messages-ui_adb.html#robo646">Messages.UI/SelectMessages</a></li>
+<li>41.5. <a href="./ui/messages-ui_adb.html#robo647">Messages.UI/ShowMessages</a></li>
+<li>41.6. <a href="./ui/messages-ui_ads.html#robo648">Messages.UI/ShowMessagesUI</a></li>
+<li>41.7. <a href="./ui/messages-ui_adb.html#robo649">Messages.UI/VisibleMessages</a></li>
+</ul>
+<li>42. <a href="./missions_ads.html#robo42">Steamsky/Missions</a></li>
+<ul>
+<li>42.1. <a href="./missions_ads.html#robo134">Missions/Mission_Container</a></li>
+<li>42.2. <a href="./missions_ads.html#robo135">Missions/Mission_Data(MType:</a></li>
+<li>42.3. <a href="./missions_ads.html#robo136">Missions/Missions_Types</a></li>
+<li>42.4. <a href="./missions_ads.html#robo137">Missions/RewardMultiplier</a></li>
+<li>42.5. <a href="./missions_ads.html#robo301">Missions/AcceptedMissions</a></li>
+<li>42.6. <a href="./missions_ads.html#robo339">Missions/Missions_Accepting_Error</a></li>
+<li>42.7. <a href="./missions_ads.html#robo340">Missions/Missions_Finishing_Error</a></li>
+<li>42.8. <a href="./missions_ads.html#robo665">Missions/AcceptMission</a></li>
+<li>42.9. <a href="./missions_ads.html#robo666">Missions/AutoFinishMissions</a></li>
+<li>42.10. <a href="./missions_ads.html#robo667">Missions/DeleteMission</a></li>
+<li>42.11. <a href="./missions_ads.html#robo668">Missions/FinishMission</a></li>
+<li>42.12. <a href="./missions_ads.html#robo669">Missions/GenerateMissions</a></li>
+<li>42.13. <a href="./missions_ads.html#robo670">Missions/UpdateMission</a></li>
+<li>42.14. <a href="./missions_ads.html#robo671">Missions/UpdateMissions</a></li>
+</ul>
+<li>43. <a href="./ui/missions-ui_ads.html#robo43">Steamsky/Missions.UI</a></li>
+<ul>
+<li>43.1. <a href="./ui/missions-ui_adb.html#robo299">Missions.UI/Cleaning</a></li>
+<li>43.2. <a href="./ui/missions-ui_adb.html#robo300">Missions.UI/MissionIndex</a></li>
+<li>43.3. <a href="./ui/missions-ui_adb.html#robo657">Missions.UI/AcceptSelectedMission</a></li>
+<li>43.4. <a href="./ui/missions-ui_adb.html#robo658">Missions.UI/ButtonMission</a></li>
+<li>43.5. <a href="./ui/missions-ui_ads.html#robo659">Missions.UI/CreateMissionsUI</a></li>
+<li>43.6. <a href="./ui/missions-ui_adb.html#robo660">Missions.UI/RefreshMissionsList</a></li>
+<li>43.7. <a href="./ui/missions-ui_ads.html#robo661">Missions.UI/ShowAcceptedMissions</a></li>
+<li>43.8. <a href="./ui/missions-ui_adb.html#robo662">Missions.UI/ShowAvailableMission</a></li>
+<li>43.9. <a href="./ui/missions-ui_adb.html#robo663">Missions.UI/ShowMissionInfo</a></li>
+<li>43.10. <a href="./ui/missions-ui_ads.html#robo664">Missions.UI/ShowMissionsUI</a></li>
+</ul>
+<li>44. <a href="./mobs_ads.html#robo44">Steamsky/Mobs</a></li>
+<ul>
+<li>44.1. <a href="./mobs_ads.html#robo138">Mobs/MobInventory_Container</a></li>
+<li>44.2. <a href="./mobs_ads.html#robo139">Mobs/MobInventoryRecord</a></li>
+<li>44.3. <a href="./mobs_ads.html#robo140">Mobs/ProtoMobRecord</a></li>
+<li>44.4. <a href="./mobs_ads.html#robo141">Mobs/ProtoMobs_Container</a></li>
+<li>44.5. <a href="./mobs_ads.html#robo302">Mobs/ProtoMobs_List</a></li>
+<li>44.6. <a href="./mobs_ads.html#robo341">Mobs/Mobs_Invalid_Data</a></li>
+<li>44.7. <a href="./mobs_ads.html#robo672">Mobs/LoadMobs</a></li>
+</ul>
+<li>45. <a href="./shipmodules_ads.html#robo45">Steamsky/ShipModules</a></li>
+<ul>
+<li>45.1. <a href="./shipmodules_ads.html#robo142">ShipModules/BaseModule_Data</a></li>
+<li>45.2. <a href="./shipmodules_ads.html#robo143">ShipModules/BaseModules_Container</a></li>
+<li>45.3. <a href="./shipmodules_ads.html#robo144">ShipModules/ModuleType</a></li>
+<li>45.4. <a href="./shipmodules_ads.html#robo303">ShipModules/Modules_List</a></li>
+<li>45.5. <a href="./shipmodules_ads.html#robo673">ShipModules/LoadShipModules</a></li>
+</ul>
+<li>46. <a href="./ships_ads.html#robo46">Steamsky/Ships</a></li>
+<ul>
+<li>46.1. <a href="./ships_ads.html#robo146">Ships/Crew_Container</a></li>
+<li>46.2. <a href="./ships_ads.html#robo147">Ships/Data_Array</a></li>
+<li>46.3. <a href="./ships_ads.html#robo148">Ships/ModuleData</a></li>
+<li>46.4. <a href="./ships_ads.html#robo149">Ships/Modules_Container</a></li>
+<li>46.5. <a href="./ships_ads.html#robo150">Ships/ModuleType2</a></li>
+<li>46.6. <a href="./ships_ads.html#robo151">Ships/ProtoCrew_Container</a></li>
+<li>46.7. <a href="./ships_ads.html#robo152">Ships/ProtoMember_Data</a></li>
+<li>46.8. <a href="./ships_ads.html#robo153">Ships/ProtoShipData</a></li>
+<li>46.9. <a href="./ships_ads.html#robo154">Ships/ProtoShips_Container</a></li>
+<li>46.10. <a href="./ships_ads.html#robo155">Ships/ShipCombatAi</a></li>
+<li>46.11. <a href="./ships_ads.html#robo156">Ships/ShipRecord</a></li>
+<li>46.12. <a href="./ships_ads.html#robo157">Ships/ShipSpeed</a></li>
+<li>46.13. <a href="./ships_ads.html#robo158">Ships/ShipUpgrade</a></li>
+<li>46.14. <a href="./ships_ads.html#robo308">Ships/PlayerShip</a></li>
+<li>46.15. <a href="./ships_ads.html#robo309">Ships/ProtoShips_List</a></li>
+<li>46.16. <a href="./ships_ads.html#robo310">Ships/ShipSyllablesEnd</a></li>
+<li>46.17. <a href="./ships_ads.html#robo311">Ships/ShipSyllablesMiddle</a></li>
+<li>46.18. <a href="./ships_ads.html#robo312">Ships/ShipSyllablesStart</a></li>
+<li>46.19. <a href="./ships_ads.html#robo343">Ships/Ships_Invalid_Data</a></li>
+<li>46.20. <a href="./ships_ads.html#robo721">Ships/CountCombatValue</a></li>
+<li>46.21. <a href="./ships_ads.html#robo722">Ships/CountShipWeight</a></li>
+<li>46.22. <a href="./ships_ads.html#robo723">Ships/CreateShip</a></li>
+<li>46.23. <a href="./ships_ads.html#robo724">Ships/GenerateShipName</a></li>
+<li>46.24. <a href="./ships_ads.html#robo725">Ships/GetCabinQuality</a></li>
+<li>46.25. <a href="./ships_ads.html#robo726">Ships/LoadShips</a></li>
+</ul>
+<li>47. <a href="./ships-cargo_ads.html#robo47">Steamsky/Ships.Cargo</a></li>
+<ul>
+<li>47.1. <a href="./ships-cargo_ads.html#robo683">Ships.Cargo/FreeCargo</a></li>
+<li>47.2. <a href="./ships-cargo_ads.html#robo684">Ships.Cargo/GetItemAmount</a></li>
+<li>47.3. <a href="./ships-cargo_ads.html#robo685">Ships.Cargo/GetItemsAmount</a></li>
+<li>47.4. <a href="./ships-cargo_ads.html#robo686">Ships.Cargo/UpdateCargo</a></li>
+</ul>
+<li>48. <a href="./ui/ships-cargo-ui_ads.html#robo48">Steamsky/Ships.Cargo.UI</a></li>
+<ul>
+<li>48.1. <a href="./ui/ships-cargo-ui_adb.html#robo304">Ships.Cargo.UI/ItemIndex</a></li>
+<li>48.2. <a href="./ui/ships-cargo-ui_adb.html#robo305">Ships.Cargo.UI/SettingTime</a></li>
+<li>48.3. <a href="./ui/ships-cargo-ui_ads.html#robo674">Ships.Cargo.UI/CreateCargoUI</a></li>
+<li>48.4. <a href="./ui/ships-cargo-ui_adb.html#robo675">Ships.Cargo.UI/DropItem</a></li>
+<li>48.5. <a href="./ui/ships-cargo-ui_adb.html#robo676">Ships.Cargo.UI/GiveItem</a></li>
+<li>48.6. <a href="./ui/ships-cargo-ui_adb.html#robo677">Ships.Cargo.UI/RefreshCargoInfo</a></li>
+<li>48.7. <a href="./ui/ships-cargo-ui_adb.html#robo678">Ships.Cargo.UI/SearchCargo</a></li>
+<li>48.8. <a href="./ui/ships-cargo-ui_adb.html#robo679">Ships.Cargo.UI/SetActiveItem</a></li>
+<li>48.9. <a href="./ui/ships-cargo-ui_ads.html#robo680">Ships.Cargo.UI/ShowCargoUI</a></li>
+<li>48.10. <a href="./ui/ships-cargo-ui_adb.html#robo681">Ships.Cargo.UI/ShowItemCargoInfo</a></li>
+<li>48.11. <a href="./ui/ships-cargo-ui_adb.html#robo682">Ships.Cargo.UI/VisibleCargo</a></li>
+</ul>
+<li>49. <a href="./ships-crew_ads.html#robo49">Steamsky/Ships.Crew</a></li>
+<ul>
+<li>49.1. <a href="./ships-crew_ads.html#robo687">Ships.Crew/Death</a></li>
+<li>49.2. <a href="./ships-crew_ads.html#robo688">Ships.Crew/DeleteMember</a></li>
+<li>49.3. <a href="./ships-crew_ads.html#robo689">Ships.Crew/FindMember</a></li>
+<li>49.4. <a href="./ships-crew_ads.html#robo690">Ships.Crew/GetSkillLevel</a></li>
+<li>49.5. <a href="./ships-crew_ads.html#robo691">Ships.Crew/GiveOrders</a></li>
+<li>49.6. <a href="./ships-crew_ads.html#robo692">Ships.Crew/UpdateMorale</a></li>
+<li>49.7. <a href="./ships-crew_ads.html#robo693">Ships.Crew/UpdateOrders</a></li>
+</ul>
+<li>50. <a href="./ships-movement_ads.html#robo50">Steamsky/Ships.Movement</a></li>
+<ul>
+<li>50.1. <a href="./ships-movement_adb.html#robo145">Ships.Movement/SpeedType</a></li>
+<li>50.2. <a href="./ships-movement_ads.html#robo694">Ships.Movement/ChangeShipSpeed</a></li>
+<li>50.3. <a href="./ships-movement_ads.html#robo695">Ships.Movement/CountFuelNeeded</a></li>
+<li>50.4. <a href="./ships-movement_ads.html#robo696">Ships.Movement/DockShip</a></li>
+<li>50.5. <a href="./ships-movement_adb.html#robo697">Ships.Movement/HaveOrderRequirements</a></li>
+<li>50.6. <a href="./ships-movement_ads.html#robo698">Ships.Movement/MoveShip</a></li>
+<li>50.7. <a href="./ships-movement_ads.html#robo699">Ships.Movement/RealSpeed</a></li>
+<li>50.8. <a href="./ships-movement_ads.html#robo700">Ships.Movement/WaitInPlace</a></li>
+</ul>
+<li>51. <a href="./ships-repairs_ads.html#robo51">Steamsky/Ships.Repairs</a></li>
+<ul>
+<li>51.1. <a href="./ships-repairs_ads.html#robo701">Ships.Repairs/RepairShip</a></li>
+</ul>
+<li>52. <a href="./ships-saveload_ads.html#robo52">Steamsky/Ships.SaveLoad</a></li>
+<ul>
+<li>52.1. <a href="./ships-saveload_ads.html#robo702">Ships.SaveLoad/LoadPlayerShip</a></li>
+<li>52.2. <a href="./ships-saveload_ads.html#robo703">Ships.SaveLoad/SavePlayerShip</a></li>
+</ul>
+<li>53. <a href="./ui/ships-ui_ads.html#robo53">Steamsky/Ships.UI</a></li>
+<ul>
+<li>53.1. <a href="./ui/ships-ui_ads.html#robo306">Ships.UI/ModuleIndex</a></li>
+<li>53.2. <a href="./ui/ships-ui_adb.html#robo307">Ships.UI/SkillsListSet</a></li>
+<li>53.3. <a href="./ui/ships-ui_ads.html#robo713">Ships.UI/CreateShipUI</a></li>
+<li>53.4. <a href="./ui/ships-ui_adb.html#robo714">Ships.UI/ShowAssignAmmo</a></li>
+<li>53.5. <a href="./ui/ships-ui_adb.html#robo715">Ships.UI/ShowAssignMember</a></li>
+<li>53.6. <a href="./ui/ships-ui_ads.html#robo716">Ships.UI/ShowModuleOptions</a></li>
+<li>53.7. <a href="./ui/ships-ui_ads.html#robo717">Ships.UI/ShowShipInfo</a></li>
+<li>53.8. <a href="./ui/ships-ui_ads.html#robo718">Ships.UI/ShowShipUI</a></li>
+</ul>
+<li>54. <a href="./ui/ships-ui-handlers_ads.html#robo54">Steamsky/Ships.UI.Handlers</a></li>
+<ul>
+<li>54.1. <a href="./ui/ships-ui-handlers_ads.html#robo704">Ships.UI.Handlers/Assign</a></li>
+<li>54.2. <a href="./ui/ships-ui-handlers_ads.html#robo705">Ships.UI.Handlers/ChangeModuleName</a></li>
+<li>54.3. <a href="./ui/ships-ui-handlers_ads.html#robo706">Ships.UI.Handlers/ChangeShipName</a></li>
+<li>54.4. <a href="./ui/ships-ui-handlers_ads.html#robo707">Ships.UI.Handlers/DisableEngine</a></li>
+<li>54.5. <a href="./ui/ships-ui-handlers_ads.html#robo708">Ships.UI.Handlers/SetRepair</a></li>
+<li>54.6. <a href="./ui/ships-ui-handlers_ads.html#robo709">Ships.UI.Handlers/SetUpgrade</a></li>
+<li>54.7. <a href="./ui/ships-ui-handlers_ads.html#robo710">Ships.UI.Handlers/ShowModuleInfo</a></li>
+<li>54.8. <a href="./ui/ships-ui-handlers_ads.html#robo711">Ships.UI.Handlers/StopUpgrading</a></li>
+<li>54.9. <a href="./ui/ships-ui-handlers_ads.html#robo712">Ships.UI.Handlers/ToggleSearch</a></li>
+</ul>
+<li>55. <a href="./ships-upgrade_ads.html#robo55">Steamsky/Ships.Upgrade</a></li>
+<ul>
+<li>55.1. <a href="./ships-upgrade_ads.html#robo342">Ships.Upgrade/Ship_Upgrade_Error</a></li>
+<li>55.2. <a href="./ships-upgrade_ads.html#robo719">Ships.Upgrade/StartUpgrading</a></li>
+<li>55.3. <a href="./ships-upgrade_ads.html#robo720">Ships.Upgrade/UpgradeShip</a></li>
+</ul>
+<li>56. <a href="./statistics_ads.html#robo56">Steamsky/Statistics</a></li>
+<ul>
+<li>56.1. <a href="./statistics_ads.html#robo159">Statistics/GameStats_Data</a></li>
+<li>56.2. <a href="./statistics_ads.html#robo160">Statistics/Statistics_Container</a></li>
+<li>56.3. <a href="./statistics_ads.html#robo161">Statistics/Statistics_Data</a></li>
+<li>56.4. <a href="./statistics_ads.html#robo313">Statistics/GameStats</a></li>
+<li>56.5. <a href="./statistics_ads.html#robo732">Statistics/ClearGameStats</a></li>
+<li>56.6. <a href="./statistics_ads.html#robo733">Statistics/GetGamePoints</a></li>
+<li>56.7. <a href="./statistics_ads.html#robo734">Statistics/UpdateCraftingOrders</a></li>
+<li>56.8. <a href="./statistics_ads.html#robo735">Statistics/UpdateDestroyedShips</a></li>
+<li>56.9. <a href="./statistics_ads.html#robo736">Statistics/UpdateFinishedGoals</a></li>
+<li>56.10. <a href="./statistics_ads.html#robo737">Statistics/UpdateFinishedMissions</a></li>
+<li>56.11. <a href="./statistics_ads.html#robo738">Statistics/UpdateKilledMobs</a></li>
+</ul>
+<li>57. <a href="./ui/statistics-ui_ads.html#robo57">Steamsky/Statistics.UI</a></li>
+<ul>
+<li>57.1. <a href="./ui/statistics-ui_ads.html#robo727">Statistics.UI/CreateStatsUI</a></li>
+<li>57.2. <a href="./ui/statistics-ui_ads.html#robo728">Statistics.UI/HideStatistics</a></li>
+<li>57.3. <a href="./ui/statistics-ui_adb.html#robo729">Statistics.UI/ShowGoals</a></li>
+<li>57.4. <a href="./ui/statistics-ui_ads.html#robo730">Statistics.UI/ShowStatsUI</a></li>
+<li>57.5. <a href="./ui/statistics-ui_ads.html#robo731">Statistics.UI/UpdateGoalsButton</a></li>
+</ul>
+<li>58. <a href="./stories_ads.html#robo58">Steamsky/Stories</a></li>
+<ul>
+<li>58.1. <a href="./stories_ads.html#robo162">Stories/CurrentStory_Data</a></li>
+<li>58.2. <a href="./stories_ads.html#robo163">Stories/FinishedStories_Container</a></li>
+<li>58.3. <a href="./stories_ads.html#robo164">Stories/FinishedStory_Data</a></li>
+<li>58.4. <a href="./stories_ads.html#robo165">Stories/StartConditionType</a></li>
+<li>58.5. <a href="./stories_ads.html#robo166">Stories/Step_Data</a></li>
+<li>58.6. <a href="./stories_ads.html#robo167">Stories/StepConditionType</a></li>
+<li>58.7. <a href="./stories_ads.html#robo168">Stories/StepData_Container</a></li>
+<li>58.8. <a href="./stories_ads.html#robo169">Stories/StepFinish_Data</a></li>
+<li>58.9. <a href="./stories_ads.html#robo170">Stories/Steps_Container</a></li>
+<li>58.10. <a href="./stories_ads.html#robo171">Stories/StepText_Data</a></li>
+<li>58.11. <a href="./stories_ads.html#robo172">Stories/StepTexts_Container</a></li>
+<li>58.12. <a href="./stories_ads.html#robo173">Stories/Stories_Container</a></li>
+<li>58.13. <a href="./stories_ads.html#robo174">Stories/Story_Data</a></li>
+<li>58.14. <a href="./stories_ads.html#robo315">Stories/CurrentStory</a></li>
+<li>58.15. <a href="./stories_ads.html#robo316">Stories/FinishedStories</a></li>
+<li>58.16. <a href="./stories_ads.html#robo317">Stories/Stories_List</a></li>
+<li>58.17. <a href="./stories_ads.html#robo744">Stories/ClearCurrentStory</a></li>
+<li>58.18. <a href="./stories_ads.html#robo745">Stories/GetCurrentStoryText</a></li>
+<li>58.19. <a href="./stories_ads.html#robo746">Stories/GetStepData</a></li>
+<li>58.20. <a href="./stories_ads.html#robo747">Stories/GetStoryLocation</a></li>
+<li>58.21. <a href="./stories_ads.html#robo748">Stories/LoadStories</a></li>
+<li>58.22. <a href="./stories_ads.html#robo749">Stories/ProgressStory</a></li>
+<li>58.23. <a href="./stories_adb.html#robo750">Stories/SelectBase</a></li>
+<li>58.24. <a href="./stories_adb.html#robo751">Stories/SelectEnemy</a></li>
+<li>58.25. <a href="./stories_adb.html#robo752">Stories/SelectLocation</a></li>
+<li>58.26. <a href="./stories_adb.html#robo753">Stories/SelectLoot</a></li>
+<li>58.27. <a href="./stories_ads.html#robo754">Stories/StartStory</a></li>
+</ul>
+<li>59. <a href="./ui/stories-ui_ads.html#robo59">Steamsky/Stories.UI</a></li>
+<ul>
+<li>59.1. <a href="./ui/stories-ui_adb.html#robo314">Stories.UI/Setting</a></li>
+<li>59.2. <a href="./ui/stories-ui_ads.html#robo739">Stories.UI/CreateStoriesUI</a></li>
+<li>59.3. <a href="./ui/stories-ui_adb.html#robo740">Stories.UI/SetStoryAsDestination</a></li>
+<li>59.4. <a href="./ui/stories-ui_ads.html#robo741">Stories.UI/ShowStoriesUI</a></li>
+<li>59.5. <a href="./ui/stories-ui_adb.html#robo742">Stories.UI/ShowStory</a></li>
+<li>59.6. <a href="./ui/stories-ui_adb.html#robo743">Stories.UI/ShowStoryInfo</a></li>
+</ul>
+<li>60. <a href="./ui/themes_ads.html#robo60">Steamsky/Themes</a></li>
+<ul>
+<li>60.1. <a href="./ui/themes_ads.html#robo175">Themes/FontTypes</a></li>
+<li>60.2. <a href="./ui/themes_ads.html#robo176">Themes/ThemeRecord</a></li>
+<li>60.3. <a href="./ui/themes_ads.html#robo177">Themes/Themes_Container</a></li>
+<li>60.4. <a href="./ui/themes_adb.html#robo318">Themes/OldProvider</a></li>
+<li>60.5. <a href="./ui/themes_ads.html#robo319">Themes/Themes_List</a></li>
+<li>60.6. <a href="./ui/themes_adb.html#robo755">Themes/LoadCssText</a></li>
+<li>60.7. <a href="./ui/themes_ads.html#robo756">Themes/LoadThemes</a></li>
+<li>60.8. <a href="./ui/themes_ads.html#robo757">Themes/ResetFontsSizes</a></li>
+<li>60.9. <a href="./ui/themes_ads.html#robo758">Themes/SetFontSize</a></li>
+</ul>
+<li>61. <a href="./trades_ads.html#robo61">Steamsky/Trades</a></li>
+<ul>
+<li>61.1. <a href="./trades_ads.html#robo321">Trades/TraderCargo</a></li>
+<li>61.2. <a href="./trades_ads.html#robo344">Trades/Trade_Buying_Too_Much</a></li>
+<li>61.3. <a href="./trades_ads.html#robo345">Trades/Trade_Cant_Buy</a></li>
+<li>61.4. <a href="./trades_ads.html#robo346">Trades/Trade_Invalid_Amount</a></li>
+<li>61.5. <a href="./trades_ads.html#robo347">Trades/Trade_No_Free_Cargo</a></li>
+<li>61.6. <a href="./trades_ads.html#robo348">Trades/Trade_No_Money</a></li>
+<li>61.7. <a href="./trades_ads.html#robo349">Trades/Trade_No_Money_In_Base</a></li>
+<li>61.8. <a href="./trades_ads.html#robo350">Trades/Trade_No_Trader</a></li>
+<li>61.9. <a href="./trades_ads.html#robo351">Trades/Trade_Not_Enough_Money</a></li>
+<li>61.10. <a href="./trades_ads.html#robo352">Trades/Trade_Not_For_Sale_Now</a></li>
+<li>61.11. <a href="./trades_ads.html#robo353">Trades/Trade_Too_Much_For_Sale</a></li>
+<li>61.12. <a href="./trades_ads.html#robo766">Trades/BuyItems</a></li>
+<li>61.13. <a href="./trades_ads.html#robo767">Trades/GenerateTraderCargo</a></li>
+<li>61.14. <a href="./trades_ads.html#robo768">Trades/SellItems</a></li>
+</ul>
+<li>62. <a href="./ui/trades-ui_ads.html#robo62">Steamsky/Trades.UI</a></li>
+<ul>
+<li>62.1. <a href="./ui/trades-ui_adb.html#robo320">Trades.UI/SettingTime</a></li>
+<li>62.2. <a href="./ui/trades-ui_adb.html#robo759">Trades.UI/CloseTrade</a></li>
+<li>62.3. <a href="./ui/trades-ui_ads.html#robo760">Trades.UI/CreateTradeUI</a></li>
+<li>62.4. <a href="./ui/trades-ui_adb.html#robo761">Trades.UI/SearchTrade</a></li>
+<li>62.5. <a href="./ui/trades-ui_adb.html#robo762">Trades.UI/ShowItemTradeInfo</a></li>
+<li>62.6. <a href="./ui/trades-ui_ads.html#robo763">Trades.UI/ShowTradeUI</a></li>
+<li>62.7. <a href="./ui/trades-ui_adb.html#robo764">Trades.UI/TradeItem</a></li>
+<li>62.8. <a href="./ui/trades-ui_adb.html#robo765">Trades.UI/VisibleTrade</a></li>
+</ul>
+<li>63. <a href="./ui/utils-ui_ads.html#robo63">Steamsky/Utils.UI</a></li>
+<ul>
+<li>63.1. <a href="./ui/utils-ui_ads.html#robo178">Utils.UI/GameStates</a></li>
+<li>63.2. <a href="./ui/utils-ui_adb.html#robo322">Utils.UI/Builder</a></li>
+<li>63.3. <a href="./ui/utils-ui_ads.html#robo323">Utils.UI/PreviousGameState</a></li>
+<li>63.4. <a href="./ui/utils-ui_adb.html#robo324">Utils.UI/Source_Id</a></li>
+<li>63.5. <a href="./ui/utils-ui_adb.html#robo769">Utils.UI/AutoHideDialog</a></li>
+<li>63.6. <a href="./ui/utils-ui_ads.html#robo770">Utils.UI/CheckAmount</a></li>
+<li>63.7. <a href="./ui/utils-ui_ads.html#robo771">Utils.UI/CloseMessages</a></li>
+<li>63.8. <a href="./ui/utils-ui_ads.html#robo772">Utils.UI/CloseWindow</a></li>
+<li>63.9. <a href="./ui/utils-ui_ads.html#robo773">Utils.UI/HideDialog</a></li>
+<li>63.10. <a href="./ui/utils-ui_ads.html#robo774">Utils.UI/HideItemInfo</a></li>
+<li>63.11. <a href="./ui/utils-ui_ads.html#robo775">Utils.UI/HideWindow</a></li>
+<li>63.12. <a href="./ui/utils-ui_ads.html#robo776">Utils.UI/MinutesToDate</a></li>
+<li>63.13. <a href="./ui/utils-ui_ads.html#robo777">Utils.UI/QuitGame</a></li>
+<li>63.14. <a href="./ui/utils-ui_ads.html#robo778">Utils.UI/RemoveWidget</a></li>
+<li>63.15. <a href="./ui/utils-ui_ads.html#robo779">Utils.UI/SelectElement</a></li>
+<li>63.16. <a href="./ui/utils-ui_ads.html#robo780">Utils.UI/SetUtilsBuilder</a></li>
+<li>63.17. <a href="./ui/utils-ui_ads.html#robo781">Utils.UI/ShowConfirmDialog</a></li>
+<li>63.18. <a href="./ui/utils-ui_ads.html#robo782">Utils.UI/ShowDialog</a></li>
+<li>63.19. <a href="./ui/utils-ui_ads.html#robo783">Utils.UI/ShowInventoryItemInfo</a></li>
+<li>63.20. <a href="./ui/utils-ui_ads.html#robo784">Utils.UI/ShowPopupMenu</a></li>
+<li>63.21. <a href="./ui/utils-ui_ads.html#robo785">Utils.UI/ShowPopupMenuButton</a></li>
+<li>63.22. <a href="./ui/utils-ui_ads.html#robo786">Utils.UI/ShowWindow</a></li>
+<li>63.23. <a href="./ui/utils-ui_ads.html#robo787">Utils.UI/TravelInfo</a></li>
+<li>63.24. <a href="./ui/utils-ui_ads.html#robo788">Utils.UI/UpdateMessages</a></li>
+</ul>
+<li>64. <a href="./utils_ads.html#robo64">Utils/Utils</a></li>
+<ul>
+<li>64.1. <a href="./utils_ads.html#robo789">Utils/DaysDifference</a></li>
+<li>64.2. <a href="./utils_ads.html#robo790">Utils/GenerateRoboticName</a></li>
+<li>64.3. <a href="./utils_ads.html#robo791">Utils/GetRandom</a></li>
+</ul>
+</ul>
+</div> <!-- content -->
+<div id="footer">
+<p>Generated from ./src/ with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 04 2019 06:25:03
+</p>
+</div> <!-- footer -->
+</body>
+</html>

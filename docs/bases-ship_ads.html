@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="./robodoc.css" type="text/css" />
+<title>./src/bases-ship.ads</title>
+<!-- Source: ./src/bases-ship.ads -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  2 2019) -->
+</head>
+<body>
+<div id="logo">
+<a name="robo_top_of_doc">Steamsky 4.0 code documentation</a>
+</div> <!-- logo -->
+<div id="navigation">
+<a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
+<a class="menuitem" href="./sources.html#top">Source files</a>
+<a class="menuitem" href="./index.html#top">Index</a>
+<a class="menuitem" href="./robo_exceptions.html#top">Exceptions</a>
+<a class="menuitem" href="./robo_subprograms.html#top">Subprograms</a>
+<a class="menuitem" href="./robo_packages.html#top">Packages</a>
+<a class="menuitem" href="./robo_types.html#top">Types</a>
+<a class="menuitem" href="./robo_variables.html#top">Variables</a>
+</div> <!-- navigation -->
+<div id="content">
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li>1. <a href="#robo9">Steamsky/Bases.Ship</a></li>
+<ul>
+<li>1.1. <a href="#robo325">Bases.Ship/BasesShip_Installation_Error</a></li>
+<li>1.2. <a href="#robo326">Bases.Ship/BasesShip_Nothing_To_Repair</a></li>
+<li>1.3. <a href="#robo327">Bases.Ship/BasesShip_Removing_Error</a></li>
+<li>1.4. <a href="#robo328">Bases.Ship/BasesShip_Unique_Module</a></li>
+<li>1.5. <a href="#robo376">Bases.Ship/PayForDock</a></li>
+<li>1.6. <a href="#robo377">Bases.Ship/RepairCost</a></li>
+<li>1.7. <a href="#robo378">Bases.Ship/RepairShip</a></li>
+<li>1.8. <a href="#robo379">Bases.Ship/UpgradeShip</a></li>
+</ul>
+</ul>
+<hr />
+<a name="Steamsky2fBases2eShip"></a>
+<a name="robo9"></a><h2>Steamsky/Bases.Ship [ Packages ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Provides code to manipulate player ship in sky bases
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source"><span class="keyword">package</span> <strong>Bases.Ship</strong> <span class="keyword">is</span>
+</pre>
+
+<hr />
+<a name="Bases2eShip2fBasesShip5fInstallation5fError"></a>
+<a name="robo325"></a><h2>Bases.Ship/BasesShip_Installation_Error [ Exceptions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo9">Bases.Ship</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Raised when problems with installing ship module occurs
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>BasesShip_Installation_Error</strong><span class="sign">:</span> <span class="keyword">exception</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Bases2eShip2fBasesShip5fNothing5fTo5fRepair"></a>
+<a name="robo326"></a><h2>Bases.Ship/BasesShip_Nothing_To_Repair [ Exceptions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo9">Bases.Ship</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Raised when there is nothing to repair
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>BasesShip_Nothing_To_Repair</strong><span class="sign">:</span> <span class="keyword">exception</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Bases2eShip2fBasesShip5fRemoving5fError"></a>
+<a name="robo327"></a><h2>Bases.Ship/BasesShip_Removing_Error [ Exceptions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo9">Bases.Ship</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Raised when problems with removing ship module occurs
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>BasesShip_Removing_Error</strong><span class="sign">:</span> <span class="keyword">exception</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Bases2eShip2fBasesShip5fUnique5fModule"></a>
+<a name="robo328"></a><h2>Bases.Ship/BasesShip_Unique_Module [ Exceptions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo9">Bases.Ship</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Raised when player try install another same unique module
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>BasesShip_Unique_Module</strong><span class="sign">:</span> <span class="keyword">exception</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Bases2eShip2fPayForDock"></a>
+<a name="robo376"></a><h2>Bases.Ship/PayForDock [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo9">Bases.Ship</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Pay daily fee for docking
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>PayForDock</strong><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Bases2eShip2fRepairCost"></a>
+<a name="robo377"></a><h2>Bases.Ship/RepairCost [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo9">Bases.Ship</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Count cost and time of repairs of player ship
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>RepairCost</strong><span class="sign">(</span>Cost<span class="sign">,</span> Time<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Natural<span class="sign">;</span> <a href="./ui/ships-ui_ads.html#robo306">ModuleIndex</a><span class="sign">:</span> Integer<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Cost        - Overall cost of repair of player ship
+ Time        - Time needed for repair of player ship
+ <a href="./ui/ships-ui_ads.html#robo306">ModuleIndex</a> - Index of module on player ship to repair or 0 to repair
+               all damage modules
+</pre>
+<p class="item_name">RESULT</p>
+<pre> Parameters Cost and Time
+</pre>
+
+<hr />
+<a name="Bases2eShip2fRepairShip"></a>
+<a name="robo378"></a><h2>Bases.Ship/RepairShip [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo9">Bases.Ship</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Repairs player ship in bases
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>RepairShip</strong><span class="sign">(</span><a href="./ui/ships-ui_ads.html#robo306">ModuleIndex</a><span class="sign">:</span> Integer<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> <a href="./ui/ships-ui_ads.html#robo306">ModuleIndex</a> - Index of player ship module to repair or 0 to repair whole
+               ship
+</pre>
+
+<hr />
+<a name="Bases2eShip2fUpgradeShip"></a>
+<a name="robo379"></a><h2>Bases.Ship/UpgradeShip [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo9">Bases.Ship</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Install or remove modules on player ship
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>UpgradeShip</strong><span class="sign">(</span>Install<span class="sign">:</span> Boolean<span class="sign">;</span> <a href="./ui/ships-ui_ads.html#robo306">ModuleIndex</a><span class="sign">:</span> Unbounded_String<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Install     - If True, perform module installation on player ship. On False,
+           remove module
+ <a href="./ui/ships-ui_ads.html#robo306">ModuleIndex</a> - Index of prototype module to install or remove
+</pre>
+
+</div> <!-- content -->
+<div id="footer">
+<p>Generated from ./src/bases-ship.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 04 2019 06:25:03
+</p>
+</div> <!-- footer -->
+</body>
+</html>

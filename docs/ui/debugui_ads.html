@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="../robodoc.css" type="text/css" />
+<title>./src/ui/debugui.ads</title>
+<!-- Source: ./src/ui/debugui.ads -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  2 2019) -->
+</head>
+<body>
+<div id="logo">
+<a name="robo_top_of_doc">Steamsky 4.0 code documentation</a>
+</div> <!-- logo -->
+<div id="navigation">
+<a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
+<a class="menuitem" href="../sources.html#top">Source files</a>
+<a class="menuitem" href="../index.html#top">Index</a>
+<a class="menuitem" href="../robo_exceptions.html#top">Exceptions</a>
+<a class="menuitem" href="../robo_subprograms.html#top">Subprograms</a>
+<a class="menuitem" href="../robo_packages.html#top">Packages</a>
+<a class="menuitem" href="../robo_types.html#top">Types</a>
+<a class="menuitem" href="../robo_variables.html#top">Variables</a>
+</div> <!-- navigation -->
+<div id="content">
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li>1. <a href="#robo1">DebugUI/DebugUI</a></li>
+<ul>
+<li>1.1. <a href="./debugui_adb.html#robo221">DebugUI/Builder</a></li>
+<li>1.2. <a href="./debugui_adb.html#robo222">DebugUI/Setting</a></li>
+<li>1.3. <a href="./debugui_adb.html#robo476">DebugUI/AddCargo</a></li>
+<li>1.4. <a href="./debugui_adb.html#robo477">DebugUI/AddEvent</a></li>
+<li>1.5. <a href="./debugui_adb.html#robo478">DebugUI/AddShip</a></li>
+<li>1.6. <a href="./debugui_adb.html#robo479">DebugUI/AddSkill</a></li>
+<li>1.7. <a href="./debugui_adb.html#robo480">DebugUI/ChangeSkillLevel</a></li>
+<li>1.8. <a href="./debugui_adb.html#robo481">DebugUI/ChangeStatLevel</a></li>
+<li>1.9. <a href="#robo482">DebugUI/CreateDebugUI</a></li>
+<li>1.10. <a href="./debugui_adb.html#robo483">DebugUI/DeleteEvent</a></li>
+<li>1.11. <a href="./debugui_adb.html#robo484">DebugUI/MoveShip</a></li>
+<li>1.12. <a href="./debugui_adb.html#robo485">DebugUI/RefreshUI</a></li>
+<li>1.13. <a href="./debugui_adb.html#robo486">DebugUI/ResetWorldUI</a></li>
+<li>1.14. <a href="./debugui_adb.html#robo487">DebugUI/Save_Game</a></li>
+<li>1.15. <a href="./debugui_adb.html#robo488">DebugUI/SetCargoAmount</a></li>
+<li>1.16. <a href="./debugui_adb.html#robo489">DebugUI/SetMemberStats</a></li>
+<li>1.17. <a href="./debugui_adb.html#robo490">DebugUI/SetModuleStats</a></li>
+<li>1.18. <a href="./debugui_adb.html#robo491">DebugUI/ShowBaseInfo</a></li>
+<li>1.19. <a href="#robo492">DebugUI/ShowDebugUI</a></li>
+<li>1.20. <a href="./debugui_adb.html#robo493">DebugUI/ShowItemEvent</a></li>
+<li>1.21. <a href="./debugui_adb.html#robo494">DebugUI/UpdateAttribute</a></li>
+<li>1.22. <a href="./debugui_adb.html#robo495">DebugUI/UpdateBase</a></li>
+<li>1.23. <a href="./debugui_adb.html#robo496">DebugUI/UpdateCargoInfo</a></li>
+<li>1.24. <a href="./debugui_adb.html#robo497">DebugUI/UpdateCrew</a></li>
+<li>1.25. <a href="./debugui_adb.html#robo498">DebugUI/UpdateMember</a></li>
+<li>1.26. <a href="./debugui_adb.html#robo499">DebugUI/UpdateModule</a></li>
+<li>1.27. <a href="./debugui_adb.html#robo500">DebugUI/UpdateShip</a></li>
+<li>1.28. <a href="./debugui_adb.html#robo501">DebugUI/UpdateShipCargo</a></li>
+<li>1.29. <a href="./debugui_adb.html#robo502">DebugUI/UpdateSkill</a></li>
+</ul>
+</ul>
+<hr />
+<a name="DebugUI2fDebugUI"></a>
+<a name="robo1"></a><h2>DebugUI/DebugUI [ Packages ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Provides code for debug UI
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source"><span class="keyword">package</span> <strong>DebugUI</strong> <span class="keyword">is</span>
+</pre>
+
+<hr />
+<a name="DebugUI2fCreateDebugUI"></a>
+<a name="robo482"></a><h2>DebugUI/CreateDebugUI [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Create debug user interface
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>CreateDebugUI</strong><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="DebugUI2fShowDebugUI"></a>
+<a name="robo492"></a><h2>DebugUI/ShowDebugUI [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show debug user interface
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>ShowDebugUI</strong><span class="sign">;</span>
+</pre>
+
+</div> <!-- content -->
+<div id="footer">
+<p>Generated from ./src/ui/debugui.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 04 2019 06:25:03
+</p>
+</div> <!-- footer -->
+</body>
+</html>
