@@ -9694,7 +9694,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                                     <signal name="clicked" handler="Set_Upgrade" object="btnupgradedur" swapped="no"/>
                                                   </object>
                                                   <packing>
-                                                    <property name="expand">True</property>
+                                                    <property name="expand">False</property>
                                                     <property name="fill">True</property>
                                                     <property name="position">0</property>
                                                   </packing>
@@ -9710,7 +9710,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                                     <signal name="clicked" handler="Set_Upgrade" object="btnupgrade1" swapped="no"/>
                                                   </object>
                                                   <packing>
-                                                    <property name="expand">True</property>
+                                                    <property name="expand">False</property>
                                                     <property name="fill">True</property>
                                                     <property name="position">1</property>
                                                   </packing>
@@ -9726,7 +9726,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                                     <signal name="clicked" handler="Set_Upgrade" object="btnupgrade2" swapped="no"/>
                                                   </object>
                                                   <packing>
-                                                    <property name="expand">True</property>
+                                                    <property name="expand">False</property>
                                                     <property name="fill">True</property>
                                                     <property name="position">2</property>
                                                   </packing>
@@ -9875,7 +9875,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                                     <signal name="clicked" handler="Set_Upgrade" object="btncontinue" swapped="no"/>
                                                   </object>
                                                   <packing>
-                                                    <property name="expand">True</property>
+                                                    <property name="expand">False</property>
                                                     <property name="fill">True</property>
                                                     <property name="position">7</property>
                                                   </packing>
@@ -9892,7 +9892,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                                     <signal name="clicked" handler="Stop_Upgrading" swapped="no"/>
                                                   </object>
                                                   <packing>
-                                                    <property name="expand">True</property>
+                                                    <property name="expand">False</property>
                                                     <property name="fill">True</property>
                                                     <property name="position">8</property>
                                                   </packing>
@@ -9909,7 +9909,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                                     <signal name="clicked" handler="Set_Repair" object="btnrepairfirst" swapped="no"/>
                                                   </object>
                                                   <packing>
-                                                    <property name="expand">True</property>
+                                                    <property name="expand">False</property>
                                                     <property name="fill">True</property>
                                                     <property name="position">9</property>
                                                   </packing>
@@ -9926,7 +9926,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                                     <signal name="clicked" handler="Set_Repair" object="btnremovepriority" swapped="no"/>
                                                   </object>
                                                   <packing>
-                                                    <property name="expand">True</property>
+                                                    <property name="expand">False</property>
                                                     <property name="fill">True</property>
                                                     <property name="position">10</property>
                                                   </packing>
