@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="./robodoc.css" type="text/css" />
+<title>./src/crew-inventory.ads</title>
+<!-- Source: ./src/crew-inventory.ads -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  2 2019) -->
+</head>
+<body>
+<div id="logo">
+<a name="robo_top_of_doc">Steamsky 4.0 code documentation</a>
+</div> <!-- logo -->
+<div id="navigation">
+<a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
+<a class="menuitem" href="./sources.html#top">Source files</a>
+<a class="menuitem" href="./index.html#top">Index</a>
+<a class="menuitem" href="./robo_exceptions.html#top">Exceptions</a>
+<a class="menuitem" href="./robo_subprograms.html#top">Subprograms</a>
+<a class="menuitem" href="./robo_packages.html#top">Packages</a>
+<a class="menuitem" href="./robo_types.html#top">Types</a>
+<a class="menuitem" href="./robo_variables.html#top">Variables</a>
+</div> <!-- navigation -->
+<div id="content">
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li>1. <a href="#robo20">Steamsky/Crew.Inventory</a></li>
+<ul>
+<li>1.1. <a href="#robo444">Crew.Inventory/FindTools</a></li>
+<li>1.2. <a href="#robo445">Crew.Inventory/FreeInventory</a></li>
+<li>1.3. <a href="#robo446">Crew.Inventory/ItemIsUsed</a></li>
+<li>1.4. <a href="#robo447">Crew.Inventory/TakeOffItem</a></li>
+<li>1.5. <a href="#robo448">Crew.Inventory/UpdateInventory</a></li>
+</ul>
+</ul>
+<hr />
+<a name="Steamsky2fCrew2eInventory"></a>
+<a name="robo20"></a><h2>Steamsky/Crew.Inventory [ Packages ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Provide code for manipulate player ship crew members inventory
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source"><span class="keyword">package</span> <strong>Crew.Inventory</strong> <span class="keyword">is</span>
+</pre>
+
+<hr />
+<a name="Crew2eInventory2fFindTools"></a>
+<a name="robo444"></a><h2>Crew.Inventory/FindTools [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">Crew.Inventory</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Search for specified tools in character and ship cargo
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>FindTools</strong>
+     <span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a><span class="sign">:</span> Positive<span class="sign">;</span> ItemType<span class="sign">:</span> Unbounded_String<span class="sign">;</span> Order<span class="sign">:</span> <a href="./crew_ads.html#robo89">Crew_Orders</a><span class="sign">)</span>
+      <span class="keyword">return</span> Natural with
+      Pre <span class="sign">=</span><span class="sign">&gt;</span>
+      <span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo308">PlayerShip</a><span class="sign">.</span><a href="./crew_ads.html#robo19">Crew</a><span class="sign">.</span>Last_Index and
+       ItemType <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> <a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a> - <a href="./crew_ads.html#robo19">Crew</a> index of the member which will be checked
+ ItemType    - Type of item which will be looking for
+ Order       - Order which crew member will be doing when he/she find
+               proper tool
+</pre>
+<p class="item_name">RESULT</p>
+<pre> Selected crew member inventory index of the tool or 0 if tool was not
+ found
+</pre>
+
+<hr />
+<a name="Crew2eInventory2fFreeInventory"></a>
+<a name="robo445"></a><h2>Crew.Inventory/FreeInventory [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">Crew.Inventory</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Return available space in crew member inventory after adding or
+ extracting Amount
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>FreeInventory</strong>
+     <span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a><span class="sign">:</span> Positive<span class="sign">;</span> Amount<span class="sign">:</span> Integer<span class="sign">)</span> <span class="keyword">return</span> Integer with
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo308">PlayerShip</a><span class="sign">.</span><a href="./crew_ads.html#robo19">Crew</a><span class="sign">.</span>Last_Index<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> <a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a> - <a href="./crew_ads.html#robo19">Crew</a> index of the member which inventory will be checked
+ Amount      - Amount of kilogram to add or remove during check
+</pre>
+<p class="item_name">RESULT</p>
+<pre> Amount of available space in kilograms
+</pre>
+
+<hr />
+<a name="Crew2eInventory2fItemIsUsed"></a>
+<a name="robo446"></a><h2>Crew.Inventory/ItemIsUsed [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">Crew.Inventory</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Check if selected crew member use this item
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>ItemIsUsed</strong><span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a><span class="sign">,</span> <a href="./ui/ships-cargo-ui_adb.html#robo304">ItemIndex</a><span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">return</span> Boolean with
+      Pre <span class="sign">=</span><span class="sign">&gt;</span>
+      <span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo308">PlayerShip</a><span class="sign">.</span><a href="./crew_ads.html#robo19">Crew</a><span class="sign">.</span>Last_Index and
+       <a href="./ui/ships-cargo-ui_adb.html#robo304">ItemIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo308">PlayerShip</a><span class="sign">.</span><a href="./crew_ads.html#robo19">Crew</a><span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a><span class="sign">)</span><span class="sign">.</span>Inventory<span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> <a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a> - <a href="./crew_ads.html#robo19">Crew</a> index of the member which will be checked
+ <a href="./ui/ships-cargo-ui_adb.html#robo304">ItemIndex</a>   - Iventory index of the item which will be checked
+</pre>
+
+<hr />
+<a name="Crew2eInventory2fTakeOffItem"></a>
+<a name="robo447"></a><h2>Crew.Inventory/TakeOffItem [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">Crew.Inventory</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Remove selected item from character equipment
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>TakeOffItem</strong><span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a><span class="sign">,</span> <a href="./ui/ships-cargo-ui_adb.html#robo304">ItemIndex</a><span class="sign">:</span> Positive<span class="sign">)</span> with
+      Pre <span class="sign">=</span><span class="sign">&gt;</span>
+      <span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo308">PlayerShip</a><span class="sign">.</span><a href="./crew_ads.html#robo19">Crew</a><span class="sign">.</span>Last_Index and
+       <a href="./ui/ships-cargo-ui_adb.html#robo304">ItemIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo308">PlayerShip</a><span class="sign">.</span><a href="./crew_ads.html#robo19">Crew</a><span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a><span class="sign">)</span><span class="sign">.</span>Inventory<span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> <a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a> - <a href="./crew_ads.html#robo19">Crew</a> index of the member from which item willl be taken
+               off
+ <a href="./ui/ships-cargo-ui_adb.html#robo304">ItemIndex</a>   - Inventory index of item to take off
+</pre>
+
+<hr />
+<a name="Crew2eInventory2fUpdateInventory"></a>
+<a name="robo448"></a><h2>Crew.Inventory/UpdateInventory [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">Crew.Inventory</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Update member inventory
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateInventory</strong>
+     <span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a><span class="sign">:</span> Positive<span class="sign">;</span> Amount<span class="sign">:</span> Integer<span class="sign">;</span>
+      ProtoIndex<span class="sign">:</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">;</span>
+      Durability<span class="sign">,</span> InventoryIndex<span class="sign">,</span> Price<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">)</span> with
+      Pre <span class="sign">=</span><span class="sign">&gt;</span>
+      <span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo308">PlayerShip</a><span class="sign">.</span><a href="./crew_ads.html#robo19">Crew</a><span class="sign">.</span>Last_Index and
+       InventoryIndex <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo308">PlayerShip</a><span class="sign">.</span><a href="./crew_ads.html#robo19">Crew</a><span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a><span class="sign">)</span><span class="sign">.</span>Inventory<span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> <a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a>    - <a href="./crew_ads.html#robo19">Crew</a> index of member which will be have updated the
+                  inventory
+ Amount         - Amount of items to add or delete from inventory
+ ProtoIndex     - Prototype index of item to add or delete. Can be
+                  empty if InventoryIndex is set
+ Durability     - Durability of item to add or delete from inventory
+ InventoryIndex - Item index in crew member inventory. Can be empty if
+                  ProtoIndex is set
+ Price          - Price of the item
+</pre>
+
+</div> <!-- content -->
+<div id="footer">
+<p>Generated from ./src/crew-inventory.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 04 2019 06:25:03
+</p>
+</div> <!-- footer -->
+</body>
+</html>

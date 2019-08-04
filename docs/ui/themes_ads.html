@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="../robodoc.css" type="text/css" />
+<title>./src/ui/themes.ads</title>
+<!-- Source: ./src/ui/themes.ads -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  2 2019) -->
+</head>
+<body>
+<div id="logo">
+<a name="robo_top_of_doc">Steamsky 4.0 code documentation</a>
+</div> <!-- logo -->
+<div id="navigation">
+<a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
+<a class="menuitem" href="../sources.html#top">Source files</a>
+<a class="menuitem" href="../index.html#top">Index</a>
+<a class="menuitem" href="../robo_exceptions.html#top">Exceptions</a>
+<a class="menuitem" href="../robo_subprograms.html#top">Subprograms</a>
+<a class="menuitem" href="../robo_packages.html#top">Packages</a>
+<a class="menuitem" href="../robo_types.html#top">Types</a>
+<a class="menuitem" href="../robo_variables.html#top">Variables</a>
+</div> <!-- navigation -->
+<div id="content">
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li>1. <a href="#robo60">Steamsky/Themes</a></li>
+<ul>
+<li>1.1. <a href="#robo175">Themes/FontTypes</a></li>
+<li>1.2. <a href="#robo176">Themes/ThemeRecord</a></li>
+<li>1.3. <a href="#robo177">Themes/Themes_Container</a></li>
+<li>1.4. <a href="./themes_adb.html#robo318">Themes/OldProvider</a></li>
+<li>1.5. <a href="#robo319">Themes/Themes_List</a></li>
+<li>1.6. <a href="./themes_adb.html#robo755">Themes/LoadCssText</a></li>
+<li>1.7. <a href="#robo756">Themes/LoadThemes</a></li>
+<li>1.8. <a href="#robo757">Themes/ResetFontsSizes</a></li>
+<li>1.9. <a href="#robo758">Themes/SetFontSize</a></li>
+</ul>
+</ul>
+<hr />
+<a name="Steamsky2fThemes"></a>
+<a name="robo60"></a><h2>Steamsky/Themes [ Packages ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Provides code for manipulate the game themes
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source"><span class="keyword">package</span> <strong>Themes</strong> <span class="keyword">is</span>
+</pre>
+
+<hr />
+<a name="Themes2fFontTypes"></a>
+<a name="robo175"></a><h2>Themes/FontTypes [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo60">Themes</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Types of font available in game
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> <strong>FontTypes</strong> <span class="keyword">is</span> <span class="sign">(</span>HELPFONT<span class="sign">,</span> MAPFONT<span class="sign">,</span> INTERFACEFONT<span class="sign">,</span> ALLFONTS<span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Themes2fThemeRecord"></a>
+<a name="robo176"></a><h2>Themes/ThemeRecord [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo60">Themes</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Data structure for themes settings
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> <strong>ThemeRecord</strong> <span class="keyword">is</span> <span class="keyword">record</span>
+      Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      FileName<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      EnemyShipIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      AttackOnBaseIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      DiseaseIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      DoublePriceIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      FullDocksIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      EnemyPatrolIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      TraderIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      FriendlyShipIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      DeliverIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      DestroyIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      PatrolIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      ExploreIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      PassengerIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      PilotIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      EngineerIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      GunnerIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      CrewTraderIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      RepairIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      UpgradeIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      CleanIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      ManufactureIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      MoveMapUpIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      MoveMapDownIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      MoveMapLeftIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      MoveMapRightIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      NoFuelIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      NoFoodIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      NoDrinksIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      NotVisitedBaseIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      PlayerShipIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      EmptyMapIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      TargetIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      StoryIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      OverloadedIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      CheckButtonUnchecked<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      CheckButtonChecked<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+   <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Name                 - Name of theme
+ FileName             - Name of .css file of theme
+ EnemyShipIcon        - Icon used for <a href="../combat_ads.html#robo197">Enemy</a> Ship event
+ AttackOnBaseIcon     - Icon used for Attack on Base event
+ DiseaseIcon          - Icon used for Disease event
+ DoublePriceIcon      - Icon used for Double Price event
+ FullDocksIcon        - Icon used for Full Docks event
+ EnemyPatrolIcon      - Icon used for <a href="../combat_ads.html#robo197">Enemy</a> Patrol event
+ TraderIcon           - Icon used for Trader event
+ FriendlyShipIcon     - Icon used for Friendly Ship event
+ DeliverIcon          - Icon used for Deliver Item mission
+ DestroyIcon          - Icon used for Destroy Ship mission
+ PatrolIcon           - Icon used for  Patrol Area mission
+ ExploreIcon          - Icon used for Explore Area mission
+ PassengerIcon        - Icon used for Transport Passenger mission
+ PilotIcon            - Icon used for Pilot info
+ EngineerIcon         - Icon used for Engineer info
+ GunnerIcon           - Icon used for Gunners info
+ CrewTraderIcon       - Icon used for Trader info
+ RepairIcon           - Icon used for Repairs info
+ UpgradeIcon          - Icon used for Upgrade info
+ CleanIcon            - Icon used for Clean Ship info
+ ManufactureIcon      - Icon used for <a href="../crafts_ads.html#robo441">Manufacturing</a> info
+ MoveMapUpIcon        - Icon used for move map up button
+ MoveMapDownIcon      - Icon used for move map down button
+ MoveMapLeftIcon      - Icon used for move map left button
+ MoveMapRightIcon     - Icon used for move map right button
+ NoFuelIcon           - Icon used for show warning about no fuel
+ NoFoodIcon           - Icon used for show warning about no food
+ NoDrinksIcon         - Icon used for show warning about no drinks
+ NotVisitedBaseIcon   - Icon used for show not visited bases on map
+ PlayerShipIcon       - Icon used for show player ship on map
+ EmptyMapIcon         - Icon used for empty map fields
+ TargetIcon           - Icon used for player selected target on map
+ StoryIcon            - Icon used for show story event location on map
+ OverloadedIcon       - Icon used for show warning about overloaded ship
+ CheckButtonUnchecked - Name of image file used for check buttons when
+                        unchecked
+ CheckButtonChecked   - Name of image file used for check buttons when
+                        checked
+</pre>
+
+<hr />
+<a name="Themes2fThemes5fContainer"></a>
+<a name="robo177"></a><h2>Themes/Themes_Container [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo60">Themes</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Used to store themes data
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">package</span> <strong>Themes_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Ada<span class="sign">.</span>Containers<span class="sign">.</span>Indefinite_Hashed_Maps
+     <span class="sign">(</span>String<span class="sign">,</span> <a href="#robo176">ThemeRecord</a><span class="sign">,</span> Ada<span class="sign">.</span>Strings<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Themes2fThemes5fList"></a>
+<a name="robo319"></a><h2>Themes/Themes_List [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo60">Themes</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> List of all available themes
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>Themes_List</strong><span class="sign">:</span> <a href="#robo177">Themes_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Themes2fLoadThemes"></a>
+<a name="robo756"></a><h2>Themes/LoadThemes [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo60">Themes</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Load data for all themes
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>LoadThemes</strong><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Themes2fResetFontsSizes"></a>
+<a name="robo757"></a><h2>Themes/ResetFontsSizes [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo60">Themes</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Reset size of fonts to theme default values
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>ResetFontsSizes</strong><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Themes2fSetFontSize"></a>
+<a name="robo758"></a><h2>Themes/SetFontSize [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo60">Themes</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Set size of selected font
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>SetFontSize</strong><span class="sign">(</span>FontType<span class="sign">:</span> <a href="#robo175">FontTypes</a><span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> FontType - Type of font to set
+</pre>
+
+</div> <!-- content -->
+<div id="footer">
+<p>Generated from ./src/ui/themes.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 04 2019 06:25:03
+</p>
+</div> <!-- footer -->
+</body>
+</html>

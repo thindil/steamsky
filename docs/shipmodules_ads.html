@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="./robodoc.css" type="text/css" />
+<title>./src/shipmodules.ads</title>
+<!-- Source: ./src/shipmodules.ads -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  2 2019) -->
+</head>
+<body>
+<div id="logo">
+<a name="robo_top_of_doc">Steamsky 4.0 code documentation</a>
+</div> <!-- logo -->
+<div id="navigation">
+<a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
+<a class="menuitem" href="./sources.html#top">Source files</a>
+<a class="menuitem" href="./index.html#top">Index</a>
+<a class="menuitem" href="./robo_exceptions.html#top">Exceptions</a>
+<a class="menuitem" href="./robo_subprograms.html#top">Subprograms</a>
+<a class="menuitem" href="./robo_packages.html#top">Packages</a>
+<a class="menuitem" href="./robo_types.html#top">Types</a>
+<a class="menuitem" href="./robo_variables.html#top">Variables</a>
+</div> <!-- navigation -->
+<div id="content">
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li>1. <a href="#robo45">Steamsky/ShipModules</a></li>
+<ul>
+<li>1.1. <a href="#robo142">ShipModules/BaseModule_Data</a></li>
+<li>1.2. <a href="#robo143">ShipModules/BaseModules_Container</a></li>
+<li>1.3. <a href="#robo144">ShipModules/ModuleType</a></li>
+<li>1.4. <a href="#robo303">ShipModules/Modules_List</a></li>
+<li>1.5. <a href="#robo673">ShipModules/LoadShipModules</a></li>
+</ul>
+</ul>
+<hr />
+<a name="Steamsky2fShipModules"></a>
+<a name="robo45"></a><h2>Steamsky/ShipModules [ Packages ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Provided code to manipulate ship modules prototypes
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source"><span class="keyword">package</span> <strong>ShipModules</strong> <span class="keyword">is</span>
+</pre>
+
+<hr />
+<a name="ShipModules2fBaseModule5fData"></a>
+<a name="robo142"></a><h2>ShipModules/BaseModule_Data [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo45">ShipModules</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Data structure for prototypes of ship modules
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> <strong>BaseModule_Data</strong> <span class="keyword">is</span> <span class="keyword">record</span>
+      Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      MType<span class="sign">:</span> <a href="#robo144">ModuleType</a><span class="sign">;</span>
+      Weight<span class="sign">:</span> Natural<span class="sign">;</span>
+      Value<span class="sign">:</span> Integer<span class="sign">;</span>
+      MaxValue<span class="sign">:</span> Integer<span class="sign">;</span>
+      Durability<span class="sign">:</span> Integer<span class="sign">;</span>
+      RepairMaterial<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      RepairSkill<span class="sign">:</span> Positive<span class="sign">;</span>
+      Price<span class="sign">:</span> Natural<span class="sign">;</span>
+      InstallTime<span class="sign">:</span> Positive<span class="sign">;</span>
+      Unique<span class="sign">:</span> Boolean<span class="sign">;</span>
+      Size<span class="sign">:</span> Natural<span class="sign">;</span>
+      Description<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      MaxOwners<span class="sign">:</span> Natural<span class="sign">;</span>
+   <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Name           - Name of module
+ MType          - Type of module
+ Weight         - Base weight of module
+ Value          - For engine base power, depends on module
+ MaxValue       - For gun, damage, depends on module
+ Durability     - Base durability of module
+ RepairMaterial - Material needed for repair module
+ RepairSkill    - Skill needed for repair module
+ Price          - Price for module in shipyards
+ InstallTime    - Amount of minutes needed for install/remove module
+ Unique         - Did ship can have installed only one that module
+ Size           - How many space in ship this module take
+ Description    - Description of module
+ MaxOwners      - How many owners module can have
+</pre>
+
+<hr />
+<a name="ShipModules2fBaseModules5fContainer"></a>
+<a name="robo143"></a><h2>ShipModules/BaseModules_Container [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo45">ShipModules</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Used for store prototypes of modules
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">package</span> <strong>BaseModules_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span>
+      <a href="#robo142">BaseModule_Data</a><span class="sign">,</span> Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="ShipModules2fModuleType"></a>
+<a name="robo144"></a><h2>ShipModules/ModuleType [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo45">ShipModules</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Types of ship modules
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> <strong>ModuleType</strong> <span class="keyword">is</span>
+     <span class="sign">(</span>ANY<span class="sign">,</span> ENGINE<span class="sign">,</span> CABIN<span class="sign">,</span> COCKPIT<span class="sign">,</span> TURRET<span class="sign">,</span> GUN<span class="sign">,</span> CARGO<span class="sign">,</span> HULL<span class="sign">,</span> ARMOR<span class="sign">,</span>
+      BATTERING_RAM<span class="sign">,</span> ALCHEMY_LAB<span class="sign">,</span> FURNACE<span class="sign">,</span> WATER_COLLECTOR<span class="sign">,</span> WORKSHOP<span class="sign">,</span>
+      GREENHOUSE<span class="sign">,</span> MEDICAL_ROOM<span class="sign">,</span> HARPOON_GUN<span class="sign">,</span> TRAINING_ROOM<span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="ShipModules2fModules5fList"></a>
+<a name="robo303"></a><h2>ShipModules/Modules_List [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo45">ShipModules</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> List of ship modules available in game
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>Modules_List</strong><span class="sign">:</span> <a href="#robo143">BaseModules_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="ShipModules2fLoadShipModules"></a>
+<a name="robo673"></a><h2>ShipModules/LoadShipModules [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo45">ShipModules</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Load modules from files
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>LoadShipModules</strong><span class="sign">(</span>Reader<span class="sign">:</span> Tree_Reader<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Reader - XML Reader from which ship modules data will be read
+</pre>
+
+</div> <!-- content -->
+<div id="footer">
+<p>Generated from ./src/shipmodules.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 04 2019 06:25:03
+</p>
+</div> <!-- footer -->
+</body>
+</html>

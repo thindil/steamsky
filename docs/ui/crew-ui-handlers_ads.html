@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="../robodoc.css" type="text/css" />
+<title>./src/ui/crew-ui-handlers.ads</title>
+<!-- Source: ./src/ui/crew-ui-handlers.ads -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  2 2019) -->
+</head>
+<body>
+<div id="logo">
+<a name="robo_top_of_doc">Steamsky 4.0 code documentation</a>
+</div> <!-- logo -->
+<div id="navigation">
+<a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
+<a class="menuitem" href="../sources.html#top">Source files</a>
+<a class="menuitem" href="../index.html#top">Index</a>
+<a class="menuitem" href="../robo_exceptions.html#top">Exceptions</a>
+<a class="menuitem" href="../robo_subprograms.html#top">Subprograms</a>
+<a class="menuitem" href="../robo_packages.html#top">Packages</a>
+<a class="menuitem" href="../robo_types.html#top">Types</a>
+<a class="menuitem" href="../robo_variables.html#top">Variables</a>
+</div> <!-- navigation -->
+<div id="content">
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li>1. <a href="#robo22">Steamsky/Crew.UI.Handlers</a></li>
+<ul>
+<li>1.1. <a href="#robo449">Crew.UI.Handlers/DismissMember</a></li>
+<li>1.2. <a href="#robo450">Crew.UI.Handlers/GiveCrewOrders</a></li>
+<li>1.3. <a href="#robo451">Crew.UI.Handlers/GiveOrdersAll</a></li>
+<li>1.4. <a href="#robo452">Crew.UI.Handlers/MoveItem</a></li>
+<li>1.5. <a href="./crew-ui-handlers_adb.html#robo453">Crew.UI.Handlers/ReducePriority</a></li>
+<li>1.6. <a href="#robo454">Crew.UI.Handlers/SetPriority</a></li>
+<li>1.7. <a href="#robo455">Crew.UI.Handlers/ShowInventory</a></li>
+<li>1.8. <a href="#robo456">Crew.UI.Handlers/ShowItemInfo2</a></li>
+<li>1.9. <a href="#robo457">Crew.UI.Handlers/ShowMemberInfo</a></li>
+<li>1.10. <a href="./crew-ui-handlers_adb.html#robo458">Crew.UI.Handlers/UpdatePriorities</a></li>
+<li>1.11. <a href="#robo459">Crew.UI.Handlers/UseItem</a></li>
+</ul>
+</ul>
+<hr />
+<a name="Steamsky2fCrew2eUI2eHandlers"></a>
+<a name="robo22"></a><h2>Steamsky/Crew.UI.Handlers [ Packages ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Provides code for crew UI handers
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source"><span class="keyword">package</span> <strong>Crew.UI.Handlers</strong> <span class="keyword">is</span>
+</pre>
+
+<hr />
+<a name="Crew2eUI2eHandlers2fDismissMember"></a>
+<a name="robo449"></a><h2>Crew.UI.Handlers/DismissMember [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo22">Crew.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Dismiss selected crew member
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>DismissMember</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Object - Gtkada_Builder used to create UI
+</pre>
+
+<hr />
+<a name="Crew2eUI2eHandlers2fGiveCrewOrders"></a>
+<a name="robo450"></a><h2>Crew.UI.Handlers/GiveCrewOrders [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo22">Crew.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show give orders for all crew members
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>GiveCrewOrders</strong>
+     <span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Cell_Renderer_Combo_Record<span class="keyword">'Class</span><span class="sign">;</span>
+      Path_String<span class="sign">:</span> UTF8_String<span class="sign">;</span> New_Iter<span class="sign">:</span> Gtk.Tree_Model.Gtk_Tree_Iter<span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Self        - GtkTreeView cell which was clicked
+ Path_String - Full path in GtkTreeView to selected cell
+ New_Iter    - Gtk_Tree_Iter to selected GtkTreeView cell
+</pre>
+
+<hr />
+<a name="Crew2eUI2eHandlers2fGiveOrdersAll"></a>
+<a name="robo451"></a><h2>Crew.UI.Handlers/GiveOrdersAll [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo22">Crew.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Give orders to all crew members
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>GiveOrdersAll</strong><span class="sign">(</span>User_Data<span class="sign">:</span> <span class="keyword">access</span> GObject_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> User_Data - Button which was clicked
+</pre>
+
+<hr />
+<a name="Crew2eUI2eHandlers2fMoveItem"></a>
+<a name="robo452"></a><h2>Crew.UI.Handlers/MoveItem [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo22">Crew.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Move item from inventory to ship cargo
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>MoveItem</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Object - Gtkada_Builder used to create UI
+</pre>
+
+<hr />
+<a name="Crew2eUI2eHandlers2fSetPriority"></a>
+<a name="robo454"></a><h2>Crew.UI.Handlers/SetPriority [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo22">Crew.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Set selected priority (and reduce others if needed)
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>SetPriority</strong>
+     <span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Cell_Renderer_Combo_Record<span class="keyword">'Class</span><span class="sign">;</span>
+      Path_String<span class="sign">:</span> UTF8_String<span class="sign">;</span> New_Iter<span class="sign">:</span> Gtk.Tree_Model.Gtk_Tree_Iter<span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Self        - GtkTreeView cell which was clicked
+ Path_String - Full path in GtkTreeView to selected cell
+ New_Iter    - Gtk_Tree_Iter to selected GtkTreeView cell
+</pre>
+
+<hr />
+<a name="Crew2eUI2eHandlers2fShowInventory"></a>
+<a name="robo455"></a><h2>Crew.UI.Handlers/ShowInventory [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo22">Crew.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Refresh informations about selected member inventory
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>ShowInventory</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Object - Gtkada_Builder used to create UI
+</pre>
+
+<hr />
+<a name="Crew2eUI2eHandlers2fShowItemInfo2"></a>
+<a name="robo456"></a><h2>Crew.UI.Handlers/ShowItemInfo2 [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo22">Crew.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show informations about selected item
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>ShowItemInfo2</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Object - Gtkada_Builder used to create UI
+</pre>
+
+<hr />
+<a name="Crew2eUI2eHandlers2fShowMemberInfo"></a>
+<a name="robo457"></a><h2>Crew.UI.Handlers/ShowMemberInfo [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo22">Crew.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show selected member info
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>ShowMemberInfo</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Object - Gtkada_Builder used to create UI
+</pre>
+
+<hr />
+<a name="Crew2eUI2eHandlers2fUseItem"></a>
+<a name="robo459"></a><h2>Crew.UI.Handlers/UseItem [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo22">Crew.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Set selected item as used by crew member or take it down
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>UseItem</strong>
+     <span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Cell_Renderer_Toggle_Record<span class="keyword">'Class</span><span class="sign">;</span> Path<span class="sign">:</span> UTF8_String<span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Self - GtkTreeView cell which was clicked
+ Path - Full path in GtkTreeView to selected cell
+</pre>
+
+</div> <!-- content -->
+<div id="footer">
+<p>Generated from ./src/ui/crew-ui-handlers.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 04 2019 06:25:03
+</p>
+</div> <!-- footer -->
+</body>
+</html>

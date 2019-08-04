@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="../robodoc.css" type="text/css" />
+<title>./src/ui/utils-ui.ads</title>
+<!-- Source: ./src/ui/utils-ui.ads -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  2 2019) -->
+</head>
+<body>
+<div id="logo">
+<a name="robo_top_of_doc">Steamsky 4.0 code documentation</a>
+</div> <!-- logo -->
+<div id="navigation">
+<a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
+<a class="menuitem" href="../sources.html#top">Source files</a>
+<a class="menuitem" href="../index.html#top">Index</a>
+<a class="menuitem" href="../robo_exceptions.html#top">Exceptions</a>
+<a class="menuitem" href="../robo_subprograms.html#top">Subprograms</a>
+<a class="menuitem" href="../robo_packages.html#top">Packages</a>
+<a class="menuitem" href="../robo_types.html#top">Types</a>
+<a class="menuitem" href="../robo_variables.html#top">Variables</a>
+</div> <!-- navigation -->
+<div id="content">
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li>1. <a href="#robo63">Steamsky/Utils.UI</a></li>
+<ul>
+<li>1.1. <a href="#robo178">Utils.UI/GameStates</a></li>
+<li>1.2. <a href="./utils-ui_adb.html#robo322">Utils.UI/Builder</a></li>
+<li>1.3. <a href="#robo323">Utils.UI/PreviousGameState</a></li>
+<li>1.4. <a href="./utils-ui_adb.html#robo324">Utils.UI/Source_Id</a></li>
+<li>1.5. <a href="./utils-ui_adb.html#robo769">Utils.UI/AutoHideDialog</a></li>
+<li>1.6. <a href="#robo770">Utils.UI/CheckAmount</a></li>
+<li>1.7. <a href="#robo771">Utils.UI/CloseMessages</a></li>
+<li>1.8. <a href="#robo772">Utils.UI/CloseWindow</a></li>
+<li>1.9. <a href="#robo773">Utils.UI/HideDialog</a></li>
+<li>1.10. <a href="#robo774">Utils.UI/HideItemInfo</a></li>
+<li>1.11. <a href="#robo775">Utils.UI/HideWindow</a></li>
+<li>1.12. <a href="#robo776">Utils.UI/MinutesToDate</a></li>
+<li>1.13. <a href="#robo777">Utils.UI/QuitGame</a></li>
+<li>1.14. <a href="#robo778">Utils.UI/RemoveWidget</a></li>
+<li>1.15. <a href="#robo779">Utils.UI/SelectElement</a></li>
+<li>1.16. <a href="#robo780">Utils.UI/SetUtilsBuilder</a></li>
+<li>1.17. <a href="#robo781">Utils.UI/ShowConfirmDialog</a></li>
+<li>1.18. <a href="#robo782">Utils.UI/ShowDialog</a></li>
+<li>1.19. <a href="#robo783">Utils.UI/ShowInventoryItemInfo</a></li>
+<li>1.20. <a href="#robo784">Utils.UI/ShowPopupMenu</a></li>
+<li>1.21. <a href="#robo785">Utils.UI/ShowPopupMenuButton</a></li>
+<li>1.22. <a href="#robo786">Utils.UI/ShowWindow</a></li>
+<li>1.23. <a href="#robo787">Utils.UI/TravelInfo</a></li>
+<li>1.24. <a href="#robo788">Utils.UI/UpdateMessages</a></li>
+</ul>
+</ul>
+<hr />
+<a name="Steamsky2fUtils2eUI"></a>
+<a name="robo63"></a><h2>Steamsky/Utils.UI [ Packages ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Provides various code for UI
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source"><span class="keyword">package</span> <strong>Utils.UI</strong> <span class="keyword">is</span>
+</pre>
+
+<hr />
+<a name="Utils2eUI2fGameStates"></a>
+<a name="robo178"></a><h2>Utils.UI/GameStates [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">Utils.UI</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> <a href="../game_ads.html#robo26">Game</a> states
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> <strong>GameStates</strong> <span class="keyword">is</span> <span class="sign">(</span>SkyMap_View<span class="sign">,</span> Combat_View<span class="sign">,</span> Main_Menu<span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Utils2eUI2fPreviousGameState"></a>
+<a name="robo323"></a><h2>Utils.UI/PreviousGameState [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">Utils.UI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Current game state, needed for hide some windows
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>PreviousGameState</strong><span class="sign">:</span> <a href="#robo178">GameStates</a><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Utils2eUI2fCheckAmount"></a>
+<a name="robo770"></a><h2>Utils.UI/CheckAmount [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Check did entered amount in text field don't drop below low level warnings
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>CheckAmount</strong><span class="sign">(</span>User_Data<span class="sign">:</span> <span class="keyword">access</span> GObject_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> User_Data - Text field to check
+</pre>
+
+<hr />
+<a name="Utils2eUI2fCloseMessages"></a>
+<a name="robo771"></a><h2>Utils.UI/CloseMessages [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Switch back to skymap or combat from info
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>CloseMessages</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Object - Gtkada_Builder used to create UI
+</pre>
+
+<hr />
+<a name="Utils2eUI2fCloseWindow"></a>
+<a name="robo772"></a><h2>Utils.UI/CloseWindow [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Close window on press Escape key
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>CloseWindow</strong>
+     <span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Widget_Record<span class="keyword">'Class</span><span class="sign">;</span> Event<span class="sign">:</span> Gdk_Event_Key<span class="sign">)</span>
+     <span class="keyword"> return </span>Boolean<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Self  - <a href="../game_ads.html#robo26">Game</a> window to close
+ Event - Detailed info about keyboard event
+</pre>
+<p class="item_name">RESULT</p>
+<pre> False if window was closed otherwise true
+</pre>
+
+<hr />
+<a name="Utils2eUI2fHideDialog"></a>
+<a name="robo773"></a><h2>Utils.UI/HideDialog [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Close dialog window and stop auto close timer
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>HideDialog</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Object - Gtkada_Builder used to create UI
+</pre>
+
+<hr />
+<a name="Utils2eUI2fHideItemInfo"></a>
+<a name="robo774"></a><h2>Utils.UI/HideItemInfo [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Hide or show detailed item info
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>HideItemInfo</strong><span class="sign">(</span>User_Data<span class="sign">:</span> <span class="keyword">access</span> GObject_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> User_Data - Gtk_Widget to hide
+</pre>
+
+<hr />
+<a name="Utils2eUI2fHideWindow"></a>
+<a name="robo775"></a><h2>Utils.UI/HideWindow [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Hide window instead of destroying it
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>HideWindow</strong><span class="sign">(</span>User_Data<span class="sign">:</span> <span class="keyword">access</span> GObject_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> return </span>Boolean<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> User_Data - Window to hide
+</pre>
+<p class="item_name">RESULT</p>
+<pre> Always return true
+</pre>
+
+<hr />
+<a name="Utils2eUI2fMinutesToDate"></a>
+<a name="robo776"></a><h2>Utils.UI/MinutesToDate [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Convert minutes to game date and add it to text
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>MinutesToDate</strong>
+     <span class="sign">(</span>Minutes<span class="sign">:</span> Natural<span class="sign">;</span> InfoText<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Unbounded_String<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Minutes  - Amount of minutes to convert
+ InfoText - Text to which time info will be added
+</pre>
+<p class="item_name">RESULT</p>
+<pre> Parameter InfoText
+</pre>
+
+<hr />
+<a name="Utils2eUI2fQuitGame"></a>
+<a name="robo777"></a><h2>Utils.UI/QuitGame [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Save and quit from game
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>QuitGame</strong><span class="sign">(</span>User_Data<span class="sign">:</span> <span class="keyword">access</span> GObject_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> return </span>Boolean<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> User_Data - the game window
+</pre>
+<p class="item_name">RESULT</p>
+<pre> Always true
+</pre>
+
+<hr />
+<a name="Utils2eUI2fRemoveWidget"></a>
+<a name="robo778"></a><h2>Utils.UI/RemoveWidget [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Remove selected widget
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>RemoveWidget</strong><span class="sign">(</span>Widget<span class="sign">:</span> <span class="keyword">not</span> <span class="keyword">null</span> <span class="keyword">access</span> Gtk_Widget_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Widget - Gtk_Widget to remove
+</pre>
+
+<hr />
+<a name="Utils2eUI2fSelectElement"></a>
+<a name="robo779"></a><h2>Utils.UI/SelectElement [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Select other element on press Return key
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>SelectElement</strong>
+     <span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> GObject_Record<span class="keyword">'Class</span><span class="sign">;</span> Event<span class="sign">:</span> Gdk_Event_Key<span class="sign">)</span><span class="keyword"> return </span>Boolean<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Self  - Gtk_Widget which will grab focus
+ Event - Detailed info about keyboard event
+</pre>
+<p class="item_name">RESULT</p>
+<pre> True if new element was selected, otherwise false
+</pre>
+
+<hr />
+<a name="Utils2eUI2fSetUtilsBuilder"></a>
+<a name="robo780"></a><h2>Utils.UI/SetUtilsBuilder [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Set Gtk <a href="./debugui_adb.html#robo221">Builder</a> for <a href="../utils_ads.html#robo64">Utils</a> package
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>SetUtilsBuilder</strong><span class="sign">(</span>NewBuilder<span class="sign">:</span> Gtkada_Builder<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> NewBuilder - Gtkada_Builder used to create UI
+</pre>
+
+<hr />
+<a name="Utils2eUI2fShowConfirmDialog"></a>
+<a name="robo781"></a><h2>Utils.UI/ShowConfirmDialog [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show confirmation dialog to player
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>ShowConfirmDialog</strong>
+     <span class="sign">(</span>Message<span class="sign">:</span> String<span class="sign">;</span> Parent<span class="sign">:</span> Gtk_Window<span class="sign">)</span> <span class="keyword">return</span> Boolean<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Message - Text to show to player
+ Parent  - Gtk Window which will be parent for that dialog
+</pre>
+<p class="item_name">RESULT</p>
+<pre> True if player select 'Yes' option, otherwise false
+</pre>
+
+<hr />
+<a name="Utils2eUI2fShowDialog"></a>
+<a name="robo782"></a><h2>Utils.UI/ShowDialog [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show dialog with info
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>ShowDialog</strong><span class="sign">(</span>Message<span class="sign">:</span> String<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Message - Text to show
+</pre>
+
+<hr />
+<a name="Utils2eUI2fShowInventoryItemInfo"></a>
+<a name="robo783"></a><h2>Utils.UI/ShowInventoryItemInfo [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show info about selected item in ship cargo or crew member inventory
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>ShowInventoryItemInfo</strong>
+     <span class="sign">(</span>Label<span class="sign">:</span> Gtk_Label<span class="sign">;</span> <a href="./ships-cargo-ui_adb.html#robo304">ItemIndex</a><span class="sign">:</span> Positive<span class="sign">;</span> <a href="./crew-ui_ads.html#robo211">MemberIndex</a><span class="sign">:</span> Natural<span class="sign">)</span> with
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="./crew-ui_ads.html#robo211">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="../ships_ads.html#robo308">PlayerShip</a><span class="sign">.</span><a href="../crew_ads.html#robo19">Crew</a><span class="sign">.</span>Last_Index<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Label       - Gtk_Label which text will be set
+ <a href="./ships-cargo-ui_adb.html#robo304">ItemIndex</a>   - Index of item (can be inventory or ship cargo)
+ <a href="./crew-ui_ads.html#robo211">MemberIndex</a> - If item is in crew member inventory, crew index of member,
+               otherwise 0
+</pre>
+
+<hr />
+<a name="Utils2eUI2fShowPopupMenu"></a>
+<a name="robo784"></a><h2>Utils.UI/ShowPopupMenu [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show popup menu for selected widget
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>ShowPopupMenu</strong>
+     <span class="sign">(</span>User_Data<span class="sign">:</span> <span class="keyword">access</span> GObject_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> return </span>Boolean<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> User_Data - Gtk_Menu to show
+</pre>
+<p class="item_name">RESULT</p>
+<pre> Always false
+</pre>
+
+<hr />
+<a name="Utils2eUI2fShowPopupMenuButton"></a>
+<a name="robo785"></a><h2>Utils.UI/ShowPopupMenuButton [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show popup menu on click of right mouse button
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>ShowPopupMenuButton</strong>
+     <span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Widget_Record<span class="keyword">'Class</span><span class="sign">;</span> Event<span class="sign">:</span> Gdk_Event_Button<span class="sign">)</span>
+     <span class="keyword"> return </span>Boolean<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Self  - GtkTreeView to which menu will be show
+ Event - Detailed info about mouse event
+</pre>
+<p class="item_name">RESULT</p>
+<pre> Always false
+</pre>
+
+<hr />
+<a name="Utils2eUI2fShowWindow"></a>
+<a name="robo786"></a><h2>Utils.UI/ShowWindow [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show selected window
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>ShowWindow</strong><span class="sign">(</span>User_Data<span class="sign">:</span> <span class="keyword">access</span> GObject_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> User_Data - Window to show
+</pre>
+
+<hr />
+<a name="Utils2eUI2fTravelInfo"></a>
+<a name="robo787"></a><h2>Utils.UI/TravelInfo [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Add info about travel eta and approx fuel usage
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>TravelInfo</strong>
+     <span class="sign">(</span>InfoText<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Unbounded_String<span class="sign">;</span> Distance<span class="sign">:</span> Positive<span class="sign">;</span>
+      ShowFuelName<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> InfoText     - Text to which info about travel will be added
+ Distance     - Distance in map fields to destination point
+ ShowFuelName - If true, add fuel name to info. Default is false
+</pre>
+<p class="item_name">RESULT</p>
+<pre> Parameter InfoText
+</pre>
+
+<hr />
+<a name="Utils2eUI2fUpdateMessages"></a>
+<a name="robo788"></a><h2>Utils.UI/UpdateMessages [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Update game messages and last message
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateMessages</strong><span class="sign">;</span>
+</pre>
+
+</div> <!-- content -->
+<div id="footer">
+<p>Generated from ./src/ui/utils-ui.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 04 2019 06:25:03
+</p>
+</div> <!-- footer -->
+</body>
+</html>

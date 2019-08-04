@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="../robodoc.css" type="text/css" />
+<title>./src/ui/ships-ui-handlers.ads</title>
+<!-- Source: ./src/ui/ships-ui-handlers.ads -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  2 2019) -->
+</head>
+<body>
+<div id="logo">
+<a name="robo_top_of_doc">Steamsky 4.0 code documentation</a>
+</div> <!-- logo -->
+<div id="navigation">
+<a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
+<a class="menuitem" href="../sources.html#top">Source files</a>
+<a class="menuitem" href="../index.html#top">Index</a>
+<a class="menuitem" href="../robo_exceptions.html#top">Exceptions</a>
+<a class="menuitem" href="../robo_subprograms.html#top">Subprograms</a>
+<a class="menuitem" href="../robo_packages.html#top">Packages</a>
+<a class="menuitem" href="../robo_types.html#top">Types</a>
+<a class="menuitem" href="../robo_variables.html#top">Variables</a>
+</div> <!-- navigation -->
+<div id="content">
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li>1. <a href="#robo54">Steamsky/Ships.UI.Handlers</a></li>
+<ul>
+<li>1.1. <a href="#robo704">Ships.UI.Handlers/Assign</a></li>
+<li>1.2. <a href="#robo705">Ships.UI.Handlers/ChangeModuleName</a></li>
+<li>1.3. <a href="#robo706">Ships.UI.Handlers/ChangeShipName</a></li>
+<li>1.4. <a href="#robo707">Ships.UI.Handlers/DisableEngine</a></li>
+<li>1.5. <a href="#robo708">Ships.UI.Handlers/SetRepair</a></li>
+<li>1.6. <a href="#robo709">Ships.UI.Handlers/SetUpgrade</a></li>
+<li>1.7. <a href="#robo710">Ships.UI.Handlers/ShowModuleInfo</a></li>
+<li>1.8. <a href="#robo711">Ships.UI.Handlers/StopUpgrading</a></li>
+<li>1.9. <a href="#robo712">Ships.UI.Handlers/ToggleSearch</a></li>
+</ul>
+</ul>
+<hr />
+<a name="Steamsky2fShips2eUI2eHandlers"></a>
+<a name="robo54"></a><h2>Steamsky/Ships.UI.Handlers [ Packages ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Provided code for ship info UI handlers
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source"><span class="keyword">package</span> <strong>Ships.UI.Handlers</strong> <span class="keyword">is</span>
+</pre>
+
+<hr />
+<a name="Ships2eUI2eHandlers2fAssign"></a>
+<a name="robo704"></a><h2>Ships.UI.Handlers/Assign [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo54">Ships.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> <strong>Assign</strong> crew member or ammo to selected module
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>Assign</strong><span class="sign">(</span>User_Data<span class="sign">:</span> <span class="keyword">access</span> GObject_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> User_Data - Button clicked to assign member or ammo to module
+</pre>
+
+<hr />
+<a name="Ships2eUI2eHandlers2fChangeModuleName"></a>
+<a name="robo705"></a><h2>Ships.UI.Handlers/ChangeModuleName [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo54">Ships.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Change name of selected module
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>ChangeModuleName</strong>
+     <span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Cell_Renderer_Text_Record<span class="keyword">'Class</span><span class="sign">;</span> Path<span class="sign">:</span> UTF8_String<span class="sign">;</span>
+      New_Text<span class="sign">:</span> UTF8_String<span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Self     - GtkTreeView cell with name of the module to change. Unused
+ Path     - Full GtkTreeView path to selected module name
+ New_Text - New name for selected module
+</pre>
+
+<hr />
+<a name="Ships2eUI2eHandlers2fChangeShipName"></a>
+<a name="robo706"></a><h2>Ships.UI.Handlers/ChangeShipName [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo54">Ships.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Change name of player's ship
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>ChangeShipName</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Object - Gtkada_Builder used to create UI
+</pre>
+
+<hr />
+<a name="Ships2eUI2eHandlers2fDisableEngine"></a>
+<a name="robo707"></a><h2>Ships.UI.Handlers/DisableEngine [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo54">Ships.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Enable/disable selected engine
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>DisableEngine</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Object - Gtkada_Builder used to create UI
+</pre>
+
+<hr />
+<a name="Ships2eUI2eHandlers2fSetRepair"></a>
+<a name="robo708"></a><h2>Ships.UI.Handlers/SetRepair [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo54">Ships.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Set repair priority for selected module
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>SetRepair</strong><span class="sign">(</span>User_Data<span class="sign">:</span> <span class="keyword">access</span> GObject_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> User_Data - Button clicked to set or remove repair priority
+</pre>
+
+<hr />
+<a name="Ships2eUI2eHandlers2fSetUpgrade"></a>
+<a name="robo709"></a><h2>Ships.UI.Handlers/SetUpgrade [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo54">Ships.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Start upgrading selected module
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>SetUpgrade</strong><span class="sign">(</span>User_Data<span class="sign">:</span> <span class="keyword">access</span> GObject_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> User_Data - Button with upgrade type clicked
+</pre>
+
+<hr />
+<a name="Ships2eUI2eHandlers2fShowModuleInfo"></a>
+<a name="robo710"></a><h2>Ships.UI.Handlers/ShowModuleInfo [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo54">Ships.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show informations about selected module
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>ShowModuleInfo</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Object - Gtkada_Builder used to create UI
+</pre>
+
+<hr />
+<a name="Ships2eUI2eHandlers2fStopUpgrading"></a>
+<a name="robo711"></a><h2>Ships.UI.Handlers/StopUpgrading [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo54">Ships.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Stop current module upgrade
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>StopUpgrading</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Object - Gtkada_Builder used to create UI
+</pre>
+
+<hr />
+<a name="Ships2eUI2eHandlers2fToggleSearch"></a>
+<a name="robo712"></a><h2>Ships.UI.Handlers/ToggleSearch [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo54">Ships.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Enable/disable search for ship module when start/end editing module name
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>ToggleSearch</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Object - Gtkada_Builder used to create UI
+</pre>
+
+</div> <!-- content -->
+<div id="footer">
+<p>Generated from ./src/ui/ships-ui-handlers.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 04 2019 06:25:03
+</p>
+</div> <!-- footer -->
+</body>
+</html>

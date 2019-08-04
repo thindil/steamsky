@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="./robodoc.css" type="text/css" />
+<title>./src/ships-saveload.ads</title>
+<!-- Source: ./src/ships-saveload.ads -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  2 2019) -->
+</head>
+<body>
+<div id="logo">
+<a name="robo_top_of_doc">Steamsky 4.0 code documentation</a>
+</div> <!-- logo -->
+<div id="navigation">
+<a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
+<a class="menuitem" href="./sources.html#top">Source files</a>
+<a class="menuitem" href="./index.html#top">Index</a>
+<a class="menuitem" href="./robo_exceptions.html#top">Exceptions</a>
+<a class="menuitem" href="./robo_subprograms.html#top">Subprograms</a>
+<a class="menuitem" href="./robo_packages.html#top">Packages</a>
+<a class="menuitem" href="./robo_types.html#top">Types</a>
+<a class="menuitem" href="./robo_variables.html#top">Variables</a>
+</div> <!-- navigation -->
+<div id="content">
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li>1. <a href="#robo52">Steamsky/Ships.SaveLoad</a></li>
+<ul>
+<li>1.1. <a href="#robo702">Ships.SaveLoad/LoadPlayerShip</a></li>
+<li>1.2. <a href="#robo703">Ships.SaveLoad/SavePlayerShip</a></li>
+</ul>
+</ul>
+<hr />
+<a name="Steamsky2fShips2eSaveLoad"></a>
+<a name="robo52"></a><h2>Steamsky/Ships.SaveLoad [ Packages ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Provides code to save and load player ship data to file
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source"><span class="keyword">package</span> <strong>Ships.SaveLoad</strong> <span class="keyword">is</span>
+</pre>
+
+<hr />
+<a name="Ships2eSaveLoad2fLoadPlayerShip"></a>
+<a name="robo702"></a><h2>Ships.SaveLoad/LoadPlayerShip [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo52">Ships.SaveLoad</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Load saved player ship from file
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>LoadPlayerShip</strong><span class="sign">(</span><a href="./game-saveload_adb.html#robo229">SaveData</a><span class="sign">:</span> Document<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> <a href="./game-saveload_adb.html#robo229">SaveData</a> - XML structure from which player ship data will be loaded
+</pre>
+
+<hr />
+<a name="Ships2eSaveLoad2fSavePlayerShip"></a>
+<a name="robo703"></a><h2>Ships.SaveLoad/SavePlayerShip [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo52">Ships.SaveLoad</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Save player ship to file
+ PAEAMETERS
+ <a href="./game-saveload_adb.html#robo229">SaveData</a> - XML structure to which player ship data will be saved
+ MainNode - XML main node to which player ship data will be saved
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>SavePlayerShip</strong><span class="sign">(</span><a href="./game-saveload_adb.html#robo229">SaveData</a><span class="sign">:</span> Document<span class="sign">;</span> MainNode<span class="sign">:</span> DOM<span class="sign">.</span>Core<span class="sign">.</span>Element<span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+</div> <!-- content -->
+<div id="footer">
+<p>Generated from ./src/ships-saveload.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 04 2019 06:25:03
+</p>
+</div> <!-- footer -->
+</body>
+</html>
