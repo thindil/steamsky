@@ -40,5 +40,6 @@ list).-->
   <skill name="Blacksmith" />
   <skill name="Woodworking" />
   <skill name="Leatherworking" />
+  <skill name="Printing" />
  </career>
 </careers>
