@@ -136,6 +136,14 @@ package body Bases.LootUI is
             LF & "Damage chance: " &
             GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
       end if;
+      if Length(Items_List(ProtoIndex).IType) > 4
+        and then
+        (Slice(Items_List(ProtoIndex).IType, 1, 4) = "Ammo" or
+         Items_List(ProtoIndex).IType = To_Unbounded_String("Harpoon")) then
+         Append
+           (ItemInfo,
+            LF & "Strength:" & Integer'Image(Items_List(ProtoIndex).Value(1)));
+      end if;
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
          Append
            (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
