@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file.
 - Updated README.md
 - Updated contributing guide
 - Default installation directory on Windows
+- Updated crafter career with bonus to Printing skill
 
 ### Fixed
 - Crash after showing info dialog in main menu
