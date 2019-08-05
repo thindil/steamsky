@@ -28,7 +28,7 @@ All notable changes to this project will be documented in this file.
   alchemy lab
 - Info about chance to damage for items
 - Check if the game have permission to write to save directory
-- Info about strength of ship's weapons
+- Info about strength of ship's weapons, guns ammunitions and harpoons
 
 ### Changed
 - Updated help
