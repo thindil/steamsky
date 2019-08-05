@@ -24,7 +24,8 @@ All notable changes to this project will be documented in this file.
   double extended titanium cabin, huge double luxury titanium cabin, huge
   double advanced orichalcum cabin, huge double extended orichalcum cabin,
   huge double luxury orichalcum cabin, huge double extended adamantium cabin,
-  huge double luxury adamanitum cabin, medium bronze alchemy lab
+  huge double luxury adamanitum cabin, medium bronze alchemy lab, medium iron
+  alchemy lab
 - Info about chance to damage for items
 - Check if the game have permission to write to save directory
 - Info about strength of ship's weapons
