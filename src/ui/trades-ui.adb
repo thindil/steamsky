@@ -195,9 +195,6 @@ package body Trades.UI is
             when others =>
                null;
          end case;
-         Append
-           (ItemInfo,
-            LF & "Strength:" & Integer'Image(Items_List(ProtoIndex).Value(2)));
       end if;
       for ItemType of ItemTypes loop
          if Items_List(ProtoIndex).IType = ItemType then
@@ -205,6 +202,10 @@ package body Trades.UI is
               (ItemInfo,
                LF & "Damage chance: " &
                GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
+            Append
+              (ItemInfo,
+               LF & "Strength:" &
+               Integer'Image(Items_List(ProtoIndex).Value(2)));
             exit;
          end if;
       end loop;
