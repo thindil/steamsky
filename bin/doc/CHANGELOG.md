@@ -28,8 +28,8 @@ All notable changes to this project will be documented in this file.
   alchemy lab, medium steel alchemy lab, medium titanium alchemy lab
 - Info about chance to damage for items
 - Check if the game have permission to write to save directory
-- Info about strength of ship's weapons, guns ammunitions, harpoons and melee
-  weapons
+- Info about strength of ship's weapons, guns ammunitions, harpoons, melee
+  weapons and crew members armors
 
 ### Changed
 - Updated help
