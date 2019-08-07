@@ -162,71 +162,116 @@ package body Crew.UI.Handlers is
       ProgressBar := Gtk_Progress_Bar(Get_Object(Object, "progresshealth"));
       Show_All(Gtk_Widget(ProgressBar));
       Set_Fraction(ProgressBar, Gdouble(Member.Health) / 100.0);
-      if Member.Health < 100 and Member.Health > 80 then
-         Set_Text(ProgressBar, "Slightly wounded");
-      elsif Member.Health < 81 and Member.Health > 50 then
-         Set_Text(ProgressBar, "Wounded");
-      elsif Member.Health < 51 then
-         Set_Text(ProgressBar, "Heavily wounded");
-      else
+      if Member.Health = 100 then
          Hide(Gtk_Widget(ProgressBar));
       end if;
+      if GameSettings.ShowNumbers then
+         Set_Text(ProgressBar, "Health:" & Natural'Image(Member.Health) & "%");
+      else
+         case Member.Health is
+            when 81 .. 99 =>
+               Set_Text(ProgressBar, "Slightly wounded");
+            when 51 .. 80 =>
+               Set_Text(ProgressBar, "Wounded");
+            when 1 .. 50 =>
+               Set_Text(ProgressBar, "Heavily wounded");
+            when others =>
+               null;
+         end case;
+      end if;
       TiredPoints := Member.Tired - Member.Attributes(ConditionIndex)(1);
+      if TiredPoints < 0 then
+         TiredPoints := 0;
+      end if;
       ProgressBar := Gtk_Progress_Bar(Get_Object(Object, "progresstired"));
       Show_All(Gtk_Widget(ProgressBar));
       Set_Fraction(ProgressBar, Gdouble(TiredPoints) / 100.0);
-      if TiredPoints > 0 and TiredPoints < 41 then
-         Set_Text(ProgressBar, "Bit tired");
-      elsif TiredPoints > 40 and TiredPoints < 81 then
-         Set_Text(ProgressBar, "Tired");
-      elsif TiredPoints > 80 and TiredPoints < 100 then
-         Set_Text(ProgressBar, "Very tired");
-      elsif TiredPoints = 100 then
-         Set_Text(ProgressBar, "Unconscious");
-      else
+      if TiredPoints = 0 then
          Hide(Gtk_Widget(ProgressBar));
+      end if;
+      if GameSettings.ShowNumbers then
+         Set_Text
+           (ProgressBar, "Tiredness:" & Natural'Image(TiredPoints) & "%");
+      else
+         case TiredPoints is
+            when 1 .. 40 =>
+               Set_Text(ProgressBar, "Bit tired");
+            when 41 .. 80 =>
+               Set_Text(ProgressBar, "Tired");
+            when 81 .. 99 =>
+               Set_Text(ProgressBar, "Very tired");
+            when 100 =>
+               Set_Text(ProgressBar, "Unconscious");
+            when others =>
+               null;
+         end case;
       end if;
       ProgressBar := Gtk_Progress_Bar(Get_Object(Object, "progressthirst"));
       Show_All(Gtk_Widget(ProgressBar));
       Set_Fraction(ProgressBar, Gdouble(Member.Thirst) / 100.0);
-      if Member.Thirst > 0 and Member.Thirst < 41 then
-         Set_Text(ProgressBar, "Bit thirsty");
-      elsif Member.Thirst > 40 and Member.Thirst < 81 then
-         Set_Text(ProgressBar, "Thirsty");
-      elsif Member.Thirst > 80 and Member.Thirst < 100 then
-         Set_Text(ProgressBar, "Very thirsty");
-      elsif Member.Thirst = 100 then
-         Set_Text(ProgressBar, "Dehydrated");
-      else
+      if Member.Thirst = 0 then
          Hide(Gtk_Widget(ProgressBar));
+      end if;
+      if GameSettings.ShowNumbers then
+         Set_Text(ProgressBar, "Thirst:" & Natural'Image(Member.Thirst) & "%");
+      else
+         case Member.Thirst is
+            when 1 .. 40 =>
+               Set_Text(ProgressBar, "Bit thirsty");
+            when 41 .. 80 =>
+               Set_Text(ProgressBar, "Thirsty");
+            when 81 .. 99 =>
+               Set_Text(ProgressBar, "Very thirsty");
+            when 100 =>
+               Set_Text(ProgressBar, "Dehydrated");
+            when others =>
+               null;
+         end case;
       end if;
       ProgressBar := Gtk_Progress_Bar(Get_Object(Object, "progresshunger"));
       Show_All(Gtk_Widget(ProgressBar));
       Set_Fraction(ProgressBar, Gdouble(Member.Hunger) / 100.0);
-      if Member.Hunger > 0 and Member.Hunger < 41 then
-         Set_Text(ProgressBar, "Bit hungry");
-      elsif Member.Hunger > 40 and Member.Hunger < 81 then
-         Set_Text(ProgressBar, "Hungry");
-      elsif Member.Hunger > 80 and Member.Hunger < 100 then
-         Set_Text(ProgressBar, "Very hungry");
-      elsif Member.Hunger = 100 then
-         Set_Text(ProgressBar, "Starving");
-      else
+      if Member.Hunger = 0 then
          Hide(Gtk_Widget(ProgressBar));
+      end if;
+      if GameSettings.ShowNumbers then
+         Set_Text(ProgressBar, "Hunger:" & Natural'Image(Member.Hunger) & "%");
+      else
+         case Member.Hunger is
+            when 1 .. 40 =>
+               Set_Text(ProgressBar, "Bit hungry");
+            when 41 .. 80 =>
+               Set_Text(ProgressBar, "Hungry");
+            when 81 .. 99 =>
+               Set_Text(ProgressBar, "Very hungry");
+            when 100 =>
+               Set_Text(ProgressBar, "Starving");
+            when others =>
+               null;
+         end case;
       end if;
       ProgressBar := Gtk_Progress_Bar(Get_Object(Object, "progressmorale"));
       Show_All(Gtk_Widget(ProgressBar));
       Set_Fraction(ProgressBar, Gdouble(Member.Morale(1)) / 100.0);
-      if Member.Morale(1) < 25 then
-         Set_Text(ProgressBar, "Upset");
-      elsif Member.Morale(1) > 24 and Member.Morale(1) < 50 then
-         Set_Text(ProgressBar, "Unhappy");
-      elsif Member.Morale(1) = 50 then
+      if Member.Morale(1) = 50 then
          Hide(Gtk_Widget(ProgressBar));
-      elsif Member.Morale(1) > 50 and Member.Morale(1) < 75 then
-         Set_Text(ProgressBar, "Happy");
-      elsif Member.Morale(1) > 74 then
-         Set_Text(ProgressBar, "Excited");
+      end if;
+      if GameSettings.ShowNumbers then
+         Set_Text
+           (ProgressBar, "Morale:" & Natural'Image(Member.Morale(1)) & "%");
+      else
+         case Member.Morale(1) is
+            when 0 .. 24 =>
+               Set_Text(ProgressBar, "Upset");
+            when 25 .. 49 =>
+               Set_Text(ProgressBar, "Unhappy");
+            when 51 .. 74 =>
+               Set_Text(ProgressBar, "Happy");
+            when 75 .. 100 =>
+               Set_Text(ProgressBar, "Excited");
+            when others =>
+               null;
+         end case;
       end if;
       if Member.Skills.Length > 0 and Member.ContractLength /= 0 then
          declare
