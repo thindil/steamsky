@@ -55,7 +55,7 @@ package body Config is
          ShowLastMessages => True, MessagesPosition => 0, FullScreen => False,
          AutoCloseMessagesTime => 6, AutoSave => NONE, TopicsPosition => 0,
          ShowBaseInfo => True, ShowCargoInfo => True,
-         ShowInventoryInfo => True);
+         ShowInventoryInfo => True, ShowNumbers => True);
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
@@ -175,6 +175,8 @@ package body Config is
                GameSettings.ShowCargoInfo := LoadBoolean;
             elsif FieldName = To_Unbounded_String("ShowInventoryInfo") then
                GameSettings.ShowInventoryInfo := LoadBoolean;
+            elsif FieldName = To_Unbounded_String("ShowNumbers") then
+               GameSettings.ShowNumbers := LoadBoolean;
             end if;
          end if;
       end loop;
@@ -306,6 +308,7 @@ package body Config is
       SaveBoolean(GameSettings.ShowBaseInfo, "ShowBaseInfo");
       SaveBoolean(GameSettings.ShowCargoInfo, "ShowCargoInfo");
       SaveBoolean(GameSettings.ShowInventoryInfo, "ShowInventoryInfo");
+      SaveBoolean(GameSettings.ShowNumbers, "ShowNumbers");
       Close(ConfigFile);
    end SaveConfig;
 
