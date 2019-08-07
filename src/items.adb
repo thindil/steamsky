@@ -27,6 +27,7 @@ with Utils; use Utils;
 with Crew; use Crew;
 with Crew.Inventory; use Crew.Inventory;
 with Crafts; use Crafts;
+with Config; use Config;
 
 package body Items is
 
@@ -330,6 +331,9 @@ package body Items is
 
    function GetItemChanceToDamage(ItemData: Natural) return String is
    begin
+      if GameSettings.ShowNumbers then
+         return Natural'Image(ItemData) & "%";
+      end if;
       case ItemData is
          when 1 =>
             return "Almost never";

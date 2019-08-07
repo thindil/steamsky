@@ -790,6 +790,9 @@ package body Crew is
 
    function GetSkillLevelName(SkillLevel: Positive) return String is
    begin
+      if GameSettings.ShowNumbers then
+         return Positive'Image(SkillLevel);
+      end if;
       case SkillLevel is
          when 1 .. 10 =>
             return "Beginner";
@@ -818,6 +821,9 @@ package body Crew is
 
    function GetAttributeLevelName(AttributeLevel: Positive) return String is
    begin
+      if GameSettings.ShowNumbers then
+         return Positive'Image(AttributeLevel);
+      end if;
       case AttributeLevel is
          when 1 .. 5 =>
             return "Very low";
