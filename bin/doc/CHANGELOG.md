@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Check if the game have permission to write to save directory
 - Info about strength of ship's weapons, guns ammunitions, harpoons, melee
   weapons and crew members armors
+- Option to show numeric values of crew members attributes, skills, etc
 
 ### Changed
 - Updated help
