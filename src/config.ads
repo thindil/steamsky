@@ -133,6 +133,8 @@ package Config is
    --                         selected item in player ship cargo
    -- ShowInventoryInfo     - If true, show detailed information about
    --                         selected item in crew member inventory
+   -- ShowNumbers           - If true, show numbers values instead of text for
+   --                         various things (like weapon strength, etc)
    -- SOURCE
    type GameSettingsRecord is record
       AutoRest: Boolean;
@@ -167,6 +169,7 @@ package Config is
       ShowBaseInfo: Boolean;
       ShowCargoInfo: Boolean;
       ShowInventoryInfo: Boolean;
+      ShowNumbers: Boolean;
    end record;
    -- ****
    -- ****v* Config/NewGameSettings
