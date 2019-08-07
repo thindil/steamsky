@@ -8294,102 +8294,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                               <object class="GtkLabel">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="tooltip_text" translatable="yes">Size (in pixels) of font used in interface (for example, here).</property>
-                                                <property name="label" translatable="yes">Size of interface font:</property>
-                                                <property name="xalign">0</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="top_attach">10</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkSpinButton">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="tooltip_text" translatable="yes">Size (in pixels) of font used in interface (for example, here).</property>
-                                                <property name="text" translatable="yes">10</property>
-                                                <property name="adjustment">adjinterfacefont</property>
-                                                <property name="numeric">True</property>
-                                                <property name="value">10</property>
-                                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="top_attach">10</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkLabel">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="tooltip_text" translatable="yes">Size (in pixels) of font used mainly in help.</property>
-                                                <property name="label" translatable="yes">Size of help font:</property>
-                                                <property name="xalign">0</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="top_attach">9</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkSpinButton">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="tooltip_text" translatable="yes">Size (in pixels) of font used mainly in help.</property>
-                                                <property name="text" translatable="yes">10</property>
-                                                <property name="adjustment">adjhelpfont</property>
-                                                <property name="numeric">True</property>
-                                                <property name="value">10</property>
-                                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="top_attach">9</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkLabel">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="tooltip_text" translatable="yes">Size (in pixels) of font used to draw game map.</property>
-                                                <property name="label" translatable="yes">Size of map font:</property>
-                                                <property name="xalign">0</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="top_attach">8</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkSpinButton">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="tooltip_text" translatable="yes">Size (in pixels) of font used to draw game map.</property>
-                                                <property name="text" translatable="yes">10</property>
-                                                <property name="adjustment">adjmapfont</property>
-                                                <property name="numeric">True</property>
-                                                <property name="value">10</property>
-                                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
-                                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
-                                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="top_attach">8</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkLabel">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
                                                 <property name="tooltip_text" translatable="yes">Auto close game messages after that amount of seconds.</property>
                                                 <property name="label" translatable="yes">Close messages after:</property>
                                                 <property name="xalign">0</property>
@@ -8414,6 +8318,126 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                               <packing>
                                                 <property name="left_attach">1</property>
                                                 <property name="top_attach">7</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="tooltip_text" translatable="yes">Size (in pixels) of font used in interface (for example, here).</property>
+                                                <property name="label" translatable="yes">Size of interface font:</property>
+                                                <property name="xalign">0</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">11</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkSpinButton">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="tooltip_text" translatable="yes">Size (in pixels) of font used in interface (for example, here).</property>
+                                                <property name="text" translatable="yes">10</property>
+                                                <property name="adjustment">adjinterfacefont</property>
+                                                <property name="numeric">True</property>
+                                                <property name="value">10</property>
+                                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">11</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="tooltip_text" translatable="yes">Size (in pixels) of font used mainly in help.</property>
+                                                <property name="label" translatable="yes">Size of help font:</property>
+                                                <property name="xalign">0</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">10</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkSpinButton">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="tooltip_text" translatable="yes">Size (in pixels) of font used mainly in help.</property>
+                                                <property name="text" translatable="yes">10</property>
+                                                <property name="adjustment">adjhelpfont</property>
+                                                <property name="numeric">True</property>
+                                                <property name="value">10</property>
+                                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">10</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="tooltip_text" translatable="yes">Size (in pixels) of font used to draw game map.</property>
+                                                <property name="label" translatable="yes">Size of map font:</property>
+                                                <property name="xalign">0</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">9</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkSpinButton">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="tooltip_text" translatable="yes">Size (in pixels) of font used to draw game map.</property>
+                                                <property name="text" translatable="yes">10</property>
+                                                <property name="adjustment">adjmapfont</property>
+                                                <property name="numeric">True</property>
+                                                <property name="value">10</property>
+                                                <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
+                                                <signal name="focus-in-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                                <signal name="focus-out-event" handler="Enable_Menu_Shortcuts" swapped="no"/>
+                                                <signal name="focus-out-event" handler="Toggle_Close_Button" object="btnclose" swapped="no"/>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">9</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="tooltip_text" translatable="yes">Show numeric values of many statistics, like crew abilities, weapons strength, etc.</property>
+                                                <property name="label" translatable="yes">Show numeric values:</property>
+                                                <property name="xalign">0</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">8</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkSwitch" id="switchshownumbers">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="tooltip_text" translatable="yes">Show numeric values of many statistics, like crew abilities, weapons strength, etc.</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">8</property>
                                               </packing>
                                             </child>
                                           </object>

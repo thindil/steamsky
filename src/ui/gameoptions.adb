@@ -305,6 +305,8 @@ package body GameOptions is
       GameSettings.AutoSave :=
         AutoSaveType'Val
           (Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbautosave"))));
+      GameSettings.ShowNumbers :=
+        Get_State(Gtk_Switch(Get_Object(Object, "switchshownumbers")));
       SaveConfig;
       SetFontSize(ALLFONTS);
       Save(To_String(SaveDirectory) & "keys.cfg");
@@ -578,6 +580,9 @@ package body GameOptions is
       Set_Active
         (Gtk_Combo_Box(Get_Object(Builder, "cmbautosave")),
          (AutoSaveType'Pos(GameSettings.AutoSave)));
+      Set_State
+        (Gtk_Switch(Get_Object(Builder, "switchshownumbers")),
+         GameSettings.ShowNumbers);
       SetFontsSizes;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "options");
