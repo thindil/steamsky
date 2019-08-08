@@ -46,15 +46,15 @@ package body Crafts is
       MaterialAdded: Boolean;
       Action: DataAction;
    begin
-      TempRecord :=
-        (MaterialTypes => TempMaterials, MaterialAmounts => TempAmount,
-         ResultIndex => Null_Unbounded_String, ResultAmount => 10000,
-         Workplace => ALCHEMY_LAB, Skill => 1, Time => 15, Difficulty => 1,
-         BaseType => 0, Tool => To_Unbounded_String("None"));
       RecipesData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(RecipesData, "recipe");
       for I in 0 .. Length(NodesList) - 1 loop
+         TempRecord :=
+           (MaterialTypes => TempMaterials, MaterialAmounts => TempAmount,
+            ResultIndex => Null_Unbounded_String, ResultAmount => 10000,
+            Workplace => ALCHEMY_LAB, Skill => 1, Time => 15, Difficulty => 1,
+            BaseType => 0, Tool => To_Unbounded_String("None"));
          RecipeNode := Item(NodesList, I);
          RecipeIndex :=
            To_Unbounded_String(Get_Attribute(RecipeNode, "index"));
@@ -178,11 +178,6 @@ package body Crafts is
             LogMessage
               ("Recipe removed: " & To_String(RecipeIndex), Everything);
          end if;
-         TempRecord :=
-           (MaterialTypes => TempMaterials, MaterialAmounts => TempAmount,
-            ResultIndex => Null_Unbounded_String, ResultAmount => 10000,
-            Workplace => ALCHEMY_LAB, Skill => 1, Time => 15, Difficulty => 1,
-            BaseType => 0, Tool => To_Unbounded_String("None"));
       end loop;
    end LoadRecipes;
 
