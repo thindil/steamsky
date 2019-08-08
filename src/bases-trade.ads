@@ -64,53 +64,61 @@ package Bases.Trade is
    -- PARAMETERS
    -- RecipeIndex - Index of the recipe from base recipes list to buy
    -- SOURCE
-   procedure BuyRecipe(RecipeIndex: Unbounded_String);
-   -- ****
-   -- ****f* Bases.Trade/HealWounded
-   -- FUNCTION
-   -- Heals wounded crew members in bases
-   -- PARAMETERS
-   -- MemberIndex - Index of player ship crew member to heal or 0 for heal
-   --               all wounded crew members
-   -- SOURCE
-   procedure HealWounded(MemberIndex: Natural);
-   -- ****
-   -- ****f* Bases.Trade/HealCost
-   -- FUNCTION
-   -- Count cost of healing action
-   -- PARAMETERS
-   -- Cost        - Overall cost of heal wounded player ship crew member(s)
-   -- Time        - Time needed to heal wounded player ship crew member(s)
-   -- MemberIndex - Index of player ship crew member to heal or 0 for heal
-   --               all wounded crew members
-   -- RESULT
-   -- Parameters Cost and Time
-   -- SOURCE
-   procedure HealCost(Cost, Time: in out Natural; MemberIndex: Natural);
-   -- ****
-   -- ****f* Bases.Trade/TrainCost
-   -- FUNCTION
-   -- Count cost of training action
-   -- PARAMETERS
-   -- MemberIndex - Index of player ship crew member which will be training
-   -- SkillIndex  - Index of skill of selected crew member which will be
-   --               training
-   -- RESULT
-   -- Overall cost of training selected skill by selected crew member
-   -- SOURCE
-   function TrainCost(MemberIndex, SkillIndex: Positive) return Natural;
-   -- ****
-   -- ****f* Bases.Trade/TrainSkill
-   -- FUNCTION
-   -- Train selected skill
-   -- PARAMETERS
-   -- MemberIndex - Index of playership crew member which train
-   -- SkillIndex  - Index of skill of selected crew member to train
-   -- SOURCE
+   procedure BuyRecipe(RecipeIndex: Unbounded_String) with
+      Pre => (RecipeIndex /= Null_Unbounded_String);
+      -- ****
+      -- ****f* Bases.Trade/HealWounded
+      -- FUNCTION
+      -- Heals wounded crew members in bases
+      -- PARAMETERS
+      -- MemberIndex - Index of player ship crew member to heal or 0 for heal
+      --               all wounded crew members
+      -- SOURCE
+   procedure HealWounded(MemberIndex: Crew_Container.Extended_Index) with
+      Pre => (MemberIndex < PlayerShip.Crew.Last_Index);
+      -- ****
+      -- ****f* Bases.Trade/HealCost
+      -- FUNCTION
+      -- Count cost of healing action
+      -- PARAMETERS
+      -- Cost        - Overall cost of heal wounded player ship crew member(s)
+      -- Time        - Time needed to heal wounded player ship crew member(s)
+      -- MemberIndex - Index of player ship crew member to heal or 0 for heal
+      --               all wounded crew members
+      -- RESULT
+      -- Parameters Cost and Time
+      -- SOURCE
+   procedure HealCost
+     (Cost, Time: in out Natural;
+      MemberIndex: Crew_Container.Extended_Index) with
+      Pre => (MemberIndex < PlayerShip.Crew.Last_Index);
+      -- ****
+      -- ****f* Bases.Trade/TrainCost
+      -- FUNCTION
+      -- Count cost of training action
+      -- PARAMETERS
+      -- MemberIndex - Index of player ship crew member which will be training
+      -- SkillIndex  - Index of skill of selected crew member which will be
+      --               training
+      -- RESULT
+      -- Overall cost of training selected skill by selected crew member
+      -- SOURCE
+   function TrainCost(MemberIndex, SkillIndex: Positive) return Natural with
+      Pre =>
+      (MemberIndex <= PlayerShip.Crew.Last_Index and
+       SkillIndex <= Skills_List.Last_Index);
+      -- ****
+      -- ****f* Bases.Trade/TrainSkill
+      -- FUNCTION
+      -- Train selected skill
+      -- PARAMETERS
+      -- MemberIndex - Index of playership crew member which train
+      -- SkillIndex  - Index of skill of selected crew member to train
+      -- SOURCE
    procedure TrainSkill(MemberIndex, SkillIndex: Positive) with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
-       SkillIndex < Skills_List.Last_Index);
+       SkillIndex <= Skills_List.Last_Index);
       -- ****
 
 end Bases.Trade;
