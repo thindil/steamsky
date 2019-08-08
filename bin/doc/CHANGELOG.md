@@ -27,7 +27,7 @@ All notable changes to this project will be documented in this file.
   huge double luxury adamanitum cabin, medium bronze alchemy lab, medium iron
   alchemy lab, medium steel alchemy lab, medium titanium alchemy lab, medium
   orichalcum alchemy lab, medium adamantium alchemy lab, large bronze alchemy
-  lab
+  lab, large iron alchemy lab
 - Info about chance to damage for items
 - Check if the game have permission to write to save directory
 - Info about strength of ship's weapons, guns ammunitions, harpoons, melee
