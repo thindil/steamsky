@@ -242,20 +242,22 @@ package Crew is
    -- RESULT
    -- Name (as words) of skill level
    -- SOURCE
-   function GetSkillLevelName(SkillLevel: Positive) return String;
-   -- ****
-   -- ****f* Crew/GetAttributeLevelName
-   -- FUNCTION
-   -- Get member attribute level name
-   -- PARAMETERS
-   -- AttributeLevel - Numeric value of attribute level
-   -- RESULT
-   -- Name (as words) of attribute level
-   -- SOURCE
-   function GetAttributeLevelName(AttributeLevel: Positive) return String;
-   -- ****
-   -- ****f* Crew/DailyPayment
-   -- FUNCTION
+   function GetSkillLevelName(SkillLevel: Positive) return String with
+      Pre => (SkillLevel <= 100);
+      -- ****
+      -- ****f* Crew/GetAttributeLevelName
+      -- FUNCTION
+      -- Get member attribute level name
+      -- PARAMETERS
+      -- AttributeLevel - Numeric value of attribute level
+      -- RESULT
+      -- Name (as words) of attribute level
+      -- SOURCE
+   function GetAttributeLevelName(AttributeLevel: Positive) return String with
+      Pre => (AttributeLevel <= 50);
+      -- ****
+      -- ****f* Crew/DailyPayment
+      -- FUNCTION
    -- Daily payment and upgrade contracts length for player ship crew members
    -- SOURCE
    procedure DailyPayment;
