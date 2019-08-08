@@ -53,16 +53,16 @@ package body Stories is
         (Index => Null_Unbounded_String, FinishCondition => ASKINBASE,
          FinishData => TempData, FailText => Null_Unbounded_String,
          Texts => TempTexts);
-      TempRecord :=
-        (StartCondition => DROPITEM, StartData => TempValue, MinSteps => 1,
-         MaxSteps => 2, StartingStep => TempStep, Steps => TempSteps,
-         FinalStep => TempStep, EndText => Null_Unbounded_String,
-         Name => Null_Unbounded_String, ForbiddenFactions => TempValue);
       StartStep := Null_Unbounded_String;
       StoriesData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(StoriesData, "story");
       for I in 0 .. Length(NodesList) - 1 loop
+         TempRecord :=
+           (StartCondition => DROPITEM, StartData => TempValue, MinSteps => 1,
+            MaxSteps => 2, StartingStep => TempStep, Steps => TempSteps,
+            FinalStep => TempStep, EndText => Null_Unbounded_String,
+            Name => Null_Unbounded_String, ForbiddenFactions => TempValue);
          StoryNode := Item(NodesList, I);
          StoryIndex := To_Unbounded_String(Get_Attribute(StoryNode, "index"));
          if Get_Attribute(StoryNode, "action")'Length > 0 then
@@ -326,11 +326,6 @@ package body Stories is
             Stories_Container.Exclude(Stories_List, StoryIndex);
             LogMessage("Story removed: " & To_String(StoryIndex), Everything);
          end if;
-         TempRecord :=
-           (StartCondition => DROPITEM, StartData => TempValue, MinSteps => 1,
-            MaxSteps => 2, StartingStep => TempStep, Steps => TempSteps,
-            FinalStep => TempStep, EndText => Null_Unbounded_String,
-            Name => Null_Unbounded_String, ForbiddenFactions => TempValue);
       end loop;
    end LoadStories;
 

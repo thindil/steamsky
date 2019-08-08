@@ -33,12 +33,12 @@ package body Help is
       HelpIndex, HelpTitle: Unbounded_String;
       HelpNode: Node;
    begin
-      TmpHelp :=
-        (Index => Null_Unbounded_String, Text => Null_Unbounded_String);
       HelpData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(HelpData, "entry");
       for I in 0 .. Length(NodesList) - 1 loop
+         TmpHelp :=
+           (Index => Null_Unbounded_String, Text => Null_Unbounded_String);
          HelpNode := Item(NodesList, I);
          if Get_Attribute(HelpNode, "action")'Length > 0 then
             Action := DataAction'Value(Get_Attribute(HelpNode, "action"));
@@ -78,8 +78,6 @@ package body Help is
             Help_Container.Exclude(Help_List, HelpTitle);
             LogMessage("Help removed: " & To_String(HelpTitle), Everything);
          end if;
-         TmpHelp :=
-           (Index => Null_Unbounded_String, Text => Null_Unbounded_String);
       end loop;
    end LoadHelp;
 

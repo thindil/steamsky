@@ -41,13 +41,13 @@ package body Goals is
       GoalIndex: Natural;
       GoalNode: Node;
    begin
-      TempRecord :=
-        (Index => Null_Unbounded_String, GType => RANDOM, Amount => 0,
-         TargetIndex => Null_Unbounded_String, Multiplier => 1);
       GoalsData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(GoalsData, "goal");
       for I in 0 .. Length(NodesList) - 1 loop
+         TempRecord :=
+           (Index => Null_Unbounded_String, GType => RANDOM, Amount => 0,
+            TargetIndex => Null_Unbounded_String, Multiplier => 1);
          GoalNode := Item(NodesList, I);
          TempRecord.Index :=
            To_Unbounded_String(Get_Attribute(GoalNode, "index"));
@@ -109,9 +109,6 @@ package body Goals is
             LogMessage
               ("Goal removed: " & To_String(TempRecord.Index), Everything);
          end if;
-         TempRecord :=
-           (Index => Null_Unbounded_String, GType => RANDOM, Amount => 0,
-            TargetIndex => Null_Unbounded_String, Multiplier => 1);
       end loop;
    end LoadGoals;
 
