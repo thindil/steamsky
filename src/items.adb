@@ -40,16 +40,16 @@ package body Items is
       ItemIndex: Unbounded_String;
       Action: DataAction;
    begin
-      TempRecord :=
-        (Name => Null_Unbounded_String, Weight => 1,
-         IType => Null_Unbounded_String, Prices => (others => 0),
-         Buyable => (others => False), Value => TempValue,
-         ShowType => Null_Unbounded_String,
-         Description => Null_Unbounded_String);
       ItemsData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(ItemsData, "item");
       for I in 0 .. Length(NodesList) - 1 loop
+         TempRecord :=
+           (Name => Null_Unbounded_String, Weight => 1,
+            IType => Null_Unbounded_String, Prices => (others => 0),
+            Buyable => (others => False), Value => TempValue,
+            ShowType => Null_Unbounded_String,
+            Description => Null_Unbounded_String);
          ItemNode := Item(NodesList, I);
          ItemIndex := To_Unbounded_String(Get_Attribute(ItemNode, "index"));
          if Get_Attribute(ItemNode, "action")'Length > 0 then
@@ -134,12 +134,6 @@ package body Items is
             Objects_Container.Exclude(Items_List, ItemIndex);
             LogMessage("Item removed: " & To_String(ItemIndex), Everything);
          end if;
-         TempRecord :=
-           (Name => Null_Unbounded_String, Weight => 1,
-            IType => Null_Unbounded_String, Prices => (others => 0),
-            Buyable => (others => False), Value => TempValue,
-            ShowType => Null_Unbounded_String,
-            Description => Null_Unbounded_String);
       end loop;
       for I in Items_List.Iterate loop
          if Items_List(I).IType = WeaponType then

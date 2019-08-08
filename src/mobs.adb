@@ -56,14 +56,14 @@ package body Mobs is
       DeleteIndex: Positive;
       MobIndex, ItemIndex: Unbounded_String;
    begin
-      TempRecord :=
-        (Skills => TempSkills, Attributes => TempAttributes, Order => Rest,
-         Priorities => TempPriorities, Inventory => TempInventory,
-         Equipment => TempEquipment);
       MobsData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(MobsData, "mobile");
       for I in 0 .. Length(NodesList) - 1 loop
+         TempRecord :=
+           (Skills => TempSkills, Attributes => TempAttributes, Order => Rest,
+            Priorities => TempPriorities, Inventory => TempInventory,
+            Equipment => TempEquipment);
          MobNode := Item(NodesList, I);
          MobIndex := To_Unbounded_String(Get_Attribute(MobNode, "index"));
          if Get_Attribute(MobNode, "action")'Length > 0 then
@@ -346,10 +346,6 @@ package body Mobs is
             ProtoMobs_Container.Exclude(ProtoMobs_List, MobIndex);
             LogMessage("Mob removed: " & To_String(MobIndex), Everything);
          end if;
-         TempRecord :=
-           (Skills => TempSkills, Attributes => TempAttributes, Order => Rest,
-            Priorities => TempPriorities, Inventory => TempInventory,
-            Equipment => TempEquipment);
       end loop;
    end LoadMobs;
 

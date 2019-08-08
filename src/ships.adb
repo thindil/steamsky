@@ -509,18 +509,18 @@ package body Ships is
          end loop;
       end CountAmmoValue;
    begin
-      TempRecord :=
-        (Name => Null_Unbounded_String, Modules => TempModules,
-         Accuracy => (0, 0), CombatAI => NONE, Evasion => (0, 0),
-         Loot => (0, 0), Perception => (0, 0), Cargo => TempCargo,
-         CombatValue => 1, Crew => TempCrew,
-         Description => Null_Unbounded_String,
-         Owner => Factions_Container.Key(Factions_List.First),
-         KnownRecipes => TempRecipes);
       ShipsData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(ShipsData, "ship");
       for I in 0 .. Length(NodesList) - 1 loop
+         TempRecord :=
+           (Name => Null_Unbounded_String, Modules => TempModules,
+            Accuracy => (0, 0), CombatAI => NONE, Evasion => (0, 0),
+            Loot => (0, 0), Perception => (0, 0), Cargo => TempCargo,
+            CombatValue => 1, Crew => TempCrew,
+            Description => Null_Unbounded_String,
+            Owner => Factions_Container.Key(Factions_List.First),
+            KnownRecipes => TempRecipes);
          ShipNode := Item(NodesList, I);
          ShipIndex := To_Unbounded_String(Get_Attribute(ShipNode, "index"));
          if Get_Attribute(ShipNode, "action")'Length > 0 then
@@ -916,14 +916,6 @@ package body Ships is
             ProtoShips_Container.Exclude(ProtoShips_List, ShipIndex);
             LogMessage("Ship removed: " & To_String(ShipIndex), Everything);
          end if;
-         TempRecord :=
-           (Name => Null_Unbounded_String, Modules => TempModules,
-            Accuracy => (0, 0), CombatAI => NONE, Evasion => (0, 0),
-            Loot => (0, 0), Perception => (0, 0), Cargo => TempCargo,
-            CombatValue => 1, Crew => TempCrew,
-            Description => Null_Unbounded_String,
-            Owner => Factions_Container.Key(Factions_List.First),
-            KnownRecipes => TempRecipes);
       end loop;
    end LoadShips;
 

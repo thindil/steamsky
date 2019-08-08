@@ -36,16 +36,16 @@ package body ShipModules is
       MaterialExists: Boolean;
       ModuleIndex: Unbounded_String;
    begin
-      TempRecord :=
-        (Name => Null_Unbounded_String, MType => ENGINE, Weight => 0,
-         Value => 0, MaxValue => 0, Durability => 0,
-         RepairMaterial => Null_Unbounded_String, RepairSkill => 2, Price => 0,
-         InstallTime => 60, Unique => False, Size => 0,
-         Description => Null_Unbounded_String, MaxOwners => 1);
       ModulesData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(ModulesData, "module");
       for I in 0 .. Length(NodesList) - 1 loop
+         TempRecord :=
+           (Name => Null_Unbounded_String, MType => ENGINE, Weight => 0,
+            Value => 0, MaxValue => 0, Durability => 0,
+            RepairMaterial => Null_Unbounded_String, RepairSkill => 2,
+            Price => 0, InstallTime => 60, Unique => False, Size => 0,
+            Description => Null_Unbounded_String, MaxOwners => 1);
          ModuleNode := Item(NodesList, I);
          ModuleIndex :=
            To_Unbounded_String(Get_Attribute(ModuleNode, "index"));
@@ -164,12 +164,6 @@ package body ShipModules is
             LogMessage
               ("Module removed: " & To_String(ModuleIndex), Everything);
          end if;
-         TempRecord :=
-           (Name => Null_Unbounded_String, MType => ENGINE, Weight => 0,
-            Value => 0, MaxValue => 0, Durability => 0,
-            RepairMaterial => Null_Unbounded_String, RepairSkill => 2,
-            Price => 0, InstallTime => 60, Unique => False, Size => 0,
-            Description => Null_Unbounded_String, MaxOwners => 1);
       end loop;
    end LoadShipModules;
 

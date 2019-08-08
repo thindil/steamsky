@@ -35,11 +35,11 @@ package body Careers is
       CareerNode: Node;
       Action, SkillAction: DataAction;
    begin
-      TempRecord := (Name => Null_Unbounded_String, Skills => TmpSkills);
       CareersData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(CareersData, "career");
       for I in 0 .. Length(NodesList) - 1 loop
+         TempRecord := (Name => Null_Unbounded_String, Skills => TmpSkills);
          CareerNode := Item(NodesList, I);
          CareerIndex :=
            To_Unbounded_String(Get_Attribute(CareerNode, "index"));
@@ -119,7 +119,6 @@ package body Careers is
             LogMessage
               ("Career removed: " & To_String(CareerIndex), Everything);
          end if;
-         TempRecord := (Name => Null_Unbounded_String, Skills => TmpSkills);
       end loop;
    end LoadCareers;
 

@@ -83,19 +83,19 @@ package body Factions is
          end loop;
       end AddChildNode;
    begin
-      TempRecord :=
-        (Name => Null_Unbounded_String, MemberName => Null_Unbounded_String,
-         PluralMemberName => Null_Unbounded_String, SpawnChance => 0,
-         Population => (0, 0), NamesType => STANDARD,
-         Relations => TmpRelations, Description => Null_Unbounded_String,
-         FoodTypes => TmpFood, DrinksTypes => TmpFood,
-         HealingTools => Null_Unbounded_String, HealingSkill => 1,
-         Flags => TmpFood, Careers => TmpCareers,
-         BaseIcon => Wide_Character'Val(16#f5d2#));
       FactionsData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(FactionsData, "faction");
       for I in 0 .. Length(NodesList) - 1 loop
+         TempRecord :=
+           (Name => Null_Unbounded_String, MemberName => Null_Unbounded_String,
+            PluralMemberName => Null_Unbounded_String, SpawnChance => 0,
+            Population => (0, 0), NamesType => STANDARD,
+            Relations => TmpRelations, Description => Null_Unbounded_String,
+            FoodTypes => TmpFood, DrinksTypes => TmpFood,
+            HealingTools => Null_Unbounded_String, HealingSkill => 1,
+            Flags => TmpFood, Careers => TmpCareers,
+            BaseIcon => Wide_Character'Val(16#f5d2#));
          FactionNode := Item(NodesList, I);
          FactionIndex :=
            To_Unbounded_String(Get_Attribute(FactionNode, "index"));
@@ -298,15 +298,6 @@ package body Factions is
             LogMessage
               ("Faction removed: " & To_String(FactionIndex), Everything);
          end if;
-         TempRecord :=
-           (Name => Null_Unbounded_String, MemberName => Null_Unbounded_String,
-            PluralMemberName => Null_Unbounded_String, SpawnChance => 0,
-            Population => (0, 0), NamesType => STANDARD,
-            Relations => TmpRelations, Description => Null_Unbounded_String,
-            FoodTypes => TmpFood, DrinksTypes => TmpFood,
-            HealingTools => Null_Unbounded_String, HealingSkill => 1,
-            Flags => TmpFood, Careers => TmpCareers,
-            BaseIcon => Wide_Character'Val(16#f5d2#));
       end loop;
    end LoadFactions;
 
