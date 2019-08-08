@@ -165,7 +165,7 @@ package body Bases.Trade is
       UpdateGame(5);
    end BuyRecipe;
 
-   procedure HealWounded(MemberIndex: Natural) is
+   procedure HealWounded(MemberIndex: Crew_Container.Extended_Index) is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Cost, Time, MoneyIndex2: Natural := 0;
@@ -209,7 +209,9 @@ package body Bases.Trade is
       UpdateGame(Time);
    end HealWounded;
 
-   procedure HealCost(Cost, Time: in out Natural; MemberIndex: Natural) is
+   procedure HealCost
+     (Cost, Time: in out Natural;
+      MemberIndex: Crew_Container.Extended_Index) is
       BaseType: constant Positive :=
         Bases_Types'Pos
           (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
