@@ -54,22 +54,24 @@ package Bases.Ship is
    -- ModuleIndex - Index of player ship module to repair or 0 to repair whole
    --               ship
    -- SOURCE
-   procedure RepairShip(ModuleIndex: Integer);
-   -- ****
+   procedure RepairShip(ModuleIndex: Integer) with
+      Pre => (ModuleIndex <= PlayerShip.Modules.Last_Index);
+      -- ****
 -- ****f* Bases.Ship/UpgradeShip
 -- FUNCTION
 -- Install or remove modules on player ship
 -- PARAMETERS
 -- Install     - If True, perform module installation on player ship. On False,
-   --           remove module
-   -- ModuleIndex - Index of prototype module to install or remove
-   -- SOURCE
-   procedure UpgradeShip(Install: Boolean; ModuleIndex: Unbounded_String);
-   -- ****
-   -- ****f* Bases.Ship/PayForDock
-   -- FUNCTION
-   -- Pay daily fee for docking
-   -- SOURCE
+      --               remove module
+      -- ModuleIndex - Index of prototype module to install or remove
+      -- SOURCE
+   procedure UpgradeShip(Install: Boolean; ModuleIndex: Unbounded_String) with
+      Pre => (ModuleIndex /= Null_Unbounded_String);
+      -- ****
+      -- ****f* Bases.Ship/PayForDock
+      -- FUNCTION
+      -- Pay daily fee for docking
+      -- SOURCE
    procedure PayForDock;
    -- ****
    -- ****f* Bases.Ship/RepairCost
@@ -83,7 +85,8 @@ package Bases.Ship is
    -- RESULT
    -- Parameters Cost and Time
    -- SOURCE
-   procedure RepairCost(Cost, Time: in out Natural; ModuleIndex: Integer);
-   -- ****
+   procedure RepairCost(Cost, Time: in out Natural; ModuleIndex: Integer) with
+      Pre => (ModuleIndex <= PlayerShip.Modules.Last_Index);
+      -- ****
 
 end Bases.Ship;
