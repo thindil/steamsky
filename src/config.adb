@@ -55,7 +55,7 @@ package body Config is
          ShowLastMessages => True, MessagesPosition => 0, FullScreen => False,
          AutoCloseMessagesTime => 6, AutoSave => NONE, TopicsPosition => 0,
          ShowBaseInfo => True, ShowCargoInfo => True,
-         ShowInventoryInfo => True, ShowNumbers => True);
+         ShowInventoryInfo => True, ShowNumbers => False);
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
       end if;
