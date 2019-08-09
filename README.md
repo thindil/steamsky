@@ -46,6 +46,12 @@ this file is) to compile:
 * If you prefer using console: in main source code directory type `gprbuild`
   for debug mode build or for release mode: `gprbuild -XMode=release`
 
+### Build unit tests
+Navigate to `tests/driver` directory from the main directory (where this file
+is):
+
+From console: type `gprbuild -P test_driver.gpr`
+
 ## Generating code documentation
 
 To generate (or regenerate) code documentation, you need [ROBODoc](https://rfsber.home.xs4all.nl/Robo/)
