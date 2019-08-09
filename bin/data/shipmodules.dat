@@ -428,5 +428,6 @@ types of modules) the module can have. Default value is 1.
  <module durability="300" index="393" installtime="150" material="Bronze" maxowners="3" name="Large bronze alchemy lab" price="3000" size="3" skill="Engineering" type="ALCHEMY_LAB" value="0" weight="1200">Allow research new crafting recipes and craft some items. large sized.</module>
  <module durability="600" index="394" installtime="150" material="Iron" maxowners="3" name="Large iron alchemy lab" price="6000" size="3" skill="Engineering" type="ALCHEMY_LAB" value="0" weight="1200">Allow research new crafting recipes and craft some items. More durable and large sized version.</module>
  <module durability="900" index="395" installtime="150" material="Steel" maxowners="3" name="Large steel alchemy lab" price="12000" size="3" skill="Engineering" type="ALCHEMY_LAB" value="0" weight="1350">Allow research new crafting recipes and craft some items. More durable and large sized version made of steel</module>
+ <module durability="1200" index="396" installtime="240" material="Titanium" maxowners="3" name="Large titanium alchemy lab" price="18000" size="3" skill="Engineering" type="ALCHEMY_LAB" value="0" weight="2700">Allows research of new crafting recipes and crafting of some items. More durable and large sized version made of titanium.</module>
 </modules>
 
