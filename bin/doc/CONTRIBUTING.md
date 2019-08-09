@@ -97,7 +97,7 @@ documentation. Steam sky uses `-- ` for start all documenation lines.
 10 - Source code of item .
 11 - Documentation footer. Steam sky uses `-- ****` for closing documentation.
 
-How to generate the code documentation is described in main README.md file.
+How to generate the code documentation is described in main *README.md* file.
 
 ### Code submission
 
@@ -119,10 +119,25 @@ file is):
 More informations about code coverage and profiling, you can find in proper
 documentation for both programs.
 
-### Generating test units
+### Generating unit tests
 
 To generate (or regenerate) unit tests use command `gnattest` which generate
 skeletons code for tests units (in main project directory, where *steamsky.gpr*
 file is):
 
 `gnattest -P steamsky.gpr`
+
+Tests are generated only for this subprograms which have explicitly declared
+tests cases in declarations. Thus if here are no tests cases declared in the
+game code, there will be no unit tests generated.
+
+### Running unit tests
+
+First, you must build all tests. How to do it, is described in main
+*README.md* file. To run all unit tests, go to the `test/driver` directory and
+type in console:
+
+`./test_runner`
+
+More information about GnatTest (how to create unit test, etc) you can find
+[here](http://docs.adacore.com/live/wave/gnat_ugn/html/gnat_ugn/gnat_ugn/gnat_utility_programs.html#the-unit-test-generator-gnattest).
