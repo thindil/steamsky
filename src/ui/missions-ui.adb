@@ -234,13 +234,10 @@ package body Missions.UI is
                "You can't take any more missions from this base.");
             CanAccept := False;
          end if;
-         if not CanAccept then
-            Set_Sensitive
-              (Gtk_Widget(Get_Object(Builder, "btnacceptmission")), False);
-         else
-            Set_Sensitive
-              (Gtk_Widget(Get_Object(Builder, "btnacceptmission")), True);
-         end if;
+         Set_Sensitive
+           (Gtk_Widget(Get_Object(Builder, "btnacceptmission")), CanAccept);
+         Set_Sensitive
+           (Gtk_Widget(Get_Object(Builder, "scalemission")), CanAccept);
       else
          Set_Markup
            (Gtk_Label(Get_Object(Builder, "lblmissioninfo")),
