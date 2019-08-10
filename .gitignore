@@ -3,3 +3,4 @@ bin/data/saves/*
 bin/gmon.out
 obj/*
 robofix.py
+tests/driver/*
