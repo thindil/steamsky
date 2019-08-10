@@ -34,16 +34,18 @@ package Utils is
    -- RESULT
    -- Random number between Min and Max
    -- SOURCE
-   function GetRandom(Min, Max: Integer) return Integer;
-   -- ****
-   -- ****f* Utils/DaysDifference
-   -- FUNCTION
-   -- Count days difference between selected date and current game date
-   -- PARAMETERS
-   -- DateToCompare - In game date to compare with current game date
-   -- RESULT
-   -- Amount of days difference between DateToCompare and current game date
-   -- SOURCE
+   function GetRandom(Min, Max: Integer) return Integer with
+      Pre => Min <= Max,
+      Test_Case => ("Test_GetRandom", Nominal);
+      -- ****
+      -- ****f* Utils/DaysDifference
+      -- FUNCTION
+      -- Count days difference between selected date and current game date
+      -- PARAMETERS
+      -- DateToCompare - In game date to compare with current game date
+      -- RESULT
+      -- Amount of days difference between DateToCompare and current game date
+      -- SOURCE
    function DaysDifference(DateToCompare: Date_Record) return Natural;
    -- ****
    -- ****f* Utils/GenerateRoboticName
