@@ -2888,7 +2888,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkScale">
+                                      <object class="GtkScale" id="scalemission">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="tooltip_text" translatable="yes">Move left - more reputation from mission but less money, move right - more money from mission but less reputation.</property>
