@@ -235,6 +235,9 @@ package body Maps.UI is
          end case;
       end loop;
       if HavePilot and
+        (HaveEngineer or
+         Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+           (To_Unbounded_String("sentientships"))) and
         Get_Visible_Child_Name(Gtk_Stack(Get_Object(Builder, "gamestack"))) /=
           "combat" then
          declare
@@ -246,9 +249,9 @@ package body Maps.UI is
             else
                Speed := (SpeedType(RealSpeed(PlayerShip, True)) / 1000.0);
             end if;
-            if Speed < 0.5 and HavePilot then
+            if Speed < 0.5 then
                UpdateLabel
-                 ("lblnofood",
+                 ("lbloverloaded",
                   Encode
                     ("<span foreground=""red"">" &
                      CurrentTheme.OverloadedIcon & "</span>"),
