@@ -29,7 +29,7 @@ All notable changes to this project will be documented in this file.
   orichalcum alchemy lab, medium adamantium alchemy lab, large bronze alchemy
   lab, large iron alchemy lab, large steel alchemy lab, large titanium alchemy
   lab, large orichalcum alchemy lab, large adamantium alchemy lab, huge bronze
-  alchemy lab
+  alchemy lab and huge iron alchemy lab
 - Info about chance to damage for items
 - Check if the game have permission to write to save directory
 - Info about strength of ship's weapons, guns ammunitions, harpoons, melee
