@@ -120,7 +120,8 @@
 <pre> Count cost and time of repairs of player ship
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>RepairCost</strong><span class="sign">(</span>Cost<span class="sign">,</span> Time<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Natural<span class="sign">;</span> <a href="./ui/ships-ui_ads.html#robo306">ModuleIndex</a><span class="sign">:</span> Integer<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> <strong>RepairCost</strong><span class="sign">(</span>Cost<span class="sign">,</span> Time<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Natural<span class="sign">;</span> <a href="./ui/ships-ui_ads.html#robo306">ModuleIndex</a><span class="sign">:</span> Integer<span class="sign">)</span> with
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><a href="./ui/ships-ui_ads.html#robo306">ModuleIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo308">PlayerShip</a><span class="sign">.</span>Modules<span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Cost        - Overall cost of repair of player ship
@@ -141,7 +142,8 @@
 <pre> Repairs player ship in bases
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>RepairShip</strong><span class="sign">(</span><a href="./ui/ships-ui_ads.html#robo306">ModuleIndex</a><span class="sign">:</span> Integer<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> <strong>RepairShip</strong><span class="sign">(</span><a href="./ui/ships-ui_ads.html#robo306">ModuleIndex</a><span class="sign">:</span> Integer<span class="sign">)</span> with
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><a href="./ui/ships-ui_ads.html#robo306">ModuleIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo308">PlayerShip</a><span class="sign">.</span>Modules<span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> <a href="./ui/ships-ui_ads.html#robo306">ModuleIndex</a> - Index of player ship module to repair or 0 to repair whole
@@ -157,17 +159,18 @@
 <pre> Install or remove modules on player ship
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>UpgradeShip</strong><span class="sign">(</span>Install<span class="sign">:</span> Boolean<span class="sign">;</span> <a href="./ui/ships-ui_ads.html#robo306">ModuleIndex</a><span class="sign">:</span> Unbounded_String<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> <strong>UpgradeShip</strong><span class="sign">(</span>Install<span class="sign">:</span> Boolean<span class="sign">;</span> <a href="./ui/ships-ui_ads.html#robo306">ModuleIndex</a><span class="sign">:</span> Unbounded_String<span class="sign">)</span> with
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><a href="./ui/ships-ui_ads.html#robo306">ModuleIndex</a> <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Install     - If True, perform module installation on player ship. On False,
-           remove module
+               remove module
  <a href="./ui/ships-ui_ads.html#robo306">ModuleIndex</a> - Index of prototype module to install or remove
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/bases-ship.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 04 2019 06:25:03
+<p>Generated from ./src/bases-ship.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 11 2019 06:27:52
 </p>
 </div> <!-- footer -->
 </body>

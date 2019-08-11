@@ -88,7 +88,9 @@
 <pre> Return random number from Min to Max range
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>GetRandom</strong><span class="sign">(</span>Min<span class="sign">,</span> Max<span class="sign">:</span> Integer<span class="sign">)</span> <span class="keyword">return</span> Integer<span class="sign">;</span>
+<pre class="source">   <span class="keyword">function</span> <strong>GetRandom</strong><span class="sign">(</span>Min<span class="sign">,</span> Max<span class="sign">:</span> Integer<span class="sign">)</span> <span class="keyword">return</span> Integer with
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> Min <span class="sign">&lt;</span><span class="sign">=</span> Max<span class="sign">,</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_GetRandom"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Min - Starting value from which generate random number
@@ -100,7 +102,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/utils.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 04 2019 06:25:03
+<p>Generated from ./src/utils.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 11 2019 06:27:52
 </p>
 </div> <!-- footer -->
 </body>
