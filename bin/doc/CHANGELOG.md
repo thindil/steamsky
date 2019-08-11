@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [4.0] - 2019-08-11
 
 ### Added
 - New ship modules: medium double extended adamantium cabin, medium double
