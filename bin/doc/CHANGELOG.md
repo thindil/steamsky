@@ -53,6 +53,7 @@ All notable changes to this project will be documented in this file.
 - Showing ship info icons on Windows
 - Crash after asking for the events in bases
 - Showing movement buttons on Windows
+- Don't show overload information when engineer is resting
 
 ## [3.9] - 2019-07-14
 
