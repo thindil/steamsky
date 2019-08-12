@@ -9,9 +9,9 @@ available for Linux and Windows 64 bit platforms.
 
 ## Game versions
 There are currently 2 versions of the game:
-- 3.0.x: "stable" version of game. This version will receive bug fixes but
-  no new features. Source code for this version is in *3.0* branch.
-- 3.x: "development" version of game, future version 4.0. This is where
+- 4.0.x: "stable" version of game. This version will receive bug fixes but
+  no new features. Source code for this version is in *4.0* branch.
+- 4.x: "development" version of game, future version 5.0. This is where
   game feature updates happen. Due to new features, save compatibility
   will typically break between releases. Use this version at your own risk.
   Source code for this version is in the *master* branch. **This** version.
