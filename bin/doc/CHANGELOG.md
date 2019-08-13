@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New ship modules: huge steel alchemy lab, huge titanium alchemy lab, huge
-  orichalcum alchemy lab
+  orichalcum alchemy lab, huge adamantium alchemy lab
 
 ### Changed
 - Updated README.md
