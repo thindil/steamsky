@@ -162,18 +162,20 @@ package Items is
    -- RESULT
    -- Map index of item or empty string if item not found
    -- SOURCE
-   function FindProtoItem(ItemType: Unbounded_String) return Unbounded_String;
-   -- ****
-   -- ****f* Items/GetItemDamage
-   -- FUNCTION
-   -- Get description of item damage
-   -- PARAMETERS
-   -- ItemDurability - Numeric value of current durability of the item
-   -- ToLower        - If true, convert description to lower cases. Default
-   --                  is false
-   -- RESULT
-   -- Description of item damage level
-   -- SOURCE
+   function FindProtoItem
+     (ItemType: Unbounded_String) return Unbounded_String with
+      Pre => (ItemType /= Null_Unbounded_String);
+      -- ****
+      -- ****f* Items/GetItemDamage
+      -- FUNCTION
+      -- Get description of item damage
+      -- PARAMETERS
+      -- ItemDurability - Numeric value of current durability of the item
+      -- ToLower        - If true, convert description to lower cases. Default
+      --                  is false
+      -- RESULT
+      -- Description of item damage level
+      -- SOURCE
    function GetItemDamage
      (ItemDurability: Natural; ToLower: Boolean := False) return String;
    -- ****
@@ -206,19 +208,20 @@ package Items is
    -- SOURCE
    procedure DamageItem
      (Inventory: in out Inventory_Container.Vector; ItemIndex: Positive;
-      SkillLevel, MemberIndex: Natural := 0);
-   -- ****
-   -- ****f* Items/FindItem
-   -- FUNCTION
-   -- Find item in ship cargo or character inventory
-   -- PARAMETERS
-   -- Inventory  - Inventory in which item will be looking for
-   -- ProtoIndex - Prototype index of item. Can be empty if ItemType is set
-   -- ItemType   - Type of item to search. Can be empty if ProtoIndex is set
-   -- Durability - Durability of item to search. Can be empty
-   -- RESULT
-   -- Iventory index of item or 0 if item was not found
-   -- SOURCE
+      SkillLevel, MemberIndex: Natural := 0) with
+      Pre => (ItemIndex <= Inventory.Last_Index);
+      -- ****
+      -- ****f* Items/FindItem
+      -- FUNCTION
+      -- Find item in ship cargo or character inventory
+      -- PARAMETERS
+      -- Inventory  - Inventory in which item will be looking for
+      -- ProtoIndex - Prototype index of item. Can be empty if ItemType is set
+      -- ItemType   - Type of item to search. Can be empty if ProtoIndex is set
+      -- Durability - Durability of item to search. Can be empty
+      -- RESULT
+      -- Iventory index of item or 0 if item was not found
+      -- SOURCE
    function FindItem
      (Inventory: Inventory_Container.Vector;
       ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
