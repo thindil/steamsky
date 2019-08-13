@@ -9,3 +9,6 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated README.md
+
+### Fixed
+- Crash on returning mission with max reputation as reward
