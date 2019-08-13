@@ -14,7 +14,6 @@ with System.Assertions;
 --  This section can be used to add with clauses if necessary.
 --
 --  end read only
-with Ada.texT_io;
 --  begin read only
 --  end read only
 package body Utils.Test_Data.Tests is
@@ -79,6 +78,37 @@ package body Utils.Test_Data.Tests is
 
 --  begin read only
    end Test_GetRandom_test_getrandom;
+--  end read only
+
+--  begin read only
+   function Wrap_Test_DaysDifference_ef24bd_fd50f2 (DateToCompare: Date_Record)  return Natural
+   is
+   begin
+      declare
+         Test_DaysDifference_ef24bd_fd50f2_Result : constant Natural := GNATtest_Generated.GNATtest_Standard.Utils.DaysDifference (DateToCompare);
+      begin
+         return Test_DaysDifference_ef24bd_fd50f2_Result;
+      end;
+   end Wrap_Test_DaysDifference_ef24bd_fd50f2;
+--  end read only
+
+--  begin read only
+   procedure Test_DaysDifference_test_daysdifference (Gnattest_T : in out Test);
+   procedure Test_DaysDifference_ef24bd_fd50f2 (Gnattest_T : in out Test) renames Test_DaysDifference_test_daysdifference;
+--  id:2.2/ef24bd841a916fae/DaysDifference/1/0/test_daysdifference/
+   procedure Test_DaysDifference_test_daysdifference (Gnattest_T : in out Test) is
+      function DaysDifference (DateToCompare: Date_Record) return Natural renames Wrap_Test_DaysDifference_ef24bd_fd50f2;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      GameDate := (1600, 1, 2, 0, 0);
+      Assert(DaysDifference((1600, 1, 1, 0, 0)) = 1, "Invalid count of days difference between game dates.");
+
+--  begin read only
+   end Test_DaysDifference_test_daysdifference;
 --  end read only
 
 --  begin read only
