@@ -46,7 +46,8 @@ package Utils is
       -- RESULT
       -- Amount of days difference between DateToCompare and current game date
       -- SOURCE
-   function DaysDifference(DateToCompare: Date_Record) return Natural;
+   function DaysDifference(DateToCompare: Date_Record) return Natural with
+      Test_Case => ("Test_DaysDifference", Robustness);
    -- ****
    -- ****f* Utils/GenerateRoboticName
    -- FUNCTION

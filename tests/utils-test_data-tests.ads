@@ -12,5 +12,8 @@ package Utils.Test_Data.Tests is
    procedure Test_GetRandom_9cea97_28ba02 (Gnattest_T : in out Test);
    --  utils.ads:37:4:GetRandom:Test_GetRandom
 
+   procedure Test_DaysDifference_ef24bd_fd50f2 (Gnattest_T : in out Test);
+   --  utils.ads:49:4:DaysDifference:Test_DaysDifference
+
 end Utils.Test_Data.Tests;
 --  end read only
