@@ -62,10 +62,13 @@ package body Bases is
    end GainRep;
 
    procedure CountPrice
-     (Price: in out Positive; TraderIndex: Crew_Container.Extended_Index;
+     (Price: in out Natural; TraderIndex: Crew_Container.Extended_Index;
       Reduce: Boolean := True) is
       Bonus: Integer := 0;
    begin
+      if Price = 0 then
+         return;
+      end if;
       if TraderIndex /= Crew_Container.No_Index then
          Bonus :=
            Integer
