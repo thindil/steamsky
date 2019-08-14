@@ -48,13 +48,13 @@ package Utils is
       -- SOURCE
    function DaysDifference(DateToCompare: Date_Record) return Natural with
       Test_Case => ("Test_DaysDifference", Robustness);
-   -- ****
-   -- ****f* Utils/GenerateRoboticName
-   -- FUNCTION
-   -- Generate robotic type name for bases, mobs, ships, etc
-   -- RESULT
-   -- Random robotic name
-   -- SOURCE
+      -- ****
+      -- ****f* Utils/GenerateRoboticName
+      -- FUNCTION
+      -- Generate robotic type name for bases, mobs, ships, etc
+      -- RESULT
+      -- Random robotic name
+      -- SOURCE
    function GenerateRoboticName return Unbounded_String;
    -- ****
 
