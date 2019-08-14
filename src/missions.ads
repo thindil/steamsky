@@ -143,7 +143,8 @@ package Missions is
       -- SOURCE
    procedure DeleteMission
      (MissionIndex: Positive; Failed: Boolean := True) with
-      Pre => MissionIndex <= AcceptedMissions.Last_Index;
+      Pre => MissionIndex <= AcceptedMissions.Last_Index,
+      Test_Case => ("Test_DeleteMission", Nominal);
       -- ****
       -- ****f* Missions/UpdateMission
       -- FUNCTION
