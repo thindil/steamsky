@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash on returning mission with max reputation as reward
+- Patrol missions should be only on visited map cells
 
 ## [4.0] - 2019-08-11
 
