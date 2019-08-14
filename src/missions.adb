@@ -111,39 +111,49 @@ package body Missions is
                Mission :=
                  (MType => Deliver, Time => 1, TargetX => 0, TargetY => 0,
                   Reward => 1, StartBase => 1, Finished => False,
-                  ItemIndex => Null_Unbounded_String, Multiplier => 1.0);
+                  ItemIndex =>
+                    MissionsItems
+                      (GetRandom(1, Positive(MissionsItems.Length))),
+                  Multiplier => 1.0);
             when Destroy =>
                Mission :=
                  (MType => Destroy, Time => 1, TargetX => 0, TargetY => 0,
                   Reward => 1, StartBase => 1, Finished => False,
-                  Multiplier => 1.0, ShipIndex => Null_Unbounded_String);
+                  Multiplier => 1.0,
+                  ShipIndex =>
+                    Enemies
+                      (GetRandom(Enemies.First_Index, Enemies.Last_Index)));
+               loop
+                  MissionX := GetRandom(MinX, MaxX);
+                  MissionY := GetRandom(MinY, MaxY);
+                  exit when SkyMap(MissionX, MissionY).BaseIndex = 0 and
+                    MissionX /= PlayerShip.SkyX and
+                    MissionY /= PlayerShip.SkyY;
+               end loop;
             when Patrol =>
                Mission :=
                  (MType => Patrol, Time => 1, TargetX => 0, TargetY => 0,
                   Reward => 1, StartBase => 1, Finished => False,
-                  Multiplier => 1.0, Target => 0);
+                  Multiplier => 1.0, Target => 1);
+               for J in 1 .. 10 loop
+                  MissionX := GetRandom(MinX, MaxX);
+                  MissionY := GetRandom(MinY, MaxY);
+                  if SkyMap(MissionX, MissionY).Visited then
+                     Mission.Target := 0;
+                     exit;
+                  end if;
+               end loop;
+               if Mission.Target = 1 then
+                  Mission :=
+                    (MType => Explore, Time => 1, TargetX => 0, TargetY => 0,
+                     Reward => 1, StartBase => 1, Finished => False,
+                     Target => 0, Multiplier => 1.0);
+               end if;
             when Explore =>
                Mission :=
                  (MType => Explore, Time => 1, TargetX => 0, TargetY => 0,
                   Reward => 1, StartBase => 1, Finished => False,
-                  Multiplier => 1.0, Target => 0);
-            when Passenger =>
-               Mission :=
-                 (MType => Passenger, Time => 1, TargetX => 0, TargetY => 0,
-                  Reward => 1, StartBase => 1, Finished => False,
-                  Multiplier => 1.0, Data => 1);
-         end case;
-         case Mission.MType is
-            when Deliver =>
-               Mission.ItemIndex :=
-                 MissionsItems(GetRandom(1, Positive(MissionsItems.Length)));
-            when Destroy =>
-               Mission.ShipIndex :=
-                 Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index));
-            when Patrol =>
-               Mission.Target := 0;
-            when Explore =>
-               Mission.Target := 1;
+                  Multiplier => 1.0, Target => 1);
                for J in 1 .. 10 loop
                   MissionX := GetRandom(MinX, MaxX);
                   MissionY := GetRandom(MinY, MaxY);
@@ -153,25 +163,21 @@ package body Missions is
                   end if;
                end loop;
                if Mission.Target = 1 then
-                  Mission.Target := 0;
                   Mission :=
                     (MType => Patrol, Time => 1, TargetX => 0, TargetY => 0,
                      Reward => 1, StartBase => 1, Finished => False,
                      Target => 0, Multiplier => 1.0);
                end if;
             when Passenger =>
-               Mission.Data :=
-                 QualitiesArray
-                   (GetRandom(QualitiesArray'First, QualitiesArray'Last));
+               Mission :=
+                 (MType => Passenger, Time => 1, TargetX => 0, TargetY => 0,
+                  Reward => 1, StartBase => 1, Finished => False,
+                  Multiplier => 1.0,
+                  Data =>
+                    QualitiesArray
+                      (GetRandom(QualitiesArray'First, QualitiesArray'Last)));
          end case;
-         if Mission.MType /= Deliver and Mission.MType /= Passenger then
-            loop
-               MissionX := GetRandom(MinX, MaxX);
-               MissionY := GetRandom(MinY, MaxY);
-               exit when SkyMap(MissionX, MissionY).BaseIndex = 0 and
-                 MissionX /= PlayerShip.SkyX and MissionY /= PlayerShip.SkyY;
-            end loop;
-         else
+         if Mission.MType = Deliver or Mission.MType = Passenger then
             loop
                TmpBaseIndex :=
                  GetRandom(BasesInRange.First_Index, BasesInRange.Last_Index);
