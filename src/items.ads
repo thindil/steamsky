@@ -164,7 +164,8 @@ package Items is
    -- SOURCE
    function FindProtoItem
      (ItemType: Unbounded_String) return Unbounded_String with
-      Pre => (ItemType /= Null_Unbounded_String);
+      Pre => (ItemType /= Null_Unbounded_String),
+      Test_Case => ("Test_FindProtoItem", Nominal);
       -- ****
       -- ****f* Items/GetItemDamage
       -- FUNCTION

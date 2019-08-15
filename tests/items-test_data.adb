@@ -7,7 +7,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Config; use Config;
 with Game; use Game;
 
-package body Missions.Test_Data is
+package body Items.Test_Data is
 
    procedure Set_Up (Gnattest_T : in out Test) is
       pragma Unreferenced (Gnattest_T);
@@ -29,4 +29,4 @@ package body Missions.Test_Data is
       pragma Unreferenced (Gnattest_T);
    begin
       null;
-   end Tear_Down;end Missions.Test_Data;
+   end Tear_Down;end Items.Test_Data;
