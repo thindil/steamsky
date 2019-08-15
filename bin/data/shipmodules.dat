@@ -439,5 +439,6 @@ types of modules) the module can have. Default value is 1.
  <module durability="2400" index="404" installtime="320" material="Adamantium" maxowners="4" name="Huge adamantium alchemy lab" price="96000" size="1" skill="Engineering" type="ALCHEMY_LAB" value="0" weight="4800">Allows research of new crafting recipes and crafting of some items. More durable and huge sized version made of adamantium.</module>
  <module durability="200" index="405" installtime="100" material="Bronze" maxowners="2" name="Medium bronze furnace" price="2000" size="2" skill="Metalsmith" type="FURNACE" value="0" weight="1600">Allow smelt ores into metals. Medium sized.</module>
  <module durability="400" index="406" installtime="100" material="Iron" maxowners="2" name="Medium iron furnace" price="4000" size="2" skill="Metalsmith" type="FURNACE" value="0" weight="1600">Allow smelt ores into metals. More durable and medium sized version.</module>
+ <module durability="600" index="407" installtime="100" material="Steel" maxowners="2" name="Medium steel furnace" price="6000" size="2" skill="Metalsmith" type="FURNACE" value="0" weight="1800">Allow smelt ores into metals. Made of steel. Medium sized.</module>
 </modules>
 
