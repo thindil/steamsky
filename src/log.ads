@@ -53,7 +53,8 @@ package Log is
    -- SOURCE
    procedure LogMessage
      (Message: String; MessageType: Debug_Types;
-      NewLine, TimeStamp: Boolean := True);
+      NewLine, TimeStamp: Boolean := True) with
+      Pre => Message'Length > 0;
    -- ****
    -- ****f* Log/EndLogging
    -- FUNCTION
