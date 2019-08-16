@@ -55,11 +55,11 @@ package Log is
      (Message: String; MessageType: Debug_Types;
       NewLine, TimeStamp: Boolean := True) with
       Pre => Message'Length > 0;
-   -- ****
-   -- ****f* Log/EndLogging
-   -- FUNCTION
-   -- Close debug.file
-   -- SOURCE
+      -- ****
+      -- ****f* Log/EndLogging
+      -- FUNCTION
+      -- Close debug.file
+      -- SOURCE
    procedure EndLogging;
    -- ****
 
