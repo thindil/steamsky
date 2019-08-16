@@ -235,6 +235,8 @@ package Maps.UI.Handlers is
    -- Disable menu shortcuts keys
    -- PARAMETERS
    -- Object - Gtkada_Builder used to create UI
+   -- SEE ALSO
+   -- DisableMenuShortcutsProc
    -- SOURCE
    function DisableMenuShortcuts
      (Object: access Gtkada_Builder_Record'Class) return Boolean;
@@ -253,6 +255,8 @@ package Maps.UI.Handlers is
    -- Disable menu shortcuts keys
    -- PARAMETERS
    -- Object - Gtkada_Builder used to create UI
+   -- SEE ALSO
+   -- DisableMenuShortcuts
    -- SOURCE
    procedure DisableMenuShortcutsProc
      (Object: access Gtkada_Builder_Record'Class);
