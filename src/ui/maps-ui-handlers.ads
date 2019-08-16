@@ -246,6 +246,8 @@ package Maps.UI.Handlers is
    -- Enable menu shortcuts keys
    -- PARAMETERS
    -- Object - Gtkada_Builder used to create UI
+   -- SEE ALSO
+   -- EnableMenuShortcutsProc
    -- SOURCE
    function EnableMenuShortcuts
      (Object: access Gtkada_Builder_Record'Class) return Boolean;
@@ -266,6 +268,8 @@ package Maps.UI.Handlers is
    -- Enable menu shortcuts keys
    -- PARAMETERS
    -- Object - Gtkada_Builder used to create UI
+   -- SEE ALSO
+   -- EnableMenuShortcuts
    -- SOURCE
    procedure EnableMenuShortcutsProc
      (Object: access Gtkada_Builder_Record'Class);
