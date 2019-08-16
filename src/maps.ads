@@ -55,17 +55,19 @@ package Maps is
    -- RESULT
    -- Distance between player ship and destination point
    -- SOURCE
-   function CountDistance(DestinationX, DestinationY: Positive) return Natural;
-   -- ****
-   -- ****f* Maps/NormalizeCoord
-   -- FUNCTION
-   -- Normalize map coordinates
-   -- PARAMETERS
-   -- Coord   - Coordinate to normalize
-   -- IsXAxis - If true, coordinate is in X axis
-   -- RESULT
-   -- Parameter Coord
-   -- SOURCE
+   function CountDistance
+     (DestinationX, DestinationY: Positive) return Natural with
+      Pre => DestinationX < 1025 and DestinationY < 1025;
+      -- ****
+      -- ****f* Maps/NormalizeCoord
+      -- FUNCTION
+      -- Normalize map coordinates
+      -- PARAMETERS
+      -- Coord   - Coordinate to normalize
+      -- IsXAxis - If true, coordinate is in X axis
+      -- RESULT
+      -- Parameter Coord
+      -- SOURCE
    procedure NormalizeCoord(Coord: in out Integer; IsXAxis: Boolean := True);
    -- ****
 
