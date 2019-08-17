@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 - New ship modules: huge steel alchemy lab, huge titanium alchemy lab, huge
   orichalcum alchemy lab, huge adamantium alchemy lab, medium bronze furnace,
   medium iron furnace, medium steel furnace, medium titanium furnace, medium
-  orichalcum furnace, medium adamantium furnace
+  orichalcum furnace, medium adamantium furnace, large bronze furnace
 
 ### Changed
 - Updated README.md
