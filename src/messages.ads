@@ -92,19 +92,20 @@ package Messages is
    -- Color   - Color of message to add
    -- SOURCE
    procedure AddMessage
-     (Message: String; MType: Message_Type; Color: Message_Color := WHITE);
-   -- ****
-   -- ****f* Messages/GetMessage
-   -- FUNCTION
-   -- Get Nth message of selected type
-   -- PARAMETERS
-   -- MessageIndex - If positive, get Nth message from start of list if
-   --                negative, get Nth message from the end of the messages
-   --                list
-   -- MType        - Type of messages to check. Default all messages
-   -- RESULT
-   -- Selected message or empty message if nothing found
-   -- SOURCE
+     (Message: String; MType: Message_Type; Color: Message_Color := WHITE) with
+      Pre => Message'Length > 0;
+      -- ****
+      -- ****f* Messages/GetMessage
+      -- FUNCTION
+      -- Get Nth message of selected type
+      -- PARAMETERS
+      -- MessageIndex - If positive, get Nth message from start of list if
+      --                negative, get Nth message from the end of the messages
+      --                list
+      -- MType        - Type of messages to check. Default all messages
+      -- RESULT
+      -- Selected message or empty message if nothing found
+      -- SOURCE
    function GetMessage
      (MessageIndex: Integer; MType: Message_Type := Default)
       return Message_Data;
@@ -135,14 +136,15 @@ package Messages is
    -- SOURCE
    procedure RestoreMessage
      (Message: Unbounded_String; MType: Message_Type := Default;
-      Color: Message_Color := WHITE);
-   -- ****
-   -- ****f* Messages/GetLastMessageIndex
-   -- FUNCTION
-   -- Get last message index
-   -- RESULT
-   -- List index of the last message
-   -- SOURCE
+      Color: Message_Color := WHITE) with
+      Pre => Message /= Null_Unbounded_String;
+      -- ****
+      -- ****f* Messages/GetLastMessageIndex
+      -- FUNCTION
+      -- Get last message index
+      -- RESULT
+      -- List index of the last message
+      -- SOURCE
    function GetLastMessageIndex return Natural;
    -- ****
 
