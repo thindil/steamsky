@@ -43,6 +43,7 @@ package Ships.Cargo is
       Durability: Natural := 100; CargoIndex, Price: Natural := 0) with
       Pre => CargoIndex <= Ship.Cargo.Last_Index;
       -- ****
+
       -- ****f* Ships.Cargo/FreeCargo
       -- FUNCTION
       -- Check how much is free space in cargo of selected ship
@@ -58,6 +59,7 @@ package Ships.Cargo is
    function FreeCargo
      (Amount: Integer; Ship: ShipRecord := PlayerShip) return Integer;
    -- ****
+
    -- ****f* Ships.Cargo/GetItemAmount
    -- FUNCTION
    -- Check how much selected items is in player ship cargo
@@ -66,17 +68,20 @@ package Ships.Cargo is
    -- RESULT
    -- Amount of items of selected type on player ship
    -- SOURCE
-   function GetItemAmount(ItemType: Unbounded_String) return Natural;
-   -- ****
-   -- ****f* Ships.Cargo/GetItemsAmount
-   -- FUNCTION
-   -- Check amount of selected consumables on player ship
-   -- PARAMETERS
-   -- IType - "Drinks" or "Food". Type of items which will be looking for
-   -- RESULT
-   -- Amount of drinks or food, depends on IType on the player ship
-   -- SOURCE
-   function GetItemsAmount(IType: String) return Natural;
-   -- ****
+   function GetItemAmount(ItemType: Unbounded_String) return Natural with
+      Pre => ItemType /= Null_Unbounded_String;
+      -- ****
+
+      -- ****f* Ships.Cargo/GetItemsAmount
+      -- FUNCTION
+      -- Check amount of selected consumables on player ship
+      -- PARAMETERS
+      -- IType - "Drinks" or "Food". Type of items which will be looking for
+      -- RESULT
+      -- Amount of drinks or food, depends on IType on the player ship
+      -- SOURCE
+   function GetItemsAmount(IType: String) return Natural with
+      Pre => IType = "Drinks" or IType = "Food";
+      -- ****
 
 end Ships.Cargo;
