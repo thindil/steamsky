@@ -35,12 +35,14 @@ package Items is
    -- SOURCE
    Items_Types: UnboundedString_Container.Vector;
    -- ****
+
    -- ****t* Items/Object_Buyable
    -- FUNCTION
    -- Did item is buyable in bases
    -- SOURCE
    type Object_Buyable is array(1 .. 5) of Boolean;
    -- ****
+
    -- ****t* Items/Object_Data
    -- FUNCTION
    -- Data structure for objects prototypes
@@ -66,6 +68,7 @@ package Items is
       Description: Unbounded_String;
    end record;
    -- ****
+
    -- ****t* Items/Objects_Container
    -- FUNCTION
    -- Used to store items data
@@ -73,6 +76,7 @@ package Items is
    package Objects_Container is new Hashed_Maps(Unbounded_String, Object_Data,
       Ada.Strings.Unbounded.Hash, "=");
    -- ****
+
    -- ****t* Items/InventoryData
    -- FUNCTION
    -- Data structure for item in inventory
@@ -91,54 +95,63 @@ package Items is
       Price: Natural;
    end record;
    -- ****
+
    -- ****t* Items/Inventory_Container
    -- FUNCTION
    -- Used to store inventory data
    -- SOURCE
    package Inventory_Container is new Vectors(Positive, InventoryData);
    -- ****
+
    -- ****v* Items/Items_List
    -- FUNCTION
    -- List of item available in game
    -- SOURCE
    Items_List: Objects_Container.Map;
    -- ****
+
    -- ****v* Items/Tools_List
    -- FUNCTION
    -- List of all tools types in game
    -- SOURCE
    Tools_List: UnboundedString_Container.Vector;
    -- ****
+
    -- ****v* Items/Weapons_List
    -- FUNCTION
    -- List of indexes of all weapons in game
    -- SOURCE
    Weapons_List: UnboundedString_Container.Vector;
    -- ****
+
    -- ****v* Items/Shields_List
    -- FUNCTION
    -- List of indexes of all shields in game
    -- SOURCE
    Shields_List: UnboundedString_Container.Vector;
    -- ****
+
    -- ****v* Items/HeadArmors_List
    -- FUNCTION
    -- List of indexes of all head armors in game
    -- SOURCE
    HeadArmors_List: UnboundedString_Container.Vector;
    -- ****
+
    -- ****v* Items/ChestArmors_List
    -- FUNCTION
    -- List of indexes of all chest armors in game
    -- SOURCE
    ChestArmors_List: UnboundedString_Container.Vector;
    -- ****
+
    -- ****v* Items/ArmsArmors_List
    -- FUNCTION
    -- List of indexes of all arms armors in game
    -- SOURCE
    ArmsArmors_List: UnboundedString_Container.Vector;
    -- ****
+
    -- ****v* Items/LegsArmors_List
    -- FUNCTION
    -- List of indexes of all legs armors in game
@@ -154,6 +167,7 @@ package Items is
    -- SOURCE
    procedure LoadItems(Reader: Tree_Reader);
    -- ****
+
    -- ****f* Items/FindProtoItem
    -- FUNCTION
    -- Search for map index of selected item
@@ -167,6 +181,7 @@ package Items is
       Pre => (ItemType /= Null_Unbounded_String),
       Test_Case => ("Test_FindProtoItem", Nominal);
       -- ****
+
       -- ****f* Items/GetItemDamage
       -- FUNCTION
       -- Get description of item damage
@@ -178,22 +193,25 @@ package Items is
       -- Description of item damage level
       -- SOURCE
    function GetItemDamage
-     (ItemDurability: Natural; ToLower: Boolean := False) return String;
-   -- ****
-   -- ****f* Items/GetItemName
-   -- FUNCTION
-   -- Get name of item in ship cargo or character inventory
-   -- Item       - Item to get it name
-   -- DamageInfo - If true, include description of the item damage in name.
-   --              Default is true.
-   -- ToLower    - If true, convert whole result string to lower case.
-   --              Default is true
-   -- RESULT
-   -- Name of item with additional damage level info
-   -- SOURCE
+     (ItemDurability: Natural; ToLower: Boolean := False) return String with
+      Test_Case => ("Test_GetItemDamage", Robustness);
+      -- ****
+
+      -- ****f* Items/GetItemName
+      -- FUNCTION
+      -- Get name of item in ship cargo or character inventory
+      -- Item       - Item to get it name
+      -- DamageInfo - If true, include description of the item damage in name.
+      --              Default is true.
+      -- ToLower    - If true, convert whole result string to lower case.
+      --              Default is true
+      -- RESULT
+      -- Name of item with additional damage level info
+      -- SOURCE
    function GetItemName
      (Item: InventoryData; DamageInfo, ToLower: Boolean := True) return String;
    -- ****
+
    -- ****f* Items/DamageItem
    -- FUNCTION
    -- Check if item in ship cargo or character inventory was damaged
@@ -212,6 +230,7 @@ package Items is
       SkillLevel, MemberIndex: Natural := 0) with
       Pre => (ItemIndex <= Inventory.Last_Index);
       -- ****
+
       -- ****f* Items/FindItem
       -- FUNCTION
       -- Find item in ship cargo or character inventory
@@ -228,12 +247,14 @@ package Items is
       ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
       Durability: Natural := 101) return Natural;
    -- ****
+
    -- ****f* Items/SetToolsList
    -- FUNCTION
    -- Fill tools types list
    -- SOURCE
    procedure SetToolsList;
    -- ****
+
    -- ****f* Items/GetItemChanceToDamage
    -- FUNCTION
    -- Get item chance to damage info
