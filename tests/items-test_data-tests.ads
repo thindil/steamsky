@@ -10,7 +10,10 @@ package Items.Test_Data.Tests is
    with null record;
 
    procedure Test_FindProtoItem_f36791_112bba (Gnattest_T : in out Test);
-   --  items.ads:165:4:FindProtoItem:Test_FindProtoItem
+   --  items.ads:179:4:FindProtoItem:Test_FindProtoItem
+
+   procedure Test_GetItemDamage_dedcfa_d584da (Gnattest_T : in out Test);
+   --  items.ads:195:4:GetItemDamage:Test_GetItemDamage
 
 end Items.Test_Data.Tests;
 --  end read only
