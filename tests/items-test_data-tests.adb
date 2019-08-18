@@ -80,6 +80,37 @@ package body Items.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_GetItemDamage_dedcfa_d584da (ItemDurability: Natural; ToLower: Boolean := False)  return String
+   is
+   begin
+      declare
+         Test_GetItemDamage_dedcfa_d584da_Result : constant String := GNATtest_Generated.GNATtest_Standard.Items.GetItemDamage (ItemDurability, ToLower);
+      begin
+         return Test_GetItemDamage_dedcfa_d584da_Result;
+      end;
+   end Wrap_Test_GetItemDamage_dedcfa_d584da;
+--  end read only
+
+--  begin read only
+   procedure Test_GetItemDamage_test_getitemdamage (Gnattest_T : in out Test);
+   procedure Test_GetItemDamage_dedcfa_d584da (Gnattest_T : in out Test) renames Test_GetItemDamage_test_getitemdamage;
+--  id:2.2/dedcfaf3e24b7100/GetItemDamage/1/0/test_getitemdamage/
+   procedure Test_GetItemDamage_test_getitemdamage (Gnattest_T : in out Test) is
+      function GetItemDamage (ItemDurability: Natural; ToLower: Boolean := False) return String renames Wrap_Test_GetItemDamage_dedcfa_d584da;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(GetItemDamage(60) = "Damaged", "Returned wrong description for item durability.");
+      Assert(GetItemDamage(60, True) = "damaged", "Not lowered description for item durability.");
+
+--  begin read only
+   end Test_GetItemDamage_test_getitemdamage;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
