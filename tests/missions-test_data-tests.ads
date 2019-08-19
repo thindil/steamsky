@@ -9,8 +9,11 @@ package Missions.Test_Data.Tests is
    type Test is new GNATtest_Generated.GNATtest_Standard.Missions.Test_Data.Test
    with null record;
 
+   procedure Test_GenerateMissions_2a8787_14c74a (Gnattest_T : in out Test);
+   --  missions.ads:113:4:GenerateMissions:Test_GenerateMissions
+
    procedure Test_DeleteMission_4bf0c5_8b646f (Gnattest_T : in out Test);
-   --  missions.ads:144:4:DeleteMission:Test_DeleteMission
+   --  missions.ads:155:4:DeleteMission:Test_DeleteMission
 
 end Missions.Test_Data.Tests;
 --  end read only
