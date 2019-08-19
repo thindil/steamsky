@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Possible crash on generating missions
+
 ## [4.0.1] - 2019-08-18
 
 ### Changed
