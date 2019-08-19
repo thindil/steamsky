@@ -8,7 +8,8 @@ All notable changes to this project will be documented in this file.
   orichalcum alchemy lab, huge adamantium alchemy lab, medium bronze furnace,
   medium iron furnace, medium steel furnace, medium titanium furnace, medium
   orichalcum furnace, medium adamantium furnace, large bronze furnace, large
-  iron furnace, large steel furnace, large titanium furnace
+  iron furnace, large steel furnace, large titanium furnace, large orichalcum
+  furnace
 
 ### Changed
 - Updated README.md
