@@ -18,3 +18,4 @@ All notable changes to this project will be documented in this file.
 - Crash on returning mission with max reputation as reward
 - Patrol missions should be generated only on visited map cells
 - Lack of fonts on Windows
+- Possible crash on generating missions
