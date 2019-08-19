@@ -39,13 +39,14 @@ package body Missions is
    procedure GenerateMissions is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      MissionsAmount, MissionX, MissionY, TmpBaseIndex, DiffX, DiffY: Positive;
+      MissionsAmount, MissionX, MissionY, TmpBaseIndex: Positive;
       Mission: Mission_Data;
       MissionsItems: UnboundedString_Container.Vector;
       BasesInRange: Positive_Container.Vector;
       MinX, MinY, MaxX, MaxY: Integer;
       Enemies: UnboundedString_Container.Vector;
       MType: Missions_Types;
+      DiffX, DiffY: Natural;
       QualitiesArray: constant array(Positive range <>) of Positive :=
         (1, 11, 21, 31, 41, 51, 61, 71, 81, 91);
    begin
@@ -138,7 +139,9 @@ package body Missions is
                for J in 1 .. 10 loop
                   MissionX := GetRandom(MinX, MaxX);
                   MissionY := GetRandom(MinY, MaxY);
-                  if SkyMap(MissionX, MissionY).Visited then
+                  if SkyMap(MissionX, MissionY).Visited and
+                    MissionX /= PlayerShip.SkyX and
+                    MissionY /= PlayerShip.SkyY then
                      Mission.Target := 0;
                      exit;
                   end if;
