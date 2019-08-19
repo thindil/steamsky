@@ -27,25 +27,27 @@ package Ships.Crew is
    -- Get level of skill of selected crew member
    -- PARAMETERS
    -- Member     - Crew member which skill will be looking for
-   -- SkillIndex - Index of skill in crew member skills list
+   -- SkillIndex - Index of skill in skills list
    -- RESULT
    -- Real level of selected skill of selected crew member
    -- SOURCE
    function GetSkillLevel
-     (Member: Member_Data; SkillIndex: Positive) return Natural;
-   -- ****
-   -- ****f* Ships.Crew/Death
-   -- FUNCTION
-   -- Handle crew member death
-   -- PARAMETERS
-   -- MemberIndex - Crew index of the member which died
-   -- Reason      - Reason of the death
-   -- Ship        - Ship in which crew member died
-   -- CreateBody  - If true, create body for dead crew member. Default is
-   --               true
-   -- RESULT
-   -- Parameter Ship with updated data (crew, cargo, modules)
-   -- SOURCE
+     (Member: Member_Data; SkillIndex: Positive) return Natural with
+      Pre => SkillIndex <= Skills_List.Last_Index;
+      -- ****
+
+      -- ****f* Ships.Crew/Death
+      -- FUNCTION
+      -- Handle crew member death
+      -- PARAMETERS
+      -- MemberIndex - Crew index of the member which died
+      -- Reason      - Reason of the death
+      -- Ship        - Ship in which crew member died
+      -- CreateBody  - If true, create body for dead crew member. Default is
+      --               true
+      -- RESULT
+      -- Parameter Ship with updated data (crew, cargo, modules)
+      -- SOURCE
    procedure Death
      (MemberIndex: Positive; Reason: Unbounded_String; Ship: in out ShipRecord;
       CreateBody: Boolean := True) with
@@ -53,6 +55,7 @@ package Ships.Crew is
       (MemberIndex <= Ship.Crew.Last_Index and
        Reason /= Null_Unbounded_String);
       -- ****
+
       -- ****f* Ships.Crew/DeleteMember
       -- FUNCTION
       -- Delete selected member from crew list
@@ -62,8 +65,10 @@ package Ships.Crew is
       -- RESULT
       -- Parameter Ship with modified data (crew and modules)
       -- SOURCE
-   procedure DeleteMember(MemberIndex: Positive; Ship: in out ShipRecord);
-   -- ****
+   procedure DeleteMember(MemberIndex: Positive; Ship: in out ShipRecord) with
+      Pre => MemberIndex <= Ship.Crew.Last_Index;
+      -- ****
+
    -- ****f* Ships.Crew/FindMember
    -- FUNCTION
    -- Find index of first crew member with selected order
@@ -77,6 +82,7 @@ package Ships.Crew is
      (Order: Crew_Orders; Crew: Crew_Container.Vector := PlayerShip.Crew)
       return Natural;
    -- ****
+
    -- ****f* Ships.Crew/GiveOrders
    -- FUNCTION
    -- Change order for selected crew member
@@ -98,6 +104,7 @@ package Ships.Crew is
       (MemberIndex <= Ship.Crew.Last_Index and
        ModuleIndex <= Ship.Modules.Last_Index);
       -- ****
+
       -- ****f* Ships.Crew/UpdateOrders
       -- FUNCTION
       -- Update crew orders based on their orders priorities
@@ -109,6 +116,7 @@ package Ships.Crew is
       -- SOURCE
    procedure UpdateOrders(Ship: in out ShipRecord; Combat: Boolean := False);
    -- ****
+
    -- ****f* Ships.Crew/UpdateMorale
    -- FUNCTION
    -- Update morale of selected crew member by value
