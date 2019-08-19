@@ -31,12 +31,14 @@ package Missions is
    -- SOURCE
    type Missions_Types is (Deliver, Destroy, Patrol, Explore, Passenger);
    -- ****
+
    -- ****t* Missions/RewardMultiplier
    -- FUNCTION
    -- Used for count reward for finished missions
    -- SOURCE
    type RewardMultiplier is digits 2 range 0.0 .. 2.0;
    -- ****
+
    -- ****t* Missions/Mission_Data(MType:
    -- FUNCTION
    -- Data structure for missions
@@ -75,24 +77,28 @@ package Missions is
       end case;
    end record;
    -- ****
+
    -- ****t* Missions/Mission_Container
    -- FUNCTION
    -- Used to store data for missions
    -- SOURCE
    package Mission_Container is new Vectors(Positive, Mission_Data);
    -- ****
+
    -- ****v* Missions/AcceptedMissions
    -- FUNCTION
    -- List of missions accepted by player
    -- SOURCE
    AcceptedMissions: Mission_Container.Vector;
    -- ****
+
    -- ****e* Missions/Missions_Accepting_Error
    -- FUNCTION
    -- Raised when mission can't be accepted
    -- SOURCE
    Missions_Accepting_Error: exception;
    -- ****
+
    -- ****e* Missions/Missions_Finishing_Error
    -- FUNCTION
    -- Raised when mission can't be finished
@@ -104,17 +110,20 @@ package Missions is
    -- FUNCTION
    -- Generate if needed new missions in base
    -- SOURCE
-   procedure GenerateMissions;
-   -- ****
-   -- ****f* Missions/AcceptMission
-   -- FUNCTION
-   -- Accept selected mission from base
-   -- PARAMETERS
-   -- MissionIndex - Base list of available missions index of mission to
-   --                accept
-   -- SOURCE
+   procedure GenerateMissions with
+      Test_Case => ("Test_GenerateMissions", Robustness);
+      -- ****
+
+      -- ****f* Missions/AcceptMission
+      -- FUNCTION
+      -- Accept selected mission from base
+      -- PARAMETERS
+      -- MissionIndex - Base list of available missions index of mission to
+      --                accept
+      -- SOURCE
    procedure AcceptMission(MissionIndex: Positive);
    -- ****
+
    -- ****f* Missions/UpdateMissions
    -- FUNCTION
    -- Update accepted missions
@@ -123,6 +132,7 @@ package Missions is
    -- SOURCE
    procedure UpdateMissions(Minutes: Positive);
    -- ****
+
    -- ****f* Missions/FinishMission
    -- FUNCTION
    -- Finish selected mission
@@ -133,6 +143,7 @@ package Missions is
    procedure FinishMission(MissionIndex: Positive) with
       Pre => MissionIndex <= AcceptedMissions.Last_Index;
       -- ****
+
       -- ****f* Missions/DeleteMission
       -- FUNCTION
       -- Delete selected mission
@@ -146,6 +157,7 @@ package Missions is
       Pre => MissionIndex <= AcceptedMissions.Last_Index,
       Test_Case => ("Test_DeleteMission", Nominal);
       -- ****
+
       -- ****f* Missions/UpdateMission
       -- FUNCTION
       -- Update status of mission
@@ -156,6 +168,7 @@ package Missions is
    procedure UpdateMission(MissionIndex: Positive) with
       Pre => MissionIndex <= AcceptedMissions.Last_Index;
       -- ****
+
       -- ****f* Missions/AutoFinishMissions
       -- FUNCTION
       -- Finish all possible missions.

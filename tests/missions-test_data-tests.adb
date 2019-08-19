@@ -7,6 +7,9 @@
 
 with AUnit.Assertions; use AUnit.Assertions;
 with System.Assertions;
+with Ships; use Ships;
+with Maps; use Maps;
+with Bases; use Bases;
 
 --  begin read only
 --  id:2.2/00/
@@ -28,6 +31,38 @@ package body Missions.Test_Data.Tests is
 
 --  begin read only
 --  end read only
+--  begin read only
+   procedure Wrap_Test_GenerateMissions_2a8787_14c74a
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Missions.GenerateMissions;
+   end Wrap_Test_GenerateMissions_2a8787_14c74a;
+--  end read only
+
+--  begin read only
+   procedure Test_GenerateMissions_test_generatemissions (Gnattest_T : in out Test);
+   procedure Test_GenerateMissions_2a8787_14c74a (Gnattest_T : in out Test) renames Test_GenerateMissions_test_generatemissions;
+--  id:2.2/2a8787b975b577a4/GenerateMissions/1/0/test_generatemissions/
+   procedure Test_GenerateMissions_test_generatemissions (Gnattest_T : in out Test) is
+   procedure GenerateMissions renames Wrap_Test_GenerateMissions_2a8787_14c74a;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      BaseIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+
+   begin
+
+      for I in 1 .. 1000 loop
+         SkyBases(BaseIndex).MissionsDate := (others => 0);
+         GenerateMissions;
+      end loop;
+      Assert(True, "Test not implemented.");
+
+--  begin read only
+   end Test_GenerateMissions_test_generatemissions;
+--  end read only
+
 --  begin read only
    procedure Wrap_Test_DeleteMission_4bf0c5_8b646f (MissionIndex: Positive; Failed: Boolean := True) 
    is
