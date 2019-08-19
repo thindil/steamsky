@@ -27,7 +27,7 @@ package Ships.Crew is
    -- Get level of skill of selected crew member
    -- PARAMETERS
    -- Member     - Crew member which skill will be looking for
-   -- SkillIndex - Index of skill in crew member skills list
+   -- SkillIndex - Index of skill in Skills_List
    -- RESULT
    -- Real level of selected skill of selected crew member
    -- SOURCE
