@@ -203,28 +203,30 @@ package Items is
       -- Item       - Item to get it name
       -- DamageInfo - If true, include description of the item damage in name.
       --              Default is true.
-      -- ToLower    - If true, convert whole result string to lower case.
-      --              Default is true
+      -- ToLower    - If true, convert damage info to lower case. Default is
+      --              true.
       -- RESULT
       -- Name of item with additional damage level info
       -- SOURCE
    function GetItemName
-     (Item: InventoryData; DamageInfo, ToLower: Boolean := True) return String;
-   -- ****
+     (Item: InventoryData; DamageInfo, ToLower: Boolean := True)
+      return String with
+      Test_Case => ("Test_GetItemName", Robustness);
+      -- ****
 
-   -- ****f* Items/DamageItem
-   -- FUNCTION
-   -- Check if item in ship cargo or character inventory was damaged
-   -- PARAMETERS
-   -- Inventory   - Inventory in which selected item is
-   -- ItemIndex   - Inventory index of selected item
-   -- SkillLevel  - Level of skill character which uses that item. Default
-   --               is 0
-   -- MemberIndex - Index of crew member of player ship which uses that
-   --               item. Default is 0
-   -- RESULT
-   -- Updated inventory in which item was
-   -- SOURCE
+      -- ****f* Items/DamageItem
+      -- FUNCTION
+      -- Check if item in ship cargo or character inventory was damaged
+      -- PARAMETERS
+      -- Inventory   - Inventory in which selected item is
+      -- ItemIndex   - Inventory index of selected item
+      -- SkillLevel  - Level of skill character which uses that item. Default
+      --               is 0
+      -- MemberIndex - Index of crew member of player ship which uses that
+      --               item. Default is 0
+      -- RESULT
+      -- Updated inventory in which item was
+      -- SOURCE
    procedure DamageItem
      (Inventory: in out Inventory_Container.Vector; ItemIndex: Positive;
       SkillLevel, MemberIndex: Natural := 0) with
