@@ -7,9 +7,6 @@
 
 with AUnit.Assertions; use AUnit.Assertions;
 with System.Assertions;
-with Ships; use Ships;
-with Maps; use Maps;
-with Bases; use Bases;
 
 --  begin read only
 --  id:2.2/00/
@@ -17,6 +14,10 @@ with Bases; use Bases;
 --  This section can be used to add with clauses if necessary.
 --
 --  end read only
+
+with Ships; use Ships;
+with Maps; use Maps;
+with Bases; use Bases;
 
 --  begin read only
 --  end read only
