@@ -2,8 +2,8 @@
 
 case $1 in
    release)
-      gprclean
-      gprbuild -XMode=release
+      gprclean -P steamsky.gpr
+      gprbuild -p steamsky.gpr -XMode=release
       mkdir -p others/Output/release/bin
       cp -r share others/Output/release
       cp bin/steamsky others/Output/release/bin
@@ -13,11 +13,11 @@ case $1 in
       rm -r others/Output/release/share/data/themes
       cp -r bin/doc others/Output/release/share
       cp README.md others/Output/release/share/doc
-      gprclean
+      gprclean -P steamsky.gpr
       ;;
    debug)
-      grpclean
-      gprbuild
+      grpclean -P steamsky.gpr
+      gprbuild -P steamsky.gpr
       ;;
    createtest)
       gnattest -P steamsky.gpr
@@ -26,7 +26,10 @@ case $1 in
       gprbuild -P tests/driver/test_driver.gpr
       ;;
    docs)
-      ./generatedocs
+      ./generatedocs.py
+      ;;
+   windows)
+      wineconsole build.cmd
       ;;
    help)
       echo "release       - Build the game in release mode"
@@ -34,9 +37,10 @@ case $1 in
       echo "createtests   - Regenerate unit tests"
       echo "tests         - Build unit tests"
       echo "docs          - Generate code documentation"
+      echo "windows       - Build the game in release mode for Windows"
       echo "help          - This screen"
       ;;
    *)
-      echo "Unknown command, possible options are: release, debug, createtests, tests, docs, help"
+      echo "Unknown command, possible options are: release, debug, createtests, tests, docs, windows, help"
       ;;
 esac
