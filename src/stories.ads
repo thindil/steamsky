@@ -35,12 +35,14 @@ package Stories is
    -- SOURCE
    type StartConditionType is (DROPITEM);
    -- ****
+
    -- ****t* Stories/StepConditionType
    -- FUNCTION
    -- Types of conditions to finish story step
    -- SOURCE
    type StepConditionType is (ASKINBASE, DESTROYSHIP, EXPLORE, ANY, LOOT);
    -- ****
+
    -- ****t* Stories/StepText_Data
    -- FUNCTION
    -- Data structure for stories steps texts
@@ -53,12 +55,14 @@ package Stories is
       Text: Unbounded_String;
    end record;
    -- ****
+
    -- ****t* Stories/StepTexts_Container
    -- FUNCTION
    -- Used to store stories steps text data
    -- SOURCE
    package StepTexts_Container is new Vectors(Positive, StepText_Data);
    -- ****
+
    -- ****t* Stories/StepFinish_Data
    -- FUNCTION
    -- Structure for finish condition data
@@ -71,12 +75,14 @@ package Stories is
       Value: Unbounded_String;
    end record;
    -- ****
+
    -- ****t* Stories/StepData_Container
    -- FUNCTION
    -- Used to store stories steps data
    -- SOURCE
    package StepData_Container is new Vectors(Positive, StepFinish_Data);
    -- ****
+
    -- ****t* Stories/Step_Data
    -- FUNCTION
    -- Data structure for stories steps
@@ -98,12 +104,14 @@ package Stories is
       FailText: Unbounded_String;
    end record;
    -- ****
+
    -- ****t* Stories/Steps_Container
    -- FUNCTION
    -- Used to store stories steps
    -- SOURCE
    package Steps_Container is new Vectors(Positive, Step_Data);
    -- ****
+
    -- ****t* Stories/Story_Data
    -- FUNCTION
    -- Data structure for stories
@@ -133,6 +141,7 @@ package Stories is
       ForbiddenFactions: UnboundedString_Container.Vector;
    end record;
    -- ****
+
    -- ****t* Stories/Stories_Container
    -- FUNCTION
    -- Used to store stories
@@ -140,6 +149,7 @@ package Stories is
    package Stories_Container is new Hashed_Maps(Unbounded_String, Story_Data,
       Ada.Strings.Unbounded.Hash, "=");
    -- ****
+
    -- ****t* Stories/CurrentStory_Data
    -- FUNCTION
    -- Data structure for current active story
@@ -164,6 +174,7 @@ package Stories is
       FinishedStep: StepConditionType;
    end record;
    -- ****
+
    -- ****t* Stories/FinishedStory_Data
    -- FUNCTION
    -- Data structure for finished story/steps
@@ -179,6 +190,7 @@ package Stories is
       StepsTexts: UnboundedString_Container.Vector;
    end record;
    -- ****
+
    -- ****t* Stories/FinishedStories_Container
    -- FUNCTIONS
    -- Used to store finished stories
@@ -186,18 +198,21 @@ package Stories is
    package FinishedStories_Container is new Vectors(Positive,
       FinishedStory_Data);
    -- ****
+
    -- ****v* Stories/CurrentStory
    -- FUNCTION
    -- Contains data about current story on which player is
    -- SOURCE
    CurrentStory: CurrentStory_Data;
    -- ****
+
    -- ****v* Stories/Stories_List
    -- FUNCTION
    -- List of available stories in game
    -- SOURCE
    Stories_List: Stories_Container.Map;
    -- ****
+
    -- ****v* Stories/FinishedStories
    -- FUNCTION
    -- List of finished stories (or past data of current story)
@@ -213,6 +228,7 @@ package Stories is
    -- SOURCE
    procedure LoadStories(Reader: Tree_Reader);
    -- ****
+
    -- ****f* Stories/StartStory
    -- FUNCTION
    -- Check if any story can starts
@@ -224,12 +240,14 @@ package Stories is
      (FactionName: Unbounded_String; Condition: StartConditionType) with
       Pre => FactionName /= Null_Unbounded_String;
       -- ****
+
       -- ****f* Stories/ClearCurrentStory
       -- FUNCTION
       -- Resets current story
       -- SOURCE
    procedure ClearCurrentStory;
    -- ****
+
    -- ****f* Stories/ProgressStory
    -- FUNCTION
    -- Progress current story one step
@@ -241,6 +259,7 @@ package Stories is
    -- SOURCE
    function ProgressStory(NextStep: Boolean := False) return Boolean;
    -- ****
+
    -- ****f* Stories/GetCurrentStoryText
    -- FUNCTION
    -- Get text of current step in story
@@ -249,6 +268,7 @@ package Stories is
    -- SOURCE
    function GetCurrentStoryText return Unbounded_String;
    -- ****
+
    -- ****f* Stories/GetStepData
    -- FUNCTION
    -- Get step finish data with selected name
@@ -263,6 +283,7 @@ package Stories is
       return Unbounded_String with
       Pre => Name /= "";
       -- ****
+
       -- ****f* Stories/GetStoryLocation
       -- FUNCTION
       -- Get target location of current story
@@ -272,7 +293,8 @@ package Stories is
       -- RESULT
       -- Parameters X and Y
       -- SOURCE
-   procedure GetStoryLocation(StoryX, StoryY: in out Positive);
-   -- ****
+   procedure GetStoryLocation(StoryX, StoryY: in out Positive) with
+      Pre => StoryX < 1025 and StoryY < 1025;
+      -- ****
 
 end Stories;
