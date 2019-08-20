@@ -183,8 +183,8 @@ package Items is
    -- Item       - Item to get it name
    -- DamageInfo - If true, include description of the item damage in name.
    --              Default is true.
-   -- ToLower    - If true, convert whole result string to lower case.
-   --              Default is true
+   -- ToLower    - If true, convert damage info to lower case. Default is
+     --            true.
    -- RESULT
    -- Name of item with additional damage level info
    -- SOURCE
