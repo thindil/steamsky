@@ -111,6 +111,41 @@ package body Items.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_GetItemName_2db285_6191e0 (Item: InventoryData; DamageInfo, ToLower: Boolean := True)  return String
+   is
+   begin
+      declare
+         Test_GetItemName_2db285_6191e0_Result : constant String := GNATtest_Generated.GNATtest_Standard.Items.GetItemName (Item, DamageInfo, ToLower);
+      begin
+         return Test_GetItemName_2db285_6191e0_Result;
+      end;
+   end Wrap_Test_GetItemName_2db285_6191e0;
+--  end read only
+
+--  begin read only
+   procedure Test_GetItemName_test_getitemname (Gnattest_T : in out Test);
+   procedure Test_GetItemName_2db285_6191e0 (Gnattest_T : in out Test) renames Test_GetItemName_test_getitemname;
+--  id:2.2/2db285163d74c283/GetItemName/1/0/test_getitemname/
+   procedure Test_GetItemName_test_getitemname (Gnattest_T : in out Test) is
+      function GetItemName (Item: InventoryData; DamageInfo, ToLower: Boolean := True) return String renames Wrap_Test_GetItemName_2db285_6191e0;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      Item: InventoryData := (ProtoIndex => To_Unbounded_String("2"), Amount => 1, Name => Null_Unbounded_String, Durability => 80, Price => 0);
+
+   begin
+
+      Assert(GetItemName(Item) = "Basic Rations (slightly used)", "Invalid item name with lowered damage info.");
+      Assert(GetItemName(Item, False) = "Basic Rations", "Invalid item name.");
+      Assert(GetItemName(Item, True, False) = "Basic Rations (Slightly used)", "Invalid item name with damage info.");
+      Item.Name := To_Unbounded_String("New name");
+      Assert(GetItemName(Item, False) = "New name", "Invalid item name with local name.");
+
+--  begin read only
+   end Test_GetItemName_test_getitemname;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
