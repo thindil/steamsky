@@ -9,7 +9,8 @@ All notable changes to this project will be documented in this file.
   medium iron furnace, medium steel furnace, medium titanium furnace, medium
   orichalcum furnace, medium adamantium furnace, large bronze furnace, large
   iron furnace, large steel furnace, large titanium furnace, large orichalcum
-  furnace, large adamantium furnace, huge bronze furnace, huge iron furnace
+  furnace, large adamantium furnace, huge bronze furnace, huge iron furnace,
+  huge steel furnace
 
 ### Changed
 - Updated README.md
