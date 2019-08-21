@@ -4,7 +4,8 @@ prefix=$(dirname "$0")
 cd "$prefix" || exit
 prefix=$(pwd)
 
-if [ -d lib ]; then
+if [ -d lib ]
+then
    # distributed
    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$prefix/lib
    export GDK_PIXBUF_MODULE_FILE=$prefix/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
@@ -17,8 +18,16 @@ else
    eval "$(gtkada-env.sh --print-only)"
 fi
 
-cd bin || exit
-export GTK_THEME=Adwaita
-export RUNFROMSCRIPT=1
+if [ -n $1 ] && [ "$1" = "tests" ]
+then
+   # run unit tests instead of the game
+   cd tests/driver || exit
+   ./test_runner
+else
+   # run the game
+   cd bin || exit
+   export GTK_THEME=Adwaita
+   export RUNFROMSCRIPT=1
 
-./steamsky "$@"
+   ./steamsky "$@"
+fi
