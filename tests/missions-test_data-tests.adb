@@ -58,7 +58,7 @@ package body Missions.Test_Data.Tests is
          SkyBases(BaseIndex).MissionsDate := (others => 0);
          GenerateMissions;
       end loop;
-      Assert(True, "Test not implemented.");
+      Assert(True, "This test can only crash.");
 
 --  begin read only
    end Test_GenerateMissions_test_generatemissions;
