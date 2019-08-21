@@ -18,5 +18,8 @@ package Items.Test_Data.Tests is
    procedure Test_GetItemName_2db285_6191e0 (Gnattest_T : in out Test);
    --  items.ads:211:4:GetItemName:Test_GetItemName
 
+   procedure Test_DamageItem_f848d1_f75741 (Gnattest_T : in out Test);
+   --  items.ads:230:4:DamageItem:Test_DamageItem
+
 end Items.Test_Data.Tests;
 --  end read only

@@ -7,6 +7,7 @@
 
 with AUnit.Assertions; use AUnit.Assertions;
 with System.Assertions;
+with ada.text_io;
 
 --  begin read only
 --  id:2.2/00/
@@ -14,6 +15,8 @@ with System.Assertions;
 --  This section can be used to add with clauses if necessary.
 --
 --  end read only
+
+with Ships; use Ships;
 
 --  begin read only
 --  end read only
@@ -143,6 +146,55 @@ package body Items.Test_Data.Tests is
 
 --  begin read only
    end Test_GetItemName_test_getitemname;
+--  end read only
+
+--  begin read only
+   procedure Wrap_Test_DamageItem_f848d1_f75741 (Inventory: in out Inventory_Container.Vector; ItemIndex: Positive; SkillLevel, MemberIndex: Natural := 0) 
+   is
+   begin
+      begin
+         pragma Assert
+           ((ItemIndex <= Inventory.Last_Index));
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(items.ads:0):Test_DamageItem test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Items.DamageItem (Inventory, ItemIndex, SkillLevel, MemberIndex);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(items.ads:0:):Test_DamageItem test commitment violated");
+      end;
+   end Wrap_Test_DamageItem_f848d1_f75741;
+--  end read only
+
+--  begin read only
+   procedure Test_DamageItem_test_damageitem (Gnattest_T : in out Test);
+   procedure Test_DamageItem_f848d1_f75741 (Gnattest_T : in out Test) renames Test_DamageItem_test_damageitem;
+--  id:2.2/f848d19e08f0418b/DamageItem/1/0/test_damageitem/
+   procedure Test_DamageItem_test_damageitem (Gnattest_T : in out Test) is
+   procedure DamageItem (Inventory: in out Inventory_Container.Vector; ItemIndex: Positive; SkillLevel, MemberIndex: Natural := 0) renames Wrap_Test_DamageItem_f848d1_f75741;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      for I in 1 .. 100 loop
+         DamageItem(PlayerShip.Crew(1).Inventory, 1);
+      end loop;
+      Assert(True, "This test can only crash.");
+
+--  begin read only
+   end Test_DamageItem_test_damageitem;
 --  end read only
 
 --  begin read only
