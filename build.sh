@@ -16,10 +16,10 @@ case $1 in
       gprclean -P steamsky.gpr
       ;;
    debug)
-      grpclean -P steamsky.gpr
+      gprclean -P steamsky.gpr
       gprbuild -P steamsky.gpr
       ;;
-   createtest)
+   createtests)
       gnattest -P steamsky.gpr
       ;;
    tests)
