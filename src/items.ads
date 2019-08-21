@@ -230,7 +230,8 @@ package Items is
    procedure DamageItem
      (Inventory: in out Inventory_Container.Vector; ItemIndex: Positive;
       SkillLevel, MemberIndex: Natural := 0) with
-      Pre => (ItemIndex <= Inventory.Last_Index);
+      Pre => (ItemIndex <= Inventory.Last_Index),
+      Test_Case => ("Test_DamageItem", Nominal);
       -- ****
 
       -- ****f* Items/FindItem
