@@ -19,6 +19,10 @@ case $1 in
       gprclean -P steamsky.gpr
       gprbuild -P steamsky.gpr
       ;;
+   analyze)
+      gprclean -P steamsky.gpr
+      gprbuild -p steamsky.gpr -XMode=analyze
+      ;;
    createtests)
       gnattest -P steamsky.gpr
       ;;
@@ -34,6 +38,7 @@ case $1 in
    help)
       echo "release       - Build the game in release mode"
       echo "debug         - Build the game in debug mode"
+      echo "analyze       - Build the game in analyze mode for gcov and gprof"
       echo "createtests   - Regenerate unit tests"
       echo "tests         - Build unit tests"
       echo "docs          - Generate code documentation"
