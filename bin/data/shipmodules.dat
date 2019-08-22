@@ -454,5 +454,6 @@ types of modules) the module can have. Default value is 1.
  <module durability="1200" index="419" installtime="200" material="Steel" maxowners="4" name="Huge steel furnace" price="12000" size="4" skill="Metalsmith" type="FURNACE" value="0" weight="3600">Allow smelt ores into metals. Made of steel. Huge sized.</module>
  <module durability="1600" index="420" installtime="320" material="Titanium" maxowners="4" name="Huge titanium furnace" price="24000" size="4" skill="Metalsmith" type="FURNACE" value="0" weight="7200">Allow smelt ores into metals. Made of titanium. Huge sized.</module>
  <module durability="2000" index="421" installtime="320" material="Orichalcum" maxowners="4" name="Huge orichalcum furnace" price="48000" size="4" skill="Metalsmith" type="FURNACE" value="0" weight="7200">Allow smelt ores into metals. Made of orichalcum. Huge sized.</module>
+ <module durability="2400" index="422" installtime="320" material="Adamantium" maxowners="4" name="Huge adamantium furnace" price="96000" size="4" skill="Metalsmith" type="FURNACE" value="0" weight="9600">Allow smelt ores into metals. Made of adamantium. Huge sized</module>
 </modules>
 
