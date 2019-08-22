@@ -7,7 +7,6 @@
 
 with AUnit.Assertions; use AUnit.Assertions;
 with System.Assertions;
-with ada.text_io;
 
 --  begin read only
 --  id:2.2/00/
@@ -195,6 +194,39 @@ package body Items.Test_Data.Tests is
 
 --  begin read only
    end Test_DamageItem_test_damageitem;
+--  end read only
+
+--  begin read only
+   function Wrap_Test_FindItem_40535b_d3c7d4 (Inventory: Inventory_Container.Vector; ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String; Durability: Natural := 101)  return Natural
+   is
+   begin
+      declare
+         Test_FindItem_40535b_d3c7d4_Result : constant Natural := GNATtest_Generated.GNATtest_Standard.Items.FindItem (Inventory, ProtoIndex, ItemType, Durability);
+      begin
+         return Test_FindItem_40535b_d3c7d4_Result;
+      end;
+   end Wrap_Test_FindItem_40535b_d3c7d4;
+--  end read only
+
+--  begin read only
+   procedure Test_FindItem_test_finditem (Gnattest_T : in out Test);
+   procedure Test_FindItem_40535b_d3c7d4 (Gnattest_T : in out Test) renames Test_FindItem_test_finditem;
+--  id:2.2/40535b42aced5966/FindItem/1/0/test_finditem/
+   procedure Test_FindItem_test_finditem (Gnattest_T : in out Test) is
+      function FindItem (Inventory: Inventory_Container.Vector; ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String; Durability: Natural := 101) return Natural renames Wrap_Test_FindItem_40535b_d3c7d4;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(FindItem(PlayerShip.Crew(1).Inventory, To_Unbounded_String("66")) = 1, "Can't find item with ProtoIndex.");
+      Assert(FindItem(Inventory => PlayerShip.Crew(1).Inventory, ItemType => To_Unbounded_String("Weapon")) = 1, "Can't find item wiht ItemType.");
+      Assert(FindItem(PlayerShip.Crew(1).Inventory, To_Unbounded_String("tsdfsdf")) = 0, "Item with not existing ProtoIndex found.");
+      Assert(FindItem(Inventory => PlayerShip.Crew(1).Inventory, ItemType => To_Unbounded_String("sdfsdfds")) = 0, "Item with non existing ItemType found.");
+
+--  begin read only
+   end Test_FindItem_test_finditem;
 --  end read only
 
 --  begin read only
