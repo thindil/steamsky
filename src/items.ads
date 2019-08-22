@@ -248,13 +248,14 @@ package Items is
    function FindItem
      (Inventory: Inventory_Container.Vector;
       ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
-      Durability: Natural := 101) return Natural;
-   -- ****
+      Durability: Natural := 101) return Natural with
+      Test_Case => ("Test_FindItem", Robustness);
+      -- ****
 
-   -- ****f* Items/SetToolsList
-   -- FUNCTION
-   -- Fill tools types list
-   -- SOURCE
+      -- ****f* Items/SetToolsList
+      -- FUNCTION
+      -- Fill tools types list
+      -- SOURCE
    procedure SetToolsList;
    -- ****
 
