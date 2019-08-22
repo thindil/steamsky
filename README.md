@@ -44,13 +44,19 @@ this file is) to compile:
   `Build All`.
 
 * If you prefer using console: in main source code directory type `gprbuild`
-  for debug mode build or for release mode: `gprbuild -XMode=release`
+  for debug mode build or for release mode: `gprbuild -XMode=release`. You
+  can also use build script `build.sh`. Command: `./build.sh debug` will build
+  the game in debug mode. Command: `.build.sh release` will build the game in
+  release mode and put all needed files in *others/Output/release* directory.
 
 ### Build unit tests
-Navigate to `tests/driver` directory from the main directory (where this file
-is):
 
-From console: type `gprbuild -P test_driver.gpr`
+In main source directory, from console: type `./build.sh tests`
+
+### Build.sh script
+
+This is main build script for the game. To see all available options for it,
+in main source directory, type `./build.sh help`
 
 ## Generating code documentation
 
@@ -58,7 +64,8 @@ To generate (or regenerate) code documentation, you need [ROBODoc](https://rfsbe
 If you have it, in main the game directory (where this file is) enter terminal
 command: `./generatedocs.py`. For more information about this script, please
 look [here](https://github.com/thindil/roboada#generatedocspy). This version
-of script have set all default settings for Steam Sky code.
+of script have set all default settings for Steam Sky code. You can also use
+build script `build.sh` for this. Enter command: `./build.sh docs`.
 
 ## Running Steam Sky
 
