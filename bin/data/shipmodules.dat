@@ -452,6 +452,7 @@ types of modules) the module can have. Default value is 1.
  <module durability="400" index="417" installtime="200" material="Bronze" maxowners="4" name="Huge bronze furnace" price="4000" size="4" skill="Metalsmith" type="FURNACE" value="0" weight="3200">Allow smelt ores into metals. Huge sized.</module>
  <module durability="800" index="418" installtime="200" material="Iron" maxowners="4" name="Huge iron furnace" price="8000" size="4" skill="Metalsmith" type="FURNACE" value="0" weight="3200">Allow smelt ores into metals. More durable version. Huge sized.</module>
  <module durability="1200" index="419" installtime="200" material="Steel" maxowners="4" name="Huge steel furnace" price="12000" size="4" skill="Metalsmith" type="FURNACE" value="0" weight="3600">Allow smelt ores into metals. Made of steel. Huge sized.</module>
- <module durability="1600" index="420" installtime="350" material="Titanium" maxowners="4" name="Huge titanium furnace" price="24000" size="4" skill="Metalsmith" type="FURNACE" value="0" weight="7200">Allow smelt ores into metals. Made of titanium. Huge sized.</module>
+ <module durability="1600" index="420" installtime="320" material="Titanium" maxowners="4" name="Huge titanium furnace" price="24000" size="4" skill="Metalsmith" type="FURNACE" value="0" weight="7200">Allow smelt ores into metals. Made of titanium. Huge sized.</module>
+ <module durability="2000" index="421" installtime="320" material="Orichalcum" maxowners="4" name="Huge orichalcum furnace" price="48000" size="4" skill="Metalsmith" type="FURNACE" value="0" weight="7200">Allow smelt ores into metals. Made of orichalcum. Huge sized.</module>
 </modules>
 
