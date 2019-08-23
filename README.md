@@ -77,7 +77,7 @@ files usage, you can find at:
 https://docs.appimage.org/user-guide/run-appimages.html
 
 When you trying to run build by yourself version of the game, use script
-`steamsky.sh`. Game will not works if you try to start it by binary file
+`run.sh`. Game will not works if you try to start it by binary file
 `steamsky` from `bin` directory.
 
 ### Windows
@@ -89,31 +89,32 @@ You can specify the game directories through command-line parameters.
 Possible options are:
 
 * --datadir=[directory] This is where the game data files are kept.
-   Example: `./steamsky.sh --datadir=/home/user/game/tmp`.
+   Example: `./run.sh --datadir=/home/user/game/tmp`.
    Default value is *data/*
 
 * --savedir=[directory] This is where savegames and logs are kept.
    The Game must have write permission to this directory.
-   Example: `./steamsky.sh --savedir=/home/user/.saves`.
+   Example: `./run.sh --savedir=/home/user/.saves`.
    Default value is *data/saves/*
 
 * --docdir=[directory] This is where the game documentation is.
-   Example `./steamsky.sh --docdir=/usr/share/steamsky/doc`.
+   Example `./run.sh --docdir=/usr/share/steamsky/doc`.
    Default value is *doc/*.
 
 * --modsdir=[directory] This is where mods are loaded from.
-   Example:`./steamsky.sh --modsdir=/home/user/.mods`.
+   Example:`./run.sh --modsdir=/home/user/.mods`.
    Default value is *data/mods/*
 
 * --themesdir=[directory] This is where custom themes are loaded from.
-   Example: `./steamsky.sh --themesdir=/home/user/.mods`.
+   Example: `./run.sh --themesdir=/home/user/.mods`.
    Default value is *data/themes/*
 
 Of course, you can set all parameters together:
-`./steamsky.sh --datadir=somedir/ --savedir=otherdir/ --docdir=anotherdir/`
+`./run.sh --datadir=somedir/ --savedir=otherdir/ --docdir=anotherdir/`
 
 Paths to directories can be absolute or relative where file `steamsky` is. For
-Windows, use `steamsky.exe` instead `./steamsky.sh`.
+Windows, use `steamsky.exe` instead `./run.sh`. If you use AppImage version
+of the game, you can also use all of this starting parameters.
 
 ## Modding Support
 For detailed informations about modifying various game elements or debugging
