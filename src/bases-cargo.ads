@@ -28,6 +28,7 @@ package Bases.Cargo is
    -- SOURCE
    procedure GenerateCargo;
    -- ****
+
    -- ****f* Bases.Cargo/UpdateBaseCargo
    -- FUNCTION
    -- Update cargo in base
@@ -42,6 +43,7 @@ package Bases.Cargo is
      (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Natural := 100; CargoIndex: Natural := 0);
    -- ****
+
    -- ****f* Bases.Cargo/FindBaseCargo
    -- FUNCTION
    -- Find index of item in base cargo
