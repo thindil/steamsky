@@ -267,7 +267,8 @@ package Items is
    -- RESULT
    -- String with chance to damage level description
    -- SOURCE
-   function GetItemChanceToDamage(ItemData: Natural) return String;
-   -- ****
+   function GetItemChanceToDamage(ItemData: Natural) return String with
+      Test_Case => ("Test_GetItemChanceToDamage", Robustness);
+      -- ****
 
 end Items;

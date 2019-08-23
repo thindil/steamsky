@@ -230,6 +230,37 @@ package body Items.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_GetItemChanceToDamage_71801d_da4763 (ItemData: Natural)  return String
+   is
+   begin
+      declare
+         Test_GetItemChanceToDamage_71801d_da4763_Result : constant String := GNATtest_Generated.GNATtest_Standard.Items.GetItemChanceToDamage (ItemData);
+      begin
+         return Test_GetItemChanceToDamage_71801d_da4763_Result;
+      end;
+   end Wrap_Test_GetItemChanceToDamage_71801d_da4763;
+--  end read only
+
+--  begin read only
+   procedure Test_GetItemChanceToDamage_test_getitemchancetodamage (Gnattest_T : in out Test);
+   procedure Test_GetItemChanceToDamage_71801d_da4763 (Gnattest_T : in out Test) renames Test_GetItemChanceToDamage_test_getitemchancetodamage;
+--  id:2.2/71801da93fac4ec5/GetItemChanceToDamage/1/0/test_getitemchancetodamage/
+   procedure Test_GetItemChanceToDamage_test_getitemchancetodamage (Gnattest_T : in out Test) is
+      function GetItemChanceToDamage (ItemData: Natural) return String renames Wrap_Test_GetItemChanceToDamage_71801d_da4763;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(GetItemChanceToDamage(3) = "Small", "Wrong value returned for 3.");
+      Assert(GetItemChanceToDamage(30) = "Very high", "Wrong value returned for 30.");
+
+--  begin read only
+   end Test_GetItemChanceToDamage_test_getitemchancetodamage;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
