@@ -11,7 +11,8 @@ All notable changes to this project will be documented in this file.
   iron furnace, large steel furnace, large titanium furnace, large orichalcum
   furnace, large adamantium furnace, huge bronze furnace, huge iron furnace,
   huge steel furnace, huge titanium furnace, huge orichalcum furnace, huge
-  adamantium furnace, medium bronze water collector
+  adamantium furnace, medium bronze water collector, medium iron water
+  collector
 
 ### Changed
 - Updated README.md
