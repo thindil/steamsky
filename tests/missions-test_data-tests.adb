@@ -65,6 +65,62 @@ package body Missions.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_AcceptMission_979505_57ce38 (MissionIndex: Positive) 
+   is
+   begin
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(missions.ads:0):Test_AcceptMission test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Missions.AcceptMission (MissionIndex);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(missions.ads:0:):Test_AcceptMission test commitment violated");
+      end;
+   end Wrap_Test_AcceptMission_979505_57ce38;
+--  end read only
+
+--  begin read only
+   procedure Test_AcceptMission_test_acceptmission (Gnattest_T : in out Test);
+   procedure Test_AcceptMission_979505_57ce38 (Gnattest_T : in out Test) renames Test_AcceptMission_test_acceptmission;
+--  id:2.2/9795058c0b298911/AcceptMission/1/0/test_acceptmission/
+   procedure Test_AcceptMission_test_acceptmission (Gnattest_T : in out Test) is
+   procedure AcceptMission (MissionIndex: Positive) renames Wrap_Test_AcceptMission_979505_57ce38;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      MissionIndex: Positive;
+   begin
+
+      for I in SkyBases(BaseIndex).Missions.Iterate loop
+         if SkyBases(BaseIndex).Missions(I).MType = Explore or SkyBases(BaseIndex).Missions(I).MType = Patrol or SkyBases(BaseIndex).Missions(I).MType = Destroy then
+            MissionIndex := Mission_Container.To_Index(I);
+            exit;
+         end if;
+      end loop;
+      AcceptMission(MissionIndex);
+      Assert(AcceptedMissions.Length = 1, "Accepting mission failed.");
+
+--  begin read only
+   end Test_AcceptMission_test_acceptmission;
+--  end read only
+
+--  begin read only
    procedure Wrap_Test_DeleteMission_4bf0c5_8b646f (MissionIndex: Positive; Failed: Boolean := True) 
    is
    begin
@@ -104,6 +160,7 @@ package body Missions.Test_Data.Tests is
 
    begin
 
+      AcceptedMissions.Clear;
       AcceptedMissions.Append((MType => Explore, Time => 1, TargetX => 1, TargetY => 1,
                   Reward => 1, StartBase => 1, Finished => True,
                   Multiplier => 0.0, Target => 0));
