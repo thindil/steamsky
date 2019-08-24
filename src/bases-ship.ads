@@ -28,18 +28,21 @@ package Bases.Ship is
    -- SOURCE
    BasesShip_Nothing_To_Repair: exception;
    -- ****
+
    -- ****e* Bases.Ship/BasesShip_Unique_Module
    -- FUNCTION
    -- Raised when player try install another same unique module
    -- SOURCE
    BasesShip_Unique_Module: exception;
    -- ****
+
    -- ****e* Bases.Ship/BasesShip_Installation_Error
    -- FUNCTION
    -- Raised when problems with installing ship module occurs
    -- SOURCE
    BasesShip_Installation_Error: exception;
    -- ****
+
    -- ****e* Bases.Ship/BasesShip_Removing_Error
    -- FUNCTION
    -- Raised when problems with removing ship module occurs
@@ -57,6 +60,7 @@ package Bases.Ship is
    procedure RepairShip(ModuleIndex: Integer) with
       Pre => (ModuleIndex <= PlayerShip.Modules.Last_Index);
       -- ****
+
 -- ****f* Bases.Ship/UpgradeShip
 -- FUNCTION
 -- Install or remove modules on player ship
@@ -68,12 +72,14 @@ package Bases.Ship is
    procedure UpgradeShip(Install: Boolean; ModuleIndex: Unbounded_String) with
       Pre => (ModuleIndex /= Null_Unbounded_String);
       -- ****
+
       -- ****f* Bases.Ship/PayForDock
       -- FUNCTION
       -- Pay daily fee for docking
       -- SOURCE
    procedure PayForDock;
    -- ****
+
    -- ****f* Bases.Ship/RepairCost
    -- FUNCTION
    -- Count cost and time of repairs of player ship
