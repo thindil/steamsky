@@ -121,15 +121,16 @@ package Missions is
       -- MissionIndex - Base list of available missions index of mission to
       --                accept
       -- SOURCE
-   procedure AcceptMission(MissionIndex: Positive);
-   -- ****
+   procedure AcceptMission(MissionIndex: Positive) with
+      Test_Case => ("Test_AcceptMission", Nominal);
+      -- ****
 
-   -- ****f* Missions/UpdateMissions
-   -- FUNCTION
-   -- Update accepted missions
-   -- PARAMETERS
-   -- Minutes - Amount of passed minutes
-   -- SOURCE
+      -- ****f* Missions/UpdateMissions
+      -- FUNCTION
+      -- Update accepted missions
+      -- PARAMETERS
+      -- Minutes - Amount of passed minutes
+      -- SOURCE
    procedure UpdateMissions(Minutes: Positive);
    -- ****
 
