@@ -90,12 +90,12 @@ header:
     10 function GetRandom(Min, Max: Integer) return Integer;
     11 -- ****
 
-1 - Documentation header. Steam sky uses `-- ****[letter]* [package]/[itemname]`
+1 - Documentation header. Steam Sky uses `-- ****[letter]* [package]/[itemname]`
 format for documentation headers.
 2-9 - Documentation. For all available options, please refer to ROBODoc
 documentation. Steam sky uses `-- ` for start all documenation lines.
 10 - Source code of item .
-11 - Documentation footer. Steam sky uses `-- ****` for closing documentation.
+11 - Documentation footer. Steam Sky uses `-- ****` for closing documentation.
 
 How to generate the code documentation is described in main *README.md* file.
 
@@ -116,6 +116,10 @@ file is):
 
 `gprbuild -XMode=analyze`
 
+or, if you prefer use `build.sh` command:
+
+`./build.sh analyze`
+
 More informations about code coverage and profiling, you can find in proper
 documentation for both programs.
 
@@ -134,10 +138,7 @@ game code, there will be no unit tests generated.
 ### Running unit tests
 
 First, you must build all tests. How to do it, is described in main
-*README.md* file. To run all unit tests, go to the `test/driver` directory and
-type in console:
-
-`./test_runner`
+*README.md* file. Then, in console type: `./run.sh tests`
 
 More information about GnatTest (how to create unit test, etc) you can find
 [here](http://docs.adacore.com/live/wave/gnat_ugn/html/gnat_ugn/gnat_ugn/gnat_utility_programs.html#the-unit-test-generator-gnattest).
