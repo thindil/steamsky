@@ -33,6 +33,7 @@ package Bases.SaveLoad is
    -- SOURCE
    procedure SaveBases(SaveData: Document; MainNode: DOM.Core.Element);
    -- ****
+
    -- ****f* Bases.SaveLoad/LoadBases
    -- FUNCTION
    -- Load bases from file
