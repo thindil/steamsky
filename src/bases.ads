@@ -37,6 +37,7 @@ package Bases is
    type Bases_Types is
      (Industrial, Agricultural, Refinery, Shipyard, Military, Any);
    -- ****
+
    -- ****t* Bases/Recruit_Data
    -- FUNCTION
    -- Data structure for recruits
@@ -68,18 +69,21 @@ package Bases is
       Faction: Unbounded_String;
    end record;
    -- ****
+
    -- ****t* Bases/Recruit_Container
    -- FUNCTION
    -- Used to store sky bases recruits data
    -- SOURCE
    package Recruit_Container is new Vectors(Positive, Recruit_Data);
    -- ****
+
    -- ****t* Bases/Reputation_Array
    -- FUNCTION
    -- Data structure for reputation, 1 = level, 2 = points to next level
    -- SOURCE
    type Reputation_Array is array(1 .. 2) of Integer;
    -- ****
+
    -- ****t* Bases/Base_Cargo
    -- FUNCTION
    -- Data structure for bases cargo
@@ -96,18 +100,21 @@ package Bases is
       Price: Natural;
    end record;
    -- ****
+
    -- ****t* Bases/BaseCargo_Container
    -- FUNCTION
    -- Used to store sky bases cargos
    -- SOURCE
    package BaseCargo_Container is new Vectors(Positive, Base_Cargo);
    -- ****
+
    -- ****t* Bases/Bases_Size
    -- FUNCTION
    -- Bases sizes
    -- SOURCE
    type Bases_Size is (Small, Medium, Big);
    -- ****
+
    -- ****t* Bases/BaseRecord
    -- FUNCTION
    -- Data structure for bases
@@ -150,36 +157,42 @@ package Bases is
       Size: Bases_Size;
    end record;
    -- ****
+
    -- ****t* Bases/BasesRange
    -- FUNCTION
    -- Amount of sky bases
    -- SOURCE
    subtype BasesRange is Positive range 1 .. 1024;
    -- ****
+
    -- ****v* Bases/SkyBases
    -- FUNCTION
    -- List of sky bases
    -- SOURCE
    SkyBases: array(BasesRange) of BaseRecord;
    -- ****
+
    -- ****v* Bases/BaseSyllablesPre
    -- FUNCTION
    -- List of pre syllables for generating bases names
    -- SOURCE
    BaseSyllablesPre: UnboundedString_Container.Vector;
    -- ****
+
    -- ****v* Bases/BaseSyllablesStart
    -- FUNCTION
    -- List of first syllables for generating bases names
    -- SOURCE
    BaseSyllablesStart: UnboundedString_Container.Vector;
    -- ****
+
    -- ****v* Bases/BaseSyllablesEnd
    -- FUNCTION
    -- List of second syllables for generating bases names
    -- SOURCE
    BaseSyllablesEnd: UnboundedString_Container.Vector;
    -- ****
+
    -- ****v* Bases/BaseSyllablesPost
    -- FUNCTION
    -- List of post syllables for generating bases names
@@ -196,6 +209,7 @@ package Bases is
    -- SOURCE
    procedure GainRep(BaseIndex: BasesRange; Points: Integer);
    -- ****
+
    -- ****f* Bases/CountPrice
    -- FUNCTION
    -- Count price for actions with bases (buying/selling/docking/ect)
@@ -213,6 +227,7 @@ package Bases is
       Reduce: Boolean := True) with
       Pre => TraderIndex <= PlayerShip.Crew.Last_Index;
       -- ****
+
       -- ****f* Bases/GenerateBaseName
       -- FUNCTION
       -- Generate random name for base based on faction
@@ -225,30 +240,35 @@ package Bases is
      (FactionIndex: Unbounded_String) return Unbounded_String with
       Pre => Factions_Container.Contains(Factions_List, FactionIndex);
       -- ****
+
       -- ****f* Bases/GenerateRecruits
       -- FUNCTION
       -- Generate if needed new recruits in base
       -- SOURCE
    procedure GenerateRecruits;
    -- ****
+
    -- ****f* Bases/AskForBases
    -- FUNCTION
    -- Ask in base for direction for other bases
    -- SOURCE
    procedure AskForBases;
    -- ****
+
    -- ****f* Bases/AskForEvents
    -- FUNCTION
    -- Ask in base for direction for random events
    -- SOURCE
    procedure AskForEvents;
    -- ****
+
    -- ****f* Bases/UpdatePopulation
    -- FUNCTION
    -- Update base population if needed
    -- SOURCE
    procedure UpdatePopulation;
    -- ****
+
    -- ****f* Bases/UpdatePrices
    -- FUNCTION
    -- Random changes of items prices in base
