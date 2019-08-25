@@ -15,8 +15,11 @@ package Missions.Test_Data.Tests is
    procedure Test_AcceptMission_979505_57ce38 (Gnattest_T : in out Test);
    --  missions.ads:124:4:AcceptMission:Test_AcceptMission
 
+   procedure Test_UpdateMissions_b5358e_60a195 (Gnattest_T : in out Test);
+   --  missions.ads:134:4:UpdateMissions:Test_UpdateMissions
+
    procedure Test_DeleteMission_4bf0c5_8b646f (Gnattest_T : in out Test);
-   --  missions.ads:156:4:DeleteMission:Test_DeleteMission
+   --  missions.ads:157:4:DeleteMission:Test_DeleteMission
 
 end Missions.Test_Data.Tests;
 --  end read only
