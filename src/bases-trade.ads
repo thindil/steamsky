@@ -29,12 +29,14 @@ package Bases.Trade is
    -- SOURCE
    Trade_Already_Known: exception;
    -- ****
+
    -- ****e* Bases.Trade/Trade_Cant_Heal
    -- FUNCTION
    -- Raised when no crew members are wounded
    -- SOURCE
    Trade_Cant_Heal: exception;
    -- ****
+
    -- ****e* Bases.Trade/Trade_Cant_Train
    -- FUNCTION
    -- Raised when skill is maxed and can't be trained
@@ -58,6 +60,7 @@ package Bases.Trade is
      (RecruitIndex, Cost: Positive; DailyPayment, TradePayment: Natural;
       ContractLenght: Integer);
    -- ****
+
    -- ****f* Bases.Trade/BuyRecipe
    -- FUNCTION
    -- Buy new crafting recipe
@@ -67,6 +70,7 @@ package Bases.Trade is
    procedure BuyRecipe(RecipeIndex: Unbounded_String) with
       Pre => (RecipeIndex /= Null_Unbounded_String);
       -- ****
+
       -- ****f* Bases.Trade/HealWounded
       -- FUNCTION
       -- Heals wounded crew members in bases
@@ -77,6 +81,7 @@ package Bases.Trade is
    procedure HealWounded(MemberIndex: Crew_Container.Extended_Index) with
       Pre => (MemberIndex < PlayerShip.Crew.Last_Index);
       -- ****
+
       -- ****f* Bases.Trade/HealCost
       -- FUNCTION
       -- Count cost of healing action
@@ -93,6 +98,7 @@ package Bases.Trade is
       MemberIndex: Crew_Container.Extended_Index) with
       Pre => (MemberIndex < PlayerShip.Crew.Last_Index);
       -- ****
+
       -- ****f* Bases.Trade/TrainCost
       -- FUNCTION
       -- Count cost of training action
@@ -108,6 +114,7 @@ package Bases.Trade is
       (MemberIndex <= PlayerShip.Crew.Last_Index and
        SkillIndex <= Skills_List.Last_Index);
       -- ****
+
       -- ****f* Bases.Trade/TrainSkill
       -- FUNCTION
       -- Train selected skill
