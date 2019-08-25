@@ -131,7 +131,8 @@ package Missions is
       -- PARAMETERS
       -- Minutes - Amount of passed minutes
       -- SOURCE
-   procedure UpdateMissions(Minutes: Positive);
+   procedure UpdateMissions(Minutes: Positive) with
+      Test_Case => ("Test_UpdateMissions", Robustness);
    -- ****
 
    -- ****f* Missions/FinishMission
