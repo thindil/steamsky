@@ -34,6 +34,7 @@ with Goals; use Goals;
 with Factions; use Factions;
 with Stories; use Stories;
 with Config; use Config;
+with Trades; use Trades;
 
 package body Combat is
 
@@ -86,6 +87,15 @@ package body Combat is
         CreateShip
           (EnemyIndex, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY,
            FULL_SPEED);
+      -- Enemy ship is trader, generate cargo for it
+      if Index(ProtoShips_List(EnemyIndex).Name, To_String(TradersName)) >
+        0 then
+         GenerateTraderCargo(EnemyIndex);
+         for Item of TraderCargo loop
+            UpdateCargo(EnemyShip, Item.ProtoIndex, Item.Amount);
+         end loop;
+         TraderCargo.Clear;
+      end if;
       Enemy :=
         (Ship => EnemyShip, Accuracy => 0, Distance => 10000,
          CombatAI => ProtoShips_List(EnemyIndex).CombatAI, Evasion => 0,
