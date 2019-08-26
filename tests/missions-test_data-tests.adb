@@ -154,6 +154,57 @@ package body Missions.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_FinishMission_c82383_b2ab56 (MissionIndex: Positive) 
+   is
+   begin
+      begin
+         pragma Assert
+           (MissionIndex <= AcceptedMissions.Last_Index);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(missions.ads:0):Test_FinishMission test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Missions.FinishMission (MissionIndex);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(missions.ads:0:):Test_FinishMission test commitment violated");
+      end;
+   end Wrap_Test_FinishMission_c82383_b2ab56;
+--  end read only
+
+--  begin read only
+   procedure Test_FinishMission_test_finishmission (Gnattest_T : in out Test);
+   procedure Test_FinishMission_c82383_b2ab56 (Gnattest_T : in out Test) renames Test_FinishMission_test_finishmission;
+--  id:2.2/c823837fea6a8759/FinishMission/1/0/test_finishmission/
+   procedure Test_FinishMission_test_finishmission (Gnattest_T : in out Test) is
+   procedure FinishMission (MissionIndex: Positive) renames Wrap_Test_FinishMission_c82383_b2ab56;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      AcceptedMissions.Clear;
+      AcceptedMissions.Append((MType => Explore, Time => 10, TargetX => 1, TargetY => 1,
+                  Reward => 1, StartBase => 1, Finished => True,
+                  Multiplier => 0.0, Target => 0));
+      FinishMission(1);
+      Assert(AcceptedMissions.Length = 0, "Mission not finished correctly.");
+
+--  begin read only
+   end Test_FinishMission_test_finishmission;
+--  end read only
+
+--  begin read only
    procedure Wrap_Test_DeleteMission_4bf0c5_8b646f (MissionIndex: Positive; Failed: Boolean := True) 
    is
    begin

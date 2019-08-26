@@ -133,17 +133,18 @@ package Missions is
       -- SOURCE
    procedure UpdateMissions(Minutes: Positive) with
       Test_Case => ("Test_UpdateMissions", Robustness);
-   -- ****
+      -- ****
 
-   -- ****f* Missions/FinishMission
-   -- FUNCTION
-   -- Finish selected mission
-   -- PARAMETERS
-   -- MissionIndex - Player ship list of accepted missions index of mission
-   --                to finish
-   -- SOURCE
+      -- ****f* Missions/FinishMission
+      -- FUNCTION
+      -- Finish selected mission
+      -- PARAMETERS
+      -- MissionIndex - Player ship list of accepted missions index of mission
+      --                to finish
+      -- SOURCE
    procedure FinishMission(MissionIndex: Positive) with
-      Pre => MissionIndex <= AcceptedMissions.Last_Index;
+      Pre => MissionIndex <= AcceptedMissions.Last_Index,
+      Test_Case => ("Test_FinishMission", Nominal);
       -- ****
 
       -- ****f* Missions/DeleteMission
