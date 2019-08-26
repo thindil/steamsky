@@ -58,35 +58,41 @@ package Crafts is
       Tool: Unbounded_String;
    end record;
    -- ****
+
    -- ****t* Crafts/Recipes_Container
    -- SOURCE
    package Recipes_Container is new Hashed_Maps(Unbounded_String, Craft_Data,
       Ada.Strings.Unbounded.Hash, "=");
    -- ****
+
    -- ****v* Crafts/Recipes_List
    -- FUNCTION
    -- List of recipes available in game
    -- SOURCE
    Recipes_List: Recipes_Container.Map;
    -- ****
+
    -- ****v* Crafts/Known_Recipes
    -- FUNCTION
    -- List of all know by player recipes
    -- SOURCE
    Known_Recipes: UnboundedString_Container.Vector;
    -- ****
+
    -- ****e* Crafts/Crafting_No_Materials
    -- FUNCTION
    -- Raised when no materials needed for selected recipe
    -- SOURCE
    Crafting_No_Materials: exception;
    -- ****
+
    -- ****e* Crafts/Crafting_No_Tools
    -- FUNCTION
    -- Raised when no tool needed for selected recipe
    -- SOURCE
    Crafting_No_Tools: exception;
    -- ****
+
    -- ****e* Crafts/Crafting_No_Workshop
    -- FUNCTION
    -- Raised when no workshop needed for selected recipe
@@ -102,6 +108,7 @@ package Crafts is
    -- SOURCE
    procedure LoadRecipes(Reader: Tree_Reader);
    -- ****
+
    -- ****f* Crafts/Manufacturing
    -- FUNCTION
    -- Craft selected items
@@ -110,6 +117,7 @@ package Crafts is
    -- SOURCE
    procedure Manufacturing(Minutes: Positive);
    -- ****
+
    -- ****f* Crafts/CheckRecipe
    -- FUNCTION
    -- Check if player have all requirements for selected recipe
@@ -122,6 +130,7 @@ package Crafts is
    function CheckRecipe(RecipeIndex: Unbounded_String) return Positive with
       Pre => RecipeIndex /= Null_Unbounded_String;
       -- ****
+
       -- ****f* Crafts/SetRecipe
       -- FUNCTION
       -- Set crafting recipe for selected workshop
