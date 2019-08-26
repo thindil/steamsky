@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated README.md
+- Added cargo to traders ships so they will be slower in combat
 
 ### Fixed
 - Possible crash on generating missions
