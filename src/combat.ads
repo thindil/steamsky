@@ -33,36 +33,42 @@ package Combat is
    -- SOURCE
    EnemyName: Unbounded_String := Null_Unbounded_String;
    -- ****
+
    -- ****v* Combat/PilotOrder, EngineerOrder
    -- FUNCTION
    -- Orders for crew members
    -- SOURCE
    PilotOrder, EngineerOrder: Positive;
    -- ****
+
    -- ****t* Combat/GunsInfoArray
    -- FUNCTION
    -- Data structure for guns informations
    -- SOURCE
    type GunsInfoArray is array(1 .. 2) of Positive;
    -- ****
+
    -- ****t* Combat/Guns_Container
    -- FUNCTION
    -- Used to store data for player ship guns
    -- SOURCE
    package Guns_Container is new Vectors(Positive, GunsInfoArray);
    -- ****
+
    -- ****v* Combat/Guns
    -- FUNCTION
    -- List of guns installed on player ship
    -- SOURCE
    Guns: Guns_Container.Vector;
    -- ****
+
    -- ****v* Combat/BoardingOrders
    -- FUNCTION
    -- List of orders for boarding party
    -- SOURCE
    BoardingOrders: Integer_Container.Vector;
    -- ****
+
    -- ****t* Combat/Enemy_Record
    -- FUNCTION
    -- Data structure for enemies
@@ -88,36 +94,42 @@ package Combat is
       HarpoonDuration: Natural;
    end record;
    -- ****
+
    -- ****v* Combat/Enemy
    -- FUNCTION
    -- Enemy informations
    -- SOURCE
    Enemy: Enemy_Record;
    -- ****
+
    -- ****v* Combat/EndCombat
    -- FUNCTION
    -- True if combat ends
    -- SOURCE
    EndCombat: Boolean;
    -- ****
+
    -- ****v* Combat/MessagesStarts
    -- FUNCTION
    -- Start index for showing messages
    -- SOURCE
    MessagesStarts: Natural;
    -- ****
+
    -- ****v* Combat/OldSpeed
    -- FUNCTION
    -- Speed of player ship before combat
    -- SOURCE
    OldSpeed: ShipSpeed;
    -- ****
+
    -- ****v* Combat/HarpoonDuration
    -- FUNCTION
    -- How long (amount of rounds) player ship will be stopped by enemy harpoon
    -- SOURCE
    HarpoonDuration: Natural;
    -- ****
+
    -- ****v* Combat/EnemyShipIndex
    -- FUNCTION
    -- Prototype index of enemy ship

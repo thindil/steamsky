@@ -41,6 +41,7 @@ package Careers is
       Skills: UnboundedString_Container.Vector;
    end record;
    -- ****
+
    -- ****t* Careers/Careers_Container
    -- FUNCTION
    -- Used to store all available careers
@@ -48,6 +49,7 @@ package Careers is
    package Careers_Container is new Hashed_Maps(Unbounded_String, CareerRecord,
       Ada.Strings.Unbounded.Hash, "=");
    -- ****
+
    -- ****v* Careers/Careers_List
    -- FUNCTION
    -- List of all available careers for player
