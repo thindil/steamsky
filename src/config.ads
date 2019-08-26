@@ -65,24 +65,28 @@ package Config is
       PricesBonus: Float;
    end record;
    -- ****
+
    -- ****t* Config/AutoMoveBreak
    -- FUNCTION
    -- Options when stop auto move of player ship
    -- SOURCE
    type AutoMoveBreak is (NEVER, ANY, FRIENDLY, ENEMY);
    -- ****
+
    -- ****t* Config/MessagesOrderType
    -- FUNCTION
    -- Options to set showing messages order
    -- SOURCE
    type MessagesOrderType is (OLDER_FIRST, NEWER_FIRST);
    -- ****
+
    -- ****t* Config/AutoSaveType
    -- FUNCTION
    -- Type used to set how often autosave is done
    -- SOURCE
    type AutoSaveType is (NONE, DOCK, UNDOCK, DAILY, MONTHLY, YEARLY);
    -- ****
+
    -- ****t* Config/GameSettingsRecord
    -- FUNCTION
    -- Data for game settings
@@ -172,12 +176,14 @@ package Config is
       ShowNumbers: Boolean;
    end record;
    -- ****
+
    -- ****v* Config/NewGameSettings
    -- FUNCTION
    -- Settings for the new game
    -- SOURCE
    NewGameSettings: NewGameRecord;
    -- ****
+
    -- ****v* Config/GameSettings
    -- FUNCTION
    -- General settings for the game
@@ -191,6 +197,7 @@ package Config is
    -- SOURCE
    procedure LoadConfig;
    -- ****
+
    -- ****f* Config/SaveConfig
    -- FUNCTION
    -- Save game configuration to file
