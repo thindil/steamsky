@@ -18,6 +18,7 @@ with System.Assertions;
 with Ships; use Ships;
 with Maps; use Maps;
 with Bases; use Bases;
+with ada.text_io;
 
 --  begin read only
 --  end read only
@@ -253,6 +254,57 @@ package body Missions.Test_Data.Tests is
 
 --  begin read only
    end Test_DeleteMission_test_deletemission;
+--  end read only
+
+--  begin read only
+   procedure Wrap_Test_UpdateMission_06efd0_8b6bc6 (MissionIndex: Positive) 
+   is
+   begin
+      begin
+         pragma Assert
+           (MissionIndex <= AcceptedMissions.Last_Index);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(missions.ads:0):Test_UpdateMission test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Missions.UpdateMission (MissionIndex);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(missions.ads:0:):Test_UpdateMission test commitment violated");
+      end;
+   end Wrap_Test_UpdateMission_06efd0_8b6bc6;
+--  end read only
+
+--  begin read only
+   procedure Test_UpdateMission_test_updatemission (Gnattest_T : in out Test);
+   procedure Test_UpdateMission_06efd0_8b6bc6 (Gnattest_T : in out Test) renames Test_UpdateMission_test_updatemission;
+--  id:2.2/06efd0aaaa7e1e74/UpdateMission/1/0/test_updatemission/
+   procedure Test_UpdateMission_test_updatemission (Gnattest_T : in out Test) is
+   procedure UpdateMission (MissionIndex: Positive) renames Wrap_Test_UpdateMission_06efd0_8b6bc6;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      AcceptedMissions.Clear;
+      AcceptedMissions.Append((MType => Explore, Time => 1, TargetX => 1, TargetY => 1,
+                  Reward => 1, StartBase => 1, Finished => True,
+                  Multiplier => 0.0, Target => 0));
+      UpdateMission(1);
+      Assert(AcceptedMissions(1).Finished, "Failed to update mission.");
+
+--  begin read only
+   end Test_UpdateMission_test_updatemission;
 --  end read only
 
 --  begin read only
