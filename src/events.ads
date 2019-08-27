@@ -35,6 +35,7 @@ package Events is
      (None, EnemyShip, AttackOnBase, Disease, DoublePrice, BaseRecovery,
       FullDocks, EnemyPatrol, Trader, FriendlyShip);
    -- ****
+
    -- ****t* Events/EventData
    -- FUNCTION
    -- Data structure for random events
@@ -60,24 +61,28 @@ package Events is
       end case;
    end record;
    -- ****
+
    -- ****t* Events/Events_Container
    -- FUNCTION
    -- Used to store events data
    -- SOURCE
    package Events_Container is new Vectors(Positive, EventData);
    -- ****
+
    -- ****v* Events/Events_List
    -- FUNCTION
    -- List of all events in the game
    -- SOURCE
    Events_List: Events_Container.Vector;
    -- ****
+
    -- ****v* Events/Traders
    -- FUNCTION
    -- List of indexes of all friendly traders in the game
    -- SOURCE
    Traders: UnboundedString_Container.Vector;
    -- ****
+
    -- ****v* Events/FriendlyShips
    -- FUNCTION
    -- List of indexes of all friendly ships in the game
@@ -93,6 +98,7 @@ package Events is
    -- SOURCE
    function CheckForEvent return Boolean;
    -- ****
+
    -- ****f* Events/UpdateEvents
    -- FUNCTION
    -- Update all events timers
@@ -101,6 +107,7 @@ package Events is
    -- SOURCE
    procedure UpdateEvents(Minutes: Positive);
    -- ****
+
    -- ****f* Events/DeleteEvent
    -- FUNCTION
    -- Delete selected event
@@ -110,12 +117,14 @@ package Events is
    procedure DeleteEvent(EventIndex: Positive) with
       Pre => EventIndex <= Events_List.Last_Index;
       -- ****
+
       -- ****f* Events/GenerateTraders
       -- FUNCTION
       -- Create list of traders needed for trader event
       -- SOURCE
    procedure GenerateTraders;
    -- ****
+
    -- ****f* Events/RecoverBase
    -- FUNCTION
    -- Recover abandoned base
@@ -124,6 +133,7 @@ package Events is
    -- SOURCE
    procedure RecoverBase(BaseIndex: BasesRange);
    -- ****
+
    -- ****f* Events/GenerateEnemies
    -- FUNCTION
    -- Create list of enemies ships
