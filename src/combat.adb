@@ -96,6 +96,55 @@ package body Combat is
          end loop;
          TraderCargo.Clear;
       end if;
+      declare
+         MinFreeSpace, ItemIndex, CargoItemIndex: Natural := 0;
+         ItemAmount: Positive;
+         NewItemIndex: Unbounded_String;
+      begin
+         for Module of EnemyShip.Modules loop
+            if Module.MType = CARGO_ROOM and Module.Durability > 0 then
+               MinFreeSpace :=
+                 MinFreeSpace + Modules_List(Module.ProtoIndex).MaxValue;
+            end if;
+         end loop;
+         MinFreeSpace :=
+           Natural
+             (Float(MinFreeSpace) *
+              (1.0 - (Float(GetRandom(20, 70)) / 100.0)));
+         loop
+            exit when FreeCargo(0, EnemyShip) <= MinFreeSpace;
+            ItemIndex := GetRandom(1, Positive(Items_List.Length));
+            for I in Items_List.Iterate loop
+               ItemIndex := ItemIndex - 1;
+               if ItemIndex = 0 then
+                  NewItemIndex := Objects_Container.Key(I);
+                  exit;
+               end if;
+            end loop;
+            if EnemyShip.Crew.Length < 5 then
+               ItemAmount := GetRandom(1, 100);
+            elsif EnemyShip.Crew.Length < 10 then
+               ItemAmount := GetRandom(1, 500);
+            else
+               ItemAmount := GetRandom(1, 1000);
+            end if;
+            CargoItemIndex := FindItem(EnemyShip.Cargo, NewItemIndex);
+            if CargoItemIndex > 0 then
+               EnemyShip.Cargo(CargoItemIndex).Amount :=
+                 EnemyShip.Cargo(CargoItemIndex).Amount + ItemAmount;
+            else
+               if FreeCargo
+                   (0 - (Items_List(NewItemIndex).Weight * ItemAmount)) >
+                 -1 then
+                  EnemyShip.Cargo.Append
+                    (New_Item =>
+                       (ProtoIndex => NewItemIndex, Amount => ItemAmount,
+                        Durability => 100, Name => Null_Unbounded_String,
+                        Price => 0));
+               end if;
+            end if;
+         end loop;
+      end;
       Enemy :=
         (Ship => EnemyShip, Accuracy => 0, Distance => 10000,
          CombatAI => ProtoShips_List(EnemyIndex).CombatAI, Evasion => 0,
