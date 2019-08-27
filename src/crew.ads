@@ -33,12 +33,14 @@ package Crew is
    -- SOURCE
    type Skill_Array is array(1 .. 3) of Natural;
    -- ****
+
    -- ****t* Crew/Skills_Container
    -- FUNCTION
    -- Used to store skills data
    -- SOURCE
    package Skills_Container is new Vectors(Positive, Skill_Array);
    -- ****
+
    -- ****t* Crew/Crew_Orders
    -- FUNCTION
    -- Available orders for ships crews
@@ -47,17 +49,20 @@ package Crew is
      (Pilot, Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean,
       Rest, Defend, Boarding, Train);
    -- ****
+
    -- ****t* Crew/Attributes_Array
    -- FUNCTION
    -- Data structure for attributes: 1 - Attribute level, 2 - current experience in attribute
    -- SOURCE
    type Attributes_Array is array(1 .. 2) of Natural;
    -- ****
+
    -- ****t* Crew/Attributes_Container
    -- Used to store attributes data
    -- SOURCE
    package Attributes_Container is new Vectors(Positive, Attributes_Array);
    -- ****
+
    -- ****t* Crew/Member_Data
    -- FUNCTION
    -- Data structure for ship crew member
@@ -112,66 +117,77 @@ package Crew is
       Faction: Unbounded_String;
    end record;
    -- ****
+
    -- ****v* Crew/MaleSyllablesStart
    -- FUNCTION
    -- List of males first syllables for generating crew members names
    -- SOURCE
    MaleSyllablesStart: UnboundedString_Container.Vector;
    -- ****
+
    -- ****v* Crew/MaleSyllablesMiddle
    -- FUNCTION
    -- List of males middle syllables for generating crew members names
    -- SOURCE
    MaleSyllablesMiddle: UnboundedString_Container.Vector;
    -- ****
+
    -- ****v* Crew/MaleSyllablesEnd
    -- FUNCTION
    -- List of males last syllables for generating crew members names
    -- SOURCE
    MaleSyllablesEnd: UnboundedString_Container.Vector;
    -- ****
+
    -- ****v* Crew/MaleVocals
    -- FUNCTION
    -- List of males vocals for generating crew members names
    -- SOURCE
    MaleVocals: UnboundedString_Container.Vector;
    -- ****
+
    -- ****v* Crew/MaleConsonants
    -- FUNCTION
    -- List of males consonants for generating crew members names
    -- SOURCE
    MaleConsonants: UnboundedString_Container.Vector;
    -- ****
+
    -- ****v* Crew/FemaleSyllablesStart
    -- FUNCTION
    -- List of females first syllables for generating crew members names
    -- SOURCE
    FemaleSyllablesStart: UnboundedString_Container.Vector;
    -- ****
+
    -- ****v* Crew/FemaleSyllablesMiddle
    -- FUNCTION
    -- List of females middle syllables for generating crew members names
    -- SOURCE
    FemaleSyllablesMiddle: UnboundedString_Container.Vector;
    -- ****
+
    -- ****v* Crew/FemaleSyllablesEnd
    -- FUNCTION
    -- List of females last syllables for generating crew members names
    -- SOURCE
    FemaleSyllablesEnd: UnboundedString_Container.Vector;
    -- ****
+
    -- ****v* Crew/FemaleVocals
    -- FUNCTION
    -- List of females vocals for generating crew members names
    -- SOURCE
    FemaleVocals: UnboundedString_Container.Vector;
    -- ****
+
    -- ****e* Crew/Crew_Order_Error
    -- FUNCTION
    -- Raised when new order can't be set for selected crew member
    -- SOURCE
    Crew_Order_Error: exception;
    -- ****
+
    -- ****e* Crew/Crew_No_Space_Error
    -- FUNCTION
    -- Raised when no space for new item in crew member inventory
@@ -190,6 +206,7 @@ package Crew is
    procedure GainExp(Amount: Natural; SkillNumber, CrewIndex: Positive) with
       Pre => SkillNumber <= Skills_List.Last_Index;
       -- ****
+
       -- ****f* Crew/GenerateMemberName
       -- FUNCTION
       -- Generate random name for crew member
@@ -206,6 +223,7 @@ package Crew is
       ((Gender = 'M' or Gender = 'F') and
        FactionIndex /= Null_Unbounded_String);
       -- ****
+
       -- ****f* Crew/FindCabin
       -- FUNCTION
       -- Find index of cabin which belongs to selected crew member
@@ -217,6 +235,7 @@ package Crew is
       -- SOURCE
    function FindCabin(MemberIndex: Positive) return Natural;
    -- ****
+
    -- ****f* Crew/UpdateCrew
    -- FUNCTION
    -- Update player ship crew
@@ -228,12 +247,14 @@ package Crew is
    procedure UpdateCrew
      (Minutes: Positive; TiredPoints: Natural; InCombat: Boolean := False);
    -- ****
+
    -- ****f* Crew/WaitForRest
    -- FUNCTION
    -- Wait until whole crew is rested
    -- SOURCE
    procedure WaitForRest;
    -- ****
+
    -- ****f* Crew/GetSkillLevelName
    -- FUNCTION
    -- Get member skill level name
@@ -245,6 +266,7 @@ package Crew is
    function GetSkillLevelName(SkillLevel: Positive) return String with
       Pre => (SkillLevel <= 100);
       -- ****
+
       -- ****f* Crew/GetAttributeLevelName
       -- FUNCTION
       -- Get member attribute level name
@@ -256,6 +278,7 @@ package Crew is
    function GetAttributeLevelName(AttributeLevel: Positive) return String with
       Pre => (AttributeLevel <= 50);
       -- ****
+
       -- ****f* Crew/DailyPayment
       -- FUNCTION
    -- Daily payment and upgrade contracts length for player ship crew members
