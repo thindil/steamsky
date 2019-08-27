@@ -46,6 +46,7 @@ package Crew.Inventory is
       (MemberIndex <= PlayerShip.Crew.Last_Index and
        InventoryIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index);
       -- ****
+
       -- ****f* Crew.Inventory/FreeInventory
       -- FUNCTION
       -- Return available space in crew member inventory after adding or
@@ -60,6 +61,7 @@ package Crew.Inventory is
      (MemberIndex: Positive; Amount: Integer) return Integer with
       Pre => MemberIndex <= PlayerShip.Crew.Last_Index;
       -- ****
+
       -- ****f* Crew.Inventory/TakeOffItem
       -- FUNCTION
       -- Remove selected item from character equipment
@@ -73,6 +75,7 @@ package Crew.Inventory is
       (MemberIndex <= PlayerShip.Crew.Last_Index and
        ItemIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index);
       -- ****
+
       -- ****f* Crew.Inventory/ItemIsUsed
       -- FUNCTION
       -- Check if selected crew member use this item
@@ -85,6 +88,7 @@ package Crew.Inventory is
       (MemberIndex <= PlayerShip.Crew.Last_Index and
        ItemIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index);
       -- ****
+
       -- ****f* Crew.Inventory/FindTools
       -- FUNCTION
       -- Search for specified tools in character and ship cargo
