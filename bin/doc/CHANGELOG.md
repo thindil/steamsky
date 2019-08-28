@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Updated README.md
 - Updated contributing guide
 - Added cargo to traders ships so they will be slower in combat
+- Updated interface
 
 ### Fixed
 - Crash on returning mission with max reputation as reward
