@@ -160,17 +160,22 @@ GtkTreeView:selected,
 .progressbar,
    .progressbar:selected,
    .progressbar:selected:focus {
-   background:linear-gradient(to bottom, blue, black);
-   border-radius:10px;
+   background:linear-gradient(to bottom, rgb(0, 0, 150), rgb(0, 0, 50));
+   border:5px rgba(32, 32, 32, 0) outset;
 }
+
+.progressbar:hover {
+   border:5px rgba(32, 32, 32, 0) outset;
+}
+
 
 /* Settings for progress bars background */
 GtkProgressBar.trough,
    GtkTreeView.view.trough,
    GtkTreeView.view.trough:selected,
    GtkTreeView.view.trough:selected:focus {
-  border-radius: 10px;
-  background:linear-gradient(to bottom, rgb(53,53,53), transparent);
+  background:#151515;
+  border:5px #181818 outset;
 }
 
 /* Settings for frames */
@@ -248,48 +253,45 @@ GtkTextView#mapview {
 .progressbar#redbar,
    .progressbar:selected#redbar,
    .progressbar:selected#redbar:focus {
-   background:linear-gradient(to bottom, red, black);
-   border-radius:10px;
+   background:linear-gradient(to bottom, rgb(150, 0, 0), rgb(50, 0, 0));
 }
 
 /* Green progress bars settings */
 .progressbar#greenbar,
    .progressbar:selected#greenbar,
    .progressbar:selected#greenbar:focus {
-   background:linear-gradient(to bottom, darkgreen, black);
-   border-radius:10px;
+   background:linear-gradient(to bottom, rgb(0, 100, 0), rgb(0, 50, 0));
 }
 
 /* Yellow progress bars settings */
 .progressbar#yellowbar,
    .progressbar:selected#yellowbar,
    .progressbar:selected#yellowbar:focus {
-   background:linear-gradient(to bottom, rgb(172, 119, 0), black);
-   border-radius:10px;
+   background:linear-gradient(to bottom, rgb(172, 119, 0), rgb(72, 19, 0));
 }
 
 /* Negative values bar settings (for example, negative reputation) */
 .progressbar#negativebar,
    .progressbar:selected#negativebar,
    .progressbar:selected#negativebar:focus {
-   background:linear-gradient(to bottom, red, black);
-   border-radius:10px 0 0 10px;
+   background:linear-gradient(to bottom, rgb(150, 0, 0), rgb(50, 0, 0));
+   border-right:0;
 }
 
 GtkProgressBar.trough#negativebar {
-  border-radius:10px 0 0 10px;
+   border-right:0;
 }
 
 /* Positive values bar settings (for example, positive reputation) */
 .progressbar#positivebar,
    .progressbar:selected#positivebar,
    .progressbar:selected#positivebar:focus {
-   background:linear-gradient(to bottom, darkgreen, black);
-   border-radius:0 10px 10px 0;
+   background:linear-gradient(to bottom, rgb(0, 100, 0), rgb(0, 50, 0));
+   border-left:0;
 }
 
 GtkProgressBar.trough#positivebar {
-  border-radius:0 10px 10px 0;
+   border-left:0;
 }
 
 /* Setting for tables headers */
@@ -421,17 +423,19 @@ GtkInfoBar {
 .progressbar#goldbar,
    .progressbar:selected#goldbar,
    .progressbar:selected#goldbar:focus {
-   background:linear-gradient(to bottom, gold, black);
-   border-radius:10px;
+   background:linear-gradient(to bottom, rgb(175, 125, 0), rgb(85, 35, 0));
 }
 
 /* Crew member experience progress bars settings */
 .progressbar#experience,
    .progressbar#experience:selected,
    .progressbar#experience:selected:focus {
-   background:linear-gradient(to bottom, darkgoldenrod, black);
+   background:#423004;
+   border-radius:0;
+   border:1px black solid;
 }
 
 GtkProgressBar.trough#experience {
-  background:linear-gradient(to bottom, rgb(25,25,25), transparent);
+   border:0;
+   background:transparent;
 }
