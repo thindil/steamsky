@@ -18,7 +18,6 @@ with System.Assertions;
 with Ships; use Ships;
 with Maps; use Maps;
 with Bases; use Bases;
-with ada.text_io;
 
 --  begin read only
 --  end read only
@@ -305,6 +304,40 @@ package body Missions.Test_Data.Tests is
 
 --  begin read only
    end Test_UpdateMission_test_updatemission;
+--  end read only
+
+--  begin read only
+   function Wrap_Test_AutoFinishMissions_ca7126_527254 return String
+   is
+   begin
+      declare
+         Test_AutoFinishMissions_ca7126_527254_Result : constant String := GNATtest_Generated.GNATtest_Standard.Missions.AutoFinishMissions;
+      begin
+         return Test_AutoFinishMissions_ca7126_527254_Result;
+      end;
+   end Wrap_Test_AutoFinishMissions_ca7126_527254;
+--  end read only
+
+--  begin read only
+   procedure Test_AutoFinishMissions_test_autofinishmissions (Gnattest_T : in out Test);
+   procedure Test_AutoFinishMissions_ca7126_527254 (Gnattest_T : in out Test) renames Test_AutoFinishMissions_test_autofinishmissions;
+--  id:2.2/ca7126890331fcb0/AutoFinishMissions/1/0/test_autofinishmissions/
+   procedure Test_AutoFinishMissions_test_autofinishmissions (Gnattest_T : in out Test) is
+      function AutoFinishMissions return String renames Wrap_Test_AutoFinishMissions_ca7126_527254;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      AcceptedMissions.Clear;
+      AcceptedMissions.Append((MType => Explore, Time => 1, TargetX => 1, TargetY => 1,
+                  Reward => 1, StartBase => 1,
+                  Finished => True, Multiplier => 0.0, Target => 0));
+      Assert(AutoFinishMissions'Length = 0, "Can't autoupdate missions.");
+
+--  begin read only
+   end Test_AutoFinishMissions_test_autofinishmissions;
 --  end read only
 
 --  begin read only
