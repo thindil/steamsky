@@ -35,12 +35,14 @@ package Factions is
    -- SOURCE
    type NamesTypes is (STANDARD, ROBOTIC);
    -- ****
+
    -- ****t* Factions/Reputation_Array
    -- FUNCTION
    -- Minium and maximum reputation values
    -- SOURCE
    type Reputation_Array is array(1 .. 2) of Integer;
    -- ****
+
    -- ****t* Factions/RelationsRecord
    -- FUNCTION
    -- Data structure for relations between factions
@@ -54,6 +56,7 @@ package Factions is
       Friendly: Boolean;
    end record;
    -- ****
+
    -- ****t* Factions/Relations_Container
    -- FUNCTION
    -- Used to store relations data in faction
@@ -61,6 +64,7 @@ package Factions is
    package Relations_Container is new Hashed_Maps(Unbounded_String,
       RelationsRecord, Ada.Strings.Unbounded.Hash, "=");
    -- ****
+
    -- ****t* Factions/CareerRecord
    -- FUNCTION
    -- Data structure for player career in faction
@@ -79,6 +83,7 @@ package Factions is
       Name: Unbounded_String;
    end record;
    -- ****
+
    -- ****t* Factions/Careers_Container
    -- FUNCTION
    -- Used to store careers data in faction
@@ -86,6 +91,7 @@ package Factions is
    package Careers_Container is new Hashed_Maps(Unbounded_String, CareerRecord,
       Ada.Strings.Unbounded.Hash, "=");
    -- ****
+
    -- ****t* Factions/FactionRecord
    -- FUNCTION
    -- Data structure for faction
@@ -131,6 +137,7 @@ package Factions is
       BaseIcon: Wide_Character;
    end record;
    -- ****
+
    -- ****t* Factions/Factions_Container
    -- FUNCTION
    -- Used to store factions data
@@ -138,6 +145,7 @@ package Factions is
    package Factions_Container is new Hashed_Maps(Unbounded_String,
       FactionRecord, Ada.Strings.Unbounded.Hash, "=");
    -- ****
+
    -- ****v* Factions/Factions_List
    -- SOURCE
    Factions_List: Factions_Container.Map;
@@ -151,6 +159,7 @@ package Factions is
    -- SOURCE
    procedure LoadFactions(Reader: Tree_Reader);
    -- ****
+
    -- ****f* Factions/GetReputation
    -- FUNCTION
    -- Get reputation between SourceFaction and TargetFaction
@@ -166,6 +175,7 @@ package Factions is
       (Factions_Container.Contains(Factions_List, SourceFaction) and
        Factions_Container.Contains(Factions_List, TargetFaction));
       -- ****
+
       -- ****f* Factions/IsFriendly
       -- FUNCTION
       -- Check if TargetFaction is friendly for SourceFaction. Returns true if yes, otherwise false.
@@ -181,6 +191,7 @@ package Factions is
       (Factions_Container.Contains(Factions_List, SourceFaction) and
        Factions_Container.Contains(Factions_List, TargetFaction));
       -- ****
+
       -- ****f* Factions/GetRandomFaction
       -- FUNCTION
       -- Select random faction from list

@@ -43,18 +43,21 @@ package Game is
       Minutes: Natural;
    end record;
    -- ****
+
    -- ****v* Game/GameDate
    -- FUNCTION
    -- Current in game date
    -- SOURCE
    GameDate: Date_Record;
    -- ****
+
    -- ****v* Game/GameVersion
    -- FUNCTION
    -- Current the game version
    -- SOURCE
    GameVersion: constant String := "Version: 4.1";
    -- ****
+
    -- ****t* Game/UnboundedString_Container
    -- FUNCTION
    -- Used to store Unbounded_String values as list
@@ -62,24 +65,28 @@ package Game is
    package UnboundedString_Container is new Vectors(Positive,
       Unbounded_String);
    -- ****
+
    -- ****t* Game/Positive_Container
    -- FUNCTION
    -- Used to store Positive values as list
    -- SOURCE
    package Positive_Container is new Vectors(Positive, Positive);
    -- ****
+
    -- ****t* Game/Natural_Container
    -- FUNCTION
    -- Used to store Natural values as list
    -- SOURCE
    package Natural_Container is new Vectors(Positive, Natural);
    -- ****
+
    -- ****t* Game/Integer_Container
    -- FUNCTION
    -- Used to store Integer values as list
    -- SOURCE
    package Integer_Container is new Vectors(Positive, Integer);
    -- ****
+
    -- ****t* Game/Skill_Record
    -- FUNCTION
    -- Data for skills
@@ -96,12 +103,14 @@ package Game is
       Tool: Unbounded_String;
    end record;
    -- ****
+
    -- ****t* Game/SkillsData_Container
    -- FUNCTION
    -- Used to store skills data
    -- SOURCE
    package SkillsData_Container is new Vectors(Positive, Skill_Record);
    -- ****
+
    -- ****t* Game/Attribute_Record
    -- FUNCTION
    -- Data for attributes
@@ -114,66 +123,77 @@ package Game is
       Description: Unbounded_String;
    end record;
    -- ****
+
    -- ****t* Game/AttributesData_Container
    -- FUNCTION
    -- Used to store attributes data
    -- SOURCE
    package AttributesData_Container is new Vectors(Positive, Attribute_Record);
    -- ****
+
    -- ****v* Game/Skills_List
    -- FUNCTION
    -- Contains data for all skills
    -- SOURCE
    Skills_List: SkillsData_Container.Vector;
    -- ****
+
    -- ****v* Game/RepairTools
    -- FUNCTION
    -- Name of item type used as tool in repairing/upgrading ship
    -- SOURCE
    RepairTools: Unbounded_String;
    -- ****
+
    -- ****v* Game/CleaningTools
    -- FUNCTION
    -- Name of item type used as tool in cleaning ship
    -- SOURCE
    CleaningTools: Unbounded_String;
    -- ****
+
    -- ****v* Game/AlchemyTools
    -- FUNCTION
    -- Name of item type used as alchemy tools (mainly in deconstructing orders)
    -- SOURCE
    AlchemyTools: Unbounded_String;
    -- ****
+
    -- ****v* Game/CorpseIndex
    -- FUNCTION
    -- Index of item used to create mobs corpses
    -- SOURCE
    CorpseIndex: Unbounded_String;
    -- ****
+
    -- ****v* Game/MissionItemsType
    -- FUNCTION
    -- Name of item type used for delivery missions
    -- SOURCE
    MissionItemsType: Unbounded_String;
    -- ****
+
    -- ****v* Game/FuelType
    -- FUNCTION
    -- Name of item type used as fuel for ships
    -- SOURCE
    FuelType: Unbounded_String;
    -- ****
+
    -- ****v* Game/MoneyIndex
    -- FUNCTION
    -- Index of item used as money
    -- SOURCE
    MoneyIndex: Unbounded_String;
    -- ****
+
    -- ****v* Game/MoneyName
    -- FUNCTION
    -- Name of money (taken from MoneyIndex)
    -- SOURCE
    MoneyName: Unbounded_String;
    -- ****
+
    -- ****v* Game/SaveDirectory
    -- FUNCTION
    -- Path to directory where are savegame and logs
@@ -181,6 +201,7 @@ package Game is
    SaveDirectory: Unbounded_String :=
      To_Unbounded_String("data" & Dir_Separator & "saves" & Dir_Separator);
    -- ****
+
    -- ****v* Game/DataDirectory
    -- FUNCTION
    -- Path to directory where are game data files
@@ -188,108 +209,126 @@ package Game is
    DataDirectory: Unbounded_String :=
      To_Unbounded_String("data" & Dir_Separator);
    -- ****
+
    -- ****v* Game/TradersName
    -- FUNCTION
    -- Word used in ships names for traders ships (for events)
    -- SOURCE
    TradersName: Unbounded_String;
    -- ****
+
    -- ****v* Game/Attributes_List
    -- FUNCTION
    -- Contains data for all characters attributes
    -- SOURCE
    Attributes_List: AttributesData_Container.Vector;
    -- ****
+
    -- ****v* Game/ConditionIndex
    -- FUNCTION
    -- Index of attribute used as bonus to character condition
    -- SOURCE
    ConditionIndex: Positive;
    -- ****
+
    -- ****v* Game/StrengthIndex
    -- FUNCTION
    -- Index of attribute used to count max character encumbrance
    -- SOURCE
    StrengthIndex: Positive;
    -- ****
+
    -- ****v* Game/PilotingSkill
    -- FUNCTION
    -- Index of skill used to piloting ship
    -- SOURCE
    PilotingSkill: Positive;
    -- ****
+
    -- ****v* Game/EngineeringSkill
    -- FUNCTION
    -- Index of skill used by engineer on ship
    -- SOURCE
    EngineeringSkill: Positive;
    -- ****
+
    -- ****v* Game/GunnerySkill
    -- FUNCTION
    -- Index of skill used by gunners
    -- SOURCE
    GunnerySkill: Positive;
    -- ****
+
    -- ****v* Game/TalkingSkill
    -- FUNCTION
    -- Index of skill used for talk in bases or with other ships
    -- SOURCE
    TalkingSkill: Positive;
    -- ****
+
    -- ****v* Game/PerceptionSkill
    -- FUNCTION
    -- Index of skill used for spoting
    -- SOURCE
    PerceptionSkill: Positive;
    -- ****
+
    -- ****v* Game/DodgeSkill
    -- FUNCTION
    -- Index of skill used for dodge in character's combat
    -- SOURCE
    DodgeSkill: Positive;
    -- ****
+
    -- ****v* Game/UnarmedSkill
    -- FUNCTION
    -- Index of skill used for unarmed attacks in character's combat
    -- SOURCE
    UnarmedSkill: Positive;
    -- ****
+
    -- ****v* Game/HeadArmor
    -- FUNCTION
    -- Name of item type used as characters head armor
    -- SOURCE
    HeadArmor: Unbounded_String;
    -- ****
+
    -- ****v* Game/ChestArmor
    -- FUNCTION
    -- Name of item type used as characters torso armor
    -- SOURCE
    ChestArmor: Unbounded_String;
    -- ****
+
    -- ****v* Game/ArmsArmor
    -- FUNCTION
    -- Name of item type used as characters arms armor
    -- SOURCE
    ArmsArmor: Unbounded_String;
    -- ****
+
    -- ****v* Game/LegsArmor
    -- FUNCTION
    -- Name of item type used as characters legs armor
    -- SOURCE
    LegsArmor: Unbounded_String;
    -- ****
+
    -- ****v* Game/ShieldType
    -- FUNCTION
    -- Name of item type used as characters shield
    -- SOURCE
    ShieldType: Unbounded_String;
    -- ****
+
    -- ****v* Game/WeaponType
    -- FUNCTION
    -- Name of item type used as characters weapon
    -- SOURCE
    WeaponType: Unbounded_String;
    -- ****
+
    -- ****v* Game/DocDirectory
    -- FUNCTION
    -- Path to directory where documentation is
@@ -297,6 +336,7 @@ package Game is
    DocDirectory: Unbounded_String :=
      To_Unbounded_String("doc" & Dir_Separator);
    -- ****
+
    -- ****v* Game/ModsDirectory
    -- FUNCTION
    -- Path to directory where are game modifications
@@ -304,12 +344,14 @@ package Game is
    ModsDirectory: Unbounded_String :=
      To_Unbounded_String("data" & Dir_Separator & "mods" & Dir_Separator);
    -- ****
+
    -- ****v* Game/PlayerCareer
    -- FUNCTION
    -- Index of career selected by player during starting game
    -- SOURCE
    PlayerCareer: Unbounded_String;
    -- ****
+
    -- ****v* Game/ThemesDirectory
    -- FUNCTION
    -- Path to directory where are ui themes
@@ -317,24 +359,28 @@ package Game is
    ThemesDirectory: Unbounded_String :=
      To_Unbounded_String("data" & Dir_Separator & "themes" & Dir_Separator);
    -- ****
+
    -- ****t* Game/DataAction
    -- FUNCTION
    -- Possible actions to do when loading game data
    -- SOURCE
    type DataAction is (ADD, UPDATE, REMOVE);
    -- ****
+
    -- ****t* Game/Natural_Array
    -- FUNCTION
    -- General purpose array of Natural
    -- SOURCE
    type Natural_Array is array(Positive range <>) of Natural;
    -- ****
+
    -- ****t* Game/DamageFactor
    -- FUNCTION
    -- Used mostly for count percentage of damage of modules
    -- SOURCE
    type DamageFactor is digits 2 range 0.0 .. 1.0;
    -- ****
+
    -- ****e* Game/Data_Loading_Error
    -- FUNCTION
    -- Raised when error occurs during loading any game data
@@ -348,6 +394,7 @@ package Game is
    -- SOURCE
    procedure NewGame;
    -- ****
+
    -- ****f* Game/UpdateGame
    -- FUNCTION
    -- Game ticks (update time, crew, ship, etc)
@@ -357,6 +404,7 @@ package Game is
    -- SOURCE
    procedure UpdateGame(Minutes: Positive; InCombat: Boolean := False);
    -- ****
+
    -- ****f* Game/EndGame
    -- FUNCTION
    -- Save (or not) game and clear all temporary data
@@ -365,6 +413,7 @@ package Game is
    -- SOURCE
    procedure EndGame(Save: Boolean);
    -- ****
+
    -- ****f* Game/FindSkillIndex
    -- FUNCTION
    -- Find index of selected skill
@@ -376,6 +425,7 @@ package Game is
    function FindSkillIndex(SkillName: Unbounded_String) return Natural with
       Pre => SkillName /= Null_Unbounded_String;
       -- ****
+
       -- ****f* Game/LoadGameData
       -- FUNCTION
       -- Load game data from files
