@@ -28,6 +28,7 @@ package Game.SaveLoad is
    -- SOURCE
    SaveName: Unbounded_String;
    -- ****
+
    -- ****e* Game.SaveLoad/SaveGame_Invalid_Data
    -- FUNCTION
    -- Raised when invalid data found in savegame
@@ -44,12 +45,14 @@ package Game.SaveLoad is
    -- SOURCE
    procedure SaveGame(PrettyPrint: Boolean := False);
    -- ****
+
    -- ****f* Game.SaveLoad/LoadGame
    -- FUNCTION
    -- Load game from file
    -- SOURCE
    procedure LoadGame;
    -- ****
+
    -- ****f* Game.SaveLoad/GenerateSaveName
    -- FUNCTION
    -- Generate unique name for save game file
