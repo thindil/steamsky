@@ -180,7 +180,8 @@ package Missions is
       -- Empty string if everything is ok, otherwise message with information
       -- what goes wrong
       -- SOURCE
-   function AutoFinishMissions return String;
+   function AutoFinishMissions return String with
+      Test_Case => ("Test_AutoFinishMissions", Robustness);
    -- ****
 
 end Missions;
