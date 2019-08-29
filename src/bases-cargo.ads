@@ -26,8 +26,9 @@ package Bases.Cargo is
    -- FUNCTION
    -- Generate base cargo
    -- SOURCE
-   procedure GenerateCargo;
-   -- ****
+   procedure GenerateCargo with
+      Test_Case => ("Test_GenerateCargo", Robustness);
+      -- ****
 
    -- ****f* Bases.Cargo/UpdateBaseCargo
    -- FUNCTION
@@ -37,8 +38,8 @@ package Bases.Cargo is
    -- Amount     - Amount of item to add or remove
    -- Durability - Durability of item to add or remove. Can be empty
    -- CargoIndex - Index of item in sky base cargo. Can be empty if ProtoIndex
-   --              is set
-   -- SOURCE
+      --              is set
+      -- SOURCE
    procedure UpdateBaseCargo
      (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Natural := 100; CargoIndex: Natural := 0);
