@@ -103,6 +103,7 @@ GtkWindow, #overlay {
    border:1px solid black;
    color:rgb(255,223,0);
    text-shadow:0 1px 0 #120d0d;
+   border-radius:10px;
 }
 
 /* Settings for currently active text entry fields (like player and ship name) */
@@ -352,7 +353,15 @@ GtkStackSwitcher .button:checked {
 
 /* Default setting for number entry fields (like amount in trading, wait x minutes) */
 .spinbutton {
+   border-radius: 10px;
+}
+
+.spinbutton .button {
    border-radius: 0;
+}
+
+.spinbutton .button:last-child {
+   border-radius: 0 10px 10px 0;
 }
 
 /* Default setting for focused number entry fields buttons */
