@@ -38,6 +38,7 @@ package Maps is
       MissionIndex: Natural;
    end record;
    -- ****
+
    -- ****v* Maps/SkyMap
    -- FUNCTION
    -- Game map

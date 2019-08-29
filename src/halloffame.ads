@@ -38,6 +38,7 @@ package HallOfFame is
       DeathReason: Unbounded_String;
    end record;
    -- ****
+
    -- ****v* HallOfFame/HallOfFame_Array
    -- FUNCTION
    -- Store all hall of fame entries
@@ -54,6 +55,7 @@ package HallOfFame is
    -- SOURCE
    procedure LoadHallOfFame;
    -- ****
+
    -- ****f* HallOfFame/UpdateHallOfFame
    -- FUNCTION
    -- Check did new entry should enter hall of fame
