@@ -1,9 +1,18 @@
 /* Information about available CSS options you can find at https://developer.gnome.org/gtk3/stable/chap-css-overview.html */
 
+/* Colors definitions */
+@define-color golden_yellow #FFDF00;
+@define-color very_dark_orange #1A130c;
+@define-color dark_orange #372412;
+@define-color pale_goldenrod #EEE8AA;
+@define-color dark_yellow #7D7800;
+@define-color very_dark_red #5C4745;
+
+
 /* General setting of ui */
 * {
    background:transparent;
-   color:rgb(238,232,170);
+   color:@pale_goldenrod;
    border-style:none;
    box-shadow:none;
    text-shadow:none;
@@ -14,15 +23,15 @@
 
 /* General setting for all game windows */
 GtkWindow, #overlay {
-   border: 1px solid rgb(125,120,0);
-   background-color:#1a130c;
+   border: 1px solid @dark_yellow;
+   background-color:@very_dark_orange;
 }
 
 /* Mouse hovering over UI element */
 *:hover {
    border-style:solid;
    border-width:1px;
-   border-color:rgb(255,223,0);
+   border-color:@golden_yellow;
 }
 
 /* Blocked buttons */
@@ -36,31 +45,31 @@ GtkWindow, #overlay {
 
 /* Default all buttons settings */
 .button, GtkSwitch.slider {
-   box-shadow:inset 0 1px 0 0 #5c4745;
-   background:linear-gradient(to bottom, #372412 5%, #1a130c 100%);
+   box-shadow:inset 0 1px 0 0 @very_dark_red;
+   background:linear-gradient(to bottom, @dark_orange 5%, @very_dark_orange 100%);
    border-radius:10px;
    border:1px solid black;
-   color:rgb(255,223,0);
+   color:@golden_yellow;
    text-shadow:0 1px 0 #120d0d;
 }
 
 /* Setting for buttons texts */
 .button * {
-   color:rgb(255,223,0);
+   color:@golden_yellow;
    text-shadow:0 1px 0 #2b1e1d;
 }
 
 /* Setting for currently focused button */
 .button:focus  {
-   background:linear-gradient(to bottom, #1a130c 5%, #372412 100%);
+   background:linear-gradient(to bottom, @very_dark_orange 5%, @dark_orange 100%);
    border-style:solid;
    border-width:1px;
-   border-color:rgb(255,223,0);
+   border-color:@golden_yellow;
 }
 
 /* Setting for currently mouse hovered over button */
 .button:hover, GtkScale:hover {
-   background:linear-gradient(to bottom, #1a130c 5%, #372412 100%);
+   background:linear-gradient(to bottom, @very_dark_orange 5%, @dark_orange 100%);
 }
 
 /* Setting for pressed button */
@@ -70,25 +79,25 @@ GtkWindow, #overlay {
 
 /* Default vertical buttons settings */
 .button#vertical {
-   box-shadow:inset 0 1px 0 0 #5c4745;
-   background:linear-gradient(to right, #372412 5%, #1a130c 100%);
+   box-shadow:inset 0 1px 0 0 @very_dark_red;
+   background:linear-gradient(to right, @dark_orange 5%, @very_dark_orange 100%);
    border-radius:10px;
    border:1px solid black;
-   color:rgb(255,223,0);
+   color:@golden_yellow;
    text-shadow:0 1px 0 #120d0d;
 }
 
 /* Setting for currently focused vertical button */
 .button#vertical:focus  {
-   background:linear-gradient(to right, #1a130c 5%, #372412 100%);
+   background:linear-gradient(to right, @very_dark_orange 5%, @dark_orange 100%);
    border-style:solid;
    border-width:1px;
-   border-color:rgb(255,223,0);
+   border-color:@golden_yellow;
 }
 
 /* Setting for currently mouse hovered over vertical button */
 .button#vertical:hover {
-   background:linear-gradient(to right, #1a130c 5%, #372412 100%);
+   background:linear-gradient(to right, @very_dark_orange 5%, @dark_orange 100%);
 }
 
 /* Setting for pressed vertical button */
@@ -98,17 +107,17 @@ GtkWindow, #overlay {
 
 /* Default settings for text entry fields (like player and ship name) */
 .entry {
-   box-shadow:inset 0 1px 0 0 #5c4745;
+   box-shadow:inset 0 1px 0 0 @very_dark_red;
    background-color:#2d2115;
    border:1px solid black;
-   color:rgb(255,223,0);
+   color:@golden_yellow;
    text-shadow:0 1px 0 #120d0d;
    border-radius:10px;
 }
 
 /* Settings for currently active text entry fields (like player and ship name) */
 .entry:focus, .entry:active {
-   border-color:rgb(255,223,0);
+   border-color:@golden_yellow;
    background-color:#2d2115;
 }
 
@@ -121,8 +130,8 @@ GtkTreeView:selected,
 
 /* Setting for all sliders */
 .scrollbar.slider {
-   box-shadow:inset 0 0 0 1px #5c4745;
-   background:linear-gradient(to right, #372412 5%, #1a130c 100%);
+   box-shadow:inset 0 0 0 1px @very_dark_red;
+   background:linear-gradient(to right, @dark_orange 5%, @very_dark_orange 100%);
    border-radius:10px;
    border:1px solid black;
 }
@@ -135,13 +144,13 @@ GtkTreeView:selected,
 
 /* Mouse hover over slider */
 .scrollbar.slider:hover {
-   background:linear-gradient(to right, #1a130c 5%, #372412 100%);
+   background:linear-gradient(to right, @very_dark_orange 5%, @dark_orange 100%);
 }
 
 /* Setting for horizontal sliders */
 .scrollbar.slider.horizontal {
-   box-shadow:inset 0 0 0 1px #5c4745;
-   background:linear-gradient(to bottom, #372412 5%, #1a130c 100%);
+   box-shadow:inset 0 0 0 1px @very_dark_red;
+   background:linear-gradient(to bottom, @dark_orange 5%, @very_dark_orange 100%);
    border-radius:10px;
    border:1px solid black;
 }
@@ -154,7 +163,7 @@ GtkTreeView:selected,
 
 /* Mouse hover over horizontal slider */
 .scrollbar.slider.horizontal:hover {
-   background:linear-gradient(to bottom, #1a130c 5%, #372412 100%);
+   background:linear-gradient(to bottom, @very_dark_orange 5%, @dark_orange 100%);
 }
 
 /* Settings for progress bars */
@@ -324,11 +333,11 @@ GtkTreeView row:hover {
 
 /* Default setting for all scales */
 GtkScale {
-   box-shadow:inset 0 1px 0 0 #5c4745;
-   background:linear-gradient(to bottom, #372412 5%, #1a130c 100%);
+   box-shadow:inset 0 1px 0 0 @very_dark_red;
+   background:linear-gradient(to bottom, @dark_orange 5%, @very_dark_orange 100%);
    border-radius:5px;
    border:1px solid black;
-   color:rgb(255,223,0);
+   color:@golden_yellow;
    text-shadow:0 1px 0 #120d0d;
 }
 
@@ -366,10 +375,10 @@ GtkStackSwitcher .button:checked {
 
 /* Default setting for focused number entry fields buttons */
 .spinbutton .button:focus {
-   box-shadow:inset 0 1px 0 0 #5c4745;
-   background:linear-gradient(to bottom, #372412 5%, #1a130c 100%);
+   box-shadow:inset 0 1px 0 0 @very_dark_red;
+   background:linear-gradient(to bottom, @dark_orange 5%, @very_dark_orange 100%);
    border:1px solid black;
-   color:rgb(255,223,0);
+   color:@golden_yellow;
    text-shadow:0 1px 0 #120d0d;
 }
 
@@ -392,7 +401,7 @@ GtkStackSwitcher .button:checked {
    border-style:none;
    box-shadow:none;
    text-shadow:none;
-   background:#1a130c;
+   background:@very_dark_orange;
 }
 
 /* Settings for buttons with informations about ship */
@@ -409,7 +418,7 @@ GtkStackSwitcher .button:checked {
 
 /* Settings for move map buttons */
 *#movemap {
-   background-color:#1a130c;
+   background-color:@very_dark_orange;
 }
 
 *#movemap * {
@@ -418,13 +427,13 @@ GtkStackSwitcher .button:checked {
 }
 
 .pane-separator {
-   background:linear-gradient(to bottom, #372412 5%, #1a130c 100%);
+   background:linear-gradient(to bottom, @dark_orange 5%, @very_dark_orange 100%);
 }
 
 /* Setting for messages bar */
 GtkInfoBar {
-   border: 1px solid rgb(125,120,0);
-   background-color:#1a130c;
+   border: 1px solid @dark_yellow;
+   background-color:@very_dark_orange;
    border-radius:10px;
 }
 
