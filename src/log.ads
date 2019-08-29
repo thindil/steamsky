@@ -28,6 +28,7 @@ package Log is
    -- SOURCE
    type Debug_Types is (None, Everything, Combat, Menu);
    -- ****
+
    -- ****v* Log/DebugMode
    -- FUNCTION
    -- Did game is run in debug mode
@@ -41,6 +42,7 @@ package Log is
    -- SOURCE
    procedure StartLogging;
    -- ****
+
    -- ****f* Log/LogMessage
    -- FUNCTION
    -- Log message (if proper type) to file in debug mode
@@ -56,6 +58,7 @@ package Log is
       NewLine, TimeStamp: Boolean := True) with
       Pre => Message'Length > 0;
       -- ****
+
       -- ****f* Log/EndLogging
       -- FUNCTION
       -- Close debug.file
