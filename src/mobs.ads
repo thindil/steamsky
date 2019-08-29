@@ -44,12 +44,14 @@ package Mobs is
       MaxAmount: Natural;
    end record;
    -- ****
+
    -- ****t* Mobs/MobInventory_Container
    -- FUNCTION
    -- Used for store mobiles inventories
    -- SOURCE
    package MobInventory_Container is new Vectors(Positive, MobInventoryRecord);
    -- ****
+
    -- ****t* Mobs/ProtoMobRecord
    -- FUNCTION
    -- Data structure for mobs prototypes
@@ -72,6 +74,7 @@ package Mobs is
       Equipment: Natural_Array(1 .. 7);
    end record;
    -- ****
+
    -- ****t* Mobs/ProtoMobs_Container
    -- FUNCTION
    -- Used to store mobiles
@@ -79,12 +82,14 @@ package Mobs is
    package ProtoMobs_Container is new Hashed_Maps(Unbounded_String,
       ProtoMobRecord, Ada.Strings.Unbounded.Hash, "=");
    -- ****
+
    -- ****v* Mobs/ProtoMobs_List
    -- FUNCTION
    -- List of prototypes of all mobiles available in the game
    -- SOURCE
    ProtoMobs_List: ProtoMobs_Container.Map;
    -- ****
+
    -- ****e* Mobs/Mobs_Invalid_Data
    -- FUNCTION
    -- Raised when invalid data found in mobs file

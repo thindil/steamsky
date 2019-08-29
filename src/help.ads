@@ -38,12 +38,14 @@ package Help is
       Text: Unbounded_String;
    end record;
    -- ****
+
    -- ****t* Help/Help_Container
    -- FUNCTION
    -- Used to store help data
    -- SOURCE
    package Help_Container is new Ordered_Maps(Unbounded_String, Help_Data);
    -- ****
+
    -- ****v* Help/Help_List
    -- FUNCTION
    -- List of all help topics

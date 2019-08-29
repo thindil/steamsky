@@ -36,6 +36,7 @@ package ShipModules is
       BATTERING_RAM, ALCHEMY_LAB, FURNACE, WATER_COLLECTOR, WORKSHOP,
       GREENHOUSE, MEDICAL_ROOM, HARPOON_GUN, TRAINING_ROOM);
    -- ****
+
    -- ****t* ShipModules/BaseModule_Data
    -- FUNCTION
    -- Data structure for prototypes of ship modules
@@ -72,6 +73,7 @@ package ShipModules is
       MaxOwners: Natural;
    end record;
    -- ****
+
    -- ****t* ShipModules/BaseModules_Container
    -- FUNCTION
    -- Used for store prototypes of modules
@@ -79,6 +81,7 @@ package ShipModules is
    package BaseModules_Container is new Hashed_Maps(Unbounded_String,
       BaseModule_Data, Ada.Strings.Unbounded.Hash, "=");
    -- ****
+
    -- ****v* ShipModules/Modules_List
    -- FUNCTION
    -- List of ship modules available in game

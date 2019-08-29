@@ -182,6 +182,6 @@ package Missions is
       -- SOURCE
    function AutoFinishMissions return String with
       Test_Case => ("Test_AutoFinishMissions", Robustness);
-   -- ****
+      -- ****
 
 end Missions;

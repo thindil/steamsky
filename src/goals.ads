@@ -33,6 +33,7 @@ package Goals is
    type GoalTypes is
      (RANDOM, REPUTATION, DESTROY, DISCOVER, VISIT, CRAFT, MISSION, KILL);
    -- ****
+
    -- ****t* Goals/Goal_Data
    -- FUNCTION
    -- Data structure for each goal
@@ -51,18 +52,21 @@ package Goals is
       Multiplier: Positive;
    end record;
    -- ****
+
    -- ****t* Goals/Goals_Container
    -- FUNCTION
    -- Used to store goals data
    -- SOURCE
    package Goals_Container is new Vectors(Positive, Goal_Data);
    -- ****
+
    -- ****v* Goals/Goals_List
    -- FUNCTION
    -- List of player goals available in game
    -- SOURCE
    Goals_List: Goals_Container.Vector;
    -- ****
+
    -- ****v* Goals/CurrentGoal
    -- FUNCTION
    -- Player current goal
@@ -78,6 +82,7 @@ package Goals is
    -- SOURCE
    procedure LoadGoals(Reader: Tree_Reader);
    -- ****
+
    -- ****f* Goals/GoalText
    -- FUNCTION
    -- Get info about selected goal
@@ -90,12 +95,14 @@ package Goals is
    function GoalText(Index: Goals_Container.Extended_Index) return String with
       Pre => Index <= Goals_List.Last_Index;
       -- ****
+
       -- ****f* Goals/ClearCurrentGoal
       -- FUNCTION
       -- Reset current goal
       -- SOURCE
    procedure ClearCurrentGoal;
    -- ****
+
    -- ****f* Goals/UpdateGoal
    -- FUNCTION
    -- Update current goal

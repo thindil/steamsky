@@ -34,12 +34,14 @@ package Messages is
      (Default, CombatMessage, TradeMessage, OrderMessage, CraftMessage,
       OtherMessage, MissionMessage);
    -- ****
+
    -- ****t* Messages/Message_Color
    -- FUNCTION
    -- Colors of messages
    -- SOURCE
    type Message_Color is (WHITE, YELLOW, GREEN, RED, BLUE, CYAN);
    -- ****
+
    -- ****t* Messages/Message_Data
    -- FUNCTION
    -- Data structure for messages
@@ -54,18 +56,21 @@ package Messages is
       Color: Message_Color;
    end record;
    -- ****
+
    -- ****t* Messages/Messages_Container
    -- FUNCTION
    -- Used to store messages data
    -- SOURCE
    package Messages_Container is new Vectors(Positive, Message_Data);
    -- ****
+
    -- ****v* Messages/Messages_List
    -- FUNCTION
    -- List of all messages
    -- SOURCE
    Messages_List: Messages_Container.Vector;
    -- ****
+
    -- ****v* Messages/LastMessageIndex
    -- FUNCTION
    -- Index of last message to show
@@ -83,6 +88,7 @@ package Messages is
    -- SOURCE
    function FormatedTime(Time: Date_Record := GameDate) return String;
    -- ****
+
    -- ****f* Messages/AddMessage
    -- FUNCTION
    -- Add new message to list
@@ -95,6 +101,7 @@ package Messages is
      (Message: String; MType: Message_Type; Color: Message_Color := WHITE) with
       Pre => Message'Length > 0;
       -- ****
+
       -- ****f* Messages/GetMessage
       -- FUNCTION
       -- Get Nth message of selected type
@@ -110,12 +117,14 @@ package Messages is
      (MessageIndex: Integer; MType: Message_Type := Default)
       return Message_Data;
    -- ****
+
    -- ****f* Messages/ClearMessages
    -- FUNCTION
    -- Remove all messages
    -- SOURCE
    procedure ClearMessages;
    -- ****
+
    -- ****f* Messages/MessagesAmount
    -- FUNCTION
    -- Get amount of selected type messages
@@ -126,6 +135,7 @@ package Messages is
    -- SOURCE
    function MessagesAmount(MType: Message_Type := Default) return Natural;
    -- ****
+
    -- ****f* Messages/RestoreMessage
    -- FUNCTION
    -- Restore message from save file
@@ -139,6 +149,7 @@ package Messages is
       Color: Message_Color := WHITE) with
       Pre => Message /= Null_Unbounded_String;
       -- ****
+
       -- ****f* Messages/GetLastMessageIndex
       -- FUNCTION
       -- Get last message index
