@@ -7,6 +7,14 @@
 @define-color pale_goldenrod #EEE8AA;
 @define-color dark_yellow #7D7800;
 @define-color very_dark_red #5C4745;
+@define-color almost_black_red #120D0D;
+@define-color almost_black_red2 #2B1E1D;
+@define-color very_dark_red2 #4C0000;
+@define-color dark_red #990000;
+@define-color almost_black_orange #2D2115;
+@define-color dark_blue #000096;
+@define-color very_dark_blue #000032;
+@define-color very_dark_gray rgba(32, 32, 32, 0);
 
 
 /* General setting of ui */
@@ -50,13 +58,13 @@ GtkWindow, #overlay {
    border-radius:10px;
    border:1px solid black;
    color:@golden_yellow;
-   text-shadow:0 1px 0 #120d0d;
+   text-shadow:0 1px 0 @almost_black_red;
 }
 
 /* Setting for buttons texts */
 .button * {
    color:@golden_yellow;
-   text-shadow:0 1px 0 #2b1e1d;
+   text-shadow:0 1px 0 @almost_black_red2;
 }
 
 /* Setting for currently focused button */
@@ -74,7 +82,7 @@ GtkWindow, #overlay {
 
 /* Setting for pressed button */
 .button:active {
-   background:linear-gradient(to bottom, #4c0000 5%, #990000 100%);
+   background:linear-gradient(to bottom, @very_dark_red2 5%, @dark_red 100%);
 }
 
 /* Default vertical buttons settings */
@@ -84,7 +92,7 @@ GtkWindow, #overlay {
    border-radius:10px;
    border:1px solid black;
    color:@golden_yellow;
-   text-shadow:0 1px 0 #120d0d;
+   text-shadow:0 1px 0 @almost_black_red;
 }
 
 /* Setting for currently focused vertical button */
@@ -102,30 +110,30 @@ GtkWindow, #overlay {
 
 /* Setting for pressed vertical button */
 .button#vertical:active {
-   background:linear-gradient(to right, #4c0000 5%, #990000 100%);
+   background:linear-gradient(to right, @very_dark_red2 5%, @dark_red 100%);
 }
 
 /* Default settings for text entry fields (like player and ship name) */
 .entry {
    box-shadow:inset 0 1px 0 0 @very_dark_red;
-   background-color:#2d2115;
+   background-color:@almost_black_orange;
    border:1px solid black;
    color:@golden_yellow;
-   text-shadow:0 1px 0 #120d0d;
+   text-shadow:0 1px 0 @almost_black_red;
    border-radius:10px;
 }
 
 /* Settings for currently active text entry fields (like player and ship name) */
 .entry:focus, .entry:active {
    border-color:@golden_yellow;
-   background-color:#2d2115;
+   background-color:@almost_black_orange;
 }
 
 /* Button pressed and selected item in lists (like modules list, etc) */
 GtkTreeView:selected,
    GtkTreeView:selected:focus,
    .entry:selected {
-  background:rgb(128,0,0);
+  background:maroon;
 }
 
 /* Setting for all sliders */
@@ -139,7 +147,7 @@ GtkTreeView:selected,
 /* Setting for currently used slider */
 .scrollbar.slider:prelight:active,
    .scrollbar.slider:active {
-   background:linear-gradient(to right, #4c0000 5%, #990000 100%);
+   background:linear-gradient(to right, @very_dark_red2 5%, @dark_red 100%);
 }
 
 /* Mouse hover over slider */
@@ -158,7 +166,7 @@ GtkTreeView:selected,
 /* Setting for currently used horizontal slider */
 .scrollbar.slider.horizontal:prelight:active,
    .scrollbar#horizontal.slider:active {
-   background:linear-gradient(to bottom, #4c0000 5%, #990000 100%);
+   background:linear-gradient(to bottom, @very_dark_red2 5%, @dark_red 100%);
 }
 
 /* Mouse hover over horizontal slider */
@@ -170,12 +178,13 @@ GtkTreeView:selected,
 .progressbar,
    .progressbar:selected,
    .progressbar:selected:focus {
-   background:linear-gradient(to bottom, rgb(0, 0, 150), rgb(0, 0, 50));
-   border:5px rgba(32, 32, 32, 0) outset;
+   background:linear-gradient(to bottom, @dark_blue, @very_dark_blue);
+   border:5px @very_dark_gray outset;
 }
 
+/* Default settings for progress bars when mouse hovering over them */
 .progressbar:hover {
-   border:5px rgba(32, 32, 32, 0) outset;
+   border:5px @very_dark_gray outset;
 }
 
 
@@ -338,12 +347,12 @@ GtkScale {
    border-radius:5px;
    border:1px solid black;
    color:@golden_yellow;
-   text-shadow:0 1px 0 #120d0d;
+   text-shadow:0 1px 0 @almost_black_red;
 }
 
 /* Setting for currently selected page in options or shipyard */
 GtkStackSwitcher .button:checked {
-   background:linear-gradient(to bottom, #4c0000 5%, #990000 100%);
+   background:linear-gradient(to bottom, @very_dark_red2 5%, @dark_red 100%);
 }
 
 /* Default setting for last message info */
@@ -379,12 +388,12 @@ GtkStackSwitcher .button:checked {
    background:linear-gradient(to bottom, @dark_orange 5%, @very_dark_orange 100%);
    border:1px solid black;
    color:@golden_yellow;
-   text-shadow:0 1px 0 #120d0d;
+   text-shadow:0 1px 0 @almost_black_red;
 }
 
 /* Default setting for pressed buttons in number entry fields */
 .spinbutton .button:active {
-   background:linear-gradient(to bottom, #4c0000 5%, #990000 100%);
+   background:linear-gradient(to bottom, @very_dark_red2 5%, @dark_red 100%);
 }
 
 /* Default setting for inactive buttons in number entry fiedls */
