@@ -38,12 +38,14 @@ package Statistics is
       Amount: Positive;
    end record;
    -- ****
+
    -- ****t* Statistics/Statistics_Container
    -- FUNCTION
    -- Used to store game statistics data
    -- SOURCE
    package Statistics_Container is new Vectors(Positive, Statistics_Data);
    -- ****
+
    -- ****t* Statistics/GameStats_Data
    -- FUNCTION
    -- Data for game statistics
@@ -72,6 +74,7 @@ package Statistics is
       Points: Natural;
    end record;
    -- ****
+
    -- ****v* Statistics/GameStats
    -- FUNCTION
    -- Game statistics
@@ -88,12 +91,14 @@ package Statistics is
    procedure UpdateDestroyedShips(ShipName: Unbounded_String) with
       Pre => ShipName /= Null_Unbounded_String;
       -- ****
+
       -- ****f* Statistics/ClearGameStats
       -- FUNCTION
       -- Clear game statistics
       -- SOURCE
    procedure ClearGameStats;
    -- ****
+
    -- ****f* Statistics/UpdateFinishedGoals
    -- FUNCTION
    -- Add new finished goal to list
@@ -103,6 +108,7 @@ package Statistics is
    procedure UpdateFinishedGoals(Index: Unbounded_String) with
       Pre => Index /= Null_Unbounded_String;
       -- ****
+
       -- ****f* Statistics/UpdateFinishedMissions
       -- FUNCTION
       -- Add new finished mission to list
@@ -112,6 +118,7 @@ package Statistics is
    procedure UpdateFinishedMissions(MType: Unbounded_String) with
       Pre => MType /= Null_Unbounded_String;
       -- ****
+
       -- ****f* Statistics/UpdateCraftingOrders
       -- FUNCTION
       -- Add new finished crafting order to list
@@ -121,6 +128,7 @@ package Statistics is
    procedure UpdateCraftingOrders(Index: Unbounded_String) with
       Pre => Index /= Null_Unbounded_String;
       -- ****
+
       -- ****f* Statistics/UpdateKilledMobs
       -- FUNCTION
       -- Add new killed mob to list
@@ -132,6 +140,7 @@ package Statistics is
      (Mob: Member_Data; FractionName: Unbounded_String) with
       Pre => FractionName /= Null_Unbounded_String;
       -- ****
+
       -- ****f* Statistics/GetGamePoints
       -- FUNCTION
       -- Get amount of gained points multiplied by difficulty bonus
