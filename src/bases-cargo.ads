@@ -42,18 +42,19 @@ package Bases.Cargo is
       -- SOURCE
    procedure UpdateBaseCargo
      (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
-      Durability: Natural := 100; CargoIndex: Natural := 0);
-   -- ****
+      Durability: Natural := 100; CargoIndex: Natural := 0) with
+      Test_Case => ("Test_UpdateBaseCargo", Robustness);
+      -- ****
 
-   -- ****f* Bases.Cargo/FindBaseCargo
-   -- FUNCTION
-   -- Find index of item in base cargo
-   -- PARAMETERS
-   -- ProtoIndex - Index of prototype of item to search
-   -- Durability - Durability of item to search. Can be empty
-   -- RESULT
-   -- Index of item in sky base cargo or 0 if item not found
-   -- SOURCE
+      -- ****f* Bases.Cargo/FindBaseCargo
+      -- FUNCTION
+      -- Find index of item in base cargo
+      -- PARAMETERS
+      -- ProtoIndex - Index of prototype of item to search
+      -- Durability - Durability of item to search. Can be empty
+      -- RESULT
+      -- Index of item in sky base cargo or 0 if item not found
+      -- SOURCE
    function FindBaseCargo
      (ProtoIndex: Unbounded_String; Durability: Natural := 101) return Natural;
    -- ****
