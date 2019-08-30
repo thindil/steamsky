@@ -36,6 +36,7 @@ package Ships.Movement is
    function MoveShip
      (X, Y: Integer; Message: in out Unbounded_String) return Natural;
    -- ****
+
    -- ****f* Ships.Movement/DockShip
    -- FUNCTION
    -- Dock/Undock ship at base
@@ -47,6 +48,7 @@ package Ships.Movement is
    -- SOURCE
    function DockShip(Docking: Boolean) return String;
    -- ****
+
    -- ****f* Ships.Movement/ChangeShipSpeed
    -- FUNCTION
    -- Change speed of ship
@@ -57,6 +59,7 @@ package Ships.Movement is
    -- SOURCE
    function ChangeShipSpeed(SpeedValue: ShipSpeed) return String;
    -- ****
+
    -- ****f* Ships.Movement/RealSpeed
    -- FUNCTION
    -- Count real ship speed in meters per minute
@@ -70,6 +73,7 @@ package Ships.Movement is
    function RealSpeed
      (Ship: ShipRecord; InfoOnly: Boolean := False) return Natural;
    -- ****
+
    -- ****f* Ships.Movement/CountFuelNeeded
    -- FUNCTION
    -- Count amount of fuel needed by player ship to travel
@@ -78,6 +82,7 @@ package Ships.Movement is
    -- SOURCE
    function CountFuelNeeded return Integer;
    -- ****
+
    -- ****f* Ships.Movement/WaitInPlace
    -- FUNCTION
    -- Use fuel when ship wait in place

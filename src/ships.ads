@@ -39,24 +39,28 @@ package Ships is
    type ShipSpeed is
      (DOCKED, FULL_STOP, QUARTER_SPEED, HALF_SPEED, FULL_SPEED);
    -- ****
+
    -- ****t* Ships/ShipCombatAi
    -- FUNCTION
    -- NPC ships combat AI types
    -- SOURCE
    type ShipCombatAi is (NONE, BERSERKER, ATTACKER, COWARD, DISARMER);
    -- ****
+
    -- ****t* Ships/ShipUpgrade
    -- FUNCTION
    -- Player ship types of module upgrades
    -- SOURCE
    type ShipUpgrade is (NONE, DURABILITY, MAX_VALUE, VALUE);
    -- ****
+
    -- ****t* Ships/Data_Array
    -- FUNCTION
    -- Used to store ship modules data
    -- SOURCE
    type Data_Array is array(1 .. 3) of Integer;
    -- ****
+
    -- ****t* Ships/ModuleType2
    -- FUNCTION
    -- Types of ships modules
@@ -65,6 +69,7 @@ package Ships is
      (WORKSHOP, ANY, MEDICAL_ROOM, TRAINING_ROOM, ENGINE, CABIN, COCKPIT,
       TURRET, GUN, CARGO_ROOM, HULL, ARMOR, BATTERING_RAM, HARPOON_GUN);
    -- ****
+
    -- ****t* Ships/ModuleData
    -- FUNCTION
    -- Data structure for ship modules, medical room, cockpit, armor and cargo
@@ -144,18 +149,21 @@ package Ships is
       end case;
    end record;
    -- ****
+
    -- ****t* Ships/Modules_Container
    -- FUNCTION
    -- Used to store modules data in ships
    -- SOURCE
    package Modules_Container is new Vectors(Positive, ModuleData);
    -- ****
+
    -- ****t* Ships/Crew_Container
    -- FUNCTION
    -- Used to store crew data in ships
    -- SOURCE
    package Crew_Container is new Vectors(Positive, Member_Data);
    -- ****
+
    -- ****t* Ships/ShipRecord
    -- FUNCTION
    -- Data structure for ships
@@ -190,6 +198,7 @@ package Ships is
       HomeBase: Natural;
    end record;
    -- ****
+
    -- ****t* Ships/ProtoMember_Data
    -- FUNCTION
    -- Data structure for proto crew info
@@ -205,12 +214,14 @@ package Ships is
       MaxAmount: Natural;
    end record;
    -- ****
+
    -- ****t* Ships/ProtoCrew_Container
    -- FUNCTION
    -- Used to store crew info in ships prototypes
    -- SOURCE
    package ProtoCrew_Container is new Vectors(Positive, ProtoMember_Data);
    -- ****
+
    -- ****t* Ships/ProtoShipData
    -- FUNCTION
    -- Data structure for ship prototypes
@@ -245,6 +256,7 @@ package Ships is
       KnownRecipes: UnboundedString_Container.Vector;
    end record;
    -- ****
+
    -- ****t* Ships/ProtoShips_Container
    -- FUNCTION
    -- Used to store prototype ships data
@@ -252,36 +264,42 @@ package Ships is
    package ProtoShips_Container is new Hashed_Maps(Unbounded_String,
       ProtoShipData, Ada.Strings.Unbounded.Hash, "=");
    -- ****
+
    -- ****v* Ships/ProtoShips_List
    -- FUNCTION
    -- List of all prototypes of ships
    -- SOURCE
    ProtoShips_List: ProtoShips_Container.Map;
    -- ****
+
    -- ****v* Ships/PlayerShip
    -- FUNCTION
    -- The player ship
    -- SOURCE
    PlayerShip: ShipRecord;
    -- ****
+
    -- ****v* Ships/ShipSyllablesStart
    -- FUNCTION
    -- List of first syllables for generating ships names
    -- SOURCE
    ShipSyllablesStart: UnboundedString_Container.Vector;
    -- ****
+
    -- ****v* Ships/ShipSyllablesMiddle
    -- FUNCTION
    -- List of middle syllables for generating ships names
    -- SOURCE
    ShipSyllablesMiddle: UnboundedString_Container.Vector;
    -- ****
+
    -- ****v* Ships/ShipSyllablesEnd
    -- FUNCTION
    -- List of last syllables for generating ships names
    -- SOURCE
    ShipSyllablesEnd: UnboundedString_Container.Vector;
    -- ****
+
    -- ****e* Ships/Ships_Invalid_Data
    -- FUNCTION
    -- Raised when invalid data in ships file
@@ -309,6 +327,7 @@ package Ships is
       RandomUpgrades: Boolean := True) return ShipRecord with
       Pre => (ProtoShips_Container.Contains(ProtoShips_List, ProtoIndex));
       -- ****
+
       -- ****f* Ships/LoadShips
       -- FUNCTION
       -- Load ships from files
@@ -317,6 +336,7 @@ package Ships is
       -- SOURCE
    procedure LoadShips(Reader: Tree_Reader);
    -- ****
+
    -- ****f* Ships/CountShipWeight
    -- FUNCTION
    -- Count weight of ship (with modules and cargo)
@@ -327,6 +347,7 @@ package Ships is
    -- SOURCE
    function CountShipWeight(Ship: ShipRecord) return Positive;
    -- ****
+
    -- ****f* Ships/GenerateShipName
    -- FUNCTION
    -- Generate random name for ship
@@ -339,6 +360,7 @@ package Ships is
      (Owner: Unbounded_String) return Unbounded_String with
       Pre => Owner /= Null_Unbounded_String;
       -- ****
+
       -- ****f* Ships/CountCombatValue
       -- FUNCTION
       -- Count combat value of player ship
@@ -347,6 +369,7 @@ package Ships is
       -- SOURCE
    function CountCombatValue return Natural;
    -- ****
+
    -- ****f* Ships/GetCabinQuality
    -- FUNCTION
    -- Get description of quality of selected cabin in player ship
