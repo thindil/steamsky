@@ -37,6 +37,7 @@ package Crew.UI.Handlers is
    -- SOURCE
    procedure ShowMemberInfo(Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Crew.UI.Handlers/GiveOrdersAll
    -- FUNCTION
    -- Give orders to all crew members
@@ -45,6 +46,7 @@ package Crew.UI.Handlers is
    -- SOURCE
    procedure GiveOrdersAll(User_Data: access GObject_Record'Class);
    -- ****
+
    -- ****f* Crew.UI.Handlers/ShowInventory
    -- FUNCTION
    -- Refresh informations about selected member inventory
@@ -53,6 +55,7 @@ package Crew.UI.Handlers is
    -- SOURCE
    procedure ShowInventory(Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Crew.UI.Handlers/ShowItemInfo2
    -- FUNCTION
    -- Show informations about selected item
@@ -61,6 +64,7 @@ package Crew.UI.Handlers is
    -- SOURCE
    procedure ShowItemInfo2(Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Crew.UI.Handlers/UseItem
    -- FUNCTION
    -- Set selected item as used by crew member or take it down
@@ -71,6 +75,7 @@ package Crew.UI.Handlers is
    procedure UseItem
      (Self: access Gtk_Cell_Renderer_Toggle_Record'Class; Path: UTF8_String);
    -- ****
+
    -- ****f* Crew.UI.Handlers/MoveItem
    -- FUNCTION
    -- Move item from inventory to ship cargo
@@ -79,6 +84,7 @@ package Crew.UI.Handlers is
    -- SOURCE
    procedure MoveItem(Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Crew.UI.Handlers/GiveCrewOrders
    -- FUNCTION
    -- Show give orders for all crew members
@@ -91,6 +97,7 @@ package Crew.UI.Handlers is
      (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
       Path_String: UTF8_String; New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter);
    -- ****
+
    -- ****f* Crew.UI.Handlers/SetPriority
    -- FUNCTION
    -- Set selected priority (and reduce others if needed)
@@ -103,6 +110,7 @@ package Crew.UI.Handlers is
      (Self: access Gtk_Cell_Renderer_Combo_Record'Class;
       Path_String: UTF8_String; New_Iter: Gtk.Tree_Model.Gtk_Tree_Iter);
    -- ****
+
    -- ****f* Crew.UI.Handlers/DismissMember
    -- FUNCTION
    -- Dismiss selected crew member

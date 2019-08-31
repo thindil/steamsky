@@ -28,6 +28,7 @@ package Crafts.UI is
    -- SOURCE
    procedure CreateCraftsUI;
    -- ****
+
    -- ****f* Crafts.UI/ShowCraftsUI
    -- FUNCTION
    -- Show interface for manufacturing

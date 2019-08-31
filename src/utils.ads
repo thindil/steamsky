@@ -38,6 +38,7 @@ package Utils is
       Pre => Min <= Max,
       Test_Case => ("Test_GetRandom", Nominal);
       -- ****
+
       -- ****f* Utils/DaysDifference
       -- FUNCTION
       -- Count days difference between selected date and current game date
@@ -49,6 +50,7 @@ package Utils is
    function DaysDifference(DateToCompare: Date_Record) return Natural with
       Test_Case => ("Test_DaysDifference", Robustness);
       -- ****
+
       -- ****f* Utils/GenerateRoboticName
       -- FUNCTION
       -- Generate robotic type name for bases, mobs, ships, etc

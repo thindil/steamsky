@@ -28,6 +28,7 @@ package DebugUI is
    -- SOURCE
    procedure CreateDebugUI;
    -- ****
+
    -- ****f* DebugUI/ShowDebugUI
    -- FUNCTION
    -- Show debug user interface
