@@ -28,6 +28,7 @@ package Bases.SchoolUI is
    -- SOURCE
    procedure CreateBasesSchoolUI;
    -- ****
+
    -- ****f* Bases.SchoolUI/ShowSchoolUI
    -- FUNCTION
    -- Show interface for training skills in bases

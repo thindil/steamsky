@@ -28,6 +28,7 @@ package Combat.UI is
    -- SOURCE
    procedure CreateCombatUI;
    -- ****
+
    -- ****f* Combat.UI/ShowCombatUI
    -- FUNCTION
    -- Show combat interface
