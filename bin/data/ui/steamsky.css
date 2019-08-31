@@ -2,27 +2,30 @@
 
 /* Colors definitions */
 @define-color golden_yellow #FFDF00;
+@define-color dark_yellow #7D7800;
+@define-color pale_goldenrod #EEE8AA;
 @define-color very_dark_orange #1A130c;
 @define-color dark_orange #372412;
-@define-color pale_goldenrod #EEE8AA;
-@define-color dark_yellow #7D7800;
+@define-color almost_black_orange #2D2115;
+@define-color dark_brown_orange #AC7700;
+@define-color very_dark_orange2 #481300;
+@define-color dark_orange2 #AF7D00;
+@define-color very_dark_orange2 #552300;
+@define-color very_dark_orange3 #423004;
 @define-color very_dark_red #5C4745;
 @define-color almost_black_red #120D0D;
 @define-color almost_black_red2 #2B1E1D;
 @define-color very_dark_red2 #4C0000;
 @define-color dark_red #990000;
-@define-color almost_black_orange #2D2115;
+@define-color very_dark_red3 #320000;
 @define-color dark_blue #000096;
 @define-color very_dark_blue #000032;
 @define-color very_dark_gray rgba(32, 32, 32, 0);
 @define-color almost_black_gray #151515;
 @define-color almost_black_gray2 #181818;
 @define-color very_dark_gray2 #393939;
-@define-color very_dark_red3 #320000;
 @define-color very_dark_lime #006400;
-@define-color very_dark_lime #003200;
-@define-color dark_brown_orange #AC7700;
-@define-color very_dark_orange2 #481300;
+@define-color very_dark_lime2 #003200;
 
 
 /* General setting of ui */
@@ -444,14 +447,14 @@ GtkInfoBar {
 .progressbar#goldbar,
    .progressbar:selected#goldbar,
    .progressbar:selected#goldbar:focus {
-   background:linear-gradient(to bottom, rgb(175, 125, 0), rgb(85, 35, 0));
+   background:linear-gradient(to bottom, @dark_orange2, @very_dark_orange2);
 }
 
 /* Crew member experience progress bars settings */
 .progressbar#experience,
    .progressbar#experience:selected,
    .progressbar#experience:selected:focus {
-   background:#423004;
+   background:@very_dark_orange3;
    border-radius:0;
    border:1px black solid;
 }
