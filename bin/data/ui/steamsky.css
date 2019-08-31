@@ -363,20 +363,6 @@ GtkStackSwitcher .button:checked {
    background:linear-gradient(to bottom, @very_dark_red2 5%, @dark_red 100%);
 }
 
-/* Default setting for last message info */
-*#overlayinfo {
-   border-radius:5px;
-   border-style:solid;
-   border-width:1px;
-   border-color:gray;
-   background:rgba(25,25,25,0.5);
-}
-
-/* Default setting for last message info close button */
-*#overlayinfo .button {
-   background:rgba(25,25,25,0.5);
-}
-
 /* Default setting for number entry fields (like amount in trading, wait x minutes) */
 .spinbutton {
    border-radius: 10px;
