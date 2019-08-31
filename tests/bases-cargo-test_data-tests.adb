@@ -98,6 +98,43 @@ package body Bases.Cargo.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_FindBaseCargo_7cc62c_be492f (ProtoIndex: Unbounded_String; Durability: Natural := 101)  return Natural
+   is
+   begin
+      declare
+         Test_FindBaseCargo_7cc62c_be492f_Result : constant Natural := GNATtest_Generated.GNATtest_Standard.Bases.Cargo.FindBaseCargo (ProtoIndex, Durability);
+      begin
+         return Test_FindBaseCargo_7cc62c_be492f_Result;
+      end;
+   end Wrap_Test_FindBaseCargo_7cc62c_be492f;
+--  end read only
+
+--  begin read only
+   procedure Test_FindBaseCargo_test_findbasecargo (Gnattest_T : in out Test);
+   procedure Test_FindBaseCargo_7cc62c_be492f (Gnattest_T : in out Test) renames Test_FindBaseCargo_test_findbasecargo;
+--  id:2.2/7cc62c290354667f/FindBaseCargo/1/0/test_findbasecargo/
+   procedure Test_FindBaseCargo_test_findbasecargo (Gnattest_T : in out Test) is
+      function FindBaseCargo (ProtoIndex: Unbounded_String; Durability: Natural := 101) return Natural renames Wrap_Test_FindBaseCargo_7cc62c_be492f;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+
+   begin
+
+
+      SkyBases(BaseIndex).Cargo.Clear;
+      GenerateCargo;
+      Assert(FindBaseCargo(To_Unbounded_String("1")) = 1, "Failed to find charcoal.");
+      Assert(FindBaseCargo(To_Unbounded_String("40")) = 0, "Found item which is not in cargo.");
+      Assert(FindBaseCargo(To_Unbounded_String("sdfsdf")) = 0, "Found item which not exists.");
+
+--  begin read only
+   end Test_FindBaseCargo_test_findbasecargo;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
