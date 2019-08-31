@@ -471,5 +471,6 @@ types of modules) the module can have. Default value is 1.
  <module durability="800" index="436" installtime="200" material="Iron" maxowners="4" name="Huge iron water collector" price="8000" size="4" skill="Engineering" type="WATER_COLLECTOR" value="0" weight="3200">Allows collection of water from air. More durable and huge sized version.</module>
  <module durability="1200" index="437" installtime="200" material="Steel" maxowners="4" name="Huge steel water collector" price="12000" size="4" skill="Engineering" type="WATER_COLLECTOR" value="0" weight="3600">Allows collection of water from air. Made of steel. Huge sized.</module>
  <module durability="1200" index="438" installtime="320" material="Titanium" maxowners="4" name="Huge titanium water collector" price="24000" size="4" skill="Engineering" type="WATER_COLLECTOR" value="0" weight="7200">Allows collection of water from air. Made of titanium. Huge sized.</module>
+ <module durability="2000" index="439" installtime="320" material="Orichalcum" maxowners="4" name="Huge orichalcum water collector" price="48000" size="4" skill="Engineering" type="WATER_COLLECTOR" value="0" weight="7200">Allows collection of water from air. Made of orichalcum. Huge sized.</module>
 </modules>
 
