@@ -28,6 +28,7 @@ package Bases.LootUI is
    -- SOURCE
    procedure CreateBasesLootUI;
    -- ****
+
    -- ****f* Bases.LootUI/ShowLootUI
    -- FUNCTION
    -- Show interface for looting bases

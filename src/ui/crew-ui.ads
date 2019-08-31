@@ -30,6 +30,7 @@ package Crew.UI is
    -- SOURCE
    procedure CreateCrewUI;
    -- ****
+
    -- ****f* Crew.UI/ShowCrewUI
    -- FUNCTION
    -- Show interface for show player ship crew info
@@ -45,36 +46,42 @@ private
    -- SOURCE
    MemberIndex, ItemIndex: Positive;
    -- ****
+
    -- ****f* Crew.UI/SetOrdersList
    -- FUNCTION
    -- Set orders for selected crew member
    -- SOURCE
    procedure SetOrdersList;
    -- ****
+
    -- ****f* Crew.UI/ShowOrdersForAll
    -- FUNCTION
    -- Show list of orders for all crew members
    -- SOURCE
    procedure ShowOrdersForAll;
    -- ****
+
    -- ****f* Crew.UI/RefreshInventory
    -- FUNCTION
    -- Refresh informations about selected crew member inventory
    -- SOURCE
    procedure RefreshInventory;
    -- ****
+
    -- ****f* Crew.UI/SetActiveItem
    -- FUNCTION
    -- Set active item in inventory list
    -- SOURCE
    procedure SetActiveItem;
    -- ****
+
    -- ****f* Crew.UI/RefreshCrewInfo
    -- FUNCTION
    -- Refresh crew list
    -- SOURCE
    procedure RefreshCrewInfo;
    -- ****
+
    -- ****f* Crew.UI/SetActiveMember
    -- FUNCTION
    -- Set active crew member in crew list

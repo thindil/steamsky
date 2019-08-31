@@ -28,6 +28,7 @@ package BasesList is
    -- SOURCE
    procedure CreateBasesListUI;
    -- ****
+
    -- ****f* BasesList/ShowBasesListUI
    -- FUNCTION
    -- Show interface for list of bases

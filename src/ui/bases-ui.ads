@@ -28,18 +28,21 @@ package Bases.UI is
    -- SOURCE
    procedure CreateBasesUI;
    -- ****
+
    -- ****f* Bases.UI/ShowBuyRecipesUI
    -- FUNCTION
    -- Show interface for buying crafting recipes
    -- SOURCE
    procedure ShowBuyRecipesUI;
    -- ****
+
    -- ****f* Bases.UI/ShowRepairUI
    -- FUNCTION
    -- Show interface for buying ship repairs in bases
    -- SOURCE
    procedure ShowRepairUI;
    -- ****
+
    -- ****f* Bases.UI/ShowHealUI
    -- FUNCTION
    -- Show interface for buying crew members healing in bases

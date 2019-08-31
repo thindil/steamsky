@@ -28,6 +28,7 @@ package Events.UI is
    -- SOURCE
    procedure CreateEventsUI;
    -- ****
+
    -- ****f* Events.UI/ShowEventsUI
    -- FUNCTION
    -- Show interface for show known events

@@ -28,6 +28,7 @@ package Bases.RecruitUI is
    -- SOURCE
    procedure CreateRecruitUI;
    -- ****
+
    -- ****f* Bases.RecruitUI/ShowRecruitUI
    -- FUNCTION
    -- Show interface for recruit new crew members
