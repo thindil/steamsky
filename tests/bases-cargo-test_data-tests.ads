@@ -15,5 +15,8 @@ package Bases.Cargo.Test_Data.Tests is
    procedure Test_UpdateBaseCargo_8dbba5_1e1787 (Gnattest_T : in out Test);
    --  bases-cargo.ads:43:4:UpdateBaseCargo:Test_UpdateBaseCargo
 
+   procedure Test_FindBaseCargo_7cc62c_be492f (Gnattest_T : in out Test);
+   --  bases-cargo.ads:58:4:FindBaseCargo:Test_FindBaseCargo
+
 end Bases.Cargo.Test_Data.Tests;
 --  end read only
