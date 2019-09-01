@@ -58,7 +58,8 @@ package Bases.Ship is
    --               ship
    -- SOURCE
    procedure RepairShip(ModuleIndex: Integer) with
-      Pre => (ModuleIndex <= PlayerShip.Modules.Last_Index);
+      Pre => (ModuleIndex <= PlayerShip.Modules.Last_Index),
+      Test_Case => ("Test_RepairShip", Nominal);
       -- ****
 
 -- ****f* Bases.Ship/UpgradeShip
