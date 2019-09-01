@@ -34,6 +34,7 @@ package Maps.UI.Handlers is
    -- SOURCE
    procedure QuitGameMenu(Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/HideMapInfoWindow
    -- FUNCTION
    -- Hide selected window
@@ -42,6 +43,7 @@ package Maps.UI.Handlers is
    -- SOURCE
    procedure HideMapInfoWindow(User_Data: access GObject_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/GetMapSize
    -- FUNCTION
    -- Get size of map cell
@@ -50,6 +52,7 @@ package Maps.UI.Handlers is
    -- SOURCE
    procedure GetMapSize(Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/SetDestination
    -- FUNCTION
    -- Set ship destination
@@ -59,6 +62,7 @@ package Maps.UI.Handlers is
    function SetDestination
      (Object: access Gtkada_Builder_Record'Class) return Boolean;
    -- ****
+
    -- ****f* Maps.UI.Handlers/MoveMap
    -- FUNCTION
    -- Move map to selected position
@@ -67,6 +71,7 @@ package Maps.UI.Handlers is
    -- SOURCE
    procedure MoveMap(User_Data: access GObject_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/BtnDockClicked
    -- FUNCTION
    -- Dock/undock ship from base
@@ -75,6 +80,7 @@ package Maps.UI.Handlers is
    -- SOURCE
    procedure BtnDockClicked(Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/ChangeSpeed
    -- FUNCTION
    -- Change current ship speed
@@ -83,6 +89,7 @@ package Maps.UI.Handlers is
    -- SOURCE
    procedure ChangeSpeed(Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/MoveShip
    -- FUNCTION
    -- Move ship in selected direction
@@ -91,6 +98,7 @@ package Maps.UI.Handlers is
    -- SOURCE
    procedure MoveShip(User_Data: access GObject_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/ShowOrders
    -- FUNCTION
    -- Show available ship orders
@@ -99,6 +107,7 @@ package Maps.UI.Handlers is
    -- SOURCE
    procedure ShowOrders(Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/WaitOrder
    -- FUNCTION
    -- Execute selected wait order
@@ -107,6 +116,7 @@ package Maps.UI.Handlers is
    -- SOURCE
    procedure WaitOrder(User_Data: access GObject_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/AttackOrder
    -- FUNCTION
    -- Execute attack or show wait order
@@ -115,6 +125,7 @@ package Maps.UI.Handlers is
    -- SOURCE
    procedure AttackOrder(Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/ShowHelp
    -- FUNCTION
    -- Show help for selected topic
@@ -123,6 +134,7 @@ package Maps.UI.Handlers is
    -- SOURCE
    procedure ShowHelp(Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/ShowInfo
    -- FUNCTION
    -- Show selected info (ship/crew/cargo/etc)
@@ -131,6 +143,7 @@ package Maps.UI.Handlers is
    -- SOURCE
    procedure ShowInfo(User_Data: access GObject_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/ResignFromGame
    -- FUNCTION
    -- Show confirmation for resign from game
@@ -139,6 +152,7 @@ package Maps.UI.Handlers is
    -- SOURCE
    procedure ResignFromGame(Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/ShowMissions
    -- FUNCTION
    -- Show available missions in base
@@ -147,6 +161,7 @@ package Maps.UI.Handlers is
    -- SOURCE
    procedure ShowMissions(Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/StartMission
    -- FUNCTION
    -- Start mission if ship is in cell with it
@@ -155,6 +170,7 @@ package Maps.UI.Handlers is
    -- SOURCE
    procedure StartMission(Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/CompleteMission
    -- FUNCTION
    -- Finish mission if ship is at sky base
@@ -163,6 +179,7 @@ package Maps.UI.Handlers is
    -- SOURCE
    procedure CompleteMission(Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/ExecuteOrder
    -- FUNCTION
    -- Set home base/ask for bases/ask for events
@@ -171,6 +188,7 @@ package Maps.UI.Handlers is
    -- SOURCE
    procedure ExecuteOrder(User_Data: access GObject_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/DeliverMedicines
    -- FUNCTION
    -- Deliver medicines to base
@@ -179,6 +197,7 @@ package Maps.UI.Handlers is
    -- SOURCE
    procedure DeliverMedicines(User_Data: access GObject_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/ShowWaitOrders
    -- FUNCTION
    -- Show available wait orders
@@ -187,6 +206,7 @@ package Maps.UI.Handlers is
    -- SOURCE
    procedure ShowWaitOrders(Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/UpdateTooltip
    -- FUNCTION
    -- Update map tooltip with information about cell on mouse movement
@@ -196,6 +216,7 @@ package Maps.UI.Handlers is
    function UpdateTooltip
      (Object: access Gtkada_Builder_Record'Class) return Boolean;
    -- ****
+
    -- ****f* Maps.UI.Handlers/MapKeyReleased
    -- FUNCTION
    -- Center map on player ship
@@ -207,6 +228,7 @@ package Maps.UI.Handlers is
      (Self: access Gtk_Widget_Record'Class; Event: Gdk.Event.Gdk_Event_Key)
       return Boolean;
    -- ****
+
    -- ****f* Maps.UI.Handlers/MapKeyPressed
    -- FUNCTION
    -- Move mouse cursor on map by keyboard
@@ -219,6 +241,7 @@ package Maps.UI.Handlers is
      (Self: access Gtk_Widget_Record'Class; Event: Gdk.Event.Gdk_Event_Key)
       return Boolean;
    -- ****
+
    -- ****f* Maps.UI.Handlers/ZoomMap
    -- FUNCTION
    -- Resize sky map font with mouse wheel
@@ -230,6 +253,7 @@ package Maps.UI.Handlers is
      (Self: access Gtk_Widget_Record'Class; Event: Gdk.Event.Gdk_Event_Scroll)
       return Boolean;
    -- ****
+
    -- ****f* Maps.UI.Handlers/DisableMenuShortcuts
    -- FUNCTION
    -- Disable menu shortcuts keys
@@ -241,6 +265,7 @@ package Maps.UI.Handlers is
    function DisableMenuShortcuts
      (Object: access Gtkada_Builder_Record'Class) return Boolean;
    -- ****
+
    -- ****f* Maps.UI.Handlers/EnableMenuShortcuts
    -- FUNCTION
    -- Enable menu shortcuts keys
@@ -252,6 +277,7 @@ package Maps.UI.Handlers is
    function EnableMenuShortcuts
      (Object: access Gtkada_Builder_Record'Class) return Boolean;
    -- ****
+
    -- ****f* Maps.UI.Handlers/DisableMenuShortcutsProc
    -- FUNCTION
    -- Disable menu shortcuts keys
@@ -263,6 +289,7 @@ package Maps.UI.Handlers is
    procedure DisableMenuShortcutsProc
      (Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/EnableMenuShortcutsProc
    -- FUNCTION
    -- Enable menu shortcuts keys
@@ -274,6 +301,7 @@ package Maps.UI.Handlers is
    procedure EnableMenuShortcutsProc
      (Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/ToggleCloseButton
    -- FUNCTION
    -- Toggle sensitive of close button
@@ -285,6 +313,7 @@ package Maps.UI.Handlers is
    function ToggleCloseButton
      (User_Data: access GObject_Record'Class) return Boolean;
    -- ****
+
    -- ****f* Maps.UI.Handlers/ToggleCloseButtonProc
    -- FUNCTION
    -- Toggle sensitive of close button
@@ -295,6 +324,7 @@ package Maps.UI.Handlers is
    -- SOURCE
    procedure ToggleCloseButtonProc(User_Data: access GObject_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/MoveMapInfo
    -- FUNCTION
    -- Move map info widget when mouse enters it
@@ -304,12 +334,14 @@ package Maps.UI.Handlers is
    function MoveMapInfo
      (Object: access Gtkada_Builder_Record'Class) return Boolean;
    -- ****
+
    -- ****f* Maps.UI.Handlers/MoveMapButtons
    -- FUNCTION
    -- Move map buttons to selected position
    -- SOURCE
    procedure MoveMapButtons(User_Data: access GObject_Record'Class);
    -- ****
+
    -- ****f* Maps.UI.Handlers/DisableMouse
    -- FUNCTION
    -- Disable mouse clicking on selected UI element
@@ -319,6 +351,7 @@ package Maps.UI.Handlers is
    function DisableMouse
      (Object: access Gtkada_Builder_Record'Class) return Boolean;
    -- ****
+
    -- ****f* Maps.UI.Handlers/SetMessagesPosition
    -- FUNCTION
    -- Set new message window size setting on resize it
