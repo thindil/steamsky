@@ -19,7 +19,7 @@ All notable changes to this project will be documented in this file.
   large adamantium water collector, huge bronze water collector, huge iron
   water collector, huge steel water collector, huge titanium water collector,
   huge orichalcum water collector, huge adamantium water collector, medium
-  bronze workshop
+  bronze workshop, medium iron workshop
 - More random cargo to the enemies ships in combat
 
 ### Changed
