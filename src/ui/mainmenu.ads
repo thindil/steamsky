@@ -31,6 +31,7 @@ package MainMenu is
    -- SOURCE
    procedure CreateMainMenu;
    -- ****
+
    -- ****f* MainMenu/UpdateGoalButton
    -- FUNCTION
    -- Update label on character goal button
@@ -40,12 +41,14 @@ package MainMenu is
    procedure UpdateGoalButton(Message: String) with
       Pre => Message'Length > 0;
       -- ****
+
       -- ****f* MainMenu/ShowMainMenu
       -- FUNCTION
       -- Show main menu window
       -- SOURCE
    procedure ShowMainMenu;
    -- ****
+
    -- ****f* MainMenu/SaveException
    -- FUNCTION
    -- Save data exception to file
@@ -56,6 +59,7 @@ package MainMenu is
    procedure SaveException
      (An_Exception: Exception_Occurrence; PrintToTerminal: Boolean);
    -- ****
+
    -- ****f* MainMenu/On_Exception
    -- FUNCTION
    -- Handle GUI exceptions

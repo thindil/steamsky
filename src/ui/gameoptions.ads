@@ -30,12 +30,14 @@ package GameOptions is
    -- SOURCE
    procedure CreateGameOptions;
    -- ****
+
    -- ****f* GameOptions/ShowGameOptions
    -- FUNCTION
    -- Show interface for game options
    -- SOURCE
    procedure ShowGameOptions;
    -- ****
+
    -- ****f* GameOptions/CloseOptions
    -- FUNCTION
    -- Close options, save them and back to sky map view
