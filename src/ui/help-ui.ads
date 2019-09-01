@@ -28,6 +28,7 @@ package Help.UI is
    -- SOURCE
    procedure CreateHelpUI;
    -- ****
+
    -- ****f* Help.UI/ShowHelpUI
    -- FUNCTION
    -- Show help user interface

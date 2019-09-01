@@ -28,6 +28,7 @@ package Goals.UI is
    -- SOURCE
    procedure CreateGoalsMenu;
    -- ****
+
    -- ****f* Goals.UI/ShowGoalsMenu
    -- FUNCTION
    -- Show goals selection menu to player
