@@ -40,6 +40,7 @@ package Maps.UI is
    -- SOURCE
    procedure CreateSkyMap;
    -- ****
+
    -- ****f* Maps.UI/ShowSkyMap
    -- FUNCTION
    -- Show sky map
@@ -52,12 +53,14 @@ package Maps.UI is
    procedure ShowSkyMap
      (X: Integer := PlayerShip.SkyX; Y: Integer := PlayerShip.SkyY);
    -- ****
+
    -- ****f* Maps.UI/UpdateHeader
    -- FUNCTION
    -- Update game header informations
    -- SOURCE
    procedure UpdateHeader;
    -- ****
+
    -- ****f* Maps.UI/SetMapMoveButtons
    -- FUNCTION
    -- Set icons on move map buttons
@@ -67,17 +70,76 @@ package Maps.UI is
 
 private
 
-   -- ****h* Maps.UI/MapWidth, MapHeight, CenterX, CenterY, MapCellWidth, MapCellHeight, MapX, MapY
+   -- ****v* Maps.UI/MapWidth
+   -- FUNCTION
+   -- Width in map cells of the sky map
    -- SOURCE
-   MapWidth, MapHeight, CenterX, CenterY, MapCellWidth, MapCellHeight, MapX,
+   MapWidth: Positive;
+   -- ****
+
+   -- ****v* Maps.UI/MapHeight
+   -- FUNCTION
+   -- Height in map cells of the sky map
+   -- SOURCE
+   MapHeight: Positive;
+   -- ****
+
+   -- ****v* Maps.UI/CenterX
+   -- FUNCTION
+   -- X coordinate of the center point of the map
+   -- SOURCE
+   CenterX: Positive;
+   -- ****
+
+   -- ****v* Maps.UI/CenterY
+   -- FUNCTION
+   -- Y coordinate of the center poinf of the map
+   -- SOURCE
+   CenterY: Positive;
+   -- ****
+
+   -- ****v* Maps.UI/MapCellWidth
+   -- FUNCTION
+   -- Width in pixels of single map cell
+   -- SOURCE
+   MapCellWidth: Positive;
+   -- ****
+
+   -- ****v* Maps.UI/MapCellHeight
+   -- FUNCTION
+   -- Height in pixels of single map cell
+   -- SOURCE
+   MapCellHeight: Positive;
+   -- ****
+
+   -- ****v* Maps.UI/MapX
+   -- FUNCTION
+   -- X coordinate of the currently selected map cell
+   -- SOURCE
+   MapX: Positive;
+   -- ****
+
+   -- ****v* Maps.UI/MapY
+   -- FUNCTION
+   -- Y coordinate of the currently selected map cell
+   -- SOURCE
    MapY: Positive;
    -- ****
-   -- ****v* Maps.UI/StartX, StartY
+
+   -- ****v* Maps.UI/StartX
    -- FUNCTION
-   -- Starting point for draw map
+   -- X coordinate of the starting point for draw map
    -- SOURCE
-   StartX, StartY: Integer;
+   StartX: Integer;
    -- ****
+
+   -- ****v* Maps.UI/StartY
+   -- FUNCTION
+   -- Y coordinate of the starting point for draw map
+   -- SOURCE
+   StartY: Integer;
+   -- ****
+
    -- ****v* Maps.UI/ButtonsVisible
    -- FUNCTION
    -- If true, buttons like menu and close are visible. Default is false
@@ -91,18 +153,21 @@ private
    -- SOURCE
    procedure DeathConfirm;
    -- ****
+
    -- ****f* Maps.UI/UpdateMoveButtons
    -- FUNCTION
    -- Update move buttons
    -- SOURCE
    procedure UpdateMoveButtons;
    -- ****
+
    -- ****f* Maps.UI/DrawMap
    -- FUNCTION
    -- Draw sky map
    -- SOURCE
    procedure DrawMap;
    -- ****
+
    -- ****f* Maps.UI/HideButtons
    -- FUNCTION
    -- Hide selected button
@@ -111,6 +176,7 @@ private
    -- SOURCE
    procedure HideButtons(Widget: not null access Gtk_Widget_Record'Class);
    -- ****
+
    -- ****f* Maps.UI/CheckButtons
    -- FUNCTION
    -- Check selected button
@@ -119,12 +185,14 @@ private
    -- SOURCE
    procedure CheckButtons(Widget: not null access Gtk_Widget_Record'Class);
    -- ****
+
    -- ****f* Maps.UI/GetCurrentCellCoords
    -- FUNCTION
    -- Get current map cell coordinates based on mouse position
    -- SOURCE
    procedure GetCurrentCellCoords;
    -- ****
+
    -- ****f* Maps.UI/UpdateMapInfo
    -- FUNCTION
    -- Update info about current map cell
@@ -134,6 +202,7 @@ private
    -- SOURCE
    procedure UpdateMapInfo(ShowOrdersInfo: Boolean := False);
    -- ****
+
    -- ****f* Maps.UI/FinishStory
    -- FUNCTION
    -- Finish current story and show confirm dialog to player
