@@ -32,6 +32,7 @@ package Themes is
    -- SOURCE
    type FontTypes is (HELPFONT, MAPFONT, INTERFACEFONT, ALLFONTS);
    -- ****
+
    -- ****t* Themes/ThemeRecord
    -- FUNCTION
    -- Data structure for themes settings
@@ -118,6 +119,7 @@ package Themes is
       CheckButtonChecked: Unbounded_String;
    end record;
    -- ****
+
    -- ****t* Themes/Themes_Container
    -- FUNCTION
    -- Used to store themes data
@@ -125,6 +127,7 @@ package Themes is
    package Themes_Container is new Ada.Containers.Indefinite_Hashed_Maps
      (String, ThemeRecord, Ada.Strings.Hash, "=");
    -- ****
+
    -- ****v* Themes/Themes_List
    -- FUNCTION
    -- List of all available themes
@@ -140,12 +143,14 @@ package Themes is
    -- SOURCE
    procedure SetFontSize(FontType: FontTypes);
    -- ****
+
    -- ****f* Themes/ResetFontsSizes
    -- FUNCTION
    -- Reset size of fonts to theme default values
    -- SOURCE
    procedure ResetFontsSizes;
    -- ****
+
    -- ****f* Themes/LoadThemes
    -- FUNCTION
    -- Load data for all themes

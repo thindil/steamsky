@@ -28,12 +28,14 @@ package Missions.UI is
    -- SOURCE
    procedure CreateMissionsUI;
    -- ****
+
    -- ****f* Missions.UI/ShowMissionsUI
    -- FUNCTION
    -- Show interface for show available missions
    -- SOURCE
    procedure ShowMissionsUI;
    -- ****
+
    -- ****f* Missions.UI/ShowAcceptedMissions
    -- FUNCTION
    -- Show interface for show accepted missions

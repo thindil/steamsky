@@ -28,6 +28,7 @@ package Stories.UI is
    -- SOURCE
    procedure CreateStoriesUI;
    -- ****
+
    -- ****f* Stories.UI/ShowStoriesUI
    -- FUNCTION
    -- Show stories informations to player

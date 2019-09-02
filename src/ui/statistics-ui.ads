@@ -28,18 +28,21 @@ package Statistics.UI is
    -- SOURCE
    procedure HideStatistics;
    -- ****
+
    -- ****f* Statistics.UI/CreateStatsUI
    -- FUNCTION
    -- Create infterace for show game statistics
    -- SOURCE
    procedure CreateStatsUI;
    -- ****
+
    -- ****f* Statistics.UI/ShowStatsUI
    -- FUNCTION
    -- Show interface for show game statistics
    -- SOURCE
    procedure ShowStatsUI;
    -- ****
+
    -- ****f* Statistics.UI/UpdateGoalsButton
    -- FUNCTION
    -- Update label on character goal button
