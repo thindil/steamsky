@@ -71,7 +71,8 @@ package Bases.Ship is
       -- ModuleIndex - Index of prototype module to install or remove
       -- SOURCE
    procedure UpgradeShip(Install: Boolean; ModuleIndex: Unbounded_String) with
-      Pre => (ModuleIndex /= Null_Unbounded_String);
+      Pre => (ModuleIndex /= Null_Unbounded_String),
+      Test_Case => ("Test_UpdgradeShip", Nominal);
       -- ****
 
       -- ****f* Bases.Ship/PayForDock
