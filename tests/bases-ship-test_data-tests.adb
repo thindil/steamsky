@@ -81,6 +81,55 @@ package body Bases.Ship.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_UpgradeShip_62a16e_73d66b (Install: Boolean; ModuleIndex: Unbounded_String) 
+   is
+   begin
+      begin
+         pragma Assert
+           ((ModuleIndex /= Null_Unbounded_String));
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(bases-ship.ads:0):Test_UpdgradeShip test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Bases.Ship.UpgradeShip (Install, ModuleIndex);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(bases-ship.ads:0:):Test_UpdgradeShip test commitment violated");
+      end;
+   end Wrap_Test_UpgradeShip_62a16e_73d66b;
+--  end read only
+
+--  begin read only
+   procedure Test_UpgradeShip_test_updgradeship (Gnattest_T : in out Test);
+   procedure Test_UpgradeShip_62a16e_73d66b (Gnattest_T : in out Test) renames Test_UpgradeShip_test_updgradeship;
+--  id:2.2/62a16ebed8881e22/UpgradeShip/1/0/test_updgradeship/
+   procedure Test_UpgradeShip_test_updgradeship (Gnattest_T : in out Test) is
+   procedure UpgradeShip (Install: Boolean; ModuleIndex: Unbounded_String) renames Wrap_Test_UpgradeShip_62a16e_73d66b;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      UpgradeShip(False, To_Unbounded_String("9"));
+      Assert(PlayerShip.Modules.Length = 12, "Failed to remove module on player ship.");
+      UpgradeShip(True, To_Unbounded_String("6"));
+      Assert(PlayerShip.Modules.Length = 13, "Failed to install module on player ship.");
+
+--  begin read only
+   end Test_UpgradeShip_test_updgradeship;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
