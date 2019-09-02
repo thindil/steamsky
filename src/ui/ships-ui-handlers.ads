@@ -35,6 +35,7 @@ package Ships.UI.Handlers is
    -- SOURCE
    procedure ShowModuleInfo(Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Ships.UI.Handlers/ChangeShipName
    -- FUNCTION
    -- Change name of player's ship
@@ -43,6 +44,7 @@ package Ships.UI.Handlers is
    -- SOURCE
    procedure ChangeShipName(Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Ships.UI.Handlers/ChangeModuleName
    -- FUNCTION
    -- Change name of selected module
@@ -55,6 +57,7 @@ package Ships.UI.Handlers is
      (Self: access Gtk_Cell_Renderer_Text_Record'Class; Path: UTF8_String;
       New_Text: UTF8_String);
    -- ****
+
    -- ****f* Ships.UI.Handlers/SetUpgrade
    -- FUNCTION
    -- Start upgrading selected module
@@ -63,6 +66,7 @@ package Ships.UI.Handlers is
    -- SOURCE
    procedure SetUpgrade(User_Data: access GObject_Record'Class);
    -- ****
+
    -- ****f* Ships.UI.Handlers/StopUpgrading
    -- FUNCTION
    -- Stop current module upgrade
@@ -71,6 +75,7 @@ package Ships.UI.Handlers is
    -- SOURCE
    procedure StopUpgrading(Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Ships.UI.Handlers/SetRepair
    -- FUNCTION
    -- Set repair priority for selected module
@@ -79,6 +84,7 @@ package Ships.UI.Handlers is
    -- SOURCE
    procedure SetRepair(User_Data: access GObject_Record'Class);
    -- ****
+
    -- ****f* Ships.UI.Handlers/Assign
    -- FUNCTION
    -- Assign crew member or ammo to selected module
@@ -87,6 +93,7 @@ package Ships.UI.Handlers is
    -- SOURCE
    procedure Assign(User_Data: access GObject_Record'Class);
    -- ****
+
    -- ****f* Ships.UI.Handlers/DisableEngine
    -- FUNCTION
    -- Enable/disable selected engine
@@ -95,6 +102,7 @@ package Ships.UI.Handlers is
    -- SOURCE
    procedure DisableEngine(Object: access Gtkada_Builder_Record'Class);
    -- ****
+
    -- ****f* Ships.UI.Handlers/ToggleSearch
    -- FUNCTION
    -- Enable/disable search for ship module when start/end editing module name

@@ -28,6 +28,7 @@ package Messages.UI is
    -- SOURCE
    procedure CreateMessagesUI;
    -- ****
+
    -- ****f* Messages.UI/ShowMessagesUI
    -- FUNCTION
    -- Show interface for show messages

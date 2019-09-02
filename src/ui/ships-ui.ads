@@ -28,6 +28,7 @@ package Ships.UI is
    -- SOURCE
    procedure CreateShipUI;
    -- ****
+
    -- ****f* Ships.UI/ShowShipUI
    -- FUNCTION
    -- Show interface for show player ship info
@@ -37,23 +38,25 @@ package Ships.UI is
 
 private
 
--- ****v* Ships.UI/ModuleIndex
--- FUNCTION
--- Index of selected module
--- SOURCE
+   -- ****v* Ships.UI/ModuleIndex
+   -- FUNCTION
+   -- Index of selected module
+   -- SOURCE
    ModuleIndex: Positive;
--- ****
--- ****f* Ships.UI/ShowModuleOptions
--- FUNCTION
--- Show options for selected module
--- SOURCE
+   -- ****
+
+   -- ****f* Ships.UI/ShowModuleOptions
+   -- FUNCTION
+   -- Show options for selected module
+   -- SOURCE
    procedure ShowModuleOptions;
--- ****
--- ****f* Ships.UI/ShowShipInfo
--- FUNCTION
--- Show general info about player's ship
--- SOURCE
+   -- ****
+
+   -- ****f* Ships.UI/ShowShipInfo
+   -- FUNCTION
+   -- Show general info about player's ship
+   -- SOURCE
    procedure ShowShipInfo;
--- ****
+   -- ****
 
 end Ships.UI;
