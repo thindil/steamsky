@@ -28,6 +28,7 @@ package Trades.UI is
    -- SOURCE
    procedure CreateTradeUI;
    -- ****
+
    -- ****f* Trades.UI/ShowTradeUI
    -- FUNCTION
    -- Show interface for trades

@@ -28,6 +28,7 @@ package Ships.Cargo.UI is
    -- SOURCE
    procedure CreateCargoUI;
    -- ****
+
    -- ****f* Ships.Cargo.UI/ShowCargoUI
    -- FUNCTION
    -- Show interface for show player ship cargo
