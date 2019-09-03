@@ -79,7 +79,8 @@ package Bases.Ship is
       -- FUNCTION
       -- Pay daily fee for docking
       -- SOURCE
-   procedure PayForDock;
+   procedure PayForDock with
+      Test_Case => ("Test_PayForDock", Robustness);
    -- ****
 
    -- ****f* Bases.Ship/RepairCost
