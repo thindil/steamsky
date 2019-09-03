@@ -34,3 +34,4 @@ All notable changes to this project will be documented in this file.
 - Patrol missions should be generated only on visited map cells
 - Lack of fonts on Windows
 - Possible crash on generating missions
+- Moved cheapest harpoons buying option to Military bases instead Industrial
