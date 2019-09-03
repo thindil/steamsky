@@ -7,6 +7,7 @@
 
 with AUnit.Assertions; use AUnit.Assertions;
 with System.Assertions;
+with ada.text_io;
 
 --  begin read only
 --  id:2.2/00/
@@ -127,6 +128,34 @@ package body Bases.Ship.Test_Data.Tests is
 
 --  begin read only
    end Test_UpgradeShip_test_updgradeship;
+--  end read only
+
+--  begin read only
+   procedure Wrap_Test_PayForDock_b46f8e_d92d34
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Bases.Ship.PayForDock;
+   end Wrap_Test_PayForDock_b46f8e_d92d34;
+--  end read only
+
+--  begin read only
+   procedure Test_PayForDock_test_payfordock (Gnattest_T : in out Test);
+   procedure Test_PayForDock_b46f8e_d92d34 (Gnattest_T : in out Test) renames Test_PayForDock_test_payfordock;
+--  id:2.2/b46f8ee6fa97fa17/PayForDock/1/0/test_payfordock/
+   procedure Test_PayForDock_test_payfordock (Gnattest_T : in out Test) is
+   procedure PayForDock renames Wrap_Test_PayForDock_b46f8e_d92d34;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      Money: constant Positive := PlayerShip.Cargo(1).Amount;
+
+   begin
+
+      PayForDock;
+      Assert(PlayerShip.Cargo(1).Amount < Money, "Failed to pay for docks.");
+
+--  begin read only
+   end Test_PayForDock_test_payfordock;
 --  end read only
 
 --  begin read only
