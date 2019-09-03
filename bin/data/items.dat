@@ -572,29 +572,29 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <description>Bronze set of tools needed to repair or upgrade ship modules.</description>
  </item>
  <item index="62" name="Bronze harpoon" showtype="Ammunition" type="Harpoon" weight="10">
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
+  <trade buyable="N" price="7"/>
   <trade buyable="Y" price="5"/>
-  <trade buyable="N" price="7"/>
-  <trade buyable="N" price="7"/>
-  <trade buyable="N" price="7"/>
-  <trade buyable="N" price="7"/>
   <data value="2"/>
   <description>Weakest type of harpoon with long rope. Used as ammunition for harpoon guns.</description>
  </item>
  <item index="63" name="Iron harpoon" showtype="Ammunition" type="Harpoon" weight="12">
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
+  <trade buyable="N" price="10"/>
   <trade buyable="Y" price="7"/>
-  <trade buyable="N" price="10"/>
-  <trade buyable="N" price="10"/>
-  <trade buyable="N" price="10"/>
-  <trade buyable="N" price="10"/>
   <data value="4"/>
   <description>Harpoon made of iron with long rope. Used as ammunition for harpoon guns.</description>
  </item>
  <item index="64" name="Steel harpoon" showtype="Ammunition" type="Harpoon" weight="12">
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
+  <trade buyable="N" price="12"/>
   <trade buyable="Y" price="10"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
   <data value="8"/>
   <description>Harpoon made of steel with long rope. Used as ammunition for harpoon guns.</description>
  </item>
