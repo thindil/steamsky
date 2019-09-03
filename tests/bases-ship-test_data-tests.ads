@@ -15,5 +15,8 @@ package Bases.Ship.Test_Data.Tests is
    procedure Test_UpgradeShip_62a16e_73d66b (Gnattest_T : in out Test);
    --  bases-ship.ads:73:4:UpgradeShip:Test_UpdgradeShip
 
+   procedure Test_PayForDock_b46f8e_d92d34 (Gnattest_T : in out Test);
+   --  bases-ship.ads:82:4:PayForDock:Test_PayForDock
+
 end Bases.Ship.Test_Data.Tests;
 --  end read only
