@@ -240,6 +240,21 @@ Required.
   <recipe index="35" />
  </base>
  <base index="refinery" name="Refinery" color="#ffff00">
+  <item index="9" sellprice="3" />
+  <item index="10" sellprice="4" />
+  <item index="15" sellprice="1" />
+  <item index="16" sellprice="1" />
+  <item index="19" sellprice="3" />
+  <item index="22" sellprice="5" />
+  <item index="37" sellprice="1" />
+  <item index="38" sellprice="1" />
+  <item index="115" sellprice="8" />
+  <item index="131" sellprice="12" />
+  <item index="166" sellprice="28" />
+  <item index="209" sellprice="2" />
+  <recipe index="2" />
+  <recipe index="27" />
+  <recipe index="28" />
  </base>
  <base index="shipyard" name="Shipyard" color="#00ffff">
  </base>
