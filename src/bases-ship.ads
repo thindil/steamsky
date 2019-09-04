@@ -81,21 +81,22 @@ package Bases.Ship is
       -- SOURCE
    procedure PayForDock with
       Test_Case => ("Test_PayForDock", Robustness);
-   -- ****
+      -- ****
 
-   -- ****f* Bases.Ship/RepairCost
-   -- FUNCTION
-   -- Count cost and time of repairs of player ship
-   -- PARAMETERS
-   -- Cost        - Overall cost of repair of player ship
-   -- Time        - Time needed for repair of player ship
-   -- ModuleIndex - Index of module on player ship to repair or 0 to repair
-   --               all damage modules
-   -- RESULT
-   -- Parameters Cost and Time
-   -- SOURCE
+      -- ****f* Bases.Ship/RepairCost
+      -- FUNCTION
+      -- Count cost and time of repairs of player ship
+      -- PARAMETERS
+      -- Cost        - Overall cost of repair of player ship
+      -- Time        - Time needed for repair of player ship
+      -- ModuleIndex - Index of module on player ship to repair or 0 to repair
+      --               all damage modules
+      -- RESULT
+      -- Parameters Cost and Time
+      -- SOURCE
    procedure RepairCost(Cost, Time: in out Natural; ModuleIndex: Integer) with
-      Pre => (ModuleIndex <= PlayerShip.Modules.Last_Index);
+      Pre => (ModuleIndex <= PlayerShip.Modules.Last_Index),
+      Test_Case => ("Test_RepairCost", Nominal);
       -- ****
 
 end Bases.Ship;
