@@ -208,6 +208,36 @@ Required.
   <recipe index="188" />
  </base>
  <base index="agricultural" name="Agricultural" color="#00ff00">
+  <item index="2" sellprice="2" />
+  <item index="3" sellprice="1" />
+  <item index="6" sellprice="1" />
+  <item index="7" sellprice="1" />
+  <item index="8" sellprice="1" />
+  <item index="11" sellprice="3" />
+  <item index="22" sellprice="5" />
+  <item index="28" sellprice="3" />
+  <item index="29" sellprice="2" />
+  <item index="30" sellprice="1" />
+  <item index="44" sellprice="2" />
+  <item index="45" sellprice="3" />
+  <item index="46" sellprice="5" />
+  <item index="54" sellprice="1" />
+  <item index="55" sellprice="2" />
+  <item index="56" sellprice="2" />
+  <item index="65" sellprice="2" />
+  <recipe index="1" />
+  <recipe index="3" />
+  <recipe index="17" />
+  <recipe index="18" />
+  <recipe index="19" />
+  <recipe index="20" />
+  <recipe index="29" />
+  <recipe index="30" />
+  <recipe index="31" />
+  <recipe index="32" />
+  <recipe index="33" />
+  <recipe index="34" />
+  <recipe index="35" />
  </base>
  <base index="refinery" name="Refinery" color="#ffff00">
  </base>
