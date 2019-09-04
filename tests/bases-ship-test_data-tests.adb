@@ -7,7 +7,6 @@
 
 with AUnit.Assertions; use AUnit.Assertions;
 with System.Assertions;
-with ada.text_io;
 
 --  begin read only
 --  id:2.2/00/
@@ -156,6 +155,57 @@ package body Bases.Ship.Test_Data.Tests is
 
 --  begin read only
    end Test_PayForDock_test_payfordock;
+--  end read only
+
+--  begin read only
+   procedure Wrap_Test_RepairCost_2d9781_2dee42 (Cost, Time: in out Natural; ModuleIndex: Integer) 
+   is
+   begin
+      begin
+         pragma Assert
+           ((ModuleIndex <= PlayerShip.Modules.Last_Index));
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(bases-ship.ads:0):Test_RepairCost test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Bases.Ship.RepairCost (Cost, Time, ModuleIndex);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(bases-ship.ads:0:):Test_RepairCost test commitment violated");
+      end;
+   end Wrap_Test_RepairCost_2d9781_2dee42;
+--  end read only
+
+--  begin read only
+   procedure Test_RepairCost_test_repaircost (Gnattest_T : in out Test);
+   procedure Test_RepairCost_2d9781_2dee42 (Gnattest_T : in out Test) renames Test_RepairCost_test_repaircost;
+--  id:2.2/2d9781143dbec48d/RepairCost/1/0/test_repaircost/
+   procedure Test_RepairCost_test_repaircost (Gnattest_T : in out Test) is
+   procedure RepairCost (Cost, Time: in out Natural; ModuleIndex: Integer) renames Wrap_Test_RepairCost_2d9781_2dee42;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+      Cost, Time: Natural := 0;
+
+   begin
+
+      PlayerShip.Modules(1).Durability := PlayerShip.Modules(1).Durability - 5;
+      RepairCost(Cost, Time, 1);
+      Assert(Cost > 0, "Failed to count player ship repair costs.");
+      Assert(Time > 0, "Failed to count player ship repair time.");
+
+--  begin read only
+   end Test_RepairCost_test_repaircost;
 --  end read only
 
 --  begin read only
