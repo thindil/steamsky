@@ -257,6 +257,12 @@ Required.
   <recipe index="28" />
  </base>
  <base index="shipyard" name="Shipyard" color="#00ffff">
+<!--
+Tag "flags" is various info about selected base type. Possible options are:
+"shipyard" - that base type have shipyard. Ship repairs in that base are 50%
+cheaper.
+-->
+  <flag name="shipyard" />
  </base>
  <base index="military" name="Military" color="#32dc32">
  </base>
