@@ -206,6 +206,11 @@ Required.
   <recipe index="186" />
   <recipe index="187" />
   <recipe index="188" />
+<!--
+Tag "description": in game description of selected type of bases. Will be
+presented to the player during selection of starting base in main menu.
+-->
+  <description>Industrial bases provide tools and materials for crafting. Little more difficult start point than Agricultural bases.</description>
  </base>
  <base index="agricultural" name="Agricultural" color="#00ff00">
   <item index="2" sellprice="2" />
@@ -238,6 +243,7 @@ Required.
   <recipe index="33" />
   <recipe index="34" />
   <recipe index="35" />
+  <description>Agricultural bases provides food, drinks and raw materials to create them. Easiest starting point.</description>
  </base>
  <base index="refinery" name="Refinery" color="#ffff00">
   <item index="9" sellprice="3" />
@@ -255,6 +261,7 @@ Required.
   <recipe index="2" />
   <recipe index="27" />
   <recipe index="28" />
+  <description>Refinery bases provides raw materials for refining which later can be sold in Industrial bases. Little more difficult starting point than Industrial bases.</description>
  </base>
  <base index="shipyard" name="Shipyard" color="#00ffff">
 <!--
@@ -263,6 +270,7 @@ Tag "flags" is various info about selected base type. Possible options are:
 cheaper.
 -->
   <flag name="shipyard" />
+  <description>Shipyard bases don't sell any items but offers cheaper repairs to ships and ability to upgrade ships. Difficult place for starting point.</description>
  </base>
  <base index="military" name="Military" color="#32dc32">
   <item index="4" sellprice="3" />
@@ -507,5 +515,6 @@ cheaper.
   <recipe index="228" />
   <recipe index="229" />
   <recipe index="230" />
+  <description>Military bases provides ammunition to guns and melee weapons. They are most difficult place for starting point.</description>
  </base>
 </bases>
