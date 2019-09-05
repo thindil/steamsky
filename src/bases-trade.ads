@@ -58,15 +58,16 @@ package Bases.Trade is
    -- SOURCE
    procedure HireRecruit
      (RecruitIndex, Cost: Positive; DailyPayment, TradePayment: Natural;
-      ContractLenght: Integer);
-   -- ****
+      ContractLenght: Integer) with
+      Test_Case => ("Test_HireRecruit", Robustness);
+      -- ****
 
-   -- ****f* Bases.Trade/BuyRecipe
-   -- FUNCTION
-   -- Buy new crafting recipe
-   -- PARAMETERS
-   -- RecipeIndex - Index of the recipe from base recipes list to buy
-   -- SOURCE
+      -- ****f* Bases.Trade/BuyRecipe
+      -- FUNCTION
+      -- Buy new crafting recipe
+      -- PARAMETERS
+      -- RecipeIndex - Index of the recipe from base recipes list to buy
+      -- SOURCE
    procedure BuyRecipe(RecipeIndex: Unbounded_String) with
       Pre => (RecipeIndex /= Null_Unbounded_String);
       -- ****
