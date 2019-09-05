@@ -1,0 +1,89 @@
+--    Copyright 2019 Bartek thindil Jasicki
+--
+--    This file is part of Steam Sky.
+--
+--    Steam Sky is free software: you can redistribute it and/or modify
+--    it under the terms of the GNU General Public License as published by
+--    the Free Software Foundation, either version 3 of the License, or
+--    (at your option) any later version.
+--
+--    Steam Sky is distributed in the hope that it will be useful,
+--    but WITHOUT ANY WARRANTY; without even the implied warranty of
+--    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+--    GNU General Public License for more details.
+--
+--    You should have received a copy of the GNU General Public License
+--    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
+
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Strings.Unbounded.Hash;
+with Ada.Containers.Hashed_Maps; use Ada.Containers;
+with DOM.Readers; use DOM.Readers;
+with Game; use Game;
+
+-- ****h* Steamsky/BasesTypes
+-- FUNCTION
+-- Provide code for bases types
+-- SOURCE
+package BasesTypes is
+-- ****
+
+   type Prices_Array is array (1 .. 2) of Natural;
+
+   -- ****t* BasesTypes/BasesTrade_Container
+   -- FUNCTION
+   -- Used to store base buy and sell prices for items in selected base type
+   -- SOURCE
+   package BasesTrade_Container is new Hashed_Maps(Unbounded_String,
+      Prices_Array, Ada.Strings.Unbounded.Hash, "=");
+   -- ****
+
+   -- ****t* BasesTypes/BaseType_Data
+   -- FUNCTION
+   -- Data structure for bases types
+   -- PARAMETERS
+   -- Name        - Name of base type, will be presented to the player
+   -- Color       - Hexadecimal number of color used to show that base type on
+   --               the map
+   -- Trades      - List of base items prices for buy and sale in that base
+   --               type
+   -- Recipes     - List of available crafting recipes in that base type
+   -- Flags       - Special flags for selected base type (like shipyard, etc)
+   -- Description - Description of the base type. Will be presented to the
+   --               player, for example in new game menu
+   -- SOURCE
+   type BaseType_Data is record
+      Name: Unbounded_String;
+      Color: String(1 .. 7);
+      Trades: BasesTrade_Container.Map;
+      Recipes: UnboundedString_Container.Vector;
+      Flags: UnboundedString_Container.Vector;
+      Description: Unbounded_String;
+   end record;
+   -- ****
+
+   -- ****t* BasesTypes/BasesTypes_Container
+   -- FUNCTION
+   -- Used to store information about all available bases types
+   -- SOURCE
+   package BasesTypes_Container is new Hashed_Maps(Unbounded_String,
+      BaseType_Data, Ada.Strings.Unbounded.Hash, "=");
+   -- ****
+
+   -- ****v* BasesTypes/BasesTypes_List
+   -- FUNCTION
+   -- List of all available bases types
+   -- SOURCE
+   BasesTypes_List: BasesTrade_Container.Map;
+   -- ****
+
+   -- ****f* BasesTypes/LoadBasesTypes
+   -- FUNCTION
+   -- Load bases types from file
+   -- PARAMETERS
+   -- Reader - XML Reader from which bases types will be read
+   -- SOURCE
+   procedure LoadBasesTypes(Reader: Tree_Reader);
+   -- ****
+
+end BasesTypes;
