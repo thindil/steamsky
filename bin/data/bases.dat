@@ -265,5 +265,247 @@ cheaper.
   <flag name="shipyard" />
  </base>
  <base index="military" name="Military" color="#32dc32">
+  <item index="4" sellprice="3" />
+  <item index="14" sellprice="1" />
+  <item index="20" sellprice="6" />
+  <item index="23" sellprice="5" />
+  <item index="24" sellprice="3" />
+  <item index="25" sellprice="8" />
+  <item index="26" sellprice="10" />
+  <item index="27" sellprice="12" />
+  <item index="31" sellprice="16" />
+  <item index="32" sellprice="20" />
+  <item index="33" sellprice="24" />
+  <item index="34" sellprice="32" />
+  <item index="35" sellprice="38" />
+  <item index="36" sellprice="50" />
+  <item index="62" sellprice="5" />
+  <item index="63" sellprice="7" />
+  <item index="64" sellprice="10" />
+  <item index="66" sellprice="10" />
+  <item index="67" sellprice="10" />
+  <item index="68" sellprice="7" />
+  <item index="69" sellprice="8" />
+  <item index="71" sellprice="9" />
+  <item index="72" sellprice="10" />
+  <item index="73" sellprice="7" />
+  <item index="74" sellprice="7" />
+  <item index="76" sellprice="15" />
+  <item index="77" sellprice="10" />
+  <item index="78" sellprice="15" />
+  <item index="79" sellprice="10" />
+  <item index="80" sellprice="12" />
+  <item index="81" sellprice="14" />
+  <item index="82" sellprice="14" />
+  <item index="83" sellprice="18" />
+  <item index="84" sellprice="12" />
+  <item index="85" sellprice="15" />
+  <item index="86" sellprice="17" />
+  <item index="87" sellprice="15" />
+  <item index="88" sellprice="20" />
+  <item index="89" sellprice="24" />
+  <item index="90" sellprice="28" />
+  <item index="91" sellprice="18" />
+  <item index="92" sellprice="20" />
+  <item index="93" sellprice="24" />
+  <item index="117" sellprice="12" />
+  <item index="118" sellprice="20" />
+  <item index="119" sellprice="24" />
+  <item index="120" sellprice="38" />
+  <item index="121" sellprice="70" />
+  <item index="122" sellprice="15" />
+  <item index="123" sellprice="22" />
+  <item index="124" sellprice="25" />
+  <item index="125" sellprice="30" />
+  <item index="126" sellprice="35" />
+  <item index="127" sellprice="24" />
+  <item index="128" sellprice="26" />
+  <item index="129" sellprice="30" />
+  <item index="152" sellprice="28" />
+  <item index="153" sellprice="32" />
+  <item index="154" sellprice="58" />
+  <item index="155" sellprice="100" />
+  <item index="156" sellprice="25" />
+  <item index="157" sellprice="28" />
+  <item index="158" sellprice="35" />
+  <item index="159" sellprice="38" />
+  <item index="160" sellprice="43" />
+  <item index="161" sellprice="30" />
+  <item index="162" sellprice="33" />
+  <item index="163" sellprice="36" />
+  <item index="178" sellprice="64" />
+  <item index="179" sellprice="116" />
+  <item index="180" sellprice="200" />
+  <item index="181" sellprice="50" />
+  <item index="182" sellprice="56" />
+  <item index="183" sellprice="70" />
+  <item index="184" sellprice="76" />
+  <item index="185" sellprice="86" />
+  <item index="187" sellprice="60" />
+  <item index="190" sellprice="66" />
+  <item index="193" sellprice="72" />
+  <item index="211" sellprice="7" />
+  <item index="212" sellprice="10" />
+  <item index="213" sellprice="15" />
+  <item index="214" sellprice="22" />
+  <item index="215" sellprice="28" />
+  <item index="216" sellprice="56" />
+  <item index="217" sellprice="7" />
+  <item index="218" sellprice="10" />
+  <item index="219" sellprice="15" />
+  <item index="220" sellprice="22" />
+  <item index="221" sellprice="28" />
+  <item index="222" sellprice="56" />
+  <item index="223" sellprice="17" />
+  <item index="224" sellprice="22" />
+  <item index="225" sellprice="27" />
+  <item index="226" sellprice="32" />
+  <item index="227" sellprice="37" />
+  <item index="228" sellprice="77" />
+  <item index="229" sellprice="10" />
+  <item index="230" sellprice="15" />
+  <item index="231" sellprice="20" />
+  <item index="232" sellprice="25" />
+  <item index="233" sellprice="35" />
+  <item index="234" sellprice="70" />
+  <item index="235" sellprice="17" />
+  <item index="236" sellprice="22" />
+  <item index="237" sellprice="27" />
+  <item index="238" sellprice="32" />
+  <item index="239" sellprice="37" />
+  <item index="240" sellprice="77" />
+  <item index="241" sellprice="10" />
+  <item index="242" sellprice="15" />
+  <item index="243" sellprice="20" />
+  <item index="244" sellprice="25" />
+  <item index="245" sellprice="35" />
+  <item index="246" sellprice="70" />
+  <item index="247" sellprice="17" />
+  <item index="248" sellprice="22" />
+  <item index="249" sellprice="27" />
+  <item index="250" sellprice="32" />
+  <item index="251" sellprice="37" />
+  <item index="252" sellprice="77" />
+  <recipe index="4" />
+  <recipe index="5" />
+  <recipe index="10" />
+  <recipe index="12" />
+  <recipe index="13" />
+  <recipe index="14" />
+  <recipe index="15" />
+  <recipe index="16" />
+  <recipe index="21" />
+  <recipe index="22" />
+  <recipe index="23" />
+  <recipe index="24" />
+  <recipe index="25" />
+  <recipe index="26" />
+  <recipe index="45" />
+  <recipe index="46" />
+  <recipe index="47" />
+  <recipe index="48" />
+  <recipe index="49" />
+  <recipe index="50" />
+  <recipe index="51" />
+  <recipe index="53" />
+  <recipe index="54" />
+  <recipe index="55" />
+  <recipe index="56" />
+  <recipe index="58" />
+  <recipe index="59" />
+  <recipe index="60" />
+  <recipe index="61" />
+  <recipe index="62" />
+  <recipe index="63" />
+  <recipe index="64" />
+  <recipe index="65" />
+  <recipe index="66" />
+  <recipe index="67" />
+  <recipe index="68" />
+  <recipe index="69" />
+  <recipe index="70" />
+  <recipe index="71" />
+  <recipe index="72" />
+  <recipe index="73" />
+  <recipe index="74" />
+  <recipe index="75" />
+  <recipe index="98" />
+  <recipe index="99" />
+  <recipe index="100" />
+  <recipe index="101" />
+  <recipe index="102" />
+  <recipe index="103" />
+  <recipe index="104" />
+  <recipe index="105" />
+  <recipe index="106" />
+  <recipe index="107" />
+  <recipe index="108" />
+  <recipe index="109" />
+  <recipe index="110" />
+  <recipe index="132" />
+  <recipe index="133" />
+  <recipe index="134" />
+  <recipe index="135" />
+  <recipe index="136" />
+  <recipe index="137" />
+  <recipe index="138" />
+  <recipe index="139" />
+  <recipe index="140" />
+  <recipe index="141" />
+  <recipe index="142" />
+  <recipe index="143" />
+  <recipe index="155" />
+  <recipe index="156" />
+  <recipe index="157" />
+  <recipe index="158" />
+  <recipe index="159" />
+  <recipe index="160" />
+  <recipe index="161" />
+  <recipe index="162" />
+  <recipe index="163" />
+  <recipe index="164" />
+  <recipe index="165" />
+  <recipe index="189" />
+  <recipe index="190" />
+  <recipe index="191" />
+  <recipe index="192" />
+  <recipe index="193" />
+  <recipe index="194" />
+  <recipe index="195" />
+  <recipe index="196" />
+  <recipe index="197" />
+  <recipe index="198" />
+  <recipe index="199" />
+  <recipe index="200" />
+  <recipe index="201" />
+  <recipe index="202" />
+  <recipe index="203" />
+  <recipe index="204" />
+  <recipe index="205" />
+  <recipe index="206" />
+  <recipe index="207" />
+  <recipe index="208" />
+  <recipe index="209" />
+  <recipe index="210" />
+  <recipe index="211" />
+  <recipe index="212" />
+  <recipe index="213" />
+  <recipe index="214" />
+  <recipe index="215" />
+  <recipe index="216" />
+  <recipe index="217" />
+  <recipe index="218" />
+  <recipe index="219" />
+  <recipe index="220" />
+  <recipe index="221" />
+  <recipe index="222" />
+  <recipe index="223" />
+  <recipe index="224" />
+  <recipe index="225" />
+  <recipe index="226" />
+  <recipe index="227" />
+  <recipe index="228" />
+  <recipe index="229" />
+  <recipe index="230" />
  </base>
 </bases>
