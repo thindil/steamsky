@@ -51,6 +51,7 @@ with Log; use Log;
 with Help; use Help;
 with Stories; use Stories;
 with Careers; use Careers;
+with BasesTypes; use BasesTypes;
 
 package body Game is
 
@@ -732,6 +733,7 @@ package body Game is
          (To_Unbounded_String("modules"),
           To_Unbounded_String("shipmodules.dat")),
          (To_Unbounded_String("recipes"), To_Unbounded_String("recipes.dat")),
+         (To_Unbounded_String("bases"), To_Unbounded_String("bases.dat")),
          (To_Unbounded_String("mobiles"), To_Unbounded_String("mobs.dat")),
          (To_Unbounded_String("careers"), To_Unbounded_String("careers.dat")),
          (To_Unbounded_String("factions"),
@@ -771,6 +773,8 @@ package body Game is
                   LoadMobs(Reader);
                elsif To_String(DataType) = "recipes" then
                   LoadRecipes(Reader);
+               elsif To_String(DataType) = "bases" then
+                  LoadBasesTypes(Reader);
                elsif To_String(DataType) = "modules" then
                   LoadShipModules(Reader);
                elsif To_String(DataType) = "ships" then
