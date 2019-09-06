@@ -7,6 +7,9 @@ type. It can be number or text. Required
 unique too. Required.
 - Attribute "color" is a base type color in hexadecimal used to show this
 base type to player on the map in game. Required.
+- Optional attribute `action`: what to do with this entry. Possible values
+are: "add" (add this entry, default option), "remove" (remove this entry) or
+"update" (update selected entry).
 -->
  <base index="industrial" name="Industrial" color="#ff0000">
 <!--
