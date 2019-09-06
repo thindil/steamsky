@@ -28,7 +28,12 @@ with Game; use Game;
 package BasesTypes is
 -- ****
 
-   type Prices_Array is array (1 .. 2) of Natural;
+   -- ****t* BasesTypes/Prices_Array
+   -- FUNCTION
+   -- Buy and sell prices for the item in selected base type
+   -- SOURCE
+   type Prices_Array is array(1 .. 2) of Natural;
+   -- ****
 
    -- ****t* BasesTypes/BasesTrade_Container
    -- FUNCTION
@@ -74,7 +79,7 @@ package BasesTypes is
    -- FUNCTION
    -- List of all available bases types
    -- SOURCE
-   BasesTypes_List: BasesTrade_Container.Map;
+   BasesTypes_List: BasesTypes_Container.Map;
    -- ****
 
    -- ****f* BasesTypes/LoadBasesTypes
