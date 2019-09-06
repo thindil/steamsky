@@ -15,6 +15,9 @@ with System.Assertions;
 --
 --  end read only
 
+with Crafts; use Crafts;
+with Maps; use Maps;
+
 --  begin read only
 --  end read only
 package body Bases.Trade.Test_Data.Tests is
@@ -54,6 +57,64 @@ package body Bases.Trade.Test_Data.Tests is
 
 --  begin read only
    end Test_HireRecruit_test_hirerecruit;
+--  end read only
+
+--  begin read only
+   procedure Wrap_Test_BuyRecipe_64b3a1_e0c4a8 (RecipeIndex: Unbounded_String) 
+   is
+   begin
+      begin
+         pragma Assert
+           ((RecipeIndex /= Null_Unbounded_String));
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(bases-trade.ads:0):Test_BuyRecipe test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Bases.Trade.BuyRecipe (RecipeIndex);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(bases-trade.ads:0:):Test_BuyRecipe test commitment violated");
+      end;
+   end Wrap_Test_BuyRecipe_64b3a1_e0c4a8;
+--  end read only
+
+--  begin read only
+   procedure Test_BuyRecipe_test_buyrecipe (Gnattest_T : in out Test);
+   procedure Test_BuyRecipe_64b3a1_e0c4a8 (Gnattest_T : in out Test) renames Test_BuyRecipe_test_buyrecipe;
+--  id:2.2/64b3a1fdc448171c/BuyRecipe/1/0/test_buyrecipe/
+   procedure Test_BuyRecipe_test_buyrecipe (Gnattest_T : in out Test) is
+   procedure BuyRecipe (RecipeIndex: Unbounded_String) renames Wrap_Test_BuyRecipe_64b3a1_e0c4a8;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      Amount: Positive := Positive(Known_Recipes.Length);
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      BaseType: constant Positive :=
+        Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
+
+   begin
+
+      for I in Recipes_List.Iterate loop
+         if Recipes_List(I).BaseType = BaseType and then Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) =
+        Positive_Container.No_Index then
+            BuyRecipe(Recipes_Container.Key(I));
+            exit;
+         end if;
+      end loop;
+      Assert(Positive(Known_Recipes.Length) = Amount + 1, "Failed to buy recipe from base.");
+
+--  begin read only
+   end Test_BuyRecipe_test_buyrecipe;
 --  end read only
 
 --  begin read only

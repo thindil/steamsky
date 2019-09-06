@@ -69,7 +69,8 @@ package Bases.Trade is
       -- RecipeIndex - Index of the recipe from base recipes list to buy
       -- SOURCE
    procedure BuyRecipe(RecipeIndex: Unbounded_String) with
-      Pre => (RecipeIndex /= Null_Unbounded_String);
+      Pre => (RecipeIndex /= Null_Unbounded_String),
+      Test_Case => ("Test_BuyRecipe", Nominal);
       -- ****
 
       -- ****f* Bases.Trade/HealWounded

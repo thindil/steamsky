@@ -12,5 +12,8 @@ package Bases.Trade.Test_Data.Tests is
    procedure Test_HireRecruit_e2a034_6a9998 (Gnattest_T : in out Test);
    --  bases-trade.ads:59:4:HireRecruit:Test_HireRecruit
 
+   procedure Test_BuyRecipe_64b3a1_e0c4a8 (Gnattest_T : in out Test);
+   --  bases-trade.ads:71:4:BuyRecipe:Test_BuyRecipe
+
 end Bases.Trade.Test_Data.Tests;
 --  end read only
