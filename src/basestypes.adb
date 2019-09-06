@@ -21,19 +21,59 @@ with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
 with Log; use Log;
+with Crafts; use Crafts;
+with Items; use Items;
 
 package body BasesTypes is
 
    procedure LoadBasesTypes(Reader: Tree_Reader) is
       TempRecord: BaseType_Data;
-      NodesList: Node_List;
+      NodesList, ChildNodes: Node_List;
       BasesData: Document;
       TmpTrades: BasesTrade_Container.Map;
       TmpRecipes: UnboundedString_Container.Vector;
       TmpFlags: UnboundedString_Container.Vector;
-      BaseNode: Node;
-      BaseIndex: Unbounded_String;
-      Action: DataAction;
+      BaseNode, ChildNode: Node;
+      BaseIndex, ItemIndex: Unbounded_String;
+      Action, SubAction: DataAction;
+      procedure AddChildNode
+        (Data: in out UnboundedString_Container.Vector; Name: String;
+         Index: Natural) is
+         Value: Unbounded_String;
+         DeleteIndex: Positive;
+      begin
+         ChildNodes :=
+           DOM.Core.Elements.Get_Elements_By_Tag_Name
+             (Item(NodesList, Index), Name);
+         for J in 0 .. Length(ChildNodes) - 1 loop
+            ChildNode := Item(ChildNodes, J);
+            Value := To_Unbounded_String(Get_Attribute(ChildNode, "index"));
+            if Get_Attribute(ChildNode, "action")'Length > 0 then
+               SubAction :=
+                 DataAction'Value(Get_Attribute(ChildNode, "action"));
+            else
+               SubAction := ADD;
+            end if;
+            if Name = "recipe" and then not Recipes_List.Contains(Value) then
+               raise Data_Loading_Error
+                 with "Can't " & To_Lower(DataAction'Image(Action)) &
+                 " base type '" & To_String(BaseIndex) &
+                 "', no recipe with index '" & To_String(Value) & "'.";
+            end if;
+            if SubAction /= REMOVE then
+               Data.Append(New_Item => Value);
+            else
+               DeleteIndex := Data.First_Index;
+               while DeleteIndex <= Data.Last_Index loop
+                  if Data(DeleteIndex) = Value then
+                     Data.Delete(Index => DeleteIndex);
+                     exit;
+                  end if;
+                  DeleteIndex := DeleteIndex + 1;
+               end loop;
+            end if;
+         end loop;
+      end AddChildNode;
    begin
       BasesData := Get_Tree(Reader);
       NodesList :=
@@ -78,6 +118,37 @@ package body BasesTypes is
                TempRecord.Description :=
                  To_Unbounded_String(Get_Attribute(BaseNode, "description"));
             end if;
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Item(NodesList, I), "item");
+            for J in 0 .. Length(ChildNodes) - 1 loop
+               ChildNode := Item(ChildNodes, J);
+               ItemIndex :=
+                 To_Unbounded_String(Get_Attribute(ChildNode, "index"));
+               if Get_Attribute(ChildNode, "action")'Length > 0 then
+                  SubAction :=
+                    DataAction'Value(Get_Attribute(ChildNode, "action"));
+               else
+                  SubAction := ADD;
+               end if;
+               if not Items_List.Contains(ItemIndex) then
+                  raise Data_Loading_Error
+                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    " base type '" & To_String(BaseIndex) &
+                    "', no item with index '" & To_String(ItemIndex) & "'.";
+               end if;
+               if SubAction /= REMOVE then
+                  TempRecord.Trades.Include
+                    (Key => ItemIndex,
+                     New_Item =>
+                       (Natural'Value(Get_Attribute(ChildNode, "sellprice")),
+                        0));
+               else
+                  TempRecord.Trades.Delete(ItemIndex);
+               end if;
+            end loop;
+            AddChildNode(TempRecord.Recipes, "recipe", I);
+            AddChildNode(TempRecord.Flags, "flag", I);
             if Action /= UPDATE then
                BasesTypes_Container.Include
                  (BasesTypes_List, BaseIndex, TempRecord);
