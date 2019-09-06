@@ -12,6 +12,7 @@ package body Bases.Trade.Test_Data is
    procedure Set_Up (Gnattest_T : in out Test) is
       pragma Unreferenced (Gnattest_T);
    begin
+      NewGameSettings.StartingBase := To_Unbounded_String("Agricultural");
       if DataDirectory = To_Unbounded_String("../../bin/data/") then
          return;
       end if;
