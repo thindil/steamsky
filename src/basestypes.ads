@@ -20,6 +20,7 @@ with Ada.Strings.Unbounded.Hash;
 with Ada.Containers.Hashed_Maps; use Ada.Containers;
 with DOM.Readers; use DOM.Readers;
 with Game; use Game;
+with Items; use Items;
 
 -- ****h* Steamsky/BasesTypes
 -- FUNCTION
@@ -90,5 +91,20 @@ package BasesTypes is
    -- SOURCE
    procedure LoadBasesTypes(Reader: Tree_Reader);
    -- ****
+
+   -- ****f* BasesTypes/Is_Buyable
+   -- FUNCTION
+   -- Check if selected item is buyable in selected base type
+   -- PARAMETERS
+   -- BaseType  - Base type to check
+   -- ItemIndex - Index of item prototype to check
+   -- RESULT
+   -- True if item is buyable in that type of bases otherwise false
+   -- SOURCE
+   function Is_Buyable(BaseType, ItemIndex: Unbounded_String) return Boolean with
+      Pre => BasesTypes_List.Contains(BaseType) and Items_List.Contains(ItemIndex);
+      -- ****
+
+   function BaseTypeIndex(BaseType: Unbounded_String) return Positive;
 
 end BasesTypes;

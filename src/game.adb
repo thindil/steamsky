@@ -114,10 +114,10 @@ package body Game is
          TempX, TempY, BaseReputation, PosX, PosY: Integer;
          TmpRecruits: Recruit_Container.Vector;
          TmpMissions: Mission_Container.Vector;
-         BasePopulation: Natural;
+         BasePopulation, BaseTypeRoll: Natural;
          TmpCargo: BaseCargo_Container.Vector;
          BaseSize: Bases_Size;
-         BaseOwner: Unbounded_String;
+         BaseOwner, BaseType: Unbounded_String;
          package Bases_Container is new Hashed_Maps(Unbounded_String,
             Positive_Container.Vector, Ada.Strings.Unbounded.Hash, "=",
             Positive_Container."=");
@@ -160,10 +160,18 @@ package body Game is
             else
                BaseSize := Big;
             end if;
+            BaseTypeRoll := GetRandom(1, Integer(BasesTypes_List.Length));
+            for J in BasesTypes_List.Iterate loop
+               BaseTypeRoll := BaseTypeRoll - 1;
+               if BaseTypeRoll = 0 then
+                  BaseType := BasesTypes_Container.Key(J);
+                  exit;
+               end if;
+            end loop;
             SkyBases(I) :=
               (Name => GenerateBaseName(BaseOwner), Visited => (others => 0),
                SkyX => 0, SkyY => 0,
-               BaseType => Bases_Types'Val(GetRandom(0, 4)),
+               BaseType => BaseType,
                Population => BasePopulation, RecruitDate => (others => 0),
                Recruits => TmpRecruits, Known => False, AskedForBases => False,
                AskedForEvents => (others => 0),
@@ -250,22 +258,17 @@ package body Game is
          end loop;
       end;
       -- Place player ship in random large base
-      declare
-         BaseType: constant Bases_Types :=
-           Bases_Types'Value(To_String(NewGameSettings.StartingBase));
-      begin
-         loop
-            RandomBase := GetRandom(1, 1024);
-            if BaseType = Any then
-               exit when SkyBases(RandomBase).Population > 299 and
-                 SkyBases(RandomBase).Owner = NewGameSettings.PlayerFaction;
-            else
-               exit when SkyBases(RandomBase).Population > 299 and
-                 SkyBases(RandomBase).Owner = NewGameSettings.PlayerFaction and
-                 SkyBases(RandomBase).BaseType = BaseType;
-            end if;
-         end loop;
-      end;
+      loop
+         RandomBase := GetRandom(1, 1024);
+         if NewGameSettings.StartingBase = To_Unbounded_String("Any") then
+            exit when SkyBases(RandomBase).Population > 299 and
+            SkyBases(RandomBase).Owner = NewGameSettings.PlayerFaction;
+         else
+            exit when SkyBases(RandomBase).Population > 299 and
+            SkyBases(RandomBase).Owner = NewGameSettings.PlayerFaction and
+            SkyBases(RandomBase).BaseType = NewGameSettings.StartingBase;
+         end if;
+      end loop;
       -- Create player ship
       PlayerShip :=
         CreateShip

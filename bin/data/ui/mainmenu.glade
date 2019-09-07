@@ -97,26 +97,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">Industrial</col>
-        <col id="1" translatable="yes">Industrial bases provide tools and materials for crafting. Little more difficult start point than Agricultural bases.</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Agricultural</col>
-        <col id="1" translatable="yes">Agricultural bases provides food, drinks and raw materials to create them. Easiest starting point.</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Refinery</col>
-        <col id="1" translatable="yes">Refinery bases provides raw materials for refining which later can be sold in Industrial bases. Little more difficult starting point than Industrial bases.</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Shipyard</col>
-        <col id="1" translatable="yes">Shipyard bases don't sell any items but offers cheaper repairs to ships and ability to upgrade ships. Difficult place for starting point.</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Military</col>
-        <col id="1" translatable="yes">Military bases provides ammunition to guns and melee weapons. They are most difficult place for starting point.</col>
-      </row>
-      <row>
         <col id="0" translatable="yes">Any</col>
         <col id="1" translatable="yes">Start game in randomly selected base type.</col>
       </row>
@@ -554,6 +534,17 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               </packing>
                             </child>
                             <child>
+                              <object class="GtkLabel" id="playertooltip">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">General player character settings. Select field which you want to set to see more informations about it.</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">7</property>
+                              </packing>
+                            </child>
+                            <child>
                               <object class="GtkComboBox" id="cmbbasetype">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -572,17 +563,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="top_attach">6</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="playertooltip">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="tooltip_text" translatable="yes">General player character settings. Select field which you want to set to see more informations about it.</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">7</property>
                               </packing>
                             </child>
                             <child>

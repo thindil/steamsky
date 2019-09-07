@@ -30,14 +30,6 @@ with Factions; use Factions;
 package Bases is
 -- ****
 
-   -- ****t* Bases/Bases_Types
-   -- FUNCTION
-   -- Types of bases
-   -- SOURCE
-   type Bases_Types is
-     (Industrial, Agricultural, Refinery, Shipyard, Military, Any);
-   -- ****
-
    -- ****t* Bases/Recruit_Data
    -- FUNCTION
    -- Data structure for recruits
@@ -142,7 +134,7 @@ package Bases is
       Visited: Date_Record;
       SkyX: Integer;
       SkyY: Integer;
-      BaseType: Bases_Types;
+      BaseType: Unbounded_String;
       Population: Natural;
       RecruitDate: Date_Record;
       Recruits: Recruit_Container.Vector;
