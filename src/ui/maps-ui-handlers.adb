@@ -79,6 +79,7 @@ with Stories; use Stories;
 with Stories.UI; use Stories.UI;
 with Factions; use Factions;
 with Themes; use Themes;
+with BasesTypes; use BasesTypes;
 
 package body Maps.UI.Handlers is
 
@@ -618,15 +619,16 @@ package body Maps.UI.Handlers is
                   exit;
                end if;
             end loop;
-            if SkyBases(BaseIndex).BaseType = Shipyard then
+            if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
+                (To_Unbounded_String("shipyard")) then
                Set_No_Show_All
                  (Gtk_Widget(Get_Object(Object, "btnshipyard")), False);
             end if;
             for I in Recipes_List.Iterate loop
                if Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) =
                  UnboundedString_Container.No_Index and
-                 Recipes_List(I).BaseType =
-                   Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1 then
+                 BasesTypes_List(SkyBases(BaseIndex).BaseType).Recipes.Contains
+                   (Recipes_Container.Key(I)) then
                   Set_No_Show_All
                     (Gtk_Widget(Get_Object(Object, "btnrecipes")), False);
                   exit;

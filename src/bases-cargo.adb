@@ -53,13 +53,16 @@ package body Bases.Cargo is
                Amount => (GetRandom(50, 200) * Population), Durability => 100,
                Price => 0));
          for I in Items_List.Iterate loop
-            if Is_Buyable(SkyBases(BaseIndex).BaseType, Objects_Container.Key(I)) then
+            if Is_Buyable
+                (SkyBases(BaseIndex).BaseType, Objects_Container.Key(I)) then
                SkyBases(BaseIndex).Cargo.Append
-                  (New_Item =>
-                  (ProtoIndex => Objects_Container.Key(I),
-                  Amount => (GetRandom(0, 100) * Population),
-                  Durability => 100,
-                  Price => Items_List(I).Prices(BaseTypeIndex(SkyBases(BaseIndex).BaseType))));
+                 (New_Item =>
+                    (ProtoIndex => Objects_Container.Key(I),
+                     Amount => (GetRandom(0, 100) * Population),
+                     Durability => 100,
+                     Price =>
+                       Items_List(I).Prices
+                         (BaseTypeIndex(SkyBases(BaseIndex).BaseType))));
             end if;
          end loop;
       else
@@ -109,7 +112,9 @@ package body Bases.Cargo is
               (New_Item =>
                  (ProtoIndex => ProtoIndex, Amount => Amount,
                   Durability => Durability,
-                  Price => Items_List(ProtoIndex).Prices(BaseTypeIndex(SkyBases(BaseIndex).BaseType))));
+                  Price =>
+                    Items_List(ProtoIndex).Prices
+                      (BaseTypeIndex(SkyBases(BaseIndex).BaseType))));
          else
             SkyBases(BaseIndex).Cargo(ItemIndex).Amount :=
               SkyBases(BaseIndex).Cargo(ItemIndex).Amount + Amount;
@@ -118,8 +123,9 @@ package body Bases.Cargo is
          SkyBases(BaseIndex).Cargo(ItemIndex).Amount :=
            SkyBases(BaseIndex).Cargo(ItemIndex).Amount + Amount;
          if SkyBases(BaseIndex).Cargo(ItemIndex).Amount = 0 and
-           not Is_Buyable(SkyBases(BaseIndex).BaseType, SkyBases(BaseIndex).Cargo(ItemIndex).ProtoIndex)
-              and
+           not Is_Buyable
+             (SkyBases(BaseIndex).BaseType,
+              SkyBases(BaseIndex).Cargo(ItemIndex).ProtoIndex) and
            ItemIndex > 1 then
             SkyBases(BaseIndex).Cargo.Delete(Index => ItemIndex);
          end if;

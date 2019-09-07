@@ -26,6 +26,7 @@ with Crew; use Crew;
 with Game; use Game;
 with Utils; use Utils;
 with Bases.Cargo; use Bases.Cargo;
+with BasesTypes; use BasesTypes;
 
 package body Trades is
 
@@ -134,7 +135,7 @@ package body Trades is
          raise Trade_No_Trader;
       end if;
       if BaseIndex > 0 then
-         BaseType := Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
+         BaseType := BaseTypeIndex(SkyBases(BaseIndex).BaseType);
          BaseItemIndex := FindBaseCargo(ProtoIndex);
       else
          BaseType := 1;

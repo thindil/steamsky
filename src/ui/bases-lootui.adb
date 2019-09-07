@@ -39,6 +39,7 @@ with Items; use Items;
 with Bases.Cargo; use Bases.Cargo;
 with Utils.UI; use Utils.UI;
 with Maps.UI; use Maps.UI;
+with BasesTypes; use BasesTypes;
 
 package body Bases.LootUI is
 
@@ -361,7 +362,7 @@ package body Bases.LootUI is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=
-        Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
+        BaseTypeIndex(SkyBases(BaseIndex).BaseType);
       IndexesList: Positive_Container.Vector;
       BaseCargoIndex: Natural;
       ProtoIndex: Unbounded_String;

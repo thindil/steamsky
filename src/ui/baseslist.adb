@@ -46,6 +46,7 @@ with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 with Factions; use Factions;
 with Config; use Config;
+with BasesTypes; use BasesTypes;
 
 package body BasesList is
 
@@ -286,7 +287,7 @@ package body BasesList is
      (Model: Gtk_Tree_Model; Iter: Gtk_Tree_Iter) return Boolean is
       -- ****
       ShowBase: Boolean := False;
-      BasesType: Bases_Types;
+      BasesType: Unbounded_String;
       BasesStatus: Natural;
       BaseIndex: Positive;
       BasesOwner: Unbounded_String;
@@ -295,8 +296,8 @@ package body BasesList is
          return True;
       end if;
       BasesType :=
-        Bases_Types'Val
-          (Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbtype"))));
+        To_Unbounded_String
+          (Get_Active_Text(Gtk_Combo_Box(Get_Object(Builder, "cmbtype"))));
       BasesStatus :=
         Natural(Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbstatus"))));
       BasesOwner :=
@@ -305,7 +306,7 @@ package body BasesList is
       BaseIndex := Positive(Get_Int(Model, Iter, 1));
       case BasesStatus is
          when 0 => -- All bases
-            if BasesType = Any then
+            if BasesType = To_Unbounded_String("Any") then
                if
                  (Factions_Container.Contains(Factions_List, BasesOwner) and
                   SkyBases(BaseIndex).Visited.Year > 0)
@@ -316,7 +317,8 @@ package body BasesList is
                   ShowBase := True;
                end if;
             elsif SkyBases(BaseIndex).Visited.Year > 0 and
-              SkyBases(BaseIndex).BaseType = BasesType then
+              BasesTypes_List(SkyBases(BaseIndex).BaseType).Name =
+                BasesType then
                if Factions_Container.Contains(Factions_List, BasesOwner)
                  and then SkyBases(BaseIndex).Owner = BasesOwner then
                   ShowBase := True;
@@ -326,8 +328,8 @@ package body BasesList is
             end if;
          when 1 => -- Only visited bases
             if
-              (BasesType = Any or
-               (BasesType /= Any and
+              (BasesType = To_Unbounded_String("Any") or
+               (BasesType /= To_Unbounded_String("Any") and
                 SkyBases(BaseIndex).BaseType = BasesType)) and
               SkyBases(BaseIndex).Visited.Year > 0 then
                if Factions_Container.Contains(Factions_List, BasesOwner)
@@ -401,12 +403,10 @@ package body BasesList is
       Register_Handler(Builder, "Show_Popup_Menu", ShowPopupMenu'Access);
       Register_Handler(Builder, "Toggle_Base_Info", ToggleBaseInfo'Access);
       ComboBox := Gtk_Combo_Box_Text(Get_Object(Builder, "cmbtype"));
-      for I in Bases_Types loop
-         Append_Text
-           (ComboBox,
-            Bases_Types'Image(I)(1) &
-            To_Lower(Bases_Types'Image(I)(2 .. Bases_Types'Image(I)'Last)));
+      for BaseType of BasesTypes_List loop
+         Append_Text(ComboBox, To_String(BaseType.Name));
       end loop;
+      Append_Text(ComboBox, "Any");
       ComboBox := Gtk_Combo_Box_Text(Get_Object(Builder, "cmbowner"));
       for I in Factions_List.Iterate loop
          Append
@@ -436,7 +436,7 @@ package body BasesList is
    begin
       Set_Active
         (Gtk_Combo_Box(Get_Object(Builder, "cmbtype")),
-         Bases_Types'Pos(Bases_Types'Last));
+         Gint(BasesTypes_List.Length));
       Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbstatus")), 0);
       if not Set_Active_Id
           (Gtk_Combo_Box(Get_Object(Builder, "cmbowner")), "Any") then
@@ -473,7 +473,7 @@ package body BasesList is
                   To_String(Factions_List(SkyBases(I).Owner).Name));
                Set
                  (BaseList, BaseIter, 7,
-                  To_Lower(Bases_Types'Image(SkyBases(I).BaseType)));
+                  To_String(BasesTypes_List(SkyBases(I).BaseType).Name));
             else
                Set(BaseList, BaseIter, 3, "not visited");
                Set(BaseList, BaseIter, 4, -1);

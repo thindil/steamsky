@@ -24,6 +24,7 @@ with Ships.Crew; use Ships.Crew;
 with Trades; use Trades;
 with Bases.Cargo; use Bases.Cargo;
 with Config; use Config;
+with BasesTypes; use BasesTypes;
 
 package body Bases.Ship is
 
@@ -483,12 +484,9 @@ package body Bases.Ship is
    end PayForDock;
 
    procedure RepairCost(Cost, Time: in out Natural; ModuleIndex: Integer) is
-      BaseType: constant Positive :=
-        Bases_Types'Pos
-          (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-             .BaseType) +
-        1;
       ProtoIndex: Unbounded_String;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
       if ModuleIndex > 0 then
          Time :=
@@ -499,7 +497,10 @@ package body Bases.Ship is
              (ItemType =>
                 Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                   .RepairMaterial);
-         Cost := Time * Items_List(ProtoIndex).Prices(BaseType);
+         Cost :=
+           Time *
+           Items_List(ProtoIndex).Prices
+             (BaseTypeIndex(SkyBases(BaseIndex).BaseType));
       else
          for Module of PlayerShip.Modules loop
             if Module.Durability < Module.MaxDurability then
@@ -511,7 +512,8 @@ package body Bases.Ship is
                Cost :=
                  Cost +
                  ((Module.MaxDurability - Module.Durability) *
-                  Items_List(ProtoIndex).Prices(BaseType));
+                  Items_List(ProtoIndex).Prices
+                    (BaseTypeIndex(SkyBases(BaseIndex).BaseType)));
             end if;
          end loop;
          if ModuleIndex = -1 then
@@ -522,7 +524,8 @@ package body Bases.Ship is
             Time := Time / 4;
          end if;
       end if;
-      if Bases_Types'Val(BaseType - 1) = Shipyard then
+      if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
+          (To_Unbounded_String("shipyard")) then
          Cost := Cost / 2;
       end if;
       Cost := Natural(Float(Cost) * NewGameSettings.PricesBonus);

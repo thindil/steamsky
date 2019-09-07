@@ -60,7 +60,7 @@ package BasesTypes is
    -- SOURCE
    type BaseType_Data is record
       Name: Unbounded_String;
-      Color: String(1 .. 7);
+      Color: String(1 .. 6);
       Trades: BasesTrade_Container.Map;
       Recipes: UnboundedString_Container.Vector;
       Flags: UnboundedString_Container.Vector;
@@ -101,8 +101,10 @@ package BasesTypes is
    -- RESULT
    -- True if item is buyable in that type of bases otherwise false
    -- SOURCE
-   function Is_Buyable(BaseType, ItemIndex: Unbounded_String) return Boolean with
-      Pre => BasesTypes_List.Contains(BaseType) and Items_List.Contains(ItemIndex);
+   function Is_Buyable
+     (BaseType, ItemIndex: Unbounded_String) return Boolean with
+      Pre => BasesTypes_List.Contains(BaseType) and
+      Items_List.Contains(ItemIndex);
       -- ****
 
    function BaseTypeIndex(BaseType: Unbounded_String) return Positive;

@@ -38,6 +38,7 @@ with Bases.Trade; use Bases.Trade;
 with Crafts; use Crafts;
 with Utils.UI; use Utils.UI;
 with Config; use Config;
+with BasesTypes; use BasesTypes;
 
 package body Bases.UI is
 
@@ -73,7 +74,7 @@ package body Bases.UI is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=
-        Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
+        BaseTypeIndex(SkyBases(BaseIndex).BaseType);
       MoneyIndex2: Natural;
       MinChildren: Gint;
       FormattedTime, ObjectIndex: Unbounded_String;
@@ -254,7 +255,7 @@ package body Bases.UI is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Positive :=
-        Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
+        BaseTypeIndex(SkyBases(BaseIndex).BaseType);
    begin
       CurrentState := CLEARING;
       Clear(RecipesList);

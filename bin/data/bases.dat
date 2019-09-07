@@ -11,7 +11,7 @@ base type to player on the map in game. Required.
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 -->
- <base index="industrial" name="Industrial" color="#ff0000">
+ <base index="industrial" name="Industrial" color="ff0000">
 <!--
 Tag "item" is used to set prices for selected item in that base.
 - Attribute "index": item index from "items.dat" file. Required.
@@ -215,7 +215,7 @@ presented to the player during selection of starting base in main menu.
 -->
   <description>Industrial bases provide tools and materials for crafting. Little more difficult start point than Agricultural bases.</description>
  </base>
- <base index="agricultural" name="Agricultural" color="#00ff00">
+ <base index="agricultural" name="Agricultural" color="00ff00">
   <item index="2" sellprice="2" />
   <item index="3" sellprice="1" />
   <item index="6" sellprice="1" />
@@ -248,7 +248,7 @@ presented to the player during selection of starting base in main menu.
   <recipe index="35" />
   <description>Agricultural bases provides food, drinks and raw materials to create them. Easiest starting point.</description>
  </base>
- <base index="refinery" name="Refinery" color="#ffff00">
+ <base index="refinery" name="Refinery" color="ffff00">
   <item index="9" sellprice="3" />
   <item index="10" sellprice="4" />
   <item index="15" sellprice="1" />
@@ -266,7 +266,7 @@ presented to the player during selection of starting base in main menu.
   <recipe index="28" />
   <description>Refinery bases provides raw materials for refining which later can be sold in Industrial bases. Little more difficult starting point than Industrial bases.</description>
  </base>
- <base index="shipyard" name="Shipyard" color="#00ffff">
+ <base index="shipyard" name="Shipyard" color="00ffff">
 <!--
 Tag "flags" is various info about selected base type. Possible options are:
 "shipyard" - that base type have shipyard. Ship repairs in that base are 50%
@@ -275,7 +275,7 @@ cheaper.
   <flag name="shipyard" />
   <description>Shipyard bases don't sell any items but offers cheaper repairs to ships and ability to upgrade ships. Difficult place for starting point.</description>
  </base>
- <base index="military" name="Military" color="#32dc32">
+ <base index="military" name="Military" color="32dc32">
   <item index="4" sellprice="3" />
   <item index="14" sellprice="1" />
   <item index="20" sellprice="6" />
