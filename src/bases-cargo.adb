@@ -19,6 +19,7 @@ with Maps; use Maps;
 with Utils; use Utils;
 with Trades; use Trades;
 with Items; use Items;
+with BasesTypes; use BasesTypes;
 
 package body Bases.Cargo is
 
@@ -51,21 +52,16 @@ package body Bases.Cargo is
               (ProtoIndex => MoneyIndex,
                Amount => (GetRandom(50, 200) * Population), Durability => 100,
                Price => 0));
-         declare
-            BaseType: constant Positive :=
-              Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
-         begin
-            for I in Items_List.Iterate loop
-               if Items_List(I).Buyable(BaseType) then
-                  SkyBases(BaseIndex).Cargo.Append
-                    (New_Item =>
-                       (ProtoIndex => Objects_Container.Key(I),
-                        Amount => (GetRandom(0, 100) * Population),
-                        Durability => 100,
-                        Price => Items_List(I).Prices(BaseType)));
-               end if;
-            end loop;
-         end;
+         for I in Items_List.Iterate loop
+            if Is_Buyable(SkyBases(BaseIndex).BaseType, Objects_Container.Key(I)) then
+               SkyBases(BaseIndex).Cargo.Append
+                  (New_Item =>
+                  (ProtoIndex => Objects_Container.Key(I),
+                  Amount => (GetRandom(0, 100) * Population),
+                  Durability => 100,
+                  Price => Items_List(I).Prices(BaseTypeIndex(SkyBases(BaseIndex).BaseType))));
+            end if;
+         end loop;
       else
          declare
             Roll: Positive;
@@ -100,8 +96,6 @@ package body Bases.Cargo is
       Durability: Natural := 100; CargoIndex: Natural := 0) is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      BaseType: constant Positive :=
-        Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
       ItemIndex: Natural;
    begin
       if ProtoIndex /= Null_Unbounded_String then
@@ -115,7 +109,7 @@ package body Bases.Cargo is
               (New_Item =>
                  (ProtoIndex => ProtoIndex, Amount => Amount,
                   Durability => Durability,
-                  Price => Items_List(ProtoIndex).Prices(BaseType)));
+                  Price => Items_List(ProtoIndex).Prices(BaseTypeIndex(SkyBases(BaseIndex).BaseType))));
          else
             SkyBases(BaseIndex).Cargo(ItemIndex).Amount :=
               SkyBases(BaseIndex).Cargo(ItemIndex).Amount + Amount;
@@ -124,9 +118,8 @@ package body Bases.Cargo is
          SkyBases(BaseIndex).Cargo(ItemIndex).Amount :=
            SkyBases(BaseIndex).Cargo(ItemIndex).Amount + Amount;
          if SkyBases(BaseIndex).Cargo(ItemIndex).Amount = 0 and
-           not Items_List(SkyBases(BaseIndex).Cargo(ItemIndex).ProtoIndex)
-             .Buyable
-             (BaseType) and
+           not Is_Buyable(SkyBases(BaseIndex).BaseType, SkyBases(BaseIndex).Cargo(ItemIndex).ProtoIndex)
+              and
            ItemIndex > 1 then
             SkyBases(BaseIndex).Cargo.Delete(Index => ItemIndex);
          end if;

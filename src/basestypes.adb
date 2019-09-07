@@ -22,7 +22,6 @@ with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
 with Log; use Log;
 with Crafts; use Crafts;
-with Items; use Items;
 
 package body BasesTypes is
 
@@ -114,9 +113,13 @@ package body BasesTypes is
             if Get_Attribute(BaseNode, "color") /= "" then
                TempRecord.Color := Get_Attribute(BaseNode, "color");
             end if;
-            if Get_Attribute(BaseNode, "description") /= "" then
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (BaseNode, "description");
+            if Length(ChildNodes) > 0 then
                TempRecord.Description :=
-                 To_Unbounded_String(Get_Attribute(BaseNode, "description"));
+                 To_Unbounded_String
+                   (Node_Value(First_Child(Item(ChildNodes, 0))));
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
@@ -168,5 +171,32 @@ package body BasesTypes is
          end if;
       end loop;
    end LoadBasesTypes;
+
+   function Is_Buyable(BaseType, ItemIndex: Unbounded_String) return Boolean is
+   begin
+      if not BasesTypes_List(BaseType).Trades.Contains(ItemIndex) then
+         return False;
+      end if;
+      if BasesTypes_List(BaseType).Trades(ItemIndex)(1) = 0 then
+         return False;
+      end if;
+      return True;
+   end Is_Buyable;
+
+   function BaseTypeIndex(BaseType: Unbounded_String) return Positive is
+   begin
+      if BaseType = To_Unbounded_String("industrial") then
+         return 1;
+      elsif BaseType = To_Unbounded_String("agricultural") then
+         return 2;
+      elsif BaseType = To_Unbounded_String("refinery") then
+         return 3;
+      elsif BaseType = To_Unbounded_String("shipyard") then
+         return 4;
+      elsif BaseType = To_Unbounded_String("military") then
+         return 5;
+      end if;
+      return 1;
+   end BaseTypeIndex;
 
 end BasesTypes;

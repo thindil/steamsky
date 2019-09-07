@@ -70,8 +70,8 @@ with Help.UI; use Help.UI;
 with Factions; use Factions;
 with Events; use Events;
 with Themes; use Themes;
-with Bases; use Bases;
 with DebugUI; use DebugUI;
+with BasesTypes; use BasesTypes;
 
 package body MainMenu is
 
@@ -193,6 +193,7 @@ package body MainMenu is
    -- SOURCE
    procedure ShowPage(User_Data: access GObject_Record'Class) is
    -- ****
+      BaseTypeIndex: Natural := 0;
    begin
       if User_Data = Get_Object(Builder, "btnnewgame") then
          if Get_Text(Gtk_GEntry(Get_Object(Builder, "entrycharactername"))) =
@@ -231,10 +232,13 @@ package body MainMenu is
                end if;
             end loop;
          end if;
+         for I in BasesTypes_List.Iterate loop
+            exit when BasesTypes_Container.Key(I) = NewGameSettings.StartingBase;
+            BaseTypeIndex := BaseTypeIndex + 1;
+         end loop;
          Set_Active
            (Gtk_Combo_Box(Get_Object(Builder, "cmbbasetype")),
-            Bases_Types'Pos
-              (Bases_Types'Value(To_String(NewGameSettings.StartingBase))));
+            Gint(BaseTypeIndex));
          CreateGoalsMenu;
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page1");
@@ -487,14 +491,7 @@ package body MainMenu is
            To_Unbounded_String
              (Get_Active_Id
                 (Gtk_Combo_Box_Text(Get_Object(Object, "cmbcareer")))),
-         StartingBase =>
-           To_Unbounded_String
-             (Bases_Types'Image
-                (Bases_Types'Val
-                   (Natural
-                      (Get_Active
-                         (Gtk_Combo_Box
-                            (Get_Object(Object, "cmbbasetype"))))))),
+         StartingBase => To_Unbounded_String(Get_Active_Text(Gtk_Combo_Box(Get_Object(Object, "cmbbasetype")))),
          EnemyDamageBonus =>
            Float
              (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjenemydamage"))) /
@@ -528,6 +525,12 @@ package body MainMenu is
            Float
              (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjprices"))) /
               100.0));
+      for I in BasesTypes_List.Iterate loop
+         if BasesTypes_List(I).Name = NewGameSettings.StartingBase then
+            NewGameSettings.StartingBase := BasesTypes_Container.Key(I);
+            exit;
+         end if;
+      end loop;
       NewGame;
       StartGame;
    end NewGame;
@@ -904,6 +907,17 @@ package body MainMenu is
          end loop;
          Append(FactionComboBox, "random", "Random");
          Set_Active(FactionComboBox, 0);
+      end;
+      declare
+         BasesList: constant Gtk_List_Store :=
+           Gtk_List_Store(Get_Object(Builder, "basesstore"));
+         BaseIter: Gtk_Tree_Iter;
+      begin
+         for BaseType of BasesTypes_List loop
+            Append(BasesList, BaseIter);
+            Set(BasesList, BaseIter, 0, To_String(BaseType.Name));
+            Set(BasesList, BaseIter, 1, To_String(BaseType.Description));
+         end loop;
       end;
       for I in AdjNames'Range loop
          Set_Value
