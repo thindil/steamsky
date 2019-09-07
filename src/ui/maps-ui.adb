@@ -751,20 +751,32 @@ package body Maps.UI is
                         MapChar :=
                           Factions_List(SkyBases(SkyMap(X, Y).BaseIndex).Owner)
                             .BaseIcon;
-                        Gtk_New(MapColor, "BaseColor");
-                        Parse
-                          (Color,
-                           BasesTypes_List
-                             (SkyBases(SkyMap(X, Y).BaseIndex).BaseType)
-                             .Color,
-                           Success);
-                        if Success then
-                           Set_Property
-                             (GObject(MapColor), Foreground_Rgba_Property,
-                              Color);
-                           Set_Property
-                             (GObject(MapColor), Background_Rgba_Property,
-                              Black_RGBA);
+                        MapColor :=
+                          Lookup
+                            (Tags,
+                             To_String
+                               (SkyBases(SkyMap(X, Y).BaseIndex).BaseType));
+                        if MapColor = null then
+                           Gtk_New
+                             (MapColor,
+                              To_String
+                                (SkyBases(SkyMap(X, Y).BaseIndex).BaseType));
+                           Parse
+                             (Color,
+                              "#" &
+                              BasesTypes_List
+                                (SkyBases(SkyMap(X, Y).BaseIndex).BaseType)
+                                .Color,
+                              Success);
+                           if Success then
+                              Set_Property
+                                (GObject(MapColor), Foreground_Rgba_Property,
+                                 Color);
+                              Set_Property
+                                (GObject(MapColor), Background_Rgba_Property,
+                                 Black_RGBA);
+                           end if;
+                           Add(Tags, MapColor);
                         end if;
                      else
                         MapColor := WhiteGrayColor;
