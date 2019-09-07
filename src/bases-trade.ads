@@ -81,7 +81,8 @@ package Bases.Trade is
       --               all wounded crew members
       -- SOURCE
    procedure HealWounded(MemberIndex: Crew_Container.Extended_Index) with
-      Pre => (MemberIndex < PlayerShip.Crew.Last_Index);
+      Pre => (MemberIndex < PlayerShip.Crew.Last_Index),
+      Test_Case => ("Test_HealWounded", Nominal);
       -- ****
 
       -- ****f* Bases.Trade/HealCost

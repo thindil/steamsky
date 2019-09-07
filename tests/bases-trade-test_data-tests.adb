@@ -118,6 +118,58 @@ package body Bases.Trade.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_HealWounded_ec5713_45cd90 (MemberIndex: Crew_Container.Extended_Index) 
+   is
+   begin
+      begin
+         pragma Assert
+           ((MemberIndex < PlayerShip.Crew.Last_Index));
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(bases-trade.ads:0):Test_HealWounded test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Bases.Trade.HealWounded (MemberIndex);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(bases-trade.ads:0:):Test_HealWounded test commitment violated");
+      end;
+   end Wrap_Test_HealWounded_ec5713_45cd90;
+--  end read only
+
+--  begin read only
+   procedure Test_HealWounded_test_healwounded (Gnattest_T : in out Test);
+   procedure Test_HealWounded_ec5713_45cd90 (Gnattest_T : in out Test) renames Test_HealWounded_test_healwounded;
+--  id:2.2/ec5713429dea8dfb/HealWounded/1/0/test_healwounded/
+   procedure Test_HealWounded_test_healwounded (Gnattest_T : in out Test) is
+   procedure HealWounded (MemberIndex: Crew_Container.Extended_Index) renames Wrap_Test_HealWounded_ec5713_45cd90;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      PlayerShip.Cargo(1).Amount := PlayerShip.Cargo(1).Amount + 2000;
+      PlayerShip.Crew(1).Health := 90;
+      HealWounded(1);
+      Assert(PlayerShip.Crew(1).Health = 100, "Failed to heal selected crew member.");
+      PlayerShip.Crew(1).Health := 90;
+      HealWounded(0);
+      Assert(PlayerShip.Crew(1).Health = 100, "Failed to heal whole crew.");
+
+--  begin read only
+   end Test_HealWounded_test_healwounded;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.

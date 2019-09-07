@@ -15,5 +15,8 @@ package Bases.Trade.Test_Data.Tests is
    procedure Test_BuyRecipe_64b3a1_e0c4a8 (Gnattest_T : in out Test);
    --  bases-trade.ads:71:4:BuyRecipe:Test_BuyRecipe
 
+   procedure Test_HealWounded_ec5713_45cd90 (Gnattest_T : in out Test);
+   --  bases-trade.ads:83:4:HealWounded:Test_HealWounded
+
 end Bases.Trade.Test_Data.Tests;
 --  end read only
