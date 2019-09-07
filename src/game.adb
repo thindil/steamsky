@@ -170,8 +170,7 @@ package body Game is
             end loop;
             SkyBases(I) :=
               (Name => GenerateBaseName(BaseOwner), Visited => (others => 0),
-               SkyX => 0, SkyY => 0,
-               BaseType => BaseType,
+               SkyX => 0, SkyY => 0, BaseType => BaseType,
                Population => BasePopulation, RecruitDate => (others => 0),
                Recruits => TmpRecruits, Known => False, AskedForBases => False,
                AskedForEvents => (others => 0),
@@ -262,11 +261,11 @@ package body Game is
          RandomBase := GetRandom(1, 1024);
          if NewGameSettings.StartingBase = To_Unbounded_String("Any") then
             exit when SkyBases(RandomBase).Population > 299 and
-            SkyBases(RandomBase).Owner = NewGameSettings.PlayerFaction;
+              SkyBases(RandomBase).Owner = NewGameSettings.PlayerFaction;
          else
             exit when SkyBases(RandomBase).Population > 299 and
-            SkyBases(RandomBase).Owner = NewGameSettings.PlayerFaction and
-            SkyBases(RandomBase).BaseType = NewGameSettings.StartingBase;
+              SkyBases(RandomBase).Owner = NewGameSettings.PlayerFaction and
+              SkyBases(RandomBase).BaseType = NewGameSettings.StartingBase;
          end if;
       end loop;
       -- Create player ship

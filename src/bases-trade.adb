@@ -25,6 +25,7 @@ with Trades; use Trades;
 with Utils; use Utils;
 with Bases.Cargo; use Bases.Cargo;
 with Config; use Config;
+with BasesTypes; use BasesTypes;
 
 package body Bases.Trade is
 
@@ -124,7 +125,7 @@ package body Bases.Trade is
       RecipeName: constant String :=
         To_String(Items_List(Recipes_List(RecipeIndex).ResultIndex).Name);
       BaseType: constant Positive :=
-        Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
+        BaseTypeIndex(SkyBases(BaseIndex).BaseType);
       TraderIndex: Natural;
    begin
       if BaseType /= Recipes_List(RecipeIndex).BaseType then
@@ -213,10 +214,9 @@ package body Bases.Trade is
      (Cost, Time: in out Natural;
       MemberIndex: Crew_Container.Extended_Index) is
       BaseType: constant Positive :=
-        Bases_Types'Pos
+        BaseTypeIndex
           (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-             .BaseType) +
-        1;
+             .BaseType);
    begin
       if MemberIndex > 0 then
          Time := 5 * (100 - PlayerShip.Crew(MemberIndex).Health);

@@ -61,11 +61,7 @@ package body Bases.SaveLoad is
          RawValue := To_Unbounded_String(Integer'Image(SkyBases(I).SkyY));
          Set_Attribute
            (BaseNode, "y", To_String(Trim(RawValue, Ada.Strings.Left)));
-         RawValue :=
-           To_Unbounded_String
-             (Integer'Image(Bases_Types'Pos(SkyBases(I).BaseType)));
-         Set_Attribute
-           (BaseNode, "type", To_String(Trim(RawValue, Ada.Strings.Left)));
+         Set_Attribute(BaseNode, "type", To_String(SkyBases(I).BaseType));
          RawValue :=
            To_Unbounded_String(Integer'Image(SkyBases(I).Population));
          Set_Attribute
@@ -332,8 +328,7 @@ package body Bases.SaveLoad is
             Visited => (0, 0, 0, 0, 0),
             SkyX => Integer'Value(Get_Attribute(BaseNode, "x")),
             SkyY => Integer'Value(Get_Attribute(BaseNode, "y")),
-            BaseType =>
-              Bases_Types'Val(Integer'Value(Get_Attribute(BaseNode, "type"))),
+            BaseType => To_Unbounded_String(Get_Attribute(BaseNode, "type")),
             Population => Integer'Value(Get_Attribute(BaseNode, "population")),
             RecruitDate => (0, 0, 0, 0, 0), Recruits => BaseRecruits,
             Known => False, AskedForBases => False,

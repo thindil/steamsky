@@ -43,6 +43,7 @@ with Maps.UI; use Maps.UI;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with ShipModules; use ShipModules;
+with BasesTypes; use BasesTypes;
 
 package body DebugUI is
 
@@ -331,7 +332,7 @@ package body DebugUI is
          if SkyBases(I).Name = BaseName then
             Set_Active
               (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbasetype")),
-               Bases_Types'Pos(SkyBases(I).BaseType));
+               Gint(BaseTypeIndex(SkyBases(I).BaseType) - 1));
             Set_Active
               (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbasesize")),
                Bases_Size'Pos(SkyBases(I).Size));
@@ -640,11 +641,9 @@ package body DebugUI is
       for SkyBase of SkyBases loop
          if SkyBase.Name = BaseName then
             SkyBase.BaseType :=
-              Bases_Types'Val
-                (Integer
-                   (Get_Active
-                      (Gtk_Combo_Box_Text
-                         (Get_Object(Object, "cmbbasetype")))));
+              To_Unbounded_String
+                (Get_Active_Text
+                   (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbasetype"))));
             SkyBase.Owner :=
               To_Unbounded_String
                 (Get_Active_Id
@@ -975,11 +974,8 @@ package body DebugUI is
          ComboBox: Gtk_Combo_Box_Text;
       begin
          ComboBox := Gtk_Combo_Box_Text(Get_Object(Builder, "cmbbasetype"));
-         for I in Bases_Types loop
-            Append_Text
-              (ComboBox,
-               Bases_Types'Image(I)(1) &
-               To_Lower(Bases_Types'Image(I)(2 .. Bases_Types'Image(I)'Last)));
+         for I in BasesTypes_List.Iterate loop
+            Append_Text(ComboBox, To_String(BasesTypes_Container.Key(I)));
          end loop;
          ComboBox := Gtk_Combo_Box_Text(Get_Object(Builder, "cmbbaseowner"));
          for I in Factions_List.Iterate loop

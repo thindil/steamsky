@@ -46,6 +46,7 @@ with Items; use Items;
 with Bases.Cargo; use Bases.Cargo;
 with Utils.UI; use Utils.UI;
 with Crew; use Crew;
+with BasesTypes; use BasesTypes;
 
 package body Trades.UI is
 
@@ -113,7 +114,7 @@ package body Trades.UI is
          return;
       end if;
       if BaseIndex > 0 then
-         BaseType := Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
+         BaseType := BaseTypeIndex(SkyBases(BaseIndex).BaseType);
       else
          BaseType := 1;
       end if;
@@ -638,7 +639,7 @@ package body Trades.UI is
    begin
       ItemsTypes.Append(To_Unbounded_String("All"));
       if BaseIndex > 0 then
-         BaseType := Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
+         BaseType := BaseTypeIndex(SkyBases(BaseIndex).BaseType);
          BaseCargo := SkyBases(BaseIndex).Cargo;
       else
          BaseType := 1;
