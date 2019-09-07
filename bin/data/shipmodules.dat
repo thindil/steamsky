@@ -486,5 +486,6 @@ types of modules) the module can have. Default value is 1.
  <module durability="1500" index="451" installtime="240" material="Orichalcum" maxowners="3" name="Large orichalcum workshop" price="36000" size="3" skill="Engineering" type="WORKSHOP" value="0" weight="2700">Allows crafting of some tools. Made of orichalcum. Large sized.</module>
  <module durability="1800" index="452" installtime="240" material="Adamantium" maxowners="3" name="Large adamantium workshop" price="72000" size="3" skill="Engineering" type="WORKSHOP" value="0" weight="2700">Allows crafting of some tools. Made of adamantium. Large sized.</module>
  <module durability="400" index="453" installtime="200" material="Bronze" maxowners="4" name="Huge bronze workshop" price="4000" size="4" skill="Engineering" type="WORKSHOP" value="0" weight="1600">Allows crafting of some tools. Huge sized.</module>
+ <module durability="800" index="454" installtime="200" material="Iron" maxowners="4" name="Huge iron workshop" price="8000" size="4" skill="Engineering" type="WORKSHOP" value="0" weight="1600">Allows crafting of some tools. More durable, large sized version.</module>
 </modules>
 
