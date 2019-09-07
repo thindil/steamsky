@@ -113,6 +113,8 @@ package body MainMenu is
       To_Unbounded_String("adjprices"));
    -- ****
 
+   BaseTypeName: Unbounded_String;
+
    -- ****if* MainMenu/Quit
    -- FUNCTION
    -- Quit from the game
@@ -185,6 +187,29 @@ package body MainMenu is
          To_String(LicenseText));
    end LoadFile;
 
+   -- ****if* MainMenu/SetBaseType
+   -- FUNCTION
+   -- Set base type for new game based on the game settings
+   -- PARAMETERS
+   -- Model - Gtk_Tree_Model with bases types
+   -- Path  - Gtk_Tree_Path to currently selected base type. Unused
+   -- Iter  - Gtk_Tree_Iter to currently selected base type
+   -- RESULT
+   -- Return true if current base type was set as default, otherwise false
+   -- SOURCE
+   function SetBaseType
+     (Model: Gtk_Tree_Model; Path: Gtk_Tree_Path; Iter: Gtk_Tree_Iter)
+      return Boolean is
+      pragma Unreferenced(Path);
+   begin
+      if Get_String(Model, Iter, 0) = To_String(BaseTypeName) then
+         Set_Active_Iter
+           (Gtk_Combo_Box(Get_Object(Builder, "cmbbasetype")), Iter);
+         return True;
+      end if;
+      return False;
+   end SetBaseType;
+
    -- ****if* MainMenu/ShowPage
    -- FUNCTION
    -- Show selected page to the player
@@ -192,8 +217,7 @@ package body MainMenu is
    -- User_Data - Button pressed
    -- SOURCE
    procedure ShowPage(User_Data: access GObject_Record'Class) is
-      -- ****
-      BaseTypeIndex: Natural := 0;
+   -- ****
    begin
       if User_Data = Get_Object(Builder, "btnnewgame") then
          if Get_Text(Gtk_GEntry(Get_Object(Builder, "entrycharactername"))) =
@@ -233,13 +257,14 @@ package body MainMenu is
             end loop;
          end if;
          for I in BasesTypes_List.Iterate loop
-            exit when BasesTypes_Container.Key(I) =
-              NewGameSettings.StartingBase;
-            BaseTypeIndex := BaseTypeIndex + 1;
+            if BasesTypes_Container.Key(I) = NewGameSettings.StartingBase then
+               BaseTypeName := BasesTypes_List(I).Name;
+               exit;
+            end if;
          end loop;
-         Set_Active
-           (Gtk_Combo_Box(Get_Object(Builder, "cmbbasetype")),
-            Gint(BaseTypeIndex));
+         Foreach
+           (Gtk_List_Store(Get_Object(Builder, "basesstore")),
+            SetBaseType'Access);
          CreateGoalsMenu;
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page1");
@@ -494,8 +519,11 @@ package body MainMenu is
                 (Gtk_Combo_Box_Text(Get_Object(Object, "cmbcareer")))),
          StartingBase =>
            To_Unbounded_String
-             (Get_Active_Text
-                (Gtk_Combo_Box(Get_Object(Object, "cmbbasetype")))),
+             (Get_String
+                (Gtk_List_Store(Get_Object(Object, "basesstore")),
+                 Get_Active_Iter
+                   (Gtk_Combo_Box(Get_Object(Object, "cmbbasetype"))),
+                 0)),
          EnemyDamageBonus =>
            Float
              (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjenemydamage"))) /

@@ -46,7 +46,11 @@ package body BasesTypes is
              (Item(NodesList, Index), Name);
          for J in 0 .. Length(ChildNodes) - 1 loop
             ChildNode := Item(ChildNodes, J);
-            Value := To_Unbounded_String(Get_Attribute(ChildNode, "index"));
+            if Name = "flag" then
+               Value := To_Unbounded_String(Get_Attribute(ChildNode, "name"));
+            else
+               Value := To_Unbounded_String(Get_Attribute(ChildNode, "index"));
+            end if;
             if Get_Attribute(ChildNode, "action")'Length > 0 then
                SubAction :=
                  DataAction'Value(Get_Attribute(ChildNode, "action"));
