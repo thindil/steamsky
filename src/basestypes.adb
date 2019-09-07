@@ -79,7 +79,7 @@ package body BasesTypes is
         DOM.Core.Documents.Get_Elements_By_Tag_Name(BasesData, "base");
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
-           (Name => Null_Unbounded_String, Color => "#FFFFFF",
+           (Name => Null_Unbounded_String, Color => "ffffff",
             Trades => TmpTrades, Recipes => TmpRecipes, Flags => TmpFlags,
             Description => Null_Unbounded_String);
          BaseNode := Item(NodesList, I);

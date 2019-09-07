@@ -47,6 +47,7 @@ with Gdk.Cursor; use Gdk.Cursor;
 with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
 with Gdk.Device_Manager; use Gdk.Device_Manager;
 with Gdk.Types; use Gdk.Types;
+with Gdk.RGBA; use Gdk.RGBA;
 with Game; use Game;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
@@ -87,6 +88,7 @@ with Stories.UI; use Stories.UI;
 with Themes; use Themes;
 with DebugUI; use DebugUI;
 with Log; use Log;
+with BasesTypes; use BasesTypes;
 
 package body Maps.UI is
 
@@ -584,6 +586,8 @@ package body Maps.UI is
           (Gtk_Text_View(Get_Object(Builder, "mapview")), Text_Window_Text);
       CurrentTheme: constant ThemeRecord :=
         Themes_List(To_String(GameSettings.InterfaceTheme));
+      Color: Gdk_RGBA := Null_RGBA;
+      Success: Boolean;
    begin
       StartY := CenterY - (MapHeight / 2);
       StartX := CenterX - (MapWidth / 2);
@@ -747,20 +751,21 @@ package body Maps.UI is
                         MapChar :=
                           Factions_List(SkyBases(SkyMap(X, Y).BaseIndex).Owner)
                             .BaseIcon;
-                        case SkyBases(SkyMap(X, Y).BaseIndex).BaseType is
-                           when Industrial =>
-                              MapColor := RedColor;
-                           when Agricultural =>
-                              MapColor := GreenColor;
-                           when Refinery =>
-                              MapColor := YellowColor;
-                           when Shipyard =>
-                              MapColor := CyanColor;
-                           when Military =>
-                              MapColor := LimeColor;
-                           when others =>
-                              null;
-                        end case;
+                        Gtk_New(MapColor, "BaseColor");
+                        Parse
+                          (Color,
+                           BasesTypes_List
+                             (SkyBases(SkyMap(X, Y).BaseIndex).BaseType)
+                             .Color,
+                           Success);
+                        if Success then
+                           Set_Property
+                             (GObject(MapColor), Foreground_Rgba_Property,
+                              Color);
+                           Set_Property
+                             (GObject(MapColor), Background_Rgba_Property,
+                              Black_RGBA);
+                        end if;
                      else
                         MapColor := WhiteGrayColor;
                      end if;
@@ -861,7 +866,8 @@ package body Maps.UI is
                Append
                  (MapInfoText,
                   "Type: " &
-                  To_Lower(Bases_Types'Image(SkyBases(BaseIndex).BaseType)));
+                  To_String
+                    (BasesTypes_List(SkyBases(BaseIndex).BaseType).Name));
                if SkyBases(BaseIndex).Population > 0 then
                   Append(MapInfoText, LF);
                end if;

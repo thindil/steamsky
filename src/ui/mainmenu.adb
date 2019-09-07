@@ -192,7 +192,7 @@ package body MainMenu is
    -- User_Data - Button pressed
    -- SOURCE
    procedure ShowPage(User_Data: access GObject_Record'Class) is
-   -- ****
+      -- ****
       BaseTypeIndex: Natural := 0;
    begin
       if User_Data = Get_Object(Builder, "btnnewgame") then
@@ -233,7 +233,8 @@ package body MainMenu is
             end loop;
          end if;
          for I in BasesTypes_List.Iterate loop
-            exit when BasesTypes_Container.Key(I) = NewGameSettings.StartingBase;
+            exit when BasesTypes_Container.Key(I) =
+              NewGameSettings.StartingBase;
             BaseTypeIndex := BaseTypeIndex + 1;
          end loop;
          Set_Active
@@ -491,7 +492,10 @@ package body MainMenu is
            To_Unbounded_String
              (Get_Active_Id
                 (Gtk_Combo_Box_Text(Get_Object(Object, "cmbcareer")))),
-         StartingBase => To_Unbounded_String(Get_Active_Text(Gtk_Combo_Box(Get_Object(Object, "cmbbasetype")))),
+         StartingBase =>
+           To_Unbounded_String
+             (Get_Active_Text
+                (Gtk_Combo_Box(Get_Object(Object, "cmbbasetype")))),
          EnemyDamageBonus =>
            Float
              (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjenemydamage"))) /
