@@ -189,15 +189,15 @@ package body BasesTypes is
 
    function BaseTypeIndex(BaseType: Unbounded_String) return Positive is
    begin
-      if BaseType = To_Unbounded_String("industrial") then
+      if BaseType = To_Unbounded_String("0") then
          return 1;
-      elsif BaseType = To_Unbounded_String("agricultural") then
+      elsif BaseType = To_Unbounded_String("1") then
          return 2;
-      elsif BaseType = To_Unbounded_String("refinery") then
+      elsif BaseType = To_Unbounded_String("2") then
          return 3;
-      elsif BaseType = To_Unbounded_String("shipyard") then
+      elsif BaseType = To_Unbounded_String("3") then
          return 4;
-      elsif BaseType = To_Unbounded_String("military") then
+      elsif BaseType = To_Unbounded_String("4") then
          return 5;
       end if;
       return 1;
