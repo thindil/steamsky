@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - Updated contributing guide
 - Added cargo to traders ships so they will be slower in combat
 - Updated interface
+- Moved bases types to separated data file
 
 ### Fixed
 - Crash on returning mission with max reputation as reward
