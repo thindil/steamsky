@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -29,15 +29,15 @@
 <ul>
 <li>1. <a href="#robo60">Steamsky/Themes</a></li>
 <ul>
-<li>1.1. <a href="#robo175">Themes/FontTypes</a></li>
-<li>1.2. <a href="#robo176">Themes/ThemeRecord</a></li>
-<li>1.3. <a href="#robo177">Themes/Themes_Container</a></li>
-<li>1.4. <a href="./themes_adb.html#robo318">Themes/OldProvider</a></li>
-<li>1.5. <a href="#robo319">Themes/Themes_List</a></li>
-<li>1.6. <a href="./themes_adb.html#robo755">Themes/LoadCssText</a></li>
-<li>1.7. <a href="#robo756">Themes/LoadThemes</a></li>
-<li>1.8. <a href="#robo757">Themes/ResetFontsSizes</a></li>
-<li>1.9. <a href="#robo758">Themes/SetFontSize</a></li>
+<li>1.1. <a href="#robo178">Themes/FontTypes</a></li>
+<li>1.2. <a href="#robo179">Themes/ThemeRecord</a></li>
+<li>1.3. <a href="#robo180">Themes/Themes_Container</a></li>
+<li>1.4. <a href="./themes_adb.html#robo331">Themes/OldProvider</a></li>
+<li>1.5. <a href="#robo332">Themes/Themes_List</a></li>
+<li>1.6. <a href="./themes_adb.html#robo771">Themes/LoadCssText</a></li>
+<li>1.7. <a href="#robo772">Themes/LoadThemes</a></li>
+<li>1.8. <a href="#robo773">Themes/ResetFontsSizes</a></li>
+<li>1.9. <a href="#robo774">Themes/SetFontSize</a></li>
 </ul>
 </ul>
 <hr />
@@ -54,7 +54,7 @@
 
 <hr />
 <a name="Themes2fFontTypes"></a>
-<a name="robo175"></a><h2>Themes/FontTypes [ Types ]</h2>
+<a name="robo178"></a><h2>Themes/FontTypes [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo60">Themes</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -66,7 +66,7 @@
 
 <hr />
 <a name="Themes2fThemeRecord"></a>
-<a name="robo176"></a><h2>Themes/ThemeRecord [ Types ]</h2>
+<a name="robo179"></a><h2>Themes/ThemeRecord [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo60">Themes</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -117,12 +117,12 @@
 <p class="item_name">PARAMETERS</p>
 <pre> Name                 - Name of theme
  FileName             - Name of .css file of theme
- EnemyShipIcon        - Icon used for <a href="../combat_ads.html#robo197">Enemy</a> Ship event
+ EnemyShipIcon        - Icon used for <a href="../combat_ads.html#robo201">Enemy</a> Ship event
  AttackOnBaseIcon     - Icon used for Attack on Base event
  DiseaseIcon          - Icon used for Disease event
  DoublePriceIcon      - Icon used for Double Price event
  FullDocksIcon        - Icon used for Full Docks event
- EnemyPatrolIcon      - Icon used for <a href="../combat_ads.html#robo197">Enemy</a> Patrol event
+ EnemyPatrolIcon      - Icon used for <a href="../combat_ads.html#robo201">Enemy</a> Patrol event
  TraderIcon           - Icon used for Trader event
  FriendlyShipIcon     - Icon used for Friendly Ship event
  DeliverIcon          - Icon used for Deliver Item mission
@@ -137,7 +137,7 @@
  RepairIcon           - Icon used for Repairs info
  UpgradeIcon          - Icon used for Upgrade info
  CleanIcon            - Icon used for Clean Ship info
- ManufactureIcon      - Icon used for <a href="../crafts_ads.html#robo441">Manufacturing</a> info
+ ManufactureIcon      - Icon used for <a href="../crafts_ads.html#robo456">Manufacturing</a> info
  MoveMapUpIcon        - Icon used for move map up button
  MoveMapDownIcon      - Icon used for move map down button
  MoveMapLeftIcon      - Icon used for move map left button
@@ -159,7 +159,7 @@
 
 <hr />
 <a name="Themes2fThemes5fContainer"></a>
-<a name="robo177"></a><h2>Themes/Themes_Container [ Types ]</h2>
+<a name="robo180"></a><h2>Themes/Themes_Container [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo60">Themes</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -167,24 +167,24 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">package</span> <strong>Themes_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Ada<span class="sign">.</span>Containers<span class="sign">.</span>Indefinite_Hashed_Maps
-     <span class="sign">(</span>String<span class="sign">,</span> <a href="#robo176">ThemeRecord</a><span class="sign">,</span> Ada<span class="sign">.</span>Strings<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
+     <span class="sign">(</span>String<span class="sign">,</span> <a href="#robo179">ThemeRecord</a><span class="sign">,</span> Ada<span class="sign">.</span>Strings<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Themes2fThemes5fList"></a>
-<a name="robo319"></a><h2>Themes/Themes_List [ Variables ]</h2>
+<a name="robo332"></a><h2>Themes/Themes_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo60">Themes</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of all available themes
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>Themes_List</strong><span class="sign">:</span> <a href="#robo177">Themes_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
+<pre class="source">   <strong>Themes_List</strong><span class="sign">:</span> <a href="#robo180">Themes_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Themes2fLoadThemes"></a>
-<a name="robo756"></a><h2>Themes/LoadThemes [ Subprograms ]</h2>
+<a name="robo772"></a><h2>Themes/LoadThemes [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo60">Themes</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -196,7 +196,7 @@
 
 <hr />
 <a name="Themes2fResetFontsSizes"></a>
-<a name="robo757"></a><h2>Themes/ResetFontsSizes [ Subprograms ]</h2>
+<a name="robo773"></a><h2>Themes/ResetFontsSizes [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo60">Themes</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -208,14 +208,14 @@
 
 <hr />
 <a name="Themes2fSetFontSize"></a>
-<a name="robo758"></a><h2>Themes/SetFontSize [ Subprograms ]</h2>
+<a name="robo774"></a><h2>Themes/SetFontSize [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo60">Themes</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set size of selected font
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>SetFontSize</strong><span class="sign">(</span>FontType<span class="sign">:</span> <a href="#robo175">FontTypes</a><span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> <strong>SetFontSize</strong><span class="sign">(</span>FontType<span class="sign">:</span> <a href="#robo178">FontTypes</a><span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> FontType - Type of font to set
@@ -223,7 +223,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/themes.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 11 2019 06:27:52
+<p>Generated from ./src/ui/themes.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Sep 08 2019 06:47:38
 </p>
 </div> <!-- footer -->
 </body>

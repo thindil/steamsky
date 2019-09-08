@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -29,10 +29,10 @@
 <ul>
 <li>1. <a href="#robo37">Steamsky/Maps</a></li>
 <ul>
-<li>1.1. <a href="#robo129">Maps/SkyCell</a></li>
-<li>1.2. <a href="#robo296">Maps/SkyMap</a></li>
-<li>1.3. <a href="#robo641">Maps/CountDistance</a></li>
-<li>1.4. <a href="#robo642">Maps/NormalizeCoord</a></li>
+<li>1.1. <a href="#robo132">Maps/SkyCell</a></li>
+<li>1.2. <a href="#robo309">Maps/SkyMap</a></li>
+<li>1.3. <a href="#robo657">Maps/CountDistance</a></li>
+<li>1.4. <a href="#robo658">Maps/NormalizeCoord</a></li>
 </ul>
 </ul>
 <hr />
@@ -49,7 +49,7 @@
 
 <hr />
 <a name="Maps2fSkyCell"></a>
-<a name="robo129"></a><h2>Maps/SkyCell [ Types ]</h2>
+<a name="robo132"></a><h2>Maps/SkyCell [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo37">Maps</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -57,34 +57,34 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> <strong>SkyCell</strong> <span class="keyword">is</span> <span class="keyword">record</span>
-      <a href="./ui/baseslist_adb.html#robo189">BaseIndex</a><span class="sign">:</span> Natural<span class="sign">;</span>
+      <a href="./ui/baseslist_adb.html#robo192">BaseIndex</a><span class="sign">:</span> Natural<span class="sign">;</span>
       Visited<span class="sign">:</span> Boolean<span class="sign">;</span>
-      <a href="./ui/events-ui_adb.html#robo224">EventIndex</a><span class="sign">:</span> Natural<span class="sign">;</span>
-      <a href="./ui/missions-ui_adb.html#robo300">MissionIndex</a><span class="sign">:</span> Natural<span class="sign">;</span>
+      <a href="./ui/events-ui_adb.html#robo228">EventIndex</a><span class="sign">:</span> Natural<span class="sign">;</span>
+      <a href="./ui/missions-ui_adb.html#robo313">MissionIndex</a><span class="sign">:</span> Natural<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./ui/baseslist_adb.html#robo189">BaseIndex</a>    - If sky base is in cell &gt; 0
+<pre> <a href="./ui/baseslist_adb.html#robo192">BaseIndex</a>    - If sky base is in cell &gt; 0
  Visited      - True if player was in this cell
- <a href="./ui/events-ui_adb.html#robo224">EventIndex</a>   - If event is in cell &gt; 0
- <a href="./ui/missions-ui_adb.html#robo300">MissionIndex</a> - If accepted mission is in cell &gt; 0
+ <a href="./ui/events-ui_adb.html#robo228">EventIndex</a>   - If event is in cell &gt; 0
+ <a href="./ui/missions-ui_adb.html#robo313">MissionIndex</a> - If accepted mission is in cell &gt; 0
 </pre>
 
 <hr />
 <a name="Maps2fSkyMap"></a>
-<a name="robo296"></a><h2>Maps/SkyMap [ Variables ]</h2>
+<a name="robo309"></a><h2>Maps/SkyMap [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo37">Maps</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> <a href="./game_ads.html#robo26">Game</a> map
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>SkyMap</strong><span class="sign">:</span> array<span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 1024<span class="sign">,</span> 1 <span class="sign">.</span><span class="sign">.</span> 1024<span class="sign">)</span> of <a href="#robo129">SkyCell</a><span class="sign">;</span>
+<pre class="source">   <strong>SkyMap</strong><span class="sign">:</span> array<span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 1024<span class="sign">,</span> 1 <span class="sign">.</span><span class="sign">.</span> 1024<span class="sign">)</span> of <a href="#robo132">SkyCell</a><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Maps2fCountDistance"></a>
-<a name="robo641"></a><h2>Maps/CountDistance [ Subprograms ]</h2>
+<a name="robo657"></a><h2>Maps/CountDistance [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo37">Maps</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -92,7 +92,9 @@
  point
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>CountDistance</strong><span class="sign">(</span>DestinationX<span class="sign">,</span> DestinationY<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">return</span> Natural<span class="sign">;</span>
+<pre class="source">   <span class="keyword">function</span> <strong>CountDistance</strong>
+     <span class="sign">(</span>DestinationX<span class="sign">,</span> DestinationY<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">return</span> Natural with
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> DestinationX <span class="sign">&lt;</span> 1025 and DestinationY <span class="sign">&lt;</span> 1025<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> DestinationX - X coordinate of the destination point
@@ -104,7 +106,7 @@
 
 <hr />
 <a name="Maps2fNormalizeCoord"></a>
-<a name="robo642"></a><h2>Maps/NormalizeCoord [ Subprograms ]</h2>
+<a name="robo658"></a><h2>Maps/NormalizeCoord [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo37">Maps</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -123,7 +125,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/maps.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 11 2019 06:27:52
+<p>Generated from ./src/maps.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Sep 08 2019 06:47:38
 </p>
 </div> <!-- footer -->
 </body>
