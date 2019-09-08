@@ -17,6 +17,7 @@ with System.Assertions;
 
 with Crafts; use Crafts;
 with Maps; use Maps;
+with BasesTypes; use BasesTypes;
 
 --  begin read only
 --  end read only
@@ -99,15 +100,14 @@ package body Bases.Trade.Test_Data.Tests is
       Amount: Positive := Positive(Known_Recipes.Length);
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      BaseType: constant Positive :=
-        Bases_Types'Pos(SkyBases(BaseIndex).BaseType) + 1;
+      BaseType: constant Unbounded_String := SkyBases(BaseIndex).BaseType;
 
    begin
 
-      for I in Recipes_List.Iterate loop
-         if Recipes_List(I).BaseType = BaseType and then Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) =
+      for Recipe of BasesTypes_List(SkyBases(BaseIndex).BaseType).Recipes loop
+         if Known_Recipes.Find_Index(Item => Recipe) =
         Positive_Container.No_Index then
-            BuyRecipe(Recipes_Container.Key(I));
+            BuyRecipe(Recipe);
             exit;
          end if;
       end loop;
@@ -167,6 +167,56 @@ package body Bases.Trade.Test_Data.Tests is
 
 --  begin read only
    end Test_HealWounded_test_healwounded;
+--  end read only
+
+--  begin read only
+   procedure Wrap_Test_HealCost_772065_0483ed (Cost, Time: in out Natural; MemberIndex: Crew_Container.Extended_Index) 
+   is
+   begin
+      begin
+         pragma Assert
+           ((MemberIndex < PlayerShip.Crew.Last_Index));
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(bases-trade.ads:0):Test_HealCost test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Bases.Trade.HealCost (Cost, Time, MemberIndex);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(bases-trade.ads:0:):Test_HealCost test commitment violated");
+      end;
+   end Wrap_Test_HealCost_772065_0483ed;
+--  end read only
+
+--  begin read only
+   procedure Test_HealCost_test_healcost (Gnattest_T : in out Test);
+   procedure Test_HealCost_772065_0483ed (Gnattest_T : in out Test) renames Test_HealCost_test_healcost;
+--  id:2.2/77206542a3e2c8c9/HealCost/1/0/test_healcost/
+   procedure Test_HealCost_test_healcost (Gnattest_T : in out Test) is
+   procedure HealCost (Cost, Time: in out Natural; MemberIndex: Crew_Container.Extended_Index) renames Wrap_Test_HealCost_772065_0483ed;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      Cost, Time: Natural := 0;
+
+   begin
+
+      PlayerShip.Crew(1).Health := PlayerShip.Crew(1).Health - 10;
+      HealCost(Cost, Time, 1);
+      Assert(Cost > 0, "Failed to count player crew member heal costs.");
+      Assert(Time > 0, "Failed to count player crew member heal time.");
+
+--  begin read only
+   end Test_HealCost_test_healcost;
 --  end read only
 
 --  begin read only
