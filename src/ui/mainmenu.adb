@@ -256,15 +256,20 @@ package body MainMenu is
                end if;
             end loop;
          end if;
-         for I in BasesTypes_List.Iterate loop
-            if BasesTypes_Container.Key(I) = NewGameSettings.StartingBase then
-               BaseTypeName := BasesTypes_List(I).Name;
-               exit;
-            end if;
-         end loop;
-         Foreach
-           (Gtk_List_Store(Get_Object(Builder, "basesstore")),
-            SetBaseType'Access);
+         if NewGameSettings.StartingBase /= "Any" then
+            for I in BasesTypes_List.Iterate loop
+               if BasesTypes_Container.Key(I) =
+                 NewGameSettings.StartingBase then
+                  BaseTypeName := BasesTypes_List(I).Name;
+                  exit;
+               end if;
+            end loop;
+            Foreach
+              (Gtk_List_Store(Get_Object(Builder, "basesstore")),
+               SetBaseType'Access);
+         else
+            Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbbasetype")), 0);
+         end if;
          CreateGoalsMenu;
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page1");
