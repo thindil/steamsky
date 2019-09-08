@@ -99,7 +99,8 @@ package Bases.Trade is
    procedure HealCost
      (Cost, Time: in out Natural;
       MemberIndex: Crew_Container.Extended_Index) with
-      Pre => (MemberIndex < PlayerShip.Crew.Last_Index);
+      Pre => (MemberIndex < PlayerShip.Crew.Last_Index),
+      Test_Case => ("Test_HealCost", Nominal);
       -- ****
 
       -- ****f* Bases.Trade/TrainCost
