@@ -23,7 +23,8 @@ All notable changes to this project will be documented in this file.
   titanium workshop, medium orichalcum workshop, medium adamantium workshop,
   large bronze workshop, large iron workshop, large steel workshop, large
   titanium workshop, large orichalcum workshop, large adamantium workshop,
-  huge bronze workshop, huge iron workshop, huge steel workshop
+  huge bronze workshop, huge iron workshop, huge steel workshop and huge
+  titanium workshop
 - More random cargo to the enemies ships in combat
 
 ### Changed
