@@ -201,6 +201,7 @@ package body MainMenu is
      (Model: Gtk_Tree_Model; Path: Gtk_Tree_Path; Iter: Gtk_Tree_Iter)
       return Boolean is
       pragma Unreferenced(Path);
+      -- ****
    begin
       if Get_String(Model, Iter, 0) = To_String(BaseTypeName) then
          Set_Active_Iter
