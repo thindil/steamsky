@@ -18,5 +18,8 @@ package Bases.Trade.Test_Data.Tests is
    procedure Test_HealWounded_ec5713_45cd90 (Gnattest_T : in out Test);
    --  bases-trade.ads:83:4:HealWounded:Test_HealWounded
 
+   procedure Test_HealCost_772065_0483ed (Gnattest_T : in out Test);
+   --  bases-trade.ads:99:4:HealCost:Test_HealCost
+
 end Bases.Trade.Test_Data.Tests;
 --  end read only
