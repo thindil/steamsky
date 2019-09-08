@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [4.1] - 2019-09-08
 
 ### Added
 - New ship modules: huge steel alchemy lab, huge titanium alchemy lab, huge
