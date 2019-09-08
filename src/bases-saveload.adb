@@ -315,7 +315,7 @@ package body Bases.SaveLoad is
       BaseCargo: BaseCargo_Container.Vector;
       NodesList, BaseData: Node_List;
       BaseIndex: Positive;
-      NodeName, BaseType: Unbounded_String;
+      NodeName: Unbounded_String;
       BaseNode, ChildNode: Node;
    begin
       NodesList :=
@@ -323,24 +323,12 @@ package body Bases.SaveLoad is
       BaseIndex := 1;
       for I in 0 .. Length(NodesList) - 1 loop
          BaseNode := Item(NodesList, I);
-         BaseType := To_Unbounded_String(Get_Attribute(BaseNode, "type"));
-         if BaseType = To_Unbounded_String("0") then
-            BaseType := To_Unbounded_String("industrial");
-         elsif BaseType = To_Unbounded_String("1") then
-            BaseType := To_Unbounded_String("agricultural");
-         elsif BaseType = To_Unbounded_String("2") then
-            BaseType := To_Unbounded_String("refinery");
-         elsif BaseType = To_Unbounded_String("3") then
-            BaseType := To_Unbounded_String("shipyard");
-         elsif BaseType = To_Unbounded_String("4") then
-            BaseType := To_Unbounded_String("military");
-         end if;
          SkyBases(BaseIndex) :=
            (Name => To_Unbounded_String(Get_Attribute(BaseNode, "name")),
             Visited => (0, 0, 0, 0, 0),
             SkyX => Integer'Value(Get_Attribute(BaseNode, "x")),
             SkyY => Integer'Value(Get_Attribute(BaseNode, "y")),
-            BaseType => BaseType,
+            BaseType => To_Unbounded_String(Get_Attribute(BaseNode, "type")),
             Population => Integer'Value(Get_Attribute(BaseNode, "population")),
             RecruitDate => (0, 0, 0, 0, 0), Recruits => BaseRecruits,
             Known => False, AskedForBases => False,
