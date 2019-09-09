@@ -38,7 +38,7 @@ package body Config is
          ShipName => To_Unbounded_String("Anaria"),
          PlayerFaction => To_Unbounded_String("POLEIS"),
          PlayerCareer => To_Unbounded_String("general"),
-         StartingBase => To_Unbounded_String("ANY"), EnemyDamageBonus => 1.0,
+         StartingBase => To_Unbounded_String("Any"), EnemyDamageBonus => 1.0,
          PlayerDamageBonus => 1.0, EnemyMeleeDamageBonus => 1.0,
          PlayerMeleeDamageBonus => 1.0, ExperienceBonus => 1.0,
          ReputationBonus => 1.0, UpgradeCostBonus => 1.0, PricesBonus => 1.0);
