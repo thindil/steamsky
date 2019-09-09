@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New ship modules: huge orichalcum workshop, huge adamantium workshop
 
+### Fixed
+- No base type selected in new game setting on first run
+
 ## [4.1] - 2019-09-08
 
 ### Added
