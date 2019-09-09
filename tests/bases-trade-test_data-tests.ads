@@ -21,5 +21,8 @@ package Bases.Trade.Test_Data.Tests is
    procedure Test_HealCost_772065_0483ed (Gnattest_T : in out Test);
    --  bases-trade.ads:99:4:HealCost:Test_HealCost
 
+   procedure Test_TrainCost_8eb46e_3a2aca (Gnattest_T : in out Test);
+   --  bases-trade.ads:116:4:TrainCost:Test_TrainCost
+
 end Bases.Trade.Test_Data.Tests;
 --  end read only
