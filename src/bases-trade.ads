@@ -116,7 +116,8 @@ package Bases.Trade is
    function TrainCost(MemberIndex, SkillIndex: Positive) return Natural with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
-       SkillIndex <= Skills_List.Last_Index);
+       SkillIndex <= Skills_List.Last_Index),
+      Test_Case => ("Test_TrainCost", Nominal);
       -- ****
 
       -- ****f* Bases.Trade/TrainSkill

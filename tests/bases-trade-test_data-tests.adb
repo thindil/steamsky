@@ -220,6 +220,56 @@ package body Bases.Trade.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_TrainCost_8eb46e_3a2aca (MemberIndex, SkillIndex: Positive)  return Natural
+   is
+   begin
+      begin
+         pragma Assert
+           ((MemberIndex <= PlayerShip.Crew.Last_Index and SkillIndex <= Skills_List.Last_Index));
+         null;
+      exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "req_sloc(bases-trade.ads:0):Test_TrainCost test requirement violated");
+      end;
+      declare
+         Test_TrainCost_8eb46e_3a2aca_Result : constant Natural := GNATtest_Generated.GNATtest_Standard.Bases.Trade.TrainCost (MemberIndex, SkillIndex);
+      begin
+         begin
+            pragma Assert
+              (True);
+            null;
+         exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "ens_sloc(bases-trade.ads:0:):Test_TrainCost test commitment violated");
+         end;
+         return Test_TrainCost_8eb46e_3a2aca_Result;
+      end;
+   end Wrap_Test_TrainCost_8eb46e_3a2aca;
+--  end read only
+
+--  begin read only
+   procedure Test_TrainCost_test_traincost (Gnattest_T : in out Test);
+   procedure Test_TrainCost_8eb46e_3a2aca (Gnattest_T : in out Test) renames Test_TrainCost_test_traincost;
+--  id:2.2/8eb46ecf0e9a06cb/TrainCost/1/0/test_traincost/
+   procedure Test_TrainCost_test_traincost (Gnattest_T : in out Test) is
+      function TrainCost (MemberIndex, SkillIndex: Positive) return Natural renames Wrap_Test_TrainCost_8eb46e_3a2aca;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(TrainCost(1, 1) > 0, "Failed to count player crew member training cost.");
+
+--  begin read only
+   end Test_TrainCost_test_traincost;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
