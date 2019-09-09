@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New ship module: huge orichalcum workshop
+- New ship modules: huge orichalcum workshop, huge adamantium workshop
 
 ## [4.1] - 2019-09-08
 
