@@ -63,11 +63,11 @@
      <span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a><span class="sign">:</span> Positive<span class="sign">;</span> Reason<span class="sign">:</span> Unbounded_String<span class="sign">;</span> Ship<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> <a href="./ships_ads.html#robo156">ShipRecord</a><span class="sign">;</span>
       CreateBody<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span> with
       Pre <span class="sign">=</span><span class="sign">&gt;</span>
-      <span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> Ship<span class="sign">.</span><a href="./crew_ads.html#robo19">Crew</a><span class="sign">.</span>Last_Index and
+      <span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> Ship<span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">.</span>Last_Index and
        Reason <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a> - <a href="./crew_ads.html#robo19">Crew</a> index of the member which died
+<pre> <a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a> - <a href="./crew_ads.html#robo18">Crew</a> index of the member which died
  Reason      - Reason of the death
  Ship        - Ship in which crew member died
  CreateBody  - If true, create body for dead crew member. Default is
@@ -89,7 +89,7 @@
 <pre class="source">   <span class="keyword">procedure</span> <strong>DeleteMember</strong><span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a><span class="sign">:</span> Positive<span class="sign">;</span> Ship<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> <a href="./ships_ads.html#robo156">ShipRecord</a><span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a> - <a href="./crew_ads.html#robo19">Crew</a> index of the member which will be deleted
+<pre> <a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a> - <a href="./crew_ads.html#robo18">Crew</a> index of the member which will be deleted
  Ship        - Ship which crew will be modified
 </pre>
 <p class="item_name">RESULT</p>
@@ -106,15 +106,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> <strong>FindMember</strong>
-     <span class="sign">(</span>Order<span class="sign">:</span> <a href="./crew_ads.html#robo89">Crew_Orders</a><span class="sign">;</span> <a href="./crew_ads.html#robo19">Crew</a><span class="sign">:</span> <a href="./ships_ads.html#robo146">Crew_Container</a><span class="sign">.</span>Vector <span class="sign">:</span><span class="sign">=</span> <a href="./ships_ads.html#robo308">PlayerShip</a><span class="sign">.</span><a href="./crew_ads.html#robo19">Crew</a><span class="sign">)</span>
+     <span class="sign">(</span>Order<span class="sign">:</span> <a href="./crew_ads.html#robo89">Crew_Orders</a><span class="sign">;</span> <a href="./crew_ads.html#robo18">Crew</a><span class="sign">:</span> <a href="./ships_ads.html#robo146">Crew_Container</a><span class="sign">.</span>Vector <span class="sign">:</span><span class="sign">=</span> <a href="./ships_ads.html#robo308">PlayerShip</a><span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">)</span>
       <span class="keyword">return</span> Natural<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Order - Current crew order which will be looking for
- <a href="./crew_ads.html#robo19">Crew</a>  - <a href="./crew_ads.html#robo19">Crew</a> of ship which will be searched
+ <a href="./crew_ads.html#robo18">Crew</a>  - <a href="./crew_ads.html#robo18">Crew</a> of ship which will be searched
 </pre>
 <p class="item_name">RESULT</p>
-<pre> <a href="./crew_ads.html#robo19">Crew</a> index of crew member with selected order or 0 if nothing was found
+<pre> <a href="./crew_ads.html#robo18">Crew</a> index of crew member with selected order or 0 if nothing was found
 </pre>
 
 <hr />
@@ -130,7 +130,7 @@
      <span class="sign">(</span>Member<span class="sign">:</span> <a href="./crew_ads.html#robo90">Member_Data</a><span class="sign">;</span> SkillIndex<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">return</span> Natural<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Member     - <a href="./crew_ads.html#robo19">Crew</a> member which skill will be looking for
+<pre> Member     - <a href="./crew_ads.html#robo18">Crew</a> member which skill will be looking for
  SkillIndex - Index of skill in <a href="./game_ads.html#robo258">Skills_List</a>
 </pre>
 <p class="item_name">RESULT</p>
@@ -150,12 +150,12 @@
      <span class="sign">(</span>Ship<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> <a href="./ships_ads.html#robo156">ShipRecord</a><span class="sign">;</span> <a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a><span class="sign">:</span> Positive<span class="sign">;</span> GivenOrder<span class="sign">:</span> <a href="./crew_ads.html#robo89">Crew_Orders</a><span class="sign">;</span>
       <a href="./ui/ships-ui_ads.html#robo306">ModuleIndex</a><span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span> CheckPriorities<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span> with
       Pre <span class="sign">=</span><span class="sign">&gt;</span>
-      <span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> Ship<span class="sign">.</span><a href="./crew_ads.html#robo19">Crew</a><span class="sign">.</span>Last_Index and
+      <span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> Ship<span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">.</span>Last_Index and
        <a href="./ui/ships-ui_ads.html#robo306">ModuleIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> Ship<span class="sign">.</span>Modules<span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Ship            - Ship in which crew member will be have changed order
- <a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a>     - <a href="./crew_ads.html#robo19">Crew</a> index of member to change order
+ <a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a>     - <a href="./crew_ads.html#robo18">Crew</a> index of member to change order
  GivenOrder      - New order for selected crew member
  <a href="./ui/ships-ui_ads.html#robo306">ModuleIndex</a>     - Index of module to assign to crew member with new
                    order. Default is 0 - no module assigned
@@ -176,11 +176,11 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>UpdateMorale</strong>
      <span class="sign">(</span>Ship<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> <a href="./ships_ads.html#robo156">ShipRecord</a><span class="sign">;</span> <a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a><span class="sign">:</span> Positive<span class="sign">;</span> Value<span class="sign">:</span> Integer<span class="sign">)</span> with
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> Ship<span class="sign">.</span><a href="./crew_ads.html#robo19">Crew</a><span class="sign">.</span>Last_Index<span class="sign">;</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> Ship<span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">.</span>Last_Index<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Ship        - Ship on which crew member will be have updated morale
- <a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a> - <a href="./crew_ads.html#robo19">Crew</a> index of member to update morale
+ <a href="./ui/crew-ui_ads.html#robo211">MemberIndex</a> - <a href="./crew_ads.html#robo18">Crew</a> index of member to update morale
  Value       - Amount of morale to add or substract
 </pre>
 <p class="item_name">RESULT</p>
@@ -196,11 +196,11 @@
 <pre> Update crew orders based on their orders priorities
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateOrders</strong><span class="sign">(</span>Ship<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> <a href="./ships_ads.html#robo156">ShipRecord</a><span class="sign">;</span> <a href="./combat_ads.html#robo14">Combat</a><span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateOrders</strong><span class="sign">(</span>Ship<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> <a href="./ships_ads.html#robo156">ShipRecord</a><span class="sign">;</span> <a href="./combat_ads.html#robo13">Combat</a><span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Ship   - Ship in which crew will be check
- <a href="./combat_ads.html#robo14">Combat</a> - If true, ship is in combat. Default is false
+ <a href="./combat_ads.html#robo13">Combat</a> - If true, ship is in combat. Default is false
 </pre>
 <p class="item_name">RESULT</p>
 <pre> Parameter Ship with modified data (crew, modules, cargo)
@@ -208,7 +208,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ships-crew.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Tue Aug 20 2019 06:29:40
+<p>Generated from ./src/ships-crew.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Mon Sep 09 2019 06:40:50
 </p>
 </div> <!-- footer -->
 </body>
