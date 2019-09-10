@@ -24,5 +24,8 @@ package Bases.Trade.Test_Data.Tests is
    procedure Test_TrainCost_8eb46e_3a2aca (Gnattest_T : in out Test);
    --  bases-trade.ads:116:4:TrainCost:Test_TrainCost
 
+   procedure Test_TrainSkill_54836b_cf98b9 (Gnattest_T : in out Test);
+   --  bases-trade.ads:130:4:TrainSkill:Test_TrainSkill
+
 end Bases.Trade.Test_Data.Tests;
 --  end read only
