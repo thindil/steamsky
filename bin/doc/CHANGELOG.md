@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 - New ship modules: huge orichalcum workshop, huge adamantium workshop, medium
   bronze greenhouse, medium iron greenhouse
 
+### Changed
+- Updated MODDING.md
+
 ### Fixed
 - No base type selected in new game setting on first run
 
