@@ -18,7 +18,7 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Game; use Game;
 
--- ****h* Utils/Utils
+-- ****h* Steamsky/Utils
 -- FUNCTION
 -- Provided various uncategorized code
 -- SOURCE
