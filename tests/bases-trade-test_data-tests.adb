@@ -270,6 +270,54 @@ package body Bases.Trade.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_TrainSkill_54836b_cf98b9 (MemberIndex, SkillIndex: Positive) 
+   is
+   begin
+      begin
+         pragma Assert
+           ((MemberIndex <= PlayerShip.Crew.Last_Index and SkillIndex <= Skills_List.Last_Index));
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(bases-trade.ads:0):Test_TrainSkill test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Bases.Trade.TrainSkill (MemberIndex, SkillIndex);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(bases-trade.ads:0:):Test_TrainSkill test commitment violated");
+      end;
+   end Wrap_Test_TrainSkill_54836b_cf98b9;
+--  end read only
+
+--  begin read only
+   procedure Test_TrainSkill_test_trainskill (Gnattest_T : in out Test);
+   procedure Test_TrainSkill_54836b_cf98b9 (Gnattest_T : in out Test) renames Test_TrainSkill_test_trainskill;
+--  id:2.2/54836b3d91c772c0/TrainSkill/1/0/test_trainskill/
+   procedure Test_TrainSkill_test_trainskill (Gnattest_T : in out Test) is
+   procedure TrainSkill (MemberIndex, SkillIndex: Positive) renames Wrap_Test_TrainSkill_54836b_cf98b9;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      SkillsAmount: constant Positive := Positive(PlayerShip.Crew(1).Skills.Length);
+
+   begin
+      
+      TrainSkill(1, 1);
+      Assert(Positive(PlayerShip.Crew(1).Skills.Length) > SkillsAmount, "Failed to train new skill.");
+
+--  begin read only
+   end Test_TrainSkill_test_trainskill;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.

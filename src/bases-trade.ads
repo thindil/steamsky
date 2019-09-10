@@ -130,7 +130,8 @@ package Bases.Trade is
    procedure TrainSkill(MemberIndex, SkillIndex: Positive) with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
-       SkillIndex <= Skills_List.Last_Index);
+       SkillIndex <= Skills_List.Last_Index),
+      Test_Case => ("Test_TrainSkill", Nominal);
       -- ****
 
 end Bases.Trade;
