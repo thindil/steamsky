@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
--- ****h* BasesList/BasesList
+-- ****h* Steamsky/BasesList
 -- FUNCTION
 -- Provides code for bases list
 -- SOURCE
