@@ -788,6 +788,42 @@ story.
       are: "add" (add skill, default option) or "remove" (remove this skill
       from bonus list).
 
+## Bases Types
+
+### General informations
+- Default base types are in *bases.dat* file which is in *data* directory.
+- If you want to remove or update any existing base type, you can do it in
+  *bases.dat* file in *data* directory or in modification file (better option)
+  add tag `base` with attribute `index` which value will be index of
+  selected base type and attribute `action`. Then if you modify existing
+  base type, add changed values.
+
+### Bases Types data structure
+- Each base type is between "base" tags.
+- Attribute `index` is a base type index and must be unique for each base
+  type. It can be number or text. Required
+- Attribute `name` is a base type name showed to player in game. Should be
+  unique too. Required.
+- Attribute `color` is a base type color in hexadecimal used to show this
+  base type to player on the map in game. Required.
+- Optional attribute `action`: what to do with this entry. Possible values
+  are: "add" (add this entry, default option), "remove" (remove this entry) or
+  "update" (update selected entry).
+- Tag `item` is used to set prices for selected item in that base.
+   - Attribute `index`: item index from "items.dat" file. Required.
+   - Attribute `sellprice`: price for which item is sell in that type of base.
+     If you want make selected item buyable in that type of base, you must add
+     this attribute.
+- Tag `recipe` is used to set which recipes are available to buy in that type
+  of bases.
+   - Attribute `index`: Index of the recipe to buy, from file "recipes.dat".
+     Required.
+- Tag `description`: in game description of selected type of bases. Will be
+  presented to the player during selection of starting base in main menu.
+- Tag `flags` is various info about selected base type. Possible options are:
+  `shipyard` - that base type have shipyard. Ship repairs in that base are 50%
+  cheaper.
+
 ## Themes
 
 ### General informations
