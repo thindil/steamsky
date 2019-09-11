@@ -199,21 +199,22 @@ package Bases is
    -- BaseIndex - Index of the base in which player gained or lose reputation
    -- Points    - Amount of reputation points to gain or lose
    -- SOURCE
-   procedure GainRep(BaseIndex: BasesRange; Points: Integer);
-   -- ****
+   procedure GainRep(BaseIndex: BasesRange; Points: Integer) with
+      Test_Case => ("Test_GainRep", Robustness);
+      -- ****
 
-   -- ****f* Bases/CountPrice
-   -- FUNCTION
-   -- Count price for actions with bases (buying/selling/docking/ect)
-   -- PARAMETERS
-   -- Price       - Cost of action with the base
-   -- TraderIndex - Index of crew member assigned as trader or 0 if noone is
-   --               assigned
-   -- Reduce      - If true, reduce cost of action, otherwise raise. Default
-   --               is true
-   -- RESULT
-   -- Parameter Cost
-   -- SOURCE
+      -- ****f* Bases/CountPrice
+      -- FUNCTION
+      -- Count price for actions with bases (buying/selling/docking/ect)
+      -- PARAMETERS
+      -- Price       - Cost of action with the base
+      -- TraderIndex - Index of crew member assigned as trader or 0 if noone is
+      --               assigned
+      -- Reduce      - If true, reduce cost of action, otherwise raise. Default
+      --               is true
+      -- RESULT
+      -- Parameter Cost
+      -- SOURCE
    procedure CountPrice
      (Price: in out Natural; TraderIndex: Crew_Container.Extended_Index;
       Reduce: Boolean := True) with
