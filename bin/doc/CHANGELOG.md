@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated MODDING.md
+- Changed prices for items in bases on one price in data files
 
 ### Fixed
 - No base type selected in new game setting on first run
