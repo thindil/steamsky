@@ -91,7 +91,7 @@ package body Trades.UI is
       CargoIndex, BaseCargoIndex, BaseCargoIndex2: Natural := 0;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      BaseType: Positive;
+      BaseType: Unbounded_String;
       MoneyIndex2: Natural;
       ItemTypes: constant array(Positive range <>) of Unbounded_String :=
         (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
@@ -114,9 +114,9 @@ package body Trades.UI is
          return;
       end if;
       if BaseIndex > 0 then
-         BaseType := BaseTypeIndex(SkyBases(BaseIndex).BaseType);
+         BaseType := SkyBases(BaseIndex).BaseType;
       else
-         BaseType := 1;
+         BaseType := To_Unbounded_String("0");
       end if;
       if BaseIndex = 0 and BaseCargoIndex > Natural(TraderCargo.Length) then
          return;
@@ -145,7 +145,7 @@ package body Trades.UI is
                Price := TraderCargo(BaseCargoIndex2).Price;
             end if;
          else
-            Price := Items_List(ProtoIndex).Prices(BaseType);
+            Price := Get_Price(BaseType, ProtoIndex);
          end if;
       else
          if BaseIndex > 0 then
@@ -294,7 +294,7 @@ package body Trades.UI is
       MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
       Hide(Gtk_Widget(Get_Object(Object, "buybox")));
       if BaseCargoIndex > 0 and MoneyIndex2 > 0 and
-        Items_List(ProtoIndex).Buyable(BaseType) then
+        Is_Buyable(BaseType, ProtoIndex) then
          if BaseIndex > 0
            and then SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount > 0 then
             Show_All(Gtk_Widget(Get_Object(Object, "buybox")));
@@ -615,14 +615,14 @@ package body Trades.UI is
         Gtk_List_Store(Get_Object(Builder, "itemslist1"));
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      BaseType, Price: Positive;
+      Price: Positive;
       IndexesList: Positive_Container.Vector;
       BaseCargoIndex: Natural;
       BaseCargo: BaseCargo_Container.Vector;
       Visible: Boolean := False;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
-      ProtoIndex: Unbounded_String;
+      ProtoIndex, BaseType: Unbounded_String;
       ItemsTypes: UnboundedString_Container.Vector;
       Profit: Integer;
       procedure AddType is
@@ -639,17 +639,16 @@ package body Trades.UI is
    begin
       ItemsTypes.Append(To_Unbounded_String("All"));
       if BaseIndex > 0 then
-         BaseType := BaseTypeIndex(SkyBases(BaseIndex).BaseType);
+         BaseType := SkyBases(BaseIndex).BaseType;
          BaseCargo := SkyBases(BaseIndex).Cargo;
       else
-         BaseType := 1;
+         BaseType := To_Unbounded_String("0");
          BaseCargo := TraderCargo;
       end if;
       SettingTime := True;
       Clear(ItemsList);
       for I in PlayerShip.Cargo.Iterate loop
-         if Items_List(PlayerShip.Cargo(I).ProtoIndex).Prices(BaseType) >
-           0 then
+         if Get_Price(BaseType, PlayerShip.Cargo(I).ProtoIndex) > 0 then
             Append(ItemsList, ItemsIter);
             Set
               (ItemsList, ItemsIter, 0,
@@ -682,7 +681,7 @@ package body Trades.UI is
             end if;
             Set(ItemsList, ItemsIter, 4, Gint(PlayerShip.Cargo(I).Durability));
             if BaseCargoIndex = 0 then
-               Price := Items_List(ProtoIndex).Prices(BaseType);
+               Price := Get_Price(BaseType, ProtoIndex);
             else
                if BaseIndex > 0 then
                   Price := SkyBases(BaseIndex).Cargo(BaseCargoIndex).Price;
@@ -705,8 +704,7 @@ package body Trades.UI is
                Set(ItemsList, ItemsIter, 11, "green");
             end if;
             Set(ItemsList, ItemsIter, 7, Gint(PlayerShip.Cargo(I).Amount));
-            if BaseCargoIndex > 0 and
-              Items_List(ProtoIndex).Buyable(BaseType) then
+            if BaseCargoIndex > 0 and Is_Buyable(BaseType, ProtoIndex) then
                if BaseIndex = 0 then
                   Set
                     (ItemsList, ItemsIter, 8,
@@ -724,7 +722,7 @@ package body Trades.UI is
          Visible);
       for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
          if IndexesList.Find_Index(Item => I) = 0 and
-           Items_List(BaseCargo(I).ProtoIndex).Buyable(BaseType) then
+           Is_Buyable(BaseType, BaseCargo(I).ProtoIndex) then
             Append(ItemsList, ItemsIter);
             ProtoIndex := BaseCargo(I).ProtoIndex;
             Set

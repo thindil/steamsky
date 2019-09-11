@@ -361,8 +361,6 @@ package body Bases.LootUI is
         Gtk_List_Store(Get_Object(Builder, "itemslist2"));
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      BaseType: constant Positive :=
-        BaseTypeIndex(SkyBases(BaseIndex).BaseType);
       IndexesList: Positive_Container.Vector;
       BaseCargoIndex: Natural;
       ProtoIndex: Unbounded_String;
@@ -384,7 +382,8 @@ package body Bases.LootUI is
       ItemsTypes.Append(To_Unbounded_String("All"));
       Clear(ItemsList);
       for I in PlayerShip.Cargo.Iterate loop
-         if Items_List(PlayerShip.Cargo(I).ProtoIndex).Prices(BaseType) >
+         if Get_Price
+             (SkyBases(BaseIndex).BaseType, PlayerShip.Cargo(I).ProtoIndex) >
            0 then
             Append(ItemsList, ItemsIter);
             Set(ItemsList, ItemsIter, 0, GetItemName(PlayerShip.Cargo(I)));

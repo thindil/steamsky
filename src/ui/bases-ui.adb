@@ -73,8 +73,6 @@ package body Bases.UI is
       Cost, Time: Natural := 0;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      BaseType: constant Positive :=
-        BaseTypeIndex(SkyBases(BaseIndex).BaseType);
       MoneyIndex2: Natural;
       MinChildren: Gint;
       FormattedTime, ObjectIndex: Unbounded_String;
@@ -149,12 +147,14 @@ package body Bases.UI is
       ObjectIndex := To_Unbounded_String(Get_String(Model, Iter, 1));
       case CurrentState is
          when RECIPES =>
-            if Items_List(Recipes_List(ObjectIndex).ResultIndex).Prices
-                (BaseType) >
+            if Get_Price
+                (SkyBases(BaseIndex).BaseType,
+                 Recipes_List(ObjectIndex).ResultIndex) >
               0 then
                Cost :=
-                 Items_List(Recipes_List(ObjectIndex).ResultIndex).Prices
-                   (BaseType) *
+                 Get_Price
+                   (SkyBases(BaseIndex).BaseType,
+                    Recipes_List(ObjectIndex).ResultIndex) *
                  Recipes_List(ObjectIndex).Difficulty * 10;
             else
                Cost := Recipes_List(ObjectIndex).Difficulty * 10;

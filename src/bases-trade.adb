@@ -139,10 +139,14 @@ package body Bases.Trade is
       if TraderIndex = 0 then
          raise Trade_No_Trader;
       end if;
-      if Items_List(Recipes_List(RecipeIndex).ResultIndex).Prices(BaseType) >
+      if Get_Price
+          (SkyBases(BaseIndex).BaseType,
+           Recipes_List(RecipeIndex).ResultIndex) >
         0 then
          Cost :=
-           Items_List(Recipes_List(RecipeIndex).ResultIndex).Prices(BaseType) *
+           Get_Price
+             (SkyBases(BaseIndex).BaseType,
+              Recipes_List(RecipeIndex).ResultIndex) *
            Recipes_List(RecipeIndex).Difficulty * 10;
       else
          Cost := Recipes_List(RecipeIndex).Difficulty * 10;
@@ -213,22 +217,17 @@ package body Bases.Trade is
    procedure HealCost
      (Cost, Time: in out Natural;
       MemberIndex: Crew_Container.Extended_Index) is
-      BaseType: constant Positive :=
-        BaseTypeIndex
-          (SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-             .BaseType);
    begin
       if MemberIndex > 0 then
          Time := 5 * (100 - PlayerShip.Crew(MemberIndex).Health);
          Cost :=
            (5 * (100 - PlayerShip.Crew(MemberIndex).Health)) *
-           Items_List
-             (FindProtoItem
+           Get_Price
+             (To_Unbounded_String("0"),
+              FindProtoItem
                 (ItemType =>
                    Factions_List(PlayerShip.Crew(MemberIndex).Faction)
-                     .HealingTools))
-             .Prices
-             (BaseType);
+                     .HealingTools));
       else
          for Member of PlayerShip.Crew loop
             if Member.Health < 100 then
@@ -240,8 +239,7 @@ package body Bases.Trade is
                     (FindProtoItem
                        (ItemType =>
                           Factions_List(Member.Faction).HealingTools))
-                    .Prices
-                    (BaseType));
+                    .Price);
             end if;
          end loop;
       end if;

@@ -187,6 +187,21 @@ package body BasesTypes is
       return True;
    end Is_Buyable;
 
+   function Get_Price(BaseType, ItemIndex: Unbounded_String) return Natural is
+   begin
+      if Items_List(ItemIndex).Price = 0 then
+         return 0;
+      end if;
+      if BasesTypes_List(BaseType).Trades.Contains(ItemIndex) then
+         if BasesTypes_List(BaseType).Trades(ItemIndex)(1) > 0 then
+            return BasesTypes_List(BaseType).Trades(ItemIndex)(1);
+         elsif BasesTypes_List(BaseType).Trades(ItemIndex)(2) > 0 then
+            return BasesTypes_List(BaseType).Trades(ItemIndex)(2);
+         end if;
+      end if;
+      return Items_List(ItemIndex).Price;
+   end Get_Price;
+
    function BaseTypeIndex(BaseType: Unbounded_String) return Positive is
    begin
       if BaseType = To_Unbounded_String("0") then

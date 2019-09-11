@@ -50,8 +50,7 @@ package Items is
    -- Name        - Name of item
    -- Weight      - Weight of item
    -- IType       - Type of item
-   -- Prices      - Prices of item in bases
-   -- Buyable     - Did item is buyable in selected bases
+   -- Price      - Price of item in bases
    -- Value       - Additional item data (damage for ammo, etc)
    -- ShowType    - Displayed type of item (can be group of items, renamed
    --               type, etc)
@@ -61,8 +60,7 @@ package Items is
       Name: Unbounded_String;
       Weight: Positive;
       IType: Unbounded_String;
-      Prices: Natural_Array(1 .. 5);
-      Buyable: Object_Buyable;
+      Price: Natural;
       Value: Integer_Container.Vector;
       ShowType: Unbounded_String;
       Description: Unbounded_String;
