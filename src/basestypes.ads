@@ -107,6 +107,21 @@ package BasesTypes is
       Items_List.Contains(ItemIndex);
       -- ****
 
+      -- ****f* BasesTypes/Get_Price
+      -- FUNCTION
+      -- Get price of selected item in selected base type
+      -- PARAMETERS
+      -- BaseType  - Base type to check
+      -- ItemIndex - Index of item prototype to check
+      -- RESULT
+      -- Price of selected item in selected base type
+      -- SOURCE
+   function Get_Price
+     (BaseType, ItemIndex: Unbounded_String) return Natural with
+      Pre => BasesTypes_List.Contains(BaseType) and
+      Items_List.Contains(ItemIndex);
+      -- ****
+
    function BaseTypeIndex(BaseType: Unbounded_String) return Positive;
 
 end BasesTypes;

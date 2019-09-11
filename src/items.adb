@@ -46,8 +46,7 @@ package body Items is
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
            (Name => Null_Unbounded_String, Weight => 1,
-            IType => Null_Unbounded_String, Prices => (others => 0),
-            Buyable => (others => False), Value => TempValue,
+            IType => Null_Unbounded_String, Price => 0, Value => TempValue,
             ShowType => Null_Unbounded_String,
             Description => Null_Unbounded_String);
          ItemNode := Item(NodesList, I);
@@ -93,12 +92,16 @@ package body Items is
               DOM.Core.Elements.Get_Elements_By_Tag_Name(ItemNode, "trade");
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
-               TempRecord.Prices(J + 1) :=
-                 Natural'Value(Get_Attribute(ChildNode, "price"));
-               if Get_Attribute(ChildNode, "buyable") = "Y" then
-                  TempRecord.Buyable(J + 1) := True;
+               if Get_Attribute(ChildNode, "buyable") = "N" then
+                  TempRecord.Price :=
+                    Natural'Value(Get_Attribute(ChildNode, "price"));
+                  exit;
                end if;
             end loop;
+            if Get_Attribute(ItemNode, "price")'Length > 0 then
+               TempRecord.Price :=
+                 Natural'Value(Get_Attribute(ItemNode, "price"));
+            end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(ItemNode, "data");
             if Length(ChildNodes) > 0 then

@@ -25,6 +25,7 @@ with Utils; use Utils;
 with Goals; use Goals;
 with Crafts; use Crafts;
 with Config; use Config;
+with BasesTypes; use BasesTypes;
 
 package body Bases is
 
@@ -172,9 +173,14 @@ package body Bases is
            GetRandom(ItemsIndexes.First_Index, ItemsIndexes.Last_Index);
          Inventory.Append(New_Item => ItemsIndexes(ItemIndex));
          Equipment(EquipIndex) := Inventory.Last_Index;
-         Price := Price + (Items_List(ItemsIndexes(ItemIndex)).Prices(1) * 2);
+         Price :=
+           Price +
+           (Get_Price(SkyBases(BaseIndex).BaseType, ItemsIndexes(ItemIndex)) *
+            2);
          Payment :=
-           Payment + (Items_List(ItemsIndexes(ItemIndex)).Prices(1) / 10);
+           Payment +
+           (Get_Price(SkyBases(BaseIndex).BaseType, ItemsIndexes(ItemIndex)) /
+            10);
       end AddInventory;
    begin
       if DaysDifference(SkyBases(BaseIndex).RecruitDate) < 30 or
@@ -572,7 +578,12 @@ package body Bases is
                   for J in Items_List.Iterate loop
                      ItemIndex := ItemIndex - 1;
                      if ItemIndex <= 0
-                       and then Items_List(J).Prices(1) > 0 then
+                       and then
+                         Get_Price
+                           (SkyBases(SkyMap(EventX, EventY).BaseIndex)
+                              .BaseType,
+                            Objects_Container.Key(J)) >
+                         0 then
                         NewItemIndex := Objects_Container.Key(J);
                         exit;
                      end if;

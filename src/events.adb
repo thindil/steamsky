@@ -26,6 +26,7 @@ with Crew; use Crew;
 with Items; use Items;
 with Utils; use Utils;
 with Factions; use Factions;
+with BasesTypes; use BasesTypes;
 
 package body Events is
 
@@ -222,13 +223,25 @@ package body Events is
                         for J in Items_List.Iterate loop
                            ItemIndex := ItemIndex - 1;
                            if ItemIndex = 0 then
-                              if Items_List(J).Prices(1) > 0 then
+                              if Get_Price
+                                  (SkyBases
+                                     (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
+                                        .BaseIndex)
+                                     .BaseType,
+                                   Objects_Container.Key(J)) >
+                                0 then
                                  NewItemIndex := Objects_Container.Key(J);
                               end if;
                               exit;
                            end if;
                         end loop;
-                        exit when Items_List(NewItemIndex).Prices(1) > 0;
+                        exit when Get_Price
+                            (SkyBases
+                               (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
+                                  .BaseIndex)
+                               .BaseType,
+                             NewItemIndex) >
+                          0;
                      end loop;
                      Events_List.Append
                        (New_Item =>
