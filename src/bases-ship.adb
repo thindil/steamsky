@@ -497,10 +497,7 @@ package body Bases.Ship is
              (ItemType =>
                 Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                   .RepairMaterial);
-         Cost :=
-           Time *
-           Items_List(ProtoIndex).Prices
-             (BaseTypeIndex(SkyBases(BaseIndex).BaseType));
+         Cost := Time * Get_Price(SkyBases(BaseIndex).BaseType, ProtoIndex);
       else
          for Module of PlayerShip.Modules loop
             if Module.Durability < Module.MaxDurability then
@@ -512,8 +509,7 @@ package body Bases.Ship is
                Cost :=
                  Cost +
                  ((Module.MaxDurability - Module.Durability) *
-                  Items_List(ProtoIndex).Prices
-                    (BaseTypeIndex(SkyBases(BaseIndex).BaseType)));
+                  Items_List(ProtoIndex).Price);
             end if;
          end loop;
          if ModuleIndex = -1 then

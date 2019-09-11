@@ -61,8 +61,9 @@ package body Bases.Cargo is
                      Amount => (GetRandom(0, 100) * Population),
                      Durability => 100,
                      Price =>
-                       Items_List(I).Prices
-                         (BaseTypeIndex(SkyBases(BaseIndex).BaseType))));
+                       Get_Price
+                         (SkyBases(BaseIndex).BaseType,
+                          Objects_Container.Key(I))));
             end if;
          end loop;
       else
@@ -113,8 +114,7 @@ package body Bases.Cargo is
                  (ProtoIndex => ProtoIndex, Amount => Amount,
                   Durability => Durability,
                   Price =>
-                    Items_List(ProtoIndex).Prices
-                      (BaseTypeIndex(SkyBases(BaseIndex).BaseType))));
+                    Get_Price(SkyBases(BaseIndex).BaseType, ProtoIndex)));
          else
             SkyBases(BaseIndex).Cargo(ItemIndex).Amount :=
               SkyBases(BaseIndex).Cargo(ItemIndex).Amount + Amount;

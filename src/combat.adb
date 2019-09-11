@@ -1411,7 +1411,7 @@ package body Combat is
                   if FreeSpace < 0 then
                      LootAmount := LootAmount + FreeSpace;
                   end if;
-                  if Items_List(Item.ProtoIndex).Prices(1) = 0 and
+                  if Items_List(Item.ProtoIndex).Price = 0 and
                     Item.ProtoIndex /= MoneyIndex then
                      LootAmount := 0;
                   end if;
