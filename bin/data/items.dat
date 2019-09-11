@@ -14,22 +14,10 @@ crafting, etc.).
 - Attribute "showtype" is optional. If you want to show item type in game
 (for example in cargo or in trade screen) different than item type from
 *game.dat* file, you can set this parameter to any text value.
+- Attribute "price" is price of the item. If you want that item will be not
+possible to buy/sellable in bases set it price to 0.
 -->
- <item index="1" name="Charcollum" showtype="Fuel/Moneys" type="Fuel" weight="1">
-<!--
-- Each trade entry is for selected type of bases: Industrial, Agricultural,
-Refinery, Shipyard, Military.
-- Attribute "price" is price of item in selected base type. If you want that
-item will be not possible to buy/sellable in bases (or only selected base type)
-set it price to 0.
-- Attribute "buyable" said did item can be bough in selected type of base.
-"Y" mean Yes, "N" means No.
--->
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
+ <item index="1" name="Charcollum" showtype="Fuel/Moneys" type="Fuel" weight="1" price="0">
 <!--
 Optional tags "data". For items used as food it is value of hunger
 reduced by one portion. For items used as drinks, value of thirst reduced by
@@ -49,431 +37,186 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
 <!-- In game description of item. Can have any value. -->
   <description>Standard ship fuel. Used as moneys in bases trades too.</description>
  </item>
- <item index="2" name="Basic Rations" type="Food" weight="1">
-  <trade buyable="N" price="3"/>
-  <trade buyable="Y" price="2"/>
-  <trade buyable="N" price="3"/>
-  <trade buyable="N" price="3"/>
-  <trade buyable="N" price="3"/>
+ <item index="2" name="Basic Rations" type="Food" weight="1" price="3">
   <data value="60"/>
   <data value="0"/>
   <description>Standard food rations.</description>
  </item>
- <item index="3" name="Water" type="Drink" weight="1">
-  <trade buyable="N" price="2"/>
-  <trade buyable="Y" price="1"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
+ <item index="3" name="Water" type="Drink" weight="1" price="2">
   <data value="30"/>
   <data value="0"/>
   <description>Clean water, used as drinks.</description>
  </item>
- <item index="4" name="Iron 20mm ammo" showtype="Ammunition" type="Ammo20" weight="1">
-  <trade buyable="N" price="5"/>
-  <trade buyable="N" price="5"/>
-  <trade buyable="N" price="5"/>
-  <trade buyable="N" price="5"/>
-  <trade buyable="Y" price="3"/>
+ <item index="4" name="Iron 20mm ammo" showtype="Ammunition" type="Ammo20" weight="1" price="5">
   <data value="2"/>
   <description>Standard 20mm gun ammunition.</description>
  </item>
- <item index="5" name="Bronze plates" showtype="Repair material" type="Bronze" weight="5">
-  <trade buyable="Y" price="3"/>
-  <trade buyable="N" price="5"/>
-  <trade buyable="N" price="5"/>
-  <trade buyable="N" price="5"/>
-  <trade buyable="N" price="5"/>
+ <item index="5" name="Bronze plates" showtype="Repair material" type="Bronze" weight="5" price="5">
   <description>Heavy, large, bronze plates used to repair or upgrade ship modules.</description>
  </item>
- <item index="6" name="Fresh vegetables" showtype="Raw Food" type="RawFood" weight="1">
-  <trade buyable="N" price="2"/>
-  <trade buyable="Y" price="1"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
+ <item index="6" name="Fresh vegetables" showtype="Raw Food" type="RawFood" weight="1" price="2">
   <data value="30"/>
   <data value="-5"/>
   <description>Raw food used mainly for crafting rations.</description>
  </item>
- <item index="7" name="Fresh fruits" showtype="Raw Food" type="RawFood" weight="1">
-  <trade buyable="N" price="2"/>
-  <trade buyable="Y" price="1"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
+ <item index="7" name="Fresh fruits" showtype="Raw Food" type="RawFood" weight="1" price="2">
   <data value="30"/>
   <data value="-5"/>
   <description>Raw food used mainly for crafting rations.</description>
  </item>
- <item index="8" name="Fresh meat" showtype="Raw Food" type="RawFood" weight="1">
-  <trade buyable="N" price="2"/>
-  <trade buyable="Y" price="1"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
+ <item index="8" name="Fresh meat" showtype="Raw Food" type="RawFood" weight="1" price="2">
   <data value="30"/>
   <data value="-5"/>
   <description>Raw food used mainly for crafting rations.</description>
  </item>
- <item index="9" name="Andrae logs" type="Wood" weight="5">
-  <trade buyable="N" price="5"/>
-  <trade buyable="N" price="5"/>
-  <trade buyable="Y" price="3"/>
-  <trade buyable="N" price="5"/>
-  <trade buyable="N" price="5"/>
+ <item index="9" name="Andrae logs" type="Wood" weight="5" price="5">
   <description>Wooden logs used in crafting items and Charcollum.</description>
  </item>
- <item index="10" name="Illandru logs" type="Wood" weight="3">
-  <trade buyable="N" price="6"/>
-  <trade buyable="N" price="6"/>
-  <trade buyable="Y" price="4"/>
-  <trade buyable="N" price="6"/>
-  <trade buyable="N" price="6"/>
+ <item index="10" name="Illandru logs" type="Wood" weight="3" price="6">
   <description>Wooden logs used in crafting items and Charcollum.</description>
  </item>
- <item index="11" name="Fine Rations" type="Food" weight="1">
-  <trade buyable="N" price="5"/>
-  <trade buyable="Y" price="3"/>
-  <trade buyable="N" price="5"/>
-  <trade buyable="N" price="5"/>
-  <trade buyable="N" price="5"/>
+ <item index="11" name="Fine Rations" type="Food" weight="1" price="5">
   <data value="80"/>
   <data value="5"/>
   <description>Better food rations.</description>
  </item>
- <item index="12" name="Gunpowder" type="Gunpowder" weight="1">
-  <trade buyable="Y" price="1"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
+ <item index="12" name="Gunpowder" type="Gunpowder" weight="1" price="2">
   <description>Used to produce ammunition.</description>
  </item>
- <item index="13" name="Iron plates" showtype="Repair material" type="Iron" weight="5">
-  <trade buyable="Y" price="4"/>
-  <trade buyable="N" price="6"/>
-  <trade buyable="N" price="6"/>
-  <trade buyable="N" price="6"/>
-  <trade buyable="N" price="6"/>
+ <item index="13" name="Iron plates" showtype="Repair material" type="Iron" weight="5" price="6">
   <description>Heavy, large, iron plates used to repair or upgrade ship modules.</description>
  </item>
- <item index="14" name="Iron 10mm ammo" showtype="Ammunition" type="Ammo10" weight="1">
-  <trade buyable="N" price="3"/>
-  <trade buyable="N" price="3"/>
-  <trade buyable="N" price="3"/>
-  <trade buyable="N" price="3"/>
-  <trade buyable="Y" price="1"/>
+ <item index="14" name="Iron 10mm ammo" showtype="Ammunition" type="Ammo10" weight="1" price="3">
   <data value="1"/>
   <description>Standard 10mm gun ammunition.</description>
  </item>
- <item index="15" name="Copper ore" showtype="Ore" type="CopperOre" weight="7">
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="Y" price="1"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
+ <item index="15" name="Copper ore" showtype="Ore" type="CopperOre" weight="7" price="2">
   <description>Unrefined copper ore.</description>
  </item>
- <item index="16" name="Tin ore" showtype="Ore" type="TinOre" weight="7">
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="Y" price="1"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
+ <item index="16" name="Tin ore" showtype="Ore" type="TinOre" weight="7" price="2">
   <description>Unrefined tin ore.</description>
  </item>
- <item index="17" name="Copper plates" type="Copper" weight="5">
-  <trade buyable="Y" price="2"/>
-  <trade buyable="N" price="4"/>
-  <trade buyable="N" price="4"/>
-  <trade buyable="N" price="4"/>
-  <trade buyable="N" price="4"/>
+ <item index="17" name="Copper plates" type="Copper" weight="5" price="4">
   <description>Heavy, large, copper plates.</description>
  </item>
- <item index="18" name="Tin plates" type="Tin" weight="5">
-  <trade buyable="Y" price="2"/>
-  <trade buyable="N" price="4"/>
-  <trade buyable="N" price="4"/>
-  <trade buyable="N" price="4"/>
-  <trade buyable="N" price="4"/>
+ <item index="18" name="Tin plates" type="Tin" weight="5" price="4">
   <description>Heavy, large, tin plates.</description>
  </item>
- <item index="19" name="Iron ore" showtype="Ore" type="IronOre" weight="8">
-  <trade buyable="N" price="5"/>
-  <trade buyable="N" price="5"/>
-  <trade buyable="Y" price="3"/>
-  <trade buyable="N" price="5"/>
-  <trade buyable="N" price="5"/>
+ <item index="19" name="Iron ore" showtype="Ore" type="IronOre" weight="8" price="5">
   <description>Unrefined iron ore.</description>
  </item>
- <item index="20" name="Iron 40mm ammo" showtype="Ammunition" type="Ammo40" weight="2">
-  <trade buyable="N" price="8"/>
-  <trade buyable="N" price="8"/>
-  <trade buyable="N" price="8"/>
-  <trade buyable="N" price="8"/>
-  <trade buyable="Y" price="6"/>
+ <item index="20" name="Iron 40mm ammo" showtype="Ammunition" type="Ammo40" weight="2" price="8">
   <data value="4"/>
   <description>Standard 40mm gun ammunition.</description>
  </item>
- <item index="21" name="Steel plates" showtype="Repair material" type="Steel" weight="5">
-  <trade buyable="Y" price="6"/>
-  <trade buyable="N" price="8"/>
-  <trade buyable="N" price="8"/>
-  <trade buyable="N" price="8"/>
-  <trade buyable="N" price="8"/>
+ <item index="21" name="Steel plates" showtype="Repair material" type="Steel" weight="5" price="8">
   <description>Heavy, large, steel plates.</description>
  </item>
- <item index="22" name="Medical supplies" type="Medicines" weight="5">
-  <trade buyable="N" price="7"/>
-  <trade buyable="Y" price="5"/>
-  <trade buyable="Y" price="5"/>
-  <trade buyable="N" price="7"/>
-  <trade buyable="N" price="7"/>
+ <item index="22" name="Medical supplies" type="Medicines" weight="5" price="7">
   <description>Bandages, disease and poison antidotes, all what is needed to cure patients.</description>
  </item>
- <item index="23" name="Steel 20mm ammo" showtype="Ammunition" type="Ammo20" weight="1">
-  <trade buyable="N" price="7"/>
-  <trade buyable="N" price="7"/>
-  <trade buyable="N" price="7"/>
-  <trade buyable="N" price="7"/>
-  <trade buyable="Y" price="5"/>
+ <item index="23" name="Steel 20mm ammo" showtype="Ammunition" type="Ammo20" weight="1" price="7">
   <data value="4"/>
   <description>Upgraded 20mm gun ammunition.</description>
  </item>
- <item index="24" name="Steel 10mm ammo" showtype="Ammunition" type="Ammo10" weight="1">
-  <trade buyable="N" price="5"/>
-  <trade buyable="N" price="5"/>
-  <trade buyable="N" price="5"/>
-  <trade buyable="N" price="5"/>
-  <trade buyable="Y" price="3"/>
+ <item index="24" name="Steel 10mm ammo" showtype="Ammunition" type="Ammo10" weight="1" price="5">
   <data value="2"/>
   <description>Upgraded 10mm gun ammunition.</description>
  </item>
- <item index="25" name="Steel 40mm ammo" showtype="Ammunition" type="Ammo40" weight="2">
-  <trade buyable="N" price="10"/>
-  <trade buyable="N" price="10"/>
-  <trade buyable="N" price="10"/>
-  <trade buyable="N" price="10"/>
-  <trade buyable="Y" price="8"/>
+ <item index="25" name="Steel 40mm ammo" showtype="Ammunition" type="Ammo40" weight="2" price="10">
   <data value="8"/>
   <description>Upgraded 40mm gun ammunition.</description>
  </item>
- <item index="26" name="Iron 60mm ammo" showtype="Ammunition" type="Ammo60" weight="4">
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="Y" price="10"/>
+ <item index="26" name="Iron 60mm ammo" showtype="Ammunition" type="Ammo60" weight="4" price="12">
   <data value="8"/>
   <description>Standard 60mm gun ammunition.</description>
  </item>
- <item index="27" name="Steel 60mm ammo" showtype="Ammunition" type="Ammo60" weight="4">
-  <trade buyable="N" price="14"/>
-  <trade buyable="N" price="14"/>
-  <trade buyable="N" price="14"/>
-  <trade buyable="N" price="14"/>
-  <trade buyable="Y" price="12"/>
+ <item index="27" name="Steel 60mm ammo" showtype="Ammunition" type="Ammo60" weight="4" price="14">
   <data value="16"/>
   <description>Upgraded 60mm gun ammunition.</description>
  </item>
- <item index="28" name="Medical herbs" type="Herbs" weight="5">
-  <trade buyable="N" price="5"/>
-  <trade buyable="Y" price="3"/>
-  <trade buyable="N" price="5"/>
-  <trade buyable="N" price="5"/>
-  <trade buyable="N" price="5"/>
+ <item index="28" name="Medical herbs" type="Herbs" weight="5" price="5">
   <description>Different herbs needed to create medical supplies.</description>
  </item>
- <item index="29" name="Medical herbs seeds" showtype="Seeds" type="HerbSeeds" weight="1">
-  <trade buyable="N" price="4"/>
-  <trade buyable="Y" price="2"/>
-  <trade buyable="N" price="4"/>
-  <trade buyable="N" price="4"/>
-  <trade buyable="N" price="4"/>
+ <item index="29" name="Medical herbs seeds" showtype="Seeds" type="HerbSeeds" weight="1" price="4">
   <description>Seeds to cultivate medical herbs.</description>
  </item>
- <item index="30" name="Vegetables seeds" showtype="Seeds" type="VegetableSeeds" weight="1">
-  <trade buyable="N" price="2"/>
-  <trade buyable="Y" price="1"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
+ <item index="30" name="Vegetables seeds" showtype="Seeds" type="VegetableSeeds" weight="1" price="2">
   <description>Seeds to cultivate vegetables.</description>
  </item>
- <item index="31" name="Iron 80mm ammo" showtype="Ammunition" type="Ammo80" weight="8">
-  <trade buyable="N" price="18"/>
-  <trade buyable="N" price="18"/>
-  <trade buyable="N" price="18"/>
-  <trade buyable="N" price="18"/>
-  <trade buyable="Y" price="16"/>
+ <item index="31" name="Iron 80mm ammo" showtype="Ammunition" type="Ammo80" weight="8" price="18">
   <data value="16"/>
   <description>Standard 80mm gun ammunition.</description>
  </item>
- <item index="32" name="Steel 80mm ammo" showtype="Ammunition" type="Ammo80" weight="8">
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="Y" price="20"/>
+ <item index="32" name="Steel 80mm ammo" showtype="Ammunition" type="Ammo80" weight="8" price="22">
   <data value="32"/>
   <description>Upgraded 80mm gun ammunition.</description>
  </item>
- <item index="33" name="Iron 100mm ammo" showtype="Ammunition" type="Ammo100" weight="16">
-  <trade buyable="N" price="26"/>
-  <trade buyable="N" price="26"/>
-  <trade buyable="N" price="26"/>
-  <trade buyable="N" price="26"/>
-  <trade buyable="Y" price="24"/>
+ <item index="33" name="Iron 100mm ammo" showtype="Ammunition" type="Ammo100" weight="16" price="26">
   <data value="32"/>
   <description>Standard 100mm gun ammunition.</description>
  </item>
- <item index="34" name="Steel 100mm ammo" showtype="Ammunition" type="Ammo100" weight="16">
-  <trade buyable="N" price="34"/>
-  <trade buyable="N" price="34"/>
-  <trade buyable="N" price="34"/>
-  <trade buyable="N" price="34"/>
-  <trade buyable="Y" price="32"/>
+ <item index="34" name="Steel 100mm ammo" showtype="Ammunition" type="Ammo100" weight="16" price="34">
   <data value="64"/>
   <description>Upgraded 100mm gun ammunition.</description>
  </item>
- <item index="35" name="Iron 120mm ammo" showtype="Ammunition" type="Ammo120" weight="30">
-  <trade buyable="N" price="40"/>
-  <trade buyable="N" price="40"/>
-  <trade buyable="N" price="40"/>
-  <trade buyable="N" price="40"/>
-  <trade buyable="Y" price="38"/>
+ <item index="35" name="Iron 120mm ammo" showtype="Ammunition" type="Ammo120" weight="30" price="40">
   <data value="64"/>
   <description>Standard 120mm gun ammunition.</description>
  </item>
- <item index="36" name="Steel 120mm ammo" showtype="Ammunition" type="Ammo120" weight="30">
-  <trade buyable="N" price="52"/>
-  <trade buyable="N" price="52"/>
-  <trade buyable="N" price="52"/>
-  <trade buyable="N" price="52"/>
-  <trade buyable="Y" price="50"/>
+ <item index="36" name="Steel 120mm ammo" showtype="Ammunition" type="Ammo120" weight="30" price="52">
   <data value="128"/>
   <description>Upgraded 120mm gun ammunition.</description>
  </item>
- <item index="37" name="Andrae seeds" showtype="Seeds" type="AndraeSeeds" weight="1">
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="Y" price="1"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
+ <item index="37" name="Andrae seeds" showtype="Seeds" type="AndraeSeeds" weight="1" price="2">
   <description>Seeds to cultivate Andrae trees.</description>
  </item>
- <item index="38" name="Illandru seeds" showtype="Seeds" type="IllandruSeeds" weight="1">
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="Y" price="1"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
+ <item index="38" name="Illandru seeds" showtype="Seeds" type="IllandruSeeds" weight="1" price="2">
   <description>Seeds to cultivate Illandru trees.</description>
  </item>
- <item index="39" name="Small package" showtype="Special" type="MissionItem" weight="5">
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
+ <item index="39" name="Small package" showtype="Special" type="MissionItem" weight="5" price="0">
   <description>Item needed for one of your missions. Deliver it to proper sky base for reward. Removing it from cargo automatically fail proper mission.</description>
  </item>
- <item index="40" name="Corpse" type="Body" weight="70">
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
+ <item index="40" name="Corpse" type="Body" weight="70" price="0">
   <description>Dead body.</description>
  </item>
- <item index="41" name="Package" showtype="Special" type="MissionItem" weight="10">
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
+ <item index="41" name="Package" showtype="Special" type="MissionItem" weight="10" price="0">
   <description>Item needed for one of your missions. Deliver it to proper sky base for reward. Removing it from cargo automatically fail proper mission.</description>
  </item>
- <item index="42" name="Large package" showtype="Special" type="MissionItem" weight="50">
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
+ <item index="42" name="Large package" showtype="Special" type="MissionItem" weight="50" price="0">
   <description>Item needed for one of your missions. Deliver it to proper sky base for reward. Removing it from cargo automatically fail proper mission.</description>
  </item>
- <item index="43" name="Huge package" showtype="Special" type="MissionItem" weight="200">
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
+ <item index="43" name="Huge package" showtype="Special" type="MissionItem" weight="200" price="0">
   <description>Item needed for one of your missions. Deliver it to proper sky base for reward. Removing it from cargo automatically fail proper mission.</description>
  </item>
- <item index="44" name="Beer" type="Drink" weight="1">
-  <trade buyable="N" price="3"/>
-  <trade buyable="Y" price="2"/>
-  <trade buyable="N" price="3"/>
-  <trade buyable="N" price="3"/>
-  <trade buyable="N" price="3"/>
+ <item index="44" name="Beer" type="Drink" weight="1" price="3">
   <data value="40"/>
   <data value="5"/>
   <description>Standard beer, used as drink.</description>
  </item>
- <item index="45" name="Wine" type="Drink" weight="1">
-  <trade buyable="N" price="4"/>
-  <trade buyable="Y" price="3"/>
-  <trade buyable="N" price="4"/>
-  <trade buyable="N" price="4"/>
-  <trade buyable="N" price="4"/>
+ <item index="45" name="Wine" type="Drink" weight="1" price="4">
   <data value="50"/>
   <data value="10"/>
   <description>Good quality wine, used as drink.</description>
  </item>
- <item index="46" name="Lavish Rations" type="Food" weight="1">
-  <trade buyable="N" price="7"/>
-  <trade buyable="Y" price="5"/>
-  <trade buyable="N" price="7"/>
-  <trade buyable="N" price="7"/>
-  <trade buyable="N" price="7"/>
+ <item index="46" name="Lavish Rations" type="Food" weight="1" price="7">
   <data value="100"/>
   <data value="10"/>
   <description>Best food rations.</description>
  </item>
- <item index="47" name="Alchemy set" showtype="Tool" type="AlchemySet" weight="5">
-  <trade buyable="Y" price="5"/>
-  <trade buyable="N" price="7"/>
-  <trade buyable="N" price="7"/>
-  <trade buyable="N" price="7"/>
-  <trade buyable="N" price="7"/>
+ <item index="47" name="Alchemy set" showtype="Tool" type="AlchemySet" weight="5" price="7">
   <data value="10"/>
   <description>Tool used in alchemical recipes.</description>
  </item>
- <item index="48" name="Bronze mold" showtype="Tool" type="Mold" weight="10">
-  <trade buyable="Y" price="10"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
+ <item index="48" name="Bronze mold" showtype="Tool" type="Mold" weight="10" price="12">
   <data value="15"/>
   <description>Bronze tool used in metalsmith recipes.</description>
  </item>
- <item index="49" name="Bronze gunsmith set" showtype="Tool" type="GunsmithSet" weight="10">
-  <trade buyable="Y" price="10"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
+ <item index="49" name="Bronze gunsmith set" showtype="Tool" type="GunsmithSet" weight="10" price="12">
   <data value="15"/>
   <description>Bronze tool used in gunsmith recipes.</description>
  </item>
- <item index="50" name="Wooden cooking set" showtype="Tool" type="CookingSet" weight="5">
-  <trade buyable="Y" price="7"/>
-  <trade buyable="N" price="9"/>
-  <trade buyable="N" price="9"/>
-  <trade buyable="N" price="9"/>
-  <trade buyable="N" price="9"/>
+ <item index="50" name="Wooden cooking set" showtype="Tool" type="CookingSet" weight="5" price="9">
   <data value="20"/>
   <description>Wooden tool used to cook items.</description>
  </item>
