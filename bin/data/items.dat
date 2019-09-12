@@ -687,66 +687,31 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Titanium set of tools needed to sew items.</description>
  </item>
- <item index="151" name="Orichalcum sewing kit" showtype="Tool" type="SewingKit" weight="4">
-  <trade buyable="Y" price="26"/>
-  <trade buyable="N" price="28"/>
-  <trade buyable="N" price="28"/>
-  <trade buyable="N" price="28"/>
-  <trade buyable="N" price="28"/>
+ <item index="151" name="Orichalcum sewing kit" showtype="Tool" type="SewingKit" weight="4" price="28">
   <data value="2"/>
   <description>Orichalcum set of tools needed to sew items.</description>
  </item>
- <item index="152" name="Orichalcum 60mm ammo" showtype="Ammunition" type="Ammo60" weight="8">
-  <trade buyable="N" price="30"/>
-  <trade buyable="N" price="30"/>
-  <trade buyable="N" price="30"/>
-  <trade buyable="N" price="30"/>
-  <trade buyable="Y" price="28"/>
+ <item index="152" name="Orichalcum 60mm ammo" showtype="Ammunition" type="Ammo60" weight="8" price="30">
   <data value="64"/>
   <description>Upgraded 60mm gun ammunition, made of orichalcum.</description>
  </item>
- <item index="153" name="Orichalcum 80mm ammo" showtype="Ammunition" type="Ammo80" weight="16">
-  <trade buyable="N" price="34"/>
-  <trade buyable="N" price="34"/>
-  <trade buyable="N" price="34"/>
-  <trade buyable="N" price="34"/>
-  <trade buyable="Y" price="32"/>
+ <item index="153" name="Orichalcum 80mm ammo" showtype="Ammunition" type="Ammo80" weight="16" price="34">
   <data value="128"/>
   <description>Upgraded 80mm gun ammunition, made of orichalcum.</description>
  </item>
- <item index="154" name="Orichalcum 100mm ammo" showtype="Ammunition" type="Ammo100" weight="32">
-  <trade buyable="N" price="60"/>
-  <trade buyable="N" price="60"/>
-  <trade buyable="N" price="60"/>
-  <trade buyable="N" price="60"/>
-  <trade buyable="Y" price="58"/>
+ <item index="154" name="Orichalcum 100mm ammo" showtype="Ammunition" type="Ammo100" weight="32" price="60">
   <data value="256"/>
   <description>Upgraded 100mm gun ammunition, made of orichalcum.</description>
  </item>
- <item index="155" name="Orichalcum 120mm ammo" showtype="Ammunition" type="Ammo120" weight="60">
-  <trade buyable="N" price="102"/>
-  <trade buyable="N" price="102"/>
-  <trade buyable="N" price="102"/>
-  <trade buyable="N" price="102"/>
-  <trade buyable="Y" price="100"/>
+ <item index="155" name="Orichalcum 120mm ammo" showtype="Ammunition" type="Ammo120" weight="60" price="102">
   <data value="512"/>
   <description>Upgraded 120mm gun ammunition, made of orichalcum.</description>
  </item>
- <item index="156" name="Orichalcum harpoon" showtype="Ammunition" type="Harpoon" weight="20">
-  <trade buyable="N" price="27"/>
-  <trade buyable="N" price="27"/>
-  <trade buyable="N" price="27"/>
-  <trade buyable="N" price="27"/>
-  <trade buyable="Y" price="25"/>
+ <item index="156" name="Orichalcum harpoon" showtype="Ammunition" type="Harpoon" weight="20" price="27">
   <data value="16"/>
   <description>Harpoon made of orichalcum with long rope. Used as ammunition for harpoon guns.</description>
  </item>
- <item index="157" name="Orichalcum short sword" type="Weapon" weight="2">
-  <trade buyable="N" price="30"/>
-  <trade buyable="N" price="30"/>
-  <trade buyable="N" price="30"/>
-  <trade buyable="N" price="30"/>
-  <trade buyable="Y" price="28"/>
+ <item index="157" name="Orichalcum short sword" type="Weapon" weight="2" price="30">
   <data value="2"/>
   <data value="35"/>
   <data value="17"/>
@@ -754,12 +719,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Simple short sword made of orichalcum, used in melee combat.</description>
  </item>
- <item index="158" name="Orichalcum sword" type="Weapon" weight="3">
-  <trade buyable="N" price="37"/>
-  <trade buyable="N" price="37"/>
-  <trade buyable="N" price="37"/>
-  <trade buyable="N" price="37"/>
-  <trade buyable="Y" price="35"/>
+ <item index="158" name="Orichalcum sword" type="Weapon" weight="3" price="37">
   <data value="2"/>
   <data value="40"/>
   <data value="17"/>
@@ -767,224 +727,104 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Simple sword made of orichalcum, used in melee combat.</description>
  </item>
- <item index="159" name="Orichalcum shield" type="Shield" weight="9">
-  <trade buyable="N" price="40"/>
-  <trade buyable="N" price="40"/>
-  <trade buyable="N" price="40"/>
-  <trade buyable="N" price="40"/>
-  <trade buyable="Y" price="38"/>
+ <item index="159" name="Orichalcum shield" type="Shield" weight="9" price="40">
   <data value="2"/>
   <data value="20"/>
   <description>Standard shield made of orichalcum, used in melee combat.</description>
  </item>
- <item index="160" name="Orichalcum chestplate" showtype="Armor" type="ChestArmor" weight="18">
-  <trade buyable="N" price="45"/>
-  <trade buyable="N" price="45"/>
-  <trade buyable="N" price="45"/>
-  <trade buyable="N" price="45"/>
-  <trade buyable="Y" price="43"/>
+ <item index="160" name="Orichalcum chestplate" showtype="Armor" type="ChestArmor" weight="18" price="45">
   <data value="2"/>
   <data value="30"/>
   <data value="7"/>
   <description>Standard type of armor, made of orichalcum, weared on torso.</description>
  </item>
- <item index="161" name="Orichalcum helmet" showtype="Armor" type="HeadArmor" weight="5">
-  <trade buyable="N" price="32"/>
-  <trade buyable="N" price="32"/>
-  <trade buyable="N" price="32"/>
-  <trade buyable="N" price="32"/>
-  <trade buyable="Y" price="30"/>
+ <item index="161" name="Orichalcum helmet" showtype="Armor" type="HeadArmor" weight="5" price="32">
   <data value="2"/>
   <data value="15"/>
   <data value="3"/>
   <description>Standard type of armor, made of orichalcum, weared on head.</description>
  </item>
- <item index="162" name="Orichalcum armsguard" showtype="Armor" type="ArmsArmor" weight="4">
-  <trade buyable="N" price="35"/>
-  <trade buyable="N" price="35"/>
-  <trade buyable="N" price="35"/>
-  <trade buyable="N" price="35"/>
-  <trade buyable="Y" price="33"/>
+ <item index="162" name="Orichalcum armsguard" showtype="Armor" type="ArmsArmor" weight="4" price="35">
   <data value="2"/>
   <data value="16"/>
   <data value="3"/>
   <description>Standard type of armor, made of orichalcum, protects arms.</description>
  </item>
- <item index="163" name="Orichalcum legsguard" showtype="Armor" type="LegsArmor" weight="5">
-  <trade buyable="N" price="38"/>
-  <trade buyable="N" price="38"/>
-  <trade buyable="N" price="38"/>
-  <trade buyable="N" price="38"/>
-  <trade buyable="Y" price="36"/>
+ <item index="163" name="Orichalcum legsguard" showtype="Armor" type="LegsArmor" weight="5" price="38">
   <data value="2"/>
   <data value="24"/>
   <data value="4"/>
   <description>Standard type of armor, made of orichalcum, protects legs.</description>
  </item>
- <item index="164" name="Strange medalion" showtype="Special" type="StoryItem" weight="1">
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
+ <item index="164" name="Strange medalion" showtype="Special" type="StoryItem" weight="1" price="0">
   <description>Weird looking medalion made from shining metal.</description>
  </item>
- <item index="165" name="Strange metal scrap" showtype="Special" type="StoryItem" weight="1">
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
-  <trade buyable="N" price="0"/>
+ <item index="165" name="Strange metal scrap" showtype="Special" type="StoryItem" weight="1" price="0">
   <description>Scrap of strange shining metal. Very similiar to medalion which you found ealier.</description>
  </item>
- <item index="166" name="Adamantium ore" showtype="Ore" type="AdamantiumOre" weight="20">
-  <trade buyable="N" price="30"/>
-  <trade buyable="N" price="30"/>
-  <trade buyable="Y" price="28"/>
-  <trade buyable="N" price="30"/>
-  <trade buyable="N" price="30"/>
+ <item index="166" name="Adamantium ore" showtype="Ore" type="AdamantiumOre" weight="20" price="30">
   <description>Unrefined adamanantium ore.</description>
  </item>
- <item index="167" name="Adamantium plates" showtype="Repair material" type="Adamantium" weight="18">
-  <trade buyable="Y" price="42"/>
-  <trade buyable="N" price="44"/>
-  <trade buyable="N" price="44"/>
-  <trade buyable="N" price="44"/>
-  <trade buyable="N" price="44"/>
+ <item index="167" name="Adamantium plates" showtype="Repair material" type="Adamantium" weight="18" price="44">
   <description>Heavy, large, adamantium plates used to repair or upgrade ship modules.</description>
  </item>
- <item index="168" name="Adamantium mold" showtype="Tool" type="Mold" weight="30">
-  <trade buyable="Y" price="70"/>
-  <trade buyable="N" price="72"/>
-  <trade buyable="N" price="72"/>
-  <trade buyable="N" price="72"/>
-  <trade buyable="N" price="72"/>
+ <item index="168" name="Adamantium mold" showtype="Tool" type="Mold" weight="30" price="72">
   <data value="1"/>
   <description>Adamantium tool used in metalsmith recipes.</description>
  </item>
- <item index="169" name="Adamantium gunsmith set" showtype="Tool" type="GunsmithSet" weight="30">
-  <trade buyable="Y" price="68"/>
-  <trade buyable="N" price="70"/>
-  <trade buyable="N" price="70"/>
-  <trade buyable="N" price="70"/>
-  <trade buyable="N" price="70"/>
+ <item index="169" name="Adamantium gunsmith set" showtype="Tool" type="GunsmithSet" weight="30" price="70">
   <data value="1"/>
   <description>Adamantium tool used in gunsmith recipes.</description>
  </item>
- <item index="170" name="Adamantium cooking set" showtype="Tool" type="CookingSet" weight="30">
-  <trade buyable="Y" price="66"/>
-  <trade buyable="N" price="68"/>
-  <trade buyable="N" price="68"/>
-  <trade buyable="N" price="68"/>
-  <trade buyable="N" price="68"/>
+ <item index="170" name="Adamantium cooking set" showtype="Tool" type="CookingSet" weight="30" price="68">
   <data value="1"/>
   <description>Set of tools made of adamantium, used to cook items.</description>
  </item>
- <item index="171" name="Adamantium sickle" showtype="Tool" type="Sickle" weight="2">
-  <trade buyable="Y" price="48"/>
-  <trade buyable="N" price="50"/>
-  <trade buyable="N" price="50"/>
-  <trade buyable="N" price="50"/>
-  <trade buyable="N" price="50"/>
+ <item index="171" name="Adamantium sickle" showtype="Tool" type="Sickle" weight="2" price="50">
   <data value="1"/>
   <description>Adamantium tool used in cultivating plants.</description>
  </item>
- <item index="172" name="Adamantium saw" showtype="Tool" type="Saw" weight="2">
-  <trade buyable="Y" price="52"/>
-  <trade buyable="N" price="54"/>
-  <trade buyable="N" price="54"/>
-  <trade buyable="N" price="54"/>
-  <trade buyable="N" price="54"/>
+ <item index="172" name="Adamantium saw" showtype="Tool" type="Saw" weight="2" price="54">
   <data value="1"/>
   <description>Adamantium tool used to cut wood.</description>
  </item>
- <item index="173" name="Adamantium bucket" showtype="Tool" type="Bucket" weight="16">
-  <trade buyable="Y" price="58"/>
-  <trade buyable="N" price="60"/>
-  <trade buyable="N" price="60"/>
-  <trade buyable="N" price="60"/>
-  <trade buyable="N" price="60"/>
+ <item index="173" name="Adamantium bucket" showtype="Tool" type="Bucket" weight="16" price="60">
   <data value="1"/>
   <description>Simple bucket made of adamantium.</description>
  </item>
- <item index="174" name="Adamantium blacksmith set" showtype="Tool" type="BlacksmithSet" weight="100">
-  <trade buyable="Y" price="230"/>
-  <trade buyable="N" price="232"/>
-  <trade buyable="N" price="232"/>
-  <trade buyable="N" price="232"/>
-  <trade buyable="N" price="232"/>
+ <item index="174" name="Adamantium blacksmith set" showtype="Tool" type="BlacksmithSet" weight="100" price="232">
   <data value="1"/>
   <description>Adamantium set of tools used in blacksmith recipes.</description>
  </item>
- <item index="175" name="Adamantium woodworker set" showtype="Tool" type="WoodworkerSet" weight="20">
-  <trade buyable="Y" price="52"/>
-  <trade buyable="N" price="54"/>
-  <trade buyable="N" price="54"/>
-  <trade buyable="N" price="54"/>
-  <trade buyable="N" price="54"/>
+ <item index="175" name="Adamantium woodworker set" showtype="Tool" type="WoodworkerSet" weight="20" price="54">
   <data value="1"/>
   <description>Adamantium set of tools used in woodworker recipes.</description>
  </item>
- <item index="176" name="Adamantium repair tools" showtype="Tool" type="RepairTools" weight="20">
-  <trade buyable="Y" price="50"/>
-  <trade buyable="N" price="52"/>
-  <trade buyable="N" price="52"/>
-  <trade buyable="N" price="52"/>
-  <trade buyable="N" price="52"/>
+ <item index="176" name="Adamantium repair tools" showtype="Tool" type="RepairTools" weight="20" price="52">
   <data value="1"/>
   <description>Adamantium set of tools needed to repair or upgrade ship modules.</description>
  </item>
- <item index="177" name="Adamantium sewing kit" showtype="Tool" type="SewingKit" weight="8">
-  <trade buyable="Y" price="52"/>
-  <trade buyable="N" price="54"/>
-  <trade buyable="N" price="54"/>
-  <trade buyable="N" price="54"/>
-  <trade buyable="N" price="54"/>
+ <item index="177" name="Adamantium sewing kit" showtype="Tool" type="SewingKit" weight="8" price="54">
   <data value="1"/>
   <description>Adamantium set of tools needed to sew items.</description>
  </item>
- <item index="178" name="Adamantium 80mm ammo" showtype="Ammunition" type="Ammo80" weight="32">
-  <trade buyable="N" price="66"/>
-  <trade buyable="N" price="66"/>
-  <trade buyable="N" price="66"/>
-  <trade buyable="N" price="66"/>
-  <trade buyable="Y" price="64"/>
+ <item index="178" name="Adamantium 80mm ammo" showtype="Ammunition" type="Ammo80" weight="32" price="66">
   <data value="256"/>
   <description>Upgraded 80mm gun ammunition, made of adamantium.</description>
  </item>
- <item index="179" name="Adamantium 100mm ammo" showtype="Ammunition" type="Ammo100" weight="64">
-  <trade buyable="N" price="118"/>
-  <trade buyable="N" price="118"/>
-  <trade buyable="N" price="118"/>
-  <trade buyable="N" price="118"/>
-  <trade buyable="Y" price="116"/>
+ <item index="179" name="Adamantium 100mm ammo" showtype="Ammunition" type="Ammo100" weight="64" price="118">
   <data value="512"/>
   <description>Upgraded 100mm gun ammunition, made of adamantium.</description>
  </item>
- <item index="180" name="Adamantium 120mm ammo" showtype="Ammunition" type="Ammo120" weight="120">
-  <trade buyable="N" price="202"/>
-  <trade buyable="N" price="202"/>
-  <trade buyable="N" price="202"/>
-  <trade buyable="N" price="202"/>
-  <trade buyable="Y" price="200"/>
+ <item index="180" name="Adamantium 120mm ammo" showtype="Ammunition" type="Ammo120" weight="120" price="202">
   <data value="1024"/>
   <description>Upgraded 120mm gun ammunition, made of adamantium.</description>
  </item>
- <item index="181" name="Adamantium harpoon" showtype="Ammunition" type="Harpoon" weight="40">
-  <trade buyable="N" price="52"/>
-  <trade buyable="N" price="52"/>
-  <trade buyable="N" price="52"/>
-  <trade buyable="N" price="52"/>
-  <trade buyable="Y" price="50"/>
+ <item index="181" name="Adamantium harpoon" showtype="Ammunition" type="Harpoon" weight="40" price="52">
   <data value="20"/>
   <description>Harpoon made of adamantium with long rope. Used as ammunition for harpoon guns.</description>
  </item>
- <item index="182" name="Adamantium short sword" type="Weapon" weight="3">
-  <trade buyable="N" price="58"/>
-  <trade buyable="N" price="58"/>
-  <trade buyable="N" price="58"/>
-  <trade buyable="N" price="58"/>
-  <trade buyable="Y" price="56"/>
+ <item index="182" name="Adamantium short sword" type="Weapon" weight="3" price="58">
   <data value="1"/>
   <data value="40"/>
   <data value="17"/>
@@ -992,12 +832,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Simple short sword made of adamantium, used in melee combat.</description>
  </item>
- <item index="183" name="Adamantium sword" type="Weapon" weight="5">
-  <trade buyable="N" price="72"/>
-  <trade buyable="N" price="72"/>
-  <trade buyable="N" price="72"/>
-  <trade buyable="N" price="72"/>
-  <trade buyable="Y" price="70"/>
+ <item index="183" name="Adamantium sword" type="Weapon" weight="5" price="72">
   <data value="1"/>
   <data value="45"/>
   <data value="17"/>
@@ -1005,262 +840,122 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Simple sword made of adamantium, used in melee combat.</description>
  </item>
- <item index="184" name="Adamantium shield" type="Shield" weight="15">
-  <trade buyable="N" price="78"/>
-  <trade buyable="N" price="78"/>
-  <trade buyable="N" price="78"/>
-  <trade buyable="N" price="78"/>
-  <trade buyable="Y" price="76"/>
+ <item index="184" name="Adamantium shield" type="Shield" weight="15" price="78">
   <data value="1"/>
   <data value="24"/>
   <description>Standard shield made of adamantium, used in melee combat.</description>
  </item>
- <item index="185" name="Adamantium chestplate" showtype="Armor" type="ChestArmor" weight="27">
-  <trade buyable="N" price="88"/>
-  <trade buyable="N" price="88"/>
-  <trade buyable="N" price="88"/>
-  <trade buyable="N" price="88"/>
-  <trade buyable="Y" price="86"/>
+ <item index="185" name="Adamantium chestplate" showtype="Armor" type="ChestArmor" weight="27" price="88">
   <data value="1"/>
   <data value="35"/>
   <data value="10"/>
   <description>Standard type of armor, made of adamantium, weared on torso.</description>
  </item>
- <item index="186" name="Wooden cockpit simulator" showtype="Cockpit Simulator" type="CockpitSimulator" weight="25">
-  <trade buyable="Y" price="20"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
+ <item index="186" name="Wooden cockpit simulator" showtype="Cockpit Simulator" type="CockpitSimulator" weight="25" price="22">
   <data value="20"/>
   <description>Wooden tool used in training skills.</description>
  </item>
- <item index="187" name="Adamantium helmet" showtype="Armor" type="HeadArmor" weight="7">
-  <trade buyable="N" price="62"/>
-  <trade buyable="N" price="62"/>
-  <trade buyable="N" price="62"/>
-  <trade buyable="N" price="62"/>
-  <trade buyable="Y" price="60"/>
+ <item index="187" name="Adamantium helmet" showtype="Armor" type="HeadArmor" weight="7" price="62">
   <data value="1"/>
   <data value="17"/>
   <data value="4"/>
   <description>Standard type of armor, made of adamantiu, weared on head.</description>
  </item>
- <item index="188" name="Small book of engineering" showtype="Book of Engineering" type="EngineersBook" weight="1">
-  <trade buyable="Y" price="10"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
+ <item index="188" name="Small book of engineering" showtype="Book of Engineering" type="EngineersBook" weight="1" price="12">
   <data value="20"/>
   <description>Small book with informations about basics of engineering. Used in training skills.</description>
  </item>
- <item index="189" name="Wooden gun simulator" showtype="Gun Simulator" type="GunSimulator" weight="23">
-  <trade buyable="Y" price="19"/>
-  <trade buyable="N" price="21"/>
-  <trade buyable="N" price="21"/>
-  <trade buyable="N" price="21"/>
-  <trade buyable="N" price="21"/>
+ <item index="189" name="Wooden gun simulator" showtype="Gun Simulator" type="GunSimulator" weight="23" price="21">
   <data value="20"/>
   <description>Wooden tool used in training skills.</description>
  </item>
- <item index="190" name="Adamantium armsguard" showtype="Armor" type="ArmsArmor" weight="5">
-  <trade buyable="N" price="68"/>
-  <trade buyable="N" price="68"/>
-  <trade buyable="N" price="68"/>
-  <trade buyable="N" price="68"/>
-  <trade buyable="Y" price="66"/>
+ <item index="190" name="Adamantium armsguard" showtype="Armor" type="ArmsArmor" weight="5" price="68">
   <data value="1"/>
   <data value="18"/>
   <data value="4"/>
   <description>Standard type of armor, made of adamantium, protects arms.</description>
  </item>
- <item index="191" name="Small book of rhetoric" showtype="Book of Rhetoric" type="RhetoricBook" weight="1">
-  <trade buyable="Y" price="10"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
+ <item index="191" name="Small book of rhetoric" showtype="Book of Rhetoric" type="RhetoricBook" weight="1" price="12">
   <data value="20"/>
   <description>Small book with informations about basics of rhetoric. Used in training skills.</description>
  </item>
- <item index="192" name="Wooden small toys" showtype="Small toys" type="SmallToys" weight="1">
-  <trade buyable="Y" price="8"/>
-  <trade buyable="N" price="10"/>
-  <trade buyable="N" price="10"/>
-  <trade buyable="N" price="10"/>
-  <trade buyable="N" price="10"/>
+ <item index="192" name="Wooden small toys" showtype="Small toys" type="SmallToys" weight="1" price="10">
   <data value="20"/>
   <description>Small wooden toys. Used to play or to train some skills.</description>
  </item>
- <item index="193" name="Adamantium legsguard" showtype="Armor" type="LegsArmor" weight="6">
-  <trade buyable="N" price="74"/>
-  <trade buyable="N" price="74"/>
-  <trade buyable="N" price="74"/>
-  <trade buyable="N" price="74"/>
-  <trade buyable="Y" price="72"/>
+ <item index="193" name="Adamantium legsguard" showtype="Armor" type="LegsArmor" weight="6" price="74">
   <data value="1"/>
   <data value="28"/>
   <data value="5"/>
   <description>Standard type of armor, made of adamantium, protects legs.</description>
  </item>
- <item index="194" name="Small book of alchemy" showtype="Book of Alchemy" type="AlchemyBook" weight="1">
-  <trade buyable="Y" price="10"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
+ <item index="194" name="Small book of alchemy" showtype="Book of Alchemy" type="AlchemyBook" weight="1" price="12">
   <data value="20"/>
   <description>Small book with informations about basics of alchemy. Used in training skills.</description>
  </item>
- <item index="195" name="Small book of cooking" showtype="Book of Cooking" type="CookingBook" weight="1">
-  <trade buyable="Y" price="10"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
+ <item index="195" name="Small book of cooking" showtype="Book of Cooking" type="CookingBook" weight="1" price="12">
   <data value="20"/>
   <description>Small book with informations about basics of cooking. Used in training skills.</description>
  </item>
- <item index="196" name="Small book of gunsmithing" showtype="Book of Gunsmithing" type="GunsmithBook" weight="1">
-  <trade buyable="Y" price="10"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
+ <item index="196" name="Small book of gunsmithing" showtype="Book of Gunsmithing" type="GunsmithBook" weight="1" price="12">
   <data value="20"/>
   <description>Small book with informations about basics of gunsmithing. Used in training skills.</description>
  </item>
- <item index="197" name="Small book of metalsmithing" showtype="Book of Metalsmithing" type="MetalsmithBook" weight="1">
-  <trade buyable="Y" price="10"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
+ <item index="197" name="Small book of metalsmithing" showtype="Book of Metalsmithing" type="MetalsmithBook" weight="1" price="12">
   <data value="20"/>
   <description>Small book with informations about basics of metalsmithing. Used in training skills.</description>
  </item>
- <item index="198" name="Small book of medicine" showtype="Book of Medicine" type="MedicineBook" weight="1">
-  <trade buyable="Y" price="10"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
+ <item index="198" name="Small book of medicine" showtype="Book of Medicine" type="MedicineBook" weight="1" price="12">
   <data value="20"/>
   <description>Small book with informations about basics of medicine. Used in training skills.</description>
  </item>
- <item index="199" name="Small book of farming" showtype="Book of Farming" type="FarmingBook" weight="1">
-  <trade buyable="Y" price="10"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
+ <item index="199" name="Small book of farming" showtype="Book of Farming" type="FarmingBook" weight="1" price="12">
   <data value="20"/>
   <description>Small book with informations about basics of farming. Used in training skills.</description>
  </item>
- <item index="200" name="Small book of woodcutting" showtype="Book of Woodcutting" type="WoodcuttingBook" weight="1">
-  <trade buyable="Y" price="10"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
+ <item index="200" name="Small book of woodcutting" showtype="Book of Woodcutting" type="WoodcuttingBook" weight="1" price="12">
   <data value="20"/>
   <description>Small book with informations about basics of woodcutting. Used in training skills.</description>
  </item>
- <item index="201" name="Small book of brewing" showtype="Book of Brewing" type="BrewingBook" weight="1">
-  <trade buyable="Y" price="10"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
+ <item index="201" name="Small book of brewing" showtype="Book of Brewing" type="BrewingBook" weight="1" price="12">
   <data value="20"/>
   <description>Small book with informations about basics of brewing. Used in training skills.</description>
  </item>
- <item index="202" name="Small book of blacksmithing" showtype="Book of Blacksmithing" type="BlacksmithBook" weight="1">
-  <trade buyable="Y" price="10"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
+ <item index="202" name="Small book of blacksmithing" showtype="Book of Blacksmithing" type="BlacksmithBook" weight="1" price="12">
   <data value="20"/>
   <description>Small book with informations about basics of blacksmithing. Used in training skills.</description>
  </item>
- <item index="203" name="Small book of woodworking" showtype="Book of Woodworking" type="WoodworkingBook" weight="1">
-  <trade buyable="Y" price="10"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
+ <item index="203" name="Small book of woodworking" showtype="Book of Woodworking" type="WoodworkingBook" weight="1" price="12">
   <data value="20"/>
   <description>Small book with informations about basics of woodworking. Used in training skills.</description>
  </item>
- <item index="204" name="Small book of leatherworking" showtype="Book of Leatherworking" type="LeatherworkingBook" weight="1">
-  <trade buyable="Y" price="10"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
+ <item index="204" name="Small book of leatherworking" showtype="Book of Leatherworking" type="LeatherworkingBook" weight="1" price="12">
   <data value="20"/>
   <description>Small book with informations about basics of leatherworking. Used in training skills.</description>
  </item>
- <item index="205" name="Wooden training dummy" showtype="Training Dummy" type="TrainingDummy" weight="12">
-  <trade buyable="Y" price="12"/>
-  <trade buyable="N" price="14"/>
-  <trade buyable="N" price="14"/>
-  <trade buyable="N" price="14"/>
-  <trade buyable="N" price="14"/>
+ <item index="205" name="Wooden training dummy" showtype="Training Dummy" type="TrainingDummy" weight="12" price="14">
   <data value="20"/>
   <description>Wooden tool used in training skills.</description>
  </item>
- <item index="206" name="Wooden small traps" showtype="Small traps" type="SmallTraps" weight="1">
-  <trade buyable="Y" price="8"/>
-  <trade buyable="N" price="10"/>
-  <trade buyable="N" price="10"/>
-  <trade buyable="N" price="10"/>
-  <trade buyable="N" price="10"/>
+ <item index="206" name="Wooden small traps" showtype="Small traps" type="SmallTraps" weight="1" price="10">
   <data value="20"/>
   <description>Small wooden traps. Used to train some skills.</description>
  </item>
- <item index="207" name="Small book of printing" showtype="Book of printing" type="PrintingBook" weight="1">
-  <trade buyable="Y" price="10"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
+ <item index="207" name="Small book of printing" showtype="Book of printing" type="PrintingBook" weight="1" price="12">
   <data value="20"/>
   <description>Small book with informations about basics of printing. Used in training skills.</description>
  </item>
- <item index="208" name="Wooden printing set" showtype="Printing set" type="PrintingSet" weight="24">
-  <trade buyable="Y" price="20"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
+ <item index="208" name="Wooden printing set" showtype="Printing set" type="PrintingSet" weight="24" price="22">
   <data value="20"/>
   <description>Wooden set of tools used in crafting paper and books.</description>
  </item>
- <item index="209" name="Sheet of paper" type="Paper" weight="1">
-  <trade buyable="N" price="1"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="Y" price="2"/>
-  <trade buyable="N" price="2"/>
-  <trade buyable="N" price="2"/>
+ <item index="209" name="Sheet of paper" type="Paper" weight="1" price="2">
   <description>Large piece of paper. Used mostly in crafting books.</description>
  </item>
- <item index="210" name="Empty book" showtype="Tool" type="EmptyBook" weight="1">
-  <trade buyable="Y" price="7"/>
-  <trade buyable="N" price="9"/>
-  <trade buyable="N" price="9"/>
-  <trade buyable="N" price="9"/>
-  <trade buyable="N" price="9"/>
+ <item index="210" name="Empty book" showtype="Tool" type="EmptyBook" weight="1" price="9">
   <description>Empty, ready to print book.</description>
  </item>
- <item index="211" name="Bronze mace" type="Weapon" weight="1">
-  <trade buyable="N" price="10"/>
-  <trade buyable="N" price="10"/>
-  <trade buyable="N" price="10"/>
-  <trade buyable="N" price="10"/>
-  <trade buyable="Y" price="7"/>
+ <item index="211" name="Bronze mace" type="Weapon" weight="1" price="10">
   <data value="15"/>
   <data value="22"/>
   <data value="21"/>
@@ -1268,12 +963,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple mace made of bronze, used in melee combat.</description>
  </item>
- <item index="212" name="Iron mace" type="Weapon" weight="1">
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="Y" price="10"/>
+ <item index="212" name="Iron mace" type="Weapon" weight="1" price="12">
   <data value="10"/>
   <data value="30"/>
   <data value="21"/>
@@ -1281,12 +971,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple mace made of iron, used in melee combat.</description>
  </item>
- <item index="213" name="Steel mace" type="Weapon" weight="1">
-  <trade buyable="N" price="17"/>
-  <trade buyable="N" price="17"/>
-  <trade buyable="N" price="17"/>
-  <trade buyable="N" price="17"/>
-  <trade buyable="Y" price="15"/>
+ <item index="213" name="Steel mace" type="Weapon" weight="1" price="17">
   <data value="5"/>
   <data value="37"/>
   <data value="21"/>
@@ -1294,12 +979,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple mace made of steel, used in melee combat.</description>
  </item>
- <item index="214" name="Titanium mace" type="Weapon" weight="2">
-  <trade buyable="N" price="24"/>
-  <trade buyable="N" price="24"/>
-  <trade buyable="N" price="24"/>
-  <trade buyable="N" price="24"/>
-  <trade buyable="Y" price="22"/>
+ <item index="214" name="Titanium mace" type="Weapon" weight="2" price="24">
   <data value="3"/>
   <data value="45"/>
   <data value="21"/>
@@ -1307,12 +987,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple mace made of titanium, used in melee combat.</description>
  </item>
- <item index="215" name="Orichalcum mace" type="Weapon" weight="2">
-  <trade buyable="N" price="30"/>
-  <trade buyable="N" price="30"/>
-  <trade buyable="N" price="30"/>
-  <trade buyable="N" price="30"/>
-  <trade buyable="Y" price="28"/>
+ <item index="215" name="Orichalcum mace" type="Weapon" weight="2" price="30">
   <data value="2"/>
   <data value="52"/>
   <data value="21"/>
@@ -1320,12 +995,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple mace made of orichalcum, used in melee combat.</description>
  </item>
- <item index="216" name="Adamantium mace" type="Weapon" weight="3">
-  <trade buyable="N" price="58"/>
-  <trade buyable="N" price="58"/>
-  <trade buyable="N" price="58"/>
-  <trade buyable="N" price="58"/>
-  <trade buyable="Y" price="56"/>
+ <item index="216" name="Adamantium mace" type="Weapon" weight="3" price="58">
   <data value="1"/>
   <data value="60"/>
   <data value="21"/>
@@ -1333,12 +1003,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple mace made of adamantium, used in melee combat.</description>
  </item>
- <item index="217" name="Bronze dagger" type="Weapon" weight="1">
-  <trade buyable="N" price="10"/>
-  <trade buyable="N" price="10"/>
-  <trade buyable="N" price="10"/>
-  <trade buyable="N" price="10"/>
-  <trade buyable="Y" price="7"/>
+ <item index="217" name="Bronze dagger" type="Weapon" weight="1" price="10">
   <data value="15"/>
   <data value="10"/>
   <data value="22"/>
@@ -1346,12 +1011,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple dagger made of bronze, used in melee combat.</description>
  </item>
- <item index="218" name="Iron dagger" type="Weapon" weight="1">
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="N" price="12"/>
-  <trade buyable="Y" price="10"/>
+ <item index="218" name="Iron dagger" type="Weapon" weight="1" price="12">
   <data value="10"/>
   <data value="12"/>
   <data value="22"/>
@@ -1359,12 +1019,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple dagger made of iron, used in melee combat.</description>
  </item>
- <item index="219" name="Steel dagger" type="Weapon" weight="1">
-  <trade buyable="N" price="17"/>
-  <trade buyable="N" price="17"/>
-  <trade buyable="N" price="17"/>
-  <trade buyable="N" price="17"/>
-  <trade buyable="Y" price="15"/>
+ <item index="219" name="Steel dagger" type="Weapon" weight="1" price="17">
   <data value="5"/>
   <data value="15"/>
   <data value="22"/>
@@ -1372,12 +1027,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple dagger made of steel, used in melee combat.</description>
  </item>
- <item index="220" name="Titanium dagger" type="Weapon" weight="2">
-  <trade buyable="N" price="24"/>
-  <trade buyable="N" price="24"/>
-  <trade buyable="N" price="24"/>
-  <trade buyable="N" price="24"/>
-  <trade buyable="Y" price="22"/>
+ <item index="220" name="Titanium dagger" type="Weapon" weight="2" price="24">
   <data value="3"/>
   <data value="20"/>
   <data value="22"/>
@@ -1385,12 +1035,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple dagger made of titanium, used in melee combat.</description>
  </item>
- <item index="221" name="Orichalcum dagger" type="Weapon" weight="2">
-  <trade buyable="N" price="30"/>
-  <trade buyable="N" price="30"/>
-  <trade buyable="N" price="30"/>
-  <trade buyable="N" price="30"/>
-  <trade buyable="Y" price="28"/>
+ <item index="221" name="Orichalcum dagger" type="Weapon" weight="2" price="30">
   <data value="2"/>
   <data value="25"/>
   <data value="22"/>
@@ -1398,12 +1043,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple dagger made of orichalcum, used in melee combat.</description>
  </item>
- <item index="222" name="Adamantium dagger" type="Weapon" weight="3">
-  <trade buyable="N" price="58"/>
-  <trade buyable="N" price="58"/>
-  <trade buyable="N" price="58"/>
-  <trade buyable="N" price="58"/>
-  <trade buyable="Y" price="56"/>
+ <item index="222" name="Adamantium dagger" type="Weapon" weight="3" price="58">
   <data value="1"/>
   <data value="30"/>
   <data value="22"/>
@@ -1411,12 +1051,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple dagger made of adamantium, used in melee combat.</description>
  </item>
- <item index="223" name="Bronze greatsword" type="Weapon" weight="4">
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="Y" price="17"/>
+ <item index="223" name="Bronze greatsword" type="Weapon" weight="4" price="22">
   <data value="15"/>
   <data value="30"/>
   <data value="23"/>
@@ -1424,12 +1059,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Simple, twohanded greatsword made of bronze, used in melee combat.</description>
  </item>
- <item index="224" name="Iron greatsword" type="Weapon" weight="4">
-  <trade buyable="N" price="27"/>
-  <trade buyable="N" price="27"/>
-  <trade buyable="N" price="27"/>
-  <trade buyable="N" price="27"/>
-  <trade buyable="Y" price="22"/>
+ <item index="224" name="Iron greatsword" type="Weapon" weight="4" price="27">
   <data value="10"/>
   <data value="35"/>
   <data value="23"/>
@@ -1437,12 +1067,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Simple, twohanded greatsword made of iron, used in melee combat.</description>
  </item>
- <item index="225" name="Steel greatsword" type="Weapon" weight="4">
-  <trade buyable="N" price="32"/>
-  <trade buyable="N" price="32"/>
-  <trade buyable="N" price="32"/>
-  <trade buyable="N" price="32"/>
-  <trade buyable="Y" price="27"/>
+ <item index="225" name="Steel greatsword" type="Weapon" weight="4" price="32">
   <data value="5"/>
   <data value="40"/>
   <data value="23"/>
@@ -1450,12 +1075,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Simple, twohanded greatsword made of steel, used in melee combat.</description>
  </item>
- <item index="226" name="Titanium greatsword" type="Weapon" weight="6">
-  <trade buyable="N" price="37"/>
-  <trade buyable="N" price="37"/>
-  <trade buyable="N" price="37"/>
-  <trade buyable="N" price="37"/>
-  <trade buyable="Y" price="32"/>
+ <item index="226" name="Titanium greatsword" type="Weapon" weight="6" price="37">
   <data value="3"/>
   <data value="45"/>
   <data value="23"/>
@@ -1463,12 +1083,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Simple, twohanded greatsword made of titanium, used in melee combat.</description>
  </item>
- <item index="227" name="Orichalcum greatsword" type="Weapon" weight="6">
-  <trade buyable="N" price="42"/>
-  <trade buyable="N" price="42"/>
-  <trade buyable="N" price="42"/>
-  <trade buyable="N" price="42"/>
-  <trade buyable="Y" price="37"/>
+ <item index="227" name="Orichalcum greatsword" type="Weapon" weight="6" price="42">
   <data value="2"/>
   <data value="50"/>
   <data value="23"/>
@@ -1476,12 +1091,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Simple, twohanded greatsword made of orichalcum, used in melee combat.</description>
  </item>
- <item index="228" name="Adamantium greatsword" type="Weapon" weight="10">
-  <trade buyable="N" price="82"/>
-  <trade buyable="N" price="82"/>
-  <trade buyable="N" price="82"/>
-  <trade buyable="N" price="82"/>
-  <trade buyable="Y" price="77"/>
+ <item index="228" name="Adamantium greatsword" type="Weapon" weight="10" price="82">
   <data value="1"/>
   <data value="55"/>
   <data value="23"/>
@@ -1489,12 +1099,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Simple, twohanded greatsword made of adamantium, used in melee combat.</description>
  </item>
- <item index="229" name="Bronze warhammer" type="Weapon" weight="2">
-  <trade buyable="N" price="15"/>
-  <trade buyable="N" price="15"/>
-  <trade buyable="N" price="15"/>
-  <trade buyable="N" price="15"/>
-  <trade buyable="Y" price="10"/>
+ <item index="229" name="Bronze warhammer" type="Weapon" weight="2" price="15">
   <data value="15"/>
   <data value="30"/>
   <data value="21"/>
@@ -1502,12 +1107,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple warhammer made of bronze, used in melee combat.</description>
  </item>
- <item index="230" name="Iron warhammer" type="Weapon" weight="2">
-  <trade buyable="N" price="17"/>
-  <trade buyable="N" price="17"/>
-  <trade buyable="N" price="17"/>
-  <trade buyable="N" price="17"/>
-  <trade buyable="Y" price="15"/>
+ <item index="230" name="Iron warhammer" type="Weapon" weight="2" price="17">
   <data value="10"/>
   <data value="37"/>
   <data value="21"/>
@@ -1515,12 +1115,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple warhammer made of iron, used in melee combat.</description>
  </item>
- <item index="231" name="Steel warhammer" type="Weapon" weight="2">
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="Y" price="20"/>
+ <item index="231" name="Steel warhammer" type="Weapon" weight="2" price="22">
   <data value="5"/>
   <data value="45"/>
   <data value="21"/>
@@ -1528,12 +1123,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple warhammer made of steel, used in melee combat.</description>
  </item>
- <item index="232" name="Titanium warhamher" type="Weapon" weight="3">
-  <trade buyable="N" price="27"/>
-  <trade buyable="N" price="27"/>
-  <trade buyable="N" price="27"/>
-  <trade buyable="N" price="27"/>
-  <trade buyable="Y" price="25"/>
+ <item index="232" name="Titanium warhamher" type="Weapon" weight="3" price="27">
   <data value="3"/>
   <data value="52"/>
   <data value="21"/>
@@ -1541,12 +1131,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple warhammer made of titanium, used in melee combat.</description>
  </item>
- <item index="233" name="Orichalcum warhammer" type="Weapon" weight="3">
-  <trade buyable="N" price="37"/>
-  <trade buyable="N" price="37"/>
-  <trade buyable="N" price="37"/>
-  <trade buyable="N" price="37"/>
-  <trade buyable="Y" price="35"/>
+ <item index="233" name="Orichalcum warhammer" type="Weapon" weight="3" price="37">
   <data value="2"/>
   <data value="60"/>
   <data value="21"/>
@@ -1554,12 +1139,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple warhammer made of orichalcum, used in melee combat.</description>
  </item>
- <item index="234" name="Adamantium warhammer" type="Weapon" weight="5">
-  <trade buyable="N" price="72"/>
-  <trade buyable="N" price="72"/>
-  <trade buyable="N" price="72"/>
-  <trade buyable="N" price="72"/>
-  <trade buyable="Y" price="70"/>
+ <item index="234" name="Adamantium warhammer" type="Weapon" weight="5" price="72">
   <data value="1"/>
   <data value="70"/>
   <data value="21"/>
@@ -1567,12 +1147,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple warhammer made of adamantium, used in melee combat.</description>
  </item>
- <item index="235" name="Bronze maul" type="Weapon" weight="4">
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="Y" price="17"/>
+ <item index="235" name="Bronze maul" type="Weapon" weight="4" price="22">
   <data value="15"/>
   <data value="45"/>
   <data value="24"/>
@@ -1580,12 +1155,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple, twohanded hammer made of bronze, used in melee combat.</description>
  </item>
- <item index="236" name="Iron maul" type="Weapon" weight="4">
-  <trade buyable="N" price="27"/>
-  <trade buyable="N" price="27"/>
-  <trade buyable="N" price="27"/>
-  <trade buyable="N" price="27"/>
-  <trade buyable="Y" price="22"/>
+ <item index="236" name="Iron maul" type="Weapon" weight="4" price="27">
   <data value="10"/>
   <data value="52"/>
   <data value="24"/>
@@ -1593,12 +1163,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple, twohanded hammer made of iron, used in melee combat.</description>
  </item>
- <item index="237" name="Steel maul" type="Weapon" weight="4">
-  <trade buyable="N" price="32"/>
-  <trade buyable="N" price="32"/>
-  <trade buyable="N" price="32"/>
-  <trade buyable="N" price="32"/>
-  <trade buyable="Y" price="27"/>
+ <item index="237" name="Steel maul" type="Weapon" weight="4" price="32">
   <data value="5"/>
   <data value="60"/>
   <data value="24"/>
@@ -1606,12 +1171,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple, twohanded hammer made of steel, used in melee combat.</description>
  </item>
- <item index="238" name="Titanium maul" type="Weapon" weight="6">
-  <trade buyable="N" price="37"/>
-  <trade buyable="N" price="37"/>
-  <trade buyable="N" price="37"/>
-  <trade buyable="N" price="37"/>
-  <trade buyable="Y" price="32"/>
+ <item index="238" name="Titanium maul" type="Weapon" weight="6" price="37">
   <data value="3"/>
   <data value="67"/>
   <data value="24"/>
@@ -1619,12 +1179,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple, twohanded hammer made of titanium, used in melee combat.</description>
  </item>
- <item index="239" name="Orichalcum maul" type="Weapon" weight="6">
-  <trade buyable="N" price="42"/>
-  <trade buyable="N" price="42"/>
-  <trade buyable="N" price="42"/>
-  <trade buyable="N" price="42"/>
-  <trade buyable="Y" price="37"/>
+ <item index="239" name="Orichalcum maul" type="Weapon" weight="6" price="42">
   <data value="2"/>
   <data value="75"/>
   <data value="24"/>
@@ -1632,12 +1187,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple, twohanded hammer made of orichalcum, used in melee combat.</description>
  </item>
- <item index="240" name="Adamantium maul" type="Weapon" weight="10">
-  <trade buyable="N" price="82"/>
-  <trade buyable="N" price="82"/>
-  <trade buyable="N" price="82"/>
-  <trade buyable="N" price="82"/>
-  <trade buyable="Y" price="77"/>
+ <item index="240" name="Adamantium maul" type="Weapon" weight="10" price="82">
   <data value="1"/>
   <data value="82"/>
   <data value="24"/>
@@ -1645,12 +1195,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Simple, twohanded hammer made of adamantium, used in melee combat.</description>
  </item>
- <item index="241" name="Bronze rapier" type="Weapon" weight="2">
-  <trade buyable="N" price="15"/>
-  <trade buyable="N" price="15"/>
-  <trade buyable="N" price="15"/>
-  <trade buyable="N" price="15"/>
-  <trade buyable="Y" price="10"/>
+ <item index="241" name="Bronze rapier" type="Weapon" weight="2" price="15">
   <data value="15"/>
   <data value="15"/>
   <data value="25"/>
@@ -1658,12 +1203,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple rapier made of bronze, used in melee combat.</description>
  </item>
- <item index="242" name="Iron rapier" type="Weapon" weight="2">
-  <trade buyable="N" price="17"/>
-  <trade buyable="N" price="17"/>
-  <trade buyable="N" price="17"/>
-  <trade buyable="N" price="17"/>
-  <trade buyable="Y" price="15"/>
+ <item index="242" name="Iron rapier" type="Weapon" weight="2" price="17">
   <data value="10"/>
   <data value="18"/>
   <data value="25"/>
@@ -1671,12 +1211,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple rapier made of iron, used in melee combat.</description>
  </item>
- <item index="243" name="Steel rapier" type="Weapon" weight="2">
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="Y" price="20"/>
+ <item index="243" name="Steel rapier" type="Weapon" weight="2" price="22">
   <data value="5"/>
   <data value="22"/>
   <data value="25"/>
@@ -1684,12 +1219,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple rapier made of steel, used in melee combat.</description>
  </item>
- <item index="244" name="Titanium rapier" type="Weapon" weight="3">
-  <trade buyable="N" price="27"/>
-  <trade buyable="N" price="27"/>
-  <trade buyable="N" price="27"/>
-  <trade buyable="N" price="27"/>
-  <trade buyable="Y" price="25"/>
+ <item index="244" name="Titanium rapier" type="Weapon" weight="3" price="27">
   <data value="3"/>
   <data value="26"/>
   <data value="25"/>
@@ -1697,12 +1227,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple rapier made of titanium, used in melee combat.</description>
  </item>
- <item index="245" name="Orichalcum rapier" type="Weapon" weight="3">
-  <trade buyable="N" price="37"/>
-  <trade buyable="N" price="37"/>
-  <trade buyable="N" price="37"/>
-  <trade buyable="N" price="37"/>
-  <trade buyable="Y" price="35"/>
+ <item index="245" name="Orichalcum rapier" type="Weapon" weight="3" price="37">
   <data value="2"/>
   <data value="30"/>
   <data value="25"/>
@@ -1710,12 +1235,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple rapier made of orichalcum, used in melee combat.</description>
  </item>
- <item index="246" name="Adamantium rapier" type="Weapon" weight="5">
-  <trade buyable="N" price="72"/>
-  <trade buyable="N" price="72"/>
-  <trade buyable="N" price="72"/>
-  <trade buyable="N" price="72"/>
-  <trade buyable="Y" price="70"/>
+ <item index="246" name="Adamantium rapier" type="Weapon" weight="5" price="72">
   <data value="1"/>
   <data value="34"/>
   <data value="25"/>
@@ -1723,12 +1243,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple rapier made of adamantium, used in melee combat.</description>
  </item>
- <item index="247" name="Bronze spear" type="Weapon" weight="4">
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="N" price="22"/>
-  <trade buyable="Y" price="17"/>
+ <item index="247" name="Bronze spear" type="Weapon" weight="4" price="22">
   <data value="15"/>
   <data value="22"/>
   <data value="26"/>
@@ -1736,12 +1251,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple spear made of bronze, used in melee combat.</description>
  </item>
- <item index="248" name="Iron spear" type="Weapon" weight="4">
-  <trade buyable="N" price="27"/>
-  <trade buyable="N" price="27"/>
-  <trade buyable="N" price="27"/>
-  <trade buyable="N" price="27"/>
-  <trade buyable="Y" price="22"/>
+ <item index="248" name="Iron spear" type="Weapon" weight="4" price="27">
   <data value="10"/>
   <data value="27"/>
   <data value="26"/>
@@ -1749,12 +1259,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple spear made of iron, used in melee combat.</description>
  </item>
- <item index="249" name="Steel spear" type="Weapon" weight="4">
-  <trade buyable="N" price="32"/>
-  <trade buyable="N" price="32"/>
-  <trade buyable="N" price="32"/>
-  <trade buyable="N" price="32"/>
-  <trade buyable="Y" price="27"/>
+ <item index="249" name="Steel spear" type="Weapon" weight="4" price="32">
   <data value="5"/>
   <data value="32"/>
   <data value="26"/>
@@ -1762,12 +1267,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple spear made of steel, used in melee combat.</description>
  </item>
- <item index="250" name="Titanium spear" type="Weapon" weight="6">
-  <trade buyable="N" price="37"/>
-  <trade buyable="N" price="37"/>
-  <trade buyable="N" price="37"/>
-  <trade buyable="N" price="37"/>
-  <trade buyable="Y" price="32"/>
+ <item index="250" name="Titanium spear" type="Weapon" weight="6" price="37">
   <data value="3"/>
   <data value="38"/>
   <data value="26"/>
@@ -1775,12 +1275,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple spear made of titanium, used in melee combat.</description>
  </item>
- <item index="251" name="Orichalcum spear" type="Weapon" weight="6">
-  <trade buyable="N" price="42"/>
-  <trade buyable="N" price="42"/>
-  <trade buyable="N" price="42"/>
-  <trade buyable="N" price="42"/>
-  <trade buyable="Y" price="37"/>
+ <item index="251" name="Orichalcum spear" type="Weapon" weight="6" price="42">
   <data value="2"/>
   <data value="42"/>
   <data value="26"/>
@@ -1788,12 +1283,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple spear made of orichalcum, used in melee combat.</description>
  </item>
- <item index="252" name="Adamantium spear" type="Weapon" weight="10">
-  <trade buyable="N" price="82"/>
-  <trade buyable="N" price="82"/>
-  <trade buyable="N" price="82"/>
-  <trade buyable="N" price="82"/>
-  <trade buyable="Y" price="77"/>
+ <item index="252" name="Adamantium spear" type="Weapon" weight="10" price="82">
   <data value="1"/>
   <data value="47"/>
   <data value="26"/>
