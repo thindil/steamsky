@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New ship modules: huge orichalcum workshop, huge adamantium workshop, medium
   bronze greenhouse, medium iron greenhouse, medium steel greenhouse, medium
-  titanium greenhouse, medium orichalcum greenhouse
+  titanium greenhouse, medium orichalcum greenhouse, medium adamantium
+  greenhouse
 
 ### Changed
 - Updated MODDING.md
