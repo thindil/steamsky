@@ -59,6 +59,57 @@ package body Bases.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_CountPrice_173272_bef05e (Price: in out Natural; TraderIndex: Crew_Container.Extended_Index; Reduce: Boolean := True) 
+   is
+   begin
+      begin
+         pragma Assert
+           (TraderIndex <= PlayerShip.Crew.Last_Index);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(bases.ads:0):Test_CountPrice test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Bases.CountPrice (Price, TraderIndex, Reduce);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(bases.ads:0:):Test_CountPrice test commitment violated");
+      end;
+   end Wrap_Test_CountPrice_173272_bef05e;
+--  end read only
+
+--  begin read only
+   procedure Test_CountPrice_test_countprice (Gnattest_T : in out Test);
+   procedure Test_CountPrice_173272_bef05e (Gnattest_T : in out Test) renames Test_CountPrice_test_countprice;
+--  id:2.2/17327298eafedc9a/CountPrice/1/0/test_countprice/
+   procedure Test_CountPrice_test_countprice (Gnattest_T : in out Test) is
+   procedure CountPrice (Price: in out Natural; TraderIndex: Crew_Container.Extended_Index; Reduce: Boolean := True) renames Wrap_Test_CountPrice_173272_bef05e;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      Price: Positive := 100;
+
+   begin
+
+      CountPrice(Price, 1, False);
+      Assert(Price > 100, "Failed to raise price in base.");
+      Price := 100;
+      CountPrice(Price, 1);
+      Assert(Price < 100, "Failed to reduce price in base.");
+
+--  begin read only
+   end Test_CountPrice_test_countprice;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
