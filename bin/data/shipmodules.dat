@@ -496,5 +496,6 @@ types of modules) the module can have. Default value is 1.
  <module durability="600" index="461" installtime="100" material="Steel" maxowners="2" name="Medium steel greenhouse" price="6000" size="2" skill="Engineering" type="GREENHOUSE" value="0" weight="2200">Allows cultivation of plants. Made of steel. Medium sized.</module>
  <module durability="800" index="462" installtime="150" material="Titanium" maxowners="2" name="Medium titanium greenhouse" price="12000" size="2" skill="Engineering" type="GREENHOUSE" value="0" weight="4400">Allows cultivation of plants. Made of titanium. Medium sized.</module>
  <module durability="1000" index="463" installtime="150" material="Orichalcum" maxowners="2" name="Medium orichalcum greenhouse" price="24000" size="2" skill="Engineering" type="GREENHOUSE" value="0" weight="4400">Allows cultivation of plants. Made of orichalcum. Medium sized.</module>
+ <module durability="1200" index="464" installtime="150" material="Adamantium" maxowners="2" name="Medium adamantium greenhouse" price="48000" size="2" skill="Engineering" type="GREENHOUSE" value="0" weight="4400">Allows cultivation of plants. Made of adamantium. Medium sized.</module>
 </modules>
 
