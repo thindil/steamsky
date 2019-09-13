@@ -15,5 +15,8 @@ package Bases.Test_Data.Tests is
    procedure Test_CountPrice_173272_bef05e (Gnattest_T : in out Test);
    --  bases.ads:218:4:CountPrice:Test_CountPrice
 
+   procedure Test_GenerateBaseName_e09aa7_c4cd74 (Gnattest_T : in out Test);
+   --  bases.ads:233:4:GenerateBaseName:Test_GenerateBaseName
+
 end Bases.Test_Data.Tests;
 --  end read only
