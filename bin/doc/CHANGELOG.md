@@ -14,6 +14,9 @@ All notable changes to this project will be documented in this file.
 - Changed prices for items in bases on one price in data files
 - Updated items data
 
+### Removed
+- Info about which base type sells recipes from recipes data file
+
 ### Fixed
 - No base type selected in new game setting on first run
 
