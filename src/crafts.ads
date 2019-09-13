@@ -42,7 +42,6 @@ package Crafts is
    -- Skill           - Skill used in crafting item
    -- Time            - Minutes needed for finish recipe
    -- Difficulty      - How difficult is recipe to discover
-   -- BaseType        - Sky base type in which recipe can be bought
    -- Tool            - Type of tool used to craft item
    -- SOURCE
    type Craft_Data is record
@@ -54,7 +53,6 @@ package Crafts is
       Skill: Positive;
       Time: Positive;
       Difficulty: Positive;
-      BaseType: Natural;
       Tool: Unbounded_String;
    end record;
    -- ****
