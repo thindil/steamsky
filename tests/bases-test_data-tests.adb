@@ -110,6 +110,56 @@ package body Bases.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_GenerateBaseName_e09aa7_c4cd74 (FactionIndex: Unbounded_String)  return Unbounded_String
+   is
+   begin
+      begin
+         pragma Assert
+           (Factions_Container.Contains(Factions_List, FactionIndex));
+         null;
+      exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "req_sloc(bases.ads:0):Test_GenerateBaseName test requirement violated");
+      end;
+      declare
+         Test_GenerateBaseName_e09aa7_c4cd74_Result : constant Unbounded_String := GNATtest_Generated.GNATtest_Standard.Bases.GenerateBaseName (FactionIndex);
+      begin
+         begin
+            pragma Assert
+              (True);
+            null;
+         exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "ens_sloc(bases.ads:0:):Test_GenerateBaseName test commitment violated");
+         end;
+         return Test_GenerateBaseName_e09aa7_c4cd74_Result;
+      end;
+   end Wrap_Test_GenerateBaseName_e09aa7_c4cd74;
+--  end read only
+
+--  begin read only
+   procedure Test_GenerateBaseName_test_generatebasename (Gnattest_T : in out Test);
+   procedure Test_GenerateBaseName_e09aa7_c4cd74 (Gnattest_T : in out Test) renames Test_GenerateBaseName_test_generatebasename;
+--  id:2.2/e09aa72173a8bcc3/GenerateBaseName/1/0/test_generatebasename/
+   procedure Test_GenerateBaseName_test_generatebasename (Gnattest_T : in out Test) is
+      function GenerateBaseName (FactionIndex: Unbounded_String) return Unbounded_String renames Wrap_Test_GenerateBaseName_e09aa7_c4cd74;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(GenerateBaseName(To_Unbounded_String("POLEIS")) /= Null_Unbounded_String, "Failed to generate new base name.");
+
+--  begin read only
+   end Test_GenerateBaseName_test_generatebasename;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
