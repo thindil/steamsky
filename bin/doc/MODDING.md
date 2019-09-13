@@ -235,17 +235,13 @@ Value must be existing skill name.
 - Attribute `weight`: weight of one item in kilograms
 - Attribute `type`: item type of item (from *game.dat* file, entry
   *ItemsTypes*)
-- Each `trade` tag is for selected type of bases: Industrial, Agricultural,
-  Refinery, Shipyard, Military. Attribute `price` is price of item in selected
-  base type. If you want that item will be not possible to buy/sellable in
-  bases (or only selected base type) set it price to 0. Attribute `buyable`
-  said did item can be bough in selected type of base. "Y" mean Yes, "N" means
-  No.
 - Attribute `showtype`: optional attribute. If you want to show item type in
   game (for example in cargo or in trade screen) different than item type
   from *game.dat* file, you can set this parameter to any text value.
-- `Data`: optional tags. Each tag is one value. For items used as food it is
-  value of hunger reduced by one portion. For item used as drinks, value of
+- Attribute `price` is price of the item. If you want that item will be not
+  possible to buy or sell in bases, set it price to 0.
+- Tag `data`: optional tag. Each tag is one value. For items used as food it
+  is value of hunger reduced by one portion. For item used as drinks, value of
   thirst reduced by one portion. For ammunition it is damage done by that
   ammunition. For working tools it is chance for item to be damaged during
   work. For harpoon guns ammunition it is how long (in combat turns) item will
