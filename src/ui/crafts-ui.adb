@@ -152,7 +152,6 @@ package body Crafts.UI is
             end if;
          end loop;
          Recipe.Difficulty := 1;
-         Recipe.BaseType := 0;
          Recipe.Tool := AlchemyTools;
       else
          Recipe := Recipes_List(RecipeIndex);
