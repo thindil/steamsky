@@ -124,11 +124,10 @@ package body Bases.Trade is
       Cost, MoneyIndex2: Natural;
       RecipeName: constant String :=
         To_String(Items_List(Recipes_List(RecipeIndex).ResultIndex).Name);
-      BaseType: constant Positive :=
-        BaseTypeIndex(SkyBases(BaseIndex).BaseType);
+      BaseType: constant Unbounded_String := SkyBases(BaseIndex).BaseType;
       TraderIndex: Natural;
    begin
-      if BaseType /= Recipes_List(RecipeIndex).BaseType then
+      if not BasesTypes_List(BaseType).Recipes.Contains(RecipeIndex) then
          raise Trade_Cant_Buy;
       end if;
       if Known_Recipes.Find_Index(Item => RecipeIndex) /=

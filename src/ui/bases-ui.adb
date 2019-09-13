@@ -254,14 +254,14 @@ package body Bases.UI is
         Gtk_List_Store(Get_Object(Builder, "itemslist"));
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      BaseType: constant Positive :=
-        BaseTypeIndex(SkyBases(BaseIndex).BaseType);
+      BaseType: constant Unbounded_String := SkyBases(BaseIndex).BaseType;
    begin
       CurrentState := CLEARING;
       Clear(RecipesList);
       CurrentState := RECIPES;
       for I in Recipes_List.Iterate loop
-         if Recipes_List(I).BaseType = BaseType and
+         if BasesTypes_List(BaseType).Recipes.Contains
+             (Recipes_Container.Key(I)) and
            Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) =
              Positive_Container.No_Index then
             Append(RecipesList, RecipesIter);
