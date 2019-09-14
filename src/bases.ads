@@ -240,13 +240,14 @@ package Bases is
       -- FUNCTION
       -- Generate if needed new recruits in base
       -- SOURCE
-   procedure GenerateRecruits;
-   -- ****
+   procedure GenerateRecruits with
+      Test_Case => ("Test_GenerateRecruits", Robustness);
+      -- ****
 
-   -- ****f* Bases/AskForBases
-   -- FUNCTION
-   -- Ask in base for direction for other bases
-   -- SOURCE
+      -- ****f* Bases/AskForBases
+      -- FUNCTION
+      -- Ask in base for direction for other bases
+      -- SOURCE
    procedure AskForBases;
    -- ****
 

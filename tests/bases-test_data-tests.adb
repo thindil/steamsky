@@ -15,6 +15,8 @@ with System.Assertions;
 --
 --  end read only
 
+with Maps; use Maps;
+
 --  begin read only
 --  end read only
 package body Bases.Test_Data.Tests is
@@ -157,6 +159,37 @@ package body Bases.Test_Data.Tests is
 
 --  begin read only
    end Test_GenerateBaseName_test_generatebasename;
+--  end read only
+
+--  begin read only
+   procedure Wrap_Test_GenerateRecruits_71442c_06ea09
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Bases.GenerateRecruits;
+   end Wrap_Test_GenerateRecruits_71442c_06ea09;
+--  end read only
+
+--  begin read only
+   procedure Test_GenerateRecruits_test_generaterecruits (Gnattest_T : in out Test);
+   procedure Test_GenerateRecruits_71442c_06ea09 (Gnattest_T : in out Test) renames Test_GenerateRecruits_test_generaterecruits;
+--  id:2.2/71442c2bd1e072c1/GenerateRecruits/1/0/test_generaterecruits/
+   procedure Test_GenerateRecruits_test_generaterecruits (Gnattest_T : in out Test) is
+   procedure GenerateRecruits renames Wrap_Test_GenerateRecruits_71442c_06ea09;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+
+   begin
+
+      SkyBases(BaseIndex).Recruits.Clear;
+      SkyBases(BaseIndex).RecruitDate := (others => 0);
+      GenerateRecruits;
+      Assert(SkyBases(BaseIndex).Recruits.Length > 0, "Failed to generate recruits.");
+
+--  begin read only
+   end Test_GenerateRecruits_test_generaterecruits;
 --  end read only
 
 --  begin read only
