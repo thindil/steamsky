@@ -18,5 +18,8 @@ package Bases.Test_Data.Tests is
    procedure Test_GenerateBaseName_e09aa7_c4cd74 (Gnattest_T : in out Test);
    --  bases.ads:233:4:GenerateBaseName:Test_GenerateBaseName
 
+   procedure Test_GenerateRecruits_71442c_06ea09 (Gnattest_T : in out Test);
+   --  bases.ads:243:4:GenerateRecruits:Test_GenerateRecruits
+
 end Bases.Test_Data.Tests;
 --  end read only
