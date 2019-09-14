@@ -292,9 +292,6 @@ Value must be existing skill name.
   (items types are in *game.dat* file).
 - Attribute `difficulty`: optional attribute. How complicated recipe is. Should
   be between 1 and 100.
-- Attribute `basetype`: In which bases type recipe can be bought. If not set,
-  recipe will be know from beginning of game. Values: 1 for Industrial, 2 for
-  Agricultural, 3 for Refinery, 4 for Shipyard and 5 for Military.
 - Attribute `time`: optional attribute. How long in minutes take crafting selected
   recipe. If not set, it take 15 minutes.
 
