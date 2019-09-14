@@ -18,13 +18,10 @@ names are in *game.dat* file).
 types are in *game.dat* file).
 - Optional attribute "difficulty": how complicated recipe is. Should be between 1
 and 100.
-- Attribute "basetype": In which bases type recipe can be bought. If not set,
-recipe will be know from beginning of game. Values: 1 for Industrial, 2 for
-Agricultural, 3 for Refinery, 4 for Shipyard and 5 for Military.
 - Optional attribute "time": how long in minutes take crafting selected recipe.
 If not set, it take 15 minutes.
 -->
- <recipe basetype="2" crafted="1" index="1" result="2" skill="Cooking" tool="CookingSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" index="1" result="2" skill="Cooking" tool="CookingSet" workplace="ALCHEMY_LAB">
 <!-- Tags "material" contains data about materials used to craft selected recipe.
 - Attribute "type" is item type of materials need for recipe.
 - Attribute "amount": Amount of crafting materials needed for recipe. Zero
@@ -32,734 +29,734 @@ amount for updating recipe means that this material should be removed.
 If you want add more materials to recipe, just add new tag "material" with proper data. -->
   <material amount="1" type="RawFood"/>
  </recipe>
- <recipe basetype="3" crafted="5" index="2" result="1" skill="Alchemy" tool="AlchemySet" workplace="ALCHEMY_LAB">
+ <recipe crafted="5" index="2" result="1" skill="Alchemy" tool="AlchemySet" workplace="ALCHEMY_LAB">
   <material amount="1" type="Wood"/>
  </recipe>
- <recipe basetype="2" crafted="1" difficulty="5" index="3" result="11" skill="Cooking" time="30" tool="CookingSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="5" index="3" result="11" skill="Cooking" time="30" tool="CookingSet" workplace="ALCHEMY_LAB">
   <material amount="2" type="RawFood"/>
  </recipe>
- <recipe basetype="5" crafted="5" index="4" result="4" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="5" index="4" result="4" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="1" type="Iron"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="10" index="5" result="14" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="10" index="5" result="14" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="1" type="Iron"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="6" result="17" skill="Metalsmith" tool="Mold" workplace="FURNACE">
+ <recipe crafted="1" index="6" result="17" skill="Metalsmith" tool="Mold" workplace="FURNACE">
   <material amount="1" type="CopperOre"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="7" result="18" skill="Metalsmith" tool="Mold" workplace="FURNACE">
+ <recipe crafted="1" index="7" result="18" skill="Metalsmith" tool="Mold" workplace="FURNACE">
   <material amount="1" type="TinOre"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="8" result="5" skill="Metalsmith" tool="Mold" workplace="FURNACE">
+ <recipe crafted="1" index="8" result="5" skill="Metalsmith" tool="Mold" workplace="FURNACE">
   <material amount="1" type="Copper"/>
   <material amount="1" type="Tin"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="5" index="9" result="13" skill="Metalsmith" tool="Mold" workplace="FURNACE">
+ <recipe crafted="1" difficulty="5" index="9" result="13" skill="Metalsmith" tool="Mold" workplace="FURNACE">
   <material amount="1" type="IronOre"/>
  </recipe>
- <recipe basetype="5" crafted="2" difficulty="5" index="10" result="20" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="2" difficulty="5" index="10" result="20" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="1" type="Iron"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="10" index="11" result="21" skill="Metalsmith" time="30" tool="Mold" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="11" result="21" skill="Metalsmith" time="30" tool="Mold" workplace="FURNACE">
   <material amount="1" type="IronOre"/>
   <material amount="1" type="Fuel"/>
  </recipe>
- <recipe basetype="5" crafted="5" difficulty="5" index="12" result="23" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="5" difficulty="5" index="12" result="23" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="1" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="10" index="13" result="24" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="10" index="13" result="24" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="1" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="2" difficulty="10" index="14" result="25" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="2" difficulty="10" index="14" result="25" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="1" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="15" index="15" result="26" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="15" index="15" result="26" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="1" type="Iron"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="15" index="16" result="27" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="15" index="16" result="27" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="1" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe basetype="2" crafted="1" difficulty="5" index="17" result="22" skill="Medicine" tool="AlchemySet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="5" index="17" result="22" skill="Medicine" tool="AlchemySet" workplace="ALCHEMY_LAB">
   <material amount="1" type="Herbs"/>
  </recipe>
- <recipe basetype="2" crafted="2" index="18" result="28" skill="Farming" time="120" tool="Sickle" workplace="GREENHOUSE">
+ <recipe crafted="2" index="18" result="28" skill="Farming" time="120" tool="Sickle" workplace="GREENHOUSE">
   <material amount="1" type="HerbSeeds"/>
  </recipe>
- <recipe basetype="2" crafted="2" index="19" result="6" skill="Farming" time="60" tool="Sickle" workplace="GREENHOUSE">
+ <recipe crafted="2" index="19" result="6" skill="Farming" time="60" tool="Sickle" workplace="GREENHOUSE">
   <material amount="1" type="VegetableSeeds"/>
  </recipe>
- <recipe basetype="2" crafted="3" index="20" result="3" skill="Engineering" time="60" tool="Bucket" workplace="WATER_COLLECTOR">
+ <recipe crafted="3" index="20" result="3" skill="Engineering" time="60" tool="Bucket" workplace="WATER_COLLECTOR">
   <material amount="1" type="Wood"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="20" index="21" result="31" skill="Gunsmith" time="30" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="20" index="21" result="31" skill="Gunsmith" time="30" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="2" type="Iron"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="20" index="22" result="32" skill="Gunsmith" time="30" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="20" index="22" result="32" skill="Gunsmith" time="30" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="2" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="25" index="23" result="33" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="25" index="23" result="33" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="4" type="Iron"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="25" index="24" result="34" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="25" index="24" result="34" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="4" type="Steel"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="30" index="25" result="35" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="30" index="25" result="35" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="6" type="Iron"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="30" index="26" result="36" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="30" index="26" result="36" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="6" type="Steel"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe basetype="3" crafted="3" index="27" result="9" skill="Woodcutting" time="240" tool="Saw" workplace="GREENHOUSE">
+ <recipe crafted="3" index="27" result="9" skill="Woodcutting" time="240" tool="Saw" workplace="GREENHOUSE">
   <material amount="1" type="AndraeSeeds"/>
  </recipe>
- <recipe basetype="3" crafted="3" index="28" result="10" skill="Woodcutting" time="240" tool="Saw" workplace="GREENHOUSE">
+ <recipe crafted="3" index="28" result="10" skill="Woodcutting" time="240" tool="Saw" workplace="GREENHOUSE">
   <material amount="1" type="IllandruSeeds"/>
  </recipe>
- <recipe basetype="2" crafted="3" index="29" result="54" skill="Farming" tool="AlchemySet" workplace="ALCHEMY_LAB">
+ <recipe crafted="3" index="29" result="54" skill="Farming" tool="AlchemySet" workplace="ALCHEMY_LAB">
   <material amount="1" type="Barley"/>
  </recipe>
- <recipe basetype="2" crafted="2" index="30" result="55" skill="Farming" time="60" tool="Sickle" workplace="GREENHOUSE">
+ <recipe crafted="2" index="30" result="55" skill="Farming" time="60" tool="Sickle" workplace="GREENHOUSE">
   <material amount="1" type="BarleySeeds"/>
  </recipe>
- <recipe basetype="2" crafted="2" index="31" result="44" skill="Brewery" tool="AlchemySet" workplace="ALCHEMY_LAB">
+ <recipe crafted="2" index="31" result="44" skill="Brewery" tool="AlchemySet" workplace="ALCHEMY_LAB">
   <material amount="1" type="BarleySeeds"/>
  </recipe>
- <recipe basetype="2" crafted="2" difficulty="5" index="32" result="56" skill="Farming" tool="AlchemySet" workplace="ALCHEMY_LAB">
+ <recipe crafted="2" difficulty="5" index="32" result="56" skill="Farming" tool="AlchemySet" workplace="ALCHEMY_LAB">
   <material amount="1" type="GrapeVine"/>
  </recipe>
- <recipe basetype="2" crafted="2" difficulty="5" index="33" result="57" skill="Farming" time="60" tool="Bucket" workplace="GREENHOUSE">
+ <recipe crafted="2" difficulty="5" index="33" result="57" skill="Farming" time="60" tool="Bucket" workplace="GREENHOUSE">
   <material amount="1" type="Grapes"/>
  </recipe>
- <recipe basetype="2" crafted="2" difficulty="5" index="34" result="45" skill="Brewery" tool="AlchemySet" workplace="ALCHEMY_LAB">
+ <recipe crafted="2" difficulty="5" index="34" result="45" skill="Brewery" tool="AlchemySet" workplace="ALCHEMY_LAB">
   <material amount="1" type="Grapes"/>
  </recipe>
- <recipe basetype="2" crafted="1" difficulty="10" index="35" result="46" skill="Cooking" time="30" tool="CookingSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="10" index="35" result="46" skill="Cooking" time="30" tool="CookingSet" workplace="ALCHEMY_LAB">
   <material amount="3" type="RawFood"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="36" result="47" skill="Alchemy" tool="Mold" workplace="FURNACE">
+ <recipe crafted="1" index="36" result="47" skill="Alchemy" tool="Mold" workplace="FURNACE">
   <material amount="2" type="Sand"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="37" result="48" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" index="37" result="48" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Bronze"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="5" index="38" result="49" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="5" index="38" result="49" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Bronze"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="10" index="39" result="59" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="39" result="59" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="10" type="Bronze"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="5" index="40" result="52" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="5" index="40" result="52" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Bronze"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="5" index="41" result="60" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="5" index="41" result="60" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Bronze"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="5" index="42" result="50" skill="Woodworking" tool="WoodworkerSet" workplace="WORKSHOP">
+ <recipe crafted="1" difficulty="5" index="42" result="50" skill="Woodworking" tool="WoodworkerSet" workplace="WORKSHOP">
   <material amount="1" type="Wood"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="5" index="43" result="53" skill="Woodworking" tool="WoodworkerSet" workplace="WORKSHOP">
+ <recipe crafted="1" difficulty="5" index="43" result="53" skill="Woodworking" tool="WoodworkerSet" workplace="WORKSHOP">
   <material amount="1" type="Wood"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="5" index="44" result="61" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="5" index="44" result="61" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Bronze"/>
  </recipe>
- <recipe basetype="5" crafted="1" index="45" result="62" skill="Blacksmith" tool="BlacksmithSet" workplace="WORKSHOP">
+ <recipe crafted="1" index="45" result="62" skill="Blacksmith" tool="BlacksmithSet" workplace="WORKSHOP">
   <material amount="1" type="Bronze"/>
   <material amount="1" type="Leather"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="5" index="46" result="63" skill="Blacksmith" tool="BlacksmithSet" workplace="WORKSHOP">
+ <recipe crafted="1" difficulty="5" index="46" result="63" skill="Blacksmith" tool="BlacksmithSet" workplace="WORKSHOP">
   <material amount="1" type="Iron"/>
   <material amount="1" type="Leather"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="10" index="47" result="64" skill="Blacksmith" tool="BlacksmithSet" workplace="WORKSHOP">
+ <recipe crafted="1" difficulty="10" index="47" result="64" skill="Blacksmith" tool="BlacksmithSet" workplace="WORKSHOP">
   <material amount="1" type="Steel"/>
   <material amount="1" type="Leather"/>
  </recipe>
- <recipe basetype="5" crafted="1" index="48" result="66" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" index="48" result="66" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Bronze"/>
  </recipe>
- <recipe basetype="5" crafted="1" index="49" result="67" skill="Leatherworking" tool="SewingKit" workplace="WORKSHOP">
+ <recipe crafted="1" index="49" result="67" skill="Leatherworking" tool="SewingKit" workplace="WORKSHOP">
   <material amount="2" type="Leather"/>
  </recipe>
- <recipe basetype="5" crafted="1" index="50" result="68" skill="Leatherworking" tool="SewingKit" workplace="WORKSHOP">
+ <recipe crafted="1" index="50" result="68" skill="Leatherworking" tool="SewingKit" workplace="WORKSHOP">
   <material amount="1" type="Leather"/>
  </recipe>
- <recipe basetype="5" crafted="1" index="51" result="69" skill="Leatherworking" tool="SewingKit" workplace="WORKSHOP">
+ <recipe crafted="1" index="51" result="69" skill="Leatherworking" tool="SewingKit" workplace="WORKSHOP">
   <material amount="1" type="Leather"/>
  </recipe>
- <recipe basetype="1" crafted="2" index="52" result="70" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" index="52" result="70" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Bronze"/>
  </recipe>
- <recipe basetype="5" crafted="1" index="53" result="71" skill="Leatherworking" tool="SewingKit" workplace="WORKSHOP">
+ <recipe crafted="1" index="53" result="71" skill="Leatherworking" tool="SewingKit" workplace="WORKSHOP">
   <material amount="2" type="Leather"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="5" index="54" result="72" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="5" index="54" result="72" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Bronze"/>
  </recipe>
- <recipe basetype="5" crafted="1" index="55" result="73" skill="Woodworking" tool="WoodworkerSet" workplace="WORKSHOP">
+ <recipe crafted="1" index="55" result="73" skill="Woodworking" tool="WoodworkerSet" workplace="WORKSHOP">
   <material amount="1" type="Wood"/>
  </recipe>
- <recipe basetype="5" crafted="2" index="56" result="74" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" index="56" result="74" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Bronze"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="5" index="57" result="75" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="5" index="57" result="75" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Iron"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="5" index="58" result="76" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="5" index="58" result="76" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe basetype="5" crafted="2" difficulty="5" index="59" result="77" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="5" index="59" result="77" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="5" index="60" result="78" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="5" index="60" result="78" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Bronze"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="5" index="61" result="79" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="5" index="61" result="79" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Bronze"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="5" index="62" result="80" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="5" index="62" result="80" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Bronze"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="5" index="63" result="81" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="5" index="63" result="81" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Bronze"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="10" index="64" result="82" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="64" result="82" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="10" index="65" result="83" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="65" result="83" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Iron"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="10" index="66" result="84" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="66" result="84" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="10" index="67" result="85" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="67" result="85" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="10" index="68" result="86" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="68" result="86" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Iron"/>
  </recipe>
- <recipe basetype="5" crafted="2" difficulty="10" index="69" result="87" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="10" index="69" result="87" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="10" index="70" result="88" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="70" result="88" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="15" index="71" result="89" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="71" result="89" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="15" index="72" result="90" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="72" result="90" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Steel"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="15" index="73" result="91" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="73" result="91" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="15" index="74" result="92" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="74" result="92" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="15" index="75" result="93" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="75" result="93" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Steel"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="10" index="76" result="94" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="76" result="94" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Steel"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="10" index="77" result="95" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="77" result="95" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Iron"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="15" index="78" result="96" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="78" result="96" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Steel"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="10" index="79" result="97" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="79" result="97" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Bronze"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="15" index="80" result="98" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="80" result="98" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="20" index="81" result="99" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="81" result="99" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="5" index="82" result="100" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="5" index="82" result="100" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="10" index="83" result="101" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="83" result="101" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="10" index="84" result="102" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="84" result="102" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="15" index="85" result="103" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="85" result="103" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="10" index="86" result="104" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="86" result="104" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Bronze"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="15" index="87" result="105" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="87" result="105" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="20" index="88" result="106" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="88" result="106" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="15" index="89" result="107" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="89" result="107" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="10" type="Iron"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="20" index="90" result="108" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="90" result="108" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="10" type="Steel"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="10" index="91" result="109" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="91" result="109" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="15" index="92" result="110" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="92" result="110" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="10" index="93" result="111" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="93" result="111" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="15" index="94" result="112" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="94" result="112" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe basetype="1" crafted="2" difficulty="10" index="95" result="113" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="10" index="95" result="113" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe basetype="1" crafted="2" difficulty="15" index="96" result="114" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="15" index="96" result="114" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="15" index="97" result="116" skill="Metalsmith" time="60" tool="Mold" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="97" result="116" skill="Metalsmith" time="60" tool="Mold" workplace="FURNACE">
   <material amount="1" type="TitaniumOre"/>
   <material amount="2" type="Fuel"/>
  </recipe>
- <recipe basetype="5" crafted="2" difficulty="15" index="98" result="117" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="2" difficulty="15" index="98" result="117" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="1" type="Titanium"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="20" index="99" result="118" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="20" index="99" result="118" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="1" type="Titanium"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="25" index="100" result="119" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="25" index="100" result="119" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="2" type="Titanium"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="30" index="101" result="120" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="30" index="101" result="120" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="4" type="Titanium"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="35" index="102" result="121" skill="Gunsmith" time="75" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="35" index="102" result="121" skill="Gunsmith" time="75" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="6" type="Titanium"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="15" index="103" result="122" skill="Blacksmith" tool="BlacksmithSet" workplace="WORKSHOP">
+ <recipe crafted="1" difficulty="15" index="103" result="122" skill="Blacksmith" tool="BlacksmithSet" workplace="WORKSHOP">
   <material amount="1" type="Titanium"/>
   <material amount="1" type="Leather"/>
  </recipe>
- <recipe basetype="5" crafted="2" difficulty="15" index="104" result="123" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="15" index="104" result="123" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="15" index="105" result="124" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="105" result="124" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="20" index="106" result="125" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="106" result="125" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="20" index="107" result="126" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="107" result="126" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Titanium"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="20" index="108" result="127" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="108" result="127" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="20" index="109" result="128" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="109" result="128" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="20" index="110" result="129" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="110" result="129" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Titanium"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="20" index="111" result="131" skill="Metalsmith" time="90" tool="Mold" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="111" result="131" skill="Metalsmith" time="90" tool="Mold" workplace="FURNACE">
   <material amount="1" type="OrichalcumOre"/>
   <material amount="2" type="Fuel"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="15" index="112" result="132" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="112" result="132" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Titanium"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="20" index="113" result="133" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="113" result="133" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Orichalcum"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="20" index="114" result="134" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="114" result="134" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Titanium"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="25" index="115" result="135" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="115" result="135" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Orichalcum"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="25" index="116" result="136" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="116" result="136" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="30" index="117" result="137" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="30" index="117" result="137" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="15" index="118" result="138" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="118" result="138" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="20" index="119" result="139" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="119" result="139" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="20" index="120" result="140" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="120" result="140" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="25" index="121" result="141" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="121" result="141" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="25" index="122" result="142" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="122" result="142" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="30" index="123" result="143" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="30" index="123" result="143" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="25" index="124" result="144" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="124" result="144" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="10" type="Titanium"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="30" index="125" result="145" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="30" index="125" result="145" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="10" type="Orichalcum"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="20" index="126" result="146" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="126" result="146" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="25" index="127" result="147" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="127" result="147" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="20" index="128" result="148" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="128" result="148" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="25" index="129" result="149" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="129" result="149" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe basetype="1" crafted="2" difficulty="20" index="130" result="150" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="20" index="130" result="150" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe basetype="1" crafted="2" difficulty="25" index="131" result="151" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="25" index="131" result="151" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="25" index="132" result="152" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="25" index="132" result="152" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="1" type="Orichalcum"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="30" index="133" result="153" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="30" index="133" result="153" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="2" type="Orichalcum"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="35" index="134" result="154" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="35" index="134" result="154" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="4" type="Orichalcum"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="40" index="135" result="155" skill="Gunsmith" time="75" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="40" index="135" result="155" skill="Gunsmith" time="75" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="6" type="Orichalcum"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="15" index="136" result="156" skill="Blacksmith" tool="BlacksmithSet" workplace="WORKSHOP">
+ <recipe crafted="1" difficulty="15" index="136" result="156" skill="Blacksmith" tool="BlacksmithSet" workplace="WORKSHOP">
   <material amount="1" type="Orichalcum"/>
   <material amount="1" type="Leather"/>
  </recipe>
- <recipe basetype="5" crafted="2" difficulty="20" index="137" result="157" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="20" index="137" result="157" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="20" index="138" result="158" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="138" result="158" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="25" index="139" result="159" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="139" result="159" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="25" index="140" result="160" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="140" result="160" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Orichalcum"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="25" index="141" result="161" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="141" result="161" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="25" index="142" result="162" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="142" result="162" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="25" index="143" result="163" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="143" result="163" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Orichalcum"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="25" index="144" result="167" skill="Metalsmith" time="120" tool="Mold" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="144" result="167" skill="Metalsmith" time="120" tool="Mold" workplace="FURNACE">
   <material amount="1" type="AdamantiumOre"/>
   <material amount="4" type="Fuel"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="25" index="145" result="168" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="145" result="168" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Adamantium"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="30" index="146" result="169" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="30" index="146" result="169" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Adamantium"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="35" index="147" result="170" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="35" index="147" result="170" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Adamantium"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="25" index="148" result="171" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="148" result="171" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Adamantium"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="30" index="149" result="172" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="30" index="149" result="172" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Adamantium"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="35" index="150" result="173" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="35" index="150" result="173" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Adamantium"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="35" index="151" result="174" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="35" index="151" result="174" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="10" type="Adamantium"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="30" index="152" result="175" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="30" index="152" result="175" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Adamantium"/>
  </recipe>
- <recipe basetype="1" crafted="1" difficulty="30" index="153" result="176" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="30" index="153" result="176" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Adamantium"/>
  </recipe>
- <recipe basetype="1" crafted="2" difficulty="30" index="154" result="177" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="30" index="154" result="177" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Adamantium"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="35" index="155" result="178" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="35" index="155" result="178" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="2" type="Adamantium"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="40" index="156" result="179" skill="Gunsmith" time="75" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="40" index="156" result="179" skill="Gunsmith" time="75" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="4" type="Adamantium"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="45" index="157" result="180" skill="Gunsmith" time="90" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="45" index="157" result="180" skill="Gunsmith" time="90" tool="GunsmithSet" workplace="ALCHEMY_LAB">
   <material amount="6" type="Adamantium"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="20" index="158" result="181" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="WORKSHOP">
+ <recipe crafted="1" difficulty="20" index="158" result="181" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="WORKSHOP">
   <material amount="1" type="Adamantium"/>
   <material amount="1" type="Leather"/>
  </recipe>
- <recipe basetype="5" crafted="2" difficulty="25" index="159" result="182" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="25" index="159" result="182" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Adamantium"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="25" index="160" result="183" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="160" result="183" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Adamantium"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="30" index="161" result="184" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="30" index="161" result="184" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Adamantium"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="25" index="162" result="185" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="162" result="185" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Adamantium"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="30" index="163" result="187" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="30" index="163" result="187" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Adamantium"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="30" index="164" result="190" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="30" index="164" result="190" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Adamantium"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="30" index="165" result="193" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="30" index="165" result="193" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Adamantium"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="166" result="186" skill="Woodworking" tool="WoodworkerSet" workplace="Workshop">
+ <recipe crafted="1" index="166" result="186" skill="Woodworking" tool="WoodworkerSet" workplace="Workshop">
   <material amount="5" type="Wood"/>
  </recipe>
- <recipe basetype="1" crafted="2" index="167" result="209" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="2" index="167" result="209" skill="Printing" tool="PrintingSet" workplace="Workshop">
   <material amount="1" type="Wood"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="168" result="210" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="168" result="210" skill="Printing" tool="PrintingSet" workplace="Workshop">
   <material amount="8" type="Paper"/>
   <material amount="1" type="Leather"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="169" result="188" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="169" result="188" skill="Printing" tool="PrintingSet" workplace="Workshop">
   <material amount="1" type="EmptyBook"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="170" result="189" skill="Woodworking" tool="WoodworkerSet" workplace="Workshop">
+ <recipe crafted="1" index="170" result="189" skill="Woodworking" tool="WoodworkerSet" workplace="Workshop">
   <material amount="4" type="Wood"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="171" result="191" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="171" result="191" skill="Printing" tool="PrintingSet" workplace="Workshop">
   <material amount="1" type="EmptyBook"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="172" result="192" skill="Woodworking" tool="WoodworkerSet" workplace="Workshop">
+ <recipe crafted="1" index="172" result="192" skill="Woodworking" tool="WoodworkerSet" workplace="Workshop">
   <material amount="1" type="Wood"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="173" result="194" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="173" result="194" skill="Printing" tool="PrintingSet" workplace="Workshop">
   <material amount="1" type="EmptyBook"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="174" result="195" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="174" result="195" skill="Printing" tool="PrintingSet" workplace="Workshop">
   <material amount="1" type="EmptyBook"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="175" result="196" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="175" result="196" skill="Printing" tool="PrintingSet" workplace="Workshop">
   <material amount="1" type="EmptyBook"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="176" result="197" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="176" result="197" skill="Printing" tool="PrintingSet" workplace="Workshop">
   <material amount="1" type="EmptyBook"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="177" result="198" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="177" result="198" skill="Printing" tool="PrintingSet" workplace="Workshop">
   <material amount="1" type="EmptyBook"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="178" result="199" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="178" result="199" skill="Printing" tool="PrintingSet" workplace="Workshop">
   <material amount="1" type="EmptyBook"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="179" result="200" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="179" result="200" skill="Printing" tool="PrintingSet" workplace="Workshop">
   <material amount="1" type="EmptyBook"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="180" result="201" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="180" result="201" skill="Printing" tool="PrintingSet" workplace="Workshop">
   <material amount="1" type="EmptyBook"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="181" result="202" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="181" result="202" skill="Printing" tool="PrintingSet" workplace="Workshop">
   <material amount="1" type="EmptyBook"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="182" result="203" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="182" result="203" skill="Printing" tool="PrintingSet" workplace="Workshop">
   <material amount="1" type="EmptyBook"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="183" result="204" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="183" result="204" skill="Printing" tool="PrintingSet" workplace="Workshop">
   <material amount="1" type="EmptyBook"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="184" result="205" skill="Woodworking" tool="WoodworkerSet" workplace="Workshop">
+ <recipe crafted="1" index="184" result="205" skill="Woodworking" tool="WoodworkerSet" workplace="Workshop">
   <material amount="3" type="Wood"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="185" result="206" skill="Woodworking" tool="WoodworkerSet" workplace="Workshop">
+ <recipe crafted="1" index="185" result="206" skill="Woodworking" tool="WoodworkerSet" workplace="Workshop">
   <material amount="1" type="Wood"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="186" result="207" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="186" result="207" skill="Printing" tool="PrintingSet" workplace="Workshop">
   <material amount="1" type="EmptyBook"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="187" result="208" skill="Woodworking" tool="WoodworkerSet" workplace="Workshop">
+ <recipe crafted="1" index="187" result="208" skill="Woodworking" tool="WoodworkerSet" workplace="Workshop">
   <material amount="4" type="Wood"/>
  </recipe>
- <recipe basetype="1" crafted="1" index="188" result="51" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" index="188" result="51" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Bronze"/>
  </recipe>
- <recipe basetype="5" crafted="2" index="189" result="211" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" index="189" result="211" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Bronze"/>
  </recipe>
- <recipe basetype="5" crafted="2" difficulty="5" index="190" result="212" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="5" index="190" result="212" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe basetype="5" crafted="2" difficulty="10" index="191" result="213" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="10" index="191" result="213" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe basetype="5" crafted="2" difficulty="15" index="192" result="214" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="15" index="192" result="214" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe basetype="5" crafted="2" difficulty="20" index="193" result="215" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="20" index="193" result="215" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe basetype="5" crafted="2" difficulty="25" index="194" result="216" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="25" index="194" result="216" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Adamantium"/>
  </recipe>
- <recipe basetype="5" crafted="2" index="195" result="217" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" index="195" result="217" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Bronze"/>
  </recipe>
- <recipe basetype="5" crafted="2" difficulty="5" index="196" result="218" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="5" index="196" result="218" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe basetype="5" crafted="2" difficulty="10" index="197" result="219" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="10" index="197" result="219" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe basetype="5" crafted="2" difficulty="15" index="198" result="220" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="15" index="198" result="220" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe basetype="5" crafted="2" difficulty="20" index="199" result="221" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="20" index="199" result="221" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe basetype="5" crafted="2" difficulty="25" index="200" result="222" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="25" index="200" result="222" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Adamantium"/>
  </recipe>
- <recipe basetype="5" crafted="1" index="201" result="223" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" index="201" result="223" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Bronze"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="5" index="202" result="224" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="5" index="202" result="224" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Iron"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="10" index="203" result="225" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="203" result="225" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Steel"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="15" index="204" result="226" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="204" result="226" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Titanium"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="20" index="205" result="227" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="205" result="227" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Orichalcum"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="25" index="206" result="228" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="206" result="228" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Adamantium"/>
  </recipe>
- <recipe basetype="5" crafted="1" index="207" result="229" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" index="207" result="229" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Bronze"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="5" index="208" result="230" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="5" index="208" result="230" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="10" index="209" result="231" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="209" result="231" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="15" index="210" result="232" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="210" result="232" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="20" index="211" result="233" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="211" result="233" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="25" index="212" result="234" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="212" result="234" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Adamantium"/>
  </recipe>
- <recipe basetype="5" crafted="1" index="213" result="235" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" index="213" result="235" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Bronze"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="5" index="214" result="236" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="5" index="214" result="236" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Iron"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="10" index="215" result="237" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="215" result="237" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Steel"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="15" index="216" result="238" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="216" result="238" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Titanium"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="20" index="217" result="239" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="217" result="239" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Orichalcum"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="25" index="218" result="240" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="218" result="240" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Adamantium"/>
  </recipe>
- <recipe basetype="5" crafted="1" index="219" result="241" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" index="219" result="241" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Bronze"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="5" index="220" result="242" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="5" index="220" result="242" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="10" index="221" result="243" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="221" result="243" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="15" index="222" result="244" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="222" result="244" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="20" index="223" result="245" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="223" result="245" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="25" index="224" result="246" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="224" result="246" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Adamantium"/>
  </recipe>
- <recipe basetype="5" crafted="1" index="225" result="247" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" index="225" result="247" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Bronze"/>
   <material amount="1" type="Wood"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="5" index="226" result="248" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="5" index="226" result="248" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
   <material amount="1" type="Wood"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="10" index="227" result="249" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="227" result="249" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Steel"/>
   <material amount="1" type="Wood"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="15" index="228" result="250" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="228" result="250" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Titanium"/>
   <material amount="1" type="Wood"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="20" index="229" result="251" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="229" result="251" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Orichalcum"/>
   <material amount="1" type="Wood"/>
  </recipe>
- <recipe basetype="5" crafted="1" difficulty="25" index="230" result="252" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="230" result="252" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Adamantium"/>
   <material amount="1" type="Wood"/>
  </recipe>
