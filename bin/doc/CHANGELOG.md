@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updated README.md
+
 ### Fixed
 - Moved cheapest harpoons buying option to Military bases instead of Industrial
 
