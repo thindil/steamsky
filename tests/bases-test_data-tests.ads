@@ -21,5 +21,8 @@ package Bases.Test_Data.Tests is
    procedure Test_GenerateRecruits_71442c_06ea09 (Gnattest_T : in out Test);
    --  bases.ads:243:4:GenerateRecruits:Test_GenerateRecruits
 
+   procedure Test_AskForBases_73243b_f3f6c6 (Gnattest_T : in out Test);
+   --  bases.ads:251:4:AskForBases:Test_AskForBases
+
 end Bases.Test_Data.Tests;
 --  end read only

@@ -193,6 +193,36 @@ package body Bases.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_AskForBases_73243b_f3f6c6
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Bases.AskForBases;
+   end Wrap_Test_AskForBases_73243b_f3f6c6;
+--  end read only
+
+--  begin read only
+   procedure Test_AskForBases_test_askforbases (Gnattest_T : in out Test);
+   procedure Test_AskForBases_73243b_f3f6c6 (Gnattest_T : in out Test) renames Test_AskForBases_test_askforbases;
+--  id:2.2/73243b5c6c15a56d/AskForBases/1/0/test_askforbases/
+   procedure Test_AskForBases_test_askforbases (Gnattest_T : in out Test) is
+   procedure AskForBases renames Wrap_Test_AskForBases_73243b_f3f6c6;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+
+   begin
+
+      SkyBases(BaseIndex).AskedForBases := False;
+      AskForBases;
+      Assert(True, "This test can only crash.");
+
+--  begin read only
+   end Test_AskForBases_test_askforbases;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.

@@ -248,7 +248,8 @@ package Bases is
       -- FUNCTION
       -- Ask in base for direction for other bases
       -- SOURCE
-   procedure AskForBases;
+   procedure AskForBases with
+      Test_Case => ("Test_AskForBases", Robustness);
    -- ****
 
    -- ****f* Bases/AskForEvents
