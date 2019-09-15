@@ -2,17 +2,18 @@
 
 case $1 in
    release)
+      releasedir="usr"
       gprclean -P steamsky.gpr
       gprbuild -p steamsky.gpr -XMode=release
-      mkdir -p others/Output/release/bin
-      cp -r share others/Output/release
-      cp bin/steamsky others/Output/release/bin
-      cp -r bin/data others/Output/release/share
-      rm -r others/Output/release/share/data/mods
-      rm -r others/Output/release/share/data/saves
-      rm -r others/Output/release/share/data/themes
-      cp -r bin/doc others/Output/release/share
-      cp README.md others/Output/release/share/doc
+      mkdir -p "$releasedir"/bin
+      cp -r share "$releasedir"
+      cp bin/steamsky "$releasedir"/bin
+      cp -r bin/data "$releasedir"/share
+      rm -r "$releasedir"/share/data/mods
+      rm -r "$releasedir"/share/data/saves
+      rm -r "$releasedir"/share/data/themes
+      cp -r bin/doc "$releasedir"/share
+      cp README.md "$releasedir"/share/doc
       gprclean -P steamsky.gpr
       ;;
    debug)
