@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [4.0.3] - 2019-09-15
 
 ### Changed
 - Updated README.md
