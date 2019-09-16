@@ -250,13 +250,14 @@ package Bases is
       -- SOURCE
    procedure AskForBases with
       Test_Case => ("Test_AskForBases", Robustness);
-   -- ****
+      -- ****
 
-   -- ****f* Bases/AskForEvents
-   -- FUNCTION
-   -- Ask in base for direction for random events
-   -- SOURCE
-   procedure AskForEvents;
+      -- ****f* Bases/AskForEvents
+      -- FUNCTION
+      -- Ask in base for direction for random events
+      -- SOURCE
+   procedure AskForEvents with
+      Test_Case => ("Test_AskForEvents", Robustness);
    -- ****
 
    -- ****f* Bases/UpdatePopulation

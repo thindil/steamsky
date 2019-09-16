@@ -16,6 +16,7 @@ with System.Assertions;
 --  end read only
 
 with Maps; use Maps;
+with Events; use Events;
 
 --  begin read only
 --  end read only
@@ -220,6 +221,37 @@ package body Bases.Test_Data.Tests is
 
 --  begin read only
    end Test_AskForBases_test_askforbases;
+--  end read only
+
+--  begin read only
+   procedure Wrap_Test_AskForEvents_2dde2f_3e359b
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Bases.AskForEvents;
+   end Wrap_Test_AskForEvents_2dde2f_3e359b;
+--  end read only
+
+--  begin read only
+   procedure Test_AskForEvents_test_askforevents (Gnattest_T : in out Test);
+   procedure Test_AskForEvents_2dde2f_3e359b (Gnattest_T : in out Test) renames Test_AskForEvents_test_askforevents;
+--  id:2.2/2dde2f14a34f8154/AskForEvents/1/0/test_askforevents/
+   procedure Test_AskForEvents_test_askforevents (Gnattest_T : in out Test) is
+   procedure AskForEvents renames Wrap_Test_AskForEvents_2dde2f_3e359b;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      Amount: constant Natural := Natural(Events_List.Length);
+
+   begin
+
+      SkyBases(BaseIndex).AskedForEvents := (others => 0);
+      AskForEvents;
+      Assert(Natural(Events_List.Length) > Amount, "Failed to ask for events in base.");
+
+--  begin read only
+   end Test_AskForEvents_test_askforevents;
 --  end read only
 
 --  begin read only
