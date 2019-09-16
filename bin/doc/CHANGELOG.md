@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Updated MODDING.md
 - Changed prices for items in bases on one price in data files
 - Updated items and recipes data
+- Updated README.md
 
 ### Removed
 - Info about which base type sells recipes from recipes data file
