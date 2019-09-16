@@ -47,7 +47,7 @@ this file is) to compile:
   for debug mode build or for release mode: `gprbuild -XMode=release`. You
   can also use build script `build.sh`. Command: `./build.sh debug` will build
   the game in debug mode. Command: `.build.sh release` will build the game in
-  release mode and put all needed files in *others/Output/release* directory.
+  release mode and put all needed files in *usr* directory.
 
 ### Build unit tests
 
