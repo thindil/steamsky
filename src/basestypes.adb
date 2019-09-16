@@ -202,20 +202,4 @@ package body BasesTypes is
       return Items_List(ItemIndex).Price;
    end Get_Price;
 
-   function BaseTypeIndex(BaseType: Unbounded_String) return Positive is
-   begin
-      if BaseType = To_Unbounded_String("0") then
-         return 1;
-      elsif BaseType = To_Unbounded_String("1") then
-         return 2;
-      elsif BaseType = To_Unbounded_String("2") then
-         return 3;
-      elsif BaseType = To_Unbounded_String("3") then
-         return 4;
-      elsif BaseType = To_Unbounded_String("4") then
-         return 5;
-      end if;
-      return 1;
-   end BaseTypeIndex;
-
 end BasesTypes;
