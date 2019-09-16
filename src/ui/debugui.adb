@@ -330,9 +330,11 @@ package body DebugUI is
    begin
       for I in SkyBases'Range loop
          if SkyBases(I).Name = BaseName then
-            Set_Active
-              (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbasetype")),
-               Gint(BaseTypeIndex(SkyBases(I).BaseType) - 1));
+            if not Set_Active_Id
+                (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbasetype")),
+                 To_String(SkyBases(I).BaseType)) then
+               return;
+            end if;
             Set_Active
               (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbasesize")),
                Bases_Size'Pos(SkyBases(I).Size));
@@ -975,7 +977,9 @@ package body DebugUI is
       begin
          ComboBox := Gtk_Combo_Box_Text(Get_Object(Builder, "cmbbasetype"));
          for I in BasesTypes_List.Iterate loop
-            Append_Text(ComboBox, To_String(BasesTypes_Container.Key(I)));
+            Append
+              (ComboBox, To_String(BasesTypes_Container.Key(I)),
+               To_String(BasesTypes_List(I).Name));
          end loop;
          ComboBox := Gtk_Combo_Box_Text(Get_Object(Builder, "cmbbaseowner"));
          for I in Factions_List.Iterate loop

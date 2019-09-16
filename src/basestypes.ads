@@ -122,6 +122,4 @@ package BasesTypes is
       Items_List.Contains(ItemIndex);
       -- ****
 
-   function BaseTypeIndex(BaseType: Unbounded_String) return Positive;
-
 end BasesTypes;
