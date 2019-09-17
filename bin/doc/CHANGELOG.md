@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - No base type selected in new game setting on first run
+- Crash on editing not visited base in debug menu
 
 ## [4.1] - 2019-09-08
 
