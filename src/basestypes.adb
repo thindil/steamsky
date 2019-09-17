@@ -35,6 +35,7 @@ package body BasesTypes is
       BaseNode, ChildNode: Node;
       BaseIndex, ItemIndex: Unbounded_String;
       Action, SubAction: DataAction;
+      BuyPrice, SellPrice: Natural;
       procedure AddChildNode
         (Data: in out UnboundedString_Container.Vector; Name: String;
          Index: Natural) is
@@ -145,11 +146,18 @@ package body BasesTypes is
                     "', no item with index '" & To_String(ItemIndex) & "'.";
                end if;
                if SubAction /= REMOVE then
+                  SellPrice := 0;
+                  if Get_Attribute(ChildNode, "sellprice") /= "" then
+                     SellPrice :=
+                       Natural'Value(Get_Attribute(ChildNode, "sellprice"));
+                  end if;
+                  BuyPrice := 0;
+                  if Get_Attribute(ChildNode, "buyprice") /= "" then
+                     BuyPrice :=
+                       Natural'Value(Get_Attribute(ChildNode, "buyprice"));
+                  end if;
                   TempRecord.Trades.Include
-                    (Key => ItemIndex,
-                     New_Item =>
-                       (Natural'Value(Get_Attribute(ChildNode, "sellprice")),
-                        0));
+                    (Key => ItemIndex, New_Item => (SellPrice, BuyPrice));
                else
                   TempRecord.Trades.Delete(ItemIndex);
                end if;
