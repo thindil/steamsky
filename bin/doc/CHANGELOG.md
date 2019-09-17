@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash on editing not visited base in debug menu
+
 ## [4.0.3] - 2019-09-15
 
 ### Changed
