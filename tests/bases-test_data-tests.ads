@@ -27,5 +27,8 @@ package Bases.Test_Data.Tests is
    procedure Test_AskForEvents_2dde2f_3e359b (Gnattest_T : in out Test);
    --  bases.ads:259:4:AskForEvents:Test_AskForEvents
 
+   procedure Test_UpdatePopulation_b3200e_10dec8 (Gnattest_T : in out Test);
+   --  bases.ads:267:4:UpdatePopulation:Test_UpdatePopulation
+
 end Bases.Test_Data.Tests;
 --  end read only
