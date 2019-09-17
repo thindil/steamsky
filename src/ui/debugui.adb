@@ -349,9 +349,14 @@ package body DebugUI is
             Set_Value
               (Gtk_Adjustment(Get_Object(Object, "adjreputation")),
                Gdouble(SkyBases(I).Reputation(1)));
-            Set_Value
-              (Gtk_Adjustment(Get_Object(Object, "adjbasemoney")),
-               Gdouble(SkyBases(I).Cargo(1).Amount));
+            if SkyBases(I).Cargo.Length > 0 then
+               Set_Value
+                 (Gtk_Adjustment(Get_Object(Object, "adjbasemoney")),
+                  Gdouble(SkyBases(I).Cargo(1).Amount));
+            else
+               Set_Value
+                 (Gtk_Adjustment(Get_Object(Object, "adjbasemoney")), 0.0);
+            end if;
             exit;
          end if;
       end loop;
