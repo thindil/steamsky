@@ -258,19 +258,20 @@ package Bases is
       -- SOURCE
    procedure AskForEvents with
       Test_Case => ("Test_AskForEvents", Robustness);
-   -- ****
+      -- ****
 
-   -- ****f* Bases/UpdatePopulation
-   -- FUNCTION
-   -- Update base population if needed
-   -- SOURCE
-   procedure UpdatePopulation;
-   -- ****
+      -- ****f* Bases/UpdatePopulation
+      -- FUNCTION
+      -- Update base population if needed
+      -- SOURCE
+   procedure UpdatePopulation with
+      Test_Case => ("Test_UpdatePopulation", Robustness);
+      -- ****
 
-   -- ****f* Bases/UpdatePrices
-   -- FUNCTION
-   -- Random changes of items prices in base
-   -- SOURCE
+      -- ****f* Bases/UpdatePrices
+      -- FUNCTION
+      -- Random changes of items prices in base
+      -- SOURCE
    procedure UpdatePrices;
    -- ****
 

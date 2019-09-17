@@ -255,6 +255,36 @@ package body Bases.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_UpdatePopulation_b3200e_10dec8
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Bases.UpdatePopulation;
+   end Wrap_Test_UpdatePopulation_b3200e_10dec8;
+--  end read only
+
+--  begin read only
+   procedure Test_UpdatePopulation_test_updatepopulation (Gnattest_T : in out Test);
+   procedure Test_UpdatePopulation_b3200e_10dec8 (Gnattest_T : in out Test) renames Test_UpdatePopulation_test_updatepopulation;
+--  id:2.2/b3200e8f4431ca20/UpdatePopulation/1/0/test_updatepopulation/
+   procedure Test_UpdatePopulation_test_updatepopulation (Gnattest_T : in out Test) is
+   procedure UpdatePopulation renames Wrap_Test_UpdatePopulation_b3200e_10dec8;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+
+   begin
+
+      SkyBases(BaseIndex).RecruitDate := (others => 0);
+      UpdatePopulation;
+      Assert(True, "This test can only crash.");
+
+--  begin read only
+   end Test_UpdatePopulation_test_updatepopulation;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
