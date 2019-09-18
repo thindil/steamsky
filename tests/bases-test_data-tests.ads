@@ -30,5 +30,8 @@ package Bases.Test_Data.Tests is
    procedure Test_UpdatePopulation_b3200e_10dec8 (Gnattest_T : in out Test);
    --  bases.ads:267:4:UpdatePopulation:Test_UpdatePopulation
 
+   procedure Test_UpdatePrices_5dfbf5_f6cd8d (Gnattest_T : in out Test);
+   --  bases.ads:275:4:UpdatePrices:Test_UpdatePrices
+
 end Bases.Test_Data.Tests;
 --  end read only

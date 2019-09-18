@@ -285,6 +285,33 @@ package body Bases.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_UpdatePrices_5dfbf5_f6cd8d
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Bases.UpdatePrices;
+   end Wrap_Test_UpdatePrices_5dfbf5_f6cd8d;
+--  end read only
+
+--  begin read only
+   procedure Test_UpdatePrices_test_updateprices (Gnattest_T : in out Test);
+   procedure Test_UpdatePrices_5dfbf5_f6cd8d (Gnattest_T : in out Test) renames Test_UpdatePrices_test_updateprices;
+--  id:2.2/5dfbf57036e5fd00/UpdatePrices/1/0/test_updateprices/
+   procedure Test_UpdatePrices_test_updateprices (Gnattest_T : in out Test) is
+   procedure UpdatePrices renames Wrap_Test_UpdatePrices_5dfbf5_f6cd8d;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      UpdatePrices;
+      Assert(True, "This test can only crash.");
+
+--  begin read only
+   end Test_UpdatePrices_test_updateprices;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
