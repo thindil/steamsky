@@ -118,6 +118,9 @@ package Factions is
    -- Flags            - Various flags for faction (no gender, etc)
    -- Careers          - List of possible careers for that faction
    -- BaseIcon         - Character used as base icon on map for this faction
+   -- BasesTypes       - List of available base types for this faction. If
+   --                    empty then all bases types are available for this
+   --                    faction
    -- SOURCE
    type FactionRecord is record
       Name: Unbounded_String;
@@ -135,6 +138,7 @@ package Factions is
       Flags: UnboundedString_Container.Vector;
       Careers: Careers_Container.Map;
       BaseIcon: Wide_Character;
+      BasesTypes: UnboundedString_Container.Vector;
    end record;
    -- ****
 
