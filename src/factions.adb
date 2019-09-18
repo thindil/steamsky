@@ -24,6 +24,7 @@ with Log; use Log;
 with Utils; use Utils;
 with Careers; use Careers;
 with Items; use Items;
+with BasesTypes; use BasesTypes;
 
 package body Factions is
 
@@ -95,7 +96,7 @@ package body Factions is
             FoodTypes => TmpFood, DrinksTypes => TmpFood,
             HealingTools => Null_Unbounded_String, HealingSkill => 1,
             Flags => TmpFood, Careers => TmpCareers,
-            BaseIcon => Wide_Character'Val(16#f5d2#));
+            BaseIcon => Wide_Character'Val(16#f5d2#), BasesTypes => TmpFood);
          FactionNode := Item(NodesList, I);
          FactionIndex :=
            To_Unbounded_String(Get_Attribute(FactionNode, "index"));
@@ -282,7 +283,13 @@ package body Factions is
                   end case;
                end if;
             end loop;
+            AddChildNode(TempRecord.BasesTypes, "basetype", I, False);
             if Action /= UPDATE then
+               if TempRecord.BasesTypes.Length = 0 then
+                  for I in BasesTypes_List.Iterate loop
+                     TempRecord.BasesTypes.Append(BasesTypes_Container.Key(I));
+                  end loop;
+               end if;
                Factions_Container.Include
                  (Factions_List, FactionIndex, TempRecord);
                LogMessage

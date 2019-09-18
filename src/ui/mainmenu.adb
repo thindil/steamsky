@@ -662,6 +662,30 @@ package body MainMenu is
          Show_All(Gtk_Widget(Get_Object(Object, "cmbgender")));
          Show_All(Gtk_Widget(Get_Object(Object, "lblgender")));
       end if;
+      declare
+         BasesList: constant Gtk_List_Store :=
+           Gtk_List_Store(Get_Object(Builder, "basesstore"));
+         BaseIter: Gtk_Tree_Iter;
+      begin
+         BasesList.Clear;
+         Append(BasesList, BaseIter);
+         Set(BasesList, BaseIter, 0, "Any");
+         Set
+           (BasesList, BaseIter, 1,
+            "Start game in randomly selected base type.");
+         for BaseType of Factions_List(FactionIndex).BasesTypes loop
+            Append(BasesList, BaseIter);
+            Set
+              (BasesList, BaseIter, 0,
+               To_String(BasesTypes_List(BaseType).Name));
+            Set
+              (BasesList, BaseIter, 1,
+               To_String(BasesTypes_List(BaseType).Description));
+         end loop;
+         Setting := True;
+         Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbbasetype")), 0);
+         Setting := False;
+      end;
    end ShowFactionDescription;
 
    -- ****if* MainMenu/ShowCareerDescription
@@ -713,7 +737,7 @@ package body MainMenu is
       BasesTypesList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Object, "basesstore"));
    begin
-      if BaseTypeIndex = -1 then
+      if BaseTypeIndex = -1 or Setting then
          return;
       end if;
       Set_Label

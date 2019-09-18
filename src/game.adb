@@ -148,6 +148,15 @@ package body Game is
                     GetReputation
                       (NewGameSettings.PlayerFaction,
                        Factions_Container.Key(J));
+                  BaseTypeRoll :=
+                    GetRandom(1, Integer(Factions_List(J).BasesTypes.Length));
+                  for BType of Factions_List(J).BasesTypes loop
+                     BaseTypeRoll := BaseTypeRoll - 1;
+                     if BaseTypeRoll = 0 then
+                        BaseType := BType;
+                        exit;
+                     end if;
+                  end loop;
                   exit;
                end if;
             end loop;
@@ -160,14 +169,6 @@ package body Game is
             else
                BaseSize := Big;
             end if;
-            BaseTypeRoll := GetRandom(1, Integer(BasesTypes_List.Length));
-            for J in BasesTypes_List.Iterate loop
-               BaseTypeRoll := BaseTypeRoll - 1;
-               if BaseTypeRoll = 0 then
-                  BaseType := BasesTypes_Container.Key(J);
-                  exit;
-               end if;
-            end loop;
             SkyBases(I) :=
               (Name => GenerateBaseName(BaseOwner), Visited => (others => 0),
                SkyX => 0, SkyY => 0, BaseType => BaseType,
