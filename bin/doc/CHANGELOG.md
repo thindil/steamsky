@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
   greenhouse, large bronze greenhouse, large iron greenhouse, large steel
   greenhouse, large titanium greenhouse, large orichalcum greenhouse, large
   adamantium greenhouse, huge bronze greenhouse, huge iron greenhouse, huge
-  steel greenhouse, huge titanium greenhouse
+  steel greenhouse, huge titanium greenhouse, huge orichalcum greenhouse
 
 ### Changed
 - Updated MODDING.md
