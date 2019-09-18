@@ -272,7 +272,8 @@ package Bases is
       -- FUNCTION
       -- Random changes of items prices in base
       -- SOURCE
-   procedure UpdatePrices;
-   -- ****
+   procedure UpdatePrices with
+      Test_Case => ("Test_UpdatePrices", Robustness);
+      -- ****
 
 end Bases;
