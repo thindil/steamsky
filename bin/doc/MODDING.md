@@ -807,6 +807,9 @@ story.
    - Attribute `sellprice`: price for which item is sell in that type of base.
      If you want make selected item buyable in that type of base, you must add
      this attribute.
+   - Attribute "buyprice": price for which item will be bought in that type of
+     base. If you want item to have special price in selected type of base you
+     must add this attribute.
 - Tag `recipe` is used to set which recipes are available to buy in that type
   of bases.
    - Attribute `index`: Index of the recipe to buy, from file "recipes.dat".
