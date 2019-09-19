@@ -683,6 +683,10 @@ Value must be existing skill name.
       ships file.
     - Attribute `name`: optional attribute. Specific name of career for this
       faction. Will be show to player instead of default name.
+- Tags `basetype`: Available base types for this faction. If you don't add
+  any that tag, all bases types available in the game will be available for
+  that faction.
+    - Attribute `name`: index of the base type from *data/bases.dat* file.
 
 ## Stories
 
