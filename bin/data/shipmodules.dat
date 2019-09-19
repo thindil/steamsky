@@ -510,5 +510,6 @@ types of modules) the module can have. Default value is 1.
  <module durability="2000" index="475" installtime="320" material="Orichalcum" maxowners="4" name="Huge orichalcum greenhouse" price="48000" size="4" skill="Engineering" type="GREENHOUSE" value="0" weight="8800">Allows cultivation of plants. Made of orichalcum. Huge sized.</module>
  <module durability="2400" index="476" installtime="320" material="Adamantium" maxowners="4" name="Huge adamantium greenhouse" price="96000" size="4" skill="Engineering" type="GREENHOUSE" value="0" weight="8800">Allows cultivation of plants. Made of adamantium. Huge sized.</module>
  <module durability="200" index="477" installtime="100" material="Bronze" maxowners="2" maxvalue="0" name="Medium bronze training room" price="4000" size="2" skill="Engineering" type="TRAINING_ROOM" value="0" weight="800">Allow training skills on ship. Medium sized.</module>
+ <module durability="400" index="478" installtime="100" material="Iron" maxowners="2" maxvalue="0" name="Medium iron training room" price="8000" size="2" skill="Engineering" type="TRAINING_ROOM" value="0" weight="800">Allow training skills on ship. More durable and medium sized version.</module>
 </modules>
 
