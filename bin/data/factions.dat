@@ -106,6 +106,16 @@ faction. Will be show to player instead of default name.
   <career index="hunter" playerindex="1" shipindex="168">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
   <career index="explorer" playerindex="1" shipindex="171">Career focused on exploring. You get average equipped small ship, with smaller cargo space than general career's ship but with water collector installed on it.</career>
   <career index="crafter" playerindex="1" shipindex="173">Career focused on crafting. You get average equipped small ship, with smaller cargo space than general career's ship but with furnace installed on it. Additionally, you will know more crafting recipes at start.</career>
+<!-- Tags "basetype": Available base types for this faction. If you don't add
+any that tag, all bases types available in the game will be available for that
+faction.
+- Attribute "name": index of the base type from *data/bases.dat* file.
+-->
+  <basetype name="0" />
+  <basetype name="1" />
+  <basetype name="2" />
+  <basetype name="3" />
+  <basetype name="4" />
  </faction>
  <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" spawn="20" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine" baseicon="f5df">
   <relation faction="POLEIS" reputation="0" friendly="Y" />
@@ -137,6 +147,11 @@ bases of that faction are not grouped near self.
   <career index="hunter" playerindex="184" shipindex="303">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
   <career index="explorer" playerindex="184" shipindex="304">Career focused on exploring. You get average equipped small ship, with smaller cargo space than general career's ship but with water collector installed on it.</career>
   <career index="crafter" playerindex="184" shipindex="305">Career focused on crafting. You get average equipped small ship, with smaller cargo space than general career's ship but with furnace installed on it. Additionally, you will know more crafting recipes at start.</career>
+  <basetype name="0" />
+  <basetype name="1" />
+  <basetype name="2" />
+  <basetype name="3" />
+  <basetype name="4" />
  </faction>
  <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" spawn="8" minpopulation="0" maxpopulation="500" playerindex="1" healingtools="Medicines" healingskill="Medicine" baseicon="fc72">
   <relation faction="POLEIS" reputation="-10" friendly="N" />
@@ -153,6 +168,11 @@ bases of that faction are not grouped near self.
   <career index="general" playerindex="188" shipindex="161">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
   <career index="merchant" playerindex="188" shipindex="306">Career focused on trading. You get unarmed small ship with larger cargo space and more moneys. Your crew will be bit smaller that General. At beginning is better to avoid combat.</career>
   <career index="hunter" playerindex="188" shipindex="307">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
+  <basetype name="0" />
+  <basetype name="1" />
+  <basetype name="2" />
+  <basetype name="3" />
+  <basetype name="4" />
  </faction>
  <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" spawn="8" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine" baseicon="fb8a">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
@@ -169,6 +189,11 @@ bases of that faction are not grouped near self.
   <flag name="toxicattack" />
   <career index="general" playerindex="75" shipindex="164">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
   <career index="hunter" playerindex="75" shipindex="169">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
+  <basetype name="0" />
+  <basetype name="1" />
+  <basetype name="2" />
+  <basetype name="3" />
+  <basetype name="4" />
  </faction>
  <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" spawn="7" minpopulation="0" maxpopulation="500" namestype="robotic" healingtools="Bronze" healingskill="Engineering" baseicon="f013">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
@@ -189,6 +214,11 @@ bases of that faction are not grouped near self.
   <career index="hunter" playerindex="76" shipindex="170">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
   <career index="explorer" playerindex="76" shipindex="172">Career focused on exploring. You get average equipped small ship, with smaller cargo space than general career's ship but with water collector installed on it.</career>
   <career index="crafter" playerindex="76" shipindex="174">Career focused on crafting. You get average equipped small ship, with smaller cargo space than general career's ship but with furnace installed on it. Additionally, you will know more crafting recipes at start.</career>
+  <basetype name="0" />
+  <basetype name="1" />
+  <basetype name="2" />
+  <basetype name="3" />
+  <basetype name="4" />
  </faction>
  <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" spawn="6" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine" baseicon="f643">
   <relation faction="POLEIS" reputation="-50" friendly="N" />
@@ -204,6 +234,11 @@ bases of that faction are not grouped near self.
   <flag name="fanaticism" />
   <career index="general" playerindex="192" shipindex="166">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
   <career index="hunter" playerindex="192" shipindex="308">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
+  <basetype name="0" />
+  <basetype name="1" />
+  <basetype name="2" />
+  <basetype name="3" />
+  <basetype name="4" />
  </faction>
 </factions>
 
