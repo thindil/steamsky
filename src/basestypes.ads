@@ -104,7 +104,8 @@ package BasesTypes is
    function Is_Buyable
      (BaseType, ItemIndex: Unbounded_String) return Boolean with
       Pre => BasesTypes_List.Contains(BaseType) and
-      Items_List.Contains(ItemIndex);
+      Items_List.Contains(ItemIndex),
+      Test_Case => ("Test_Is_Buyable", Nominal);
       -- ****
 
       -- ****f* BasesTypes/Get_Price
