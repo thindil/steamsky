@@ -92,6 +92,15 @@ package Factions is
       Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
+   -- ****t* Factions/BaseType_Container
+   -- FUNCTION
+   -- Used to store bases types data in faction
+   -- SOURCE
+   package BaseType_Container is new Hashed_Maps(Unbounded_String, Positive,
+      Ada.Strings.Unbounded.Hash, "=");
+   -- ****
+
+   -- ****
    -- ****t* Factions/FactionRecord
    -- FUNCTION
    -- Data structure for faction
@@ -118,9 +127,9 @@ package Factions is
    -- Flags            - Various flags for faction (no gender, etc)
    -- Careers          - List of possible careers for that faction
    -- BaseIcon         - Character used as base icon on map for this faction
-   -- BasesTypes       - List of available base types for this faction. If
-   --                    empty then all bases types are available for this
-   --                    faction
+   -- BasesTypes       - List of available base types (with chances to spawn)
+   --                    for this faction. If it is empty then all bases types
+   --                    are available for this faction
    -- SOURCE
    type FactionRecord is record
       Name: Unbounded_String;
@@ -138,7 +147,7 @@ package Factions is
       Flags: UnboundedString_Container.Vector;
       Careers: Careers_Container.Map;
       BaseIcon: Wide_Character;
-      BasesTypes: UnboundedString_Container.Vector;
+      BasesTypes: BaseType_Container.Map;
    end record;
    -- ****
 
