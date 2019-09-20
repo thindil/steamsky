@@ -43,6 +43,8 @@ package body Factions is
       FactionNode, ChildNode: Node;
       DeleteIndex: Positive;
       Action, SubAction: DataAction;
+      TmpBaseTypeChance: Positive;
+      TmpBasesTypes: BaseType_Container.Map;
       procedure AddChildNode
         (Data: in out UnboundedString_Container.Vector; Name: String;
          Index: Natural; CheckItemType: Boolean := True) is
@@ -96,7 +98,8 @@ package body Factions is
             FoodTypes => TmpFood, DrinksTypes => TmpFood,
             HealingTools => Null_Unbounded_String, HealingSkill => 1,
             Flags => TmpFood, Careers => TmpCareers,
-            BaseIcon => Wide_Character'Val(16#f5d2#), BasesTypes => TmpFood);
+            BaseIcon => Wide_Character'Val(16#f5d2#),
+            BasesTypes => TmpBasesTypes);
          FactionNode := Item(NodesList, I);
          FactionIndex :=
            To_Unbounded_String(Get_Attribute(FactionNode, "index"));
@@ -283,11 +286,48 @@ package body Factions is
                   end case;
                end if;
             end loop;
-            AddChildNode(TempRecord.BasesTypes, "basetype", I, False);
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (FactionNode, "basetype");
+            for J in 0 .. Length(ChildNodes) - 1 loop
+               ChildNode := Item(ChildNodes, J);
+               CareerIndex :=
+                 To_Unbounded_String(Get_Attribute(ChildNode, "index"));
+               if Get_Attribute(ChildNode, "action")'Length > 0 then
+                  SubAction :=
+                    DataAction'Value(Get_Attribute(ChildNode, "action"));
+               else
+                  SubAction := ADD;
+               end if;
+               if Get_Attribute(ChildNode, "chance") /= "" then
+                  TmpBaseTypeChance :=
+                    Positive'Value(Get_Attribute(ChildNode, "chance"));
+               else
+                  TmpBaseTypeChance :=
+                    Factions_List(FactionIndex).BasesTypes(CareerIndex);
+               end if;
+               if BasesTypes_Container.Contains
+                   (BasesTypes_List, CareerIndex) then
+                  case SubAction is
+                     when REMOVE =>
+                        Factions.BaseType_Container.Exclude
+                          (TempRecord.BasesTypes, CareerIndex);
+                     when UPDATE =>
+                        TempRecord.BasesTypes(CareerIndex) :=
+                          TmpBaseTypeChance;
+                     when ADD =>
+                        Factions.BaseType_Container.Include
+                          (TempRecord.BasesTypes, CareerIndex,
+                           TmpBaseTypeChance);
+                  end case;
+               end if;
+            end loop;
             if Action /= UPDATE then
                if TempRecord.BasesTypes.Length = 0 then
                   for I in BasesTypes_List.Iterate loop
-                     TempRecord.BasesTypes.Append(BasesTypes_Container.Key(I));
+                     Factions.BaseType_Container.Include
+                       (TempRecord.BasesTypes, BasesTypes_Container.Key(I),
+                        20);
                   end loop;
                end if;
                Factions_Container.Include

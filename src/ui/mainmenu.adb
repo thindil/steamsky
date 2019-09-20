@@ -673,14 +673,15 @@ package body MainMenu is
          Set
            (BasesList, BaseIter, 1,
             "Start game in randomly selected base type.");
-         for BaseType of Factions_List(FactionIndex).BasesTypes loop
+         for I in Factions_List(FactionIndex).BasesTypes.Iterate loop
             Append(BasesList, BaseIter);
             Set
               (BasesList, BaseIter, 0,
-               To_String(BasesTypes_List(BaseType).Name));
+               To_String(BasesTypes_List(BaseType_Container.Key(I)).Name));
             Set
               (BasesList, BaseIter, 1,
-               To_String(BasesTypes_List(BaseType).Description));
+               To_String
+                 (BasesTypes_List(BaseType_Container.Key(I)).Description));
          end loop;
          Setting := True;
          Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbbasetype")), 0);
