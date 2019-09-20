@@ -108,7 +108,7 @@ package body Game is
               (BaseIndex => 0, Visited => False, EventIndex => 0,
                MissionIndex => 0)));
       declare
-         MaxSpawnRoll: Natural := 0;
+         MaxSpawnRoll, MaxBaseSpawnRoll: Natural := 0;
          FactionRoll: Positive;
          ValidLocation: Boolean;
          TempX, TempY, BaseReputation, PosX, PosY: Integer;
@@ -148,12 +148,17 @@ package body Game is
                     GetReputation
                       (NewGameSettings.PlayerFaction,
                        Factions_Container.Key(J));
-                  BaseTypeRoll :=
-                    GetRandom(1, Integer(Factions_List(J).BasesTypes.Length));
-                  for BType of Factions_List(J).BasesTypes loop
-                     BaseTypeRoll := BaseTypeRoll - 1;
-                     if BaseTypeRoll = 0 then
-                        BaseType := BType;
+                  MaxBaseSpawnRoll := 0;
+                  for SpawnChance of Factions_List(J).BasesTypes loop
+                     MaxBaseSpawnRoll := MaxBaseSpawnRoll + SpawnChance;
+                  end loop;
+                  BaseTypeRoll := GetRandom(1, MaxBaseSpawnRoll);
+                  for K in Factions_List(J).BasesTypes.Iterate loop
+                     if BaseTypeRoll > Factions_List(J).BasesTypes(K) then
+                        BaseTypeRoll :=
+                          BaseTypeRoll - Factions_List(J).BasesTypes(K);
+                     else
+                        BaseType := BaseType_Container.Key(K);
                         exit;
                      end if;
                   end loop;
