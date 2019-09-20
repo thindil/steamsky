@@ -120,7 +120,8 @@ package BasesTypes is
    function Get_Price
      (BaseType, ItemIndex: Unbounded_String) return Natural with
       Pre => BasesTypes_List.Contains(BaseType) and
-      Items_List.Contains(ItemIndex);
+      Items_List.Contains(ItemIndex),
+      Test_Case => ("Test_Get_Price", Nominal);
       -- ****
 
 end BasesTypes;
