@@ -686,7 +686,14 @@ Value must be existing skill name.
 - Tags `basetype`: Available base types for this faction. If you don't add
   any that tag, all bases types available in the game will be available for
   that faction.
-    - Attribute `name`: index of the base type from *data/bases.dat* file.
+    - Attribute `index`: index of the base type from *data/bases.dat* file.
+    - Attribute `chance`: chance to that newly created sky base will be this
+      type. Value of this attribute is roll on dice with sum of "chance"
+      attributes of all bases types available for this faction. For example if
+      there will be 2 base types, one with "chance" = 50 and second with
+      "chance" = 20 then if roll on dice 70 will be equal or lower to 50 it
+      will be first base type, when between 51 and 70 it will be second base
+      type.
 
 ## Stories
 
