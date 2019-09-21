@@ -513,5 +513,6 @@ types of modules) the module can have. Default value is 1.
  <module durability="400" index="478" installtime="100" material="Iron" maxowners="2" maxvalue="0" name="Medium iron training room" price="8000" size="2" skill="Engineering" type="TRAINING_ROOM" value="0" weight="800">Allow training skills on ship. More durable and medium sized version.</module>
  <module durability="600" index="479" installtime="100" material="Steel" maxowners="2" maxvalue="0" name="Medium steel training room" price="16000" size="2" skill="Engineering" type="TRAINING_ROOM" value="0" weight="900">Allow training skills on ship. More durable and medium sized version, made of steel.</module>
  <module durability="800" index="480" installtime="150" material="Titanium" maxowners="2" maxvalue="0" name="Medium titanium training room" price="32000" size="2" skill="Engineering" type="TRAINING_ROOM" value="0" weight="900">Allow training skills on ship. More durable and medium sized version made of titanium.</module>
+ <module durability="1000" index="481" installtime="150" material="Orichalcum" maxowners="2" maxvalue="0" name="Medium orichalcum training room" price="64000" size="2" skill="Engineering" type="TRAINING_ROOM" value="0" weight="900">Allow training skills on ship. More durable and medium sized version made of orichalcum.</module>
 </modules>
 
