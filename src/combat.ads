@@ -149,8 +149,10 @@ package Combat is
    function StartCombat
      (EnemyIndex: Unbounded_String; NewCombat: Boolean := True)
       return Boolean with
-      Pre => ProtoShips_Container.Contains(ProtoShips_List, EnemyIndex);
+      Pre => ProtoShips_Container.Contains(ProtoShips_List, EnemyIndex),
+      Test_Case => ("Test_StartCombat", Nominal);
       -- ****
+
       -- ****f* Combat/CombatTurn
       -- FUNCTION
       -- Count damage/ships actions, etc
