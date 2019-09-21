@@ -218,7 +218,7 @@ presented to the player during selection of starting base in main menu.
 -->
   <description>Industrial bases provide tools and materials for crafting. Little more difficult start point than Agricultural bases.</description>
  </base>
- <base index="1" name="Agricultural" color="00ff00">
+ <base index="1" name="Agricultural" color="007800">
   <item index="2" sellprice="2" />
   <item index="3" sellprice="1" />
   <item index="6" sellprice="1" />
