@@ -83,6 +83,46 @@ package body Combat.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_CombatTurn_4b34b0_e12d30
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Combat.CombatTurn;
+   end Wrap_Test_CombatTurn_4b34b0_e12d30;
+--  end read only
+
+--  begin read only
+   procedure Test_CombatTurn_test_combatturn (Gnattest_T : in out Test);
+   procedure Test_CombatTurn_4b34b0_e12d30 (Gnattest_T : in out Test) renames Test_CombatTurn_test_combatturn;
+--  id:2.2/4b34b0f86cde143a/CombatTurn/1/0/test_combatturn/
+   procedure Test_CombatTurn_test_combatturn (Gnattest_T : in out Test) is
+   procedure CombatTurn renames Wrap_Test_CombatTurn_4b34b0_e12d30;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      OldX: constant Positive := PlayerShip.SkyX;
+      OldY: constant Positive := PlayerShip.SkyY;
+
+   begin
+
+      PlayerShip.SkyX := 5;
+      PlayerShip.SkyY := 5;
+      PlayerShip.Speed := FULL_SPEED;
+      if StartCombat(To_Unbounded_String("2")) then
+         CombatTurn;
+         Assert(True, "This test can only crash.");
+      else
+         CombatTurn;
+         Assert(True, "This test can only crash.");
+      end if;
+      PlayerShip.Speed := Docked;
+      PlayerShip.SkyX := OldX;
+      PlayerShip.SkyY := OldY;
+
+--  begin read only
+   end Test_CombatTurn_test_combatturn;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
