@@ -157,7 +157,8 @@ package Combat is
       -- FUNCTION
       -- Count damage/ships actions, etc
       -- SOURCE
-   procedure CombatTurn;
-   -- ****
+   procedure CombatTurn with
+      Test_Case => ("Test_CombatTurn", Robustness);
+      -- ****
 
 end Combat;
