@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
   orichalcum training room, medium adamantium training room, large bronze
   training room, large iron training room
 - Option to set which bases types are available for each faction
+- Option to set chance for spawn for each base type for each faction
 
 ### Changed
 - Updated MODDING.md
