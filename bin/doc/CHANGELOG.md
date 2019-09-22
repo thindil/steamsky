@@ -13,7 +13,8 @@ All notable changes to this project will be documented in this file.
   steel greenhouse, huge titanium greenhouse, huge orichalcum greenhouse, huge
   adamantium greenhouse, medium bronze training room, medium iron training
   room, medium steel training room, medium titanium training room, medium
-  orichalcum training room, medium adamantium training room
+  orichalcum training room, medium adamantium training room, large bronze
+  training room
 - Option to set which bases types are available for each faction
 
 ### Changed
