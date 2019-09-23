@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Update contributing guide
+
 ### Fixed
 - Crash on editing not visited base in debug menu
 
