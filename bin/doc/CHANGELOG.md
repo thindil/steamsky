@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Changed prices for items in bases on one price in data files
 - Updated items, recipes and factions data
 - Updated README.md
+- Updated contributing guide
 
 ### Removed
 - Info about which base type sells recipes from recipes data file
