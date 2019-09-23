@@ -624,6 +624,11 @@ package body Maps.UI.Handlers is
                Set_No_Show_All
                  (Gtk_Widget(Get_Object(Object, "btnshipyard")), False);
             end if;
+            if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
+                (To_Unbounded_String("temple")) then
+               Set_No_Show_All
+                 (Gtk_Widget(Get_Object(Object, "btnpray")), False);
+            end if;
             for I in Recipes_List.Iterate loop
                if Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) =
                  UnboundedString_Container.No_Index and
@@ -1284,6 +1289,14 @@ package body Maps.UI.Handlers is
                CurrentStory.ShowText := False;
             end if;
          end;
+      elsif User_Data = Get_Object(Builder, "btnpray") then
+         for I in PlayerShip.Crew.Iterate loop
+            UpdateMorale(PlayerShip, Crew_Container.To_Index(I), 10);
+         end loop;
+         AddMessage
+           ("You and your crew were praying for some time. Now you all feel a bit better.",
+            OrderMessage);
+         UpdateGame(30);
       else
          CountPrice(Price, TraderIndex);
          if ShowConfirmDialog
