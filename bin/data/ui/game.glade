@@ -389,6 +389,21 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       </packing>
     </child>
     <child>
+      <object class="GtkButton" id="btnpray">
+        <property name="label" translatable="yes">Pray</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Execute_Order" object="btnpray" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">11</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkButton" id="btnheal">
         <property name="label" translatable="yes">Heal _wounded</property>
         <property name="visible">True</property>
@@ -400,7 +415,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">11</property>
+        <property name="position">12</property>
       </packing>
     </child>
     <child>
@@ -415,7 +430,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">12</property>
+        <property name="position">13</property>
       </packing>
     </child>
     <child>
@@ -430,7 +445,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">13</property>
+        <property name="position">14</property>
       </packing>
     </child>
     <child>
@@ -445,7 +460,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">14</property>
+        <property name="position">15</property>
       </packing>
     </child>
     <child>
@@ -460,7 +475,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">15</property>
+        <property name="position">16</property>
       </packing>
     </child>
     <child>
@@ -475,7 +490,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">16</property>
+        <property name="position">17</property>
       </packing>
     </child>
     <child>
@@ -490,7 +505,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">17</property>
+        <property name="position">18</property>
       </packing>
     </child>
     <child>
@@ -505,7 +520,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">18</property>
+        <property name="position">19</property>
       </packing>
     </child>
     <child>
@@ -520,7 +535,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">19</property>
+        <property name="position">20</property>
       </packing>
     </child>
   </object>
