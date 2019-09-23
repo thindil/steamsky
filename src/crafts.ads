@@ -113,18 +113,19 @@ package Crafts is
    -- PARAMETERS
    -- Minutes - How many in game minutes passed
    -- SOURCE
-   procedure Manufacturing(Minutes: Positive);
-   -- ****
+   procedure Manufacturing(Minutes: Positive) with
+      Test_Case => ("Test_Manufacturing", Robustness);
+      -- ****
 
-   -- ****f* Crafts/CheckRecipe
-   -- FUNCTION
-   -- Check if player have all requirements for selected recipe
-   -- PARAMETERS
-   -- RecipeIndex - Index of the prototype recipe to check or if deconstruct
-   --               existing item, "Deconstruct " + item name.
-   -- RESULT
-   -- Max amount of items which can be craft
-   -- SOURCE
+      -- ****f* Crafts/CheckRecipe
+      -- FUNCTION
+      -- Check if player have all requirements for selected recipe
+      -- PARAMETERS
+      -- RecipeIndex - Index of the prototype recipe to check or if deconstruct
+      --               existing item, "Deconstruct " + item name.
+      -- RESULT
+      -- Max amount of items which can be craft
+      -- SOURCE
    function CheckRecipe(RecipeIndex: Unbounded_String) return Positive with
       Pre => RecipeIndex /= Null_Unbounded_String;
       -- ****
