@@ -127,7 +127,8 @@ package Crafts is
       -- Max amount of items which can be craft
       -- SOURCE
    function CheckRecipe(RecipeIndex: Unbounded_String) return Positive with
-      Pre => RecipeIndex /= Null_Unbounded_String;
+      Pre => RecipeIndex /= Null_Unbounded_String,
+      Test_Case => ("Test_CheckRecipe", Nominal);
       -- ****
 
       -- ****f* Crafts/SetRecipe

@@ -15,6 +15,8 @@ with System.Assertions;
 --
 --  end read only
 
+with Ships.Cargo; use Ships.Cargo;
+
 --  begin read only
 --  end read only
 package body Crafts.Test_Data.Tests is
@@ -53,6 +55,57 @@ package body Crafts.Test_Data.Tests is
 
 --  begin read only
    end Test_Manufacturing_test_manufacturing;
+--  end read only
+
+--  begin read only
+   function Wrap_Test_CheckRecipe_6b22c5_37e1c4 (RecipeIndex: Unbounded_String)  return Positive
+   is
+   begin
+      begin
+         pragma Assert
+           (RecipeIndex /= Null_Unbounded_String);
+         null;
+      exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "req_sloc(crafts.ads:0):Test_CheckRecipe test requirement violated");
+      end;
+      declare
+         Test_CheckRecipe_6b22c5_37e1c4_Result : constant Positive := GNATtest_Generated.GNATtest_Standard.Crafts.CheckRecipe (RecipeIndex);
+      begin
+         begin
+            pragma Assert
+              (True);
+            null;
+         exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "ens_sloc(crafts.ads:0:):Test_CheckRecipe test commitment violated");
+         end;
+         return Test_CheckRecipe_6b22c5_37e1c4_Result;
+      end;
+   end Wrap_Test_CheckRecipe_6b22c5_37e1c4;
+--  end read only
+
+--  begin read only
+   procedure Test_CheckRecipe_test_checkrecipe (Gnattest_T : in out Test);
+   procedure Test_CheckRecipe_6b22c5_37e1c4 (Gnattest_T : in out Test) renames Test_CheckRecipe_test_checkrecipe;
+--  id:2.2/6b22c50e71f35d02/CheckRecipe/1/0/test_checkrecipe/
+   procedure Test_CheckRecipe_test_checkrecipe (Gnattest_T : in out Test) is
+      function CheckRecipe (RecipeIndex: Unbounded_String) return Positive renames Wrap_Test_CheckRecipe_6b22c5_37e1c4;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      UpdateCargo(PlayerShip, To_Unbounded_String("6"), 10);
+      Assert(CheckRecipe(To_Unbounded_String("1")) > 0, "Failed to check crafting recipe requirements.");
+
+--  begin read only
+   end Test_CheckRecipe_test_checkrecipe;
 --  end read only
 
 --  begin read only

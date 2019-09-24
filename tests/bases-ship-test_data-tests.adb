@@ -120,10 +120,10 @@ package body Bases.Ship.Test_Data.Tests is
 
    begin
 
-      UpgradeShip(False, To_Unbounded_String("9"));
-      Assert(PlayerShip.Modules.Length = 12, "Failed to remove module on player ship.");
+      UpgradeShip(False, To_Unbounded_String("4"));
+      Assert(PlayerShip.Modules.Length = 11, "Failed to remove module on player ship.");
       UpgradeShip(True, To_Unbounded_String("6"));
-      Assert(PlayerShip.Modules.Length = 13, "Failed to install module on player ship.");
+      Assert(PlayerShip.Modules.Length = 12, "Failed to install module on player ship.");
 
 --  begin read only
    end Test_UpgradeShip_test_updgradeship;
