@@ -818,7 +818,7 @@ story.
    - Attribute `sellprice`: price for which item is sell in that type of base.
      If you want make selected item buyable in that type of base, you must add
      this attribute.
-   - Attribute "buyprice": price for which item will be bought in that type of
+   - Attribute `buyprice`: price for which item will be bought in that type of
      base. If you want item to have special price in selected type of base you
      must add this attribute.
 - Tag `recipe` is used to set which recipes are available to buy in that type
@@ -829,7 +829,9 @@ story.
   presented to the player during selection of starting base in main menu.
 - Tag `flags` is various info about selected base type. Possible options are:
   `shipyard` - that base type have shipyard. Ship repairs in that base are 50%
-  cheaper.
+  cheaper, `temple` - that base type allow action `Pray` which raise player
+  and the player ship crew members morale, additionally, healing wounded crew
+  members in that base is twice time cheaper.
 
 ## Themes
 
