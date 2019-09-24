@@ -220,7 +220,7 @@ package body Items.Test_Data.Tests is
 
    begin
 
-      Assert(FindItem(PlayerShip.Crew(1).Inventory, To_Unbounded_String("66")) = 1, "Can't find item with ProtoIndex.");
+      Assert(FindItem(PlayerShip.Crew(1).Inventory, To_Unbounded_String("67")) = 2, "Can't find item with ProtoIndex.");
       Assert(FindItem(Inventory => PlayerShip.Crew(1).Inventory, ItemType => To_Unbounded_String("Weapon")) = 1, "Can't find item wiht ItemType.");
       Assert(FindItem(PlayerShip.Crew(1).Inventory, To_Unbounded_String("tsdfsdf")) = 0, "Item with not existing ProtoIndex found.");
       Assert(FindItem(Inventory => PlayerShip.Crew(1).Inventory, ItemType => To_Unbounded_String("sdfsdfds")) = 0, "Item with non existing ItemType found.");
