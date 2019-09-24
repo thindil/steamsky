@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
   room, medium steel training room, medium titanium training room, medium
   orichalcum training room, medium adamantium training room, large bronze
   training room, large iron training room, large steel training room, large
-  titanium training room
+  titanium training room, large adamantium training room
 - Option to set which bases types are available for each faction
 - Option to set chance for spawn for each base type for each faction
 
