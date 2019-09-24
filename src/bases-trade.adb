@@ -216,6 +216,8 @@ package body Bases.Trade is
    procedure HealCost
      (Cost, Time: in out Natural;
       MemberIndex: Crew_Container.Extended_Index) is
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
       if MemberIndex > 0 then
          Time := 5 * (100 - PlayerShip.Crew(MemberIndex).Health);
@@ -249,6 +251,13 @@ package body Bases.Trade is
       CountPrice(Cost, FindMember(Talk));
       if Time = 0 then
          Time := 1;
+      end if;
+      if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
+          (To_Unbounded_String("temple")) then
+         Cost := Cost / 2;
+         if Cost = 0 then
+            Cost := 1;
+         end if;
       end if;
    end HealCost;
 
