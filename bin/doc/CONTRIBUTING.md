@@ -127,6 +127,14 @@ Or, if you prefer use `build.sh` command:
 More informations about code coverage and profiling, you can find in the proper
 documentation for both programs.
 
+#### Generating reports
+
+After running the game in `analyze` mode, you can generate reports by using
+`build.sh` command:
+
+- `./build.sh gcov` for generate report for the code coverage
+- `./build.sh gprof` for generate report for the code profiling
+
 ### Generating unit tests
 
 To generate (or regenerate) unit tests use command `gnattest` which generate
