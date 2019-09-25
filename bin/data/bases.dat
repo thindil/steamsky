@@ -273,7 +273,9 @@ presented to the player during selection of starting base in main menu.
 <!--
 Tag "flags" is various info about selected base type. Possible options are:
 "shipyard" - that base type have shipyard. Ship repairs in that base are 50%
-cheaper.
+cheaper, `temple` - that base type allow action `Pray` which raise player
+and the player ship crew members morale, additionally, healing wounded crew
+members in that base is twice time cheaper.
 -->
   <flag name="shipyard" />
   <description>Shipyard bases don't sell any items but offers cheaper repairs to ships and ability to upgrade ships. Difficult place for starting point.</description>
@@ -522,5 +524,18 @@ cheaper.
   <recipe index="229" />
   <recipe index="230" />
   <description>Military bases provides ammunition to guns and melee weapons. They are most difficult place for starting point.</description>
+ </base>
+ <base index="5" name="Temple" color="7f6b00">
+  <item index="2" sellprice="2" />
+  <item index="3" sellprice="1" />
+  <item index="22" sellprice="5" />
+  <item index="28" sellprice="3" />
+  <item index="29" sellprice="2" />
+  <recipe index="1" />
+  <recipe index="17" />
+  <recipe index="18" />
+  <recipe index="20" />
+  <flag name="temple" />
+  <description>Temple bases provides ability to pray for your ship crew members. Additinally, healing there is a lot cheaper than in other bases. They also provide basic food and drinks. Little more difficult starting point than Agricultural bases.</description>
  </base>
 </bases>
