@@ -144,7 +144,8 @@ package Crafts is
      (Workshop, Amount: Positive; RecipeIndex: Unbounded_String) with
       Pre =>
       (Workshop <= PlayerShip.Modules.Last_Index and
-       RecipeIndex /= Null_Unbounded_String);
+       RecipeIndex /= Null_Unbounded_String),
+      Test_Case => ("Test_SetRecipe", Nominal);
       -- ****
 
 end Crafts;
