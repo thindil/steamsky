@@ -109,6 +109,54 @@ package body Crafts.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_SetRecipe_d9013b_dcc889 (Workshop, Amount: Positive; RecipeIndex: Unbounded_String) 
+   is
+   begin
+      begin
+         pragma Assert
+           ((Workshop <= PlayerShip.Modules.Last_Index and RecipeIndex /= Null_Unbounded_String));
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(crafts.ads:0):Test_SetRecipe test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Crafts.SetRecipe (Workshop, Amount, RecipeIndex);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(crafts.ads:0:):Test_SetRecipe test commitment violated");
+      end;
+   end Wrap_Test_SetRecipe_d9013b_dcc889;
+--  end read only
+
+--  begin read only
+   procedure Test_SetRecipe_test_setrecipe (Gnattest_T : in out Test);
+   procedure Test_SetRecipe_d9013b_dcc889 (Gnattest_T : in out Test) renames Test_SetRecipe_test_setrecipe;
+--  id:2.2/d9013bfcb0ae8d7e/SetRecipe/1/0/test_setrecipe/
+   procedure Test_SetRecipe_test_setrecipe (Gnattest_T : in out Test) is
+   procedure SetRecipe (Workshop, Amount: Positive; RecipeIndex: Unbounded_String) renames Wrap_Test_SetRecipe_d9013b_dcc889;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      UpdateCargo(PlayerShip, To_Unbounded_String("6"), 10);
+      SetRecipe(9, 10, To_Unbounded_String("1"));
+      Assert(PlayerShip.Modules(9).CraftingAmount = 10, "Failed to set crafting recipe.");
+
+--  begin read only
+   end Test_SetRecipe_test_setrecipe;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
