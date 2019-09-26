@@ -245,6 +245,7 @@ bases of that faction are not grouped near self.
   <basetype index="2" chance="20" />
   <basetype index="3" chance="20" />
   <basetype index="4" chance="20" />
+  <basetype index="5" chance="10" />
  </faction>
 </factions>
 
