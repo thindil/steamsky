@@ -44,7 +44,8 @@ package Crew.Inventory is
       Durability, InventoryIndex, Price: Natural := 0) with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
-       InventoryIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index);
+       InventoryIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index),
+      Test_Case => ("Test_UpdateInventory", Nominal);
       -- ****
 
       -- ****f* Crew.Inventory/FreeInventory
