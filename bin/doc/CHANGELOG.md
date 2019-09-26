@@ -21,7 +21,8 @@ All notable changes to this project will be documented in this file.
 - Option to set which bases types are available for each faction
 - Option to set chance for spawn for each base type for each faction
 - New flag for bases types: temple
-- New base type for Inquisition: Temple
+- New base type - Temple
+- Added temple base type to the Inquisition faction
 
 ### Changed
 - Updated MODDING.md
