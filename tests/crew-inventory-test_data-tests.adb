@@ -79,6 +79,58 @@ package body Crew.Inventory.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_FreeInventory_df8fe5_59014f (MemberIndex: Positive; Amount: Integer)  return Integer
+   is
+   begin
+      begin
+         pragma Assert
+           (MemberIndex <= PlayerShip.Crew.Last_Index);
+         null;
+      exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "req_sloc(crew-inventory.ads:0):Test_FreeInventory test requirement violated");
+      end;
+      declare
+         Test_FreeInventory_df8fe5_59014f_Result : constant Integer := GNATtest_Generated.GNATtest_Standard.Crew.Inventory.FreeInventory (MemberIndex, Amount);
+      begin
+         begin
+            pragma Assert
+              (True);
+            null;
+         exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "ens_sloc(crew-inventory.ads:0:):Test_FreeInventory test commitment violated");
+         end;
+         return Test_FreeInventory_df8fe5_59014f_Result;
+      end;
+   end Wrap_Test_FreeInventory_df8fe5_59014f;
+--  end read only
+
+--  begin read only
+   procedure Test_FreeInventory_test_freeinventory (Gnattest_T : in out Test);
+   procedure Test_FreeInventory_df8fe5_59014f (Gnattest_T : in out Test) renames Test_FreeInventory_test_freeinventory;
+--  id:2.2/df8fe5d066a1fde9/FreeInventory/1/0/test_freeinventory/
+   procedure Test_FreeInventory_test_freeinventory (Gnattest_T : in out Test) is
+      function FreeInventory (MemberIndex: Positive; Amount: Integer) return Integer renames Wrap_Test_FreeInventory_df8fe5_59014f;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      if FreeInventory(1, 0) /= 0 then
+         Assert(True, "This test can only crash.");
+      end if;
+
+--  begin read only
+   end Test_FreeInventory_test_freeinventory;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
