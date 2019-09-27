@@ -41,6 +41,7 @@ with Items; use Items;
 with Factions; use Factions;
 with Config; use Config;
 with Utils.UI; use Utils.UI;
+with BasesTypes; use BasesTypes;
 
 package body Help.UI is
 
@@ -269,6 +270,9 @@ package body Help.UI is
          To_Unbounded_String("sentientships"),
          To_Unbounded_String("fanaticism"), To_Unbounded_String("loner"));
       FactionsWithFlag: Unbounded_String;
+      BasesFlags: constant array(Positive range <>) of Unbounded_String :=
+        (To_Unbounded_String("shipyard"), To_Unbounded_String("someflag"));
+      BasesWithFlag: Unbounded_String;
    begin
       if Setting then
          return;
@@ -345,6 +349,27 @@ package body Help.UI is
                Insert(HelpBuffer, Iter, To_String(FactionsWithFlag));
                exit;
             end if;
+         end loop;
+         for BaseFlag of BasesFlags loop
+            if TagText /= BaseFlag then
+               goto Bases_Flags_Loop_End;
+            end if;
+            for BaseType of BasesTypes_List loop
+               if BaseType.Flags.Contains(TagText) then
+                  if BasesWithFlag /= Null_Unbounded_String then
+                     Append(BasesWithFlag, " and ");
+                  end if;
+                  Append(BasesWithFlag, BaseType.Name);
+               end if;
+            end loop;
+            while Ada.Strings.Unbounded.Count(BasesWithFlag, " and ") > 1 loop
+               Replace_Slice
+                 (BasesWithFlag, Index(BasesWithFlag, " and "),
+                  Index(BasesWithFlag, " and ") + 5, ", ");
+            end loop;
+            Insert(HelpBuffer, Iter, To_String(BasesWithFlag));
+            exit;
+            <<Bases_Flags_Loop_End>>
          end loop;
          OldIndex := EndIndex + 2;
       end loop;
