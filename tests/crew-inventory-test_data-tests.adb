@@ -131,6 +131,53 @@ package body Crew.Inventory.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_TakeOffItem_a8b09e_c7fb64 (MemberIndex, ItemIndex: Positive) 
+   is
+   begin
+      begin
+         pragma Assert
+           ((MemberIndex <= PlayerShip.Crew.Last_Index and ItemIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index));
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(crew-inventory.ads:0):Test_TakeOffItem test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Crew.Inventory.TakeOffItem (MemberIndex, ItemIndex);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(crew-inventory.ads:0:):Test_TakeOffItem test commitment violated");
+      end;
+   end Wrap_Test_TakeOffItem_a8b09e_c7fb64;
+--  end read only
+
+--  begin read only
+   procedure Test_TakeOffItem_test_takeoffitem (Gnattest_T : in out Test);
+   procedure Test_TakeOffItem_a8b09e_c7fb64 (Gnattest_T : in out Test) renames Test_TakeOffItem_test_takeoffitem;
+--  id:2.2/a8b09e84477e626f/TakeOffItem/1/0/test_takeoffitem/
+   procedure Test_TakeOffItem_test_takeoffitem (Gnattest_T : in out Test) is
+   procedure TakeOffItem (MemberIndex, ItemIndex: Positive) renames Wrap_Test_TakeOffItem_a8b09e_c7fb64;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      TakeOffItem(1, 1);
+      Assert(not ItemIsUsed(1, 1), "Failed to take off item from the player character.");
+
+--  begin read only
+   end Test_TakeOffItem_test_takeoffitem;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
