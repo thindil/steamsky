@@ -75,7 +75,8 @@ package Crew.Inventory is
    procedure TakeOffItem(MemberIndex, ItemIndex: Positive) with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
-       ItemIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index);
+       ItemIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index),
+      Test_Case => ("Test_TakeOffItem", Nominal);
       -- ****
 
       -- ****f* Crew.Inventory/ItemIsUsed

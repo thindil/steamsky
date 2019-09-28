@@ -15,5 +15,8 @@ package Crew.Inventory.Test_Data.Tests is
    procedure Test_FreeInventory_df8fe5_59014f (Gnattest_T : in out Test);
    --  crew-inventory.ads:61:4:FreeInventory:Test_FreeInventory
 
+   procedure Test_TakeOffItem_a8b09e_c7fb64 (Gnattest_T : in out Test);
+   --  crew-inventory.ads:75:4:TakeOffItem:Test_TakeOffItem
+
 end Crew.Inventory.Test_Data.Tests;
 --  end read only
