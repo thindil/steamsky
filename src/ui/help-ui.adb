@@ -354,6 +354,7 @@ package body Help.UI is
             if TagText /= BaseFlag then
                goto Bases_Flags_Loop_End;
             end if;
+            BasesWithFlag := Null_Unbounded_String;
             for BaseType of BasesTypes_List loop
                if BaseType.Flags.Contains(TagText) then
                   if BasesWithFlag /= Null_Unbounded_String then
