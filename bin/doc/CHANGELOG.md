@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - Updated items, recipes and factions data
 - Updated README.md
 - Updated contributing guide
+- Updated help
 
 ### Removed
 - Info about which base type sells recipes from recipes data file
