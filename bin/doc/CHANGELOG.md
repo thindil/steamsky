@@ -19,7 +19,8 @@ All notable changes to this project will be documented in this file.
   training room, huge bronze training room, huge iron training room, huge
   steel training room, huge titanium training room, huge orichalcum training
   room, huge adamantium training room, medium bronze medical room, medium
-  iron medical room, medium steel medical room
+  iron medical room, medium steel medical room, medium titanium medical
+  room
 - Option to set which bases types are available for each faction
 - Option to set chance for spawn for each base type for each faction
 - New flag for bases types: temple
