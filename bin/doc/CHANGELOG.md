@@ -43,6 +43,7 @@ All notable changes to this project will be documented in this file.
 - No base type selected in new game setting on first run
 - Crash on editing not visited base in debug menu
 - Color of agricultural bases on the map
+- Parsing factions names for selected flag in help
 
 ## [4.1] - 2019-09-08
 
