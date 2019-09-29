@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash on editing not visited base in debug menu
+- Parsing factions names for selected flag in help
 
 ## [4.0.3] - 2019-09-15
 
