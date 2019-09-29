@@ -340,7 +340,7 @@ package body Help.UI is
                  1 loop
                   Replace_Slice
                     (FactionsWithFlag, Index(FactionsWithFlag, " and "),
-                     Index(FactionsWithFlag, " and ") + 5, ", ");
+                     Index(FactionsWithFlag, " and ") + 4, ", ");
                end loop;
                Insert(HelpBuffer, Iter, To_String(FactionsWithFlag));
                exit;
