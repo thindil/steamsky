@@ -89,7 +89,8 @@ package Crew.Inventory is
    function ItemIsUsed(MemberIndex, ItemIndex: Positive) return Boolean with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
-       ItemIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index);
+       ItemIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index),
+      Test_Case => ("Test_ItemIsUsed", Nominal);
       -- ****
 
       -- ****f* Crew.Inventory/FindTools

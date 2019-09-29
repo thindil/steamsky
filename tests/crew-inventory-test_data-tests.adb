@@ -178,6 +178,57 @@ package body Crew.Inventory.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_ItemIsUsed_9a8ce5_fa2743 (MemberIndex, ItemIndex: Positive)  return Boolean
+   is
+   begin
+      begin
+         pragma Assert
+           ((MemberIndex <= PlayerShip.Crew.Last_Index and ItemIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index));
+         null;
+      exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "req_sloc(crew-inventory.ads:0):Test_ItemIsUsed test requirement violated");
+      end;
+      declare
+         Test_ItemIsUsed_9a8ce5_fa2743_Result : constant Boolean := GNATtest_Generated.GNATtest_Standard.Crew.Inventory.ItemIsUsed (MemberIndex, ItemIndex);
+      begin
+         begin
+            pragma Assert
+              (True);
+            null;
+         exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "ens_sloc(crew-inventory.ads:0:):Test_ItemIsUsed test commitment violated");
+         end;
+         return Test_ItemIsUsed_9a8ce5_fa2743_Result;
+      end;
+   end Wrap_Test_ItemIsUsed_9a8ce5_fa2743;
+--  end read only
+
+--  begin read only
+   procedure Test_ItemIsUsed_test_itemisused (Gnattest_T : in out Test);
+   procedure Test_ItemIsUsed_9a8ce5_fa2743 (Gnattest_T : in out Test) renames Test_ItemIsUsed_test_itemisused;
+--  id:2.2/9a8ce5527fb6a663/ItemIsUsed/1/0/test_itemisused/
+   procedure Test_ItemIsUsed_test_itemisused (Gnattest_T : in out Test) is
+      function ItemIsUsed (MemberIndex, ItemIndex: Positive) return Boolean renames Wrap_Test_ItemIsUsed_9a8ce5_fa2743;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(ItemIsUsed(1, 1) = False, "Failed to detect that item is not used.");
+      Assert(ItemIsUsed(1, 2) = True, "Failed to detect that item is used.");
+
+--  begin read only
+   end Test_ItemIsUsed_test_itemisused;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.

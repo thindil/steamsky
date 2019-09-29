@@ -18,5 +18,8 @@ package Crew.Inventory.Test_Data.Tests is
    procedure Test_TakeOffItem_a8b09e_c7fb64 (Gnattest_T : in out Test);
    --  crew-inventory.ads:75:4:TakeOffItem:Test_TakeOffItem
 
+   procedure Test_ItemIsUsed_9a8ce5_fa2743 (Gnattest_T : in out Test);
+   --  crew-inventory.ads:89:4:ItemIsUsed:Test_ItemIsUsed
+
 end Crew.Inventory.Test_Data.Tests;
 --  end read only
