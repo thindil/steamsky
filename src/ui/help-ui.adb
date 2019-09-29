@@ -344,7 +344,7 @@ package body Help.UI is
                  1 loop
                   Replace_Slice
                     (FactionsWithFlag, Index(FactionsWithFlag, " and "),
-                     Index(FactionsWithFlag, " and ") + 5, ", ");
+                     Index(FactionsWithFlag, " and ") + 4, ", ");
                end loop;
                Insert(HelpBuffer, Iter, To_String(FactionsWithFlag));
                exit;
@@ -366,7 +366,7 @@ package body Help.UI is
             while Ada.Strings.Unbounded.Count(BasesWithFlag, " and ") > 1 loop
                Replace_Slice
                  (BasesWithFlag, Index(BasesWithFlag, " and "),
-                  Index(BasesWithFlag, " and ") + 5, ", ");
+                  Index(BasesWithFlag, " and ") + 4, ", ");
             end loop;
             Insert(HelpBuffer, Iter, To_String(BasesWithFlag));
             exit;
