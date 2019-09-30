@@ -483,8 +483,8 @@ Value must be existing skill name.
   `nomorale`, `naturalarmor`,`toxicattack`, `sentientships`, `fanaticism`,
   `loner` which later will be replaced by list of factions which have set
   selected flag.
-- Inside help text you can use special variable `shipyard` which later will
-  be replaced by list of bases types which have set selected flag.
+- Inside help text you can use special variables `shipyard`, `temple` which
+  later will be replaced by list of bases types which have set selected flag.
 
 ## Goals
 
