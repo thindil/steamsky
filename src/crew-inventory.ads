@@ -110,7 +110,8 @@ package Crew.Inventory is
       return Natural with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
-       ItemType /= Null_Unbounded_String);
+       ItemType /= Null_Unbounded_String),
+      Test_Case => ("Test_FindTools", Nominal);
       -- ****
 
 end Crew.Inventory;

@@ -229,6 +229,57 @@ package body Crew.Inventory.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_FindTools_05b505_61150c (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders)  return Natural
+   is
+   begin
+      begin
+         pragma Assert
+           ((MemberIndex <= PlayerShip.Crew.Last_Index and ItemType /= Null_Unbounded_String));
+         null;
+      exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "req_sloc(crew-inventory.ads:0):Test_FindTools test requirement violated");
+      end;
+      declare
+         Test_FindTools_05b505_61150c_Result : constant Natural := GNATtest_Generated.GNATtest_Standard.Crew.Inventory.FindTools (MemberIndex, ItemType, Order);
+      begin
+         begin
+            pragma Assert
+              (True);
+            null;
+         exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "ens_sloc(crew-inventory.ads:0:):Test_FindTools test commitment violated");
+         end;
+         return Test_FindTools_05b505_61150c_Result;
+      end;
+   end Wrap_Test_FindTools_05b505_61150c;
+--  end read only
+
+--  begin read only
+   procedure Test_FindTools_test_findtools (Gnattest_T : in out Test);
+   procedure Test_FindTools_05b505_61150c (Gnattest_T : in out Test) renames Test_FindTools_test_findtools;
+--  id:2.2/05b505dfeefda597/FindTools/1/0/test_findtools/
+   procedure Test_FindTools_test_findtools (Gnattest_T : in out Test) is
+      function FindTools (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders) return Natural renames Wrap_Test_FindTools_05b505_61150c;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+      
+      Assert(FindTools(1, To_Unbounded_String("Bucket"), Clean) > 0, "Failed to find tools for cleaning.");
+      Assert(FindTools(1, To_Unbounded_String("sdfsdfds"), Talk) = 0, "Failed to not find non-existing tools.");
+
+--  begin read only
+   end Test_FindTools_test_findtools;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.

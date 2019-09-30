@@ -21,5 +21,8 @@ package Crew.Inventory.Test_Data.Tests is
    procedure Test_ItemIsUsed_9a8ce5_fa2743 (Gnattest_T : in out Test);
    --  crew-inventory.ads:89:4:ItemIsUsed:Test_ItemIsUsed
 
+   procedure Test_FindTools_05b505_61150c (Gnattest_T : in out Test);
+   --  crew-inventory.ads:108:4:FindTools:Test_FindTools
+
 end Crew.Inventory.Test_Data.Tests;
 --  end read only
