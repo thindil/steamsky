@@ -26,7 +26,7 @@ All notable changes to this project will be documented in this file.
 - New flag for bases types: temple
 - New base type - Temple
 - Added temple base type to the Inquisition faction
-- Added flag shipyard to the help
+- Added flags shipyard and temple to the help
 
 ### Changed
 - Updated MODDING.md
