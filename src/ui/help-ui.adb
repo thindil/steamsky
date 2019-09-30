@@ -271,7 +271,7 @@ package body Help.UI is
          To_Unbounded_String("fanaticism"), To_Unbounded_String("loner"));
       FactionsWithFlag: Unbounded_String;
       BasesFlags: constant array(Positive range <>) of Unbounded_String :=
-        (To_Unbounded_String("shipyard"), To_Unbounded_String("someflag"));
+        (To_Unbounded_String("shipyard"), To_Unbounded_String("temple"));
       BasesWithFlag: Unbounded_String;
    begin
       if Setting then
