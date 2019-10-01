@@ -833,7 +833,9 @@ story.
   `shipyard` - that base type have shipyard. Ship repairs in that base are 50%
   cheaper, `temple` - that base type allow action `Pray` which raise player
   and the player ship crew members morale, additionally, healing wounded crew
-  members in that base is twice time cheaper.
+  members in that base is twice time cheaper, `blackmarket` - that base type
+  have random cargo (and normal cargo too, if defined) for sale, additionally,
+  all sold items here can be buy again.
 
 ## Themes
 
