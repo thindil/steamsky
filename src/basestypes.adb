@@ -184,8 +184,15 @@ package body BasesTypes is
       end loop;
    end LoadBasesTypes;
 
-   function Is_Buyable(BaseType, ItemIndex: Unbounded_String) return Boolean is
+   function Is_Buyable
+     (BaseType, ItemIndex: Unbounded_String; CheckFlag: Boolean := True)
+      return Boolean is
    begin
+      if CheckFlag
+        and then (BasesTypes_List(BaseType).Flags.Contains
+          (To_Unbounded_String("blackmarket")) and Get_Price(BaseType, ItemIndex) > 0) then
+         return True;
+      end if;
       if not BasesTypes_List(BaseType).Trades.Contains(ItemIndex) then
          return False;
       end if;

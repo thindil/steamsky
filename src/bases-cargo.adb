@@ -54,7 +54,8 @@ package body Bases.Cargo is
                Price => 0));
          for I in Items_List.Iterate loop
             if Is_Buyable
-                (SkyBases(BaseIndex).BaseType, Objects_Container.Key(I)) then
+                (SkyBases(BaseIndex).BaseType, Objects_Container.Key(I),
+                 False) then
                SkyBases(BaseIndex).Cargo.Append
                  (New_Item =>
                     (ProtoIndex => Objects_Container.Key(I),
@@ -66,6 +67,46 @@ package body Bases.Cargo is
                           Objects_Container.Key(I))));
             end if;
          end loop;
+         if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
+             (To_Unbounded_String("blackmarket")) then
+            declare
+               Amount: Positive;
+               ItemIndex: Natural;
+            begin
+               if SkyBases(BaseIndex).Population < 150 then
+                  Amount := GetRandom(1, 10);
+               elsif SkyBases(BaseIndex).Population < 300 then
+                  Amount := GetRandom(1, 20);
+               else
+                  Amount := GetRandom(1, 30);
+               end if;
+               for I in 1 .. Amount loop
+                  ItemIndex := GetRandom(1, Positive(Items_List.Length));
+                  for J in Items_List.Iterate loop
+                     ItemIndex := ItemIndex - 1;
+                     if ItemIndex = 0 then
+                        if Get_Price
+                            (SkyBases(BaseIndex).BaseType,
+                             Objects_Container.Key(J)) =
+                          0 then
+                           ItemIndex := ItemIndex + 1;
+                        else
+                           SkyBases(BaseIndex).Cargo.Append
+                             (New_Item =>
+                                (ProtoIndex => Objects_Container.Key(J),
+                                 Amount => (GetRandom(0, 100) * Population),
+                                 Durability => 100,
+                                 Price =>
+                                   Get_Price
+                                     (SkyBases(BaseIndex).BaseType,
+                                      Objects_Container.Key(J))));
+                           exit;
+                        end if;
+                     end if;
+                  end loop;
+               end loop;
+            end;
+         end if;
       else
          declare
             Roll: Positive;
