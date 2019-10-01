@@ -204,7 +204,8 @@ package Crew is
    -- CrewIndex   - Crew index of member
    -- SOURCE
    procedure GainExp(Amount: Natural; SkillNumber, CrewIndex: Positive) with
-      Pre => SkillNumber <= Skills_List.Last_Index;
+      Pre => SkillNumber <= Skills_List.Last_Index,
+      Test_Case => ("Test_GainExp", Nominal);
       -- ****
 
       -- ****f* Crew/GenerateMemberName
