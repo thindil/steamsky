@@ -98,11 +98,13 @@ package BasesTypes is
    -- PARAMETERS
    -- BaseType  - Base type to check
    -- ItemIndex - Index of item prototype to check
+   -- CheckFlag - Check if selected base type has blackmarket flag
    -- RESULT
    -- True if item is buyable in that type of bases otherwise false
    -- SOURCE
    function Is_Buyable
-     (BaseType, ItemIndex: Unbounded_String) return Boolean with
+     (BaseType, ItemIndex: Unbounded_String; CheckFlag: Boolean := True)
+      return Boolean with
       Pre => BasesTypes_List.Contains(BaseType) and
       Items_List.Contains(ItemIndex),
       Test_Case => ("Test_Is_Buyable", Nominal);
