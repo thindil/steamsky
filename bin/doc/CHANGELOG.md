@@ -26,7 +26,7 @@ All notable changes to this project will be documented in this file.
 - Option to set which bases types are available for each faction
 - Option to set chance for spawn for each base type for each faction
 - New flags for bases types: temple and blackmarket
-- New base type - Temple
+- New base types: Temple and Black market
 - Added temple base type to the Inquisition faction
 - Added flags shipyard and temple to the help
 
