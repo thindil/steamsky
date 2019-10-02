@@ -222,7 +222,8 @@ package Crew is
       return Unbounded_String with
       Pre =>
       ((Gender = 'M' or Gender = 'F') and
-       FactionIndex /= Null_Unbounded_String);
+       FactionIndex /= Null_Unbounded_String),
+      Test_Case => ("Test_GenerateMemberName", Nominal);
       -- ****
 
       -- ****f* Crew/FindCabin

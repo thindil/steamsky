@@ -78,6 +78,56 @@ package body Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_GenerateMemberName_b4591b_2ce78d (Gender: Character; FactionIndex: Unbounded_String)  return Unbounded_String
+   is
+   begin
+      begin
+         pragma Assert
+           (((Gender = 'M' or Gender = 'F') and FactionIndex /= Null_Unbounded_String));
+         null;
+      exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "req_sloc(crew.ads:0):Test_GenerateMemberName test requirement violated");
+      end;
+      declare
+         Test_GenerateMemberName_b4591b_2ce78d_Result : constant Unbounded_String := GNATtest_Generated.GNATtest_Standard.Crew.GenerateMemberName (Gender, FactionIndex);
+      begin
+         begin
+            pragma Assert
+              (True);
+            null;
+         exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "ens_sloc(crew.ads:0:):Test_GenerateMemberName test commitment violated");
+         end;
+         return Test_GenerateMemberName_b4591b_2ce78d_Result;
+      end;
+   end Wrap_Test_GenerateMemberName_b4591b_2ce78d;
+--  end read only
+
+--  begin read only
+   procedure Test_GenerateMemberName_test_generatemembername (Gnattest_T : in out Test);
+   procedure Test_GenerateMemberName_b4591b_2ce78d (Gnattest_T : in out Test) renames Test_GenerateMemberName_test_generatemembername;
+--  id:2.2/b4591b69c6a992ff/GenerateMemberName/1/0/test_generatemembername/
+   procedure Test_GenerateMemberName_test_generatemembername (Gnattest_T : in out Test) is
+      function GenerateMemberName (Gender: Character; FactionIndex: Unbounded_String) return Unbounded_String renames Wrap_Test_GenerateMemberName_b4591b_2ce78d;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(GenerateMemberName('M', To_Unbounded_String("POLEIS")) /= Null_Unbounded_String, "Failed to generate male name for poleis faction.");
+
+--  begin read only
+   end Test_GenerateMemberName_test_generatemembername;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.

@@ -12,5 +12,8 @@ package Crew.Test_Data.Tests is
    procedure Test_GainExp_685058_9e4143 (Gnattest_T : in out Test);
    --  crew.ads:206:4:GainExp:Test_GainExp
 
+   procedure Test_GenerateMemberName_b4591b_2ce78d (Gnattest_T : in out Test);
+   --  crew.ads:220:4:GenerateMemberName:Test_GenerateMemberName
+
 end Crew.Test_Data.Tests;
 --  end read only
