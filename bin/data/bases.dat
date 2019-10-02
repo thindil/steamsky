@@ -538,4 +538,8 @@ members in that base is twice time cheaper.
   <flag name="temple" />
   <description>Temple bases provides ability to pray for your ship crew members. Additinally, healing there is a lot cheaper than in other bases. They also provide basic food and drinks. Little more difficult starting point than Agricultural bases.</description>
  </base>
+ <base index="6" name="Black market" color="787878">
+  <flag name="blackmarket" />
+  <description>Black market bases sells and buys random items. Depending on your luck it can be very easy or very difficult point to start the game.</description>
+ </base>
 </bases>
