@@ -235,17 +235,18 @@ package Crew is
       -- Player ship module index of owned cabin or 0 if crew member don't
       -- have any cabin assigned
       -- SOURCE
-   function FindCabin(MemberIndex: Positive) return Natural;
-   -- ****
+   function FindCabin(MemberIndex: Positive) return Natural with
+      Test_Case => ("Test_FindCabin", Robustness);
+      -- ****
 
-   -- ****f* Crew/UpdateCrew
-   -- FUNCTION
-   -- Update player ship crew
-   -- PARAMETERS
-   -- Minutes     - Amount of in-game minutes which passed
-   -- TiredPoints - Amount of Tired points which will be added to crew members
-   -- InCombat    - If true, player is in combat. Default is false
-   -- SOURCE
+      -- ****f* Crew/UpdateCrew
+      -- FUNCTION
+      -- Update player ship crew
+      -- PARAMETERS
+      -- Minutes     - Amount of in-game minutes which passed
+      -- TiredPoints - Amount of Tired points which will be added to crew members
+      -- InCombat    - If true, player is in combat. Default is false
+      -- SOURCE
    procedure UpdateCrew
      (Minutes: Positive; TiredPoints: Natural; InCombat: Boolean := False);
    -- ****

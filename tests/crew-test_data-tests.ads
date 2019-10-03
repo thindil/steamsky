@@ -15,5 +15,8 @@ package Crew.Test_Data.Tests is
    procedure Test_GenerateMemberName_b4591b_2ce78d (Gnattest_T : in out Test);
    --  crew.ads:220:4:GenerateMemberName:Test_GenerateMemberName
 
+   procedure Test_FindCabin_c60907_006804 (Gnattest_T : in out Test);
+   --  crew.ads:238:4:FindCabin:Test_FindCabin
+
 end Crew.Test_Data.Tests;
 --  end read only
