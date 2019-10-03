@@ -128,6 +128,37 @@ package body Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_FindCabin_c60907_006804 (MemberIndex: Positive)  return Natural
+   is
+   begin
+      declare
+         Test_FindCabin_c60907_006804_Result : constant Natural := GNATtest_Generated.GNATtest_Standard.Crew.FindCabin (MemberIndex);
+      begin
+         return Test_FindCabin_c60907_006804_Result;
+      end;
+   end Wrap_Test_FindCabin_c60907_006804;
+--  end read only
+
+--  begin read only
+   procedure Test_FindCabin_test_findcabin (Gnattest_T : in out Test);
+   procedure Test_FindCabin_c60907_006804 (Gnattest_T : in out Test) renames Test_FindCabin_test_findcabin;
+--  id:2.2/c60907de3ec73748/FindCabin/1/0/test_findcabin/
+   procedure Test_FindCabin_test_findcabin (Gnattest_T : in out Test) is
+      function FindCabin (MemberIndex: Positive) return Natural renames Wrap_Test_FindCabin_c60907_006804;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(FindCabin(1) > 0, "Failed to find cabin for existing crew member.");
+      Assert(FindCabin(100) = 0, "Failed to not find cabin for non existing crew member.");
+
+--  begin read only
+   end Test_FindCabin_test_findcabin;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
