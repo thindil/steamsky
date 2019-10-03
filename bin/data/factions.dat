@@ -179,6 +179,7 @@ bases of that faction are not grouped near self.
   <basetype index="2" chance="20" />
   <basetype index="3" chance="20" />
   <basetype index="4" chance="40" />
+  <basetype index="6" chance="10" />
  </faction>
  <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" spawn="8" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine" baseicon="fb8a">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
