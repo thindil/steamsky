@@ -23,7 +23,7 @@ All notable changes to this project will be documented in this file.
   room, medium orichalcum medical room, medium adamantium medical room,
   large bronze medical room, large iron medical room, large steel medical
   room, large titanium medical room, large orichalcum medical room, large
-  adamantium medical room
+  adamantium medical room, huge bronze medical room
 - Option to set which bases types are available for each faction
 - Option to set chance for spawn for each base type for each faction
 - New flags for bases types: temple and blackmarket
