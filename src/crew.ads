@@ -248,13 +248,14 @@ package Crew is
       -- InCombat    - If true, player is in combat. Default is false
       -- SOURCE
    procedure UpdateCrew
-     (Minutes: Positive; TiredPoints: Natural; InCombat: Boolean := False);
-   -- ****
+     (Minutes: Positive; TiredPoints: Natural; InCombat: Boolean := False) with
+     Test_Case => ("Test_UpdateCrew", Robustness);
+     -- ****
 
-   -- ****f* Crew/WaitForRest
-   -- FUNCTION
-   -- Wait until whole crew is rested
-   -- SOURCE
+     -- ****f* Crew/WaitForRest
+     -- FUNCTION
+     -- Wait until whole crew is rested
+     -- SOURCE
    procedure WaitForRest;
    -- ****
 
