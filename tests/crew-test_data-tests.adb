@@ -159,6 +159,33 @@ package body Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_UpdateCrew_123b55_011eae (Minutes: Positive; TiredPoints: Natural; InCombat: Boolean := False) 
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Crew.UpdateCrew (Minutes, TiredPoints, InCombat);
+   end Wrap_Test_UpdateCrew_123b55_011eae;
+--  end read only
+
+--  begin read only
+   procedure Test_UpdateCrew_test_updatecrew (Gnattest_T : in out Test);
+   procedure Test_UpdateCrew_123b55_011eae (Gnattest_T : in out Test) renames Test_UpdateCrew_test_updatecrew;
+--  id:2.2/123b55a332c8ae22/UpdateCrew/1/0/test_updatecrew/
+   procedure Test_UpdateCrew_test_updatecrew (Gnattest_T : in out Test) is
+   procedure UpdateCrew (Minutes: Positive; TiredPoints: Natural; InCombat: Boolean := False) renames Wrap_Test_UpdateCrew_123b55_011eae;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      UpdateCrew(1, 1);
+      Assert(True, "This test can only crash.");
+
+--  begin read only
+   end Test_UpdateCrew_test_updatecrew;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.

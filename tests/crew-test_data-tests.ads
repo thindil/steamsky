@@ -18,5 +18,8 @@ package Crew.Test_Data.Tests is
    procedure Test_FindCabin_c60907_006804 (Gnattest_T : in out Test);
    --  crew.ads:238:4:FindCabin:Test_FindCabin
 
+   procedure Test_UpdateCrew_123b55_011eae (Gnattest_T : in out Test);
+   --  crew.ads:250:4:UpdateCrew:Test_UpdateCrew
+
 end Crew.Test_Data.Tests;
 --  end read only
