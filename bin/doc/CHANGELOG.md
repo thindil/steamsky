@@ -30,7 +30,7 @@ All notable changes to this project will be documented in this file.
 - New flags for bases types: temple and blackmarket
 - New base types: Temple and Black market
 - Added temple base type to the Inquisition faction
-- Added flags shipyard and temple to the help
+- Added flags shipyard, temple and blackmarket to the help
 - Added black market base type to the Pirates faction
 
 ### Changed
