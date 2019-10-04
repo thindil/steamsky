@@ -189,8 +189,10 @@ package body BasesTypes is
       return Boolean is
    begin
       if CheckFlag
-        and then (BasesTypes_List(BaseType).Flags.Contains
-          (To_Unbounded_String("blackmarket")) and Get_Price(BaseType, ItemIndex) > 0) then
+        and then
+        (BasesTypes_List(BaseType).Flags.Contains
+           (To_Unbounded_String("blackmarket")) and
+         Get_Price(BaseType, ItemIndex) > 0) then
          return True;
       end if;
       if not BasesTypes_List(BaseType).Trades.Contains(ItemIndex) then
