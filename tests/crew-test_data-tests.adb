@@ -186,6 +186,33 @@ package body Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_WaitForRest_237f93_b046aa
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Crew.WaitForRest;
+   end Wrap_Test_WaitForRest_237f93_b046aa;
+--  end read only
+
+--  begin read only
+   procedure Test_WaitForRest_test_waitforrest (Gnattest_T : in out Test);
+   procedure Test_WaitForRest_237f93_b046aa (Gnattest_T : in out Test) renames Test_WaitForRest_test_waitforrest;
+--  id:2.2/237f93172c11704d/WaitForRest/1/0/test_waitforrest/
+   procedure Test_WaitForRest_test_waitforrest (Gnattest_T : in out Test) is
+   procedure WaitForRest renames Wrap_Test_WaitForRest_237f93_b046aa;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      WaitForRest;
+      Assert(True, "This test can only crash.");
+
+--  begin read only
+   end Test_WaitForRest_test_waitforrest;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.

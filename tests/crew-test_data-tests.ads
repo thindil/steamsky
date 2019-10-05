@@ -21,5 +21,8 @@ package Crew.Test_Data.Tests is
    procedure Test_UpdateCrew_123b55_011eae (Gnattest_T : in out Test);
    --  crew.ads:250:4:UpdateCrew:Test_UpdateCrew
 
+   procedure Test_WaitForRest_237f93_b046aa (Gnattest_T : in out Test);
+   --  crew.ads:259:4:WaitForRest:Test_WaitForRest
+
 end Crew.Test_Data.Tests;
 --  end read only

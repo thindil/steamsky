@@ -256,17 +256,18 @@ package Crew is
      -- FUNCTION
      -- Wait until whole crew is rested
      -- SOURCE
-   procedure WaitForRest;
-   -- ****
+   procedure WaitForRest with
+      Test_Case => ("Test_WaitForRest", Robustness);
+      -- ****
 
-   -- ****f* Crew/GetSkillLevelName
-   -- FUNCTION
-   -- Get member skill level name
-   -- PARAMETERS
-   -- SkillLevel - Numeric value of skill level
-   -- RESULT
-   -- Name (as words) of skill level
-   -- SOURCE
+      -- ****f* Crew/GetSkillLevelName
+      -- FUNCTION
+      -- Get member skill level name
+      -- PARAMETERS
+      -- SkillLevel - Numeric value of skill level
+      -- RESULT
+      -- Name (as words) of skill level
+      -- SOURCE
    function GetSkillLevelName(SkillLevel: Positive) return String with
       Pre => (SkillLevel <= 100);
       -- ****
