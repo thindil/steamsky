@@ -542,4 +542,192 @@ members in that base is twice time cheaper.
   <flag name="blackmarket" />
   <description>Black market bases sells and buys random items. Depending on your luck it can be very easy or very difficult point to start the game.</description>
  </base>
+ <base index="7" name="Factory" color="ff0000">
+  <item index="5" sellprice="3" />
+  <item index="12" sellprice="1" />
+  <item index="13" sellprice="4" />
+  <item index="17" sellprice="2" />
+  <item index="18" sellprice="2" />
+  <item index="21" sellprice="6" />
+  <item index="47" sellprice="5" />
+  <item index="48" sellprice="10" />
+  <item index="49" sellprice="10" />
+  <item index="50" sellprice="7" />
+  <item index="51" sellprice="5" />
+  <item index="52" sellprice="5" />
+  <item index="53" sellprice="7" />
+  <item index="59" sellprice="35" />
+  <item index="60" sellprice="5" />
+  <item index="61" sellprice="5" />
+  <item index="70" sellprice="5" />
+  <item index="75" sellprice="15" />
+  <item index="94" sellprice="20" />
+  <item index="95" sellprice="15" />
+  <item index="96" sellprice="20" />
+  <item index="97" sellprice="10" />
+  <item index="98" sellprice="15" />
+  <item index="99" sellprice="10" />
+  <item index="100" sellprice="10" />
+  <item index="101" sellprice="15" />
+  <item index="102" sellprice="10" />
+  <item index="103" sellprice="15" />
+  <item index="104" sellprice="10" />
+  <item index="105" sellprice="15" />
+  <item index="106" sellprice="20" />
+  <item index="107" sellprice="65" />
+  <item index="108" sellprice="95" />
+  <item index="109" sellprice="10" />
+  <item index="110" sellprice="15" />
+  <item index="111" sellprice="10" />
+  <item index="112" sellprice="15" />
+  <item index="113" sellprice="10" />
+  <item index="114" sellprice="15" />
+  <item index="132" sellprice="27" />
+  <item index="133" sellprice="35" />
+  <item index="134" sellprice="26" />
+  <item index="135" sellprice="34" />
+  <item index="136" sellprice="25" />
+  <item index="137" sellprice="33" />
+  <item index="138" sellprice="20" />
+  <item index="139" sellprice="24" />
+  <item index="140" sellprice="20" />
+  <item index="141" sellprice="26" />
+  <item index="142" sellprice="24" />
+  <item index="143" sellprice="29" />
+  <item index="144" sellprice="110" />
+  <item index="145" sellprice="115" />
+  <item index="146" sellprice="20" />
+  <item index="147" sellprice="26" />
+  <item index="148" sellprice="20" />
+  <item index="149" sellprice="25" />
+  <item index="150" sellprice="21" />
+  <item index="151" sellprice="26" />
+  <item index="167" sellprice="42" />
+  <item index="168" sellprice="70" />
+  <item index="169" sellprice="68" />
+  <item index="170" sellprice="66" />
+  <item index="171" sellprice="48" />
+  <item index="172" sellprice="52" />
+  <item index="173" sellprice="58" />
+  <item index="174" sellprice="230" />
+  <item index="175" sellprice="52" />
+  <item index="176" sellprice="50" />
+  <item index="177" sellprice="52" />
+  <item index="186" sellprice="20" />
+  <item index="188" sellprice="10" />
+  <item index="189" sellprice="19" />
+  <item index="191" sellprice="10" />
+  <item index="192" sellprice="8" />
+  <item index="194" sellprice="10" />
+  <item index="195" sellprice="10" />
+  <item index="196" sellprice="10" />
+  <item index="197" sellprice="10" />
+  <item index="198" sellprice="10" />
+  <item index="199" sellprice="10" />
+  <item index="200" sellprice="10" />
+  <item index="201" sellprice="10" />
+  <item index="202" sellprice="10" />
+  <item index="203" sellprice="10" />
+  <item index="204" sellprice="10" />
+  <item index="205" sellprice="12" />
+  <item index="206" sellprice="8" />
+  <item index="207" sellprice="10" />
+  <item index="208" sellprice="20" />
+  <item index="210" sellprice="7" />
+  <recipe index="6" />
+  <recipe index="7" />
+  <recipe index="8" />
+  <recipe index="9" />
+  <recipe index="11" />
+  <recipe index="36" />
+  <recipe index="37" />
+  <recipe index="38" />
+  <recipe index="39" />
+  <recipe index="40" />
+  <recipe index="41" />
+  <recipe index="42" />
+  <recipe index="43" />
+  <recipe index="44" />
+  <recipe index="52" />
+  <recipe index="57" />
+  <recipe index="76" />
+  <recipe index="77" />
+  <recipe index="78" />
+  <recipe index="79" />
+  <recipe index="80" />
+  <recipe index="81" />
+  <recipe index="82" />
+  <recipe index="83" />
+  <recipe index="84" />
+  <recipe index="85" />
+  <recipe index="86" />
+  <recipe index="87" />
+  <recipe index="88" />
+  <recipe index="89" />
+  <recipe index="90" />
+  <recipe index="91" />
+  <recipe index="92" />
+  <recipe index="93" />
+  <recipe index="94" />
+  <recipe index="95" />
+  <recipe index="96" />
+  <recipe index="97" />
+  <recipe index="111" />
+  <recipe index="112" />
+  <recipe index="113" />
+  <recipe index="114" />
+  <recipe index="115" />
+  <recipe index="116" />
+  <recipe index="117" />
+  <recipe index="118" />
+  <recipe index="119" />
+  <recipe index="120" />
+  <recipe index="121" />
+  <recipe index="122" />
+  <recipe index="123" />
+  <recipe index="124" />
+  <recipe index="125" />
+  <recipe index="126" />
+  <recipe index="127" />
+  <recipe index="128" />
+  <recipe index="129" />
+  <recipe index="130" />
+  <recipe index="131" />
+  <recipe index="144" />
+  <recipe index="145" />
+  <recipe index="146" />
+  <recipe index="147" />
+  <recipe index="148" />
+  <recipe index="149" />
+  <recipe index="150" />
+  <recipe index="151" />
+  <recipe index="152" />
+  <recipe index="153" />
+  <recipe index="154" />
+  <recipe index="166" />
+  <recipe index="167" />
+  <recipe index="168" />
+  <recipe index="169" />
+  <recipe index="170" />
+  <recipe index="171" />
+  <recipe index="172" />
+  <recipe index="173" />
+  <recipe index="174" />
+  <recipe index="175" />
+  <recipe index="176" />
+  <recipe index="177" />
+  <recipe index="178" />
+  <recipe index="179" />
+  <recipe index="180" />
+  <recipe index="181" />
+  <recipe index="182" />
+  <recipe index="183" />
+  <recipe index="184" />
+  <recipe index="185" />
+  <recipe index="186" />
+  <recipe index="187" />
+  <recipe index="188" />
+  <flag name="shipyard" />
+  <description>Factory bases provide tools and materials for crafting and allow to repair or upgrade your ship in the shipyard. Little more difficult start point than Agricultural bases.</description>
+ </base>
 </bases>
