@@ -129,6 +129,7 @@ Reputation levels, starting from lowest: Hated, Outlaw, Hostile, Unfriendly, Unk
 - Shipyard (light blue color): don't produce anything they only buys everything. But in this base you can install or remove modules from your ship.
 - Military (green color): produces ammunition to guns, weapons and armors for melee combat and buys other things. Same as refinery it is perfect start for trade route with industrial base.
 - Temple (dark gold color): available only for Inquisition faction: produces basic food, drinks and medicines. Also it provide option to Pray, which raise your character and your crew members morale.
+- Black market (grey color): available only for Pirates faction: they always offers random goods for sale. Depends on your luck, it can be good or bad place to start any trade route.
 More informations about trading you may find in {b}Trading{/b} help topic and about installing new ship modules in {b}Repair/upgrade ship{/b} topic.</entry>
  <entry index="trade" title=" 5. Trading">{u}General info{/u}
     To buy/sell items from bases you must first dock to base and having assigned crew member to talking in bases. All bases buy all items, but which items are sold, depends on base type.
