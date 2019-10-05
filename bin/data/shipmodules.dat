@@ -541,5 +541,6 @@ types of modules) the module can have. Default value is 1.
  <module durability="1800" index="508" installtime="240" material="Adamantium" maxowners="3" maxvalue="0" name="Large adamantium medical room" price="72000" size="3" skill="Engineering" type="MEDICAL_ROOM" unique="Y" value="0" weight="3000">Allows treatment of wounded crew members. Made of adamantium. Large sized.</module>
  <module durability="400" index="509" installtime="200" material="Bronze" maxvalue="0" maxowners="4" name="Huge bronze medical room" price="4000" size="4" skill="Engineering" type="MEDICAL_ROOM" unique="Y" value="0" weight="1600">Allows treatment of wounded crew members. Huge sized.</module>
  <module durability="800" index="510" installtime="200" material="Iron" maxowners="4" maxvalue="0" name="Huge iron medical room" price="8000" size="4" skill="Engineering" type="MEDICAL_ROOM" unique="Y" value="0" weight="1600">Allows treatment of wounded crew members. More durable and huge sized version.</module>
+ <module durability="1200" index="511" installtime="200" material="Steel" maxowners="4" maxvalue="0" name="Huge steel medical room" price="12000" size="4" skill="Engineering" type="MEDICAL_ROOM" unique="Y" value="0" weight="2000">Allows treatment of wounded crew members. Made of steel. Huge sized.</module>
 </modules>
 
