@@ -213,6 +213,58 @@ package body Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_GetSkillLevelName_b5615e_88354f (SkillLevel: Positive)  return String
+   is
+   begin
+      begin
+         pragma Assert
+           ((SkillLevel <= 100));
+         null;
+      exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "req_sloc(crew.ads:0):Test_GetSkillLevelName test requirement violated");
+      end;
+      declare
+         Test_GetSkillLevelName_b5615e_88354f_Result : constant String := GNATtest_Generated.GNATtest_Standard.Crew.GetSkillLevelName (SkillLevel);
+      begin
+         begin
+            pragma Assert
+              (True);
+            null;
+         exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "ens_sloc(crew.ads:0:):Test_GetSkillLevelName test commitment violated");
+         end;
+         return Test_GetSkillLevelName_b5615e_88354f_Result;
+      end;
+   end Wrap_Test_GetSkillLevelName_b5615e_88354f;
+--  end read only
+
+--  begin read only
+   procedure Test_GetSkillLevelName_test_getskilllevelname (Gnattest_T : in out Test);
+   procedure Test_GetSkillLevelName_b5615e_88354f (Gnattest_T : in out Test) renames Test_GetSkillLevelName_test_getskilllevelname;
+--  id:2.2/b5615ec8a22d7d74/GetSkillLevelName/1/0/test_getskilllevelname/
+   procedure Test_GetSkillLevelName_test_getskilllevelname (Gnattest_T : in out Test) is
+      function GetSkillLevelName (SkillLevel: Positive) return String renames Wrap_Test_GetSkillLevelName_b5615e_88354f;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(GetSkillLevelName(9) = "Beginner", "Failed to get skill level name for level 9.");
+      Assert(GetSkillLevelName(54) = "Respected", "Failed to get skill level name for level 54");
+      Assert(GetSkillLevelName(92) = "Legendary", "Failed to get skill level name for level 92");
+
+--  begin read only
+   end Test_GetSkillLevelName_test_getskilllevelname;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
