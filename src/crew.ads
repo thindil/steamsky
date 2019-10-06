@@ -269,7 +269,8 @@ package Crew is
       -- Name (as words) of skill level
       -- SOURCE
    function GetSkillLevelName(SkillLevel: Positive) return String with
-      Pre => (SkillLevel <= 100);
+      Pre => (SkillLevel <= 100),
+      Test_Case => ("Test_GetSkillLevelName", Nominal);
       -- ****
 
       -- ****f* Crew/GetAttributeLevelName
