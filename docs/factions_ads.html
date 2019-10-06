@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.1 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -29,19 +29,20 @@
 <ul>
 <li>1. <a href="#robo25">Steamsky/Factions</a></li>
 <ul>
-<li>1.1. <a href="#robo99">Factions/CareerRecord</a></li>
-<li>1.2. <a href="#robo100">Factions/Careers_Container</a></li>
-<li>1.3. <a href="#robo101">Factions/FactionRecord</a></li>
-<li>1.4. <a href="#robo102">Factions/Factions_Container</a></li>
-<li>1.5. <a href="#robo103">Factions/NamesTypes</a></li>
-<li>1.6. <a href="#robo104">Factions/Relations_Container</a></li>
-<li>1.7. <a href="#robo105">Factions/RelationsRecord</a></li>
-<li>1.8. <a href="#robo106">Factions/Reputation_Array</a></li>
-<li>1.9. <a href="#robo232">Factions/Factions_List</a></li>
-<li>1.10. <a href="#robo530">Factions/GetRandomFaction</a></li>
-<li>1.11. <a href="#robo531">Factions/GetReputation</a></li>
-<li>1.12. <a href="#robo532">Factions/IsFriendly</a></li>
-<li>1.13. <a href="#robo533">Factions/LoadFactions</a></li>
+<li>1.1. <a href="#robo99">Factions/BaseType_Container</a></li>
+<li>1.2. <a href="#robo100">Factions/CareerRecord</a></li>
+<li>1.3. <a href="#robo101">Factions/Careers_Container</a></li>
+<li>1.4. <a href="#robo102">Factions/FactionRecord</a></li>
+<li>1.5. <a href="#robo103">Factions/Factions_Container</a></li>
+<li>1.6. <a href="#robo104">Factions/NamesTypes</a></li>
+<li>1.7. <a href="#robo105">Factions/Relations_Container</a></li>
+<li>1.8. <a href="#robo106">Factions/RelationsRecord</a></li>
+<li>1.9. <a href="#robo107">Factions/Reputation_Array</a></li>
+<li>1.10. <a href="#robo233">Factions/Factions_List</a></li>
+<li>1.11. <a href="#robo532">Factions/GetRandomFaction</a></li>
+<li>1.12. <a href="#robo533">Factions/GetReputation</a></li>
+<li>1.13. <a href="#robo534">Factions/IsFriendly</a></li>
+<li>1.14. <a href="#robo535">Factions/LoadFactions</a></li>
 </ul>
 </ul>
 <hr />
@@ -57,8 +58,21 @@
 </pre>
 
 <hr />
+<a name="Factions2fBaseType5fContainer"></a>
+<a name="robo99"></a><h2>Factions/BaseType_Container [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Factions</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Used to store bases types data in faction
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">package</span> <strong>BaseType_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span> Positive<span class="sign">,</span>
+      Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
 <a name="Factions2fCareerRecord"></a>
-<a name="robo99"></a><h2>Factions/CareerRecord [ Types ]</h2>
+<a name="robo100"></a><h2>Factions/CareerRecord [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Factions</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -83,20 +97,20 @@
 
 <hr />
 <a name="Factions2fCareers5fContainer"></a>
-<a name="robo100"></a><h2>Factions/Careers_Container [ Types ]</h2>
+<a name="robo101"></a><h2>Factions/Careers_Container [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Factions</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store careers data in faction
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> <strong>Careers_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span> <a href="./careers_ads.html#robo78">CareerRecord</a><span class="sign">,</span>
+<pre class="source">   <span class="keyword">package</span> <strong>Careers_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span> <a href="#robo100">CareerRecord</a><span class="sign">,</span>
       Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Factions2fFactionRecord"></a>
-<a name="robo101"></a><h2>Factions/FactionRecord [ Types ]</h2>
+<a name="robo102"></a><h2>Factions/FactionRecord [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Factions</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -109,16 +123,17 @@
       PluralMemberName<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       SpawnChance<span class="sign">:</span> Natural<span class="sign">;</span>
       Population<span class="sign">:</span> <a href="./crew_ads.html#robo90">Attributes_Array</a><span class="sign">;</span>
-      NamesType<span class="sign">:</span> <a href="#robo103">NamesTypes</a><span class="sign">;</span>
-      Relations<span class="sign">:</span> <a href="#robo104">Relations_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
+      NamesType<span class="sign">:</span> <a href="#robo104">NamesTypes</a><span class="sign">;</span>
+      Relations<span class="sign">:</span> <a href="#robo105">Relations_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
       Description<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      FoodTypes<span class="sign">:</span> <a href="./game_ads.html#robo118">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
-      DrinksTypes<span class="sign">:</span> <a href="./game_ads.html#robo118">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+      FoodTypes<span class="sign">:</span> <a href="./game_ads.html#robo119">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+      DrinksTypes<span class="sign">:</span> <a href="./game_ads.html#robo119">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
       HealingTools<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       HealingSkill<span class="sign">:</span> Positive<span class="sign">;</span>
-      Flags<span class="sign">:</span> <a href="./game_ads.html#robo118">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
-      <a href="./careers_ads.html#robo13">Careers</a><span class="sign">:</span> <a href="./careers_ads.html#robo79">Careers_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
+      Flags<span class="sign">:</span> <a href="./game_ads.html#robo119">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+      <a href="./careers_ads.html#robo12">Careers</a><span class="sign">:</span> <a href="./careers_ads.html#robo79">Careers_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
       BaseIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      <a href="./basestypes_ads.html#robo11">BasesTypes</a><span class="sign">:</span> <a href="#robo99">BaseType_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -129,7 +144,7 @@
                     this faction
  Population       - Min and max population for new bases with this
                     faction as owner
- <a href="#robo103">NamesTypes</a>       - Type of names of members of faction (used in
+ <a href="#robo104">NamesTypes</a>       - Type of names of members of faction (used in
                     generating names of ships)
  Relations        - Relations of this faction with others factions
  Description      - Description on faction, displayed to player
@@ -142,13 +157,16 @@
  HealingSkill     - Vector index of skill used in healing members of this
                     faction
  Flags            - Various flags for faction (no gender, etc)
- <a href="./careers_ads.html#robo13">Careers</a>          - List of possible careers for that faction
+ <a href="./careers_ads.html#robo12">Careers</a>          - List of possible careers for that faction
  BaseIcon         - Character used as base icon on map for this faction
+ <a href="./basestypes_ads.html#robo11">BasesTypes</a>       - List of available base types (with chances to spawn)
+                    for this faction. If it is empty then all bases types
+                    are available for this faction
 </pre>
 
 <hr />
 <a name="Factions2fFactions5fContainer"></a>
-<a name="robo102"></a><h2>Factions/Factions_Container [ Types ]</h2>
+<a name="robo103"></a><h2>Factions/Factions_Container [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Factions</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -156,12 +174,12 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">package</span> <strong>Factions_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span>
-      <a href="#robo101">FactionRecord</a><span class="sign">,</span> Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
+      <a href="#robo102">FactionRecord</a><span class="sign">,</span> Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Factions2fNamesTypes"></a>
-<a name="robo103"></a><h2>Factions/NamesTypes [ Types ]</h2>
+<a name="robo104"></a><h2>Factions/NamesTypes [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Factions</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -173,7 +191,7 @@
 
 <hr />
 <a name="Factions2fRelations5fContainer"></a>
-<a name="robo104"></a><h2>Factions/Relations_Container [ Types ]</h2>
+<a name="robo105"></a><h2>Factions/Relations_Container [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Factions</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -181,12 +199,12 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">package</span> <strong>Relations_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span>
-      <a href="#robo105">RelationsRecord</a><span class="sign">,</span> Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
+      <a href="#robo106">RelationsRecord</a><span class="sign">,</span> Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Factions2fRelationsRecord"></a>
-<a name="robo105"></a><h2>Factions/RelationsRecord [ Types ]</h2>
+<a name="robo106"></a><h2>Factions/RelationsRecord [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Factions</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -194,7 +212,7 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> <strong>RelationsRecord</strong> <span class="keyword">is</span> <span class="keyword">record</span>
-      Reputation<span class="sign">:</span> <a href="./bases_ads.html#robo73">Reputation_Array</a><span class="sign">;</span>
+      Reputation<span class="sign">:</span> <a href="#robo107">Reputation_Array</a><span class="sign">;</span>
       Friendly<span class="sign">:</span> Boolean<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
@@ -206,7 +224,7 @@
 
 <hr />
 <a name="Factions2fReputation5fArray"></a>
-<a name="robo106"></a><h2>Factions/Reputation_Array [ Types ]</h2>
+<a name="robo107"></a><h2>Factions/Reputation_Array [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Factions</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -218,16 +236,16 @@
 
 <hr />
 <a name="Factions2fFactions5fList"></a>
-<a name="robo232"></a><h2>Factions/Factions_List [ Variables ]</h2>
+<a name="robo233"></a><h2>Factions/Factions_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Factions</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>Factions_List</strong><span class="sign">:</span> <a href="#robo102">Factions_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
+<pre class="source">   <strong>Factions_List</strong><span class="sign">:</span> <a href="#robo103">Factions_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Factions2fGetRandomFaction"></a>
-<a name="robo530"></a><h2>Factions/GetRandomFaction [ Subprograms ]</h2>
+<a name="robo532"></a><h2>Factions/GetRandomFaction [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Factions</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -242,7 +260,7 @@
 
 <hr />
 <a name="Factions2fGetReputation"></a>
-<a name="robo531"></a><h2>Factions/GetReputation [ Subprograms ]</h2>
+<a name="robo533"></a><h2>Factions/GetReputation [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Factions</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -252,8 +270,8 @@
 <pre class="source">   <span class="keyword">function</span> <strong>GetReputation</strong>
      <span class="sign">(</span>SourceFaction<span class="sign">,</span> TargetFaction<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Integer with
       Pre <span class="sign">=</span><span class="sign">&gt;</span>
-      <span class="sign">(</span><a href="#robo102">Factions_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="#robo232">Factions_List</a><span class="sign">,</span> SourceFaction<span class="sign">)</span> and
-       <a href="#robo102">Factions_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="#robo232">Factions_List</a><span class="sign">,</span> TargetFaction<span class="sign">)</span><span class="sign">)</span><span class="sign">;</span>
+      <span class="sign">(</span><a href="#robo103">Factions_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="#robo233">Factions_List</a><span class="sign">,</span> SourceFaction<span class="sign">)</span> and
+       <a href="#robo103">Factions_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="#robo233">Factions_List</a><span class="sign">,</span> TargetFaction<span class="sign">)</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> SourceFaction - Index of first faction which reputation will be check
@@ -265,7 +283,7 @@
 
 <hr />
 <a name="Factions2fIsFriendly"></a>
-<a name="robo532"></a><h2>Factions/IsFriendly [ Subprograms ]</h2>
+<a name="robo534"></a><h2>Factions/IsFriendly [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Factions</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -275,8 +293,8 @@
 <pre class="source">   <span class="keyword">function</span> <strong>IsFriendly</strong>
      <span class="sign">(</span>SourceFaction<span class="sign">,</span> TargetFaction<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Boolean with
       Pre <span class="sign">=</span><span class="sign">&gt;</span>
-      <span class="sign">(</span><a href="#robo102">Factions_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="#robo232">Factions_List</a><span class="sign">,</span> SourceFaction<span class="sign">)</span> and
-       <a href="#robo102">Factions_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="#robo232">Factions_List</a><span class="sign">,</span> TargetFaction<span class="sign">)</span><span class="sign">)</span><span class="sign">;</span>
+      <span class="sign">(</span><a href="#robo103">Factions_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="#robo233">Factions_List</a><span class="sign">,</span> SourceFaction<span class="sign">)</span> and
+       <a href="#robo103">Factions_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="#robo233">Factions_List</a><span class="sign">,</span> TargetFaction<span class="sign">)</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> SourceFaction - Index of base faction to which TargetFaction will be checked
@@ -288,7 +306,7 @@
 
 <hr />
 <a name="Factions2fLoadFactions"></a>
-<a name="robo533"></a><h2>Factions/LoadFactions [ Subprograms ]</h2>
+<a name="robo535"></a><h2>Factions/LoadFactions [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Factions</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -303,7 +321,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/factions.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Sep 08 2019 06:47:38
+<p>Generated from ./src/factions.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Oct 06 2019 06:40:13
 </p>
 </div> <!-- footer -->
 </body>
