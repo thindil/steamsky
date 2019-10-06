@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [4.2] - 2019-10-06
 
 ### Added
 - New ship modules: huge orichalcum workshop, huge adamantium workshop, medium
