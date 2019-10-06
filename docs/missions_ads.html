@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.1 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -29,20 +29,20 @@
 <ul>
 <li>1. <a href="#robo42">Steamsky/Missions</a></li>
 <ul>
-<li>1.1. <a href="#robo137">Missions/Mission_Container</a></li>
-<li>1.2. <a href="#robo138">Missions/Mission_Data(MType:</a></li>
-<li>1.3. <a href="#robo139">Missions/Missions_Types</a></li>
-<li>1.4. <a href="#robo140">Missions/RewardMultiplier</a></li>
-<li>1.5. <a href="#robo314">Missions/AcceptedMissions</a></li>
-<li>1.6. <a href="#robo352">Missions/Missions_Accepting_Error</a></li>
-<li>1.7. <a href="#robo353">Missions/Missions_Finishing_Error</a></li>
-<li>1.8. <a href="#robo681">Missions/AcceptMission</a></li>
-<li>1.9. <a href="#robo682">Missions/AutoFinishMissions</a></li>
-<li>1.10. <a href="#robo683">Missions/DeleteMission</a></li>
-<li>1.11. <a href="#robo684">Missions/FinishMission</a></li>
-<li>1.12. <a href="#robo685">Missions/GenerateMissions</a></li>
-<li>1.13. <a href="#robo686">Missions/UpdateMission</a></li>
-<li>1.14. <a href="#robo687">Missions/UpdateMissions</a></li>
+<li>1.1. <a href="#robo138">Missions/Mission_Container</a></li>
+<li>1.2. <a href="#robo139">Missions/Mission_Data(MType:</a></li>
+<li>1.3. <a href="#robo140">Missions/Missions_Types</a></li>
+<li>1.4. <a href="#robo141">Missions/RewardMultiplier</a></li>
+<li>1.5. <a href="#robo315">Missions/AcceptedMissions</a></li>
+<li>1.6. <a href="#robo353">Missions/Missions_Accepting_Error</a></li>
+<li>1.7. <a href="#robo354">Missions/Missions_Finishing_Error</a></li>
+<li>1.8. <a href="#robo683">Missions/AcceptMission</a></li>
+<li>1.9. <a href="#robo684">Missions/AutoFinishMissions</a></li>
+<li>1.10. <a href="#robo685">Missions/DeleteMission</a></li>
+<li>1.11. <a href="#robo686">Missions/FinishMission</a></li>
+<li>1.12. <a href="#robo687">Missions/GenerateMissions</a></li>
+<li>1.13. <a href="#robo688">Missions/UpdateMission</a></li>
+<li>1.14. <a href="#robo689">Missions/UpdateMissions</a></li>
 </ul>
 </ul>
 <hr />
@@ -59,7 +59,7 @@
 
 <hr />
 <a name="Missions2fMission5fContainer"></a>
-<a name="robo137"></a><h2>Missions/Mission_Container [ Types ]</h2>
+<a name="robo138"></a><h2>Missions/Mission_Container [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo42">Missions</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -71,24 +71,24 @@
 
 <hr />
 <a name="Missions2fMission5fData28MType3a"></a>
-<a name="robo138"></a><h2>Missions/Mission_Data(MType: [ Types ]</h2>
+<a name="robo139"></a><h2>Missions/Mission_Data(MType: [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo42">Missions</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data structure for missions
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> <strong>Mission_Data(MType:</strong> <a href="#robo139">Missions_Types</a> <span class="sign">:</span><span class="sign">=</span> Deliver<span class="sign">)</span> <span class="keyword">is</span> <span class="keyword">record</span>
+<pre class="source">   <span class="keyword">type</span> <strong>Mission_Data(MType:</strong> <a href="#robo140">Missions_Types</a> <span class="sign">:</span><span class="sign">=</span> Deliver<span class="sign">)</span> <span class="keyword">is</span> <span class="keyword">record</span>
       Time<span class="sign">:</span> Positive<span class="sign">;</span>
       TargetX<span class="sign">:</span> Natural<span class="sign">;</span>
       TargetY<span class="sign">:</span> Natural<span class="sign">;</span>
       Reward<span class="sign">:</span> Positive<span class="sign">;</span>
       StartBase<span class="sign">:</span> Positive<span class="sign">;</span>
       Finished<span class="sign">:</span> Boolean<span class="sign">;</span>
-      Multiplier<span class="sign">:</span> <a href="#robo140">RewardMultiplier</a><span class="sign">;</span>
+      Multiplier<span class="sign">:</span> <a href="#robo141">RewardMultiplier</a><span class="sign">;</span>
       case MType <span class="keyword">is</span>
          when Deliver <span class="sign">=</span><span class="sign">&gt;</span>
-            <a href="./ui/ships-cargo-ui_adb.html#robo317">ItemIndex</a><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+            <a href="./ui/crew-ui_ads.html#robo216">ItemIndex</a><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
          when Passenger <span class="sign">=</span><span class="sign">&gt;</span>
             Data<span class="sign">:</span> Positive<span class="sign">;</span>
          when Destroy <span class="sign">=</span><span class="sign">&gt;</span>
@@ -107,7 +107,7 @@
  Finished   - Did the mission is finished
  Multiplier - Bonus to amount of money or reputation rewards for the
               mission
- <a href="./ui/ships-cargo-ui_adb.html#robo317">ItemIndex</a>  - Index of proto item to deliver to base
+ <a href="./ui/crew-ui_ads.html#robo216">ItemIndex</a>  - Index of proto item to deliver to base
  Data       - Minimum quality of cabin needed by passenger (in bases)
               or passenger index (in player ship)
  ShipIndex  - Index of proto ship which must be destroyed
@@ -116,7 +116,7 @@
 
 <hr />
 <a name="Missions2fMissions5fTypes"></a>
-<a name="robo139"></a><h2>Missions/Missions_Types [ Types ]</h2>
+<a name="robo140"></a><h2>Missions/Missions_Types [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo42">Missions</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -128,7 +128,7 @@
 
 <hr />
 <a name="Missions2fRewardMultiplier"></a>
-<a name="robo140"></a><h2>Missions/RewardMultiplier [ Types ]</h2>
+<a name="robo141"></a><h2>Missions/RewardMultiplier [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo42">Missions</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -140,19 +140,19 @@
 
 <hr />
 <a name="Missions2fAcceptedMissions"></a>
-<a name="robo314"></a><h2>Missions/AcceptedMissions [ Variables ]</h2>
+<a name="robo315"></a><h2>Missions/AcceptedMissions [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo42">Missions</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of missions accepted by player
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>AcceptedMissions</strong><span class="sign">:</span> <a href="#robo137">Mission_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   <strong>AcceptedMissions</strong><span class="sign">:</span> <a href="#robo138">Mission_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Missions2fMissions5fAccepting5fError"></a>
-<a name="robo352"></a><h2>Missions/Missions_Accepting_Error [ Exceptions ]</h2>
+<a name="robo353"></a><h2>Missions/Missions_Accepting_Error [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo42">Missions</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -164,7 +164,7 @@
 
 <hr />
 <a name="Missions2fMissions5fFinishing5fError"></a>
-<a name="robo353"></a><h2>Missions/Missions_Finishing_Error [ Exceptions ]</h2>
+<a name="robo354"></a><h2>Missions/Missions_Finishing_Error [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo42">Missions</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -176,24 +176,24 @@
 
 <hr />
 <a name="Missions2fAcceptMission"></a>
-<a name="robo681"></a><h2>Missions/AcceptMission [ Subprograms ]</h2>
+<a name="robo683"></a><h2>Missions/AcceptMission [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo42">Missions</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Accept selected mission from base
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>AcceptMission</strong><span class="sign">(</span><a href="./ui/missions-ui_adb.html#robo313">MissionIndex</a><span class="sign">:</span> Positive<span class="sign">)</span> with
+<pre class="source">   <span class="keyword">procedure</span> <strong>AcceptMission</strong><span class="sign">(</span><a href="./ui/missions-ui_adb.html#robo314">MissionIndex</a><span class="sign">:</span> Positive<span class="sign">)</span> with
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_AcceptMission"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./ui/missions-ui_adb.html#robo313">MissionIndex</a> - Base list of available missions index of mission to
+<pre> <a href="./ui/missions-ui_adb.html#robo314">MissionIndex</a> - Base list of available missions index of mission to
                 accept
 </pre>
 
 <hr />
 <a name="Missions2fAutoFinishMissions"></a>
-<a name="robo682"></a><h2>Missions/AutoFinishMissions [ Subprograms ]</h2>
+<a name="robo684"></a><h2>Missions/AutoFinishMissions [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo42">Missions</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -210,7 +210,7 @@
 
 <hr />
 <a name="Missions2fDeleteMission"></a>
-<a name="robo683"></a><h2>Missions/DeleteMission [ Subprograms ]</h2>
+<a name="robo685"></a><h2>Missions/DeleteMission [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo42">Missions</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -218,37 +218,37 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>DeleteMission</strong>
-     <span class="sign">(</span><a href="./ui/missions-ui_adb.html#robo313">MissionIndex</a><span class="sign">:</span> Positive<span class="sign">;</span> Failed<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span> with
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="./ui/missions-ui_adb.html#robo313">MissionIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="#robo314">AcceptedMissions</a><span class="sign">.</span>Last_Index<span class="sign">,</span>
+     <span class="sign">(</span><a href="./ui/missions-ui_adb.html#robo314">MissionIndex</a><span class="sign">:</span> Positive<span class="sign">;</span> Failed<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span> with
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="./ui/missions-ui_adb.html#robo314">MissionIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="#robo315">AcceptedMissions</a><span class="sign">.</span>Last_Index<span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_DeleteMission"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./ui/missions-ui_adb.html#robo313">MissionIndex</a> - Player ship list of accepted missions index of mission
+<pre> <a href="./ui/missions-ui_adb.html#robo314">MissionIndex</a> - Player ship list of accepted missions index of mission
                 to delete
  Failed       - If true, it is failed mission. Default is true.
 </pre>
 
 <hr />
 <a name="Missions2fFinishMission"></a>
-<a name="robo684"></a><h2>Missions/FinishMission [ Subprograms ]</h2>
+<a name="robo686"></a><h2>Missions/FinishMission [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo42">Missions</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Finish selected mission
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>FinishMission</strong><span class="sign">(</span><a href="./ui/missions-ui_adb.html#robo313">MissionIndex</a><span class="sign">:</span> Positive<span class="sign">)</span> with
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="./ui/missions-ui_adb.html#robo313">MissionIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="#robo314">AcceptedMissions</a><span class="sign">.</span>Last_Index<span class="sign">,</span>
+<pre class="source">   <span class="keyword">procedure</span> <strong>FinishMission</strong><span class="sign">(</span><a href="./ui/missions-ui_adb.html#robo314">MissionIndex</a><span class="sign">:</span> Positive<span class="sign">)</span> with
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="./ui/missions-ui_adb.html#robo314">MissionIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="#robo315">AcceptedMissions</a><span class="sign">.</span>Last_Index<span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_FinishMission"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./ui/missions-ui_adb.html#robo313">MissionIndex</a> - Player ship list of accepted missions index of mission
+<pre> <a href="./ui/missions-ui_adb.html#robo314">MissionIndex</a> - Player ship list of accepted missions index of mission
                 to finish
 </pre>
 
 <hr />
 <a name="Missions2fGenerateMissions"></a>
-<a name="robo685"></a><h2>Missions/GenerateMissions [ Subprograms ]</h2>
+<a name="robo687"></a><h2>Missions/GenerateMissions [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo42">Missions</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -261,25 +261,25 @@
 
 <hr />
 <a name="Missions2fUpdateMission"></a>
-<a name="robo686"></a><h2>Missions/UpdateMission [ Subprograms ]</h2>
+<a name="robo688"></a><h2>Missions/UpdateMission [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo42">Missions</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update status of mission
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateMission</strong><span class="sign">(</span><a href="./ui/missions-ui_adb.html#robo313">MissionIndex</a><span class="sign">:</span> Positive<span class="sign">)</span> with
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="./ui/missions-ui_adb.html#robo313">MissionIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="#robo314">AcceptedMissions</a><span class="sign">.</span>Last_Index<span class="sign">,</span>
+<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateMission</strong><span class="sign">(</span><a href="./ui/missions-ui_adb.html#robo314">MissionIndex</a><span class="sign">:</span> Positive<span class="sign">)</span> with
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="./ui/missions-ui_adb.html#robo314">MissionIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="#robo315">AcceptedMissions</a><span class="sign">.</span>Last_Index<span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_UpdateMission"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./ui/missions-ui_adb.html#robo313">MissionIndex</a> - Player ship list of accepted missions index of mission
+<pre> <a href="./ui/missions-ui_adb.html#robo314">MissionIndex</a> - Player ship list of accepted missions index of mission
                 to update
 </pre>
 
 <hr />
 <a name="Missions2fUpdateMissions"></a>
-<a name="robo687"></a><h2>Missions/UpdateMissions [ Subprograms ]</h2>
+<a name="robo689"></a><h2>Missions/UpdateMissions [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo42">Missions</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -295,7 +295,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/missions.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Sep 08 2019 06:47:38
+<p>Generated from ./src/missions.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Oct 06 2019 06:40:13
 </p>
 </div> <!-- footer -->
 </body>

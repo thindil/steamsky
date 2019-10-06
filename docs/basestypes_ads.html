@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.1 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -27,20 +27,21 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo12">Steamsky/BasesTypes</a></li>
+<li>1. <a href="#robo11">Steamsky/BasesTypes</a></li>
 <ul>
 <li>1.1. <a href="#robo74">BasesTypes/BasesTrade_Container</a></li>
 <li>1.2. <a href="#robo75">BasesTypes/BasesTypes_Container</a></li>
 <li>1.3. <a href="#robo76">BasesTypes/BaseType_Data</a></li>
 <li>1.4. <a href="#robo77">BasesTypes/Prices_Array</a></li>
-<li>1.5. <a href="#robo194">BasesTypes/BasesTypes_List</a></li>
-<li>1.6. <a href="#robo431">BasesTypes/Is_Buyable</a></li>
-<li>1.7. <a href="#robo432">BasesTypes/LoadBasesTypes</a></li>
+<li>1.5. <a href="#robo195">BasesTypes/BasesTypes_List</a></li>
+<li>1.6. <a href="#robo432">BasesTypes/Get_Price</a></li>
+<li>1.7. <a href="#robo433">BasesTypes/Is_Buyable</a></li>
+<li>1.8. <a href="#robo434">BasesTypes/LoadBasesTypes</a></li>
 </ul>
 </ul>
 <hr />
 <a name="Steamsky2fBasesTypes"></a>
-<a name="robo12"></a><h2>Steamsky/BasesTypes [ Packages ]</h2>
+<a name="robo11"></a><h2>Steamsky/BasesTypes [ Packages ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -54,7 +55,7 @@
 <a name="BasesTypes2fBasesTrade5fContainer"></a>
 <a name="robo74"></a><h2>BasesTypes/BasesTrade_Container [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">BasesTypes</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo11">BasesTypes</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store base buy and sell prices for items in selected base type
 </pre>
@@ -67,7 +68,7 @@
 <a name="BasesTypes2fBasesTypes5fContainer"></a>
 <a name="robo75"></a><h2>BasesTypes/BasesTypes_Container [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">BasesTypes</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo11">BasesTypes</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store information about all available bases types
 </pre>
@@ -80,7 +81,7 @@
 <a name="BasesTypes2fBaseType5fData"></a>
 <a name="robo76"></a><h2>BasesTypes/BaseType_Data [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">BasesTypes</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo11">BasesTypes</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data structure for bases types
 </pre>
@@ -89,8 +90,8 @@
       Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Color<span class="sign">:</span> String<span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 6<span class="sign">)</span><span class="sign">;</span>
       <a href="./trades_ads.html#robo61">Trades</a><span class="sign">:</span> <a href="#robo74">BasesTrade_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
-      Recipes<span class="sign">:</span> <a href="./game_ads.html#robo118">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
-      Flags<span class="sign">:</span> <a href="./game_ads.html#robo118">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+      Recipes<span class="sign">:</span> <a href="./game_ads.html#robo119">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+      Flags<span class="sign">:</span> <a href="./game_ads.html#robo119">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
       Description<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
@@ -110,7 +111,7 @@
 <a name="BasesTypes2fPrices5fArray"></a>
 <a name="robo77"></a><h2>BasesTypes/Prices_Array [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">BasesTypes</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo11">BasesTypes</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Buy and sell prices for the item in selected base type
 </pre>
@@ -120,9 +121,9 @@
 
 <hr />
 <a name="BasesTypes2fBasesTypes5fList"></a>
-<a name="robo194"></a><h2>BasesTypes/BasesTypes_List [ Variables ]</h2>
+<a name="robo195"></a><h2>BasesTypes/BasesTypes_List [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">BasesTypes</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo11">BasesTypes</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of all available bases types
 </pre>
@@ -131,22 +132,48 @@
 </pre>
 
 <hr />
-<a name="BasesTypes2fIs5fBuyable"></a>
-<a name="robo431"></a><h2>BasesTypes/Is_Buyable [ Subprograms ]</h2>
+<a name="BasesTypes2fGet5fPrice"></a>
+<a name="robo432"></a><h2>BasesTypes/Get_Price [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">BasesTypes</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo11">BasesTypes</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Get price of selected item in selected base type
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>Get_Price</strong>
+     <span class="sign">(</span>BaseType<span class="sign">,</span> <a href="./ui/crew-ui_ads.html#robo216">ItemIndex</a><span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Natural with
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="#robo195">BasesTypes_List</a><span class="sign">.</span>Contains<span class="sign">(</span>BaseType<span class="sign">)</span> and
+      <a href="./items_ads.html#robo284">Items_List</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo216">ItemIndex</a><span class="sign">)</span><span class="sign">,</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_Get_Price"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> BaseType  - Base type to check
+ <a href="./ui/crew-ui_ads.html#robo216">ItemIndex</a> - Index of item prototype to check
+</pre>
+<p class="item_name">RESULT</p>
+<pre> Price of selected item in selected base type
+</pre>
+
+<hr />
+<a name="BasesTypes2fIs5fBuyable"></a>
+<a name="robo433"></a><h2>BasesTypes/Is_Buyable [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo11">BasesTypes</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Check if selected item is buyable in selected base type
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> <strong>Is_Buyable</strong>
-     <span class="sign">(</span>BaseType<span class="sign">,</span> <a href="./ui/ships-cargo-ui_adb.html#robo317">ItemIndex</a><span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Boolean with
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="#robo194">BasesTypes_List</a><span class="sign">.</span>Contains<span class="sign">(</span>BaseType<span class="sign">)</span> and
-      <a href="./items_ads.html#robo283">Items_List</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="./ui/ships-cargo-ui_adb.html#robo317">ItemIndex</a><span class="sign">)</span><span class="sign">;</span>
+     <span class="sign">(</span>BaseType<span class="sign">,</span> <a href="./ui/crew-ui_ads.html#robo216">ItemIndex</a><span class="sign">:</span> Unbounded_String<span class="sign">;</span> CheckFlag<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span>
+      <span class="keyword">return</span> Boolean with
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="#robo195">BasesTypes_List</a><span class="sign">.</span>Contains<span class="sign">(</span>BaseType<span class="sign">)</span> and
+      <a href="./items_ads.html#robo284">Items_List</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo216">ItemIndex</a><span class="sign">)</span><span class="sign">,</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_Is_Buyable"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> BaseType  - Base type to check
- <a href="./ui/ships-cargo-ui_adb.html#robo317">ItemIndex</a> - Index of item prototype to check
+ <a href="./ui/crew-ui_ads.html#robo216">ItemIndex</a> - Index of item prototype to check
+ CheckFlag - Check if selected base type has blackmarket flag
 </pre>
 <p class="item_name">RESULT</p>
 <pre> True if item is buyable in that type of bases otherwise false
@@ -154,9 +181,9 @@
 
 <hr />
 <a name="BasesTypes2fLoadBasesTypes"></a>
-<a name="robo432"></a><h2>BasesTypes/LoadBasesTypes [ Subprograms ]</h2>
+<a name="robo434"></a><h2>BasesTypes/LoadBasesTypes [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">BasesTypes</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo11">BasesTypes</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Load bases types from file
 </pre>
@@ -169,7 +196,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/basestypes.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Sep 08 2019 06:47:38
+<p>Generated from ./src/basestypes.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Oct 06 2019 06:40:13
 </p>
 </div> <!-- footer -->
 </body>
