@@ -221,10 +221,9 @@ bases of that faction are not grouped near self.
   <career index="hunter" playerindex="76" shipindex="170">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
   <career index="explorer" playerindex="76" shipindex="172">Career focused on exploring. You get average equipped small ship, with smaller cargo space than general career's ship but with water collector installed on it.</career>
   <career index="crafter" playerindex="76" shipindex="174">Career focused on crafting. You get average equipped small ship, with smaller cargo space than general career's ship but with furnace installed on it. Additionally, you will know more crafting recipes at start.</career>
-  <basetype index="0" chance="20" />
   <basetype index="1" chance="20" />
   <basetype index="2" chance="20" />
-  <basetype index="3" chance="40" />
+  <basetype index="7" chance="40" />
   <basetype index="4" chance="20" />
  </faction>
  <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" spawn="6" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine" baseicon="f643">
