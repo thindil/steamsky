@@ -728,6 +728,6 @@ members in that base is twice time cheaper.
   <recipe index="187" />
   <recipe index="188" />
   <flag name="shipyard" />
-  <description>Factory bases provide tools and materials for crafting and allow to repair or upgrade your ship in the shipyard. Little more difficult start point than Agricultural bases.</description>
+  <description>Factory bases provide tools and materials for crafting and allow to repair or upgrade your ship in the shipyard. Easiest starting point for Drones.</description>
  </base>
 </bases>
