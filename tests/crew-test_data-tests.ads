@@ -27,5 +27,8 @@ package Crew.Test_Data.Tests is
    procedure Test_GetSkillLevelName_b5615e_88354f (Gnattest_T : in out Test);
    --  crew.ads:271:4:GetSkillLevelName:Test_GetSkillLevelName
 
+   procedure Test_GetAttributeLevelName_ac08df_7fd836 (Gnattest_T : in out Test);
+   --  crew.ads:284:4:GetAttributeLevelName:Test_GetAttributeLevelName
+
 end Crew.Test_Data.Tests;
 --  end read only

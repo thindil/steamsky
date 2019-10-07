@@ -265,6 +265,58 @@ package body Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_GetAttributeLevelName_ac08df_7fd836 (AttributeLevel: Positive)  return String
+   is
+   begin
+      begin
+         pragma Assert
+           ((AttributeLevel <= 50));
+         null;
+      exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "req_sloc(crew.ads:0):Test_GetAttributeLevelName test requirement violated");
+      end;
+      declare
+         Test_GetAttributeLevelName_ac08df_7fd836_Result : constant String := GNATtest_Generated.GNATtest_Standard.Crew.GetAttributeLevelName (AttributeLevel);
+      begin
+         begin
+            pragma Assert
+              (True);
+            null;
+         exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "ens_sloc(crew.ads:0:):Test_GetAttributeLevelName test commitment violated");
+         end;
+         return Test_GetAttributeLevelName_ac08df_7fd836_Result;
+      end;
+   end Wrap_Test_GetAttributeLevelName_ac08df_7fd836;
+--  end read only
+
+--  begin read only
+   procedure Test_GetAttributeLevelName_test_getattributelevelname (Gnattest_T : in out Test);
+   procedure Test_GetAttributeLevelName_ac08df_7fd836 (Gnattest_T : in out Test) renames Test_GetAttributeLevelName_test_getattributelevelname;
+--  id:2.2/ac08dfe313a43d73/GetAttributeLevelName/1/0/test_getattributelevelname/
+   procedure Test_GetAttributeLevelName_test_getattributelevelname (Gnattest_T : in out Test) is
+      function GetAttributeLevelName (AttributeLevel: Positive) return String renames Wrap_Test_GetAttributeLevelName_ac08df_7fd836;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(GetAttributeLevelName(3) = "Very low", "Failed to get attribute level name for level 3");
+      Assert(GetAttributeLevelName(12) = "Below average", "Failed to get attribute level name for level 12");
+      Assert(GetAttributeLevelName(48) = "Very high", "Failed to get attribute level name for level 48");
+
+--  begin read only
+   end Test_GetAttributeLevelName_test_getattributelevelname;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
