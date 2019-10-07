@@ -3,8 +3,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-### Updated
+### Added
+- Factory base type to the Drones faction
+
+### Changed
 - Pirates faction ships
+
+### Removed
+- Industrial and Shipyard bases types from the Drones faction
 
 ## [4.2] - 2019-10-06
 
