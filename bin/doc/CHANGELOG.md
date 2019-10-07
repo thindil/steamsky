@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Updated
+- Pirates faction ships
+
 ## [4.2] - 2019-10-06
 
 ### Added
