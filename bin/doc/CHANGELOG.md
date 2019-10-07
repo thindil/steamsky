@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Pirates faction ships
+- Factory base type description
 
 ### Removed
 - Industrial and Shipyard bases types from the Drones faction
