@@ -282,7 +282,8 @@ package Crew is
       -- Name (as words) of attribute level
       -- SOURCE
    function GetAttributeLevelName(AttributeLevel: Positive) return String with
-      Pre => (AttributeLevel <= 50);
+      Pre => (AttributeLevel <= 50),
+      Test_Case => ("Test_GetAttributeLevelName", Nominal);
       -- ****
 
       -- ****f* Crew/DailyPayment
