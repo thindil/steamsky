@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash when viewing available recruits in bases
+
 ## [4.0.4] - 2019-09-29
 
 ### Changed
