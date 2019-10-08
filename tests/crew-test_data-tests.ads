@@ -30,5 +30,8 @@ package Crew.Test_Data.Tests is
    procedure Test_GetAttributeLevelName_ac08df_7fd836 (Gnattest_T : in out Test);
    --  crew.ads:284:4:GetAttributeLevelName:Test_GetAttributeLevelName
 
+   procedure Test_DailyPayment_62db86_0bfd06 (Gnattest_T : in out Test);
+   --  crew.ads:293:4:DailyPayment:Test_DailyPayment
+
 end Crew.Test_Data.Tests;
 --  end read only
