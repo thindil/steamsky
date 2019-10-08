@@ -291,7 +291,7 @@ during combat. -->
  <ship combatai="ATTACKER" index="15" maxloot="200" minloot="100" name="Inquisition ship" owner="INQUISITION">
   <module index="17"/>
   <module index="15"/>
-  <module amount="8" index="4"/>
+  <module amount="4" index="237"/>
   <module index="5"/>
   <module amount="2" index="219"/>
   <module index="12"/>
@@ -312,7 +312,7 @@ during combat. -->
   <module index="17"/>
   <module index="2"/>
   <module index="15"/>
-  <module amount="8" index="4"/>
+  <module amount="4" index="237"/>
   <module index="5"/>
   <module amount="2" index="219"/>
   <module index="12"/>
@@ -397,7 +397,7 @@ during combat. -->
   <module index="23"/>
   <module index="26"/>
   <module index="19"/>
-  <module amount="10" index="4"/>
+  <module amount="4" index="257"/>
   <module index="5"/>
   <module amount="2" index="225"/>
   <module index="40"/>
@@ -486,7 +486,7 @@ during combat. -->
   <module index="22"/>
   <module index="25"/>
   <module index="18"/>
-  <module amount="8" index="4"/>
+  <module amount="4" index="237"/>
   <module index="5"/>
   <module amount="2" index="219"/>
   <module index="40"/>
@@ -611,7 +611,7 @@ during combat. -->
   <module index="60"/>
   <module index="26"/>
   <module index="62"/>
-  <module amount="13" index="4"/>
+  <module amount="4" index="277"/>
   <module index="5"/>
   <module index="7"/>
   <module amount="2" index="231"/>
@@ -633,7 +633,7 @@ during combat. -->
   <module index="61"/>
   <module index="26"/>
   <module index="63"/>
-  <module amount="15" index="4"/>
+  <module amount="4" index="277"/>
   <module index="5"/>
   <module amount="3" index="7"/>
   <module amount="2" index="231"/>
@@ -831,7 +831,7 @@ during combat. -->
  <ship combatai="ATTACKER" index="47" maxloot="200" minloot="100" name="Inquisition ship mk II" owner="INQUISITION">
   <module index="66"/>
   <module index="74"/>
-  <module amount="8" index="80"/>
+  <module amount="4" index="241"/>
   <module index="41"/>
   <module amount="2" index="220"/>
   <module index="87"/>
@@ -851,7 +851,7 @@ during combat. -->
   <module index="66"/>
   <module index="55"/>
   <module index="74"/>
-  <module amount="8" index="80"/>
+  <module amount="4" index="241"/>
   <module index="41"/>
   <module amount="2" index="220"/>
   <module index="87"/>
@@ -934,7 +934,7 @@ during combat. -->
   <module index="68"/>
   <module index="57"/>
   <module index="76"/>
-  <module amount="10" index="80"/>
+  <module amount="4" index="261"/>
   <module index="41"/>
   <module index="42"/>
   <module amount="2" index="226"/>
@@ -1019,7 +1019,7 @@ during combat. -->
   <module index="67"/>
   <module index="56"/>
   <module index="75"/>
-  <module amount="8" index="80"/>
+  <module amount="4" index="241"/>
   <module index="41"/>
   <module amount="2" index="220"/>
   <module index="89"/>
@@ -1139,7 +1139,7 @@ during combat. -->
   <module index="70"/>
   <module index="57"/>
   <module index="78"/>
-  <module amount="13" index="80"/>
+  <module amount="4" index="281"/>
   <module index="41"/>
   <module index="42"/>
   <module amount="2" index="232"/>
@@ -1160,7 +1160,7 @@ during combat. -->
   <module index="71"/>
   <module index="57"/>
   <module index="79"/>
-  <module amount="15" index="80"/>
+  <module amount="4" index="281"/>
   <module index="41"/>
   <module amount="3" index="42"/>
   <module amount="2" index="232"/>
@@ -1314,7 +1314,7 @@ during combat. -->
  <ship combatai="ATTACKER" index="76" maxloot="200" minloot="100" name="Inquisition ship mk III" owner="INQUISITION">
   <module index="103"/>
   <module index="101"/>
-  <module amount="8" index="93"/>
+  <module amount="4" index="245"/>
   <module index="94"/>
   <module amount="2" index="221"/>
   <module index="98"/>
@@ -1334,7 +1334,7 @@ during combat. -->
   <module index="103"/>
   <module index="91"/>
   <module index="101"/>
-  <module amount="8" index="93"/>
+  <module amount="4" index="245"/>
   <module index="94"/>
   <module amount="2" index="221"/>
   <module index="98"/>
@@ -1416,7 +1416,7 @@ during combat. -->
   <module index="109"/>
   <module index="112"/>
   <module index="105"/>
-  <module amount="10" index="93"/>
+  <module amount="4" index="265"/>
   <module index="94"/>
   <module index="96"/>
   <module amount="2" index="227"/>
@@ -1501,7 +1501,7 @@ during combat. -->
   <module index="108"/>
   <module index="111"/>
   <module index="104"/>
-  <module amount="8" index="93"/>
+  <module amount="4" index="245"/>
   <module index="94"/>
   <module amount="2" index="221"/>
   <module index="121"/>
@@ -1621,7 +1621,7 @@ during combat. -->
   <module index="123"/>
   <module index="112"/>
   <module index="125"/>
-  <module amount="13" index="93"/>
+  <module amount="4" index="285"/>
   <module index="94"/>
   <module index="96"/>
   <module amount="2" index="233"/>
@@ -1642,7 +1642,7 @@ during combat. -->
   <module index="124"/>
   <module index="112"/>
   <module index="126"/>
-  <module amount="15" index="93"/>
+  <module amount="4" index="285"/>
   <module index="94"/>
   <module amount="3" index="96"/>
   <module amount="2" index="233"/>
@@ -2338,7 +2338,7 @@ during combat. -->
  <ship combatai="ATTACKER" index="130" maxloot="200" minloot="100" name="Inquisition ship mk IV" owner="INQUISITION">
   <module index="135"/>
   <module index="134"/>
-  <module amount="8" index="93"/>
+  <module amount="4" index="245"/>
   <module index="130"/>
   <module amount="2" index="222"/>
   <module index="133"/>
@@ -2359,7 +2359,7 @@ during combat. -->
   <module index="135"/>
   <module index="91"/>
   <module index="134"/>
-  <module amount="8" index="93"/>
+  <module amount="4" index="245"/>
   <module index="130"/>
   <module amount="2" index="222"/>
   <module index="133"/>
@@ -2442,7 +2442,7 @@ during combat. -->
   <module index="141"/>
   <module index="144"/>
   <module index="137"/>
-  <module amount="10" index="93"/>
+  <module amount="4" index="265"/>
   <module index="130"/>
   <module index="132"/>
   <module amount="2" index="228"/>
@@ -2527,7 +2527,7 @@ during combat. -->
   <module index="140"/>
   <module index="143"/>
   <module index="136"/>
-  <module amount="8" index="93"/>
+  <module amount="4" index="245"/>
   <module index="130"/>
   <module amount="2" index="222"/>
   <module index="153"/>
@@ -2647,7 +2647,7 @@ during combat. -->
   <module index="155"/>
   <module index="144"/>
   <module index="157"/>
-  <module amount="13" index="93"/>
+  <module amount="4" index="285"/>
   <module index="130"/>
   <module index="132"/>
   <module amount="2" index="234"/>
@@ -2668,7 +2668,7 @@ during combat. -->
   <module index="156"/>
   <module index="144"/>
   <module index="158"/>
-  <module amount="15" index="93"/>
+  <module amount="4" index="285"/>
   <module index="130"/>
   <module amount="3" index="132"/>
   <module amount="2" index="234"/>
@@ -2738,7 +2738,7 @@ during combat. -->
   <module index="175"/>
   <module index="177"/>
   <module index="172"/>
-  <module amount="10" index="93"/>
+  <module amount="4" index="265"/>
   <module index="169"/>
   <module index="171"/>
   <module amount="2" index="229"/>
@@ -2904,7 +2904,7 @@ during combat. -->
   <module index="186"/>
   <module index="177"/>
   <module index="188"/>
-  <module amount="13" index="93"/>
+  <module amount="4" index="285"/>
   <module index="169"/>
   <module index="171"/>
   <module amount="2" index="235"/>
@@ -2925,7 +2925,7 @@ during combat. -->
   <module index="187"/>
   <module index="177"/>
   <module index="189"/>
-  <module amount="15" index="93"/>
+  <module amount="4" index="285"/>
   <module index="169"/>
   <module amount="3" index="171"/>
   <module amount="2" index="235"/>
@@ -3365,7 +3365,7 @@ during combat. -->
   <module index="209"/>
   <module index="201"/>
   <module index="211"/>
-  <module amount="13" index="93"/>
+  <module amount="4" index="285"/>
   <module index="197"/>
   <module index="199"/>
   <module amount="2" index="236"/>
@@ -3386,7 +3386,7 @@ during combat. -->
   <module index="210"/>
   <module index="201"/>
   <module index="212"/>
-  <module amount="15" index="93"/>
+  <module amount="4" index="285"/>
   <module index="197"/>
   <module amount="3" index="199"/>
   <module amount="2" index="236"/>
