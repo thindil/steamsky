@@ -262,6 +262,9 @@ package body Bases.RecruitUI is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
+      if RecruitIndex = 0 then
+         return;
+      end if;
       Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
       Set_Upper
         (Gtk_Adjustment(Get_Object(Object, "adjdailypayment")),
