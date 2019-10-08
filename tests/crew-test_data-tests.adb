@@ -317,6 +317,33 @@ package body Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_DailyPayment_62db86_0bfd06
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Crew.DailyPayment;
+   end Wrap_Test_DailyPayment_62db86_0bfd06;
+--  end read only
+
+--  begin read only
+   procedure Test_DailyPayment_test_dailypayment (Gnattest_T : in out Test);
+   procedure Test_DailyPayment_62db86_0bfd06 (Gnattest_T : in out Test) renames Test_DailyPayment_test_dailypayment;
+--  id:2.2/62db86393c55b47a/DailyPayment/1/0/test_dailypayment/
+   procedure Test_DailyPayment_test_dailypayment (Gnattest_T : in out Test) is
+   procedure DailyPayment renames Wrap_Test_DailyPayment_62db86_0bfd06;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      DailyPayment;
+      Assert(True, "This test can only crash.");
+
+--  begin read only
+   end Test_DailyPayment_test_dailypayment;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
