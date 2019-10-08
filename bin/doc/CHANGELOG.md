@@ -14,6 +14,9 @@ All notable changes to this project will be documented in this file.
 ### Removed
 - Industrial and Shipyard bases types from the Drones faction
 
+### Fixed
+- Crash when viewing available recruits in bases
+
 ## [4.2] - 2019-10-06
 
 ### Added
