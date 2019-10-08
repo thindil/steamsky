@@ -290,7 +290,8 @@ package Crew is
       -- FUNCTION
    -- Daily payment and upgrade contracts length for player ship crew members
    -- SOURCE
-   procedure DailyPayment;
-   -- ****
+   procedure DailyPayment with
+      Test_Case => ("Test_DailyPayment", Robustness);
+      -- ****
 
 end Crew;
