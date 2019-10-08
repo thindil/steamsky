@@ -730,4 +730,9 @@ members in that base is twice time cheaper.
   <flag name="shipyard" />
   <description>Factory bases provide tools and materials for crafting and allow to repair or upgrade your ship in the shipyard. Easiest starting point for Drones.</description>
  </base>
+ <base index="8" name="Market" color="5f9ea0">
+  <flag name="blackmarket" />
+  <flag name="shipyard" />
+  <description>Market bases sells and buys random items, additionally they offers cheaper repairs to ships and ability to upgrade ships. Depending on your luck it can be very easy or very difficult point to start the game.</description>
+ </base>
 </bases>
