@@ -104,6 +104,7 @@ package body Missions is
       SkyBases(BaseIndex).Missions.Clear;
       GenerateEnemies(Enemies);
       for I in 1 .. MissionsAmount loop
+         <<Start_Of_Loop>>
          MType :=
            Missions_Types'Val
              (GetRandom(0, Missions_Types'Pos(Missions_Types'Last)));
@@ -147,10 +148,7 @@ package body Missions is
                   end if;
                end loop;
                if Mission.Target = 1 then
-                  Mission :=
-                    (MType => Explore, Time => 1, TargetX => 0, TargetY => 0,
-                     Reward => 1, StartBase => 1, Finished => False,
-                     Target => 0, Multiplier => 1.0);
+                  goto Start_Of_Loop;
                end if;
             when Explore =>
                Mission :=
@@ -166,10 +164,7 @@ package body Missions is
                   end if;
                end loop;
                if Mission.Target = 1 then
-                  Mission :=
-                    (MType => Patrol, Time => 1, TargetX => 0, TargetY => 0,
-                     Reward => 1, StartBase => 1, Finished => False,
-                     Target => 0, Multiplier => 1.0);
+                  goto Start_Of_Loop;
                end if;
             when Passenger =>
                Mission :=
