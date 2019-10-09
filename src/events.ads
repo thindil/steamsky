@@ -96,15 +96,16 @@ package Events is
    -- RESULT
    -- Return true if combat starts, otherwise false
    -- SOURCE
-   function CheckForEvent return Boolean;
-   -- ****
+   function CheckForEvent return Boolean with
+      Test_Case => ("Test_CheckForEvent", Robustness);
+      -- ****
 
-   -- ****f* Events/UpdateEvents
-   -- FUNCTION
-   -- Update all events timers
-   -- PARAMETERS
-   -- Minutes - Amount of in-game minutes which passed
-   -- SOURCE
+      -- ****f* Events/UpdateEvents
+      -- FUNCTION
+      -- Update all events timers
+      -- PARAMETERS
+      -- Minutes - Amount of in-game minutes which passed
+      -- SOURCE
    procedure UpdateEvents(Minutes: Positive);
    -- ****
 
