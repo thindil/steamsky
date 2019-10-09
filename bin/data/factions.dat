@@ -158,6 +158,7 @@ bases of that faction are not grouped near self.
   <basetype index="2" chance="20" />
   <basetype index="3" chance="20" />
   <basetype index="4" chance="20" />
+  <basetype index="8" chance="10" />
  </faction>
  <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" spawn="8" minpopulation="0" maxpopulation="500" playerindex="1" healingtools="Medicines" healingskill="Medicine" baseicon="fc72">
   <relation faction="POLEIS" reputation="-10" friendly="N" />
