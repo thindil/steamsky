@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 - Factory base type to the Drones faction
 
 ### Changed
-- Pirates and Inquisition factions ships
+- Pirates, Inquisition and Poleis factions ships
 - Factory base type description
 - Updated help
 
