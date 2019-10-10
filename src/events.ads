@@ -106,7 +106,8 @@ package Events is
       -- PARAMETERS
       -- Minutes - Amount of in-game minutes which passed
       -- SOURCE
-   procedure UpdateEvents(Minutes: Positive);
+   procedure UpdateEvents(Minutes: Positive) with
+      Test_Case => ("Test_UpdateEvents", Robustness);
    -- ****
 
    -- ****f* Events/DeleteEvent
