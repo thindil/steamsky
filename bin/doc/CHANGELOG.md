@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Pirates, Inquisition, Poleis and Independent factions ships
 - Factory base type description
 - Updated help
+- Updated MODDING.md
 
 ### Removed
 - Industrial and Shipyard bases types from the Drones faction
