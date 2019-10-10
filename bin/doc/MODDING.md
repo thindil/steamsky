@@ -836,7 +836,9 @@ story.
   and the player ship crew members morale, additionally, healing wounded crew
   members in that base is twice time cheaper, `blackmarket` - that base type
   have random cargo (and normal cargo too, if defined) for sale, additionally,
-  all sold items here can be buy again.
+  all sold items here can be buy again, `barracks` - that base type have more
+  recruits available and they are cheaper to hire plus they have lower daily
+  payment.
 
 ## Themes
 
