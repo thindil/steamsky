@@ -194,6 +194,10 @@ package body Bases is
       else
          MaxRecruits := 15;
       end if;
+      if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
+          (To_Unbounded_String("barracks")) then
+         MaxRecruits := MaxRecruits * 2;
+      end if;
       if MaxRecruits > (SkyBases(BaseIndex).Population / 10) then
          MaxRecruits := (SkyBases(BaseIndex).Population / 10) + 1;
       end if;
@@ -288,6 +292,11 @@ package body Bases is
                exit;
             end if;
          end loop;
+         if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
+             (To_Unbounded_String("barracks")) then
+            Price := Price / 2;
+            Payment := Payment / 2;
+         end if;
          Price := Natural(Float(Price * 100) * NewGameSettings.PricesBonus);
          if Price = 0 then
             Price := 1;
