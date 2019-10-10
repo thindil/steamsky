@@ -62,6 +62,33 @@ package body Events.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_UpdateEvents_96e988_646fe5 (Minutes: Positive) 
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Events.UpdateEvents (Minutes);
+   end Wrap_Test_UpdateEvents_96e988_646fe5;
+--  end read only
+
+--  begin read only
+   procedure Test_UpdateEvents_test_updateevents (Gnattest_T : in out Test);
+   procedure Test_UpdateEvents_96e988_646fe5 (Gnattest_T : in out Test) renames Test_UpdateEvents_test_updateevents;
+--  id:2.2/96e988ace71f5fcf/UpdateEvents/1/0/test_updateevents/
+   procedure Test_UpdateEvents_test_updateevents (Gnattest_T : in out Test) is
+   procedure UpdateEvents (Minutes: Positive) renames Wrap_Test_UpdateEvents_96e988_646fe5;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      UpdateEvents(1);
+      Assert(True, "This test can only crash.");
+
+--  begin read only
+   end Test_UpdateEvents_test_updateevents;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
