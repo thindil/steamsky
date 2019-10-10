@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Factory base type to the Drones faction
 - New base type: Market
 - Market base type to the Independent faction
+- New flag for bases types: barracks
 
 ### Changed
 - Pirates, Inquisition, Poleis and Independent factions ships
