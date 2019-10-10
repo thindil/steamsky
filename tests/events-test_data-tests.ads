@@ -12,5 +12,8 @@ package Events.Test_Data.Tests is
    procedure Test_CheckForEvent_1c4562_e01b25 (Gnattest_T : in out Test);
    --  events.ads:99:4:CheckForEvent:Test_CheckForEvent
 
+   procedure Test_UpdateEvents_96e988_646fe5 (Gnattest_T : in out Test);
+   --  events.ads:109:4:UpdateEvents:Test_UpdateEvents
+
 end Events.Test_Data.Tests;
 --  end read only
