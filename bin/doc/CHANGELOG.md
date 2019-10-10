@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 - Market base type to the Independent faction
 
 ### Changed
-- Pirates, Inquisition and Poleis factions ships
+- Pirates, Inquisition, Poleis and Independent factions ships
 - Factory base type description
 - Updated help
 
