@@ -117,7 +117,8 @@ package Events is
    -- EventIndex - Index of the event to delete
    -- SOURCE
    procedure DeleteEvent(EventIndex: Positive) with
-      Pre => EventIndex <= Events_List.Last_Index;
+      Pre => EventIndex <= Events_List.Last_Index,
+      Test_Case => ("Test_DeleteEvent", Nominal);
       -- ****
 
       -- ****f* Events/GenerateTraders
