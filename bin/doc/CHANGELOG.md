@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Factory base type description
 - Updated help
 - Updated MODDING.md
+- Updated Industrial base type with new recipe
 
 ### Removed
 - Industrial and Shipyard bases types from the Drones faction
