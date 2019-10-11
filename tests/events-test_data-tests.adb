@@ -89,6 +89,54 @@ package body Events.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_DeleteEvent_0ca9ce_33228f (EventIndex: Positive) 
+   is
+   begin
+      begin
+         pragma Assert
+           (EventIndex <= Events_List.Last_Index);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(events.ads:0):Test_DeleteEvent test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Events.DeleteEvent (EventIndex);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(events.ads:0:):Test_DeleteEvent test commitment violated");
+      end;
+   end Wrap_Test_DeleteEvent_0ca9ce_33228f;
+--  end read only
+
+--  begin read only
+   procedure Test_DeleteEvent_test_deleteevent (Gnattest_T : in out Test);
+   procedure Test_DeleteEvent_0ca9ce_33228f (Gnattest_T : in out Test) renames Test_DeleteEvent_test_deleteevent;
+--  id:2.2/0ca9ce05c1aa70d1/DeleteEvent/1/0/test_deleteevent/
+   procedure Test_DeleteEvent_test_deleteevent (Gnattest_T : in out Test) is
+   procedure DeleteEvent (EventIndex: Positive) renames Wrap_Test_DeleteEvent_0ca9ce_33228f;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      Amount: constant Natural := Natural(Events_List.Length);
+
+   begin
+
+      DeleteEvent(1);
+      Assert(Natural(Events_List.Length) < Amount, "Failed to delete event.");
+
+--  begin read only
+   end Test_DeleteEvent_test_deleteevent;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.

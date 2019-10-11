@@ -15,5 +15,8 @@ package Events.Test_Data.Tests is
    procedure Test_UpdateEvents_96e988_646fe5 (Gnattest_T : in out Test);
    --  events.ads:109:4:UpdateEvents:Test_UpdateEvents
 
+   procedure Test_DeleteEvent_0ca9ce_33228f (Gnattest_T : in out Test);
+   --  events.ads:119:4:DeleteEvent:Test_DeleteEvent
+
 end Events.Test_Data.Tests;
 --  end read only
