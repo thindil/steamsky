@@ -243,19 +243,19 @@ package Crew is
       -- FUNCTION
       -- Update player ship crew
       -- PARAMETERS
-      -- Minutes     - Amount of in-game minutes which passed
-      -- TiredPoints - Amount of Tired points which will be added to crew members
-      -- InCombat    - If true, player is in combat. Default is false
-      -- SOURCE
+   -- Minutes     - Amount of in-game minutes which passed
+   -- TiredPoints - Amount of Tired points which will be added to crew members
+   -- InCombat    - If true, player is in combat. Default is false
+   -- SOURCE
    procedure UpdateCrew
      (Minutes: Positive; TiredPoints: Natural; InCombat: Boolean := False) with
-     Test_Case => ("Test_UpdateCrew", Robustness);
-     -- ****
+      Test_Case => ("Test_UpdateCrew", Robustness);
+      -- ****
 
-     -- ****f* Crew/WaitForRest
-     -- FUNCTION
-     -- Wait until whole crew is rested
-     -- SOURCE
+      -- ****f* Crew/WaitForRest
+      -- FUNCTION
+      -- Wait until whole crew is rested
+      -- SOURCE
    procedure WaitForRest with
       Test_Case => ("Test_WaitForRest", Robustness);
       -- ****
