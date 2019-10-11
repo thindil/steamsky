@@ -1291,5 +1291,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Simple spear made of adamantium, used in melee combat.</description>
  </item>
+ <item index="253" name="Bronze cockpit simulator" showtype="Cockpit Simulator" type="CockpitSimulator" weight="40" price="27">
+  <data value="15"/>
+  <description>Bronze tool used in training skills.</description>
+ </item>
 </items>
 
