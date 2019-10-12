@@ -137,6 +137,33 @@ package body Events.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_GenerateTraders_8d2b65_5d00a3
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Events.GenerateTraders;
+   end Wrap_Test_GenerateTraders_8d2b65_5d00a3;
+--  end read only
+
+--  begin read only
+   procedure Test_GenerateTraders_test_generatetraders (Gnattest_T : in out Test);
+   procedure Test_GenerateTraders_8d2b65_5d00a3 (Gnattest_T : in out Test) renames Test_GenerateTraders_test_generatetraders;
+--  id:2.2/8d2b65740d8f0270/GenerateTraders/1/0/test_generatetraders/
+   procedure Test_GenerateTraders_test_generatetraders (Gnattest_T : in out Test) is
+   procedure GenerateTraders renames Wrap_Test_GenerateTraders_8d2b65_5d00a3;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      GenerateTraders;
+      Assert(True, "This test can only crash.");
+
+--  begin read only
+   end Test_GenerateTraders_test_generatetraders;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
