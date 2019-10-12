@@ -47,7 +47,9 @@ this file is) to compile:
   for debug mode build or for release mode: `gprbuild -XMode=release`. You
   can also use build script `build.sh`. Command: `./build.sh debug` will build
   the game in debug mode. Command: `.build.sh release` will build the game in
-  release mode and put all needed files in *usr* directory.
+  release mode and put all needed files in *usr* directory. If you want to only
+  build release version of the game, use only `gprbuild -XMode=release`
+  command.
 
 ### Build unit tests
 
@@ -78,7 +80,11 @@ https://docs.appimage.org/user-guide/run-appimages.html
 
 When you trying to run build by yourself version of the game, use script
 `run.sh`. Game will not works if you try to start it by binary file
-`steamsky` from `bin` directory.
+`steamsky` from `bin` directory. This script generally was created for
+testing purposes, may require some changes especially if you want to run
+the game which was build in release mode. In that situation, probably
+easier way will be decompress AppImage version of the game and replace
+files inside with the new version.
 
 ### Windows
 If you compiled the game or downloaded the binaries just clicking on
