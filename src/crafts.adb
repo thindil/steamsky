@@ -347,7 +347,9 @@ package body Crafts is
          end if;
          for Owner of Module.Owner loop
             if Owner = ModuleOwner or ModuleOwner = 0 then
-               GiveOrders(PlayerShip, Owner, Rest);
+               if Owner <= Natural(PlayerShip.Crew.Length) then
+                  GiveOrders(PlayerShip, Owner, Rest);
+               end if;
                Owner := 0;
             end if;
             if Owner > 0 then
