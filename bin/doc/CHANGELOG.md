@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Crash when viewing available recruits in bases
 - Possible crash during generating new missions in bases
+- Crash during crafting (issue #46)
 
 ## [4.0.4] - 2019-09-29
 
