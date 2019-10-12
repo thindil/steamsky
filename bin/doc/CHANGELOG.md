@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
 - New base type: Market
 - Market base type to the Independent faction
 - New flag for bases types: barracks
-- New item: bronze cockpit simulator
+- New items: bronze cockpit simulator, iron cockpit simulator
 - New crafting recipe: bronze cockpit simulator
 
 ### Changed
