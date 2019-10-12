@@ -18,5 +18,8 @@ package Events.Test_Data.Tests is
    procedure Test_DeleteEvent_0ca9ce_33228f (Gnattest_T : in out Test);
    --  events.ads:119:4:DeleteEvent:Test_DeleteEvent
 
+   procedure Test_GenerateTraders_8d2b65_5d00a3 (Gnattest_T : in out Test);
+   --  events.ads:128:4:GenerateTraders:Test_GenerateTraders
+
 end Events.Test_Data.Tests;
 --  end read only

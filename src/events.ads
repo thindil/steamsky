@@ -108,14 +108,14 @@ package Events is
       -- SOURCE
    procedure UpdateEvents(Minutes: Positive) with
       Test_Case => ("Test_UpdateEvents", Robustness);
-   -- ****
+      -- ****
 
-   -- ****f* Events/DeleteEvent
-   -- FUNCTION
-   -- Delete selected event
-   -- PARAMETERS
-   -- EventIndex - Index of the event to delete
-   -- SOURCE
+      -- ****f* Events/DeleteEvent
+      -- FUNCTION
+      -- Delete selected event
+      -- PARAMETERS
+      -- EventIndex - Index of the event to delete
+      -- SOURCE
    procedure DeleteEvent(EventIndex: Positive) with
       Pre => EventIndex <= Events_List.Last_Index,
       Test_Case => ("Test_DeleteEvent", Nominal);
@@ -125,15 +125,16 @@ package Events is
       -- FUNCTION
       -- Create list of traders needed for trader event
       -- SOURCE
-   procedure GenerateTraders;
-   -- ****
+   procedure GenerateTraders with
+      Test_Case => ("Test_GenerateTraders", Robustness);
+      -- ****
 
-   -- ****f* Events/RecoverBase
-   -- FUNCTION
-   -- Recover abandoned base
-   -- PARAMETERS
-   -- BaseIndex - Index of the base where recovery happened
-   -- SOURCE
+      -- ****f* Events/RecoverBase
+      -- FUNCTION
+      -- Recover abandoned base
+      -- PARAMETERS
+      -- BaseIndex - Index of the base where recovery happened
+      -- SOURCE
    procedure RecoverBase(BaseIndex: BasesRange);
    -- ****
 
