@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 - Market base type to the Independent faction
 - New flag for bases types: barracks
 - New items: bronze cockpit simulator, iron cockpit simulator
-- New crafting recipe: bronze cockpit simulator
+- New crafting recipes: bronze cockpit simulator, iron cockpit simulator
 
 ### Changed
 - Pirates, Inquisition, Poleis and Independent factions ships
