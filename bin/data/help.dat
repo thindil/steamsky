@@ -203,7 +203,7 @@ For crafting items you can set how many times you want to craft it. For deconstr
 Grayed name of recipe on list mean that you don't have enough material, proper tool or proper module installed thus you can't craft that recipe.
 
 {u}Getting new crafting recipes{/u}
-    At beginning of game, you know only few basic crafting recipes. To discover more, you must deconstruct item which crafting recipe you want to reveal. Deconstructing works in similar way like normal crafting order - with two differences: deconstructing take always one item to finish and it is always executed in alchemy lab module. List of available deconstruction orders depends on items which you have in ship cargo.
+    At beginning of game, you know only few basic crafting recipes. To discover more, you must deconstruct item which crafting recipe you want to reveal. Deconstructing works in similar way like normal crafting order - with two differences: deconstructing take always one item to finish and it is always executed in alchemy lab module. List of available deconstruction orders depends on items which you have in ship cargo. Deconstructing items doesn't give any materials, only crafting recipe.
     Additionally, you can buy crafting recipes in bases. Which recipes are available, depends on base type and known recipes. If you don't have option {b}&quot;Buy recipes&quot;{/b} in orders menu when docked to base, this mean you bought or know all available recipes in that base type.
 
 {u}Crafting tips{/u}
