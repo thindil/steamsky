@@ -135,18 +135,19 @@ package Events is
       -- PARAMETERS
       -- BaseIndex - Index of the base where recovery happened
       -- SOURCE
-   procedure RecoverBase(BaseIndex: BasesRange);
-   -- ****
+   procedure RecoverBase(BaseIndex: BasesRange) with
+      Test_Case => ("Test_RecoverBase", Robustness);
+      -- ****
 
-   -- ****f* Events/GenerateEnemies
-   -- FUNCTION
-   -- Create list of enemies ships
-   -- PARAMETERS
-   -- Enemies     - List of enemies to generate
-   -- Owner       - Index of faction which enemies list should contains.
-   --               Default all factions
-   -- WithTraders - Did list should contains enemy traders too. Default true
-   -- SOURCE
+      -- ****f* Events/GenerateEnemies
+      -- FUNCTION
+      -- Create list of enemies ships
+      -- PARAMETERS
+      -- Enemies     - List of enemies to generate
+      -- Owner       - Index of faction which enemies list should contains.
+      --               Default all factions
+      -- WithTraders - Did list should contains enemy traders too. Default true
+      -- SOURCE
    procedure GenerateEnemies
      (Enemies: in out UnboundedString_Container.Vector;
       Owner: Unbounded_String := To_Unbounded_String("Any");
