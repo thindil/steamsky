@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated README.md to avoid confusion with `run.sh` script (issue #45)
+- Updated help with info that deconstructing doesn't give materials (issue #46)
 
 ### Fixed
 - Crash when viewing available recruits in bases
