@@ -15,6 +15,8 @@ with System.Assertions;
 --
 --  end read only
 
+with Bases; use Bases;
+
 --  begin read only
 --  end read only
 package body Events.Test_Data.Tests is
@@ -161,6 +163,38 @@ package body Events.Test_Data.Tests is
 
 --  begin read only
    end Test_GenerateTraders_test_generatetraders;
+--  end read only
+
+--  begin read only
+   procedure Wrap_Test_RecoverBase_904011_a032fd (BaseIndex: BasesRange) 
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Events.RecoverBase (BaseIndex);
+   end Wrap_Test_RecoverBase_904011_a032fd;
+--  end read only
+
+--  begin read only
+   procedure Test_RecoverBase_test_recoverbase (Gnattest_T : in out Test);
+   procedure Test_RecoverBase_904011_a032fd (Gnattest_T : in out Test) renames Test_RecoverBase_test_recoverbase;
+--  id:2.2/904011d165b5f6d4/RecoverBase/1/0/test_recoverbase/
+   procedure Test_RecoverBase_test_recoverbase (Gnattest_T : in out Test) is
+   procedure RecoverBase (BaseIndex: BasesRange) renames Wrap_Test_RecoverBase_904011_a032fd;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      for I in SkyBases'Range loop
+         if SkyBases(I).Population = 0 then
+            RecoverBase(I);
+            exit;
+         end if;
+      end loop;
+      Assert(True, "This test can only crash.");
+
+--  begin read only
+   end Test_RecoverBase_test_recoverbase;
 --  end read only
 
 --  begin read only
