@@ -1,0 +1,56 @@
+language: c
+
+branches:
+   only:
+      - master
+
+services:
+   - docker
+
+matrix:
+   include:
+      - os: linux
+        env:
+         - EXTENSION=tar.gz
+        install:
+         - docker pull thindil/gnat-gtkada;
+        script:
+         - docker run -v $(pwd):/app thindil/gnat-gtkada /bin/sh -c "cd /app && ./build.sh release"
+         - tar -czf steamsky-development.tar.gz usr
+      - os: windows
+        env:
+         - EXTENSION=zip
+        install:
+         - export "PATH=/c/GNAT/bin:/c/GtkAda/bin:$PATH";
+         - export "GPR_PROJECT_PATH=/c/GtkAda/lib/gnat";
+         - wget "https://www.dropbox.com/s/2kk2hb6fvpy9a58/gnat.7z?dl=0" -O gnat.7z;
+         - 7z x gnat.7z -oc:/;
+         - wget "https://www.dropbox.com/s/jd0s4gkycrxy029/gtkada.7z?dl=0" -O gtkada.7z;
+         - 7z x gtkada.7z -oc:/;
+        script:
+         - build.cmd;
+         - 7z a -tzip steamsky-development.zip release;
+
+before_deploy:
+  - git tag -f travis-dev-build
+  - git remote add gh https://${TRAVIS_REPO_SLUG%/*}:${KEY}@github.com/${TRAVIS_REPO_SLUG}.git
+  - git push -f gh travis-dev-build
+  - git remote remove gh
+
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api-key: $KEY
+  file:
+   - steamsky.$EXTENSION
+  name: Continuous Integration build
+  body: Development build of $TRAVIS_BRANCH ($TRAVIS_COMMIT) built by Travis CI on $(date +'%F %T %Z').
+  prerelease: true
+  overwrite: true
+  target_commitish: $TRAVIS_COMMIT
+  tag_name: travis-dev-build
+  on:
+   branch: master
+
+notifications:
+  email: false
