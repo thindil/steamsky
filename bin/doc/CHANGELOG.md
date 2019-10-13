@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [4.0.5] - 2019-10-13
 
 ### Changed
 - Updated README.md to avoid confusion with `run.sh` script (issue #45)
