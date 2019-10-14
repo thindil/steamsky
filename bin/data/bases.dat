@@ -214,6 +214,7 @@ Required.
   <recipe index="188" />
   <recipe index="231" />
   <recipe index="232" />
+  <recipe index="233" />
 <!--
 Tag "description": in game description of selected type of bases. Will be
 presented to the player during selection of starting base in main menu.
@@ -731,6 +732,7 @@ members in that base is twice time cheaper.
   <recipe index="188" />
   <recipe index="231" />
   <recipe index="232" />
+  <recipe index="233" />
   <flag name="shipyard" />
   <description>Factory bases provide tools and materials for crafting and allow to repair or upgrade your ship in the shipyard. Easiest starting point for Drones.</description>
  </base>
