@@ -28,8 +28,8 @@ matrix:
          - wget "https://www.dropbox.com/s/jd0s4gkycrxy029/gtkada.7z?dl=0" -O gtkada.7z;
          - 7z x gtkada.7z -oc:/;
         script:
-         - build.cmd;
-         - 7z a -tzip steamsky-development.zip release;
+         - gprbuild -P steamsky.gpr -XMode=release
+         - 7z a -tzip steamsky-development.zip bin;
 
 before_deploy:
   - git tag -f travis-dev-build
@@ -42,7 +42,7 @@ deploy:
   skip_cleanup: true
   api-key: $KEY
   file:
-   - steamsky.$EXTENSION
+   - steamsky-development.$EXTENSION
   name: Continuous Integration build
   body: Development build of $TRAVIS_BRANCH ($TRAVIS_COMMIT) built by Travis CI on $(date +'%F %T %Z').
   prerelease: true
