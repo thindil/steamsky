@@ -152,7 +152,8 @@ package Events is
      (Enemies: in out UnboundedString_Container.Vector;
       Owner: Unbounded_String := To_Unbounded_String("Any");
       WithTraders: Boolean := True) with
-      Pre => Owner /= Null_Unbounded_String;
+      Pre => Owner /= Null_Unbounded_String,
+      Test_Case => ("Test_GenerateEnemies", Nominal);
       -- ****
 
 end Events;
