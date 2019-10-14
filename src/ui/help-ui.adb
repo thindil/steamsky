@@ -272,7 +272,7 @@ package body Help.UI is
       FactionsWithFlag: Unbounded_String;
       BasesFlags: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("shipyard"), To_Unbounded_String("temple"),
-         To_Unbounded_String("blackmarket"));
+         To_Unbounded_String("blackmarket"), To_Unbounded_String("barracks"));
       BasesWithFlag: Unbounded_String;
    begin
       if Setting then
