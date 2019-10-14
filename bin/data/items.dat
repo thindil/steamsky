@@ -1299,5 +1299,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="10"/>
   <description>Iron tool used in training skills.</description>
  </item>
+ <item index="255" name="Steel cockpit simulator" showtype="Cockpit Simulator" type="CockpitSimulator" weight="40" price="37">
+  <data value="5"/>
+  <description>Steel tool used in training skills.</description>
+ </item>
 </items>
 
