@@ -198,6 +198,54 @@ package body Events.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_GenerateEnemies_7f8f2c_3cff13 (Enemies: in out UnboundedString_Container.Vector; Owner: Unbounded_String := To_Unbounded_String("Any"); WithTraders: Boolean := True) 
+   is
+   begin
+      begin
+         pragma Assert
+           (Owner /= Null_Unbounded_String);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(events.ads:0):Test_GenerateEnemies test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Events.GenerateEnemies (Enemies, Owner, WithTraders);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(events.ads:0:):Test_GenerateEnemies test commitment violated");
+      end;
+   end Wrap_Test_GenerateEnemies_7f8f2c_3cff13;
+--  end read only
+
+--  begin read only
+   procedure Test_GenerateEnemies_test_generateenemies (Gnattest_T : in out Test);
+   procedure Test_GenerateEnemies_7f8f2c_3cff13 (Gnattest_T : in out Test) renames Test_GenerateEnemies_test_generateenemies;
+--  id:2.2/7f8f2ce3bb5b1dd9/GenerateEnemies/1/0/test_generateenemies/
+   procedure Test_GenerateEnemies_test_generateenemies (Gnattest_T : in out Test) is
+   procedure GenerateEnemies (Enemies: in out UnboundedString_Container.Vector; Owner: Unbounded_String := To_Unbounded_String("Any"); WithTraders: Boolean := True) renames Wrap_Test_GenerateEnemies_7f8f2c_3cff13;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      Enemies: UnboundedString_Container.Vector;
+
+   begin
+
+      GenerateEnemies(Enemies);
+      Assert(Enemies.Length > 0, "Failed to generate enemies.");
+
+--  begin read only
+   end Test_GenerateEnemies_test_generateenemies;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
