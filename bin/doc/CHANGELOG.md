@@ -18,7 +18,7 @@ All notable changes to this project will be documented in this file.
 - Factory base type description
 - Updated help
 - Updated MODDING.md
-- Updated Industrial base type with new recipe
+- Updated Industrial and Factory bases types with new recipes
 - Updated README.md to avoid confusion with `run.sh` script (issue #45)
 
 ### Removed
