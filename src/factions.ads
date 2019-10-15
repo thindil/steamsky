@@ -186,7 +186,8 @@ package Factions is
      (SourceFaction, TargetFaction: Unbounded_String) return Integer with
       Pre =>
       (Factions_Container.Contains(Factions_List, SourceFaction) and
-       Factions_Container.Contains(Factions_List, TargetFaction));
+       Factions_Container.Contains(Factions_List, TargetFaction)),
+      Test_Case => ("Test_GetReputation", Nominal);
       -- ****
 
       -- ****f* Factions/IsFriendly
