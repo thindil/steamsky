@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 - New items: bronze cockpit simulator, iron cockpit simulator, steel cockpit
   simulator, titanium cockpit simulator
 - New crafting recipes: bronze cockpit simulator, iron cockpit simulator,
-  steel cockpit simulator
+  steel cockpit simulator, titanium cockpit simulator
 
 ### Changed
 - Pirates, Inquisition, Poleis and Independent factions ships
