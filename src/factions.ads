@@ -203,7 +203,8 @@ package Factions is
      (SourceFaction, TargetFaction: Unbounded_String) return Boolean with
       Pre =>
       (Factions_Container.Contains(Factions_List, SourceFaction) and
-       Factions_Container.Contains(Factions_List, TargetFaction));
+       Factions_Container.Contains(Factions_List, TargetFaction)),
+      Test_Case => ("Test_IsFriendly", Nominal);
       -- ****
 
       -- ****f* Factions/GetRandomFaction

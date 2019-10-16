@@ -80,6 +80,57 @@ package body Factions.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_IsFriendly_868bec_b689c9 (SourceFaction, TargetFaction: Unbounded_String)  return Boolean
+   is
+   begin
+      begin
+         pragma Assert
+           ((Factions_Container.Contains(Factions_List, SourceFaction) and Factions_Container.Contains(Factions_List, TargetFaction)));
+         null;
+      exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "req_sloc(factions.ads:0):Test_IsFriendly test requirement violated");
+      end;
+      declare
+         Test_IsFriendly_868bec_b689c9_Result : constant Boolean := GNATtest_Generated.GNATtest_Standard.Factions.IsFriendly (SourceFaction, TargetFaction);
+      begin
+         begin
+            pragma Assert
+              (True);
+            null;
+         exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "ens_sloc(factions.ads:0:):Test_IsFriendly test commitment violated");
+         end;
+         return Test_IsFriendly_868bec_b689c9_Result;
+      end;
+   end Wrap_Test_IsFriendly_868bec_b689c9;
+--  end read only
+
+--  begin read only
+   procedure Test_IsFriendly_test_isfriendly (Gnattest_T : in out Test);
+   procedure Test_IsFriendly_868bec_b689c9 (Gnattest_T : in out Test) renames Test_IsFriendly_test_isfriendly;
+--  id:2.2/868bec8bf6fd9c98/IsFriendly/1/0/test_isfriendly/
+   procedure Test_IsFriendly_test_isfriendly (Gnattest_T : in out Test) is
+      function IsFriendly (SourceFaction, TargetFaction: Unbounded_String) return Boolean renames Wrap_Test_IsFriendly_868bec_b689c9;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(IsFriendly(To_Unbounded_String("POLEIS"), To_Unbounded_String("INDEPENDENT")) = True, "Failed to check two friendly factions.");
+      Assert(IsFriendly(To_Unbounded_String("POLEIS"), To_Unbounded_String("PIRATES")) = False, "Failed to check two unfriendly factions.");
+
+--  begin read only
+   end Test_IsFriendly_test_isfriendly;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
