@@ -122,6 +122,16 @@ Paths to directories can be absolute or relative where file `steamsky` is. For
 Windows, use `steamsky.exe` instead `./run.sh`. If you use AppImage version
 of the game, you can also use all of this starting parameters.
 
+### Testing versions
+
+Here are available also testing versions of the game. You can find them
+in [Releases](https://github.com/thindil/steamsky/releases/tag/travis-dev-build).
+To use them, first you must download normal release. Then, inside directory
+where the game is, type `./steamsky-dev-x86_64.AppImage --appimage-extract`
+to extract whole game to directory *squashfs-root*. And then just move files
+from the archive to proper locations. To run that version, just enter
+*squashfs-root* directory and type in console `./AppRun`.
+
 ## Modding Support
 For detailed informations about modifying various game elements or debugging
 game, see [MODDING.md](bin/doc/MODDING.md)
