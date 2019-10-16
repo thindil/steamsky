@@ -745,4 +745,8 @@ members in that base is twice time cheaper.
   <flag name="shipyard" />
   <description>Market bases sells and buys random items, additionally they offers cheaper repairs to ships and ability to upgrade ships. Depending on your luck it can be very easy or very difficult point to start the game.</description>
  </base>
+ <base index="9" name="Barracks" color="19785f">
+  <flag name="barracks" />
+  <description>Barracks bases don't sell any items but have more that other bases recruits and they are cheaper to hire with lower maintain costs. Difficult place for starting point.</description>
+ </base>
 </bases>
