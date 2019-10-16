@@ -1307,5 +1307,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Titanium tool used in training skills.</description>
  </item>
+ <item index="257" name="Orichalcum cockpit simulator" showtype="Cockpit Simulator" type="CockpitSimulator" weight="60" price="47">
+  <data value="2"/>
+  <description>Orichalcum tool used in training skills.</description>
+ </item>
 </items>
 
