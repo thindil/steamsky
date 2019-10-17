@@ -113,6 +113,12 @@ add this attribute.
   <item index="207" sellprice="10" />
   <item index="208" sellprice="20" />
   <item index="210" sellprice="7" />
+  <item index="253" sellprice="25" />
+  <item index="254" sellprice="30" />
+  <item index="255" sellprice="35" />
+  <item index="256" sellprice="40" />
+  <item index="257" sellprice="45" />
+  <item index="258" sellprice="85" />
 <!--
 Tag "recipe" is used to set which recipes are available to buy in that type of
 bases.
@@ -217,6 +223,7 @@ Required.
   <recipe index="233" />
   <recipe index="234" />
   <recipe index="235" />
+  <recipe index="236" />
 <!--
 Tag "description": in game description of selected type of bases. Will be
 presented to the player during selection of starting base in main menu.
@@ -639,6 +646,12 @@ members in that base is twice time cheaper.
   <item index="207" sellprice="10" />
   <item index="208" sellprice="20" />
   <item index="210" sellprice="7" />
+  <item index="253" sellprice="25" />
+  <item index="254" sellprice="30" />
+  <item index="255" sellprice="35" />
+  <item index="256" sellprice="40" />
+  <item index="257" sellprice="45" />
+  <item index="258" sellprice="85" />
   <recipe index="6" />
   <recipe index="7" />
   <recipe index="8" />
@@ -737,6 +750,7 @@ members in that base is twice time cheaper.
   <recipe index="233" />
   <recipe index="234" />
   <recipe index="235" />
+  <recipe index="236" />
   <flag name="shipyard" />
   <description>Factory bases provide tools and materials for crafting and allow to repair or upgrade your ship in the shipyard. Easiest starting point for Drones.</description>
  </base>
