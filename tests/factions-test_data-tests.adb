@@ -131,6 +131,39 @@ package body Factions.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_GetRandomFaction_47dd81_103989 return Unbounded_String
+   is
+   begin
+      declare
+         Test_GetRandomFaction_47dd81_103989_Result : constant Unbounded_String := GNATtest_Generated.GNATtest_Standard.Factions.GetRandomFaction;
+      begin
+         return Test_GetRandomFaction_47dd81_103989_Result;
+      end;
+   end Wrap_Test_GetRandomFaction_47dd81_103989;
+--  end read only
+
+--  begin read only
+   procedure Test_GetRandomFaction_test_getrandomfaction (Gnattest_T : in out Test);
+   procedure Test_GetRandomFaction_47dd81_103989 (Gnattest_T : in out Test) renames Test_GetRandomFaction_test_getrandomfaction;
+--  id:2.2/47dd8179e978586a/GetRandomFaction/1/0/test_getrandomfaction/
+   procedure Test_GetRandomFaction_test_getrandomfaction (Gnattest_T : in out Test) is
+      function GetRandomFaction return Unbounded_String renames Wrap_Test_GetRandomFaction_47dd81_103989;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      FactionName: Unbounded_String := Null_Unbounded_String;
+
+   begin
+
+      FactionName := GetRandomFaction;
+      Assert(FactionName /= Null_Unbounded_String, "Failed to get random faction name. Empty name.");
+      Assert(Factions_List.Contains(FactionName), "Failed to get random faction name. Got not existing name.");
+
+--  begin read only
+   end Test_GetRandomFaction_test_getrandomfaction;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
