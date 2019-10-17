@@ -213,7 +213,8 @@ package Factions is
       -- RESULT
       -- Random index of faction
       -- SOURCE
-   function GetRandomFaction return Unbounded_String;
-   -- ****
+   function GetRandomFaction return Unbounded_String with
+      Test_Case => ("Test_GetRandomFaction", Robustness);
+      -- ****
 
 end Factions;
