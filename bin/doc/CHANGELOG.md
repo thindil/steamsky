@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Factory base type to the Drones faction
-- New base type: Market
+- New base types: Market and Barracks
 - Market base type to the Independent faction
 - New flag for bases types: barracks
 - New items: bronze cockpit simulator, iron cockpit simulator, steel cockpit
