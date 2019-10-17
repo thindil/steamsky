@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Updated MODDING.md
 - Updated Industrial and Factory bases types with new recipes
 - Updated README.md to avoid confusion with `run.sh` script (issue #45)
+- Updated README.md
 
 ### Removed
 - Industrial and Shipyard bases types from the Drones faction
