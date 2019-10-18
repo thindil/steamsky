@@ -1034,6 +1034,7 @@ package body MainMenu is
            ("Directory " & To_String(SaveDirectory) &
             " is not write accessible, thus save games cannot be saved.");
       end if;
+      ShowFactionDescription(Builder);
    end CreateMainMenu;
 
    -- ****if* MainMenu/ShowErrorInfo
