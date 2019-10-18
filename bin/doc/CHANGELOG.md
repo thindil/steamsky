@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
   adamantium cockpit simulator, medium book of engineering
 - New crafting recipes: bronze cockpit simulator, iron cockpit simulator,
   steel cockpit simulator, titanium cockpit simulator, orichalcum cockpit
-  simulator, adamantium cockpit simulator
+  simulator, adamantium cockpit simulator, medium book of engineering
 
 ### Changed
 - Pirates, Inquisition, Poleis and Independent factions ships
