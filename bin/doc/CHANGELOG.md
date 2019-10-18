@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Crash when viewing available recruits in bases
 - Possible crash during generating new missions in bases
 - Crash during crafting (issue #46)
+- Showing all bases when Undead faction is selected as default
 
 ## [4.2] - 2019-10-06
 
