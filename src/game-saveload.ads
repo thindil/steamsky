@@ -59,7 +59,8 @@ package Game.SaveLoad is
    -- PARAMETERS
    -- RenameSave - If true, rename existing save game file. Default false.
    -- SOURCE
-   procedure GenerateSaveName(RenameSave: Boolean := False);
-   -- ****
+   procedure GenerateSaveName(RenameSave: Boolean := False) with
+      Test_Case => ("Test_GenerateSaveName", Robustness);
+      -- ****
 
 end Game.SaveLoad;
