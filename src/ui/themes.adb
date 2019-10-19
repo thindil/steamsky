@@ -196,15 +196,29 @@ package body Themes is
             OverloadedIcon => Wide_Character'Val(16#f55b#),
             CheckButtonUnchecked =>
               DataDirectory &
-              To_Unbounded_String
-                ("ui" & Dir_Separator & "images" & Dir_Separator &
-                 "checkbox-unchecked.svg"),
+              To_Unbounded_String("/ui/images/checkbox-unchecked.svg"),
             CheckButtonChecked =>
               DataDirectory &
-              To_Unbounded_String
-                ("ui" & Dir_Separator & "images" & Dir_Separator &
-                 "checkbox-checked.svg"));
+              To_Unbounded_String("/ui/images/checkbox-checked.svg"));
       end SetDefaultValues;
+      function ToUri(Path: String) return Unbounded_String is
+         Uri: Unbounded_String := To_Unbounded_String(Path);
+      begin
+         for I in 1 .. Length(Uri) loop
+            if Element(Uri, I) = ' ' then
+               Replace_Slice(Uri, I, I, "%20");
+            end if;
+         end loop;
+         if Dir_Separator = '/' then
+            return Uri & To_Unbounded_String("/");
+         end if;
+         for I in 1 .. Length(Uri) loop
+            if Element(Uri, I) = '\' then
+               Replace_Element(Uri, I, '/');
+            end if;
+         end loop;
+         return Uri & To_Unbounded_String("/");
+      end ToUri;
    begin
       SetDefaultValues;
       TempRecord.Name := To_Unbounded_String("Default theme");
@@ -388,15 +402,11 @@ package body Themes is
                      elsif FieldName =
                        To_Unbounded_String("CheckButtonUnchecked") then
                         TempRecord.CheckButtonUnchecked :=
-                          To_Unbounded_String
-                            (Full_Name(FoundDirectory) & Dir_Separator) &
-                          Value;
+                          ToUri(Full_Name(FoundDirectory)) & Value;
                      elsif FieldName =
                        To_Unbounded_String("CheckButtonChecked") then
                         TempRecord.CheckButtonChecked :=
-                          To_Unbounded_String
-                            (Full_Name(FoundDirectory) & Dir_Separator) &
-                          Value;
+                          ToUri(Full_Name(FoundDirectory)) & Value;
                      end if;
                   end if;
                end loop;
