@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash on showing battering ram info in Shipyard (issue #47)
+- Inventory window doesn't show properly, most of the interface is not drawn,
+  flickering on and off (issue #48)
 
 ## [4.0.5] - 2019-10-13
 
