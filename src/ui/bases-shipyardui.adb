@@ -108,7 +108,7 @@ package body Bases.ShipyardUI is
                  Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
                    .Value;
             when BATTERING_RAM =>
-               MaxValue := PlayerShip.Modules(ShipModuleIndex).Damage;
+               MaxValue := PlayerShip.Modules(ShipModuleIndex).Damage2;
                Value := 0;
             when others =>
                MaxValue := 0;
