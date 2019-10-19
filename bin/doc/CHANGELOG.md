@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash on showing battering ram info in Shipyard (issue #47)
+
 ## [4.0.5] - 2019-10-13
 
 ### Changed
