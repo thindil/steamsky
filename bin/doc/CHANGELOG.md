@@ -35,6 +35,8 @@ All notable changes to this project will be documented in this file.
 - Crash during crafting (issue #46)
 - Showing all bases when Undead faction is selected as default
 - Crash on showing battering ram info in Shipyard (issue #47)
+- Inventory window doesn't show properly, most of the interface is not drawn,
+  flickering on and off (issue #48)
 
 ## [4.2] - 2019-10-06
 
