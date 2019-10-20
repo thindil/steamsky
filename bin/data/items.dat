@@ -1323,5 +1323,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="10"/>
   <description>Large book with informations about basics of engineering. Used in training skills.</description>
  </item>
+ <item index="261" name="Huge book of engineering" showtype="Book of Engineering" type="EngineersBook" weight="2" price="27">
+  <data value="5"/>
+  <description>Huge book with informations about basics of engineering. Used in training skills.</description>
+ </item>
 </items>
 
