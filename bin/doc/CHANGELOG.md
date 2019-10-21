@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
 - New crafting recipes: bronze cockpit simulator, iron cockpit simulator,
   steel cockpit simulator, titanium cockpit simulator, orichalcum cockpit
   simulator, adamantium cockpit simulator, medium book of engineering, large
-  book of engineering, huge book of engineering
+  book of engineering, huge book of engineering, bronze gun simulator
 
 ### Changed
 - Pirates, Inquisition, Poleis and Independent factions ships
