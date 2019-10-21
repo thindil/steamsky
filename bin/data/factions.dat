@@ -202,6 +202,7 @@ bases of that faction are not grouped near self.
   <basetype index="2" chance="20" />
   <basetype index="3" chance="20" />
   <basetype index="4" chance="20" />
+  <basetype index="9" chance="10" />
  </faction>
  <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" spawn="7" minpopulation="0" maxpopulation="500" namestype="robotic" healingtools="Bronze" healingskill="Engineering" baseicon="f013">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
