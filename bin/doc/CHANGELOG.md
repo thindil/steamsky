@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
   steel cockpit simulator, titanium cockpit simulator, orichalcum cockpit
   simulator, adamantium cockpit simulator, medium book of engineering, large
   book of engineering, huge book of engineering, bronze gun simulator
+- Barracks base type to the Undead faction
 
 ### Changed
 - Pirates, Inquisition, Poleis and Independent factions ships
