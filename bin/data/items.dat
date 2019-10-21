@@ -1327,5 +1327,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="5"/>
   <description>Huge book with informations about basics of engineering. Used in training skills.</description>
  </item>
+ <item index="262" name="Bronze gun simulator" showtype="Gun Simulator" type="GunSimulator" weight="37" price="26">
+  <data value="15"/>
+  <description>Bronze tool used in training skills.</description>
+ </item>
 </items>
 
