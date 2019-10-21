@@ -402,7 +402,8 @@ package Game is
    -- Minutes  - Amount of in-game minutes passed
    -- InCombat - Did player is in combat currently. Default false
    -- SOURCE
-   procedure UpdateGame(Minutes: Positive; InCombat: Boolean := False);
+   procedure UpdateGame(Minutes: Positive; InCombat: Boolean := False) with
+      Test_Case => ("Test_UpdateGame", Robustness);
    -- ****
 
    -- ****f* Game/EndGame
