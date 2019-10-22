@@ -783,4 +783,10 @@ members in that base is twice time cheaper.
   <flag name="barracks" />
   <description>Barracks bases don't sell any items but have more that other bases recruits and they are cheaper to hire with lower maintain costs. Difficult place for starting point.</description>
  </base>
+ <base index="10" name="Agora" color="cd00cd">
+  <flag name="blackmarket" />
+  <flag name="shipyard" />
+  <flag name="barracks" />
+  <description>Agoras bases sells and buys random items, have more available recruits and they are cheaper than in other bases. Additionally they offers cheaper repairs to ships and ability to upgrade ships. Depending on your luck it can be very easy or very difficult point to start the game.</description>
+ </base>
 </bases>
