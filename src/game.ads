@@ -404,25 +404,26 @@ package Game is
    -- SOURCE
    procedure UpdateGame(Minutes: Positive; InCombat: Boolean := False) with
       Test_Case => ("Test_UpdateGame", Robustness);
-   -- ****
+      -- ****
 
-   -- ****f* Game/EndGame
-   -- FUNCTION
-   -- Save (or not) game and clear all temporary data
-   -- PARAMETERS
-   -- Save - Did game should be saved to file or not
-   -- SOURCE
-   procedure EndGame(Save: Boolean);
-   -- ****
+      -- ****f* Game/EndGame
+      -- FUNCTION
+      -- Save (or not) game and clear all temporary data
+      -- PARAMETERS
+      -- Save - Did game should be saved to file or not
+      -- SOURCE
+   procedure EndGame(Save: Boolean) with
+      Test_Case => ("Test_EndGame", Robustness);
+      -- ****
 
-   -- ****f* Game/FindSkillIndex
-   -- FUNCTION
-   -- Find index of selected skill
-   -- PARAMETERS
-   -- SkillName - Name of the skill to search
-   -- RESULT
-   -- Index of selected skill or 0 if skill was not found
-   -- SOURCE
+      -- ****f* Game/FindSkillIndex
+      -- FUNCTION
+      -- Find index of selected skill
+      -- PARAMETERS
+      -- SkillName - Name of the skill to search
+      -- RESULT
+      -- Index of selected skill or 0 if skill was not found
+      -- SOURCE
    function FindSkillIndex(SkillName: Unbounded_String) return Natural with
       Pre => SkillName /= Null_Unbounded_String;
       -- ****
