@@ -12,5 +12,8 @@ package Game.Test_Data.Tests is
    procedure Test_UpdateGame_93bf31_5306b6 (Gnattest_T : in out Test);
    --  game.ads:405:4:UpdateGame:Test_UpdateGame
 
+   procedure Test_EndGame_2a7140_745ef4 (Gnattest_T : in out Test);
+   --  game.ads:415:4:EndGame:Test_EndGame
+
 end Game.Test_Data.Tests;
 --  end read only

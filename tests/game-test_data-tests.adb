@@ -15,6 +15,9 @@ with System.Assertions;
 --
 --  end read only
 
+with Messages; use Messages;
+with Config; use Config;
+
 --  begin read only
 --  end read only
 package body Game.Test_Data.Tests is
@@ -54,6 +57,37 @@ package body Game.Test_Data.Tests is
 
 --  begin read only
    end Test_UpdateGame_test_updategame;
+--  end read only
+
+--  begin read only
+   procedure Wrap_Test_EndGame_2a7140_745ef4 (Save: Boolean) 
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Game.EndGame (Save);
+   end Wrap_Test_EndGame_2a7140_745ef4;
+--  end read only
+
+--  begin read only
+   procedure Test_EndGame_test_endgame (Gnattest_T : in out Test);
+   procedure Test_EndGame_2a7140_745ef4 (Gnattest_T : in out Test) renames Test_EndGame_test_endgame;
+--  id:2.2/2a71400c0eb9defc/EndGame/1/0/test_endgame/
+   procedure Test_EndGame_test_endgame (Gnattest_T : in out Test) is
+   procedure EndGame (Save: Boolean) renames Wrap_Test_EndGame_2a7140_745ef4;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      EndGame(False);
+      Assert(Messages_List.Length = 0, "Failed to clear old game data.");
+      NewGameSettings.PlayerFaction := To_Unbounded_String("POLEIS");
+      NewGameSettings.PlayerCareer := To_Unbounded_String("general");
+      NewGameSettings.StartingBase := To_Unbounded_String("1");
+      NewGame;
+
+--  begin read only
+   end Test_EndGame_test_endgame;
 --  end read only
 
 --  begin read only
