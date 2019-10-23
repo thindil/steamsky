@@ -425,7 +425,8 @@ package Game is
       -- Index of selected skill or 0 if skill was not found
       -- SOURCE
    function FindSkillIndex(SkillName: Unbounded_String) return Natural with
-      Pre => SkillName /= Null_Unbounded_String;
+      Pre => SkillName /= Null_Unbounded_String,
+      Test_Case => ("Test_FindSkillIndex", Nominal);
       -- ****
 
       -- ****f* Game/LoadGameData
