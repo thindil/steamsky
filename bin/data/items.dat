@@ -1335,5 +1335,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="10"/>
   <description>Iron tool used in training skills.</description>
  </item>
+ <item index="264" name="Steel gun simulator" showtype="Gun Simulator" type="GunSimulator" weight="37" price="36">
+  <data value="5"/>
+  <description>Steel tool used in training skills.</description>
+ </item>
 </items>
 
