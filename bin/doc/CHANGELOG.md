@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
   book of engineering, huge book of engineering, bronze gun simulator, iron
   gun simulator, steel gun simulator
 - Barracks base type to the Undead faction
+- Agora base type to the Poleis faction
 
 ### Changed
 - Pirates, Inquisition, Poleis and Independent factions ships
