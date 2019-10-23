@@ -122,6 +122,7 @@ between 51 and 70 it will be second base type.
   <basetype index="2" chance="20" />
   <basetype index="3" chance="20" />
   <basetype index="4" chance="20" />
+  <basetype index="10" chance="10" />
  </faction>
  <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" spawn="20" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine" baseicon="f5df">
   <relation faction="POLEIS" reputation="0" friendly="Y" />
