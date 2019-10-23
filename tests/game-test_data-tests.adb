@@ -91,6 +91,57 @@ package body Game.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_FindSkillIndex_f70bc5_c869df (SkillName: Unbounded_String)  return Natural
+   is
+   begin
+      begin
+         pragma Assert
+           (SkillName /= Null_Unbounded_String);
+         null;
+      exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "req_sloc(game.ads:0):Test_FindSkillIndex test requirement violated");
+      end;
+      declare
+         Test_FindSkillIndex_f70bc5_c869df_Result : constant Natural := GNATtest_Generated.GNATtest_Standard.Game.FindSkillIndex (SkillName);
+      begin
+         begin
+            pragma Assert
+              (True);
+            null;
+         exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "ens_sloc(game.ads:0:):Test_FindSkillIndex test commitment violated");
+         end;
+         return Test_FindSkillIndex_f70bc5_c869df_Result;
+      end;
+   end Wrap_Test_FindSkillIndex_f70bc5_c869df;
+--  end read only
+
+--  begin read only
+   procedure Test_FindSkillIndex_test_findskillindex (Gnattest_T : in out Test);
+   procedure Test_FindSkillIndex_f70bc5_c869df (Gnattest_T : in out Test) renames Test_FindSkillIndex_test_findskillindex;
+--  id:2.2/f70bc5b5036bd777/FindSkillIndex/1/0/test_findskillindex/
+   procedure Test_FindSkillIndex_test_findskillindex (Gnattest_T : in out Test) is
+      function FindSkillIndex (SkillName: Unbounded_String) return Natural renames Wrap_Test_FindSkillIndex_f70bc5_c869df;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(FindSkillIndex(To_Unbounded_String("Piloting")) = 1, "Failed to find existing skill.");
+      Assert(FindSkillIndex(To_Unbounded_String("sdljfskfhsf")) = 0, "Failed to not find non exisiting skill.");
+
+--  begin read only
+   end Test_FindSkillIndex_test_findskillindex;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
