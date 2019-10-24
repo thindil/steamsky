@@ -1339,5 +1339,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="5"/>
   <description>Steel tool used in training skills.</description>
  </item>
+ <item index="265" name="Titanium gun simulator" showtype="Gun Simulator" type="GunSimulator" weight="37" price="41">
+  <data value="3"/>
+  <description>Titanium tool used in training skills.</description>
+ </item>
 </items>
 
