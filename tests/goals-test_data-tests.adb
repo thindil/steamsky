@@ -79,6 +79,35 @@ package body Goals.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_ClearCurrentGoal_cb9255_08f1aa
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Goals.ClearCurrentGoal;
+   end Wrap_Test_ClearCurrentGoal_cb9255_08f1aa;
+--  end read only
+
+--  begin read only
+   procedure Test_ClearCurrentGoal_test_clearcurrentgoal (Gnattest_T : in out Test);
+   procedure Test_ClearCurrentGoal_cb9255_08f1aa (Gnattest_T : in out Test) renames Test_ClearCurrentGoal_test_clearcurrentgoal;
+--  id:2.2/cb92551f0de5a16e/ClearCurrentGoal/1/0/test_clearcurrentgoal/
+   procedure Test_ClearCurrentGoal_test_clearcurrentgoal (Gnattest_T : in out Test) is
+   procedure ClearCurrentGoal renames Wrap_Test_ClearCurrentGoal_cb9255_08f1aa;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      ClearCurrentGoal;
+      Assert(CurrentGoal.Index = Null_Unbounded_String, "Failed to reset current goal.");
+      CurrentGoal := Goals_List(1);
+
+
+--  begin read only
+   end Test_ClearCurrentGoal_test_clearcurrentgoal;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
