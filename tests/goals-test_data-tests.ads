@@ -12,5 +12,8 @@ package Goals.Test_Data.Tests is
    procedure Test_GoalText_c541ba_267fe9 (Gnattest_T : in out Test);
    --  goals.ads:95:4:GoalText:Test_GoalText
 
+   procedure Test_ClearCurrentGoal_cb9255_08f1aa (Gnattest_T : in out Test);
+   --  goals.ads:104:4:ClearCurrentGoal:Test_ClearCurrentGoal
+
 end Goals.Test_Data.Tests;
 --  end read only

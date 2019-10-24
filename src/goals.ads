@@ -101,17 +101,18 @@ package Goals is
       -- FUNCTION
       -- Reset current goal
       -- SOURCE
-   procedure ClearCurrentGoal;
-   -- ****
+   procedure ClearCurrentGoal with
+      Test_Case => ("Test_ClearCurrentGoal", Robustness);
+      -- ****
 
-   -- ****f* Goals/UpdateGoal
-   -- FUNCTION
-   -- Update current goal
-   -- PARAMETERS
-   -- GType       - Type of goal to check
-   -- TargetIndex - Index of target to check
-   -- Amount      - Amount for goal to modify if both checks are valid
-   -- SOURCE
+      -- ****f* Goals/UpdateGoal
+      -- FUNCTION
+      -- Update current goal
+      -- PARAMETERS
+      -- GType       - Type of goal to check
+      -- TargetIndex - Index of target to check
+      -- Amount      - Amount for goal to modify if both checks are valid
+      -- SOURCE
    procedure UpdateGoal
      (GType: GoalTypes; TargetIndex: Unbounded_String; Amount: Positive := 1);
    -- ****
