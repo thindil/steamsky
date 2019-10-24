@@ -93,7 +93,8 @@ package Goals is
    -- Info about selected goal
    -- SOURCE
    function GoalText(Index: Goals_Container.Extended_Index) return String with
-      Pre => Index <= Goals_List.Last_Index;
+      Pre => Index <= Goals_List.Last_Index,
+      Test_Case => ("Test_GoalText", Nominal);
       -- ****
 
       -- ****f* Goals/ClearCurrentGoal
