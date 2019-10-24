@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file.
   simulator, titanium cockpit simulator, orichalcum cockpit simulator,
   adamantium cockpit simulator, medium book of engineering, large book of
   engineering, huge book of engineering, bronze gun simulator, iron gun
-  simulator, steel gun simulator
+  simulator, steel gun simulator, titanium gun simulator
 - New crafting recipes: bronze cockpit simulator, iron cockpit simulator,
   steel cockpit simulator, titanium cockpit simulator, orichalcum cockpit
   simulator, adamantium cockpit simulator, medium book of engineering, large
