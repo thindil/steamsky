@@ -100,11 +100,42 @@ package body Goals.Test_Data.Tests is
 
       ClearCurrentGoal;
       Assert(CurrentGoal.Index = Null_Unbounded_String, "Failed to reset current goal.");
-      CurrentGoal := Goals_List(1);
+      CurrentGoal := Goals_List(2);
 
 
 --  begin read only
    end Test_ClearCurrentGoal_test_clearcurrentgoal;
+--  end read only
+
+--  begin read only
+   procedure Wrap_Test_UpdateGoal_cfe7db_0e93ce (GType: GoalTypes; TargetIndex: Unbounded_String; Amount: Positive := 1) 
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Goals.UpdateGoal (GType, TargetIndex, Amount);
+   end Wrap_Test_UpdateGoal_cfe7db_0e93ce;
+--  end read only
+
+--  begin read only
+   procedure Test_UpdateGoal_test_updategoal (Gnattest_T : in out Test);
+   procedure Test_UpdateGoal_cfe7db_0e93ce (Gnattest_T : in out Test) renames Test_UpdateGoal_test_updategoal;
+--  id:2.2/cfe7dbae26bc2b25/UpdateGoal/1/0/test_updategoal/
+   procedure Test_UpdateGoal_test_updategoal (Gnattest_T : in out Test) is
+   procedure UpdateGoal (GType: GoalTypes; TargetIndex: Unbounded_String; Amount: Positive := 1) renames Wrap_Test_UpdateGoal_cfe7db_0e93ce;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      Amount: Natural := CurrentGoal.Amount;
+
+   begin
+
+      UpdateGoal(DESTROY, To_Unbounded_String("PIRATES"), 1);
+      Assert(CurrentGoal.Amount = (Amount - 1), "Failed to update goal.");
+      Amount := CurrentGoal.Amount;
+      UpdateGoal(REPUTATION, To_Unbounded_String("PIRATES"), 1);
+      Assert(CurrentGoal.Amount = Amount, "Failed to not update goal.");
+
+--  begin read only
+   end Test_UpdateGoal_test_updategoal;
 --  end read only
 
 --  begin read only
