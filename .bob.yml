@@ -1,0 +1,48 @@
+- command:
+   name: runtests
+   execute:
+      - cd tests/driver
+      - ./test_runner
+   description: Run Steam Sky unit tests
+- command:
+   name: debug
+   execute:
+      - gprbuild -P steamsky.gpr
+   description: Build Steam Sky in debug mode
+- command:
+   name: release
+   execute:
+      - gprclean -P steamsky.gpr
+      - others/build.sh
+      - gprclean -P steamsky.gpr
+   description: Build Steam Sky in release mode
+- command:
+   name: analyze
+   execute:
+      - gprbuild -P steamsky.gpr -XMode=analyze
+   description: Build Steam Sky in analyze mode
+- command:
+   name: clean
+   execute:
+      - gprclean -P steamsky.gpr
+   description: Clean all compilation files
+- command:
+   name: createtests
+   execute:
+      - gnattest -P steamsky.gpr
+   description: Regenerate unit tests
+- command:
+   name: tests
+   execute:
+      - gprbuild -P tests/driver/test_driver.gpr
+   description: Build Steam Sky unit tests
+- command:
+   name: docs
+   execute:
+      - others/generatedocs.py
+   description: Generate code documentation
+- command:
+   name: gprof
+   execute:
+      - gprof bin/steamsky gmon.out
+   description: Generate gprof report
