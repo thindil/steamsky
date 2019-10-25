@@ -809,5 +809,9 @@ If you want add more materials to recipe, just add new tag "material" with prope
   <material amount="4" type="Titanium"/>
   <material amount="1" type="Wood"/>
  </recipe>
+ <recipe crafted="1" index="244" result="266" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="4" type="Orichalcum"/>
+  <material amount="1" type="Wood"/>
+ </recipe>
 </recipes>
 
