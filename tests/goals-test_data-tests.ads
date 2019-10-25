@@ -15,5 +15,8 @@ package Goals.Test_Data.Tests is
    procedure Test_ClearCurrentGoal_cb9255_08f1aa (Gnattest_T : in out Test);
    --  goals.ads:104:4:ClearCurrentGoal:Test_ClearCurrentGoal
 
+   procedure Test_UpdateGoal_cfe7db_0e93ce (Gnattest_T : in out Test);
+   --  goals.ads:116:4:UpdateGoal:Test_UpdateGoal
+
 end Goals.Test_Data.Tests;
 --  end read only
