@@ -66,7 +66,8 @@ package HallOfFame is
    procedure UpdateHallOfFame(PlayerName, DeathReason: Unbounded_String) with
       Pre =>
       (PlayerName /= Null_Unbounded_String and
-       DeathReason /= Null_Unbounded_String);
+       DeathReason /= Null_Unbounded_String),
+      Test_Case => ("Test_UpdateHallOfFame", Nominal);
       -- ****
 
 end HallOfFame;
