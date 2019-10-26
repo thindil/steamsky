@@ -32,10 +32,8 @@ matrix:
          - 7z a -tzip steamsky-development.zip bin;
 
 before_deploy:
-  - git tag -f travis-dev-build
-  - git remote add gh https://${TRAVIS_REPO_SLUG%/*}:${KEY}@github.com/${TRAVIS_REPO_SLUG}.git
-  - git push -f gh travis-dev-build
-  - git remote remove gh
+    - "if [[ $EXTENSION == \"tar.gz\" ]]; then git tag -f travis-dev-build && git remote add gh https://${TRAVIS_REPO_SLUG%/*}:${KEY}@github.com/${TRAVIS_REPO_SLUG}.git && git push -f gh travis-dev-build && git remote remove gh; fi"
+    - export "TRAVIS_TAG=travis-dev-build";
 
 deploy:
   provider: releases
