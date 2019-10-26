@@ -8,3 +8,6 @@ Various files which are not necessary needed for development:
 - robodocada.rc     - configuration script for ROBODoc to generate the code
                       documentation of the game
 - robodoc.css       - CSS style for the code documentation of the game
+- generatedocs.py   - script to generate code documentation. **Important:** run
+                      this script from the main project directory, not from
+                      this.
