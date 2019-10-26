@@ -19,7 +19,7 @@ All notable changes to this project will be documented in this file.
   simulator, adamantium cockpit simulator, medium book of engineering, large
   book of engineering, huge book of engineering, bronze gun simulator, iron
   gun simulator, steel gun simulator, titanium gun simulator, orichalcum gun
-  simulator
+  simulator, adamantium gun simulator
 - Barracks base type to the Undead faction
 - Agora base type to the Poleis faction
 
