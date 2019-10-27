@@ -1351,5 +1351,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Adamantium tool used in training skills.</description>
  </item>
+ <item index="268" name="Medium book of rhetoric" showtype="Book of Rhetoric" type="RhetoricBook" weight="1" price="17">
+  <data value="15"/>
+  <description>Medium book with informations about basics of rhetoric. Used in training skills.</description>
+ </item>
 </items>
 
