@@ -56,7 +56,8 @@ package Log is
    procedure LogMessage
      (Message: String; MessageType: Debug_Types;
       NewLine, TimeStamp: Boolean := True) with
-      Pre => Message'Length > 0;
+      Pre => Message'Length > 0,
+      Test_Case => ("Test_LogMessage", Nominal);
       -- ****
 
       -- ****f* Log/EndLogging
