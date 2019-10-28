@@ -58,8 +58,10 @@ package Maps is
    -- SOURCE
    function CountDistance
      (DestinationX, DestinationY: Positive) return Natural with
-      Pre => DestinationX < 1025 and DestinationY < 1025;
+      Pre => DestinationX < 1025 and DestinationY < 1025,
+      Test_Case => ("Test_CountDistance", Nominal);
       -- ****
+
       -- ****f* Maps/NormalizeCoord
       -- FUNCTION
       -- Normalize map coordinates
