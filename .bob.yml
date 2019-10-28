@@ -46,3 +46,8 @@
    execute:
       - gprof bin/steamsky gmon.out
    description: Generate gprof report
+- command:
+   name: windows
+   execute:
+      - wineconsole others/build.cmd
+   description: Build Steam sky release for Windows on Linux
