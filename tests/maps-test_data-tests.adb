@@ -81,6 +81,36 @@ package body Maps.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_NormalizeCoord_6338a5_63c4fc (Coord: in out Integer; IsXAxis: Boolean := True) 
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Maps.NormalizeCoord (Coord, IsXAxis);
+   end Wrap_Test_NormalizeCoord_6338a5_63c4fc;
+--  end read only
+
+--  begin read only
+   procedure Test_NormalizeCoord_test_normalizecoord (Gnattest_T : in out Test);
+   procedure Test_NormalizeCoord_6338a5_63c4fc (Gnattest_T : in out Test) renames Test_NormalizeCoord_test_normalizecoord;
+--  id:2.2/6338a59b69707203/NormalizeCoord/1/0/test_normalizecoord/
+   procedure Test_NormalizeCoord_test_normalizecoord (Gnattest_T : in out Test) is
+   procedure NormalizeCoord (Coord: in out Integer; IsXAxis: Boolean := True) renames Wrap_Test_NormalizeCoord_6338a5_63c4fc;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      Coord: Integer := 0;
+
+   begin
+
+      NormalizeCoord(Coord);
+      Assert(Coord = 1, "Failed to normalize map coordinate.");
+      NormalizeCoord(Coord);
+      Assert(Coord = 1, "Failed to not normalize map coordinate.");
+
+--  begin read only
+   end Test_NormalizeCoord_test_normalizecoord;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
