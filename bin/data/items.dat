@@ -1359,5 +1359,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="10"/>
   <description>Large book with informations about basics of rhetoric. Used in training skills.</description>
  </item>
+ <item index="270" name="Huge book of rhetoric" showtype="Book of Rhetoric" type="RhetoricBook" weight="1" price="27">
+  <data value="5"/>
+  <description>Large book with informations about basics of rhetoric. Used in training skills.</description>
+ </item>
 </items>
 
