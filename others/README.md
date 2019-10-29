@@ -11,3 +11,6 @@ Various files which are not necessary needed for development:
 - generatedocs.py   - script to generate code documentation. **Important:** run
                       this script from the main project directory, not from
                       this.
+- build.cmd         - script used to build Windows version of the program on
+                      Linux. You will probably have to change PATH variable
+                      inside if you want o run it.
