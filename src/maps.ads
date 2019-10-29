@@ -71,7 +71,9 @@ package Maps is
       -- RESULT
       -- Parameter Coord
       -- SOURCE
-   procedure NormalizeCoord(Coord: in out Integer; IsXAxis: Boolean := True);
-   -- ****
+   procedure NormalizeCoord
+     (Coord: in out Integer; IsXAxis: Boolean := True) with
+      Test_Case => ("Test_NormalizeCoord", Robustness);
+      -- ****
 
 end Maps;

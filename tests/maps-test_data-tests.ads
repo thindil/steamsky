@@ -12,5 +12,8 @@ package Maps.Test_Data.Tests is
    procedure Test_CountDistance_603480_547c35 (Gnattest_T : in out Test);
    --  maps.ads:59:4:CountDistance:Test_CountDistance
 
+   procedure Test_NormalizeCoord_6338a5_63c4fc (Gnattest_T : in out Test);
+   --  maps.ads:74:4:NormalizeCoord:Test_NormalizeCoord
+
 end Maps.Test_Data.Tests;
 --  end read only
