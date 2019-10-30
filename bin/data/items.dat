@@ -1363,5 +1363,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="5"/>
   <description>Large book with informations about basics of rhetoric. Used in training skills.</description>
  </item>
+ <item index="271" name="Bronze small toys" showtype="Small toys" type="SmallToys" weight="2" price="15">
+  <data value="15"/>
+  <description>Small bronze toys. Used to play or to train some skills.</description>
+ </item>
 </items>
 
