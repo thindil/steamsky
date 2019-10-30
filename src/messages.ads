@@ -86,17 +86,18 @@ package Messages is
    -- RESULT
    -- Formatted in YYYY-MM-DD HH:MM style in game time
    -- SOURCE
-   function FormatedTime(Time: Date_Record := GameDate) return String;
-   -- ****
+   function FormatedTime(Time: Date_Record := GameDate) return String with
+      Test_Case => ("Test_FormattedTime", Robustness);
+      -- ****
 
-   -- ****f* Messages/AddMessage
-   -- FUNCTION
-   -- Add new message to list
-   -- PARAMETERS
-   -- Message - Text of message to add
-   -- MType   - Type of message to add
-   -- Color   - Color of message to add
-   -- SOURCE
+      -- ****f* Messages/AddMessage
+      -- FUNCTION
+      -- Add new message to list
+      -- PARAMETERS
+      -- Message - Text of message to add
+      -- MType   - Type of message to add
+      -- Color   - Color of message to add
+      -- SOURCE
    procedure AddMessage
      (Message: String; MType: Message_Type; Color: Message_Color := WHITE) with
       Pre => Message'Length > 0;
