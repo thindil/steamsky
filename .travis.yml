@@ -15,7 +15,7 @@ matrix:
         install:
          - docker pull thindil/gnat-gtkada;
         script:
-         - docker run -v $(pwd):/app thindil/gnat-gtkada /bin/sh -c "cd /app && ./build.sh release"
+         - docker run -v $(pwd):/app thindil/gnat-gtkada /bin/sh -c "cd /app && others/build.sh"
          - tar -czf steamsky-development.tar.gz usr
       - os: windows
         env:
