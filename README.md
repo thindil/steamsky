@@ -44,30 +44,28 @@ this file is) to compile:
   `Build All`.
 
 * If you prefer using console: in main source code directory type `gprbuild`
-  for debug mode build or for release mode: `gprbuild -XMode=release`. You
-  can also use build script `build.sh`. Command: `./build.sh debug` will build
-  the game in debug mode. Command: `.build.sh release` will build the game in
-  release mode and put all needed files in *usr* directory. If you want to only
-  build release version of the game, use only `gprbuild -XMode=release`
-  command.
+  for debug mode build or for release mode: `gprbuild -XMode=release`. If you
+  have installed *Bob* you can type `bob debug` for build in debug mode or
+  `bob release` to prepare release for the program. If you want to only build
+  release version of the game, use only `gprbuild -XMode=release` command.
 
 ### Build unit tests
 
-In main source directory, from console: type `./build.sh tests`
+Navigate to `tests/driver` directory from the main directory (where this
+file is):
 
-### Build.sh script
+* From console: type `gprbuild -P test_driver.gpr`
 
-This is main build script for the game. To see all available options for it,
-in main source directory, type `./build.sh help`
+Or if you have *Bob* installed, type `bob tests`.
 
 ## Generating code documentation
 
 To generate (or regenerate) code documentation, you need [ROBODoc](https://rfsber.home.xs4all.nl/Robo/).
-If you have it, in main the game directory (where this file is) enter terminal
-command: `./generatedocs.py`. For more information about this script, please
-look [here](https://github.com/thindil/roboada#generatedocspy). This version
-of script have set all default settings for Steam Sky code. You can also use
-build script `build.sh` for this. Enter command: `./build.sh docs`.
+If you have it, in main program directory (where this file is) enter terminal
+command: `others/generatedocs.py`. For more information about this script,
+please look [here](https://github.com/thindil/roboada#generatedocspy). This
+version of script have set all default settings for Hunter code. If you have
+*Bob* installed, you can type `bob docs`.
 
 ## Running Steam Sky
 
