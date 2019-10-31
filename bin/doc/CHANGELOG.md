@@ -21,7 +21,7 @@ All notable changes to this project will be documented in this file.
   book of engineering, huge book of engineering, bronze gun simulator, iron
   gun simulator, steel gun simulator, titanium gun simulator, orichalcum gun
   simulator, adamantium gun simulator, medium book of rhetoric, large book of
-  rhetoric, huge book of rhetoric, bronze small toys
+  rhetoric, huge book of rhetoric, bronze small toys, iron small toys
 - Barracks base type to the Undead faction
 - Agora base type to the Poleis faction
 
