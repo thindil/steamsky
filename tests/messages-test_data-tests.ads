@@ -12,5 +12,8 @@ package Messages.Test_Data.Tests is
    procedure Test_FormatedTime_5bb1ad_45f0f1 (Gnattest_T : in out Test);
    --  messages.ads:89:4:FormatedTime:Test_FormattedTime
 
+   procedure Test_AddMessage_508d2e_c15a00 (Gnattest_T : in out Test);
+   --  messages.ads:101:4:AddMessage:Test_AddMessage
+
 end Messages.Test_Data.Tests;
 --  end read only

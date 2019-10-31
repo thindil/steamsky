@@ -100,7 +100,8 @@ package Messages is
       -- SOURCE
    procedure AddMessage
      (Message: String; MType: Message_Type; Color: Message_Color := WHITE) with
-      Pre => Message'Length > 0;
+      Pre => Message'Length > 0,
+      Test_Case => ("Test_AddMessage", Nominal);
       -- ****
 
       -- ****f* Messages/GetMessage

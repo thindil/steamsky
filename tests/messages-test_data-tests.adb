@@ -59,6 +59,54 @@ package body Messages.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_AddMessage_508d2e_c15a00 (Message: String; MType: Message_Type; Color: Message_Color := WHITE) 
+   is
+   begin
+      begin
+         pragma Assert
+           (Message'Length > 0);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(messages.ads:0):Test_AddMessage test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Messages.AddMessage (Message, MType, Color);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(messages.ads:0:):Test_AddMessage test commitment violated");
+      end;
+   end Wrap_Test_AddMessage_508d2e_c15a00;
+--  end read only
+
+--  begin read only
+   procedure Test_AddMessage_test_addmessage (Gnattest_T : in out Test);
+   procedure Test_AddMessage_508d2e_c15a00 (Gnattest_T : in out Test) renames Test_AddMessage_test_addmessage;
+--  id:2.2/508d2ebb71c5d14a/AddMessage/1/0/test_addmessage/
+   procedure Test_AddMessage_test_addmessage (Gnattest_T : in out Test) is
+   procedure AddMessage (Message: String; MType: Message_Type; Color: Message_Color := WHITE) renames Wrap_Test_AddMessage_508d2e_c15a00;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      Amount: constant Natural := MessagesAmount;
+
+   begin
+
+      AddMessage("Test message.", Default);
+      Assert(Amount < MessagesAmount, "Failed to add new message.");
+
+--  begin read only
+   end Test_AddMessage_test_addmessage;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
