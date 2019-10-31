@@ -14,3 +14,6 @@ Various files which are not necessary needed for development:
 - build.cmd         - script used to build Windows version of the program on
                       Linux. You will probably have to change PATH variable
                       inside if you want o run it.
+- build.sh          - script to build release for the program. Build the
+                      program in release mode and copy all files to proper
+                      location.
