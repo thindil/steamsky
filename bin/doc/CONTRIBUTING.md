@@ -6,7 +6,7 @@ or if you prefer, on mail <thindil@laeran.pl>
 
 ### Some general hints about reporting bugs
 
-- In the "Title" field try to write very short but not too general description
+- In the "Title" field try to write short but not too general description
   of the problem. Good example: "Game crashed when entering base". Bad example:
   "Game crashes often."
 - In the body/comment field try to write as much informations about the problem
@@ -120,9 +120,9 @@ the game with mode `analyze` (in the main project directory, where
 
 `gprbuild -XMode=analyze`
 
-Or, if you prefer use `build.sh` command:
+or, if you prefer (and you have installed), use `Bob`:
 
-`./build.sh analyze`
+`bob analyze`
 
 More informations about code coverage and profiling, you can find in the proper
 documentation for both programs.
@@ -130,10 +130,13 @@ documentation for both programs.
 #### Generating reports
 
 After running the game in `analyze` mode, you can generate reports by using
-`build.sh` command:
+command:
 
-- `./build.sh gcov` for generate report for the code coverage
-- `./build.sh gprof` for generate report for the code profiling
+`gprof bin/steamsky gmon.out` for generate report for the code profiling
+
+or, if you prefer (and you have installed), use `Bob`:
+
+`bob gprof`
 
 ### Generating unit tests
 
@@ -143,6 +146,10 @@ skeletons code for tests units (in the main project directory, where
 
 `gnattest -P steamsky.gpr`
 
+or, if you prefer (and you have installed), use `Bob`:
+
+`bob createtests`
+
 Tests are generated only for this subprograms which have explicitly declared
 tests cases in declarations. Thus if here are no tests cases declared in the
 game code, there will be no unit tests generated.
@@ -151,6 +158,10 @@ game code, there will be no unit tests generated.
 
 First, you must build all tests. How to do it, is described in main
 *README.md* file. Then, in console type: `./run.sh tests`
+
+or, if you prefer (and you have installed), use `Bob`:
+
+`bob runtests`
 
 More information about GnatTest (how to create unit test, etc.) you can find
 [here](http://docs.adacore.com/live/wave/gnat_ugn/html/gnat_ugn/gnat_ugn/gnat_utility_programs.html#the-unit-test-generator-gnattest).
