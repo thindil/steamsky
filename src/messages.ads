@@ -117,13 +117,14 @@ package Messages is
       -- SOURCE
    function GetMessage
      (MessageIndex: Integer; MType: Message_Type := Default)
-      return Message_Data;
-   -- ****
+      return Message_Data with
+      Test_Case => ("Test_GetMessage", Robustness);
+      -- ****
 
-   -- ****f* Messages/ClearMessages
-   -- FUNCTION
-   -- Remove all messages
-   -- SOURCE
+      -- ****f* Messages/ClearMessages
+      -- FUNCTION
+      -- Remove all messages
+      -- SOURCE
    procedure ClearMessages;
    -- ****
 

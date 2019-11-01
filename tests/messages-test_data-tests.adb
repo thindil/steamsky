@@ -107,6 +107,37 @@ package body Messages.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_GetMessage_56cd5a_0b2a8d (MessageIndex: Integer; MType: Message_Type := Default)  return Message_Data
+   is
+   begin
+      declare
+         Test_GetMessage_56cd5a_0b2a8d_Result : constant Message_Data := GNATtest_Generated.GNATtest_Standard.Messages.GetMessage (MessageIndex, MType);
+      begin
+         return Test_GetMessage_56cd5a_0b2a8d_Result;
+      end;
+   end Wrap_Test_GetMessage_56cd5a_0b2a8d;
+--  end read only
+
+--  begin read only
+   procedure Test_GetMessage_test_getmessage (Gnattest_T : in out Test);
+   procedure Test_GetMessage_56cd5a_0b2a8d (Gnattest_T : in out Test) renames Test_GetMessage_test_getmessage;
+--  id:2.2/56cd5ac704cead2b/GetMessage/1/0/test_getmessage/
+   procedure Test_GetMessage_test_getmessage (Gnattest_T : in out Test) is
+      function GetMessage (MessageIndex: Integer; MType: Message_Type := Default) return Message_Data renames Wrap_Test_GetMessage_56cd5a_0b2a8d;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+      
+      Assert(GetMessage(1).Message /= Null_Unbounded_String, "Failed to get message.");
+      Assert(GetMessage(1000).Message = Null_Unbounded_String, "Failed to not get non-existing message.");
+
+--  begin read only
+   end Test_GetMessage_test_getmessage;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
