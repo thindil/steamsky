@@ -15,5 +15,8 @@ package Messages.Test_Data.Tests is
    procedure Test_AddMessage_508d2e_c15a00 (Gnattest_T : in out Test);
    --  messages.ads:101:4:AddMessage:Test_AddMessage
 
+   procedure Test_GetMessage_56cd5a_0b2a8d (Gnattest_T : in out Test);
+   --  messages.ads:118:4:GetMessage:Test_GetMessage
+
 end Messages.Test_Data.Tests;
 --  end read only
