@@ -18,5 +18,8 @@ package Messages.Test_Data.Tests is
    procedure Test_GetMessage_56cd5a_0b2a8d (Gnattest_T : in out Test);
    --  messages.ads:118:4:GetMessage:Test_GetMessage
 
+   procedure Test_ClearMessages_aeb026_267040 (Gnattest_T : in out Test);
+   --  messages.ads:128:4:ClearMessages:Test_ClearMessages
+
 end Messages.Test_Data.Tests;
 --  end read only
