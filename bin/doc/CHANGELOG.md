@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 - Updated README.md to avoid confusion with `run.sh` script (issue #45)
 - Updated README.md
 - Updated contributing guide
+- Updated factions description with information about unique bases
 
 ### Removed
 - Industrial and Shipyard bases types from the Drones faction
