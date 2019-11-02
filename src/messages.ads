@@ -125,17 +125,18 @@ package Messages is
       -- FUNCTION
       -- Remove all messages
       -- SOURCE
-   procedure ClearMessages;
-   -- ****
+   procedure ClearMessages with
+      Test_Case => ("Test_ClearMessages", Robustness);
+      -- ****
 
-   -- ****f* Messages/MessagesAmount
-   -- FUNCTION
-   -- Get amount of selected type messages
-   -- PARAMETERS
-   -- MType - Type of messages to search. Default is all messages
-   -- RESULT
-   -- Amount of messages of selected type
-   -- SOURCE
+      -- ****f* Messages/MessagesAmount
+      -- FUNCTION
+      -- Get amount of selected type messages
+      -- PARAMETERS
+      -- MType - Type of messages to search. Default is all messages
+      -- RESULT
+      -- Amount of messages of selected type
+      -- SOURCE
    function MessagesAmount(MType: Message_Type := Default) return Natural;
    -- ****
 

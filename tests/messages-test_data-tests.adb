@@ -138,6 +138,34 @@ package body Messages.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_ClearMessages_aeb026_267040
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Messages.ClearMessages;
+   end Wrap_Test_ClearMessages_aeb026_267040;
+--  end read only
+
+--  begin read only
+   procedure Test_ClearMessages_test_clearmessages (Gnattest_T : in out Test);
+   procedure Test_ClearMessages_aeb026_267040 (Gnattest_T : in out Test) renames Test_ClearMessages_test_clearmessages;
+--  id:2.2/aeb0266c09a96d71/ClearMessages/1/0/test_clearmessages/
+   procedure Test_ClearMessages_test_clearmessages (Gnattest_T : in out Test) is
+   procedure ClearMessages renames Wrap_Test_ClearMessages_aeb026_267040;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      ClearMessages;
+      Assert(MessagesAmount = 0, "Failed to clear all messages.");
+      AddMessage("Test message.", Default);
+
+--  begin read only
+   end Test_ClearMessages_test_clearmessages;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
