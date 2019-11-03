@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
   simulator, steel gun simulator, titanium gun simulator, orichalcum gun
   simulator, adamantium gun simulator, medium book of rhetoric, large book of
   rhetoric, huge book of rhetoric, bronze small toys, iron small toys, steel
-  small toys, titanium small toys
+  small toys, titanium small toys and orichalcum small toys
 - New crafting recipes: bronze cockpit simulator, iron cockpit simulator,
   steel cockpit simulator, titanium cockpit simulator, orichalcum cockpit
   simulator, adamantium cockpit simulator, medium book of engineering, large
