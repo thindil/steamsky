@@ -166,6 +166,36 @@ package body Messages.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_MessagesAmount_922f17_8e4cbf (MType: Message_Type := Default)  return Natural
+   is
+   begin
+      declare
+         Test_MessagesAmount_922f17_8e4cbf_Result : constant Natural := GNATtest_Generated.GNATtest_Standard.Messages.MessagesAmount (MType);
+      begin
+         return Test_MessagesAmount_922f17_8e4cbf_Result;
+      end;
+   end Wrap_Test_MessagesAmount_922f17_8e4cbf;
+--  end read only
+
+--  begin read only
+   procedure Test_MessagesAmount_test_messagesamount (Gnattest_T : in out Test);
+   procedure Test_MessagesAmount_922f17_8e4cbf (Gnattest_T : in out Test) renames Test_MessagesAmount_test_messagesamount;
+--  id:2.2/922f1712ec778778/MessagesAmount/1/0/test_messagesamount/
+   procedure Test_MessagesAmount_test_messagesamount (Gnattest_T : in out Test) is
+      function MessagesAmount (MType: Message_Type := Default) return Natural renames Wrap_Test_MessagesAmount_922f17_8e4cbf;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(MessagesAmount = Natural(Messages_List.Length), "Failed to count properly amount of messages.");
+
+--  begin read only
+   end Test_MessagesAmount_test_messagesamount;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
