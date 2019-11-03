@@ -8,11 +8,11 @@
 <link rel="stylesheet" href="./robodoc.css" type="text/css" />
 <title>./src/maps.ads</title>
 <!-- Source: ./src/maps.ads -->
-<!-- Generated with ROBODoc Version 4.99.43 (Feb  2 2019) -->
+<!-- Generated with ROBODoc Version 4.99.43 (Jul 26 2019) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.2 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.3 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -94,7 +94,8 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> <strong>CountDistance</strong>
      <span class="sign">(</span>DestinationX<span class="sign">,</span> DestinationY<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">return</span> Natural with
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> DestinationX <span class="sign">&lt;</span> 1025 and DestinationY <span class="sign">&lt;</span> 1025<span class="sign">;</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> DestinationX <span class="sign">&lt;</span> 1025 and DestinationY <span class="sign">&lt;</span> 1025<span class="sign">,</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_CountDistance"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> DestinationX - X coordinate of the destination point
@@ -113,7 +114,9 @@
 <pre> Normalize map coordinates
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>NormalizeCoord</strong><span class="sign">(</span>Coord<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Integer<span class="sign">;</span> IsXAxis<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> <strong>NormalizeCoord</strong>
+     <span class="sign">(</span>Coord<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Integer<span class="sign">;</span> IsXAxis<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span> with
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_NormalizeCoord"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Coord   - Coordinate to normalize
@@ -125,7 +128,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/maps.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Oct 06 2019 06:40:13
+<p>Generated from ./src/maps.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Nov 03 2019 06:25:16
 </p>
 </div> <!-- footer -->
 </body>
