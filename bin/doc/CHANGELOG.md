@@ -23,7 +23,7 @@ All notable changes to this project will be documented in this file.
   gun simulator, steel gun simulator, titanium gun simulator, orichalcum gun
   simulator, adamantium gun simulator, medium book of rhetoric, large book of
   rhetoric, huge book of rhetoric, bronze small toys, iron small toys, steel
-  small toys, titanium small toys
+  small toys, titanium small toys and orichalcum small toys
 - Barracks base type to the Undead faction
 - Agora base type to the Poleis faction
 
