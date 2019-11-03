@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [4.3] - 2019-11-03
 
 ### Added
 - Factory base type to the Drones faction
