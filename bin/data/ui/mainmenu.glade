@@ -1362,7 +1362,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <property name="receives_default">True</property>
                     <property name="halign">center</property>
                     <property name="relief">none</property>
-                    <property name="uri">https://thindil.github.io/steamsky/</property>
+                    <property name="uri">https://thindil.itch.io/steam-sky</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1810,14 +1810,14 @@ Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WAR
             </child>
             <child>
               <object class="GtkLinkButton">
-                <property name="label" translatable="yes">https://thindil.github.io/steamsky/community.html</property>
+                <property name="label" translatable="yes">https://thindil.itch.io/steam-sky</property>
                 <property name="name">flatbutton</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="halign">center</property>
                 <property name="relief">none</property>
-                <property name="uri">https://thindil.github.io/steamsky/community.html</property>
+                <property name="uri">https://thindil.itch.io/steam-sky</property>
               </object>
               <packing>
                 <property name="expand">False</property>
