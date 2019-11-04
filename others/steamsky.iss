@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Steam Sky"
-#define MyAppVersion "4.0.6"
+#define MyAppVersion "4.0.7"
 #define MyAppPublisher "Bartek thindil Jasicki"
 #define MyAppURL "https://thindil.github.io/steamsky/"
 #define MyAppExeName "bin\steamsky.exe"
