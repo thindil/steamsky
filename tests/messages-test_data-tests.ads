@@ -24,5 +24,8 @@ package Messages.Test_Data.Tests is
    procedure Test_MessagesAmount_922f17_8e4cbf (Gnattest_T : in out Test);
    --  messages.ads:140:4:MessagesAmount:Test_MessagesAmount
 
+   procedure Test_GetLastMessageIndex_ee1f16_517343 (Gnattest_T : in out Test);
+   --  messages.ads:164:4:GetLastMessageIndex:Test_GetLastMessageIndex
+
 end Messages.Test_Data.Tests;
 --  end read only
