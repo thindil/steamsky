@@ -196,6 +196,36 @@ package body Messages.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_GetLastMessageIndex_ee1f16_517343 return Natural
+   is
+   begin
+      declare
+         Test_GetLastMessageIndex_ee1f16_517343_Result : constant Natural := GNATtest_Generated.GNATtest_Standard.Messages.GetLastMessageIndex;
+      begin
+         return Test_GetLastMessageIndex_ee1f16_517343_Result;
+      end;
+   end Wrap_Test_GetLastMessageIndex_ee1f16_517343;
+--  end read only
+
+--  begin read only
+   procedure Test_GetLastMessageIndex_test_getlastmessageindex (Gnattest_T : in out Test);
+   procedure Test_GetLastMessageIndex_ee1f16_517343 (Gnattest_T : in out Test) renames Test_GetLastMessageIndex_test_getlastmessageindex;
+--  id:2.2/ee1f163ccc085b43/GetLastMessageIndex/1/0/test_getlastmessageindex/
+   procedure Test_GetLastMessageIndex_test_getlastmessageindex (Gnattest_T : in out Test) is
+      function GetLastMessageIndex return Natural renames Wrap_Test_GetLastMessageIndex_ee1f16_517343;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(GetLastMessageIndex = Messages_List.Last_Index, "Failed to get last message index.");
+
+--  begin read only
+   end Test_GetLastMessageIndex_test_getlastmessageindex;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
