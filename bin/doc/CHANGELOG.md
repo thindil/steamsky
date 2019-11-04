@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ## Changed
-- Reduced price of orichalcum small toys
+- Reduced base price of orichalcum small toys
+- Reduced price of orichalcum small toys in Industrial and Factory bases
 
 ## [4.3] - 2019-11-03
 
