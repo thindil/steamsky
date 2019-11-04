@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+## Changed
+- Reduced price of orichalcum small toys
+
 ## [4.3] - 2019-11-03
 
 ### Added
