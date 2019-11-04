@@ -135,7 +135,7 @@ add this attribute.
   <item index="272" sellprice="18" />
   <item index="273" sellprice="23" />
   <item index="274" sellprice="28" />
-  <item index="275" sellprice="53" />
+  <item index="275" sellprice="33" />
 <!--
 Tag "recipe" is used to set which recipes are available to buy in that type of
 bases.
@@ -702,7 +702,7 @@ members in that base is twice time cheaper.
   <item index="272" sellprice="18" />
   <item index="273" sellprice="23" />
   <item index="274" sellprice="28" />
-  <item index="275" sellprice="53" />
+  <item index="275" sellprice="33" />
   <recipe index="6" />
   <recipe index="7" />
   <recipe index="8" />
