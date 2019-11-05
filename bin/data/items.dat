@@ -1383,5 +1383,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Small orichalcum toys. Used to play or to train some skills.</description>
  </item>
+ <item index="276" name="Adamantium small toys" showtype="Small toys" type="SmallToys" weight="3" price="60">
+  <data value="1"/>
+  <description>Small adamantium toys. Used to play or to train some skills.</description>
+ </item>
 </items>
 
