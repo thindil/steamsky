@@ -12,6 +12,9 @@ All notable changes to this project will be documented in this file.
 - Reduced price of orichalcum small toys in Industrial and Factory bases
 - Updated Industrial and Factory bases types with new recipes
 
+### Fixed
+- Crash during hiring new crew members in bases (issue #49)
+
 ## [4.3] - 2019-11-03
 
 ### Added
