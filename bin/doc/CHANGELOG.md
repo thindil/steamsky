@@ -3,7 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-## Changed
+### Added
+- New items: adamantium small toys
+
+### Changed
 - Reduced base price of orichalcum small toys
 - Reduced price of orichalcum small toys in Industrial and Factory bases
 
