@@ -232,7 +232,6 @@ package body Bases.RecruitUI is
       if Cost < 1 then
          Cost := 1;
       end if;
-      Hide(Gtk_Widget(Get_Object(Object, "negotiatewindow")));
       HireRecruit
         (RecruitIndex, Cost, DailyPayment, TradePayment, ContractLength2);
       UpdateRecruitList;
@@ -262,6 +261,9 @@ package body Bases.RecruitUI is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
+      if RecruitIndex > SkyBases(BaseIndex).Recruits.Last_Index then
+         RecruitIndex := SkyBases(BaseIndex).Recruits.Last_Index;
+      end if;
       if RecruitIndex = 0 then
          return;
       end if;
