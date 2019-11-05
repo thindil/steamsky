@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash during hiring new crew members in bases (issue #49)
+
 ## [4.0.6] - 2019-10-20
 
 ### Fixed
