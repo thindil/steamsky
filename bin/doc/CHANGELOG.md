@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New items: adamantium small toys
+- New crafting recipes: adamantium small toys
 
 ### Changed
 - Reduced base price of orichalcum small toys
