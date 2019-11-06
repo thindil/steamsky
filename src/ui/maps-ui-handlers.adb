@@ -1365,11 +1365,17 @@ package body Maps.UI.Handlers is
            (PlayerShip, PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
             (0 - PlayerShip.Cargo.Element(ItemIndex).Amount));
       else
-         GainRep
-           (BaseIndex, ((PlayerShip.Cargo(ItemIndex).Amount / 20) * (-1)));
-         SellItems
-           (ItemIndex,
-            Integer'Image(PlayerShip.Cargo.Element(ItemIndex).Amount));
+         begin
+            SellItems
+              (ItemIndex,
+               Integer'Image(PlayerShip.Cargo.Element(ItemIndex).Amount));
+            GainRep
+              (BaseIndex, ((PlayerShip.Cargo(ItemIndex).Amount / 20) * (-1)));
+         exception
+            when Trade_No_Free_Cargo =>
+               ShowDialog
+                 ("You can't sell medicines to the base because you don't have enough free cargo space for money.");
+         end;
       end if;
       UpdateHeader;
       UpdateMessages;
