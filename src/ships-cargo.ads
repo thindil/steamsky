@@ -41,7 +41,8 @@ package Ships.Cargo is
      (Ship: in out ShipRecord;
       ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Natural := 100; CargoIndex, Price: Natural := 0) with
-      Pre => CargoIndex <= Ship.Cargo.Last_Index;
+      Pre => CargoIndex <= Ship.Cargo.Last_Index,
+      Test_Case => ("Test_UpdateCargo", Nominal);
       -- ****
 
       -- ****f* Ships.Cargo/FreeCargo
