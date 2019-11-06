@@ -17,7 +17,6 @@ case $1 in
       gprclean -P steamsky.gpr
       ;;
    debug)
-      gprclean -P steamsky.gpr
       gprbuild -P steamsky.gpr
       ;;
    analyze)
@@ -45,6 +44,9 @@ case $1 in
    gprof)
       gprof bin/steamsky bin/gmon.out > gprofreport.txt
       ;;
+   clean)
+      gprclean -P steamsky.gpr
+      ;;
    help)
       echo "release       - Build the game in release mode"
       echo "debug         - Build the game in debug mode"
@@ -55,9 +57,10 @@ case $1 in
       echo "windows       - Build the game in release mode for Windows"
       echo "gcov          - Generate gcov reports for each file in gcov directory. You may need to change gcov path in this script to work"
       echo "gprof         - Generate gprof report in main directory"
+      echo "clean         - Clean all compilations files"
       echo "help          - This screen"
       ;;
    *)
-      echo "Unknown command, possible options are: release, debug, createtests, tests, docs, windows, gcov, gprof, help"
+      echo "Unknown command, possible options are: release, debug, createtests, tests, docs, windows, gcov, gprof, clean, help"
       ;;
 esac
