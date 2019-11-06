@@ -1,0 +1,91 @@
+--  This package has been generated automatically by GNATtest.
+--  You are allowed to add your code to the bodies of test routines.
+--  Such changes will be kept during further regeneration of this file.
+--  All code placed outside of test routine bodies will be lost. The
+--  code intended to set up and tear down the test environment should be
+--  placed into Ships.Cargo.Test_Data.
+
+with AUnit.Assertions; use AUnit.Assertions;
+with System.Assertions;
+
+--  begin read only
+--  id:2.2/00/
+--
+--  This section can be used to add with clauses if necessary.
+--
+--  end read only
+
+--  begin read only
+--  end read only
+package body Ships.Cargo.Test_Data.Tests is
+
+--  begin read only
+--  id:2.2/01/
+--
+--  This section can be used to add global variables and other elements.
+--
+--  end read only
+
+--  begin read only
+--  end read only
+--  begin read only
+   procedure Wrap_Test_UpdateCargo_87d3a7_53988c (Ship: in out ShipRecord; ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer; Durability: Natural := 100; CargoIndex, Price: Natural := 0) 
+   is
+   begin
+      begin
+         pragma Assert
+           (CargoIndex <= Ship.Cargo.Last_Index);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(ships-cargo.ads:0):Test_UpdateCargo test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Ships.Cargo.UpdateCargo (Ship, ProtoIndex, Amount, Durability, CargoIndex, Price);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(ships-cargo.ads:0:):Test_UpdateCargo test commitment violated");
+      end;
+   end Wrap_Test_UpdateCargo_87d3a7_53988c;
+--  end read only
+
+--  begin read only
+   procedure Test_UpdateCargo_test_updatecargo (Gnattest_T : in out Test);
+   procedure Test_UpdateCargo_87d3a7_53988c (Gnattest_T : in out Test) renames Test_UpdateCargo_test_updatecargo;
+--  id:2.2/87d3a721378c9b6a/UpdateCargo/1/0/test_updatecargo/
+   procedure Test_UpdateCargo_test_updatecargo (Gnattest_T : in out Test) is
+   procedure UpdateCargo (Ship: in out ShipRecord; ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer; Durability: Natural := 100; CargoIndex, Price: Natural := 0) renames Wrap_Test_UpdateCargo_87d3a7_53988c;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      Amount: constant Natural := PlayerShip.Cargo(1).Amount;
+
+   begin
+
+      UpdateCargo(PlayerShip, To_Unbounded_String("1"), -1);
+      Assert(Amount = PlayerShip.Cargo(1).Amount + 1, "Failed to remove some items from player ship cargo.");
+      UpdateCargo(PlayerShip, To_Unbounded_String("1"), 1);
+      Assert(Amount = PlayerShip.Cargo(1).Amount, "Failed to add some items to player ship cargo.");
+
+--  begin read only
+   end Test_UpdateCargo_test_updatecargo;
+--  end read only
+
+--  begin read only
+--  id:2.2/02/
+--
+--  This section can be used to add elaboration code for the global state.
+--
+begin
+--  end read only
+   null;
+--  begin read only
+--  end read only
+end Ships.Cargo.Test_Data.Tests;
