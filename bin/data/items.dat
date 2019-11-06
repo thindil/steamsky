@@ -1387,5 +1387,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Small adamantium toys. Used to play or to train some skills.</description>
  </item>
+ <item index="277" name="Medium book of alchemy" showtype="Book of Alchemy" type="AlchemyBook" weight="1" price="17">
+  <data value="15"/>
+  <description>Medium book with informations about basics of alchemy. Used in training skills.</description>
+ </item>
 </items>
 
