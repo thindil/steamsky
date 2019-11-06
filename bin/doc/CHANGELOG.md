@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash during hiring new crew members in bases (issue #49)
+- Crash when trying to sell medicines to diseased base with full cargo (issue #49)
 
 ## [4.3] - 2019-11-03
 
