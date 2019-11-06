@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New items: adamantium small toys, medium book of alchemy
-- New crafting recipes: adamantium small toys
+- New crafting recipes: adamantium small toys, medium book of alchemy
 
 ### Changed
 - Reduced base price of orichalcum small toys
