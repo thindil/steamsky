@@ -292,6 +292,9 @@ package body Maps.UI.Handlers is
       StartsCombat: Boolean := False;
       NewX, NewY: Integer := 0;
    begin
+      if Is_Visible(Gtk_Widget(Get_Object(Builder, "btnboxorders"))) then
+         Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
+      end if;
       if User_Data = Get_Object(Builder, "btnup") then -- Move up
          Result := MoveShip(0, -1, Message);
       elsif User_Data = Get_Object(Builder, "btnbottom") then -- Move down
