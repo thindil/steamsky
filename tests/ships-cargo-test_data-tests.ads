@@ -12,5 +12,8 @@ package Ships.Cargo.Test_Data.Tests is
    procedure Test_UpdateCargo_87d3a7_53988c (Gnattest_T : in out Test);
    --  ships-cargo.ads:40:4:UpdateCargo:Test_UpdateCargo
 
+   procedure Test_FreeCargo_2845af_4f2f60 (Gnattest_T : in out Test);
+   --  ships-cargo.ads:60:4:FreeCargo:Test_FreeCargo
+
 end Ships.Cargo.Test_Data.Tests;
 --  end read only
