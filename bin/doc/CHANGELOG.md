@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New items: adamantium small toys, medium book of alchemy
+- New items: adamantium small toys, medium book of alchemy, large book of
+  alchemy
 - New crafting recipes: adamantium small toys, medium book of alchemy
 
 ### Changed
