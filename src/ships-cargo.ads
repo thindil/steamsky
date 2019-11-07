@@ -58,17 +58,18 @@ package Ships.Cargo is
       -- of kilograms
       -- SOURCE
    function FreeCargo
-     (Amount: Integer; Ship: ShipRecord := PlayerShip) return Integer;
-   -- ****
+     (Amount: Integer; Ship: ShipRecord := PlayerShip) return Integer with
+      Test_Case => ("Test_FreeCargo", Robustness);
+      -- ****
 
-   -- ****f* Ships.Cargo/GetItemAmount
-   -- FUNCTION
-   -- Check how much selected items is in player ship cargo
-   -- PARAMETERS
-   -- ItemType - Type of items which will be looking for
-   -- RESULT
-   -- Amount of items of selected type on player ship
-   -- SOURCE
+      -- ****f* Ships.Cargo/GetItemAmount
+      -- FUNCTION
+      -- Check how much selected items is in player ship cargo
+      -- PARAMETERS
+      -- ItemType - Type of items which will be looking for
+      -- RESULT
+      -- Amount of items of selected type on player ship
+      -- SOURCE
    function GetItemAmount(ItemType: Unbounded_String) return Natural with
       Pre => ItemType /= Null_Unbounded_String;
       -- ****

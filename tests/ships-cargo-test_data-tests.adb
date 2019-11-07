@@ -79,6 +79,36 @@ package body Ships.Cargo.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_FreeCargo_2845af_4f2f60 (Amount: Integer; Ship: ShipRecord := PlayerShip)  return Integer
+   is
+   begin
+      declare
+         Test_FreeCargo_2845af_4f2f60_Result : constant Integer := GNATtest_Generated.GNATtest_Standard.Ships.Cargo.FreeCargo (Amount, Ship);
+      begin
+         return Test_FreeCargo_2845af_4f2f60_Result;
+      end;
+   end Wrap_Test_FreeCargo_2845af_4f2f60;
+--  end read only
+
+--  begin read only
+   procedure Test_FreeCargo_test_freecargo (Gnattest_T : in out Test);
+   procedure Test_FreeCargo_2845af_4f2f60 (Gnattest_T : in out Test) renames Test_FreeCargo_test_freecargo;
+--  id:2.2/2845af0c133e2533/FreeCargo/1/0/test_freecargo/
+   procedure Test_FreeCargo_test_freecargo (Gnattest_T : in out Test) is
+      function FreeCargo (Amount: Integer; Ship: ShipRecord := PlayerShip) return Integer renames Wrap_Test_FreeCargo_2845af_4f2f60;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(FreeCargo(1) > FreeCargo(0), "Failed to get proper amount of free cargo in player ship.");
+
+--  begin read only
+   end Test_FreeCargo_test_freecargo;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
