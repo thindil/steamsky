@@ -122,6 +122,21 @@ Of course, you can set all parameters together:
 Paths to directories can be absolute or relative where file `steamsky` is. For
 Windows, use `steamsky.exe` instead `./steamsky.sh`.
 
+### Testing versions
+
+Here are available also testing versions of the game. You can find them
+in [Releases](https://github.com/thindil/steamsky/releases/tag/travis-stable-build).
+To use them, first you must download normal release. Then, for Linux: inside
+directory where the game is, type `./steamsky-x86_64.AppImage --appimage-extract`
+to extract whole game to directory *squashfs-root*. And then just move files
+from the archive to proper locations. To run that version, just enter
+*squashfs-root* directory and type in console `./AppRun`. For Windows: just
+unzip files (replace existing) to proper location where the game is installed.
+
+* steamsky-stable.zip contains Windows 64-bit version of the game.
+
+* steamsky-stable.tar.gz contains Linux 64-bit version of the game.
+
 ## Modding Support
 For detailed informations about modifying various game elements or debugging
 game, see [MODDING.md](bin/doc/MODDING.md)
