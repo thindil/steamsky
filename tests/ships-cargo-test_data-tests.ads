@@ -15,5 +15,8 @@ package Ships.Cargo.Test_Data.Tests is
    procedure Test_FreeCargo_2845af_4f2f60 (Gnattest_T : in out Test);
    --  ships-cargo.ads:60:4:FreeCargo:Test_FreeCargo
 
+   procedure Test_GetItemAmount_57499f_15cacd (Gnattest_T : in out Test);
+   --  ships-cargo.ads:73:4:GetItemAmount:Test_GetItemAmount
+
 end Ships.Cargo.Test_Data.Tests;
 --  end read only
