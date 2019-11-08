@@ -71,7 +71,8 @@ package Ships.Cargo is
       -- Amount of items of selected type on player ship
       -- SOURCE
    function GetItemAmount(ItemType: Unbounded_String) return Natural with
-      Pre => ItemType /= Null_Unbounded_String;
+      Pre => ItemType /= Null_Unbounded_String,
+      Test_Case => ("Test_GetItemAmount", Nominal);
       -- ****
 
       -- ****f* Ships.Cargo/GetItemsAmount

@@ -109,6 +109,57 @@ package body Ships.Cargo.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_GetItemAmount_57499f_15cacd (ItemType: Unbounded_String)  return Natural
+   is
+   begin
+      begin
+         pragma Assert
+           (ItemType /= Null_Unbounded_String);
+         null;
+      exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "req_sloc(ships-cargo.ads:0):Test_GetItemAmount test requirement violated");
+      end;
+      declare
+         Test_GetItemAmount_57499f_15cacd_Result : constant Natural := GNATtest_Generated.GNATtest_Standard.Ships.Cargo.GetItemAmount (ItemType);
+      begin
+         begin
+            pragma Assert
+              (True);
+            null;
+         exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "ens_sloc(ships-cargo.ads:0:):Test_GetItemAmount test commitment violated");
+         end;
+         return Test_GetItemAmount_57499f_15cacd_Result;
+      end;
+   end Wrap_Test_GetItemAmount_57499f_15cacd;
+--  end read only
+
+--  begin read only
+   procedure Test_GetItemAmount_test_getitemamount (Gnattest_T : in out Test);
+   procedure Test_GetItemAmount_57499f_15cacd (Gnattest_T : in out Test) renames Test_GetItemAmount_test_getitemamount;
+--  id:2.2/57499f0478a1da15/GetItemAmount/1/0/test_getitemamount/
+   procedure Test_GetItemAmount_test_getitemamount (Gnattest_T : in out Test) is
+      function GetItemAmount (ItemType: Unbounded_String) return Natural renames Wrap_Test_GetItemAmount_57499f_15cacd;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      PlayerShip.Cargo(1).Amount := 2000;
+      Assert(GetItemAmount(To_Unbounded_String("Fuel")) = 2000, "Failed to get proper amount of item.");
+
+--  begin read only
+   end Test_GetItemAmount_test_getitemamount;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
