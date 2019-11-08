@@ -200,6 +200,7 @@ package body Utils.UI is
          return;
       end if;
       if VisibleChildName = "combat" then
+         PreviousGameState := SkyMap_View;
          Set_Sensitive(Gtk_Widget(Get_Object(Object, "treecrew1")), True);
          for I in MenuArray'Range loop
             Show_All(Gtk_Widget(Get_Object(Object, To_String(MenuArray(I)))));
