@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Hide orders menu when moving ship (issue #49)
 - Not working Close button in combat when you enter any other info screen
   (issue #49)
+- Crash on map after selling last engine
 
 ## [4.0.6] - 2019-10-20
 
