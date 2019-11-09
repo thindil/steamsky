@@ -160,6 +160,60 @@ package body Ships.Cargo.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_GetItemsAmount_df8553_104a2f (IType: String)  return Natural
+   is
+   begin
+      begin
+         pragma Assert
+           (IType = "Drinks" or IType = "Food");
+         null;
+      exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "req_sloc(ships-cargo.ads:0):Test_GetItemsAmount test requirement violated");
+      end;
+      declare
+         Test_GetItemsAmount_df8553_104a2f_Result : constant Natural := GNATtest_Generated.GNATtest_Standard.Ships.Cargo.GetItemsAmount (IType);
+      begin
+         begin
+            pragma Assert
+              (True);
+            null;
+         exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "ens_sloc(ships-cargo.ads:0:):Test_GetItemsAmount test commitment violated");
+         end;
+         return Test_GetItemsAmount_df8553_104a2f_Result;
+      end;
+   end Wrap_Test_GetItemsAmount_df8553_104a2f;
+--  end read only
+
+--  begin read only
+   procedure Test_GetItemsAmount_test_getitemsamount (Gnattest_T : in out Test);
+   procedure Test_GetItemsAmount_df8553_104a2f (Gnattest_T : in out Test) renames Test_GetItemsAmount_test_getitemsamount;
+--  id:2.2/df8553144fad6203/GetItemsAmount/1/0/test_getitemsamount/
+   procedure Test_GetItemsAmount_test_getitemsamount (Gnattest_T : in out Test) is
+      function GetItemsAmount (IType: String) return Natural renames Wrap_Test_GetItemsAmount_df8553_104a2f;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      for Member of PlayerShip.Crew loop
+         Member.Faction := To_Unbounded_String("POLEIS");
+      end loop;
+      PlayerShip.Cargo(3).Amount := 200;
+      Assert(GetItemsAmount("Drinks") = 200, "Failed to get amount of drinks.");
+
+--  begin read only
+   end Test_GetItemsAmount_test_getitemsamount;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
