@@ -243,6 +243,10 @@ package body Utils.UI is
       Damage: DamageFactor := 0.0;
       Tired, CabinBonus, TempTime: Natural;
    begin
+      if Speed = 0.0 then
+         Append(InfoText, LF & "ETA: Never");
+         return;
+      end if;
       MinutesDiff := Integer(100.0 / Speed);
       case PlayerShip.Speed is
          when QUARTER_SPEED =>
