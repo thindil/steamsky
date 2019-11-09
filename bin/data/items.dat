@@ -1399,5 +1399,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="5"/>
   <description>Large book with informations about basics of alchemy. Used in training skills.</description>
  </item>
+ <item index="280" name="Medium book of cooking" showtype="Book of Cooking" type="CookingBook" weight="1" price="17">
+  <data value="15"/>
+  <description>Medium book with informations about basics of cooking. Used in training skills.</description>
+ </item>
 </items>
 
