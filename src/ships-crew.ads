@@ -33,7 +33,8 @@ package Ships.Crew is
    -- SOURCE
    function GetSkillLevel
      (Member: Member_Data; SkillIndex: Positive) return Natural with
-      Pre => SkillIndex <= Skills_List.Last_Index;
+      Pre => SkillIndex <= Skills_List.Last_Index,
+      Test_Case => ("Test_GetSkillLevel", Nominal);
       -- ****
 
       -- ****f* Ships.Crew/Death
