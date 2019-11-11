@@ -45,6 +45,13 @@ package body Combat is
    FactionName: Unbounded_String;
    -- ****
 
+   -- ****iv* Combat/TurnNumber
+   -- FUNCTION
+   -- Number of turn of combat
+   -- SOURCE
+   TurnNumber: Natural;
+   -- ****
+
    function StartCombat
      (EnemyIndex: Unbounded_String; NewCombat: Boolean := True)
       return Boolean is
@@ -229,6 +236,7 @@ package body Combat is
          end;
          return False;
       end if;
+      TurnNumber := 0;
       LogMessage
         ("Started combat with " & To_String(Enemy.Ship.Name), Log.Combat);
       return True;
@@ -1082,6 +1090,24 @@ package body Combat is
          EndCombat := True;
          return;
       end if;
+      declare
+         ChanceForRun: Integer;
+      begin
+         TurnNumber := TurnNumber + 1;
+         case Enemy.CombatAI is
+            when ATTACKER =>
+               ChanceForRun := TurnNumber - 120;
+            when BERSERKER =>
+               ChanceForRun := TurnNumber - 200;
+            when DISARMER =>
+               ChanceForRun := TurnNumber - 60;
+            when others =>
+               null;
+         end case;
+         if ChanceForRun > 1 and then GetRandom(1, 100) < ChanceForRun then
+            Enemy.CombatAI := COWARD;
+         end if;
+      end;
       for I in PlayerShip.Crew.Iterate loop
          case PlayerShip.Crew(I).Order is
             when Pilot =>
