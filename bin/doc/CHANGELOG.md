@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
   cooking, huge book of cooking
 - New crafting recipes: adamantium small toys, medium book of alchemy, large
   book of alchemy, huge book of alchemy, medium book of cooking, large book of
-  cooking
+  cooking, huge book of cooking
 
 ### Changed
 - Reduced base price of orichalcum small toys
