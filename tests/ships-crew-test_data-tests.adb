@@ -80,6 +80,57 @@ package body Ships.Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_Death_211a27_9008b1 (MemberIndex: Positive; Reason: Unbounded_String; Ship: in out ShipRecord; CreateBody: Boolean := True) 
+   is
+   begin
+      begin
+         pragma Assert
+           ((MemberIndex <= Ship.Crew.Last_Index and Reason /= Null_Unbounded_String));
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(ships-crew.ads:0):Test_Death test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Ships.Crew.Death (MemberIndex, Reason, Ship, CreateBody);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(ships-crew.ads:0:):Test_Death test commitment violated");
+      end;
+   end Wrap_Test_Death_211a27_9008b1;
+--  end read only
+
+--  begin read only
+   procedure Test_Death_test_death (Gnattest_T : in out Test);
+   procedure Test_Death_211a27_9008b1 (Gnattest_T : in out Test) renames Test_Death_test_death;
+--  id:2.2/211a277189388faa/Death/1/0/test_death/
+   procedure Test_Death_test_death (Gnattest_T : in out Test) is
+   procedure Death (MemberIndex: Positive; Reason: Unbounded_String; Ship: in out ShipRecord; CreateBody: Boolean := True) renames Wrap_Test_Death_211a27_9008b1;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      Crew: constant Crew_Container.Vector := PlayerShip.Crew;
+      Amount: constant Positive := Positive(PlayerShip.Cargo.Length);
+
+   begin
+
+      Death(2, To_Unbounded_String("Test death"), PlayerShip);
+      Assert(PlayerShip.Crew.Length + 1 = Crew.Length, "Failed to remove crew member on death.");
+      Assert(Amount + 1 = Positive(PlayerShip.Cargo.Length), "Failed to add body of dead crew member.");
+      PlayerShip.Crew := Crew;
+
+--  begin read only
+   end Test_Death_test_death;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
