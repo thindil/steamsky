@@ -54,7 +54,8 @@ package Ships.Crew is
       CreateBody: Boolean := True) with
       Pre =>
       (MemberIndex <= Ship.Crew.Last_Index and
-       Reason /= Null_Unbounded_String);
+       Reason /= Null_Unbounded_String),
+      Test_Case => ("Test_Death", Nominal);
       -- ****
 
       -- ****f* Ships.Crew/DeleteMember
