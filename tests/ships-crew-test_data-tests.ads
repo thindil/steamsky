@@ -15,5 +15,8 @@ package Ships.Crew.Test_Data.Tests is
    procedure Test_Death_211a27_9008b1 (Gnattest_T : in out Test);
    --  ships-crew.ads:52:4:Death:Test_Death
 
+   procedure Test_DeleteMember_a2fb7d_025eac (Gnattest_T : in out Test);
+   --  ships-crew.ads:70:4:DeleteMember:Test_DeleteMember
+
 end Ships.Crew.Test_Data.Tests;
 --  end read only

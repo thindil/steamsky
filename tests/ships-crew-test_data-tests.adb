@@ -131,6 +131,55 @@ package body Ships.Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_DeleteMember_a2fb7d_025eac (MemberIndex: Positive; Ship: in out ShipRecord) 
+   is
+   begin
+      begin
+         pragma Assert
+           (MemberIndex <= Ship.Crew.Last_Index);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(ships-crew.ads:0):Test_DeleteMember test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Ships.Crew.DeleteMember (MemberIndex, Ship);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(ships-crew.ads:0:):Test_DeleteMember test commitment violated");
+      end;
+   end Wrap_Test_DeleteMember_a2fb7d_025eac;
+--  end read only
+
+--  begin read only
+   procedure Test_DeleteMember_test_deletemember (Gnattest_T : in out Test);
+   procedure Test_DeleteMember_a2fb7d_025eac (Gnattest_T : in out Test) renames Test_DeleteMember_test_deletemember;
+--  id:2.2/a2fb7d07cd83aaf9/DeleteMember/1/0/test_deletemember/
+   procedure Test_DeleteMember_test_deletemember (Gnattest_T : in out Test) is
+   procedure DeleteMember (MemberIndex: Positive; Ship: in out ShipRecord) renames Wrap_Test_DeleteMember_a2fb7d_025eac;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      Crew: constant Crew_Container.Vector := PlayerShip.Crew;
+
+   begin
+
+      DeleteMember(2, PlayerShip);
+      Assert(Crew.Length = PlayerShip.Crew.Length + 1, "Failed to delete member from the player ship crew.");
+      PlayerShip.Crew := Crew;
+
+--  begin read only
+   end Test_DeleteMember_test_deletemember;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
