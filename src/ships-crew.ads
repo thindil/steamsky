@@ -68,7 +68,8 @@ package Ships.Crew is
       -- Parameter Ship with modified data (crew and modules)
       -- SOURCE
    procedure DeleteMember(MemberIndex: Positive; Ship: in out ShipRecord) with
-      Pre => MemberIndex <= Ship.Crew.Last_Index;
+      Pre => MemberIndex <= Ship.Crew.Last_Index,
+      Test_Case => ("Test_DeleteMember", Nominal);
       -- ****
 
    -- ****f* Ships.Crew/FindMember
