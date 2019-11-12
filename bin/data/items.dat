@@ -1411,5 +1411,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="5"/>
   <description>Huge book with informations about basics of cooking. Used in training skills.</description>
  </item>
+ <item index="283" name="Medium book of gunsmithing" showtype="Book of Gunsmithing" type="GunsmithBook" weight="1" price="17">
+  <data value="15"/>
+  <description>Medium book with informations about basics of gunsmithing. Used in training skills.</description>
+ </item>
 </items>
 
