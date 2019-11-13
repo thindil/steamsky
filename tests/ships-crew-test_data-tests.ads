@@ -18,5 +18,8 @@ package Ships.Crew.Test_Data.Tests is
    procedure Test_DeleteMember_a2fb7d_025eac (Gnattest_T : in out Test);
    --  ships-crew.ads:70:4:DeleteMember:Test_DeleteMember
 
+   procedure Test_FindMember_b270de_38c9c9 (Gnattest_T : in out Test);
+   --  ships-crew.ads:84:4:FindMember:Test_FindMember
+
 end Ships.Crew.Test_Data.Tests;
 --  end read only
