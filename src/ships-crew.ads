@@ -83,23 +83,24 @@ package Ships.Crew is
    -- SOURCE
    function FindMember
      (Order: Crew_Orders; Crew: Crew_Container.Vector := PlayerShip.Crew)
-      return Natural;
-   -- ****
+      return Natural with
+      Test_Case => ("Test_FindMember", Robustness);
+      -- ****
 
-   -- ****f* Ships.Crew/GiveOrders
-   -- FUNCTION
-   -- Change order for selected crew member
-   -- PARAMETERS
-   -- Ship            - Ship in which crew member will be have changed order
-   -- MemberIndex     - Crew index of member to change order
-   -- GivenOrder      - New order for selected crew member
-   -- ModuleIndex     - Index of module to assign to crew member with new
-   --                   order. Default is 0 - no module assigned
-   -- CheckPriorities - If true, check orders priorities of whole crew.
-   --                   Default is true
-   -- Result
-   -- Parameter Ship with modified data (crew, modules, cargo)
-   -- SOURCE
+      -- ****f* Ships.Crew/GiveOrders
+      -- FUNCTION
+      -- Change order for selected crew member
+      -- PARAMETERS
+      -- Ship            - Ship in which crew member will be have changed order
+      -- MemberIndex     - Crew index of member to change order
+      -- GivenOrder      - New order for selected crew member
+      -- ModuleIndex     - Index of module to assign to crew member with new
+      --                   order. Default is 0 - no module assigned
+      -- CheckPriorities - If true, check orders priorities of whole crew.
+      --                   Default is true
+      -- Result
+      -- Parameter Ship with modified data (crew, modules, cargo)
+      -- SOURCE
    procedure GiveOrders
      (Ship: in out ShipRecord; MemberIndex: Positive; GivenOrder: Crew_Orders;
       ModuleIndex: Natural := 0; CheckPriorities: Boolean := True) with
