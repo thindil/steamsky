@@ -180,6 +180,37 @@ package body Ships.Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_FindMember_b270de_38c9c9 (Order: Crew_Orders; Crew: Crew_Container.Vector := PlayerShip.Crew)  return Natural
+   is
+   begin
+      declare
+         Test_FindMember_b270de_38c9c9_Result : constant Natural := GNATtest_Generated.GNATtest_Standard.Ships.Crew.FindMember (Order, Crew);
+      begin
+         return Test_FindMember_b270de_38c9c9_Result;
+      end;
+   end Wrap_Test_FindMember_b270de_38c9c9;
+--  end read only
+
+--  begin read only
+   procedure Test_FindMember_test_findmember (Gnattest_T : in out Test);
+   procedure Test_FindMember_b270de_38c9c9 (Gnattest_T : in out Test) renames Test_FindMember_test_findmember;
+--  id:2.2/b270debda44d8b87/FindMember/1/0/test_findmember/
+   procedure Test_FindMember_test_findmember (Gnattest_T : in out Test) is
+      function FindMember (Order: Crew_Orders; Crew: Crew_Container.Vector := PlayerShip.Crew) return Natural renames Wrap_Test_FindMember_b270de_38c9c9;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(FindMember(Talk) = 1, "Failed to find crew member with selected order.");
+      Assert(FindMember(Defend) = 0, "Failed to not find crew member with selected order.");
+
+--  begin read only
+   end Test_FindMember_test_findmember;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
