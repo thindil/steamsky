@@ -382,11 +382,13 @@ Value must be existing skill name.
   should be random, add attribute `minaccuracy` for minimum value and
   `maxaccuracy` for maximum value.
 - Attribute `combatai`: Behavior of ship in combat (NPC ships only). Possible
-  values are: Berserker - attack to end, no matter how heavy damage take.
+  values are: Berserker - attacks all time, no matter how heavy damage it take.
   Attacker - aggressive but will be run away from combat when lost all
-  ammunition or weapons. Coward - try run from combat, attack only in
+  ammunition or weapons. Coward - try run from combat, attacks only in
   self-defense. Disarmer - same as Attacker but first aim for player ship
-  weapons before start destroying ship.
+  weapons before start destroying ship. Additionally, each behavior determine
+  when the enemy will start escaping from the combat, from fastest to longest:
+  Disarmer, Attacker, Berserker.
 - Attribute `evasion`: Bonus to evasion for ship.
 - Attributes `minevasion` and `maxevasion`: If bonus to evasion for ship should
   be random, add attribute `minevasion` for minimum value and `maxevasion` for
