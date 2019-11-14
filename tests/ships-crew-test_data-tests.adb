@@ -211,6 +211,55 @@ package body Ships.Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_GiveOrders_cc73d8_cdc690 (Ship: in out ShipRecord; MemberIndex: Positive; GivenOrder: Crew_Orders; ModuleIndex: Natural := 0; CheckPriorities: Boolean := True) 
+   is
+   begin
+      begin
+         pragma Assert
+           ((MemberIndex <= Ship.Crew.Last_Index and ModuleIndex <= Ship.Modules.Last_Index));
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(ships-crew.ads:0):Test_GiveOrders test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Ships.Crew.GiveOrders (Ship, MemberIndex, GivenOrder, ModuleIndex, CheckPriorities);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(ships-crew.ads:0:):Test_GiveOrders test commitment violated");
+      end;
+   end Wrap_Test_GiveOrders_cc73d8_cdc690;
+--  end read only
+
+--  begin read only
+   procedure Test_GiveOrders_test_giveorders (Gnattest_T : in out Test);
+   procedure Test_GiveOrders_cc73d8_cdc690 (Gnattest_T : in out Test) renames Test_GiveOrders_test_giveorders;
+--  id:2.2/cc73d8053807a27a/GiveOrders/1/0/test_giveorders/
+   procedure Test_GiveOrders_test_giveorders (Gnattest_T : in out Test) is
+   procedure GiveOrders (Ship: in out ShipRecord; MemberIndex: Positive; GivenOrder: Crew_Orders; ModuleIndex: Natural := 0; CheckPriorities: Boolean := True) renames Wrap_Test_GiveOrders_cc73d8_cdc690;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      GiveOrders(PlayerShip, 1, Rest);
+      Assert(PlayerShip.Crew(1).Order = TALK, "Failed to give order to player.");
+      GiveOrders(PlayerShip, 4, Rest);
+      Assert(PlayerShip.Crew(4).Order = Rest, "Failed to give order to gunner.");
+
+--  begin read only
+   end Test_GiveOrders_test_giveorders;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.

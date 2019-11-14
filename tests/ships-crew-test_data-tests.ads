@@ -21,5 +21,8 @@ package Ships.Crew.Test_Data.Tests is
    procedure Test_FindMember_b270de_38c9c9 (Gnattest_T : in out Test);
    --  ships-crew.ads:84:4:FindMember:Test_FindMember
 
+   procedure Test_GiveOrders_cc73d8_cdc690 (Gnattest_T : in out Test);
+   --  ships-crew.ads:104:4:GiveOrders:Test_GiveOrders
+
 end Ships.Crew.Test_Data.Tests;
 --  end read only
