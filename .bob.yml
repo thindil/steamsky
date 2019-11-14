@@ -1,9 +1,12 @@
+version: 2.0
 - command:
    name: runtests
    execute:
       - cd tests/driver
       - ./test_runner
    description: Run Steam Sky unit tests
+   flags:
+      - unixonly
 - command:
    name: debug
    execute:
@@ -16,6 +19,8 @@
       - others/build.sh
       - gprclean -P steamsky.gpr
    description: Build Steam Sky in release mode
+   flags:
+      - unixonly
 - command:
    name: analyze
    execute:
@@ -36,18 +41,33 @@
    execute:
       - gprbuild -P tests/driver/test_driver.gpr
    description: Build Steam Sky unit tests
+   flags:
+      - unixonly
 - command:
    name: docs
    execute:
       - others/generatedocs.py
    description: Generate code documentation
+   flags:
+      - unixonly
 - command:
    name: gprof
    execute:
       - gprof bin/steamsky gmon.out
    description: Generate gprof report
+   flags:
+      - unixonly
 - command:
    name: windows
    execute:
       - wineconsole others/build.cmd
    description: Build Steam sky release for Windows on Linux
+   flags:
+      - unixonly
+- command:
+   name: release
+   execute:
+      - others/build.cmd
+   description: Build Steam sky in release mode
+   flags:
+      - windowsonly
