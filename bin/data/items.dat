@@ -1416,8 +1416,12 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <description>Medium book with informations about basics of gunsmithing. Used in training skills.</description>
  </item>
  <item index="284" name="Large book of gunsmithing" showtype="Book of Gunsmithing" type="GunsmithBook" weight="1" price="22">
-  <data value="20"/>
+  <data value="10"/>
   <description>Large book with informations about basics of gunsmithing. Used in training skills.</description>
+ </item>
+ <item index="285" name="Huge book of gunsmithing" showtype="Book of Gunsmithing" type="GunsmithBook" weight="1" price="27">
+  <data value="5"/>
+  <description>Huge book with informations about basics of gunsmithing. Used in training skills.</description>
  </item>
 </items>
 
