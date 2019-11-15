@@ -119,19 +119,21 @@ package Ships.Crew is
       -- RESULT
       -- Parameter Ship with modified data (crew, modules, cargo)
       -- SOURCE
-   procedure UpdateOrders(Ship: in out ShipRecord; Combat: Boolean := False);
-   -- ****
+   procedure UpdateOrders
+     (Ship: in out ShipRecord; Combat: Boolean := False) with
+      Test_Case => ("Test_UpdateOrders", Robustness);
+      -- ****
 
-   -- ****f* Ships.Crew/UpdateMorale
-   -- FUNCTION
-   -- Update morale of selected crew member by value
-   -- PARAMETERS
-   -- Ship        - Ship on which crew member will be have updated morale
-   -- MemberIndex - Crew index of member to update morale
-   -- Value       - Amount of morale to add or substract
-   -- RESULT
-   -- Parameter Ship with modified crew info
-   -- SOURCE
+      -- ****f* Ships.Crew/UpdateMorale
+      -- FUNCTION
+      -- Update morale of selected crew member by value
+      -- PARAMETERS
+      -- Ship        - Ship on which crew member will be have updated morale
+      -- MemberIndex - Crew index of member to update morale
+      -- Value       - Amount of morale to add or substract
+      -- RESULT
+      -- Parameter Ship with modified crew info
+      -- SOURCE
    procedure UpdateMorale
      (Ship: in out ShipRecord; MemberIndex: Positive; Value: Integer) with
       Pre => MemberIndex <= Ship.Crew.Last_Index;
