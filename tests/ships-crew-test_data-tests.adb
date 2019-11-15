@@ -260,6 +260,34 @@ package body Ships.Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_UpdateOrders_23e1c7_cad1b0 (Ship: in out ShipRecord; Combat: Boolean := False) 
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Ships.Crew.UpdateOrders (Ship, Combat);
+   end Wrap_Test_UpdateOrders_23e1c7_cad1b0;
+--  end read only
+
+--  begin read only
+   procedure Test_UpdateOrders_test_updateorders (Gnattest_T : in out Test);
+   procedure Test_UpdateOrders_23e1c7_cad1b0 (Gnattest_T : in out Test) renames Test_UpdateOrders_test_updateorders;
+--  id:2.2/23e1c7f66f6cc7c5/UpdateOrders/1/0/test_updateorders/
+   procedure Test_UpdateOrders_test_updateorders (Gnattest_T : in out Test) is
+   procedure UpdateOrders (Ship: in out ShipRecord; Combat: Boolean := False) renames Wrap_Test_UpdateOrders_23e1c7_cad1b0;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      GiveOrders(PlayerShip, 1, Rest, 0, False);
+      UpdateOrders(PlayerShip);
+      Assert(PlayerShip.Crew(1).Order = TALK, "Failed to update orders for player ship crew.");
+
+--  begin read only
+   end Test_UpdateOrders_test_updateorders;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
