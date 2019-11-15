@@ -124,11 +124,16 @@ of the game, you can also use all of this starting parameters.
 
 Here are available also testing versions of the game. You can find them
 in [Releases](https://github.com/thindil/steamsky/releases/tag/travis-dev-build).
-To use them, first you must download normal release. Then, inside directory
-where the game is, type `./steamsky-dev-x86_64.AppImage --appimage-extract`
+To use them, first you must download normal release. Then, for Linux: inside
+directory where the game is, type `./steamsky-x86_64.AppImage --appimage-extract`
 to extract whole game to directory *squashfs-root*. And then just move files
 from the archive to proper locations. To run that version, just enter
-*squashfs-root* directory and type in console `./AppRun`.
+*squashfs-root* directory and type in console `./AppRun`. For Windows: just
+unzip files (replace existing) to proper location where the game is installed.
+
+* steamsky-dev-Windows-64.zip contains Windows 64-bit version of the game.
+
+* steamsky-dev-Linux-64.tar.gz contains Linux 64-bit version of the game.
 
 ## Modding Support
 For detailed informations about modifying various game elements or debugging
