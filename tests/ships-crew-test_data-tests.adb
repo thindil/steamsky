@@ -288,6 +288,56 @@ package body Ships.Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_UpdateMorale_0fa9f7_f66f34 (Ship: in out ShipRecord; MemberIndex: Positive; Value: Integer) 
+   is
+   begin
+      begin
+         pragma Assert
+           (MemberIndex <= Ship.Crew.Last_Index);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(ships-crew.ads:0):Test_UpdateMorale test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Ships.Crew.UpdateMorale (Ship, MemberIndex, Value);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(ships-crew.ads:0:):Test_UpdateMorale test commitment violated");
+      end;
+   end Wrap_Test_UpdateMorale_0fa9f7_f66f34;
+--  end read only
+
+--  begin read only
+   procedure Test_UpdateMorale_test_updatemorale (Gnattest_T : in out Test);
+   procedure Test_UpdateMorale_0fa9f7_f66f34 (Gnattest_T : in out Test) renames Test_UpdateMorale_test_updatemorale;
+--  id:2.2/0fa9f73bf6ccf79e/UpdateMorale/1/0/test_updatemorale/
+   procedure Test_UpdateMorale_test_updatemorale (Gnattest_T : in out Test) is
+   procedure UpdateMorale (Ship: in out ShipRecord; MemberIndex: Positive; Value: Integer) renames Wrap_Test_UpdateMorale_0fa9f7_f66f34;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      OldMorale: constant Natural := PlayerShip.Crew(1).Morale(2);
+
+   begin
+
+      UpdateMorale(PlayerShip, 1, 1);
+      Assert(PlayerShip.Crew(1).Morale(2) - 1 = OldMorale, "Failed to raise player morale.");
+      UpdateMorale(PlayerShip, 1, -1);
+      Assert(PlayerShip.Crew(1).Morale(2) = OldMorale, "Failed to lower player morale.");
+
+--  begin read only
+   end Test_UpdateMorale_test_updatemorale;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
