@@ -120,7 +120,7 @@ the game with mode `analyze` (in the main project directory, where
 
 `gprbuild -XMode=analyze`
 
-or, if you prefer (and you have installed), use `Bob`:
+or, if you prefer (and you have installed), use [Bob](https://github.com/thindil/bob):
 
 `bob analyze`
 
@@ -134,7 +134,7 @@ command:
 
 `gprof bin/steamsky gmon.out` for generate report for the code profiling
 
-or, if you prefer (and you have installed), use `Bob`:
+or, if you prefer (and you have installed), use [Bob](https://github.com/thindil/bob):
 
 `bob gprof`
 
@@ -146,7 +146,7 @@ skeletons code for tests units (in the main project directory, where
 
 `gnattest -P steamsky.gpr`
 
-or, if you prefer (and you have installed), use `Bob`:
+or, if you prefer (and you have installed), use [Bob](https://github.com/thindil/bob):
 
 `bob createtests`
 
@@ -159,7 +159,7 @@ game code, there will be no unit tests generated.
 First, you must build all tests. How to do it, is described in main
 *README.md* file. Then, in console type: `./run.sh tests`
 
-or, if you prefer (and you have installed), use `Bob`:
+or, if you prefer (and you have installed), use [Bob](https://github.com/thindil/bob):
 
 `bob runtests`
 
