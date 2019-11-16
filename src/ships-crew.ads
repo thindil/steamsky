@@ -136,7 +136,8 @@ package Ships.Crew is
       -- SOURCE
    procedure UpdateMorale
      (Ship: in out ShipRecord; MemberIndex: Positive; Value: Integer) with
-      Pre => MemberIndex <= Ship.Crew.Last_Index;
+      Pre => MemberIndex <= Ship.Crew.Last_Index,
+      Test_Case => ("Test_UpdateMorale", Nominal);
       -- ****
 
 end Ships.Crew;
