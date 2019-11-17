@@ -54,10 +54,8 @@ package body Missions.Test_Data.Tests is
 
    begin
 
-      for I in 1 .. 1000 loop
-         SkyBases(BaseIndex).MissionsDate := (others => 0);
-         GenerateMissions;
-      end loop;
+      SkyBases(BaseIndex).MissionsDate := (others => 0);
+      GenerateMissions;
       Assert(True, "This test can only crash.");
 
 --  begin read only

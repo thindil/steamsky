@@ -20,7 +20,13 @@ package body Game.Test_Data is
       ModsDirectory := To_Unbounded_String("../../bin/data/mods/");
       ThemesDirectory := To_Unbounded_String("../../bin/data/themes/");
       LoadConfig;
-      Ada.Text_IO.Put_Line(LoadGameData);
+      declare
+         Message: constant String := LoadGameData;
+      begin
+         if Message'Length > 0 then
+            Put_Line(Message);
+         end if;
+      end;
       NewGameSettings.PlayerFaction := To_Unbounded_String("POLEIS");
       NewGameSettings.PlayerCareer := To_Unbounded_String("general");
       NewGameSettings.StartingBase := To_Unbounded_String("1");
