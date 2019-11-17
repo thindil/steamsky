@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
   alchemy, huge book of alchemy, medium book of cooking, large book of
   cooking, huge book of cooking, medium book of gunsmithing, large book of
   gunsmithing, huge book of gunsmithing, medium book of metalsmithing, large
-  book of metalsmithing
+  book of metalsmithing, huge book of metalsmithing
 - New crafting recipes: adamantium small toys, medium book of alchemy, large
   book of alchemy, huge book of alchemy, medium book of cooking, large book of
   cooking, huge book of cooking, medium book of gunsmithing, large book of
