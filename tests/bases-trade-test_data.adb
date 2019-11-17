@@ -12,17 +12,9 @@ package body Bases.Trade.Test_Data is
    procedure Set_Up (Gnattest_T : in out Test) is
       pragma Unreferenced (Gnattest_T);
    begin
-      NewGameSettings.StartingBase := To_Unbounded_String("Agricultural");
-      if DataDirectory = To_Unbounded_String("../../bin/data/") then
-         return;
-      end if;
-      DataDirectory := To_Unbounded_String("../../bin/data/");
-      SaveDirectory := To_Unbounded_String("../../bin/data/saves/");
-      DocDirectory := To_Unbounded_String("../../bin/doc/");
-      ModsDirectory := To_Unbounded_String("../../bin/data/mods/");
-      ThemesDirectory := To_Unbounded_String("../../bin/data/themes/");
-      LoadConfig;
-      Ada.Text_IO.Put_Line(LoadGameData);
+      NewGameSettings.PlayerFaction := To_Unbounded_String("POLEIS");
+      NewGameSettings.PlayerCareer := To_Unbounded_String("general");
+      NewGameSettings.StartingBase := To_Unbounded_String("1");
       NewGame;
    end Set_Up;
 
