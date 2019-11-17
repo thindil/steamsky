@@ -1431,5 +1431,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="10"/>
   <description>Large book with informations about basics of metalsmithing. Used in training skills.</description>
  </item>
+ <item index="288" name="Huge book of metalsmithing" showtype="Book of Metalsmithing" type="MetalsmithBook" weight="1" price="27">
+  <data value="5"/>
+  <description>Huge book with informations about basics of metalsmithing. Used in training skills.</description>
+ </item>
 </items>
 
