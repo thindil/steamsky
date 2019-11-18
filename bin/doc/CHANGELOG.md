@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Updated help
 - Updated MODDING.md
 - Updated README.md
+- Updated contributing guide
 
 ### Fixed
 - Crash during hiring new crew members in bases (issue #49)
