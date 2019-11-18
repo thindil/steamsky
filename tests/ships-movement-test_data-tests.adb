@@ -81,6 +81,40 @@ package body Ships.Movement.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_DockShip_edc3c4_875e5b (Docking: Boolean)  return String
+   is
+   begin
+      declare
+         Test_DockShip_edc3c4_875e5b_Result : constant String := GNATtest_Generated.GNATtest_Standard.Ships.Movement.DockShip (Docking);
+      begin
+         return Test_DockShip_edc3c4_875e5b_Result;
+      end;
+   end Wrap_Test_DockShip_edc3c4_875e5b;
+--  end read only
+
+--  begin read only
+   procedure Test_DockShip_test_dockship (Gnattest_T : in out Test);
+   procedure Test_DockShip_edc3c4_875e5b (Gnattest_T : in out Test) renames Test_DockShip_test_dockship;
+--  id:2.2/edc3c4581e124418/DockShip/1/0/test_dockship/
+   procedure Test_DockShip_test_dockship (Gnattest_T : in out Test) is
+      function DockShip (Docking: Boolean) return String renames Wrap_Test_DockShip_edc3c4_875e5b;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      Message: Unbounded_String;
+
+   begin
+
+      Message := To_Unbounded_String(DockShip(False));
+      Assert(Message = Null_Unbounded_String, "Failed to undock from the base.");
+      Message := To_Unbounded_String(DockShip(True));
+      Assert(Message = Null_Unbounded_String, "Failed to dock to the base.");
+
+--  begin read only
+   end Test_DockShip_test_dockship;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.

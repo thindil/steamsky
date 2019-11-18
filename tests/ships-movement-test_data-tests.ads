@@ -12,5 +12,8 @@ package Ships.Movement.Test_Data.Tests is
    procedure Test_MoveShip_143def_3bb6cb (Gnattest_T : in out Test);
    --  ships-movement.ads:36:4:MoveShip:Test_MoveShip
 
+   procedure Test_DockShip_edc3c4_875e5b (Gnattest_T : in out Test);
+   --  ships-movement.ads:50:4:DockShip:Test_DockShip
+
 end Ships.Movement.Test_Data.Tests;
 --  end read only
