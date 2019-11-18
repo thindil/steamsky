@@ -34,18 +34,19 @@ package Ships.Movement is
    -- Message
    -- SOURCE
    function MoveShip
-     (X, Y: Integer; Message: in out Unbounded_String) return Natural;
-   -- ****
+     (X, Y: Integer; Message: in out Unbounded_String) return Natural with
+      Test_Case => ("Test_MoveShip", Robustness);
+      -- ****
 
-   -- ****f* Ships.Movement/DockShip
-   -- FUNCTION
-   -- Dock/Undock ship at base
-   -- PARAMETERS
-   -- Docking - If true, ship docks to the base, otherwise false
-   -- RESULT
-   -- Empty string if operation was succesfull, otherwise message what goes
-   -- wrong
-   -- SOURCE
+      -- ****f* Ships.Movement/DockShip
+      -- FUNCTION
+      -- Dock/Undock ship at base
+      -- PARAMETERS
+      -- Docking - If true, ship docks to the base, otherwise false
+      -- RESULT
+      -- Empty string if operation was succesfull, otherwise message what goes
+      -- wrong
+      -- SOURCE
    function DockShip(Docking: Boolean) return String;
    -- ****
 
