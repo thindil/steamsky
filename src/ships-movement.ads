@@ -47,17 +47,18 @@ package Ships.Movement is
       -- Empty string if operation was succesfull, otherwise message what goes
       -- wrong
       -- SOURCE
-   function DockShip(Docking: Boolean) return String;
-   -- ****
+   function DockShip(Docking: Boolean) return String with
+      Test_Case => ("Test_DockShip", Robustness);
+      -- ****
 
-   -- ****f* Ships.Movement/ChangeShipSpeed
-   -- FUNCTION
-   -- Change speed of ship
-   -- PARAMETERS
-   -- SpeedValue - New speed for the ship
-   -- RESULT
-   -- Empty string if speed was changed, otherwise message what goes wrong
-   -- SOURCE
+      -- ****f* Ships.Movement/ChangeShipSpeed
+      -- FUNCTION
+      -- Change speed of ship
+      -- PARAMETERS
+      -- SpeedValue - New speed for the ship
+      -- RESULT
+      -- Empty string if speed was changed, otherwise message what goes wrong
+      -- SOURCE
    function ChangeShipSpeed(SpeedValue: ShipSpeed) return String;
    -- ****
 
