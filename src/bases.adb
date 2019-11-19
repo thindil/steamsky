@@ -175,8 +175,7 @@ package body Bases is
          Equipment(EquipIndex) := Inventory.Last_Index;
          Price :=
            Price +
-           (Get_Price(SkyBases(BaseIndex).BaseType, ItemsIndexes(ItemIndex)) *
-            2);
+           Get_Price(SkyBases(BaseIndex).BaseType, ItemsIndexes(ItemIndex));
          Payment :=
            Payment +
            (Get_Price(SkyBases(BaseIndex).BaseType, ItemsIndexes(ItemIndex)) /
