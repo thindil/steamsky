@@ -59,19 +59,20 @@ package Ships.Movement is
       -- RESULT
       -- Empty string if speed was changed, otherwise message what goes wrong
       -- SOURCE
-   function ChangeShipSpeed(SpeedValue: ShipSpeed) return String;
-   -- ****
+   function ChangeShipSpeed(SpeedValue: ShipSpeed) return String with
+      Test_Case => ("Test_ChangeShipSpeed", Robustness);
+      -- ****
 
-   -- ****f* Ships.Movement/RealSpeed
-   -- FUNCTION
-   -- Count real ship speed in meters per minute
-   -- PARAMETERS
-   -- Ship     - Ship which real speed will be counted
-   -- InfoOnly - If true and ship is docked to the base, count max speed
-   --            of the ship. Default is false
-   -- RESULT
-   -- Empty string if ship can move, otherwise message why it can't
-   -- SOURCE
+      -- ****f* Ships.Movement/RealSpeed
+      -- FUNCTION
+      -- Count real ship speed in meters per minute
+      -- PARAMETERS
+      -- Ship     - Ship which real speed will be counted
+      -- InfoOnly - If true and ship is docked to the base, count max speed
+      --            of the ship. Default is false
+      -- RESULT
+      -- Empty string if ship can move, otherwise message why it can't
+      -- SOURCE
    function RealSpeed
      (Ship: ShipRecord; InfoOnly: Boolean := False) return Natural;
    -- ****
