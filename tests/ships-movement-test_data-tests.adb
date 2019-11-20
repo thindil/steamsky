@@ -151,6 +151,40 @@ package body Ships.Movement.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_RealSpeed_60d629_f7fd56 (Ship: ShipRecord; InfoOnly: Boolean := False)  return Natural
+   is
+   begin
+      declare
+         Test_RealSpeed_60d629_f7fd56_Result : constant Natural := GNATtest_Generated.GNATtest_Standard.Ships.Movement.RealSpeed (Ship, InfoOnly);
+      begin
+         return Test_RealSpeed_60d629_f7fd56_Result;
+      end;
+   end Wrap_Test_RealSpeed_60d629_f7fd56;
+--  end read only
+
+--  begin read only
+   procedure Test_RealSpeed_test_realspeed (Gnattest_T : in out Test);
+   procedure Test_RealSpeed_60d629_f7fd56 (Gnattest_T : in out Test) renames Test_RealSpeed_test_realspeed;
+--  id:2.2/60d629cbf68bcea4/RealSpeed/1/0/test_realspeed/
+   procedure Test_RealSpeed_test_realspeed (Gnattest_T : in out Test) is
+      function RealSpeed (Ship: ShipRecord; InfoOnly: Boolean := False) return Natural renames Wrap_Test_RealSpeed_60d629_f7fd56;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(RealSpeed(PlayerShip) = 0, "Failed to get speed of docked ship.");
+      PlayerShip.Speed := FULL_SPEED;
+      Assert(RealSpeed(PlayerShip) /= 0, "Failed to get speed of ship with full speed.");
+      PlayerShip.Speed := DOCKED;
+      Assert(RealSpeed(PlayerShip, True) /= 0, "Failed to get potential speed of docked ship.");
+
+--  begin read only
+   end Test_RealSpeed_test_realspeed;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.

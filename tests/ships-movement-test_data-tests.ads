@@ -18,5 +18,8 @@ package Ships.Movement.Test_Data.Tests is
    procedure Test_ChangeShipSpeed_b9c437_17b968 (Gnattest_T : in out Test);
    --  ships-movement.ads:62:4:ChangeShipSpeed:Test_ChangeShipSpeed
 
+   procedure Test_RealSpeed_60d629_f7fd56 (Gnattest_T : in out Test);
+   --  ships-movement.ads:76:4:RealSpeed:Test_RealSpeed
+
 end Ships.Movement.Test_Data.Tests;
 --  end read only
