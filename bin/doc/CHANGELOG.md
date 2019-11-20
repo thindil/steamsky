@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
   cooking, huge book of cooking, medium book of gunsmithing, large book of
   gunsmithing, huge book of gunsmithing, medium book of metalsmithing, large
   book of metalsmithing, huge book of metalsmithing, medium book of medicine,
-  large book of medicine
+  large book of medicine, huge book of medicine
 - Enemy escape from the combat after some time
 
 ### Changed
