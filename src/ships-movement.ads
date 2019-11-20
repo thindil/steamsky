@@ -74,15 +74,16 @@ package Ships.Movement is
       -- Empty string if ship can move, otherwise message why it can't
       -- SOURCE
    function RealSpeed
-     (Ship: ShipRecord; InfoOnly: Boolean := False) return Natural;
-   -- ****
+     (Ship: ShipRecord; InfoOnly: Boolean := False) return Natural with
+     Test_Case => ("Test_RealSpeed", Robustness);
+     -- ****
 
-   -- ****f* Ships.Movement/CountFuelNeeded
-   -- FUNCTION
-   -- Count amount of fuel needed by player ship to travel
-   -- RESULT
-   -- Amount of fuel needed by player ship to travel
-   -- SOURCE
+     -- ****f* Ships.Movement/CountFuelNeeded
+     -- FUNCTION
+     -- Count amount of fuel needed by player ship to travel
+     -- RESULT
+     -- Amount of fuel needed by player ship to travel
+     -- SOURCE
    function CountFuelNeeded return Integer;
    -- ****
 
