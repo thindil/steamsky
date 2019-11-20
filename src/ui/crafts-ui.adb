@@ -17,6 +17,7 @@
 
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
@@ -267,7 +268,12 @@ package body Crafts.UI is
       if WorkplaceName = Null_Unbounded_String then
          for Module of Modules_List loop
             if Module.MType = Recipe.Workplace then
-               WorkplaceName := Module.Name;
+               WorkplaceName :=
+                 To_Unbounded_String(To_Lower(ModuleType'Image(Module.MType)));
+               while Index(WorkplaceName, "_", 1) > 0 loop
+                  Replace_Element
+                    (WorkplaceName, Index(WorkplaceName, "_", 1), ' ');
+               end loop;
                exit;
             end if;
          end loop;
@@ -275,6 +281,7 @@ package body Crafts.UI is
       if not HaveWorkplace then
          Append(RecipeInfo, "<span foreground=""red"">");
       end if;
+      Append(RecipeInfo, "Any ");
       Append(RecipeInfo, WorkplaceName);
       if not HaveWorkplace then
          Append(RecipeInfo, "</span>");
