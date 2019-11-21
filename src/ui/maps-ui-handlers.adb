@@ -155,8 +155,12 @@ package body Maps.UI.Handlers is
       PlayerShip.DestinationY := MapY;
       AddMessage
         ("You set the travel destination for your ship.", OrderMessage);
-      UpdateMessages;
-      UpdateMoveButtons;
+      if GameSettings.AutoCenter then
+         ShowSkyMap;
+      else
+         UpdateMessages;
+         UpdateMoveButtons;
+      end if;
       return True;
    end SetDestination;
 
