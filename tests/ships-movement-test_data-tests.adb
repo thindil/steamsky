@@ -185,6 +185,36 @@ package body Ships.Movement.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_CountFuelNeeded_db602d_18e85d return Integer
+   is
+   begin
+      declare
+         Test_CountFuelNeeded_db602d_18e85d_Result : constant Integer := GNATtest_Generated.GNATtest_Standard.Ships.Movement.CountFuelNeeded;
+      begin
+         return Test_CountFuelNeeded_db602d_18e85d_Result;
+      end;
+   end Wrap_Test_CountFuelNeeded_db602d_18e85d;
+--  end read only
+
+--  begin read only
+   procedure Test_CountFuelNeeded_test_countfuelneeded (Gnattest_T : in out Test);
+   procedure Test_CountFuelNeeded_db602d_18e85d (Gnattest_T : in out Test) renames Test_CountFuelNeeded_test_countfuelneeded;
+--  id:2.2/db602d4cda90f238/CountFuelNeeded/1/0/test_countfuelneeded/
+   procedure Test_CountFuelNeeded_test_countfuelneeded (Gnattest_T : in out Test) is
+      function CountFuelNeeded return Integer renames Wrap_Test_CountFuelNeeded_db602d_18e85d;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(CountFuelNeeded < 1, "Failed to count needed fuel to travel.");
+
+--  begin read only
+   end Test_CountFuelNeeded_test_countfuelneeded;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.

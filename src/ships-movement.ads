@@ -84,15 +84,16 @@ package Ships.Movement is
      -- RESULT
      -- Amount of fuel needed by player ship to travel
      -- SOURCE
-   function CountFuelNeeded return Integer;
-   -- ****
+   function CountFuelNeeded return Integer with
+      Test_Case => ("Test_CountFuelNeeded", Robustness);
+      -- ****
 
-   -- ****f* Ships.Movement/WaitInPlace
-   -- FUNCTION
-   -- Use fuel when ship wait in place
-   -- PARAMETERS
-   -- Minutes - Amount of passed in-game minutes
-   -- SOURCE
+      -- ****f* Ships.Movement/WaitInPlace
+      -- FUNCTION
+      -- Use fuel when ship wait in place
+      -- PARAMETERS
+      -- Minutes - Amount of passed in-game minutes
+      -- SOURCE
    procedure WaitInPlace(Minutes: Positive);
    -- ****
 
