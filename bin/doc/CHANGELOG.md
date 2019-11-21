@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Not working "Auto center map after set destination" configuration option
+
 ## [4.0.7] - 2019-11-10
 
 ### Changed
