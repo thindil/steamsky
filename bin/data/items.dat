@@ -1447,5 +1447,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="5"/>
   <description>Huge book with informations about basics of medicine. Used in training skills.</description>
  </item>
+ <item index="292" name="Medium book of farming" showtype="Book of Farming" type="FarmingBook" weight="1" price="17">
+  <data value="15"/>
+  <description>Medium book with informations about basics of farming. Used in training skills.</description>
+ </item>
 </items>
 
