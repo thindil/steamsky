@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file.
 - Not working Close button in combat when you enter any other info screen
   (issue #49)
 - Crash on map after selling last engine
+- Not working "Auto center map after set destination" configuration option
 
 ## [4.3] - 2019-11-03
 
