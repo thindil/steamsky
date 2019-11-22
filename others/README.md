@@ -17,3 +17,4 @@ Various files which are not necessary needed for development:
 - build.sh          - script to build release for the program. Build the
                       program in release mode and copy all files to proper
                       location.
+- pl.laeran.steamsky.appdata.xml - AppStream meta data for the AppImage.
