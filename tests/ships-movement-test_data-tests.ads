@@ -24,5 +24,8 @@ package Ships.Movement.Test_Data.Tests is
    procedure Test_CountFuelNeeded_db602d_18e85d (Gnattest_T : in out Test);
    --  ships-movement.ads:87:4:CountFuelNeeded:Test_CountFuelNeeded
 
+   procedure Test_WaitInPlace_a6040e_d787da (Gnattest_T : in out Test);
+   --  ships-movement.ads:97:4:WaitInPlace:Test_WaitInPlace
+
 end Ships.Movement.Test_Data.Tests;
 --  end read only
