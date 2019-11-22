@@ -215,6 +215,33 @@ package body Ships.Movement.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_WaitInPlace_a6040e_d787da (Minutes: Positive) 
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Ships.Movement.WaitInPlace (Minutes);
+   end Wrap_Test_WaitInPlace_a6040e_d787da;
+--  end read only
+
+--  begin read only
+   procedure Test_WaitInPlace_test_waitinplace (Gnattest_T : in out Test);
+   procedure Test_WaitInPlace_a6040e_d787da (Gnattest_T : in out Test) renames Test_WaitInPlace_test_waitinplace;
+--  id:2.2/a6040ed3f85f9963/WaitInPlace/1/0/test_waitinplace/
+   procedure Test_WaitInPlace_test_waitinplace (Gnattest_T : in out Test) is
+   procedure WaitInPlace (Minutes: Positive) renames Wrap_Test_WaitInPlace_a6040e_d787da;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      WaitInPlace(1);
+      Assert(True, "This test can only crash.");
+
+--  begin read only
+   end Test_WaitInPlace_test_waitinplace;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.

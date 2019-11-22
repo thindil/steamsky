@@ -94,7 +94,8 @@ package Ships.Movement is
       -- PARAMETERS
       -- Minutes - Amount of passed in-game minutes
       -- SOURCE
-   procedure WaitInPlace(Minutes: Positive);
-   -- ****
+   procedure WaitInPlace(Minutes: Positive) with
+      Test_Case => ("Test_WaitInPlace", Robustness);
+      -- ****
 
 end Ships.Movement;
