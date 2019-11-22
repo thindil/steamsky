@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>pl.laeran.steamsky</id>
+  <metadata_license>CC-0</metadata_license>
+  <project_license>GPL-3</project_license>
+  <name>steamsky</name>
+  <summary>SteamSky</summary>
+  <description>
+     <p>
+      Steam Sky is an open source roguelike with a steampunk setting.
+      You are a commander of a flying ship, as leader you will be traveling
+      across floating bases, engaging in combat, trading goods etc. There
+      is no mandatory ending to the game, you may freely play until your
+      character dies.
+    </p>
+  </description>
+     <screenshots>
+    <screenshot type="default">
+      <image>https://img.itch.zone/aW1hZ2UvNDkxMTgzLzI1MzkwNzUucG5n/original/8jTubG.png</image>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://thindil.itch.io/steam-sky</url>
+  <provides>
+    <binary>steamsky</binary>
+  </provides>
+</component>
