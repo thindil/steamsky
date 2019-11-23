@@ -6,6 +6,7 @@ case $1 in
       gprclean -P steamsky.gpr
       gprbuild -p steamsky.gpr -XMode=release
       mkdir -p "$releasedir"/bin
+      mkdir -p "$releasedir"/share/metainfo/
       cp -r share "$releasedir"
       cp bin/steamsky "$releasedir"/bin
       cp -r bin/data "$releasedir"/share
@@ -14,6 +15,7 @@ case $1 in
       rm -r "$releasedir"/share/data/themes
       cp -r bin/doc "$releasedir"/share
       cp README.md "$releasedir"/share/doc
+      cp others/pl.laeran.steamsky.appdata.xml "$releasedir"/share/metainfo
       gprclean -P steamsky.gpr
       ;;
    debug)
