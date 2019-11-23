@@ -38,8 +38,10 @@ package Ships.Upgrade is
    -- SOURCE
    procedure StartUpgrading(ModuleIndex, UpgradeType: Positive) with
       Pre =>
-      (ModuleIndex <= PlayerShip.Modules.Last_Index and UpgradeType < 5);
+      (ModuleIndex <= PlayerShip.Modules.Last_Index and UpgradeType < 5),
+      Test_Case => ("Test_StartUpgrading", Nominal);
       -- ****
+
       -- ****f* Ships.Upgrade/UpgradeShip
       -- FUNCTION
       -- Upgrade selected module on ship
