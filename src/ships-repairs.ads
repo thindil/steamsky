@@ -28,7 +28,8 @@ package Ships.Repairs is
    -- PARAMETERS
    -- Minutes - Amount of passed in-game minutes
    -- SOURCE
-   procedure RepairShip(Minutes: Positive);
-   -- ****
+   procedure RepairShip(Minutes: Positive) with
+      Test_Case => ("Test_RepairShip", Robustness);
+      -- ****
 
 end Ships.Repairs;
