@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file.
   gunsmithing, huge book of gunsmithing, medium book of metalsmithing, large
   book of metalsmithing, huge book of metalsmithing, medium book of medicine,
   large book of medicine, huge book of medicine, medium book of farming, large
-  book of farming, huge book of farming
+  book of farming, huge book of farming, medium book of woodcutting
 - Enemy escape from the combat after some time
 
 ### Changed
