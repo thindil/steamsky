@@ -15,6 +15,8 @@ with System.Assertions;
 --
 --  end read only
 
+with Ships.Crew; use Ships.Crew;
+
 --  begin read only
 --  end read only
 package body Ships.Upgrade.Test_Data.Tests is
@@ -73,6 +75,35 @@ package body Ships.Upgrade.Test_Data.Tests is
 
 --  begin read only
    end Test_StartUpgrading_test_startupgrading;
+--  end read only
+
+--  begin read only
+   procedure Wrap_Test_UpgradeShip_4209d2_2b44d6 (Minutes: Positive) 
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Ships.Upgrade.UpgradeShip (Minutes);
+   end Wrap_Test_UpgradeShip_4209d2_2b44d6;
+--  end read only
+
+--  begin read only
+   procedure Test_UpgradeShip_test_upgradeship (Gnattest_T : in out Test);
+   procedure Test_UpgradeShip_4209d2_2b44d6 (Gnattest_T : in out Test) renames Test_UpgradeShip_test_upgradeship;
+--  id:2.2/4209d24a189d78e6/UpgradeShip/1/0/test_upgradeship/
+   procedure Test_UpgradeShip_test_upgradeship (Gnattest_T : in out Test) is
+   procedure UpgradeShip (Minutes: Positive) renames Wrap_Test_UpgradeShip_4209d2_2b44d6;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      Progress: constant Natural := PlayerShip.Modules(1).UpgradeProgress;
+
+   begin
+
+      GiveOrders(PlayerShip, 4, Upgrading);
+      UpgradeShip(15);
+      Assert(PlayerShip.Modules(1).UpgradeProgress < Progress, "Failed to upgrade ship.");
+
+--  begin read only
+   end Test_UpgradeShip_test_upgradeship;
 --  end read only
 
 --  begin read only
