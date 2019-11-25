@@ -211,6 +211,9 @@ package body Utils.UI is
       case PreviousGameState is
          when SkyMap_View =>
             ShowSkyMap;
+            if PlayerShip.Speed = DOCKED then
+               ShowOrders(Object);
+            end if;
          when Combat_View =>
             ShowCombatUI(False);
          when Main_Menu =>
