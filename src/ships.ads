@@ -325,7 +325,8 @@ package Ships is
    function CreateShip
      (ProtoIndex, Name: Unbounded_String; X, Y: Integer; Speed: ShipSpeed;
       RandomUpgrades: Boolean := True) return ShipRecord with
-      Pre => (ProtoShips_Container.Contains(ProtoShips_List, ProtoIndex));
+      Pre => (ProtoShips_Container.Contains(ProtoShips_List, ProtoIndex)),
+      Test_Case => ("Test_CreateShip", Nominal);
       -- ****
 
       -- ****f* Ships/LoadShips
