@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - Updated contributing guide
 - Reduced influence of items prices on recruits prices
 - Better info about needed workshop in crafting
+- Exit from any station screen, lead to station menu (issue #49)
 
 ### Fixed
 - Crash during hiring new crew members in bases (issue #49)
