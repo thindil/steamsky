@@ -80,6 +80,36 @@ package body Ships.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_CountShipWeight_f01f93_0591fd (Ship: ShipRecord)  return Positive
+   is
+   begin
+      declare
+         Test_CountShipWeight_f01f93_0591fd_Result : constant Positive := GNATtest_Generated.GNATtest_Standard.Ships.CountShipWeight (Ship);
+      begin
+         return Test_CountShipWeight_f01f93_0591fd_Result;
+      end;
+   end Wrap_Test_CountShipWeight_f01f93_0591fd;
+--  end read only
+
+--  begin read only
+   procedure Test_CountShipWeight_test_countshipweight (Gnattest_T : in out Test);
+   procedure Test_CountShipWeight_f01f93_0591fd (Gnattest_T : in out Test) renames Test_CountShipWeight_test_countshipweight;
+--  id:2.2/f01f93836329aac8/CountShipWeight/1/0/test_countshipweight/
+   procedure Test_CountShipWeight_test_countshipweight (Gnattest_T : in out Test) is
+      function CountShipWeight (Ship: ShipRecord) return Positive renames Wrap_Test_CountShipWeight_f01f93_0591fd;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(CountShipWeight(PlayerShip) > 0, "This test can only crash.");
+
+--  begin read only
+   end Test_CountShipWeight_test_countshipweight;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
