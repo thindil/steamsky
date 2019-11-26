@@ -423,6 +423,27 @@ package body Bases.ShipyardUI is
          To_String(RemoveInfo));
    end ShowRemoveInfo;
 
+   -- ****if* Bases.ShipyardUI/GetModuleType
+   -- FUNCTION
+   -- Get type of selected module
+   -- PARAMETERS
+   -- ModuleIndex - Index of module in prototypes list
+   -- RETURNS
+   -- Formatted type of module
+   -- SOURCE
+   function GetModuleType(ModuleIndex: Unbounded_String) return String is
+      -- ****
+      ModuleTypeName: Unbounded_String :=
+        To_Unbounded_String
+          (To_Lower(ModuleType'Image(Modules_List(ModuleIndex).MType)));
+   begin
+      Replace_Element(ModuleTypeName, 1, To_Upper(Element(ModuleTypeName, 1)));
+      while Index(ModuleTypeName, "_", 1) > 0 loop
+         Replace_Element(ModuleTypeName, Index(ModuleTypeName, "_", 1), ' ');
+      end loop;
+      return To_String(ModuleTypeName);
+   end GetModuleType;
+
    -- ****if* Bases.ShipyardUI/SetRemoveModulesList
    -- FUNCTION
    -- Fill remove modules list with player ship modules
@@ -585,6 +606,20 @@ package body Bases.ShipyardUI is
             Set
               (ModulesList, ModulesIter, 1,
                To_String(BaseModules_Container.Key(I)));
+            Set
+              (ModulesList, ModulesIter, 2,
+               GetModuleType(BaseModules_Container.Key(I)));
+            case Modules_List(I).MType is
+               when HULL =>
+                  Set
+                    (ModulesList, ModulesIter, 3,
+                     Gint(Modules_List(I).MaxValue));
+               when others =>
+                  Set(ModulesList, ModulesIter, 3, Gint(Modules_List(I).Size));
+            end case;
+            Set
+              (ModulesList, ModulesIter, 4,
+               To_String(Modules_List(I).RepairMaterial));
          end if;
       end loop;
    end CreateBasesShipyardUI;
