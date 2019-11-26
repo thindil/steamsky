@@ -346,17 +346,18 @@ package Ships is
    -- RESULT
    -- Ship weight in kilograms
    -- SOURCE
-   function CountShipWeight(Ship: ShipRecord) return Positive;
-   -- ****
+   function CountShipWeight(Ship: ShipRecord) return Positive with
+      Test_Case => ("Test_CountShipWeight", Robustness);
+      -- ****
 
-   -- ****f* Ships/GenerateShipName
-   -- FUNCTION
-   -- Generate random name for ship
-   -- PARAMETERS
-   -- Owner - Index of faction to which ship belongs
-   -- RESULT
-   -- Random name for a ship
-   -- SOURCE
+      -- ****f* Ships/GenerateShipName
+      -- FUNCTION
+      -- Generate random name for ship
+      -- PARAMETERS
+      -- Owner - Index of faction to which ship belongs
+      -- RESULT
+      -- Random name for a ship
+      -- SOURCE
    function GenerateShipName
      (Owner: Unbounded_String) return Unbounded_String with
       Pre => Owner /= Null_Unbounded_String;
