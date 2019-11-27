@@ -360,7 +360,8 @@ package Ships is
       -- SOURCE
    function GenerateShipName
      (Owner: Unbounded_String) return Unbounded_String with
-      Pre => Owner /= Null_Unbounded_String;
+      Pre => Owner /= Null_Unbounded_String,
+      Test_Case => ("Test_GenerateShipName", Nominal);
       -- ****
 
       -- ****f* Ships/CountCombatValue
