@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file.
   book of woodcutting, huge book of woodcutting, medium book of brewing
 - Enemy escape from the combat after some time
 - Added type, size, material info to modules list in shipyard when installing
-  new modules (issue #49)
+  new modules or remove old ones (issue #49)
 
 ### Changed
 - Reduced base price of orichalcum small toys
