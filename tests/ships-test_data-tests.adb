@@ -110,6 +110,56 @@ package body Ships.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_GenerateShipName_26fd48_7313c0 (Owner: Unbounded_String)  return Unbounded_String
+   is
+   begin
+      begin
+         pragma Assert
+           (Owner /= Null_Unbounded_String);
+         null;
+      exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "req_sloc(ships.ads:0):Test_GenerateShipName test requirement violated");
+      end;
+      declare
+         Test_GenerateShipName_26fd48_7313c0_Result : constant Unbounded_String := GNATtest_Generated.GNATtest_Standard.Ships.GenerateShipName (Owner);
+      begin
+         begin
+            pragma Assert
+              (True);
+            null;
+         exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "ens_sloc(ships.ads:0:):Test_GenerateShipName test commitment violated");
+         end;
+         return Test_GenerateShipName_26fd48_7313c0_Result;
+      end;
+   end Wrap_Test_GenerateShipName_26fd48_7313c0;
+--  end read only
+
+--  begin read only
+   procedure Test_GenerateShipName_test_generateshipname (Gnattest_T : in out Test);
+   procedure Test_GenerateShipName_26fd48_7313c0 (Gnattest_T : in out Test) renames Test_GenerateShipName_test_generateshipname;
+--  id:2.2/26fd4844628732d9/GenerateShipName/1/0/test_generateshipname/
+   procedure Test_GenerateShipName_test_generateshipname (Gnattest_T : in out Test) is
+      function GenerateShipName (Owner: Unbounded_String) return Unbounded_String renames Wrap_Test_GenerateShipName_26fd48_7313c0;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(GenerateShipName(To_Unbounded_String("POLEIS")) /= Null_Unbounded_String, "Failed to generate ship name.");
+
+--  begin read only
+   end Test_GenerateShipName_test_generateshipname;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
