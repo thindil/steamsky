@@ -464,6 +464,17 @@ package body Bases.ShipyardUI is
             Set
               (ModulesList, ModulesIter, 1,
                Gint(Modules_Container.To_Index(I)));
+            Set
+              (ModulesList, ModulesIter, 2,
+               GetModuleType(PlayerShip.Modules(I).ProtoIndex));
+            Set
+              (ModulesList, ModulesIter, 3,
+               Gint(Modules_List(PlayerShip.Modules(I).ProtoIndex).Size));
+            Set
+              (ModulesList, ModulesIter, 4,
+               To_String
+                 (Modules_List(PlayerShip.Modules(I).ProtoIndex)
+                    .RepairMaterial));
          end if;
       end loop;
    end SetRemoveModulesList;
