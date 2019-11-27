@@ -1471,5 +1471,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="5"/>
   <description>Huge book with informations about basics of woodcutting. Used in training skills.</description>
  </item>
+ <item index="298" name="Medium book of brewing" showtype="Book of Brewing" type="BrewingBook" weight="1" price="17">
+  <data value="15"/>
+  <description>Medium book with informations about basics of brewing. Used in training skills.</description>
+ </item>
 </items>
 
