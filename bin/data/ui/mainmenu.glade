@@ -590,6 +590,52 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="can_focus">False</property>
                                     <property name="orientation">vertical</property>
                                     <child>
+                                      <object class="GtkBox">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="label" translatable="yes">Difficulty Level:</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkComboBoxText" id="cmbdifficulty">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="tooltip_text" translatable="yes">Select presetted level of the game difficulty.</property>
+                                            <property name="active">2</property>
+                                            <items>
+                                              <item translatable="yes">Very Easy</item>
+                                              <item translatable="yes">Easy</item>
+                                              <item translatable="yes">Normal</item>
+                                              <item translatable="yes">Hard</item>
+                                              <item translatable="yes">Very Hard</item>
+                                              <item translatable="yes">Custom</item>
+                                            </items>
+                                            <signal name="changed" handler="Set_Difficulty" swapped="no"/>
+                                            <signal name="set-focus-child" handler="Update_Info_Proc" object="cmbdifficulty" swapped="no"/>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
                                       <object class="GtkGrid" id="difficultygrid">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
@@ -914,53 +960,26 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">True</property>
-                                        <property name="position">0</property>
+                                        <property name="position">1</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkButtonBox">
+                                      <object class="GtkButton" id="btnrandom">
+                                        <property name="label" translatable="yes">_Roll</property>
                                         <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="layout_style">start</property>
-                                        <child>
-                                          <object class="GtkButton" id="btnrandom">
-                                            <property name="label" translatable="yes">_Roll</property>
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="receives_default">True</property>
-                                            <property name="tooltip_text" translatable="yes">Select random values for all settings.</property>
-                                            <property name="margin_top">10</property>
-                                            <property name="use_underline">True</property>
-                                            <signal name="clicked" handler="Random_Difficulty" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">True</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkButton" id="btnreset">
-                                            <property name="label" translatable="yes">Reset</property>
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="receives_default">True</property>
-                                            <property name="tooltip_text" translatable="yes">Reset difficulty setting to default values (all on 100%).</property>
-                                            <property name="margin_top">10</property>
-                                            <property name="use_underline">True</property>
-                                            <signal name="clicked" handler="Reset_Difficulty" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">True</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
+                                        <property name="tooltip_text" translatable="yes">Select random values for all settings.</property>
+                                        <property name="margin_left">10</property>
+                                        <property name="margin_right">10</property>
+                                        <property name="margin_top">10</property>
+                                        <property name="use_underline">True</property>
+                                        <signal name="clicked" handler="Random_Difficulty" swapped="no"/>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">True</property>
-                                        <property name="position">1</property>
+                                        <property name="position">2</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -976,7 +995,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">True</property>
-                                        <property name="position">2</property>
+                                        <property name="position">3</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -1014,7 +1033,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">True</property>
-                                        <property name="position">3</property>
+                                        <property name="position">4</property>
                                       </packing>
                                     </child>
                                   </object>
