@@ -481,11 +481,14 @@ package body MainMenu is
    procedure RandomDifficulty(Object: access Gtkada_Builder_Record'Class) is
    -- ****
    begin
+      Setting := True;
       for Name of AdjNames loop
          Set_Value
            (Gtk_Adjustment(Get_Object(Object, To_String(Name))),
             Gdouble(GetRandom(1, 500)));
       end loop;
+      Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbdifficulty")), 5);
+      Setting := False;
    end RandomDifficulty;
 
    -- ****if* MainMenu/NewGame
@@ -562,7 +565,11 @@ package body MainMenu is
          PricesBonus =>
            Float
              (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjprices"))) /
-              100.0));
+              100.0),
+         DifficultyLevel =>
+           Natural
+             (Get_Active
+                (Gtk_Combo_Box_Text(Get_Object(Object, "cmbdifficulty")))));
       for I in BasesTypes_List.Iterate loop
          if BasesTypes_List(I).Name = NewGameSettings.StartingBase then
             NewGameSettings.StartingBase := BasesTypes_Container.Key(I);
@@ -853,21 +860,10 @@ package body MainMenu is
       Set_Text
         (Gtk_Label(Get_Object(Object, "lblbonuspoints")),
          "Total gained points:" & Integer'Image(Bonus) & "%");
+      Setting := True;
+      Set_Active(Gtk_Combo_Box_Text(Get_Object(Object, "cmbdifficulty")), 5);
+      Setting := False;
    end UpdateSummary;
-
-   -- ****if* MainMenu/ResetDifficulty
-   -- FUNCTION
-   -- Set difficulty levels to default
-   -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
-   -- SOURCE
-   procedure ResetDifficulty(Object: access Gtkada_Builder_Record'Class) is
-   -- ****
-   begin
-      for Name of AdjNames loop
-         Set_Value(Gtk_Adjustment(Get_Object(Object, To_String(Name))), 100.0);
-      end loop;
-   end ResetDifficulty;
 
    -- ****if* MainMenu/RandomDifficultyToggled
    -- FUNCTION
@@ -892,6 +888,52 @@ package body MainMenu is
          UpdateSummary(Object);
       end if;
    end RandomDifficultyToggled;
+
+   -- ****if* MainMenu/SetDifficulty
+   -- FUNCTION
+   -- Set presetted level of the game difficulty
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
+   procedure SetDifficulty(Object: access Gtkada_Builder_Record'Class) is
+      -- ****
+      type DifficultyArray is array(1 .. 8) of Gdouble;
+      CurrentLevel: constant Gint :=
+        Get_Active(Gtk_Combo_Box_Text(Get_Object(Object, "cmbdifficulty")));
+      procedure UpdateDifficulty(Values: DifficultyArray) is
+      begin
+         for I in AdjNames'Range loop
+            Set_Value
+              (Gtk_Adjustment(Get_Object(Object, To_String(AdjNames(I)))),
+               Values(I));
+         end loop;
+      end UpdateDifficulty;
+   begin
+      Setting := True;
+      case CurrentLevel is
+         when 0 =>
+            UpdateDifficulty
+              ((10.0, 450.0, 10.0, 450.0, 450.0, 450.0, 10.0, 10.0));
+         when 1 =>
+            UpdateDifficulty
+              ((50.0, 250.0, 50.0, 250.0, 250.0, 250.0, 50.0, 50.0));
+         when 2 =>
+            UpdateDifficulty
+              ((100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0));
+         when 3 =>
+            UpdateDifficulty
+              ((250.0, 50.0, 250.0, 50.0, 50.0, 50.0, 250.0, 250.0));
+         when 4 =>
+            UpdateDifficulty
+              ((450.0, 10.0, 450.0, 10.0, 10.0, 10.0, 450.0, 450.0));
+         when others =>
+            null;
+      end case;
+      Set_Active
+        (Gtk_Combo_Box_Text(Get_Object(Object, "cmbdifficulty")),
+         CurrentLevel);
+      Setting := False;
+   end SetDifficulty;
 
    procedure CreateMainMenu is
       Error: aliased GError;
@@ -939,9 +981,9 @@ package body MainMenu is
       Register_Handler(Builder, "Hide_Dialog", HideDialog'Access);
       Register_Handler(Builder, "Random_Difficulty", RandomDifficulty'Access);
       Register_Handler(Builder, "Update_Summary", UpdateSummary'Access);
-      Register_Handler(Builder, "Reset_Difficulty", ResetDifficulty'Access);
       Register_Handler
         (Builder, "Random_Difficulty_Toggled", RandomDifficultyToggled'Access);
+      Register_Handler(Builder, "Set_Difficulty", SetDifficulty'Access);
       Do_Connect(Builder);
       SetUtilsBuilder(Builder);
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
@@ -982,11 +1024,16 @@ package body MainMenu is
             Set(BasesList, BaseIter, 1, To_String(BaseType.Description));
          end loop;
       end;
+      Setting := True;
+      Set_Active
+        (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbdifficulty")),
+         Gint(NewGameSettings.DifficultyLevel));
       for I in AdjNames'Range loop
          Set_Value
            (Gtk_Adjustment(Get_Object(Builder, To_String(AdjNames(I)))),
             (AdjValues(I) * 100.0));
       end loop;
+      Setting := False;
       On_Key_Press_Event
         (Gtk_Widget(Get_Object(Builder, "newgamebox")),
          NewGameKeyPressed'Access);

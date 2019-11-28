@@ -41,7 +41,8 @@ package body Config is
          StartingBase => To_Unbounded_String("Any"), EnemyDamageBonus => 1.0,
          PlayerDamageBonus => 1.0, EnemyMeleeDamageBonus => 1.0,
          PlayerMeleeDamageBonus => 1.0, ExperienceBonus => 1.0,
-         ReputationBonus => 1.0, UpgradeCostBonus => 1.0, PricesBonus => 1.0);
+         ReputationBonus => 1.0, UpgradeCostBonus => 1.0, PricesBonus => 1.0,
+         DifficultyLevel => 2);
       GameSettings :=
         (AutoRest => True, UndockSpeed => FULL_SPEED, AutoCenter => True,
          AutoReturn => True, AutoFinish => True, LowFuel => 100,
@@ -102,6 +103,9 @@ package body Config is
                  Float'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("PricesBonus") then
                NewGameSettings.PricesBonus := Float'Value(To_String(Value));
+            elsif FieldName = To_Unbounded_String("DifficultyLevel") then
+               NewGameSettings.DifficultyLevel :=
+                 Natural'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("AutoRest") then
                GameSettings.AutoRest := LoadBoolean;
             elsif FieldName = To_Unbounded_String("UndockSpeed") then
@@ -236,6 +240,9 @@ package body Config is
       Put_Line
         (ConfigFile,
          "PricesBonus =" & Float'Image(NewGameSettings.PricesBonus));
+      Put_Line
+        (ConfigFile,
+         "DifficultyLevel =" & Natural'Image(NewGameSettings.DifficultyLevel));
       SaveBoolean(GameSettings.AutoRest, "AutoRest");
       Put_Line
         (ConfigFile,

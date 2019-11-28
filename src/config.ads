@@ -47,6 +47,7 @@ package Config is
    -- UpgradeCostBonus       - Default bonus to amount of materials needed for
    --                          player's ship upgrades.
    -- PricesBonus            - Default bonus to prices for services in bases
+   -- DifficultyLevel        - Default the game difficulty level
    -- SOURCE
    type NewGameRecord is record
       PlayerName: Unbounded_String;
@@ -63,6 +64,7 @@ package Config is
       ReputationBonus: Float;
       UpgradeCostBonus: Float;
       PricesBonus: Float;
+      DifficultyLevel: Natural;
    end record;
    -- ****
 
