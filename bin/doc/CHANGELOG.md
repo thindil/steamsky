@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Enemy escape from the combat after some time
 - Added type, size, material info to modules list in shipyard when installing
   new modules or remove old ones (issue #49)
+- Presetted the game difficulty levels (issue #49)
 
 ### Changed
 - Reduced base price of orichalcum small toys
