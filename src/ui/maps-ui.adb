@@ -1105,6 +1105,9 @@ package body Maps.UI is
       Add_Overlay
         (Gtk_Overlay(Get_Object(Builder, "gameoverlay")),
          Gtk_Widget(Get_Object(Builder, "messagebox")));
+      Add_Overlay
+        (Gtk_Overlay(Get_Object(Builder, "mapoverlay")),
+         Gtk_Widget(Get_Object(Builder, "btnboxdestination")));
       Register_Handler(Builder, "Quit_Game", QuitGame'Access);
       Register_Handler(Builder, "Quit_Game_Menu", QuitGameMenu'Access);
       Register_Handler(Builder, "Get_New_Size", GetMapSize'Access);
@@ -1149,6 +1152,8 @@ package body Maps.UI is
       Register_Handler(Builder, "Disable_Mouse", DisableMouse'Access);
       Register_Handler
         (Builder, "Set_Messages_Position", SetMessagesPosition'Access);
+      Register_Handler
+        (Builder, "Show_Destination_Menu", ShowDestinationOrders'Access);
       Do_Connect(Builder);
       Add_Entry("<skymapwindow>/btnupleft", GDK_KP_7, 0);
       Add_Entry("<skymapwindow>/btnup", GDK_KP_8, 0);
@@ -1398,6 +1403,7 @@ package body Maps.UI is
       Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
       Hide(Gtk_Widget(Get_Object(Builder, "btnboxwait")));
       Hide(Gtk_Widget(Get_Object(Builder, "messagebox")));
+      Hide(Gtk_Widget(Get_Object(Builder, "btnboxdestination")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
       Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));
