@@ -55,11 +55,22 @@ package Maps.UI.Handlers is
 
    -- ****f* Maps.UI.Handlers/SetDestination
    -- FUNCTION
-   -- Set ship destination
+   -- Set ship destination or move player ship
+   -- PARAMETERS
+   -- User_Data - Button which was clicked
+   -- SOURCE
+   procedure SetDestination(User_Data: access GObject_Record'Class);
+   -- ****
+
+   -- ****f* Maps.UI.Handlers/ShowDestinationOrders
+   -- FUNCTION
+   -- Show destination menu with options
    -- PARAMETERS
    -- Object - Gtkada_Builder used to create UI
+   -- RESULT
+   -- This function always returns True
    -- SOURCE
-   function SetDestination
+   function ShowDestinationOrders
      (Object: access Gtkada_Builder_Record'Class) return Boolean;
    -- ****
 
