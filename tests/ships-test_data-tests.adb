@@ -160,6 +160,36 @@ package body Ships.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_CountCombatValue_77d5b0_424a30 return Natural
+   is
+   begin
+      declare
+         Test_CountCombatValue_77d5b0_424a30_Result : constant Natural := GNATtest_Generated.GNATtest_Standard.Ships.CountCombatValue;
+      begin
+         return Test_CountCombatValue_77d5b0_424a30_Result;
+      end;
+   end Wrap_Test_CountCombatValue_77d5b0_424a30;
+--  end read only
+
+--  begin read only
+   procedure Test_CountCombatValue_test_countcombatvalue (Gnattest_T : in out Test);
+   procedure Test_CountCombatValue_77d5b0_424a30 (Gnattest_T : in out Test) renames Test_CountCombatValue_test_countcombatvalue;
+--  id:2.2/77d5b05ac9b3095d/CountCombatValue/1/0/test_countcombatvalue/
+   procedure Test_CountCombatValue_test_countcombatvalue (Gnattest_T : in out Test) is
+      function CountCombatValue return Natural renames Wrap_Test_CountCombatValue_77d5b0_424a30;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(CountCombatValue > -1, "Failed to get player ship combat value.");
+
+--  begin read only
+   end Test_CountCombatValue_test_countcombatvalue;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.

@@ -370,17 +370,18 @@ package Ships is
       -- RESULT
       -- Numeric level of combat value of player ship
       -- SOURCE
-   function CountCombatValue return Natural;
-   -- ****
+   function CountCombatValue return Natural with
+      Test_Case => ("Test_CountCombatValue", Robustness);
+      -- ****
 
-   -- ****f* Ships/GetCabinQuality
-   -- FUNCTION
-   -- Get description of quality of selected cabin in player ship
-   -- PARAMETERS
-   -- Quality - Numeric value of cabin quality
-   -- RESULT
-   -- Description of cabin quality
-   -- SOURCE
+      -- ****f* Ships/GetCabinQuality
+      -- FUNCTION
+      -- Get description of quality of selected cabin in player ship
+      -- PARAMETERS
+      -- Quality - Numeric value of cabin quality
+      -- RESULT
+      -- Description of cabin quality
+      -- SOURCE
    function GetCabinQuality(Quality: Natural) return String;
    -- ****
 
