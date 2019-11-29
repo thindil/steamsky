@@ -21,7 +21,7 @@ All notable changes to this project will be documented in this file.
   large book of medicine, huge book of medicine, medium book of farming, large
   book of farming, huge book of farming, medium book of woodcutting, large
   book of woodcutting, huge book of woodcutting, medium book of brewing, large
-  book of brewing
+  book of brewing, huge book of brewing
 - Enemy escape from the combat after some time
 - Added type, size, material info to modules list in shipyard when installing
   new modules or remove old ones (issue #49)
