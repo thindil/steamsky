@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Added type, size, material info to modules list in shipyard when installing
   new modules or remove old ones (issue #49)
 - Presetted the game difficulty levels (issue #49)
+- Travelling with the mouse (issue #49)
 
 ### Changed
 - Reduced base price of orichalcum small toys
