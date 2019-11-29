@@ -144,25 +144,51 @@ package body Maps.UI.Handlers is
          Gint(GameSettings.WindowWidth), Gint(GameSettings.WindowHeight));
    end GetMapSize;
 
-   function SetDestination
+   procedure SetDestination(User_Data: access GObject_Record'Class) is
+   begin
+      if PlayerShip.SkyX = MapX and PlayerShip.SkyY = MapY then
+         ShowOrders(Builder);
+         return;
+      end if;
+      Hide(Gtk_Widget(Get_Object(Builder, "btnboxdestination")));
+      if User_Data /= Get_Object(Builder, "btnmoveto2") then
+         PlayerShip.DestinationX := MapX;
+         PlayerShip.DestinationY := MapY;
+         AddMessage
+           ("You set the travel destination for your ship.", OrderMessage);
+         if GameSettings.AutoCenter then
+            ShowSkyMap;
+         else
+            UpdateMessages;
+            UpdateMoveButtons;
+         end if;
+      end if;
+      if User_Data /= Get_Object(Builder, "btnsetdestination") then
+         MoveShip(Get_Object(Builder, "btnmoveto"));
+      end if;
+   end SetDestination;
+
+   function ShowDestinationOrders
      (Object: access Gtkada_Builder_Record'Class) return Boolean is
    begin
       if PlayerShip.SkyX = MapX and PlayerShip.SkyY = MapY then
          ShowOrders(Object);
          return True;
       end if;
-      PlayerShip.DestinationX := MapX;
-      PlayerShip.DestinationY := MapY;
-      AddMessage
-        ("You set the travel destination for your ship.", OrderMessage);
-      if GameSettings.AutoCenter then
-         ShowSkyMap;
-      else
-         UpdateMessages;
-         UpdateMoveButtons;
+      Hide(Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
+      Hide(Gtk_Widget(Get_Object(Builder, "btnboxwait")));
+      Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
+      Show_All(Gtk_Widget(Get_Object(Object, "btnboxdestination")));
+      if PlayerShip.Speed = DOCKED then
+         Hide(Gtk_Widget(Get_Object(Builder, "btndestinationmove")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnmoveto2")));
       end if;
+      if PlayerShip.DestinationX = 0 and PlayerShip.DestinationY = 0 then
+         Hide(Gtk_Widget(Get_Object(Builder, "btnmoveto2")));
+      end if;
+      Grab_Focus(Gtk_Widget(Get_Object(Object, "btnclosedestination")));
       return True;
-   end SetDestination;
+   end ShowDestinationOrders;
 
    procedure MoveMap(User_Data: access GObject_Record'Class) is
    begin
@@ -897,6 +923,7 @@ package body Maps.UI.Handlers is
       if ButtonsVisible then
          Hide(Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
          Hide(Gtk_Widget(Get_Object(Builder, "btnboxwait")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnboxdestination")));
          Show_All(Gtk_Widget(Get_Object(Object, "btnboxorders")));
          Grab_Focus(Gtk_Widget(Get_Object(Object, "btncloseorders")));
       else
@@ -1045,6 +1072,7 @@ package body Maps.UI.Handlers is
          PreviousGameState := SkyMap_View;
          Hide(Gtk_Widget(Get_Object(Builder, "menuwait")));
          Hide(Gtk_Widget(Get_Object(Builder, "menuorders")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnboxdestination")));
       end if;
       if User_Data = Get_Object(Builder, "menumessages") then
          if HideInfo("lastmessages") then
@@ -1487,7 +1515,7 @@ package body Maps.UI.Handlers is
          return True;
       end if;
       if Key.Accel_Key = Event.Keyval and Key.Accel_Mods = KeyMods then
-         return SetDestination(Builder);
+         return ShowDestinationOrders(Builder);
       end if;
       Lookup_Entry("<skymapwindow>/zoomin", Key, Found);
       if not Found then
