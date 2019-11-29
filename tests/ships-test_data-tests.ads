@@ -18,5 +18,8 @@ package Ships.Test_Data.Tests is
    procedure Test_GenerateShipName_26fd48_7313c0 (Gnattest_T : in out Test);
    --  ships.ads:361:4:GenerateShipName:Test_GenerateShipName
 
+   procedure Test_CountCombatValue_77d5b0_424a30 (Gnattest_T : in out Test);
+   --  ships.ads:373:4:CountCombatValue:Test_CountCombatValue
+
 end Ships.Test_Data.Tests;
 --  end read only
