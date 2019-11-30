@@ -32,8 +32,10 @@ package Trades.UI is
    -- ****f* Trades.UI/ShowTradeUI
    -- FUNCTION
    -- Show interface for trades
+   -- PARAMETERS
+   -- ResetUI - If true, reset currently set category and search field
    -- SOURCE
-   procedure ShowTradeUI;
+   procedure ShowTradeUI(ResetUI: Boolean := True);
    -- ****
 
 end Trades.UI;
