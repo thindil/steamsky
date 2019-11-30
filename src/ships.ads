@@ -382,7 +382,8 @@ package Ships is
       -- RESULT
       -- Description of cabin quality
       -- SOURCE
-   function GetCabinQuality(Quality: Natural) return String;
-   -- ****
+   function GetCabinQuality(Quality: Natural) return String with
+      Test_Case => ("Test_GetCabinQuality", Robustness);
+      -- ****
 
 end Ships;
