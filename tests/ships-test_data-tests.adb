@@ -190,6 +190,36 @@ package body Ships.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_GetCabinQuality_33b05d_0027a0 (Quality: Natural)  return String
+   is
+   begin
+      declare
+         Test_GetCabinQuality_33b05d_0027a0_Result : constant String := GNATtest_Generated.GNATtest_Standard.Ships.GetCabinQuality (Quality);
+      begin
+         return Test_GetCabinQuality_33b05d_0027a0_Result;
+      end;
+   end Wrap_Test_GetCabinQuality_33b05d_0027a0;
+--  end read only
+
+--  begin read only
+   procedure Test_GetCabinQuality_test_getcabinquality (Gnattest_T : in out Test);
+   procedure Test_GetCabinQuality_33b05d_0027a0 (Gnattest_T : in out Test) renames Test_GetCabinQuality_test_getcabinquality;
+--  id:2.2/33b05d3651ff8168/GetCabinQuality/1/0/test_getcabinquality/
+   procedure Test_GetCabinQuality_test_getcabinquality (Gnattest_T : in out Test) is
+      function GetCabinQuality (Quality: Natural) return String renames Wrap_Test_GetCabinQuality_33b05d_0027a0;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(GetCabinQuality(10) = "Empty room", "Failed to get quality of cabin.");
+
+--  begin read only
+   end Test_GetCabinQuality_test_getcabinquality;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
