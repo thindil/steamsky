@@ -463,7 +463,7 @@ package body Trades.UI is
                Positive'Image(PlayerShip.Cargo.Element(CargoIndex).Amount));
          end if;
       end if;
-      ShowTradeUI;
+      ShowTradeUI(False);
       UpdateHeader;
    exception
       when An_Exception : Trade_Cant_Buy =>
@@ -609,7 +609,7 @@ package body Trades.UI is
          Get_Object(Builder, "btnmenu"));
    end CreateTradeUI;
 
-   procedure ShowTradeUI is
+   procedure ShowTradeUI(ResetUI: Boolean := True) is
       ItemsIter: Gtk_Tree_Iter;
       ItemsList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "itemslist1"));
@@ -625,6 +625,8 @@ package body Trades.UI is
       ProtoIndex, BaseType: Unbounded_String;
       ItemsTypes: UnboundedString_Container.Vector;
       Profit: Integer;
+      Path: Gtk_Tree_Path;
+      Column: Gtk_Tree_View_Column;
       procedure AddType is
       begin
          if not ItemsTypes.Contains(Items_List(ProtoIndex).IType) and
@@ -645,6 +647,8 @@ package body Trades.UI is
          BaseType := To_Unbounded_String("0");
          BaseCargo := TraderCargo;
       end if;
+      Get_Cursor
+        (Gtk_Tree_View(Get_Object(Builder, "treeitems1")), Path, Column);
       SettingTime := True;
       Clear(ItemsList);
       for I in PlayerShip.Cargo.Iterate loop
@@ -771,25 +775,33 @@ package body Trades.UI is
             end if;
          end if;
       end loop;
-      declare
-         TypesCombo: constant Gtk_Combo_Box_Text :=
-           Gtk_Combo_Box_Text(Get_Object(Builder, "cmbtradetype"));
-      begin
-         Remove_All(TypesCombo);
-         for IType of ItemsTypes loop
-            Append_Text(TypesCombo, To_String(IType));
-         end loop;
-         Set_Active(TypesCombo, 0);
-      end;
-      Set_Text(Gtk_GEntry(Get_Object(Builder, "tradesearch")), "");
-      Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "gamestack")), "trade");
-      Set_Cursor
-        (Gtk_Tree_View(Get_Object(Builder, "treeitems1")),
-         Gtk_Tree_Path_New_From_String("0"), null, False);
+      if ResetUI then
+         declare
+            TypesCombo: constant Gtk_Combo_Box_Text :=
+              Gtk_Combo_Box_Text(Get_Object(Builder, "cmbtradetype"));
+         begin
+            Remove_All(TypesCombo);
+            for IType of ItemsTypes loop
+               Append_Text(TypesCombo, To_String(IType));
+            end loop;
+            Set_Active(TypesCombo, 0);
+         end;
+         Set_Text(Gtk_GEntry(Get_Object(Builder, "tradesearch")), "");
+         Set_Visible_Child_Name
+           (Gtk_Stack(Get_Object(Builder, "gamestack")), "trade");
+         Set_Cursor
+           (Gtk_Tree_View(Get_Object(Builder, "treeitems1")),
+            Gtk_Tree_Path_New_From_String("0"), null, False);
+         SettingTime := False;
+      else
+         SettingTime := False;
+         Refilter(Gtk_Tree_Model_Filter(Get_Object(Builder, "tradefilter")));
+         Set_Cursor
+           (Gtk_Tree_View(Get_Object(Builder, "treeitems1")), Path, Column,
+            False);
+      end if;
       UpdateMessages;
       Hide(Gtk_Widget(Get_Object(Builder, "lblsellwarning")));
-      SettingTime := False;
    end ShowTradeUI;
 
 end Trades.UI;
