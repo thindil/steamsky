@@ -89,7 +89,8 @@ package Statistics is
    -- ShipName - Name of the ship to add to destroyed list
    -- SOURCE
    procedure UpdateDestroyedShips(ShipName: Unbounded_String) with
-      Pre => ShipName /= Null_Unbounded_String;
+      Pre => ShipName /= Null_Unbounded_String,
+      Test_Case => ("Test_UpdateDestroyedShips", Nominal);
       -- ****
 
       -- ****f* Statistics/ClearGameStats
