@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.3 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.4 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -34,10 +34,10 @@
 <li>1.3. <a href="#robo85">Config/GameSettingsRecord</a></li>
 <li>1.4. <a href="#robo86">Config/MessagesOrderType</a></li>
 <li>1.5. <a href="#robo87">Config/NewGameRecord</a></li>
-<li>1.6. <a href="#robo211">Config/GameSettings</a></li>
-<li>1.7. <a href="#robo212">Config/NewGameSettings</a></li>
-<li>1.8. <a href="#robo449">Config/LoadConfig</a></li>
-<li>1.9. <a href="#robo450">Config/SaveConfig</a></li>
+<li>1.6. <a href="#robo212">Config/GameSettings</a></li>
+<li>1.7. <a href="#robo213">Config/NewGameSettings</a></li>
+<li>1.8. <a href="#robo451">Config/LoadConfig</a></li>
+<li>1.9. <a href="#robo452">Config/SaveConfig</a></li>
 </ul>
 </ul>
 <hr />
@@ -115,7 +115,7 @@
       AutoCloseMessagesTime<span class="sign">:</span> Positive<span class="sign">;</span>
       AutoSave<span class="sign">:</span> <a href="#robo84">AutoSaveType</a><span class="sign">;</span>
       TopicsPosition<span class="sign">:</span> Natural<span class="sign">;</span>
-      <a href="./ui/debugui_adb.html#robo508">ShowBaseInfo</a><span class="sign">:</span> Boolean<span class="sign">;</span>
+      <a href="./ui/debugui_adb.html#robo510">ShowBaseInfo</a><span class="sign">:</span> Boolean<span class="sign">;</span>
       ShowCargoInfo<span class="sign">:</span> Boolean<span class="sign">;</span>
       ShowInventoryInfo<span class="sign">:</span> Boolean<span class="sign">;</span>
       ShowNumbers<span class="sign">:</span> Boolean<span class="sign">;</span>
@@ -162,7 +162,7 @@
  AutoSave              - How often game is autosaved
  TopicPosition         - Position of help topics window in pixels from
                          top of the help window
- <a href="./ui/debugui_adb.html#robo508">ShowBaseInfo</a>          - If true, show detailed information about
+ <a href="./ui/debugui_adb.html#robo510">ShowBaseInfo</a>          - If true, show detailed information about
                          selected base in bases list
  ShowCargoInfo         - If true, show detailed information about
                          selected item in player ship cargo
@@ -198,7 +198,7 @@
       PlayerGender<span class="sign">:</span> Character<span class="sign">;</span>
       ShipName<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       PlayerFaction<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      <a href="./game_ads.html#robo259">PlayerCareer</a><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      <a href="./game_ads.html#robo260">PlayerCareer</a><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       StartingBase<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       EnemyDamageBonus<span class="sign">:</span> Float<span class="sign">;</span>
       PlayerDamageBonus<span class="sign">:</span> Float<span class="sign">;</span>
@@ -208,6 +208,7 @@
       ReputationBonus<span class="sign">:</span> Float<span class="sign">;</span>
       UpgradeCostBonus<span class="sign">:</span> Float<span class="sign">;</span>
       PricesBonus<span class="sign">:</span> Float<span class="sign">;</span>
+      DifficultyLevel<span class="sign">:</span> Natural<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -215,7 +216,7 @@
  PlayerGender           - Default player gender
  ShipName               - Default ship name
  PlayerFaction          - Default player faction index
- <a href="./game_ads.html#robo259">PlayerCareer</a>           - Default player career index
+ <a href="./game_ads.html#robo260">PlayerCareer</a>           - Default player career index
  StartingBase           - Default starting base type
  EnemyDamageBonus       - Default bonus for enemy ship to damage
  PlayerDamageBonus      - Default bonus for player ship to damage
@@ -229,11 +230,12 @@
  UpgradeCostBonus       - Default bonus to amount of materials needed for
                           player's ship upgrades.
  PricesBonus            - Default bonus to prices for services in bases
+ DifficultyLevel        - Default the game difficulty level
 </pre>
 
 <hr />
 <a name="Config2fGameSettings"></a>
-<a name="robo211"></a><h2>Config/GameSettings [ Variables ]</h2>
+<a name="robo212"></a><h2>Config/GameSettings [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Config</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -245,7 +247,7 @@
 
 <hr />
 <a name="Config2fNewGameSettings"></a>
-<a name="robo212"></a><h2>Config/NewGameSettings [ Variables ]</h2>
+<a name="robo213"></a><h2>Config/NewGameSettings [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Config</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -257,7 +259,7 @@
 
 <hr />
 <a name="Config2fLoadConfig"></a>
-<a name="robo449"></a><h2>Config/LoadConfig [ Subprograms ]</h2>
+<a name="robo451"></a><h2>Config/LoadConfig [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Config</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -269,7 +271,7 @@
 
 <hr />
 <a name="Config2fSaveConfig"></a>
-<a name="robo450"></a><h2>Config/SaveConfig [ Subprograms ]</h2>
+<a name="robo452"></a><h2>Config/SaveConfig [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Config</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -281,7 +283,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/config.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Nov 03 2019 06:25:16
+<p>Generated from ./src/config.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Dec 01 2019 06:46:00
 </p>
 </div> <!-- footer -->
 </body>
