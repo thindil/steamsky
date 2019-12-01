@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [4.4] - 2019-12-01
 
 ### Added
 - New items: adamantium small toys, medium book of alchemy, large book of
