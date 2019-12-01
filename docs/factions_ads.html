@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.3 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.4 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -38,11 +38,11 @@
 <li>1.7. <a href="#robo105">Factions/Relations_Container</a></li>
 <li>1.8. <a href="#robo106">Factions/RelationsRecord</a></li>
 <li>1.9. <a href="#robo107">Factions/Reputation_Array</a></li>
-<li>1.10. <a href="#robo233">Factions/Factions_List</a></li>
-<li>1.11. <a href="#robo532">Factions/GetRandomFaction</a></li>
-<li>1.12. <a href="#robo533">Factions/GetReputation</a></li>
-<li>1.13. <a href="#robo534">Factions/IsFriendly</a></li>
-<li>1.14. <a href="#robo535">Factions/LoadFactions</a></li>
+<li>1.10. <a href="#robo234">Factions/Factions_List</a></li>
+<li>1.11. <a href="#robo534">Factions/GetRandomFaction</a></li>
+<li>1.12. <a href="#robo535">Factions/GetReputation</a></li>
+<li>1.13. <a href="#robo536">Factions/IsFriendly</a></li>
+<li>1.14. <a href="#robo537">Factions/LoadFactions</a></li>
 </ul>
 </ul>
 <hr />
@@ -236,7 +236,7 @@
 
 <hr />
 <a name="Factions2fFactions5fList"></a>
-<a name="robo233"></a><h2>Factions/Factions_List [ Variables ]</h2>
+<a name="robo234"></a><h2>Factions/Factions_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Factions</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">SOURCE</p>
@@ -245,7 +245,7 @@
 
 <hr />
 <a name="Factions2fGetRandomFaction"></a>
-<a name="robo532"></a><h2>Factions/GetRandomFaction [ Subprograms ]</h2>
+<a name="robo534"></a><h2>Factions/GetRandomFaction [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Factions</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -261,7 +261,7 @@
 
 <hr />
 <a name="Factions2fGetReputation"></a>
-<a name="robo533"></a><h2>Factions/GetReputation [ Subprograms ]</h2>
+<a name="robo535"></a><h2>Factions/GetReputation [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Factions</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -271,8 +271,8 @@
 <pre class="source">   <span class="keyword">function</span> <strong>GetReputation</strong>
      <span class="sign">(</span>SourceFaction<span class="sign">,</span> TargetFaction<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Integer with
       Pre <span class="sign">=</span><span class="sign">&gt;</span>
-      <span class="sign">(</span><a href="#robo103">Factions_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="#robo233">Factions_List</a><span class="sign">,</span> SourceFaction<span class="sign">)</span> and
-       <a href="#robo103">Factions_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="#robo233">Factions_List</a><span class="sign">,</span> TargetFaction<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      <span class="sign">(</span><a href="#robo103">Factions_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="#robo234">Factions_List</a><span class="sign">,</span> SourceFaction<span class="sign">)</span> and
+       <a href="#robo103">Factions_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="#robo234">Factions_List</a><span class="sign">,</span> TargetFaction<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_GetReputation"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -285,7 +285,7 @@
 
 <hr />
 <a name="Factions2fIsFriendly"></a>
-<a name="robo534"></a><h2>Factions/IsFriendly [ Subprograms ]</h2>
+<a name="robo536"></a><h2>Factions/IsFriendly [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Factions</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -295,8 +295,8 @@
 <pre class="source">   <span class="keyword">function</span> <strong>IsFriendly</strong>
      <span class="sign">(</span>SourceFaction<span class="sign">,</span> TargetFaction<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Boolean with
       Pre <span class="sign">=</span><span class="sign">&gt;</span>
-      <span class="sign">(</span><a href="#robo103">Factions_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="#robo233">Factions_List</a><span class="sign">,</span> SourceFaction<span class="sign">)</span> and
-       <a href="#robo103">Factions_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="#robo233">Factions_List</a><span class="sign">,</span> TargetFaction<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      <span class="sign">(</span><a href="#robo103">Factions_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="#robo234">Factions_List</a><span class="sign">,</span> SourceFaction<span class="sign">)</span> and
+       <a href="#robo103">Factions_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="#robo234">Factions_List</a><span class="sign">,</span> TargetFaction<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_IsFriendly"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -309,7 +309,7 @@
 
 <hr />
 <a name="Factions2fLoadFactions"></a>
-<a name="robo535"></a><h2>Factions/LoadFactions [ Subprograms ]</h2>
+<a name="robo537"></a><h2>Factions/LoadFactions [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Factions</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -324,7 +324,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/factions.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Nov 03 2019 06:25:16
+<p>Generated from ./src/factions.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Dec 01 2019 06:46:00
 </p>
 </div> <!-- footer -->
 </body>
