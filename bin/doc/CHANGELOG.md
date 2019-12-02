@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Reduced chance to damage for Large book of metalsmithing
+- Updated Industrial and Factory bases types with new recipes and items
 
 ## [4.4] - 2019-12-01
 
@@ -42,7 +43,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Reduced base price of orichalcum small toys
 - Reduced price of orichalcum small toys in Industrial and Factory bases
-- Updated Industrial and Factory bases types with new recipes
+- Updated Industrial and Factory bases types with new recipes and items
 - Updated help
 - Updated MODDING.md
 - Updated README.md
