@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- Reduced chance to damage for Large book of metalsmithing
+
 ## [4.4] - 2019-12-01
 
 ### Added
