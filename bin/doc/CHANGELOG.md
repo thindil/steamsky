@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New items: huge book of blacksmithing
+- New crafting recipes: huge book of blacksmithing
 
 ### Changed
 - Reduced chance to damage for Large book of metalsmithing
