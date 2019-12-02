@@ -1488,7 +1488,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <description>Medium book with informations about basics of blacksmithing. Used in training skills.</description>
  </item>
  <item index="302" name="Large book of blacksmithing" showtype="Book of Blacksmithing" type="BlacksmithBook" weight="1" price="22">
-  <data value="20"/>
+  <data value="10"/>
   <description>Large book with informations about basics of blacksmithing. Used in training skills.</description>
  </item>
 </items>
