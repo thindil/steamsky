@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Info about setting difficulty level of upgrades costs
+
 ## [4.0.8] - 2019-11-24
 
 ### Fixed
