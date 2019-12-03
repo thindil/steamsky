@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New items: huge book of blacksmithing
+- New items: huge book of blacksmithing, medium book of woodworking
 - New crafting recipes: huge book of blacksmithing
 
 ### Changed
