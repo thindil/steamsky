@@ -11,6 +11,9 @@ All notable changes to this project will be documented in this file.
 - Reduced chance to damage for Large book of metalsmithing
 - Updated Industrial and Factory bases types with new recipes and items
 
+### Fixed
+- Info about setting difficulty level of upgrades costs
+
 ## [4.4] - 2019-12-01
 
 ### Added
