@@ -34,6 +34,9 @@ package body Statistics is
             exit;
          end if;
       end loop;
+      if ShipIndex = Null_Unbounded_String then
+         return;
+      end if;
       for DestroyedShip of GameStats.DestroyedShips loop
          if DestroyedShip.Index = ShipIndex then
             DestroyedShip.Amount := DestroyedShip.Amount + 1;
