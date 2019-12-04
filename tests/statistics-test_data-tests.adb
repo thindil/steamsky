@@ -7,6 +7,7 @@
 
 with AUnit.Assertions; use AUnit.Assertions;
 with System.Assertions;
+with ada.text_io;
 
 --  begin read only
 --  id:2.2/00/
@@ -70,6 +71,8 @@ package body Statistics.Test_Data.Tests is
 
       UpdateDestroyedShips(To_Unbounded_String("Tiny pirates ship"));
       Assert(Gamestats.DestroyedShips.Length = 1, "Failed to add ship to destroyed ships list.");
+      UpdateDestroyedShips(To_Unbounded_String("Sfdsfdsf"));
+      Assert(Gamestats.DestroyedShips.Length = 1, "Failed to not add non existing ship to destroyed ships list.");
 
 --  begin read only
    end Test_UpdateDestroyedShips_test_updatedestroyedships;
