@@ -928,5 +928,8 @@ If you want add more materials to recipe, just add new tag "material" with prope
  <recipe crafted="1" index="282" result="304" skill="Printing" tool="PrintingSet" workplace="Workshop">
   <material amount="2" type="EmptyBook"/>
  </recipe>
+ <recipe crafted="1" index="283" result="305" skill="Printing" tool="PrintingSet" workplace="Workshop">
+  <material amount="3" type="EmptyBook"/>
+ </recipe>
 </recipes>
 
