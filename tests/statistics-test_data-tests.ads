@@ -12,5 +12,8 @@ package Statistics.Test_Data.Tests is
    procedure Test_UpdateDestroyedShips_708ec3_001497 (Gnattest_T : in out Test);
    --  statistics.ads:91:4:UpdateDestroyedShips:Test_UpdateDestroyedShips
 
+   procedure Test_ClearGameStats_97edec_31f9dd (Gnattest_T : in out Test);
+   --  statistics.ads:100:4:ClearGameStats:Test_ClearGameStats
+
 end Statistics.Test_Data.Tests;
 --  end read only
