@@ -15,5 +15,8 @@ package Statistics.Test_Data.Tests is
    procedure Test_ClearGameStats_97edec_31f9dd (Gnattest_T : in out Test);
    --  statistics.ads:100:4:ClearGameStats:Test_ClearGameStats
 
+   procedure Test_UpdateFinishedGoals_9c0615_51796d (Gnattest_T : in out Test);
+   --  statistics.ads:110:4:UpdateFinishedGoals:Test_UpdateFinishedGoals
+
 end Statistics.Test_Data.Tests;
 --  end read only
