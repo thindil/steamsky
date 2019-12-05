@@ -7,7 +7,6 @@
 
 with AUnit.Assertions; use AUnit.Assertions;
 with System.Assertions;
-with ada.text_io;
 
 --  begin read only
 --  id:2.2/00/
@@ -76,6 +75,33 @@ package body Statistics.Test_Data.Tests is
 
 --  begin read only
    end Test_UpdateDestroyedShips_test_updatedestroyedships;
+--  end read only
+
+--  begin read only
+   procedure Wrap_Test_ClearGameStats_97edec_31f9dd
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Statistics.ClearGameStats;
+   end Wrap_Test_ClearGameStats_97edec_31f9dd;
+--  end read only
+
+--  begin read only
+   procedure Test_ClearGameStats_test_cleargamestats (Gnattest_T : in out Test);
+   procedure Test_ClearGameStats_97edec_31f9dd (Gnattest_T : in out Test) renames Test_ClearGameStats_test_cleargamestats;
+--  id:2.2/97edec1268a24200/ClearGameStats/1/0/test_cleargamestats/
+   procedure Test_ClearGameStats_test_cleargamestats (Gnattest_T : in out Test) is
+   procedure ClearGameStats renames Wrap_Test_ClearGameStats_97edec_31f9dd;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      ClearGameStats;
+      Assert(Gamestats.DestroyedShips.Length = 0, "Failed to clear game statistics.");
+
+--  begin read only
+   end Test_ClearGameStats_test_cleargamestats;
 --  end read only
 
 --  begin read only
