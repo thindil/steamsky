@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 - New items: huge book of blacksmithing, medium book of woodworking, large
   book of woodworking, huge book of woodworking
 - New crafting recipes: huge book of blacksmithing, medium book of
-  woodworking, large book of woodworking
+  woodworking, large book of woodworking, huge book of woodworking
 
 ### Changed
 - Reduced chance to damage for Large book of metalsmithing
