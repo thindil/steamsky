@@ -325,11 +325,12 @@ package body Ships.Crew.Test_Data.Tests is
 
       pragma Unreferenced (Gnattest_T);
       OldMorale: constant Natural := PlayerShip.Crew(1).Morale(2);
+      OldLevel: constant Natural := PlayerShip.Crew(1).Morale(1);
 
    begin
 
       UpdateMorale(PlayerShip, 1, 1);
-      Assert(PlayerShip.Crew(1).Morale(2) - 1 = OldMorale, "Failed to raise player morale.");
+      Assert(PlayerShip.Crew(1).Morale(2) - 1 = OldMorale or PlayerShip.Crew(1).Morale(1) - 1 = OldLevel, "Failed to raise player morale.");
       UpdateMorale(PlayerShip, 1, -1);
       Assert(PlayerShip.Crew(1).Morale(2) = OldMorale, "Failed to lower player morale.");
 
