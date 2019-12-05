@@ -1503,5 +1503,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="10"/>
   <description>Large book with informations about basics of woodworking. Used in training skills.</description>
  </item>
+ <item index="306" name="Huge book of woodworking" showtype="Book of Woodworking" type="WoodworkingBook" weight="1" price="27">
+  <data value="5"/>
+  <description>Huge book with informations about basics of woodworking. Used in training skills.</description>
+ </item>
 </items>
 
