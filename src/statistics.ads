@@ -108,7 +108,8 @@ package Statistics is
       -- Index - Index of goal to update
       -- SOURCE
    procedure UpdateFinishedGoals(Index: Unbounded_String) with
-      Pre => Index /= Null_Unbounded_String;
+      Pre => Index /= Null_Unbounded_String,
+      Test_Case => ("Test_UpdateFinishedGoals", Nominal);
       -- ****
 
       -- ****f* Statistics/UpdateFinishedMissions
