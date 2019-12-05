@@ -105,6 +105,55 @@ package body Statistics.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_UpdateFinishedGoals_9c0615_51796d (Index: Unbounded_String) 
+   is
+   begin
+      begin
+         pragma Assert
+           (Index /= Null_Unbounded_String);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(statistics.ads:0):Test_UpdateFinishedGoals test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Statistics.UpdateFinishedGoals (Index);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(statistics.ads:0:):Test_UpdateFinishedGoals test commitment violated");
+      end;
+   end Wrap_Test_UpdateFinishedGoals_9c0615_51796d;
+--  end read only
+
+--  begin read only
+   procedure Test_UpdateFinishedGoals_test_updatefinishedgoals (Gnattest_T : in out Test);
+   procedure Test_UpdateFinishedGoals_9c0615_51796d (Gnattest_T : in out Test) renames Test_UpdateFinishedGoals_test_updatefinishedgoals;
+--  id:2.2/9c061556f3d17076/UpdateFinishedGoals/1/0/test_updatefinishedgoals/
+   procedure Test_UpdateFinishedGoals_test_updatefinishedgoals (Gnattest_T : in out Test) is
+   procedure UpdateFinishedGoals (Index: Unbounded_String) renames Wrap_Test_UpdateFinishedGoals_9c0615_51796d;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      UpdateFinishedGoals(To_Unbounded_String("1"));
+      Assert(Gamestats.FinishedGoals.Length = 1, "Failed to add goal to finished goals list.");
+      UpdateFinishedGoals(To_Unbounded_String("Sfdsfdsf"));
+      Assert(Gamestats.FinishedGoals.Length = 1, "Failed to not add non goal to finished goals list.");
+
+--  begin read only
+   end Test_UpdateFinishedGoals_test_updatefinishedgoals;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
