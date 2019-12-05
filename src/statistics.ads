@@ -97,15 +97,16 @@ package Statistics is
       -- FUNCTION
       -- Clear game statistics
       -- SOURCE
-   procedure ClearGameStats;
-   -- ****
+   procedure ClearGameStats with
+      Test_Case => ("Test_ClearGameStats", Robustness);
+      -- ****
 
-   -- ****f* Statistics/UpdateFinishedGoals
-   -- FUNCTION
-   -- Add new finished goal to list
-   -- PARAMETERS
-   -- Index - Index of goal to update
-   -- SOURCE
+      -- ****f* Statistics/UpdateFinishedGoals
+      -- FUNCTION
+      -- Add new finished goal to list
+      -- PARAMETERS
+      -- Index - Index of goal to update
+      -- SOURCE
    procedure UpdateFinishedGoals(Index: Unbounded_String) with
       Pre => Index /= Null_Unbounded_String;
       -- ****
