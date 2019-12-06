@@ -130,7 +130,8 @@ package Statistics is
       -- Index - Index of crafting order to update
       -- SOURCE
    procedure UpdateCraftingOrders(Index: Unbounded_String) with
-      Pre => Index /= Null_Unbounded_String;
+      Pre => Index /= Null_Unbounded_String,
+      Test_Case => ("Test_UpdateCraftingOrders", Nominal);
       -- ****
 
       -- ****f* Statistics/UpdateKilledMobs

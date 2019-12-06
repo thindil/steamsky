@@ -21,5 +21,8 @@ package Statistics.Test_Data.Tests is
    procedure Test_UpdateFinishedMissions_cda9ad_a624ba (Gnattest_T : in out Test);
    --  statistics.ads:121:4:UpdateFinishedMissions:Test_UpdateFinishedMissions
 
+   procedure Test_UpdateCraftingOrders_24cc96_7fc6ac (Gnattest_T : in out Test);
+   --  statistics.ads:132:4:UpdateCraftingOrders:Test_UpdateCraftingOrders
+
 end Statistics.Test_Data.Tests;
 --  end read only
