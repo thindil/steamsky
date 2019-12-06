@@ -147,10 +147,59 @@ package body Statistics.Test_Data.Tests is
       UpdateFinishedGoals(To_Unbounded_String("1"));
       Assert(Gamestats.FinishedGoals.Length = 1, "Failed to add goal to finished goals list.");
       UpdateFinishedGoals(To_Unbounded_String("Sfdsfdsf"));
-      Assert(Gamestats.FinishedGoals.Length = 1, "Failed to not add non goal to finished goals list.");
+      Assert(Gamestats.FinishedGoals.Length = 1, "Failed to not add non existing goal to finished goals list.");
 
 --  begin read only
    end Test_UpdateFinishedGoals_test_updatefinishedgoals;
+--  end read only
+
+--  begin read only
+   procedure Wrap_Test_UpdateFinishedMissions_cda9ad_a624ba (MType: Unbounded_String) 
+   is
+   begin
+      begin
+         pragma Assert
+           (MType /= Null_Unbounded_String);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(statistics.ads:0):Test_UpdateFinishedMissions test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Statistics.UpdateFinishedMissions (MType);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(statistics.ads:0:):Test_UpdateFinishedMissions test commitment violated");
+      end;
+   end Wrap_Test_UpdateFinishedMissions_cda9ad_a624ba;
+--  end read only
+
+--  begin read only
+   procedure Test_UpdateFinishedMissions_test_updatefinishedmissions (Gnattest_T : in out Test);
+   procedure Test_UpdateFinishedMissions_cda9ad_a624ba (Gnattest_T : in out Test) renames Test_UpdateFinishedMissions_test_updatefinishedmissions;
+--  id:2.2/cda9ad2228e90d47/UpdateFinishedMissions/1/0/test_updatefinishedmissions/
+   procedure Test_UpdateFinishedMissions_test_updatefinishedmissions (Gnattest_T : in out Test) is
+   procedure UpdateFinishedMissions (MType: Unbounded_String) renames Wrap_Test_UpdateFinishedMissions_cda9ad_a624ba;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      UpdateFinishedMissions(To_Unbounded_String("DESTROY"));
+      Assert(Gamestats.FinishedMissions.Length = 1, "Failed to add mission to finished missions list.");
+      UpdateFinishedMissions(To_Unbounded_String("Sfdsfdsf"));
+      Assert(Gamestats.FinishedGoals.Length = 1, "Failed to not add non existing mission to finished missions list.");
+
+--  begin read only
+   end Test_UpdateFinishedMissions_test_updatefinishedmissions;
 --  end read only
 
 --  begin read only
