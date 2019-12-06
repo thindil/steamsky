@@ -119,7 +119,8 @@ package Statistics is
       -- MType - Type of mission to update
       -- SOURCE
    procedure UpdateFinishedMissions(MType: Unbounded_String) with
-      Pre => MType /= Null_Unbounded_String;
+      Pre => MType /= Null_Unbounded_String,
+      Test_Case => ("Test_UpdateFinishedMissions", Nominal);
       -- ****
 
       -- ****f* Statistics/UpdateCraftingOrders

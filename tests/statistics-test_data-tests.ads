@@ -18,5 +18,8 @@ package Statistics.Test_Data.Tests is
    procedure Test_UpdateFinishedGoals_9c0615_51796d (Gnattest_T : in out Test);
    --  statistics.ads:110:4:UpdateFinishedGoals:Test_UpdateFinishedGoals
 
+   procedure Test_UpdateFinishedMissions_cda9ad_a624ba (Gnattest_T : in out Test);
+   --  statistics.ads:121:4:UpdateFinishedMissions:Test_UpdateFinishedMissions
+
 end Statistics.Test_Data.Tests;
 --  end read only
