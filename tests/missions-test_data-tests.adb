@@ -102,13 +102,20 @@ package body Missions.Test_Data.Tests is
 
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      MissionIndex: Positive;
+      MissionIndex: Positive := Positive(SkyBases(BaseIndex).Missions.Length + 1);
    begin
 
-      for I in SkyBases(BaseIndex).Missions.Iterate loop
-         if SkyBases(BaseIndex).Missions(I).MType = Explore or SkyBases(BaseIndex).Missions(I).MType = Patrol or SkyBases(BaseIndex).Missions(I).MType = Destroy then
-            MissionIndex := Mission_Container.To_Index(I);
-            exit;
+      while MissionIndex > Natural(SkyBases(BaseIndex).Missions.Length) loop
+         for I in SkyBases(BaseIndex).Missions.Iterate loop
+            if SkyBases(BaseIndex).Missions(I).MType = Explore or SkyBases(BaseIndex).Missions(I).MType = Patrol or SkyBases(BaseIndex).Missions(I).MType = Destroy then
+               MissionIndex := Mission_Container.To_Index(I);
+               exit;
+            end if;
+         end loop;
+         if MissionIndex > Natural(SkyBases(BaseIndex).Missions.Length) then
+            SkyBases(BaseIndex).MissionsDate := (others => 0);
+            GenerateMissions;
+            MissionIndex := Positive(SkyBases(BaseIndex).Missions.Length + 1);
          end if;
       end loop;
       AcceptMission(MissionIndex);
