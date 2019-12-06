@@ -203,6 +203,53 @@ package body Statistics.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_UpdateCraftingOrders_24cc96_7fc6ac (Index: Unbounded_String) 
+   is
+   begin
+      begin
+         pragma Assert
+           (Index /= Null_Unbounded_String);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(statistics.ads:0):Test_UpdateCraftingOrders test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Statistics.UpdateCraftingOrders (Index);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(statistics.ads:0:):Test_UpdateCraftingOrders test commitment violated");
+      end;
+   end Wrap_Test_UpdateCraftingOrders_24cc96_7fc6ac;
+--  end read only
+
+--  begin read only
+   procedure Test_UpdateCraftingOrders_test_updatecraftingorders (Gnattest_T : in out Test);
+   procedure Test_UpdateCraftingOrders_24cc96_7fc6ac (Gnattest_T : in out Test) renames Test_UpdateCraftingOrders_test_updatecraftingorders;
+--  id:2.2/24cc9698c39e0070/UpdateCraftingOrders/1/0/test_updatecraftingorders/
+   procedure Test_UpdateCraftingOrders_test_updatecraftingorders (Gnattest_T : in out Test) is
+   procedure UpdateCraftingOrders (Index: Unbounded_String) renames Wrap_Test_UpdateCraftingOrders_24cc96_7fc6ac;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      UpdateCraftingOrders(To_Unbounded_String("1"));
+      Assert(GameStats.CraftingOrders.Length = 1, "Failed to add finished crafting order to game statistics.");
+
+--  begin read only
+   end Test_UpdateCraftingOrders_test_updatecraftingorders;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
