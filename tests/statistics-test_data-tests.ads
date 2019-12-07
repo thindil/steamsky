@@ -24,5 +24,8 @@ package Statistics.Test_Data.Tests is
    procedure Test_UpdateCraftingOrders_24cc96_7fc6ac (Gnattest_T : in out Test);
    --  statistics.ads:132:4:UpdateCraftingOrders:Test_UpdateCraftingOrders
 
+   procedure Test_UpdateKilledMobs_0403d9_0ca136 (Gnattest_T : in out Test);
+   --  statistics.ads:144:4:UpdateKilledMobs:Test_UpdateKilledMobs
+
 end Statistics.Test_Data.Tests;
 --  end read only
