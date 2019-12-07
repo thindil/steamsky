@@ -15,6 +15,8 @@ with System.Assertions;
 --
 --  end read only
 
+with Ships; use Ships;
+
 --  begin read only
 --  end read only
 package body Statistics.Test_Data.Tests is
@@ -247,6 +249,53 @@ package body Statistics.Test_Data.Tests is
 
 --  begin read only
    end Test_UpdateCraftingOrders_test_updatecraftingorders;
+--  end read only
+
+--  begin read only
+   procedure Wrap_Test_UpdateKilledMobs_0403d9_0ca136 (Mob: Member_Data; FractionName: Unbounded_String) 
+   is
+   begin
+      begin
+         pragma Assert
+           (FractionName /= Null_Unbounded_String);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(statistics.ads:0):Test_UpdateKilledMobs test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Statistics.UpdateKilledMobs (Mob, FractionName);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(statistics.ads:0:):Test_UpdateKilledMobs test commitment violated");
+      end;
+   end Wrap_Test_UpdateKilledMobs_0403d9_0ca136;
+--  end read only
+
+--  begin read only
+   procedure Test_UpdateKilledMobs_test_updatekilledmobs (Gnattest_T : in out Test);
+   procedure Test_UpdateKilledMobs_0403d9_0ca136 (Gnattest_T : in out Test) renames Test_UpdateKilledMobs_test_updatekilledmobs;
+--  id:2.2/0403d9266b43dc2c/UpdateKilledMobs/1/0/test_updatekilledmobs/
+   procedure Test_UpdateKilledMobs_test_updatekilledmobs (Gnattest_T : in out Test) is
+   procedure UpdateKilledMobs (Mob: Member_Data; FractionName: Unbounded_String) renames Wrap_Test_UpdateKilledMobs_0403d9_0ca136;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      UpdateKilledMobs(PlayerShip.Crew(2), To_Unbounded_String("POLEIS"));
+      Assert(Gamestats.KilledMobs.Length = 1, "Failed to add killed mob to game statistics.");
+
+--  begin read only
+   end Test_UpdateKilledMobs_test_updatekilledmobs;
 --  end read only
 
 --  begin read only
