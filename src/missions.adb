@@ -403,7 +403,7 @@ package body Missions is
          end if;
       end if;
       UpdateGame(5);
-      if MissionsAmount > Positive(AcceptedMissions.Length) then
+      if MissionsAmount > Natural(AcceptedMissions.Length) then
          return;
       end if;
       case AcceptedMissions(MissionIndex).MType is
