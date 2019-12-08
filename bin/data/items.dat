@@ -1515,5 +1515,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="10"/>
   <description>Large book with informations about basics of leatherworking. Used in training skills.</description>
  </item>
+ <item index="309" name="Huge book of leatherworking" showtype="Book of Leatherworking" type="LeatherworkingBook" weight="1" price="27">
+  <data value="5"/>
+  <description>Huge book with informations about basics of leatherworking. Used in training skills.</description>
+ </item>
 </items>
 
