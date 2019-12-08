@@ -27,5 +27,8 @@ package Statistics.Test_Data.Tests is
    procedure Test_UpdateKilledMobs_0403d9_0ca136 (Gnattest_T : in out Test);
    --  statistics.ads:144:4:UpdateKilledMobs:Test_UpdateKilledMobs
 
+   procedure Test_GetGamePoints_e274aa_4eed1d (Gnattest_T : in out Test);
+   --  statistics.ads:156:4:GetGamePoints:Test_GetGamePoints
+
 end Statistics.Test_Data.Tests;
 --  end read only

@@ -299,6 +299,36 @@ package body Statistics.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_GetGamePoints_e274aa_4eed1d return Natural
+   is
+   begin
+      declare
+         Test_GetGamePoints_e274aa_4eed1d_Result : constant Natural := GNATtest_Generated.GNATtest_Standard.Statistics.GetGamePoints;
+      begin
+         return Test_GetGamePoints_e274aa_4eed1d_Result;
+      end;
+   end Wrap_Test_GetGamePoints_e274aa_4eed1d;
+--  end read only
+
+--  begin read only
+   procedure Test_GetGamePoints_test_getgamepoints (Gnattest_T : in out Test);
+   procedure Test_GetGamePoints_e274aa_4eed1d (Gnattest_T : in out Test) renames Test_GetGamePoints_test_getgamepoints;
+--  id:2.2/e274aadb0dece247/GetGamePoints/1/0/test_getgamepoints/
+   procedure Test_GetGamePoints_test_getgamepoints (Gnattest_T : in out Test) is
+      function GetGamePoints return Natural renames Wrap_Test_GetGamePoints_e274aa_4eed1d;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(GetGamePoints > -1, "This test can only crash.");
+
+--  begin read only
+   end Test_GetGamePoints_test_getgamepoints;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
