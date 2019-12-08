@@ -153,7 +153,8 @@ package Statistics is
       -- RESULT
       -- Amount of gained points by player in this game
       -- SOURCE
-   function GetGamePoints return Natural;
-   -- ****
+   function GetGamePoints return Natural with
+      Test_Case => ("Test_GetGamePoints", Robustness);
+      -- ****
 
 end Statistics;
