@@ -68,7 +68,7 @@ project steamsky is
     package GnatTest is
        for Tests_Dir use "../tests";
        for Harness_Dir use "../tests/driver";
-       for GnatTest_Switches use ("--omit-sloc", "--test-case-only");
+       for GnatTest_Switches use ("--omit-sloc", "--test-case-only", "--passed-tests=hide");
     end GnatTest;
 
 end steamsky;
