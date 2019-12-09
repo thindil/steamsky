@@ -238,7 +238,8 @@ package Stories is
    -- SOURCE
    procedure StartStory
      (FactionName: Unbounded_String; Condition: StartConditionType) with
-      Pre => FactionName /= Null_Unbounded_String;
+      Pre => FactionName /= Null_Unbounded_String,
+      Test_Case => ("Test_StartStory", Nominal);
       -- ****
 
       -- ****f* Stories/ClearCurrentStory
