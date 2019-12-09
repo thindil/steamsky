@@ -1519,5 +1519,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="5"/>
   <description>Huge book with informations about basics of leatherworking. Used in training skills.</description>
  </item>
+ <item index="310" name="Bronze training dummy" showtype="Training Dummy" type="TrainingDummy" weight="20" price="19">
+  <data value="15"/>
+  <description>Bronze tool used in training skills.</description>
+ </item>
 </items>
 
