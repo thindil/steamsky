@@ -2,8 +2,7 @@ version: 2.0
 - command:
    name: runtests
    execute:
-      - cd tests/driver
-      - ./test_runner
+      - others/tests.sh $1
    description: Run Steam Sky unit tests
    flags:
       - unixonly
