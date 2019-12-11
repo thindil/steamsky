@@ -1527,5 +1527,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="10"/>
   <description>Iron tool used in training skills.</description>
  </item>
+ <item index="312" name="Steel training dummy" showtype="Training Dummy" type="TrainingDummy" weight="20" price="29">
+  <data value="5"/>
+  <description>Steel tool used in training skills.</description>
+ </item>
 </items>
 
