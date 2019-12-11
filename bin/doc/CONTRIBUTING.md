@@ -157,11 +157,16 @@ game code, there will be no unit tests generated.
 ### Running unit tests
 
 First, you must build all tests. How to do it, is described in main
-*README.md* file. Then, in console type: `./run.sh tests`
+*README.md* file. Then, in console, in the main project directory, type:
+`others/tests.sh [amount]`
 
 or, if you prefer (and you have installed), use [Bob](https://github.com/thindil/bob):
 
-`bob runtests`
+`bob runtests [amount]`
+
+Where `[amount]` is how many times the tests should be run. It is recommended
+to run them few times in a row to catch all problems. Tests will stops if there
+will be any problem. At this moment unit tests are available only on Linux.
 
 More information about GnatTest (how to create unit test, etc.) you can find
 [here](http://docs.adacore.com/live/wave/gnat_ugn/html/gnat_ugn/gnat_ugn/gnat_utility_programs.html#the-unit-test-generator-gnattest).
