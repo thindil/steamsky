@@ -18,16 +18,9 @@ else
    eval "$(gtkada-env.sh --print-only)"
 fi
 
-if [ -n $1 ] && [ "$1" = "tests" ]
-then
-   # run unit tests instead of the game
-   cd tests/driver || exit
-   ./test_runner
-else
-   # run the game
-   cd bin || exit
-   export GTK_THEME=Adwaita
-   export RUNFROMSCRIPT=1
+# run the game
+cd bin || exit
+export GTK_THEME=Adwaita
+export RUNFROMSCRIPT=1
 
-   ./steamsky "$@"
-fi
+./steamsky "$@"
