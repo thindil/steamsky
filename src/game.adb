@@ -121,6 +121,7 @@ package body Game is
             Positive_Container.Vector, Ada.Strings.Unbounded.Hash, "=",
             Positive_Container."=");
          BasesArray: Bases_Container.Map;
+         Attempts: Natural;
       begin
          for I in Factions_List.Iterate loop
             MaxSpawnRoll := MaxSpawnRoll + Factions_List(I).SpawnChance;
@@ -221,6 +222,12 @@ package body Game is
                             .SkyY +
                           20);
                      NormalizeCoord(PosY);
+                     Attempts := Attempts + 1;
+                     if Attempts = 251 then
+                        PosX := GetRandom(1, 1024);
+                        PosY := GetRandom(1, 1024);
+                        Attempts := 1;
+                     end if;
                   end if;
                   for J in -5 .. 5 loop
                      TempX := PosX + J;
