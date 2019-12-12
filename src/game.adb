@@ -185,6 +185,7 @@ package body Game is
          end loop;
          for FactionBases of BasesArray loop
             for I in FactionBases.Iterate loop
+               Attempts := 1;
                loop
                   ValidLocation := True;
                   if Positive_Container.To_Index(I) =
