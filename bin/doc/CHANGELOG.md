@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Info about setting difficulty level of upgrades costs
 - Adding non existing ships to the game statistics
 - Crash on finishing missions in bases
+- Hang on starting a new game
 
 ## [4.0.8] - 2019-11-24
 
