@@ -1531,5 +1531,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="5"/>
   <description>Steel tool used in training skills.</description>
  </item>
+ <item index="313" name="Titanium training dummy" showtype="Training Dummy" type="TrainingDummy" weight="35" price="34">
+  <data value="3"/>
+  <description>Steel tool used in training skills.</description>
+ </item>
 </items>
 
