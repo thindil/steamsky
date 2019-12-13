@@ -58,11 +58,19 @@ package body BasesTypes is
             else
                SubAction := ADD;
             end if;
-            if Name = "recipe" and then not Recipes_List.Contains(Value) then
-               raise Data_Loading_Error
-                 with "Can't " & To_Lower(DataAction'Image(Action)) &
-                 " base type '" & To_String(BaseIndex) &
-                 "', no recipe with index '" & To_String(Value) & "'.";
+            if Name = "recipe" then
+               if not Recipes_List.Contains(Value) then
+                  raise Data_Loading_Error
+                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    " base type '" & To_String(BaseIndex) &
+                    "', no recipe with index '" & To_String(Value) & "'.";
+               end if;
+               if Data.Contains(Value) and SubAction = ADD then
+                  raise Data_Loading_Error
+                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    " base type '" & To_String(BaseIndex) & "', recipe '" &
+                    To_String(Value) & "' already added.";
+               end if;
             end if;
             if SubAction /= REMOVE then
                Data.Append(New_Item => Value);
@@ -144,6 +152,14 @@ package body BasesTypes is
                     with "Can't " & To_Lower(DataAction'Image(Action)) &
                     " base type '" & To_String(BaseIndex) &
                     "', no item with index '" & To_String(ItemIndex) & "'.";
+               end if;
+               if SubAction = ADD
+                 and then TempRecord.Trades.Contains(ItemIndex) then
+                  raise Data_Loading_Error
+                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    " base type '" & To_String(BaseIndex) &
+                    "', item with index '" & To_String(ItemIndex) &
+                    "' already added.";
                end if;
                if SubAction /= REMOVE then
                   SellPrice := 0;
