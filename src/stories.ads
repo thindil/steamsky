@@ -246,18 +246,19 @@ package Stories is
       -- FUNCTION
       -- Resets current story
       -- SOURCE
-   procedure ClearCurrentStory;
-   -- ****
+   procedure ClearCurrentStory with
+      Test_Case => ("Test_ClearCurrentStory", Robustness);
+      -- ****
 
-   -- ****f* Stories/ProgressStory
-   -- FUNCTION
-   -- Progress current story one step
-   -- PARAMETERS
-   -- NextStep - Used with DESTROYSHIP condition. If false, progress to the
-   --            next step in story. Default is false.
-   -- RESULT
-   -- True if story goes to next step, otherwise false
-   -- SOURCE
+      -- ****f* Stories/ProgressStory
+      -- FUNCTION
+      -- Progress current story one step
+      -- PARAMETERS
+      -- NextStep - Used with DESTROYSHIP condition. If false, progress to the
+      --            next step in story. Default is false.
+      -- RESULT
+      -- True if story goes to next step, otherwise false
+      -- SOURCE
    function ProgressStory(NextStep: Boolean := False) return Boolean;
    -- ****
 

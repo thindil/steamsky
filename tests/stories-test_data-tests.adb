@@ -79,6 +79,35 @@ package body Stories.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_ClearCurrentStory_0648d1_ff8276
+   is
+   begin
+      GNATtest_Generated.GNATtest_Standard.Stories.ClearCurrentStory;
+   end Wrap_Test_ClearCurrentStory_0648d1_ff8276;
+--  end read only
+
+--  begin read only
+   procedure Test_ClearCurrentStory_test_clearcurrentstory (Gnattest_T : in out Test);
+   procedure Test_ClearCurrentStory_0648d1_ff8276 (Gnattest_T : in out Test) renames Test_ClearCurrentStory_test_clearcurrentstory;
+--  id:2.2/0648d16dba1bb959/ClearCurrentStory/1/0/test_clearcurrentstory/
+   procedure Test_ClearCurrentStory_test_clearcurrentstory (Gnattest_T : in out Test) is
+   procedure ClearCurrentStory renames Wrap_Test_ClearCurrentStory_0648d1_ff8276;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      OldStory: constant CurrentStory_Data := CurrentStory;
+
+   begin
+
+      ClearCurrentStory;
+      Assert(CurrentStory.Index = Null_Unbounded_String, "Failed to clear current story.");
+      CurrentStory := OldStory;
+
+--  begin read only
+   end Test_ClearCurrentStory_test_clearcurrentstory;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.

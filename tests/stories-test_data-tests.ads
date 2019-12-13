@@ -12,5 +12,8 @@ package Stories.Test_Data.Tests is
    procedure Test_StartStory_edaf80_b2037e (Gnattest_T : in out Test);
    --  stories.ads:239:4:StartStory:Test_StartStory
 
+   procedure Test_ClearCurrentStory_0648d1_ff8276 (Gnattest_T : in out Test);
+   --  stories.ads:249:4:ClearCurrentStory:Test_ClearCurrentStory
+
 end Stories.Test_Data.Tests;
 --  end read only
