@@ -108,6 +108,39 @@ package body Stories.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_ProgressStory_80c408_14aed6 (NextStep: Boolean := False)  return Boolean
+   is
+   begin
+      declare
+         Test_ProgressStory_80c408_14aed6_Result : constant Boolean := GNATtest_Generated.GNATtest_Standard.Stories.ProgressStory (NextStep);
+      begin
+         return Test_ProgressStory_80c408_14aed6_Result;
+      end;
+   end Wrap_Test_ProgressStory_80c408_14aed6;
+--  end read only
+
+--  begin read only
+   procedure Test_ProgressStory_test_progressstory (Gnattest_T : in out Test);
+   procedure Test_ProgressStory_80c408_14aed6 (Gnattest_T : in out Test) renames Test_ProgressStory_test_progressstory;
+--  id:2.2/80c4088c0068e59a/ProgressStory/1/0/test_progressstory/
+   procedure Test_ProgressStory_test_progressstory (Gnattest_T : in out Test) is
+      function ProgressStory (NextStep: Boolean := False) return Boolean renames Wrap_Test_ProgressStory_80c408_14aed6;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      if ProgressStory then
+         null;
+      end if;
+      Assert(True, "This test can only crash.");
+
+--  begin read only
+   end Test_ProgressStory_test_progressstory;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
