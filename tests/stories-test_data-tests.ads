@@ -18,5 +18,8 @@ package Stories.Test_Data.Tests is
    procedure Test_ProgressStory_80c408_14aed6 (Gnattest_T : in out Test);
    --  stories.ads:262:4:ProgressStory:Test_ProgressStory
 
+   procedure Test_GetCurrentStoryText_b9136f_8f71b5 (Gnattest_T : in out Test);
+   --  stories.ads:272:4:GetCurrentStoryText:Tets_GetCurrentStoryText
+
 end Stories.Test_Data.Tests;
 --  end read only

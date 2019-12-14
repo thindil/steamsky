@@ -141,6 +141,36 @@ package body Stories.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_GetCurrentStoryText_b9136f_8f71b5 return Unbounded_String
+   is
+   begin
+      declare
+         Test_GetCurrentStoryText_b9136f_8f71b5_Result : constant Unbounded_String := GNATtest_Generated.GNATtest_Standard.Stories.GetCurrentStoryText;
+      begin
+         return Test_GetCurrentStoryText_b9136f_8f71b5_Result;
+      end;
+   end Wrap_Test_GetCurrentStoryText_b9136f_8f71b5;
+--  end read only
+
+--  begin read only
+   procedure Test_GetCurrentStoryText_tets_getcurrentstorytext (Gnattest_T : in out Test);
+   procedure Test_GetCurrentStoryText_b9136f_8f71b5 (Gnattest_T : in out Test) renames Test_GetCurrentStoryText_tets_getcurrentstorytext;
+--  id:2.2/b9136fdf6bb9efe6/GetCurrentStoryText/1/0/tets_getcurrentstorytext/
+   procedure Test_GetCurrentStoryText_tets_getcurrentstorytext (Gnattest_T : in out Test) is
+      function GetCurrentStoryText return Unbounded_String renames Wrap_Test_GetCurrentStoryText_b9136f_8f71b5;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(GetCurrentStoryText /= Null_Unbounded_String, "Failed to get text of current story step.");
+
+--  begin read only
+   end Test_GetCurrentStoryText_tets_getcurrentstorytext;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
