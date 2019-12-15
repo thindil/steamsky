@@ -1543,5 +1543,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Adamantium tool used in training skills.</description>
  </item>
+ <item index="316" name="Bronze small traps" showtype="Small traps" type="SmallTraps" weight="2" price="15">
+  <data value="15"/>
+  <description>Small bronze traps. Used to train some skills.</description>
+ </item>
 </items>
 
