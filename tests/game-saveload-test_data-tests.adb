@@ -50,7 +50,7 @@ package body Game.SaveLoad.Test_Data.Tests is
    begin
 
       GenerateSaveName;
-      Assert(OldSaveName /= SaveName, "Failed to generate new save name.");
+      Assert(OldSaveName /= SaveName, "Failed to generate new save name (Oldsavename = '" & To_String(OldSaveName) & "', SaveName = '" & To_String(SaveName) & "').");
 
 --  begin read only
    end Test_GenerateSaveName_test_generatesavename;
