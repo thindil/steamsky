@@ -8,7 +8,8 @@ All notable changes to this project will be documented in this file.
   book of woodworking, huge book of woodworking, medium book of
   leatherworking, large book of leatherworking, huge book of leatherworking,
   bronze training dummy, iron training dummy, steel training dummy, titanium
-  training dummy, orichalcum training dummy, adamantium training dummy
+  training dummy, orichalcum training dummy, adamantium training dummy, bronze
+  small traps
 - New crafting recipes: huge book of blacksmithing, medium book of
   woodworking, large book of woodworking, huge book of woodworking, medium
   book of leatherworking, large book of leatherworking, huge book of
