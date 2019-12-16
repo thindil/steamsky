@@ -1547,5 +1547,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="15"/>
   <description>Small bronze traps. Used to train some skills.</description>
  </item>
+ <item index="317" name="Iron small traps" showtype="Small traps" type="SmallTraps" weight="2" price="20">
+  <data value="10"/>
+  <description>Small iron traps. Used to train some skills.</description>
+ </item>
 </items>
 
