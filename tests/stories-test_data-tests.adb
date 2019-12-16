@@ -171,6 +171,57 @@ package body Stories.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_GetStepData_8e5120_5b2a80 (FinishData: StepData_Container.Vector; Name: String)  return Unbounded_String
+   is
+   begin
+      begin
+         pragma Assert
+           (Name /= "");
+         null;
+      exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "req_sloc(stories.ads:0):Test_GetStepData test requirement violated");
+      end;
+      declare
+         Test_GetStepData_8e5120_5b2a80_Result : constant Unbounded_String := GNATtest_Generated.GNATtest_Standard.Stories.GetStepData (FinishData, Name);
+      begin
+         begin
+            pragma Assert
+              (True);
+            null;
+         exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "ens_sloc(stories.ads:0:):Test_GetStepData test commitment violated");
+         end;
+         return Test_GetStepData_8e5120_5b2a80_Result;
+      end;
+   end Wrap_Test_GetStepData_8e5120_5b2a80;
+--  end read only
+
+--  begin read only
+   procedure Test_GetStepData_test_getstepdata (Gnattest_T : in out Test);
+   procedure Test_GetStepData_8e5120_5b2a80 (Gnattest_T : in out Test) renames Test_GetStepData_test_getstepdata;
+--  id:2.2/8e51209e243a2f63/GetStepData/1/0/test_getstepdata/
+   procedure Test_GetStepData_test_getstepdata (Gnattest_T : in out Test) is
+      function GetStepData (FinishData: StepData_Container.Vector; Name: String) return Unbounded_String renames Wrap_Test_GetStepData_8e5120_5b2a80;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      Assert(GetStepData(Stories_List(To_Unbounded_String("1")).Steps(1).FinishData, "condition") = To_Unbounded_String("Rhetoric"), "Failed to get finish data of selected step.");
+      Assert(GetStepData(Stories_List(To_Unbounded_String("1")).Steps(1).FinishData, "sdfdsf") = Null_Unbounded_String, "Failed to not get non existing finish data of selected step.");
+
+--  begin read only
+   end Test_GetStepData_test_getstepdata;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.

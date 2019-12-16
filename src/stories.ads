@@ -285,7 +285,8 @@ package Stories is
    function GetStepData
      (FinishData: StepData_Container.Vector; Name: String)
       return Unbounded_String with
-      Pre => Name /= "";
+      Pre => Name /= "",
+      Test_Case => ("Test_GetStepData", Nominal);
       -- ****
 
       -- ****f* Stories/GetStoryLocation
