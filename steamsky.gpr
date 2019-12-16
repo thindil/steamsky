@@ -53,7 +53,9 @@ project steamsky is
             when "release" =>
                 for Default_Switches ("ada") use ("-Wl,--gc-sections");
             when "analyze" =>
-              for Default_Switches ("ada") use ("-no-pie", "-pg", "-fprofile-arcs");
+              for Default_Switches ("ada") use ("-no-pie",
+                    "-pg",
+                    "-fprofile-arcs");
         end case;
     end Linker;
 
@@ -68,7 +70,10 @@ project steamsky is
     package GnatTest is
        for Tests_Dir use "../tests";
        for Harness_Dir use "../tests/driver";
-       for GnatTest_Switches use ("--omit-sloc", "--test-case-only", "--passed-tests=hide", "--exit-status=on");
+       for GnatTest_Switches use ("--omit-sloc",
+                "--test-case-only",
+                "--passed-tests=hide",
+                "--exit-status=on");
     end GnatTest;
 
 end steamsky;
