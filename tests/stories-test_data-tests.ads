@@ -21,5 +21,8 @@ package Stories.Test_Data.Tests is
    procedure Test_GetCurrentStoryText_b9136f_8f71b5 (Gnattest_T : in out Test);
    --  stories.ads:272:4:GetCurrentStoryText:Tets_GetCurrentStoryText
 
+   procedure Test_GetStepData_8e5120_5b2a80 (Gnattest_T : in out Test);
+   --  stories.ads:285:4:GetStepData:Test_GetStepData
+
 end Stories.Test_Data.Tests;
 --  end read only
