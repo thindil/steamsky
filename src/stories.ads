@@ -299,7 +299,8 @@ package Stories is
       -- Parameters X and Y
       -- SOURCE
    procedure GetStoryLocation(StoryX, StoryY: in out Positive) with
-      Pre => StoryX < 1025 and StoryY < 1025;
+      Pre => StoryX < 1025 and StoryY < 1025,
+      Test_Case => ("Test_GetStoryLocation", Nominal);
       -- ****
 
 end Stories;
