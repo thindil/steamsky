@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
   dummy, titanium training dummy, orichalcum training dummy, adamantium
   training dummy, bronze small traps, iron small traps, steel small traps
 - Better check for correctness of bases types data
+- Orders menu to bases screens (issue #49)
 
 ### Changed
 - Reduced chance to damage for Large book of metalsmithing
