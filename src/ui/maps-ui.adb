@@ -1097,7 +1097,7 @@ package body Maps.UI is
         (Gtk_Overlay(Get_Object(Builder, "mapoverlay")),
          Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
       Add_Overlay
-        (Gtk_Overlay(Get_Object(Builder, "mapoverlay")),
+        (Gtk_Overlay(Get_Object(Builder, "gameoverlay")),
          Gtk_Widget(Get_Object(Builder, "btnboxorders")));
       Add_Overlay
         (Gtk_Overlay(Get_Object(Builder, "mapoverlay")),
