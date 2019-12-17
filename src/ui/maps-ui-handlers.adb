@@ -303,9 +303,7 @@ package body Maps.UI.Handlers is
          end if;
          ShowOrders(Object);
       end if;
-      UpdateHeader;
-      UpdateMessages;
-      UpdateMoveButtons;
+      ShowSkyMap;
    end BtnDockClicked;
 
    procedure ChangeSpeed(Object: access Gtkada_Builder_Record'Class) is
@@ -1071,7 +1069,6 @@ package body Maps.UI.Handlers is
       elsif VisibleChildName = "skymap" then
          PreviousGameState := SkyMap_View;
          Hide(Gtk_Widget(Get_Object(Builder, "menuwait")));
-         Hide(Gtk_Widget(Get_Object(Builder, "menuorders")));
          Hide(Gtk_Widget(Get_Object(Builder, "btnboxdestination")));
       end if;
       if User_Data = Get_Object(Builder, "menumessages") then
