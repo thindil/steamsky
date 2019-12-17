@@ -222,6 +222,54 @@ package body Stories.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_GetStoryLocation_dd7372_c97b39 (StoryX, StoryY: in out Positive) 
+   is
+   begin
+      begin
+         pragma Assert
+           (StoryX < 1025 and StoryY < 1025);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(stories.ads:0):Test_GetStoryLocation test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Stories.GetStoryLocation (StoryX, StoryY);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(stories.ads:0:):Test_GetStoryLocation test commitment violated");
+      end;
+   end Wrap_Test_GetStoryLocation_dd7372_c97b39;
+--  end read only
+
+--  begin read only
+   procedure Test_GetStoryLocation_test_getstorylocation (Gnattest_T : in out Test);
+   procedure Test_GetStoryLocation_dd7372_c97b39 (Gnattest_T : in out Test) renames Test_GetStoryLocation_test_getstorylocation;
+--  id:2.2/dd7372c22c1ac3e1/GetStoryLocation/1/0/test_getstorylocation/
+   procedure Test_GetStoryLocation_test_getstorylocation (Gnattest_T : in out Test) is
+   procedure GetStoryLocation (StoryX, StoryY: in out Positive) renames Wrap_Test_GetStoryLocation_dd7372_c97b39;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      X, Y: Positive := 1;
+
+   begin
+
+      GetStoryLocation(X, Y);
+      Assert(True, "This test can only crash.");
+
+--  begin read only
+   end Test_GetStoryLocation_test_getstorylocation;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
