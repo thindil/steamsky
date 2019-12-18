@@ -110,16 +110,17 @@ package Trades is
    -- BaseItemIndex - Base or ship cargo index of item to buy
    -- Amount        - Amount of items to buy
    -- SOURCE
-   procedure BuyItems(BaseItemIndex: Positive; Amount: String);
-   -- ****
+   procedure BuyItems(BaseItemIndex: Positive; Amount: String) with
+      Test_Case => ("Test_BuyItems", Robustness);
+      -- ****
 
-   -- ****f* Trades/SellItems
-   -- FUNCTION
-   -- Sell items from bases or trader
-   -- PARAMETERS
-   -- ItemIndex - Player ship cargo index of item to sell
-   -- Amount    - Amount of items to sell
-   -- SOURCE
+      -- ****f* Trades/SellItems
+      -- FUNCTION
+      -- Sell items from bases or trader
+      -- PARAMETERS
+      -- ItemIndex - Player ship cargo index of item to sell
+      -- Amount    - Amount of items to sell
+      -- SOURCE
    procedure SellItems(ItemIndex: Positive; Amount: String) with
       Pre => ItemIndex <= PlayerShip.Cargo.Last_Index;
       -- ****
