@@ -71,10 +71,18 @@ package body Maps.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced (Gnattest_T);
+      X: Positive := PlayerShip.SkyX + 1;
+      Y: Positive := PlayerShip.SkyY + 1;
 
    begin
 
-      Assert(CountDistance(PlayerShip.SkyX + 1, PlayerShip.SkyY) = 1, "Failed to count distance between two points on map.");
+      if X > 1024 then
+         X := PlayerShip.SkyX - 1;
+      end if;
+      if Y > 1024 then
+         Y := PlayerShip.SkyY - 1;
+      end if;
+      Assert(CountDistance(X, Y) = 1, "Failed to count distance between two points on map.");
 
 --  begin read only
    end Test_CountDistance_test_countdistance;
