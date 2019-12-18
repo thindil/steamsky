@@ -1555,5 +1555,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="5"/>
   <description>Small steel traps. Used to train some skills.</description>
  </item>
+ <item index="319" name="Titanium small traps" showtype="Small traps" type="SmallTraps" weight="3" price="30">
+  <data value="3"/>
+  <description>Small titanium traps. Used to train some skills.</description>
+ </item>
 </items>
 
