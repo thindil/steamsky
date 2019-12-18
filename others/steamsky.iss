@@ -4,7 +4,7 @@
 #define MyAppName "Steam Sky"
 #define MyAppVersion "4.0.9"
 #define MyAppPublisher "Bartek thindil Jasicki"
-#define MyAppURL "https://thindil.github.io/steamsky/"
+#define MyAppURL "https://thindil.itch.io/steam-sky"
 #define MyAppExeName "bin\steamsky.exe"
 
 [Setup]
