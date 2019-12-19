@@ -66,6 +66,55 @@ package body Trades.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_SellItems_079195_da8da3 (ItemIndex: Positive; Amount: String) 
+   is
+   begin
+      begin
+         pragma Assert
+           (ItemIndex <= PlayerShip.Cargo.Last_Index);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(trades.ads:0):Test_SellItems test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Trades.SellItems (ItemIndex, Amount);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(trades.ads:0:):Test_SellItems test commitment violated");
+      end;
+   end Wrap_Test_SellItems_079195_da8da3;
+--  end read only
+
+--  begin read only
+   procedure Test_SellItems_test_sellitems (Gnattest_T : in out Test);
+   procedure Test_SellItems_079195_da8da3 (Gnattest_T : in out Test) renames Test_SellItems_test_sellitems;
+--  id:2.2/0791958f8fd18173/SellItems/1/0/test_sellitems/
+   procedure Test_SellItems_test_sellitems (Gnattest_T : in out Test) is
+   procedure SellItems (ItemIndex: Positive; Amount: String) renames Wrap_Test_SellItems_079195_da8da3;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+      OldAmount: Positive := PlayerShip.Cargo(2).Amount;
+
+   begin
+
+      SellItems(2, "1");
+      PlayerShip.Cargo(2).Amount := OldAmount;
+      Assert(True, "This test can only crash.");
+
+--  begin read only
+   end Test_SellItems_test_sellitems;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
