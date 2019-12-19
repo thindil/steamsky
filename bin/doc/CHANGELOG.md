@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
   titanium small traps, orichalcum small traps
 - Better check for correctness of bases types data
 - Orders menu to bases screens (issue #49)
+- Button "Buy all" in trading (issue #49)
 
 ### Changed
 - Reduced chance to damage for Large book of metalsmithing
