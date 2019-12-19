@@ -293,14 +293,17 @@ package body Trades.UI is
       end if;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
       Hide(Gtk_Widget(Get_Object(Object, "buybox")));
+      Hide(Gtk_Widget(Get_Object(Object, "buybox2")));
       if BaseCargoIndex > 0 and MoneyIndex2 > 0 and
         Is_Buyable(BaseType, ProtoIndex) then
          if BaseIndex > 0
            and then SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount > 0 then
             Show_All(Gtk_Widget(Get_Object(Object, "buybox")));
+            Show_All(Gtk_Widget(Get_Object(Object, "buybox2")));
          elsif BaseIndex = 0
            and then TraderCargo(BaseCargoIndex).Amount > 0 then
             Show_All(Gtk_Widget(Get_Object(Object, "buybox")));
+            Show_All(Gtk_Widget(Get_Object(Object, "buybox2")));
          end if;
          if Is_Visible(Gtk_Widget(Get_Object(Object, "buybox"))) then
             declare
@@ -446,10 +449,21 @@ package body Trades.UI is
       else
          Trader := "ship";
       end if;
-      if User_Data = Get_Object(Builder, "btnbuyitem") then
-         Amount :=
-           Natural
-             (Get_Value(Gtk_Adjustment(Get_Object(Builder, "amountadj1"))));
+      if User_Data = Get_Object(Builder, "btnbuyitem") or
+        User_Data = Get_Object(Builder, "btnbuyall") then
+         if User_Data = Get_Object(Builder, "btnbuyitem") then
+            Amount :=
+              Natural
+                (Get_Value(Gtk_Adjustment(Get_Object(Builder, "amountadj1"))));
+         else
+            Amount :=
+              Natural'Value
+                (Get_Label(Gtk_Label(Get_Object(Builder, "lblbuyamount")))
+                   (5 ..
+                        Get_Label
+                          (Gtk_Label(Get_Object(Builder, "lblbuyamount")))'
+                          Length - 2));
+         end if;
          BuyItems(BaseCargoIndex, Natural'Image(Amount));
       else
          Amount :=
