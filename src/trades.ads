@@ -122,7 +122,8 @@ package Trades is
       -- Amount    - Amount of items to sell
       -- SOURCE
    procedure SellItems(ItemIndex: Positive; Amount: String) with
-      Pre => ItemIndex <= PlayerShip.Cargo.Last_Index;
+      Pre => ItemIndex <= PlayerShip.Cargo.Last_Index,
+      Test_Case => ("Test_SellItems", Nominal);
       -- ****
 
       -- ****f* Trades/GenerateTraderCargo
