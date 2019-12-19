@@ -1519,27 +1519,27 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="5"/>
   <description>Huge book with informations about basics of leatherworking. Used in training skills.</description>
  </item>
- <item index="310" name="Bronze training dummy" showtype="Training Dummy" type="TrainingDummy" weight="20" price="19">
+ <item index="310" name="Bronze training dummy" showtype="Training Dummy" type="TrainingDummy" weight="20" price="29">
   <data value="15"/>
   <description>Bronze tool used in training skills.</description>
  </item>
- <item index="311" name="Iron training dummy" showtype="Training Dummy" type="TrainingDummy" weight="20" price="24">
+ <item index="311" name="Iron training dummy" showtype="Training Dummy" type="TrainingDummy" weight="20" price="34">
   <data value="10"/>
   <description>Iron tool used in training skills.</description>
  </item>
- <item index="312" name="Steel training dummy" showtype="Training Dummy" type="TrainingDummy" weight="20" price="29">
+ <item index="312" name="Steel training dummy" showtype="Training Dummy" type="TrainingDummy" weight="20" price="39">
   <data value="5"/>
   <description>Steel tool used in training skills.</description>
  </item>
- <item index="313" name="Titanium training dummy" showtype="Training Dummy" type="TrainingDummy" weight="35" price="34">
+ <item index="313" name="Titanium training dummy" showtype="Training Dummy" type="TrainingDummy" weight="35" price="44">
   <data value="3"/>
   <description>Titanium tool used in training skills.</description>
  </item>
- <item index="314" name="Orichalcum training dummy" showtype="Training Dummy" type="TrainingDummy" weight="35" price="39">
+ <item index="314" name="Orichalcum training dummy" showtype="Training Dummy" type="TrainingDummy" weight="35" price="49">
   <data value="2"/>
   <description>Orichalcum tool used in training skills.</description>
  </item>
- <item index="315" name="Adamantium training dummy" showtype="Training Dummy" type="TrainingDummy" weight="55" price="61">
+ <item index="315" name="Adamantium training dummy" showtype="Training Dummy" type="TrainingDummy" weight="55" price="71">
   <data value="1"/>
   <description>Adamantium tool used in training skills.</description>
  </item>
@@ -1558,6 +1558,10 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
  <item index="319" name="Titanium small traps" showtype="Small traps" type="SmallTraps" weight="3" price="30">
   <data value="3"/>
   <description>Small titanium traps. Used to train some skills.</description>
+ </item>
+ <item index="320" name="Orichalcum small traps" showtype="Small traps" type="SmallTraps" weight="3" price="35">
+  <data value="2"/>
+  <description>Small orichalcum traps. Used to train some skills.</description>
  </item>
 </items>
 
