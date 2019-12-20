@@ -15,6 +15,7 @@ with System.Assertions;
 --
 --  end read only
 
+with Ada.Containers; use Ada.Containers;
 with Bases; use Bases;
 with Maps; use Maps;
 
@@ -112,6 +113,53 @@ package body Trades.Test_Data.Tests is
 
 --  begin read only
    end Test_SellItems_test_sellitems;
+--  end read only
+
+--  begin read only
+   procedure Wrap_Test_GenerateTraderCargo_9d8e19_802161 (ProtoIndex: Unbounded_String) 
+   is
+   begin
+      begin
+         pragma Assert
+           (ProtoShips_Container.Contains(ProtoShips_List, ProtoIndex));
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(trades.ads:0):Test_GenerateTraderCargo test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Trades.GenerateTraderCargo (ProtoIndex);
+      begin
+         pragma Assert
+           (True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(trades.ads:0:):Test_GenerateTraderCargo test commitment violated");
+      end;
+   end Wrap_Test_GenerateTraderCargo_9d8e19_802161;
+--  end read only
+
+--  begin read only
+   procedure Test_GenerateTraderCargo_test_generatetradercargo (Gnattest_T : in out Test);
+   procedure Test_GenerateTraderCargo_9d8e19_802161 (Gnattest_T : in out Test) renames Test_GenerateTraderCargo_test_generatetradercargo;
+--  id:2.2/9d8e192e181a5de1/GenerateTraderCargo/1/0/test_generatetradercargo/
+   procedure Test_GenerateTraderCargo_test_generatetradercargo (Gnattest_T : in out Test) is
+   procedure GenerateTraderCargo (ProtoIndex: Unbounded_String) renames Wrap_Test_GenerateTraderCargo_9d8e19_802161;
+--  end read only
+
+      pragma Unreferenced (Gnattest_T);
+
+   begin
+
+      GenerateTraderCargo(To_Unbounded_String("96"));
+      Assert(TraderCargo.Length > 0, "Failed to generate cargo for trade.");
+
+--  begin read only
+   end Test_GenerateTraderCargo_test_generatetradercargo;
 --  end read only
 
 --  begin read only
