@@ -134,7 +134,8 @@ package Trades is
       --              cargo
       -- SOURCE
    procedure GenerateTraderCargo(ProtoIndex: Unbounded_String) with
-      Pre => ProtoShips_Container.Contains(ProtoShips_List, ProtoIndex);
+      Pre => ProtoShips_Container.Contains(ProtoShips_List, ProtoIndex),
+      Test_Case => ("Test_GenerateTraderCargo", Nominal);
       -- ****
 
 end Trades;
