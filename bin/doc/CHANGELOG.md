@@ -20,12 +20,13 @@ All notable changes to this project will be documented in this file.
   titanium small traps, orichalcum small traps, adamantium small traps
 - Better check for correctness of bases types data
 - Orders menu to bases screens (issue #49)
-- Button "Buy all" in trading (issue #49)
+- Button "Buy max" in trading (issue #49)
 
 ### Changed
 - Reduced chance to damage for Large book of metalsmithing
 - Updated Industrial and Factory bases types with new recipes and items
 - Updated contributing guide
+- Don't show buttons buy/sell all when unneeded (issue #49)
 
 ### Fixed
 - Info about setting difficulty level of upgrades costs
