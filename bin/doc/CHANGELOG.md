@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
   bronze training dummy, iron training dummy, steel training dummy, titanium
   training dummy, orichalcum training dummy, adamantium training dummy, bronze
   small traps, iron small traps, steel small traps, titanium small traps,
-  orichalcum small traps
+  orichalcum small traps, adamantium small traps
 - New crafting recipes: huge book of blacksmithing, medium book of
   woodworking, large book of woodworking, huge book of woodworking, medium
   book of leatherworking, large book of leatherworking, huge book of
