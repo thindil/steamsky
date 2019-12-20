@@ -10953,7 +10953,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                             </child>
                                             <child>
                                               <object class="GtkButton" id="btnbuyall">
-                                                <property name="label" translatable="yes">B_uy all</property>
+                                                <property name="label" translatable="yes">B_uy max</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">True</property>
