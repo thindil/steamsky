@@ -284,7 +284,9 @@ package body Trades.UI is
                  (Gtk_Label(Get_Object(Builder, "lblsellamount")),
                   "(max" & Natural'Image(MaxSellAmount) & "):");
                Show_All(Gtk_Widget(Get_Object(Object, "sellbox")));
-               if MaxSellAmount = PlayerShip.Cargo(CargoIndex).Amount then
+               if MaxSellAmount > 1
+                 and then MaxSellAmount =
+                   PlayerShip.Cargo(CargoIndex).Amount then
                   Show_All(Gtk_Widget(Get_Object(Object, "sellbox2")));
                   CheckAmount(Object);
                end if;
@@ -361,11 +363,16 @@ package body Trades.UI is
                      Set_Label
                        (Gtk_Label(Get_Object(Builder, "lblbuyamount")),
                         "(max" & Natural'Image(MaxBuyAmount) & "):");
+                     if MaxBuyAmount = 1 then
+                        Hide(Gtk_Widget(Get_Object(Object, "buybox2")));
+                     end if;
                   else
                      Hide(Gtk_Widget(Get_Object(Object, "buybox")));
+                     Hide(Gtk_Widget(Get_Object(Object, "buybox2")));
                   end if;
                else
                   Hide(Gtk_Widget(Get_Object(Object, "buybox")));
+                  Hide(Gtk_Widget(Get_Object(Object, "buybox2")));
                end if;
             end;
          end if;
@@ -462,7 +469,8 @@ package body Trades.UI is
                    (5 ..
                         Get_Label
                           (Gtk_Label(Get_Object(Builder, "lblbuyamount")))'
-                          Length - 2));
+                          Length -
+                        2));
          end if;
          BuyItems(BaseCargoIndex, Natural'Image(Amount));
       else
