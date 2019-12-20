@@ -1563,5 +1563,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Small orichalcum traps. Used to train some skills.</description>
  </item>
+ <item index="321" name="Adamantium small traps" showtype="Small traps" type="SmallTraps" weight="4" price="60">
+  <data value="1"/>
+  <description>Small adamantium traps. Used to train some skills.</description>
+ </item>
 </items>
 
