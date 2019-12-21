@@ -17,7 +17,8 @@ All notable changes to this project will be documented in this file.
   leatherworking, bronze training dummy, iron trainning dummy, steel training
   dummy, titanium training dummy, orichalcum training dummy, adamantium
   training dummy, bronze small traps, iron small traps, steel small traps,
-  titanium small traps, orichalcum small traps, adamantium small traps
+  titanium small traps, orichalcum small traps, adamantium small traps, medium
+  book of printing
 - Better check for correctness of bases types data
 - Orders menu to bases screens (issue #49)
 - Button "Buy max" in trading (issue #49)
