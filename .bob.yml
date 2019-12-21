@@ -70,3 +70,9 @@ version: 2.0
    description: Build Steam sky in release mode
    flags:
       - windowsonly
+- command:
+   name: pretty
+   execute:
+      - gnatpp -P steamsky.gpr
+      - gnatpp -P tests/prettytests.gpr
+   description: Pretty print Steam sky source code
