@@ -1567,5 +1567,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>Small adamantium traps. Used to train some skills.</description>
  </item>
+ <item index="322" name="Medium book of printing" showtype="Book of printing" type="PrintingBook" weight="1" price="17">
+  <data value="15"/>
+  <description>Medium book with informations about basics of printing. Used in training skills.</description>
+ </item>
 </items>
 
