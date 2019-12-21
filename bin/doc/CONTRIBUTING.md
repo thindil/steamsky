@@ -71,6 +71,16 @@ Proper `gnatpp` command usage (in the main project directory, where
 
 `gnatpp -P steamsky.gpr`
 
+and for unit tests:
+
+`gnatpp -P tests/prettytests.gpr`
+
+If you prefer (and you have installed), use [Bob](https://github.com/thindil/bob):
+
+`bob pretty`
+
+for format the game and unit tests code.
+
 #### Code comments formatting
 
 The game uses [ROBODoc](https://rfsber.home.xs4all.nl/Robo/) for generating
