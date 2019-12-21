@@ -1,0 +1,9 @@
+with "../steamsky.gpr";
+
+project PrettyTests is
+
+   for Source_Dirs use (".");
+
+   package Pretty_Printer renames Steamsky.Pretty_Printer;
+
+end PrettyTests;
