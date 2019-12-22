@@ -9,8 +9,8 @@ with Game; use Game;
 
 package body Ships.Movement.Test_Data is
 
-   procedure Set_Up (Gnattest_T : in out Test) is
-      pragma Unreferenced (Gnattest_T);
+   procedure Set_Up(Gnattest_T: in out Test) is
+      pragma Unreferenced(Gnattest_T);
    begin
       NewGameSettings.PlayerFaction := To_Unbounded_String("POLEIS");
       NewGameSettings.PlayerCareer := To_Unbounded_String("general");
@@ -18,8 +18,9 @@ package body Ships.Movement.Test_Data is
       NewGame;
    end Set_Up;
 
-   procedure Tear_Down (Gnattest_T : in out Test) is
-      pragma Unreferenced (Gnattest_T);
+   procedure Tear_Down(Gnattest_T: in out Test) is
+      pragma Unreferenced(Gnattest_T);
    begin
       null;
-   end Tear_Down;end Ships.Movement.Test_Data;
+   end Tear_Down;
+end Ships.Movement.Test_Data;

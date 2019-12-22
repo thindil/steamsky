@@ -33,22 +33,25 @@ package body Trades.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_BuyItems_295d66_69cd52 (BaseItemIndex: Positive; Amount: String) 
-   is
+   procedure Wrap_Test_BuyItems_295d66_69cd52
+     (BaseItemIndex: Positive; Amount: String) is
    begin
-      GNATtest_Generated.GNATtest_Standard.Trades.BuyItems (BaseItemIndex, Amount);
+      GNATtest_Generated.GNATtest_Standard.Trades.BuyItems
+        (BaseItemIndex, Amount);
    end Wrap_Test_BuyItems_295d66_69cd52;
 --  end read only
 
 --  begin read only
-   procedure Test_BuyItems_test_buyitems (Gnattest_T : in out Test);
-   procedure Test_BuyItems_295d66_69cd52 (Gnattest_T : in out Test) renames Test_BuyItems_test_buyitems;
+   procedure Test_BuyItems_test_buyitems(Gnattest_T: in out Test);
+   procedure Test_BuyItems_295d66_69cd52(Gnattest_T: in out Test) renames
+     Test_BuyItems_test_buyitems;
 --  id:2.2/295d66b8c191f255/BuyItems/1/0/test_buyitems/
-   procedure Test_BuyItems_test_buyitems (Gnattest_T : in out Test) is
-   procedure BuyItems (BaseItemIndex: Positive; Amount: String) renames Wrap_Test_BuyItems_295d66_69cd52;
+   procedure Test_BuyItems_test_buyitems(Gnattest_T: in out Test) is
+      procedure BuyItems(BaseItemIndex: Positive; Amount: String) renames
+        Wrap_Test_BuyItems_295d66_69cd52;
 --  end read only
 
-      pragma Unreferenced (Gnattest_T);
+      pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       OldAmount: Natural := SkyBases(BaseIndex).Cargo(2).Amount;
@@ -67,12 +70,11 @@ package body Trades.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_SellItems_079195_da8da3 (ItemIndex: Positive; Amount: String) 
-   is
+   procedure Wrap_Test_SellItems_079195_da8da3
+     (ItemIndex: Positive; Amount: String) is
    begin
       begin
-         pragma Assert
-           (ItemIndex <= PlayerShip.Cargo.Last_Index);
+         pragma Assert(ItemIndex <= PlayerShip.Cargo.Last_Index);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -80,10 +82,9 @@ package body Trades.Test_Data.Tests is
               (False,
                "req_sloc(trades.ads:0):Test_SellItems test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Trades.SellItems (ItemIndex, Amount);
+      GNATtest_Generated.GNATtest_Standard.Trades.SellItems(ItemIndex, Amount);
       begin
-         pragma Assert
-           (True);
+         pragma Assert(True);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -95,14 +96,16 @@ package body Trades.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_SellItems_test_sellitems (Gnattest_T : in out Test);
-   procedure Test_SellItems_079195_da8da3 (Gnattest_T : in out Test) renames Test_SellItems_test_sellitems;
+   procedure Test_SellItems_test_sellitems(Gnattest_T: in out Test);
+   procedure Test_SellItems_079195_da8da3(Gnattest_T: in out Test) renames
+     Test_SellItems_test_sellitems;
 --  id:2.2/0791958f8fd18173/SellItems/1/0/test_sellitems/
-   procedure Test_SellItems_test_sellitems (Gnattest_T : in out Test) is
-   procedure SellItems (ItemIndex: Positive; Amount: String) renames Wrap_Test_SellItems_079195_da8da3;
+   procedure Test_SellItems_test_sellitems(Gnattest_T: in out Test) is
+      procedure SellItems(ItemIndex: Positive; Amount: String) renames
+        Wrap_Test_SellItems_079195_da8da3;
 --  end read only
 
-      pragma Unreferenced (Gnattest_T);
+      pragma Unreferenced(Gnattest_T);
       OldAmount: Positive := PlayerShip.Cargo(2).Amount;
 
    begin
@@ -116,8 +119,8 @@ package body Trades.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_GenerateTraderCargo_9d8e19_802161 (ProtoIndex: Unbounded_String) 
-   is
+   procedure Wrap_Test_GenerateTraderCargo_9d8e19_802161
+     (ProtoIndex: Unbounded_String) is
    begin
       begin
          pragma Assert
@@ -129,10 +132,10 @@ package body Trades.Test_Data.Tests is
               (False,
                "req_sloc(trades.ads:0):Test_GenerateTraderCargo test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Trades.GenerateTraderCargo (ProtoIndex);
+      GNATtest_Generated.GNATtest_Standard.Trades.GenerateTraderCargo
+        (ProtoIndex);
       begin
-         pragma Assert
-           (True);
+         pragma Assert(True);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -144,14 +147,19 @@ package body Trades.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_GenerateTraderCargo_test_generatetradercargo (Gnattest_T : in out Test);
-   procedure Test_GenerateTraderCargo_9d8e19_802161 (Gnattest_T : in out Test) renames Test_GenerateTraderCargo_test_generatetradercargo;
+   procedure Test_GenerateTraderCargo_test_generatetradercargo
+     (Gnattest_T: in out Test);
+   procedure Test_GenerateTraderCargo_9d8e19_802161
+     (Gnattest_T: in out Test) renames
+     Test_GenerateTraderCargo_test_generatetradercargo;
 --  id:2.2/9d8e192e181a5de1/GenerateTraderCargo/1/0/test_generatetradercargo/
-   procedure Test_GenerateTraderCargo_test_generatetradercargo (Gnattest_T : in out Test) is
-   procedure GenerateTraderCargo (ProtoIndex: Unbounded_String) renames Wrap_Test_GenerateTraderCargo_9d8e19_802161;
+   procedure Test_GenerateTraderCargo_test_generatetradercargo
+     (Gnattest_T: in out Test) is
+      procedure GenerateTraderCargo(ProtoIndex: Unbounded_String) renames
+        Wrap_Test_GenerateTraderCargo_9d8e19_802161;
 --  end read only
 
-      pragma Unreferenced (Gnattest_T);
+      pragma Unreferenced(Gnattest_T);
 
    begin
 

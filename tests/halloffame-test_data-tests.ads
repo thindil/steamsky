@@ -6,10 +6,11 @@ with Gnattest_Generated;
 
 package HallOfFame.Test_Data.Tests is
 
-   type Test is new GNATtest_Generated.GNATtest_Standard.HallOfFame.Test_Data.Test
-   with null record;
+   type Test is new GNATtest_Generated.GNATtest_Standard.HallOfFame.Test_Data
+     .Test with
+   null record;
 
-   procedure Test_UpdateHallOfFame_117948_539c16 (Gnattest_T : in out Test);
+   procedure Test_UpdateHallOfFame_117948_539c16(Gnattest_T: in out Test);
    --  halloffame.ads:66:4:UpdateHallOfFame:Test_UpdateHallOfFame
 
 end HallOfFame.Test_Data.Tests;
