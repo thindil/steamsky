@@ -6,8 +6,12 @@ with Gnattest_Generated;
 
 package Stories.Test_Data.Tests.StepData_Container.Test_Data.Tests is
 
-   type Test is new GNATtest_Generated.GNATtest_Standard.Stories.Test_Data.Tests.StepData_Container.Test_Data.New_Test
-   with null record;
+   type Test is new GNATtest_Generated.GNATtest_Standard.Stories.Test_Data
+     .Tests
+     .StepData_Container
+     .Test_Data
+     .New_Test with
+   null record;
 
 end Stories.Test_Data.Tests.StepData_Container.Test_Data.Tests;
 --  end read only

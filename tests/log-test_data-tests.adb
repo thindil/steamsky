@@ -29,12 +29,12 @@ package body Log.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_LogMessage_30dbb2_caf43b (Message: String; MessageType: Debug_Types; NewLine, TimeStamp: Boolean := True) 
-   is
+   procedure Wrap_Test_LogMessage_30dbb2_caf43b
+     (Message: String; MessageType: Debug_Types;
+      NewLine, TimeStamp: Boolean := True) is
    begin
       begin
-         pragma Assert
-           (Message'Length > 0);
+         pragma Assert(Message'Length > 0);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -42,10 +42,10 @@ package body Log.Test_Data.Tests is
               (False,
                "req_sloc(log.ads:0):Test_LogMessage test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Log.LogMessage (Message, MessageType, NewLine, TimeStamp);
+      GNATtest_Generated.GNATtest_Standard.Log.LogMessage
+        (Message, MessageType, NewLine, TimeStamp);
       begin
-         pragma Assert
-           (True);
+         pragma Assert(True);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -57,14 +57,18 @@ package body Log.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_LogMessage_test_logmessage (Gnattest_T : in out Test);
-   procedure Test_LogMessage_30dbb2_caf43b (Gnattest_T : in out Test) renames Test_LogMessage_test_logmessage;
+   procedure Test_LogMessage_test_logmessage(Gnattest_T: in out Test);
+   procedure Test_LogMessage_30dbb2_caf43b(Gnattest_T: in out Test) renames
+     Test_LogMessage_test_logmessage;
 --  id:2.2/30dbb2bd59a60b97/LogMessage/1/0/test_logmessage/
-   procedure Test_LogMessage_test_logmessage (Gnattest_T : in out Test) is
-   procedure LogMessage (Message: String; MessageType: Debug_Types; NewLine, TimeStamp: Boolean := True) renames Wrap_Test_LogMessage_30dbb2_caf43b;
+   procedure Test_LogMessage_test_logmessage(Gnattest_T: in out Test) is
+      procedure LogMessage
+        (Message: String; MessageType: Debug_Types;
+         NewLine, TimeStamp: Boolean := True) renames
+        Wrap_Test_LogMessage_30dbb2_caf43b;
 --  end read only
 
-      pragma Unreferenced (Gnattest_T);
+      pragma Unreferenced(Gnattest_T);
 
    begin
 

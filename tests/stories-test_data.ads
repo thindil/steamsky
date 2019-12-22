@@ -12,7 +12,7 @@ package Stories.Test_Data is
 --  end read only
    with null record;
 
-   procedure Set_Up (Gnattest_T : in out Test);
-   procedure Tear_Down (Gnattest_T : in out Test);
+   procedure Set_Up(Gnattest_T: in out Test);
+   procedure Tear_Down(Gnattest_T: in out Test);
 
 end Stories.Test_Data;

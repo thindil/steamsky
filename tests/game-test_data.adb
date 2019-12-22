@@ -8,8 +8,8 @@ with Config; use Config;
 
 package body Game.Test_Data is
 
-   procedure Set_Up (Gnattest_T : in out Test) is
-      pragma Unreferenced (Gnattest_T);
+   procedure Set_Up(Gnattest_T: in out Test) is
+      pragma Unreferenced(Gnattest_T);
    begin
       if DataDirectory = To_Unbounded_String("../../bin/data/") then
          return;
@@ -33,8 +33,9 @@ package body Game.Test_Data is
       NewGame;
    end Set_Up;
 
-   procedure Tear_Down (Gnattest_T : in out Test) is
-      pragma Unreferenced (Gnattest_T);
+   procedure Tear_Down(Gnattest_T: in out Test) is
+      pragma Unreferenced(Gnattest_T);
    begin
       null;
-   end Tear_Down;end Game.Test_Data;
+   end Tear_Down;
+end Game.Test_Data;

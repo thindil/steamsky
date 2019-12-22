@@ -31,22 +31,22 @@ package body Bases.Cargo.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_GenerateCargo_1e6cf6_021eea
-   is
+   procedure Wrap_Test_GenerateCargo_1e6cf6_021eea is
    begin
       GNATtest_Generated.GNATtest_Standard.Bases.Cargo.GenerateCargo;
    end Wrap_Test_GenerateCargo_1e6cf6_021eea;
 --  end read only
 
 --  begin read only
-   procedure Test_GenerateCargo_test_generatecargo (Gnattest_T : in out Test);
-   procedure Test_GenerateCargo_1e6cf6_021eea (Gnattest_T : in out Test) renames Test_GenerateCargo_test_generatecargo;
+   procedure Test_GenerateCargo_test_generatecargo(Gnattest_T: in out Test);
+   procedure Test_GenerateCargo_1e6cf6_021eea(Gnattest_T: in out Test) renames
+     Test_GenerateCargo_test_generatecargo;
 --  id:2.2/1e6cf6e4bcd576d4/GenerateCargo/1/0/test_generatecargo/
-   procedure Test_GenerateCargo_test_generatecargo (Gnattest_T : in out Test) is
-   procedure GenerateCargo renames Wrap_Test_GenerateCargo_1e6cf6_021eea;
+   procedure Test_GenerateCargo_test_generatecargo(Gnattest_T: in out Test) is
+      procedure GenerateCargo renames Wrap_Test_GenerateCargo_1e6cf6_021eea;
 --  end read only
 
-      pragma Unreferenced (Gnattest_T);
+      pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
 
@@ -54,29 +54,41 @@ package body Bases.Cargo.Test_Data.Tests is
 
       SkyBases(BaseIndex).Cargo.Clear;
       GenerateCargo;
-      Assert(SkyBases(BaseIndex).Cargo.Length > 0, "Failed to generate base cargo.");
+      Assert
+        (SkyBases(BaseIndex).Cargo.Length > 0,
+         "Failed to generate base cargo.");
 
 --  begin read only
    end Test_GenerateCargo_test_generatecargo;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_UpdateBaseCargo_8dbba5_1e1787 (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer; Durability: Natural := 100; CargoIndex: Natural := 0) 
-   is
+   procedure Wrap_Test_UpdateBaseCargo_8dbba5_1e1787
+     (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
+      Durability: Natural := 100; CargoIndex: Natural := 0) is
    begin
-      GNATtest_Generated.GNATtest_Standard.Bases.Cargo.UpdateBaseCargo (ProtoIndex, Amount, Durability, CargoIndex);
+      GNATtest_Generated.GNATtest_Standard.Bases.Cargo.UpdateBaseCargo
+        (ProtoIndex, Amount, Durability, CargoIndex);
    end Wrap_Test_UpdateBaseCargo_8dbba5_1e1787;
 --  end read only
 
 --  begin read only
-   procedure Test_UpdateBaseCargo_test_updatebasecargo (Gnattest_T : in out Test);
-   procedure Test_UpdateBaseCargo_8dbba5_1e1787 (Gnattest_T : in out Test) renames Test_UpdateBaseCargo_test_updatebasecargo;
+   procedure Test_UpdateBaseCargo_test_updatebasecargo
+     (Gnattest_T: in out Test);
+   procedure Test_UpdateBaseCargo_8dbba5_1e1787
+     (Gnattest_T: in out Test) renames
+     Test_UpdateBaseCargo_test_updatebasecargo;
 --  id:2.2/8dbba5e239df57ed/UpdateBaseCargo/1/0/test_updatebasecargo/
-   procedure Test_UpdateBaseCargo_test_updatebasecargo (Gnattest_T : in out Test) is
-   procedure UpdateBaseCargo (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer; Durability: Natural := 100; CargoIndex: Natural := 0) renames Wrap_Test_UpdateBaseCargo_8dbba5_1e1787;
+   procedure Test_UpdateBaseCargo_test_updatebasecargo
+     (Gnattest_T: in out Test) is
+      procedure UpdateBaseCargo
+        (ProtoIndex: Unbounded_String := Null_Unbounded_String;
+         Amount: Integer; Durability: Natural := 100;
+         CargoIndex: Natural := 0) renames
+        Wrap_Test_UpdateBaseCargo_8dbba5_1e1787;
 --  end read only
 
-      pragma Unreferenced (Gnattest_T);
+      pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Amount: Positive;
@@ -89,20 +101,27 @@ package body Bases.Cargo.Test_Data.Tests is
       Amount := SkyBases(BaseIndex).Cargo(1).Amount - 1;
       ProtoIndex := SkyBases(BaseIndex).Cargo(1).ProtoIndex;
       UpdateBaseCargo(ProtoIndex, -1);
-      Assert(SkyBases(BaseIndex).Cargo(1).Amount = Amount, "Failed to update base cargo with proto index.");
+      Assert
+        (SkyBases(BaseIndex).Cargo(1).Amount = Amount,
+         "Failed to update base cargo with proto index.");
       UpdateBaseCargo(CargoIndex => 1, Amount => -1);
-      Assert(SkyBases(BaseIndex).Cargo(1).Amount = Amount - 1, "Failed to update base cargo with cargo index.");
+      Assert
+        (SkyBases(BaseIndex).Cargo(1).Amount = Amount - 1,
+         "Failed to update base cargo with cargo index.");
 
 --  begin read only
    end Test_UpdateBaseCargo_test_updatebasecargo;
 --  end read only
 
 --  begin read only
-   function Wrap_Test_FindBaseCargo_7cc62c_be492f (ProtoIndex: Unbounded_String; Durability: Natural := 101)  return Natural
-   is
+   function Wrap_Test_FindBaseCargo_7cc62c_be492f
+     (ProtoIndex: Unbounded_String; Durability: Natural := 101)
+      return Natural is
    begin
       declare
-         Test_FindBaseCargo_7cc62c_be492f_Result : constant Natural := GNATtest_Generated.GNATtest_Standard.Bases.Cargo.FindBaseCargo (ProtoIndex, Durability);
+         Test_FindBaseCargo_7cc62c_be492f_Result: constant Natural :=
+           GNATtest_Generated.GNATtest_Standard.Bases.Cargo.FindBaseCargo
+             (ProtoIndex, Durability);
       begin
          return Test_FindBaseCargo_7cc62c_be492f_Result;
       end;
@@ -110,25 +129,34 @@ package body Bases.Cargo.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_FindBaseCargo_test_findbasecargo (Gnattest_T : in out Test);
-   procedure Test_FindBaseCargo_7cc62c_be492f (Gnattest_T : in out Test) renames Test_FindBaseCargo_test_findbasecargo;
+   procedure Test_FindBaseCargo_test_findbasecargo(Gnattest_T: in out Test);
+   procedure Test_FindBaseCargo_7cc62c_be492f(Gnattest_T: in out Test) renames
+     Test_FindBaseCargo_test_findbasecargo;
 --  id:2.2/7cc62c290354667f/FindBaseCargo/1/0/test_findbasecargo/
-   procedure Test_FindBaseCargo_test_findbasecargo (Gnattest_T : in out Test) is
-      function FindBaseCargo (ProtoIndex: Unbounded_String; Durability: Natural := 101) return Natural renames Wrap_Test_FindBaseCargo_7cc62c_be492f;
+   procedure Test_FindBaseCargo_test_findbasecargo(Gnattest_T: in out Test) is
+      function FindBaseCargo
+        (ProtoIndex: Unbounded_String; Durability: Natural := 101)
+         return Natural renames
+        Wrap_Test_FindBaseCargo_7cc62c_be492f;
 --  end read only
 
-      pragma Unreferenced (Gnattest_T);
+      pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
 
    begin
 
-
       SkyBases(BaseIndex).Cargo.Clear;
       GenerateCargo;
-      Assert(FindBaseCargo(To_Unbounded_String("1")) = 1, "Failed to find charcoal.");
-      Assert(FindBaseCargo(To_Unbounded_String("40")) = 0, "Found item which is not in cargo.");
-      Assert(FindBaseCargo(To_Unbounded_String("sdfsdf")) = 0, "Found item which not exists.");
+      Assert
+        (FindBaseCargo(To_Unbounded_String("1")) = 1,
+         "Failed to find charcoal.");
+      Assert
+        (FindBaseCargo(To_Unbounded_String("40")) = 0,
+         "Found item which is not in cargo.");
+      Assert
+        (FindBaseCargo(To_Unbounded_String("sdfsdf")) = 0,
+         "Found item which not exists.");
 
 --  begin read only
    end Test_FindBaseCargo_test_findbasecargo;
