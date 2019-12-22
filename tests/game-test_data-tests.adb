@@ -32,22 +32,25 @@ package body Game.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_UpdateGame_93bf31_5306b6 (Minutes: Positive; InCombat: Boolean := False) 
-   is
+   procedure Wrap_Test_UpdateGame_93bf31_5306b6
+     (Minutes: Positive; InCombat: Boolean := False) is
    begin
-      GNATtest_Generated.GNATtest_Standard.Game.UpdateGame (Minutes, InCombat);
+      GNATtest_Generated.GNATtest_Standard.Game.UpdateGame(Minutes, InCombat);
    end Wrap_Test_UpdateGame_93bf31_5306b6;
 --  end read only
 
 --  begin read only
-   procedure Test_UpdateGame_test_updategame (Gnattest_T : in out Test);
-   procedure Test_UpdateGame_93bf31_5306b6 (Gnattest_T : in out Test) renames Test_UpdateGame_test_updategame;
+   procedure Test_UpdateGame_test_updategame(Gnattest_T: in out Test);
+   procedure Test_UpdateGame_93bf31_5306b6(Gnattest_T: in out Test) renames
+     Test_UpdateGame_test_updategame;
 --  id:2.2/93bf3174ce6811a5/UpdateGame/1/0/test_updategame/
-   procedure Test_UpdateGame_test_updategame (Gnattest_T : in out Test) is
-   procedure UpdateGame (Minutes: Positive; InCombat: Boolean := False) renames Wrap_Test_UpdateGame_93bf31_5306b6;
+   procedure Test_UpdateGame_test_updategame(Gnattest_T: in out Test) is
+      procedure UpdateGame
+        (Minutes: Positive; InCombat: Boolean := False) renames
+        Wrap_Test_UpdateGame_93bf31_5306b6;
 --  end read only
 
-      pragma Unreferenced (Gnattest_T);
+      pragma Unreferenced(Gnattest_T);
       Minutes: constant Natural := GameDate.Minutes;
 
    begin
@@ -60,22 +63,22 @@ package body Game.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_EndGame_2a7140_745ef4 (Save: Boolean) 
-   is
+   procedure Wrap_Test_EndGame_2a7140_745ef4(Save: Boolean) is
    begin
-      GNATtest_Generated.GNATtest_Standard.Game.EndGame (Save);
+      GNATtest_Generated.GNATtest_Standard.Game.EndGame(Save);
    end Wrap_Test_EndGame_2a7140_745ef4;
 --  end read only
 
 --  begin read only
-   procedure Test_EndGame_test_endgame (Gnattest_T : in out Test);
-   procedure Test_EndGame_2a7140_745ef4 (Gnattest_T : in out Test) renames Test_EndGame_test_endgame;
+   procedure Test_EndGame_test_endgame(Gnattest_T: in out Test);
+   procedure Test_EndGame_2a7140_745ef4(Gnattest_T: in out Test) renames
+     Test_EndGame_test_endgame;
 --  id:2.2/2a71400c0eb9defc/EndGame/1/0/test_endgame/
-   procedure Test_EndGame_test_endgame (Gnattest_T : in out Test) is
-   procedure EndGame (Save: Boolean) renames Wrap_Test_EndGame_2a7140_745ef4;
+   procedure Test_EndGame_test_endgame(Gnattest_T: in out Test) is
+      procedure EndGame(Save: Boolean) renames Wrap_Test_EndGame_2a7140_745ef4;
 --  end read only
 
-      pragma Unreferenced (Gnattest_T);
+      pragma Unreferenced(Gnattest_T);
 
    begin
 
@@ -91,25 +94,24 @@ package body Game.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_FindSkillIndex_f70bc5_c869df (SkillName: Unbounded_String)  return Natural
-   is
+   function Wrap_Test_FindSkillIndex_f70bc5_c869df
+     (SkillName: Unbounded_String) return Natural is
    begin
       begin
-         pragma Assert
-           (SkillName /= Null_Unbounded_String);
+         pragma Assert(SkillName /= Null_Unbounded_String);
          null;
       exception
-            when System.Assertions.Assert_Failure =>
-               AUnit.Assertions.Assert
-                 (False,
-                  "req_sloc(game.ads:0):Test_FindSkillIndex test requirement violated");
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(game.ads:0):Test_FindSkillIndex test requirement violated");
       end;
       declare
-         Test_FindSkillIndex_f70bc5_c869df_Result : constant Natural := GNATtest_Generated.GNATtest_Standard.Game.FindSkillIndex (SkillName);
+         Test_FindSkillIndex_f70bc5_c869df_Result: constant Natural :=
+           GNATtest_Generated.GNATtest_Standard.Game.FindSkillIndex(SkillName);
       begin
          begin
-            pragma Assert
-              (True);
+            pragma Assert(True);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -123,19 +125,27 @@ package body Game.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_FindSkillIndex_test_findskillindex (Gnattest_T : in out Test);
-   procedure Test_FindSkillIndex_f70bc5_c869df (Gnattest_T : in out Test) renames Test_FindSkillIndex_test_findskillindex;
+   procedure Test_FindSkillIndex_test_findskillindex(Gnattest_T: in out Test);
+   procedure Test_FindSkillIndex_f70bc5_c869df(Gnattest_T: in out Test) renames
+     Test_FindSkillIndex_test_findskillindex;
 --  id:2.2/f70bc5b5036bd777/FindSkillIndex/1/0/test_findskillindex/
-   procedure Test_FindSkillIndex_test_findskillindex (Gnattest_T : in out Test) is
-      function FindSkillIndex (SkillName: Unbounded_String) return Natural renames Wrap_Test_FindSkillIndex_f70bc5_c869df;
+   procedure Test_FindSkillIndex_test_findskillindex
+     (Gnattest_T: in out Test) is
+      function FindSkillIndex
+        (SkillName: Unbounded_String) return Natural renames
+        Wrap_Test_FindSkillIndex_f70bc5_c869df;
 --  end read only
 
-      pragma Unreferenced (Gnattest_T);
+      pragma Unreferenced(Gnattest_T);
 
    begin
 
-      Assert(FindSkillIndex(To_Unbounded_String("Piloting")) = 1, "Failed to find existing skill.");
-      Assert(FindSkillIndex(To_Unbounded_String("sdljfskfhsf")) = 0, "Failed to not find non exisiting skill.");
+      Assert
+        (FindSkillIndex(To_Unbounded_String("Piloting")) = 1,
+         "Failed to find existing skill.");
+      Assert
+        (FindSkillIndex(To_Unbounded_String("sdljfskfhsf")) = 0,
+         "Failed to not find non exisiting skill.");
 
 --  begin read only
    end Test_FindSkillIndex_test_findskillindex;

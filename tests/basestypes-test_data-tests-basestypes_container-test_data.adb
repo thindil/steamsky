@@ -5,26 +5,26 @@
 
 package body BasesTypes.Test_Data.Tests.BasesTypes_Container.Test_Data is
 
-   procedure Set_Up (Gnattest_T : in out Test) is
-      pragma Unreferenced (Gnattest_T);
+   procedure Set_Up(Gnattest_T: in out Test) is
+      pragma Unreferenced(Gnattest_T);
    begin
       null;
    end Set_Up;
 
-   procedure Tear_Down (Gnattest_T : in out Test) is
-      pragma Unreferenced (Gnattest_T);
+   procedure Tear_Down(Gnattest_T: in out Test) is
+      pragma Unreferenced(Gnattest_T);
    begin
       null;
    end Tear_Down;
 
-   procedure User_Set_Up (Gnattest_T : in out New_Test) is
-      pragma Unreferenced (Gnattest_T);
+   procedure User_Set_Up(Gnattest_T: in out New_Test) is
+      pragma Unreferenced(Gnattest_T);
    begin
       null;
    end User_Set_Up;
 
-   procedure User_Tear_Down (Gnattest_T : in out New_Test) is
-      pragma Unreferenced (Gnattest_T);
+   procedure User_Tear_Down(Gnattest_T: in out New_Test) is
+      pragma Unreferenced(Gnattest_T);
    begin
       null;
    end User_Tear_Down;
