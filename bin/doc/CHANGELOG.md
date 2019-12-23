@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Updated Industrial and Factory bases types with new recipes and items
 - Updated contributing guide
 - Don't show buttons buy/sell all when unneeded (issue #49)
+- Reduced chance for random max skills levels for recruits
 
 ### Fixed
 - Info about setting difficulty level of upgrades costs
