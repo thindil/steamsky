@@ -1575,5 +1575,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="10"/>
   <description>Large book with informations about basics of printing. Used in training skills.</description>
  </item>
+ <item index="324" name="Huge book of printing" showtype="Book of printing" type="PrintingBook" weight="1" price="27">
+  <data value="5"/>
+  <description>Huge book with informations about basics of printing. Used in training skills.</description>
+ </item>
 </items>
 
