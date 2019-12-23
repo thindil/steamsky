@@ -232,7 +232,7 @@ package body Bases is
          if MaxSkillLevel < 20 then
             MaxSkillLevel := 20;
          end if;
-         if GetRandom(1, 100) > 90 then
+         if GetRandom(1, 100) > 95 then
             MaxSkillLevel := GetRandom(MaxSkillLevel, 100);
          end if;
          for J in 1 .. SkillsAmount loop
