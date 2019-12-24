@@ -99,7 +99,7 @@ package body Factions is
             HealingTools => Null_Unbounded_String, HealingSkill => 1,
             Flags => TmpFood, Careers => TmpCareers,
             BaseIcon => Wide_Character'Val(16#f5d2#),
-            BasesTypes => TmpBasesTypes);
+            BasesTypes => TmpBasesTypes, WeaponSkill => 17);
          FactionNode := Item(NodesList, I);
          FactionIndex :=
            To_Unbounded_String(Get_Attribute(FactionNode, "index"));
@@ -194,6 +194,19 @@ package body Factions is
                  Wide_Character'Val
                    (Natural'Value
                       ("16#" & Get_Attribute(FactionNode, "baseicon") & "#"));
+            end if;
+            if Get_Attribute(FactionNode, "weaponskill") /= "" then
+               Value :=
+                 To_Unbounded_String
+                   (Get_Attribute(FactionNode, "weaponskill"));
+               SkillIndex := FindSkillIndex(Value);
+               if SkillIndex = 0 then
+                  raise Data_Loading_Error
+                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    " faction '" & To_String(FactionIndex) &
+                    "', no skill named '" & To_String(Value) & "'.";
+               end if;
+               TempRecord.WeaponSkill := SkillIndex;
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
