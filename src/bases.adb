@@ -154,7 +154,7 @@ package body Bases is
       BaseRecruits: Recruit_Container.Vector;
       Skills: Skills_Container.Vector;
       Gender: Character;
-      Price, Payment: Natural;
+      Price, Payment, MaxSkillAmount: Natural;
       SkillIndex: Integer;
       Attributes: Attributes_Container.Vector;
       Inventory, TempTools: UnboundedString_Container.Vector;
@@ -201,6 +201,13 @@ package body Bases is
          MaxRecruits := (SkyBases(BaseIndex).Population / 10) + 1;
       end if;
       RecruitsAmount := GetRandom(1, MaxRecruits);
+      MaxSkillAmount :=
+        Natural
+          (Float(Skills_List.Length) *
+           (Float(SkyBases(BaseIndex).Reputation(1)) / 100.0));
+      if MaxSkillAmount < 5 then
+         MaxSkillAmount := 5;
+      end if;
       for I in 1 .. RecruitsAmount loop
          Skills.Clear;
          Attributes.Clear;
@@ -226,6 +233,9 @@ package body Bases is
          end if;
          SkillsAmount :=
            GetRandom(Skills_List.First_Index, Skills_List.Last_Index);
+         if SkillsAmount > MaxSkillAmount then
+            SkillsAmount := MaxSkillAmount;
+         end if;
          HighestLevel := 1;
          HighestSkill := 1;
          MaxSkillLevel := SkyBases(BaseIndex).Reputation(1);
