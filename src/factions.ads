@@ -130,6 +130,8 @@ package Factions is
    -- BasesTypes       - List of available base types (with chances to spawn)
    --                    for this faction. If it is empty then all bases types
    --                    are available for this faction
+   -- WeaponSkill      - Vector index of skill used by prefered weapon of
+   --                    members of this faction
    -- SOURCE
    type FactionRecord is record
       Name: Unbounded_String;
@@ -148,6 +150,7 @@ package Factions is
       Careers: Careers_Container.Map;
       BaseIcon: Wide_Character;
       BasesTypes: BaseType_Container.Map;
+      WeaponSkill: Positive;
    end record;
    -- ****
 
