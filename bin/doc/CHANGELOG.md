@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Don't show buttons buy/sell all when unneeded (issue #49)
 - Reduced chance for random max skills levels for recruits
 - Amount of recruit's skills depends on player reputation in base
+- Updated help
 
 ### Fixed
 - Info about setting difficulty level of upgrades costs
