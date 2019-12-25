@@ -626,6 +626,8 @@ Value must be existing skill name.
   faction. Must be valid skill name from *data/game.dat* file
 - Attribute `baseicon`: hexadecimal number of character used as base icon for
   this faction on map. Must be valid UTF-8 character from current map font.
+- Attribute `weaponskill`: name of skill skill used by favorite weapon of that
+  faction. Must be valid skill name from *data/game.dat* file.
 - Tags `relation`: Relation of this faction with other faction. All factions
   must have this tags for each faction (even for self).
     - Optional attribute `action`: what to do with this relation. Possible
@@ -757,7 +759,7 @@ story.
       randomly selected place on map or numeric coordinates of map field. Both
       used by `destroyship` and `explore` steps. Name `condition` is used by
       all steps and mean which skill should be used for check did step will
-      progress to next, or value `random` for random chance. Name `chance` is
+      progress to next, or value `random` for chance. Name `chance` is
       used by all steps and mean chance (1 to that number for `random`
       condition or Skill + roll from 1 to 100) that step will progress to next.
     - Optional attribute `action`: what to do with this entry. Possible values
