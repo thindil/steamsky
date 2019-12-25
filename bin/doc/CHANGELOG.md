@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - Reduced chance for random max skills levels for recruits
 - Amount of recruit's skills depends on player reputation in base
 - Updated help
+- Updated factions with favorite weapon skill
 
 ### Fixed
 - Info about setting difficulty level of upgrades costs
