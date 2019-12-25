@@ -22,11 +22,15 @@ with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Bin; use Gtk.Bin;
 with Gtk.Box; use Gtk.Box;
 with Gtk.Button; use Gtk.Button;
+with Gtk.Cell_Area_Box; use Gtk.Cell_Area_Box;
+with Gtk.Cell_Renderer_Text; use Gtk.Cell_Renderer_Text;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Window; use Gtk.Window;
+with Gtk.Scrolled_Window; use Gtk.Scrolled_Window;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.Tree_Store; use Gtk.Tree_Store;
 with Gtk.Tree_View; use Gtk.Tree_View;
+with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
@@ -78,13 +82,11 @@ package body Goals.UI is
    -- FUNCTION
    -- Enable or disable "Select goal" button
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Tree_View with goals
    -- SOURCE
-   procedure GoalSelected(Object: access Gtkada_Builder_Record'Class) is
+   procedure GoalSelected(Self: access Gtk_Tree_View_Record'Class) is
       -- ****
       Iter: Gtk_Tree_Iter;
-      GoalsView: constant Gtk_Tree_View :=
-        Gtk_Tree_View(Get_Object(Object, "treegoals"));
       GoalsModel: Gtk_Tree_Model;
       Button: constant Gtk_Widget :=
         Get_Child
@@ -96,7 +98,7 @@ package body Goals.UI is
                  1)),
            0);
    begin
-      Get_Selected(Get_Selection(GoalsView), GoalsModel, Iter);
+      Get_Selected(Get_Selection(Self), GoalsModel, Iter);
       if Get_String(GoalsModel, Iter, 0) /= "Random" and
         Get_Int(GoalsModel, Iter, 1) = 0 then
          Set_Sensitive(Button, False);
@@ -116,7 +118,14 @@ package body Goals.UI is
       -- ****
       Iter: Gtk_Tree_Iter;
       GoalsView: constant Gtk_Tree_View :=
-        Gtk_Tree_View(Get_Object(Builder, "treegoals"));
+        Gtk_Tree_View
+          (Get_Child
+             (Gtk_Bin
+                (Get_Child
+                   (Gtk_Box
+                      (Gtk.Bin.Get_Child
+                         (Gtk_Bin(Get_Object(Builder, "goalswindow")))),
+                    0))));
       GoalsModel: Gtk_Tree_Model;
    begin
       Get_Selected(Get_Selection(GoalsView), GoalsModel, Iter);
@@ -167,17 +176,24 @@ package body Goals.UI is
       Hide(Gtk_Widget(Get_Object(Builder, "goalswindow")));
    end CloseGoals;
 
-   procedure SelectGoalTemp(Object: access Gtkada_Builder_Record'Class) is
-      pragma Unreferenced(Object);
+   procedure SelectGoalView
+     (Self: access Gtk_Tree_View_Record'Class; Path: Gtk_Tree_Path;
+      Column: not null access Gtk_Tree_View_Column_Record'Class) is
+      pragma Unreferenced(Self, Path, Column);
    begin
       SelectGoal(null);
-   end SelectGoalTemp;
+   end SelectGoalView;
 
    procedure CreateGoalsMenu is
       Error: aliased GError;
       GoalsList: Gtk_Tree_Store;
       CategoryIter: Gtk_Tree_Iter;
       Accelerators: constant Gtk_Accel_Group := Gtk_Accel_Group_New;
+      ButtonBox: constant Gtk_Vbox := Gtk_Vbox_New;
+      GoalsView: constant Gtk_Tree_View := Gtk_Tree_View_New;
+      Column: Gtk_Tree_View_Column;
+      Area: Gtk_Cell_Area_Box;
+      Renderer: Gtk_Cell_Renderer_Text;
       procedure AddGoals(CategoryName: String; GType: GoalTypes) is
          GoalsIter: Gtk_Tree_Iter;
       begin
@@ -208,14 +224,7 @@ package body Goals.UI is
             Add_Accelerator
               (Button, "clicked", Accelerators, Key, 0, Accel_Visible);
          end if;
-         Pack_Start
-           (Gtk_Box
-              (Get_Child
-                 (Gtk_Box
-                    (Gtk.Bin.Get_Child
-                       (Gtk_Bin(Get_Object(Builder, "goalswindow")))),
-                  1)),
-            Button, False);
+         Pack_Start(ButtonBox, Button, False);
       end AddButton;
    begin
       if Builder /= null then
@@ -231,8 +240,6 @@ package body Goals.UI is
          return;
       end if;
       Register_Handler(Builder, "Hide_Goals", HideGoals'Access);
-      Register_Handler(Builder, "Goal_Selected", GoalSelected'Access);
-      Register_Handler(Builder, "Select_Goal", SelectGoalTemp'Access);
       Do_Connect(Builder);
       GoalsList := Gtk_Tree_Store(Get_Object(Builder, "goalslist"));
       Append(GoalsList, CategoryIter, Null_Iter);
@@ -245,8 +252,31 @@ package body Goals.UI is
       AddGoals("Craft items", CRAFT);
       AddGoals("Finish missions", MISSION);
       AddGoals("Kill enemies in melee combat", KILL);
+      Set_Model(GoalsView, +(GoalsList));
+      Gtk.Cell_Renderer_Text.Gtk_New(Renderer);
+      Area := Gtk_Cell_Area_Box_New;
+      Pack_Start(Area, Renderer, True);
+      Add_Attribute(Area, Renderer, "text", 0);
+      Column := Gtk_Tree_View_Column_New_With_Area(Area);
+      if Append_Column(GoalsView, Column) /= 1 then
+         raise Program_Error;
+      end if;
+      On_Row_Activated(GoalsView, SelectGoalView'Access);
+      On_Cursor_Changed(GoalsView, GoalSelected'Access);
+      Add
+        (Gtk_Scrolled_Window
+           (Get_Child
+              (Gtk_Box
+                 (Gtk.Bin.Get_Child
+                    (Gtk_Bin(Get_Object(Builder, "goalswindow")))),
+               0)),
+         GoalsView);
       AddButton("_Select goal", SelectGoal'Access);
       AddButton("Close [Escape]", CloseGoals'Access, GDK_Escape);
+      Pack_Start
+        (Gtk_Box
+           (Gtk.Bin.Get_Child(Gtk_Bin(Get_Object(Builder, "goalswindow")))),
+         ButtonBox, False);
       Add_Accel_Group
         (Gtk_Window(Get_Object(Builder, "goalswindow")), Accelerators);
    end CreateGoalsMenu;
