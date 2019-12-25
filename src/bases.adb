@@ -169,8 +169,17 @@ package body Bases is
          if GetRandom(1, 100) > 80 then
             return;
          end if;
-         ItemIndex :=
-           GetRandom(ItemsIndexes.First_Index, ItemsIndexes.Last_Index);
+         if EquipIndex > 1 then
+            ItemIndex :=
+              GetRandom(ItemsIndexes.First_Index, ItemsIndexes.Last_Index);
+         else
+            loop
+               ItemIndex :=
+                 GetRandom(ItemsIndexes.First_Index, ItemsIndexes.Last_Index);
+               exit when Items_List(ItemsIndexes(ItemIndex)).Value(3) =
+                 Factions_List(RecruitFaction).WeaponSkill;
+            end loop;
+         end if;
          Inventory.Append(New_Item => ItemsIndexes(ItemIndex));
          Equipment(EquipIndex) := Inventory.Last_Index;
          Price :=
@@ -246,8 +255,12 @@ package body Bases is
             MaxSkillLevel := GetRandom(MaxSkillLevel, 100);
          end if;
          for J in 1 .. SkillsAmount loop
-            SkillNumber :=
-              GetRandom(Skills_List.First_Index, Skills_List.Last_Index);
+            if J > 1 then
+               SkillNumber :=
+                 GetRandom(Skills_List.First_Index, Skills_List.Last_Index);
+            else
+               SkillNumber := Factions_List(RecruitFaction).WeaponSkill;
+            end if;
             SkillLevel := GetRandom(1, MaxSkillLevel);
             if SkillLevel > HighestLevel then
                HighestLevel := SkillLevel;
