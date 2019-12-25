@@ -35,6 +35,7 @@ All notable changes to this project will be documented in this file.
 - Updated help
 - Updated factions with favorite weapon skill
 - Updated MODDING.md
+- Recruits in bases have weapons of own factions
 
 ### Fixed
 - Info about setting difficulty level of upgrades costs
