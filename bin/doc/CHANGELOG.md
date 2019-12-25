@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
 - Amount of recruit's skills depends on player reputation in base
 - Updated help
 - Updated factions with favorite weapon skill
+- Updated MODDING.md
 
 ### Fixed
 - Info about setting difficulty level of upgrades costs
