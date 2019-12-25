@@ -35,8 +35,10 @@ faction and in diseased bases events. Must be valid item type from
 faction. Must be valid skill name from *data/game.dat* file.
 - Attribute "baseicon": hexadecimal number of character used as base icon for
 this faction on map. Must be valid UTF-8 character from current map font.
+- Attribute "weaponskill": name of skill skill used by favorite weapon of that
+faction. Must be valid skill name from *data/game.dat* file.
 -->
- <faction index="POLEIS" name="Poleis" membername="member of Poleis" pluralmembername="members of Poleis" spawn="50" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine" baseicon="fc06">
+ <faction index="POLEIS" name="Poleis" membername="member of Poleis" pluralmembername="members of Poleis" spawn="50" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine" baseicon="fc06" weaponskill="Swords">
 <!--
 - Tags "relation": Relation of this faction with other faction. All factions
 must have this tags for each faction (even for self).
@@ -124,7 +126,7 @@ between 51 and 70 it will be second base type.
   <basetype index="4" chance="20" />
   <basetype index="10" chance="10" />
  </faction>
- <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" spawn="20" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine" baseicon="f5df">
+ <faction index="INDEPENDENT" name="Independents" membername="Independent" pluralmembername="Independents" spawn="20" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine" baseicon="f5df" weaponskill="Spears">
   <relation faction="POLEIS" reputation="0" friendly="Y" />
   <relation faction="INDEPENDENT" minreputation="-3" maxreputation="2" friendly="Y" />
   <relation faction="PIRATES" reputation="-10" friendly="N" />
@@ -161,7 +163,7 @@ bases of that faction are not grouped near self.
   <basetype index="4" chance="20" />
   <basetype index="8" chance="10" />
  </faction>
- <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" spawn="8" minpopulation="0" maxpopulation="500" playerindex="1" healingtools="Medicines" healingskill="Medicine" baseicon="fc72">
+ <faction index="PIRATES" name="Pirates" membername="Pirate" pluralmembername="Pirates" spawn="8" minpopulation="0" maxpopulation="500" playerindex="1" healingtools="Medicines" healingskill="Medicine" baseicon="fc72" weaponskill="Rapiers">
   <relation faction="POLEIS" reputation="-10" friendly="N" />
   <relation faction="INDEPENDENT" minreputation="-20" maxreputation="-5" friendly="N" />
   <relation faction="PIRATES" reputation="0" friendly="Y" />
@@ -183,7 +185,7 @@ bases of that faction are not grouped near self.
   <basetype index="4" chance="40" />
   <basetype index="6" chance="10" />
  </faction>
- <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" spawn="8" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine" baseicon="fb8a">
+ <faction index="UNDEAD" name="Undead" membername="Undead" pluralmembername="Undeads" spawn="8" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine" baseicon="fb8a" weaponskill="Brawling">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
   <relation faction="INDEPENDENT" reputation="-100" friendly="N" />
   <relation faction="PIRATES" reputation="-100" friendly="N" />
@@ -205,7 +207,7 @@ bases of that faction are not grouped near self.
   <basetype index="4" chance="20" />
   <basetype index="9" chance="10" />
  </faction>
- <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" spawn="7" minpopulation="0" maxpopulation="500" namestype="robotic" healingtools="Bronze" healingskill="Engineering" baseicon="f013">
+ <faction index="DRONES" name="Drones" membername="Drone" pluralmembername="Drones" spawn="7" minpopulation="0" maxpopulation="500" namestype="robotic" healingtools="Bronze" healingskill="Engineering" baseicon="f013" weaponskill="Two-handed Maces">
   <relation faction="POLEIS" reputation="-100" friendly="N" />
   <relation faction="INDEPENDENT" reputation="-100" friendly="N" />
   <relation faction="PIRATES" reputation="-100" friendly="N" />
@@ -229,7 +231,7 @@ bases of that faction are not grouped near self.
   <basetype index="7" chance="40" />
   <basetype index="4" chance="20" />
  </faction>
- <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" spawn="6" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine" baseicon="f643">
+ <faction index="INQUISITION" name="Inquisition" membername="Inquisitor" pluralmembername="Inquisitors" spawn="6" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine" baseicon="f643" weaponskill="Two-handed Swords">
   <relation faction="POLEIS" reputation="-50" friendly="N" />
   <relation faction="INDEPENDENT" minreputation="-40" maxreputation="-25" friendly="N" />
   <relation faction="PIRATES" reputation="-10" friendly="N" />
