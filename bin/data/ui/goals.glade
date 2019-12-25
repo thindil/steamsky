@@ -60,29 +60,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
             <property name="hscrollbar_policy">never</property>
             <property name="shadow_type">in</property>
             <child>
-              <object class="GtkTreeView" id="treegoals">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="model">goalslist</property>
-                <property name="headers_visible">False</property>
-                <property name="headers_clickable">False</property>
-                <signal name="cursor-changed" handler="Goal_Selected" swapped="no"/>
-                <signal name="row-activated" handler="Select_Goal" swapped="no"/>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection"/>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn">
-                    <property name="title" translatable="yes">column</property>
-                    <child>
-                      <object class="GtkCellRendererText"/>
-                      <attributes>
-                        <attribute name="text">0</attribute>
-                      </attributes>
-                    </child>
-                  </object>
-                </child>
-              </object>
+              <placeholder/>
             </child>
           </object>
           <packing>
@@ -92,22 +70,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
           </packing>
         </child>
         <child>
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">1</property>
-          </packing>
+          <placeholder/>
         </child>
       </object>
     </child>
