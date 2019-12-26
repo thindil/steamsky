@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Removed outdated tooltip for recruits list in bases
+
 ## [4.0.9] - 2019-12-15
 
 ### Fixed
