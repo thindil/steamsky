@@ -3887,7 +3887,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <object class="GtkTreeView" id="treerecruits">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="tooltip_text" translatable="yes">Double click on name or press enter to start negotiations.</property>
                                 <property name="model">recruitlist</property>
                                 <property name="search_column">0</property>
                                 <signal name="cursor-changed" handler="Show_Recruit_Info" swapped="no"/>
