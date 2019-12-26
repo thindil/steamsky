@@ -43,6 +43,7 @@ All notable changes to this project will be documented in this file.
 - Adding non existing ships to the game statistics
 - Crash on finishing missions in bases
 - Hang on starting a new game
+- Removed outdated tooltip for recruits list in bases
 
 ## [4.4] - 2019-12-01
 
