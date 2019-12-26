@@ -61,7 +61,12 @@ package body Goals.UI is
    FromMainMenu: Boolean := True;
    -- ****
 
+   -- ****iv* Goals.UI/GoalsWindow
+   -- FUNCTION
+   -- Main Gtk_Window for selecting a goal.
+   -- SOURCE
    GoalsWindow: Gtk_Window;
+   -- ****
 
    -- ****if* Goals.UI/HideGoals
    -- FUNCTION
@@ -175,10 +180,20 @@ package body Goals.UI is
       Hide(GoalsWindow);
    end CloseGoals;
 
+   -- ****if* Goals.UI/SelectGoalView
+   -- FUNCTION
+   -- Set currently selected goal as a current game goal after selecting it
+   -- in Goals Tree_View.
+   -- PARAMETERS
+   -- Self   - Gtk_Tree_View with list of goals. Unused.
+   -- Path   - Gtk_Tree_Path to row which was clicked. Unused.
+   -- Column - Gtk_Tree_View_Column which was clicked. Unused.
+   -- SOURCE
    procedure SelectGoalView
      (Self: access Gtk_Tree_View_Record'Class; Path: Gtk_Tree_Path;
       Column: not null access Gtk_Tree_View_Column_Record'Class) is
       pragma Unreferenced(Self, Path, Column);
+      -- ****
    begin
       SelectGoal(null);
    end SelectGoalView;
