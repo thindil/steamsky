@@ -164,30 +164,81 @@ package body Bases is
       procedure AddInventory
         (ItemsIndexes: UnboundedString_Container.Vector;
          EquipIndex: Positive) is
-         ItemIndex: Positive;
+         ItemIndex, MaxIndex: Positive;
+         NewIndexes: UnboundedString_Container.Vector;
+         Added: Boolean;
       begin
          if GetRandom(1, 100) > 80 then
             return;
          end if;
          if EquipIndex > 1 then
-            ItemIndex :=
-              GetRandom(ItemsIndexes.First_Index, ItemsIndexes.Last_Index);
+            for I in ItemsIndexes.First_Index .. ItemsIndexes.Last_Index loop
+               Added := False;
+               for J in NewIndexes.First_Index .. NewIndexes.Last_Index loop
+                  if Items_List(ItemsIndexes(I)).Price <
+                    Items_List(NewIndexes(J)).Price then
+                     NewIndexes.Insert(J, ItemsIndexes(I));
+                     Added := True;
+                     exit;
+                  end if;
+               end loop;
+               if not Added then
+                  NewIndexes.Append(ItemsIndexes(I));
+               end if;
+            end loop;
+            MaxIndex :=
+              Positive
+                ((Float(NewIndexes.Last_Index) *
+                  (Float(HighestLevel) / 100.0)) +
+                 1.0);
+            if MaxIndex > NewIndexes.Last_Index then
+               MaxIndex := NewIndexes.Last_Index;
+            end if;
+            ItemIndex := GetRandom(NewIndexes.First_Index, MaxIndex);
          else
+            for I in ItemsIndexes.First_Index .. ItemsIndexes.Last_Index loop
+               Added := False;
+               for J in NewIndexes.First_Index .. NewIndexes.Last_Index loop
+                  if Items_List(ItemsIndexes(I)).Price <
+                    Items_List(NewIndexes(J)).Price and
+                    Items_List(ItemsIndexes(I)).Value(3) =
+                      Factions_List(RecruitFaction).WeaponSkill then
+                     NewIndexes.Insert(J, ItemsIndexes(I));
+                     Added := True;
+                     exit;
+                  end if;
+               end loop;
+               if not Added and
+                 Items_List(ItemsIndexes(I)).Value(3) =
+                   Factions_List(RecruitFaction).WeaponSkill then
+                  NewIndexes.Append(ItemsIndexes(I));
+               end if;
+            end loop;
+            if NewIndexes.Length = 0 then
+               return;
+            end if;
+            MaxIndex :=
+              Positive
+                ((Float(NewIndexes.Last_Index) *
+                  (Float(Skills(1)(2)) / 100.0)) +
+                 1.0);
+            if MaxIndex > NewIndexes.Last_Index then
+               MaxIndex := NewIndexes.Last_Index;
+            end if;
             loop
-               ItemIndex :=
-                 GetRandom(ItemsIndexes.First_Index, ItemsIndexes.Last_Index);
+               ItemIndex := GetRandom(NewIndexes.First_Index, MaxIndex);
                exit when Items_List(ItemsIndexes(ItemIndex)).Value(3) =
                  Factions_List(RecruitFaction).WeaponSkill;
             end loop;
          end if;
-         Inventory.Append(New_Item => ItemsIndexes(ItemIndex));
+         Inventory.Append(New_Item => NewIndexes(ItemIndex));
          Equipment(EquipIndex) := Inventory.Last_Index;
          Price :=
            Price +
-           Get_Price(SkyBases(BaseIndex).BaseType, ItemsIndexes(ItemIndex));
+           Get_Price(SkyBases(BaseIndex).BaseType, NewIndexes(ItemIndex));
          Payment :=
            Payment +
-           (Get_Price(SkyBases(BaseIndex).BaseType, ItemsIndexes(ItemIndex)) /
+           (Get_Price(SkyBases(BaseIndex).BaseType, NewIndexes(ItemIndex)) /
             10);
       end AddInventory;
    begin
