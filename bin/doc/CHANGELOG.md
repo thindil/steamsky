@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 - Updated factions with favorite weapon skill
 - Updated MODDING.md
 - Recruits in bases have weapons of own factions
+- Recruits equipment quality depends on player reputation in base
 
 ### Fixed
 - Info about setting difficulty level of upgrades costs
