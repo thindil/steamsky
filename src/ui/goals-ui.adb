@@ -24,6 +24,7 @@ with Gtk.Box; use Gtk.Box;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Cell_Area_Box; use Gtk.Cell_Area_Box;
 with Gtk.Cell_Renderer_Text; use Gtk.Cell_Renderer_Text;
+with Gtk.Enums; use Gtk.Enums;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Scrolled_Window; use Gtk.Scrolled_Window;
@@ -35,6 +36,7 @@ with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
+with Gdk.Event; use Gdk.Event;
 with Gdk.Types; use Gdk.Types;
 with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
 with Game; use Game;
@@ -59,23 +61,27 @@ package body Goals.UI is
    FromMainMenu: Boolean := True;
    -- ****
 
+   GoalsWindow: Gtk_Window;
+
    -- ****if* Goals.UI/HideGoals
    -- FUNCTION
    -- Hide goals UI instead of destroy it
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self  - Gtk_Widget which triggered this event (GoalsWindow)
+   -- Event - Gdk_Event structure with data about the event. Unused.
    -- SOURCE
    function HideGoals
-     (User_Data: access Gtkada_Builder_Record'Class) return Boolean is
-   -- ****
+     (Self: access Gtk_Widget_Record'Class; Event: Gdk_Event) return Boolean is
+      pragma Unreferenced(Event);
+      -- ****
    begin
-      return Hide_On_Delete(Gtk_Widget(Get_Object(User_Data, "goalswindow")));
+      return Hide_On_Delete(Self);
    end HideGoals;
 
    procedure ShowGoalsMenu(InMainMenu: Boolean := True) is
    begin
       FromMainMenu := InMainMenu;
-      Show_All(Gtk_Widget(Get_Object(Builder, "goalswindow")));
+      Show_All(GoalsWindow);
    end ShowGoalsMenu;
 
    -- ****if* Goals.UI/GoalSelected
@@ -91,11 +97,7 @@ package body Goals.UI is
       Button: constant Gtk_Widget :=
         Get_Child
           (Gtk_Box
-             (Get_Child
-                (Gtk_Box
-                   (Gtk.Bin.Get_Child
-                      (Gtk_Bin(Get_Object(Builder, "goalswindow")))),
-                 1)),
+             (Get_Child(Gtk_Box(Gtk.Bin.Get_Child(Gtk_Bin(GoalsWindow))), 1)),
            0);
    begin
       Get_Selected(Get_Selection(Self), GoalsModel, Iter);
@@ -122,10 +124,7 @@ package body Goals.UI is
           (Get_Child
              (Gtk_Bin
                 (Get_Child
-                   (Gtk_Box
-                      (Gtk.Bin.Get_Child
-                         (Gtk_Bin(Get_Object(Builder, "goalswindow")))),
-                    0))));
+                   (Gtk_Box(Gtk.Bin.Get_Child(Gtk_Bin(GoalsWindow))), 0))));
       GoalsModel: Gtk_Tree_Model;
    begin
       Get_Selected(Get_Selection(GoalsView), GoalsModel, Iter);
@@ -160,7 +159,7 @@ package body Goals.UI is
             UpdateGoalsButton(GoalText(0));
          end if;
       end if;
-      Hide(Gtk_Widget(Get_Object(Builder, "goalswindow")));
+      Hide(GoalsWindow);
    end SelectGoal;
 
    -- ****if* Goals.UI/CloseGoals
@@ -173,7 +172,7 @@ package body Goals.UI is
       pragma Unreferenced(Self);
       -- ****
    begin
-      Hide(Gtk_Widget(Get_Object(Builder, "goalswindow")));
+      Hide(GoalsWindow);
    end CloseGoals;
 
    procedure SelectGoalView
@@ -189,11 +188,12 @@ package body Goals.UI is
       GoalsList: Gtk_Tree_Store;
       CategoryIter: Gtk_Tree_Iter;
       Accelerators: constant Gtk_Accel_Group := Gtk_Accel_Group_New;
-      ButtonBox: constant Gtk_Vbox := Gtk_Vbox_New;
+      ButtonBox, MainBox: constant Gtk_Vbox := Gtk_Vbox_New;
       GoalsView: constant Gtk_Tree_View := Gtk_Tree_View_New;
       Column: Gtk_Tree_View_Column;
       Area: Gtk_Cell_Area_Box;
       Renderer: Gtk_Cell_Renderer_Text;
+      GoalsScroll: constant Gtk_Scrolled_Window := Gtk_Scrolled_Window_New;
       procedure AddGoals(CategoryName: String; GType: GoalTypes) is
          GoalsIter: Gtk_Tree_Iter;
       begin
@@ -239,8 +239,8 @@ package body Goals.UI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      Register_Handler(Builder, "Hide_Goals", HideGoals'Access);
       Do_Connect(Builder);
+      Set_Policy(GoalsScroll, Policy_Never, Policy_Automatic);
       GoalsList := Gtk_Tree_Store(Get_Object(Builder, "goalslist"));
       Append(GoalsList, CategoryIter, Null_Iter);
       Set(GoalsList, CategoryIter, 0, "Random");
@@ -259,26 +259,28 @@ package body Goals.UI is
       Add_Attribute(Area, Renderer, "text", 0);
       Column := Gtk_Tree_View_Column_New_With_Area(Area);
       if Append_Column(GoalsView, Column) /= 1 then
-         raise Program_Error;
+         raise Program_Error with "Can't add column to goals view";
       end if;
       On_Row_Activated(GoalsView, SelectGoalView'Access);
       On_Cursor_Changed(GoalsView, GoalSelected'Access);
-      Add
-        (Gtk_Scrolled_Window
-           (Get_Child
-              (Gtk_Box
-                 (Gtk.Bin.Get_Child
-                    (Gtk_Bin(Get_Object(Builder, "goalswindow")))),
-               0)),
-         GoalsView);
+      Add(GoalsScroll, GoalsView);
+      Pack_Start(MainBox, GoalsScroll);
       AddButton("_Select goal", SelectGoal'Access);
       AddButton("Close [Escape]", CloseGoals'Access, GDK_Escape);
-      Pack_Start
-        (Gtk_Box
-           (Gtk.Bin.Get_Child(Gtk_Bin(Get_Object(Builder, "goalswindow")))),
-         ButtonBox, False);
-      Add_Accel_Group
-        (Gtk_Window(Get_Object(Builder, "goalswindow")), Accelerators);
+      Pack_Start(MainBox, ButtonBox, False);
+      GoalsWindow := Gtk_Window_New;
+      On_Delete_Event(Gtk_Widget(GoalsWindow), HideGoals'Access);
+      Set_Default_Size(GoalsWindow, -1, 600);
+      Set_Position(GoalsWindow, Win_Pos_Center);
+      Set_Title(GoalsWindow, "Steam Sky - Select Goal");
+      if not Set_Icon_From_File
+          (GoalsWindow,
+           To_String(DataDirectory) & Dir_Separator & "ui" & Dir_Separator &
+           "images" & Dir_Separator & "icon.png") then
+           raise Program_Error with "Can't set icon for the goals window";
+      end if;
+      Add(GoalsWindow, MainBox);
+      Add_Accel_Group(GoalsWindow, Accelerators);
    end CreateGoalsMenu;
 
 end Goals.UI;
