@@ -15,9 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Bin; use Gtk.Bin;
 with Gtk.Box; use Gtk.Box;
@@ -34,7 +32,6 @@ with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Glib; use Glib;
-with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
 with Gdk.Event; use Gdk.Event;
 with Gdk.Types; use Gdk.Types;
@@ -46,13 +43,6 @@ with Statistics.UI; use Statistics.UI;
 with Utils; use Utils;
 
 package body Goals.UI is
-
-   -- ****iv* Goals.UI/Builder
-   -- FUNCTION
-   -- Gtkada_Builder used for creating UI
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
 
    -- ****iv* Goals.UI/FromMainMenu
    -- FUNCTION
@@ -199,8 +189,8 @@ package body Goals.UI is
    end SelectGoalView;
 
    procedure CreateGoalsMenu is
-      Error: aliased GError;
-      GoalsList: Gtk_Tree_Store;
+      GoalsList: constant Gtk_Tree_Store :=
+        Gtk_Tree_Store_Newv((GType_String, GType_Uint));
       CategoryIter: Gtk_Tree_Iter;
       Accelerators: constant Gtk_Accel_Group := Gtk_Accel_Group_New;
       ButtonBox, MainBox: constant Gtk_Vbox := Gtk_Vbox_New;
@@ -242,21 +232,10 @@ package body Goals.UI is
          Pack_Start(ButtonBox, Button, False);
       end AddButton;
    begin
-      if Builder /= null then
+      if GoalsWindow /= null then
          return;
       end if;
-      Gtk_New(Builder);
-      if Add_From_File
-          (Builder,
-           To_String(DataDirectory) & "ui" & Dir_Separator & "goals.glade",
-           Error'Access) =
-        Guint(0) then
-         Put_Line("Error : " & Get_Message(Error));
-         return;
-      end if;
-      Do_Connect(Builder);
       Set_Policy(GoalsScroll, Policy_Never, Policy_Automatic);
-      GoalsList := Gtk_Tree_Store(Get_Object(Builder, "goalslist"));
       Append(GoalsList, CategoryIter, Null_Iter);
       Set(GoalsList, CategoryIter, 0, "Random");
       Set(GoalsList, CategoryIter, 1, 0);
@@ -292,7 +271,7 @@ package body Goals.UI is
           (GoalsWindow,
            To_String(DataDirectory) & Dir_Separator & "ui" & Dir_Separator &
            "images" & Dir_Separator & "icon.png") then
-           raise Program_Error with "Can't set icon for the goals window";
+         raise Program_Error with "Can't set icon for the goals window";
       end if;
       Add(GoalsWindow, MainBox);
       Add_Accel_Group(GoalsWindow, Accelerators);
