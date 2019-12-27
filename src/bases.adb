@@ -338,7 +338,7 @@ package body Bases is
          end loop;
          for J in Attributes_List.Iterate loop
             Attributes.Append
-              (New_Item => (GetRandom(3, (MaxSkillLevel / 2)), 0));
+              (New_Item => (GetRandom(3, (MaxSkillLevel / 3)), 0));
          end loop;
          for Skill of Skills loop
             Price := Price + Skill(2);
