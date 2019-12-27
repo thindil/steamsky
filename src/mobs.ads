@@ -106,4 +106,19 @@ package Mobs is
    procedure LoadMobs(Reader: Tree_Reader);
    -- ****
 
+   -- ****f* Mobs/GenerateMob
+   -- FUNCTION
+   -- Generate mob from selected prototype and faction.
+   -- PARAMETERS
+   -- MobIndex     - Prototype index from ProtoMobs_List from which the mob
+   --                will be generated
+   -- FactionIndex - Faction index from Factions_List to which the generated
+   --                mob will be belong
+   -- RESULT
+   -- Newly generated mob
+   -- SOURCE
+   function GenerateMob
+     (MobIndex, FactionIndex: Unbounded_String) return Member_Data;
+   -- ****
+
 end Mobs;
