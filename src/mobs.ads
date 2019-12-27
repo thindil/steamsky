@@ -21,6 +21,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Strings.Unbounded.Hash;
 with DOM.Readers; use DOM.Readers;
 with Crew; use Crew;
+with Factions; use Factions;
 with Game; use Game;
 
 -- ****h* Steamsky/Mobs
@@ -118,7 +119,11 @@ package Mobs is
    -- Newly generated mob
    -- SOURCE
    function GenerateMob
-     (MobIndex, FactionIndex: Unbounded_String) return Member_Data;
-   -- ****
+     (MobIndex, FactionIndex: Unbounded_String) return Member_Data with
+      Pre =>
+      (ProtoMobs_List.Contains(MobIndex) and
+       Factions_List.Contains(FactionIndex)),
+      Test_Case => ("Test_GenearateMob", Nominal);
+      -- ****
 
 end Mobs;
