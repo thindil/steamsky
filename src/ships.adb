@@ -269,13 +269,7 @@ package body Ships is
       end if;
       -- Set ship crew
       declare
-         Gender: Character;
-         MemberName: Unbounded_String;
-         TmpSkills: Skills_Container.Vector;
-         MemberFaction: Unbounded_String;
-         TmpAttributes: Attributes_Container.Vector;
-         TmpInventory: Inventory_Container.Vector;
-         Member: ProtoMobRecord;
+         Member: Member_Data;
       begin
          for ProtoMember of ProtoShip.Crew loop
             if ProtoMember.MaxAmount = 0 then
@@ -285,69 +279,8 @@ package body Ships is
                  GetRandom(ProtoMember.MinAmount, ProtoMember.MaxAmount);
             end if;
             for I in 1 .. Amount loop
-               if GetRandom(1, 100) < 99 then
-                  MemberFaction := ProtoShip.Owner;
-               else
-                  MemberFaction := GetRandomFaction;
-               end if;
-               if not Factions_List(MemberFaction).Flags.Contains
-                   (To_Unbounded_String("nogender")) then
-                  if GetRandom(1, 100) < 50 then
-                     Gender := 'M';
-                  else
-                     Gender := 'F';
-                  end if;
-               else
-                  Gender := 'M';
-               end if;
-               MemberName := GenerateMemberName(Gender, MemberFaction);
-               Member := ProtoMobs_List(ProtoMember.ProtoIndex);
-               for Skill of Member.Skills loop
-                  if Skill(3) = 0 then
-                     TmpSkills.Append(New_Item => Skill);
-                  else
-                     TmpSkills.Append
-                       (New_Item =>
-                          (Skill(1), GetRandom(Skill(2), Skill(3)), 0));
-                  end if;
-               end loop;
-               for Attribute of Member.Attributes loop
-                  if Attribute(2) = 0 then
-                     TmpAttributes.Append(New_Item => Attribute);
-                  else
-                     TmpAttributes.Append
-                       (New_Item =>
-                          (GetRandom(Attribute(1), Attribute(2)), 0));
-                  end if;
-               end loop;
-               for I in Member.Inventory.Iterate loop
-                  if Member.Inventory(I).MaxAmount > 0 then
-                     Amount :=
-                       GetRandom
-                         (Member.Inventory(I).MinAmount,
-                          Member.Inventory(I).MaxAmount);
-                  else
-                     Amount := Member.Inventory(I).MinAmount;
-                  end if;
-                  TmpInventory.Append
-                    (New_Item =>
-                       (ProtoIndex => Member.Inventory(I).ProtoIndex,
-                        Amount => Amount, Name => Null_Unbounded_String,
-                        Durability => 100, Price => 0));
-               end loop;
-               ShipCrew.Append
-                 (New_Item =>
-                    (Name => MemberName, Gender => Gender, Health => 100,
-                     Tired => 0, Skills => TmpSkills, Hunger => 0, Thirst => 0,
-                     Order => Member.Order, PreviousOrder => Rest,
-                     OrderTime => 15, Orders => Member.Priorities,
-                     Attributes => TmpAttributes, Inventory => TmpInventory,
-                     Equipment => Member.Equipment, Payment => (20, 0),
-                     ContractLength => -1, Morale => (50, 0), Loyalty => 100,
-                     HomeBase => 1, Faction => MemberFaction));
-               TmpSkills.Clear;
-               TmpAttributes.Clear;
-               TmpInventory.Clear;
+               Member := GenerateMob(ProtoMember.ProtoIndex, ProtoShip.Owner);
+               ShipCrew.Append(New_Item => Member);
                Modules_Loop :
                for Module of ShipModules loop
                   if Module.MType = CABIN then
@@ -356,7 +289,7 @@ package body Ships is
                            Module.Owner(I) := ShipCrew.Last_Index;
                            if Natural_Container.To_Index(I) = 1 then
                               Module.Name :=
-                                MemberName & To_Unbounded_String("'s Cabin");
+                                Member.Name & To_Unbounded_String("'s Cabin");
                            end if;
                            exit Modules_Loop;
                         end if;
