@@ -20,7 +20,6 @@ with DOM.Core; use DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
-with Factions; use Factions;
 with Items; use Items;
 with Log; use Log;
 with Utils; use Utils;
