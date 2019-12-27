@@ -18,24 +18,28 @@
 with Ada.Text_IO; use Ada.Text_IO;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
-with Gtk.Text_Buffer; use Gtk.Text_Buffer;
-with Gtk.Widget; use Gtk.Widget;
 with Gtk.Accel_Map; use Gtk.Accel_Map;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
+with Gtk.Enums; use Gtk.Enums;
+with Gtk.Expander; use Gtk.Expander;
+with Gtk.List_Store; use Gtk.List_Store;
+with Gtk.Main; use Gtk.Main;
+with Gtk.Paned; use Gtk.Paned;
+with Gtk.Scrolled_Window; use Gtk.Scrolled_Window;
+with Gtk.Text_Buffer; use Gtk.Text_Buffer;
 with Gtk.Text_Iter; use Gtk.Text_Iter;
 with Gtk.Text_Tag_Table; use Gtk.Text_Tag_Table;
 with Gtk.Text_Tag; use Gtk.Text_Tag;
-with Gtk.Window; use Gtk.Window;
-with Gtk.List_Store; use Gtk.List_Store;
+with Gtk.Text_View; use Gtk.Text_View;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Tree_View; use Gtk.Tree_View;
-with Gtk.Paned; use Gtk.Paned;
-with Gtk.Expander; use Gtk.Expander;
-with Gtk.Main; use Gtk.Main;
+with Gtk.Widget; use Gtk.Widget;
+with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
+with Gdk.Event; use Gdk.Event;
 with Game; use Game;
 with Items; use Items;
 with Factions; use Factions;
@@ -97,13 +101,15 @@ package body Help.UI is
    -- FUNCTION
    -- Disable mouse buttons on help text view
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI (unused)
+   -- Self  - Gtk_Widget in which the player clicked. Unused.
+   -- Event - Gdk_Event_Button with information about the event. Unused.
    -- RESULT
    -- This function always return True
    -- SOURCE
    function DisableMouse
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
-      pragma Unreferenced(Object);
+     (Self: access Gtk_Widget_Record'Class; Event: Gdk_Event_Button)
+      return Boolean is
+      pragma Unreferenced(Self, Event);
       -- ****
    begin
       return True;
@@ -150,6 +156,8 @@ package body Help.UI is
       Error: aliased GError;
       TopicsIter: Gtk_Tree_Iter;
       TopicsList: Gtk_List_Store;
+      HelpScroll: constant Gtk_Scrolled_Window := Gtk_Scrolled_Window_New;
+      HelpView: constant Gtk_Text_View := Gtk_Text_View_New;
    begin
       if Builder /= null then
          return;
@@ -171,11 +179,17 @@ package body Help.UI is
       end loop;
       Register_Handler(Builder, "Hide_Window", HideHelpWindow'Access);
       Register_Handler(Builder, "Select_Topic", SelectTopic'Access);
-      Register_Handler(Builder, "Disable_Mouse", DisableMouse'Access);
       Register_Handler(Builder, "Toggle_Topics", ToggleTopics'Access);
       Do_Connect(Builder);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "helpwindow")), CloseWindow'Access);
+      Set_Buffer(HelpView, Gtk_Text_Buffer(Get_Object(Builder, "helpbuffer")));
+      Set_Editable(HelpView, False);
+      Set_Cursor_Visible(HelpView, False);
+      Set_Wrap_Mode(HelpView, Wrap_Word_Char);
+      On_Button_Press_Event(HelpView, DisableMouse'Access);
+      Add(HelpScroll, HelpView);
+      Add2(Gtk_Paned(Get_Object(Builder, "helppaned")), HelpScroll);
    end CreateHelpUI;
 
    procedure ShowHelpUI(HelpIndex: Unbounded_String) is
@@ -379,7 +393,7 @@ package body Help.UI is
       Resize
         (Gtk_Window(Get_Object(Builder, "helpwindow")),
          Gint(GameSettings.WindowWidth), Gint(GameSettings.WindowHeight));
-      while Events_Pending loop
+      while Gtk.Main.Events_Pending loop
          if Main_Iteration_Do(False) then
             return;
          end if;
