@@ -20,8 +20,10 @@ with DOM.Core; use DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
-with Log; use Log;
+with Factions; use Factions;
 with Items; use Items;
+with Log; use Log;
+with Utils; use Utils;
 
 package body Mobs is
 
@@ -348,5 +350,73 @@ package body Mobs is
          end if;
       end loop;
    end LoadMobs;
+
+   function GenerateMob
+     (MobIndex, FactionIndex: Unbounded_String) return Member_Data is
+      Mob: Member_Data;
+      ProtoMob: constant ProtoMobRecord := ProtoMobs_List(MobIndex);
+      Amount: Natural;
+   begin
+      if GetRandom(1, 100) < 99 then
+         Mob.Faction := FactionIndex;
+      else
+         Mob.Faction := GetRandomFaction;
+      end if;
+      if not Factions_List(Mob.Faction).Flags.Contains
+          (To_Unbounded_String("nogender")) then
+         if GetRandom(1, 100) < 50 then
+            Mob.Gender := 'M';
+         else
+            Mob.Gender := 'F';
+         end if;
+      else
+         Mob.Gender := 'M';
+      end if;
+      Mob.Name := GenerateMemberName(Mob.Gender, Mob.Faction);
+      for Skill of ProtoMob.Skills loop
+         if Skill(3) = 0 then
+            Mob.Skills.Append(New_Item => Skill);
+         else
+            Mob.Skills.Append
+              (New_Item => (Skill(1), GetRandom(Skill(2), Skill(3)), 0));
+         end if;
+      end loop;
+      for Attribute of ProtoMob.Attributes loop
+         if Attribute(2) = 0 then
+            Mob.Attributes.Append(New_Item => Attribute);
+         else
+            Mob.Attributes.Append
+              (New_Item => (GetRandom(Attribute(1), Attribute(2)), 0));
+         end if;
+      end loop;
+      for I in ProtoMob.Inventory.Iterate loop
+         if ProtoMob.Inventory(I).MaxAmount > 0 then
+            Amount :=
+              GetRandom
+                (ProtoMob.Inventory(I).MinAmount,
+                 ProtoMob.Inventory(I).MaxAmount);
+         else
+            Amount := ProtoMob.Inventory(I).MinAmount;
+         end if;
+         Mob.Inventory.Append
+           (New_Item =>
+              (ProtoIndex => ProtoMob.Inventory(I).ProtoIndex,
+               Amount => Amount, Name => Null_Unbounded_String,
+               Durability => 100, Price => 0));
+      end loop;
+      Mob.Order := ProtoMob.Order;
+      Mob.PreviousOrder := Rest;
+      Mob.Health := 100;
+      Mob.Tired := 0;
+      Mob.Hunger := 0;
+      Mob.Thirst := 0;
+      Mob.Equipment := ProtoMob.Equipment;
+      Mob.Payment := (20, 0);
+      Mob.ContractLength := -1;
+      Mob.Morale := (50, 0);
+      Mob.Loyalty := 100;
+      Mob.HomeBase := 1;
+      return Mob;
+   end GenerateMob;
 
 end Mobs;
