@@ -24,40 +24,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
   <!-- interface-license-type gplv3 -->
   <!-- interface-name Steam Sky -->
   <!-- interface-copyright 2018-2019 Bartek thindil Jasicki -->
-  <object class="GtkTextTagTable" id="helptagtable">
-    <child type="tag">
-      <object class="GtkTextTag" id="underline">
-        <property name="name">underline</property>
-        <property name="font">Normal</property>
-        <property name="underline">single</property>
-      </object>
-    </child>
-    <child type="tag">
-      <object class="GtkTextTag" id="italic">
-        <property name="name">italic</property>
-        <property name="font">Normal</property>
-        <property name="style">italic</property>
-      </object>
-    </child>
-    <child type="tag">
-      <object class="GtkTextTag" id="special">
-        <property name="name">special</property>
-        <property name="foreground">yellow</property>
-        <property name="font">Normal</property>
-        <property name="weight">700</property>
-      </object>
-    </child>
-    <child type="tag">
-      <object class="GtkTextTag" id="bold">
-        <property name="name">bold</property>
-        <property name="font">Normal</property>
-        <property name="weight">700</property>
-      </object>
-    </child>
-  </object>
-  <object class="GtkTextBuffer" id="helpbuffer">
-    <property name="tag_table">helptagtable</property>
-  </object>
   <object class="GtkListStore" id="topicslist">
     <columns>
       <!-- column-name topic -->
