@@ -1,9 +1,10 @@
 version: 2.0
 - command:
-   name: runtests
+   name: tests
    execute:
+      - gprbuild -P tests/driver/test_driver.gpr
       - others/tests.sh $1
-   description: Run Steam Sky unit tests
+   description: Build and run Steam Sky unit tests X times (required argument how many times)
    flags:
       - unixonly
 - command:
@@ -35,13 +36,6 @@ version: 2.0
    execute:
       - gnattest -P steamsky.gpr
    description: Regenerate unit tests
-- command:
-   name: tests
-   execute:
-      - gprbuild -P tests/driver/test_driver.gpr
-   description: Build Steam Sky unit tests
-   flags:
-      - unixonly
 - command:
    name: docs
    execute:
