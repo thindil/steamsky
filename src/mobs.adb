@@ -403,6 +403,7 @@ package body Mobs is
                Amount => Amount, Name => Null_Unbounded_String,
                Durability => 100, Price => 0));
       end loop;
+      Mob.Orders := ProtoMob.Priorities;
       Mob.Order := ProtoMob.Order;
       Mob.PreviousOrder := Rest;
       Mob.Health := 100;
