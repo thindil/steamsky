@@ -15,6 +15,7 @@ with System.Assertions;
 --
 --  end read only
 
+with Config; use Config;
 with Ships; use Ships;
 
 --  begin read only
@@ -289,15 +290,26 @@ package body Crew.Test_Data.Tests is
 
    begin
 
+      GameSettings.ShowNumbers := False;
       Assert
         (GetSkillLevelName(9) = "Beginner",
-         "Failed to get skill level name for level 9.");
+         "Failed to get skill level name for level 9");
       Assert
         (GetSkillLevelName(54) = "Respected",
          "Failed to get skill level name for level 54");
       Assert
         (GetSkillLevelName(92) = "Legendary",
          "Failed to get skill level name for level 92");
+      GameSettings.ShowNumbers := True;
+      Assert
+        (GetSkillLevelName(9) = " 9",
+         "Failed to get skill level name for level 9 (numeric)");
+      Assert
+        (GetSkillLevelName(54) = " 54",
+         "Failed to get skill level name for level 54 (numeric)");
+      Assert
+        (GetSkillLevelName(92) = " 92",
+         "Failed to get skill level name for level 92 (numeric)");
 
 --  begin read only
    end Test_GetSkillLevelName_test_getskilllevelname;
@@ -353,6 +365,7 @@ package body Crew.Test_Data.Tests is
 
    begin
 
+      GameSettings.ShowNumbers := False;
       Assert
         (GetAttributeLevelName(3) = "Very low",
          "Failed to get attribute level name for level 3");
@@ -362,6 +375,16 @@ package body Crew.Test_Data.Tests is
       Assert
         (GetAttributeLevelName(48) = "Very high",
          "Failed to get attribute level name for level 48");
+      GameSettings.ShowNumbers := True;
+      Assert
+        (GetAttributeLevelName(3) = " 3",
+         "Failed to get attribute level name for level 3 (numeric)");
+      Assert
+        (GetAttributeLevelName(12) = " 12",
+         "Failed to get attribute level name for level 12 (numeric)");
+      Assert
+        (GetAttributeLevelName(48) = " 48",
+         "Failed to get attribute level name for level 48 (numeric)");
 
 --  begin read only
    end Test_GetAttributeLevelName_test_getattributelevelname;
