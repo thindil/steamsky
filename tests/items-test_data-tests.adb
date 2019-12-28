@@ -15,6 +15,7 @@ with System.Assertions;
 --
 --  end read only
 
+with Config; use Config;
 with Ships; use Ships;
 
 --  begin read only
@@ -321,11 +322,18 @@ package body Items.Test_Data.Tests is
 
    begin
 
+      GameSettings.ShowNumbers := False;
       Assert
         (GetItemChanceToDamage(3) = "Small", "Wrong value returned for 3.");
       Assert
         (GetItemChanceToDamage(30) = "Very high",
          "Wrong value returned for 30.");
+      GameSettings.ShowNumbers := True;
+      Assert
+        (GetItemChanceToDamage(3) = " 3%", "Wrong value returned for 3 (numeric).");
+      Assert
+        (GetItemChanceToDamage(30) = " 30%",
+         "Wrong value returned for 30 (numeric).");
 
 --  begin read only
    end Test_GetItemChanceToDamage_test_getitemchancetodamage;
