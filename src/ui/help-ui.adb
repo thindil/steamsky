@@ -39,7 +39,9 @@ with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
+with Glib.Properties; use Glib.Properties;
 with Gdk.Event; use Gdk.Event;
+with Pango.Enums; use Pango.Enums;
 with Game; use Game;
 with Items; use Items;
 with Factions; use Factions;
@@ -158,6 +160,8 @@ package body Help.UI is
       TopicsList: Gtk_List_Store;
       HelpScroll: constant Gtk_Scrolled_Window := Gtk_Scrolled_Window_New;
       HelpView: constant Gtk_Text_View := Gtk_Text_View_New;
+      Tags: constant Gtk_Text_Tag_Table := Gtk_Text_Tag_Table_New;
+      Tag: Gtk_Text_Tag;
    begin
       if Builder /= null then
          return;
@@ -183,10 +187,24 @@ package body Help.UI is
       Do_Connect(Builder);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "helpwindow")), CloseWindow'Access);
-      Set_Buffer(HelpView, Gtk_Text_Buffer(Get_Object(Builder, "helpbuffer")));
+      Tag := Gtk_Text_Tag_New("underline");
+      Set_Property(Tag, Underline_Property, Pango_Underline_Single);
+      Add(Tags, Tag);
+      Tag := Gtk_Text_Tag_New("italic");
+      Set_Property(Tag, Gtk.Text_Tag.Style_Property, Pango_Style_Italic);
+      Add(Tags, Tag);
+      Tag := Gtk_Text_Tag_New("bold");
+      Set_Property(Tag, Weight_Property, Pango_Weight_Bold);
+      Add(Tags, Tag);
+      Tag := Gtk_Text_Tag_New("special");
+      Set_Property(Tag, Weight_Property, Pango_Weight_Bold);
+      Set_Property(GObject(Tag), Foreground_Property, "yellow");
+      Add(Tags, Tag);
+      Set_Buffer(HelpView, Gtk_Text_Buffer_New(Tags));
       Set_Editable(HelpView, False);
       Set_Cursor_Visible(HelpView, False);
       Set_Wrap_Mode(HelpView, Wrap_Word_Char);
+      Set_Property(HelpView, Gtk.Widget.Name_Property, "normalfont");
       On_Button_Press_Event(HelpView, DisableMouse'Access);
       Add(HelpScroll, HelpView);
       Add2(Gtk_Paned(Get_Object(Builder, "helppaned")), HelpScroll);
@@ -264,7 +282,12 @@ package body Help.UI is
          To_Unbounded_String("<skymapwindow>/zoomin"),
          To_Unbounded_String("<skymapwindow>/zoomout"));
       HelpBuffer: constant Gtk_Text_Buffer :=
-        Gtk_Text_Buffer(Get_Object(Builder, "helpbuffer"));
+        Get_Buffer
+          (Gtk_Text_View
+             (Get_Child
+                (Gtk_Scrolled_Window
+                   (Get_Child2
+                      (Gtk_Paned(Get_Object(Builder, "helppaned")))))));
       Iter: Gtk_Text_Iter;
       Tags: constant Gtk_Text_Tag_Table := Get_Tag_Table(HelpBuffer);
       SpecialText: constant Gtk_Text_Tag := Lookup(Tags, "special");
