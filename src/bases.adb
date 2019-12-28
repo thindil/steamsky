@@ -227,8 +227,8 @@ package body Bases is
             end if;
             loop
                ItemIndex := GetRandom(NewIndexes.First_Index, MaxIndex);
-               exit when Items_List(ItemsIndexes(ItemIndex)).Value(3) =
-                 Factions_List(RecruitFaction).WeaponSkill;
+               exit when Items_List(NewIndexes(ItemIndex)).Value(3) =
+                  Factions_List(RecruitFaction).WeaponSkill;
             end loop;
          end if;
          Inventory.Append(New_Item => NewIndexes(ItemIndex));
