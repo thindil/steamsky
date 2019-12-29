@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.4 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.5 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -27,28 +27,17 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo273">Goals.UI/Builder</a></li>
-<li>2. <a href="#robo274">Goals.UI/FromMainMenu</a></li>
+<li>1. <a href="#robo273">Goals.UI/FromMainMenu</a></li>
+<li>2. <a href="#robo274">Goals.UI/GoalsWindow</a></li>
 <li>3. <a href="#robo556">Goals.UI/CloseGoals</a></li>
 <li>4. <a href="#robo558">Goals.UI/GoalSelected</a></li>
 <li>5. <a href="#robo559">Goals.UI/HideGoals</a></li>
 <li>6. <a href="#robo560">Goals.UI/SelectGoal</a></li>
+<li>7. <a href="#robo561">Goals.UI/SelectGoalView</a></li>
 </ul>
 <hr />
-<a name="Goals2eUI2fBuilder"></a>
-<a name="robo273"></a><h2>Goals.UI/Builder [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./goals-ui_ads.html#robo30">Goals.UI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Gtkada_Builder used for creating UI
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <strong>Builder</strong><span class="sign">:</span> Gtkada_Builder<span class="sign">;</span>
-</pre>
-
-<hr />
 <a name="Goals2eUI2fFromMainMenu"></a>
-<a name="robo274"></a><h2>Goals.UI/FromMainMenu [ Variables ]</h2>
+<a name="robo273"></a><h2>Goals.UI/FromMainMenu [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./goals-ui_ads.html#robo30">Goals.UI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -56,6 +45,18 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <strong>FromMainMenu</strong><span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Goals2eUI2fGoalsWindow"></a>
+<a name="robo274"></a><h2>Goals.UI/GoalsWindow [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./goals-ui_ads.html#robo30">Goals.UI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Main Gtk_Window for selecting a goal.
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>GoalsWindow</strong><span class="sign">:</span> Gtk_Window<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -67,10 +68,11 @@
 <pre> Hide goals UI
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>CloseGoals</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">procedure</span> <strong>CloseGoals</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
+</span>     <span class="keyword"> pragma </span>Unreferenced<span class="sign">(</span>Self<span class="sign"><span class="sign">)</span>;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
+<pre> Self - Gtk_Button which was clicked. Unused
 </pre>
 
 <hr />
@@ -82,10 +84,10 @@
 <pre> Enable or disable "Select goal" button
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>GoalSelected</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
+<pre class="source">   <span class="keyword">procedure</span> <strong>GoalSelected</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Tree_View_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
 </span></pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
+<pre> Self - Gtk_Tree_View with goals
 </pre>
 
 <hr />
@@ -98,10 +100,12 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> <strong>HideGoals</strong>
-     <span class="sign">(</span>User_Data<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> return </span>Boolean<span class="keyword"> is
-</span></pre>
+     <span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Widget_Record<span class="keyword">'Class</span><span class="sign">;</span> Event<span class="sign">:</span> Gdk_Event<span class="sign">)</span><span class="keyword"> return </span>Boolean<span class="keyword"> is
+</span>     <span class="keyword"> pragma </span>Unreferenced<span class="sign">(</span>Event<span class="sign"><span class="sign">)</span>;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
+<pre> Self  - Gtk_Widget which triggered this event (<a href="#robo274">GoalsWindow</a>)
+ Event - Gdk_Event structure with data about the event. Unused.
 </pre>
 
 <hr />
@@ -113,15 +117,37 @@
 <pre> Set currently selected goal as a current game goal
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>SelectGoal</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">procedure</span> <strong>SelectGoal</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
+</span>     <span class="keyword"> pragma </span>Unreferenced<span class="sign">(</span>Self<span class="sign"><span class="sign">)</span>;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
+<pre> Self - Gtk_Button which was clicked. Unused
+</pre>
+
+<hr />
+<a name="Goals2eUI2fSelectGoalView"></a>
+<a name="robo561"></a><h2>Goals.UI/SelectGoalView [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./goals-ui_ads.html#robo30">Goals.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Set currently selected goal as a current game goal after selecting it
+ in <a href="../goals_ads.html#robo29">Goals</a> Tree_View.
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>SelectGoalView</strong>
+     <span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Tree_View_Record<span class="keyword">'Class</span><span class="sign">;</span> Path<span class="sign">:</span> Gtk_Tree_Path<span class="sign">;</span>
+      Column<span class="sign">:</span> not null access Gtk_Tree_View_Column_Record'</span>Class<span class="sign">)</span> <span class="keyword">is</span>
+      <span class="keyword">pragma</span> Unreferenced<span class="sign">(</span>Self<span class="sign">,</span> Path<span class="sign">,</span> Column<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Self   - Gtk_Tree_View with list of goals. Unused.
+ Path   - Gtk_Tree_Path to row which was clicked. Unused.
+ Column - Gtk_Tree_View_Column which was clicked. Unused.
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/goals-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Dec 01 2019 06:46:00
+<p>Generated from ./src/ui/goals-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Dec 29 2019 06:26:20
 </p>
 </div> <!-- footer -->
 </body>

@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.4 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.5 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -134,6 +134,7 @@
       <a href="./careers_ads.html#robo12">Careers</a><span class="sign">:</span> <a href="./careers_ads.html#robo79">Careers_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
       BaseIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
       <a href="./basestypes_ads.html#robo11">BasesTypes</a><span class="sign">:</span> <a href="#robo99">BaseType_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
+      WeaponSkill<span class="sign">:</span> Positive<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -162,6 +163,8 @@
  <a href="./basestypes_ads.html#robo11">BasesTypes</a>       - List of available base types (with chances to spawn)
                     for this faction. If it is empty then all bases types
                     are available for this faction
+ WeaponSkill      - Vector index of skill used by prefered weapon of
+                    members of this faction
 </pre>
 
 <hr />
@@ -212,7 +215,7 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> <strong>RelationsRecord</strong> <span class="keyword">is</span> <span class="keyword">record</span>
-      Reputation<span class="sign">:</span> <a href="#robo107">Reputation_Array</a><span class="sign">;</span>
+      Reputation<span class="sign">:</span> <a href="./bases_ads.html#robo73">Reputation_Array</a><span class="sign">;</span>
       Friendly<span class="sign">:</span> Boolean<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
@@ -324,7 +327,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/factions.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Dec 01 2019 06:46:00
+<p>Generated from ./src/factions.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Dec 29 2019 06:26:20
 </p>
 </div> <!-- footer -->
 </body>
