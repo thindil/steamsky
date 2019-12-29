@@ -57,7 +57,8 @@ file is):
 
 * From console: type `gprbuild -P test_driver.gpr`
 
-Or if you have [Bob](https://github.com/thindil/bob) installed, type `bob tests`.
+Or if you have [Bob](https://github.com/thindil/bob) installed, type `bob tests 1`.
+It will also run tests once.
 
 ## Generating code documentation
 
