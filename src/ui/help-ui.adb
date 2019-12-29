@@ -20,6 +20,8 @@ with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Accel_Map; use Gtk.Accel_Map;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
+with Gtk.Cell_Area_Box; use Gtk.Cell_Area_Box;
+with Gtk.Cell_Renderer_Text; use Gtk.Cell_Renderer_Text;
 with Gtk.Enums; use Gtk.Enums;
 with Gtk.Expander; use Gtk.Expander;
 with Gtk.List_Store; use Gtk.List_Store;
@@ -34,6 +36,7 @@ with Gtk.Text_View; use Gtk.Text_View;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Tree_View; use Gtk.Tree_View;
+with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
@@ -68,9 +71,9 @@ package body Help.UI is
    -- FUNCTION
    -- Show selected from the list help topic
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Tree_View with topics list clicked
    -- SOURCE
-   procedure SelectTopic(Object: access Gtkada_Builder_Record'Class) is
+   procedure SelectTopic(Self: access Gtk_Tree_View_Record'Class) is
       -- ****
       TopicName: Unbounded_String;
    begin
@@ -82,9 +85,7 @@ package body Help.UI is
          TopicModel: Gtk_Tree_Model;
       begin
          Get_Selected
-           (Gtk.Tree_View.Get_Selection
-              (Gtk_Tree_View(Get_Object(Object, "treetopics"))),
-            TopicModel, TopicIter);
+           (Gtk.Tree_View.Get_Selection(Self), TopicModel, TopicIter);
          if TopicIter = Null_Iter then
             return;
          end if;
@@ -162,6 +163,10 @@ package body Help.UI is
       HelpView: constant Gtk_Text_View := Gtk_Text_View_New;
       Tags: constant Gtk_Text_Tag_Table := Gtk_Text_Tag_Table_New;
       Tag: Gtk_Text_Tag;
+      TopicsView: Gtk_Tree_View;
+      Column: Gtk_Tree_View_Column;
+      Area: constant Gtk_Cell_Area_Box := Gtk_Cell_Area_Box_New;
+      Renderer: constant Gtk_Cell_Renderer_Text := Gtk_Cell_Renderer_Text_New;
    begin
       if Builder /= null then
          return;
@@ -181,24 +186,36 @@ package body Help.UI is
          Append(TopicsList, TopicsIter);
          Set(TopicsList, TopicsIter, 0, To_String(Help_Container.Key(I)));
       end loop;
+      TopicsView := Gtk_Tree_View_New_With_Model(+(TopicsList));
+      Pack_Start(Area, Renderer, True);
+      Add_Attribute(Area, Renderer, "text", 0);
+      Column := Gtk_Tree_View_Column_New_With_Area(Area);
+      if Append_Column(TopicsView, Column) /= 1 then
+         raise Program_Error with "Can't add column to help topics view.";
+      end if;
+      Set_Enable_Search(TopicsView, False);
+      Set_Headers_Visible(TopicsView, False);
+      On_Cursor_Changed(TopicsView, SelectTopic'Access);
+      Set_Property(TopicsView, Gtk.Widget.Name_Property, "normalfont");
+      Add(Gtk_Expander(Get_Object(Builder, "helpexpander")), TopicsView);
       Register_Handler(Builder, "Hide_Window", HideHelpWindow'Access);
-      Register_Handler(Builder, "Select_Topic", SelectTopic'Access);
       Register_Handler(Builder, "Toggle_Topics", ToggleTopics'Access);
       Do_Connect(Builder);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "helpwindow")), CloseWindow'Access);
       Tag := Gtk_Text_Tag_New("underline");
-      Set_Property(Tag, Underline_Property, Pango_Underline_Single);
+      Set_Property
+        (Tag, Gtk.Text_Tag.Underline_Property, Pango_Underline_Single);
       Add(Tags, Tag);
       Tag := Gtk_Text_Tag_New("italic");
       Set_Property(Tag, Gtk.Text_Tag.Style_Property, Pango_Style_Italic);
       Add(Tags, Tag);
       Tag := Gtk_Text_Tag_New("bold");
-      Set_Property(Tag, Weight_Property, Pango_Weight_Bold);
+      Set_Property(Tag, Gtk.Text_Tag.Weight_Property, Pango_Weight_Bold);
       Add(Tags, Tag);
       Tag := Gtk_Text_Tag_New("special");
-      Set_Property(Tag, Weight_Property, Pango_Weight_Bold);
-      Set_Property(GObject(Tag), Foreground_Property, "yellow");
+      Set_Property(Tag, Gtk.Text_Tag.Weight_Property, Pango_Weight_Bold);
+      Set_Property(GObject(Tag), Gtk.Text_Tag.Foreground_Property, "yellow");
       Add(Tags, Tag);
       Set_Buffer(HelpView, Gtk_Text_Buffer_New(Tags));
       Set_Editable(HelpView, False);
@@ -434,7 +451,8 @@ package body Help.UI is
             Gint(GameSettings.TopicsPosition));
       end if;
       Set_Cursor
-        (Gtk_Tree_View(Get_Object(Builder, "treetopics")),
+        (Gtk_Tree_View
+           (Get_Child(Gtk_Expander(Get_Object(Builder, "helpexpander")))),
          Gtk_Tree_Path_New_From_String(Natural'Image(TopicIndex)), null,
          False);
       Setting := False;
