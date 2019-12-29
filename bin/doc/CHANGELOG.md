@@ -38,6 +38,7 @@ All notable changes to this project will be documented in this file.
 - Recruits in bases have weapons of own factions
 - Recruits equipment quality depends on player reputation in base
 - Reduced attributes of recruits in bases
+- Updated README.md
 
 ### Fixed
 - Info about setting difficulty level of upgrades costs
