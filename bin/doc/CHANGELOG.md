@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [4.5] - 2019-12-29
 
 ### Added
 - New items: huge book of blacksmithing, medium book of woodworking, large
