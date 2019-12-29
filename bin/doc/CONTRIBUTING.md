@@ -172,7 +172,7 @@ First, you must build all tests. How to do it, is described in main
 
 or, if you prefer (and you have installed), use [Bob](https://github.com/thindil/bob):
 
-`bob runtests [amount]`
+`bob tests [amount]`
 
 Where `[amount]` is how many times the tests should be run. It is recommended
 to run them few times in a row to catch all problems. Tests will stops if there
