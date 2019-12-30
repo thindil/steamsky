@@ -141,7 +141,10 @@ package Mobs is
    function GetRandomItem
      (ItemsIndexes: UnboundedString_Container.Vector;
       EquipIndex, HighestLevel, WeaponSkillLevel: Positive;
-      FactionIndex: Unbounded_String) return Unbounded_String;
+      FactionIndex: Unbounded_String) return Unbounded_String with
+      Pre =>
+      (EquipIndex < 8 and HighestLevel < 101 and WeaponSkillLevel < 101 and
+       Factions_List.Contains(FactionIndex));
       -- ****
 
 end Mobs;
