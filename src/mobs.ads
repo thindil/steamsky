@@ -126,4 +126,22 @@ package Mobs is
       Test_Case => ("Test_GenearateMob", Nominal);
       -- ****
 
+      -- ****f* Mobs/GetRandomItem
+      -- FUNCTION
+      -- Get random item from the list based on mob skills and faction
+      -- PARAMETERS
+      -- ItemsIndexes     - List of items from which item will be get
+      -- EquipIndex       - Index of equipment for selected item: 1 - weapon,
+      --                    2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 -
+      --                    legs, 7 - tool
+      -- HighestLevel     - Highest skill level for selected mob
+      -- WeaponSkillLevel - Weapon skill level for selected mob
+      -- FactionIndex     - Faction index to which selected mob belongs
+      -- SOURCE
+   function GetRandomItem
+     (ItemsIndexes: UnboundedString_Container.Vector;
+      EquipIndex, HighestLevel, WeaponSkillLevel: Positive;
+      FactionIndex: Unbounded_String) return Unbounded_String;
+      -- ****
+
 end Mobs;

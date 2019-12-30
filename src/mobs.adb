@@ -419,4 +419,79 @@ package body Mobs is
       return Mob;
    end GenerateMob;
 
+   function GetRandomItem
+     (ItemsIndexes: UnboundedString_Container.Vector;
+      EquipIndex, HighestLevel, WeaponSkillLevel: Positive;
+      FactionIndex: Unbounded_String) return Unbounded_String is
+      ItemIndex, MaxIndex: Positive;
+      NewIndexes: UnboundedString_Container.Vector;
+      Added: Boolean;
+   begin
+      if EquipIndex > 1 then
+         for I in ItemsIndexes.First_Index .. ItemsIndexes.Last_Index loop
+            Added := False;
+            for J in NewIndexes.First_Index .. NewIndexes.Last_Index loop
+               if Items_List(ItemsIndexes(I)).Price <
+                 Items_List(NewIndexes(J)).Price then
+                  NewIndexes.Insert(J, ItemsIndexes(I));
+                  Added := True;
+                  exit;
+               end if;
+            end loop;
+            if not Added then
+               NewIndexes.Append(ItemsIndexes(I));
+            end if;
+         end loop;
+         MaxIndex :=
+           Positive
+             ((Float(NewIndexes.Last_Index) * (Float(HighestLevel) / 100.0)) +
+              1.0);
+         if MaxIndex > NewIndexes.Last_Index then
+            MaxIndex := NewIndexes.Last_Index;
+         end if;
+         ItemIndex := GetRandom(NewIndexes.First_Index, MaxIndex);
+      else
+         for I in ItemsIndexes.First_Index .. ItemsIndexes.Last_Index loop
+            Added := False;
+            for J in NewIndexes.First_Index .. NewIndexes.Last_Index loop
+               if Items_List(ItemsIndexes(I)).Price <
+                 Items_List(NewIndexes(J)).Price and
+                 Items_List(ItemsIndexes(I)).Value(3) =
+                   Factions_List(FactionIndex).WeaponSkill then
+                  NewIndexes.Insert(J, ItemsIndexes(I));
+                  Added := True;
+                  exit;
+               end if;
+            end loop;
+            if not Added and
+              Items_List(ItemsIndexes(I)).Value(3) =
+                Factions_List(FactionIndex).WeaponSkill then
+               NewIndexes.Append(ItemsIndexes(I));
+            end if;
+         end loop;
+         if NewIndexes.Length = 0 then
+            return Null_Unbounded_String;
+         end if;
+         MaxIndex :=
+           Positive
+             ((Float(NewIndexes.Last_Index) *
+               (Float(WeaponSkillLevel) / 100.0)) +
+              1.0);
+         if MaxIndex > NewIndexes.Last_Index then
+            MaxIndex := NewIndexes.Last_Index;
+         end if;
+         loop
+            ItemIndex := GetRandom(NewIndexes.First_Index, MaxIndex);
+            exit when Items_List(NewIndexes(ItemIndex)).Value(3) =
+              Factions_List(FactionIndex).WeaponSkill;
+         end loop;
+      end if;
+      for Index of ItemsIndexes loop
+         if Index = NewIndexes(ItemIndex) then
+            return Index;
+         end if;
+      end loop;
+      return Null_Unbounded_String;
+   end GetRandomItem;
+
 end Mobs;
