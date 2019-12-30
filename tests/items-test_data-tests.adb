@@ -330,7 +330,8 @@ package body Items.Test_Data.Tests is
          "Wrong value returned for 30.");
       GameSettings.ShowNumbers := True;
       Assert
-        (GetItemChanceToDamage(3) = " 3%", "Wrong value returned for 3 (numeric).");
+        (GetItemChanceToDamage(3) = " 3%",
+         "Wrong value returned for 3 (numeric).");
       Assert
         (GetItemChanceToDamage(30) = " 30%",
          "Wrong value returned for 30 (numeric).");
