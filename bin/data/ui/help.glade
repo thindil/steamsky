@@ -43,40 +43,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         <property name="position">125</property>
         <property name="position_set">True</property>
         <child>
-          <object class="GtkScrolledWindow">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="shadow_type">in</property>
-            <child>
-              <object class="GtkViewport">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <object class="GtkExpander" id="helpexpander">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="expanded">True</property>
-                    <signal name="activate" handler="Toggle_Topics" swapped="no"/>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child type="label">
-                      <object class="GtkLabel">
-                        <property name="name">normalfont</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Table of content:</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="resize">True</property>
-            <property name="shrink">True</property>
-          </packing>
+          <placeholder/>
         </child>
         <child>
           <placeholder/>
