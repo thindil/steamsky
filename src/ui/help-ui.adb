@@ -67,6 +67,13 @@ package body Help.UI is
    Setting: Boolean := False;
    -- ****
 
+   -- ****iv* Help.UI/TopicsView
+   -- FUNCTION
+   -- Gtk_Tree_View with list of topics
+   -- SOURCE
+   TopicsView: Gtk_Tree_View;
+   -- ****
+
    -- ****if* Help.UI/SelectTopic
    -- FUNCTION
    -- Show selected from the list help topic
@@ -138,13 +145,12 @@ package body Help.UI is
    -- FUNCTION
    -- Hide or show help topics list
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Expander with topics list
    -- SOURCE
-   procedure ToggleTopics(Object: access Gtkada_Builder_Record'Class) is
+   procedure ToggleTopics(Self: access Gtk_Expander_Record'Class) is
    -- ****
    begin
-      if not Get_Expanded(Gtk_Expander(Get_Object(Object, "helpexpander"))) and
-        GameSettings.TopicsPosition > 0 then
+      if not Get_Expanded(Self) and GameSettings.TopicsPosition > 0 then
          Set_Position
            (Gtk_Paned(Get_Object(Builder, "helppaned")),
             Gint(GameSettings.TopicsPosition));
@@ -159,14 +165,15 @@ package body Help.UI is
       Error: aliased GError;
       TopicsIter: Gtk_Tree_Iter;
       TopicsList: Gtk_List_Store;
-      HelpScroll: constant Gtk_Scrolled_Window := Gtk_Scrolled_Window_New;
+      Scroll: Gtk_Scrolled_Window := Gtk_Scrolled_Window_New;
       HelpView: constant Gtk_Text_View := Gtk_Text_View_New;
       Tags: constant Gtk_Text_Tag_Table := Gtk_Text_Tag_Table_New;
       Tag: Gtk_Text_Tag;
-      TopicsView: Gtk_Tree_View;
       Column: Gtk_Tree_View_Column;
       Area: constant Gtk_Cell_Area_Box := Gtk_Cell_Area_Box_New;
       Renderer: constant Gtk_Cell_Renderer_Text := Gtk_Cell_Renderer_Text_New;
+      HelpExpander: constant Gtk_Expander :=
+        Gtk_Expander_New("Table of contents:");
    begin
       if Builder /= null then
          return;
@@ -180,6 +187,11 @@ package body Help.UI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
+      Set_Expanded(HelpExpander, True);
+      Set_Property
+        (Get_Label_Widget(HelpExpander), Gtk.Widget.Name_Property,
+         "normalfont");
+      On_Activate(HelpExpander, ToggleTopics'Access);
       TopicsList := Gtk_List_Store(Get_Object(Builder, "topicslist"));
       Clear(TopicsList);
       for I in Help_List.Iterate loop
@@ -197,9 +209,10 @@ package body Help.UI is
       Set_Headers_Visible(TopicsView, False);
       On_Cursor_Changed(TopicsView, SelectTopic'Access);
       Set_Property(TopicsView, Gtk.Widget.Name_Property, "normalfont");
-      Add(Gtk_Expander(Get_Object(Builder, "helpexpander")), TopicsView);
+      Add(HelpExpander, TopicsView);
+      Add(Scroll, HelpExpander);
+      Add1(Gtk_Paned(Get_Object(Builder, "helppaned")), Scroll);
       Register_Handler(Builder, "Hide_Window", HideHelpWindow'Access);
-      Register_Handler(Builder, "Toggle_Topics", ToggleTopics'Access);
       Do_Connect(Builder);
       On_Key_Release_Event
         (Gtk_Widget(Get_Object(Builder, "helpwindow")), CloseWindow'Access);
@@ -223,8 +236,9 @@ package body Help.UI is
       Set_Wrap_Mode(HelpView, Wrap_Word_Char);
       Set_Property(HelpView, Gtk.Widget.Name_Property, "normalfont");
       On_Button_Press_Event(HelpView, DisableMouse'Access);
-      Add(HelpScroll, HelpView);
-      Add2(Gtk_Paned(Get_Object(Builder, "helppaned")), HelpScroll);
+      Scroll := Gtk_Scrolled_Window_New;
+      Add(Scroll, HelpView);
+      Add2(Gtk_Paned(Get_Object(Builder, "helppaned")), Scroll);
    end CreateHelpUI;
 
    procedure ShowHelpUI(HelpIndex: Unbounded_String) is
@@ -451,10 +465,8 @@ package body Help.UI is
             Gint(GameSettings.TopicsPosition));
       end if;
       Set_Cursor
-        (Gtk_Tree_View
-           (Get_Child(Gtk_Expander(Get_Object(Builder, "helpexpander")))),
-         Gtk_Tree_Path_New_From_String(Natural'Image(TopicIndex)), null,
-         False);
+        (TopicsView, Gtk_Tree_Path_New_From_String(Natural'Image(TopicIndex)),
+         null, False);
       Setting := False;
    end ShowHelpUI;
 
