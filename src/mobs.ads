@@ -144,7 +144,8 @@ package Mobs is
       FactionIndex: Unbounded_String) return Unbounded_String with
       Pre =>
       (EquipIndex < 8 and HighestLevel < 101 and WeaponSkillLevel < 101 and
-       Factions_List.Contains(FactionIndex));
+       Factions_List.Contains(FactionIndex)),
+      Test_Case => ("Test_GetRandomItem", Nominal);
       -- ****
 
 end Mobs;
