@@ -355,6 +355,7 @@ package body Mobs is
       Mob: Member_Data;
       ProtoMob: constant ProtoMobRecord := ProtoMobs_List(MobIndex);
       Amount: Natural;
+      HighestSkillLevel, WeaponSkillLevel: Positive := 1;
    begin
       if GetRandom(1, 100) < 99 then
          Mob.Faction := FactionIndex;
@@ -378,6 +379,12 @@ package body Mobs is
          else
             Mob.Skills.Append
               (New_Item => (Skill(1), GetRandom(Skill(2), Skill(3)), 0));
+         end if;
+         if Skill(1) = Factions_List(FactionIndex).WeaponSkill then
+            WeaponSkillLevel := Mob.Skills(Mob.Skills.Last_Index)(2);
+         end if;
+         if Mob.Skills(Mob.Skills.Last_Index)(2) > HighestSkillLevel then
+            HighestSkillLevel := Mob.Skills(Mob.Skills.Last_Index)(2);
          end if;
       end loop;
       for Attribute of ProtoMob.Attributes loop
@@ -403,6 +410,42 @@ package body Mobs is
                Amount => Amount, Name => Null_Unbounded_String,
                Durability => 100, Price => 0));
       end loop;
+      Mob.Equipment := ProtoMob.Equipment;
+      declare
+         ItemsList: UnboundedString_Container.Vector;
+         ItemIndex: Unbounded_String;
+      begin
+         for I in 1 .. 6 loop
+            case I is
+               when 1 =>
+                  ItemsList := Weapons_List;
+               when 2 =>
+                  ItemsList := Shields_List;
+               when 3 =>
+                  ItemsList := HeadArmors_List;
+               when 4 =>
+                  ItemsList := ChestArmors_List;
+               when 5 =>
+                  ItemsList := ArmsArmors_List;
+               when 6 =>
+                  ItemsList := LegsArmors_List;
+            end case;
+            if Mob.Equipment(I) = 0 then
+               ItemIndex :=
+                 GetRandomItem
+                   (ItemsList, I, HighestSkillLevel, WeaponSkillLevel,
+                    FactionIndex);
+               if ItemIndex /= Null_Unbounded_String then
+                  Mob.Inventory.Append
+                    (New_Item =>
+                       (ProtoIndex => ItemIndex, Amount => 1,
+                        Name => Null_Unbounded_String, Durability => 100,
+                        Price => 0));
+                  Mob.Equipment(I) := Mob.Inventory.Last_Index;
+               end if;
+            end if;
+         end loop;
+      end;
       Mob.Orders := ProtoMob.Priorities;
       Mob.Order := ProtoMob.Order;
       Mob.PreviousOrder := Rest;
@@ -410,7 +453,6 @@ package body Mobs is
       Mob.Tired := 0;
       Mob.Hunger := 0;
       Mob.Thirst := 0;
-      Mob.Equipment := ProtoMob.Equipment;
       Mob.Payment := (20, 0);
       Mob.ContractLength := -1;
       Mob.Morale := (50, 0);
