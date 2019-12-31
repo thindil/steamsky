@@ -74,6 +74,13 @@ package body Help.UI is
    TopicsView: Gtk_Tree_View;
    -- ****
 
+   -- ****iv* Help.UI/HelpWindow
+   -- FUNCTION
+   -- Main help window
+   -- SOURCE
+   HelpWindow: Gtk_Window;
+   -- ****
+
    -- ****if* Help.UI/SelectTopic
    -- FUNCTION
    -- Show selected from the list help topic
@@ -129,16 +136,19 @@ package body Help.UI is
    -- FUNCTION
    -- Hide help window instead of destroying it
    -- PARAMETERS
-   -- User_Data - Window to hide
+   -- Self  - Gtk_Widget to hide
+   -- Event - Gdk_Event triggered. Unused.
    -- SOURCE
    function HideHelpWindow
-     (User_Data: access GObject_Record'Class) return Boolean is
+     (Self  : access Gtk_Widget_Record'Class;
+      Event : Gdk_Event) return Boolean is
+      pragma Unreferenced(Event);
    -- ****
    begin
       GameSettings.TopicsPosition :=
-        Natural(Get_Position(Gtk_Paned(Get_Object(Builder, "helppaned"))));
+        Natural(Get_Position(Gtk_Paned(Get_Child(HelpWindow))));
       SaveConfig;
-      return Hide_On_Delete(Gtk_Widget(User_Data));
+      return Hide_On_Delete(Self);
    end HideHelpWindow;
 
    -- ****if* Help.UI/ToggleTopics
@@ -152,12 +162,12 @@ package body Help.UI is
    begin
       if not Get_Expanded(Self) and GameSettings.TopicsPosition > 0 then
          Set_Position
-           (Gtk_Paned(Get_Object(Builder, "helppaned")),
+           (Gtk_Paned(Get_Child(HelpWindow)),
             Gint(GameSettings.TopicsPosition));
       else
          GameSettings.TopicsPosition :=
-           Natural(Get_Position(Gtk_Paned(Get_Object(Builder, "helppaned"))));
-         Set_Position(Gtk_Paned(Get_Object(Builder, "helppaned")), 60);
+           Natural(Get_Position(Gtk_Paned(Get_Child(HelpWindow))));
+         Set_Position(Gtk_Paned(Get_Child(HelpWindow)), 60);
       end if;
    end ToggleTopics;
 
@@ -174,7 +184,11 @@ package body Help.UI is
       Renderer: constant Gtk_Cell_Renderer_Text := Gtk_Cell_Renderer_Text_New;
       HelpExpander: constant Gtk_Expander :=
         Gtk_Expander_New("Table of contents:");
+      HelpPaned: constant Gtk_Vpaned := Gtk_Vpaned_New;
    begin
+      if HelpWindow /= null then
+         return;
+      end if;
       if Builder /= null then
          return;
       end if;
@@ -187,6 +201,10 @@ package body Help.UI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
+      HelpWindow := Gtk_Window_New;
+      On_Delete_Event(HelpWindow, HideHelpWindow'Access);
+      On_Key_Release_Event
+        (HelpWindow, CloseWindow'Access);
       Set_Expanded(HelpExpander, True);
       Set_Property
         (Get_Label_Widget(HelpExpander), Gtk.Widget.Name_Property,
@@ -211,11 +229,8 @@ package body Help.UI is
       Set_Property(TopicsView, Gtk.Widget.Name_Property, "normalfont");
       Add(HelpExpander, TopicsView);
       Add(Scroll, HelpExpander);
-      Add1(Gtk_Paned(Get_Object(Builder, "helppaned")), Scroll);
-      Register_Handler(Builder, "Hide_Window", HideHelpWindow'Access);
+      Add1(HelpPaned, Scroll);
       Do_Connect(Builder);
-      On_Key_Release_Event
-        (Gtk_Widget(Get_Object(Builder, "helpwindow")), CloseWindow'Access);
       Tag := Gtk_Text_Tag_New("underline");
       Set_Property
         (Tag, Gtk.Text_Tag.Underline_Property, Pango_Underline_Single);
@@ -238,7 +253,8 @@ package body Help.UI is
       On_Button_Press_Event(HelpView, DisableMouse'Access);
       Scroll := Gtk_Scrolled_Window_New;
       Add(Scroll, HelpView);
-      Add2(Gtk_Paned(Get_Object(Builder, "helppaned")), Scroll);
+      Add2(HelpPaned, Scroll);
+      Add(HelpWindow, HelpPaned);
    end CreateHelpUI;
 
    procedure ShowHelpUI(HelpIndex: Unbounded_String) is
@@ -318,7 +334,7 @@ package body Help.UI is
              (Get_Child
                 (Gtk_Scrolled_Window
                    (Get_Child2
-                      (Gtk_Paned(Get_Object(Builder, "helppaned")))))));
+                      (Gtk_Paned(Get_Child(HelpWindow)))))));
       Iter: Gtk_Text_Iter;
       Tags: constant Gtk_Text_Tag_Table := Get_Tag_Table(HelpBuffer);
       SpecialText: constant Gtk_Text_Tag := Lookup(Tags, "special");
@@ -443,9 +459,9 @@ package body Help.UI is
          end loop;
          OldIndex := EndIndex + 2;
       end loop;
-      Show_All(Gtk_Widget(Get_Object(Builder, "helpwindow")));
+      Show_All(HelpWindow);
       Resize
-        (Gtk_Window(Get_Object(Builder, "helpwindow")),
+        (HelpWindow,
          Gint(GameSettings.WindowWidth), Gint(GameSettings.WindowHeight));
       while Gtk.Main.Events_Pending loop
          if Main_Iteration_Do(False) then
@@ -461,7 +477,7 @@ package body Help.UI is
       end loop;
       if GameSettings.TopicsPosition > 0 then
          Set_Position
-           (Gtk_Paned(Get_Object(Builder, "helppaned")),
+           (Gtk_Paned(Get_Child(HelpWindow)),
             Gint(GameSettings.TopicsPosition));
       end if;
       Set_Cursor
