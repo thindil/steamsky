@@ -161,14 +161,25 @@ package body Ships.Movement.Test_Data.Tests is
    begin
 
       Message := To_Unbounded_String(ChangeShipSpeed(FULL_SPEED));
-      Assert
-        (Message = Null_Unbounded_String,
-         "Failed to change speed of docked ship.");
+      if Message /= Null_Unbounded_String then
+         Ada.Text_IO.Put_Line(To_String(Message));
+         Assert(False, "Failed to change speed of docked ship.");
+      end if;
       Message := To_Unbounded_String(DockShip(False));
+      if Message /= Null_Unbounded_String then
+         Ada.Text_IO.Put_Line(To_String(Message));
+         Assert(False, "Failed to dock ship again.");
+      end if;
       Message := To_Unbounded_String(ChangeShipSpeed(FULL_STOP));
-      Assert
-        (Message = Null_Unbounded_String, "Failed to change speed of ship.");
+      if Message /= Null_Unbounded_String then
+         Ada.Text_IO.Put_Line(To_String(Message));
+         Assert(False, "Failed to change speed of ship.");
+      end if;
       Message := To_Unbounded_String(DockShip(True));
+      if Message /= Null_Unbounded_String then
+         Ada.Text_IO.Put_Line(To_String(Message));
+         Assert(False, "Failed to dock ship again second time.");
+      end if;
 
 --  begin read only
    end Test_ChangeShipSpeed_test_changeshipspeed;
