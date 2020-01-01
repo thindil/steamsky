@@ -1,4 +1,4 @@
---    Copyright 2019 Bartek thindil Jasicki
+--    Copyright 2019-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -22,12 +22,18 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Adjustment; use Gtk.Adjustment;
+with Gtk.Box; use Gtk.Box;
+with Gtk.Button; use Gtk.Button;
 with Gtk.Cell_Renderer_Text; use Gtk.Cell_Renderer_Text;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
+with Gtk.Entry_Completion; use Gtk.Entry_Completion;
 with Gtk.GEntry; use Gtk.GEntry;
-with Gtk.Tree_Model; use Gtk.Tree_Model;
+with Gtk.Grid; use Gtk.Grid;
+with Gtk.Label; use Gtk.Label;
 with Gtk.List_Store; use Gtk.List_Store;
+with Gtk.Spin_Button; use Gtk.Spin_Button;
+with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.Widget; use Gtk.Widget;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
@@ -370,12 +376,17 @@ package body DebugUI is
       -- ****
       EventsCombo: constant Gtk_Widget :=
         Gtk_Widget(Get_Object(Builder, "cmbevents"));
+      EventGrid: constant Gtk_Grid :=
+        Gtk_Grid
+          (Get_Child
+             (Gtk_Box(Get_Child(Gtk_Box(Get_Object(Builder, "worldbox")), 1)),
+              0));
    begin
       Set_Text(Gtk_GEntry(Get_Object(Builder, "edtship")), "");
       Set_Value(Gtk_Adjustment(Get_Object(Builder, "adjnpcshipx")), 1.0);
       Set_Value(Gtk_Adjustment(Get_Object(Builder, "adjnpcshipy")), 1.0);
-      Set_Text(Gtk_GEntry(Get_Object(Builder, "edteventbase")), "");
-      Set_Text(Gtk_GEntry(Get_Object(Builder, "edteventitem")), "");
+      Set_Text(Gtk_GEntry(Get_Child_At(EventGrid, 1, 0)), "");
+      Set_Text(Gtk_GEntry(Get_Child_At(EventGrid, 1, 2)), "");
       if Events_List.Length = 0 then
          Hide(EventsCombo);
          Hide(Gtk_Widget(Get_Object(Builder, "btndeleteevent")));
@@ -731,18 +742,17 @@ package body DebugUI is
    -- FUNCTION
    -- Show or hide info about item used by selected event
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Combo_Box with selected event
    -- SOURCE
-   procedure ShowItemEvent(Object: access Gtkada_Builder_Record'Class) is
+   procedure ShowItemEvent(Self: access Gtk_Combo_Box_Record'Class) is
    -- ****
    begin
-      if Get_Active(Gtk_Combo_Box_Text(Get_Object(Object, "cmbbaseevent"))) =
-        1 then
-         Show_All(Gtk_Widget(Get_Object(Object, "lbleventitem")));
-         Show_All(Gtk_Widget(Get_Object(Object, "edteventitem")));
+      if Get_Active(Self) = 1 then
+         Show_All(Get_Child_At(Gtk_Grid(Get_Parent(Self)), 0, 2));
+         Show_All(Get_Child_At(Gtk_Grid(Get_Parent(Self)), 1, 2));
       else
-         Hide(Gtk_Widget(Get_Object(Object, "lbleventitem")));
-         Hide(Gtk_Widget(Get_Object(Object, "edteventitem")));
+         Hide(Get_Child_At(Gtk_Grid(Get_Parent(Self)), 0, 2));
+         Hide(Get_Child_At(Gtk_Grid(Get_Parent(Self)), 1, 2));
       end if;
    end ShowItemEvent;
 
@@ -750,22 +760,24 @@ package body DebugUI is
    -- FUNCTION
    -- Add new event to the game
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Button clicked.
    -- SOURCE
-   procedure AddEvent(Object: access Gtkada_Builder_Record'Class) is
+   procedure AddEvent(Self: access Gtk_Button_Record'Class) is
       -- ****
+      ParentGrid: constant Gtk_Grid :=
+        Gtk_Grid(Get_Child(Gtk_Box(Get_Parent(Self)), 0));
       BaseName: constant Unbounded_String :=
         To_Unbounded_String
-          (Get_Text(Gtk_GEntry(Get_Object(Object, "edteventbase"))));
+          (Get_Text(Gtk_GEntry(Get_Child_At(ParentGrid, 1, 0))));
       ItemName: constant Unbounded_String :=
         To_Unbounded_String
-          (Get_Text(Gtk_GEntry(Get_Object(Object, "edteventitem"))));
+          (Get_Text(Gtk_GEntry(Get_Child_At(ParentGrid, 1, 2))));
       EventAdded: Boolean := True;
    begin
       for Base of SkyBases loop
          if Base.Name = BaseName then
             case Get_Active
-              (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbaseevent"))) is
+              (Gtk_Combo_Box_Text(Get_Child_At(ParentGrid, 1, 1))) is
                when 0 =>
                   Events_List.Append
                     (New_Item =>
@@ -773,7 +785,7 @@ package body DebugUI is
                         Positive
                           (Get_Value
                              (Gtk_Adjustment
-                                (Get_Object(Object, "adjminutesbase")))),
+                                (Get_Object(Builder, "adjminutesbase")))),
                         1));
                when 1 =>
                   EventAdded := False;
@@ -785,7 +797,8 @@ package body DebugUI is
                               Positive
                                 (Get_Value
                                    (Gtk_Adjustment
-                                      (Get_Object(Object, "adjminutesbase")))),
+                                      (Get_Object
+                                         (Builder, "adjminutesbase")))),
                               Objects_Container.Key(I)));
                         EventAdded := True;
                         exit;
@@ -798,7 +811,7 @@ package body DebugUI is
                         Positive
                           (Get_Value
                              (Gtk_Adjustment
-                                (Get_Object(Object, "adjminutesbase")))),
+                                (Get_Object(Builder, "adjminutesbase")))),
                         1));
                when others =>
                   null;
@@ -939,8 +952,6 @@ package body DebugUI is
       Register_Handler(Builder, "Show_Base_Info", ShowBaseInfo'Access);
       Register_Handler(Builder, "Update_Base", UpdateBase'Access);
       Register_Handler(Builder, "Add_Ship", AddShip'Access);
-      Register_Handler(Builder, "Show_Item_Event", ShowItemEvent'Access);
-      Register_Handler(Builder, "Add_Event", AddEvent'Access);
       Register_Handler(Builder, "Delete_Event", DeleteEvent'Access);
       Register_Handler(Builder, "Save_Game", Save_Game'Access);
       Register_Handler(Builder, "Set_Module_Stats", SetModuleStats'Access);
@@ -1000,13 +1011,66 @@ package body DebugUI is
                To_Lower(Bases_Size'Image(I)(2 .. Bases_Size'Image(I)'Last)));
          end loop;
       end;
+      declare
+         EventGrid: constant Gtk_Grid := Gtk_Grid_New;
+         EventButton: constant Gtk_Button :=
+           Gtk_Button_New_With_Label("Add event");
+         Label: Gtk_Label;
+         EventEntry: Gtk_Entry;
+         EventComboBox: constant Gtk_Combo_Box_Text := Gtk_Combo_Box_Text_New;
+         EventBox: constant Gtk_Vbox := Gtk_Vbox_New;
+      begin
+         Label := Gtk_Label_New("Base:");
+         Attach(EventGrid, Label, 0, 0);
+         EventEntry := Gtk_Entry_New;
+         Set_Completion
+           (EventEntry,
+            Gtk_Entry_Completion(Get_Object(Builder, "basescompletion")));
+         Attach(EventGrid, EventEntry, 1, 0);
+         Label := Gtk_Label_New("Event:");
+         Attach(EventGrid, Label, 0, 1);
+         Append(EventComboBox, "3", "Disease");
+         Append(EventComboBox, "4", "Double price");
+         Append(EventComboBox, "6", "Full docks");
+         Set_Active(EventComboBox, 0);
+         On_Changed(EventComboBox, ShowItemEvent'Access);
+         Attach(EventGrid, EventComboBox, 1, 1);
+         Label := Gtk_Label_New("Item:");
+         Attach(EventGrid, Label, 0, 2);
+         EventEntry := Gtk_Entry_New;
+         Set_Completion
+           (EventEntry,
+            Gtk_Entry_Completion(Get_Object(Builder, "tradecompletion")));
+         Attach(EventGrid, EventEntry, 1, 2);
+         Label := Gtk_Label_New("Duration:");
+         Attach(EventGrid, Label, 0, 3);
+         Attach
+           (EventGrid,
+            Gtk_Spin_Button_New
+              (Gtk_Adjustment(Get_Object(Builder, "adjminutesbase")), 0.0),
+            1, 3);
+         Pack_Start(EventBox, EventGrid, False);
+         On_Clicked(EventButton, AddEvent'Access);
+         Set_Halign(EventButton, Align_Start);
+         Pack_Start(EventBox, EventButton, False);
+         Pack_Start(Gtk_Box(Get_Object(Builder, "worldbox")), EventBox);
+      end;
    end CreateDebugUI;
 
    procedure ShowDebugUI is
    begin
       RefreshUI(Builder);
       Show_All(Gtk_Widget(Get_Object(Builder, "debugwindow")));
-      ShowItemEvent(Builder);
+      ShowItemEvent
+        (Gtk_Combo_Box
+           (Get_Child_At
+              (Gtk_Grid
+                 (Get_Child
+                    (Gtk_Box
+                       (Get_Child
+                          (Gtk_Box(Get_Object(Builder, "worldbox")), 1)),
+                     0)),
+               1, 1)));
       ResetWorldUI;
    end ShowDebugUI;
 
