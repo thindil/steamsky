@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -431,10 +431,13 @@ package body Mobs is
                   ItemsList := LegsArmors_List;
             end case;
             if Mob.Equipment(I) = 0 then
-               ItemIndex :=
-                 GetRandomItem
-                   (ItemsList, I, HighestSkillLevel, WeaponSkillLevel,
-                    FactionIndex);
+               ItemIndex := Null_Unbounded_String;
+               if GetRandom(1, 100) < 95 then
+                  ItemIndex :=
+                    GetRandomItem
+                      (ItemsList, I, HighestSkillLevel, WeaponSkillLevel,
+                       FactionIndex);
+               end if;
                if ItemIndex /= Null_Unbounded_String then
                   Mob.Inventory.Append
                     (New_Item =>
