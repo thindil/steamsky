@@ -311,6 +311,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="5" minlevel="3"/>
   <attribute maxlevel="5" minlevel="3"/>
   <attribute maxlevel="5" minlevel="3"/>
+  <priority name="Piloting" value="Normal"/>
  </mobile>
  <mobile index="21" order="PILOT">
   <skill maxlevel="15" minlevel="5" name="Piloting"/>
