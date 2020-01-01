@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Removed outdated tooltip for recruits list in bases
+- Orders priority for one mob
 
 ## [4.0.9] - 2019-12-15
 
