@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,9 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Accel_Map; use Gtk.Accel_Map;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Cell_Area_Box; use Gtk.Cell_Area_Box;
@@ -40,7 +37,6 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
-with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
 with Glib.Properties; use Glib.Properties;
 with Gdk.Event; use Gdk.Event;
@@ -54,12 +50,6 @@ with BasesTypes; use BasesTypes;
 
 package body Help.UI is
 
-   -- ****iv* Help.UI/Builder
-   -- FUNCTION
-   -- Gtkada_Builder used for creating UI
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
    -- ****iv* Help.UI/Setting
    -- FUNCTION
    -- If true, UI is in setting mode. Default is false
@@ -172,9 +162,8 @@ package body Help.UI is
    end ToggleTopics;
 
    procedure CreateHelpUI is
-      Error: aliased GError;
       TopicsIter: Gtk_Tree_Iter;
-      TopicsList: Gtk_List_Store;
+      TopicsList: constant Gtk_List_Store := Gtk_List_Store_Newv((0 => GType_String));
       Scroll: Gtk_Scrolled_Window := Gtk_Scrolled_Window_New;
       HelpView: constant Gtk_Text_View := Gtk_Text_View_New;
       Tags: constant Gtk_Text_Tag_Table := Gtk_Text_Tag_Table_New;
@@ -189,18 +178,6 @@ package body Help.UI is
       if HelpWindow /= null then
          return;
       end if;
-      if Builder /= null then
-         return;
-      end if;
-      Gtk_New(Builder);
-      if Add_From_File
-          (Builder,
-           To_String(DataDirectory) & "ui" & Dir_Separator & "help.glade",
-           Error'Access) =
-        Guint(0) then
-         Put_Line("Error : " & Get_Message(Error));
-         return;
-      end if;
       HelpWindow := Gtk_Window_New;
       On_Delete_Event(HelpWindow, HideHelpWindow'Access);
       On_Key_Release_Event
@@ -210,7 +187,6 @@ package body Help.UI is
         (Get_Label_Widget(HelpExpander), Gtk.Widget.Name_Property,
          "normalfont");
       On_Activate(HelpExpander, ToggleTopics'Access);
-      TopicsList := Gtk_List_Store(Get_Object(Builder, "topicslist"));
       Clear(TopicsList);
       for I in Help_List.Iterate loop
          Append(TopicsList, TopicsIter);
@@ -230,7 +206,6 @@ package body Help.UI is
       Add(HelpExpander, TopicsView);
       Add(Scroll, HelpExpander);
       Add1(HelpPaned, Scroll);
-      Do_Connect(Builder);
       Tag := Gtk_Text_Tag_New("underline");
       Set_Property
         (Tag, Gtk.Text_Tag.Underline_Property, Pango_Underline_Single);
