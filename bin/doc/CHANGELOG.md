@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Ability to set random equipment for mobs
 
+### Fixed
+- Orders priority for one mob
+
 ## [4.5] - 2019-12-29
 
 ### Added
