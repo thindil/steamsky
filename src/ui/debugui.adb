@@ -375,7 +375,8 @@ package body DebugUI is
    procedure ResetWorldUI is
       -- ****
       EventsCombo: constant Gtk_Widget :=
-        Gtk_Widget(Get_Object(Builder, "cmbevents"));
+        Get_Child
+          (Gtk_Box(Get_Child(Gtk_Box(Get_Object(Builder, "worldbox")), 0)), 2);
       EventGrid: constant Gtk_Grid :=
         Gtk_Grid
           (Get_Child
@@ -389,10 +390,16 @@ package body DebugUI is
       Set_Text(Gtk_GEntry(Get_Child_At(EventGrid, 1, 2)), "");
       if Events_List.Length = 0 then
          Hide(EventsCombo);
-         Hide(Gtk_Widget(Get_Object(Builder, "btndeleteevent")));
+         Hide
+           (Get_Child
+              (Gtk_Box(Get_Child(Gtk_Box(Get_Object(Builder, "worldbox")), 0)),
+               3));
       else
          Show_All(EventsCombo);
-         Show_All(Gtk_Widget(Get_Object(Builder, "btndeleteevent")));
+         Show_All
+           (Get_Child
+              (Gtk_Box(Get_Child(Gtk_Box(Get_Object(Builder, "worldbox")), 0)),
+               3));
          Remove_All(Gtk_Combo_Box_Text(EventsCombo));
          for I in Events_List.Iterate loop
             case Events_List(I).EType is
@@ -829,15 +836,18 @@ package body DebugUI is
    -- ****if* DebugUI/DeleteEvent
    -- FUNCTION
    -- Delete selected event from the game
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked.
    -- SOURCE
-   procedure DeleteEvent(Object: access Gtkada_Builder_Record'Class) is
+   procedure DeleteEvent(Self: access Gtk_Button_Record'Class) is
    -- ****
    begin
       Events_List.Delete
         (Index =>
            Positive'Value
              (Get_Active_Id
-                (Gtk_Combo_Box_Text(Get_Object(Object, "cmbevents")))));
+                (Gtk_Combo_Box_Text
+                   (Get_Child(Gtk_Box(Get_Parent(Self)), 2)))));
       ResetWorldUI;
    end DeleteEvent;
 
@@ -952,7 +962,6 @@ package body DebugUI is
       Register_Handler(Builder, "Show_Base_Info", ShowBaseInfo'Access);
       Register_Handler(Builder, "Update_Base", UpdateBase'Access);
       Register_Handler(Builder, "Add_Ship", AddShip'Access);
-      Register_Handler(Builder, "Delete_Event", DeleteEvent'Access);
       Register_Handler(Builder, "Save_Game", Save_Game'Access);
       Register_Handler(Builder, "Set_Module_Stats", SetModuleStats'Access);
       Register_Handler(Builder, "Update_Module", UpdateModule'Access);
@@ -1065,6 +1074,22 @@ package body DebugUI is
          Set_Tooltip_Text(EventButton, "Add the selected event to the map.");
          Pack_Start(EventBox, EventButton, False);
          Pack_Start(Gtk_Box(Get_Object(Builder, "worldbox")), EventBox);
+      end;
+      declare
+         EventsComboBox: constant Gtk_Combo_Box_Text := Gtk_Combo_Box_Text_New;
+         DeleteEventButton: constant Gtk_Button :=
+           Gtk_Button_New_With_Label("Delete event");
+      begin
+         Set_Tooltip_Text(EventsComboBox, "Select event to delete.");
+         Set_Halign(DeleteEventButton, Align_Start);
+         On_Clicked(DeleteEventButton, DeleteEvent'Access);
+         Set_Tooltip_Text(DeleteEventButton, "Delete selected event.");
+         Pack_Start
+           (Gtk_Box(Get_Child(Gtk_Box(Get_Object(Builder, "worldbox")), 0)),
+            EventsComboBox, False);
+         Pack_Start
+           (Gtk_Box(Get_Child(Gtk_Box(Get_Object(Builder, "worldbox")), 0)),
+            DeleteEventButton, False);
       end;
    end CreateDebugUI;
 
