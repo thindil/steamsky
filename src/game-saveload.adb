@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -858,7 +858,7 @@ package body Game.SaveLoad is
            PlayerShip.Name &
            To_Unbounded_String
              ("_" & Positive'Image(GetRandom(100, 999))(2 .. 4) & ".sav");
-         exit when not Exists(To_String(SaveName));
+         exit when not Exists(To_String(SaveName)) and SaveName /= OldSaveName;
       end loop;
       if RenameSave then
          if Exists(OldSaveName) then
