@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Orders priority for one mob
+- Possible generate that same name for savegame as old name
 
 ## [4.5] - 2019-12-29
 
