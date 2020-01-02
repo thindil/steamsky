@@ -1019,6 +1019,9 @@ package body DebugUI is
          EventEntry: Gtk_Entry;
          EventComboBox: constant Gtk_Combo_Box_Text := Gtk_Combo_Box_Text_New;
          EventBox: constant Gtk_Vbox := Gtk_Vbox_New;
+         MinutesEntry: constant Gtk_Spin_Button :=
+           Gtk_Spin_Button_New
+             (Gtk_Adjustment(Get_Object(Builder, "adjminutesbase")), 0.0);
       begin
          Label := Gtk_Label_New("Base:");
          Attach(EventGrid, Label, 0, 0);
@@ -1026,6 +1029,9 @@ package body DebugUI is
          Set_Completion
            (EventEntry,
             Gtk_Entry_Completion(Get_Object(Builder, "basescompletion")));
+         Set_Tooltip_Text
+           (EventEntry,
+            "Start typing the name of a base here to select it from the list.");
          Attach(EventGrid, EventEntry, 1, 0);
          Label := Gtk_Label_New("Event:");
          Attach(EventGrid, Label, 0, 1);
@@ -1034,6 +1040,8 @@ package body DebugUI is
          Append(EventComboBox, "6", "Full docks");
          Set_Active(EventComboBox, 0);
          On_Changed(EventComboBox, ShowItemEvent'Access);
+         Set_Tooltip_Text
+           (EventComboBox, "Select event to add it to the selected base.");
          Attach(EventGrid, EventComboBox, 1, 1);
          Label := Gtk_Label_New("Item:");
          Attach(EventGrid, Label, 0, 2);
@@ -1041,17 +1049,20 @@ package body DebugUI is
          Set_Completion
            (EventEntry,
             Gtk_Entry_Completion(Get_Object(Builder, "tradecompletion")));
+         Set_Tooltip_Text
+           (EventEntry,
+            "Start typing the name of an item here to select it from the list.");
          Attach(EventGrid, EventEntry, 1, 2);
          Label := Gtk_Label_New("Duration:");
          Attach(EventGrid, Label, 0, 3);
-         Attach
-           (EventGrid,
-            Gtk_Spin_Button_New
-              (Gtk_Adjustment(Get_Object(Builder, "adjminutesbase")), 0.0),
-            1, 3);
+         Set_Tooltip_Text
+           (MinutesEntry,
+            "Amount of minutes, how long the selected will be available on the map.");
+         Attach(EventGrid, MinutesEntry, 1, 3);
          Pack_Start(EventBox, EventGrid, False);
          On_Clicked(EventButton, AddEvent'Access);
          Set_Halign(EventButton, Align_Start);
+         Set_Tooltip_Text(EventButton, "Add the selected event to the map.");
          Pack_Start(EventBox, EventButton, False);
          Pack_Start(Gtk_Box(Get_Object(Builder, "worldbox")), EventBox);
       end;
