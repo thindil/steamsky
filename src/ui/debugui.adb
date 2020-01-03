@@ -819,10 +819,8 @@ package body DebugUI is
    procedure DeleteEvent(Object: access Gtkada_Builder_Record'Class) is
    -- ****
    begin
-      Events_List.Delete
-        (Index =>
-           Positive'Value
-             (Get_Active_Id
+      DeleteEvent
+        (Positive'Value(Get_Active_Id
                 (Gtk_Combo_Box_Text(Get_Object(Object, "cmbevents")))));
       ResetWorldUI;
    end DeleteEvent;
