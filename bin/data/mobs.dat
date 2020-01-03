@@ -1437,18 +1437,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute level="2"/>
   <attribute level="2"/>
   <priority name="Operating guns" value="Normal"/>
-  <item amount="1" index="74"/>
-  <item amount="1" index="67"/>
-  <item amount="1" index="68"/>
-  <item amount="1" index="69"/>
-  <item amount="1" index="71"/>
-  <item amount="1" index="73"/>
-  <equipment index="1" slot="Weapon"/>
-  <equipment index="6" slot="Shield"/>
-  <equipment index="3" slot="Head"/>
-  <equipment index="2" slot="Torso"/>
-  <equipment index="4" slot="Arms"/>
-  <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="122" order="PILOT">
   <skill level="1" name="Piloting"/>
@@ -1460,16 +1448,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute level="3"/>
   <attribute level="3"/>
   <priority name="Piloting" value="Normal"/>
-  <item amount="1" index="66"/>
-  <item amount="1" index="67"/>
-  <item amount="1" index="68"/>
-  <item amount="1" index="69"/>
-  <item amount="1" index="71"/>
-  <equipment index="1" slot="Weapon"/>
-  <equipment index="3" slot="Head"/>
-  <equipment index="2" slot="Torso"/>
-  <equipment index="4" slot="Arms"/>
-  <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="123" order="GUNNER">
   <skill level="3" name="Gunnery"/>
@@ -1481,18 +1459,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute level="3"/>
   <attribute level="3"/>
   <priority name="Operating guns" value="Normal"/>
-  <item amount="1" index="66"/>
-  <item amount="1" index="67"/>
-  <item amount="1" index="68"/>
-  <item amount="1" index="69"/>
-  <item amount="1" index="71"/>
-  <item amount="1" index="72"/>
-  <equipment index="1" slot="Weapon"/>
-  <equipment index="6" slot="Shield"/>
-  <equipment index="3" slot="Head"/>
-  <equipment index="2" slot="Torso"/>
-  <equipment index="4" slot="Arms"/>
-  <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="124" order="ENGINEER">
   <skill maxlevel="6" minlevel="3" name="Engineering"/>
@@ -1504,16 +1470,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute level="3"/>
   <priority name="Engineering" value="Normal"/>
   <priority name="Repair ship" value="High"/>
-  <item amount="1" index="66"/>
-  <item amount="1" index="67"/>
-  <item amount="1" index="68"/>
-  <item amount="1" index="69"/>
-  <item amount="1" index="71"/>
-  <equipment index="1" slot="Weapon"/>
-  <equipment index="3" slot="Head"/>
-  <equipment index="2" slot="Torso"/>
-  <equipment index="4" slot="Arms"/>
-  <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="125" order="PILOT">
   <skill maxlevel="6" minlevel="3" name="Piloting"/>
@@ -1525,16 +1481,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="5" minlevel="3"/>
   <attribute maxlevel="5" minlevel="3"/>
   <priority name="Piloting" value="Normal"/>
-  <item amount="1" index="77"/>
-  <item amount="1" index="78"/>
-  <item amount="1" index="79"/>
-  <item amount="1" index="80"/>
-  <item amount="1" index="81"/>
-  <equipment index="1" slot="Weapon"/>
-  <equipment index="3" slot="Head"/>
-  <equipment index="2" slot="Torso"/>
-  <equipment index="4" slot="Arms"/>
-  <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="126" order="GUNNER">
   <skill maxlevel="14" minlevel="7" name="Gunnery"/>
@@ -1546,18 +1492,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="5" minlevel="3"/>
   <attribute maxlevel="5" minlevel="3"/>
   <priority name="Operating guns" value="Normal"/>
-  <item amount="1" index="77"/>
-  <item amount="1" index="78"/>
-  <item amount="1" index="79"/>
-  <item amount="1" index="80"/>
-  <item amount="1" index="81"/>
-  <item amount="1" index="72"/>
-  <equipment index="1" slot="Weapon"/>
-  <equipment index="6" slot="Shield"/>
-  <equipment index="3" slot="Head"/>
-  <equipment index="2" slot="Torso"/>
-  <equipment index="4" slot="Arms"/>
-  <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="127" order="ENGINEER">
   <skill maxlevel="12" minlevel="7" name="Engineering"/>
@@ -1569,16 +1503,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="5" minlevel="3"/>
   <priority name="Engineering" value="Normal"/>
   <priority name="Repair ship" value="High"/>
-  <item amount="1" index="77"/>
-  <item amount="1" index="78"/>
-  <item amount="1" index="79"/>
-  <item amount="1" index="80"/>
-  <item amount="1" index="81"/>
-  <equipment index="1" slot="Weapon"/>
-  <equipment index="3" slot="Head"/>
-  <equipment index="2" slot="Torso"/>
-  <equipment index="4" slot="Arms"/>
-  <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="128" order="TALK">
   <skill maxlevel="5" minlevel="1" name="Rhetoric"/>
@@ -1590,18 +1514,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="5" minlevel="3"/>
   <priority name="Talking in bases" value="Normal"/>
   <priority name="Defend ship" value="Normal"/>
-  <item amount="1" index="76"/>
-  <item amount="1" index="78"/>
-  <item amount="1" index="79"/>
-  <item amount="1" index="80"/>
-  <item amount="1" index="81"/>
-  <item amount="1" index="72"/>
-  <equipment index="1" slot="Weapon"/>
-  <equipment index="6" slot="Shield"/>
-  <equipment index="3" slot="Head"/>
-  <equipment index="2" slot="Torso"/>
-  <equipment index="4" slot="Arms"/>
-  <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="129" order="DEFEND">
   <skill maxlevel="6" minlevel="3" name="Swords"/>
@@ -1612,18 +1524,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="5" minlevel="3"/>
   <priority name="Defend ship" value="High"/>
   <priority name="Board enemy ship" value="Normal"/>
-  <item amount="1" index="77"/>
-  <item amount="1" index="78"/>
-  <item amount="1" index="79"/>
-  <item amount="1" index="80"/>
-  <item amount="1" index="81"/>
-  <item amount="1" index="72"/>
-  <equipment index="1" slot="Weapon"/>
-  <equipment index="6" slot="Shield"/>
-  <equipment index="3" slot="Head"/>
-  <equipment index="2" slot="Torso"/>
-  <equipment index="4" slot="Arms"/>
-  <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="130" order="PILOT">
   <skill maxlevel="20" minlevel="7" name="Piloting"/>
@@ -1635,18 +1535,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="15" minlevel="7"/>
   <attribute maxlevel="15" minlevel="7"/>
   <priority name="Piloting" value="Normal"/>
-  <item amount="1" index="76"/>
-  <item amount="1" index="83"/>
-  <item amount="1" index="84"/>
-  <item amount="1" index="85"/>
-  <item amount="1" index="86"/>
-  <item amount="1" index="82"/>
-  <equipment index="1" slot="Weapon"/>
-  <equipment index="6" slot="Shield"/>
-  <equipment index="3" slot="Head"/>
-  <equipment index="2" slot="Torso"/>
-  <equipment index="4" slot="Arms"/>
-  <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="131" order="GUNNER">
   <skill maxlevel="20" minlevel="7" name="Gunnery"/>
@@ -1658,18 +1546,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="15" minlevel="7"/>
   <attribute maxlevel="15" minlevel="7"/>
   <priority name="Operating guns" value="Normal"/>
-  <item amount="1" index="76"/>
-  <item amount="1" index="83"/>
-  <item amount="1" index="84"/>
-  <item amount="1" index="85"/>
-  <item amount="1" index="86"/>
-  <item amount="1" index="82"/>
-  <equipment index="1" slot="Weapon"/>
-  <equipment index="6" slot="Shield"/>
-  <equipment index="3" slot="Head"/>
-  <equipment index="2" slot="Torso"/>
-  <equipment index="4" slot="Arms"/>
-  <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="132" order="ENGINEER">
   <skill maxlevel="20" minlevel="7" name="Engineering"/>
@@ -1681,18 +1557,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="15" minlevel="7"/>
   <priority name="Engineering" value="Normal"/>
   <priority name="Repair ship" value="High"/>
-  <item amount="1" index="76"/>
-  <item amount="1" index="83"/>
-  <item amount="1" index="84"/>
-  <item amount="1" index="85"/>
-  <item amount="1" index="86"/>
-  <item amount="1" index="82"/>
-  <equipment index="1" slot="Weapon"/>
-  <equipment index="6" slot="Shield"/>
-  <equipment index="3" slot="Head"/>
-  <equipment index="2" slot="Torso"/>
-  <equipment index="4" slot="Arms"/>
-  <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="133" order="TALK">
   <skill maxlevel="6" minlevel="2" name="Rhetoric"/>
@@ -1704,18 +1568,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="15" minlevel="7"/>
   <priority name="Talking in bases" value="Normal"/>
   <priority name="Defend ship" value="Normal"/>
-  <item amount="1" index="76"/>
-  <item amount="1" index="83"/>
-  <item amount="1" index="84"/>
-  <item amount="1" index="85"/>
-  <item amount="1" index="86"/>
-  <item amount="1" index="82"/>
-  <equipment index="1" slot="Weapon"/>
-  <equipment index="6" slot="Shield"/>
-  <equipment index="3" slot="Head"/>
-  <equipment index="2" slot="Torso"/>
-  <equipment index="4" slot="Arms"/>
-  <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="134" order="DEFEND">
   <skill maxlevel="20" minlevel="7" name="Swords"/>
@@ -1726,18 +1578,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="15" minlevel="7"/>
   <priority name="Defend ship" value="High"/>
   <priority name="Board enemy ship" value="Normal"/>
-  <item amount="1" index="76"/>
-  <item amount="1" index="83"/>
-  <item amount="1" index="84"/>
-  <item amount="1" index="85"/>
-  <item amount="1" index="86"/>
-  <item amount="1" index="82"/>
-  <equipment index="1" slot="Weapon"/>
-  <equipment index="6" slot="Shield"/>
-  <equipment index="3" slot="Head"/>
-  <equipment index="2" slot="Torso"/>
-  <equipment index="4" slot="Arms"/>
-  <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="135" order="PILOT">
   <skill maxlevel="25" minlevel="15" name="Piloting"/>
@@ -1749,18 +1589,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="20" minlevel="10"/>
   <attribute maxlevel="20" minlevel="10"/>
   <priority name="Piloting" value="Normal"/>
-  <item amount="1" index="76"/>
-  <item amount="1" index="83"/>
-  <item amount="1" index="84"/>
-  <item amount="1" index="85"/>
-  <item amount="1" index="86"/>
-  <item amount="1" index="82"/>
-  <equipment index="1" slot="Weapon"/>
-  <equipment index="6" slot="Shield"/>
-  <equipment index="3" slot="Head"/>
-  <equipment index="2" slot="Torso"/>
-  <equipment index="4" slot="Arms"/>
-  <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="136" order="GUNNER">
   <skill maxlevel="25" minlevel="15" name="Gunnery"/>
@@ -1772,18 +1600,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="20" minlevel="10"/>
   <attribute maxlevel="20" minlevel="10"/>
   <priority name="Operating guns" value="Normal"/>
-  <item amount="1" index="76"/>
-  <item amount="1" index="83"/>
-  <item amount="1" index="84"/>
-  <item amount="1" index="85"/>
-  <item amount="1" index="86"/>
-  <item amount="1" index="82"/>
-  <equipment index="1" slot="Weapon"/>
-  <equipment index="6" slot="Shield"/>
-  <equipment index="3" slot="Head"/>
-  <equipment index="2" slot="Torso"/>
-  <equipment index="4" slot="Arms"/>
-  <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="137" order="ENGINEER">
   <skill maxlevel="25" minlevel="15" name="Engineering"/>
@@ -1795,18 +1611,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="20" minlevel="10"/>
   <priority name="Engineering" value="Normal"/>
   <priority name="Repair ship" value="High"/>
-  <item amount="1" index="76"/>
-  <item amount="1" index="83"/>
-  <item amount="1" index="84"/>
-  <item amount="1" index="85"/>
-  <item amount="1" index="86"/>
-  <item amount="1" index="82"/>
-  <equipment index="1" slot="Weapon"/>
-  <equipment index="6" slot="Shield"/>
-  <equipment index="3" slot="Head"/>
-  <equipment index="2" slot="Torso"/>
-  <equipment index="4" slot="Arms"/>
-  <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="138" order="TALK">
   <skill maxlevel="10" minlevel="5" name="Rhetoric"/>
@@ -1818,18 +1622,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="20" minlevel="10"/>
   <priority name="Talking in bases" value="Normal"/>
   <priority name="Defend ship" value="Normal"/>
-  <item amount="1" index="76"/>
-  <item amount="1" index="83"/>
-  <item amount="1" index="84"/>
-  <item amount="1" index="85"/>
-  <item amount="1" index="86"/>
-  <item amount="1" index="82"/>
-  <equipment index="1" slot="Weapon"/>
-  <equipment index="6" slot="Shield"/>
-  <equipment index="3" slot="Head"/>
-  <equipment index="2" slot="Torso"/>
-  <equipment index="4" slot="Arms"/>
-  <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="139" order="DEFEND">
   <skill maxlevel="25" minlevel="15" name="Swords"/>
@@ -1840,18 +1632,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="20" minlevel="10"/>
   <priority name="Defend ship" value="High"/>
   <priority name="Board enemy ship" value="Normal"/>
-  <item amount="1" index="76"/>
-  <item amount="1" index="83"/>
-  <item amount="1" index="84"/>
-  <item amount="1" index="85"/>
-  <item amount="1" index="86"/>
-  <item amount="1" index="82"/>
-  <equipment index="1" slot="Weapon"/>
-  <equipment index="6" slot="Shield"/>
-  <equipment index="3" slot="Head"/>
-  <equipment index="2" slot="Torso"/>
-  <equipment index="4" slot="Arms"/>
-  <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="140" order="PILOT">
   <skill maxlevel="50" minlevel="30" name="Piloting"/>
@@ -1863,18 +1643,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="25" minlevel="15"/>
   <attribute maxlevel="25" minlevel="15"/>
   <priority name="Piloting" value="Normal"/>
-  <item amount="1" index="88"/>
-  <item amount="1" index="90"/>
-  <item amount="1" index="91"/>
-  <item amount="1" index="92"/>
-  <item amount="1" index="93"/>
-  <item amount="1" index="89"/>
-  <equipment index="1" slot="Weapon"/>
-  <equipment index="6" slot="Shield"/>
-  <equipment index="3" slot="Head"/>
-  <equipment index="2" slot="Torso"/>
-  <equipment index="4" slot="Arms"/>
-  <equipment index="5" slot="Legs"/>
  </mobile>
  <mobile index="141" order="GUNNER">
   <skill maxlevel="50" minlevel="30" name="Gunnery"/>
