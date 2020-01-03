@@ -383,7 +383,17 @@ package body DebugUI is
              (Gtk_Box(Get_Child(Gtk_Box(Get_Object(Builder, "worldbox")), 1)),
               0));
    begin
-      Set_Text(Gtk_GEntry(Get_Object(Builder, "edtship")), "");
+      Set_Text
+        (Gtk_GEntry
+           (Get_Child_At
+              (Gtk_Grid
+                 (Get_Child
+                    (Gtk_Box
+                       (Get_Child
+                          (Gtk_Box(Get_Object(Builder, "worldbox")), 0)),
+                     0)),
+               1, 0)),
+         "");
       Set_Value(Gtk_Adjustment(Get_Object(Builder, "adjnpcshipx")), 1.0);
       Set_Value(Gtk_Adjustment(Get_Object(Builder, "adjnpcshipy")), 1.0);
       Set_Text(Gtk_GEntry(Get_Child_At(EventGrid, 1, 0)), "");
@@ -699,17 +709,23 @@ package body DebugUI is
    -- FUNCTION
    -- Add new NPC ship on map
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Button which was clicked.
    -- SOURCE
-   procedure AddShip(Object: access Gtkada_Builder_Record'Class) is
+   procedure AddShip(Self: access Gtk_Button_Record'Class) is
       -- ****
       ShipName: constant Unbounded_String :=
         To_Unbounded_String
-          (Get_Text(Gtk_GEntry(Get_Object(Object, "edtship"))));
+          (Get_Text
+             (Gtk_GEntry
+                (Get_Child_At
+                   (Gtk_Grid(Get_Child(Gtk_Box(Get_Parent(Self)), 0)), 1,
+                    0))));
       NpcShipX: constant Positive :=
-        Positive(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjnpcshipx"))));
+        Positive
+          (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjnpcshipx"))));
       NpcShipY: constant Positive :=
-        Positive(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjnpcshipy"))));
+        Positive
+          (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjnpcshipy"))));
    begin
       for I in ProtoShips_List.Iterate loop
          if ProtoShips_List(I).Name = ShipName then
@@ -719,7 +735,7 @@ package body DebugUI is
                     (Trader, NpcShipX, NpcShipY,
                      Positive
                        (Get_Value
-                          (Gtk_Adjustment(Get_Object(Object, "adjminutes")))),
+                          (Gtk_Adjustment(Get_Object(Builder, "adjminutes")))),
                      ProtoShips_Container.Key(I)));
             elsif FriendlyShips.Contains(ProtoShips_Container.Key(I)) then
                Events_List.Append
@@ -727,7 +743,7 @@ package body DebugUI is
                     (FriendlyShip, NpcShipX, NpcShipY,
                      Positive
                        (Get_Value
-                          (Gtk_Adjustment(Get_Object(Object, "adjminutes")))),
+                          (Gtk_Adjustment(Get_Object(Builder, "adjminutes")))),
                      ProtoShips_Container.Key(I)));
             else
                Events_List.Append
@@ -735,7 +751,7 @@ package body DebugUI is
                     (EnemyShip, NpcShipX, NpcShipY,
                      Positive
                        (Get_Value
-                          (Gtk_Adjustment(Get_Object(Object, "adjminutes")))),
+                          (Gtk_Adjustment(Get_Object(Builder, "adjminutes")))),
                      ProtoShips_Container.Key(I)));
             end if;
             SkyMap(NpcShipX, NpcShipY).EventIndex := Events_List.Last_Index;
@@ -961,7 +977,6 @@ package body DebugUI is
       Register_Handler(Builder, "Update_Cargo", UpdateShipCargo'Access);
       Register_Handler(Builder, "Show_Base_Info", ShowBaseInfo'Access);
       Register_Handler(Builder, "Update_Base", UpdateBase'Access);
-      Register_Handler(Builder, "Add_Ship", AddShip'Access);
       Register_Handler(Builder, "Save_Game", Save_Game'Access);
       Register_Handler(Builder, "Set_Module_Stats", SetModuleStats'Access);
       Register_Handler(Builder, "Update_Module", UpdateModule'Access);
@@ -1023,6 +1038,68 @@ package body DebugUI is
       declare
          EventGrid: constant Gtk_Grid := Gtk_Grid_New;
          EventButton: constant Gtk_Button :=
+           Gtk_Button_New_With_Label("Add ship");
+         Label: Gtk_Label;
+         ShipsEntry: constant Gtk_Entry := Gtk_Entry_New;
+         SpinButton: Gtk_Spin_Button;
+         EventsComboBox: constant Gtk_Combo_Box_Text := Gtk_Combo_Box_Text_New;
+         DeleteEventButton: constant Gtk_Button :=
+           Gtk_Button_New_With_Label("Delete event");
+         EventBox: constant Gtk_Vbox := Gtk_Vbox_New;
+      begin
+         Label := Gtk_Label_New("Ship:");
+         Attach(EventGrid, Label, 0, 0);
+         Set_Completion
+           (ShipsEntry,
+            Gtk_Entry_Completion(Get_Object(Builder, "shipscompletion")));
+         Set_Tooltip_Text
+           (ShipsEntry,
+            "Start typing the name of a ship here to select it from the list.");
+         Attach(EventGrid, ShipsEntry, 1, 0);
+         Label := Gtk_Label_New("X:");
+         Attach(EventGrid, Label, 0, 1);
+         SpinButton :=
+           Gtk_Spin_Button_New
+             (Gtk_Adjustment(Get_Object(Builder, "adjnpcshipx")), 0.0);
+         Set_Tooltip_Text
+           (SpinButton,
+            "X coordinates on the map where new NPC ship will be added.");
+         Attach(EventGrid, SpinButton, 1, 1);
+         Label := Gtk_Label_New("Y:");
+         Attach(EventGrid, Label, 0, 2);
+         SpinButton :=
+           Gtk_Spin_Button_New
+             (Gtk_Adjustment(Get_Object(Builder, "adjnpcshipy")), 0.0);
+         Set_Tooltip_Text
+           (SpinButton,
+            "Y coordinates on the map where new NPC ship will be added.");
+         Attach(EventGrid, SpinButton, 1, 2);
+         Label := Gtk_Label_New("Duration:");
+         Attach(EventGrid, Label, 0, 3);
+         SpinButton :=
+           Gtk_Spin_Button_New
+             (Gtk_Adjustment(Get_Object(Builder, "adjminutes")), 0.0);
+         Set_Tooltip_Text
+           (SpinButton,
+            "Amount of minutes, how long selected ship will be available on the map.");
+         Attach(EventGrid, SpinButton, 1, 3);
+         Pack_Start(EventBox, EventGrid, False);
+         Set_Tooltip_Text(EventButton, "Add selected ship to the map.");
+         Set_Halign(EventButton, Align_Start);
+         On_Clicked(EventButton, AddShip'Access);
+         Pack_Start(EventBox, EventButton, False);
+         Set_Tooltip_Text(EventsComboBox, "Select event to delete.");
+         Set_Halign(EventsComboBox, Align_Start);
+         Set_Halign(DeleteEventButton, Align_Start);
+         On_Clicked(DeleteEventButton, DeleteEvent'Access);
+         Set_Tooltip_Text(DeleteEventButton, "Delete selected event.");
+         Pack_Start(EventBox, EventsComboBox, False);
+         Pack_Start(EventBox, DeleteEventButton, False);
+         Pack_Start(Gtk_Box(Get_Object(Builder, "worldbox")), EventBox);
+      end;
+      declare
+         EventGrid: constant Gtk_Grid := Gtk_Grid_New;
+         EventButton: constant Gtk_Button :=
            Gtk_Button_New_With_Label("Add event");
          Label: Gtk_Label;
          EventEntry: Gtk_Entry;
@@ -1074,22 +1151,6 @@ package body DebugUI is
          Set_Tooltip_Text(EventButton, "Add the selected event to the map.");
          Pack_Start(EventBox, EventButton, False);
          Pack_Start(Gtk_Box(Get_Object(Builder, "worldbox")), EventBox);
-      end;
-      declare
-         EventsComboBox: constant Gtk_Combo_Box_Text := Gtk_Combo_Box_Text_New;
-         DeleteEventButton: constant Gtk_Button :=
-           Gtk_Button_New_With_Label("Delete event");
-      begin
-         Set_Tooltip_Text(EventsComboBox, "Select event to delete.");
-         Set_Halign(DeleteEventButton, Align_Start);
-         On_Clicked(DeleteEventButton, DeleteEvent'Access);
-         Set_Tooltip_Text(DeleteEventButton, "Delete selected event.");
-         Pack_Start
-           (Gtk_Box(Get_Child(Gtk_Box(Get_Object(Builder, "worldbox")), 0)),
-            EventsComboBox, False);
-         Pack_Start
-           (Gtk_Box(Get_Child(Gtk_Box(Get_Object(Builder, "worldbox")), 0)),
-            DeleteEventButton, False);
       end;
    end CreateDebugUI;
 
