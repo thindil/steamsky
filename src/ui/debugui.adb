@@ -858,12 +858,10 @@ package body DebugUI is
    procedure DeleteEvent(Self: access Gtk_Button_Record'Class) is
    -- ****
    begin
-      Events_List.Delete
-        (Index =>
-           Positive'Value
-             (Get_Active_Id
-                (Gtk_Combo_Box_Text
-                   (Get_Child(Gtk_Box(Get_Parent(Self)), 2)))));
+      DeleteEvent
+        (Positive'Value
+           (Get_Active_Id
+              (Gtk_Combo_Box_Text(Get_Child(Gtk_Box(Get_Parent(Self)), 2)))));
       ResetWorldUI;
    end DeleteEvent;
 
