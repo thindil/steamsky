@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Removed outdated tooltip for recruits list in bases
 - Orders priority for one mob
 - Possible generate that same name for savegame as old name
+- Deleting events in debug menu
 
 ## [4.0.9] - 2019-12-15
 
