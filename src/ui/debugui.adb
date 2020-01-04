@@ -1120,7 +1120,7 @@ package body DebugUI is
          Set_Tooltip_Text(DeleteEventButton, "Delete selected event.");
          Pack_Start(EventBox, EventsComboBox, False);
          Pack_Start(EventBox, DeleteEventButton, False);
-         Pack_Start(WorldBox, EventBox);
+         Pack_Start(WorldBox, EventBox, False);
       end;
       declare
          EventGrid: constant Gtk_Grid := Gtk_Grid_New;
@@ -1175,7 +1175,7 @@ package body DebugUI is
          Set_Halign(EventButton, Align_Start);
          Set_Tooltip_Text(EventButton, "Add the selected event to the map.");
          Pack_Start(EventBox, EventButton, False);
-         Pack_Start(WorldBox, EventBox);
+         Pack_Start(WorldBox, EventBox, False);
       end;
       Add_Titled
         (Gtk_Stack(Get_Object(Builder, "stack1")), WorldBox, "page4", "World");
