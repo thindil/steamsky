@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Ability to set random equipment for mobs
+- Updated MODDING.md
 
 ### Fixed
 - Orders priority for one mob
