@@ -577,10 +577,15 @@ Value must be existing skill name.
     - Optional attribute `action`: what to do with this item. Possible values
       are: "add" (add this item, default option), "remove" (remove this item)
       or "update" (update selected item).
-- Tag `equipment` define which items are used by mobile. Attribute `index` is
-  item index from inventory. Item index always starts with 1. Attribute `slot`
-  is name of equipment slot in which selected item is set. Possible values for
-  `slot`: Weapon, Shield, Head, Torso, Arms, Legs, Tools.
+- Tag `equipment` define which items are used by mobile. If mob will not have
+  set an item in equipment slot, it will be generated randomly based on its
+  skills and faction. In that situation, here is small chance that mob will
+  not have any equipment in selected slot.
+    - Attribute `index` is item index from inventory. Item index always starts
+      with 1.
+    - Attribute `slot` is name of equipment slot in which selected item is
+      set. Possible values for `slot`: Weapon, Shield, Head, Torso, Arms,
+      Legs, Tools.
 
 ## Factions
 
