@@ -33,6 +33,7 @@ with Gtk.Grid; use Gtk.Grid;
 with Gtk.Label; use Gtk.Label;
 with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Spin_Button; use Gtk.Spin_Button;
+with Gtk.Stack; use Gtk.Stack;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.Widget; use Gtk.Widget;
 with Glib; use Glib;
@@ -376,11 +377,22 @@ package body DebugUI is
       -- ****
       EventsCombo: constant Gtk_Widget :=
         Get_Child
-          (Gtk_Box(Get_Child(Gtk_Box(Get_Object(Builder, "worldbox")), 0)), 2);
+          (Gtk_Box
+             (Get_Child
+                (Gtk_Box
+                   (Get_Child_By_Name
+                      (Gtk_Stack(Get_Object(Builder, "stack1")), "page4")),
+                 0)),
+           2);
       EventGrid: constant Gtk_Grid :=
         Gtk_Grid
           (Get_Child
-             (Gtk_Box(Get_Child(Gtk_Box(Get_Object(Builder, "worldbox")), 1)),
+             (Gtk_Box
+                (Get_Child
+                   (Gtk_Box
+                      (Get_Child_By_Name
+                         (Gtk_Stack(Get_Object(Builder, "stack1")), "page4")),
+                    1)),
               0));
    begin
       Set_Text
@@ -390,7 +402,11 @@ package body DebugUI is
                  (Get_Child
                     (Gtk_Box
                        (Get_Child
-                          (Gtk_Box(Get_Object(Builder, "worldbox")), 0)),
+                          (Gtk_Box
+                             (Get_Child_By_Name
+                                (Gtk_Stack(Get_Object(Builder, "stack1")),
+                                 "page4")),
+                           0)),
                      0)),
                1, 0)),
          "");
@@ -402,13 +418,23 @@ package body DebugUI is
          Hide(EventsCombo);
          Hide
            (Get_Child
-              (Gtk_Box(Get_Child(Gtk_Box(Get_Object(Builder, "worldbox")), 0)),
+              (Gtk_Box
+                 (Get_Child
+                    (Gtk_Box
+                       (Get_Child_By_Name
+                          (Gtk_Stack(Get_Object(Builder, "stack1")), "page4")),
+                     0)),
                3));
       else
          Show_All(EventsCombo);
          Show_All
            (Get_Child
-              (Gtk_Box(Get_Child(Gtk_Box(Get_Object(Builder, "worldbox")), 0)),
+              (Gtk_Box
+                 (Get_Child
+                    (Gtk_Box
+                       (Get_Child_By_Name
+                          (Gtk_Stack(Get_Object(Builder, "stack1")), "page4")),
+                     0)),
                3));
          Remove_All(Gtk_Combo_Box_Text(EventsCombo));
          for I in Events_List.Iterate loop
@@ -949,6 +975,7 @@ package body DebugUI is
 
    procedure CreateDebugUI is
       Error: aliased GError;
+      WorldBox: constant Gtk_Hbox := Gtk_Hbox_New;
    begin
       if Builder /= null then
          return;
@@ -1093,7 +1120,7 @@ package body DebugUI is
          Set_Tooltip_Text(DeleteEventButton, "Delete selected event.");
          Pack_Start(EventBox, EventsComboBox, False);
          Pack_Start(EventBox, DeleteEventButton, False);
-         Pack_Start(Gtk_Box(Get_Object(Builder, "worldbox")), EventBox);
+         Pack_Start(WorldBox, EventBox);
       end;
       declare
          EventGrid: constant Gtk_Grid := Gtk_Grid_New;
@@ -1148,8 +1175,10 @@ package body DebugUI is
          Set_Halign(EventButton, Align_Start);
          Set_Tooltip_Text(EventButton, "Add the selected event to the map.");
          Pack_Start(EventBox, EventButton, False);
-         Pack_Start(Gtk_Box(Get_Object(Builder, "worldbox")), EventBox);
+         Pack_Start(WorldBox, EventBox);
       end;
+      Add_Titled
+        (Gtk_Stack(Get_Object(Builder, "stack1")), WorldBox, "page4", "World");
    end CreateDebugUI;
 
    procedure ShowDebugUI is
@@ -1163,7 +1192,11 @@ package body DebugUI is
                  (Get_Child
                     (Gtk_Box
                        (Get_Child
-                          (Gtk_Box(Get_Object(Builder, "worldbox")), 1)),
+                          (Gtk_Box
+                             (Get_Child_By_Name
+                                (Gtk_Stack(Get_Object(Builder, "stack1")),
+                                 "page4")),
+                           1)),
                      0)),
                1, 1)));
       ResetWorldUI;
