@@ -1262,21 +1262,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="btnupdatebase">
-                    <property name="label" translatable="yes">_Update base</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes">Update selected base.</property>
-                    <property name="halign">start</property>
-                    <property name="use_underline">True</property>
-                    <signal name="clicked" handler="Update_Base" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -1284,9 +1270,6 @@
                 <property name="title" translatable="yes">Bases</property>
                 <property name="position">3</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
           <packing>
