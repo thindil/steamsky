@@ -691,42 +691,43 @@ package body DebugUI is
    -- FUNCTION
    -- Update selected base with new data
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Button which was clicked.
    -- SOURCE
-   procedure UpdateBase(Object: access Gtkada_Builder_Record'Class) is
+   procedure UpdateBase(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
       -- ****
       BaseName: constant Unbounded_String :=
         To_Unbounded_String
-          (Get_Text(Gtk_GEntry(Get_Object(Object, "edtbase"))));
+          (Get_Text(Gtk_GEntry(Get_Object(Builder, "edtbase"))));
    begin
       for SkyBase of SkyBases loop
          if SkyBase.Name = BaseName then
             SkyBase.BaseType :=
               To_Unbounded_String
                 (Get_Active_Text
-                   (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbasetype"))));
+                   (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbbasetype"))));
             SkyBase.Owner :=
               To_Unbounded_String
                 (Get_Active_Id
-                   (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbaseowner"))));
+                   (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbbaseowner"))));
             SkyBase.Size :=
               Bases_Size'Val
                 (Integer
                    (Get_Active
                       (Gtk_Combo_Box_Text
-                         (Get_Object(Object, "cmbbasesize")))));
+                         (Get_Object(Builder, "cmbbasesize")))));
             SkyBase.Cargo(1).Amount :=
               Natural
                 (Get_Value
-                   (Gtk_Adjustment(Get_Object(Object, "adjbasemoney"))));
+                   (Gtk_Adjustment(Get_Object(Builder, "adjbasemoney"))));
             SkyBase.Population :=
               Natural
                 (Get_Value
-                   (Gtk_Adjustment(Get_Object(Object, "adjpopulation"))));
+                   (Gtk_Adjustment(Get_Object(Builder, "adjpopulation"))));
             SkyBase.Reputation(1) :=
               Natural
                 (Get_Value
-                   (Gtk_Adjustment(Get_Object(Object, "adjreputation"))));
+                   (Gtk_Adjustment(Get_Object(Builder, "adjreputation"))));
          end if;
       end loop;
    end UpdateBase;
@@ -1001,7 +1002,6 @@ package body DebugUI is
       Register_Handler(Builder, "Add_Cargo", AddCargo'Access);
       Register_Handler(Builder, "Update_Cargo", UpdateShipCargo'Access);
       Register_Handler(Builder, "Show_Base_Info", ShowBaseInfo'Access);
-      Register_Handler(Builder, "Update_Base", UpdateBase'Access);
       Register_Handler(Builder, "Save_Game", Save_Game'Access);
       Register_Handler(Builder, "Set_Module_Stats", SetModuleStats'Access);
       Register_Handler(Builder, "Update_Module", UpdateModule'Access);
@@ -1059,6 +1059,16 @@ package body DebugUI is
                Bases_Size'Image(I)(1) &
                To_Lower(Bases_Size'Image(I)(2 .. Bases_Size'Image(I)'Last)));
          end loop;
+      end;
+      declare
+         BaseButton: constant Gtk_Button :=
+           Gtk_Button_New_With_Mnemonic("_Update base");
+      begin
+         Set_Halign(BaseButton, Align_Start);
+         On_Clicked(BaseButton, UpdateBase'Access);
+         Set_Tooltip_Text(BaseButton, "Update selected base.");
+         Pack_Start
+           (Gtk_Box(Get_Object(Builder, "basesbox")), BaseButton, False);
       end;
       declare
          EventGrid: constant Gtk_Grid := Gtk_Grid_New;
