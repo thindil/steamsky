@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 - Ability to set random equipment for mobs
 - Updated MODDING.md
 
+### Changed
+- Updated mobs data
+
 ### Fixed
 - Orders priority for one mob
 - Possible generate that same name for savegame as old name
