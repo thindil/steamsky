@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [4.0.10] - 2020-01-05
 
 ### Fixed
 - Removed outdated tooltip for recruits list in bases
