@@ -704,7 +704,7 @@ package body DebugUI is
          if SkyBase.Name = BaseName then
             SkyBase.BaseType :=
               To_Unbounded_String
-                (Get_Active_Text
+                (Get_Active_Id
                    (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbbasetype"))));
             SkyBase.Owner :=
               To_Unbounded_String
