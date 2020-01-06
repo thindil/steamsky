@@ -343,12 +343,12 @@ package body DebugUI is
             if not Set_Active_Id
                 (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbaseowner")),
                  To_String(SkyBases(I).Owner)) then
-               return;
+               raise Program_Error with "Can't set active Id for cmbbaseowner";
             end if;
             if not Set_Active_Id
                 (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbasetype")),
                  To_String(SkyBases(I).BaseType)) then
-               return;
+               raise Program_Error with "Can't set active Id for cmbbasetype";
             end if;
             Set_Value
               (Gtk_Adjustment(Get_Object(Object, "adjpopulation")),
