@@ -716,16 +716,28 @@ package body DebugUI is
                    (Get_Active
                       (Gtk_Combo_Box_Text
                          (Get_Object(Builder, "cmbbasesize")))));
-            SkyBase.Cargo(1).Amount :=
-              Natural
-                (Get_Value
-                   (Gtk_Adjustment(Get_Object(Builder, "adjbasemoney"))));
+            if SkyBase.Cargo.Length > 0 then
+               SkyBase.Cargo(1).Amount :=
+                 Natural
+                   (Get_Value
+                      (Gtk_Adjustment(Get_Object(Builder, "adjbasemoney"))));
+            else
+               SkyBase.Cargo.Append
+                 (New_Item =>
+                    (ProtoIndex => MoneyIndex,
+                     Amount =>
+                       Natural
+                         (Get_Value
+                            (Gtk_Adjustment
+                               (Get_Object(Builder, "adjbasemoney")))),
+                     Durability => 100, Price => 0));
+            end if;
             SkyBase.Population :=
               Natural
                 (Get_Value
                    (Gtk_Adjustment(Get_Object(Builder, "adjpopulation"))));
             SkyBase.Reputation(1) :=
-              Natural
+              Integer
                 (Get_Value
                    (Gtk_Adjustment(Get_Object(Builder, "adjreputation"))));
          end if;
