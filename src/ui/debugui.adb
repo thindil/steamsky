@@ -325,7 +325,7 @@ package body DebugUI is
 
    -- ****if* DebugUI/ShowBaseInfo
    -- FUNCTION
-   -- Updated information about selected base
+   -- Update information about selected base
    -- PARAMETERS
    -- Object - Gtkada_Builder used to create UI
    -- SOURCE
@@ -337,17 +337,17 @@ package body DebugUI is
    begin
       for I in SkyBases'Range loop
          if SkyBases(I).Name = BaseName then
-            if not Set_Active_Id
-                (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbasetype")),
-                 To_String(SkyBases(I).BaseType)) then
-               return;
-            end if;
             Set_Active
               (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbasesize")),
                Bases_Size'Pos(SkyBases(I).Size));
             if not Set_Active_Id
                 (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbaseowner")),
                  To_String(SkyBases(I).Owner)) then
+               return;
+            end if;
+            if not Set_Active_Id
+                (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbasetype")),
+                 To_String(SkyBases(I).BaseType)) then
                return;
             end if;
             Set_Value
@@ -974,6 +974,26 @@ package body DebugUI is
           (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjmoduleupgrade"))));
    end UpdateModule;
 
+   procedure ShowBasesTypes(Object: access Gtkada_Builder_Record'Class) is
+      ComboBox: constant Gtk_Combo_Box_Text :=
+        Gtk_Combo_Box_Text(Get_Object(Object, "cmbbasetype"));
+      FactionIndex: constant Unbounded_String :=
+        To_Unbounded_String
+          (Get_Active_Id
+             (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbaseowner"))));
+   begin
+      Remove_All(ComboBox);
+      for I in BasesTypes_List.Iterate loop
+         if Factions_List(FactionIndex).BasesTypes.Contains
+             (BasesTypes_Container.Key(I)) then
+            Append
+              (ComboBox, To_String(BasesTypes_Container.Key(I)),
+               To_String(BasesTypes_List(I).Name));
+         end if;
+      end loop;
+      Set_Active(ComboBox, 0);
+   end ShowBasesTypes;
+
    procedure CreateDebugUI is
       Error: aliased GError;
       WorldBox: constant Gtk_Hbox := Gtk_Hbox_New;
@@ -1005,6 +1025,7 @@ package body DebugUI is
       Register_Handler(Builder, "Save_Game", Save_Game'Access);
       Register_Handler(Builder, "Set_Module_Stats", SetModuleStats'Access);
       Register_Handler(Builder, "Update_Module", UpdateModule'Access);
+      Register_Handler(Builder, "Show_Bases_Types", ShowBasesTypes'Access);
       Do_Connect(Builder);
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderstat")),
@@ -1040,12 +1061,6 @@ package body DebugUI is
       declare
          ComboBox: Gtk_Combo_Box_Text;
       begin
-         ComboBox := Gtk_Combo_Box_Text(Get_Object(Builder, "cmbbasetype"));
-         for I in BasesTypes_List.Iterate loop
-            Append
-              (ComboBox, To_String(BasesTypes_Container.Key(I)),
-               To_String(BasesTypes_List(I).Name));
-         end loop;
          ComboBox := Gtk_Combo_Box_Text(Get_Object(Builder, "cmbbaseowner"));
          for I in Factions_List.Iterate loop
             Append
