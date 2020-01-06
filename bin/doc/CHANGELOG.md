@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated mobs data
+- When updating base in debug menu, show only available for selected faction
+  bases types
 
 ### Fixed
 - Orders priority for one mob
