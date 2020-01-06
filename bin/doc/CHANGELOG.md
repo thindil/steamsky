@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Possible generate that same name for savegame as old name
 - Deleting events in debug menu
 - Crash on updating base in debug menu
+- Setting base type in debug menu
 
 ## [4.5] - 2019-12-29
 
