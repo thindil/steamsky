@@ -974,7 +974,14 @@ package body DebugUI is
           (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjmoduleupgrade"))));
    end UpdateModule;
 
+   -- ****if* DebugUI/ShowBasesTypes
+   -- FUNCTION
+   -- Update bases types list after selecting faction
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
    procedure ShowBasesTypes(Object: access Gtkada_Builder_Record'Class) is
+      -- ****
       ComboBox: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Object(Object, "cmbbasetype"));
       FactionIndex: constant Unbounded_String :=
