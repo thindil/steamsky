@@ -95,6 +95,9 @@ package body Mobs is
                ChildIndex :=
                  FindSkillIndex
                    (To_Unbounded_String(Get_Attribute(ChildNode, "name")));
+               if Get_Attribute(ChildNode, "name") = "WeaponSkill" then
+                  ChildIndex := Natural(Skills_List.Length) + 1;
+               end if;
                if ChildIndex = 0 then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(DataAction'Image(Action)) &
@@ -356,6 +359,7 @@ package body Mobs is
       ProtoMob: constant ProtoMobRecord := ProtoMobs_List(MobIndex);
       Amount: Natural;
       HighestSkillLevel, WeaponSkillLevel: Positive := 1;
+      SkillIndex: Positive;
    begin
       if GetRandom(1, 100) < 99 then
          Mob.Faction := FactionIndex;
@@ -374,13 +378,18 @@ package body Mobs is
       end if;
       Mob.Name := GenerateMemberName(Mob.Gender, Mob.Faction);
       for Skill of ProtoMob.Skills loop
+         if Skill(1) = Positive(Skills_List.Length) + 1 then
+            SkillIndex := Factions_List(FactionIndex).WeaponSkill;
+         else
+            SkillIndex := Skill(1);
+         end if;
          if Skill(3) = 0 then
-            Mob.Skills.Append(New_Item => Skill);
+            Mob.Skills.Append(New_Item => (SkillIndex, Skill(2), 0));
          else
             Mob.Skills.Append
-              (New_Item => (Skill(1), GetRandom(Skill(2), Skill(3)), 0));
+              (New_Item => (SkillIndex, GetRandom(Skill(2), Skill(3)), 0));
          end if;
-         if Skill(1) = Factions_List(FactionIndex).WeaponSkill then
+         if SkillIndex = Factions_List(FactionIndex).WeaponSkill then
             WeaponSkillLevel := Mob.Skills(Mob.Skills.Last_Index)(2);
          end if;
          if Mob.Skills(Mob.Skills.Last_Index)(2) > HighestSkillLevel then
