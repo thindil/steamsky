@@ -548,7 +548,9 @@ Value must be existing skill name.
   Pilot, Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean, Rest,
   Defend, Boarding.
 - Tag `skill` define skill of mobile.
-- Attribute `name` is name of skill (from *game.dat* from *data* directory).
+    - Attribute `name` is name of skill (from *game.dat* from *data*
+      directory). If name is set to "WeaponSkill" it will be later replaced by
+      proper weapon skill depending on mobile faction.
     - Optional attribute `action`: what to do with this skill. Possible values
       are: "add" (add this skill, default option), "remove" (remove this skill)
       or "update" (update selected skill).
