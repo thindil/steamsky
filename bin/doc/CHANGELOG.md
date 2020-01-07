@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Ability to set random equipment for mobs
 - Updated MODDING.md
+- Ability to set more generic weapon skill for mobs
 
 ### Changed
 - Updated mobs data
