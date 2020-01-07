@@ -14,6 +14,8 @@ Defend, Boarding.
  <mobile index="1" order="TALK">
 <!-- Tags "skill" define skill of mobile.
 - Attribute "name" is name of skill (from *game.dat* from *data* directory).
+If name is set to "WeaponSkill" it will be later replaced by proper weapon
+skill depending on mobile faction.
 - Optional attribute `action`: what to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
