@@ -366,15 +366,11 @@ package body Mobs is
       else
          Mob.Faction := GetRandomFaction;
       end if;
+      Mob.Gender := 'M';
       if not Factions_List(Mob.Faction).Flags.Contains
-          (To_Unbounded_String("nogender")) then
-         if GetRandom(1, 100) < 50 then
-            Mob.Gender := 'M';
-         else
-            Mob.Gender := 'F';
-         end if;
-      else
-         Mob.Gender := 'M';
+          (To_Unbounded_String("nogender"))
+        and then GetRandom(1, 100) > 50 then
+         Mob.Gender := 'F';
       end if;
       Mob.Name := GenerateMemberName(Mob.Gender, Mob.Faction);
       for Skill of ProtoMob.Skills loop
