@@ -1078,7 +1078,13 @@ package body DebugUI is
          end loop;
       end;
       declare
+         BaseButton: constant Gtk_Button :=
+           Gtk_Button_New_With_Mnemonic("_Update base");
          ComboBox: Gtk_Combo_Box_Text;
+         Label: Gtk_Label;
+         SpinButton: Gtk_Spin_Button;
+         BaseGrid: constant Gtk_Grid :=
+           Gtk_Grid(Get_Object(Builder, "basesgrid"));
       begin
          ComboBox := Gtk_Combo_Box_Text(Get_Object(Builder, "cmbbaseowner"));
          for I in Factions_List.Iterate loop
@@ -1093,11 +1099,31 @@ package body DebugUI is
                Bases_Size'Image(I)(1) &
                To_Lower(Bases_Size'Image(I)(2 .. Bases_Size'Image(I)'Last)));
          end loop;
-      end;
-      declare
-         BaseButton: constant Gtk_Button :=
-           Gtk_Button_New_With_Mnemonic("_Update base");
-      begin
+         Label := Gtk_Label_New("Population:");
+         Attach(BaseGrid, Label, 0, 4);
+         SpinButton :=
+           Gtk_Spin_Button_New
+             (Gtk_Adjustment(Get_Object(Builder, "adjpopulation")), 0.0);
+         Set_Tooltip_Text
+           (SpinButton, "Amount of people living in selected base.");
+         Attach(BaseGrid, SpinButton, 1, 4);
+         Label := Gtk_Label_New("Reputation:");
+         Attach(BaseGrid, Label, 0, 5);
+         SpinButton :=
+           Gtk_Spin_Button_New
+             (Gtk_Adjustment(Get_Object(Builder, "adjreputation")), 0.0);
+         Set_Tooltip_Text
+           (SpinButton,
+            "Player reputation in selected base. Value between -100 and 100.");
+         Attach(BaseGrid, SpinButton, 1, 5);
+         Label := Gtk_Label_New("Money:");
+         Attach(BaseGrid, Label, 0, 6);
+         SpinButton :=
+           Gtk_Spin_Button_New
+             (Gtk_Adjustment(Get_Object(Builder, "adjbasemoney")), 0.0);
+         Set_Tooltip_Text
+           (SpinButton, "Amount of money owned by selected base.");
+         Attach(BaseGrid, SpinButton, 1, 6);
          Set_Halign(BaseButton, Align_Start);
          On_Clicked(BaseButton, UpdateBase'Access);
          Set_Tooltip_Text(BaseButton, "Update selected base.");
