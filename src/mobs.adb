@@ -379,7 +379,7 @@ package body Mobs is
       Mob.Name := GenerateMemberName(Mob.Gender, Mob.Faction);
       for Skill of ProtoMob.Skills loop
          if Skill(1) = Positive(Skills_List.Length) + 1 then
-            SkillIndex := Factions_List(FactionIndex).WeaponSkill;
+            SkillIndex := Factions_List(Mob.Faction).WeaponSkill;
          else
             SkillIndex := Skill(1);
          end if;
@@ -389,7 +389,7 @@ package body Mobs is
             Mob.Skills.Append
               (New_Item => (SkillIndex, GetRandom(Skill(2), Skill(3)), 0));
          end if;
-         if SkillIndex = Factions_List(FactionIndex).WeaponSkill then
+         if SkillIndex = Factions_List(Mob.Faction).WeaponSkill then
             WeaponSkillLevel := Mob.Skills(Mob.Skills.Last_Index)(2);
          end if;
          if Mob.Skills(Mob.Skills.Last_Index)(2) > HighestSkillLevel then
@@ -445,7 +445,7 @@ package body Mobs is
                   ItemIndex :=
                     GetRandomItem
                       (ItemsList, I, HighestSkillLevel, WeaponSkillLevel,
-                       FactionIndex);
+                       Mob.Faction);
                end if;
                if ItemIndex /= Null_Unbounded_String then
                   Mob.Inventory.Append
