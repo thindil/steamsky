@@ -540,7 +540,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  </mobile>
  <mobile index="41" order="ENGINEER">
   <skill maxlevel="50" minlevel="30" name="Engineering"/>
-  <skill maxlevel="50" minlevel="30" name="Rapiers"/>
+  <skill maxlevel="50" minlevel="30" name="WeaponSkill"/>
   <skill maxlevel="50" minlevel="30" name="Dodge"/>
   <attribute maxlevel="25" minlevel="15"/>
   <attribute maxlevel="25" minlevel="15"/>
@@ -551,7 +551,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  </mobile>
  <mobile index="42" order="TALK">
   <skill maxlevel="20" minlevel="10" name="Rhetoric"/>
-  <skill maxlevel="50" minlevel="30" name="Rapiers"/>
+  <skill maxlevel="50" minlevel="30" name="WeaponSkill"/>
   <skill maxlevel="50" minlevel="30" name="Dodge"/>
   <attribute maxlevel="25" minlevel="15"/>
   <attribute maxlevel="25" minlevel="15"/>
@@ -563,7 +563,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="43" order="PILOT">
   <skill maxlevel="60" minlevel="40" name="Piloting"/>
   <skill maxlevel="15" minlevel="8" name="Perception"/>
-  <skill maxlevel="60" minlevel="40" name="Rapiers"/>
+  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
   <attribute maxlevel="35" minlevel="25"/>
   <attribute maxlevel="35" minlevel="25"/>
@@ -574,7 +574,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="44" order="GUNNER">
   <skill maxlevel="60" minlevel="40" name="Gunnery"/>
   <skill maxlevel="15" minlevel="8" name="Perception"/>
-  <skill maxlevel="60" minlevel="40" name="Rapiers"/>
+  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
   <attribute maxlevel="35" minlevel="25"/>
   <attribute maxlevel="35" minlevel="25"/>
@@ -584,7 +584,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  </mobile>
  <mobile index="45" order="ENGINEER">
   <skill maxlevel="60" minlevel="40" name="Engineering"/>
-  <skill maxlevel="60" minlevel="40" name="Rapiers"/>
+  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
   <attribute maxlevel="35" minlevel="25"/>
   <attribute maxlevel="35" minlevel="25"/>
@@ -595,7 +595,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  </mobile>
  <mobile index="46" order="TALK">
   <skill maxlevel="40" minlevel="20" name="Rhetoric"/>
-  <skill maxlevel="60" minlevel="40" name="Rapiers"/>
+  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
   <attribute maxlevel="35" minlevel="25"/>
   <attribute maxlevel="35" minlevel="25"/>
@@ -607,7 +607,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="47" order="PILOT">
   <skill maxlevel="50" minlevel="30" name="Piloting"/>
   <skill maxlevel="50" minlevel="30" name="Perception"/>
-  <skill maxlevel="50" minlevel="30" name="Brawling"/>
+  <skill maxlevel="50" minlevel="30" name="WeaponSkill"/>
   <skill maxlevel="50" minlevel="30" name="Dodge"/>
   <attribute maxlevel="20" minlevel="15"/>
   <attribute maxlevel="20" minlevel="15"/>
@@ -618,7 +618,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="48" order="PILOT">
   <skill maxlevel="60" minlevel="40" name="Piloting"/>
   <skill maxlevel="60" minlevel="40" name="Perception"/>
-  <skill maxlevel="60" minlevel="40" name="Brawling"/>
+  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
   <attribute maxlevel="30" minlevel="20"/>
   <attribute maxlevel="30" minlevel="20"/>
@@ -629,7 +629,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="49" order="PILOT">
   <skill maxlevel="60" minlevel="40" name="Piloting"/>
   <skill maxlevel="15" minlevel="5" name="Perception"/>
-  <skill maxlevel="60" minlevel="40" name="Two-handed Swords"/>
+  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
   <attribute maxlevel="25" minlevel="15"/>
   <attribute maxlevel="25" minlevel="15"/>
@@ -640,7 +640,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="50" order="GUNNER">
   <skill maxlevel="50" minlevel="30" name="Gunnery"/>
   <skill maxlevel="15" minlevel="5" name="Perception"/>
-  <skill maxlevel="60" minlevel="40" name="Two-handed Swords"/>
+  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
   <attribute maxlevel="25" minlevel="15"/>
   <attribute maxlevel="25" minlevel="15"/>
@@ -651,7 +651,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="51" order="PILOT">
   <skill maxlevel="70" minlevel="50" name="Piloting"/>
   <skill maxlevel="20" minlevel="8" name="Perception"/>
-  <skill maxlevel="70" minlevel="50" name="Two-handed Swords"/>
+  <skill maxlevel="70" minlevel="50" name="WeaponSkill"/>
   <skill maxlevel="70" minlevel="50" name="Dodge"/>
   <attribute maxlevel="35" minlevel="25"/>
   <attribute maxlevel="35" minlevel="25"/>
@@ -662,7 +662,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="52" order="GUNNER">
   <skill maxlevel="60" minlevel="40" name="Gunnery"/>
   <skill maxlevel="20" minlevel="8" name="Perception"/>
-  <skill maxlevel="70" minlevel="50" name="Two-handed Swords"/>
+  <skill maxlevel="70" minlevel="50" name="WeaponSkill"/>
   <skill maxlevel="70" minlevel="50" name="Dodge"/>
   <attribute maxlevel="35" minlevel="25"/>
   <attribute maxlevel="35" minlevel="25"/>
@@ -673,7 +673,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="53" order="PILOT">
   <skill level="1" name="Piloting"/>
   <skill level="1" name="Perception"/>
-  <skill level="1" name="Rapiers"/>
+  <skill level="1" name="WeaponSkill"/>
   <skill level="1" name="Dodge"/>
   <attribute level="3"/>
   <attribute level="3"/>
@@ -684,7 +684,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="54" order="GUNNER">
   <skill level="1" name="Gunnery"/>
   <skill level="1" name="Perception"/>
-  <skill level="1" name="Rapiers"/>
+  <skill level="1" name="WeaponSkill"/>
   <skill level="1" name="Dodge"/>
   <attribute level="3"/>
   <attribute level="3"/>
@@ -693,7 +693,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Operating guns" value="Normal"/>
  </mobile>
  <mobile index="55" order="DEFEND">
-  <skill level="2" name="Brawling"/>
+  <skill level="2" name="WeaponSkill"/>
   <skill level="2" name="Dodge"/>
   <attribute level="1"/>
   <attribute level="1"/>
@@ -702,7 +702,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Defend ship" value="High"/>
  </mobile>
  <mobile index="56" order="DEFEND">
-  <skill maxlevel="6" minlevel="2" name="Brawling"/>
+  <skill maxlevel="6" minlevel="2" name="WeaponSkill"/>
   <skill maxlevel="6" minlevel="2" name="Dodge"/>
   <attribute level="3"/>
   <attribute level="3"/>
@@ -711,7 +711,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Defend ship" value="High"/>
  </mobile>
  <mobile index="57" order="DEFEND">
-  <skill maxlevel="6" minlevel="3" name="Rapiers"/>
+  <skill maxlevel="6" minlevel="3" name="WeaponSkill"/>
   <skill maxlevel="6" minlevel="3" name="Dodge"/>
   <attribute maxlevel="5" minlevel="3"/>
   <attribute maxlevel="5" minlevel="3"/>
@@ -721,7 +721,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Board enemy ship" value="Normal"/>
  </mobile>
  <mobile index="58" order="DEFEND">
-  <skill maxlevel="14" minlevel="7" name="Rapiers"/>
+  <skill maxlevel="14" minlevel="7" name="WeaponSkill"/>
   <skill maxlevel="14" minlevel="7" name="Dodge"/>
   <attribute maxlevel="10" minlevel="5"/>
   <attribute maxlevel="10" minlevel="5"/>
@@ -731,7 +731,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Board enemy ship" value="Normal"/>
  </mobile>
  <mobile index="59" order="DEFEND">
-  <skill maxlevel="7" minlevel="3" name="Two-handed Swords"/>
+  <skill maxlevel="7" minlevel="3" name="WeaponSkill"/>
   <skill maxlevel="7" minlevel="3" name="Dodge"/>
   <attribute maxlevel="5" minlevel="3"/>
   <attribute maxlevel="5" minlevel="3"/>
@@ -741,7 +741,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Board enemy ship" value="Normal"/>
  </mobile>
  <mobile index="60" order="DEFEND">
-  <skill maxlevel="15" minlevel="5" name="Two-handed Swords"/>
+  <skill maxlevel="15" minlevel="5" name="WeaponSkill"/>
   <skill maxlevel="15" minlevel="5" name="Dodge"/>
   <attribute maxlevel="10" minlevel="5"/>
   <attribute maxlevel="10" minlevel="5"/>
@@ -751,7 +751,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Board enemy ship" value="Normal"/>
  </mobile>
  <mobile index="61" order="DEFEND">
-  <skill maxlevel="25" minlevel="15" name="Rapiers"/>
+  <skill maxlevel="25" minlevel="15" name="WeaponSkill"/>
   <skill maxlevel="25" minlevel="15" name="Dodge"/>
   <attribute maxlevel="20" minlevel="10"/>
   <attribute maxlevel="20" minlevel="10"/>
@@ -761,7 +761,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Board enemy ship" value="Normal"/>
  </mobile>
  <mobile index="62" order="DEFEND">
-  <skill maxlevel="15" minlevel="5" name="Brawling"/>
+  <skill maxlevel="15" minlevel="5" name="WeaponSkill"/>
   <skill maxlevel="15" minlevel="5" name="Dodge"/>
   <attribute maxlevel="4" minlevel="2"/>
   <attribute maxlevel="4" minlevel="2"/>
@@ -770,7 +770,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Defend ship" value="High"/>
  </mobile>
  <mobile index="63" order="DEFEND">
-  <skill maxlevel="25" minlevel="15" name="Brawling"/>
+  <skill maxlevel="25" minlevel="15" name="WeaponSkill"/>
   <skill maxlevel="25" minlevel="15" name="Dodge"/>
   <attribute maxlevel="15" minlevel="5"/>
   <attribute maxlevel="15" minlevel="5"/>
@@ -779,7 +779,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Defend ship" value="High"/>
  </mobile>
  <mobile index="64" order="DEFEND">
-  <skill maxlevel="25" minlevel="15" name="Two-handed Swords"/>
+  <skill maxlevel="25" minlevel="15" name="WeaponSkill"/>
   <skill maxlevel="25" minlevel="15" name="Dodge"/>
   <attribute maxlevel="15" minlevel="7"/>
   <attribute maxlevel="15" minlevel="7"/>
@@ -789,7 +789,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Board enemy ship" value="Normal"/>
  </mobile>
  <mobile index="65" order="DEFEND">
-  <skill maxlevel="20" minlevel="7" name="Rapiers"/>
+  <skill maxlevel="20" minlevel="7" name="WeaponSkill"/>
   <skill maxlevel="20" minlevel="7" name="Dodge"/>
   <attribute maxlevel="15" minlevel="7"/>
   <attribute maxlevel="15" minlevel="7"/>
@@ -799,7 +799,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Board enemy ship" value="Normal"/>
  </mobile>
  <mobile index="66" order="DEFEND">
-  <skill maxlevel="15" minlevel="5" name="Brawling"/>
+  <skill maxlevel="15" minlevel="5" name="WeaponSkill"/>
   <skill maxlevel="15" minlevel="5" name="Dodge"/>
   <attribute maxlevel="10" minlevel="5"/>
   <attribute maxlevel="10" minlevel="5"/>
@@ -808,7 +808,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Defend ship" value="High"/>
  </mobile>
  <mobile index="67" order="DEFEND">
-  <skill maxlevel="15" minlevel="5" name="Two-handed Swords"/>
+  <skill maxlevel="15" minlevel="5" name="WeaponSkill"/>
   <skill maxlevel="15" minlevel="5" name="Dodge"/>
   <attribute maxlevel="15" minlevel="7"/>
   <attribute maxlevel="15" minlevel="7"/>
@@ -818,7 +818,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Board enemy ship" value="Normal"/>
  </mobile>
  <mobile index="68" order="DEFEND">
-  <skill maxlevel="50" minlevel="30" name="Rapiers"/>
+  <skill maxlevel="50" minlevel="30" name="WeaponSkill"/>
   <skill maxlevel="50" minlevel="30" name="Dodge"/>
   <attribute maxlevel="25" minlevel="15"/>
   <attribute maxlevel="25" minlevel="15"/>
@@ -828,7 +828,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Board enemy ship" value="Normal"/>
  </mobile>
  <mobile index="69" order="DEFEND">
-  <skill maxlevel="60" minlevel="40" name="Rapiers"/>
+  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
   <attribute maxlevel="35" minlevel="25"/>
   <attribute maxlevel="35" minlevel="25"/>
@@ -838,7 +838,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Board enemy ship" value="Normal"/>
  </mobile>
  <mobile index="70" order="DEFEND">
-  <skill maxlevel="50" minlevel="30" name="Brawling"/>
+  <skill maxlevel="50" minlevel="30" name="WeaponSkill"/>
   <skill maxlevel="50" minlevel="30" name="Dodge"/>
   <attribute maxlevel="20" minlevel="15"/>
   <attribute maxlevel="20" minlevel="15"/>
@@ -847,7 +847,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Defend ship" value="High"/>
  </mobile>
  <mobile index="71" order="DEFEND">
-  <skill maxlevel="60" minlevel="40" name="Brawling"/>
+  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
   <attribute maxlevel="30" minlevel="20"/>
   <attribute maxlevel="30" minlevel="20"/>
@@ -856,7 +856,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Defend ship" value="High"/>
  </mobile>
  <mobile index="72" order="DEFEND">
-  <skill maxlevel="60" minlevel="40" name="Two-handed Swords"/>
+  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
   <attribute maxlevel="25" minlevel="15"/>
   <attribute maxlevel="25" minlevel="15"/>
@@ -866,7 +866,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Board enemy ship" value="Normal"/>
  </mobile>
  <mobile index="73" order="DEFEND">
-  <skill maxlevel="70" minlevel="50" name="Two-handed Swords"/>
+  <skill maxlevel="70" minlevel="50" name="WeaponSkill"/>
   <skill maxlevel="70" minlevel="50" name="Dodge"/>
   <attribute maxlevel="35" minlevel="25"/>
   <attribute maxlevel="35" minlevel="25"/>
@@ -876,7 +876,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Board enemy ship" value="Normal"/>
  </mobile>
  <mobile index="74" order="DEFEND">
-  <skill level="1" name="Rapiers"/>
+  <skill level="1" name="WeaponSkill"/>
   <skill level="1" name="Dodge"/>
   <attribute level="3"/>
   <attribute level="3"/>
