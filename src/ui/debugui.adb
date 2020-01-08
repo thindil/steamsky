@@ -327,42 +327,42 @@ package body DebugUI is
    -- FUNCTION
    -- Update information about selected base
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_GEntry in which button Enter was pressed
    -- SOURCE
-   procedure ShowBaseInfo(Object: access Gtkada_Builder_Record'Class) is
+   procedure ShowBaseInfo(Self: access Gtk_Entry_Record'Class) is
       -- ****
+      BaseGrid: constant Gtk_Grid := Gtk_Grid(Get_Parent(Self));
       BaseName: constant Unbounded_String :=
-        To_Unbounded_String
-          (Get_Text(Gtk_GEntry(Get_Object(Object, "edtbase"))));
+        To_Unbounded_String(Get_Text(Self));
    begin
       for I in SkyBases'Range loop
          if SkyBases(I).Name = BaseName then
             Set_Active
-              (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbasesize")),
+              (Gtk_Combo_Box_Text(Get_Child_At(BaseGrid, 1, 3)),
                Bases_Size'Pos(SkyBases(I).Size));
             if not Set_Active_Id
-                (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbaseowner")),
+                (Gtk_Combo_Box_Text(Get_Child_At(BaseGrid, 1, 2)),
                  To_String(SkyBases(I).Owner)) then
-               raise Program_Error with "Can't set active Id for cmbbaseowner";
+               raise Program_Error with "Can't set active Id for base owner";
             end if;
             if not Set_Active_Id
-                (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbasetype")),
+                (Gtk_Combo_Box_Text(Get_Child_At(BaseGrid, 1, 1)),
                  To_String(SkyBases(I).BaseType)) then
-               raise Program_Error with "Can't set active Id for cmbbasetype";
+               raise Program_Error with "Can't set active Id for base type";
             end if;
             Set_Value
-              (Gtk_Adjustment(Get_Object(Object, "adjpopulation")),
+              (Gtk_Adjustment(Get_Object(Builder, "adjpopulation")),
                Gdouble(SkyBases(I).Population));
             Set_Value
-              (Gtk_Adjustment(Get_Object(Object, "adjreputation")),
+              (Gtk_Adjustment(Get_Object(Builder, "adjreputation")),
                Gdouble(SkyBases(I).Reputation(1)));
             if SkyBases(I).Cargo.Length > 0 then
                Set_Value
-                 (Gtk_Adjustment(Get_Object(Object, "adjbasemoney")),
+                 (Gtk_Adjustment(Get_Object(Builder, "adjbasemoney")),
                   Gdouble(SkyBases(I).Cargo(1).Amount));
             else
                Set_Value
-                 (Gtk_Adjustment(Get_Object(Object, "adjbasemoney")), 0.0);
+                 (Gtk_Adjustment(Get_Object(Builder, "adjbasemoney")), 0.0);
             end if;
             exit;
          end if;
@@ -524,7 +524,16 @@ package body DebugUI is
       UpdateShip(Object);
       UpdateCrew(Object);
       UpdateCargoInfo(Object);
-      ShowBaseInfo(Object);
+      ShowBaseInfo
+        (Gtk_GEntry
+           (Get_Child_At
+              (Gtk_Grid
+                 (Get_Child
+                    (Gtk_Box
+                       (Get_Child_By_Name
+                          (Gtk_Stack(Get_Object(Object, "stack1")), "page3")),
+                     0)),
+               1, 0)));
       ResetWorldUI;
    end RefreshUI;
 
@@ -694,28 +703,28 @@ package body DebugUI is
    -- Self - Gtk_Button which was clicked.
    -- SOURCE
    procedure UpdateBase(Self: access Gtk_Button_Record'Class) is
-      pragma Unreferenced(Self);
       -- ****
+      BaseGrid: constant Gtk_Grid :=
+        Gtk_Grid(Get_Child(Gtk_Box(Get_Parent(Self)), 0));
       BaseName: constant Unbounded_String :=
         To_Unbounded_String
-          (Get_Text(Gtk_GEntry(Get_Object(Builder, "edtbase"))));
+          (Get_Text(Gtk_GEntry(Get_Child_At(BaseGrid, 1, 0))));
    begin
       for SkyBase of SkyBases loop
          if SkyBase.Name = BaseName then
             SkyBase.BaseType :=
               To_Unbounded_String
                 (Get_Active_Id
-                   (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbbasetype"))));
+                   (Gtk_Combo_Box_Text(Get_Child_At(BaseGrid, 1, 1))));
             SkyBase.Owner :=
               To_Unbounded_String
                 (Get_Active_Id
-                   (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbbaseowner"))));
+                   (Gtk_Combo_Box_Text(Get_Child_At(BaseGrid, 1, 2))));
             SkyBase.Size :=
               Bases_Size'Val
                 (Integer
                    (Get_Active
-                      (Gtk_Combo_Box_Text
-                         (Get_Object(Builder, "cmbbasesize")))));
+                      (Gtk_Combo_Box_Text(Get_Child_At(BaseGrid, 1, 3)))));
             if SkyBase.Cargo.Length > 0 then
                SkyBase.Cargo(1).Amount :=
                  Natural
@@ -990,16 +999,14 @@ package body DebugUI is
    -- FUNCTION
    -- Update bases types list after selecting faction
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Combo_Box in which value was changed
    -- SOURCE
-   procedure ShowBasesTypes(Object: access Gtkada_Builder_Record'Class) is
+   procedure ShowBasesTypes(Self: access Gtk_Combo_Box_Record'Class) is
       -- ****
       ComboBox: constant Gtk_Combo_Box_Text :=
-        Gtk_Combo_Box_Text(Get_Object(Object, "cmbbasetype"));
+        Gtk_Combo_Box_Text(Get_Child_At(Gtk_Grid(Get_Parent(Self)), 1, 1));
       FactionIndex: constant Unbounded_String :=
-        To_Unbounded_String
-          (Get_Active_Id
-             (Gtk_Combo_Box_Text(Get_Object(Object, "cmbbaseowner"))));
+        To_Unbounded_String(Get_Active_Id(Self));
    begin
       Remove_All(ComboBox);
       for I in BasesTypes_List.Iterate loop
@@ -1040,11 +1047,9 @@ package body DebugUI is
       Register_Handler(Builder, "Set_Cargo_Amount", SetCargoAmount'Access);
       Register_Handler(Builder, "Add_Cargo", AddCargo'Access);
       Register_Handler(Builder, "Update_Cargo", UpdateShipCargo'Access);
-      Register_Handler(Builder, "Show_Base_Info", ShowBaseInfo'Access);
       Register_Handler(Builder, "Save_Game", Save_Game'Access);
       Register_Handler(Builder, "Set_Module_Stats", SetModuleStats'Access);
       Register_Handler(Builder, "Update_Module", UpdateModule'Access);
-      Register_Handler(Builder, "Show_Bases_Types", ShowBasesTypes'Access);
       Do_Connect(Builder);
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderstat")),
@@ -1085,20 +1090,45 @@ package body DebugUI is
          SpinButton: Gtk_Spin_Button;
          BaseGrid: constant Gtk_Grid :=
            Gtk_Grid(Get_Object(Builder, "basesgrid"));
+         BaseEntry: constant Gtk_Entry := Gtk_Entry_New;
       begin
-         ComboBox := Gtk_Combo_Box_Text(Get_Object(Builder, "cmbbaseowner"));
+         Label := Gtk_Label_New("Base:");
+         Attach(BaseGrid, Label, 0, 0);
+         Set_Completion
+           (BaseEntry,
+            Gtk_Entry_Completion(Get_Object(Builder, "basescompletion1")));
+         Set_Tooltip_Text
+           (BaseEntry,
+            "Start typing here a name of the base to select it from the list. Base data will show after pressing key Enter.");
+         On_Activate(BaseEntry, ShowBaseInfo'Access);
+         Attach(BaseGrid, BaseEntry, 1, 0);
+         Label := Gtk_Label_New("Type:");
+         Attach(BaseGrid, Label, 0, 1);
+         ComboBox := Gtk_Combo_Box_Text_New;
+         Set_Tooltip_Text(ComboBox, "Type of selected base");
+         Attach(BaseGrid, ComboBox, 1, 1);
+         Label := Gtk_Label_New("Owner:");
+         Attach(BaseGrid, Label, 0, 2);
+         ComboBox := Gtk_Combo_Box_Text_New;
          for I in Factions_List.Iterate loop
             Append
               (ComboBox, To_String(Factions_Container.Key(I)),
                To_String(Factions_List(I).Name));
          end loop;
-         ComboBox := Gtk_Combo_Box_Text(Get_Object(Builder, "cmbbasesize"));
+         Set_Tooltip_Text(ComboBox, "Owner of selected base");
+         On_Changed(ComboBox, ShowBasesTypes'Access);
+         Attach(BaseGrid, ComboBox, 1, 2);
+         Label := Gtk_Label_New("Size:");
+         Attach(BaseGrid, Label, 0, 3);
+         ComboBox := Gtk_Combo_Box_Text_New;
          for I in Bases_Size loop
             Append_Text
               (ComboBox,
                Bases_Size'Image(I)(1) &
                To_Lower(Bases_Size'Image(I)(2 .. Bases_Size'Image(I)'Last)));
          end loop;
+         Set_Tooltip_Text(ComboBox, "Size of selected base");
+         Attach(BaseGrid, ComboBox, 1, 3);
          Label := Gtk_Label_New("Population:");
          Attach(BaseGrid, Label, 0, 4);
          SpinButton :=
