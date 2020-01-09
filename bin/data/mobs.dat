@@ -2637,7 +2637,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  </mobile>
  <mobile index="221" order="ENGINEER">
   <skill maxlevel="12" minlevel="7" name="Engineering"/>
-  <skill maxlevel="12" minlevel="7" name="Swords"/>
+  <skill maxlevel="12" minlevel="7" name="WeaponSkill"/>
   <skill maxlevel="12" minlevel="7" name="Dodge"/>
   <attribute maxlevel="10" minlevel="5"/>
   <attribute maxlevel="10" minlevel="5"/>
@@ -2647,7 +2647,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Repair ship" value="High"/>
  </mobile>
  <mobile index="222" order="DEFEND">
-  <skill maxlevel="14" minlevel="7" name="Swords"/>
+  <skill maxlevel="14" minlevel="7" name="WeaponSkill"/>
   <skill maxlevel="14" minlevel="7" name="Dodge"/>
   <attribute maxlevel="10" minlevel="5"/>
   <attribute maxlevel="10" minlevel="5"/>
@@ -2659,7 +2659,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="223" order="PILOT">
   <skill maxlevel="12" minlevel="6" name="Piloting"/>
   <skill maxlevel="6" minlevel="3" name="Perception"/>
-  <skill maxlevel="12" minlevel="6" name="Spears"/>
+  <skill maxlevel="12" minlevel="6" name="WeaponSkill"/>
   <skill maxlevel="12" minlevel="6" name="Dodge"/>
   <attribute maxlevel="10" minlevel="5"/>
   <attribute maxlevel="10" minlevel="5"/>
@@ -2670,7 +2670,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="224" order="GUNNER">
   <skill maxlevel="14" minlevel="7" name="Gunnery"/>
   <skill maxlevel="6" minlevel="3" name="Perception"/>
-  <skill maxlevel="14" minlevel="7" name="Spears"/>
+  <skill maxlevel="14" minlevel="7" name="WeaponSkill"/>
   <skill maxlevel="14" minlevel="7" name="Dodge"/>
   <attribute maxlevel="10" minlevel="5"/>
   <attribute maxlevel="10" minlevel="5"/>
@@ -2680,7 +2680,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  </mobile>
  <mobile index="225" order="ENGINEER">
   <skill maxlevel="12" minlevel="7" name="Engineering"/>
-  <skill maxlevel="12" minlevel="7" name="Spears"/>
+  <skill maxlevel="12" minlevel="7" name="WeaponSkill"/>
   <skill maxlevel="12" minlevel="7" name="Dodge"/>
   <attribute maxlevel="10" minlevel="5"/>
   <attribute maxlevel="10" minlevel="5"/>
@@ -2690,7 +2690,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Repair ship" value="High"/>
  </mobile>
  <mobile index="226" order="DEFEND">
-  <skill maxlevel="14" minlevel="7" name="Spears"/>
+  <skill maxlevel="14" minlevel="7" name="WeaponSkill"/>
   <skill maxlevel="14" minlevel="7" name="Dodge"/>
   <attribute maxlevel="10" minlevel="5"/>
   <attribute maxlevel="10" minlevel="5"/>
