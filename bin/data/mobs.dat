@@ -2081,7 +2081,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Defend ship" value="Normal"/>
  </mobile>
  <mobile index="181" order="DEFEND">
-  <skill maxlevel="60" minlevel="40" name="Spears"/>
+  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
   <attribute maxlevel="35" minlevel="25"/>
   <attribute maxlevel="35" minlevel="25"/>
@@ -2093,7 +2093,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="182" order="PILOT">
   <skill level="1" name="Piloting"/>
   <skill level="1" name="Perception"/>
-  <skill level="1" name="Spears"/>
+  <skill level="1" name="WeaponSkill"/>
   <skill level="1" name="Dodge"/>
   <attribute level="3"/>
   <attribute level="3"/>
@@ -2104,7 +2104,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="183" order="GUNNER">
   <skill level="1" name="Gunnery"/>
   <skill level="1" name="Perception"/>
-  <skill level="1" name="Spears"/>
+  <skill level="1" name="WeaponSkill"/>
   <skill level="1" name="Dodge"/>
   <attribute level="3"/>
   <attribute level="3"/>
@@ -2358,7 +2358,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="195" order="PILOT">
   <skill maxlevel="80" minlevel="60" name="Piloting"/>
   <skill maxlevel="35" minlevel="25" name="Perception"/>
-  <skill maxlevel="80" minlevel="60" name="Swords"/>
+  <skill maxlevel="80" minlevel="60" name="WeaponSkill"/>
   <skill maxlevel="80" minlevel="60" name="Dodge"/>
   <attribute maxlevel="45" minlevel="35"/>
   <attribute maxlevel="45" minlevel="35"/>
@@ -2369,7 +2369,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="196" order="GUNNER">
   <skill maxlevel="80" minlevel="60" name="Gunnery"/>
   <skill maxlevel="35" minlevel="25" name="Perception"/>
-  <skill maxlevel="80" minlevel="60" name="Swords"/>
+  <skill maxlevel="80" minlevel="60" name="WeaponSkill"/>
   <skill maxlevel="80" minlevel="60" name="Dodge"/>
   <attribute maxlevel="45" minlevel="35"/>
   <attribute maxlevel="45" minlevel="35"/>
@@ -2379,7 +2379,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  </mobile>
  <mobile index="197" order="ENGINEER">
   <skill maxlevel="80" minlevel="60" name="Engineering"/>
-  <skill maxlevel="80" minlevel="60" name="Swords"/>
+  <skill maxlevel="80" minlevel="60" name="WeaponSkill"/>
   <skill maxlevel="80" minlevel="60" name="Dodge"/>
   <attribute maxlevel="45" minlevel="35"/>
   <attribute maxlevel="45" minlevel="35"/>
@@ -2389,7 +2389,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Repair ship" value="High"/>
  </mobile>
  <mobile index="198" order="DEFEND">
-  <skill maxlevel="80" minlevel="60" name="Swords"/>
+  <skill maxlevel="80" minlevel="60" name="WeaponSkill"/>
   <skill maxlevel="80" minlevel="60" name="Dodge"/>
   <attribute maxlevel="45" minlevel="35"/>
   <attribute maxlevel="45" minlevel="35"/>
@@ -2401,7 +2401,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="199" order="PILOT">
   <skill maxlevel="60" minlevel="40" name="Piloting"/>
   <skill maxlevel="15" minlevel="8" name="Perception"/>
-  <skill maxlevel="60" minlevel="40" name="Swords"/>
+  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
   <attribute maxlevel="35" minlevel="25"/>
   <attribute maxlevel="35" minlevel="25"/>
@@ -2412,7 +2412,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="200" order="GUNNER">
   <skill maxlevel="60" minlevel="40" name="Gunnery"/>
   <skill maxlevel="15" minlevel="8" name="Perception"/>
-  <skill maxlevel="60" minlevel="40" name="Swords"/>
+  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
   <attribute maxlevel="35" minlevel="25"/>
   <attribute maxlevel="35" minlevel="25"/>
