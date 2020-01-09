@@ -1088,9 +1088,9 @@ package body DebugUI is
          ComboBox: Gtk_Combo_Box_Text;
          Label: Gtk_Label;
          SpinButton: Gtk_Spin_Button;
-         BaseGrid: constant Gtk_Grid :=
-           Gtk_Grid(Get_Object(Builder, "basesgrid"));
+         BaseGrid: constant Gtk_Grid := Gtk_Grid_New;
          BaseEntry: constant Gtk_Entry := Gtk_Entry_New;
+         BaseBox: constant Gtk_Vbox := Gtk_Vbox_New;
       begin
          Label := Gtk_Label_New("Base:");
          Attach(BaseGrid, Label, 0, 0);
@@ -1154,11 +1154,14 @@ package body DebugUI is
          Set_Tooltip_Text
            (SpinButton, "Amount of money owned by selected base.");
          Attach(BaseGrid, SpinButton, 1, 6);
+         Pack_Start(BaseBox, BaseGrid, False);
          Set_Halign(BaseButton, Align_Start);
          On_Clicked(BaseButton, UpdateBase'Access);
          Set_Tooltip_Text(BaseButton, "Update selected base.");
-         Pack_Start
-           (Gtk_Box(Get_Object(Builder, "basesbox")), BaseButton, False);
+         Pack_Start(BaseBox, BaseButton, False);
+         Add_Titled
+           (Gtk_Stack(Get_Object(Builder, "stack1")), BaseBox, "page3",
+            "Bases");
       end;
       declare
          EventGrid: constant Gtk_Grid := Gtk_Grid_New;
