@@ -1865,7 +1865,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Defend ship" value="Normal"/>
  </mobile>
  <mobile index="161" order="DEFEND">
-  <skill maxlevel="6" minlevel="3" name="Spears"/>
+  <skill maxlevel="6" minlevel="3" name="WeaponSkill"/>
   <skill maxlevel="6" minlevel="3" name="Dodge"/>
   <attribute maxlevel="5" minlevel="3"/>
   <attribute maxlevel="5" minlevel="3"/>
@@ -1877,7 +1877,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="162" order="PILOT">
   <skill maxlevel="20" minlevel="7" name="Piloting"/>
   <skill maxlevel="12" minlevel="4" name="Perception"/>
-  <skill maxlevel="20" minlevel="7" name="Spears"/>
+  <skill maxlevel="20" minlevel="7" name="WeaponSkill"/>
   <skill maxlevel="20" minlevel="7" name="Dodge"/>
   <attribute maxlevel="15" minlevel="7"/>
   <attribute maxlevel="15" minlevel="7"/>
@@ -1888,7 +1888,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="163" order="GUNNER">
   <skill maxlevel="20" minlevel="7" name="Gunnery"/>
   <skill maxlevel="10" minlevel="3" name="Perception"/>
-  <skill maxlevel="20" minlevel="7" name="Spears"/>
+  <skill maxlevel="20" minlevel="7" name="WeaponSkill"/>
   <skill maxlevel="20" minlevel="7" name="Dodge"/>
   <attribute maxlevel="15" minlevel="7"/>
   <attribute maxlevel="15" minlevel="7"/>
@@ -1898,7 +1898,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  </mobile>
  <mobile index="164" order="ENGINEER">
   <skill maxlevel="20" minlevel="7" name="Engineering"/>
-  <skill maxlevel="20" minlevel="7" name="Spears"/>
+  <skill maxlevel="20" minlevel="7" name="WeaponSkill"/>
   <skill maxlevel="20" minlevel="7" name="Dodge"/>
   <attribute maxlevel="15" minlevel="7"/>
   <attribute maxlevel="15" minlevel="7"/>
@@ -1909,7 +1909,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  </mobile>
  <mobile index="165" order="TALK">
   <skill maxlevel="6" minlevel="2" name="Rhetoric"/>
-  <skill maxlevel="20" minlevel="7" name="Spears"/>
+  <skill maxlevel="20" minlevel="7" name="WeaponSkill"/>
   <skill maxlevel="20" minlevel="7" name="Dodge"/>
   <attribute maxlevel="15" minlevel="7"/>
   <attribute maxlevel="15" minlevel="7"/>
@@ -1919,7 +1919,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Defend ship" value="Normal"/>
  </mobile>
  <mobile index="166" order="DEFEND">
-  <skill maxlevel="20" minlevel="7" name="Spears"/>
+  <skill maxlevel="20" minlevel="7" name="WeaponSkill"/>
   <skill maxlevel="20" minlevel="7" name="Dodge"/>
   <attribute maxlevel="15" minlevel="7"/>
   <attribute maxlevel="15" minlevel="7"/>
@@ -1931,7 +1931,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="167" order="PILOT">
   <skill maxlevel="25" minlevel="15" name="Piloting"/>
   <skill maxlevel="6" minlevel="3" name="Perception"/>
-  <skill maxlevel="25" minlevel="15" name="Spears"/>
+  <skill maxlevel="25" minlevel="15" name="WeaponSkill"/>
   <skill maxlevel="25" minlevel="15" name="Dodge"/>
   <attribute maxlevel="20" minlevel="10"/>
   <attribute maxlevel="20" minlevel="10"/>
@@ -1942,7 +1942,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="168" order="GUNNER">
   <skill maxlevel="25" minlevel="15" name="Gunnery"/>
   <skill maxlevel="6" minlevel="3" name="Perception"/>
-  <skill maxlevel="25" minlevel="15" name="Spears"/>
+  <skill maxlevel="25" minlevel="15" name="WeaponSkill"/>
   <skill maxlevel="25" minlevel="15" name="Dodge"/>
   <attribute maxlevel="20" minlevel="10"/>
   <attribute maxlevel="20" minlevel="10"/>
@@ -1952,7 +1952,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  </mobile>
  <mobile index="169" order="ENGINEER">
   <skill maxlevel="25" minlevel="15" name="Engineering"/>
-  <skill maxlevel="25" minlevel="15" name="Spears"/>
+  <skill maxlevel="25" minlevel="15" name="WeaponSkill"/>
   <skill maxlevel="25" minlevel="15" name="Dodge"/>
   <attribute maxlevel="20" minlevel="10"/>
   <attribute maxlevel="20" minlevel="10"/>
@@ -1963,7 +1963,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  </mobile>
  <mobile index="170" order="TALK">
   <skill maxlevel="10" minlevel="5" name="Rhetoric"/>
-  <skill maxlevel="25" minlevel="15" name="Spears"/>
+  <skill maxlevel="25" minlevel="15" name="WeaponSkill"/>
   <skill maxlevel="25" minlevel="15" name="Dodge"/>
   <attribute maxlevel="20" minlevel="10"/>
   <attribute maxlevel="20" minlevel="10"/>
@@ -1973,7 +1973,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Defend ship" value="Normal"/>
  </mobile>
  <mobile index="171" order="DEFEND">
-  <skill maxlevel="25" minlevel="15" name="Spears"/>
+  <skill maxlevel="25" minlevel="15" name="WeaponSkill"/>
   <skill maxlevel="25" minlevel="15" name="Dodge"/>
   <attribute maxlevel="20" minlevel="10"/>
   <attribute maxlevel="20" minlevel="10"/>
@@ -1985,7 +1985,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="172" order="PILOT">
   <skill maxlevel="50" minlevel="30" name="Piloting"/>
   <skill maxlevel="12" minlevel="4" name="Perception"/>
-  <skill maxlevel="50" minlevel="30" name="Spears"/>
+  <skill maxlevel="50" minlevel="30" name="WeaponSkill"/>
   <skill maxlevel="50" minlevel="30" name="Dodge"/>
   <attribute maxlevel="25" minlevel="15"/>
   <attribute maxlevel="25" minlevel="15"/>
@@ -1996,7 +1996,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="173" order="GUNNER">
   <skill maxlevel="50" minlevel="30" name="Gunnery"/>
   <skill maxlevel="12" minlevel="4" name="Perception"/>
-  <skill maxlevel="50" minlevel="30" name="Spears"/>
+  <skill maxlevel="50" minlevel="30" name="WeaponSkill"/>
   <skill maxlevel="50" minlevel="30" name="Dodge"/>
   <attribute maxlevel="25" minlevel="15"/>
   <attribute maxlevel="25" minlevel="15"/>
@@ -2006,7 +2006,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  </mobile>
  <mobile index="174" order="ENGINEER">
   <skill maxlevel="50" minlevel="30" name="Engineering"/>
-  <skill maxlevel="50" minlevel="30" name="Spears"/>
+  <skill maxlevel="50" minlevel="30" name="WeaponSkill"/>
   <skill maxlevel="50" minlevel="30" name="Dodge"/>
   <attribute maxlevel="25" minlevel="15"/>
   <attribute maxlevel="25" minlevel="15"/>
@@ -2017,7 +2017,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  </mobile>
  <mobile index="175" order="TALK">
   <skill maxlevel="20" minlevel="10" name="Rhetoric"/>
-  <skill maxlevel="50" minlevel="30" name="Spears"/>
+  <skill maxlevel="50" minlevel="30" name="WeaponSkill"/>
   <skill maxlevel="50" minlevel="30" name="Dodge"/>
   <attribute maxlevel="25" minlevel="15"/>
   <attribute maxlevel="25" minlevel="15"/>
@@ -2027,7 +2027,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Defend ship" value="Normal"/>
  </mobile>
  <mobile index="176" order="DEFEND">
-  <skill maxlevel="50" minlevel="30" name="Spears"/>
+  <skill maxlevel="50" minlevel="30" name="WeaponSkill"/>
   <skill maxlevel="50" minlevel="30" name="Dodge"/>
   <attribute maxlevel="25" minlevel="15"/>
   <attribute maxlevel="25" minlevel="15"/>
@@ -2039,7 +2039,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="177" order="PILOT">
   <skill maxlevel="60" minlevel="40" name="Piloting"/>
   <skill maxlevel="15" minlevel="8" name="Perception"/>
-  <skill maxlevel="60" minlevel="40" name="Spears"/>
+  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
   <attribute maxlevel="35" minlevel="25"/>
   <attribute maxlevel="35" minlevel="25"/>
@@ -2050,7 +2050,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  <mobile index="178" order="GUNNER">
   <skill maxlevel="60" minlevel="40" name="Gunnery"/>
   <skill maxlevel="15" minlevel="8" name="Perception"/>
-  <skill maxlevel="60" minlevel="40" name="Spears"/>
+  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
   <attribute maxlevel="35" minlevel="25"/>
   <attribute maxlevel="35" minlevel="25"/>
@@ -2060,7 +2060,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  </mobile>
  <mobile index="179" order="ENGINEER">
   <skill maxlevel="60" minlevel="40" name="Engineering"/>
-  <skill maxlevel="60" minlevel="40" name="Spears"/>
+  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
   <attribute maxlevel="35" minlevel="25"/>
   <attribute maxlevel="35" minlevel="25"/>
@@ -2071,7 +2071,7 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
  </mobile>
  <mobile index="180" order="TALK">
   <skill maxlevel="40" minlevel="20" name="Rhetoric"/>
-  <skill maxlevel="60" minlevel="40" name="Spears"/>
+  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
   <attribute maxlevel="35" minlevel="25"/>
   <attribute maxlevel="35" minlevel="25"/>
