@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
   bases types
 - Updated some ships crews
 - Updated MODDING.md
+- Updated contributing guide
 
 ### Fixed
 - Orders priority for one mob
