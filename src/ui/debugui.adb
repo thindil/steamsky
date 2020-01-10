@@ -648,14 +648,15 @@ package body DebugUI is
    -- FUNCTION
    -- Add new item to the player ship cargo
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Button which was clicked.
    -- SOURCE
-   procedure AddCargo(Object: access Gtkada_Builder_Record'Class) is
+   procedure AddCargo(Self: access Gtk_Button_Record'Class) is
       -- ****
       ItemIndex: Unbounded_String := Null_Unbounded_String;
       ItemName: constant Unbounded_String :=
         To_Unbounded_String
-          (Get_Text(Gtk_GEntry(Get_Object(Object, "edtcargoadd"))));
+          (Get_Text
+             (Gtk_GEntry(Get_Child_At(Gtk_Grid(Get_Parent(Self)), 1, 0))));
    begin
       for I in Items_List.Iterate loop
          if Items_List(I).Name = ItemName then
@@ -669,8 +670,8 @@ package body DebugUI is
       UpdateCargo
         (PlayerShip, ItemIndex,
          Positive
-           (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjaddcargo")))));
-      UpdateCargoInfo(Object);
+           (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjaddcargo")))));
+      UpdateCargoInfo(Builder);
    end AddCargo;
 
    -- ****if* DebugUI/UpdateShipCargo
@@ -1023,6 +1024,10 @@ package body DebugUI is
    procedure CreateDebugUI is
       Error: aliased GError;
       WorldBox: constant Gtk_Hbox := Gtk_Hbox_New;
+      Label: Gtk_Label;
+      ComboBox: Gtk_Combo_Box_Text;
+      SpinButton: Gtk_Spin_Button;
+      Button: Gtk_Button;
    begin
       if Builder /= null then
          return;
@@ -1045,7 +1050,6 @@ package body DebugUI is
       Register_Handler(Builder, "Add_Skill", AddSkill'Access);
       Register_Handler(Builder, "Update_Cargo_Info", UpdateCargoInfo'Access);
       Register_Handler(Builder, "Set_Cargo_Amount", SetCargoAmount'Access);
-      Register_Handler(Builder, "Add_Cargo", AddCargo'Access);
       Register_Handler(Builder, "Update_Cargo", UpdateShipCargo'Access);
       Register_Handler(Builder, "Save_Game", Save_Game'Access);
       Register_Handler(Builder, "Set_Module_Stats", SetModuleStats'Access);
@@ -1083,11 +1087,35 @@ package body DebugUI is
          end loop;
       end;
       declare
+         CargoGrid: constant Gtk_Grid :=
+           Gtk_Grid(Get_Object(Builder, "cargogrid"));
+         CargoEntry: constant Gtk_Entry := Gtk_Entry_New;
+      begin
+         Button := Gtk_Button_New_With_Mnemonic("_Add");
+         Set_Tooltip_Text
+           (Button, "Add selected item to the player ship cargo.");
+         On_Clicked(Button, AddCargo'Access);
+         Attach(CargoGrid, Button, 0, 0);
+         Set_Completion
+           (CargoEntry,
+            Gtk_Entry_Completion(Get_Object(Builder, "cargocompletion")));
+         Set_Tooltip_Text
+           (CargoEntry,
+            "Start typing here a name of the item to select it from the list.");
+         Attach(CargoGrid, CargoEntry, 1, 0);
+         Label := Gtk_Label_New("Amount:");
+         Attach(CargoGrid, Label, 2, 0);
+         SpinButton :=
+           Gtk_Spin_Button_New
+             (Gtk_Adjustment(Get_Object(Builder, "adjaddcargo")), 0.0);
+         Set_Tooltip_Text
+           (SpinButton,
+            "Add that amount of selected item to the player ship cargo.");
+         Attach(CargoGrid, SpinButton, 3, 0);
+      end;
+      declare
          BaseButton: constant Gtk_Button :=
            Gtk_Button_New_With_Mnemonic("_Update base");
-         ComboBox: Gtk_Combo_Box_Text;
-         Label: Gtk_Label;
-         SpinButton: Gtk_Spin_Button;
          BaseGrid: constant Gtk_Grid := Gtk_Grid_New;
          BaseEntry: constant Gtk_Entry := Gtk_Entry_New;
          BaseBox: constant Gtk_Vbox := Gtk_Vbox_New;
@@ -1167,9 +1195,7 @@ package body DebugUI is
          EventGrid: constant Gtk_Grid := Gtk_Grid_New;
          EventButton: constant Gtk_Button :=
            Gtk_Button_New_With_Label("Add ship");
-         Label: Gtk_Label;
          ShipsEntry: constant Gtk_Entry := Gtk_Entry_New;
-         SpinButton: Gtk_Spin_Button;
          EventsComboBox: constant Gtk_Combo_Box_Text := Gtk_Combo_Box_Text_New;
          DeleteEventButton: constant Gtk_Button :=
            Gtk_Button_New_With_Label("Delete event");
