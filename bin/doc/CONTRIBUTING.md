@@ -6,6 +6,8 @@ or if you prefer, on mail <thindil@laeran.pl>
 
 ### Some general hints about reporting bugs
 
+- If you use Github issues, it is recommended to use the bug report template.
+  It have all hints for the desired information included.
 - In the "Title" field try to write short but not too general description
   of the problem. Good example: "Game crashed when entering base". Bad example:
   "Game crashes often."
@@ -43,11 +45,16 @@ mechanic. I have my own long TODO list and your propositions can duplicate or
 be against my ideas. Of course, if you really want it, you can always start
 discussion about new feature, just I'm afraid, it may take long time to
 implement it into the game.
+
 If you want to talk/propose changes in any existing in the game feature or
 mechanic, feel free to contact me via issues tracker or mail (addresses of
 both you can find at top of this file). General rule about propositions is
 same as for bugs reports - please, try to write that much informations as
 possible. This help us all better understand purpose of your changes.
+
+List of things which I wish to add to the game, you can find [here](https://github.com/thindil/steamsky/projects/1)
+Please read carefully it description on how to discuss or how they will be
+implemented in the game.
 
 ## Code propositions
 
