@@ -979,21 +979,6 @@
                 <property name="can_focus">False</property>
                 <signal name="map" handler="Update_Cargo_Info" swapped="no"/>
                 <child>
-                  <object class="GtkButton" id="btnaddcargo">
-                    <property name="label" translatable="yes">_Add</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes">Add selected item to the player ship cargo.</property>
-                    <property name="use_underline">True</property>
-                    <signal name="clicked" handler="Add_Cargo" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkButton" id="btnupdatecargo">
                     <property name="label" translatable="yes">_Update</property>
                     <property name="visible">True</property>
@@ -1028,30 +1013,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Amount:</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
                     <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">Add that amount of selected item to the player ship cargo.</property>
-                    <property name="adjustment">adjaddcargo</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">3</property>
-                    <property name="top_attach">0</property>
                   </packing>
                 </child>
                 <child>
@@ -1067,16 +1029,16 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="edtcargoadd">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">Start typing here a name of the item to select it from the list.</property>
-                    <property name="completion">cargocompletion</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -1084,9 +1046,6 @@
                 <property name="title" translatable="yes">Cargo</property>
                 <property name="position">2</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
           <packing>
