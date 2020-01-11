@@ -974,78 +974,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkGrid" id="cargogrid">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <signal name="map" handler="Update_Cargo_Info" swapped="no"/>
-                <child>
-                  <object class="GtkButton" id="btnupdatecargo">
-                    <property name="label" translatable="yes">_Update</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes">Update amount of selected item in the player ship cargo.</property>
-                    <property name="use_underline">True</property>
-                    <signal name="clicked" handler="Update_Cargo" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="cmbcargoupdate">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Select item from the player ship cargo.</property>
-                    <signal name="changed" handler="Set_Cargo_Amount" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Amount:</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">New amount of selected item in the player ship cargo.</property>
-                    <property name="adjustment">adjupdatecargo</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">3</property>
-                    <property name="top_attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="name">page2</property>
-                <property name="title" translatable="yes">Cargo</property>
-                <property name="position">2</property>
-              </packing>
+              <placeholder/>
             </child>
           </object>
           <packing>
