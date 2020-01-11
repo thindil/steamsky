@@ -1721,17 +1721,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Defend ship" value="High"/>
   <priority name="Board enemy ship" value="Normal"/>
  </mobile>
- <mobile index="150" order="PILOT">
-  <skill level="1" name="Piloting"/>
-  <skill level="1" name="Perception"/>
-  <skill level="1" name="WeaponSkill"/>
-  <skill level="1" name="Dodge"/>
-  <attribute level="3"/>
-  <attribute level="3"/>
-  <attribute level="3"/>
-  <attribute level="3"/>
-  <priority name="Piloting" value="Normal"/>
- </mobile>
  <mobile index="151" order="GUNNER">
   <skill level="1" name="Gunnery"/>
   <skill level="1" name="Perception"/>
@@ -2045,17 +2034,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="35" minlevel="25"/>
   <priority name="Defend ship" value="High"/>
   <priority name="Board enemy ship" value="Normal"/>
- </mobile>
- <mobile index="182" order="PILOT">
-  <skill level="1" name="Piloting"/>
-  <skill level="1" name="Perception"/>
-  <skill level="1" name="WeaponSkill"/>
-  <skill level="1" name="Dodge"/>
-  <attribute level="3"/>
-  <attribute level="3"/>
-  <attribute level="3"/>
-  <attribute level="3"/>
-  <priority name="Piloting" value="Normal"/>
  </mobile>
  <mobile index="183" order="GUNNER">
   <skill level="1" name="Gunnery"/>
