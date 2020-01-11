@@ -305,12 +305,12 @@ package body DebugUI is
    -- FUNCTION
    -- Update the player ship cargo list
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Widget which will be mapped
    -- SOURCE
-   procedure UpdateCargoInfo(Object: access Gtkada_Builder_Record'Class) is
+   procedure UpdateCargoInfo(Self: access Gtk_Widget_Record'Class) is
       -- ****
       ComboBox: constant Gtk_Combo_Box_Text :=
-        Gtk_Combo_Box_Text(Get_Object(Object, "cmbcargoupdate"));
+        Gtk_Combo_Box_Text(Get_Child_At(Gtk_Grid(Self), 1, 1));
    begin
       Setting := True;
       Remove_All(ComboBox);
@@ -523,7 +523,8 @@ package body DebugUI is
    begin
       UpdateShip(Object);
       UpdateCrew(Object);
-      UpdateCargoInfo(Object);
+      UpdateCargoInfo
+        (Get_Child_By_Name(Gtk_Stack(Get_Object(Object, "stack1")), "page2"));
       ShowBaseInfo
         (Gtk_GEntry
            (Get_Child_At
@@ -625,9 +626,9 @@ package body DebugUI is
    -- FUNCTION
    -- Set cargo amount value for selected item in the player ship cargo
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Combo_Box which value was changed.
    -- SOURCE
-   procedure SetCargoAmount(Object: access Gtkada_Builder_Record'Class) is
+   procedure SetCargoAmount(Self: access Gtk_Combo_Box_Record'Class) is
       -- ****
       Item: InventoryData;
    begin
@@ -636,11 +637,9 @@ package body DebugUI is
       end if;
       Item :=
         PlayerShip.Cargo
-          (Positive'Value
-             (Get_Active_Id
-                (Gtk_Combo_Box_Text(Get_Object(Object, "cmbcargoupdate")))));
+          (Positive'Value(Get_Active_Id(Gtk_Combo_Box_Text(Self))));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Object, "adjupdatecargo")),
+        (Gtk_Adjustment(Get_Object(Builder, "adjupdatecargo")),
          Gdouble(Item.Amount));
    end SetCargoAmount;
 
@@ -671,28 +670,29 @@ package body DebugUI is
         (PlayerShip, ItemIndex,
          Positive
            (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjaddcargo")))));
-      UpdateCargoInfo(Builder);
+      UpdateCargoInfo(Get_Parent(Self));
    end AddCargo;
 
    -- ****if* DebugUI/UpdateShipCargo
    -- FUNCTION
    -- Updated existing item in the player ship cargo
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Button which was clicked.
    -- SOURCE
-   procedure UpdateShipCargo(Object: access Gtkada_Builder_Record'Class) is
+   procedure UpdateShipCargo(Self: access Gtk_Button_Record'Class) is
       -- ****
       CargoIndex: constant Positive :=
         Positive'Value
           (Get_Active_Id
-             (Gtk_Combo_Box_Text(Get_Object(Object, "cmbcargoupdate"))));
+             (Gtk_Combo_Box_Text
+                (Get_Child_At(Gtk_Grid(Get_Parent(Self)), 1, 1))));
    begin
       UpdateCargo
         (Ship => PlayerShip,
          Amount =>
            (Integer
               (Get_Value
-                 (Gtk_Adjustment(Get_Object(Object, "adjupdatecargo")))) -
+                 (Gtk_Adjustment(Get_Object(Builder, "adjupdatecargo")))) -
             PlayerShip.Cargo(CargoIndex).Amount),
          CargoIndex => CargoIndex);
    end UpdateShipCargo;
@@ -1048,9 +1048,6 @@ package body DebugUI is
       Register_Handler(Builder, "Set_Member_Stats", SetMemberStats'Access);
       Register_Handler(Builder, "Update_Member", UpdateMember'Access);
       Register_Handler(Builder, "Add_Skill", AddSkill'Access);
-      Register_Handler(Builder, "Update_Cargo_Info", UpdateCargoInfo'Access);
-      Register_Handler(Builder, "Set_Cargo_Amount", SetCargoAmount'Access);
-      Register_Handler(Builder, "Update_Cargo", UpdateShipCargo'Access);
       Register_Handler(Builder, "Save_Game", Save_Game'Access);
       Register_Handler(Builder, "Set_Module_Stats", SetModuleStats'Access);
       Register_Handler(Builder, "Update_Module", UpdateModule'Access);
@@ -1087,10 +1084,10 @@ package body DebugUI is
          end loop;
       end;
       declare
-         CargoGrid: constant Gtk_Grid :=
-           Gtk_Grid(Get_Object(Builder, "cargogrid"));
+         CargoGrid: constant Gtk_Grid := Gtk_Grid_New;
          CargoEntry: constant Gtk_Entry := Gtk_Entry_New;
       begin
+         On_Map(CargoGrid, UpdateCargoInfo'Access);
          Button := Gtk_Button_New_With_Mnemonic("_Add");
          Set_Tooltip_Text
            (Button, "Add selected item to the player ship cargo.");
@@ -1112,6 +1109,28 @@ package body DebugUI is
            (SpinButton,
             "Add that amount of selected item to the player ship cargo.");
          Attach(CargoGrid, SpinButton, 3, 0);
+         Button := Gtk_Button_New_With_Mnemonic("_Update");
+         Set_Tooltip_Text
+           (Button,
+            "Update amount of selected item in the player ship cargo.");
+         On_Clicked(Button, UpdateShipCargo'Access);
+         Attach(CargoGrid, Button, 0, 1);
+         ComboBox := Gtk_Combo_Box_Text_New;
+         Set_Tooltip_Text(ComboBox, "Select item from the player ship cargo.");
+         On_Changed(Gtk_Combo_Box(ComboBox), SetCargoAmount'Access);
+         Attach(CargoGrid, ComboBox, 1, 1);
+         Label := Gtk_Label_New("Amount:");
+         Attach(CargoGrid, Label, 2, 1);
+         SpinButton :=
+           Gtk_Spin_Button_New
+             (Gtk_Adjustment(Get_Object(Builder, "adjupdatecargo")), 0.0);
+         Set_Tooltip_Text
+           (SpinButton,
+            "New amount of selected item in the player ship cargo.");
+         Attach(CargoGrid, SpinButton, 3, 1);
+         Add_Titled
+           (Gtk_Stack(Get_Object(Builder, "stack1")), CargoGrid, "page2",
+            "Cargo");
       end;
       declare
          BaseButton: constant Gtk_Button :=
