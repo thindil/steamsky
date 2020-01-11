@@ -15,10 +15,14 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
+with Gtk.Tree_Model_Filter; use Gtk.Tree_Model_Filter;
 with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
@@ -242,10 +246,63 @@ package body Bases.UI is
       end case;
    end AcceptAction;
 
+   -- ****if* Bases.UI/VisibleRecipes
+   -- FUNCTION
+   -- Check if selected recipe is visible on recipes list
+   -- PARAMETERS
+   -- Model - Gtk_Tree_Model with recipes which will be checked
+   -- Iter  - Gtk_Tree_Iter of recipe which will be checked
+   -- RESULT
+   -- True if recipe should be visible, otherwise false
+   -- SOURCE
+   function VisibleRecipes
+     (Model: Gtk_Tree_Model; Iter: Gtk_Tree_Iter) return Boolean is
+      -- ****
+      SearchEntry: constant Gtk_GEntry :=
+        Gtk_GEntry(Get_Object(Builder, "searchrecipe"));
+   begin
+      if Get_Text(SearchEntry) = "" then
+         return True;
+      end if;
+      if Index
+          (To_Lower(Get_String(Model, Iter, 0)),
+           To_Lower(Get_Text(SearchEntry)), 1) >
+        0 then
+         return True;
+      end if;
+      return False;
+   end VisibleRecipes;
+
+   -- ****if* Bases.UI/SearchRecipes
+   -- FUNCTION
+   -- Search recipe by it name
+   -- PARAMETERS
+   -- Object - Gtkada_Builder used to create UI
+   -- SOURCE
+   procedure SearchRecipes(Object: access Gtkada_Builder_Record'Class) is
+   -- ****
+   begin
+      Refilter(Gtk_Tree_Model_Filter(Get_Object(Object, "itemsfilter")));
+      if N_Children
+          (Gtk_List_Store(Get_Object(Builder, "itemslist")), Null_Iter) >
+        0 then
+         Set_Cursor
+           (Gtk_Tree_View(Get_Object(Builder, "treebases1")),
+            Gtk_Tree_Path_New_From_String("0"), null, False);
+      end if;
+   end SearchRecipes;
+
    procedure CreateBasesUI is
    begin
       Register_Handler(Builder, "Object_Selected", ObjectSelected'Access);
       Register_Handler(Builder, "Accept_Action", AcceptAction'Access);
+      Register_Handler(Builder, "Search_Recipe", SearchRecipes'Access);
+      Set_Visible_Func
+        (Gtk_Tree_Model_Filter(Get_Object(Builder, "itemsfilter")),
+         VisibleRecipes'Access);
+      On_Key_Press_Event
+        (Gtk_Widget(Get_Object(Builder, "searchrecipe")), SelectElement'Access,
+         Get_Object(Builder, "btnmenu"));
    end CreateBasesUI;
 
    procedure ShowBuyRecipesUI is
@@ -275,6 +332,9 @@ package body Bases.UI is
       end loop;
       Set_Label
         (Gtk_Button(Get_Object(Builder, "btnacceptbase")), "_Buy recipe");
+      Show_All(Gtk_Widget(Get_Object(Builder, "searchrecipe")));
+      Set_Enable_Search
+        (Gtk_Tree_View(Get_Object(Builder, ("treebases1"))), False);
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "base");
       Set_Cursor
@@ -320,6 +380,9 @@ package body Bases.UI is
       end if;
       Set_Label
         (Gtk_Button(Get_Object(Builder, "btnacceptbase")), "_Buy repairs");
+      Hide(Gtk_Widget(Get_Object(Builder, "searchrecipe")));
+      Set_Enable_Search
+        (Gtk_Tree_View(Get_Object(Builder, ("treebases1"))), True);
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "base");
       Set_Cursor
@@ -350,6 +413,9 @@ package body Bases.UI is
       Set(HealsList, HealsIter, 1, Gint'Image(0));
       Set_Label
         (Gtk_Button(Get_Object(Builder, "btnacceptbase")), "_Buy healing");
+      Hide(Gtk_Widget(Get_Object(Builder, "searchrecipe")));
+      Set_Enable_Search
+        (Gtk_Tree_View(Get_Object(Builder, ("treebases1"))), True);
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "base");
       Set_Cursor
