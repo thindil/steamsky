@@ -3537,7 +3537,7 @@ during combat. -->
   <cargo index="2" maxamount="100" minamount="80"/>
   <cargo index="3" maxamount="200" minamount="150"/>
   <cargo index="14" maxamount="200" minamount="100"/>
-  <member index="150"/>
+  <member index="53"/>
   <member index="151"/>
   <description>Smallest known poleis trader, upgraded version. Avoids any fights.</description>
  </ship>
@@ -3553,7 +3553,7 @@ during combat. -->
   <cargo index="2" maxamount="100" minamount="80"/>
   <cargo index="3" maxamount="200" minamount="150"/>
   <cargo index="14" maxamount="200" minamount="100"/>
-  <member index="182"/>
+  <member index="53"/>
   <member index="183"/>
   <description>Smallest known independent trader, upgraded version. Avoids any fights.</description>
  </ship>
@@ -3585,7 +3585,7 @@ during combat. -->
   <cargo index="2" maxamount="100" minamount="80"/>
   <cargo index="3" maxamount="200" minamount="150"/>
   <cargo index="14" maxamount="500" minamount="300"/>
-  <member index="150"/>
+  <member index="53"/>
   <member index="151"/>
   <description>Smallest known poleis patrol ship, upgraded version. As law enforcers they trying to dismarm enemies first.</description>
  </ship>
@@ -3601,7 +3601,7 @@ during combat. -->
   <cargo index="2" maxamount="100" minamount="80"/>
   <cargo index="3" maxamount="200" minamount="150"/>
   <cargo index="14" maxamount="500" minamount="300"/>
-  <member index="182"/>
+  <member index="53"/>
   <member index="183"/>
   <description>Smallest known independent patrol ship, upgraded version. As law enforcers they trying to dismarm enemies first.</description>
  </ship>
