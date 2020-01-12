@@ -1495,16 +1495,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Talking in bases" value="Normal"/>
   <priority name="Defend ship" value="Normal"/>
  </mobile>
- <mobile index="129" order="DEFEND">
-  <skill maxlevel="6" minlevel="3" name="WeaponSkill"/>
-  <skill maxlevel="6" minlevel="3" name="Dodge"/>
-  <attribute maxlevel="5" minlevel="3"/>
-  <attribute maxlevel="5" minlevel="3"/>
-  <attribute maxlevel="5" minlevel="3"/>
-  <attribute maxlevel="5" minlevel="3"/>
-  <priority name="Defend ship" value="High"/>
-  <priority name="Board enemy ship" value="Normal"/>
- </mobile>
  <mobile index="130" order="PILOT">
   <skill maxlevel="20" minlevel="7" name="Piloting"/>
   <skill maxlevel="12" minlevel="4" name="Perception"/>
@@ -1797,16 +1787,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="5" minlevel="3"/>
   <priority name="Talking in bases" value="Normal"/>
   <priority name="Defend ship" value="Normal"/>
- </mobile>
- <mobile index="161" order="DEFEND">
-  <skill maxlevel="6" minlevel="3" name="WeaponSkill"/>
-  <skill maxlevel="6" minlevel="3" name="Dodge"/>
-  <attribute maxlevel="5" minlevel="3"/>
-  <attribute maxlevel="5" minlevel="3"/>
-  <attribute maxlevel="5" minlevel="3"/>
-  <attribute maxlevel="5" minlevel="3"/>
-  <priority name="Defend ship" value="High"/>
-  <priority name="Board enemy ship" value="Normal"/>
  </mobile>
  <mobile index="162" order="PILOT">
   <skill maxlevel="20" minlevel="7" name="Piloting"/>
