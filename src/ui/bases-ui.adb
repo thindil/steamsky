@@ -80,6 +80,7 @@ package body Bases.UI is
       MoneyIndex2: Natural;
       MinChildren: Gint;
       FormattedTime, ObjectIndex: Unbounded_String;
+      ItemsModel: constant Gtk_List_Store := Gtk_List_Store(Get_Object(Object, "itemslist"));
       procedure ShowMap is
       begin
          ShowSkyMap;
@@ -120,7 +121,7 @@ package body Bases.UI is
          Model, Iter);
       case CurrentState is
          when RECIPES =>
-            if N_Children(Model, Null_Iter) = 0 then
+            if N_Children(ItemsModel, Null_Iter) = 0 then
                ShowMap;
                return;
             end if;
@@ -133,12 +134,12 @@ package body Bases.UI is
             else
                MinChildren := 3;
             end if;
-            if N_Children(Model, Null_Iter) = MinChildren then
+            if N_Children(ItemsModel, Null_Iter) = MinChildren then
                ShowMap;
                return;
             end if;
          when HEAL =>
-            if N_Children(Model, Null_Iter) = 1 then
+            if N_Children(ItemsModel, Null_Iter) = 1 then
                ShowMap;
                return;
             end if;
@@ -146,7 +147,10 @@ package body Bases.UI is
             null;
       end case;
       if Iter = Null_Iter then
+         Hide(Gtk_Widget(Get_Object(Object, "scrollbase")));
          return;
+      else
+         Show_All(Gtk_Widget(Get_Object(Object, "scrollbase")));
       end if;
       ObjectIndex := To_Unbounded_String(Get_String(Model, Iter, 1));
       case CurrentState is
@@ -332,9 +336,7 @@ package body Bases.UI is
       end loop;
       Set_Label
         (Gtk_Button(Get_Object(Builder, "btnacceptbase")), "_Buy recipe");
-      Show_All(Gtk_Widget(Get_Object(Builder, "searchrecipe")));
-      Set_Enable_Search
-        (Gtk_Tree_View(Get_Object(Builder, ("treebases1"))), False);
+      Set_Placeholder_Text(Gtk_GEntry(Get_Object(Builder, "searchrecipe")), "<Search recipes>");
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "base");
       Set_Cursor
@@ -380,9 +382,7 @@ package body Bases.UI is
       end if;
       Set_Label
         (Gtk_Button(Get_Object(Builder, "btnacceptbase")), "_Buy repairs");
-      Hide(Gtk_Widget(Get_Object(Builder, "searchrecipe")));
-      Set_Enable_Search
-        (Gtk_Tree_View(Get_Object(Builder, ("treebases1"))), True);
+      Set_Placeholder_Text(Gtk_GEntry(Get_Object(Builder, "searchrecipe")), "<Search action>");
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "base");
       Set_Cursor
@@ -413,9 +413,7 @@ package body Bases.UI is
       Set(HealsList, HealsIter, 1, Gint'Image(0));
       Set_Label
         (Gtk_Button(Get_Object(Builder, "btnacceptbase")), "_Buy healing");
-      Hide(Gtk_Widget(Get_Object(Builder, "searchrecipe")));
-      Set_Enable_Search
-        (Gtk_Tree_View(Get_Object(Builder, ("treebases1"))), True);
+      Set_Placeholder_Text(Gtk_GEntry(Get_Object(Builder, "searchrecipe")), "<Search action>");
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "base");
       Set_Cursor
