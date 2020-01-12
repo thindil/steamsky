@@ -4365,6 +4365,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="model">itemssort</property>
+                                    <property name="enable_search">False</property>
                                     <property name="search_column">0</property>
                                     <signal name="cursor-changed" handler="Object_Selected" swapped="no"/>
                                     <signal name="focus-in-event" handler="Disable_Menu_Shortcuts" swapped="no"/>
@@ -4396,7 +4397,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkScrolledWindow">
+                              <object class="GtkScrolledWindow" id="scrollbase">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="shadow_type">in</property>
