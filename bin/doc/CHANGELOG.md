@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Ability to set random equipment for mobs
 - Ability to set more generic weapon skill for mobs
-- Better search for recipes in buying recipes in bases
+- Better search for recipes, wounded crew members and modules to repair in
+  bases
 
 ### Changed
 - Updated mobs data
