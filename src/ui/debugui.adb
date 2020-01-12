@@ -148,8 +148,10 @@ package body DebugUI is
       Iter: Gtk_Tree_Iter;
       List: Gtk_List_Store := Gtk_List_Store(Get_Object(Builder, "statslist"));
       KnowSkills: Positive_Container.Vector;
+      AddSkillBox: constant Gtk_Box :=
+        Gtk_Box(Get_Child(Gtk_Box(Get_Object(Object, "skillsbox")), 1));
       ComboBox: constant Gtk_Combo_Box_Text :=
-        Gtk_Combo_Box_Text(Get_Object(Object, "cmbskill"));
+        Gtk_Combo_Box_Text(Get_Child(AddSkillBox, 1));
    begin
       if Setting then
          return;
@@ -204,10 +206,10 @@ package body DebugUI is
          end if;
       end loop;
       if N_Children(Get_Model(ComboBox)) > 0 then
-         Show_All(Gtk_Widget(Get_Object(Object, "addskillbox")));
+         Show_All(AddSkillBox);
          Set_Active(ComboBox, 0);
       else
-         Hide(Gtk_Widget(Get_Object(Object, "addskillbox")));
+         Hide(AddSkillBox);
       end if;
    end SetMemberStats;
 
@@ -274,31 +276,33 @@ package body DebugUI is
    -- FUNCTION
    -- Update selected the player ship crew member statistics, skill, etc
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Button which was clicked
    -- SOURCE
-   procedure UpdateMember(Object: access Gtkada_Builder_Record'Class) is
+   procedure UpdateMember(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
       -- ****
       MemberIndex: constant Positive :=
         Positive'Value
-          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbmember"))));
+          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Builder, "cmbmember"))));
    begin
       PlayerShip.Crew(MemberIndex).Health :=
-        Natural(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjhealth"))));
+        Natural(Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjhealth"))));
       PlayerShip.Crew(MemberIndex).Thirst :=
-        Natural(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjthirst"))));
+        Natural(Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjthirst"))));
       PlayerShip.Crew(MemberIndex).Hunger :=
-        Natural(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjhunger"))));
+        Natural(Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjhunger"))));
       PlayerShip.Crew(MemberIndex).Tired :=
-        Natural(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjtired"))));
+        Natural(Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjtired"))));
       PlayerShip.Crew(MemberIndex).Morale(1) :=
-        Natural(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjmorale"))));
+        Natural(Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjmorale"))));
       PlayerShip.Crew(MemberIndex).Loyalty :=
-        Natural(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjloyalty"))));
+        Natural(Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjloyalty"))));
       Foreach
-        (Gtk_List_Store(Get_Object(Object, "statslist")),
+        (Gtk_List_Store(Get_Object(Builder, "statslist")),
          UpdateAttribute'Access);
       Foreach
-        (Gtk_List_Store(Get_Object(Object, "skillslist")), UpdateSkill'Access);
+        (Gtk_List_Store(Get_Object(Builder, "skillslist")),
+         UpdateSkill'Access);
    end UpdateMember;
 
    -- ****if* DebugUI/UpdateCargoInfo
@@ -600,15 +604,16 @@ package body DebugUI is
    -- FUNCTION
    -- Add new skill to selected the player ship crew member
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Button which was clicked
    -- SOURCE
-   procedure AddSkill(Object: access Gtkada_Builder_Record'Class) is
+   procedure AddSkill(Self: access Gtk_Button_Record'Class) is
       -- ****
       SkillsIter: Gtk_Tree_Iter;
       SkillsList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "skillslist"));
+      SkillBox: constant Gtk_Box := Gtk_Box(Get_Parent(Self));
       ComboBox: constant Gtk_Combo_Box_Text :=
-        Gtk_Combo_Box_Text(Get_Object(Object, "cmbskill"));
+        Gtk_Combo_Box_Text(Get_Child(SkillBox, 1));
    begin
       Append(SkillsList, SkillsIter);
       Set(SkillsList, SkillsIter, 0, Get_Active_Text(ComboBox));
@@ -618,7 +623,7 @@ package body DebugUI is
       if N_Children(Get_Model(ComboBox)) > 0 then
          Set_Active(ComboBox, 0);
       else
-         Hide(Gtk_Widget(Get_Object(Object, "addskillbox")));
+         Hide(SkillBox);
       end if;
    end AddSkill;
 
@@ -1046,8 +1051,6 @@ package body DebugUI is
       Register_Handler(Builder, "Refresh_UI", RefreshUI'Access);
       Register_Handler(Builder, "Update_Crew", UpdateCrew'Access);
       Register_Handler(Builder, "Set_Member_Stats", SetMemberStats'Access);
-      Register_Handler(Builder, "Update_Member", UpdateMember'Access);
-      Register_Handler(Builder, "Add_Skill", AddSkill'Access);
       Register_Handler(Builder, "Save_Game", Save_Game'Access);
       Register_Handler(Builder, "Set_Module_Stats", SetModuleStats'Access);
       Register_Handler(Builder, "Update_Module", UpdateModule'Access);
@@ -1082,6 +1085,24 @@ package body DebugUI is
             Append(List, Iter);
             Set(List, Iter, 0, To_String(Module.Name));
          end loop;
+      end;
+      declare
+         CrewBox: constant Gtk_Vbox := Gtk_Vbox(Get_Object(Builder, "crewbox"));
+         HBox: Gtk_Hbox;
+      begin
+         HBox := Gtk_Hbox_New;
+         Button := Gtk_Button_New_With_Mnemonic("_Add");
+         Set_Tooltip_Text(Button, "Add new skill to selected crew member");
+         On_Clicked(Button, AddSkill'Access);
+         Pack_Start(HBox, Button, False);
+         ComboBox := Gtk_Combo_Box_Text_New;
+         Set_Tooltip_Text(ComboBox, "Select skill to add.");
+         Pack_Start(HBox, ComboBox);
+         Pack_Start(Gtk_Box(Get_Object(Builder, "skillsbox")), Hbox, False);
+         Button := Gtk_Button_New_With_Mnemonic("_Change");
+         Set_Tooltip_Text(Button, "Commit changes to the crew member.");
+         On_Clicked(Button, UpdateMember'Access);
+         Pack_Start(CrewBox, Button, False);
       end;
       declare
          CargoGrid: constant Gtk_Grid := Gtk_Grid_New;
