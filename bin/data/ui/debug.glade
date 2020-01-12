@@ -837,7 +837,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="skillsbox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
@@ -898,43 +898,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="addskillbox">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child>
-                              <object class="GtkButton" id="btnaddskill">
-                                <property name="label" translatable="yes">_Add</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="tooltip_text" translatable="yes">Add new skill to selected crew member</property>
-                                <property name="use_underline">True</property>
-                                <signal name="clicked" handler="Add_Skill" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBoxText" id="cmbskill">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="tooltip_text" translatable="yes">Select skill to add.</property>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
+                          <placeholder/>
                         </child>
                       </object>
                       <packing>
@@ -951,20 +915,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="btnchangemember">
-                    <property name="label" translatable="yes">_Change</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes">Commit changes to the crew member.</property>
-                    <property name="use_underline">True</property>
-                    <signal name="clicked" handler="Update_Member" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -972,9 +923,6 @@
                 <property name="title" translatable="yes">Crew</property>
                 <property name="position">1</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
           <packing>
