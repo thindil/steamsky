@@ -1707,7 +1707,7 @@ during combat. -->
   <cargo index="13" maxamount="20" minamount="10"/>
   <member index="8"/>
   <member index="9"/>
-  <member index="124"/>
+  <member index="10"/>
   <description>Small poleis traders vessel. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="99" maxloot="200" minloot="20" name="Small independent trader" owner="INDEPENDENT">
@@ -1726,7 +1726,7 @@ during combat. -->
   <cargo index="13" maxamount="20" minamount="10"/>
   <member index="8"/>
   <member index="9"/>
-  <member index="156"/>
+  <member index="10"/>
   <description>Small independent traders vessel. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="100" maxloot="200" minloot="100" name="Poleis trader" owner="POLEIS">
@@ -1995,7 +1995,7 @@ during combat. -->
   <cargo index="13" maxamount="20" minamount="10"/>
   <member index="8"/>
   <member index="9"/>
-  <member index="124"/>
+  <member index="10"/>
   <description>Small, fast poleis patrol vessel. As a law enforcers they trying to dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="113" maxloot="200" minloot="20" name="Small independent patrol ship" owner="INDEPENDENT">
@@ -2014,7 +2014,7 @@ during combat. -->
   <cargo index="13" maxamount="20" minamount="10"/>
   <member index="8"/>
   <member index="9"/>
-  <member index="156"/>
+  <member index="10"/>
   <description>Small, fast independent patrol vessel. As a law enforcers they trying to dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="114" maxloot="200" minloot="100" name="Poleis patrol ship" owner="POLEIS">
@@ -3621,7 +3621,7 @@ during combat. -->
   <cargo index="13" maxamount="20" minamount="10"/>
   <member index="8"/>
   <member index="9"/>
-  <member index="124"/>
+  <member index="10"/>
   <description>Small poleis traders vessel, upgraded version. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="195" maxloot="200" minloot="20" name="Small independent trader mk II" owner="INDEPENDENT">
@@ -3640,7 +3640,7 @@ during combat. -->
   <cargo index="13" maxamount="20" minamount="10"/>
   <member index="8"/>
   <member index="9"/>
-  <member index="156"/>
+  <member index="10"/>
   <description>Small independent traders vessel, upgraded version. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="196" maxloot="200" minloot="20" name="Small pirates trader mk II" owner="PIRATES">
@@ -3678,7 +3678,7 @@ during combat. -->
   <cargo index="13" maxamount="20" minamount="10"/>
   <member index="8"/>
   <member index="9"/>
-  <member index="124"/>
+  <member index="10"/>
   <description>Small, fast poleis patrol vessel, upgraded version. As a law enforcers they trying to dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="198" maxloot="200" minloot="20" name="Small independent patrol ship mk II" owner="INDEPENDENT">
@@ -3697,7 +3697,7 @@ during combat. -->
   <cargo index="13" maxamount="20" minamount="10"/>
   <member index="8"/>
   <member index="9"/>
-  <member index="156"/>
+  <member index="10"/>
   <description>Small, fast independent patrol vessel, upgraded version. As a law enforcers they trying to dismarm enemies first.</description>
  </ship>
  <ship combatai="COWARD" index="199" maxloot="200" minloot="20" name="Small poleis trader mk III" owner="POLEIS">
@@ -3715,7 +3715,7 @@ during combat. -->
   <cargo index="21" maxamount="100" minamount="80"/>
   <member index="8"/>
   <member index="9"/>
-  <member index="124"/>
+  <member index="10"/>
   <description>Small poleis traders vessel, upgraded version. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="200" maxloot="200" minloot="20" name="Small independent trader mk III" owner="INDEPENDENT">
@@ -3733,7 +3733,7 @@ during combat. -->
   <cargo index="21" maxamount="100" minamount="80"/>
   <member index="8"/>
   <member index="9"/>
-  <member index="156"/>
+  <member index="10"/>
   <description>Small independent traders vessel, upgraded version. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="201" maxloot="200" minloot="20" name="Small pirates trader mk III" owner="PIRATES">
@@ -3769,7 +3769,7 @@ during combat. -->
   <cargo index="21" maxamount="100" minamount="80"/>
   <member index="8"/>
   <member index="9"/>
-  <member index="124"/>
+  <member index="10"/>
   <description>Small, fast poleis patrol vessel, upgraded version. As a law enforcers they trying to dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="203" maxloot="200" minloot="20" name="Small independent patrol ship mk III" owner="INDEPENDENT">
@@ -3787,7 +3787,7 @@ during combat. -->
   <cargo index="21" maxamount="100" minamount="80"/>
   <member index="8"/>
   <member index="9"/>
-  <member index="156"/>
+  <member index="10"/>
   <description>Small, fast independent patrol vessel, upgraded version. As a law enforcers they trying to dismarm enemies first.</description>
  </ship>
  <ship combatai="COWARD" index="204" maxloot="200" minloot="100" name="Poleis trader mk II" owner="POLEIS">
