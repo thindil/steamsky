@@ -1705,7 +1705,7 @@ during combat. -->
   <cargo index="4" maxamount="500" minamount="450"/>
   <cargo index="5" maxamount="100" minamount="80"/>
   <cargo index="13" maxamount="20" minamount="10"/>
-  <member index="122"/>
+  <member index="8"/>
   <member index="123"/>
   <member index="124"/>
   <description>Small poleis traders vessel. Avoids any fights.</description>
@@ -1724,7 +1724,7 @@ during combat. -->
   <cargo index="4" maxamount="500" minamount="450"/>
   <cargo index="5" maxamount="100" minamount="80"/>
   <cargo index="13" maxamount="20" minamount="10"/>
-  <member index="154"/>
+  <member index="8"/>
   <member index="155"/>
   <member index="156"/>
   <description>Small independent traders vessel. Avoids any fights.</description>
@@ -1993,7 +1993,7 @@ during combat. -->
   <cargo index="4" maxamount="500" minamount="450"/>
   <cargo index="5" maxamount="100" minamount="80"/>
   <cargo index="13" maxamount="20" minamount="10"/>
-  <member index="122"/>
+  <member index="8"/>
   <member index="123"/>
   <member index="124"/>
   <description>Small, fast poleis patrol vessel. As a law enforcers they trying to dismarm enemies first.</description>
@@ -2012,7 +2012,7 @@ during combat. -->
   <cargo index="4" maxamount="500" minamount="450"/>
   <cargo index="5" maxamount="100" minamount="80"/>
   <cargo index="13" maxamount="20" minamount="10"/>
-  <member index="154"/>
+  <member index="8"/>
   <member index="155"/>
   <member index="156"/>
   <description>Small, fast independent patrol vessel. As a law enforcers they trying to dismarm enemies first.</description>
@@ -3619,7 +3619,7 @@ during combat. -->
   <cargo index="4" maxamount="500" minamount="450"/>
   <cargo index="5" maxamount="100" minamount="80"/>
   <cargo index="13" maxamount="20" minamount="10"/>
-  <member index="122"/>
+  <member index="8"/>
   <member index="123"/>
   <member index="124"/>
   <description>Small poleis traders vessel, upgraded version. Avoids any fights.</description>
@@ -3638,7 +3638,7 @@ during combat. -->
   <cargo index="4" maxamount="500" minamount="450"/>
   <cargo index="5" maxamount="100" minamount="80"/>
   <cargo index="13" maxamount="20" minamount="10"/>
-  <member index="154"/>
+  <member index="8"/>
   <member index="155"/>
   <member index="156"/>
   <description>Small independent traders vessel, upgraded version. Avoids any fights.</description>
@@ -3676,7 +3676,7 @@ during combat. -->
   <cargo index="4" maxamount="500" minamount="450"/>
   <cargo index="5" maxamount="100" minamount="80"/>
   <cargo index="13" maxamount="20" minamount="10"/>
-  <member index="122"/>
+  <member index="8"/>
   <member index="123"/>
   <member index="124"/>
   <description>Small, fast poleis patrol vessel, upgraded version. As a law enforcers they trying to dismarm enemies first.</description>
@@ -3695,7 +3695,7 @@ during combat. -->
   <cargo index="4" maxamount="500" minamount="450"/>
   <cargo index="5" maxamount="100" minamount="80"/>
   <cargo index="13" maxamount="20" minamount="10"/>
-  <member index="154"/>
+  <member index="8"/>
   <member index="155"/>
   <member index="156"/>
   <description>Small, fast independent patrol vessel, upgraded version. As a law enforcers they trying to dismarm enemies first.</description>
@@ -3713,7 +3713,7 @@ during combat. -->
   <cargo index="3" maxamount="200" minamount="170"/>
   <cargo index="23" maxamount="500" minamount="450"/>
   <cargo index="21" maxamount="100" minamount="80"/>
-  <member index="122"/>
+  <member index="8"/>
   <member index="123"/>
   <member index="124"/>
   <description>Small poleis traders vessel, upgraded version. Avoids any fights.</description>
@@ -3731,7 +3731,7 @@ during combat. -->
   <cargo index="3" maxamount="200" minamount="170"/>
   <cargo index="23" maxamount="500" minamount="450"/>
   <cargo index="21" maxamount="100" minamount="80"/>
-  <member index="154"/>
+  <member index="8"/>
   <member index="155"/>
   <member index="156"/>
   <description>Small independent traders vessel, upgraded version. Avoids any fights.</description>
@@ -3767,7 +3767,7 @@ during combat. -->
   <cargo index="3" maxamount="200" minamount="170"/>
   <cargo index="23" maxamount="500" minamount="450"/>
   <cargo index="21" maxamount="100" minamount="80"/>
-  <member index="122"/>
+  <member index="8"/>
   <member index="123"/>
   <member index="124"/>
   <description>Small, fast poleis patrol vessel, upgraded version. As a law enforcers they trying to dismarm enemies first.</description>
@@ -3785,7 +3785,7 @@ during combat. -->
   <cargo index="3" maxamount="200" minamount="170"/>
   <cargo index="23" maxamount="500" minamount="450"/>
   <cargo index="21" maxamount="100" minamount="80"/>
-  <member index="154"/>
+  <member index="8"/>
   <member index="155"/>
   <member index="156"/>
   <description>Small, fast independent patrol vessel, upgraded version. As a law enforcers they trying to dismarm enemies first.</description>
