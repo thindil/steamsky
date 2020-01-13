@@ -24,20 +24,28 @@ with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Box; use Gtk.Box;
 with Gtk.Button; use Gtk.Button;
+with Gtk.Cell_Area_Box; use Gtk.Cell_Area_Box;
+with Gtk.Cell_Renderer_Spin; use Gtk.Cell_Renderer_Spin;
 with Gtk.Cell_Renderer_Text; use Gtk.Cell_Renderer_Text;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Gtk.Entry_Completion; use Gtk.Entry_Completion;
+with Gtk.Enums; use Gtk.Enums;
 with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Grid; use Gtk.Grid;
 with Gtk.Label; use Gtk.Label;
 with Gtk.List_Store; use Gtk.List_Store;
+with Gtk.Scrolled_Window; use Gtk.Scrolled_Window;
 with Gtk.Spin_Button; use Gtk.Spin_Button;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
+with Gtk.Tree_View; use Gtk.Tree_View;
+with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Widget; use Gtk.Widget;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
+with Glib.Object; use Glib.Object;
+with Glib.Properties; use Glib.Properties;
 with Bases; use Bases;
 with Crew; use Crew;
 with Events; use Events;
@@ -149,7 +157,10 @@ package body DebugUI is
       List: Gtk_List_Store := Gtk_List_Store(Get_Object(Builder, "statslist"));
       KnowSkills: Positive_Container.Vector;
       AddSkillBox: constant Gtk_Box :=
-        Gtk_Box(Get_Child(Gtk_Box(Get_Object(Object, "skillsbox")), 1));
+        Gtk_Box
+          (Get_Child
+             (Gtk_Box(Get_Child(Gtk_Box(Get_Object(Object, "memberbox")), 2)),
+              1));
       ComboBox: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Child(AddSkillBox, 1));
    begin
@@ -1058,9 +1069,6 @@ package body DebugUI is
       On_Edited
         (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderstat")),
          ChangeStatLevel'Access);
-      On_Edited
-        (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderskill")),
-         ChangeSkillLevel'Access);
       declare
          List: Gtk_List_Store :=
            Gtk_List_Store(Get_Object(Builder, "itemslist"));
@@ -1087,9 +1095,57 @@ package body DebugUI is
          end loop;
       end;
       declare
-         CrewBox: constant Gtk_Vbox := Gtk_Vbox(Get_Object(Builder, "crewbox"));
+         CrewBox: constant Gtk_Vbox :=
+           Gtk_Vbox(Get_Object(Builder, "crewbox"));
+         SkillsBox: constant Gtk_Vbox := Gtk_Vbox_New;
          HBox: Gtk_Hbox;
+         Scrolled: constant Gtk_Scrolled_Window := Gtk_Scrolled_Window_New;
+         View: Gtk_Tree_View;
+         Column: Gtk_Tree_View_Column;
+         Area: Gtk_Cell_Area_Box := Gtk_Cell_Area_Box_New;
+         Renderer: constant Gtk_Cell_Renderer_Text :=
+           Gtk_Cell_Renderer_Text_New;
+         RendererSpin: constant Gtk_Cell_Renderer_Spin :=
+           Gtk_Cell_Renderer_Spin_New;
       begin
+         View :=
+           Gtk_Tree_View_New_With_Model
+             (+(Gtk_List_Store(Get_Object(Builder, "skillslist"))));
+         Set_Tooltip_Text
+           (View,
+            "To change level of selected skill, double left click on level column. Values between 1 and 100.");
+         Pack_Start(Area, Renderer, True);
+         Add_Attribute(Area, Renderer, "text", 0);
+         Column := Gtk_Tree_View_Column_New_With_Area(Area);
+         Set_Title(Column, "Name");
+         Set_Clickable(Column, True);
+         Set_Sort_Indicator(Column, True);
+         Set_Sort_Column_Id(Column, 0);
+         if Append_Column(View, Column) /= 1 then
+            raise Program_Error
+              with "Can't add column name to member skills view.";
+         end if;
+         Area := Gtk_Cell_Area_Box_New;
+         Set_Property
+           (RendererSpin, Gtk.Cell_Renderer_Spin.Adjustment_Property,
+            Get_Object(Builder, "adjskills"));
+         Set_Property
+           (RendererSpin, Gtk.Cell_Renderer_Text.Editable_Property, True);
+         Pack_Start(Area, RendererSpin, True);
+         Add_Attribute(Area, RendererSpin, "text", 2);
+         Column := Gtk_Tree_View_Column_New_With_Area(Area);
+         Set_Title(Column, "Level");
+         Set_Clickable(Column, True);
+         Set_Sort_Indicator(Column, True);
+         Set_Sort_Column_Id(Column, 2);
+         On_Edited(RendererSpin, ChangeSkillLevel'Access);
+         if Append_Column(View, Column) /= 2 then
+            raise Program_Error
+              with "Can't add column level to member skills view.";
+         end if;
+         Set_Policy(Scrolled, Policy_Never, Policy_Automatic);
+         Add(Scrolled, View);
+         Pack_Start(SkillsBox, Scrolled);
          HBox := Gtk_Hbox_New;
          Button := Gtk_Button_New_With_Mnemonic("_Add");
          Set_Tooltip_Text(Button, "Add new skill to selected crew member");
@@ -1098,7 +1154,8 @@ package body DebugUI is
          ComboBox := Gtk_Combo_Box_Text_New;
          Set_Tooltip_Text(ComboBox, "Select skill to add.");
          Pack_Start(HBox, ComboBox);
-         Pack_Start(Gtk_Box(Get_Object(Builder, "skillsbox")), Hbox, False);
+         Pack_Start(SkillsBox, HBox, False);
+         Pack_Start(Gtk_Box(Get_Object(Builder, "memberbox")), SkillsBox);
          Button := Gtk_Button_New_With_Mnemonic("_Change");
          Set_Tooltip_Text(Button, "Commit changes to the crew member.");
          On_Clicked(Button, UpdateMember'Access);
