@@ -1066,9 +1066,6 @@ package body DebugUI is
       Register_Handler(Builder, "Set_Module_Stats", SetModuleStats'Access);
       Register_Handler(Builder, "Update_Module", UpdateModule'Access);
       Do_Connect(Builder);
-      On_Edited
-        (Gtk_Cell_Renderer_Text(Get_Object(Builder, "renderstat")),
-         ChangeStatLevel'Access);
       declare
          List: Gtk_List_Store :=
            Gtk_List_Store(Get_Object(Builder, "itemslist"));
@@ -1099,21 +1096,63 @@ package body DebugUI is
            Gtk_Vbox(Get_Object(Builder, "crewbox"));
          SkillsBox: constant Gtk_Vbox := Gtk_Vbox_New;
          HBox: Gtk_Hbox;
-         Scrolled: constant Gtk_Scrolled_Window := Gtk_Scrolled_Window_New;
+         Scrolled: Gtk_Scrolled_Window;
          View: Gtk_Tree_View;
          Column: Gtk_Tree_View_Column;
          Area: Gtk_Cell_Area_Box := Gtk_Cell_Area_Box_New;
-         Renderer: constant Gtk_Cell_Renderer_Text :=
-           Gtk_Cell_Renderer_Text_New;
-         RendererSpin: constant Gtk_Cell_Renderer_Spin :=
-           Gtk_Cell_Renderer_Spin_New;
+         Renderer: Gtk_Cell_Renderer_Text;
+         RendererSpin: Gtk_Cell_Renderer_Spin;
       begin
+         Scrolled := Gtk_Scrolled_Window_New;
+         View :=
+           Gtk_Tree_View_New_With_Model
+             (+(Gtk_List_Store(Get_Object(Builder, "statslist"))));
+         Set_Tooltip_Text
+           (View,
+            "To change level of selected attribute, double left click on level column. Values between 1 and 50.");
+         Renderer :=
+           Gtk_Cell_Renderer_Text_New;
+         Pack_Start(Area, Renderer, True);
+         Add_Attribute(Area, Renderer, "text", 0);
+         Column := Gtk_Tree_View_Column_New_With_Area(Area);
+         Set_Title(Column, "Name");
+         Set_Clickable(Column, True);
+         Set_Sort_Indicator(Column, True);
+         Set_Sort_Column_Id(Column, 0);
+         if Append_Column(View, Column) /= 1 then
+            raise Program_Error
+              with "Can't add column name to member attributes view.";
+         end if;
+         Area := Gtk_Cell_Area_Box_New;
+         RendererSpin := Gtk_Cell_Renderer_Spin_New;
+         Set_Property
+           (RendererSpin, Gtk.Cell_Renderer_Spin.Adjustment_Property,
+            Get_Object(Builder, "adjstats"));
+         Set_Property
+           (RendererSpin, Gtk.Cell_Renderer_Text.Editable_Property, True);
+         Pack_Start(Area, RendererSpin, True);
+         Add_Attribute(Area, RendererSpin, "text", 2);
+         Column := Gtk_Tree_View_Column_New_With_Area(Area);
+         Set_Title(Column, "Level");
+         Set_Clickable(Column, True);
+         Set_Sort_Indicator(Column, True);
+         Set_Sort_Column_Id(Column, 2);
+         On_Edited(RendererSpin, ChangeStatLevel'Access);
+         if Append_Column(View, Column) /= 2 then
+            raise Program_Error
+              with "Can't add column level to member stats view.";
+         end if;
+         Set_Policy(Scrolled, Policy_Never, Policy_Automatic);
+         Add(Scrolled, View);
+         Pack_Start(Gtk_Box(Get_Object(Builder, "memberbox")), Scrolled);
+         Scrolled := Gtk_Scrolled_Window_New;
          View :=
            Gtk_Tree_View_New_With_Model
              (+(Gtk_List_Store(Get_Object(Builder, "skillslist"))));
          Set_Tooltip_Text
            (View,
             "To change level of selected skill, double left click on level column. Values between 1 and 100.");
+         Area := Gtk_Cell_Area_Box_New;
          Pack_Start(Area, Renderer, True);
          Add_Attribute(Area, Renderer, "text", 0);
          Column := Gtk_Tree_View_Column_New_With_Area(Area);
