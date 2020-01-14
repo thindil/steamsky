@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Ability to set more generic weapon skill for mobs
 - Better search for recipes, wounded crew members and modules to repair in
   bases
+- Info about used equipment by both crews members during boarding
 
 ### Changed
 - Updated mobs data
