@@ -853,6 +853,7 @@ package body Combat.UI is
       OrdersList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "orders2"));
       OrdersIter: Gtk_Tree_Iter;
+      Tooltip: Unbounded_String;
    begin
       Combat.UI.UpdateMessages;
       declare
@@ -882,6 +883,15 @@ package body Combat.UI is
               (OrderName, 2, Length(OrderName),
                To_Lower(Slice(OrderName, 2, Length(OrderName))));
             Set(EnemyCrewList, EnemyCrewIter, 3, To_String(OrderName));
+            Tooltip := To_Unbounded_String("Uses: ");
+            for Item of Enemy.Ship.Crew(I).Equipment loop
+               if Item /= 0 then
+                  Append
+                    (Tooltip,
+                     GetItemName(Enemy.Ship.Crew(I).Inventory(Item)) & " ");
+               end if;
+            end loop;
+            Set(EnemyCrewList, EnemyCrewIter, 4, To_String(Tooltip));
             Append(OrdersList, OrdersIter);
             Set
               (OrdersList, OrdersIter, 0,
@@ -910,6 +920,16 @@ package body Combat.UI is
                Set
                  (CrewList, CrewIter, 3,
                   Get_String(OrdersList, OrdersIter, 0));
+               Tooltip := To_Unbounded_String("Uses: ");
+               for Item of PlayerShip.Crew(I).Equipment loop
+                  if Item /= 0 then
+                     Append
+                       (Tooltip,
+                        GetItemName(PlayerShip.Crew(I).Inventory(Item)) &
+                        " ");
+                  end if;
+               end loop;
+               Set(CrewList, CrewIter, 4, To_String(Tooltip));
                OrderIndex := OrderIndex + 1;
             end if;
          end loop;
