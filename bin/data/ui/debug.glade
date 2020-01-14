@@ -216,42 +216,6 @@
       </attributes>
     </child>
   </object>
-  <object class="GtkListStore" id="shipslist">
-    <columns>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkEntryCompletion" id="shipscompletion">
-    <property name="model">shipslist</property>
-    <property name="text_column">0</property>
-    <child>
-      <object class="GtkCellRendererText"/>
-      <attributes>
-        <attribute name="text">0</attribute>
-      </attributes>
-    </child>
-  </object>
-  <object class="GtkListStore" id="skillslist">
-    <columns>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-      <!-- column-name index -->
-      <column type="gint"/>
-      <!-- column-name level -->
-      <column type="guint"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="statslist">
-    <columns>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-      <!-- column-name index -->
-      <column type="guint"/>
-      <!-- column-name level -->
-      <column type="guint"/>
-    </columns>
-  </object>
   <object class="GtkWindow" id="debugwindow">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Steam Sky - debug</property>
@@ -781,60 +745,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkScrolledWindow">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">never</property>
-                        <property name="shadow_type">in</property>
-                        <child>
-                          <object class="GtkTreeView">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip_text" translatable="yes">To change level of selected attribute, double left click on level column. Values between 1 and 50.</property>
-                            <property name="model">statslist</property>
-                            <property name="search_column">0</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection"/>
-                            </child>
-                            <child>
-                              <object class="GtkTreeViewColumn">
-                                <property name="title" translatable="yes">Name</property>
-                                <property name="clickable">True</property>
-                                <property name="sort_indicator">True</property>
-                                <property name="sort_column_id">0</property>
-                                <child>
-                                  <object class="GtkCellRendererText"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkTreeViewColumn">
-                                <property name="title" translatable="yes">Level</property>
-                                <property name="clickable">True</property>
-                                <property name="sort_indicator">True</property>
-                                <property name="sort_column_id">2</property>
-                                <child>
-                                  <object class="GtkCellRendererSpin" id="renderstat">
-                                    <property name="editable">True</property>
-                                    <property name="adjustment">adjstats</property>
-                                  </object>
-                                  <attributes>
-                                    <attribute name="text">2</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
+                      <placeholder/>
                     </child>
                     <child>
                       <placeholder/>
@@ -865,5 +776,41 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkListStore" id="shipslist">
+    <columns>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkEntryCompletion" id="shipscompletion">
+    <property name="model">shipslist</property>
+    <property name="text_column">0</property>
+    <child>
+      <object class="GtkCellRendererText"/>
+      <attributes>
+        <attribute name="text">0</attribute>
+      </attributes>
+    </child>
+  </object>
+  <object class="GtkListStore" id="skillslist">
+    <columns>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+      <!-- column-name index -->
+      <column type="gint"/>
+      <!-- column-name level -->
+      <column type="guint"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="statslist">
+    <columns>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+      <!-- column-name index -->
+      <column type="guint"/>
+      <!-- column-name level -->
+      <column type="guint"/>
+    </columns>
   </object>
 </interface>
