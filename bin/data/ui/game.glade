@@ -698,6 +698,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="guint"/>
       <!-- column-name gchararray2 -->
       <column type="gchararray"/>
+      <!-- column-name tooltip -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkListStore" id="crewnames">
@@ -733,6 +735,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <!-- column-name guint2 -->
       <column type="guint"/>
       <!-- column-name gchararray2 -->
+      <column type="gchararray"/>
+      <!-- column-name tooltip -->
       <column type="gchararray"/>
     </columns>
   </object>
@@ -5983,6 +5987,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <property name="can_focus">True</property>
                                         <property name="model">crewlist3</property>
                                         <property name="search_column">0</property>
+                                        <property name="tooltip_column">4</property>
                                         <child internal-child="selection">
                                           <object class="GtkTreeSelection"/>
                                         </child>
@@ -6051,6 +6056,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                         <property name="can_focus">True</property>
                                         <property name="model">enemycrewlist</property>
                                         <property name="search_column">0</property>
+                                        <property name="tooltip_column">4</property>
                                         <child internal-child="selection">
                                           <object class="GtkTreeSelection">
                                             <property name="mode">none</property>
