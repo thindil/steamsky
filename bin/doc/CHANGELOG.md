@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Updated some ships crews
 - Updated MODDING.md
 - Updated contributing guide
+- Updated help
 
 ### Fixed
 - Orders priority for one mob
