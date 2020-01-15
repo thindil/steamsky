@@ -134,12 +134,13 @@ package body DebugUI is
    -- FUNCTION
    -- Update the player ship crew
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Widget which was mapped
    -- SOURCE
-   procedure UpdateCrew(Object: access Gtkada_Builder_Record'Class) is
+   procedure UpdateCrew(Self: access Gtk_Widget_Record'Class) is
       -- ****
       ComboBox: constant Gtk_Combo_Box :=
-        Gtk_Combo_Box(Get_Object(Object, "cmbmember"));
+        Gtk_Combo_Box
+          (Get_Child(Gtk_Box(Get_Child(Gtk_Box(Get_Parent(Self)), 0)), 1));
    begin
       Set_Active(ComboBox, 0);
    end UpdateCrew;
@@ -159,7 +160,11 @@ package body DebugUI is
       AddSkillBox: constant Gtk_Box :=
         Gtk_Box
           (Get_Child
-             (Gtk_Box(Get_Child(Gtk_Box(Get_Object(Object, "memberbox")), 2)),
+             (Gtk_Box
+                (Get_Child
+                   (Gtk_Box
+                      (Get_Child(Gtk_Box(Get_Object(Object, "crewbox")), 1)),
+                    2)),
               1));
       ComboBox: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Child(AddSkillBox, 1));
@@ -537,7 +542,12 @@ package body DebugUI is
    -- ****
    begin
       UpdateShip(Object);
-      UpdateCrew(Object);
+      UpdateCrew
+        (Get_Child
+           (Gtk_Box
+              (Get_Child_By_Name
+                 (Gtk_Stack(Get_Object(Object, "stack1")), "page1")),
+            1));
       UpdateCargoInfo
         (Get_Child_By_Name(Gtk_Stack(Get_Object(Object, "stack1")), "page2"));
       ShowBaseInfo
@@ -1060,7 +1070,6 @@ package body DebugUI is
       Register_Handler(Builder, "Move_Ship", MoveShip'Access);
       Register_Handler(Builder, "Update_Ship", UpdateShip'Access);
       Register_Handler(Builder, "Refresh_UI", RefreshUI'Access);
-      Register_Handler(Builder, "Update_Crew", UpdateCrew'Access);
       Register_Handler(Builder, "Set_Member_Stats", SetMemberStats'Access);
       Register_Handler(Builder, "Save_Game", Save_Game'Access);
       Register_Handler(Builder, "Set_Module_Stats", SetModuleStats'Access);
@@ -1102,7 +1111,34 @@ package body DebugUI is
          Area: Gtk_Cell_Area_Box := Gtk_Cell_Area_Box_New;
          Renderer: Gtk_Cell_Renderer_Text;
          RendererSpin: Gtk_Cell_Renderer_Spin;
+         MemberGrid: constant Gtk_Grid := Gtk_Grid_New;
+         Labels: constant array(0 .. 5) of Unbounded_String :=
+           (To_Unbounded_String("Health"), To_Unbounded_String("Thirst"),
+            To_Unbounded_String("Hunger"), To_Unbounded_String("Tired"),
+            To_Unbounded_String("Morale"), To_Unbounded_String("Loyalty"));
+         LowerLabel: Unbounded_String;
+         MemberBox: constant Gtk_Hbox := Gtk_Hbox_New;
       begin
+         for I in Labels'Range loop
+            Attach
+              (MemberGrid, Gtk_Label_New(To_String(Labels(I))), 0, Gint(I));
+            LowerLabel :=
+              To_Unbounded_String
+                (To_Lower(Element(Labels(I), 1)) &
+                 Slice(Labels(I), 2, Length(Labels(I))));
+            SpinButton :=
+              Gtk_Spin_Button_New
+                (Gtk_Adjustment
+                   (Get_Object(Builder, "adj" & To_String(LowerLabel))),
+                 0.0);
+            Set_Tooltip_Text
+              (SpinButton,
+               "Level of " & To_String(LowerLabel) &
+               " of crew member. Value between 0 and 100.");
+            Attach(MemberGrid, SpinButton, 1, Gint(I));
+         end loop;
+         On_Map(MemberBox, UpdateCrew'Access);
+         Pack_Start(MemberBox, MemberGrid, False);
          Scrolled := Gtk_Scrolled_Window_New;
          View :=
            Gtk_Tree_View_New_With_Model
@@ -1110,8 +1146,7 @@ package body DebugUI is
          Set_Tooltip_Text
            (View,
             "To change level of selected attribute, double left click on level column. Values between 1 and 50.");
-         Renderer :=
-           Gtk_Cell_Renderer_Text_New;
+         Renderer := Gtk_Cell_Renderer_Text_New;
          Pack_Start(Area, Renderer, True);
          Add_Attribute(Area, Renderer, "text", 0);
          Column := Gtk_Tree_View_Column_New_With_Area(Area);
@@ -1144,7 +1179,7 @@ package body DebugUI is
          end if;
          Set_Policy(Scrolled, Policy_Never, Policy_Automatic);
          Add(Scrolled, View);
-         Pack_Start(Gtk_Box(Get_Object(Builder, "memberbox")), Scrolled);
+         Pack_Start(MemberBox, Scrolled, False);
          Scrolled := Gtk_Scrolled_Window_New;
          View :=
            Gtk_Tree_View_New_With_Model
@@ -1194,7 +1229,8 @@ package body DebugUI is
          Set_Tooltip_Text(ComboBox, "Select skill to add.");
          Pack_Start(HBox, ComboBox);
          Pack_Start(SkillsBox, HBox, False);
-         Pack_Start(Gtk_Box(Get_Object(Builder, "memberbox")), SkillsBox);
+         Pack_Start(MemberBox, SkillsBox);
+         Pack_Start(CrewBox, MemberBox, False);
          Button := Gtk_Button_New_With_Mnemonic("_Change");
          Set_Tooltip_Text(Button, "Commit changes to the crew member.");
          On_Clicked(Button, UpdateMember'Access);
