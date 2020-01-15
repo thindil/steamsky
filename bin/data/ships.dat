@@ -1746,7 +1746,7 @@ during combat. -->
   <member index="12"/>
   <member index="13"/>
   <member index="14"/>
-  <member index="128"/>
+  <member index="15"/>
   <member amount="2" index="57"/>
   <description>Standard poleis traders vessel. Avoids any fights.</description>
  </ship>
@@ -1767,7 +1767,7 @@ during combat. -->
   <member index="12"/>
   <member index="13"/>
   <member index="14"/>
-  <member index="160"/>
+  <member index="15"/>
   <member amount="2" index="57"/>
   <description>Standard independent traders vessel. Avoids any fights.</description>
  </ship>
@@ -3807,7 +3807,7 @@ during combat. -->
   <member index="12"/>
   <member index="13"/>
   <member index="14"/>
-  <member index="128"/>
+  <member index="15"/>
   <member amount="2" index="57"/>
   <description>Standard poleis traders vessel, upgraded version. Avoids any fights.</description>
  </ship>
@@ -3828,7 +3828,7 @@ during combat. -->
   <member index="12"/>
   <member index="13"/>
   <member index="14"/>
-  <member index="160"/>
+  <member index="15"/>
   <member amount="2" index="57"/>
   <description>Standard independent traders vessel, upgraded version. Avoids any fights.</description>
  </ship>
@@ -3909,7 +3909,7 @@ during combat. -->
   <member index="12"/>
   <member index="13"/>
   <member index="14"/>
-  <member index="128"/>
+  <member index="15"/>
   <member amount="2" index="57"/>
   <description>Standard poleis traders vessel, upgraded version. Avoids any fights.</description>
  </ship>
@@ -3929,7 +3929,7 @@ during combat. -->
   <member index="12"/>
   <member index="13"/>
   <member index="14"/>
-  <member index="160"/>
+  <member index="15"/>
   <member amount="2" index="57"/>
   <description>Standard independent traders vessel, upgraded version. Avoids any fights.</description>
  </ship>
@@ -4007,7 +4007,7 @@ during combat. -->
   <member index="12"/>
   <member index="13"/>
   <member index="14"/>
-  <member index="128"/>
+  <member index="15"/>
   <member amount="2" index="57"/>
   <description>Standard poleis traders vessel, upgraded version. Avoids any fights.</description>
  </ship>
@@ -4027,7 +4027,7 @@ during combat. -->
   <member index="12"/>
   <member index="13"/>
   <member index="14"/>
-  <member index="160"/>
+  <member index="15"/>
   <member amount="2" index="57"/>
   <description>Standard independent traders vessel, upgraded version. Avoids any fights.</description>
  </ship>
