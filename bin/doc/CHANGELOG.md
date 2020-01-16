@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Deleting events in debug menu
 - Crash on updating base in debug menu
 - Setting base type in debug menu
+- Possible crash after combat
 
 ## [4.5] - 2019-12-29
 
