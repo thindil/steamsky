@@ -120,7 +120,7 @@ package Combat is
    -- FUNCTION
    -- Speed of player ship before combat
    -- SOURCE
-   OldSpeed: ShipSpeed;
+   OldSpeed: ShipSpeed := FULL_SPEED;
    -- ****
 
    -- ****v* Combat/HarpoonDuration
