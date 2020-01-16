@@ -149,50 +149,46 @@ package body DebugUI is
    -- FUNCTION
    -- Show statistics, skills, etc for selected the player ship crew member
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Combo_Box with crew members names
    -- SOURCE
-   procedure SetMemberStats(Object: access Gtkada_Builder_Record'Class) is
+   procedure SetMemberStats(Self: access Gtk_Combo_Box_Record'Class) is
       -- ****
       Member: Member_Data;
       Iter: Gtk_Tree_Iter;
       List: Gtk_List_Store := Gtk_List_Store(Get_Object(Builder, "statslist"));
       KnowSkills: Positive_Container.Vector;
+      CrewBox: constant Gtk_Box :=
+        Gtk_Box
+          (Get_Child_By_Name
+             (Gtk_Stack(Get_Object(Builder, "stack1")), "page1"));
       AddSkillBox: constant Gtk_Box :=
         Gtk_Box
           (Get_Child
-             (Gtk_Box
-                (Get_Child
-                   (Gtk_Box
-                      (Get_Child(Gtk_Box(Get_Object(Object, "crewbox")), 1)),
-                    2)),
-              1));
+             (Gtk_Box(Get_Child(Gtk_Box(Get_Child(CrewBox, 1)), 2)), 1));
       ComboBox: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Child(AddSkillBox, 1));
    begin
       if Setting then
          return;
       end if;
-      Member :=
-        PlayerShip.Crew
-          (Positive'Value
-             (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbmember")))));
+      Member := PlayerShip.Crew(Positive'Value(Get_Active_Id(Self)));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Object, "adjhealth")),
+        (Gtk_Adjustment(Get_Object(Builder, "adjhealth")),
          Gdouble(Member.Health));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Object, "adjthirst")),
+        (Gtk_Adjustment(Get_Object(Builder, "adjthirst")),
          Gdouble(Member.Thirst));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Object, "adjhunger")),
+        (Gtk_Adjustment(Get_Object(Builder, "adjhunger")),
          Gdouble(Member.Hunger));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Object, "adjtired")),
+        (Gtk_Adjustment(Get_Object(Builder, "adjtired")),
          Gdouble(Member.Tired));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Object, "adjmorale")),
+        (Gtk_Adjustment(Get_Object(Builder, "adjmorale")),
          Gdouble(Member.Morale(1)));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Object, "adjloyalty")),
+        (Gtk_Adjustment(Get_Object(Builder, "adjloyalty")),
          Gdouble(Member.Loyalty));
       Clear(List);
       for I in Member.Attributes.Iterate loop
@@ -244,9 +240,14 @@ package body DebugUI is
       return Boolean is
       pragma Unreferenced(Path);
       -- ****
+      CrewBox: constant Gtk_Box :=
+        Gtk_Box
+          (Get_Child_By_Name
+             (Gtk_Stack(Get_Object(Builder, "stack1")), "crewbox"));
       MemberIndex: constant Positive :=
         Positive'Value
-          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Builder, "cmbmember"))));
+          (Get_Active_Id
+             (Gtk_Combo_Box(Get_Child(Gtk_Box(Get_Child(CrewBox, 0)), 1))));
    begin
       PlayerShip.Crew(MemberIndex).Attributes
         (Positive(Get_Int(Model, Iter, 1)))
@@ -270,9 +271,14 @@ package body DebugUI is
       return Boolean is
       pragma Unreferenced(Path);
       -- ****
+      CrewBox: constant Gtk_Box :=
+        Gtk_Box
+          (Get_Child_By_Name
+             (Gtk_Stack(Get_Object(Builder, "stack1")), "crewbox"));
       MemberIndex: constant Positive :=
         Positive'Value
-          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Builder, "cmbmember"))));
+          (Get_Active_Id
+             (Gtk_Combo_Box(Get_Child(Gtk_Box(Get_Child(CrewBox, 0)), 1))));
       SkillIndex: constant Integer := Integer(Get_Int(Model, Iter, 1));
    begin
       if SkillIndex > 0 then
@@ -297,9 +303,14 @@ package body DebugUI is
    procedure UpdateMember(Self: access Gtk_Button_Record'Class) is
       pragma Unreferenced(Self);
       -- ****
+      CrewBox: constant Gtk_Box :=
+        Gtk_Box
+          (Get_Child_By_Name
+             (Gtk_Stack(Get_Object(Builder, "stack1")), "crewbox"));
       MemberIndex: constant Positive :=
         Positive'Value
-          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Builder, "cmbmember"))));
+          (Get_Active_Id
+             (Gtk_Combo_Box(Get_Child(Gtk_Box(Get_Child(CrewBox, 0)), 1))));
    begin
       PlayerShip.Crew(MemberIndex).Health :=
         Natural(Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjhealth"))));
@@ -1070,7 +1081,6 @@ package body DebugUI is
       Register_Handler(Builder, "Move_Ship", MoveShip'Access);
       Register_Handler(Builder, "Update_Ship", UpdateShip'Access);
       Register_Handler(Builder, "Refresh_UI", RefreshUI'Access);
-      Register_Handler(Builder, "Set_Member_Stats", SetMemberStats'Access);
       Register_Handler(Builder, "Save_Game", Save_Game'Access);
       Register_Handler(Builder, "Set_Module_Stats", SetModuleStats'Access);
       Register_Handler(Builder, "Update_Module", UpdateModule'Access);
@@ -1101,8 +1111,7 @@ package body DebugUI is
          end loop;
       end;
       declare
-         CrewBox: constant Gtk_Vbox :=
-           Gtk_Vbox(Get_Object(Builder, "crewbox"));
+         CrewBox: constant Gtk_Vbox := Gtk_Vbox_New;
          SkillsBox: constant Gtk_Vbox := Gtk_Vbox_New;
          HBox: Gtk_Hbox;
          Scrolled: Gtk_Scrolled_Window;
@@ -1118,7 +1127,20 @@ package body DebugUI is
             To_Unbounded_String("Morale"), To_Unbounded_String("Loyalty"));
          LowerLabel: Unbounded_String;
          MemberBox: constant Gtk_Hbox := Gtk_Hbox_New;
+         MemberComboBox: constant Gtk_Combo_Box :=
+           Gtk_Combo_Box_New_With_Model
+             (+(Gtk_List_Store(Get_Object(Builder, "crewlist"))));
       begin
+         HBox := Gtk_Hbox_New;
+         Label := Gtk_Label_New("Member");
+         Pack_Start(HBox, Label, False);
+         Renderer := Gtk_Cell_Renderer_Text_New;
+         Pack_Start(MemberComboBox, Renderer, True);
+         Add_Attribute(MemberComboBox, Renderer, "text", 0);
+         Set_Id_Column(MemberComboBox, 1);
+         On_Changed(MemberComboBox, SetMemberStats'Access);
+         Pack_Start(HBox, MemberComboBox, False);
+         Pack_Start(CrewBox, HBox, False);
          for I in Labels'Range loop
             Attach
               (MemberGrid, Gtk_Label_New(To_String(Labels(I))), 0, Gint(I));
@@ -1235,6 +1257,9 @@ package body DebugUI is
          Set_Tooltip_Text(Button, "Commit changes to the crew member.");
          On_Clicked(Button, UpdateMember'Access);
          Pack_Start(CrewBox, Button, False);
+         Add_Titled
+           (Gtk_Stack(Get_Object(Builder, "stack1")), CrewBox, "page1",
+            "Crew");
       end;
       declare
          CargoGrid: constant Gtk_Grid := Gtk_Grid_New;
