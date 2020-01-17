@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Updated MODDING.md
 - Updated contributing guide
 - Updated help
+- Desconstruct crafting order name to Study
 
 ### Fixed
 - Orders priority for one mob
