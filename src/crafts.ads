@@ -122,7 +122,7 @@ package Crafts is
       -- Check if player have all requirements for selected recipe
       -- PARAMETERS
       -- RecipeIndex - Index of the prototype recipe to check or if deconstruct
-      --               existing item, "Deconstruct " + item name.
+      --               existing item, "Study " + item name.
       -- RESULT
       -- Max amount of items which can be craft
       -- SOURCE
@@ -138,7 +138,7 @@ package Crafts is
       -- Workshop    - Index of player ship module (workplace) to which
       --               selected recipe will be set
       -- RecipeIndex - Index of the prototype recipe to check or if deconstruct
-      --               existing item, "Deconstruct " + item name.
+      --               existing item, "Study " + item name.
       -- SOURCE
    procedure SetRecipe
      (Workshop, Amount: Positive; RecipeIndex: Unbounded_String) with
