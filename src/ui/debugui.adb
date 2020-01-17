@@ -1002,16 +1002,17 @@ package body DebugUI is
    -- FUNCTION
    -- Update selected the player ship module with new data
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Button which was clicked.
    -- SOURCE
-   procedure UpdateModule(Object: access Gtkada_Builder_Record'Class) is
+   procedure UpdateModule(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
       -- ****
       ModuleIndex: constant Positive :=
         Positive'Value
-          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbmodules"))));
+          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Builder, "cmbmodules"))));
       ProtoName: constant Unbounded_String :=
         To_Unbounded_String
-          (Get_Text(Gtk_GEntry(Get_Object(Object, "edtprototype"))));
+          (Get_Text(Gtk_GEntry(Get_Object(Builder, "edtprototype"))));
    begin
       for I in Modules_List.Iterate loop
          if Modules_List(I).Name = ProtoName then
@@ -1022,15 +1023,16 @@ package body DebugUI is
       end loop;
       PlayerShip.Modules(ModuleIndex).Weight :=
         Natural
-          (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjmoduleweight"))));
+          (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjmoduleweight"))));
       PlayerShip.Modules(ModuleIndex).Durability :=
-        Natural(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjmoduledur"))));
+        Natural
+          (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjmoduledur"))));
       PlayerShip.Modules(ModuleIndex).MaxDurability :=
         Natural
-          (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjmodulemaxdur"))));
+          (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjmodulemaxdur"))));
       PlayerShip.Modules(ModuleIndex).UpgradeProgress :=
         Natural
-          (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjmoduleupgrade"))));
+          (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjmoduleupgrade"))));
    end UpdateModule;
 
    -- ****if* DebugUI/ShowBasesTypes
@@ -1083,7 +1085,6 @@ package body DebugUI is
       Register_Handler(Builder, "Refresh_UI", RefreshUI'Access);
       Register_Handler(Builder, "Save_Game", Save_Game'Access);
       Register_Handler(Builder, "Set_Module_Stats", SetModuleStats'Access);
-      Register_Handler(Builder, "Update_Module", UpdateModule'Access);
       Do_Connect(Builder);
       declare
          List: Gtk_List_Store :=
@@ -1109,6 +1110,12 @@ package body DebugUI is
             Append(List, Iter);
             Set(List, Iter, 0, To_String(Module.Name));
          end loop;
+      end;
+      begin
+         Button := Gtk_Button_New_With_Mnemonic("_Change");
+         Set_Tooltip_Text(Button, "Commit changes to the ship module.");
+         On_Clicked(Button, UpdateModule'Access);
+         Pack_Start(Gtk_Box(Get_Object(Builder, "shipbox")), Button, False);
       end;
       declare
          CrewBox: constant Gtk_Vbox := Gtk_Vbox_New;
