@@ -291,7 +291,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="shipbox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
@@ -521,19 +521,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="btnchangemodule">
-                    <property name="label" translatable="yes">Change</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes">Commit changes to the ship module.</property>
-                    <signal name="clicked" handler="Update_Module" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
