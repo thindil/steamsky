@@ -66,8 +66,8 @@ package body Crafts.UI is
       Set_Value(AmountAdj, 1.0);
       Set_Upper(AmountAdj, Gdouble(MaxAmount));
       Set_Label(LabelTimes, "(max" & Positive'Image(MaxAmount) & "):");
-      if Length(RecipeIndex) > 12
-        and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
+      if Length(RecipeIndex) > 6
+        and then Slice(RecipeIndex, 1, 5) = "Study" then
          MType := ALCHEMY_LAB;
       else
          MType := Recipes_List(RecipeIndex).Workplace;
@@ -78,8 +78,8 @@ package body Crafts.UI is
             Append_Text(CmbModules, To_String(Module.Name));
          end if;
       end loop;
-      if Length(RecipeIndex) > 12
-        and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
+      if Length(RecipeIndex) > 6
+        and then Slice(RecipeIndex, 1, 5) = "Study" then
          Hide(Gtk_Widget(Get_Object(Object, "spincraftamount")));
          Hide(Gtk_Widget(LabelTimes));
       else
@@ -134,14 +134,14 @@ package body Crafts.UI is
          RecipeIndex :=
            To_Unbounded_String(Get_String(RecipesModel, RecipesIter, 1));
       end;
-      if Length(RecipeIndex) > 12
-        and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
+      if Length(RecipeIndex) > 6
+        and then Slice(RecipeIndex, 1, 5) = "Study" then
          Recipe.MaterialTypes.Append
            (New_Item =>
-              Items_List(Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex)))
+              Items_List(Unbounded_Slice(RecipeIndex, 7, Length(RecipeIndex)))
                 .IType);
          Recipe.ResultIndex :=
-           Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex));
+           Unbounded_Slice(RecipeIndex, 7, Length(RecipeIndex));
          Recipe.MaterialAmounts.Append(New_Item => 1);
          Recipe.ResultAmount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
@@ -173,8 +173,8 @@ package body Crafts.UI is
             MAmount := 0;
             for J in Items_List.Iterate loop
                IsMaterial := False;
-               if Length(RecipeIndex) > 12
-                 and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
+               if Length(RecipeIndex) > 6
+                 and then Slice(RecipeIndex, 1, 5) = "Study" then
                   if Items_List(J).Name =
                     Items_List(Recipe.ResultIndex).Name then
                      IsMaterial := True;
@@ -356,7 +356,7 @@ package body Crafts.UI is
    end CreateCraftsUI;
 
    procedure ShowCraftsUI is
-      Deconstructs: UnboundedString_Container.Vector;
+      Studies: UnboundedString_Container.Vector;
       RecipesIter: Gtk_Tree_Iter;
       RecipesList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "recipeslist"));
@@ -386,9 +386,9 @@ package body Crafts.UI is
               and then
               (Known_Recipes.Find_Index(Item => Recipes_Container.Key(J)) =
                Positive_Container.No_Index and
-               Deconstructs.Find_Index(Item => Item.ProtoIndex) =
+               Studies.Find_Index(Item => Item.ProtoIndex) =
                  Positive_Container.No_Index) then
-               Deconstructs.Append(New_Item => Item.ProtoIndex);
+               Studies.Append(New_Item => Item.ProtoIndex);
                exit;
             end if;
          end loop;
@@ -456,22 +456,20 @@ package body Crafts.UI is
          end if;
          Set(RecipesList, RecipesIter, 1, To_String(Known_Recipes.Element(I)));
       end loop;
-      for I in Deconstructs.First_Index .. Deconstructs.Last_Index loop
+      for I in Studies.First_Index .. Studies.Last_Index loop
          CheckTool(AlchemyTools);
          Append(RecipesList, RecipesIter);
          if CanCraft then
             Set
               (RecipesList, RecipesIter, 0,
-               "Deconstruct " & To_String(Items_List(Deconstructs(I)).Name));
+               "Study " & To_String(Items_List(Studies(I)).Name));
          else
             Set
               (RecipesList, RecipesIter, 0,
-               "<span foreground=""gray"">Deconstruct " &
-               To_String(Items_List(Deconstructs(I)).Name) & "</span>");
+               "<span foreground=""gray"">Study " &
+               To_String(Items_List(Studies(I)).Name) & "</span>");
          end if;
-         Set
-           (RecipesList, RecipesIter, 1,
-            "Deconstruct " & To_String(Deconstructs(I)));
+         Set(RecipesList, RecipesIter, 1, "Study " & To_String(Studies(I)));
       end loop;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "crafts");
