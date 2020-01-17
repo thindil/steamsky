@@ -303,16 +303,15 @@ package body Ships.UI.Handlers is
             AddOwnersInfo("Worker");
             Append(ModuleInfo, LF);
             if Module.CraftingIndex /= Null_Unbounded_String then
-               if Length(Module.CraftingIndex) > 12
-                 and then Slice(Module.CraftingIndex, 1, 11) =
-                   "Deconstruct" then
+               if Length(Module.CraftingIndex) > 6
+                 and then Slice(Module.CraftingIndex, 1, 5) = "Study" then
                   Append
                     (ModuleInfo,
-                     "Deconstructing " &
+                     "Studying " &
                      To_String
                        (Items_List
                           (Unbounded_Slice
-                             (Module.CraftingIndex, 13,
+                             (Module.CraftingIndex, 7,
                               Length(Module.CraftingIndex)))
                           .Name));
                else
