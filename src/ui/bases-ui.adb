@@ -80,7 +80,8 @@ package body Bases.UI is
       MoneyIndex2: Natural;
       MinChildren: Gint;
       FormattedTime, ObjectIndex: Unbounded_String;
-      ItemsModel: constant Gtk_List_Store := Gtk_List_Store(Get_Object(Object, "itemslist"));
+      ItemsModel: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Object, "itemslist"));
       procedure ShowMap is
       begin
          ShowSkyMap;
@@ -336,7 +337,8 @@ package body Bases.UI is
       end loop;
       Set_Label
         (Gtk_Button(Get_Object(Builder, "btnacceptbase")), "_Buy recipe");
-      Set_Placeholder_Text(Gtk_GEntry(Get_Object(Builder, "searchrecipe")), "<Search recipes>");
+      Set_Placeholder_Text
+        (Gtk_GEntry(Get_Object(Builder, "searchrecipe")), "<Search recipes>");
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "base");
       Set_Cursor
@@ -382,7 +384,8 @@ package body Bases.UI is
       end if;
       Set_Label
         (Gtk_Button(Get_Object(Builder, "btnacceptbase")), "_Buy repairs");
-      Set_Placeholder_Text(Gtk_GEntry(Get_Object(Builder, "searchrecipe")), "<Search action>");
+      Set_Placeholder_Text
+        (Gtk_GEntry(Get_Object(Builder, "searchrecipe")), "<Search action>");
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "base");
       Set_Cursor
@@ -413,7 +416,8 @@ package body Bases.UI is
       Set(HealsList, HealsIter, 1, Gint'Image(0));
       Set_Label
         (Gtk_Button(Get_Object(Builder, "btnacceptbase")), "_Buy healing");
-      Set_Placeholder_Text(Gtk_GEntry(Get_Object(Builder, "searchrecipe")), "<Search action>");
+      Set_Placeholder_Text
+        (Gtk_GEntry(Get_Object(Builder, "searchrecipe")), "<Search action>");
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "base");
       Set_Cursor

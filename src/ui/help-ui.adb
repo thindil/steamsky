@@ -130,10 +130,9 @@ package body Help.UI is
    -- Event - Gdk_Event triggered. Unused.
    -- SOURCE
    function HideHelpWindow
-     (Self  : access Gtk_Widget_Record'Class;
-      Event : Gdk_Event) return Boolean is
+     (Self: access Gtk_Widget_Record'Class; Event: Gdk_Event) return Boolean is
       pragma Unreferenced(Event);
-   -- ****
+      -- ****
    begin
       GameSettings.TopicsPosition :=
         Natural(Get_Position(Gtk_Paned(Get_Child(HelpWindow))));
@@ -163,7 +162,8 @@ package body Help.UI is
 
    procedure CreateHelpUI is
       TopicsIter: Gtk_Tree_Iter;
-      TopicsList: constant Gtk_List_Store := Gtk_List_Store_Newv((0 => GType_String));
+      TopicsList: constant Gtk_List_Store :=
+        Gtk_List_Store_Newv((0 => GType_String));
       Scroll: Gtk_Scrolled_Window := Gtk_Scrolled_Window_New;
       HelpView: constant Gtk_Text_View := Gtk_Text_View_New;
       Tags: constant Gtk_Text_Tag_Table := Gtk_Text_Tag_Table_New;
@@ -180,8 +180,7 @@ package body Help.UI is
       end if;
       HelpWindow := Gtk_Window_New;
       On_Delete_Event(HelpWindow, HideHelpWindow'Access);
-      On_Key_Release_Event
-        (HelpWindow, CloseWindow'Access);
+      On_Key_Release_Event(HelpWindow, CloseWindow'Access);
       Set_Expanded(HelpExpander, True);
       Set_Property
         (Get_Label_Widget(HelpExpander), Gtk.Widget.Name_Property,
@@ -308,8 +307,7 @@ package body Help.UI is
           (Gtk_Text_View
              (Get_Child
                 (Gtk_Scrolled_Window
-                   (Get_Child2
-                      (Gtk_Paned(Get_Child(HelpWindow)))))));
+                   (Get_Child2(Gtk_Paned(Get_Child(HelpWindow)))))));
       Iter: Gtk_Text_Iter;
       Tags: constant Gtk_Text_Tag_Table := Get_Tag_Table(HelpBuffer);
       SpecialText: constant Gtk_Text_Tag := Lookup(Tags, "special");
@@ -436,8 +434,8 @@ package body Help.UI is
       end loop;
       Show_All(HelpWindow);
       Resize
-        (HelpWindow,
-         Gint(GameSettings.WindowWidth), Gint(GameSettings.WindowHeight));
+        (HelpWindow, Gint(GameSettings.WindowWidth),
+         Gint(GameSettings.WindowHeight));
       while Gtk.Main.Events_Pending loop
          if Main_Iteration_Do(False) then
             return;

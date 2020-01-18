@@ -925,8 +925,7 @@ package body Combat.UI is
                   if Item /= 0 then
                      Append
                        (Tooltip,
-                        GetItemName(PlayerShip.Crew(I).Inventory(Item)) &
-                        " ");
+                        GetItemName(PlayerShip.Crew(I).Inventory(Item)) & " ");
                   end if;
                end loop;
                Set(CrewList, CrewIter, 4, To_String(Tooltip));
