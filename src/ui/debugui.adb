@@ -103,7 +103,16 @@ package body DebugUI is
         Gtk_List_Store(Get_Object(Object, "crewlist"));
       CrewIter: Gtk_Tree_Iter;
       ComboBox: constant Gtk_Combo_Box_Text :=
-        Gtk_Combo_Box_Text(Get_Object(Object, "cmbmodules"));
+        Gtk_Combo_Box_Text
+          (Get_Child_At
+             (Gtk_Grid
+                (Get_Child
+                   (Gtk_Box
+                      (Get_Child_By_Name
+                         (Gtk_Stack(Get_Object(Builder, "stack1")),
+                          "page0")),
+                    0)),
+              1, 1));
    begin
       Setting := True;
       Clear(CrewList);
@@ -243,7 +252,7 @@ package body DebugUI is
       CrewBox: constant Gtk_Box :=
         Gtk_Box
           (Get_Child_By_Name
-             (Gtk_Stack(Get_Object(Builder, "stack1")), "crewbox"));
+             (Gtk_Stack(Get_Object(Builder, "stack1")), "page1"));
       MemberIndex: constant Positive :=
         Positive'Value
           (Get_Active_Id
@@ -274,7 +283,7 @@ package body DebugUI is
       CrewBox: constant Gtk_Box :=
         Gtk_Box
           (Get_Child_By_Name
-             (Gtk_Stack(Get_Object(Builder, "stack1")), "crewbox"));
+             (Gtk_Stack(Get_Object(Builder, "stack1")), "page1"));
       MemberIndex: constant Positive :=
         Positive'Value
           (Get_Active_Id
@@ -306,7 +315,7 @@ package body DebugUI is
       CrewBox: constant Gtk_Box :=
         Gtk_Box
           (Get_Child_By_Name
-             (Gtk_Stack(Get_Object(Builder, "stack1")), "crewbox"));
+             (Gtk_Stack(Get_Object(Builder, "stack1")), "page1"));
       MemberIndex: constant Positive :=
         Positive'Value
           (Get_Active_Id
@@ -970,31 +979,29 @@ package body DebugUI is
    -- PARAMETERS
    -- Object - Gtkada_Builder used to create UI
    -- SOURCE
-   procedure SetModuleStats(Object: access Gtkada_Builder_Record'Class) is
+   procedure SetModuleStats(Self: access Gtk_Combo_Box_Record'Class) is
       -- ****
       Module: ModuleData;
+      ShipGrid: constant Gtk_Grid := Gtk_Grid(Get_Parent(Self));
    begin
       if Setting then
          return;
       end if;
-      Module :=
-        PlayerShip.Modules
-          (Positive'Value
-             (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbmodules")))));
+      Module := PlayerShip.Modules(Positive'Value(Get_Active_Id(Self)));
       Set_Text
-        (Gtk_GEntry(Get_Object(Object, "edtprototype")),
+        (Gtk_GEntry(Get_Child_At(ShipGrid, 1, 2)),
          To_String(Modules_List(Module.ProtoIndex).Name));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Object, "adjmoduleweight")),
+        (Gtk_Adjustment(Get_Object(Builder, "adjmoduleweight")),
          Gdouble(Module.Weight));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Object, "adjmoduledur")),
+        (Gtk_Adjustment(Get_Object(Builder, "adjmoduledur")),
          Gdouble(Module.Durability));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Object, "adjmodulemaxdur")),
+        (Gtk_Adjustment(Get_Object(Builder, "adjmodulemaxdur")),
          Gdouble(Module.MaxDurability));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Object, "adjmoduleupgrade")),
+        (Gtk_Adjustment(Get_Object(Builder, "adjmoduleupgrade")),
          Gdouble(Module.UpgradeProgress));
    end SetModuleStats;
 
@@ -1005,14 +1012,15 @@ package body DebugUI is
    -- Self - Gtk_Button which was clicked.
    -- SOURCE
    procedure UpdateModule(Self: access Gtk_Button_Record'Class) is
-      pragma Unreferenced(Self);
       -- ****
+      ShipGrid: constant Gtk_Grid :=
+        Gtk_Grid(Get_Child(Gtk_Box(Get_Parent(Self)), 0));
       ModuleIndex: constant Positive :=
         Positive'Value
-          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Builder, "cmbmodules"))));
+          (Get_Active_Id(Gtk_Combo_Box(Get_Child_At(ShipGrid, 1, 1))));
       ProtoName: constant Unbounded_String :=
         To_Unbounded_String
-          (Get_Text(Gtk_GEntry(Get_Object(Builder, "edtprototype"))));
+          (Get_Text(Gtk_GEntry(Get_Child_At(ShipGrid, 1, 2))));
    begin
       for I in Modules_List.Iterate loop
          if Modules_List(I).Name = ProtoName then
@@ -1084,7 +1092,6 @@ package body DebugUI is
       Register_Handler(Builder, "Update_Ship", UpdateShip'Access);
       Register_Handler(Builder, "Refresh_UI", RefreshUI'Access);
       Register_Handler(Builder, "Save_Game", Save_Game'Access);
-      Register_Handler(Builder, "Set_Module_Stats", SetModuleStats'Access);
       Do_Connect(Builder);
       declare
          List: Gtk_List_Store :=
@@ -1111,7 +1118,53 @@ package body DebugUI is
             Set(List, Iter, 0, To_String(Module.Name));
          end loop;
       end;
+      declare
+         ShipGrid: constant Gtk_Grid :=
+           Gtk_Grid(Get_Object(Builder, "shipgrid"));
+         Labels: constant array(1 .. 6) of Unbounded_String :=
+           (To_Unbounded_String("Module"), To_Unbounded_String("Prototype"),
+            To_Unbounded_String("Weight"), To_Unbounded_String("Durability"),
+            To_Unbounded_String("Max Durability"),
+            To_Unbounded_String("Upgrade Progress"));
+         ShipEntry: constant Gtk_Entry := Gtk_Entry_New;
       begin
+         for I in Labels'Range loop
+            Attach(ShipGrid, Gtk_Label_New(To_String(Labels(I))), 0, Gint(I));
+         end loop;
+         ComboBox := Gtk_Combo_Box_Text_New;
+         Set_Tooltip_Text(ComboBox, "Select module to edit.");
+         On_Changed(Gtk_Combo_Box(ComboBox), SetModuleStats'Access);
+         Attach(ShipGrid, ComboBox, 1, 1);
+         Set_Completion
+           (ShipEntry,
+            Gtk_Entry_Completion(Get_Object(Builder, "modulescompletion")));
+         Set_Tooltip_Text
+           (ShipEntry,
+            "Select prototype module for this module. Start typying to select name of proto module. WARNING: If you select other type of module than previous (for example from Cabin to Workshop) the game can crash.");
+         Attach(ShipGrid, ShipEntry, 1, 2);
+         SpinButton :=
+           Gtk_Spin_Button_New
+             (Gtk_Adjustment(Get_Object(Builder, "adjmoduleweight")), 0.0);
+         Set_Tooltip_Text(SpinButton, "Set new weight of the module.");
+         Attach(ShipGrid, SpinButton, 1, 3);
+         SpinButton :=
+           Gtk_Spin_Button_New
+             (Gtk_Adjustment(Get_Object(Builder, "adjmoduledur")), 0.0);
+         Set_Tooltip_Text(SpinButton, "Set new durability of the module.");
+         Attach(ShipGrid, SpinButton, 1, 4);
+         SpinButton :=
+           Gtk_Spin_Button_New
+             (Gtk_Adjustment(Get_Object(Builder, "adjmodulemaxdur")), 0.0);
+         Set_Tooltip_Text
+           (SpinButton, "Set new maximum durablity for the module.");
+         Attach(ShipGrid, SpinButton, 1, 5);
+         SpinButton :=
+           Gtk_Spin_Button_New
+             (Gtk_Adjustment(Get_Object(Builder, "adjmoduleupgrade")), 0.0);
+         Set_Tooltip_Text
+           (SpinButton,
+            "Set upgrade progress for the module. No effect unless any ugrade is set for selected module.");
+         Attach(ShipGrid, SpinButton, 1, 6);
          Button := Gtk_Button_New_With_Mnemonic("_Change");
          Set_Tooltip_Text(Button, "Commit changes to the ship module.");
          On_Clicked(Button, UpdateModule'Access);
