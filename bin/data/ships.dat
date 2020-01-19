@@ -1832,7 +1832,7 @@ during combat. -->
   <cargo index="13" maxamount="100" minamount="50"/>
   <member index="23"/>
   <member amount="2" index="24"/>
-  <member index="137"/>
+  <member index="25"/>
   <member index="138"/>
   <member amount="3" index="139"/>
   <description>Large, well armored version of poleis traders ship. Avoids any fights.</description>
@@ -1854,7 +1854,7 @@ during combat. -->
   <cargo index="13" maxamount="100" minamount="50"/>
   <member index="23"/>
   <member amount="2" index="24"/>
-  <member index="169"/>
+  <member index="25"/>
   <member index="170"/>
   <member amount="3" index="171"/>
   <description>Large, well armored version of independent traders ship. Avoids any fights.</description>
@@ -2158,7 +2158,7 @@ during combat. -->
   <cargo index="13" maxamount="100" minamount="50"/>
   <member index="23"/>
   <member amount="3" index="24"/>
-  <member index="137"/>
+  <member index="25"/>
   <member index="139" maxamount="7" minamount="3"/>
   <description>Large, well armored poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
@@ -2179,7 +2179,7 @@ during combat. -->
   <cargo index="13" maxamount="100" minamount="50"/>
   <member index="23"/>
   <member amount="3" index="24"/>
-  <member index="169"/>
+  <member index="25"/>
   <member index="171" maxamount="7" minamount="3"/>
   <description>Large, well armored independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
@@ -4351,7 +4351,7 @@ during combat. -->
   <cargo index="13" maxamount="400" minamount="200"/>
   <member index="23"/>
   <member amount="2" index="24"/>
-  <member index="137"/>
+  <member index="25"/>
   <member index="138"/>
   <member amount="3" index="139"/>
   <description>Large, well armored and upgraded version of poleis traders ship. Avoids any fights.</description>
@@ -4372,7 +4372,7 @@ during combat. -->
   <cargo index="13" maxamount="400" minamount="200"/>
   <member index="23"/>
   <member amount="2" index="24"/>
-  <member index="169"/>
+  <member index="25"/>
   <member index="170"/>
   <member amount="3" index="171"/>
   <description>Large, well armored and upgraded version of independent traders ship. Avoids any fights.</description>
@@ -4414,7 +4414,7 @@ during combat. -->
   <cargo index="13" maxamount="400" minamount="200"/>
   <member index="23"/>
   <member amount="3" index="24"/>
-  <member index="137"/>
+  <member index="25"/>
   <member index="139" maxamount="7" minamount="3"/>
   <description>Large, well armored, upgraded poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
@@ -4434,7 +4434,7 @@ during combat. -->
   <cargo index="13" maxamount="400" minamount="200"/>
   <member index="23"/>
   <member amount="3" index="24"/>
-  <member index="169"/>
+  <member index="25"/>
   <member index="171" maxamount="7" minamount="3"/>
   <description>Large, well armored, upgraded independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
@@ -4454,7 +4454,7 @@ during combat. -->
   <cargo index="21" maxamount="400" minamount="200"/>
   <member index="23"/>
   <member amount="2" index="24"/>
-  <member index="137"/>
+  <member index="25"/>
   <member index="138"/>
   <member amount="3" index="139"/>
   <description>Large, well armored and upgraded version of poleis traders ship. Avoids any fights.</description>
@@ -4475,7 +4475,7 @@ during combat. -->
   <cargo index="21" maxamount="400" minamount="200"/>
   <member index="23"/>
   <member amount="2" index="24"/>
-  <member index="169"/>
+  <member index="25"/>
   <member index="170"/>
   <member amount="3" index="171"/>
   <description>Large, well armored and upgraded version of independent traders ship. Avoids any fights.</description>
@@ -4517,7 +4517,7 @@ during combat. -->
   <cargo index="21" maxamount="400" minamount="200"/>
   <member index="23"/>
   <member amount="3" index="24"/>
-  <member index="137"/>
+  <member index="25"/>
   <member index="139" maxamount="7" minamount="3"/>
   <description>Large, well armored, upgraded poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
@@ -4537,7 +4537,7 @@ during combat. -->
   <cargo index="21" maxamount="400" minamount="200"/>
   <member index="23"/>
   <member amount="3" index="24"/>
-  <member index="169"/>
+  <member index="25"/>
   <member index="171" maxamount="7" minamount="3"/>
   <description>Large, well armored, upgraded independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
@@ -4557,7 +4557,7 @@ during combat. -->
   <cargo index="116" maxamount="400" minamount="200"/>
   <member index="23"/>
   <member amount="2" index="24"/>
-  <member index="137"/>
+  <member index="25"/>
   <member index="138"/>
   <member amount="3" index="139"/>
   <description>Large, well armored and upgraded version of poleis traders ship. Avoids any fights.</description>
@@ -4578,7 +4578,7 @@ during combat. -->
   <cargo index="116" maxamount="400" minamount="200"/>
   <member index="23"/>
   <member amount="2" index="24"/>
-  <member index="169"/>
+  <member index="25"/>
   <member index="170"/>
   <member amount="3" index="171"/>
   <description>Large, well armored and upgraded version of independent traders ship. Avoids any fights.</description>
@@ -4620,7 +4620,7 @@ during combat. -->
   <cargo index="116" maxamount="400" minamount="200"/>
   <member index="23"/>
   <member amount="3" index="24"/>
-  <member index="137"/>
+  <member index="25"/>
   <member index="139" maxamount="7" minamount="3"/>
   <description>Large, well armored, upgraded poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
@@ -4640,7 +4640,7 @@ during combat. -->
   <cargo index="116" maxamount="400" minamount="200"/>
   <member index="23"/>
   <member amount="3" index="24"/>
-  <member index="169"/>
+  <member index="25"/>
   <member index="171" maxamount="7" minamount="3"/>
   <description>Large, well armored, upgraded independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
@@ -4660,7 +4660,7 @@ during combat. -->
   <cargo index="131" maxamount="400" minamount="200"/>
   <member index="23"/>
   <member amount="2" index="24"/>
-  <member index="137"/>
+  <member index="25"/>
   <member index="138"/>
   <member amount="3" index="139"/>
   <description>Large, well armored and upgraded version of poleis traders ship. Avoids any fights.</description>
@@ -4681,7 +4681,7 @@ during combat. -->
   <cargo index="131" maxamount="400" minamount="200"/>
   <member index="23"/>
   <member amount="2" index="24"/>
-  <member index="169"/>
+  <member index="25"/>
   <member index="170"/>
   <member amount="3" index="171"/>
   <description>Large, well armored and upgraded version of independent traders ship. Avoids any fights.</description>
@@ -4723,7 +4723,7 @@ during combat. -->
   <cargo index="131" maxamount="400" minamount="200"/>
   <member index="23"/>
   <member amount="3" index="24"/>
-  <member index="137"/>
+  <member index="25"/>
   <member index="139" maxamount="7" minamount="3"/>
   <description>Large, well armored, upgraded poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
@@ -4743,7 +4743,7 @@ during combat. -->
   <cargo index="131" maxamount="400" minamount="200"/>
   <member index="23"/>
   <member amount="3" index="24"/>
-  <member index="169"/>
+  <member index="25"/>
   <member index="171" maxamount="7" minamount="3"/>
   <description>Large, well armored, upgraded independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
