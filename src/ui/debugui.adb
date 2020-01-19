@@ -109,8 +109,7 @@ package body DebugUI is
                 (Get_Child
                    (Gtk_Box
                       (Get_Child_By_Name
-                         (Gtk_Stack(Get_Object(Builder, "stack1")),
-                          "page0")),
+                         (Gtk_Stack(Get_Object(Builder, "stack1")), "page0")),
                     0)),
               1, 1));
    begin
@@ -1127,7 +1126,25 @@ package body DebugUI is
             To_Unbounded_String("Max Durability"),
             To_Unbounded_String("Upgrade Progress"));
          ShipEntry: constant Gtk_Entry := Gtk_Entry_New;
+         MoveBox: constant Gtk_Hbox := Gtk_Hbox_New;
       begin
+         Pack_Start(MoveBox, Gtk_Label_New("X:"), False);
+         SpinButton :=
+           Gtk_Spin_Button_New
+             (Gtk_Adjustment(Get_Object(Builder, "adjshipx")), 0.0);
+         Set_Tooltip_Text
+           (SpinButton,
+            "New X coordinate on map for the player ship. Value between 1 and 1024.");
+         Pack_Start(MoveBox, SpinButton, False);
+         Pack_Start(MoveBox, Gtk_Label_New("Y:"), False);
+         SpinButton :=
+           Gtk_Spin_Button_New
+             (Gtk_Adjustment(Get_Object(Builder, "adjshipy")), 0.0);
+         Set_Tooltip_Text
+           (SpinButton,
+            "New Y coordinate on map for the player ship. Value between 1 and 1024.");
+         Pack_Start(MoveBox, SpinButton, False);
+         Attach(ShipGrid, MoveBox, 1, 0);
          for I in Labels'Range loop
             Attach(ShipGrid, Gtk_Label_New(To_String(Labels(I))), 0, Gint(I));
          end loop;
