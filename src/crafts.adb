@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -201,7 +201,7 @@ package body Crafts is
          Recipe.MaterialTypes.Append(New_Item => Items_List(ItemIndex).IType);
          Recipe.MaterialAmounts.Append(New_Item => 1);
          Recipe.ResultIndex := ItemIndex;
-         Recipe.ResultAmount := 1;
+         Recipe.ResultAmount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
          for ProtoRecipe of Recipes_List loop
             if ProtoRecipe.ResultIndex = Recipe.ResultIndex then
