@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -53,7 +53,7 @@ package Game is
    -- FUNCTION
    -- Current the game version
    -- SOURCE
-   GameVersion: constant String := "Version: 4.0.10";
+   GameVersion: constant String := "Version: 4.0.11";
    -- ****
    -- ****t* Game/UnboundedString_Container
    -- FUNCTION
