@@ -79,15 +79,16 @@ package body DebugUI is
    -- FUNCTION
    -- Move the player ship to selected location on the map
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Button which was clicked
    -- SOURCE
-   procedure MoveShip(Object: access Gtkada_Builder_Record'Class) is
-   -- ****
+   procedure MoveShip(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
+      -- ****
    begin
       PlayerShip.SkyX :=
-        Integer(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjshipx"))));
+        Integer(Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjshipx"))));
       PlayerShip.SkyY :=
-        Integer(Get_Value(Gtk_Adjustment(Get_Object(Object, "adjshipy"))));
+        Integer(Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjshipy"))));
       ShowSkyMap;
    end MoveShip;
 
@@ -95,23 +96,15 @@ package body DebugUI is
    -- FUNCTION
    -- Update the player ship data
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Widget which was mapped
    -- SOURCE
-   procedure UpdateShip(Object: access Gtkada_Builder_Record'Class) is
+   procedure UpdateShip(Self: access Gtk_Widget_Record'Class) is
       -- ****
       CrewList: constant Gtk_List_Store :=
-        Gtk_List_Store(Get_Object(Object, "crewlist"));
+        Gtk_List_Store(Get_Object(Builder, "crewlist"));
       CrewIter: Gtk_Tree_Iter;
       ComboBox: constant Gtk_Combo_Box_Text :=
-        Gtk_Combo_Box_Text
-          (Get_Child_At
-             (Gtk_Grid
-                (Get_Child
-                   (Gtk_Box
-                      (Get_Child_By_Name
-                         (Gtk_Stack(Get_Object(Builder, "stack1")), "page0")),
-                    0)),
-              1, 1));
+        Gtk_Combo_Box_Text(Get_Child_At(Gtk_Grid(Self), 1, 1));
    begin
       Setting := True;
       Clear(CrewList);
@@ -131,10 +124,10 @@ package body DebugUI is
       Setting := False;
       Set_Active(ComboBox, 0);
       Set_Value
-        (Gtk_Adjustment(Get_Object(Object, "adjshipx")),
+        (Gtk_Adjustment(Get_Object(Builder, "adjshipx")),
          Gdouble(PlayerShip.SkyX));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Object, "adjshipy")),
+        (Gtk_Adjustment(Get_Object(Builder, "adjshipy")),
          Gdouble(PlayerShip.SkyY));
    end UpdateShip;
 
@@ -560,7 +553,12 @@ package body DebugUI is
    procedure RefreshUI(Object: access Gtkada_Builder_Record'Class) is
    -- ****
    begin
-      UpdateShip(Object);
+      UpdateShip
+        (Get_Child
+           (Gtk_Box
+              (Get_Child_By_Name
+                 (Gtk_Stack(Get_Object(Object, "stack1")), "page0")),
+            0));
       UpdateCrew
         (Get_Child
            (Gtk_Box
@@ -1087,8 +1085,6 @@ package body DebugUI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      Register_Handler(Builder, "Move_Ship", MoveShip'Access);
-      Register_Handler(Builder, "Update_Ship", UpdateShip'Access);
       Register_Handler(Builder, "Refresh_UI", RefreshUI'Access);
       Register_Handler(Builder, "Save_Game", Save_Game'Access);
       Do_Connect(Builder);
@@ -1118,8 +1114,7 @@ package body DebugUI is
          end loop;
       end;
       declare
-         ShipGrid: constant Gtk_Grid :=
-           Gtk_Grid(Get_Object(Builder, "shipgrid"));
+         ShipGrid: constant Gtk_Grid := Gtk_Grid_New;
          Labels: constant array(1 .. 6) of Unbounded_String :=
            (To_Unbounded_String("Module"), To_Unbounded_String("Prototype"),
             To_Unbounded_String("Weight"), To_Unbounded_String("Durability"),
@@ -1127,7 +1122,14 @@ package body DebugUI is
             To_Unbounded_String("Upgrade Progress"));
          ShipEntry: constant Gtk_Entry := Gtk_Entry_New;
          MoveBox: constant Gtk_Hbox := Gtk_Hbox_New;
+         ShipBox: constant Gtk_Vbox := Gtk_Vbox_New;
       begin
+         On_Map(ShipGrid, UpdateShip'Access);
+         Button := Gtk_Button_New_With_Mnemonic("_Move ship");
+         Set_Tooltip_Text
+           (Button, "Move player ship to selected location on map");
+         On_Clicked(Button, MoveShip'Access);
+         Attach(ShipGrid, Button, 0, 0);
          Pack_Start(MoveBox, Gtk_Label_New("X:"), False);
          SpinButton :=
            Gtk_Spin_Button_New
@@ -1182,10 +1184,14 @@ package body DebugUI is
            (SpinButton,
             "Set upgrade progress for the module. No effect unless any ugrade is set for selected module.");
          Attach(ShipGrid, SpinButton, 1, 6);
+         Pack_Start(ShipBox, ShipGrid, False);
          Button := Gtk_Button_New_With_Mnemonic("_Change");
          Set_Tooltip_Text(Button, "Commit changes to the ship module.");
          On_Clicked(Button, UpdateModule'Access);
-         Pack_Start(Gtk_Box(Get_Object(Builder, "shipbox")), Button, False);
+         Pack_Start(ShipBox, Button, False);
+         Add_Titled
+           (Gtk_Stack(Get_Object(Builder, "stack1")), ShipBox, "page0",
+            "Ship");
       end;
       declare
          CrewBox: constant Gtk_Vbox := Gtk_Vbox_New;
