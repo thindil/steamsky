@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Showing info about finished Deconstructing order
+
 ## [4.0.10] - 2020-01-05
 
 ### Fixed
