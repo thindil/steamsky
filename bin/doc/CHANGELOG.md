@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Crash on updating base in debug menu
 - Setting base type in debug menu
 - Possible crash after combat
+- Showing info about finished Studying order
 
 ## [4.5] - 2019-12-29
 
