@@ -249,48 +249,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkBox" id="shipbox">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkGrid" id="shipgrid">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <signal name="map" handler="Update_Ship" swapped="no"/>
-                    <child>
-                      <object class="GtkButton" id="btnmoveship">
-                        <property name="label" translatable="yes">_Move ship</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Move player ship to selected location on map</property>
-                        <property name="use_underline">True</property>
-                        <signal name="clicked" handler="Move_Ship" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="name">page0</property>
-                <property name="title" translatable="yes">Ship</property>
-              </packing>
+              <placeholder/>
             </child>
           </object>
           <packing>
