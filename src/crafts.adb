@@ -284,8 +284,8 @@ package body Crafts is
       elsif Length(RecipeIndex) > 12
         and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
          for I in PlayerShip.Cargo.Iterate loop
-            if Items_List(PlayerShip.Cargo(I).ProtoIndex).Name =
-              Items_List(Recipe.ResultIndex).Name then
+            if PlayerShip.Cargo(I).ProtoIndex =
+              Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex)) then
                MaterialIndexes.Append
                  (New_Item => Inventory_Container.To_Index(I));
                MaxAmount := PlayerShip.Cargo(I).Amount;
