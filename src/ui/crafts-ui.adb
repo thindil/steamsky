@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -210,8 +210,8 @@ package body Crafts.UI is
                   end if;
                elsif Length(RecipeIndex) > 12
                  and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
-                  if Items_List(J).Name =
-                    Items_List(Recipe.ResultIndex).Name then
+                  if Objects_Container.Key(J) =
+                    Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex)) then
                      IsMaterial := True;
                   end if;
                else
