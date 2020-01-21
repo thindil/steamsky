@@ -69,6 +69,9 @@ package body Crafts.UI is
       if Length(RecipeIndex) > 6
         and then Slice(RecipeIndex, 1, 5) = "Study" then
          MType := ALCHEMY_LAB;
+      elsif Length(RecipeIndex) > 12
+        and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
+         MType := ALCHEMY_LAB;
       else
          MType := Recipes_List(RecipeIndex).Workplace;
       end if;
@@ -154,6 +157,32 @@ package body Crafts.UI is
          end loop;
          Recipe.Difficulty := 1;
          Recipe.Tool := AlchemyTools;
+      elsif Length(RecipeIndex) > 12
+        and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
+         Recipe.MaterialTypes.Append
+           (New_Item =>
+              Items_List(Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex)))
+                .IType);
+         Recipe.ResultIndex :=
+           Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex));
+         Recipe.MaterialAmounts.Append(New_Item => 1);
+         Recipe.ResultAmount := 0;
+         Recipe.Workplace := ALCHEMY_LAB;
+         for ProtoRecipe of Recipes_List loop
+            if ProtoRecipe.ResultIndex = Recipe.ResultIndex then
+               Recipe.Skill := ProtoRecipe.Skill;
+               Recipe.Time := ProtoRecipe.Difficulty * 15;
+               Recipe.Difficulty := ProtoRecipe.Difficulty;
+               Recipe.ResultIndex :=
+                 FindProtoItem(ProtoRecipe.MaterialTypes(1));
+               Recipe.ResultAmount :=
+                 Positive
+                   (Float'Ceiling
+                      (Float(ProtoRecipe.MaterialAmounts.Element(1)) * 0.8));
+               exit;
+            end if;
+         end loop;
+         Recipe.Tool := AlchemyTools;
       else
          Recipe := Recipes_List(RecipeIndex);
          Append
@@ -175,6 +204,12 @@ package body Crafts.UI is
                IsMaterial := False;
                if Length(RecipeIndex) > 6
                  and then Slice(RecipeIndex, 1, 5) = "Study" then
+                  if Items_List(J).Name =
+                    Items_List(Recipe.ResultIndex).Name then
+                     IsMaterial := True;
+                  end if;
+               elsif Length(RecipeIndex) > 12
+                 and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
                   if Items_List(J).Name =
                     Items_List(Recipe.ResultIndex).Name then
                      IsMaterial := True;
@@ -356,7 +391,7 @@ package body Crafts.UI is
    end CreateCraftsUI;
 
    procedure ShowCraftsUI is
-      Studies: UnboundedString_Container.Vector;
+      Studies, Deconstructs: UnboundedString_Container.Vector;
       RecipesIter: Gtk_Tree_Iter;
       RecipesList: constant Gtk_List_Store :=
         Gtk_List_Store(Get_Object(Builder, "recipeslist"));
@@ -382,14 +417,18 @@ package body Crafts.UI is
    begin
       for Item of PlayerShip.Cargo loop
          for J in Recipes_List.Iterate loop
-            if Recipes_List(J).ResultIndex = Item.ProtoIndex
-              and then
-              (Known_Recipes.Find_Index(Item => Recipes_Container.Key(J)) =
-               Positive_Container.No_Index and
-               Studies.Find_Index(Item => Item.ProtoIndex) =
-                 Positive_Container.No_Index) then
-               Studies.Append(New_Item => Item.ProtoIndex);
-               exit;
+            if Recipes_List(J).ResultIndex = Item.ProtoIndex then
+               if
+                 (Known_Recipes.Find_Index(Item => Recipes_Container.Key(J)) =
+                  Positive_Container.No_Index and
+                  Studies.Find_Index(Item => Item.ProtoIndex) =
+                    Positive_Container.No_Index) then
+                  Studies.Append(New_Item => Item.ProtoIndex);
+               end if;
+               if Recipes_List(J).MaterialAmounts(1) > 1 and
+                 Recipes_List(J).ResultAmount = 1 then
+                  Deconstructs.Append(New_Item => Item.ProtoIndex);
+               end if;
             end if;
          end loop;
       end loop;
@@ -456,8 +495,8 @@ package body Crafts.UI is
          end if;
          Set(RecipesList, RecipesIter, 1, To_String(Known_Recipes.Element(I)));
       end loop;
+      CheckTool(AlchemyTools);
       for I in Studies.First_Index .. Studies.Last_Index loop
-         CheckTool(AlchemyTools);
          Append(RecipesList, RecipesIter);
          if CanCraft then
             Set
@@ -470,6 +509,22 @@ package body Crafts.UI is
                To_String(Items_List(Studies(I)).Name) & "</span>");
          end if;
          Set(RecipesList, RecipesIter, 1, "Study " & To_String(Studies(I)));
+      end loop;
+      for I in Deconstructs.First_Index .. Deconstructs.Last_Index loop
+         Append(RecipesList, RecipesIter);
+         if CanCraft then
+            Set
+              (RecipesList, RecipesIter, 0,
+               "Deconstruct " & To_String(Items_List(Deconstructs(I)).Name));
+         else
+            Set
+              (RecipesList, RecipesIter, 0,
+               "<span foreground=""gray"">Deconstruct " &
+               To_String(Items_List(Deconstructs(I)).Name) & "</span>");
+         end if;
+         Set
+           (RecipesList, RecipesIter, 1,
+            "Deconstruct " & To_String(Deconstructs(I)));
       end loop;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "crafts");
