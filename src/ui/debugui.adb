@@ -22,6 +22,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Adjustment; use Gtk.Adjustment;
+with Gtk.Bin; use Gtk.Bin;
 with Gtk.Box; use Gtk.Box;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Cell_Area_Box; use Gtk.Cell_Area_Box;
@@ -38,6 +39,7 @@ with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Scrolled_Window; use Gtk.Scrolled_Window;
 with Gtk.Spin_Button; use Gtk.Spin_Button;
 with Gtk.Stack; use Gtk.Stack;
+with Gtk.Stack_Switcher; use Gtk.Stack_Switcher;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
@@ -68,11 +70,19 @@ package body DebugUI is
    -- SOURCE
    Builder: Gtkada_Builder;
    -- ****
+
    -- ****iv* DebugUI/Setting
    -- FUNCTION
    -- If true, UI is currently in setting state
    -- SOURCE
    Setting: Boolean;
+   -- ****
+
+   -- ****iv* DebugUI/Stack
+   -- FUNCTION
+   -- Gtk_Stack with most of UI
+   -- SOURCE
+   Stack: Gtk_Stack;
    -- ****
 
    -- ****if* DebugUI/MoveShip
@@ -158,10 +168,7 @@ package body DebugUI is
       Iter: Gtk_Tree_Iter;
       List: Gtk_List_Store := Gtk_List_Store(Get_Object(Builder, "statslist"));
       KnowSkills: Positive_Container.Vector;
-      CrewBox: constant Gtk_Box :=
-        Gtk_Box
-          (Get_Child_By_Name
-             (Gtk_Stack(Get_Object(Builder, "stack1")), "page1"));
+      CrewBox: constant Gtk_Box := Gtk_Box(Get_Child_By_Name(Stack, "page1"));
       AddSkillBox: constant Gtk_Box :=
         Gtk_Box
           (Get_Child
@@ -241,10 +248,7 @@ package body DebugUI is
       return Boolean is
       pragma Unreferenced(Path);
       -- ****
-      CrewBox: constant Gtk_Box :=
-        Gtk_Box
-          (Get_Child_By_Name
-             (Gtk_Stack(Get_Object(Builder, "stack1")), "page1"));
+      CrewBox: constant Gtk_Box := Gtk_Box(Get_Child_By_Name(Stack, "page1"));
       MemberIndex: constant Positive :=
         Positive'Value
           (Get_Active_Id
@@ -272,10 +276,7 @@ package body DebugUI is
       return Boolean is
       pragma Unreferenced(Path);
       -- ****
-      CrewBox: constant Gtk_Box :=
-        Gtk_Box
-          (Get_Child_By_Name
-             (Gtk_Stack(Get_Object(Builder, "stack1")), "page1"));
+      CrewBox: constant Gtk_Box := Gtk_Box(Get_Child_By_Name(Stack, "page1"));
       MemberIndex: constant Positive :=
         Positive'Value
           (Get_Active_Id
@@ -304,10 +305,7 @@ package body DebugUI is
    procedure UpdateMember(Self: access Gtk_Button_Record'Class) is
       pragma Unreferenced(Self);
       -- ****
-      CrewBox: constant Gtk_Box :=
-        Gtk_Box
-          (Get_Child_By_Name
-             (Gtk_Stack(Get_Object(Builder, "stack1")), "page1"));
+      CrewBox: constant Gtk_Box := Gtk_Box(Get_Child_By_Name(Stack, "page1"));
       MemberIndex: constant Positive :=
         Positive'Value
           (Get_Active_Id
@@ -409,22 +407,13 @@ package body DebugUI is
       -- ****
       EventsCombo: constant Gtk_Widget :=
         Get_Child
-          (Gtk_Box
-             (Get_Child
-                (Gtk_Box
-                   (Get_Child_By_Name
-                      (Gtk_Stack(Get_Object(Builder, "stack1")), "page4")),
-                 0)),
+          (Gtk_Box(Get_Child(Gtk_Box(Get_Child_By_Name(Stack, "page4")), 0)),
            2);
       EventGrid: constant Gtk_Grid :=
         Gtk_Grid
           (Get_Child
              (Gtk_Box
-                (Get_Child
-                   (Gtk_Box
-                      (Get_Child_By_Name
-                         (Gtk_Stack(Get_Object(Builder, "stack1")), "page4")),
-                    1)),
+                (Get_Child(Gtk_Box(Get_Child_By_Name(Stack, "page4")), 1)),
               0));
    begin
       Set_Text
@@ -434,11 +423,7 @@ package body DebugUI is
                  (Get_Child
                     (Gtk_Box
                        (Get_Child
-                          (Gtk_Box
-                             (Get_Child_By_Name
-                                (Gtk_Stack(Get_Object(Builder, "stack1")),
-                                 "page4")),
-                           0)),
+                          (Gtk_Box(Get_Child_By_Name(Stack, "page4")), 0)),
                      0)),
                1, 0)),
          "");
@@ -451,22 +436,14 @@ package body DebugUI is
          Hide
            (Get_Child
               (Gtk_Box
-                 (Get_Child
-                    (Gtk_Box
-                       (Get_Child_By_Name
-                          (Gtk_Stack(Get_Object(Builder, "stack1")), "page4")),
-                     0)),
+                 (Get_Child(Gtk_Box(Get_Child_By_Name(Stack, "page4")), 0)),
                3));
       else
          Show_All(EventsCombo);
          Show_All
            (Get_Child
               (Gtk_Box
-                 (Get_Child
-                    (Gtk_Box
-                       (Get_Child_By_Name
-                          (Gtk_Stack(Get_Object(Builder, "stack1")), "page4")),
-                     0)),
+                 (Get_Child(Gtk_Box(Get_Child_By_Name(Stack, "page4")), 0)),
                3));
          Remove_All(Gtk_Combo_Box_Text(EventsCombo));
          for I in Events_List.Iterate loop
@@ -551,31 +528,17 @@ package body DebugUI is
    -- Object - Gtkada_Builder used to create UI
    -- SOURCE
    procedure RefreshUI(Object: access Gtkada_Builder_Record'Class) is
-   -- ****
+      pragma Unreferenced(Object);
+      -- ****
    begin
-      UpdateShip
-        (Get_Child
-           (Gtk_Box
-              (Get_Child_By_Name
-                 (Gtk_Stack(Get_Object(Object, "stack1")), "page0")),
-            0));
-      UpdateCrew
-        (Get_Child
-           (Gtk_Box
-              (Get_Child_By_Name
-                 (Gtk_Stack(Get_Object(Object, "stack1")), "page1")),
-            1));
-      UpdateCargoInfo
-        (Get_Child_By_Name(Gtk_Stack(Get_Object(Object, "stack1")), "page2"));
+      UpdateShip(Get_Child(Gtk_Box(Get_Child_By_Name(Stack, "page0")), 0));
+      UpdateCrew(Get_Child(Gtk_Box(Get_Child_By_Name(Stack, "page1")), 1));
+      UpdateCargoInfo(Get_Child_By_Name(Stack, "page2"));
       ShowBaseInfo
         (Gtk_GEntry
            (Get_Child_At
               (Gtk_Grid
-                 (Get_Child
-                    (Gtk_Box
-                       (Get_Child_By_Name
-                          (Gtk_Stack(Get_Object(Object, "stack1")), "page3")),
-                     0)),
+                 (Get_Child(Gtk_Box(Get_Child_By_Name(Stack, "page3")), 0)),
                1, 0)));
       ResetWorldUI;
    end RefreshUI;
@@ -1113,6 +1076,12 @@ package body DebugUI is
             Set(List, Iter, 0, To_String(Module.Name));
          end loop;
       end;
+      Stack := Gtk_Stack_New;
+      Set_Stack
+        (Gtk_Stack_Switcher(Get_Object(Builder, "stackswitch")), Stack);
+      Pack_Start
+        (Gtk_Box(Get_Child(Gtk_Bin(Get_Object(Builder, "debugwindow")))),
+         Stack);
       declare
          ShipGrid: constant Gtk_Grid := Gtk_Grid_New;
          Labels: constant array(1 .. 6) of Unbounded_String :=
@@ -1189,9 +1158,7 @@ package body DebugUI is
          Set_Tooltip_Text(Button, "Commit changes to the ship module.");
          On_Clicked(Button, UpdateModule'Access);
          Pack_Start(ShipBox, Button, False);
-         Add_Titled
-           (Gtk_Stack(Get_Object(Builder, "stack1")), ShipBox, "page0",
-            "Ship");
+         Add_Titled(Stack, ShipBox, "page0", "Ship");
       end;
       declare
          CrewBox: constant Gtk_Vbox := Gtk_Vbox_New;
@@ -1340,9 +1307,7 @@ package body DebugUI is
          Set_Tooltip_Text(Button, "Commit changes to the crew member.");
          On_Clicked(Button, UpdateMember'Access);
          Pack_Start(CrewBox, Button, False);
-         Add_Titled
-           (Gtk_Stack(Get_Object(Builder, "stack1")), CrewBox, "page1",
-            "Crew");
+         Add_Titled(Stack, CrewBox, "page1", "Crew");
       end;
       declare
          CargoGrid: constant Gtk_Grid := Gtk_Grid_New;
@@ -1389,9 +1354,7 @@ package body DebugUI is
            (SpinButton,
             "New amount of selected item in the player ship cargo.");
          Attach(CargoGrid, SpinButton, 3, 1);
-         Add_Titled
-           (Gtk_Stack(Get_Object(Builder, "stack1")), CargoGrid, "page2",
-            "Cargo");
+         Add_Titled(Stack, CargoGrid, "page2", "Cargo");
       end;
       declare
          BaseButton: constant Gtk_Button :=
@@ -1467,9 +1430,7 @@ package body DebugUI is
          On_Clicked(BaseButton, UpdateBase'Access);
          Set_Tooltip_Text(BaseButton, "Update selected base.");
          Pack_Start(BaseBox, BaseButton, False);
-         Add_Titled
-           (Gtk_Stack(Get_Object(Builder, "stack1")), BaseBox, "page3",
-            "Bases");
+         Add_Titled(Stack, BaseBox, "page3", "Bases");
       end;
       declare
          EventGrid: constant Gtk_Grid := Gtk_Grid_New;
@@ -1586,8 +1547,7 @@ package body DebugUI is
          Pack_Start(EventBox, EventButton, False);
          Pack_Start(WorldBox, EventBox, False);
       end;
-      Add_Titled
-        (Gtk_Stack(Get_Object(Builder, "stack1")), WorldBox, "page4", "World");
+      Add_Titled(Stack, WorldBox, "page4", "World");
    end CreateDebugUI;
 
    procedure ShowDebugUI is
@@ -1601,11 +1561,7 @@ package body DebugUI is
                  (Get_Child
                     (Gtk_Box
                        (Get_Child
-                          (Gtk_Box
-                             (Get_Child_By_Name
-                                (Gtk_Stack(Get_Object(Builder, "stack1")),
-                                 "page4")),
-                           1)),
+                          (Gtk_Box(Get_Child_By_Name(Stack, "page4")), 1)),
                      0)),
                1, 1)));
       ResetWorldUI;
