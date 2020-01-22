@@ -227,10 +227,15 @@ package body Crafts is
       Recipe := SetRecipeData(RecipeIndex);
       if Length(RecipeIndex) > 12
         and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
-         RecipeName := RecipeIndex;
+         RecipeName :=
+           To_Unbounded_String("deconstructing ") &
+           Items_List(Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex)))
+             .Name;
          MType := ALCHEMY_LAB;
       else
-         RecipeName := Items_List(Recipe.ResultIndex).Name;
+         RecipeName :=
+           To_Unbounded_String("manufacturing ") &
+           Items_List(Recipe.ResultIndex).Name;
          MType := Recipes_List(RecipeIndex).Workplace;
       end if;
       -- Check for workshop
