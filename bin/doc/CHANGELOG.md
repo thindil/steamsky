@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - Setting base type in debug menu
 - Possible crash after combat
 - Showing info about finished Studying order
+- Showing info about lack of materials for crafting orders
 
 ## [4.5] - 2019-12-29
 
