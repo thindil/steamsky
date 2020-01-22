@@ -924,10 +924,10 @@ package body DebugUI is
    -- FUNCTION
    -- Save current state of the game to disk
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI (unused)
+   -- Self - Gtk_Button which was clicked. Unused
    -- SOURCE
-   procedure Save_Game(Object: access Gtkada_Builder_Record'Class) is
-      pragma Unreferenced(Object);
+   procedure Save_Game(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
       -- ****
    begin
       SaveGame(True);
@@ -1049,7 +1049,6 @@ package body DebugUI is
          return;
       end if;
       Register_Handler(Builder, "Refresh_UI", RefreshUI'Access);
-      Register_Handler(Builder, "Save_Game", Save_Game'Access);
       Do_Connect(Builder);
       declare
          List: Gtk_List_Store :=
@@ -1076,9 +1075,11 @@ package body DebugUI is
             Set(List, Iter, 0, To_String(Module.Name));
          end loop;
       end;
+      Button := Gtk_Button_New_With_Mnemonic("_Save game");
+      On_Clicked(Button, Save_Game'Access);
+      Pack_Start(Gtk_Box(Get_Object(Builder, "switchbox")), Button, False);
       Stack := Gtk_Stack_New;
-      Set_Stack
-        (Gtk_Stack_Switcher(Get_Object(Builder, "stackswitch")), Stack);
+      Set_Stack(Gtk_Stack_Switcher(Get_Object(Builder, "stackswitch")), Stack);
       Pack_Start
         (Gtk_Box(Get_Child(Gtk_Bin(Get_Object(Builder, "debugwindow")))),
          Stack);
