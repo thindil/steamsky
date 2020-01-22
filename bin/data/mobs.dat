@@ -1375,17 +1375,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Defend ship" value="Normal"/>
   <priority name="Board enemy ship" value="High"/>
  </mobile>
- <mobile index="116" order="PILOT">
-  <skill maxlevel="50" minlevel="30" name="Piloting"/>
-  <skill maxlevel="12" minlevel="4" name="Perception"/>
-  <skill maxlevel="50" minlevel="30" name="WeaponSkill"/>
-  <skill maxlevel="50" minlevel="30" name="Dodge"/>
-  <attribute maxlevel="25" minlevel="15"/>
-  <attribute maxlevel="25" minlevel="15"/>
-  <attribute maxlevel="25" minlevel="15"/>
-  <attribute maxlevel="25" minlevel="15"/>
-  <priority name="Piloting" value="Normal"/>
- </mobile>
  <mobile index="117" order="GUNNER">
   <skill maxlevel="50" minlevel="30" name="Gunnery"/>
   <skill maxlevel="12" minlevel="4" name="Perception"/>
@@ -1437,17 +1426,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="20" minlevel="10"/>
   <priority name="Defend ship" value="High"/>
   <priority name="Board enemy ship" value="Normal"/>
- </mobile>
- <mobile index="140" order="PILOT">
-  <skill maxlevel="50" minlevel="30" name="Piloting"/>
-  <skill maxlevel="12" minlevel="4" name="Perception"/>
-  <skill maxlevel="50" minlevel="30" name="WeaponSkill"/>
-  <skill maxlevel="50" minlevel="30" name="Dodge"/>
-  <attribute maxlevel="25" minlevel="15"/>
-  <attribute maxlevel="25" minlevel="15"/>
-  <attribute maxlevel="25" minlevel="15"/>
-  <attribute maxlevel="25" minlevel="15"/>
-  <priority name="Piloting" value="Normal"/>
  </mobile>
  <mobile index="141" order="GUNNER">
   <skill maxlevel="50" minlevel="30" name="Gunnery"/>
@@ -1565,17 +1543,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="20" minlevel="10"/>
   <priority name="Defend ship" value="High"/>
   <priority name="Board enemy ship" value="Normal"/>
- </mobile>
- <mobile index="172" order="PILOT">
-  <skill maxlevel="50" minlevel="30" name="Piloting"/>
-  <skill maxlevel="12" minlevel="4" name="Perception"/>
-  <skill maxlevel="50" minlevel="30" name="WeaponSkill"/>
-  <skill maxlevel="50" minlevel="30" name="Dodge"/>
-  <attribute maxlevel="25" minlevel="15"/>
-  <attribute maxlevel="25" minlevel="15"/>
-  <attribute maxlevel="25" minlevel="15"/>
-  <attribute maxlevel="25" minlevel="15"/>
-  <priority name="Piloting" value="Normal"/>
  </mobile>
  <mobile index="173" order="GUNNER">
   <skill maxlevel="50" minlevel="30" name="Gunnery"/>
@@ -2003,17 +1970,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Defend ship" value="Normal"/>
   <priority name="Board enemy ship" value="High"/>
  </mobile>
- <mobile index="203" order="PILOT">
-  <skill maxlevel="50" minlevel="30" name="Piloting"/>
-  <skill maxlevel="12" minlevel="4" name="Perception"/>
-  <skill maxlevel="50" minlevel="30" name="WeaponSkill"/>
-  <skill maxlevel="50" minlevel="30" name="Dodge"/>
-  <attribute maxlevel="25" minlevel="15"/>
-  <attribute maxlevel="25" minlevel="15"/>
-  <attribute maxlevel="25" minlevel="15"/>
-  <attribute maxlevel="25" minlevel="15"/>
-  <priority name="Piloting" value="Normal"/>
- </mobile>
  <mobile index="204" order="GUNNER">
   <skill maxlevel="50" minlevel="30" name="Gunnery"/>
   <skill maxlevel="12" minlevel="4" name="Perception"/>
@@ -2131,17 +2087,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="35" minlevel="25"/>
   <priority name="Defend ship" value="Normal"/>
   <priority name="Board enemy ship" value="High"/>
- </mobile>
- <mobile index="215" order="PILOT">
-  <skill maxlevel="50" minlevel="30" name="Piloting"/>
-  <skill maxlevel="12" minlevel="4" name="Perception"/>
-  <skill maxlevel="50" minlevel="30" name="WeaponSkill"/>
-  <skill maxlevel="50" minlevel="30" name="Dodge"/>
-  <attribute maxlevel="25" minlevel="15"/>
-  <attribute maxlevel="25" minlevel="15"/>
-  <attribute maxlevel="25" minlevel="15"/>
-  <attribute maxlevel="25" minlevel="15"/>
-  <priority name="Piloting" value="Normal"/>
  </mobile>
  <mobile index="216" order="GUNNER">
   <skill maxlevel="50" minlevel="30" name="Gunnery"/>
