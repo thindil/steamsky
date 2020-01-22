@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -89,18 +89,18 @@ package body Crafts.UI is
    exception
       when An_Exception : Crafting_No_Materials =>
          ShowDialog
-           ("You don't have enough materials to start manufacturing " &
+           ("You don't have enough materials to start " &
             Exception_Message(An_Exception) & ".");
       when An_Exception : Crafting_No_Tools =>
          ShowDialog
-           ("You don't have the proper tool to start manufacturing " &
+           ("You don't have the proper tool to start " &
             Exception_Message(An_Exception) & ".");
       when Trade_No_Free_Cargo =>
          ShowDialog
            ("You don't have that much free space in your ship's cargo.");
       when An_Exception : Crafting_No_Workshop =>
          ShowDialog
-           ("You don't have proper a workplace to start manufacturing " &
+           ("You don't have proper a workplace to start " &
             Exception_Message(An_Exception) & ".");
    end ShowSetRecipe;
 
