@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Showing info about finished Deconstructing order
+- Showing info about lack of materials for crafting orders
 
 ## [4.0.10] - 2020-01-05
 
