@@ -205,20 +205,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="btnrefresh">
-                <property name="label" translatable="yes">_Refresh</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Refresh all information in menu (ships, bases, items, events, cargo, etc)</property>
-                <property name="use_underline">True</property>
-                <signal name="clicked" handler="Refresh_UI" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
+              <placeholder/>
             </child>
             <child>
               <placeholder/>
