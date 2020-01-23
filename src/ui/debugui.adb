@@ -525,10 +525,10 @@ package body DebugUI is
    -- FUNCTION
    -- Refresh whole debug UI
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Button which was clicked. Unused.
    -- SOURCE
-   procedure RefreshUI(Object: access Gtkada_Builder_Record'Class) is
-      pragma Unreferenced(Object);
+   procedure RefreshUI(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
       -- ****
    begin
       UpdateShip(Get_Child(Gtk_Box(Get_Child_By_Name(Stack, "page0")), 0));
@@ -1048,8 +1048,6 @@ package body DebugUI is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      Register_Handler(Builder, "Refresh_UI", RefreshUI'Access);
-      Do_Connect(Builder);
       declare
          List: Gtk_List_Store :=
            Gtk_List_Store(Get_Object(Builder, "itemslist"));
@@ -1075,7 +1073,12 @@ package body DebugUI is
             Set(List, Iter, 0, To_String(Module.Name));
          end loop;
       end;
+      Button := Gtk_Button_New_With_Mnemonic("_Refresh");
+      Set_Tooltip_Text(Button, "Refresh all information in menu (ships, bases, items, events, cargo, etc)");
+      On_Clicked(Button, RefreshUI'Access);
+      Pack_Start(Gtk_Box(Get_Object(Builder, "switchbox")), Button, False);
       Button := Gtk_Button_New_With_Mnemonic("_Save game");
+      Set_Tooltip_Text(Button, "Save the game to the file.");
       On_Clicked(Button, Save_Game'Access);
       Pack_Start(Gtk_Box(Get_Object(Builder, "switchbox")), Button, False);
       Stack := Gtk_Stack_New;
@@ -1553,7 +1556,7 @@ package body DebugUI is
 
    procedure ShowDebugUI is
    begin
-      RefreshUI(Builder);
+      RefreshUI(null);
       Show_All(Gtk_Widget(Get_Object(Builder, "debugwindow")));
       ShowItemEvent
         (Gtk_Combo_Box
