@@ -314,9 +314,8 @@ package body Crafts.UI is
          end loop;
       end if;
       if not HaveWorkplace then
-         Append(RecipeInfo, "<span foreground=""red"">");
+         Append(RecipeInfo, "<span foreground=""red"">Any ");
       end if;
-      Append(RecipeInfo, "Any ");
       Append(RecipeInfo, WorkplaceName);
       if not HaveWorkplace then
          Append(RecipeInfo, "</span>");
