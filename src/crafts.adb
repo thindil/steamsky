@@ -225,6 +225,9 @@ package body Crafts is
                  Positive
                    (Float'Ceiling
                       (Float(ProtoRecipe.MaterialAmounts.Element(1)) * 0.8));
+               if Recipe.ResultAmount = ProtoRecipe.MaterialAmounts(1) then
+                  Recipe.ResultAmount := Recipe.ResultAmount - 1;
+               end if;
                exit;
             end if;
          end loop;
@@ -434,7 +437,11 @@ package body Crafts is
                    "Deconstruct" then
                   RecipeName :=
                     To_Unbounded_String("deconstructing ") &
-                    Items_List(Recipe.ResultIndex).Name;
+                    Items_List
+                      (Unbounded_Slice
+                         (Module.CraftingIndex, 13,
+                          Length(Module.CraftingIndex)))
+                      .Name;
                else
                   RecipeName :=
                     To_Unbounded_String("manufacturing ") &
@@ -472,14 +479,11 @@ package body Crafts is
                      elsif Length(Module.CraftingIndex) > 12
                        and then Slice(Module.CraftingIndex, 1, 11) =
                          "Deconstruct" then
-                        for J in Items_List.Iterate loop
-                           if Items_List(J).Name =
-                             Items_List(Recipe.ResultIndex).Name then
-                              MaterialIndexes.Append
-                                (New_Item => Objects_Container.Key(J));
-                              exit;
-                           end if;
-                        end loop;
+                        MaterialIndexes.Append
+                          (New_Item =>
+                             Unbounded_Slice
+                               (Module.CraftingIndex, 13,
+                                Length(Module.CraftingIndex)));
                      else
                         for K in Recipe.MaterialTypes.Iterate loop
                            for J in Items_List.Iterate loop
@@ -619,8 +623,8 @@ package body Crafts is
                      end if;
                      if Length(Module.CraftingIndex) < 6
                        or else
-                       (Length(Module.CraftingIndex) < 6
-                        and then Slice(Module.CraftingIndex, 1, 5) =
+                       (Length(Module.CraftingIndex) > 6
+                        and then Slice(Module.CraftingIndex, 1, 5) /=
                           "Study") then
                         Amount :=
                           Amount -
@@ -634,10 +638,17 @@ package body Crafts is
                            ResetOrder(Module, Owner);
                            exit Craft_Loop;
                         end if;
-                        UpdateCargo
-                          (PlayerShip,
-                           Recipes_List(Module.CraftingIndex).ResultIndex,
-                           ResultAmount);
+                        if Length(Module.CraftingIndex) > 11
+                          and then Slice(Module.CraftingIndex, 1, 11) =
+                            "Deconstruct" then
+                           UpdateCargo
+                             (PlayerShip, Recipe.ResultIndex, ResultAmount);
+                        else
+                           UpdateCargo
+                             (PlayerShip,
+                              Recipes_List(Module.CraftingIndex).ResultIndex,
+                              ResultAmount);
+                        end if;
                         for I in Recipes_List.Iterate loop
                            if Recipes_List(I).ResultIndex =
                              Recipe.ResultIndex then
