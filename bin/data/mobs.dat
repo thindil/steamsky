@@ -1332,17 +1332,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="20" minlevel="15"/>
   <priority name="Defend ship" value="High"/>
  </mobile>
- <mobile index="113" order="GUNNER">
-  <skill maxlevel="60" minlevel="40" name="Gunnery"/>
-  <skill maxlevel="15" minlevel="8" name="Perception"/>
-  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
-  <skill maxlevel="60" minlevel="40" name="Dodge"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <priority name="Operating guns" value="Normal"/>
- </mobile>
  <mobile index="114" order="ENGINEER">
   <skill maxlevel="60" minlevel="40" name="Engineering"/>
   <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
@@ -1403,17 +1392,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="25" minlevel="15"/>
   <priority name="Defend ship" value="High"/>
   <priority name="Board enemy ship" value="Normal"/>
- </mobile>
- <mobile index="146" order="GUNNER">
-  <skill maxlevel="60" minlevel="40" name="Gunnery"/>
-  <skill maxlevel="15" minlevel="8" name="Perception"/>
-  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
-  <skill maxlevel="60" minlevel="40" name="Dodge"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <priority name="Operating guns" value="Normal"/>
  </mobile>
  <mobile index="147" order="ENGINEER">
   <skill maxlevel="60" minlevel="40" name="Engineering"/>
@@ -1476,17 +1454,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="25" minlevel="15"/>
   <priority name="Defend ship" value="High"/>
   <priority name="Board enemy ship" value="Normal"/>
- </mobile>
- <mobile index="178" order="GUNNER">
-  <skill maxlevel="60" minlevel="40" name="Gunnery"/>
-  <skill maxlevel="15" minlevel="8" name="Perception"/>
-  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
-  <skill maxlevel="60" minlevel="40" name="Dodge"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <priority name="Operating guns" value="Normal"/>
  </mobile>
  <mobile index="179" order="ENGINEER">
   <skill maxlevel="60" minlevel="40" name="Engineering"/>
@@ -1806,17 +1773,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Defend ship" value="Normal"/>
   <priority name="Board enemy ship" value="High"/>
  </mobile>
- <mobile index="200" order="GUNNER">
-  <skill maxlevel="60" minlevel="40" name="Gunnery"/>
-  <skill maxlevel="15" minlevel="8" name="Perception"/>
-  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
-  <skill maxlevel="60" minlevel="40" name="Dodge"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <priority name="Operating guns" value="Normal"/>
- </mobile>
  <mobile index="201" order="ENGINEER">
   <skill maxlevel="60" minlevel="40" name="Engineering"/>
   <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
@@ -1890,17 +1846,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="45" minlevel="35"/>
   <priority name="Defend ship" value="Normal"/>
   <priority name="Board enemy ship" value="High"/>
- </mobile>
- <mobile index="212" order="GUNNER">
-  <skill maxlevel="60" minlevel="40" name="Gunnery"/>
-  <skill maxlevel="15" minlevel="8" name="Perception"/>
-  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
-  <skill maxlevel="60" minlevel="40" name="Dodge"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <priority name="Operating guns" value="Normal"/>
  </mobile>
  <mobile index="213" order="ENGINEER">
   <skill maxlevel="60" minlevel="40" name="Engineering"/>
