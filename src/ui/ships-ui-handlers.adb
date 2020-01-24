@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -312,6 +312,17 @@ package body Ships.UI.Handlers is
                        (Items_List
                           (Unbounded_Slice
                              (Module.CraftingIndex, 7,
+                              Length(Module.CraftingIndex)))
+                          .Name));
+               elsif Length(Module.CraftingIndex) > 12
+                 and then Slice(Module.CraftingIndex, 1, 11) = "Deconstruct" then
+                  Append
+                    (ModuleInfo,
+                     "Deconstructing " &
+                     To_String
+                       (Items_List
+                          (Unbounded_Slice
+                             (Module.CraftingIndex, 13,
                               Length(Module.CraftingIndex)))
                           .Name));
                else
