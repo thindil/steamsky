@@ -1382,17 +1382,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Defend ship" value="High"/>
   <priority name="Board enemy ship" value="Normal"/>
  </mobile>
- <mobile index="148" order="TALK">
-  <skill maxlevel="40" minlevel="20" name="Rhetoric"/>
-  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
-  <skill maxlevel="60" minlevel="40" name="Dodge"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <priority name="Talking in bases" value="Normal"/>
-  <priority name="Defend ship" value="Normal"/>
- </mobile>
  <mobile index="149" order="DEFEND">
   <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
@@ -1432,17 +1421,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="25" minlevel="15"/>
   <priority name="Defend ship" value="High"/>
   <priority name="Board enemy ship" value="Normal"/>
- </mobile>
- <mobile index="180" order="TALK">
-  <skill maxlevel="40" minlevel="20" name="Rhetoric"/>
-  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
-  <skill maxlevel="60" minlevel="40" name="Dodge"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <priority name="Talking in bases" value="Normal"/>
-  <priority name="Defend ship" value="Normal"/>
  </mobile>
  <mobile index="181" order="DEFEND">
   <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
