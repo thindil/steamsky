@@ -213,6 +213,9 @@ Grayed name of recipe on list mean that you don't have enough material, proper t
     At beginning of game, you know only few basic crafting recipes. To discover more, you must study item which crafting recipe you want to reveal. Studying works in similar way like normal crafting order - with two differences: studying take always one item to finish and it is always executed in alchemy lab module. List of available study orders depends on items which you have in ship cargo. Studying items doesn't give any materials, only crafting recipe.
     Additionally, you can buy crafting recipes in bases. Which recipes are available, depends on base type and known recipes. If you don't have option {b}&quot;Buy recipes&quot;{/b} in orders menu when docked to base, this mean you bought or know all available recipes in that base type.
 
+{u}Deconstructing items{/u}
+    Some items can be deconstructed to recover some materials used to create them. Each deconstruction takes place in an Alchemy Lab. Not all items can be deconstructed - especially this smallest can't. Generally, deconstruction take same amount of time like creating the item and in exchange it give around 80% of materials used in creating process.
+
 {u}Crafting tips{/u}
 * Crafter always use tool which he/she have currently equipped. If he/she don't have any equipped, he/she take it from own inventory or from ship cargo. You may set manually which tool to use by equipping it in crew member inventory screen.
 * Each tool have chance to be damaged during crafting. Chance on damage tool depends on tool and crafting skill.
