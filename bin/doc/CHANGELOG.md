@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Better search for recipes, wounded crew members and modules to repair in
   bases
 - Info about used equipment by both crews members during boarding
+- New crafting order - deconstruct - allow recover materials from items
 
 ### Changed
 - Updated mobs data
