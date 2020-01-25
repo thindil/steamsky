@@ -1332,17 +1332,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="20" minlevel="15"/>
   <priority name="Defend ship" value="High"/>
  </mobile>
- <mobile index="114" order="ENGINEER">
-  <skill maxlevel="60" minlevel="40" name="Engineering"/>
-  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
-  <skill maxlevel="60" minlevel="40" name="Dodge"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <priority name="Engineering" value="Normal"/>
-  <priority name="Repair ship" value="High"/>
- </mobile>
  <mobile index="115" order="DEFEND">
   <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
@@ -1392,17 +1381,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="25" minlevel="15"/>
   <priority name="Defend ship" value="High"/>
   <priority name="Board enemy ship" value="Normal"/>
- </mobile>
- <mobile index="147" order="ENGINEER">
-  <skill maxlevel="60" minlevel="40" name="Engineering"/>
-  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
-  <skill maxlevel="60" minlevel="40" name="Dodge"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <priority name="Engineering" value="Normal"/>
-  <priority name="Repair ship" value="High"/>
  </mobile>
  <mobile index="148" order="TALK">
   <skill maxlevel="40" minlevel="20" name="Rhetoric"/>
@@ -1454,17 +1432,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="25" minlevel="15"/>
   <priority name="Defend ship" value="High"/>
   <priority name="Board enemy ship" value="Normal"/>
- </mobile>
- <mobile index="179" order="ENGINEER">
-  <skill maxlevel="60" minlevel="40" name="Engineering"/>
-  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
-  <skill maxlevel="60" minlevel="40" name="Dodge"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <priority name="Engineering" value="Normal"/>
-  <priority name="Repair ship" value="High"/>
  </mobile>
  <mobile index="180" order="TALK">
   <skill maxlevel="40" minlevel="20" name="Rhetoric"/>
@@ -1773,17 +1740,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <priority name="Defend ship" value="Normal"/>
   <priority name="Board enemy ship" value="High"/>
  </mobile>
- <mobile index="201" order="ENGINEER">
-  <skill maxlevel="60" minlevel="40" name="Engineering"/>
-  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
-  <skill maxlevel="60" minlevel="40" name="Dodge"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <priority name="Engineering" value="Normal"/>
-  <priority name="Repair ship" value="High"/>
- </mobile>
  <mobile index="202" order="DEFEND">
   <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
@@ -1846,17 +1802,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="45" minlevel="35"/>
   <priority name="Defend ship" value="Normal"/>
   <priority name="Board enemy ship" value="High"/>
- </mobile>
- <mobile index="213" order="ENGINEER">
-  <skill maxlevel="60" minlevel="40" name="Engineering"/>
-  <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
-  <skill maxlevel="60" minlevel="40" name="Dodge"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <attribute maxlevel="35" minlevel="25"/>
-  <priority name="Engineering" value="Normal"/>
-  <priority name="Repair ship" value="High"/>
  </mobile>
  <mobile index="214" order="DEFEND">
   <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
