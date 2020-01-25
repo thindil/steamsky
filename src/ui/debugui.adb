@@ -22,7 +22,6 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Adjustment; use Gtk.Adjustment;
-with Gtk.Bin; use Gtk.Bin;
 with Gtk.Box; use Gtk.Box;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Cell_Area_Box; use Gtk.Cell_Area_Box;
@@ -44,6 +43,7 @@ with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Widget; use Gtk.Widget;
+with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -83,6 +83,13 @@ package body DebugUI is
    -- Gtk_Stack with most of UI
    -- SOURCE
    Stack: Gtk_Stack;
+   -- ****
+
+   -- ****iv* DebugUI/DebugWindow
+   -- FUNCTION
+   -- Main debug window
+   -- SOURCE
+   DebugWindow: Gtk_Window;
    -- ****
 
    -- ****if* DebugUI/MoveShip
@@ -1036,6 +1043,8 @@ package body DebugUI is
       SpinButton: Gtk_Spin_Button;
       Button: Gtk_Button;
       StackSwitch: constant Gtk_Stack_Switcher := Gtk_Stack_Switcher_New;
+      Switchbox: constant Gtk_Vbox := Gtk_Vbox_New;
+      WindowBox: constant Gtk_Hbox := Gtk_Hbox_New;
    begin
       if Builder /= null then
          return;
@@ -1074,21 +1083,32 @@ package body DebugUI is
             Set(List, Iter, 0, To_String(Module.Name));
          end loop;
       end;
-      Pack_Start(Gtk_Box(Get_Object(Builder, "switchbox")), StackSwitch, False);
+      DebugWindow := Gtk_Window_New;
+      Set_Title(DebugWindow, "Steam Sky - debug");
+      Set_Default_Size(DebugWindow, 800, 600);
+      if not Set_Icon_From_File
+          (DebugWindow,
+           To_String(DataDirectory) & Dir_Separator & "ui" & Dir_Separator &
+           "images" & Dir_Separator & "icon.png") then
+         raise Program_Error with "Can't set icon for the debug window";
+      end if;
+      Add(DebugWindow, WindowBox);
+      Pack_Start(Switchbox, StackSwitch, False);
       Button := Gtk_Button_New_With_Mnemonic("_Refresh");
-      Set_Tooltip_Text(Button, "Refresh all information in menu (ships, bases, items, events, cargo, etc)");
+      Set_Tooltip_Text
+        (Button,
+         "Refresh all information in menu (ships, bases, items, events, cargo, etc)");
       On_Clicked(Button, RefreshUI'Access);
-      Pack_Start(Gtk_Box(Get_Object(Builder, "switchbox")), Button, False);
+      Pack_Start(Switchbox, Button, False);
       Button := Gtk_Button_New_With_Mnemonic("_Save game");
       Set_Tooltip_Text(Button, "Save the game to the file.");
       On_Clicked(Button, Save_Game'Access);
-      Pack_Start(Gtk_Box(Get_Object(Builder, "switchbox")), Button, False);
+      Pack_Start(Switchbox, Button, False);
       Stack := Gtk_Stack_New;
       Set_Stack(StackSwitch, Stack);
       Set_Orientation(StackSwitch, Orientation_Vertical);
-      Pack_Start
-        (Gtk_Box(Get_Child(Gtk_Bin(Get_Object(Builder, "debugwindow")))),
-         Stack);
+      Pack_Start(WindowBox, Switchbox, False);
+      Pack_Start(WindowBox, Stack);
       declare
          ShipGrid: constant Gtk_Grid := Gtk_Grid_New;
          Labels: constant array(1 .. 6) of Unbounded_String :=
@@ -1560,7 +1580,7 @@ package body DebugUI is
    procedure ShowDebugUI is
    begin
       RefreshUI(null);
-      Show_All(Gtk_Widget(Get_Object(Builder, "debugwindow")));
+      Show_All(DebugWindow);
       ShowItemEvent
         (Gtk_Combo_Box
            (Get_Child_At
