@@ -1921,7 +1921,7 @@ during combat. -->
   <member index="43"/>
   <member amount="3" index="44"/>
   <member index="45"/>
-  <member index="148"/>
+  <member index="46"/>
   <member index="149" maxamount="8" minamount="4"/>
   <description>Advanced version of huge, well armored poleis traders ship. Avoids any fights.</description>
  </ship>
@@ -1943,7 +1943,7 @@ during combat. -->
   <member index="43"/>
   <member amount="3" index="44"/>
   <member index="45"/>
-  <member index="180"/>
+  <member index="46"/>
   <member index="181" maxamount="8" minamount="4"/>
   <description>Advanced version of huge, well armored independent traders ship. Avoids any fights.</description>
  </ship>
@@ -5279,7 +5279,7 @@ during combat. -->
   <member index="43"/>
   <member amount="3" index="44"/>
   <member index="45"/>
-  <member index="148"/>
+  <member index="46"/>
   <member index="149" maxamount="8" minamount="4"/>
   <description>Advanced and upraded version of huge, well armored poleis traders ship. Avoids any fights.</description>
  </ship>
@@ -5300,7 +5300,7 @@ during combat. -->
   <member index="43"/>
   <member amount="3" index="44"/>
   <member index="45"/>
-  <member index="180"/>
+  <member index="46"/>
   <member index="181" maxamount="8" minamount="4"/>
   <description>Advanced and upraded version of huge, well armored independent traders ship. Avoids any fights.</description>
  </ship>
@@ -5382,7 +5382,7 @@ during combat. -->
   <member index="43"/>
   <member amount="3" index="44"/>
   <member index="45"/>
-  <member index="148"/>
+  <member index="46"/>
   <member index="149" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored poleis traders ship. Avoids any fights.</description>
  </ship>
@@ -5403,7 +5403,7 @@ during combat. -->
   <member index="43"/>
   <member amount="3" index="44"/>
   <member index="45"/>
-  <member index="180"/>
+  <member index="46"/>
   <member index="181" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored independent traders ship. Avoids any fights.</description>
  </ship>
@@ -5485,7 +5485,7 @@ during combat. -->
   <member index="43"/>
   <member amount="3" index="44"/>
   <member index="45"/>
-  <member index="148"/>
+  <member index="46"/>
   <member index="149" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored poleis traders ship. Avoids any fights.</description>
  </ship>
@@ -5506,7 +5506,7 @@ during combat. -->
   <member index="43"/>
   <member amount="3" index="44"/>
   <member index="45"/>
-  <member index="180"/>
+  <member index="46"/>
   <member index="181" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored independent traders ship. Avoids any fights.</description>
  </ship>
@@ -5587,7 +5587,7 @@ during combat. -->
   <cargo index="131" maxamount="800" minamount="600"/>
   <member index="43"/>
   <member amount="3" index="44"/>
-  <member index="148"/>
+  <member index="46"/>
   <member index="45"/>
   <member index="202" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored poleis traders ship. Avoids any fights.</description>
@@ -5608,7 +5608,7 @@ during combat. -->
   <cargo index="131" maxamount="800" minamount="600"/>
   <member index="43"/>
   <member amount="3" index="44"/>
-  <member index="180"/>
+  <member index="46"/>
   <member index="45"/>
   <member index="214" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored independent traders ship. Avoids any fights.</description>
@@ -5691,7 +5691,7 @@ during combat. -->
   <member index="195"/>
   <member amount="3" index="196"/>
   <member index="197"/>
-  <member index="148"/>
+  <member index="46"/>
   <member index="198" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored poleis traders ship. Avoids any fights.</description>
  </ship>
@@ -5711,7 +5711,7 @@ during combat. -->
   <cargo index="167" maxamount="800" minamount="600"/>
   <member index="207"/>
   <member amount="3" index="208"/>
-  <member index="180"/>
+  <member index="46"/>
   <member index="209"/>
   <member index="210" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored independent traders ship. Avoids any fights.</description>
