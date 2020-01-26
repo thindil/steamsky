@@ -682,7 +682,11 @@ package body DebugUI is
       UpdateCargo
         (PlayerShip, ItemIndex,
          Positive
-           (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjaddcargo")))));
+           (Get_Value
+              (Get_Adjustment
+                 (Gtk_Spin_Button
+                    (Gtk_GEntry
+                       (Get_Child_At(Gtk_Grid(Get_Parent(Self)), 3, 0)))))));
       UpdateCargoInfo(Get_Parent(Self));
    end AddCargo;
 
@@ -1357,7 +1361,7 @@ package body DebugUI is
          Attach(CargoGrid, Label, 2, 0);
          SpinButton :=
            Gtk_Spin_Button_New
-             (Gtk_Adjustment(Get_Object(Builder, "adjaddcargo")), 0.0);
+             (Gtk_Adjustment_New(1.0, 1.0, 1_000_000.0, 1.0, 10.0), 0.0);
          Set_Tooltip_Text
            (SpinButton,
             "Add that amount of selected item to the player ship cargo.");
