@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.5 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.6 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -44,8 +44,8 @@
 <li>1.13. <a href="#robo209">Combat/OldSpeed</a></li>
 <li>1.14. <a href="#robo210">Combat/PilotOrder</a>, <a href="#robo210">EngineerOrder</a></li>
 <li>1.15. <a href="./combat_adb.html#robo211">Combat/TurnNumber</a></li>
-<li>1.16. <a href="#robo449">Combat/CombatTurn</a></li>
-<li>1.17. <a href="#robo450">Combat/StartCombat</a></li>
+<li>1.16. <a href="#robo454">Combat/CombatTurn</a></li>
+<li>1.17. <a href="#robo455">Combat/StartCombat</a></li>
 </ul>
 </ul>
 <hr />
@@ -221,7 +221,7 @@
 <pre> Speed of player ship before combat
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>OldSpeed</strong><span class="sign">:</span> <a href="./ships_ads.html#robo161">ShipSpeed</a><span class="sign">;</span>
+<pre class="source">   <strong>OldSpeed</strong><span class="sign">:</span> <a href="./ships_ads.html#robo161">ShipSpeed</a> <span class="sign">:</span><span class="sign">=</span> FULL_SPEED<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -238,7 +238,7 @@
 
 <hr />
 <a name="Combat2fCombatTurn"></a>
-<a name="robo449"></a><h2>Combat/CombatTurn [ Subprograms ]</h2>
+<a name="robo454"></a><h2>Combat/CombatTurn [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo13">Combat</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -251,7 +251,7 @@
 
 <hr />
 <a name="Combat2fStartCombat"></a>
-<a name="robo450"></a><h2>Combat/StartCombat [ Subprograms ]</h2>
+<a name="robo455"></a><h2>Combat/StartCombat [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo13">Combat</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -261,7 +261,7 @@
 <pre class="source">   <span class="keyword">function</span> <strong>StartCombat</strong>
      <span class="sign">(</span>EnemyIndex<span class="sign">:</span> Unbounded_String<span class="sign">;</span> NewCombat<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span>
       <span class="keyword">return</span> Boolean with
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="./ships_ads.html#robo158">ProtoShips_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="./ships_ads.html#robo324">ProtoShips_List</a><span class="sign">,</span> EnemyIndex<span class="sign">)</span><span class="sign">,</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="./ships_ads.html#robo158">ProtoShips_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="./ships_ads.html#robo327">ProtoShips_List</a><span class="sign">,</span> EnemyIndex<span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_StartCombat"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -274,7 +274,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/combat.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Dec 29 2019 06:26:20
+<p>Generated from ./src/combat.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 26 2020 06:28:42
 </p>
 </div> <!-- footer -->
 </body>
