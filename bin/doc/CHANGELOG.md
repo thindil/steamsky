@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [4.6] - 2019-01-26
 
 ### Added
 - Ability to set random equipment for mobs
