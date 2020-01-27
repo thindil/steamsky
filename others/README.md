@@ -23,4 +23,4 @@ Various files which are not necessary needed for development:
                       run this script from the main project directory, not
                       from this. If you don't enter amount how many times
                       repeat tests, they will run only once.
-- pl.laeran.steamsky.appdata.xml - AppStream meta data for the AppImage.
+- steamsky.appdata.xml - AppStream meta data for the AppImage.
