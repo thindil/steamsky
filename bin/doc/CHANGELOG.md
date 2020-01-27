@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated mobs data
+- Updated some ships crews
 
 ## [4.6] - 2019-01-26
 
