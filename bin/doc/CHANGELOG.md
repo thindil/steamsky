@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- Updated mobs data
+
 ## [4.6] - 2019-01-26
 
 ### Added
