@@ -395,11 +395,14 @@ package body DebugUI is
                Gdouble(SkyBases(I).Reputation(1)));
             if SkyBases(I).Cargo.Length > 0 then
                Set_Value
-                 (Gtk_Adjustment(Get_Object(Builder, "adjbasemoney")),
+                 (Get_Adjustment
+                    (Gtk_Spin_Button(Get_Child_At(BaseGrid, 1, 6))),
                   Gdouble(SkyBases(I).Cargo(1).Amount));
             else
                Set_Value
-                 (Gtk_Adjustment(Get_Object(Builder, "adjbasemoney")), 0.0);
+                 (Get_Adjustment
+                    (Gtk_Spin_Button(Get_Child_At(BaseGrid, 1, 6))),
+                  0.0);
             end if;
             exit;
          end if;
@@ -747,7 +750,8 @@ package body DebugUI is
                SkyBase.Cargo(1).Amount :=
                  Natural
                    (Get_Value
-                      (Gtk_Adjustment(Get_Object(Builder, "adjbasemoney"))));
+                      (Get_Adjustment
+                         (Gtk_Spin_Button(Get_Child_At(BaseGrid, 1, 6)))));
             else
                SkyBase.Cargo.Append
                  (New_Item =>
@@ -755,8 +759,9 @@ package body DebugUI is
                      Amount =>
                        Natural
                          (Get_Value
-                            (Gtk_Adjustment
-                               (Get_Object(Builder, "adjbasemoney")))),
+                            (Get_Adjustment
+                               (Gtk_Spin_Button
+                                  (Get_Child_At(BaseGrid, 1, 6))))),
                      Durability => 100, Price => 0));
             end if;
             SkyBase.Population :=
@@ -1452,7 +1457,7 @@ package body DebugUI is
          Attach(BaseGrid, Label, 0, 6);
          SpinButton :=
            Gtk_Spin_Button_New
-             (Gtk_Adjustment(Get_Object(Builder, "adjbasemoney")), 0.0);
+             (Gtk_Adjustment_New(1.0, 1.0, 1_000_000.0, 1.0, 10.0), 0.0);
          Set_Tooltip_Text
            (SpinButton, "Amount of money owned by selected base.");
          Attach(BaseGrid, SpinButton, 1, 6);
