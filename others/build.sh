@@ -11,4 +11,4 @@ rm -r usr/share/data/saves
 rm -r usr/share/data/themes
 cp -r bin/doc usr/share
 cp README.md usr/share/doc
-cp others/pl.laeran.steamsky.appdata.xml usr/share/metainfo
+cp others/steamsky.appdata.xml usr/share/metainfo
