@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -145,6 +145,17 @@ package body Maps.UI is
          return;
       end if;
       Set_Text(Gtk_Label(Get_Object(Builder, "lbltime")), FormatedTime);
+      Set_Tooltip_Text
+        (Gtk_Widget(Get_Object(Builder, "lbltime")), "Game time.");
+      if GameSettings.ShowNumbers then
+         Set_Text
+           (Gtk_Label(Get_Object(Builder, "lbltime")),
+            FormatedTime & " Speed:" &
+            Natural'Image((RealSpeed(PlayerShip) * 60) / 1000) & " km/h");
+         Set_Tooltip_Text
+           (Gtk_Widget(Get_Object(Builder, "lbltime")),
+            "Game time and current ship speed.");
+      end if;
       declare
          LabelsNames: constant array(Positive range <>) of Unbounded_String :=
            (To_Unbounded_String("lblnofuel"),
