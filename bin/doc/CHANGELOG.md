@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Show current ship speed when option "Show numeric values" is enabled
+
 ### Changed
 - Updated mobs data
 - Updated some ships crews
