@@ -2937,7 +2937,7 @@ during combat. -->
   <cargo index="3" maxamount="750" minamount="600"/>
   <cargo index="154" maxamount="750" minamount="600"/>
   <cargo index="131" maxamount="650" minamount="500"/>
-  <member index="102"/>
+  <member index="51"/>
   <member amount="4" index="103"/>
   <member index="104" maxamount="12" minamount="8"/>
   <description>Advanced and upgraded version of huge, well armored inquisition flying vessel.</description>
