@@ -182,28 +182,30 @@ package body DebugUI is
              (Gtk_Box(Get_Child(Gtk_Box(Get_Child(CrewBox, 1)), 2)), 1));
       ComboBox: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Child(AddSkillBox, 1));
+      CrewGrid: constant Gtk_Grid :=
+        Gtk_Grid(Get_Child(Gtk_Box(Get_Child(CrewBox, 1)), 0));
    begin
       if Setting then
          return;
       end if;
       Member := PlayerShip.Crew(Positive'Value(Get_Active_Id(Self)));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Builder, "adjhealth")),
+        (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(CrewGrid, 1, 0))),
          Gdouble(Member.Health));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Builder, "adjthirst")),
+        (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(CrewGrid, 1, 1))),
          Gdouble(Member.Thirst));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Builder, "adjhunger")),
+        (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(CrewGrid, 1, 2))),
          Gdouble(Member.Hunger));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Builder, "adjtired")),
+        (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(CrewGrid, 1, 3))),
          Gdouble(Member.Tired));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Builder, "adjmorale")),
+        (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(CrewGrid, 1, 4))),
          Gdouble(Member.Morale(1)));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Builder, "adjloyalty")),
+        (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(CrewGrid, 1, 5))),
          Gdouble(Member.Loyalty));
       Clear(List);
       for I in Member.Attributes.Iterate loop
@@ -317,19 +319,33 @@ package body DebugUI is
         Positive'Value
           (Get_Active_Id
              (Gtk_Combo_Box(Get_Child(Gtk_Box(Get_Child(CrewBox, 0)), 1))));
+      CrewGrid: constant Gtk_Grid :=
+        Gtk_Grid(Get_Child(Gtk_Box(Get_Child(CrewBox, 1)), 0));
    begin
       PlayerShip.Crew(MemberIndex).Health :=
-        Natural(Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjhealth"))));
+        Natural
+          (Get_Value
+             (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(CrewGrid, 1, 0)))));
       PlayerShip.Crew(MemberIndex).Thirst :=
-        Natural(Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjthirst"))));
+        Natural
+          (Get_Value
+             (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(CrewGrid, 1, 1)))));
       PlayerShip.Crew(MemberIndex).Hunger :=
-        Natural(Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjhunger"))));
+        Natural
+          (Get_Value
+             (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(CrewGrid, 1, 2)))));
       PlayerShip.Crew(MemberIndex).Tired :=
-        Natural(Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjtired"))));
+        Natural
+          (Get_Value
+             (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(CrewGrid, 1, 3)))));
       PlayerShip.Crew(MemberIndex).Morale(1) :=
-        Natural(Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjmorale"))));
+        Natural
+          (Get_Value
+             (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(CrewGrid, 1, 4)))));
       PlayerShip.Crew(MemberIndex).Loyalty :=
-        Natural(Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjloyalty"))));
+        Natural
+          (Get_Value
+             (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(CrewGrid, 1, 5)))));
       Foreach
         (Gtk_List_Store(Get_Object(Builder, "statslist")),
          UpdateAttribute'Access);
@@ -1236,9 +1252,7 @@ package body DebugUI is
                  Slice(Labels(I), 2, Length(Labels(I))));
             SpinButton :=
               Gtk_Spin_Button_New
-                (Gtk_Adjustment
-                   (Get_Object(Builder, "adj" & To_String(LowerLabel))),
-                 0.0);
+                (Gtk_Adjustment_New(1.0, 1.0, 100.0, 1.0, 10.0), 0.0);
             Set_Tooltip_Text
               (SpinButton,
                "Level of " & To_String(LowerLabel) &
