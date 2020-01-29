@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Show current ship speed when option "Show numeric values" is enabled
+- Info about speed difference between player and enemy ships in combat
 
 ### Changed
 - Updated mobs data
