@@ -800,13 +800,11 @@ package body DebugUI is
    -- SOURCE
    procedure AddShip(Self: access Gtk_Button_Record'Class) is
       -- ****
+      ShipGrid: constant Gtk_Grid :=
+        Gtk_Grid(Get_Child(Gtk_Box(Get_Parent(Self)), 0));
       ShipName: constant Unbounded_String :=
         To_Unbounded_String
-          (Get_Text
-             (Gtk_GEntry
-                (Get_Child_At
-                   (Gtk_Grid(Get_Child(Gtk_Box(Get_Parent(Self)), 0)), 1,
-                    0))));
+          (Get_Text(Gtk_GEntry(Get_Child_At(ShipGrid, 1, 0))));
       NpcShipX: constant Positive :=
         Positive
           (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjnpcshipx"))));
@@ -822,7 +820,8 @@ package body DebugUI is
                     (Trader, NpcShipX, NpcShipY,
                      Positive
                        (Get_Value
-                          (Gtk_Adjustment(Get_Object(Builder, "adjminutes")))),
+                          (Get_Adjustment
+                             (Gtk_Spin_Button(Get_Child_At(ShipGrid, 1, 3))))),
                      ProtoShips_Container.Key(I)));
             elsif FriendlyShips.Contains(ProtoShips_Container.Key(I)) then
                Events_List.Append
@@ -830,7 +829,8 @@ package body DebugUI is
                     (FriendlyShip, NpcShipX, NpcShipY,
                      Positive
                        (Get_Value
-                          (Gtk_Adjustment(Get_Object(Builder, "adjminutes")))),
+                          (Get_Adjustment
+                             (Gtk_Spin_Button(Get_Child_At(ShipGrid, 1, 3))))),
                      ProtoShips_Container.Key(I)));
             else
                Events_List.Append
@@ -838,7 +838,8 @@ package body DebugUI is
                     (EnemyShip, NpcShipX, NpcShipY,
                      Positive
                        (Get_Value
-                          (Gtk_Adjustment(Get_Object(Builder, "adjminutes")))),
+                          (Get_Adjustment
+                             (Gtk_Spin_Button(Get_Child_At(ShipGrid, 1, 3))))),
                      ProtoShips_Container.Key(I)));
             end if;
             SkyMap(NpcShipX, NpcShipY).EventIndex := Events_List.Last_Index;
@@ -1523,7 +1524,7 @@ package body DebugUI is
          Attach(EventGrid, Label, 0, 3);
          SpinButton :=
            Gtk_Spin_Button_New
-             (Gtk_Adjustment(Get_Object(Builder, "adjminutes")), 0.0);
+             (Gtk_Adjustment_New(30.0, 30.0, 45.0, 1.0, 10.0), 0.0);
          Set_Tooltip_Text
            (SpinButton,
             "Amount of minutes, how long selected ship will be available on the map.");
