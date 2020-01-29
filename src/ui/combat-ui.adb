@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -47,6 +47,7 @@ with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Crew; use Crew;
 with Ships.Crew; use Ships.Crew;
+with Ships.Movement; use Ships.Movement;
 with Messages; use Messages;
 with Config; use Config;
 with Items; use Items;
@@ -445,6 +446,24 @@ package body Combat.UI is
             when others =>
                null;
          end case;
+         if Enemy.Ship.Speed /= Ships.FULL_STOP then
+            declare
+               SpeedDiff: constant Integer :=
+                 RealSpeed(Enemy.Ship) - RealSpeed(PlayerShip);
+            begin
+               if SpeedDiff > 250 then
+                  Append(EnemyInfo, " (much faster)");
+               elsif SpeedDiff > 0 then
+                  Append(EnemyInfo, " (faster)");
+               elsif SpeedDiff = 0 then
+                  Append(EnemyInfo, " (equal)");
+               elsif SpeedDiff > -250 then
+                  Append(EnemyInfo, " (slower)");
+               else
+                  Append(EnemyInfo, " (much slower)");
+               end if;
+            end;
+         end if;
       else
          Append(EnemyInfo, "Unknown");
       end if;
