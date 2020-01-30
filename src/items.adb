@@ -124,6 +124,12 @@ package body Items is
             if ItemIndex = MoneyIndex then
                MoneyName := TempRecord.Name;
             end if;
+            -- Backward compatibility, all ammunitions are normal by default
+            if Length(TempRecord.IType) > 4
+              and then Slice(TempRecord.IType, 1, 4) = "Ammo"
+              and then TempRecord.Value.Length = 1 then
+               TempRecord.Value.Append(New_Item => 1);
+            end if;
             if Action /= UPDATE then
                Objects_Container.Include(Items_List, ItemIndex, TempRecord);
                LogMessage
