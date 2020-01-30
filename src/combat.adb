@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -402,6 +402,24 @@ package body Combat is
                   if FindEnemyModule(ARMOR) > 0 then
                      Shoots := 0;
                   end if;
+               end if;
+               if Ship.Modules(K).MType = GUN and Shoots > 0 then
+                  case Items_List(Ship.Cargo(AmmoIndex).ProtoIndex).Value(2) is
+                     when 2 =>
+                        if Ship = PlayerShip then
+                           CurrentAccuracyBonus := CurrentAccuracyBonus - 10;
+                        else
+                           EvadeBonus := EvadeBonus + 10;
+                        end if;
+                     when 3 =>
+                        if Ship = PlayerShip then
+                           CurrentAccuracyBonus := CurrentAccuracyBonus + 10;
+                        else
+                           EvadeBonus := EvadeBonus - 10;
+                        end if;
+                     when others =>
+                        null;
+                  end case;
                end if;
             else
                if Enemy.Distance > 100 then
