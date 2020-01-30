@@ -895,8 +895,9 @@ package body DebugUI is
                        (Disease, Base.SkyX, Base.SkyY,
                         Positive
                           (Get_Value
-                             (Gtk_Adjustment
-                                (Get_Object(Builder, "adjminutesbase")))),
+                             (Get_Adjustment
+                                (Gtk_Spin_Button
+                                   (Get_Child_At(ParentGrid, 1, 3))))),
                         1));
                when 1 =>
                   EventAdded := False;
@@ -907,9 +908,9 @@ package body DebugUI is
                              (DoublePrice, Base.SkyX, Base.SkyY,
                               Positive
                                 (Get_Value
-                                   (Gtk_Adjustment
-                                      (Get_Object
-                                         (Builder, "adjminutesbase")))),
+                                   (Get_Adjustment
+                                      (Gtk_Spin_Button
+                                         (Get_Child_At(ParentGrid, 1, 3))))),
                               Objects_Container.Key(I)));
                         EventAdded := True;
                         exit;
@@ -921,8 +922,9 @@ package body DebugUI is
                        (FullDocks, Base.SkyX, Base.SkyY,
                         Positive
                           (Get_Value
-                             (Gtk_Adjustment
-                                (Get_Object(Builder, "adjminutesbase")))),
+                             (Get_Adjustment
+                                (Gtk_Spin_Button
+                                   (Get_Child_At(ParentGrid, 1, 3))))),
                         1));
                when others =>
                   null;
@@ -1553,7 +1555,7 @@ package body DebugUI is
          EventBox: constant Gtk_Vbox := Gtk_Vbox_New;
          MinutesEntry: constant Gtk_Spin_Button :=
            Gtk_Spin_Button_New
-             (Gtk_Adjustment(Get_Object(Builder, "adjminutesbase")), 0.0);
+             (Gtk_Adjustment_New(15.0, 15.0, 12_000.0, 1.0, 10.0), 0.0);
       begin
          Label := Gtk_Label_New("Base:");
          Attach(EventGrid, Label, 0, 0);
