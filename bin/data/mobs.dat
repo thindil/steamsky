@@ -1257,15 +1257,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="30" minlevel="20"/>
   <priority name="Defend ship" value="High"/>
  </mobile>
- <mobile index="111" order="DEFEND">
-  <skill maxlevel="50" minlevel="30" name="WeaponSkill"/>
-  <skill maxlevel="50" minlevel="30" name="Dodge"/>
-  <attribute maxlevel="20" minlevel="15"/>
-  <attribute maxlevel="20" minlevel="15"/>
-  <attribute maxlevel="20" minlevel="15"/>
-  <attribute maxlevel="20" minlevel="15"/>
-  <priority name="Defend ship" value="High"/>
- </mobile>
  <mobile index="115" order="DEFEND">
   <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
