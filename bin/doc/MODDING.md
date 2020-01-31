@@ -242,8 +242,9 @@ Value must be existing skill name.
   possible to buy or sell in bases, set it price to 0.
 - Tag `data`: optional tag. Each tag is one value. For items used as food it
   is value of hunger reduced by one portion. For item used as drinks, value of
-  thirst reduced by one portion. For ammunition it is damage done by that
-  ammunition. For working tools it is chance for item to be damaged during
+  thirst reduced by one portion. For ammunition first value is damage done by
+  that ammunition, second is ammunition type (1 - normal, 2 - piercing,
+  3 - exploding). For working tools it is chance for item to be damaged during
   work. For harpoon guns ammunition it is how long (in combat turns) item will
   be stuck in enemy ship. For weapons and armor pieces first value is change
   for item to be damaged during combat, second entry for weapons is damage
