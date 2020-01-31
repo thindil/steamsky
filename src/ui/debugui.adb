@@ -987,16 +987,16 @@ package body DebugUI is
         (Gtk_GEntry(Get_Child_At(ShipGrid, 1, 2)),
          To_String(Modules_List(Module.ProtoIndex).Name));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Builder, "adjmoduleweight")),
+        (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(ShipGrid, 1, 3))),
          Gdouble(Module.Weight));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Builder, "adjmoduledur")),
+        (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(ShipGrid, 1, 4))),
          Gdouble(Module.Durability));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Builder, "adjmodulemaxdur")),
+        (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(ShipGrid, 1, 5))),
          Gdouble(Module.MaxDurability));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Builder, "adjmoduleupgrade")),
+        (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(ShipGrid, 1, 6))),
          Gdouble(Module.UpgradeProgress));
    end SetModuleStats;
 
@@ -1026,16 +1026,20 @@ package body DebugUI is
       end loop;
       PlayerShip.Modules(ModuleIndex).Weight :=
         Natural
-          (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjmoduleweight"))));
+          (Get_Value
+             (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(ShipGrid, 1, 3)))));
       PlayerShip.Modules(ModuleIndex).Durability :=
         Natural
-          (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjmoduledur"))));
+          (Get_Value
+             (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(ShipGrid, 1, 4)))));
       PlayerShip.Modules(ModuleIndex).MaxDurability :=
         Natural
-          (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjmodulemaxdur"))));
+          (Get_Value
+             (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(ShipGrid, 1, 5)))));
       PlayerShip.Modules(ModuleIndex).UpgradeProgress :=
         Natural
-          (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjmoduleupgrade"))));
+          (Get_Value
+             (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(ShipGrid, 1, 6)))));
    end UpdateModule;
 
    -- ****if* DebugUI/ShowBasesTypes
@@ -1187,23 +1191,23 @@ package body DebugUI is
          Attach(ShipGrid, ShipEntry, 1, 2);
          SpinButton :=
            Gtk_Spin_Button_New
-             (Gtk_Adjustment(Get_Object(Builder, "adjmoduleweight")), 0.0);
+             (Gtk_Adjustment_New(0.0, 0.0, 100_000.0, 1.0, 10.0), 0.0);
          Set_Tooltip_Text(SpinButton, "Set new weight of the module.");
          Attach(ShipGrid, SpinButton, 1, 3);
          SpinButton :=
            Gtk_Spin_Button_New
-             (Gtk_Adjustment(Get_Object(Builder, "adjmoduledur")), 0.0);
+             (Gtk_Adjustment_New(0.0, 0.0, 1000.0, 1.0, 10.0), 0.0);
          Set_Tooltip_Text(SpinButton, "Set new durability of the module.");
          Attach(ShipGrid, SpinButton, 1, 4);
          SpinButton :=
            Gtk_Spin_Button_New
-             (Gtk_Adjustment(Get_Object(Builder, "adjmodulemaxdur")), 0.0);
+             (Gtk_Adjustment_New(1.0, 1.0, 1000.0, 1.0, 10.0), 0.0);
          Set_Tooltip_Text
            (SpinButton, "Set new maximum durablity for the module.");
          Attach(ShipGrid, SpinButton, 1, 5);
          SpinButton :=
            Gtk_Spin_Button_New
-             (Gtk_Adjustment(Get_Object(Builder, "adjmoduleupgrade")), 0.0);
+             (Gtk_Adjustment_New(0.0, 0.0, 1_000_000.0, 1.0, 10.0), 0.0);
          Set_Tooltip_Text
            (SpinButton,
             "Set upgrade progress for the module. No effect unless any ugrade is set for selected module.");
