@@ -2824,7 +2824,7 @@ during combat. -->
   <cargo index="1" maxamount="7000" minamount="5000"/>
   <cargo index="131" maxamount="750" minamount="500"/>
   <member index="47"/>
-  <member index="111" maxamount="14" minamount="10"/>
+  <member index="70" maxamount="14" minamount="10"/>
   <description>Huge, well armored and upgraded version of undead flying vessel. Dangerous at close range.</description>
  </ship>
  <ship combatai="BERSERKER" index="158" maxloot="900" minloot="600" name="Advanced huge undead ship mk V" owner="UNDEAD">
