@@ -2838,7 +2838,7 @@ during combat. -->
   <cargo index="1" maxamount="8000" minamount="6000"/>
   <cargo index="131" maxamount="800" minamount="600"/>
   <member index="48"/>
-  <member index="109" maxamount="15" minamount="11"/>
+  <member index="71" maxamount="15" minamount="11"/>
   <description>Advanced and upgraded version of huge, well armored undead flying vessel. Dangerous at close range.</description>
  </ship>
  <ship combatai="BERSERKER" index="159" maxaccuracy="80" maxevasion="80" maxloot="900" maxperception="80" minaccuracy="60" minevasion="60" minloot="500" minperception="60" name="Huge attacking drone mk V" owner="DRONES">
