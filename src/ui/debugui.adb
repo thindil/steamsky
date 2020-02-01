@@ -441,6 +441,12 @@ package body DebugUI is
              (Gtk_Box
                 (Get_Child(Gtk_Box(Get_Child_By_Name(Stack, "page4")), 1)),
               0));
+      ShipGrid: constant Gtk_Grid :=
+        Gtk_Grid
+          (Get_Child
+             (Gtk_Box
+                (Get_Child(Gtk_Box(Get_Child_By_Name(Stack, "page4")), 0)),
+              0));
    begin
       Set_Text
         (Gtk_GEntry
@@ -453,8 +459,10 @@ package body DebugUI is
                      0)),
                1, 0)),
          "");
-      Set_Value(Gtk_Adjustment(Get_Object(Builder, "adjnpcshipx")), 1.0);
-      Set_Value(Gtk_Adjustment(Get_Object(Builder, "adjnpcshipy")), 1.0);
+      Set_Value
+        (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(ShipGrid, 1, 1))), 1.0);
+      Set_Value
+        (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(ShipGrid, 1, 2))), 1.0);
       Set_Text(Gtk_GEntry(Get_Child_At(EventGrid, 1, 0)), "");
       Set_Text(Gtk_GEntry(Get_Child_At(EventGrid, 1, 2)), "");
       if Events_List.Length = 0 then
@@ -807,10 +815,12 @@ package body DebugUI is
           (Get_Text(Gtk_GEntry(Get_Child_At(ShipGrid, 1, 0))));
       NpcShipX: constant Positive :=
         Positive
-          (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjnpcshipx"))));
+          (Get_Value
+             (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(ShipGrid, 1, 1)))));
       NpcShipY: constant Positive :=
         Positive
-          (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjnpcshipy"))));
+          (Get_Value
+             (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(ShipGrid, 1, 2)))));
    begin
       for I in ProtoShips_List.Iterate loop
          if ProtoShips_List(I).Name = ShipName then
@@ -1512,7 +1522,7 @@ package body DebugUI is
          Attach(EventGrid, Label, 0, 1);
          SpinButton :=
            Gtk_Spin_Button_New
-             (Gtk_Adjustment(Get_Object(Builder, "adjnpcshipx")), 0.0);
+             (Gtk_Adjustment_New(1.0, 1.0, 1024.0, 1.0, 10.0), 0.0);
          Set_Tooltip_Text
            (SpinButton,
             "X coordinates on the map where new NPC ship will be added.");
@@ -1521,7 +1531,7 @@ package body DebugUI is
          Attach(EventGrid, Label, 0, 2);
          SpinButton :=
            Gtk_Spin_Button_New
-             (Gtk_Adjustment(Get_Object(Builder, "adjnpcshipy")), 0.0);
+             (Gtk_Adjustment_New(1.0, 1.0, 1024.0, 1.0, 10.0), 0.0);
          Set_Tooltip_Text
            (SpinButton,
             "Y coordinates on the map where new NPC ship will be added.");
