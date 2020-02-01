@@ -2918,7 +2918,7 @@ during combat. -->
   <cargo index="131" maxamount="600" minamount="400"/>
   <member index="49"/>
   <member amount="4" index="50"/>
-  <member index="107" maxamount="10" minamount="6"/>
+  <member index="72" maxamount="10" minamount="6"/>
   <description>Huge, well armored and upgraded version of inquisition flying vessel.</description>
  </ship>
  <ship combatai="ATTACKER" index="163" maxloot="1200" minloot="900" name="Advanced huge inquisition ship mk V" owner="INQUISITION">
