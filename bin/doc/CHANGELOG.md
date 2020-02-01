@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Updated mobs data
 - Updated some ships crews
 - Updated MODDING.md
+- Updated help
 
 ## [4.6] - 2019-01-26
 
