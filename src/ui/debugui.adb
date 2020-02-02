@@ -404,10 +404,10 @@ package body DebugUI is
                raise Program_Error with "Can't set active Id for base type";
             end if;
             Set_Value
-              (Gtk_Adjustment(Get_Object(Builder, "adjpopulation")),
+              (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(BaseGrid, 1, 4))),
                Gdouble(SkyBases(I).Population));
             Set_Value
-              (Gtk_Adjustment(Get_Object(Builder, "adjreputation")),
+              (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(BaseGrid, 1, 5))),
                Gdouble(SkyBases(I).Reputation(1)));
             if SkyBases(I).Cargo.Length > 0 then
                Set_Value
@@ -791,11 +791,13 @@ package body DebugUI is
             SkyBase.Population :=
               Natural
                 (Get_Value
-                   (Gtk_Adjustment(Get_Object(Builder, "adjpopulation"))));
+                   (Get_Adjustment
+                      (Gtk_Spin_Button(Get_Child_At(BaseGrid, 1, 4)))));
             SkyBase.Reputation(1) :=
               Integer
                 (Get_Value
-                   (Gtk_Adjustment(Get_Object(Builder, "adjreputation"))));
+                   (Get_Adjustment
+                      (Gtk_Spin_Button(Get_Child_At(BaseGrid, 1, 5)))));
          end if;
       end loop;
    end UpdateBase;
@@ -1471,7 +1473,7 @@ package body DebugUI is
          Attach(BaseGrid, Label, 0, 4);
          SpinButton :=
            Gtk_Spin_Button_New
-             (Gtk_Adjustment(Get_Object(Builder, "adjpopulation")), 0.0);
+             (Gtk_Adjustment_New(0.0, 0.0, 10_000.0, 1.0, 10.0), 0.0);
          Set_Tooltip_Text
            (SpinButton, "Amount of people living in selected base.");
          Attach(BaseGrid, SpinButton, 1, 4);
@@ -1479,7 +1481,7 @@ package body DebugUI is
          Attach(BaseGrid, Label, 0, 5);
          SpinButton :=
            Gtk_Spin_Button_New
-             (Gtk_Adjustment(Get_Object(Builder, "adjreputation")), 0.0);
+             (Gtk_Adjustment_New(0.0, -100.0, 100.0, 1.0, 10.0), 0.0);
          Set_Tooltip_Text
            (SpinButton,
             "Player reputation in selected base. Value between -100 and 100.");
