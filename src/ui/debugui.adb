@@ -99,13 +99,16 @@ package body DebugUI is
    -- Self - Gtk_Button which was clicked
    -- SOURCE
    procedure MoveShip(Self: access Gtk_Button_Record'Class) is
-      pragma Unreferenced(Self);
       -- ****
+      MoveBox: constant Gtk_Box :=
+        Gtk_Box(Get_Child_At(Gtk_Grid(Get_Parent(Self)), 1, 0));
    begin
       PlayerShip.SkyX :=
-        Integer(Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjshipx"))));
+        Integer
+          (Get_Value(Get_Adjustment(Gtk_Spin_Button(Get_Child(MoveBox, 1)))));
       PlayerShip.SkyY :=
-        Integer(Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjshipy"))));
+        Integer
+          (Get_Value(Get_Adjustment(Gtk_Spin_Button(Get_Child(MoveBox, 3)))));
       ShowSkyMap;
    end MoveShip;
 
@@ -122,6 +125,7 @@ package body DebugUI is
       CrewIter: Gtk_Tree_Iter;
       ComboBox: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Child_At(Gtk_Grid(Self), 1, 1));
+      MoveBox: constant Gtk_Box := Gtk_Box(Get_Child_At(Gtk_Grid(Self), 1, 0));
    begin
       Setting := True;
       Clear(CrewList);
@@ -141,10 +145,10 @@ package body DebugUI is
       Setting := False;
       Set_Active(ComboBox, 0);
       Set_Value
-        (Gtk_Adjustment(Get_Object(Builder, "adjshipx")),
+        (Get_Adjustment(Gtk_Spin_Button(Get_Child(MoveBox, 1))),
          Gdouble(PlayerShip.SkyX));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Builder, "adjshipy")),
+        (Get_Adjustment(Gtk_Spin_Button(Get_Child(MoveBox, 3))),
          Gdouble(PlayerShip.SkyY));
    end UpdateShip;
 
@@ -1173,7 +1177,7 @@ package body DebugUI is
          Pack_Start(MoveBox, Gtk_Label_New("X:"), False);
          SpinButton :=
            Gtk_Spin_Button_New
-             (Gtk_Adjustment(Get_Object(Builder, "adjshipx")), 0.0);
+             (Gtk_Adjustment_New(1.0, 1.0, 1024.0, 1.0, 10.0), 0.0);
          Set_Tooltip_Text
            (SpinButton,
             "New X coordinate on map for the player ship. Value between 1 and 1024.");
@@ -1181,7 +1185,7 @@ package body DebugUI is
          Pack_Start(MoveBox, Gtk_Label_New("Y:"), False);
          SpinButton :=
            Gtk_Spin_Button_New
-             (Gtk_Adjustment(Get_Object(Builder, "adjshipy")), 0.0);
+             (Gtk_Adjustment_New(1.0, 1.0, 1024.0, 1.0, 10.0), 0.0);
          Set_Tooltip_Text
            (SpinButton,
             "New Y coordinate on map for the player ship. Value between 1 and 1024.");
