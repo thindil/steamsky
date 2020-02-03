@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file.
 - Show current ship speed when option "Show numeric values" is enabled
 - Info about speed difference between player and enemy ships in combat
 - Types of ammunition: normal, piercing, explosive
+- Guns and harpoon guns have size now and require proper size of turret to be
+  installed
 
 ### Changed
 - Updated mobs data
