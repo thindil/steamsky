@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -64,8 +64,8 @@ package body Bases.ShipyardUI is
      (ModuleInfo: in out Unbounded_String; Installing: Boolean) is
       -- ****
       MType: ModuleType;
-      MAmount, Size, Weight, MaxValue, Value, MaxOwners: Natural;
-      ShipModuleIndex: Positive;
+      MAmount, Weight, MaxValue, Value, MaxOwners: Natural;
+      ShipModuleIndex, Size: Positive;
    begin
       if Installing then
          MType := Modules_List(ModuleIndex).MType;
@@ -172,7 +172,7 @@ package body Bases.ShipyardUI is
          when others =>
             null;
       end case;
-      if Size > 0 then
+      if MType not in HULL | ARMOR then
          Append(ModuleInfo, LF & "Size:" & Natural'Image(Size));
          if Installing then
             for Module of PlayerShip.Modules loop
@@ -296,8 +296,9 @@ package body Bases.ShipyardUI is
          Set_Sensitive(Gtk_Widget(Get_Object(Object, "btninstall")), False);
       else
          if PlayerShip.Cargo(MoneyIndex2).Amount < Cost or
-           (AllSpace - UsedSpace) < Modules_List(ModuleIndex).Size or
-           Modules_List(ModuleIndex).Size > MaxSize then
+           ((Modules_List(ModuleIndex).MType not in GUN | HARPOON_GUN) and
+            ((AllSpace - UsedSpace) < Modules_List(ModuleIndex).Size or
+             Modules_List(ModuleIndex).Size > MaxSize)) then
             Set_Sensitive(Gtk_Widget(Get_Object(Object, "btninstall")), False);
          else
             Set_Sensitive(Gtk_Widget(Get_Object(Object, "btninstall")), True);

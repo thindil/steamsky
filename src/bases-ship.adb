@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -91,7 +91,10 @@ package body Bases.Ship is
                HullIndex := Modules_Container.To_Index(C);
                ModulesAmount := PlayerShip.Modules(C).InstalledModules;
             when TURRET =>
-               if PlayerShip.Modules(C).GunIndex = 0 then
+               if PlayerShip.Modules(C).GunIndex = 0
+                 and then
+                   Modules_List(PlayerShip.Modules(C).ProtoIndex).Size >=
+                   Modules_List(ModuleIndex).Size then
                   FreeTurretIndex := Modules_Container.To_Index(C);
                end if;
             when others =>
@@ -132,7 +135,7 @@ package body Bases.Ship is
                Modules_List(ModuleIndex).MType = HARPOON_GUN) and
               FreeTurretIndex = 0 then
                raise BasesShip_Installation_Error
-                 with "You don't have free turret for next gun. Install new turret or remove old gun first.";
+                 with "You don't have free turret with proprer size for this gun. Install new turret or remove old gun first.";
             end if;
          else
             for Module of PlayerShip.Modules loop
@@ -385,10 +388,15 @@ package body Bases.Ship is
             when others =>
                null;
          end case;
-         ModulesAmount :=
-           ModulesAmount -
-           Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex).Size;
-         PlayerShip.Modules(HullIndex).InstalledModules := ModulesAmount;
+         if Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+             .MType not in
+             HULL | ARMOR | GUN | HARPOON_GUN then
+            ModulesAmount :=
+              ModulesAmount -
+              Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+                .Size;
+            PlayerShip.Modules(HullIndex).InstalledModules := ModulesAmount;
+         end if;
          if PlayerShip.UpgradeModule = ShipModuleIndex then
             PlayerShip.UpgradeModule := 0;
             for C in PlayerShip.Crew.Iterate loop

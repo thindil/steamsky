@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -68,7 +68,7 @@ package ShipModules is
       Price: Natural;
       InstallTime: Positive;
       Unique: Boolean;
-      Size: Natural;
+      Size: Positive;
       Description: Unbounded_String;
       MaxOwners: Natural;
    end record;
