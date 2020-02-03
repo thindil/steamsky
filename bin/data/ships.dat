@@ -5689,7 +5689,7 @@ during combat. -->
   <cargo index="179" maxamount="1000" minamount="500"/>
   <cargo index="167" maxamount="800" minamount="600"/>
   <member index="94"/>
-  <member amount="3" index="196"/>
+  <member amount="3" index="95"/>
   <member index="197"/>
   <member index="46"/>
   <member index="198" maxamount="8" minamount="4"/>
@@ -5710,7 +5710,7 @@ during combat. -->
   <cargo index="179" maxamount="1000" minamount="500"/>
   <cargo index="167" maxamount="800" minamount="600"/>
   <member index="94"/>
-  <member amount="3" index="208"/>
+  <member amount="3" index="95"/>
   <member index="46"/>
   <member index="209"/>
   <member index="210" maxamount="8" minamount="4"/>
@@ -5752,8 +5752,8 @@ during combat. -->
   <cargo index="179" maxamount="1000" minamount="500"/>
   <cargo index="167" maxamount="800" minamount="600"/>
   <member index="94"/>
-  <member amount="4" index="196"/>
-  <member index="196"/>
+  <member amount="4" index="95"/>
+  <member index="197"/>
   <member index="198" maxamount="12" minamount="8"/>
   <description>Advanced and upgraded version of huge, well armored poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
@@ -5772,7 +5772,7 @@ during combat. -->
   <cargo index="179" maxamount="1000" minamount="500"/>
   <cargo index="167" maxamount="800" minamount="600"/>
   <member index="94"/>
-  <member amount="4" index="208"/>
+  <member amount="4" index="95"/>
   <member index="209"/>
   <member index="210" maxamount="12" minamount="8"/>
   <description>Advanced and upgraded version of huge, well armored independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
