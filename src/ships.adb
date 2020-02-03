@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -359,8 +359,11 @@ package body Ships is
             elsif TmpShip.Modules(I).MType = HULL then
                HullIndex := Modules_Container.To_Index(I);
             end if;
-            Amount :=
-              Amount + Modules_List(TmpShip.Modules(I).ProtoIndex).Size;
+            if Modules_List(TmpShip.Modules(I).ProtoIndex).MType not in GUN |
+                  HARPOON_GUN | ARMOR | HULL then
+               Amount :=
+                 Amount + Modules_List(TmpShip.Modules(I).ProtoIndex).Size;
+            end if;
          end loop;
          TmpShip.Modules(HullIndex).InstalledModules := Amount;
       end;

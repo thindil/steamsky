@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -44,7 +44,7 @@ package body ShipModules is
            (Name => Null_Unbounded_String, MType => ENGINE, Weight => 0,
             Value => 0, MaxValue => 0, Durability => 0,
             RepairMaterial => Null_Unbounded_String, RepairSkill => 2,
-            Price => 0, InstallTime => 60, Unique => False, Size => 0,
+            Price => 0, InstallTime => 60, Unique => False, Size => 1,
             Description => Null_Unbounded_String, MaxOwners => 1);
          ModuleNode := Item(NodesList, I);
          ModuleIndex :=
