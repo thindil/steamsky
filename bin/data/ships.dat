@@ -5688,7 +5688,7 @@ during combat. -->
   <cargo index="3" maxamount="2000" minamount="1500"/>
   <cargo index="179" maxamount="1000" minamount="500"/>
   <cargo index="167" maxamount="800" minamount="600"/>
-  <member index="195"/>
+  <member index="94"/>
   <member amount="3" index="196"/>
   <member index="197"/>
   <member index="46"/>
@@ -5709,7 +5709,7 @@ during combat. -->
   <cargo index="3" maxamount="2000" minamount="1500"/>
   <cargo index="179" maxamount="1000" minamount="500"/>
   <cargo index="167" maxamount="800" minamount="600"/>
-  <member index="207"/>
+  <member index="94"/>
   <member amount="3" index="208"/>
   <member index="46"/>
   <member index="209"/>
@@ -5751,7 +5751,7 @@ during combat. -->
   <cargo index="3" maxamount="2000" minamount="1500"/>
   <cargo index="179" maxamount="1000" minamount="500"/>
   <cargo index="167" maxamount="800" minamount="600"/>
-  <member index="195"/>
+  <member index="94"/>
   <member amount="4" index="196"/>
   <member index="196"/>
   <member index="198" maxamount="12" minamount="8"/>
@@ -5771,7 +5771,7 @@ during combat. -->
   <cargo index="3" maxamount="2000" minamount="1500"/>
   <cargo index="179" maxamount="1000" minamount="500"/>
   <cargo index="167" maxamount="800" minamount="600"/>
-  <member index="207"/>
+  <member index="94"/>
   <member amount="4" index="208"/>
   <member index="209"/>
   <member index="210" maxamount="12" minamount="8"/>
