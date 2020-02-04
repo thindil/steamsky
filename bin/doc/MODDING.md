@@ -345,7 +345,9 @@ Value must be existing skill name.
   module from ship.
 - Optional attribute `unique`: If set to 'Y' then each ship can have only one
   module of that type.
-- Optional attribute `size`: Amount of hull module space used by module.
+- Optional attribute `size`: Amount of hull module space used by module. For
+  guns and harpoon guns it is minimum size of turret needed for that gun or
+  harpoon gun.
 - Optional attribute `maxowners`: How many owners or workers (for workshop's
   types of modules) the module can have. Default value is 1.
 - Text between `module` tags is module description.
