@@ -683,7 +683,8 @@ package body DebugUI is
         PlayerShip.Cargo
           (Positive'Value(Get_Active_Id(Gtk_Combo_Box_Text(Self))));
       Set_Value
-        (Gtk_Adjustment(Get_Object(Builder, "adjupdatecargo")),
+        (Get_Adjustment
+           (Gtk_Spin_Button(Get_Child_At(Gtk_Grid(Get_Parent(Self)), 3, 1))),
          Gdouble(Item.Amount));
    end SetCargoAmount;
 
@@ -740,7 +741,9 @@ package body DebugUI is
          Amount =>
            (Integer
               (Get_Value
-                 (Gtk_Adjustment(Get_Object(Builder, "adjupdatecargo")))) -
+                 (Get_Adjustment
+                    (Gtk_Spin_Button
+                       (Get_Child_At(Gtk_Grid(Get_Parent(Self)), 3, 1))))) -
             PlayerShip.Cargo(CargoIndex).Amount),
          CargoIndex => CargoIndex);
    end UpdateShipCargo;
@@ -1307,7 +1310,7 @@ package body DebugUI is
          RendererSpin := Gtk_Cell_Renderer_Spin_New;
          Set_Property
            (RendererSpin, Gtk.Cell_Renderer_Spin.Adjustment_Property,
-            Get_Object(Builder, "adjstats"));
+            Gtk_Adjustment_New(1.0, 1.0, 50.0, 1.0, 5.0));
          Set_Property
            (RendererSpin, Gtk.Cell_Renderer_Text.Editable_Property, True);
          Pack_Start(Area, RendererSpin, True);
@@ -1347,7 +1350,7 @@ package body DebugUI is
          Area := Gtk_Cell_Area_Box_New;
          Set_Property
            (RendererSpin, Gtk.Cell_Renderer_Spin.Adjustment_Property,
-            Get_Object(Builder, "adjskills"));
+            Gtk_Adjustment_New(1.0, 1.0, 100.0, 1.0, 10.0));
          Set_Property
            (RendererSpin, Gtk.Cell_Renderer_Text.Editable_Property, True);
          Pack_Start(Area, RendererSpin, True);
@@ -1422,7 +1425,7 @@ package body DebugUI is
          Attach(CargoGrid, Label, 2, 1);
          SpinButton :=
            Gtk_Spin_Button_New
-             (Gtk_Adjustment(Get_Object(Builder, "adjupdatecargo")), 0.0);
+             (Gtk_Adjustment_New(1.0, 1.0, 10_000_000.0, 1.0, 10.0), 0.0);
          Set_Tooltip_Text
            (SpinButton,
             "New amount of selected item in the player ship cargo.");
