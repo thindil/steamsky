@@ -1481,16 +1481,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <equipment index="4" slot="Arms"/>
   <equipment index="5" slot="Legs"/>
  </mobile>
- <mobile index="198" order="DEFEND">
-  <skill maxlevel="80" minlevel="60" name="WeaponSkill"/>
-  <skill maxlevel="80" minlevel="60" name="Dodge"/>
-  <attribute maxlevel="45" minlevel="35"/>
-  <attribute maxlevel="45" minlevel="35"/>
-  <attribute maxlevel="45" minlevel="35"/>
-  <attribute maxlevel="45" minlevel="35"/>
-  <priority name="Defend ship" value="Normal"/>
-  <priority name="Board enemy ship" value="High"/>
- </mobile>
  <mobile index="202" order="DEFEND">
   <skill maxlevel="60" minlevel="40" name="WeaponSkill"/>
   <skill maxlevel="60" minlevel="40" name="Dodge"/>
@@ -1508,16 +1498,6 @@ Possible values for "slot": Weapon, Shield, Head, Torso, Arms, Legs, Tools.-->
   <attribute maxlevel="25" minlevel="15"/>
   <attribute maxlevel="25" minlevel="15"/>
   <attribute maxlevel="25" minlevel="15"/>
-  <priority name="Defend ship" value="Normal"/>
-  <priority name="Board enemy ship" value="High"/>
- </mobile>
- <mobile index="210" order="DEFEND">
-  <skill maxlevel="80" minlevel="60" name="WeaponSkill"/>
-  <skill maxlevel="80" minlevel="60" name="Dodge"/>
-  <attribute maxlevel="45" minlevel="35"/>
-  <attribute maxlevel="45" minlevel="35"/>
-  <attribute maxlevel="45" minlevel="35"/>
-  <attribute maxlevel="45" minlevel="35"/>
   <priority name="Defend ship" value="Normal"/>
   <priority name="Board enemy ship" value="High"/>
  </mobile>
