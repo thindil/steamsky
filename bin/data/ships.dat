@@ -5589,7 +5589,7 @@ during combat. -->
   <member amount="3" index="44"/>
   <member index="46"/>
   <member index="45"/>
-  <member index="202" maxamount="8" minamount="4"/>
+  <member index="115" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored poleis traders ship. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="292" maxloot="1200" minloot="750" name="Advanced huge independent trader mk V" owner="INDEPENDENT">
@@ -5610,7 +5610,7 @@ during combat. -->
   <member amount="3" index="44"/>
   <member index="46"/>
   <member index="45"/>
-  <member index="214" maxamount="8" minamount="4"/>
+  <member index="115" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored independent traders ship. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="293" maxloot="1200" minloot="750" name="Advanced huge pirates trader mk V" owner="PIRATES">
@@ -5651,7 +5651,7 @@ during combat. -->
   <member index="43"/>
   <member amount="4" index="44"/>
   <member index="45"/>
-  <member index="202" maxamount="12" minamount="8"/>
+  <member index="115" maxamount="12" minamount="8"/>
   <description>Advanced and upgraded version of huge, well armored poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="295" maxloot="1200" minloot="750" name="Advanced huge independent patrol ship mk V" owner="INDEPENDENT">
@@ -5671,7 +5671,7 @@ during combat. -->
   <member index="43"/>
   <member amount="4" index="44"/>
   <member index="45"/>
-  <member index="214" maxamount="12" minamount="8"/>
+  <member index="115" maxamount="12" minamount="8"/>
   <description>Advanced and upgraded version of huge, well armored independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="COWARD" index="296" maxloot="1200" minloot="750" name="Advanced huge poleis trader mk VI" owner="POLEIS">
