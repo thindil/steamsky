@@ -1096,6 +1096,8 @@ package body DebugUI is
       StackSwitch: constant Gtk_Stack_Switcher := Gtk_Stack_Switcher_New;
       Switchbox: constant Gtk_Vbox := Gtk_Vbox_New;
       WindowBox: constant Gtk_Hbox := Gtk_Hbox_New;
+      BasesList: constant Gtk_List_Store :=
+        Gtk_List_Store_Newv((0 => GType_String));
    begin
       if Builder /= null then
          return;
@@ -1118,10 +1120,9 @@ package body DebugUI is
             Append(List, Iter);
             Set(List, Iter, 0, To_String(Item.Name));
          end loop;
-         List := Gtk_List_Store(Get_Object(Builder, "baseslist"));
          for I in SkyBases'Range loop
-            Append(List, Iter);
-            Set(List, Iter, 0, To_String(SkyBases(I).Name));
+            Append(BasesList, Iter);
+            Set(BasesList, Iter, 0, To_String(SkyBases(I).Name));
          end loop;
          List := Gtk_List_Store(Get_Object(Builder, "shipslist"));
          for Ship of ProtoShips_List loop
@@ -1438,12 +1439,14 @@ package body DebugUI is
          BaseGrid: constant Gtk_Grid := Gtk_Grid_New;
          BaseEntry: constant Gtk_Entry := Gtk_Entry_New;
          BaseBox: constant Gtk_Vbox := Gtk_Vbox_New;
+         BasesCompletion: constant Gtk_Entry_Completion :=
+           Gtk_Entry_Completion_New;
       begin
+         Set_Model(BasesCompletion, +(BasesList));
+         Set_Text_Column(BasesCompletion, 0);
          Label := Gtk_Label_New("Base:");
          Attach(BaseGrid, Label, 0, 0);
-         Set_Completion
-           (BaseEntry,
-            Gtk_Entry_Completion(Get_Object(Builder, "basescompletion1")));
+         Set_Completion(BaseEntry, BasesCompletion);
          Set_Tooltip_Text
            (BaseEntry,
             "Start typing here a name of the base to select it from the list. Base data will show after pressing key Enter.");
@@ -1579,13 +1582,15 @@ package body DebugUI is
          MinutesEntry: constant Gtk_Spin_Button :=
            Gtk_Spin_Button_New
              (Gtk_Adjustment_New(15.0, 15.0, 12_000.0, 1.0, 10.0), 0.0);
+         BasesCompletion: constant Gtk_Entry_Completion :=
+           Gtk_Entry_Completion_New;
       begin
+         Set_Model(BasesCompletion, +(BasesList));
+         Set_Text_Column(BasesCompletion, 0);
          Label := Gtk_Label_New("Base:");
          Attach(EventGrid, Label, 0, 0);
          EventEntry := Gtk_Entry_New;
-         Set_Completion
-           (EventEntry,
-            Gtk_Entry_Completion(Get_Object(Builder, "basescompletion")));
+         Set_Completion(EventEntry, BasesCompletion);
          Set_Tooltip_Text
            (EventEntry,
             "Start typing the name of a base here to select it from the list.");
