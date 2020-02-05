@@ -15,6 +15,9 @@ All notable changes to this project will be documented in this file.
 - Updated some ships crews
 - Updated MODDING.md
 - Updated help
+- Renamed Bronze turret, Iron turret, Steel turret and Titanium turret to
+  Medium bronze turret, Medium iron turret, Medium steel turret and Medium
+  Titanium turret
 
 ## [4.6] - 2019-01-26
 
