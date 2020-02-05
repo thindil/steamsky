@@ -2,32 +2,6 @@
 <!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.14"/>
-  <object class="GtkListStore" id="baseslist">
-    <columns>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkEntryCompletion" id="basescompletion">
-    <property name="model">baseslist</property>
-    <property name="text_column">0</property>
-    <child>
-      <object class="GtkCellRendererText"/>
-      <attributes>
-        <attribute name="text">0</attribute>
-      </attributes>
-    </child>
-  </object>
-  <object class="GtkEntryCompletion" id="basescompletion1">
-    <property name="model">baseslist</property>
-    <property name="text_column">0</property>
-    <child>
-      <object class="GtkCellRendererText"/>
-      <attributes>
-        <attribute name="text">0</attribute>
-      </attributes>
-    </child>
-  </object>
   <object class="GtkListStore" id="crewlist">
     <columns>
       <!-- column-name name -->
