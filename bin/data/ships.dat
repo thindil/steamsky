@@ -2788,7 +2788,7 @@ during combat. -->
   <member index="39"/>
   <member amount="5" index="40"/>
   <member index="41"/>
-  <member index="119" maxamount="9" minamount="5"/>
+  <member index="102" maxamount="9" minamount="5"/>
   <description>Huge, well armored pirate ship (upgraded version). Like many pirates, they prefer to disarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="156" maxloot="1200" minloot="750" name="Advanced huge pirate ship mk V" owner="PIRATES">
@@ -2810,7 +2810,7 @@ during combat. -->
   <member index="43"/>
   <member amount="5" index="44"/>
   <member index="45"/>
-  <member index="115" maxamount="11" minamount="7"/>
+  <member index="101" maxamount="11" minamount="7"/>
   <description>Advanced and upgraded version of huge, well armored pirate ship. Like many pirates, they prefer to disarm enemies first.</description>
  </ship>
  <ship combatai="BERSERKER" index="157" maxloot="750" minloot="500" name="Huge undead ship mk V" owner="UNDEAD">
@@ -2896,7 +2896,7 @@ during combat. -->
   <recipe index="2"/>
   <recipe index="4"/>
   <recipe index="20"/>
-  <member index="189"/>
+  <member index="106"/>
   <member index="190"/>
   <member index="191"/>
  </ship>
@@ -5074,7 +5074,7 @@ during combat. -->
   <member amount="3" index="40"/>
   <member index="41"/>
   <member index="42"/>
-  <member index="119" maxamount="5" minamount="3"/>
+  <member index="102" maxamount="5" minamount="3"/>
   <description>Huge, well armored, upgraded version of poleis traders ship. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="267" maxloot="1000" minloot="500" name="Huge independent trader mk V" owner="INDEPENDENT">
@@ -5095,7 +5095,7 @@ during combat. -->
   <member amount="3" index="40"/>
   <member index="41"/>
   <member index="42"/>
-  <member index="119" maxamount="5" minamount="3"/>
+  <member index="102" maxamount="5" minamount="3"/>
   <description>Huge, well armored, upgraded version of independent traders ship. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="268" maxloot="1000" minloot="500" name="Huge pirates trader mk V" owner="PIRATES">
@@ -5116,7 +5116,7 @@ during combat. -->
   <member amount="3" index="40"/>
   <member index="41"/>
   <member index="42"/>
-  <member index="119" maxamount="5" minamount="3"/>
+  <member index="102" maxamount="5" minamount="3"/>
   <description>Huge, well armored, upgraded version of pirates traders ship. Avoids any fights.</description>
  </ship>
  <ship combatai="DISARMER" index="269" maxloot="1000" minloot="500" name="Huge poleis patrol ship mk V" owner="POLEIS">
@@ -5136,7 +5136,7 @@ during combat. -->
   <member index="39"/>
   <member amount="4" index="40"/>
   <member index="41"/>
-  <member index="119" maxamount="10" minamount="6"/>
+  <member index="102" maxamount="10" minamount="6"/>
   <description>Huge, well armored, upgraded version of poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="270" maxloot="1000" minloot="500" name="Huge independent patrol ship mk V" owner="INDEPENDENT">
@@ -5156,7 +5156,7 @@ during combat. -->
   <member index="39"/>
   <member amount="4" index="40"/>
   <member index="41"/>
-  <member index="119" maxamount="10" minamount="6"/>
+  <member index="102" maxamount="10" minamount="6"/>
   <description>Huge, well armored, upgraded version of independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="COWARD" index="271" maxloot="1000" minloot="500" name="Huge poleis trader mk VI" owner="POLEIS">
@@ -5589,7 +5589,7 @@ during combat. -->
   <member amount="3" index="44"/>
   <member index="46"/>
   <member index="45"/>
-  <member index="115" maxamount="8" minamount="4"/>
+  <member index="101" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored poleis traders ship. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="292" maxloot="1200" minloot="750" name="Advanced huge independent trader mk V" owner="INDEPENDENT">
@@ -5610,7 +5610,7 @@ during combat. -->
   <member amount="3" index="44"/>
   <member index="46"/>
   <member index="45"/>
-  <member index="115" maxamount="8" minamount="4"/>
+  <member index="101" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored independent traders ship. Avoids any fights.</description>
  </ship>
  <ship combatai="COWARD" index="293" maxloot="1200" minloot="750" name="Advanced huge pirates trader mk V" owner="PIRATES">
@@ -5631,7 +5631,7 @@ during combat. -->
   <member amount="3" index="44"/>
   <member index="46"/>
   <member index="45"/>
-  <member index="115" maxamount="8" minamount="4"/>
+  <member index="101" maxamount="8" minamount="4"/>
   <description>Advanced and upgraded version of huge, well armored pirates traders ship. Avoids any fights.</description>
  </ship>
  <ship combatai="DISARMER" index="294" maxloot="1200" minloot="750" name="Advanced huge poleis patrol ship mk V" owner="POLEIS">
@@ -5651,7 +5651,7 @@ during combat. -->
   <member index="43"/>
   <member amount="4" index="44"/>
   <member index="45"/>
-  <member index="115" maxamount="12" minamount="8"/>
+  <member index="101" maxamount="12" minamount="8"/>
   <description>Advanced and upgraded version of huge, well armored poleis patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="DISARMER" index="295" maxloot="1200" minloot="750" name="Advanced huge independent patrol ship mk V" owner="INDEPENDENT">
@@ -5671,7 +5671,7 @@ during combat. -->
   <member index="43"/>
   <member amount="4" index="44"/>
   <member index="45"/>
-  <member index="115" maxamount="12" minamount="8"/>
+  <member index="101" maxamount="12" minamount="8"/>
   <description>Advanced and upgraded version of huge, well armored independent patrol ship. As a law enforcers they trying dismarm enemies first.</description>
  </ship>
  <ship combatai="COWARD" index="296" maxloot="1200" minloot="750" name="Advanced huge poleis trader mk VI" owner="POLEIS">
@@ -5803,9 +5803,9 @@ during combat. -->
   <recipe index="2"/>
   <recipe index="4"/>
   <recipe index="20"/>
-  <member index="185"/>
-  <member index="186"/>
-  <member index="187"/>
+  <member index="103"/>
+  <member index="104"/>
+  <member index="105"/>
  </ship>
  <ship index="302" name="Merchant Independent Player Ship" owner="INDEPENDENT">
   <module index="1"/>
@@ -5829,8 +5829,8 @@ during combat. -->
   <recipe index="1"/>
   <recipe index="2"/>
   <recipe index="20"/>
-  <member index="185"/>
-  <member index="186"/>
+  <member index="103"/>
+  <member index="104"/>
  </ship>
  <ship index="303" name="Hunter Independent Player Ship" owner="INDEPENDENT">
   <module index="1"/>
@@ -5858,9 +5858,9 @@ during combat. -->
   <recipe index="2"/>
   <recipe index="4"/>
   <recipe index="20"/>
-  <member index="185"/>
-  <member index="186"/>
-  <member index="187"/>
+  <member index="103"/>
+  <member index="104"/>
+  <member index="105"/>
  </ship>
  <ship index="304" name="Explorer Independent Player Ship" owner="INDEPENDENT">
   <module index="1"/>
@@ -5889,9 +5889,9 @@ during combat. -->
   <recipe index="2"/>
   <recipe index="4"/>
   <recipe index="20"/>
-  <member index="185"/>
-  <member index="186"/>
-  <member index="187"/>
+  <member index="103"/>
+  <member index="104"/>
+  <member index="105"/>
  </ship>
  <ship index="305" name="Crafter Independent Player Ship" owner="INDEPENDENT">
   <module index="1"/>
@@ -5925,9 +5925,9 @@ during combat. -->
   <recipe index="8"/>
   <recipe index="9"/>
   <recipe index="20"/>
-  <member index="185"/>
-  <member index="186"/>
-  <member index="187"/>
+  <member index="103"/>
+  <member index="104"/>
+  <member index="105"/>
  </ship>
  <ship index="306" name="Merchant Pirates Player Ship" owner="PIRATES">
   <module index="1"/>
@@ -5951,7 +5951,7 @@ during combat. -->
   <recipe index="1"/>
   <recipe index="2"/>
   <recipe index="20"/>
-  <member index="189"/>
+  <member index="106"/>
   <member index="190"/>
  </ship>
  <ship index="307" name="Hunter PIRATES Player Ship" owner="PIRATES">
@@ -5980,7 +5980,7 @@ during combat. -->
   <recipe index="2"/>
   <recipe index="4"/>
   <recipe index="20"/>
-  <member index="189"/>
+  <member index="106"/>
   <member index="190"/>
   <member index="191"/>
  </ship>
