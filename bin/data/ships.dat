@@ -2897,8 +2897,8 @@ during combat. -->
   <recipe index="4"/>
   <recipe index="20"/>
   <member index="106"/>
-  <member index="190"/>
-  <member index="191"/>
+  <member index="107"/>
+  <member index="108"/>
  </ship>
  <ship combatai="ATTACKER" index="162" maxloot="1000" minloot="750" name="Huge inquisition ship mk V" owner="INQUISITION">
   <module index="186"/>
@@ -3020,8 +3020,8 @@ during combat. -->
   <recipe index="2"/>
   <recipe index="4"/>
   <recipe index="20"/>
-  <member index="193"/>
-  <member index="194"/>
+  <member index="109"/>
+  <member index="110"/>
   <member index="83"/>
  </ship>
  <ship index="167" name="Merchant Player Ship" owner="POLEIS">
@@ -5952,7 +5952,7 @@ during combat. -->
   <recipe index="2"/>
   <recipe index="20"/>
   <member index="106"/>
-  <member index="190"/>
+  <member index="107"/>
  </ship>
  <ship index="307" name="Hunter PIRATES Player Ship" owner="PIRATES">
   <module index="1"/>
@@ -5981,8 +5981,8 @@ during combat. -->
   <recipe index="4"/>
   <recipe index="20"/>
   <member index="106"/>
-  <member index="190"/>
-  <member index="191"/>
+  <member index="107"/>
+  <member index="108"/>
  </ship>
  <ship index="308" name="Hunter Inquisition Player Ship" owner="INQUISITION">
   <module index="1"/>
@@ -6010,8 +6010,8 @@ during combat. -->
   <recipe index="2"/>
   <recipe index="4"/>
   <recipe index="20"/>
-  <member index="193"/>
-  <member index="194"/>
+  <member index="109"/>
+  <member index="110"/>
   <member index="83"/>
  </ship>
 </ships>
