@@ -121,7 +121,12 @@ package body DebugUI is
    procedure UpdateShip(Self: access Gtk_Widget_Record'Class) is
       -- ****
       CrewList: constant Gtk_List_Store :=
-        Gtk_List_Store(Get_Object(Builder, "crewlist"));
+        -(Get_Model
+           (Gtk_Combo_Box
+              (Get_Child
+                 (Gtk_Box
+                    (Get_Child(Gtk_Box(Get_Child_By_Name(Stack, "page1")), 0)),
+                  1))));
       CrewIter: Gtk_Tree_Iter;
       ComboBox: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Child_At(Gtk_Grid(Self), 1, 1));
@@ -1258,7 +1263,7 @@ package body DebugUI is
          MemberBox: constant Gtk_Hbox := Gtk_Hbox_New;
          MemberComboBox: constant Gtk_Combo_Box :=
            Gtk_Combo_Box_New_With_Model
-             (+(Gtk_List_Store(Get_Object(Builder, "crewlist"))));
+             (+(Gtk_List_Store_Newv((GType_String, GType_String))));
       begin
          HBox := Gtk_Hbox_New;
          Label := Gtk_Label_New("Member");
