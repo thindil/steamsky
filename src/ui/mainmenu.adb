@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -1152,7 +1152,7 @@ package body MainMenu is
       Append(ErrorText, LF);
       Append(ErrorText, "-------------------------------------------------");
       Append(ErrorText, LF);
-      Append(ErrorText, Symbolic_Traceback(An_Exception));
+      Append(ErrorText, Symbolic_Traceback_No_Hex(An_Exception));
       Append(ErrorText, LF);
       Append(ErrorText, "-------------------------------------------------");
       Put_Line(ErrorFile, To_String(ErrorText));
