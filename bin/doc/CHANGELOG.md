@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
   Medium bronze turret, Medium iron turret, Medium steel turret and Medium
   Titanium turret
 - Renamed Heavy turrets to Large turrets
+- Updated factions data
 
 ## [4.6] - 2019-01-26
 
