@@ -151,11 +151,11 @@ faction ships don't need pilot or engineer to fly (they are optional), `loner`
 bases of that faction are not grouped near self.
 -->
   <flag name="loner" />
-  <career index="general" playerindex="184" shipindex="301">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
-  <career index="merchant" playerindex="184" shipindex="302">Career focused on trading. You get unarmed small ship with larger cargo space and more moneys. Your crew will be bit smaller that General. At beginning is better to avoid combat.</career>
-  <career index="hunter" playerindex="184" shipindex="303">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
-  <career index="explorer" playerindex="184" shipindex="304">Career focused on exploring. You get average equipped small ship, with smaller cargo space than general career's ship but with water collector installed on it.</career>
-  <career index="crafter" playerindex="184" shipindex="305">Career focused on crafting. You get average equipped small ship, with smaller cargo space than general career's ship but with furnace installed on it. Additionally, you will know more crafting recipes at start.</career>
+  <career index="general" playerindex="111" shipindex="301">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
+  <career index="merchant" playerindex="111" shipindex="302">Career focused on trading. You get unarmed small ship with larger cargo space and more moneys. Your crew will be bit smaller that General. At beginning is better to avoid combat.</career>
+  <career index="hunter" playerindex="111" shipindex="303">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
+  <career index="explorer" playerindex="111" shipindex="304">Career focused on exploring. You get average equipped small ship, with smaller cargo space than general career's ship but with water collector installed on it.</career>
+  <career index="crafter" playerindex="111" shipindex="305">Career focused on crafting. You get average equipped small ship, with smaller cargo space than general career's ship but with furnace installed on it. Additionally, you will know more crafting recipes at start.</career>
   <basetype index="0" chance="40" />
   <basetype index="1" chance="20" />
   <basetype index="2" chance="20" />
@@ -175,9 +175,9 @@ bases of that faction are not grouped near self.
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
   <flag name="loner" />
-  <career index="general" playerindex="188" shipindex="161">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
-  <career index="merchant" playerindex="188" shipindex="306">Career focused on trading. You get unarmed small ship with larger cargo space and more moneys. Your crew will be bit smaller that General. At beginning is better to avoid combat.</career>
-  <career index="hunter" playerindex="188" shipindex="307">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
+  <career index="general" playerindex="112" shipindex="161">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
+  <career index="merchant" playerindex="112" shipindex="306">Career focused on trading. You get unarmed small ship with larger cargo space and more moneys. Your crew will be bit smaller that General. At beginning is better to avoid combat.</career>
+  <career index="hunter" playerindex="112" shipindex="307">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
   <basetype index="0" chance="20" />
   <basetype index="1" chance="20" />
   <basetype index="2" chance="20" />
@@ -243,8 +243,8 @@ bases of that faction are not grouped near self.
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
   <flag name="fanaticism" />
-  <career index="general" playerindex="192" shipindex="166">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
-  <career index="hunter" playerindex="192" shipindex="308">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
+  <career index="general" playerindex="113" shipindex="166">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
+  <career index="hunter" playerindex="113" shipindex="308">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
   <basetype index="0" chance="20" />
   <basetype index="1" chance="20" />
   <basetype index="2" chance="20" />
