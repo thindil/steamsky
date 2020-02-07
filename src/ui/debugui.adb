@@ -1103,6 +1103,8 @@ package body DebugUI is
       WindowBox: constant Gtk_Hbox := Gtk_Hbox_New;
       BasesList: constant Gtk_List_Store :=
         Gtk_List_Store_Newv((0 => GType_String));
+      ItemsList: constant Gtk_List_Store :=
+        Gtk_List_Store_Newv((0 => GType_String));
    begin
       if Builder /= null then
          return;
@@ -1117,14 +1119,15 @@ package body DebugUI is
          return;
       end if;
       declare
-         List: Gtk_List_Store :=
-           Gtk_List_Store(Get_Object(Builder, "itemslist"));
+         List: Gtk_List_Store;
          Iter: Gtk_Tree_Iter;
       begin
+         Iter := Get_Iter_First(ItemsList);
          for Item of Items_List loop
-            Append(List, Iter);
-            Set(List, Iter, 0, To_String(Item.Name));
+            Append(ItemsList, Iter);
+            Set(ItemsList, Iter, 0, To_String(Item.Name));
          end loop;
+         Iter := Get_Iter_First(BasesList);
          for I in SkyBases'Range loop
             Append(BasesList, Iter);
             Set(BasesList, Iter, 0, To_String(SkyBases(I).Name));
@@ -1394,16 +1397,18 @@ package body DebugUI is
       declare
          CargoGrid: constant Gtk_Grid := Gtk_Grid_New;
          CargoEntry: constant Gtk_Entry := Gtk_Entry_New;
+         CargoCompletion: constant Gtk_Entry_Completion :=
+           Gtk_Entry_Completion_New;
       begin
+         Set_Model(CargoCompletion, +(ItemsList));
+         Set_Text_Column(CargoCompletion, 0);
          On_Map(CargoGrid, UpdateCargoInfo'Access);
          Button := Gtk_Button_New_With_Mnemonic("_Add");
          Set_Tooltip_Text
            (Button, "Add selected item to the player ship cargo.");
          On_Clicked(Button, AddCargo'Access);
          Attach(CargoGrid, Button, 0, 0);
-         Set_Completion
-           (CargoEntry,
-            Gtk_Entry_Completion(Get_Object(Builder, "cargocompletion")));
+         Set_Completion(CargoEntry, CargoCompletion);
          Set_Tooltip_Text
            (CargoEntry,
             "Start typing here a name of the item to select it from the list.");
@@ -1589,9 +1594,13 @@ package body DebugUI is
              (Gtk_Adjustment_New(15.0, 15.0, 12_000.0, 1.0, 10.0), 0.0);
          BasesCompletion: constant Gtk_Entry_Completion :=
            Gtk_Entry_Completion_New;
+         TradeCompletion: constant Gtk_Entry_Completion :=
+           Gtk_Entry_Completion_New;
       begin
          Set_Model(BasesCompletion, +(BasesList));
          Set_Text_Column(BasesCompletion, 0);
+         Set_Model(TradeCompletion, +(ItemsList));
+         Set_Text_Column(TradeCompletion, 0);
          Label := Gtk_Label_New("Base:");
          Attach(EventGrid, Label, 0, 0);
          EventEntry := Gtk_Entry_New;
@@ -1613,9 +1622,7 @@ package body DebugUI is
          Label := Gtk_Label_New("Item:");
          Attach(EventGrid, Label, 0, 2);
          EventEntry := Gtk_Entry_New;
-         Set_Completion
-           (EventEntry,
-            Gtk_Entry_Completion(Get_Object(Builder, "tradecompletion")));
+         Set_Completion(EventEntry, TradeCompletion);
          Set_Tooltip_Text
            (EventEntry,
             "Start typing the name of an item here to select it from the list.");
