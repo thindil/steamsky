@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Types of ammunition: normal, piercing, explosive
 - Guns and harpoon guns have size now and require proper size of turret to be
   installed
+- New ship module: huge bronze turret
 
 ### Changed
 - Updated mobs data
