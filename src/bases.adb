@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -155,8 +155,8 @@ package body Bases is
       BaseRecruits: Recruit_Container.Vector;
       Skills: Skills_Container.Vector;
       Gender: Character;
-      Price, Payment, MaxSkillAmount: Natural;
-      SkillIndex: Integer;
+      Price, Payment: Natural;
+      SkillIndex, MaxSkillAmount: Integer;
       Attributes: Attributes_Container.Vector;
       Inventory, TempTools: UnboundedString_Container.Vector;
       Equipment: Natural_Array(1 .. 7);
@@ -204,7 +204,7 @@ package body Bases is
       end if;
       RecruitsAmount := GetRandom(1, MaxRecruits);
       MaxSkillAmount :=
-        Natural
+        Integer
           (Float(Skills_List.Length) *
            (Float(SkyBases(BaseIndex).Reputation(1)) / 100.0));
       if MaxSkillAmount < 5 then
