@@ -315,7 +315,8 @@ package body Ships.UI.Handlers is
                               Length(Module.CraftingIndex)))
                           .Name));
                elsif Length(Module.CraftingIndex) > 12
-                 and then Slice(Module.CraftingIndex, 1, 11) = "Deconstruct" then
+                 and then Slice(Module.CraftingIndex, 1, 11) =
+                   "Deconstruct" then
                   Append
                     (ModuleInfo,
                      "Deconstructing " &
