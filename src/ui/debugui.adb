@@ -1105,6 +1105,8 @@ package body DebugUI is
         Gtk_List_Store_Newv((0 => GType_String));
       ItemsList: constant Gtk_List_Store :=
         Gtk_List_Store_Newv((0 => GType_String));
+      ModulesList: constant Gtk_List_Store :=
+        Gtk_List_Store_Newv((0 => GType_String));
    begin
       if Builder /= null then
          return;
@@ -1137,10 +1139,10 @@ package body DebugUI is
             Append(List, Iter);
             Set(List, Iter, 0, To_String(Ship.Name));
          end loop;
-         List := Gtk_List_Store(Get_Object(Builder, "moduleslist"));
+         Iter := Get_Iter_First(ModulesList);
          for Module of Modules_List loop
-            Append(List, Iter);
-            Set(List, Iter, 0, To_String(Module.Name));
+            Append(ModulesList, Iter);
+            Set(ModulesList, Iter, 0, To_String(Module.Name));
          end loop;
       end;
       DebugWindow := Gtk_Window_New;
@@ -1179,7 +1181,11 @@ package body DebugUI is
          ShipEntry: constant Gtk_Entry := Gtk_Entry_New;
          MoveBox: constant Gtk_Hbox := Gtk_Hbox_New;
          ShipBox: constant Gtk_Vbox := Gtk_Vbox_New;
+         ModulesCompletion: constant Gtk_Entry_Completion :=
+           Gtk_Entry_Completion_New;
       begin
+         Set_Model(ModulesCompletion, +(ModulesList));
+         Set_Text_Column(ModulesCompletion, 0);
          On_Map(ShipGrid, UpdateShip'Access);
          Button := Gtk_Button_New_With_Mnemonic("_Move ship");
          Set_Tooltip_Text
@@ -1210,9 +1216,7 @@ package body DebugUI is
          Set_Tooltip_Text(ComboBox, "Select module to edit.");
          On_Changed(Gtk_Combo_Box(ComboBox), SetModuleStats'Access);
          Attach(ShipGrid, ComboBox, 1, 1);
-         Set_Completion
-           (ShipEntry,
-            Gtk_Entry_Completion(Get_Object(Builder, "modulescompletion")));
+         Set_Completion(ShipEntry, ModulesCompletion);
          Set_Tooltip_Text
            (ShipEntry,
             "Select prototype module for this module. Start typying to select name of proto module. WARNING: If you select other type of module than previous (for example from Cabin to Workshop) the game can crash.");
