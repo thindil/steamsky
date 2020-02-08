@@ -22,6 +22,9 @@ All notable changes to this project will be documented in this file.
 - Renamed Heavy turrets to Large turrets
 - Updated factions data
 
+### Fixed
+- Crash on generating recruits
+
 ## [4.6] - 2019-01-26
 
 ### Added
