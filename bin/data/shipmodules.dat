@@ -548,5 +548,6 @@ types of modules) the module can have. Default value is 1.
  <module durability="2000" index="513" installtime="320" material="Orichalcum" maxowners="4" maxvalue="0" name="Huge orichalcum medical room" price="48000" size="4" skill="Engineering" type="MEDICAL_ROOM" unique="Y" value="0" weight="4000">Allows treatment of wounded crew members. Made of orichalcum. Huge sized.</module>
  <module durability="2400" index="514" installtime="320" material="Adamantium" maxowners="4" maxvalue="0" name="Huge adamantium medical room" price="96000" size="4" skill="Engineering" type="MEDICAL_ROOM" unique="Y" value="0" weight="4000">Allows treatment of wounded crew members. Made of adamantium. Huge sized.</module>
  <module durability="500" index="515" installtime="150" material="Bronze" maxvalue="0" name="Huge bronze turret" price="1250" size="1" skill="Engineering" type="TURRET" value="0" weight="400">Huge bronze turret. If the turret is destroyed, the gun is destroyed along with the gunner.</module>
+ <module durability="500" index="516" installtime="150" material="Iron" maxvalue="0" name="Huge iron turret" price="1500" size="1" skill="Engineering" type="TURRET" value="0" weight="420">Huge iron turret. If the turret is destroyed, the gun is destroyed along with the gunner.</module>
 </modules>
 
