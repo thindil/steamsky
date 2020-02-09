@@ -1107,6 +1107,8 @@ package body DebugUI is
         Gtk_List_Store_Newv((0 => GType_String));
       ModulesList: constant Gtk_List_Store :=
         Gtk_List_Store_Newv((0 => GType_String));
+      ShipsList: constant Gtk_List_Store :=
+        Gtk_List_Store_Newv((0 => GType_String));
    begin
       if Builder /= null then
          return;
@@ -1121,7 +1123,6 @@ package body DebugUI is
          return;
       end if;
       declare
-         List: Gtk_List_Store;
          Iter: Gtk_Tree_Iter;
       begin
          Iter := Get_Iter_First(ItemsList);
@@ -1134,10 +1135,9 @@ package body DebugUI is
             Append(BasesList, Iter);
             Set(BasesList, Iter, 0, To_String(SkyBases(I).Name));
          end loop;
-         List := Gtk_List_Store(Get_Object(Builder, "shipslist"));
          for Ship of ProtoShips_List loop
-            Append(List, Iter);
-            Set(List, Iter, 0, To_String(Ship.Name));
+            Append(ShipsList, Iter);
+            Set(ShipsList, Iter, 0, To_String(Ship.Name));
          end loop;
          Iter := Get_Iter_First(ModulesList);
          for Module of Modules_List loop
@@ -1534,12 +1534,14 @@ package body DebugUI is
          DeleteEventButton: constant Gtk_Button :=
            Gtk_Button_New_With_Label("Delete event");
          EventBox: constant Gtk_Vbox := Gtk_Vbox_New;
+         ShipsCompletion: constant Gtk_Entry_Completion :=
+           Gtk_Entry_Completion_New;
       begin
+         Set_Model(ShipsCompletion, +(ShipsList));
+         Set_Text_Column(ShipsCompletion, 0);
          Label := Gtk_Label_New("Ship:");
          Attach(EventGrid, Label, 0, 0);
-         Set_Completion
-           (ShipsEntry,
-            Gtk_Entry_Completion(Get_Object(Builder, "shipscompletion")));
+         Set_Completion(ShipsEntry, ShipsCompletion);
          Set_Tooltip_Text
            (ShipsEntry,
             "Start typing the name of a ship here to select it from the list.");
