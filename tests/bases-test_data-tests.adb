@@ -203,15 +203,32 @@ package body Bases.Test_Data.Tests is
       pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      OldReputation: constant Integer := SkyBases(BaseIndex).Reputation(1);
 
    begin
 
       SkyBases(BaseIndex).Recruits.Clear;
       SkyBases(BaseIndex).RecruitDate := (others => 0);
+      SkyBases(BaseIndex).Reputation(1) := 1;
       GenerateRecruits;
       Assert
         (SkyBases(BaseIndex).Recruits.Length > 0,
-         "Failed to generate recruits.");
+         "Failed to generate recruits for bases with positive reputation.");
+      SkyBases(BaseIndex).Recruits.Clear;
+      SkyBases(BaseIndex).RecruitDate := (others => 0);
+      SkyBases(BaseIndex).Reputation(1) := -1;
+      GenerateRecruits;
+      Assert
+        (SkyBases(BaseIndex).Recruits.Length > 0,
+         "Failed to generate recruits for bases with negative reputation.");
+      SkyBases(BaseIndex).Recruits.Clear;
+      SkyBases(BaseIndex).RecruitDate := (others => 0);
+      SkyBases(BaseIndex).Reputation(1) := 0;
+      GenerateRecruits;
+      Assert
+        (SkyBases(BaseIndex).Recruits.Length > 0,
+         "Failed to generate recruits for bases with no reputation.");
+      SkyBases(BaseIndex).Reputation(1) := OldReputation;
 
 --  begin read only
    end Test_GenerateRecruits_test_generaterecruits;
