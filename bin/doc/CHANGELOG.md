@@ -23,7 +23,7 @@ All notable changes to this project will be documented in this file.
 - Updated factions data
 
 ### Fixed
-- Crash on generating recruits
+- Crash on generating recruits (issue #46)
 
 ## [4.6] - 2019-01-26
 
