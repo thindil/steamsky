@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <help>
 <!--
-- Each help entry is between "entry" tags.
+- Each help entry is between the "entry" tags.
 - Attribute "index" is the help index, used mostly in showing help for
-  selected part of the game. It can be number or text.
-- Attribute "title" is help menu entry in main help menu. It can be number or
+  selected part of the game. It can be a number or text.
+- Attribute "title" is help menu entry in the main help menu. It can be a number or
   text.
 - Optional attribute `action`: what to do with this entry. Possible values
   are: "add" (add this entry, default option), "remove" (remove this entry) or
   "update" (update selected entry).
-- Text between tags "entry" is help entry text text visible when player select
-  this option from help menu.
+- Text between the "entry" tags is help entry text, visible when player selects
+  this option from the help menu.
 - Inside help text you can use special variables which later will be replaced
   by proper keys names. All  that variables have name `{GameKey [number]}`
   where `[number]` is between 1 and 27 (example: `{GameKey 9}`). Proper game
@@ -28,15 +28,15 @@
   replaced with name of attribute used to count max character encumbrance,
   `{PilotingSkill}` which later will be replaced with name
   of skill used for piloting ship, `{EngineeringSkill}` which later will be
-  replaced with name of skill used by ship engineer, `{GunnerySkill}` which
-  later will be replaced with name of skill used to operate guns on ship,
-  `{TalkingSkill}` which later will be replaced with name of skill used to
+  replaced with the name of the skill used by ship engineer, `{GunnerySkill}` which
+  later will be replaced with the name of the skill used to operate guns on ship,
+  `{TalkingSkill}` which later will be replaced with the name of the skill used to
   talk in bases or with other ships, `{PerceptionSkill}` which later will be
-  replaced with name of skill used to notice other ships, `{ConditionName}`
+  replaced with the name of the skill used to notice other ships, `{ConditionName}`
   which later will be replaced with name of attribute used to raise crew
   member condition, `{DodgeSkill}` which later will be replaced with name of
   skill used to dodge enemy attacks in character's combat, `{UnarmedSkill}`
-  which later will be replaced with name of skill used when character fight
+  which later will be replaced with the name of the skill used when character fight
   without weapon.
 - Inside help text you can use some tags for formatting text: {u}some text{/u}
   for add underline for text, {b}some text{/b} to made bold characters and
@@ -45,26 +45,26 @@
   and `nomorale` which later will be replaced by list of factions which have
   set selected flag.
 -->
- <entry index="general" title=" 1. General Informations">{u}Overview{/u}
-    Steam Sky is a roguelike game where you are commandeer of a flying ship. You must take care of ship and crew. You can trade items between sky bases, fight with enemies or manufacture items. The game ends when your character dies. At this moment, help is under development (as whole game). To see other help topics, click on topic title (for example {b}&quot;General Informations&quot;{/b} for this screen) above help text. Some informations about game mechanics can depends on your character's faction.
+ <entry index="general" title=" 1. General Information">{u}Overview{/u}
+    Steam Sky is a roguelike game where you are the commander of a flying ship. You must take care of the ship and it's crew. You can trade items between sky bases, fight with enemies or manufacture items. The game ends when your character dies. At this moment, help is under development (as whole game). To see other help topics, click on the topic title (for example {b}&quot;General Information&quot;{/b} for this screen) above help text. Some information about certain game mechanics may depend on your character's faction.
 
 {u}Content of help topics{/u}
-- 1. General Informations: You are here. Some very basic informations about game.
-- 2. First steps: A few general hints for a new player.
-- 3. Ship movement: Moving ship around map, undocking from bases.
+- 1. General Information: You are here. Some very basic information about game.
+- 2. First steps: General hints for a new player.
+- 3. Ship movement: Moving ship around the map, undocking from bases.
 - 4. Sky bases: Discovering new bases, reputation in bases and types of bases.
-- 5. Trading: General informations about buying or selling items from sky bases and friendly traders ships.
-- 6. Combat: Starting combat, giving crew orders during combat, boarding enemy ships, some specific to combat tips.
+- 5. Trading: General information about buying or selling items from sky bases and friendly traders ships.
+- 6. Combat: Starting combat, giving crew orders during combat, boarding enemy ships, some specific combat tips.
 - 7. Crafting: Setting crafting orders, discovering or buying new crafting recipes, some specific to crafting tips.
-- 8. Repair/Upgrade ship: Self repairing and repairing in bases ship modules, upgrading ship modules, installing or removing ship modules.
-- 9. Ship crew: Hunger, thirst, morale, tiredness and health effects on your ship crew members, training their skills, setting orders priorities and some specific for crew members tips.
-- 10. Missions: Starting and finishing missions, some detail informations about each type of mission and specific for missions tips.
-- 11. Hiring crew members: Detailed informations about hiring new crew members in sky bases.
-- 12. Tips: General tips about playing game.
-   Some game modifications can bring own help topics too. If you are first time here, it is recommended to look at least to {b}Ship movement{/b}, {b}Trading{/b}, {b}Combat{/b} and {b}Tips{/b} topics for basic informations about game.
+- 8. Repairing/Upgrading your ship: Self repairing and repairing in bases ship modules, upgrading ship modules, installing or removing ship modules.
+- 9. Ship crew: Hunger, thirst, morale, tiredness and health effects on your ship crew members, training their skills, setting orders priorities and some specific crew member tips.
+- 10. Missions: Starting and finishing missions, some detail information about each type of mission and specific mission tips.
+- 11. Hiring crew members: Detailed information about hiring new crew members in sky bases.
+- 12. Tips: General tips for playing the game.
+   Some game modifications can show help topics as well. If you are first time here, it is recommended to look at {b}Ship movement{/b}, {b}Trading{/b}, {b}Combat{/b} and {b}Tips{/b} topics for basic information about the game.
 
 {u}Ship info{/u}
-    On most screens you can see information about needed crew positions in the top right corner. First icon is for pilot, second - engineer, third - gunner, forth - trader, fifth - repairs, sixth - upgrading ship module, seventh - clean ship and eighth - manufacturing.
+    On most screens you can see information about required crew positions in the top right corner. First icon is for pilot, second - engineer, third - gunner, forth - trader, fifth - repairs, sixth - upgrading ship module, seventh - ship cleaning and eighth - manufacturing.
    For pilots and engineers: if their letter is green, the position is taken by a crew member, and if it's red you don't have anyone assigned to this position.
 For gunners and manufacturing: a green icon mean all positions are taken (all guns, all crafting modules), a red icon means you have free positions (not all guns/crafting modules are taken), and a white icon means you don't have or don't need anyone assigned to this positions. For {sentientships} yellow icon mean that you don't have assigned anyone to that position, but you don't need anyone either.
 For repairs, upgrading ship modules, trader and cleaning ship, green means you have someone assigned to this position, red means you don't have anyone on that position but need someone, and white icon means you don't have anyone assigned to this position and you don't need anyone.</entry>
@@ -82,7 +82,7 @@ Thus if you find Agricultural base near Refinery, start travelling between them 
     5. After finishing upgrading engine, upgrade ship hull size by one. Then find any {shipyard} base and install second engine. And of course, upgrade it that same like first. This allow you to not only travel faster, but also escape from stronger enemies or catch them faster in the battle.
     6. Select one base as a your home base (best is probably Agricultural if you need food and drinks to live, otherwise select Industrial), and start working on maximize reputation there. Best place for that main base should have one short trading route (one of described above) and {shipyard} base for buying upgrades to the ship.
     7. Sources of money are (from the best to the worst): Trading -> Missions (especially when selected only money as reward for them) -> Crafting -> Combat with boarding enemy ships -> Only ship combat.
-    8. Read other sections of this help, you can find a lot useful informations.
+    8. Read other sections of this help, you can find a lot useful information.
     9. Enjoy the game and try to find your own, better way to play :)
 {u}Combat{/u}
     1. Fastest way to destroy enemy ship is to destroy one of its engines. If enemy is unarmored, set your Gunner order to {i}Aim for their engine{/i}. When enemy is armored, destroy they armor first by setting Gunner to {i}Fire at will{/i}.
@@ -133,7 +133,7 @@ Reputation levels, starting from lowest: Hated, Outlaw, Hostile, Unfriendly, Unk
 - Factory (red color): available only for Drones faction: produces tools and materials for crafting things. Generally you may bring here items produced in other bases types and buy here metal plates or tools. Additionally, in this base you can install or remove modules from your ship.
 - Market (light blue): available only for Independet faction: they are always offers random goods for sale. Additionally, in this base you can install or remove modules from your ship. Depends on your luck, it can be good or bad place to start any trade route.
 - Agora (purple): available only for Poleis faction: they are always offers random goods for sale and have more recruits which are also cheaper than in other bases. Additionally, in this base you can install or remove modules from your ship. Depends on your luck, it can be good or bad place to start any trade route.
-More informations about trading you may find in {b}Trading{/b} help topic and about installing new ship modules in {b}Repair/upgrade ship{/b} topic.</entry>
+More information about trading you may find in {b}Trading{/b} help topic and about installing new ship modules in {b}Repair/upgrade ship{/b} topic.</entry>
  <entry index="trade" title=" 5. Trading">{u}General info{/u}
     To buy/sell items from bases you must first dock to base and having assigned crew member to talking in bases. All bases buy all items, but which items are sold, depends on base type.
 Prices in bases depends on skill {TalkingSkill} of assigned to trade crew member - with higher skill you can sell items for more and buy for less. Additionally, prices depends on your reputation in base. With high reputation you earn more or pay less for goods, new recruits or services.
@@ -198,7 +198,7 @@ When enemy ship (or your) is stopped by harpoon or battering ram, you can set bo
 * Damage from weapon depends on level of damage itself and used ammo damage. If weapon is more damaged, it do less damage. It works for player ship and enemy ship weapons.
 * You can assign (during combat or outside combat) which ammunition to use with selected gun or harpoon gun in ship info screen. If you don't assign ammo to gun, gunner will be using first available ammo from cargo which works with selected gun.
 * On combat screen you can see only damaged modules. Progress bar show how much damaged is selected module (more damage = bigger progress).
-* Amount of informations about enemy ship depends on distance to it. In close range, you can see detailed informations about enemy ship modules. In any bigger range, only very general informations.
+* Amount of information about enemy ship depends on distance to it. In close range, you can see detailed information about enemy ship modules. In any bigger range, only very general information.
 * After destroying enemy ship, you have small chance to lose some reputation with home sky base of enemy ship.
 * If you destroy ship from your faction, chance to lose some reputation with home sky base of destroyed ship is much bigger.
 * Info about amount of ammunition to selected gun show: assigned ammo amount (if any ammunition is assigned to this gun) or all ammunition to this gun which you have in your ship cargo.
