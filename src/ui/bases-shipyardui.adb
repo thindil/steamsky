@@ -296,9 +296,12 @@ package body Bases.ShipyardUI is
          Set_Sensitive(Gtk_Widget(Get_Object(Object, "btninstall")), False);
       else
          if PlayerShip.Cargo(MoneyIndex2).Amount < Cost or
-           ((Modules_List(ModuleIndex).MType not in GUN | HARPOON_GUN) and
+           ((Modules_List(ModuleIndex).MType not in GUN | HARPOON_GUN |
+                 HULL) and
             ((AllSpace - UsedSpace) < Modules_List(ModuleIndex).Size or
-             Modules_List(ModuleIndex).Size > MaxSize)) then
+             Modules_List(ModuleIndex).Size > MaxSize)) or
+           (Modules_List(ModuleIndex).MType = HULL and
+            Modules_List(ModuleIndex).Size < MaxSize) then
             Set_Sensitive(Gtk_Widget(Get_Object(Object, "btninstall")), False);
          else
             Set_Sensitive(Gtk_Widget(Get_Object(Object, "btninstall")), True);
