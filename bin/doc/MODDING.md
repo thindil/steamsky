@@ -1,39 +1,39 @@
-Some general informations about adding/editing some game elements (skills,
+Some general information about adding/editing game elements (skills,
 ships, ships modules, etc.)
 
-## General informations about modifications
-To add new things (item, ship, module, etc) to the game, you must create
+## General information about modifications
+To add new things (items, ships, modules, etc) to the game, you must create
 a new
 directory inside the game's mod directory which is *data/mods* by default.
 
 For example, create the directory *mymod* as *data/mods/mymod*
-and place your work into a file or files with the extension *dat*
-patterned on the structure of the shipped files there.
+and place your work in a file or files with the extension *dat*
+patterned similarly to the structure of the shipped files there.
 
-For example, to add new item to game, create a file which looks like
+For example, to add a new item to game, create a file which looks like
 *data/items.dat*.
 
 Below you will find more detailed information about the
-XML data structures understood by the program.
+XML data structures used by the program.
 
 You may can edit the shipped files as well of course, but modification
 you make there will be overwritten when you update the game.
 
 ## Items types
 
-### General informations
-- Open file *game.dat* in *data* directory or better, create new file in
+### General information
+- Open file *game.dat* in *data* directory or even better, create a new file in
   modifications directory.
 - A file providing new items must start with tag `data`. Each item type is one
-  line entry with tag `itemtype`. Pattern your work on what you see in
-  *data/game.dat*.
+  line entry with tag `itemtype`. Structure your work on what you see in
+  the *data/game.dat* file.
 
-### Changing existing items types
-- By editing *data/game.dat* you can change the name of an existing item type
+### Changing an existing items types
+- By editing the *data/game.dat* file you can change the name of an existing item type
   by changing the `value` attribute.
-- When editing own file: need to remove first selected item type then add new.
+- When editing your custom file: you need to remove first selected item type, then add new.
 - Item types are referenced in the specifications of items and recipes. Don't
-  forget to do change any reference to your type in these files as well.
+  forget to change any references to your type in these files as well.
 
 ### Adding new items types
 - Add a new item type, by appending a new line with tag `itemtype`. Store the
@@ -51,85 +51,85 @@ you make there will be overwritten when you update the game.
 
 ## Characters attributes
 
-### General informations
-- To add/remove/change characters attributes, open file *game.dat* in
-  *data* directory or better, create new file in modifications directory. New
-  file must starts with `data` tag.
-- Each attribute starts with tag `attribute`. Attribute `name` is name of
-  selected attribute. Value between `attribute` tags is description of
-  attribute. Example *<attribute name="Dexterity">Nimbleness of character,
+### General information
+- To add/remove/change characters attributes, open the file *game.dat* in
+  *data* directory or better, create a new file in modifications directory. New
+  file must start with `data` tag.
+- Each attribute starts with the tag `attribute`. Attribute `name` is the name of
+  the selected attribute. Value between `attribute` tags is a description of
+  the attribute. Example *<attribute name="Dexterity">Nimbleness of character,
   used in many crafts</attrbute>*.
-- After change/remove attribute, don't forget to made proper changes in game
+- After changing/removing attribute/s, don't forget to make the proper changes in the game
   data.
 
-### Changing existing attribute
-- If editing *game.dat* file: just change selected value of attribute.
-- If editing own file: need to remove first selected attribute then add new.
-- To edit attribute name, just edit value of attribute `name`.
-- To change attribute description, just edit text between `attribute` tags.
+### Changing an existing attribute
+- If editing *game.dat* file: just change the selected value of the attribute.
+- If editing your own file: you need to remove first selected attribute then add new.
+- To edit the attribute name, just edit value of the attribute `name`.
+- To change the attributes description, just edit the text between `attribute` tags.
 
-### Adding new attribute
-- To add new attribute, just append new line with tag `attribute` with
-  it name as attribute `name` and description between tags `attribute`. Same
-  for *game.dat* file and own file.
+### Adding a new attribute
+- To add a new attribute, just append a new line with tag `attribute` with
+  its name as attribute `name` and description between tags `attribute`. Same
+  for *game.dat* file and your own file.
 
-### Removing existing attribute
-- In *game.dat* file: Just delete selected attribute entry.
+### Removing an existing attribute
+- In *game.dat* file: Just delete the selected attribute entry.
 - In own file: Append new line with tag `remove` which have attribute `name`
   set to `attribute` and value with name of attribute which will be removed.
 
 ## Skills
 
-### General informations
-- Open file *game.dat* in *data* directory to add/remove/change skills, or
-  better, create new file in modifications directory.
+### General information
+- Open the *game.dat* file in the *data* directory to add/remove/change skills, or
+  even better, create a new file in the modifications directory.
 - Each skill starts with tag `skill`.
-- Attribute `name` is name of selected skill.
-- Attribute `attribute` is name of character attribute (must be defined
+- Attribute `name` is the name of the selected skill.
+- Attribute `attribute` is the name of the character's attribute (must be defined
   earlier in this same file).
 - Optional attribute `tool` is item type used as tool during training (must be
   defined earlier in this same file).
-- After change/remove skill, you been need to made proper changes in other game
+- After changing/removing the skill, you need to make the proper changes in other game
   data files (recipes, items and this same file) if needed.
 
-### Changing existing skills
-- If editing *game.dat* file: just change selected value of skill.
-- If editing own file: need to remove first selected skill then add new.
-- To change skill name, just edit value of `name` attribute of selected skill.
-- To change assigned attribute to selected skill enter new name in attribute
-  `attribute`. Name must be existing attribute name, defined earlier in
+### Changing an existing skills
+- If editing *game.dat* file: just change the selected value of the skill/s.
+- If editing a custom file: you need to remove the first selected skill and then add new.
+- To change a skill's name, edit the value of `name` attribute of the selected skill.
+- To change assigned attribute to selected skill enter the new name in attribute
+  `attribute`. The Name must be an existing attribute name, defined earlier in
   *game.dat* file.
-- To change skill description, just edit text between `skill` tags.
-- To change assigned tool, edit value of `tool` attribute of selected skill.
-  Tool must be existing item type, defined earlier in *game.dat* file.
+- To change skill description, just edit the text between `skill` tags.
+- To change assigned tool, edit value of `tool` attribute of the selected skill.
+  Tool must be an existing item type, defined earlier in *game.dat* file.
 
 ### Adding new skills
-- To add new skill, just append new line with tag `skill` with it name as
-  attribute `name`, assigned attribute to skill as attribute `attribute`,
-  assigned item type as training tool as attribute `tool` and description between
+- To add a new skill, just append a new line with tag `skill` with its name as
+  attribute `name`, assigned attribute's skill as attribute `attribute`,
+  assigned item type's training tool as attribute `tool` and description between
   tags `skill`.
 
-### Removing existing skill
-- In *game.dat* file: Just delete selected skill entry.
-- In own file: Append new line with tag `remove` which have attribute `name`
+### Removing an existing skill
+- In *game.dat* file: Delete the selected skill entry.
+- In custom file: Append new line with tag `remove` which has attribute's `name`
   set to `skill` and value with name of skill which will be removed.
 
-All changes below (to **Skills**) are made in *game.dat* file or own file inside
-modification directory. Own file must start with `data` tag. If you want
+All changes below (to **Skills**) are made in *game.dat* file or custom file inside
+modification directory. Custom file must start with `data` tag. If you want
 overwrite default value in own file, just add new line with proper tag and
 attributes.
 
 ## Repair tools type
 To change which item type is used for repair/upgrading tools,  edit `value`
-attribute of tag `repairtools`. Value must be existing item type.
+attribute of tag `repairtools`. Value must be an existing item type.
 
 ## Cleaning tools type
-To change which item type is used for cleaning ship, edit `value` attribute of
-tag `cleaningrools`. Value must be existing item type.
+To change which item type is used for the cleaning ship, edit `value` attribute of
+tag `cleaningrools`. Value must be an existing item type.
 
 ## Alchemy tools type
-To change which item type is used for deconstruct items, edit `value` attribute
-of tag `alchemytools`. Value must be existing item type.
+To change which item type is used for the deconstructing of items, edit `value` attribute
+of tag `alchemytools`. Value must be an existing item type.
 
 ## Corpse index
 To change which item is used as a body for dead, edit `value` attribute of tag
@@ -137,95 +137,95 @@ To change which item is used as a body for dead, edit `value` attribute of tag
 
 ## Mission items type
 To change which item type is used for delivery missions, edit `value` attribute
-of tag `missionitemstype`. Value must be existing item type.
+of tag `missionitemstype`. Value must be an existing item type.
 
 ## Fuel item type
 To change which item type is used as a fuel for ship, edit `value` attribute of
-tag `fueltype`. Value must be existing item type.
+tag `fueltype`. Value must be an existing item type.
 
 ## Money index
-To change which item is used as a money, edit `value` attribute of tag
-`moneyindex`. Value must be existing item index from any items file.
+To change which item is used as currency in the game, edit `value` attribute of tag
+`moneyindex`. Value must be an existing item index from any items file.
 
 ## Traders ships name
-To change which word in ship names is used to determine trader ship (needed for
+To change which word in ship names is used to determine a trader ship (needed for
 friendly trader random event), edit `value` attribute for tag `tradersname`.
 Value can be any single word (but this word must be in trader ships names).
 
 ## Condition attribute name
-To change which attribute is used to raise character condition, edit attribute
-`value` of tag `conditionname`. Value must be existing attribute name.
+To change which attribute is used to raise a character's condition, edit attribute
+`value` of tag `conditionname`. Value must be an existing attribute name.
 
 ## Strength attribute name
-To change which attribute is used to count character maximum encumbrance, edit
-attribute `value` of tag `strenghtname`. Value must be existing attribute name.
+To change which attribute is used to count a character's maximum encumbrance, edit
+attribute `value` of tag `strenghtname`. Value must be an existing attribute name.
 
 ## Piloting skill name
-To change which skill is used for piloting ship, edit `value` attribute of tag
-`pilotingskill`. Value must be existing skill name.
+To change which skill is used for the piloting of ships, edit `value` attribute of tag
+`pilotingskill`. Value must be an existing skill name.
 
 ## Engineering skill name
 To change which skill is used for engineering duty, edit `value` attribute of
-tag `engineeringskill`. Value must be existing skill name.
+tag `engineeringskill`. Value must be an existing skill name.
 
 ## Gunnery skill name
-To change which skill is used for operating guns on ship, edit `value`
-attribute of tag `gunneryskill`. Value must be existing skill name.
+To change which skill is used for the operation of guns on ships, edit `value`
+attribute of tag `gunneryskill`. Value must be an existing skill name.
 
 ## Talking skill name
 To change which skill is used for talking in bases or with other ships (trades,
 repairs, recruit, etc), edit `value` attribute of tag `talkingskill`. Value
-must be existing skill name.
+must be an existing skill name.
 
 ## Spotting skill name
 To change which skill is used for spotting things (other ships, etc), edit
-`value` attribute of tag `perceptionskill`. Value must be existing skill name.
+`value` attribute of tag `perceptionskill`. Value must be an existing skill name.
 
 ## Head armor type
 To change which item type is used as a head armor for characters, edit `value`
-attribute of tag `headarmor`. Value must be existing item type.
+attribute of tag `headarmor`. Value must be an existing item type.
 
 ## Torso armor type
 To change which item type is used as a torso armor for characters, edit `value`
-attribute of tag `chestarmor`. Value must be existing item type.
+attribute of tag `chestarmor`. Value must be an existing item type.
 
 ## Arms armor type
-To change which item type is used as an arms armor for characters, edit `value`
-attribute of tag `armsarmor`. Value must be existing item type.
+To change which item type is used as arm armor for characters, edit `value`
+attribute of tag `armsarmor`. Value must be an existing item type.
 
 ## Legs armor type
-To change which item type is used as a legs armor for characters, edit `value`
-attribute of tag `legsarmor`. Value must be existing item type.
+To change which item type is used as leg armor for characters, edit `value`
+attribute of tag `legsarmor`. Value must be an existing item type.
 
 ## Shield type
 To change which item type is used as a shield for characters, edit `value`
-attribute of tag `shieldtype`. Value must be existing item type.
+attribute of tag `shieldtype`. Value must be an existing item type.
 
 ## Weapon type
 To change which item type is used as a weapon by characters, edit `value`
-attribute of tag `weapontype`. Value must be existing item type.
+attribute of tag `weapontype`. Value must be an existing item type.
 
 ## Dodging skill name
-To change which skill is used for dodges in character's combat, edit
-`value` attribute of tag `dodgeskill`. Value must be existing skill name.
+To change which skill is used for dodging in combat, edit
+`value` attribute of tag `dodgeskill`. Value must be an existing skill name.
 
 ## Unarmed skill name
-To change which skill is used for chance to hit enemy in character's combat
-when character don't have weapon, edit `value` attribute of tag `unarmedskill`.
-Value must be existing skill name.
+To change which skill is used for chance to hit enemy in combat
+when a character doesn't have a weapon, edit `value` attribute of tag `unarmedskill`.
+Value must be an existing skill name.
 
 ## Items
 
-### General informations
+### General information
 - Default game items are in *items.dat* file which is in *data* directory.
 - If you want remove or update any existing item, you can do it in *items.dat*
   file in *data* directory or in modification file (better option) add tag
   `item` with attribute `index` which value will be index of selected item and
-  attribute `action`. Then if you modify existing item, add changed values.
+  attribute `action`. Then if you modify an existing item, add changed values.
 
 ### Item data structure
 - Each item starts with tag `item`.
-- Attribute `index` is a item index (it can be number or text) and must be
+- Attribute `index` is the item index (it can be a number or text) and must be
   unique. This value is used in ships and recipes data entries.
 - Optional attribute `action`: what to do with this item. Possible values
   are: "add" (add this item, default option), "remove" (remove this item)
@@ -240,32 +240,32 @@ Value must be existing skill name.
   from *game.dat* file, you can set this parameter to any text value.
 - Attribute `price` is price of the item. If you want that item will be not
   possible to buy or sell in bases, set it price to 0.
-- Tag `data`: optional tag. Each tag is one value. For items used as food it
-  is value of hunger reduced by one portion. For item used as drinks, value of
-  thirst reduced by one portion. For ammunition first value is damage done by
+- Tag `data`: optional tag. Each tag is one value. For items used as food for example, it
+  is the value of hunger reduced by one portion. For items used as drinks, it's the value of
+  thirst reduced by one portion. For ammunition, the first value is damage done by
   that ammunition, second is ammunition type (1 - normal, 2 - piercing,
-  3 - exploding). For working tools it is chance for item to be damaged during
-  work. For harpoon guns ammunition it is how long (in combat turns) item will
-  be stuck in enemy ship. For weapons and armor pieces first value is change
-  for item to be damaged during combat, second entry for weapons is damage
-  done by weapon and for armor piece it is amount of damage reduced by this armor.
-  Third entry for weapons is number of skill used by this weapon (from
+  3 - exploding). For working tools, it is the chance for the item to be damaged during
+  work. For harpoon guns ammunition, it is how long (in combat turns) item will
+  be stuck in the enemy ship. For weapons and armor pieces, the first value is the chance
+  of the item being damaged during combat, second entry for weapons is damage
+  done by weapon and for armor, it is the amount of damage reduced by this armor.
+  Third entry for weapons is the number of skill used by this weapon (from
   *game.dat* file, entry *Skills*) and for armor is amount of levels of dodge
-  skill which this armor reduce when worn. Forth entry for weapon is amount
+  skill which this armor reduces when worn. Forth entry for weapon is the amount
   of hands used (1 for one-handed, 2 for two-handed weapons). Fifth entry for
   weapon is damage type (1 - cutting damage, 2 - impaling damage, 3 - blunt
   damage).
-- Tag `description`: In game description of item. Can have any value.
+- Tag `description`: In game description of the item. Can have any value.
 
 ## Recipes
 
-### General informations
+### General information
 - Default game crafting recipes are in *recipes.dat* file which is in *data*
   directory.
 - If you want remove or update any existing recipe, you can do it in
   *recipes.dat* file in *data* directory or in modification file (better
   option) add tag `recipe` with attribute `index` which value will be index
-  of selected recipe and attribute `action`. Then if you modify existing
+  of selected recipe and attribute `action`. Then if you modify an existing
   recipe, add changed values.
 
 ### Recipe data structure
@@ -298,13 +298,13 @@ Value must be existing skill name.
 
 ## Ship modules
 
-### General informations
+### General information
 - Default game ship modules are in *shipmodules.dat* file which is in *data*
   directory.
 - If you want remove or update any existing ship module, you can do it in
   *shipmodules.dat* file in *data* directory or in modification file (better
   option) add tag `module` with attribute `index` which value will be index of
-  selected ship module and attribute `action`. Then if you modify existing ship
+  selected ship module and attribute `action`. Then if you modify an existing ship
   module, add changed values.
 
 ### Ship module data structure
@@ -322,16 +322,16 @@ Value must be existing skill name.
   Training\_Room
 - Attribute `weight`: Weight of module in kilograms.
 - Attribute `value`: Depends on type of module. For 'Engine' it is fuel usage
-  for travel by one map field. For 'Cabin' it is value of reduced tiredness of
-  owner who rest there. For 'Gun' or 'Harpoon\_Gun' it is index of item type
+  for travel by one map field. For 'Cabin' it is the value of reduced tiredness of
+  the owner who rests there. For 'Gun' or 'Harpoon\_Gun' it is the index of the item type
   used as ammunition (item types are in *game.dat* file). For 'Hull' it is
-  maximum allowed size of installed module. For any other type of modules
+  maximum allowed size of installed modules. For any other type of modules
   should be 0.
 - Attribute `maxvalue`: Depends on type of module. For 'Hull' it is max
   free module space. For 'Engine' it is engine power. For 'Cargo' it is maximum
-  capacity in kilograms for cargo for that module. For 'Gun', 'Battering\_ram' it
-  is amount of damage done by selected weapon. For 'Harpoon\_Gun' it is amount of
-  combat rounds by how long harpoon is stuck in enemy ship. For `Cabin` it must
+  capacity in kilograms of cargo for that module. For 'Gun', 'Battering\_ram' it
+  is the amount of damage done by selected weapon. For 'Harpoon\_Gun' it is amount of
+  combat rounds of how long the harpoon is stuck in enemy ship. For `Cabin` it must
   be that same as "value" attribute.For any other type of modules should be 0
   (zero).
 - Attribute `durability`: Base durability of module. How many damage module can
@@ -354,12 +354,12 @@ Value must be existing skill name.
 
 ## Ships
 
-### General informations
+### General information
 - Default game ships are in *ships.dat* file which is in *data* directory.
 - If you want remove or update any existing ship, you can do it in *ships.dat*
   file in *data* directory or in modification file (better option) add tag
   `ship` with attribute `index` which value will be index of selected ship and
-  attribute `action`. Then if you modify existing ship, add changed values.
+  attribute `action`. Then if you modify an existing ship, add changed values.
 
 ### Ship data structure
 - Each ship is between `ship` tags.
@@ -434,12 +434,12 @@ Value must be existing skill name.
 
 ## Help
 
-### General informations
+### General information
 - Default game help entries are in *help.dat* file which is in *data* directory.
 - If you want remove or update any existing help topic, you can do it in
   *help.dat* file in *data* directory or in modification file (better option)
   add tag `entry` with attribute `index` which value will be index of selected
-  help topic and attribute `action`. Then if you modify existing help topic,
+  help topic and attribute `action`. Then if you modify an existing help topic,
   add changed values.
 
 ### Help data structure
@@ -494,12 +494,12 @@ Value must be existing skill name.
 
 ## Goals
 
-### General informations
+### General information
 - Default game goals are in *goals.dat* file which is in *data* directory.
 - If you want remove or update any existing goal, you can do it in *goals.dat*
   file in *data* directory or in modification file (better option) add tag
   `goal` with attribute `index` which value will be index of selected goal and
-  attribute `action`. Then if you modify existing goal, add changed values.
+  attribute `action`. Then if you modify an existing goal, add changed values.
 
 ### Goal data structure
 - Each goal starts with tag `goal`.
@@ -532,12 +532,12 @@ Value must be existing skill name.
 
 ## Mobiles
 
-### General informations
+### General information
 - Default game mobiles are in *mobs.dat* file which is in *data* directory.
 - If you want remove or update any existing mobile, you can do it in *mobs.dat*
   file in *data* directory or in modification file (better option) add tag
   `mobile` with attribute `index` which value will be index of selected mobile
-  and attribute `action`. Then if you modify existing mobile, add changed
+  and attribute `action`. Then if you modify an existing mobile, add changed
   values.
 
 ### Mob data structure
@@ -594,12 +594,12 @@ Value must be existing skill name.
 
 ## Factions
 
-### General informations
+### General information
 - Default game factions are in *factions.dat* file which is in *data* directory.
 - If you want remove or update any existing faction, you can do it in
   *factions.dat* file in *data* directory or in modification file (better
   option) add tag `faction` with attribute `index` which value will be index
-  of selected recipe and attribute `action`. Then if you modify existing
+  of selected recipe and attribute `action`. Then if you modify an existing
   recipe, add changed values.
 
 ### Faction data structure
@@ -687,16 +687,16 @@ Value must be existing skill name.
 - Tags `career`: Available careers for player when choice this faction. Text
   between tags is description of career visible in new game setting. If faction
   don't have any available career then it is unavailable for player.
-    - Attribute `index`: index of career. Must be existing career index from
+    - Attribute `index`: index of career. Must be an existing career index from
       *data/careers.dat* file.
     - Optional attribute `action`: what to do with this career. Possible values
       are: "add" (add this career, default option), "remove" (remove this
       career) or "update" (update selected career).
     - Attribute `playerindex`: index of mobile used for starting player
-      character, when he/she choice this career. Value must be existing mobile
+      character, when he/she choice this career. Value must be an existing mobile
       index from any mobiles file.
     - Attribute `shipindex`: index of ship used for starting player ship when
-      he/she choice this career. Value must be existing ship index from any
+      he/she choice this career. Value must be an existing ship index from any
       ships file.
     - Attribute `name`: optional attribute. Specific name of career for this
       faction. Will be show to player instead of default name.
@@ -714,12 +714,12 @@ Value must be existing skill name.
 
 ## Stories
 
-### General informations
+### General information
 - Default game stories are in *stories.dat* file which is in *data* directory.
 - If you want remove or update any existing story, you can do it in
   *stories.dat* file in *data* directory or in modification file (better
   option) add tag `story` with attribute `index` which value will be index of
-  selected ship and attribute `action`. Then if you modify existing ship, add
+  selected ship and attribute `action`. Then if you modify an existing ship, add
   changed values.
 
 ### Story data structure
@@ -786,12 +786,12 @@ story.
 
 ## Careers
 
-### General informations
+### General information
 - Default game careers are in *careers.dat* file which is in *data* directory.
 - If you want remove or update any existing career, you can do it in
   *careers.dat* file in *data* directory or in modification file (better
   option) add tag `career` with attribute `index` which value will be index
-  of selected career and attribute `action`. Then if you modify existing
+  of selected career and attribute `action`. Then if you modify an existing
   career, add changed values.
 
 ### Career data structure
@@ -811,12 +811,12 @@ story.
 
 ## Bases Types
 
-### General informations
+### General information
 - Default base types are in *bases.dat* file which is in *data* directory.
 - If you want to remove or update any existing base type, you can do it in
   *bases.dat* file in *data* directory or in modification file (better option)
   add tag `base` with attribute `index` which value will be index of
-  selected base type and attribute `action`. Then if you modify existing
+  selected base type and attribute `action`. Then if you modify an existing
   base type, add changed values.
 
 ### Bases Types data structure
@@ -856,7 +856,7 @@ story.
 
 ## Themes
 
-### General informations
+### General information
 - To edit default game theme, open file *steamsky.css* in *data/ui* directory.
 - To create new theme, first create new directory in *themes* directory
   (by default it is *data/themes* but you can change it with game starting
@@ -960,12 +960,12 @@ run it with parameter --debug=[debugtype]. Example:
 
 At this moment available are three types of debug:
 
-- Option 'everything' mean to log each debug message to file. At this moment
-  this mean informations about loading game data (ships/recipes/items/modules)
-  and some combat data. This option may be useful to check correctness of data
-  of added new items, etc. Additionally it spawn debug menu for modifying the
+- Option 'everything' means to log each debug message to a file. At this moment
+  this means information about loading game data (ships/recipes/items/modules)
+  and also some combat data. This option may be useful to check that the data
+  of new/added items, etc is correct. Additionally its spawns debug menu for modifying the
   game data.
-- Option 'combat' mean to log debug messages only from combat.
-- Option 'menu' spawn only debug menu after start the game for modifying it
+- Option 'combat' means to log debug messages only from combat.
+- Option 'menu' spawns only debug menu after starting the game for modifying the
   data.
 
