@@ -344,7 +344,9 @@ package body Crafts is
       procedure ResetOrder(Module: in out ModuleData; ModuleOwner: Natural) is
          HaveWorker: Boolean := False;
       begin
-         if ToolIndex > 0 then
+         if ToolIndex in
+             PlayerShip.Crew(CrafterIndex).Inventory.First_Index ..
+                   PlayerShip.Crew(CrafterIndex).Inventory.Last_Index then
             TakeOffItem(CrafterIndex, ToolIndex);
             UpdateCargo
               (PlayerShip,
@@ -357,7 +359,9 @@ package body Crafts is
          end if;
          for Owner of Module.Owner loop
             if Owner = ModuleOwner or ModuleOwner = 0 then
-               if Owner <= Natural(PlayerShip.Crew.Length) then
+               if Owner in
+                   PlayerShip.Crew.First_Index ..
+                         PlayerShip.Crew.Last_Index then
                   GiveOrders(PlayerShip, Owner, Rest);
                end if;
                Owner := 0;
