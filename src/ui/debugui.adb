@@ -225,7 +225,14 @@ package body DebugUI is
          Set(List, Iter, 1, Gint(Attributes_Container.To_Index(I)));
          Set(List, Iter, 2, Gint(Member.Attributes(I)(1)));
       end loop;
-      List := Gtk_List_Store(Get_Object(Builder, "skillslist"));
+      List :=
+        -(Get_Model
+           (Gtk_Tree_View
+              (Get_Child
+                 (Gtk_Scrolled_Window
+                    (Get_Child
+                       (Gtk_Box(Get_Child(Gtk_Box(Get_Child(CrewBox, 1)), 2)),
+                        0))))));
       Clear(List);
       for I in Member.Skills.Iterate loop
          Append(List, Iter);
@@ -359,7 +366,13 @@ package body DebugUI is
         (Gtk_List_Store(Get_Object(Builder, "statslist")),
          UpdateAttribute'Access);
       Foreach
-        (Gtk_List_Store(Get_Object(Builder, "skillslist")),
+        (-(Get_Model
+            (Gtk_Tree_View
+               (Get_Child
+                  (Gtk_Scrolled_Window
+                     (Get_Child
+                        (Gtk_Box(Get_Child(Gtk_Box(Get_Child(CrewBox, 1)), 2)),
+                         0)))))),
          UpdateSkill'Access);
    end UpdateMember;
 
@@ -629,7 +642,19 @@ package body DebugUI is
       pragma Unreferenced(Self);
       -- ****
       SkillsList: constant Gtk_List_Store :=
-        Gtk_List_Store(Get_Object(Builder, "skillslist"));
+        -(Get_Model
+           (Gtk_Tree_View
+              (Get_Child
+                 (Gtk_Scrolled_Window
+                    (Get_Child
+                       (Gtk_Box
+                          (Get_Child
+                             (Gtk_Box
+                                (Get_Child
+                                   (Gtk_Box(Get_Child_By_Name(Stack, "page1")),
+                                    1)),
+                              2)),
+                        0))))));
       NewValue: Gint;
    begin
       NewValue := Gint'Value(New_Text);
@@ -654,7 +679,19 @@ package body DebugUI is
       -- ****
       SkillsIter: Gtk_Tree_Iter;
       SkillsList: constant Gtk_List_Store :=
-        Gtk_List_Store(Get_Object(Builder, "skillslist"));
+        -(Get_Model
+           (Gtk_Tree_View
+              (Get_Child
+                 (Gtk_Scrolled_Window
+                    (Get_Child
+                       (Gtk_Box
+                          (Get_Child
+                             (Gtk_Box
+                                (Get_Child
+                                   (Gtk_Box(Get_Child_By_Name(Stack, "page1")),
+                                    1)),
+                              2)),
+                        0))))));
       SkillBox: constant Gtk_Box := Gtk_Box(Get_Parent(Self));
       ComboBox: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Child(SkillBox, 1));
@@ -1344,7 +1381,7 @@ package body DebugUI is
          Scrolled := Gtk_Scrolled_Window_New;
          View :=
            Gtk_Tree_View_New_With_Model
-             (+(Gtk_List_Store(Get_Object(Builder, "skillslist"))));
+             (+(Gtk_List_Store_Newv((GType_String, GType_Uint, GType_Uint))));
          Set_Tooltip_Text
            (View,
             "To change level of selected skill, double left click on level column. Values between 1 and 100.");
