@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Crash on generating recruits (issue #46)
 - Grammar and sentence structure by ChrisEdBurt (pull request #52)
+- Upgrading player's ship hull (issue #51)
 
 ## [4.6] - 2019-01-26
 
