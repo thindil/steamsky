@@ -4,12 +4,12 @@ about: Start a discussion about any idea from the game [Wish List](https://githu
 
 ---
 
-**Title:** When you start discussion, please start it title with
+**Title:** When you start a discussion, please title it with
 `Title of idea` from the game [Wish List](https://github.com/thindil/steamsky/projects/1)
 
 **Content of the issue:** write almost whatever you want about the selected
 idea, just please leave footer (below) of this template unchanged. It contains
-rules which we should obey during discussion.
+rules which we should consider during discussion.
 
 ---
 Please keep the discussion civilized, at least at level of an ancient
