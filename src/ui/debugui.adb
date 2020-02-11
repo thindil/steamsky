@@ -15,12 +15,10 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Containers; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Box; use Gtk.Box;
 with Gtk.Button; use Gtk.Button;
@@ -45,8 +43,6 @@ with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
-with Glib.Error; use Glib.Error;
-with Glib.Object; use Glib.Object;
 with Glib.Properties; use Glib.Properties;
 with Bases; use Bases;
 with Crew; use Crew;
@@ -63,13 +59,6 @@ with ShipModules; use ShipModules;
 with BasesTypes; use BasesTypes;
 
 package body DebugUI is
-
-   -- ****iv* DebugUI/Builder
-   -- FUNCTION
-   -- Gtkada_Builder used for creating UI
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
 
    -- ****iv* DebugUI/Setting
    -- FUNCTION
@@ -182,7 +171,6 @@ package body DebugUI is
       -- ****
       Member: Member_Data;
       Iter: Gtk_Tree_Iter;
-      List: Gtk_List_Store := Gtk_List_Store(Get_Object(Builder, "statslist"));
       KnowSkills: Positive_Container.Vector;
       CrewBox: constant Gtk_Box := Gtk_Box(Get_Child_By_Name(Stack, "page1"));
       AddSkillBox: constant Gtk_Box :=
@@ -193,6 +181,12 @@ package body DebugUI is
         Gtk_Combo_Box_Text(Get_Child(AddSkillBox, 1));
       CrewGrid: constant Gtk_Grid :=
         Gtk_Grid(Get_Child(Gtk_Box(Get_Child(CrewBox, 1)), 0));
+      List: Gtk_List_Store :=
+        -(Get_Model
+           (Gtk_Tree_View
+              (Get_Child
+                 (Gtk_Scrolled_Window
+                    (Get_Child(Gtk_Box(Get_Child(CrewBox, 1)), 1))))));
    begin
       if Setting then
          return;
@@ -363,7 +357,11 @@ package body DebugUI is
           (Get_Value
              (Get_Adjustment(Gtk_Spin_Button(Get_Child_At(CrewGrid, 1, 5)))));
       Foreach
-        (Gtk_List_Store(Get_Object(Builder, "statslist")),
+        (-(Get_Model
+            (Gtk_Tree_View
+               (Get_Child
+                  (Gtk_Scrolled_Window
+                     (Get_Child(Gtk_Box(Get_Child(CrewBox, 1)), 1)))))),
          UpdateAttribute'Access);
       Foreach
         (-(Get_Model
@@ -613,7 +611,15 @@ package body DebugUI is
       pragma Unreferenced(Self);
       -- ****
       StatsList: constant Gtk_List_Store :=
-        Gtk_List_Store(Get_Object(Builder, "statslist"));
+        -(Get_Model
+           (Gtk_Tree_View
+              (Get_Child
+                 (Gtk_Scrolled_Window
+                    (Get_Child
+                       (Gtk_Box
+                          (Get_Child
+                             (Gtk_Box(Get_Child_By_Name(Stack, "page1")), 1)),
+                        1))))));
       NewValue: Gint;
    begin
       NewValue := Gint'Value(New_Text);
@@ -1129,7 +1135,6 @@ package body DebugUI is
    end ShowBasesTypes;
 
    procedure CreateDebugUI is
-      Error: aliased GError;
       WorldBox: constant Gtk_Hbox := Gtk_Hbox_New;
       Label: Gtk_Label;
       ComboBox: Gtk_Combo_Box_Text;
@@ -1147,18 +1152,6 @@ package body DebugUI is
       ShipsList: constant Gtk_List_Store :=
         Gtk_List_Store_Newv((0 => GType_String));
    begin
-      if Builder /= null then
-         return;
-      end if;
-      Gtk_New(Builder);
-      if Add_From_File
-          (Builder,
-           To_String(DataDirectory) & "ui" & Dir_Separator & "debug.glade",
-           Error'Access) =
-        Guint(0) then
-         Put_Line("Error : " & Get_Message(Error));
-         return;
-      end if;
       declare
          Iter: Gtk_Tree_Iter;
       begin
@@ -1340,7 +1333,7 @@ package body DebugUI is
          Scrolled := Gtk_Scrolled_Window_New;
          View :=
            Gtk_Tree_View_New_With_Model
-             (+(Gtk_List_Store(Get_Object(Builder, "statslist"))));
+             (+(Gtk_List_Store_Newv((GType_String, GType_Uint, GType_Uint))));
          Set_Tooltip_Text
            (View,
             "To change level of selected attribute, double left click on level column. Values between 1 and 50.");
