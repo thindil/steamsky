@@ -116,52 +116,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     </columns>
   </object>
   <object class="GtkTextBuffer" id="licensebuffer"/>
-  <object class="GtkBox" id="messagebox">
-    <property name="name">overlay</property>
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="halign">center</property>
-    <property name="valign">center</property>
-    <property name="orientation">vertical</property>
-    <child>
-      <object class="GtkLabel" id="lblmessage">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="halign">center</property>
-        <property name="valign">center</property>
-        <property name="margin_left">5</property>
-        <property name="margin_right">5</property>
-        <property name="margin_top">5</property>
-        <property name="use_markup">True</property>
-        <property name="wrap">True</property>
-        <property name="width_chars">40</property>
-        <property name="max_width_chars">40</property>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkButton" id="btnclosemessage">
-        <property name="label" translatable="yes">_Close</property>
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="margin_left">5</property>
-        <property name="margin_right">5</property>
-        <property name="margin_bottom">5</property>
-        <property name="use_underline">True</property>
-        <signal name="clicked" handler="Hide_Dialog" swapped="no"/>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
-      </packing>
-    </child>
-  </object>
   <object class="GtkTextBuffer" id="newsbuffer"/>
   <object class="GtkListStore" id="saveslist">
     <columns>
