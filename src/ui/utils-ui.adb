@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,8 +19,12 @@ with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Gtk.Message_Dialog; use Gtk.Message_Dialog;
 with Gtk.Dialog; use Gtk.Dialog;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
+with Gtk.Adjustment; use Gtk.Adjustment;
+with Gtk.Box; use Gtk.Box;
+with Gtk.Button; use Gtk.Button;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Menu; use Gtk.Menu;
+with Gtk.Paned; use Gtk.Paned;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
 with Gtk.Text_Iter; use Gtk.Text_Iter;
 with Gtk.Text_Mark; use Gtk.Text_Mark;
@@ -29,9 +33,6 @@ with Gtk.Text_View; use Gtk.Text_View;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Tree_View; use Gtk.Tree_View;
-with Gtk.Adjustment; use Gtk.Adjustment;
-with Gtk.Button; use Gtk.Button;
-with Gtk.Paned; use Gtk.Paned;
 with Gdk.Types; use Gdk.Types;
 with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
 with Glib.Main; use Glib.Main;
@@ -59,6 +60,7 @@ package body Utils.UI is
    -- SOURCE
    Builder: Gtkada_Builder;
    -- ****
+
    -- ****iv* Utils.UI/Source_Id
    -- FUNCTION
    -- Id of timer used to hide mesages. Default is No_Source_Id
@@ -73,7 +75,7 @@ package body Utils.UI is
    function AutoHideDialog return Boolean is
    -- ****
    begin
-      Hide(Gtk_Widget(Get_Object(Builder, "messagebox")));
+      Hide(MessageBox);
       Source_Id := No_Source_Id;
       if Get_Object(Builder, "btnclose") /= null then
          EnableMenuShortcutsProc(Builder);
@@ -82,9 +84,10 @@ package body Utils.UI is
       return False;
    end AutoHideDialog;
 
-   procedure HideDialog(Object: access Gtkada_Builder_Record'Class) is
+   procedure HideDialog(Self: access Gtk_Info_Bar_Record'Class; Response_Id : Glib.Gint) is
+      pragma Unreferenced(Response_Id);
    begin
-      Hide(Gtk_Widget(Get_Object(Object, "messagebox")));
+      Hide(Self);
       Remove(Source_Id);
       Source_Id := No_Source_Id;
       if Get_Object(Builder, "btnclose") /= null then
@@ -95,8 +98,8 @@ package body Utils.UI is
 
    procedure ShowDialog(Message: String) is
    begin
-      Set_Label(Gtk_Label(Get_Object(Builder, "lblmessage")), Message);
-      Show_All(Gtk_Widget(Get_Object(Builder, "messagebox")));
+      Set_Label(Gtk_Label(Get_Child(Gtk_Box(Get_Content_Area(MessageBox)), 0)), Message);
+      Show_All(MessageBox);
       if Get_Object(Builder, "btnclose") /= null then
          DisableMenuShortcutsProc(Builder);
          Set_Sensitive(Gtk_Button(Get_Object(Builder, "btnclose")), False);

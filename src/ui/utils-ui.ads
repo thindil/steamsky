@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -17,9 +17,10 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Gtkada.Builder; use Gtkada.Builder;
+with Gtk.Info_Bar; use Gtk.Info_Bar;
+with Gtk.Label; use Gtk.Label;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Widget; use Gtk.Widget;
-with Gtk.Label; use Gtk.Label;
 with Glib; use Glib;
 with Glib.Object; use Glib.Object;
 with Gdk.Event; use Gdk.Event;
@@ -46,13 +47,21 @@ package Utils.UI is
    PreviousGameState: GameStates;
    -- ****
 
+   -- ****v* Utils.UI/MessageBox
+   -- FUNCTION
+   -- Dialog used to show messages to the player
+   -- SOURCE
+   MessageBox: Gtk_Info_Bar;
+   -- ****
+
    -- ****f* Utils.UI/HideDialog
    -- FUNCTION
    -- Close dialog window and stop auto close timer
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self        - Gtk_Info_Bar to hide
+   -- Response_Id - Gtk response id. Unused.
    -- SOURCE
-   procedure HideDialog(Object: access Gtkada_Builder_Record'Class);
+   procedure HideDialog(Self: access Gtk_Info_Bar_Record'Class; Response_Id : Glib.Gint);
    -- ****
 
    -- ****f* Utils.UI/ShowDialog

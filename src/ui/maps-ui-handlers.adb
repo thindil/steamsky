@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -33,6 +33,7 @@ with Gtk.Accel_Map; use Gtk.Accel_Map;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Box; use Gtk.Box;
 with Gtk.Paned; use Gtk.Paned;
+with Gtk.Dialog; use Gtk.Dialog;
 with Glib; use Glib;
 with Gdk.Rectangle; use Gdk.Rectangle;
 with Gdk.Device; use Gdk.Device;
@@ -442,8 +443,7 @@ package body Maps.UI.Handlers is
                   end case;
                end;
             end if;
-            if not Is_Visible
-                (Gtk_Widget(Get_Object(Builder, "messagebox"))) then
+            if not Is_Visible(Gtk_Widget(MessageBox)) then
                if GetItemAmount(FuelType) <= GameSettings.LowFuel then
                   ShowDialog("Your fuel level is dangerously low.");
                   Result := 4;
@@ -1580,8 +1580,8 @@ package body Maps.UI.Handlers is
       Key: Gtk_Accel_Key;
       Found: Boolean;
    begin
-      if Is_Visible(Gtk_Widget(Get_Object(Builder, "messagebox"))) then
-         HideDialog(Builder);
+      if Is_Visible(Gtk_Widget(MessageBox)) then
+         HideDialog(MessageBox, Gint(Gtk_Response_Close));
          return False;
       end if;
       if Get_Visible_Child_Name(Gtk_Stack(Get_Object(Builder, "gamestack"))) /=
