@@ -28,25 +28,28 @@ with GNAT.Traceback.Symbolic; use GNAT.Traceback.Symbolic;
 with GNAT.String_Split; use GNAT.String_Split;
 with GNAT.OS_Lib; use GNAT.OS_Lib;
 with Gtkada.Builder; use Gtkada.Builder;
-with Gtk.Widget; use Gtk.Widget;
-with Gtk.Label; use Gtk.Label;
-with Gtk.Main;
-with Gtk.Text_Buffer; use Gtk.Text_Buffer;
+with Gtk.Adjustment; use Gtk.Adjustment;
+with Gtk.Box; use Gtk.Box;
 with Gtk.Button; use Gtk.Button;
-with Gtk.List_Store; use Gtk.List_Store;
-with Gtk.Tree_Model; use Gtk.Tree_Model;
-with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
-with Gtk.Window; use Gtk.Window;
+with Gtk.GEntry; use Gtk.GEntry;
+with Gtk.Info_Bar; use Gtk.Info_Bar;
+with Gtk.Label; use Gtk.Label;
+with Gtk.List_Store; use Gtk.List_Store;
+with Gtk.Main;
+with Gtk.Message_Dialog; use Gtk.Message_Dialog;
+with Gtk.Overlay; use Gtk.Overlay;
+with Gtk.Scrolled_Window; use Gtk.Scrolled_Window;
 with Gtk.Stack; use Gtk.Stack;
+with Gtk.Text_Buffer; use Gtk.Text_Buffer;
+with Gtk.Toggle_Button; use Gtk.Toggle_Button;
+with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
-with Gtk.Adjustment; use Gtk.Adjustment;
-with Gtk.Scrolled_Window; use Gtk.Scrolled_Window;
-with Gtk.Overlay; use Gtk.Overlay;
-with Gtk.Toggle_Button; use Gtk.Toggle_Button;
+with Gtk.Widget; use Gtk.Widget;
+with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -958,9 +961,6 @@ package body MainMenu is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      Add_Overlay
-        (Gtk_Overlay(Get_Object(Builder, "menuoverlay")),
-         Gtk_Widget(Get_Object(Builder, "messagebox")));
       Register_Handler(Builder, "Main_Quit", Quit'Access);
       Register_Handler(Builder, "Show_All_News", ShowAllNews'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
@@ -978,7 +978,6 @@ package body MainMenu is
         (Builder, "Show_Base_Description", ShowBaseDescription'Access);
       Register_Handler(Builder, "Update_Info", UpdateInfo'Access);
       Register_Handler(Builder, "Update_Info_Proc", UpdateInfoProc'Access);
-      Register_Handler(Builder, "Hide_Dialog", HideDialog'Access);
       Register_Handler(Builder, "Random_Difficulty", RandomDifficulty'Access);
       Register_Handler(Builder, "Update_Summary", UpdateSummary'Access);
       Register_Handler
@@ -1118,6 +1117,26 @@ package body MainMenu is
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
       end if;
       End_Search(Files);
+      if DataError /= Null_Unbounded_String or
+        not Is_Write_Accessible_File(To_String(SaveDirectory)) then
+         declare
+            MessageLabel: constant Gtk_Label := Gtk_Label_New;
+         begin
+            Set_Line_Wrap(MessageLabel, True);
+            Set_Width_Chars(MessageLabel, 40);
+            Set_Max_Width_Chars(MessageLabel, 40);
+            MessageBox := Gtk_Info_Bar_New;
+            Set_Show_Close_Button(MessageBox, True);
+            Set_Message_Type(MessageBox, Message_Info);
+            Pack_Start
+              (Gtk_Box(Get_Content_Area(MessageBox)), MessageLabel, False);
+            On_Response(MessageBox, HideDialog'Access);
+            Set_Halign(MessageBox, Align_Center);
+            Set_Valign(MessageBox, Align_Center);
+         end;
+         Add_Overlay
+           (Gtk_Overlay(Get_Object(Builder, "menuoverlay")), MessageBox);
+      end if;
       if DataError /= Null_Unbounded_String then
          Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
          Hide(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
@@ -1125,7 +1144,6 @@ package body MainMenu is
       if not Exists(To_String(SaveDirectory) & "halloffame.dat") then
          Hide(Gtk_Widget(Get_Object(Builder, "btnhalloffame")));
       end if;
-      Hide(Gtk_Widget(Get_Object(Builder, "messagebox")));
    end ShowMainMenu;
 
    procedure SaveException

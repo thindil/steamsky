@@ -24,6 +24,7 @@ use Ada.Strings.UTF_Encoding.Wide_Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Label; use Gtk.Label;
+with Gtk.Info_Bar; use Gtk.Info_Bar;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
 with Gtk.Text_Iter; use Gtk.Text_Iter;
@@ -37,6 +38,8 @@ with Gtk.Stack; use Gtk.Stack;
 with Gtk.Overlay; use Gtk.Overlay;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Paned; use Gtk.Paned;
+with Gtk.Message_Dialog; use Gtk.Message_Dialog;
+with Gtk.Box; use Gtk.Box;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
@@ -1113,9 +1116,21 @@ package body Maps.UI is
       Add_Overlay
         (Gtk_Overlay(Get_Object(Builder, "mapoverlay")),
          Gtk_Widget(Get_Object(Builder, "btnboxwait")));
-      Add_Overlay
-        (Gtk_Overlay(Get_Object(Builder, "gameoverlay")),
-         Gtk_Widget(Get_Object(Builder, "messagebox")));
+      declare
+         MessageLabel: constant Gtk_Label := Gtk_Label_New;
+      begin
+         Set_Line_Wrap(MessageLabel, True);
+         Set_Width_Chars(MessageLabel, 40);
+         Set_Max_Width_Chars(MessageLabel, 40);
+         MessageBox := Gtk_Info_Bar_New;
+         Set_Show_Close_Button(MessageBox, True);
+         Set_Message_Type(MessageBox, Message_Info);
+         Pack_Start(Gtk_Box(Get_Content_Area(MessageBox)), MessageLabel, False);
+         On_Response(MessageBox, HideDialog'Access);
+         Set_Halign(MessageBox, Align_Center);
+         Set_Valign(MessageBox, Align_Center);
+      end;
+      Add_Overlay(Gtk_Overlay(Get_Object(Builder, "gameoverlay")), MessageBox);
       Add_Overlay
         (Gtk_Overlay(Get_Object(Builder, "mapoverlay")),
          Gtk_Widget(Get_Object(Builder, "btnboxdestination")));
@@ -1159,7 +1174,6 @@ package body Maps.UI is
         (Builder, "Toggle_Close_Button_Proc", ToggleCloseButtonProc'Access);
       Register_Handler(Builder, "Move_Map_Info", MoveMapInfo'Access);
       Register_Handler(Builder, "Move_Map_Buttons", MoveMapButtons'Access);
-      Register_Handler(Builder, "Hide_Dialog", HideDialog'Access);
       Register_Handler(Builder, "Disable_Mouse", DisableMouse'Access);
       Register_Handler
         (Builder, "Set_Messages_Position", SetMessagesPosition'Access);
@@ -1413,7 +1427,7 @@ package body Maps.UI is
       Hide(Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
       Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
       Hide(Gtk_Widget(Get_Object(Builder, "btnboxwait")));
-      Hide(Gtk_Widget(Get_Object(Builder, "messagebox")));
+      Hide(Gtk_Widget(MessageBox));
       Hide(Gtk_Widget(Get_Object(Builder, "btnboxdestination")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
