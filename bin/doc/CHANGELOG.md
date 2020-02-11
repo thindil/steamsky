@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
 - Guns and harpoon guns have size now and require proper size of turret to be
   installed
 - New ship modules: huge bronze turret, huge iron turret, huge steel turret,
-  huge titanium turret
+  huge titanium turret, huge orichalcum turret
 
 ### Changed
 - Updated mobs data
