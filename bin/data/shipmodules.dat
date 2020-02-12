@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <modules>
 <!-- Each ship module is between "module" tags.
-- Attribute "index" is a module index (it can be number or text) and must be
+- Attribute "index" is a module index (it can be a number or text) and must be
 unique. This value is used in ships data entries.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 - Attribute "name": Standard name of module. Will be visible in ship info
@@ -26,8 +26,8 @@ is amount of damage done by selected weapon. For 'Harpoon_Gun' it is amount of
 combat rounds by how long harpoon is stuck in enemy ship. For `Cabin` it must
 be that same as "value" attribute. For any other type of modules should be 0
 (zero).
-- Attribute "durability": Base durability of module. How many damage module can
-take before will be destroyed.
+- Attribute "durability": Base durability of module. How much damage the module can
+take before it will be destroyed.
 - Attribute "material": Type of item which will be used to repair or upgrade
 module.
 - Attribute "skill": Name of skill which will be used during repair or upgrading

@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <factions>
 <!-- Each faction is between "faction" tags.
-- Attribute "index": index of faction (it can be number or text) and must be
+- Attribute "index": Index of faction (it can be a number or text) and must be
 unique. At this moment this value is used to create bases during starting new
-game and to determine which ships are enemies or friends.
-- Optional attribute `action`: what to do with this entry. Possible values
+game and to determine which ships are enemies or friends to the player.
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Attribute "name": name of factions displayed in game. Can be any text and
 unique.
@@ -40,7 +40,7 @@ this faction on map. Must be valid UTF-8 character from current map font.
 <!--
 - Tags "relation": Relation of this faction with other faction. All factions
 must have this tags for each faction (even for self).
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "update" (update selected
 entry).
 - Attribute "faction" is faction index to which relation will be set.
@@ -69,7 +69,7 @@ enemy ships.
 no "foodtype" tags inside faction, that faction members can't be hungry.
 - Attribute "name": name of item type used as food. Must be valid item type
 from *data/game.dat* file.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry).
 -->
   <foodtype name="Food" />
@@ -79,7 +79,7 @@ are: "add" (add this entry, default option), "remove" (remove this entry).
 no "drinktype" tags inside faction, that faction members can't be hungry.
 - Attribute "name": name of item type used as food. Must be valid item type
 from *data/game.dat* file.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry).
 -->
   <drinktype name="Drink" />
@@ -87,15 +87,15 @@ are: "add" (add this entry, default option), "remove" (remove this entry).
 - Tags "career": Available careers for player when choice this faction. Text
 between tags is description of career visible in new game setting. If faction
 don't have any available career then it is unavailable for player.
-- Attribute "index": index of career. Must be existing career index from
+- Attribute "index": Index of career. Must be existing career index from
 *data/careers.dat* file.
-- Optional attribute `action`: what to do with this career. Possible values
+- Optional attribute `action`: What to do with this career. Possible values
 are: "add" (add this career, default option), "remove" (remove this career) or
 "update" (update selected career).
-- Attribute "playerindex": index of mobile used for starting player character,
+- Attribute "playerindex": Index of mobile used for starting player character,
 when he/she choice this career. Value must be existing mobile index from any
 mobiles file.
-- Attribute "shipindex": index of ship used for starting player ship when
+- Attribute "shipindex": Index of ship used for starting player ship when
 he/she choice this career. Value must be existing ship index from any ships
 file.
 - Attribute "name": optional attribute. Specific name of career for this

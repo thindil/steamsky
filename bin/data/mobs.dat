@@ -2,9 +2,9 @@
 <mobiles>
 <!--
 - Each mobile is between "mobile" tag.
-- Attribute "index" is index of mobile (it can be number or text) and must be
+- Attribute "index" is index of mobile (it can be a number or text) and must be
 unique. At this moment it is used only in setting ships crews.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 - Attribute "order": current ship order of selected mob. Possible values are:
@@ -14,7 +14,7 @@ Defend, Boarding.
  <mobile index="1" order="TALK">
 <!-- Tags "skill" define skill of mobile.
 - Attribute "name" is name of skill (from *game.dat* from *data* directory).
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 - If mobile should have constant level of skill, add attribute "level" with
@@ -48,7 +48,7 @@ wounded, Cleaning ship, Defend ship, Board enemy ship.
   <priority name="Defend ship" value="Normal"/>
 <!-- Tags "item" define item in mobile inventory.
 - Attribute "index" is index of item from files from *items* directory.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 - If mobile should have constant amount of item, add attribute "amount" with
