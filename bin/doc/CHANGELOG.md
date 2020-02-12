@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Upgrading player's ship hull (issue #51)
 - Crash on missing tools in crafting (issue #51)
 - Unable to replace hull (issue #53)
+- Removing turret crashes game  (issue #55)
 
 ## [4.6] - 2019-01-26
 
