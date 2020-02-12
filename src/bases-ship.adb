@@ -91,7 +91,7 @@ package body Bases.Ship is
                HullIndex := Modules_Container.To_Index(C);
                ModulesAmount := PlayerShip.Modules(C).InstalledModules;
             when TURRET =>
-               if PlayerShip.Modules(C).GunIndex = 0
+               if (PlayerShip.Modules(C).GunIndex = 0 and Install)
                  and then
                    Modules_List(PlayerShip.Modules(C).ProtoIndex).Size >=
                    Modules_List(ModuleIndex).Size then
