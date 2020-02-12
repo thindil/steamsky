@@ -59,7 +59,7 @@ private
    -- ****
    -- ****f* Crew.UI/RefreshInventory
    -- FUNCTION
-   -- Refresh informations about selected crew member inventory
+   -- Refresh information about selected crew member inventory
    -- SOURCE
    procedure RefreshInventory;
    -- ****

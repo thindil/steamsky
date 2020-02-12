@@ -101,7 +101,7 @@ All notable changes to this project will be documented in this file.
 ## [0.8] - 2017-02-05
 
 ### Added
-- New ship module: iron armor and heavy iron armor
+- New ship module: Iron armor and heavy iron armor
 - New item types: body, alchemyset, mold, gunsmithset, cookingset, 
   sickle, saw, bucket, barleyseeds, barley, grape, grapevine, sand,
   blacksmithset and woodworkerset
@@ -121,7 +121,7 @@ All notable changes to this project will be documented in this file.
   bronze sickle, bronze blacksmith set, bronze saw, bronze woodworker
   set, wooden cooking set and wooden bucket
 - New skills: brewery, blacksmith and woodworking
-- New type of ship modules: workshop
+- New type of ship modules: Workshop
 - New ship modules: small bronze workshop and small iron workshop
 - New type of missions in bases: explore
 - New enemy ships: large clockwork drone and large pirate ship
@@ -135,7 +135,7 @@ All notable changes to this project will be documented in this file.
 - Updated README.md
 - Item type from FoodMaterial to RawFood
 - Better random cargo in npc ships
-- Prices of: iron 80mm ammo, steel 80mm ammo, iron 100mm ammo, steel
+- Prices of: Iron 80mm ammo, steel 80mm ammo, iron 100mm ammo, steel
   100mm ammo, iron 120mm ammo and steel 120mm ammo
 - Moved starting player ship crew to separated text file
 
@@ -170,7 +170,7 @@ All notable changes to this project will be documented in this file.
 - Option to buy crafting recipes in bases
 - New items types: andraeseeds, illandruseeds and missionitem
 - New items: andrae seeds, illandru seeds and small package
-- New skill: woodcutting
+- New skill: Woodcutting
 - New crafting recipes: andrae logs and illandru logs
 - Changed name of ship module small alchemy lab to small bronze alchemy lab
 - Random missions in bases
@@ -212,7 +212,7 @@ All notable changes to this project will be documented in this file.
 - Cargo to all ships
 - Need and using ammo in combat by npc ships
 - Player reputation in bases and it impact on some player actions
-- More detailed informations about skills levels
+- More detailed information about skills levels
 - Check for minimal console size
 - More possible ammo for this same gun types
 - Option to assign ammunition to selected gun
@@ -282,7 +282,7 @@ All notable changes to this project will be documented in this file.
 - Discovering bases
 - Time passing to recruit new crew members in bases
 - Option to move sky map to selected coordinates
-- Show informations about selected map cell
+- Show information about selected map cell
 - List of known bases
 - Option to set travel destination and auto travel to it
 - Ability to be auto attacked by enemy ship
@@ -372,7 +372,7 @@ All notable changes to this project will be documented in this file.
 - Crash on updating cargo during manufacturing
 - Crash on show info about empty cabin
 - Crash on show info about empty turret
-- Informations about crew members skills levels
+- information about crew members skills levels
 
 ## [0.3] - 2016-09-18
 
@@ -381,7 +381,7 @@ All notable changes to this project will be documented in this file.
 - Support for enemy armor in combat
 - Types of messages (combat/crafting/etc.)
 - Option to sort messages by types on messages screen
-- New items to game: illandru logs, fine rations, gunpowder, iron plates
+- New items to game: Illandru logs, fine rations, gunpowder, iron plates
 - New types of items: gunpowder, iron
 - New crafting recipes: 20mm ammo and fine rations
 - New skills: cooking and gunsmith
@@ -441,13 +441,13 @@ All notable changes to this project will be documented in this file.
 - Wait 1 game minute command
 - Fatigue, hunger, thirst, health to crew members
 - Show last message on screen
-- Informations why action failed (trade/ship moving/orders)
+- information why action failed (trade/ship moving/orders)
 - Check for free cargo space during trade items
 - End game on player death
 - Confirmation dialog for quit to main menu
 - New game window with ability to set player and ship names and player gender
 - Version to savegame file which made saves from 0.1 incompatible
-- Window with informations about current location
+- Window with information about current location
 - Gaining experience in skill by crew members
 - Pilot/Engineer skills influence on flying time
 - Player Bartering skill influence on item prices in bases
@@ -459,9 +459,9 @@ All notable changes to this project will be documented in this file.
 - New items: bronze plates, fresh fruits, fresh vegetables, fresh meat, andrae logs
 - Save to file last 10 messages
 - Ability to move map without moving ship
-- Informations about license to main menu
+- information about license to main menu
 - Menu with commands to wait certain amount of time
-- Informations about in game changes to main menu
+- information about in game changes to main menu
 - Random gender to crew members
 - New ship weapon type - battering ram
 
@@ -473,7 +473,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Player and gunner starts game with on break command
 - Show ship name instead speed in ship info screen
-- Moved more items informations to prototypes
+- Moved more items information to prototypes
 - Raised starting skills levels
 - Moved help text to separated text file
 - Raised price of basic rations
@@ -481,7 +481,7 @@ All notable changes to this project will be documented in this file.
 - Better world generation
 - Moved ship modules data to separated text file
 - Moved ships data to separated text file
-- Moved ship cargo informations to separate screen
+- Moved ship cargo information to separate screen
 
 ### Fixed
 - Crash in save game when game was started from other directory

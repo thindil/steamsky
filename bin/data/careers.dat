@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <careers>
 <!--Each career is between tag `career`.
-- Attribute `index` is index of career.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Attribute `index` is the index of the career.
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
-- Attribute `name` is name of career visible to player.
+- Attribute `name` is the name of career visible to player.
 -->
  <career index="general" name="General" />
  <career index="merchant" name="Merchant">
-<!-- Each career can have bonuses to experience to certain skills. Each that
-skill is between `skill` tag.
-- Attribute `name` is name of skill which will be have bonuses to experience.
-- Optional attribute `action`: what to do with this skill. Possible values are:
+<!-- Each career can have bonuses towards experience gained in certain skills. Each
+affected skill is between `skill` tag.
+- Attribute `name` is the name of the skill which will be have bonuses to experience gained.
+- Optional attribute `action`: What to do with this skill. Possible values are:
 "add" (add skill, default option) or "remove" (remove this skill from bonus
 list).-->
   <skill name="Rhetoric" />

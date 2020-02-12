@@ -47,7 +47,7 @@ package Crew.UI.Handlers is
    -- ****
    -- ****f* Crew.UI.Handlers/ShowInventory
    -- FUNCTION
-   -- Refresh informations about selected member inventory
+   -- Refresh information about selected member inventory
    -- PARAMETERS
    -- Object - Gtkada_Builder used to create UI
    -- SOURCE
@@ -55,7 +55,7 @@ package Crew.UI.Handlers is
    -- ****
    -- ****f* Crew.UI.Handlers/ShowItemInfo2
    -- FUNCTION
-   -- Show informations about selected item
+   -- Show information about selected item
    -- PARAMETERS
    -- Object - Gtkada_Builder used to create UI
    -- SOURCE
