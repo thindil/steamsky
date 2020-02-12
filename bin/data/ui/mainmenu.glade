@@ -578,7 +578,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <object class="GtkLabel" id="playertooltip">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="tooltip_text" translatable="yes">General player character settings. Select field which you want to set to see more informations about it.</property>
+                                <property name="tooltip_text" translatable="yes">General player character settings. Select field which you want to set to see more information about it.</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>

@@ -2,10 +2,10 @@
 <ships>
 <!--
 - Each ship is between "ship" tags.
-- Attribute "index" is a index (it can be number or text) and must be unique.
+- Attribute "index" is a index (it can be a number or text) and must be unique.
 This value is used at this moment to set player ship and in Destroy types of
 goals.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 - Attribute "name": Type of ship. Will be visible during combat information.
@@ -40,9 +40,9 @@ Independent, Pirates, Undead, Drones, Inquisition.
  <ship index="1" name="Player Ship" owner="POLEIS">
 <!-- Tag "module": Ship module installed on selected ship.
 - Attribute "index" is module index from files from *shipmodules* directory.
-- Attribute"amount" is optional: if ship should have more than one that module,
+- Attribute"amount" is optional: If ship should have more than one that module,
 just add attribute "amount" with number of modules.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option) or "remove" (remove this entry).
 -->
   <module index="1"/>
@@ -59,7 +59,7 @@ are: "add" (add this entry, default option) or "remove" (remove this entry).
 - If amount of that item should be constant, add attribute "amount" with proper
 value. If amount of that item should be random, add attributes "minamount" with
 minimum amount and attribute "maxamount" with maximum amount of that item.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 -->
@@ -77,7 +77,7 @@ are: "add" (add this entry, default option), "remove" (remove this entry) or
   <cargo amount="10" index="22"/>
 <!-- Tag "recipe": Know recipe (player ship only).
 - Attribute "index" is recipe index from files from *recipes*.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option) or "remove" (remove this entry).
 -->
   <recipe index="1"/>
@@ -90,7 +90,7 @@ are: "add" (add this entry, default option) or "remove" (remove this entry).
 attribute "amount". If ship should have more than one that same mobile and
 amount should be random, add attributes "minamount" for minimum amount of
 that mobile and attribute "maxamount" for maximum amount of that mobile.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 -->

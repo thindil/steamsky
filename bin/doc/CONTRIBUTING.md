@@ -9,9 +9,9 @@ or if you prefer, on mail <thindil@laeran.pl>
 - In the "Title" field try to write very short but not too general description
   of the problem. Good example: "Game crashed when entering base". Bad example:
   "Game crashes often."
-- In the body/comment field try to write as much informations about the problem
-  as possible. In most cases, more informations is better than less. General
-  rule of good problem report is to give enough informations which allow to
+- In the body/comment field try to write as much information about the problem
+  as possible. In most cases, more information is better than less. General
+  rule of good problem report is to give enough information which allow to
   reproduce the problem by other people. It may be in form of steps which are
   needed for recreate this problem.
 - If the game crashed, in most cases it should create file *error.log* in
@@ -46,12 +46,12 @@ implement it into the game.
 If you want to talk/propose changes in any existing in the game feature or
 mechanic, feel free to contact me via issues tracker or mail (addresses of
 both you can find at top of this file). General rule about propositions is
-same as for bugs reports - please, try to write that much informations as
+same as for bugs reports - please, try to write that much information as
 possible. This help us all better understand purpose of your changes.
 
 ## Code propositions
 
-### General informations
+### General information
 
 If you want start help in the game development, please consider starts from
 something easy like fixing bugs. Before you been want to add new feature to
@@ -124,7 +124,7 @@ Or, if you prefer use `build.sh` command:
 
 `./build.sh analyze`
 
-More informations about code coverage and profiling, you can find in the proper
+More information about code coverage and profiling, you can find in the proper
 documentation for both programs.
 
 #### Generating reports

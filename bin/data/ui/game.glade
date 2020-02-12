@@ -735,7 +735,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <object class="GtkMenuItem" id="menuship">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Ship informations</property>
+        <property name="label" translatable="yes">Ship information</property>
         <property name="use_underline">True</property>
         <signal name="activate" handler="Show_Info" object="menuship" swapped="no"/>
       </object>
@@ -753,7 +753,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <object class="GtkMenuItem" id="menucrew">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Crew informations</property>
+        <property name="label" translatable="yes">Crew information</property>
         <property name="use_underline">True</property>
         <signal name="activate" handler="Show_Info" object="menucrew" swapped="no"/>
       </object>
@@ -7005,7 +7005,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           <object class="GtkLabel">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label" translatable="yes">Ship Informations:</property>
+                                            <property name="label" translatable="yes">Ship information:</property>
                                             <property name="xalign">0</property>
                                           </object>
                                           <packing>
@@ -7017,7 +7017,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           <object class="GtkLabel">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label" translatable="yes">Ship cargo informations:</property>
+                                            <property name="label" translatable="yes">Ship cargo information:</property>
                                             <property name="xalign">0</property>
                                           </object>
                                           <packing>
@@ -7029,7 +7029,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           <object class="GtkLabel">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label" translatable="yes">Crew Informations:</property>
+                                            <property name="label" translatable="yes">Crew information:</property>
                                             <property name="xalign">0</property>
                                           </object>
                                           <packing>
