@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash on missing tools in crafting (issue #51)
+- Grammar and sentence structure by ChrisEdBurt (pull request #54)
 
 ## [4.0.11] - 2020-02-02
 
