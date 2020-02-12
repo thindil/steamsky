@@ -552,5 +552,6 @@ types of modules) the module can have. Default value is 1.
  <module durability="600" index="517" installtime="250" material="Steel" maxvalue="0" name="Huge steel turret" price="1750" size="1" skill="Engineering" type="TURRET" value="0" weight="450">Huge steel turret. If the turret is destroyed, the gun is destroyed along with the gunner.</module>
  <module durability="650" index="518" installtime="350" material="Titanium" maxvalue="0" name="Huge titanium turret" price="2250" size="1" skill="Engineering" type="TURRET" value="0" weight="500">Huge titanium turret. If the turret is destroyed, the gun is destroyed along with the gunner.</module>
  <module durability="900" index="519" installtime="350" material="Orichalcum" maxvalue="0" name="Huge orichalcum turret" price="3500" size="1" skill="Engineering" type="TURRET" value="0" weight="500">Huge orichalcum turret. If the turret is destroyed, the gun is destroyed along with the gunner.</module>
+ <module durability="1200" index="520" installtime="350" material="Adamantium" maxvalue="0" name="Huge adamantium turret" price="5500" size="1" skill="Engineering" type="TURRET" value="0" weight="500">Huge adamantium turret. If the turret is destroyed, the gun is destroyed along with the gunner.</module>
 </modules>
 
