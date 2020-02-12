@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with Ada.Calendar; use Ada.Calendar;
@@ -33,6 +34,7 @@ with Gtk.Box; use Gtk.Box;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
+with Gtk.Frame; use Gtk.Frame;
 with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Info_Bar; use Gtk.Info_Bar;
 with Gtk.Label; use Gtk.Label;
@@ -43,6 +45,7 @@ with Gtk.Overlay; use Gtk.Overlay;
 with Gtk.Scrolled_Window; use Gtk.Scrolled_Window;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
+with Gtk.Text_View; use Gtk.Text_View;
 with Gtk.Toggle_Button; use Gtk.Toggle_Button;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
@@ -938,6 +941,21 @@ package body MainMenu is
       Setting := False;
    end SetDifficulty;
 
+   -- ****if* MainMenu/CreateErrorUI
+   -- FUNCTION
+   -- Create error reporting UI
+   -- SOURCE
+   procedure CreateErrorUI is
+      -- ****
+      TextView: constant Gtk_Text_View := Gtk_Text_View_New;
+      Scroll: constant Gtk_Scrolled_Window := Gtk_Scrolled_Window_New;
+      Frame: constant Gtk_Frame := Gtk_Frame_New("Technical information:");
+   begin
+      Add(Scroll, TextView);
+      Add(Frame, Scroll);
+      Pack_Start(Gtk_Box(Get_Object(Builder, "errorbox")), Frame);
+   end CreateErrorUI;
+
    procedure CreateMainMenu is
       Error: aliased GError;
       AdjValues: constant array(Positive range <>) of Gdouble :=
@@ -961,6 +979,7 @@ package body MainMenu is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
+      CreateErrorUI;
       Register_Handler(Builder, "Main_Quit", Quit'Access);
       Register_Handler(Builder, "Show_All_News", ShowAllNews'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
@@ -1093,7 +1112,15 @@ package body MainMenu is
    -- ****
    begin
       Set_Text
-        (Gtk_Text_Buffer(Get_Object(Builder, "errorbuffer")),
+        (Get_Buffer
+           (Gtk_Text_View
+              (Get_Child
+                 (Gtk_Scrolled_Window
+                    (Get_Child
+                       (Gtk_Frame
+                          (Get_Child
+                             (Gtk_Box(Get_Object(Builder, "errorbox")),
+                              5))))))),
          To_String(Message));
       Show_All(Gtk_Widget(Get_Object(Builder, "errordialog")));
    end ShowErrorInfo;
