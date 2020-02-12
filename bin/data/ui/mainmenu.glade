@@ -102,7 +102,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       </row>
     </data>
   </object>
-  <object class="GtkTextBuffer" id="errorbuffer"/>
   <object class="GtkListStore" id="hoflist">
     <columns>
       <!-- column-name guint -->
@@ -1730,7 +1729,7 @@ Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WAR
           </packing>
         </child>
         <child>
-          <object class="GtkBox">
+          <object class="GtkBox" id="errorbox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
@@ -1814,41 +1813,7 @@ Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WAR
               </packing>
             </child>
             <child>
-              <object class="GtkExpander">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <child>
-                  <object class="GtkScrolledWindow">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="shadow_type">in</property>
-                    <child>
-                      <object class="GtkTextView" id="errorview">
-                        <property name="name">normalfont</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="editable">False</property>
-                        <property name="cursor_visible">False</property>
-                        <property name="buffer">errorbuffer</property>
-                        <property name="accepts_tab">False</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child type="label">
-                  <object class="GtkLabel">
-                    <property name="name">normalfont</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Click to show technical info</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">5</property>
-              </packing>
+              <placeholder/>
             </child>
           </object>
           <packing>
