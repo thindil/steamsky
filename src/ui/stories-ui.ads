@@ -30,7 +30,7 @@ package Stories.UI is
    -- ****
    -- ****f* Stories.UI/ShowStoriesUI
    -- FUNCTION
-   -- Show stories informations to player
+   -- Show stories information to player
    -- SOURCE
    procedure ShowStoriesUI;
    -- ****

@@ -54,7 +54,7 @@ package Maps.UI is
    -- ****
    -- ****f* Maps.UI/UpdateHeader
    -- FUNCTION
-   -- Update game header informations
+   -- Update game header information
    -- SOURCE
    procedure UpdateHeader;
    -- ****

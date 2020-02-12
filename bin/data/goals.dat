@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <goals>
 <!-- Each goal is between "goal" tags.
-- Attribute "index" is index of goal (it can be number or text) and must be
-unique. At this moment this value is used to set/update goal in game.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Attribute "index" is index of goal (it can be a number or text) and must be
+unique. At this moment this value is used to set/update your goal in game.
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 - Attribute "type": Type/category of goal which define what is needed to do
-for finish selected goal. Possible values: Reputation - gain max reputation
+to finish selected goal. Possible values: Reputation - gain max reputation
 in X bases, Destroy - destroy X ships, Discover - discover X fields of map,
 Visit - visit (discover) X bases, Craft - craft X items, Mission - Finish
 X missions, Kill - Kill X enemies in melee combat.
-- Attribute "amount": Amount of target for selected goal to do for finish it.
-For example 100 ships to destroy, etc.
+- Attribute "amount": Target amount for the selected goal to finish it.
+For example destroy100 ships, etc.
 - Attribuge "target": Optional attribute, ignored for Discover type, exact
-target for  goal, depends on type of goal. Possible values: for Reputation
+target for  goal, depends on the goal type. Possible values: for Reputation
 and Visit, bases owners names: POLEIS, INDEPENDENT, PIRATES, UNDEAD, DRONES,
 INQUISITION. For Destroy, any enemy ship index (from *ships* directory) or
 owners names: POLEIS, INDEPENDENT, PIRATES, UNDEAD, DRONES, INQUISITION. For

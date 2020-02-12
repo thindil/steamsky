@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <recipes>
 <!-- Each recipe is between "recipe" tags.
-- Attribute "index" is a recipe index (it can be number or text) and must be
+- Attribute "index" is a recipe index (it can be a number or text) and must be
 unique. This value is used at this moment for set starting recipes and in Craft
 types of goals.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
-- Attribute "result": item index which will be produced by recipe (you can
+- Attribute "result": Item index which will be produced by recipe (you can
 check this index in *items* directory). Attribute "crafted": amount of items
 crafted from one recipe.
 - Attribute "workplace": type of ship module in which recipe is made. Available

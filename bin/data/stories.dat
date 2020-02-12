@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <stories>
 <!-- Each story is between "story" tags.
-- Attribute "index": index of story (it can be number or text) and must be
+- Attribute "index": Index of story (it can be a number or text) and must be
 unique. At this moment this value is used to manage current story in which
 player is involved.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 - Attribute "start": condition which must be met to start that story. Possible
@@ -12,19 +12,19 @@ values are: dropitem - story starts on drop selected item from enemies from
 selected faction.
 - Attribute "minsteps": minumum amount of steps in that story.
 - Attribute "maxsteps": maxiumum amount of steps in that story.
-- Attribute "startstep": index of step which will be used as first step in
+- Attribute "startstep": Index of step which will be used as first step in
 story.
-- Attribute "finalstep": index of step which will be used as final step in
+- Attribute "finalstep": Index of step which will be used as final step in
 story.
 - Tags "startdata": contains data needed for story starting condition. For
 "dropitem" it will be index of item which should drop, mob faction from which
 item will be dropped, chance (1 to that number) for drop.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Tag "endtext": text which will be show to player when he/she finish story.
-- Tags "forbiddenfaction": if player is in that faction, he can't start this
+- Tags "forbiddenfaction": If player is in that faction, he can't start this
 story.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option) or "remove" (remove this entry).
 -->
  <story index="1" start="dropitem" minsteps="3" maxsteps="10" startstep="1" finalstep="4" name="Strange find">
@@ -40,7 +40,7 @@ values are: "askinbase" - go to next step when player ask about something in
 any or selected base, "destroyship" - go to next step when player destroy
 selected ship, "explore" - go to next step when player search selected map
 field, "loot" - loot selected item from enemy ship.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 - Tags "finishdata": contains data needed for finish selected step.
@@ -58,13 +58,13 @@ used for check did step will progress to next, or value "random" for random
 chance. Name "chance" is used by all steps and mean chance (1 to that number
 for "random" condition or Skill + roll from 1 to 100) that step will
 progress to next.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 - Tag "text": text which will be show to player when step starts.
 - Attribute "condition": finish condition of previous step which was lead to
 this one. Possible values: "any", "askinbase", "destroyship" and "explore".
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 - Tag "failtext": text which will be show to player if step not progress to
@@ -97,9 +97,9 @@ next.
    <finishdata name="chance" value="100" />
    <finishdata name="condition" value="Perception" />
    <text condition="askinbase">One of captains of docked ship told you, that he saw undead ship with this same symbols like on your medalion. When you show him map, he mark area where he saw that ship.</text>
-   <text condition="destroyship">After fast search of destroyed ship, you found very damaged captains log. In one of last entries, you spotted this same werid symbols which are on your medalion. Entry contains informations about encountered undead ship with it name and general location. You quickly note this information on map.</text>
+   <text condition="destroyship">After fast search of destroyed ship, you found very damaged captains log. In one of last entries, you spotted this same werid symbols which are on your medalion. Entry contains information about encountered undead ship with it name and general location. You quickly note this information on map.</text>
    <text condition="explore">After spending some time around, you finally found some clue: drifting remains of another ship, not so long ago destroyed. Fast search of it resulted in find that there is another ship waiting for this one. You quickly save coordinates of meeting point on your map.</text>
-   <text condition="loot">After combat when you search destroyed ship, your boarding party found strange scrap of metal, which looks almost identical like this from which is made your medalion. Near scrap you found very damaged captains log. In one of last entries, you see informations about encountered undead ship with it name and general location. You quickly note this information on map.</text>
+   <text condition="loot">After combat when you search destroyed ship, your boarding party found strange scrap of metal, which looks almost identical like this from which is made your medalion. Near scrap you found very damaged captains log. In one of last entries, you see information about encountered undead ship with it name and general location. You quickly note this information on map.</text>
    <failtext>You searched area by some time, but can't find any sign of your target. Maybe try again?</failtext>
   </step>
   <step index="4" finish="destroyship">
@@ -132,7 +132,7 @@ next.
    <finishdata name="ship" value="any" />
    <finishdata name="chance" value="5" />
    <finishdata name="condition" value="random" />
-   <text condition="askinbase">One of base inhibitants told you that he saw somewhere very similiar metal. He wasn't sure where, only one thing he remembered: it was on other ship which was later destroyed by undead. Maybe one of undead ship will be have clue on board?</text>
+   <text condition="askinbase">One of base inhibitants told you that he saw somewhere very similiar metal. He wasn't sure where, only one thing he remembered: It was on other ship which was later destroyed by undead. Maybe one of undead ship will be have clue on board?</text>
    <text condition="destroyship">When enemy ship explodes, by the moment you saw very unnatural color in explosion. Looks like something strange was on ship. Maybe next time will be good idea to send boarding party on undead ship to check what it can be?</text>
    <text condition="explore">After spending some time around, you found freshly destroyed merchant ship. Fast search around show that it was destroyed probably by undead. In almost destroyed captain's log, you found information that some time before, they found some strange metal. Maybe this same like your medalion? Probably it is good idea to check some undead ships around, maybe one of them still have cargo from this ship.</text>
    <text condition="loot">After combat, your boarding party found on destroyed ship small scrap of strange metal. Unfortunately, it doesn't help you too much in solve mystery of medalion. Maybe when you find more that scraps on another undead ship?</text>

@@ -29,7 +29,7 @@ package Ships.UI.Handlers is
 
    -- ****f* Ships.UI.Handlers/ShowModuleInfo
    -- FUNCTION
-   -- Show informations about selected module
+   -- Show information about selected module
    -- PARAMETERS
    -- Object - Gtkada_Builder used to create UI
    -- SOURCE
