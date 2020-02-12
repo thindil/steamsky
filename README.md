@@ -1,10 +1,10 @@
 ## General Info
 
-Steam Sky is an open source roguelike with a steampunk setting. You are a
+Steam Sky is an open source roguelike with a steampunk setting. You are the
 commander of a flying ship, as leader you will be traveling across floating
 bases, engaging in combat, trading goods etc. There is no mandatory ending
 to the game, you may freely play until your character dies. The game is
-currently constant development, but is in a playable state. Steam Sky is
+currently in constant development, but is in a playable state. Steam Sky is
 available for Linux and Windows 64 bit platforms.
 
 ## Game versions
@@ -44,7 +44,7 @@ this file is) to compile:
   Just run GPS, select *steamsky.gpr* as a project file and select option
   `Build All`.
 
-* If you prefer using console: in main source code directory type `gprbuild`
+* If you prefer using console: In main source code directory type `gprbuild`
   for debug mode build or for release mode: `gprbuild -XMode=release`. You
   can also use build script `build.sh`. Command: `./build.sh debug` will build
   the game in debug mode. Command: `.build.sh release` will build the game in
@@ -74,7 +74,7 @@ build script `build.sh` for this. Enter command: `./build.sh docs`.
 
 ### Linux
 If you use downloaded AppImage version, you don't need any additional
-libraries. Just run it as any AppImage file. More informations about AppImage
+libraries. Just run it as any AppImage file. More information about AppImage
 files usage, you can find at:
 
 https://docs.appimage.org/user-guide/run-appimages.html
@@ -126,7 +126,7 @@ Windows, use `steamsky.exe` instead `./steamsky.sh`.
 
 Here are available also testing versions of the game. You can find them
 in [Releases](https://github.com/thindil/steamsky/releases/tag/travis-stable-build).
-To use them, first you must download normal release. Then, for Linux: inside
+To use them, first you must download normal release. Then, for Linux: Inside
 directory where the game is, type `./steamsky-x86_64.AppImage --appimage-extract`
 to extract whole game to directory *squashfs-root*. And then just move files
 from the archive to proper locations. To run that version, just enter
@@ -138,11 +138,11 @@ unzip files (replace existing) to proper location where the game is installed.
 * steamsky-stable.tar.gz contains Linux 64-bit version of the game.
 
 ## Modding Support
-For detailed informations about modifying various game elements or debugging
+For detailed information about modifying various game elements or debugging
 game, see [MODDING.md](bin/doc/MODDING.md)
 
 ## Contributing to project
-For detailed informations about contributing to the project
+For detailed information about contributing to the project
 (bugs reporting, ideas propositions, code conduct, etc),
 see [CONTRIBUTING.md](bin/doc/CONTRIBUTING.md)
 

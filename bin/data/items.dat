@@ -4,7 +4,7 @@
 - Each item is between "item" tags.
 - Attribute "index" must be unique for each item. This value is used in ships
 and recipes data entries.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 - Attribute "name" is name of item displayed in various places (cargo info,
@@ -1810,7 +1810,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="12"/>
   <trade buyable="N" price="12"/>
   <data value="20"/>
-  <description>Small book with informations about basics of engineering. Used in training skills.</description>
+  <description>Small book with information about the basics of engineering. Used in training skills.</description>
  </item>
  <item index="189" name="Wooden gun simulator" showtype="Gun Simulator" type="GunSimulator" weight="23">
   <trade buyable="Y" price="19"/>
@@ -1839,7 +1839,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="12"/>
   <trade buyable="N" price="12"/>
   <data value="20"/>
-  <description>Small book with informations about basics of rhetoric. Used in training skills.</description>
+  <description>Small book with information about the basics of rhetoric. Used in training skills.</description>
  </item>
  <item index="192" name="Wooden small toys" showtype="Small toys" type="SmallToys" weight="1">
   <trade buyable="Y" price="8"/>
@@ -1868,7 +1868,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="12"/>
   <trade buyable="N" price="12"/>
   <data value="20"/>
-  <description>Small book with informations about basics of alchemy. Used in training skills.</description>
+  <description>Small book with information about the basics of alchemy. Used in training skills.</description>
  </item>
  <item index="195" name="Small book of cooking" showtype="Book of Cooking" type="CookingBook" weight="1">
   <trade buyable="Y" price="10"/>
@@ -1877,7 +1877,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="12"/>
   <trade buyable="N" price="12"/>
   <data value="20"/>
-  <description>Small book with informations about basics of cooking. Used in training skills.</description>
+  <description>Small book with information about the basics of cooking. Used in training skills.</description>
  </item>
  <item index="196" name="Small book of gunsmithing" showtype="Book of Gunsmithing" type="GunsmithBook" weight="1">
   <trade buyable="Y" price="10"/>
@@ -1886,7 +1886,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="12"/>
   <trade buyable="N" price="12"/>
   <data value="20"/>
-  <description>Small book with informations about basics of gunsmithing. Used in training skills.</description>
+  <description>Small book with information about the basics of gunsmithing. Used in training skills.</description>
  </item>
  <item index="197" name="Small book of metalsmithing" showtype="Book of Metalsmithing" type="MetalsmithBook" weight="1">
   <trade buyable="Y" price="10"/>
@@ -1895,7 +1895,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="12"/>
   <trade buyable="N" price="12"/>
   <data value="20"/>
-  <description>Small book with informations about basics of metalsmithing. Used in training skills.</description>
+  <description>Small book with information about the basics of metalsmithing. Used in training skills.</description>
  </item>
  <item index="198" name="Small book of medicine" showtype="Book of Medicine" type="MedicineBook" weight="1">
   <trade buyable="Y" price="10"/>
@@ -1904,7 +1904,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="12"/>
   <trade buyable="N" price="12"/>
   <data value="20"/>
-  <description>Small book with informations about basics of medicine. Used in training skills.</description>
+  <description>Small book with information about the basics of medicine. Used in training skills.</description>
  </item>
  <item index="199" name="Small book of farming" showtype="Book of Farming" type="FarmingBook" weight="1">
   <trade buyable="Y" price="10"/>
@@ -1913,7 +1913,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="12"/>
   <trade buyable="N" price="12"/>
   <data value="20"/>
-  <description>Small book with informations about basics of farming. Used in training skills.</description>
+  <description>Small book with information about the basics of farming. Used in training skills.</description>
  </item>
  <item index="200" name="Small book of woodcutting" showtype="Book of Woodcutting" type="WoodcuttingBook" weight="1">
   <trade buyable="Y" price="10"/>
@@ -1922,7 +1922,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="12"/>
   <trade buyable="N" price="12"/>
   <data value="20"/>
-  <description>Small book with informations about basics of woodcutting. Used in training skills.</description>
+  <description>Small book with information about the basics of woodcutting. Used in training skills.</description>
  </item>
  <item index="201" name="Small book of brewing" showtype="Book of Brewing" type="BrewingBook" weight="1">
   <trade buyable="Y" price="10"/>
@@ -1931,7 +1931,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="12"/>
   <trade buyable="N" price="12"/>
   <data value="20"/>
-  <description>Small book with informations about basics of brewing. Used in training skills.</description>
+  <description>Small book with information about the basics of brewing. Used in training skills.</description>
  </item>
  <item index="202" name="Small book of blacksmithing" showtype="Book of Blacksmithing" type="BlacksmithBook" weight="1">
   <trade buyable="Y" price="10"/>
@@ -1940,7 +1940,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="12"/>
   <trade buyable="N" price="12"/>
   <data value="20"/>
-  <description>Small book with informations about basics of blacksmithing. Used in training skills.</description>
+  <description>Small book with information about the basics of blacksmithing. Used in training skills.</description>
  </item>
  <item index="203" name="Small book of woodworking" showtype="Book of Woodworking" type="WoodworkingBook" weight="1">
   <trade buyable="Y" price="10"/>
@@ -1949,7 +1949,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="12"/>
   <trade buyable="N" price="12"/>
   <data value="20"/>
-  <description>Small book with informations about basics of woodworking. Used in training skills.</description>
+  <description>Small book with information about the basics of woodworking. Used in training skills.</description>
  </item>
  <item index="204" name="Small book of leatherworking" showtype="Book of Leatherworking" type="LeatherworkingBook" weight="1">
   <trade buyable="Y" price="10"/>
@@ -1958,7 +1958,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="12"/>
   <trade buyable="N" price="12"/>
   <data value="20"/>
-  <description>Small book with informations about basics of leatherworking. Used in training skills.</description>
+  <description>Small book with information about the basics of leatherworking. Used in training skills.</description>
  </item>
  <item index="205" name="Wooden training dummy" showtype="Training Dummy" type="TrainingDummy" weight="12">
   <trade buyable="Y" price="12"/>
@@ -1985,7 +1985,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <trade buyable="N" price="12"/>
   <trade buyable="N" price="12"/>
   <data value="20"/>
-  <description>Small book with informations about basics of printing. Used in training skills.</description>
+  <description>Small book with information about the basics of printing. Used in training skills.</description>
  </item>
  <item index="208" name="Wooden printing set" showtype="Printing set" type="PrintingSet" weight="24">
   <trade buyable="Y" price="20"/>

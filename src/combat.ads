@@ -41,7 +41,7 @@ package Combat is
    -- ****
    -- ****t* Combat/GunsInfoArray
    -- FUNCTION
-   -- Data structure for guns informations
+   -- Data structure for guns information
    -- SOURCE
    type GunsInfoArray is array(1 .. 2) of Positive;
    -- ****
@@ -90,7 +90,7 @@ package Combat is
    -- ****
    -- ****v* Combat/Enemy
    -- FUNCTION
-   -- Enemy informations
+   -- Enemy information
    -- SOURCE
    Enemy: Enemy_Record;
    -- ****
