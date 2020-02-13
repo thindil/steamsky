@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
   Titanium turret
 - Renamed Heavy turrets to Large turrets
 - Updated factions data
+- Size of turrets
 
 ### Fixed
 - Crash on generating recruits (issue #46)
