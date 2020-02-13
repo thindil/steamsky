@@ -2,8 +2,8 @@ Here are a few short recommendations before you open a new issue.
 
 1. Please open one issue per problem/suggestion/bug/etc. It makes it easier to
    discuss the issue.
-2. Try to provide as much as possible regarding the issue. It is probably
-   impossible to give too much informations :) Generally, when you want add
+2. Try to provide as much information as possible regarding the issue. It is probably
+   impossible to give too much informations :) Generally, when you want to add
    something to the game, try describe it as detailed as possible, when you want to
    report a bug, try to give enough information to help others reproduce the bug.
 3. This may sound rude, but please, at this moment don't add any suggestions

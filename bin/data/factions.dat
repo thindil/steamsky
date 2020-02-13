@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <factions>
 <!-- Each faction is between "faction" tags.
-- Attribute "index": index of faction (it can be number or text) and must be
+- Attribute "index": index of faction (it can be a number or text) and must be
 unique. At this moment this value is used to create bases during starting new
 game and to determine which ships are enemies or friends.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option) or "remove" (remove this entry).
-- Attribute "name": name of factions displayed in game. Can be any text and
+- Attribute "name": Name of factions displayed in game. Can be any text and
 unique.
-- Attribute "membername": name of single mobile from this faction. Can be any
+- Attribute "membername": Name of single mobile from this faction. Can be any
 text.
 - Attribute "pluralmembername": plural of name of mobiles from this faction.
 Can be any text.
@@ -28,21 +28,21 @@ attribute "population". If it should be random value, use attribute
 population. Minimum value is 0.
 - Optional attribute "namestype": Used in generating ship names of that faction
 and names of all bases. Can be "standard" (default value) or "robotic".
-- Attribute "healingtools": name of item type used to healing members of that
+- Attribute "healingtools": Name of item type used to healing members of that
 faction and in diseased bases events. Must be valid item type from
 *data/game.dat* file.
-- Attribute "healingskill": name of skill used to healing members of that
+- Attribute "healingskill": Name of skill used to healing members of that
 faction. Must be valid skill name from *data/game.dat* file.
 - Attribute "baseicon": hexadecimal number of character used as base icon for
 this faction on map. Must be valid UTF-8 character from current map font.
-- Attribute "weaponskill": name of skill skill used by favorite weapon of that
+- Attribute "weaponskill": Name of skill skill used by favorite weapon of that
 faction. Must be valid skill name from *data/game.dat* file.
 -->
  <faction index="POLEIS" name="Poleis" membername="member of Poleis" pluralmembername="members of Poleis" spawn="50" minpopulation="0" maxpopulation="500" healingtools="Medicines" healingskill="Medicine" baseicon="fc06" weaponskill="Swords">
 <!--
 - Tags "relation": Relation of this faction with other faction. All factions
 must have this tags for each faction (even for self).
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "update" (update selected
 entry).
 - Attribute "faction" is faction index to which relation will be set.
@@ -69,9 +69,9 @@ enemy ships.
 <!--
 - Tags "foodtype": Types of items used as food by this faction members. If
 no "foodtype" tags inside faction, that faction members can't be hungry.
-- Attribute "name": name of item type used as food. Must be valid item type
+- Attribute "name": Name of item type used as food. Must be valid item type
 from *data/game.dat* file.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry).
 -->
   <foodtype name="Food" />
@@ -79,9 +79,9 @@ are: "add" (add this entry, default option), "remove" (remove this entry).
 <!--
 - Tags "drinktype": Types of items used as drink by this faction members. If
 no "drinktype" tags inside faction, that faction members can't be hungry.
-- Attribute "name": name of item type used as food. Must be valid item type
+- Attribute "name": Name of item type used as food. Must be valid item type
 from *data/game.dat* file.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry).
 -->
   <drinktype name="Drink" />
@@ -91,7 +91,7 @@ between tags is description of career visible in new game setting. If faction
 don't have any available career then it is unavailable for player.
 - Attribute "index": index of career. Must be existing career index from
 *data/careers.dat* file.
-- Optional attribute `action`: what to do with this career. Possible values
+- Optional attribute `action`: What to do with this career. Possible values
 are: "add" (add this career, default option), "remove" (remove this career) or
 "update" (update selected career).
 - Attribute "playerindex": index of mobile used for starting player character,
@@ -139,7 +139,7 @@ between 51 and 70 it will be second base type.
   <drinktype name="Drink" />
 <!--
 - Tags "flags": Various info about faction (optional tag).
-- Attribute "name": name of flag. Possible values: "nogender" faction don't
+- Attribute "name": Name of flag. Possible values: "nogender" faction don't
 have genders and use male names as default, "diseaseimmune" faction members
 cannot become ill, no disease event for this faction, "nofatigue" faction
 members don't get tired so, they can't rest and regenerate health, "nomorale"
