@@ -714,10 +714,10 @@ from *data/items* directory. -->
 <!-- To change which item type is used for delivery missions, edit `value`
 attribute of tag `missionitemstype`. Value must be existing item type. -->
  <missionitemstype value="MissionItem"/>
-<!-- To change which item type is used as a fuel for ship, edit `value`
+<!-- To change which item type is used as fuel for ships, edit `value`
 attribute of tag `fueltype`. Value must be existing item type. -->
  <fueltype value="Fuel"/>
-<!-- To change which item is used as a money, edit `value` attribute of tag
+<!-- To change which item is used as money, edit `value` attribute of tag
 `moneyindex`. Value must be existing item index from any items file from
 *data/items* directory.-->
  <moneyindex value="1"/>
@@ -805,16 +805,16 @@ Value must be existing skill name. -->
 <!-- To change which skill is used for spotting things (other ships, etc), edit
 `value` attribute of tag `perceptionskill`. Value must be existing skill name. -->
  <perceptionskill value="Perception"/>
-<!-- To change which item type is used as a head armor for characters, edit
+<!-- To change which item type is used as head armor for characters, edit
 `value` attribute of tag `headarmor`. Value must be existing item type. -->
  <headarmor value="HeadArmor"/>
-<!-- To change which item type is used as a chest armor for characters, edit
+<!-- To change which item type is used as chest armor for characters, edit
 `value` attribute of tag `chestarmor`. Value must be existing item type. -->
  <chestarmor value="ChestArmor"/>
-<!-- To change which item type is used as a arms armor for characters, edit
+<!-- To change which item type is used as arm armor for characters, edit
 `value` attribute of tag `armsarmor`. Value must be existing item type. -->
  <armsarmor value="ArmsArmor"/>
-<!-- To change which item type is used as a legs armor for characters, edit
+<!-- To change which item type is used as leg armor for characters, edit
 `value` attribute of tag `legsarmor`. Value must be existing item type. -->
  <legsarmor value="LegsArmor"/>
 <!-- To change which item type is used as a shield for characters, edit
