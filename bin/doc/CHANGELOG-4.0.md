@@ -301,7 +301,7 @@ All notable changes to this project will be documented in this file.
 ## [3.5] - 2019-03-24
 
 ### Added
-- New ships: advanced huge poleis trader mk II, advanced huge independent
+- New ships: Advanced huge poleis trader mk II, advanced huge independent
   trader mk II, advanced huge pirates trader mk II, advanced huge poleis
   patrol ship mk II, advanced huge independent patrol ship mk II, advanced
   huge poleis trader mk III, advanced huge independent trader mk III, advanced
@@ -320,7 +320,7 @@ All notable changes to this project will be documented in this file.
 - Self-closing message boxes and option to set delay for self-closing
 - Option to set check boxes looks in themes
 - Each battering ram attack cause unarmed enemy to stop for 1 combat round
-- New factions flags: naturalarmor, toxicattack, sentientships, fanaticism and
+- New factions flags: Naturalarmor, toxicattack, sentientships, fanaticism and
   loner
 - Natural armor ability for Undead and Drones faction members
 - Toxic attack ability for Undead
@@ -369,7 +369,7 @@ All notable changes to this project will be documented in this file.
 ## [3.4] - 2019-02-24
 
 ### Added
-- New ships: armored independent patrol ship mk II, armored poleis patrol
+- New ships: Armored independent patrol ship mk II, armored poleis patrol
   ship mk III, armored independent patrol ship mk III, armored poleis patrol
   ship mk IV, armored independent patrol ship mk IV, advanced poleis patrol
   ship mk II, advanced independent patrol ship mk II, advanced poleis patrol
@@ -422,7 +422,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Crash on selling ship modules in shipyard
 - Crash when waiting in place
-- Modules in ships: poleis trader mk IV, pirates trader mk IV, independent
+- Modules in ships: Poleis trader mk IV, pirates trader mk IV, independent
   trader mk IV, poleis patrol ship mk IV and independent patrol ship mk IV
 - Crash when checking cleanliness of cabins
 - Crash on cleaning ship
@@ -485,7 +485,7 @@ All notable changes to this project will be documented in this file.
 - Name of faction in destroy ship goals
 - Deleting mob by modification files
 - Typo in character creation screen - "Carrer" instead of "Career" (issue #40)
-- RFE: allow to scroll box info (during character creation) using keyboard
+- RFE: Allow to scroll box info (during character creation) using keyboard
   (issue #41)
 
 ## [3.2] - 2018-12-30
@@ -538,7 +538,7 @@ All notable changes to this project will be documented in this file.
 ## [3.1] - 2018-12-02
 
 ### Added
-- New ship modules: advanced huge adamantium hull, huge adamantium engine,
+- New ship modules: Advanced huge adamantium hull, huge adamantium engine,
   advanced huge adamantium engine, adamantium harpoon gun, adamantium 80mm gun,
   adamantium 100mm gun, adamantium 120mm gun, small adamantium workshop, medium
   bronze cargo bay and medium iron cargo bay

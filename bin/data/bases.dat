@@ -1,24 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <bases>
-<!-- Each base type is between "base" tags.
+<!-- Each base type is between the "base" tags.
 - Attribute "index" is a base type index and must be unique for each base
-type. It can be number or text. Required
-- Attribute "name" is a base type name showed to player in game. Should be
+type. It can be a number or text. Required
+- Attribute "name" is the base type name showed to the player ingame. Should be
 unique too. Required.
-- Attribute "color" is a base type color in hexadecimal used to show this
-base type to player on the map in game. Required.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Attribute "color" is the base type color in hexadecimal and is used to show this
+base type to the player on the map ingame. Required.
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 -->
  <base index="0" name="Industrial" color="ff0000">
 <!--
-Tag "item" is used to set prices for selected item in that base.
+Tag "item" is used to set the prices of selected item in that base.
 - Attribute "index": item index from "items.dat" file. Required.
-- Attribute "sellprice": price for which item is sell in that type of base. If
+- Attribute "sellprice": Price for which item is sell in that type of base. If
 you want make selected item buyable in that type of base, you must add this
 attribute.
-- Attribute "buyprice": price for which item will be bought in that type of
+- Attribute "buyprice": Price for which item will be bought in that type of
 base. If you want item to have special price in selected type of base you must
 add this attribute.
 -->
@@ -186,7 +186,7 @@ add this attribute.
   <item index="323" sellprice="20" />
   <item index="324" sellprice="25" />
 <!--
-Tag "recipe" is used to set which recipes are available to buy in that type of
+Tag "recipe" is used to set which recipes are available to buy in those types of
 bases.
 - Attribute "index": Index of the recipe to buy, from file "recipes.dat".
 Required.
@@ -393,7 +393,7 @@ presented to the player during selection of starting base in main menu.
   <recipe index="33" />
   <recipe index="34" />
   <recipe index="35" />
-  <description>Agricultural bases provides food, drinks and raw materials to create them. Easiest starting point.</description>
+  <description>Agricultural bases provides food, drinks and the raw materials to create them. Easiest starting point.</description>
  </base>
  <base index="2" name="Refinery" color="ffff00">
   <item index="9" sellprice="3" />
@@ -411,18 +411,18 @@ presented to the player during selection of starting base in main menu.
   <recipe index="2" />
   <recipe index="27" />
   <recipe index="28" />
-  <description>Refinery bases provides raw materials for refining which later can be sold in Industrial bases. Little more difficult starting point than Industrial bases.</description>
+  <description>Refinery bases provides raw materials for refining which later can be sold to Industrial bases. Little more difficult starting point than the Industrial bases.</description>
  </base>
  <base index="3" name="Shipyard" color="00ffff">
 <!--
 Tag "flags" is various info about selected base type. Possible options are:
-"shipyard" - that base type have shipyard. Ship repairs in that base are 50%
-cheaper, `temple` - that base type allow action `Pray` which raise player
+"shipyard" - Base types that have a shipyard. Ship repairs in that base are 50%
+cheaper, `temple` - That base type allows action `Pray` which raise player
 and the player ship crew members morale, additionally, healing wounded crew
-members in that base is twice time cheaper.
+members in that base is twice as cheap.
 -->
   <flag name="shipyard" />
-  <description>Shipyard bases don't sell any items but offers cheaper repairs to ships and ability to upgrade ships. Difficult place for starting point.</description>
+  <description>Shipyard bases don't sell any items but offer cheaper repairs to ships and the ability to upgrade ships. A difficult place as a starting point.</description>
  </base>
  <base index="4" name="Military" color="32dc32">
   <item index="4" sellprice="3" />
@@ -667,7 +667,7 @@ members in that base is twice time cheaper.
   <recipe index="228" />
   <recipe index="229" />
   <recipe index="230" />
-  <description>Military bases provides ammunition to guns and melee weapons. They are most difficult place for starting point.</description>
+  <description>Military bases provides ammunition to guns and melee weapons. They are the most difficult place as a starting point.</description>
  </base>
  <base index="5" name="Temple" color="7f6b00">
   <item index="2" sellprice="2" />
@@ -680,11 +680,11 @@ members in that base is twice time cheaper.
   <recipe index="18" />
   <recipe index="20" />
   <flag name="temple" />
-  <description>Temple bases provides ability to pray for your ship crew members. Additinally, healing there is a lot cheaper than in other bases. They also provide basic food and drinks. Little more difficult starting point than Agricultural bases.</description>
+  <description>Temple bases provides ability to pray for your ship crew members. Additinally, healing there is a lot cheaper than in other bases. They also provide basic food and drinks. A little more difficult starting point than in Agricultural bases.</description>
  </base>
  <base index="6" name="Black market" color="787878">
   <flag name="blackmarket" />
-  <description>Black market bases sells and buys random items. Depending on your luck it can be very easy or very difficult point to start the game.</description>
+  <description>Black market bases sell and buy random items. Depending on your luck it can be a very easy or a very difficult place to start the game.</description>
  </base>
  <base index="7" name="Factory" color="ff0000">
   <item index="5" sellprice="3" />
@@ -1015,21 +1015,21 @@ members in that base is twice time cheaper.
   <recipe index="301" />
   <recipe index="302" />
   <flag name="shipyard" />
-  <description>Factory bases provide tools and materials for crafting and allow to repair or upgrade your ship in the shipyard. Easiest starting point for Drones.</description>
+  <description>Factory bases provide tools and materials for crafting and allow to repair or upgrade your ship in the shipyard. The asiest starting place for Drones.</description>
  </base>
  <base index="8" name="Market" color="5f9ea0">
   <flag name="blackmarket" />
   <flag name="shipyard" />
-  <description>Market bases sells and buys random items, additionally they offers cheaper repairs to ships and ability to upgrade ships. Depending on your luck it can be very easy or very difficult point to start the game.</description>
+  <description>Market bases sell and buy random items, additionally they offers cheaper repairs to ships and ability to upgrade ships. Depending on your luck it can be a very easy or a very difficult point to start the game.</description>
  </base>
  <base index="9" name="Barracks" color="19785f">
   <flag name="barracks" />
-  <description>Barracks bases don't sell any items but have more that other bases recruits and they are cheaper to hire with lower maintain costs. Difficult place for starting point.</description>
+  <description>Barracks bases don't sell any items but have more that other bases recruits and they are cheaper to hire with lower maintain costs. A difficult place as astarting point.</description>
  </base>
  <base index="10" name="Agora" color="cd00cd">
   <flag name="blackmarket" />
   <flag name="shipyard" />
   <flag name="barracks" />
-  <description>Agoras bases sells and buys random items, have more available recruits and they are cheaper than in other bases. Additionally they offers cheaper repairs to ships and ability to upgrade ships. Depending on your luck it can be very easy or very difficult point to start the game.</description>
+  <description>Agora bases buy and sell random items, have more available recruits and they are cheaper than in other bases. Additionally they offers cheaper repairs for ships and the ability to upgrade ships. Depending on your luck it can be a very easy or a very difficult place to start the game.</description>
  </base>
 </bases>
