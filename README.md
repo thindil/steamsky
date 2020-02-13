@@ -43,7 +43,7 @@ this file is) to compile:
   Just run GPS, select *steamsky.gpr* as a project file and select the option
   `Build All`.
 
-* If you prefer using console: in the main source code directory type `gprbuild`
+* If you prefer using console: In the main source code directory type `gprbuild`
   for debug mode build or for release mode: `gprbuild -XMode=release`. If you
   have installed [Bob](https://github.com/thindil/bob) you can type `bob debug`
   for build in debug mode or `bob release` to prepare release for the program.
