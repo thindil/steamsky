@@ -101,7 +101,7 @@ All notable changes to this project will be documented in this file.
 ## [0.8] - 2017-02-05
 
 ### Added
-- New ship module: iron armor and heavy iron armor
+- New ship module: Iron armor and heavy iron armor
 - New item types: body, alchemyset, mold, gunsmithset, cookingset, 
   sickle, saw, bucket, barleyseeds, barley, grape, grapevine, sand,
   blacksmithset and woodworkerset
@@ -121,7 +121,7 @@ All notable changes to this project will be documented in this file.
   bronze sickle, bronze blacksmith set, bronze saw, bronze woodworker
   set, wooden cooking set and wooden bucket
 - New skills: brewery, blacksmith and woodworking
-- New type of ship modules: workshop
+- New type of ship modules: Workshop
 - New ship modules: small bronze workshop and small iron workshop
 - New type of missions in bases: explore
 - New enemy ships: large clockwork drone and large pirate ship
@@ -135,7 +135,7 @@ All notable changes to this project will be documented in this file.
 - Updated README.md
 - Item type from FoodMaterial to RawFood
 - Better random cargo in npc ships
-- Prices of: iron 80mm ammo, steel 80mm ammo, iron 100mm ammo, steel
+- Prices of: Iron 80mm ammo, steel 80mm ammo, iron 100mm ammo, steel
   100mm ammo, iron 120mm ammo and steel 120mm ammo
 - Moved starting player ship crew to separated text file
 
@@ -157,7 +157,7 @@ All notable changes to this project will be documented in this file.
 - Option to generate random player name in new game settings
 - Ships size have impact on spot another ship during fly
 - Game statistics
-- New ship modules: advanced bronze cabin, extended bronze cabin, luxury
+- New ship modules: Advanced bronze cabin, extended bronze cabin, luxury
   bronze cabin, heavy bronze turret, heavy bronze battering ram, iron cockpit,
   iron cargo bay, small iron alchemy lab, small iron furnace, small iron
   water collector, small iron greenhouse, small iron medical room, steel
@@ -168,10 +168,10 @@ All notable changes to this project will be documented in this file.
 - Random names for all ships
 - Deconstruction of items for discover new crafting recipes
 - Option to buy crafting recipes in bases
-- New items types: andraeseeds, illandruseeds and missionitem
-- New items: andrae seeds, illandru seeds and small package
-- New skill: woodcutting
-- New crafting recipes: andrae logs and illandru logs
+- New items types: Andraeseeds, illandruseeds and missionitem
+- New items: Andrae seeds, illandru seeds and small package
+- New skill: Woodcutting
+- New crafting recipes: Andrae logs and illandru logs
 - Changed name of ship module small alchemy lab to small bronze alchemy lab
 - Random missions in bases
 - New type of messages: missions messages
@@ -228,9 +228,9 @@ All notable changes to this project will be documented in this file.
 - New ship modules: bronze turret, iron 60mm gun, small bronze greenhouse, small 
   bronze water collector, small bronze medical room, iron 80mm gun, iron 100mm 
   gun and iron 120mm gun
-- New enemy ships: pirate ship, armored pirate ship, small attacking drone,
+- New enemy ships: Pirate ship, armored pirate ship, small attacking drone,
   attacking clockwork drone and armored attacking drone
-- New types of items: ammo60, herbs, herbseeds, vegetableseeds, medicines, ammo80, 
+- New types of items: Ammo60, herbs, herbseeds, vegetableseeds, medicines, ammo80, 
   ammo100 and ammo120
 - Each crafting recipe have own crafting time
 - New skills: medicine and farming
@@ -381,7 +381,7 @@ All notable changes to this project will be documented in this file.
 - Support for enemy armor in combat
 - Types of messages (combat/crafting/etc.)
 - Option to sort messages by types on messages screen
-- New items to game: illandru logs, fine rations, gunpowder, iron plates
+- New items to game: Illandru logs, fine rations, gunpowder, iron plates
 - New types of items: gunpowder, iron
 - New crafting recipes: 20mm ammo and fine rations
 - New skills: cooking and gunsmith
