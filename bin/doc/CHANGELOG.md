@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Crash on missing tools in crafting (issue #51)
 - Unable to replace hull (issue #53)
 - Removing turret crashes game  (issue #55)
+- Additional grammar fixes (pull request #56)
 
 ## [4.6] - 2019-01-26
 
