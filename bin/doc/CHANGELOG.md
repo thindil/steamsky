@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - Unable to replace hull (issue #53)
 - Removing turret crashes game  (issue #55)
 - Additional grammar fixes (pull request #56)
+- Possible crash when save directory is not writeable
 
 ## [4.6] - 2019-01-26
 
