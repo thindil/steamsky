@@ -45,14 +45,14 @@ All notable changes to this project will be documented in this file.
 ## [1.9] - 2017-12-10
 
 ### Added
-- New items: iron mold, iron sword, iron short sword, bronze chestplate,
+- New items: Iron mold, iron sword, iron short sword, bronze chestplate,
   bronze helmet, bronze armsguard, bronze legsguard, iron shield, iron
   chestplate, iron helmet, iron armsguard, iron legsguard, steel short sword,
   steel sword, steel shield, steel chestplate, steel helmet, steel armsguard,
   steel legsguard, steel mold, iron gunsmith set, steel gunsmith set, bronze 
   cooking set, iron cooking set, steel cooking set, iron sickle, steel sickle
   and iron saw
-- New crafting recipes: iron mold, iron sword, iron short sword, bronze
+- New crafting recipes: Iron mold, iron sword, iron short sword, bronze
   chestplate, bronze helmet, bronze armsguard, bronze legsguard, iron shield,
   iron chestplate, iron helmet, iron armsguard, iron legsguard, steel short
   sword, steel sword, steel shield, steel chestplate, steel helmet, steel

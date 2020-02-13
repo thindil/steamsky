@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <modules>
 <!-- Each ship module is between "module" tags.
-- Attribute "index" is a module index (it can be number or text) and must be
+- Attribute "index" is the module index (it can be a number or text) and must be
 unique. This value is used in ships data entries.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 - Attribute "name": Standard name of module. Will be visible in ship info
@@ -14,8 +14,8 @@ Water_Collector, Workshop, Greenhouse, Medical_room, Harpoon_Gun,
 Training_Room.
 - Attribute "weight": Weight of module in kilograms.
 - Attribute "value": Depends on type of module. For 'Engine' it is fuel usage
-for travel by one map field. For 'Cabin' it is value of reduced tiredness of
-owner who rest there. For 'Gun' or 'Harpoon_Gun' it is index of item type used
+for traveling one map field. For 'Cabin' it is value of reduction in tiredness of
+the owner who rests there. For 'Gun' or 'Harpoon_Gun' it is index of item type used
 as ammunition (item types are in *game.dat* file). For 'Hull' it is maximum
 allowed size of installed module. For any other type of modules should be 0
 (zero).
@@ -423,7 +423,7 @@ types of modules) the module can have. Default value is 1.
  <module durability="1200" index="386" installtime="670" material="Adamantium" maxowners="8" maxvalue="40" name="Huge double luxury adamantium cabin" price="80000" size="4" skill="Engineering" type="CABIN" value="40" weight="9600">Huge, decorated, cabin made of adamantium.  Well equipped with high quality furniture and with lower overall quality but more space for residents.</module>
  <module durability="200" index="387" installtime="100" material="Bronze" maxowners="2" name="Medium bronze alchemy lab" price="2000" size="2" skill="Engineering" type="ALCHEMY_LAB" value="0" weight="800">Allow research new crafting recipes and craft some items, medium sized.</module>
  <module durability="400" index="388" installtime="100" material="Iron" maxowners="2" name="Medium iron alchemy lab" price="4000" size="2" skill="Engineering" type="ALCHEMY_LAB" value="0" weight="800">Allow research new crafting recipes and craft some items. More durable, medium sized version.</module>
- <module durability="600" index="389" installtime="100" material="Steel" maxowners="2" name="Medium alchemy steel alchemy lab" price="8000" size="2" skill="Engineering" type="ALCHEMY_LAB" value="0" weight="900">Allow research new crafting recipes and craft some items. More durable and medium sized version made of steel</module>
+ <module durability="600" index="389" installtime="100" material="Steel" maxowners="2" name="Medium steel alchemy lab" price="8000" size="2" skill="Engineering" type="ALCHEMY_LAB" value="0" weight="900">Allow research new crafting recipes and craft some items. More durable and medium sized version made of steel</module>
  <module durability="800" index="390" installtime="150" material="Titanium" maxowners="2" name="Medium titanium alchemy lab" price="12000" size="2" skill="Engineering" type="ALCHEMY_LAB" value="0" weight="1800">Allows research of new crafting recipes and crafting of some items. More durable and medium sized version made of titanium.</module>
  <module durability="1000" index="391" installtime="150" material="Orichalcum" maxowners="2" name="Medium orichalcum alchemy lab" price="224000" size="2" skill="Engineering" type="ALCHEMY_LAB" value="0" weight="1800">Allows research of new crafting recipes and crafting of some items. More durable and medium sized version made of orichalcum.</module>
  <module durability="1200" index="392" installtime="150" material="Adamantium" maxowners="2" name="Medium adamantium alchemy lab" price="48000" size="2" skill="Engineering" type="ALCHEMY_LAB" value="0" weight="2400">Allows research of new crafting recipes and crafting of some items. More durable and medium sized version made of adamantium.</module>
