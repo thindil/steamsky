@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Show current ship speed when option "Show numeric values" is enabled
 - Info about speed difference between player and enemy ships in combat
-- Types of ammunition: normal, piercing, explosive
+- Types of ammunition: Normal, piercing, explosive
 - Guns and harpoon guns have size now and require proper size of turret to be
   installed
 - New ship modules: huge bronze turret, huge iron turret, huge steel turret,
@@ -112,7 +112,7 @@ All notable changes to this project will be documented in this file.
 ## [4.4] - 2019-12-01
 
 ### Added
-- New items: adamantium small toys, medium book of alchemy, large book of
+- New items: Adamantium small toys, medium book of alchemy, large book of
   alchemy, huge book of alchemy, medium book of cooking, large book of
   cooking, huge book of cooking, medium book of gunsmithing, large book of
   gunsmithing, huge book of gunsmithing, medium book of metalsmithing, large
@@ -122,7 +122,7 @@ All notable changes to this project will be documented in this file.
   book of woodcutting, huge book of woodcutting, medium book of brewing, large
   book of brewing, huge book of brewing, medium book of blacksmithing and
   large book of blacksmithing
-- New crafting recipes: adamantium small toys, medium book of alchemy, large
+- New crafting recipes: Adamantium small toys, medium book of alchemy, large
   book of alchemy, huge book of alchemy, medium book of cooking, large book of
   cooking, huge book of cooking, medium book of gunsmithing, large book of
   gunsmithing, huge book of gunsmithing, medium book of metalsmithing, large

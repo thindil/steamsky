@@ -4,7 +4,7 @@
 - Each item is between "item" tags.
 - Attribute "index" must be unique for each item. This value is used in ships
 and recipes data entries.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 - Attribute "name" is name of item displayed in various places (cargo info,

@@ -52,12 +52,12 @@ All notable changes to this project will be documented in this file.
 ## [2.9] - 2018-10-07
 
 ### Added
-- New crafting recipes: adamantium short sword, adamantium sword, adamantium
+- New crafting recipes: Adamantium short sword, adamantium sword, adamantium
   shield, adamantium chestplate, adamantium helmet, adamantium armsguard,
   adamantium legsguard, wooden cockpit simulator, sheet of paper, empty book,
   small book of engineering, wooden gun simulator, small book of rethoric and
   wooden small toys
-- New items: adamantium sword, adamantium shield, adamantium chestplate,
+- New items: Adamantium sword, adamantium shield, adamantium chestplate,
   wooden cockpit simulator, adamantium helmet, small book of engineering,
   wooden gun simulator, adamantium armsguard, small book of rhetoric, wooden
   small toys, adamantium legsguard, small book of alchemy, small book of
@@ -75,7 +75,7 @@ All notable changes to this project will be documented in this file.
   smalltraps, printingbook, printingset, paper and emptybook
 - Option to set fonts size in game
 - User Interface themes
-- New skill: printing
+- New skill: Printing
 - Recruits skills and attributes depends on player reputation in base
 - Size to bases
 - Ability to sort bases in bases list by population
@@ -104,12 +104,12 @@ All notable changes to this project will be documented in this file.
 ## [2.8] - 2018-09-09
 
 ### Added
-- New crafting recipes: adamantium mold, adamantium gunsmith set, adamantium
+- New crafting recipes: Adamantium mold, adamantium gunsmith set, adamantium
   cooking set, adamantium sickle, adamantium saw, adamantium bucket, adamantium
   blacksmith set, adamantium woodworker set, adamantium repair tools,
   adamantium sewing kit, adamantium 80mm ammo, adamantium 100mm ammo,
   adamantium 120mm ammo and adamantium harpoon
-- New items: adamantium gunsmith set, adamantium cooking set, adamantium
+- New items: Adamantium gunsmith set, adamantium cooking set, adamantium
   sickle, adamantium saw, adamantium bucket, adamantium blacksmith set,
   adamantium woodworker set, adamantium repair tools, adamantium sewing kit,
   adamantium 80mm ammo, adamantium 100mm ammo, adamantium 120mm ammo,
@@ -130,7 +130,7 @@ All notable changes to this project will be documented in this file.
   ship modules, ships and stories from modifications files
 - Ability to select player career which affect player starting ship and
   equipment
-- New ships: player starting ships for trader, hunter, explorer and crafter
+- New ships: Player starting ships for trader, hunter, explorer and crafter
   careers
 - Bonus to gained experience based on career selected by player
 - Each crew members, recruit, passenger have home skybase
@@ -191,14 +191,14 @@ All notable changes to this project will be documented in this file.
 - Starting player character data for undead and drones factions
 - Starting crew data for undead, drones and inquisition factions
 - Separated player starting ship for each faction
-- New ship: player starting ship for pirates, undead, drones and inquisition
+- New ship: Player starting ship for pirates, undead, drones and inquisition
   factions
 - Description to factions
-- New item types: adamantiumore and adamantium
+- New item types: Adamantiumore and adamantium
 - Option to select player faction at starting new game
-- New items: adamantium ore, adamantium plates and adamantium mold
+- New items: Adamantium ore, adamantium plates and adamantium mold
 - Separated food and drinks types for each faction
-- New crafting recipe: adamantium plates
+- New crafting recipe: Adamantium plates
 
 ### Changed
 - Updated interface
@@ -449,7 +449,7 @@ All notable changes to this project will be documented in this file.
 ## [2.2] - 2018-03-25
 
 ### Added
-- New enemy ships: armored pirate ship mk IV, attacking clockwork drone mk IV,
+- New enemy ships: Armored pirate ship mk IV, attacking clockwork drone mk IV,
   armored attacking drone mk IV, inquisition ship mk IV, armored inquisition
   ship mk IV, large clockwork drone mk IV, large pirate ship mk IV, undead ship
   mk IV, large undead ship mk IV, large inquisition ship mk IV, large attacking
@@ -500,7 +500,7 @@ All notable changes to this project will be documented in this file.
   ammo, titanium 100mm ammo, titanium 120mm ammo, titanium harpoon, titanium
   short sword, titanium sword, titanium shield, titanium chestplate, titanium
   helmet, titanium armsguard and titanium legsguard
-- New enemy ship: pirate ship mk IV
+- New enemy ship: Pirate ship mk IV
 
 ### Changed
 - Updated README.md

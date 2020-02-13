@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <stories>
 <!-- Each story is between "story" tags.
-- Attribute "index": index of story (it can be number or text) and must be
+- Attribute "index": index of story (it can be a number or text) and must be
 unique. At this moment this value is used to manage current story in which
 player is involved.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 - Attribute "start": condition which must be met to start that story. Possible
@@ -19,12 +19,12 @@ story.
 - Tags "startdata": contains data needed for story starting condition. For
 "dropitem" it will be index of item which should drop, mob faction from which
 item will be dropped, chance (1 to that number) for drop.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option) or "remove" (remove this entry).
 - Tag "endtext": text which will be show to player when he/she finish story.
 - Tags "forbiddenfaction": if player is in that faction, he can't start this
 story.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option) or "remove" (remove this entry).
 -->
  <story index="1" start="dropitem" minsteps="3" maxsteps="10" startstep="1" finalstep="4" name="Strange find">
@@ -40,7 +40,7 @@ values are: "askinbase" - go to next step when player ask about something in
 any or selected base, "destroyship" - go to next step when player destroy
 selected ship, "explore" - go to next step when player search selected map
 field, "loot" - loot selected item from enemy ship.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 - Tags "finishdata": contains data needed for finish selected step.
@@ -58,13 +58,13 @@ used for check did step will progress to next, or value "random" for random
 chance. Name "chance" is used by all steps and mean chance (1 to that number
 for "random" condition or Skill + roll from 1 to 100) that step will
 progress to next.
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 - Tag "text": text which will be show to player when step starts.
 - Attribute "condition": finish condition of previous step which was lead to
 this one. Possible values: "any", "askinbase", "destroyship" and "explore".
-- Optional attribute `action`: what to do with this entry. Possible values
+- Optional attribute `action`: What to do with this entry. Possible values
 are: "add" (add this entry, default option), "remove" (remove this entry) or
 "update" (update selected entry).
 - Tag "failtext": text which will be show to player if step not progress to
