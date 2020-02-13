@@ -952,8 +952,6 @@ package body MainMenu is
          Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
          Hide(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
          ShowDialog
-           ("Can't load game data files. Error: " & To_String(DataError));
-         ShowDialog
            ("Directory " & To_String(SaveDirectory) &
             " is not write accessible, thus save games cannot be saved.");
       end if;
