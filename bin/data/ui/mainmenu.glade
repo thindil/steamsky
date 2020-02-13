@@ -1798,19 +1798,7 @@ Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WAR
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="lblerror">
-                <property name="name">normalfont</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">and attach (if possible) file 'error.log'</property>
-                <property name="wrap">True</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">4</property>
-              </packing>
+              <placeholder/>
             </child>
             <child>
               <placeholder/>
