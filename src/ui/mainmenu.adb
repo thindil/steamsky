@@ -950,7 +950,10 @@ package body MainMenu is
       TextView: constant Gtk_Text_View := Gtk_Text_View_New;
       Scroll: constant Gtk_Scrolled_Window := Gtk_Scrolled_Window_New;
       Frame: constant Gtk_Frame := Gtk_Frame_New("Technical information:");
+      Label: constant Gtk_Label :=
+        Gtk_Label_New("and attach (if possible) file 'error.log'");
    begin
+      Pack_Start(Gtk_Box(Get_Object(Builder, "errorbox")), Label, False);
       Add(Scroll, TextView);
       Add(Frame, Scroll);
       Pack_Start(Gtk_Box(Get_Object(Builder, "errorbox")), Frame);
@@ -1057,7 +1060,7 @@ package body MainMenu is
          NewGameKeyPressed'Access);
       declare
          Label: constant Gtk_Label :=
-           Gtk_Label(Get_Object(Builder, "lblerror"));
+           Gtk_Label(Get_Child(Gtk_Box(Get_Object(Builder, "errorbox")), 4));
          ErrorFileDirectory: Unbounded_String :=
            To_Unbounded_String(Current_Directory);
          NewDataDirectory: Unbounded_String := DataDirectory;
