@@ -185,7 +185,7 @@ package body Ships.Crew is
       if GivenOrder = Train
         and then Ship.Modules(ModuleIndex).TrainedSkill = 0 then
          raise Crew_Order_Error
-           with MemberName & " can't starts training because " &
+           with MemberName & " can't start training because " &
            To_String(Ship.Modules(ModuleIndex).Name) & " isn't prepared.";
       end if;
       if GivenOrder = Upgrading or GivenOrder = Repair or GivenOrder = Clean or
@@ -228,19 +228,19 @@ package body Ships.Crew is
                   when Repair =>
                      raise Crew_Order_Error
                        with MemberName &
-                       " can't starts repairing ship because you don't have repair tools.";
+                       " can't start repairing ship because you don't have the proper tools.";
                   when Clean =>
                      raise Crew_Order_Error
                        with MemberName &
-                       " can't starts cleaning ship because you don't have any cleaning tools.";
+                       " can't start cleaning ship because you don't have any cleaning tools.";
                   when Upgrading =>
                      raise Crew_Order_Error
                        with MemberName &
-                       " can't starts upgrading module because you don't have repair tools.";
+                       " can't start upgrading module because you don't have the proper tools.";
                   when Train =>
                      raise Crew_Order_Error
                        with MemberName &
-                       " can't starts training because you don't have proper tools.";
+                       " can't start training because you don't have the proper tools.";
                   when others =>
                      return;
                end case;
@@ -323,15 +323,15 @@ package body Ships.Crew is
             when Pilot =>
                raise Crew_Order_Error
                  with MemberName &
-                 " can't starts piloting because cockpit is destroyed or you don't have cockpit.";
+                 " can't start piloting because the cockpit is destroyed or you don't have cockpit.";
             when Engineer =>
                raise Crew_Order_Error
                  with MemberName &
-                 " can't starts engineers duty because all engines are destroyed or you don't have engine.";
+                 " can't start engineer's duty because all of the engines are destroyed or you don't have engine.";
             when Gunner =>
                raise Crew_Order_Error
                  with MemberName &
-                 " can't starts operating gun because all guns are destroyed or you don't have installed any.";
+                 " can't start operating gun because all of the guns are destroyed or you don't have any installed.";
             when Rest =>
                Modules_Loop2 :
                for Module of Ship.Modules loop
@@ -340,8 +340,8 @@ package body Ships.Crew is
                         if Owner = 0 then
                            Owner := MemberIndex;
                            AddMessage
-                             (MemberName & " take " & To_String(Module.Name) &
-                              " as own cabin.",
+                             (MemberName & " takes " & To_String(Module.Name) &
+                              " as their own cabin.",
                               OtherMessage);
                            exit Modules_Loop2;
                         end if;
@@ -400,14 +400,14 @@ package body Ships.Crew is
                Ship.Modules(ModuleIndex2).Owner(1) := MemberIndex;
             when Engineer =>
                AddMessage
-                 (MemberName & " starts engineers duty.", OrderMessage);
+                 (MemberName & " starts engineer's duty.", OrderMessage);
             when Gunner =>
                AddMessage(MemberName & " starts operating gun.", OrderMessage);
                Ship.Modules(ModuleIndex2).Owner(1) := MemberIndex;
             when Rest =>
-               AddMessage(MemberName & " is going on break.", OrderMessage);
+               AddMessage(MemberName & " is going on a break.", OrderMessage);
             when Repair =>
-               AddMessage(MemberName & " starts repair ship.", OrderMessage);
+               AddMessage(MemberName & " starts repairing ship.", OrderMessage);
             when Craft =>
                AddMessage(MemberName & " starts manufacturing.", OrderMessage);
                for Owner of Ship.Modules(ModuleIndex2).Owner loop
@@ -441,10 +441,10 @@ package body Ships.Crew is
                AddMessage(MemberName & " starts cleaning ship.", OrderMessage);
             when Boarding =>
                AddMessage
-                 (MemberName & " starts boarding enemy ship.", OrderMessage);
+                 (MemberName & " starts boarding the enemy ship.", OrderMessage);
             when Defend =>
                AddMessage
-                 (MemberName & " starts defending ship.", OrderMessage);
+                 (MemberName & " starts defending the ship.", OrderMessage);
             when Train =>
                AddMessage
                  (MemberName & " starts personal training.", OrderMessage);

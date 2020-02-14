@@ -470,12 +470,12 @@ package body Ships is
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
                  " ship '" & To_String(ShipIndex) &
-                 "', there no ship with that index.";
+                 "', there is no ship with that index.";
             end if;
          elsif ProtoShips_Container.Contains(ProtoShips_List, ShipIndex) then
             raise Data_Loading_Error
               with "Can't add ship '" & To_String(ShipIndex) &
-              "', there is one with that index.";
+              "', there is already a ship with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then

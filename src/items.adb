@@ -61,12 +61,12 @@ package body Items is
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
                  " item '" & To_String(ItemIndex) &
-                 "', there no item with that index.";
+                 "', there is no item with that index.";
             end if;
          elsif Objects_Container.Contains(Items_List, ItemIndex) then
             raise Data_Loading_Error
               with "Can't add item '" & To_String(ItemIndex) &
-              "', there is one with that index.";
+              "', there is an item with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
