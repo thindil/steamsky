@@ -119,7 +119,7 @@ package body Factions is
          elsif Factions_Container.Contains(Factions_List, FactionIndex) then
             raise Data_Loading_Error
               with "Can't add faction '" & To_String(FactionIndex) &
-              "', there is one with that index.";
+              "', there is already a faction with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then

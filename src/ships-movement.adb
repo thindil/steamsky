@@ -55,10 +55,10 @@ package body Ships.Movement is
          exit when HaveEngine and HaveCockpit;
       end loop;
       if not HaveEngine then
-         return "You don't have working engine on ship or all engines are destroyed.";
+         return "You don't have a working engine on your ship or all of the engines are destroyed.";
       end if;
       if not HaveCockpit then
-         return "You don't have cockpit on ship or cockpit is destroyed.";
+         return "You don't have a cockpit on your ship or the cockpit is destroyed.";
       end if;
       if Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) then
@@ -74,10 +74,10 @@ package body Ships.Movement is
          exit when HavePilot and HaveEngineer;
       end loop;
       if not HavePilot then
-         return "You don't have pilot on duty.";
+         return "You don't have a pilot on duty.";
       end if;
       if not HaveEngineer then
-         return "You don't have engineer on duty.";
+         return "You don't have an engineer on duty.";
       end if;
       return "";
    end HaveOrderRequirements;
@@ -105,11 +105,11 @@ package body Ships.Movement is
       case PlayerShip.Speed is
          when DOCKED =>
             Message :=
-              To_Unbounded_String("First you must undock ship from base.");
+              To_Unbounded_String("First you must undock your ship from the base.");
             return 0;
          when FULL_STOP =>
             Message :=
-              To_Unbounded_String("First you must set speed for ship.");
+              To_Unbounded_String("First you must set the speed of your ship.");
             return 0;
          when others =>
             null;
@@ -175,7 +175,7 @@ package body Ships.Movement is
            FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
          if FuelIndex = 0 then
             AddMessage
-              ("Ship fall from sky due to lack of fuel.", OtherMessage, RED);
+              ("Ship falls from the sky due to a lack of fuel.", OtherMessage, RED);
             Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
             return 0;
          end if;
@@ -216,7 +216,7 @@ package body Ships.Movement is
                TraderIndex: constant Natural := FindMember(Talk);
             begin
                if MoneyIndex2 = 0 then
-                  return "You can't dock to base because you don't have " &
+                  return "You can't dock to this base because you don't have enough " &
                     To_String(MoneyName) & " to pay for docking.";
                end if;
                for Module of PlayerShip.Modules loop
@@ -232,7 +232,7 @@ package body Ships.Movement is
                end if;
                CountPrice(DockingCost, TraderIndex);
                if DockingCost > PlayerShip.Cargo(MoneyIndex2).Amount then
-                  return "You can't dock to base because you don't have enough " &
+                  return "You can't dock to this base because you don't have enough " &
                     To_String(MoneyName) & " to pay for docking.";
                end if;
                UpdateCargo
@@ -264,7 +264,7 @@ package body Ships.Movement is
                       10 then
                      AddMessage
                        (To_String(PlayerShip.Crew(MemberIndex).Name) &
-                        " resign from working for you.",
+                        " resigns from working for you.",
                         OrderMessage);
                      DeleteMember(MemberIndex, PlayerShip);
                      SkyBases(BaseIndex).Population :=
@@ -333,12 +333,12 @@ package body Ships.Movement is
          end if;
       end loop;
       if not HaveEngine then
-         return "You don't have working engine on ship or all engines are destroyed.";
+         return "You don't have a working engine on your ship or all of the engines are destroyed.";
       end if;
       if FindMember(Engineer) = 0 and
         not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) then
-         return "You don't have engineer on duty.";
+         return "You don't have an engineer on duty.";
       end if;
       PlayerShip.Speed := SpeedValue;
       return "";
@@ -473,13 +473,13 @@ package body Ships.Movement is
         FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
       if FuelIndex = 0 then
          AddMessage
-           ("Ship fall from sky due to lack of fuel.", OtherMessage, RED);
+           ("Ship falls from the sky due to a lack of fuel.", OtherMessage, RED);
          Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
          return;
       end if;
       if PlayerShip.Cargo(FuelIndex).Amount <= abs (FuelNeeded) then
          AddMessage
-           ("Ship fall from sky due to lack of fuel.", OtherMessage, RED);
+           ("Ship falls from the sky due to a lack of fuel.", OtherMessage, RED);
          Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
          return;
       end if;

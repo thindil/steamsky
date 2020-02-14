@@ -60,12 +60,12 @@ package body ShipModules is
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
                  " ship module '" & To_String(ModuleIndex) &
-                 "', there no ship module with that index.";
+                 "', there is no ship module with that index.";
             end if;
          elsif BaseModules_Container.Contains(Modules_List, ModuleIndex) then
             raise Data_Loading_Error
               with "Can't add ship module '" & To_String(ModuleIndex) &
-              "', there is one with that index.";
+              "', there is already a ship with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
@@ -109,7 +109,7 @@ package body ShipModules is
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(DataAction'Image(Action)) &
                     " ship module '" & To_String(ModuleIndex) &
-                    "', there no item type '" &
+                    "', there is no item type '" &
                     Get_Attribute(ModuleNode, "material") & "'.";
                end if;
             end if;
@@ -121,7 +121,7 @@ package body ShipModules is
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(DataAction'Image(Action)) &
                     " ship module '" & To_String(ModuleIndex) &
-                    "', there no skill named '" &
+                    "', there is no skill named '" &
                     Get_Attribute(ModuleNode, "skill") & "'.";
                end if;
                TempRecord.RepairSkill := SkillIndex;

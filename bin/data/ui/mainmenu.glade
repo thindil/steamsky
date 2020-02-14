@@ -98,7 +98,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <data>
       <row>
         <col id="0" translatable="yes">Any</col>
-        <col id="1" translatable="yes">Start game in randomly selected base type.</col>
+        <col id="1" translatable="yes">Start game in a randomly selected base type.</col>
       </row>
     </data>
   </object>
@@ -376,7 +376,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Character goal:</property>
+                                <property name="label" translatable="yes">Character's goal:</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -435,7 +435,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <object class="GtkComboBoxText" id="cmbcareer">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="tooltip_text" translatable="yes">Select your career from list. Careers have some impact on gameplay (each have bonus to gaining experience in some fields plus they determine your starting ship and crew). More info about each career you may find after selecting it. You can't change career later.</property>
+                                <property name="tooltip_text" translatable="yes">Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later.</property>
                                 <signal name="changed" handler="Show_Career_Description" swapped="no"/>
                                 <signal name="set-focus-child" handler="Show_Career_Description" swapped="no"/>
                               </object>
@@ -448,7 +448,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <object class="GtkComboBoxText" id="cmbfaction">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="tooltip_text" translatable="yes">Select your faction from list. Factions have biggest impact on game. They determine amount of bases and some playing style. More information about each faction you will see after selecting it. You can't change it later.</property>
+                                <property name="tooltip_text" translatable="yes">Select your faction from a list. Factions have the biggest impact on game. They determine the amount of bases and some playing styles. More information about each faction can be found after selecting it. You can't change this later.</property>
                                 <signal name="changed" handler="Show_Faction_Description" swapped="no"/>
                                 <signal name="set-focus-child" handler="Show_Faction_Description" swapped="no"/>
                               </object>
@@ -461,7 +461,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <object class="GtkComboBoxText" id="cmbgender">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="tooltip_text" translatable="yes">Select gender of your character. </property>
+                                <property name="tooltip_text" translatable="yes">Select the gender of your character. </property>
                                 <property name="active">0</property>
                                 <items>
                                   <item translatable="yes">Male</item>
@@ -478,7 +478,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="tooltip_text" translatable="yes">Select type of base in which you will start game. This may have some impact on game difficulty.</property>
+                                <property name="tooltip_text" translatable="yes">Select type of base in which you will start the game. This may have some impact on game difficulty.</property>
                                 <property name="label" translatable="yes">Starting base type:</property>
                               </object>
                               <packing>
@@ -490,7 +490,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <object class="GtkLabel" id="playertooltip">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="tooltip_text" translatable="yes">General player character settings. Select field which you want to set to see more informations about it.</property>
+                                <property name="tooltip_text" translatable="yes">General player character settings. Select fieldd which you want to set to see more information about.</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -501,7 +501,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               <object class="GtkComboBox" id="cmbbasetype">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="tooltip_text" translatable="yes">Select type of base in which you will start game. This may have some impact on game difficulty.</property>
+                                <property name="tooltip_text" translatable="yes">Select type of base in which you will start the ame. This may have some impact on game difficulty.</property>
                                 <property name="model">basesstore</property>
                                 <property name="active">5</property>
                                 <signal name="changed" handler="Show_Base_Description" swapped="no"/>
@@ -562,7 +562,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           <object class="GtkComboBoxText" id="cmbdifficulty">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="tooltip_text" translatable="yes">Select presetted level of the game difficulty.</property>
+                                            <property name="tooltip_text" translatable="yes">Select game difficulty preset level.</property>
                                             <property name="active">2</property>
                                             <items>
                                               <item translatable="yes">Very Easy</item>
@@ -597,7 +597,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           <object class="GtkLabel">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="label" translatable="yes">Enemy ships damage:</property>
+                                            <property name="label" translatable="yes">Enemy ship damage:</property>
                                             <property name="wrap">True</property>
                                             <property name="wrap_mode">word-char</property>
                                             <property name="max_width_chars">20</property>
@@ -686,7 +686,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           <object class="GtkSpinButton" id="spinenemydamage">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
-                                            <property name="tooltip_text" translatable="yes">Percent of damage done by enemies ships in combat. Lowering it made game easier but lower amount of gained point too.</property>
+                                            <property name="tooltip_text" translatable="yes">Percentage of damage done by enemy ships in combat. Lowering it makes the  game easier but lowers the amount of score gained as well.</property>
                                             <property name="text" translatable="yes">100</property>
                                             <property name="adjustment">adjenemydamage</property>
                                             <property name="value">100</property>
@@ -701,7 +701,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           <object class="GtkSpinButton" id="spinplayerdamage">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
-                                            <property name="tooltip_text" translatable="yes">Percent of damage done by player ship in combat. Raising it made game easier but lower amount of gained points.</property>
+                                            <property name="tooltip_text" translatable="yes">Percentage of damage done by the player's ship in combat. Raising it makes the game easier but lowers the amount of score gained as well.</property>
                                             <property name="text" translatable="yes">100</property>
                                             <property name="adjustment">adjplayerdamage</property>
                                             <property name="value">100</property>
@@ -716,7 +716,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           <object class="GtkSpinButton" id="spinenemymelee">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
-                                            <property name="tooltip_text" translatable="yes">Percent of damage done by enemies in melee combat. Lowering it made game easier but lower amount of gained point too.</property>
+                                            <property name="tooltip_text" translatable="yes">Percentage of damage done by enemies in melee combat. Lowering it makes the game easier but lowers the amount of score gained as well.</property>
                                             <property name="text" translatable="yes">100</property>
                                             <property name="adjustment">adjenemymelee</property>
                                             <property name="value">100</property>
@@ -731,7 +731,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           <object class="GtkSpinButton" id="spinplayermelee">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
-                                            <property name="tooltip_text" translatable="yes">Percent of damage done by player crew (and player character) in melee combat. Raising it made game easier but lower amount of gained points.</property>
+                                            <property name="tooltip_text" translatable="yes">Percentage of damage done by player's crew (and player character) in melee combat. Raising it makes the game easier but lowers the amount of score gained as well.</property>
                                             <property name="text" translatable="yes">100</property>
                                             <property name="adjustment">adjplayermelee</property>
                                             <property name="value">100</property>
@@ -774,7 +774,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           <object class="GtkSpinButton" id="spinexperience">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
-                                            <property name="tooltip_text" translatable="yes">Percent of experience gained by player and crew from actions. Raising it made game easier but lower amount of gained points.</property>
+                                            <property name="tooltip_text" translatable="yes">Percentage of experience gained by player and their crew from actions. Raising it makes the game easier but lowers the amount of score gained as well.</property>
                                             <property name="text" translatable="yes">100</property>
                                             <property name="adjustment">adjexperience</property>
                                             <property name="value">100</property>
@@ -789,7 +789,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           <object class="GtkSpinButton" id="spinreputation">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
-                                            <property name="tooltip_text" translatable="yes">Percent of reputation in bases gained or lost by player in sky bases due to player actions. Raising it made game easier but lower amount of gained points.</property>
+                                            <property name="tooltip_text" translatable="yes">Percentage of reputation in bases gained or lost by player in sky bases due to player actions. Raising it makes the game easier but lowers the amount of score gained as well.</property>
                                             <property name="text" translatable="yes">100</property>
                                             <property name="adjustment">adjreputation</property>
                                             <property name="value">100</property>
@@ -860,7 +860,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           <object class="GtkSpinButton" id="spinupdate">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
-                                            <property name="tooltip_text" translatable="yes">Percent of standard materials cost and time needed for upgrade ship modules. Lowering it made game easier but lower amount of gained points.</property>
+                                            <property name="tooltip_text" translatable="yes">Percentage of the standard material cost and time needed for upgrading ship modules. Lowering it makes the game easier but lowers the amount of score gained as well.</property>
                                             <property name="text" translatable="yes">100</property>
                                             <property name="adjustment">adjupdate</property>
                                             <property name="value">100</property>
@@ -886,7 +886,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           <object class="GtkSpinButton" id="spinprices">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
-                                            <property name="tooltip_text" translatable="yes">Percent of standard prices for services in bases (docking, repairing ship, recruiting new crew members, etc). Lowering it made game easier but lower amount of gained points.</property>
+                                            <property name="tooltip_text" translatable="yes">Percentage of the standard prices for services in bases (docking, repairing ship, recruiting new crew members, etc). Lowering it makes the game easier but lowers the amount of score gained as well.</property>
                                             <property name="text" translatable="yes">100</property>
                                             <property name="adjustment">adjprices</property>
                                             <property name="value">100</property>
@@ -937,11 +937,11 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     </child>
                                     <child>
                                       <object class="GtkCheckButton" id="cbtndifficulty">
-                                        <property name="label" translatable="yes">Randomize difficulty at game start</property>
+                                        <property name="label" translatable="yes">Randomize difficulty on game start</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
-                                        <property name="tooltip_text" translatable="yes">If you select this option, all difficulty settings will be randomized during start new game. Not recommended for new player.</property>
+                                        <property name="tooltip_text" translatable="yes">If you select this option, all difficulty settings will be randomized during start new game. Not recommended for new players.</property>
                                         <property name="draw_indicator">True</property>
                                         <signal name="toggled" handler="Random_Difficulty_Toggled" swapped="no"/>
                                       </object>
@@ -974,7 +974,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           <object class="GtkLabel" id="difficultytooltip">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="tooltip_text" translatable="yes">Set difficulty of new game. Each value can be between 1 and 500. Each change have impact not only on game difficulty but also on amount of points gained in the game. Select field to get more information about selected setting.</property>
+                                            <property name="tooltip_text" translatable="yes">Set difficulty of new game. Each value can be between 1 and 500. Each change has an impact not only on the game's difficulty but also on amount of points gained in the game. Select a field to get more information about it.</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -1184,7 +1184,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                     <child>
                       <object class="GtkTreeViewColumn">
                         <property name="resizable">True</property>
-                        <property name="title" translatable="yes">Died by</property>
+                        <property name="title" translatable="yes">Died from</property>
                         <property name="clickable">True</property>
                         <property name="sort_indicator">True</property>
                         <property name="sort_column_id">3</property>
@@ -1316,7 +1316,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Roguelike in the sky with steampunk theme.</property>
+                    <property name="label" translatable="yes">Roguelike in the sky with a steampunk theme.</property>
                     <property name="wrap">True</property>
                   </object>
                   <packing>
@@ -1738,7 +1738,7 @@ Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WAR
                 <property name="name">normalfont</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Oops, something bad happens and game crashed. Game should save your progress, but better check it. Also, please, remember what you done before crash and report this problem at</property>
+                <property name="label" translatable="yes">Oops, something bad happens and the game has crashed. Game should save your progress, but better verify this yourself. Also, please, remember what you were doing before the crash and report this problem at</property>
                 <property name="wrap">True</property>
                 <property name="xalign">0</property>
               </object>
