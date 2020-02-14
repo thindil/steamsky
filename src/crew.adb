@@ -308,7 +308,7 @@ package body Crew is
                   Member.OrderTime := 15;
                   AddMessage
                     (To_String(Member.Name) &
-                     " is too tired to work, going to rest.",
+                     " is too tired to work, they're going to rest.",
                      OrderMessage, YELLOW);
                   if FindCabin(I) = 0 then
                      Modules_Loop :
@@ -330,7 +330,7 @@ package body Crew is
                else
                   AddMessage
                     (To_String(Member.Name) &
-                     " is very tired but can't go to rest.",
+                     " is very tired but they can't go to rest.",
                      OrderMessage, RED);
                   UpdateMorale(PlayerShip, I, GetRandom(-5, -1));
                end if;
@@ -348,7 +348,7 @@ package body Crew is
             if ConsumeResult = 0 then
                AddMessage
                  (To_String(Member.Name) &
-                  " is hungry, but can't find anything to eat.",
+                  " is hungry, but they can't find anything to eat.",
                   OtherMessage, RED);
                UpdateMorale(PlayerShip, I, GetRandom(-10, -5));
             end if;
@@ -366,7 +366,7 @@ package body Crew is
             if ConsumeResult = 0 then
                AddMessage
                  (To_String(Member.Name) &
-                  " is thirsty, but can't find anything to drink.",
+                  " is thirsty, but they can't find anything to drink.",
                   OtherMessage, RED);
                UpdateMorale(PlayerShip, I, GetRandom(-20, -10));
             end if;
@@ -572,7 +572,7 @@ package body Crew is
                              ("You don't have any " &
                               To_String
                                 (Factions_List(Member.Faction).HealingTools) &
-                              " to continue healing wounded " &
+                              " to continue healing the wounded " &
                               To_String(Member.Name) & ".",
                               OrderMessage, RED);
                         end if;
@@ -606,7 +606,7 @@ package body Crew is
                   if HealAmount > 0 then
                      AddMessage
                        (To_String(PlayerShip.Crew(I).Name) &
-                        " finished healing wounded.",
+                        " finished healing the wounded.",
                         OrderMessage, GREEN);
                   end if;
                   if HealAmount /= 0 then
@@ -641,7 +641,7 @@ package body Crew is
                   if not NeedCleaning then
                      if ToolIndex = 0 then
                         AddMessage
-                          ("You can't continue cleaning ship because you don't have any cleaning tools.",
+                          ("You can't continue cleaning the ship because you don't have any cleaning tools.",
                            OrderMessage, RED);
                      end if;
                      for J in PlayerShip.Crew.Iterate loop
@@ -690,7 +690,7 @@ package body Crew is
                      if ToolIndex = 0 then
                         AddMessage
                           (To_String(PlayerShip.Crew(I).Name) &
-                           " can't continue training because you don't have proper tools.",
+                           " can't continue training because they don't have the proper tools.",
                            OrderMessage, RED);
                         GiveOrders(PlayerShip, I, Rest);
                      end if;
@@ -855,7 +855,7 @@ package body Crew is
          if Member.Payment(1) > 0 then
             if MoneyIndex2 = 0 and HaveMoney then
                AddMessage
-                 ("You don't have " & To_String(MoneyName) &
+                 ("You don't have enough " & To_String(MoneyName) &
                   " to pay your crew members.",
                   TradeMessage, RED);
                HaveMoney := False;

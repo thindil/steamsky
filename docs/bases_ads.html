@@ -130,22 +130,22 @@
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Name           - Base name
- Visited        - Time when player last visited base
- SkyX           - X coordinate on sky map
- SkyY           - Y coordinate on sky map
- BaseType       - Type of base
+ Visited        - Time when the player last visited this base
+ SkyX           - X coordinate on the sky map
+ SkyY           - Y coordinate on the sky map
+ BaseType       - Base type
  Population     - Amount of people in base
- RecruitDate    - Time when recruits was generated
- Recruits       - List of available recruits
- Known          - Did base is know to player
- AskedForBases  - Did player asked for bases in this base
- AskedForEvents - Time when players asked for events in this base
- Reputation     - Reputation level and progress of player
- MissionsDate   - Time when missions was generated
+ RecruitDate    - Time when recruits were generated
+ Recruits       - List of all available recruits
+ Known          - Is this base known to the player
+ AskedForBases  - Did player ask for bases in this base
+ AskedForEvents - Time when players last asked for events in this base
+ Reputation     - Reputation level and progress of the player
+ MissionsDate   - Time when missions were generated
  <a href="./missions_ads.html#robo42">Missions</a>       - List of available missions
- Owner          - Index of faction which own base
- Cargo          - List of all cargo in base
- Size           - Size of base
+ Owner          - Index of faction which own this base
+ Cargo          - List of all cargo in this base
+ Size           - Size of the base
 </pre>
 
 <hr />
@@ -208,18 +208,18 @@
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Name       - Name of recruit
- Gender     - Gender of recruit
- Skills     - Names indexes, levels and experience in skills of recruit
- Cost       - Cost of enlist of recruit
+ Gender     - Gender of the recruit
+ Skills     - Names indexes, levels and experience in terms of skills for recruit
+ Cost       - Cost of enlisting this recruit
  Attributes - Names indexes, levels and experience in attributes of
               recruit
- Inventory  - Owned items by recruit
+ Inventory  - Items owned by the recruit
  Equipment  - <a href="./items_ads.html#robo34">Items</a> indexes from inventory used by recruit: 1 - weapon,
               2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs,
               7 - tool
  Payment    - How much money recruit will take as payment each day.
- HomeBase   - Index of base from which recruit is
- Faction    - Index of faction to which recruit belongs
+ HomeBase   - Index of base from which recruit is from
+ Faction    - Index of faction to which recruit belongs to
 </pre>
 
 <hr />
@@ -337,9 +337,9 @@
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Price       - Cost of action with the base
- TraderIndex - Index of crew member assigned as trader or 0 if noone is
+ TraderIndex - Index of the crew member which is assigned as the trader or 0 if noone is
                assigned
- Reduce      - If true, reduce cost of action, otherwise raise. Default
+ Reduce      - If true, reduce the cost of the action, otherwise raise. Default
                is true
 </pre>
 <p class="item_name">RESULT</p>

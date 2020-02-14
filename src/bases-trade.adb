@@ -161,7 +161,7 @@ package body Bases.Trade is
       UpdateBaseCargo(MoneyIndex, Cost);
       Known_Recipes.Append(New_Item => RecipeIndex);
       AddMessage
-        ("You bought recipe for " & RecipeName & " for" &
+        ("You bought the recipe for " & RecipeName & " for" &
          Positive'Image(Cost) & " of " & To_String(MoneyName) & ".",
          TradeMessage);
       GainExp(1, TalkingSkill, TraderIndex);
@@ -187,7 +187,7 @@ package body Bases.Trade is
       if MemberIndex > 0 then
          PlayerShip.Crew(MemberIndex).Health := 100;
          AddMessage
-           ("You bought healing " &
+           ("You paid for healing " &
             To_String(PlayerShip.Crew(MemberIndex).Name) & " for" &
             Positive'Image(Cost) & " " & To_String(MoneyName) & ".",
             TradeMessage);
@@ -201,7 +201,7 @@ package body Bases.Trade is
             end if;
          end loop;
          AddMessage
-           ("You bought healing all wounded crew members for" &
+           ("You paid for healing for all wounded crew members for" &
             Positive'Image(Cost) & " " & To_String(MoneyName) & ".",
             TradeMessage);
       end if;
@@ -294,7 +294,7 @@ package body Bases.Trade is
       end if;
       MoneyIndex2 := CheckMoney(Cost);
       AddMessage
-        ("You bought training session in " &
+        ("You purchased a training session in " &
          To_String(Skills_List(SkillIndex).Name) & " for " &
          To_String(PlayerShip.Crew(MemberIndex).Name) & " for" &
          Positive'Image(Cost) & " " & To_String(MoneyName) & ".",

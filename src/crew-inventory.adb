@@ -58,7 +58,7 @@ package body Crew.Inventory is
             if FreeInventory(MemberIndex, Weight) < 0 then
                raise Crew_No_Space_Error
                  with To_String(PlayerShip.Crew(MemberIndex).Name) &
-                 " don't have free space in own inventory.";
+                 " doesn't have any free space in their inventory.";
             end if;
          end;
       else
@@ -168,27 +168,27 @@ package body Crew.Inventory is
                      when Repair =>
                         AddMessage
                           (To_String(PlayerShip.Crew(MemberIndex).Name) &
-                           " can't continue repairs because don't have space in inventory for repair tools.",
+                           " can't continue repairs because they don't have free space in their inventory for repair tools.",
                            OrderMessage, RED);
                      when Upgrading =>
                         AddMessage
                           (To_String(PlayerShip.Crew(MemberIndex).Name) &
-                           " can't continue upgrading module because don't have space in inventory for repair tools.",
+                           " can't continue upgrading module because they don't have free space in their inventory for repair tools.",
                            OrderMessage, RED);
                      when Clean =>
                         AddMessage
                           (To_String(PlayerShip.Crew(MemberIndex).Name) &
-                           " can't continue cleaning ship because don't have space in inventory for cleaning tools.",
+                           " can't continue cleaning ship because they don't have free space in their inventory for cleaning tools.",
                            OrderMessage, RED);
                      when Craft =>
                         AddMessage
                           (To_String(PlayerShip.Crew(MemberIndex).Name) &
-                           " can't continue manufacturing because don't have space in inventory for proper tools.",
+                           " can't continue manufacturing because they don't have space in their inventory for the proper tools.",
                            OrderMessage, RED);
                      when Train =>
                         AddMessage
                           (To_String(PlayerShip.Crew(MemberIndex).Name) &
-                           " can't continue training because don't have space in inventory for proper tools.",
+                           " can't continue training because they don't have space in their inventory for the proper tools.",
                            OrderMessage, RED);
                      when others =>
                         null;

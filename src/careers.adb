@@ -53,12 +53,12 @@ package body Careers is
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
                  " career '" & To_String(CareerIndex) &
-                 "', there no career with that index.";
+                 "', there is no career with that index.";
             end if;
          elsif Careers_Container.Contains(Careers_List, CareerIndex) then
             raise Data_Loading_Error
               with "Can't add career '" & To_String(CareerIndex) &
-              "', there is one with that index.";
+              "', there is already a career with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
