@@ -34,11 +34,13 @@ with Gtk.Box; use Gtk.Box;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
+with Gtk.Enums; use Gtk.Enums;
 with Gtk.Frame; use Gtk.Frame;
 with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Info_Bar; use Gtk.Info_Bar;
 with Gtk.Label; use Gtk.Label;
 with Gtk.List_Store; use Gtk.List_Store;
+with Gtk.Link_Button; use Gtk.Link_Button;
 with Gtk.Main;
 with Gtk.Message_Dialog; use Gtk.Message_Dialog;
 with Gtk.Overlay; use Gtk.Overlay;
@@ -56,6 +58,7 @@ with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
+with Glib.Properties; use Glib.Properties;
 with Gdk.Event;
 with Gdk.Types; use Gdk.Types;
 with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
@@ -950,12 +953,40 @@ package body MainMenu is
       TextView: constant Gtk_Text_View := Gtk_Text_View_New;
       Scroll: constant Gtk_Scrolled_Window := Gtk_Scrolled_Window_New;
       Frame: constant Gtk_Frame := Gtk_Frame_New("Technical information:");
-      Label: constant Gtk_Label :=
-        Gtk_Label_New("and attach (if possible) file 'error.log'");
+      Label: Gtk_Label;
+      LinkButton: Gtk_Link_Button;
    begin
+      Label :=
+        Gtk_Label_New
+          ("Oops, something bad happens and the game has crashed. Game should save your progress, but better verify this yourself. Also, please, remember what you were doing before the crash and report this problem at");
+      Set_Line_Wrap(Label, True);
+      Set_Property(Label, Name_Property, "normalfont");
+      Pack_Start(Gtk_Box(Get_Object(Builder, "errorbox")), Label, False);
+      LinkButton :=
+        Gtk_Link_Button_New("https://github.com/thindil/steamsky/issues");
+      Set_Relief(LinkButton, Relief_None);
+      Set_Halign(LinkButton, Align_Center);
+      Set_Property(LinkButton, Name_Property, "flatbutton");
+      Pack_Start(Gtk_Box(Get_Object(Builder, "errorbox")), LinkButton, False);
+      Label :=
+        Gtk_Label_New
+          ("or if you prefer, on one of the game community options:");
+      Set_Line_Wrap(Label, True);
+      Set_Property(Label, Name_Property, "normalfont");
+      Pack_Start(Gtk_Box(Get_Object(Builder, "errorbox")), Label, False);
+      LinkButton := Gtk_Link_Button_New("https://thindil.itch.io/steam-sky");
+      Set_Relief(LinkButton, Relief_None);
+      Set_Halign(LinkButton, Align_Center);
+      Set_Property(LinkButton, Name_Property, "flatbutton");
+      Pack_Start(Gtk_Box(Get_Object(Builder, "errorbox")), LinkButton, False);
+      Label := Gtk_Label_New("and attach (if possible) file 'error.log'");
+      Set_Line_Wrap(Label, True);
+      Set_Property(Label, Name_Property, "normalfont");
       Pack_Start(Gtk_Box(Get_Object(Builder, "errorbox")), Label, False);
       Add(Scroll, TextView);
       Add(Frame, Scroll);
+      Set_Property(Frame, Name_Property, "normalfont");
+      Set_Property(TextView, Name_Property, "normalfont");
       Pack_Start(Gtk_Box(Get_Object(Builder, "errorbox")), Frame);
    end CreateErrorUI;
 
