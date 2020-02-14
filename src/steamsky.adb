@@ -46,7 +46,7 @@ procedure SteamSky is
          PathName /= "Themes") then
          Put_Line
            ("Directory " & To_String(Path) &
-            " not exists. You must use existing directory as " &
+            " does not exist. You must use an existing directory as " &
             To_Lower(PathName) & " directory.");
          return False;
       end if;
@@ -57,7 +57,7 @@ begin
    if Dir_Separator = '/'
      and then not Ada.Environment_Variables.Exists("RUNFROMSCRIPT") then
       Put_Line
-        ("The game can be run only via 'steamsky.sh' script. Please don't run binary directly.");
+        ("The game can be run only via the 'steamsky.sh' script. Please don't run the binary directly.");
       return;
    end if;
    Set_Directory(Dir_Name(Command_Name));

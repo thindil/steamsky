@@ -77,12 +77,12 @@ package body Mobs is
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
                  " mob '" & To_String(MobIndex) &
-                 "', there no mob with that index.";
+                 "', there is no mob with that index.";
             end if;
          elsif ProtoMobs_Container.Contains(ProtoMobs_List, MobIndex) then
             raise Data_Loading_Error
               with "Can't add mob '" & To_String(MobIndex) &
-              "', there is one with that index.";
+              "', there is already a mob with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
@@ -236,7 +236,7 @@ package body Mobs is
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(DataAction'Image(Action)) &
                     " mob '" & To_String(MobIndex) &
-                    "', there no item with index '" &
+                    "', there is no item with index '" &
                     Get_Attribute(ChildNode, "index") & "'.";
                end if;
                if Get_Attribute(ChildNode, "action")'Length > 0 then

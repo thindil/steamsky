@@ -68,12 +68,12 @@ package body Goals is
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
                  " goal '" & To_String(TempRecord.Index) &
-                 "', there no goal with that index.";
+                 "', there is no goal with that index.";
             end if;
          elsif GoalIndex > 0 then
             raise Data_Loading_Error
               with "Can't add goal '" & To_String(TempRecord.Index) &
-              "', there is one with that index.";
+              "', there is already a goal with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
@@ -230,15 +230,15 @@ package body Goals is
             when MISSION =>
                case Missions_Types'Value(To_String(Goal.TargetIndex)) is
                   when Deliver =>
-                     Append(Text, ": Deliver item to base");
+                     Append(Text, ": Deliver items to bases");
                   when Patrol =>
-                     Append(Text, ": Patrol area");
+                     Append(Text, ": Patrol areas");
                   when Destroy =>
-                     Append(Text, ": Destroy ship");
+                     Append(Text, ": Destroy ships");
                   when Explore =>
-                     Append(Text, ": Explore area");
+                     Append(Text, ": Explore areas");
                   when Passenger =>
-                     Append(Text, ": Transport passenger to base");
+                     Append(Text, ": Transport passengers to bases");
                end case;
             when KILL =>
                InsertPosition := Length(Text) - 20;

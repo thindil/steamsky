@@ -23,11 +23,11 @@
   game options, quit from game, resign from game, show menu, show wait orders.
   (example: `{GameKey 10}` will be translated to key used for auto move ship).
 - Inside help text you can use special variables: `{MoneyName}` which later
-  will be replaced with name of game money, `{FuelName}` which later will be
-  replaced with name of fuel for ship, `{StrengthName}` which later will be
-  replaced with name of attribute used to count max character encumbrance,
-  `{PilotingSkill}` which later will be replaced with name
-  of skill used for piloting ship, `{EngineeringSkill}` which later will be
+  will be replaced with the name of the game's money, `{FuelName}` which later will be
+  replaced with name of fuel for ships, `{StrengthName}` which later will be
+  replaced with the name of the attribute used to count max character encumbrance,
+  `{PilotingSkill}` which later will be replaced with the name
+  of the skill used for piloting ships, `{EngineeringSkill}` which later will be
   replaced with the name of the skill used by ship engineer, `{GunnerySkill}` which
   later will be replaced with the name of the skill used to operate guns on ship,
   `{TalkingSkill}` which later will be replaced with the name of the skill used to

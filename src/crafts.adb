@@ -68,12 +68,12 @@ package body Crafts is
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
                  " recipe '" & To_String(RecipeIndex) &
-                 "', there no recipe with that index.";
+                 "', there is no recipe with that index.";
             end if;
          elsif Recipes_Container.Contains(Recipes_List, RecipeIndex) then
             raise Data_Loading_Error
               with "Can't add recipe '" & To_String(RecipeIndex) &
-              "', there is one with that index.";
+              "', there is already a recipe with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
@@ -119,7 +119,7 @@ package body Crafts is
                   raise Data_Loading_Error
                     with "Can't add recipe '" & To_String(RecipeIndex) &
                     "', result item index '" & To_String(Value) &
-                    "' don't exists.";
+                    "' does't exist.";
                end if;
                TempRecord.ResultIndex := ItemIndex;
             end if;
@@ -509,7 +509,7 @@ package body Crafts is
                              ItemType => Items_List(MaterialIndex).IType);
                         if CraftingMaterial = 0 then
                            AddMessage
-                             ("You don't have crafting materials for " &
+                             ("You don't have the crafting materials for " &
                               To_String(RecipeName) & ".",
                               CraftMessage, RED);
                            ResetOrder(Module, Owner);
@@ -525,7 +525,7 @@ package body Crafts is
                           FindTools(CrafterIndex, Recipe.Tool, Craft);
                         if ToolIndex = 0 then
                            AddMessage
-                             ("You don't have tool for " &
+                             ("You don't have the tool for " &
                               To_String(RecipeName) & ".",
                               CraftMessage, RED);
                            ResetOrder(Module, Owner);
@@ -636,7 +636,7 @@ package body Crafts is
                            ResultAmount);
                         if FreeCargo(Amount) < 0 then
                            AddMessage
-                             ("You don't have free cargo space for " &
+                             ("You don't have the free cargo space for " &
                               To_String(RecipeName) & ".",
                               CraftMessage, RED);
                            ResetOrder(Module, Owner);
@@ -722,7 +722,7 @@ package body Crafts is
                   else
                      AddMessage
                        (To_String(PlayerShip.Crew(CrafterIndex).Name) &
-                        " was discovered recipe for " &
+                        " has discovered recipe for " &
                         To_String(Items_List(Recipe.ResultIndex).Name) & ".",
                         CraftMessage, GREEN);
                      UpdateGoal(CRAFT, Null_Unbounded_String);
