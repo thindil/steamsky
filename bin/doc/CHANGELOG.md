@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
   installed
 - New ship modules: huge bronze turret, huge iron turret, huge steel turret,
   huge titanium turret, huge orichalcum turret and huge adamantium turret
+- New item: iron 10mm piercing ammo
 
 ### Changed
 - Updated mobs data
