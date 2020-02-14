@@ -119,7 +119,7 @@ package body Events is
                CrewIndex := FindMember(Pilot);
                if CrewIndex > 0 then
                   AddMessage
-                    ("Sudden bad weather makes your travel take longer.",
+                    ("Sudden bad weather causes your travel to take longer.",
                      OtherMessage, RED);
                   TimePassed :=
                     60 -
@@ -142,7 +142,7 @@ package body Events is
                        (GetRandom(Traders.First_Index, Traders.Last_Index))));
                SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                  Events_List.Last_Index;
-               AddMessage("You meet a friendly trader.", OtherMessage);
+               AddMessage("You've meet a friendly trader.", OtherMessage);
                GainPerception;
                UpdateOrders(PlayerShip);
             when 24 .. 30 => -- Friendly ship
@@ -156,7 +156,7 @@ package body Events is
                            FriendlyShips.Last_Index))));
                SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
                  Events_List.Last_Index;
-               AddMessage("You spotted a friendly ship.", OtherMessage);
+               AddMessage("You've spotted a friendly ship.", OtherMessage);
                GainPerception;
                UpdateOrders(PlayerShip);
             when others => -- Combat
@@ -272,7 +272,7 @@ package body Events is
                        (FullDocks, PlayerShip.SkyX, PlayerShip.SkyY,
                         GetRandom(15, 30), 1));
                   AddMessage
-                    ("You can't dock to base now, because its docks are full.",
+                    ("You can't dock to base now, because it's docks are full.",
                      OtherMessage, RED);
             end case;
             SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
@@ -303,7 +303,7 @@ package body Events is
                        PlayerShip.Crew(RestingCrew(Roll2)).Health - Injuries;
                      AddMessage
                        (To_String(PlayerShip.Crew(RestingCrew(Roll2)).Name) &
-                        " was injured in brawl in base.",
+                        " was injured in a brawl inside the base.",
                         OtherMessage, RED);
                      if PlayerShip.Crew(RestingCrew(Roll2)).Health = 0 then
                         Death
@@ -455,7 +455,7 @@ package body Events is
       SkyBases(BaseIndex).RecruitDate := (others => 0);
       SkyBases(BaseIndex).MissionsDate := (others => 0);
       AddMessage
-        ("Base " & To_String(SkyBases(BaseIndex).Name) & " have new owner.",
+        ("Base " & To_String(SkyBases(BaseIndex).Name) & " has a new owner.",
          OtherMessage, CYAN);
    end RecoverBase;
 
