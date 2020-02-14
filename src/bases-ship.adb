@@ -62,7 +62,7 @@ package body Bases.Ship is
             end if;
          end loop;
          AddMessage
-           ("You bought whole ship repair for" & Positive'Image(Cost) & " " &
+           ("You bought an entire ship repair for" & Positive'Image(Cost) & " " &
             To_String(MoneyName) & ".",
             TradeMessage);
       end if;
@@ -426,7 +426,7 @@ package body Bases.Ship is
          AddMessage
            ("You removed " &
             To_String(PlayerShip.Modules(ShipModuleIndex).Name) &
-            " from your ship and earned" & Positive'Image(Price) & " " &
+            " from your ship and received" & Positive'Image(Price) & " " &
             To_String(MoneyName) & ".",
             TradeMessage);
          PlayerShip.Modules.Delete(ShipModuleIndex);

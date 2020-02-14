@@ -279,7 +279,7 @@ package body Missions is
       end if;
       Mission.StartBase := BaseIndex;
       Mission.Finished := False;
-      AcceptMessage := To_Unbounded_String("You accepted mission ");
+      AcceptMessage := To_Unbounded_String("You accepted the mission to ");
       case Mission.MType is
          when Deliver =>
             Append
@@ -448,7 +448,7 @@ package body Missions is
 
    procedure DeleteMission(MissionIndex: Positive; Failed: Boolean := True) is
       MessageText: Unbounded_String :=
-        To_Unbounded_String("You failed mission ");
+        To_Unbounded_String("You failed your mission to ");
       Mission: constant Mission_Data := AcceptedMissions(MissionIndex);
       Reputation: Natural;
    begin
@@ -509,7 +509,7 @@ package body Missions is
             if RewardAmount > 0 then
                AddMessage
                  ("You received" & Integer'Image(RewardAmount) & " " &
-                  To_String(MoneyName) & " for finished mission.",
+                  To_String(MoneyName) & " for finishing your mission.",
                   MissionMessage);
                UpdateCargo(PlayerShip, MoneyIndex, RewardAmount);
             end if;
