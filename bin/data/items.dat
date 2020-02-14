@@ -1580,5 +1580,10 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="5"/>
   <description>A huge book with information about the basics of printing. It is used in training skills.</description>
  </item>
+ <item index="325" name="Iron 10mm piercing ammo" showtype="Ammunition" type="Ammo10" weight="1" price="3">
+  <data value="2"/>
+  <data value="2"/>
+  <description>A piercing 10mm gun ammunition. Do more damage but it is less accurate.</description>
+ </item>
 </items>
 
