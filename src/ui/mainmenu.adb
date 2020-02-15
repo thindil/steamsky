@@ -34,6 +34,7 @@ with Gtk.Box; use Gtk.Box;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
+with Gtk.Dialog; use Gtk.Dialog;
 with Gtk.Enums; use Gtk.Enums;
 with Gtk.Frame; use Gtk.Frame;
 with Gtk.GEntry; use Gtk.GEntry;
@@ -955,39 +956,41 @@ package body MainMenu is
       Frame: constant Gtk_Frame := Gtk_Frame_New("Technical information:");
       Label: Gtk_Label;
       LinkButton: Gtk_Link_Button;
+      ErrorBox: constant Gtk_Vbox :=
+        Get_Content_Area(Gtk_Dialog(Get_Object(Builder, "errordialog")));
    begin
       Label :=
         Gtk_Label_New
           ("Oops, something bad happens and the game has crashed. Game should save your progress, but better verify this yourself. Also, please, remember what you were doing before the crash and report this problem at");
       Set_Line_Wrap(Label, True);
       Set_Property(Label, Name_Property, "normalfont");
-      Pack_Start(Gtk_Box(Get_Object(Builder, "errorbox")), Label, False);
+      Pack_Start(ErrorBox, Label, False);
       LinkButton :=
         Gtk_Link_Button_New("https://github.com/thindil/steamsky/issues");
       Set_Relief(LinkButton, Relief_None);
       Set_Halign(LinkButton, Align_Center);
       Set_Property(LinkButton, Name_Property, "flatbutton");
-      Pack_Start(Gtk_Box(Get_Object(Builder, "errorbox")), LinkButton, False);
+      Pack_Start(ErrorBox, LinkButton, False);
       Label :=
         Gtk_Label_New
           ("or if you prefer, on one of the game community options:");
       Set_Line_Wrap(Label, True);
       Set_Property(Label, Name_Property, "normalfont");
-      Pack_Start(Gtk_Box(Get_Object(Builder, "errorbox")), Label, False);
+      Pack_Start(ErrorBox, Label, False);
       LinkButton := Gtk_Link_Button_New("https://thindil.itch.io/steam-sky");
       Set_Relief(LinkButton, Relief_None);
       Set_Halign(LinkButton, Align_Center);
       Set_Property(LinkButton, Name_Property, "flatbutton");
-      Pack_Start(Gtk_Box(Get_Object(Builder, "errorbox")), LinkButton, False);
+      Pack_Start(ErrorBox, LinkButton, False);
       Label := Gtk_Label_New("and attach (if possible) file 'error.log'");
       Set_Line_Wrap(Label, True);
       Set_Property(Label, Name_Property, "normalfont");
-      Pack_Start(Gtk_Box(Get_Object(Builder, "errorbox")), Label, False);
+      Pack_Start(ErrorBox, Label, False);
       Add(Scroll, TextView);
       Add(Frame, Scroll);
       Set_Property(Frame, Name_Property, "normalfont");
       Set_Property(TextView, Name_Property, "normalfont");
-      Pack_Start(Gtk_Box(Get_Object(Builder, "errorbox")), Frame);
+      Pack_Start(ErrorBox, Frame);
    end CreateErrorUI;
 
    procedure CreateMainMenu is
@@ -1091,7 +1094,11 @@ package body MainMenu is
          NewGameKeyPressed'Access);
       declare
          Label: constant Gtk_Label :=
-           Gtk_Label(Get_Child(Gtk_Box(Get_Object(Builder, "errorbox")), 4));
+           Gtk_Label
+             (Get_Child
+                (Get_Content_Area
+                   (Gtk_Dialog(Get_Object(Builder, "errordialog"))),
+                 4));
          ErrorFileDirectory: Unbounded_String :=
            To_Unbounded_String(Current_Directory);
          NewDataDirectory: Unbounded_String := DataDirectory;
@@ -1151,7 +1158,9 @@ package body MainMenu is
                     (Get_Child
                        (Gtk_Frame
                           (Get_Child
-                             (Gtk_Box(Get_Object(Builder, "errorbox")),
+                             (Get_Content_Area
+                                (Gtk_Dialog
+                                   (Get_Object(Builder, "errordialog"))),
                               5))))))),
          To_String(Message));
       Show_All(Gtk_Widget(Get_Object(Builder, "errordialog")));
