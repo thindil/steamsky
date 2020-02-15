@@ -43,9 +43,11 @@ package Combat is
 
    -- ****t* Combat/GunsInfoArray
    -- FUNCTION
-   -- Data structure for guns informations
+   -- Data structure for guns informations: 1 - Gun index in ship modules
+   -- list, 2 - Gunner order, 3 - Amount of shoots from the gun, value below
+   -- zero means that gun shoot once per that amount of rounds
    -- SOURCE
-   type GunsInfoArray is array(1 .. 2) of Positive;
+   type GunsInfoArray is array(1 .. 3) of Integer;
    -- ****
 
    -- ****t* Combat/Guns_Container
