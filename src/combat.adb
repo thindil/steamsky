@@ -199,7 +199,7 @@ package body Combat is
            (PlayerShip.Modules(I).MType = GUN or
             PlayerShip.Modules(I).MType = HARPOON_GUN) and
            PlayerShip.Modules(I).Durability > 0 then
-            Guns.Append(New_Item => (Modules_Container.To_Index(I), 1));
+            Guns.Append(New_Item => (Modules_Container.To_Index(I), 1, 1));
          end if;
       end loop;
       if NewCombat then
@@ -323,6 +323,27 @@ package body Combat is
                      for Gun of Guns loop
                         if Gun(1) = Modules_Container.To_Index(K) then
                            GunnerOrder := Gun(2);
+                           if Gun(3) > 0 then
+                              Shoots := Gun(3);
+                           elsif Gun(3) < 0 then
+                              Shoots := 0;
+                              Gun(3) := Gun(3) + 1;
+                              if Gun(3) = 0 then
+                                 Shoots := 1;
+                                 if GunnerOrder = 3 then
+                                    Gun(3) :=
+                                      Modules_List
+                                        (PlayerShip.Modules(Gun(1)).ProtoIndex)
+                                        .Speed;
+                                 else
+                                    Gun(3) :=
+                                      Modules_List
+                                        (PlayerShip.Modules(Gun(1)).ProtoIndex)
+                                        .Speed -
+                                      1;
+                                 end if;
+                              end if;
+                           end if;
                            exit;
                         end if;
                      end loop;
@@ -332,19 +353,12 @@ package body Combat is
                      case GunnerOrder is
                         when 2 =>
                            CurrentAccuracyBonus := AccuracyBonus + 20;
-                           Shoots := 2;
-                        when 3 =>
-                           Shoots := 4;
                         when 4 =>
                            CurrentAccuracyBonus := AccuracyBonus - 10;
-                           Shoots := 2;
                         when 5 =>
                            CurrentAccuracyBonus := AccuracyBonus - 20;
-                           Shoots := 2;
-                        when 6 =>
-                           Shoots := 2;
                         when others =>
-                           Shoots := 0;
+                           null;
                      end case;
                   end if;
                else

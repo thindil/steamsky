@@ -844,21 +844,38 @@ package body Combat.UI is
                   CombatMessage);
             end if;
          else
-            Guns(Positive'Value(Path_String) - 1)(2) :=
-              Positive(Get_Int(OrdersList, New_Iter, 1));
-            AddMessage
-              ("Order for " &
-               To_String
-                 (PlayerShip.Crew
-                    (PlayerShip.Modules
-                       (Guns(Positive'Value(Path_String) - 1)(1))
-                       .Owner
-                       (1))
-                    .Name) &
-               " was set on: " &
-               To_String
-                 (GunnerOrders(Guns(Positive'Value(Path_String) - 1)(2))),
-               CombatMessage);
+            declare
+               GunIndex: constant Positive := Positive'Value(Path_String) - 1;
+            begin
+               Guns(GunIndex)(2) := Positive(Get_Int(OrdersList, New_Iter, 1));
+               case Guns(GunIndex)(2) is
+                  when 1 =>
+                     Guns(GunIndex)(3) := 0;
+                  when 3 =>
+                     Guns(GunIndex)(3) :=
+                       Modules_List
+                         (PlayerShip.Modules(Guns(GunIndex)(1)).ProtoIndex)
+                         .Speed;
+                  when others =>
+                     Guns(GunIndex)(3) :=
+                       Modules_List
+                         (PlayerShip.Modules(Guns(GunIndex)(1)).ProtoIndex)
+                         .Speed;
+                     if Guns(GunIndex)(3) > 0 then
+                        Guns(GunIndex)(3) := Guns(GunIndex)(3) / 2;
+                     else
+                        Guns(GunIndex)(3) := Guns(GunIndex)(3) - 1;
+                     end if;
+               end case;
+               AddMessage
+                 ("Order for " &
+                  To_String
+                    (PlayerShip.Crew
+                       (PlayerShip.Modules(Guns(GunIndex)(1)).Owner(1))
+                       .Name) &
+                  " was set on: " & To_String(GunnerOrders(Guns(GunIndex)(2))),
+                  CombatMessage);
+            end;
          end if;
       end if;
       RefreshCombatUI;
