@@ -55,6 +55,7 @@ package ShipModules is
    -- Size           - How many space in ship this module take
    -- Description    - Description of module
    -- MaxOwners      - How many owners module can have
+   -- Speed          - How fast the gun shoots in combat
    -- SOURCE
    type BaseModule_Data is record
       Name: Unbounded_String;
@@ -71,6 +72,7 @@ package ShipModules is
       Size: Positive;
       Description: Unbounded_String;
       MaxOwners: Natural;
+      Speed: Integer;
    end record;
    -- ****
 
