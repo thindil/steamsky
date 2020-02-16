@@ -410,7 +410,7 @@ GtkStackSwitcher .button:checked {
    background:@very_dark_orange;
 }
 
-/* Settings for buttons with informations about ship */
+/* Settings for buttons with information about ship */
 *#headerbutton {
    border-radius:0;
    border-width:0;
