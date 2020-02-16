@@ -46,38 +46,38 @@
   set selected flag.
 -->
  <entry index="general" title=" 1. General Information">{u}Overview{/u}
-    Steam Sky is a roguelike game where you are the commander of a flying ship. You must take care of the ship and it's crew. You can trade items between sky bases, fight with enemies or manufacture items. The game ends when your character dies. At this moment, help is under development (as whole game). To see other help topics, click on the topic title (for example {b}&quot;General Information&quot;{/b} for this screen) above help text. Some information about certain game mechanics may depend on your character's faction.
+    Steam Sky is a roguelike game where you are the commander of a flying ship. You must take care of the ship and its crew. You can trade items between sky bases, fight with enemies, or manufacture items. The game ends when your character dies. At the moment, help is under development (as is the whole game). To see other help topics, click on the topic title (for example {b}&quot;General Information&quot;{/b} for this screen) above the help text. Some information about certain game mechanics may depend on your character's faction.
 
 {u}Content of help topics{/u}
 - 1. General Information: You are here. Some very basic information about game.
 - 2. First steps: General hints for a new player.
 - 3. Ship movement: Moving ship around the map, undocking from bases.
 - 4. Sky bases: Discovering new bases, reputation in bases and types of bases.
-- 5. Trading: General information about buying or selling items from sky bases and friendly traders ships.
+- 5. Trading: General information about buying or selling items from sky bases and friendly trader's ships.
 - 6. Combat: Starting combat, giving crew orders during combat, boarding enemy ships, some specific combat tips.
 - 7. Crafting: Setting crafting orders, discovering or buying new crafting recipes, some specific to crafting tips.
 - 8. Repairing/Upgrading your ship: Self repairing and repairing in bases ship modules, upgrading ship modules, installing or removing ship modules.
-- 9. Ship crew: Hunger, thirst, morale, tiredness and health effects on your ship crew members, training their skills, setting orders priorities and some specific crew member tips.
-- 10. Missions: Starting and finishing missions, some detail information about each type of mission and specific mission tips.
+- 9. Ship crew: Hunger, thirst, morale, tiredness and health effects on your ship crew members, training their skills, setting order priorities and some specific crew member tips.
+- 10. Missions: Starting and finishing missions, some detailed information about each type of mission and specific mission tips.
 - 11. Hiring crew members: Detailed information about hiring new crew members in sky bases.
 - 12. Tips: General tips for playing the game.
-   Some game modifications can show help topics as well. If you are first time here, it is recommended to look at {b}Ship movement{/b}, {b}Trading{/b}, {b}Combat{/b} and {b}Tips{/b} topics for basic information about the game.
+   Some game modifications can show help topics as well. If it is your first time here, it is recommended to look at {b}Ship movement{/b}, {b}Trading{/b}, {b}Combat{/b} and {b}Tips{/b} topics for basic information about the game.
 
 {u}Ship info{/u}
-    On most screens you can see information about required crew positions in the top right corner. First icon is for pilot, second - engineer, third - gunner, forth - trader, fifth - repairs, sixth - upgrading ship module, seventh - ship cleaning and eighth - manufacturing.
+    On most screens you can see information about the required crew positions in the top right corner. First icon is for pilot, second - engineer, third - gunner, fourth - trader, fifth - repairs, sixth - upgrading ship modules, seventh - ship cleaning, and eighth - manufacturing.
    For pilots and engineers: if their letter is green, the position is taken by a crew member, and if it's red you don't have anyone assigned to this position.
-For gunners and manufacturing: A green icon mean all positions are taken (all guns, all crafting modules), a red icon means you have free positions (not all guns/crafting modules are taken), and a white icon means you don't have or don't need anyone assigned to this positions. For {sentientships} yellow icon mean that you don't have assigned anyone to that position, but you don't need anyone either.
-For repairs, upgrading ship modules, trader and cleaning ship, green means you have someone assigned to this position, red means you don't have anyone on that position but need someone, and white icon means you don't have anyone assigned to this position and you don't need anyone.</entry>
- <entry index="firststeps" title=" 2. First steps">    {i}This steps are only suggestions how to start a new game. After some time, you will probably find a better way which will suit your needs.{/i}
+For gunners and manufacturing: A green icon means all positions are taken (all guns, all crafting modules), a red icon means you have free positions (not all guns/crafting modules are taken), and a white icon means you don't have or need anyone assigned to this position. For {sentientships} a yellow icon means that you don't have anyone assigned to that position, but you don't need anyone either.
+For repairs, upgrading ship modules, trader and cleaning ship, green means you have someone assigned to this position, red means you don't have anyone on that position but need someone, and a white icon means you don't have anyone assigned to this position and you don't need anyone.</entry>
+ <entry index="firststeps" title=" 2. First steps">    {i}These steps are only suggestions on how to start a new game. After some time, you will probably find a better way which will suit your needs.{/i}
 {u}General tips{/u}
-    1. When you start the game, whole map is empty and covered by fog. It is recommended to first thing to do in new game to ask for bases in base to which you are currently docked. Select {b}Ask for bases{/b} from list of available orders. If you closed this list, you can show it with key {Gamekey 14}.
+    1. When you start the game, the whole map is empty and covered by fog. It is recommended to first thing to do in new game to ask for bases in base to which you are currently docked. Select {b}Ask for bases{/b} from list of available orders. If you closed this list, you can show it with key {Gamekey 14}.
     2. You may also ask for events in this same base. Each that "asking" action takes some game time but in exchange it gives you some reputation in the base. More information about reputation you can find in topic {u}4. Sky bases{/u}. It is always good to have high reputation in bases.
-    3. At beginning the best way for earn some money is trading between bases of different types. Thus try to find two different bases near self and start trading between them. Some examples of good routes:
+    3. At the beginning the best way to earn some money is by trading between bases of different types. Thus try to find two different bases near yourself and start trading between them. Some examples of good routes:
 * Food (rations, raw) from Agricultural bases to other bases.
 * Gunpowder from Industrial bases to other bases.
 * Wood from Refinery bases to other bases.
 * Ammunition from Military bases to other bases.
-Thus if you find Agricultural base near Refinery, start travelling between them and transport Raw Meat from Agricultural to Refinery and in second way, Andrae Seeds from Refinery to Agricultural. Try not trade with Shipyard bases at beginning. They don't produce anything thus you may end with empty cargo travel. Trading between bases raise reputation in them too.
+Thus if you find an Agricultural base near a Refinery, start travelling between them and transport Raw Meat from the Agricultural base to the Refinery. In the other direction, Andrae Seeds from the Refinery to the Agricultural base. Do not trade with Shipyard bases at the beginning - they don't produce anything, thus you may end up travelling with empty cargo space. Trading between bases raises reputation in them too.
     4. From start go to {i}ship info{/i} screen and set {i}Reduce fuel usage{/i} as a current ship upgrade. With time your ship will be use twice time less fuel for travel, which made it a lot cheaper and all other thing a lot more profitable.
     5. After finishing upgrading engine, upgrade ship hull size by one. Then find any {shipyard} base and install second engine. And of course, upgrade it that same like first. This allow you to not only travel faster, but also escape from stronger enemies or catch them faster in the battle.
     6. Select one base as your home base (best is probably Agricultural if you need food and drinks to live, otherwise select Industrial), and start working on maximize reputation there. Best place for that main base should have one short trading route (one of described above) and {shipyard} base for buying upgrades to the ship.
