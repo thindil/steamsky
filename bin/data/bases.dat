@@ -393,7 +393,7 @@ presented to the player during selection of starting base in main menu.
   <recipe index="33" />
   <recipe index="34" />
   <recipe index="35" />
-  <description>Agricultural bases provides food, drinks and the raw materials to create them. It's the easiest starting point.</description>
+  <description>Agricultural bases provide food, drinks and the raw materials to create them. It's the easiest starting point.</description>
  </base>
  <base index="2" name="Refinery" color="ffff00">
   <item index="9" sellprice="3" />
@@ -411,7 +411,7 @@ presented to the player during selection of starting base in main menu.
   <recipe index="2" />
   <recipe index="27" />
   <recipe index="28" />
-  <description>Refinery bases provides raw materials for refining which later can be sold to Industrial bases. A little more difficult starting point than the Industrial bases.</description>
+  <description>Refinery bases provide raw materials for refining, which later can be sold to Industrial bases. A little more difficult starting point than the Industrial bases.</description>
  </base>
  <base index="3" name="Shipyard" color="00ffff">
 <!--
@@ -422,7 +422,7 @@ and the player ship crew members morale, additionally, healing wounded crew
 members in that base is twice as cheap.
 -->
   <flag name="shipyard" />
-  <description>Shipyard bases don't sell any items but offer cheaper repairs to ships and the ability to upgrade ships. A difficult point as a starting point.</description>
+  <description>Shipyard bases don't sell any items but offer cheaper repairs to ships and the ability to upgrade ships. A difficult starting point.</description>
  </base>
  <base index="4" name="Military" color="32dc32">
   <item index="4" sellprice="3" />
@@ -667,7 +667,7 @@ members in that base is twice as cheap.
   <recipe index="228" />
   <recipe index="229" />
   <recipe index="230" />
-  <description>Military bases provides ammunition for guns and also melee weapons. They are the most difficult place as a starting point.</description>
+  <description>Military bases provide ammunition for guns and also melee weapons. They are the most difficult place as a starting point.</description>
  </base>
  <base index="5" name="Temple" color="7f6b00">
   <item index="2" sellprice="2" />
@@ -680,11 +680,11 @@ members in that base is twice as cheap.
   <recipe index="18" />
   <recipe index="20" />
   <flag name="temple" />
-  <description>Temple bases provides ability to pray for your ship crew members. Additinally, healing there is a lot cheaper than in other bases. They also provide basic food and drinks. A little more difficult starting point than Agricultural bases.</description>
+  <description>Temple bases provide the ability to pray for your ship's crew members. Additionally, healing is a lot cheaper than in other bases. They also provide basic food and drinks. A little more difficult starting point than Agricultural bases.</description>
  </base>
  <base index="6" name="Black market" color="787878">
   <flag name="blackmarket" />
-  <description>Black market bases sell and buy random items. Depending on your luck it can be a very easy or a very difficult place to start the game.</description>
+  <description>Black market bases buy and sell random items. Depending on your luck it can be a very easy or a very difficult place to start the game.</description>
  </base>
  <base index="7" name="Factory" color="ff0000">
   <item index="5" sellprice="3" />
@@ -1020,16 +1020,16 @@ members in that base is twice as cheap.
  <base index="8" name="Market" color="5f9ea0">
   <flag name="blackmarket" />
   <flag name="shipyard" />
-  <description>Market bases sell and buy random items, additionally they offer cheaper repairs for ships and also the ability to upgrade ships. Depending on your luck it can be a very easy or a very difficult point to start the game.</description>
+  <description>Market bases buy and sell random items, additionally they offer cheaper repairs for ships and also the ability to upgrade ships. Depending on your luck it can be a very easy or a very difficult point to start the game.</description>
  </base>
  <base index="9" name="Barracks" color="19785f">
   <flag name="barracks" />
-  <description>Barracks bases don't sell any items but have more than other bases in terms of recruits and they are cheaper to hire with lower maintenance costs. A difficult point as a starting point.</description>
+  <description>Barracks bases don't sell any items but have more than other bases in terms of recruits and they are cheaper to hire with lower maintenance costs. A difficult starting point.</description>
  </base>
  <base index="10" name="Agora" color="cd00cd">
   <flag name="blackmarket" />
   <flag name="shipyard" />
   <flag name="barracks" />
-  <description>Agora bases buy and sell random items, have more available recruits and they are cheaper than in other bases. Additionally they offers cheaper repairs for ships and the ability to upgrade ships. Depending on your luck it can be a very easy or a very difficult point to start the game.</description>
+  <description>Agora bases buy and sell random items, have more available recruits and they are cheaper than in other bases. Additionally they offer cheaper repairs for ships and the ability to upgrade ships. Depending on your luck it can be a very easy or a very difficult point to start the game.</description>
  </base>
 </bases>
