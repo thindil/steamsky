@@ -991,6 +991,12 @@ package body MainMenu is
       Set_Property(Frame, Name_Property, "normalfont");
       Set_Property(TextView, Name_Property, "normalfont");
       Pack_Start(ErrorBox, Frame);
+      if Add_Button
+          (Gtk_Dialog(Get_Object(Builder, "errordialog")), "Close",
+           Gtk_Response_Close) =
+        null then
+         raise Program_Error with "Can't add Close button to error dialog";
+      end if;
    end CreateErrorUI;
 
    procedure CreateMainMenu is
@@ -1163,7 +1169,12 @@ package body MainMenu is
                                    (Get_Object(Builder, "errordialog"))),
                               5))))))),
          To_String(Message));
-      Show_All(Gtk_Widget(Get_Object(Builder, "errordialog")));
+      Show_All(Gtk_Dialog(Get_Object(Builder, "errordialog")));
+      if Run(Gtk_Dialog(Get_Object(Builder, "errordialog"))) /=
+        Gtk_Response_Accept then
+         Destroy(Gtk_Widget(Get_Object(Builder, "errordialog")));
+         Gtk.Main.Main_Quit;
+      end if;
    end ShowErrorInfo;
 
    procedure UpdateGoalButton(Message: String) is
