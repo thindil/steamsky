@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [4.0.12] - 2020-02-16
 
 ### Fixed
 - Crash on missing tools in crafting (issue #51)
