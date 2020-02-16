@@ -13,7 +13,8 @@ All notable changes to this project will be documented in this file.
   huge titanium turret, huge orichalcum turret and huge adamantium turret
 - New items: iron 10mm piercing ammo, iron 20mm piercing ammo, iron 20mm
   explosive ammo
-- New crafting recipe: iron 10mm piercing ammo, iron 20mm piercing ammo
+- New crafting recipe: iron 10mm piercing ammo, iron 20mm piercing ammo, iron
+  20mm explosive ammo
 
 ### Changed
 - Updated mobs data
