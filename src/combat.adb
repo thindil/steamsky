@@ -56,6 +56,8 @@ package body Combat is
      (EnemyIndex: Unbounded_String; NewCombat: Boolean := True)
       return Boolean is
       EnemyShip: ShipRecord;
+      EnemyGuns: Guns_Container.Vector;
+      ShootingSpeed: Integer;
       function CountPerception(Spotter, Spotted: ShipRecord) return Natural is
          Result: Natural := 0;
       begin
@@ -152,10 +154,30 @@ package body Combat is
             end if;
          end loop;
       end;
+      EnemyGuns.Clear;
+      for I in EnemyShip.Modules.Iterate loop
+         if (EnemyShip.Modules(I).MType in GUN | HARPOON_GUN) and
+           EnemyShip.Modules(I).Durability > 0 then
+            if Modules_List(EnemyShip.Modules(I).ProtoIndex).Speed > 0 then
+               ShootingSpeed :=
+                 Natural
+                   (Float'Ceiling
+                      (Float
+                         (Modules_List(EnemyShip.Modules(I).ProtoIndex)
+                            .Speed) /
+                       2.0));
+            else
+               ShootingSpeed :=
+                 Modules_List(EnemyShip.Modules(I).ProtoIndex).Speed - 1;
+            end if;
+            EnemyGuns.Append
+              (New_Item => (Modules_Container.To_Index(I), 1, ShootingSpeed));
+         end if;
+      end loop;
       Enemy :=
         (Ship => EnemyShip, Accuracy => 0, Distance => 10000,
          CombatAI => ProtoShips_List(EnemyIndex).CombatAI, Evasion => 0,
-         Loot => 0, Perception => 0, HarpoonDuration => 0);
+         Loot => 0, Perception => 0, HarpoonDuration => 0, Guns => EnemyGuns);
       if ProtoShips_List(EnemyIndex).Accuracy(2) = 0 then
          Enemy.Accuracy := ProtoShips_List(EnemyIndex).Accuracy(1);
       else
@@ -199,7 +221,10 @@ package body Combat is
            (PlayerShip.Modules(I).MType = GUN or
             PlayerShip.Modules(I).MType = HARPOON_GUN) and
            PlayerShip.Modules(I).Durability > 0 then
-            Guns.Append(New_Item => (Modules_Container.To_Index(I), 1, 1));
+            Guns.Append
+              (New_Item =>
+                 (Modules_Container.To_Index(I), 1,
+                  Modules_List(PlayerShip.Modules(I).ProtoIndex).Speed));
          end if;
       end loop;
       if NewCombat then
@@ -325,6 +350,10 @@ package body Combat is
                            GunnerOrder := Gun(2);
                            if Gun(3) > 0 then
                               Shoots := Gun(3);
+                              if GunnerOrder /= 3 then
+                                 Shoots :=
+                                   Natural(Float'Ceiling(Float(Shoots) / 2.0));
+                              end if;
                            elsif Gun(3) < 0 then
                               Shoots := 0;
                               Gun(3) := Gun(3) + 1;
@@ -351,6 +380,10 @@ package body Combat is
                         GunnerOrder := 1;
                      end if;
                      case GunnerOrder is
+                        when 1 =>
+                           if Shoots > 0 then
+                              Shoots := 0;
+                           end if;
                         when 2 =>
                            CurrentAccuracyBonus := AccuracyBonus + 20;
                         when 4 =>
@@ -362,7 +395,24 @@ package body Combat is
                      end case;
                   end if;
                else
-                  Shoots := 2;
+                  for Gun of Enemy.Guns loop
+                     if Gun(1) = Modules_Container.To_Index(K) then
+                        if Gun(3) > 0 then
+                           Shoots := Gun(3);
+                        elsif Gun(3) < 0 then
+                           Shoots := 0;
+                           Gun(3) := Gun(3) + 1;
+                           if Gun(3) = 0 then
+                              Shoots := 1;
+                              Gun(3) :=
+                                Modules_List(Ship.Modules(Gun(1)).ProtoIndex)
+                                  .Speed -
+                                1;
+                           end if;
+                        end if;
+                        exit;
+                     end if;
+                  end loop;
                   if Ship.Crew.Length > 0 and GunnerIndex = 0 then
                      Shoots := 0;
                   end if;
@@ -447,6 +497,7 @@ package body Combat is
                end if;
                Ship.Modules(K).CoolingDown := not Ship.Modules(K).CoolingDown;
             end if;
+            LogMessage("Shoots:" & Integer'Image(Shoots), Log.Combat);
             if Shoots > 0 then
                if Ship = PlayerShip then
                   HitChance := CurrentAccuracyBonus - Enemy.Evasion;
