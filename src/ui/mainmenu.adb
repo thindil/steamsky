@@ -123,7 +123,19 @@ package body MainMenu is
       To_Unbounded_String("adjprices"));
    -- ****
 
+   -- ****if* MainMenu/BaseTypeName
+   -- FUNCTION
+   -- Type of base for new game
+   -- SOURCE
    BaseTypeName: Unbounded_String;
+   -- ****
+
+   -- ****iv* MainMenu/ErrorDialog
+   -- FUNCTION
+   -- Gtk dialog used to show information about the crash of the game.
+   -- SOURCE
+   ErrorDialog: Gtk_Dialog;
+   -- ****
 
    -- ****if* MainMenu/Quit
    -- FUNCTION
@@ -956,9 +968,18 @@ package body MainMenu is
       Frame: constant Gtk_Frame := Gtk_Frame_New("Technical information:");
       Label: Gtk_Label;
       LinkButton: Gtk_Link_Button;
-      ErrorBox: constant Gtk_Vbox :=
-        Get_Content_Area(Gtk_Dialog(Get_Object(Builder, "errordialog")));
+      ErrorBox: Gtk_Vbox;
    begin
+      ErrorDialog :=
+        Gtk_Dialog_New
+          ("Steam Sky - error",
+           Gtk_Window(Get_Object(Builder, "mainmenuwindow")), Modal);
+      Set_Position(ErrorDialog, Win_Pos_Center_Always);
+      if not Set_Icon_From_File(ErrorDialog, "data/ui/images/icon.png") then
+         Ada.Text_IO.Put_Line("Can't set icon for the error dialog.");
+      end if;
+      Set_Default_Size(ErrorDialog, 500, -1);
+      ErrorBox := Get_Content_Area(ErrorDialog);
       Label :=
         Gtk_Label_New
           ("Oops, something bad happens and the game has crashed. Game should save your progress, but better verify this yourself. Also, please, remember what you were doing before the crash and report this problem at");
@@ -991,10 +1012,7 @@ package body MainMenu is
       Set_Property(Frame, Name_Property, "normalfont");
       Set_Property(TextView, Name_Property, "normalfont");
       Pack_Start(ErrorBox, Frame);
-      if Add_Button
-          (Gtk_Dialog(Get_Object(Builder, "errordialog")), "Close",
-           Gtk_Response_Close) =
-        null then
+      if Add_Button(ErrorDialog, "Close", Gtk_Response_Close) = null then
          raise Program_Error with "Can't add Close button to error dialog";
       end if;
    end CreateErrorUI;
@@ -1100,11 +1118,7 @@ package body MainMenu is
          NewGameKeyPressed'Access);
       declare
          Label: constant Gtk_Label :=
-           Gtk_Label
-             (Get_Child
-                (Get_Content_Area
-                   (Gtk_Dialog(Get_Object(Builder, "errordialog"))),
-                 4));
+           Gtk_Label(Get_Child(Get_Content_Area(ErrorDialog), 4));
          ErrorFileDirectory: Unbounded_String :=
            To_Unbounded_String(Current_Directory);
          NewDataDirectory: Unbounded_String := DataDirectory;
@@ -1163,16 +1177,11 @@ package body MainMenu is
                  (Gtk_Scrolled_Window
                     (Get_Child
                        (Gtk_Frame
-                          (Get_Child
-                             (Get_Content_Area
-                                (Gtk_Dialog
-                                   (Get_Object(Builder, "errordialog"))),
-                              5))))))),
+                          (Get_Child(Get_Content_Area(ErrorDialog), 5))))))),
          To_String(Message));
-      Show_All(Gtk_Dialog(Get_Object(Builder, "errordialog")));
-      if Run(Gtk_Dialog(Get_Object(Builder, "errordialog"))) /=
-        Gtk_Response_Accept then
-         Destroy(Gtk_Widget(Get_Object(Builder, "errordialog")));
+      Show_All(ErrorDialog);
+      if Run(ErrorDialog) /= Gtk_Response_Accept then
+         Destroy(ErrorDialog);
          Gtk.Main.Main_Quit;
       end if;
    end ShowErrorInfo;
