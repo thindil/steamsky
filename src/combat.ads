@@ -84,6 +84,7 @@ package Combat is
    -- Perception      - Bonus to perception
    -- HarpoonDuration - How long (amount of rounds) ship will be stopped by
    --                   player harpoon
+   -- Guns            - List of guns installed on the enemy ship
    -- SOURCE
    type Enemy_Record is record
       Ship: ShipRecord;
@@ -94,6 +95,7 @@ package Combat is
       Loot: Natural;
       Perception: Natural;
       HarpoonDuration: Natural;
+      Guns: Guns_Container.Vector;
    end record;
    -- ****
 
