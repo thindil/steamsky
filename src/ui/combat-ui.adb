@@ -17,6 +17,8 @@
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
 with Gtk.List_Store; use Gtk.List_Store;
@@ -224,6 +226,47 @@ package body Combat.UI is
       end if;
    end UpdateMessages;
 
+   -- ****if* Combat.UI/GetGunSpeed
+   -- FUNCTION
+   -- Get information about fire rate of selected gun with selected order
+   -- PARAMETERS
+   -- Position - Number of gun to check
+   -- Index    - Index of the gunner's order
+   -- RESULT
+   -- String with info about gun fire rate
+   -- SOURCE
+   function GetGunSpeed(Position: Natural; Index: Positive) return String is
+      -- ****
+      GunSpeed: Integer;
+      Firerate: Unbounded_String;
+   begin
+      GunSpeed :=
+        Modules_List(PlayerShip.Modules(Guns(Position - 1)(1)).ProtoIndex)
+          .Speed;
+      case Index is
+         when 1 =>
+            GunSpeed := 0;
+         when 3 =>
+            null;
+         when others =>
+            if GunSpeed > 0 then
+               GunSpeed := Integer(Float'Ceiling(Float(GunSpeed) / 2.0));
+            else
+               GunSpeed := GunSpeed - 1;
+            end if;
+      end case;
+      if GunSpeed > 0 then
+         Firerate :=
+           To_Unbounded_String
+             ("(" & Trim(Integer'Image(GunSpeed), Both) & "/round)");
+      elsif GunSpeed < 0 then
+         Firerate :=
+           To_Unbounded_String
+             ("(1/" & Trim(Integer'Image(GunSpeed), Both) & " rounds)");
+      end if;
+      return To_String(Firerate);
+   end GetGunSpeed;
+
    procedure RefreshCombatUI is
       DamagePercent: Gint;
       EnemyInfo, ModuleName: Unbounded_String;
@@ -332,7 +375,8 @@ package body Combat.UI is
                  Gunner then
                   Set
                     (CrewList, CrewIter, 1,
-                     To_String(GunnerOrders(Guns(I)(2))));
+                     To_String(GunnerOrders(Guns(I)(2))) & " " &
+                     GetGunSpeed(I + 1, Guns(I)(2)));
                   Set
                     (CrewList, CrewIter, 2,
                      To_String
@@ -778,7 +822,9 @@ package body Combat.UI is
                   if AssignedOrder /= GunnerOrders(I) then
                      Append(OrdersList, OrdersIter);
                      Set
-                       (OrdersList, OrdersIter, 0, To_String(GunnerOrders(I)));
+                       (OrdersList, OrdersIter, 0,
+                        To_String(GunnerOrders(I)) & " " &
+                        GetGunSpeed(Position, I));
                      Set(OrdersList, OrdersIter, 1, Gint(I));
                   end if;
                end loop;
@@ -848,25 +894,14 @@ package body Combat.UI is
                GunIndex: constant Positive := Positive'Value(Path_String) - 1;
             begin
                Guns(GunIndex)(2) := Positive(Get_Int(OrdersList, New_Iter, 1));
-               case Guns(GunIndex)(2) is
-                  when 1 =>
-                     Guns(GunIndex)(3) := 0;
-                  when 3 =>
-                     Guns(GunIndex)(3) :=
-                       Modules_List
-                         (PlayerShip.Modules(Guns(GunIndex)(1)).ProtoIndex)
-                         .Speed;
-                  when others =>
-                     Guns(GunIndex)(3) :=
-                       Modules_List
-                         (PlayerShip.Modules(Guns(GunIndex)(1)).ProtoIndex)
-                         .Speed;
-                     if Guns(GunIndex)(3) > 0 then
-                        Guns(GunIndex)(3) := Guns(GunIndex)(3) / 2;
-                     else
-                        Guns(GunIndex)(3) := Guns(GunIndex)(3) - 1;
-                     end if;
-               end case;
+               if Guns(GunIndex)(2) = 1 then
+                  Guns(GunIndex)(3) := 0;
+               else
+                  Guns(GunIndex)(3) :=
+                    Modules_List
+                      (PlayerShip.Modules(Guns(GunIndex)(1)).ProtoIndex)
+                      .Speed;
+               end if;
                AddMessage
                  ("Order for " &
                   To_String
