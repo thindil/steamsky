@@ -1593,7 +1593,12 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
  <item index="327" name="Iron 20mm explosive ammo" showtype="Ammunition" type="Ammo20" weight="1" price="5">
   <data value="1"/>
   <data value="3"/>
-  <description>A explosive 20mm gun ammunition. Do less damage but it is more accurate.</description>
+  <description>An explosive 20mm gun ammunition. Do less damage but it is more accurate.</description>
+ </item>
+ <item index="328" name="Iron 40mm piercing ammo" showtype="Ammunition" type="Ammo40" weight="2" price="8">
+  <data value="6"/>
+  <data value="2"/>
+  <description>A piercing 40mm gun ammunition. Do more damage but it is less accurate.</description>
  </item>
 </items>
 
