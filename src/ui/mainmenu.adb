@@ -31,9 +31,11 @@ with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Box; use Gtk.Box;
 with Gtk.Button; use Gtk.Button;
+with Gtk.Button_Box; use Gtk.Button_Box;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Gtk.Dialog; use Gtk.Dialog;
+with Gtk.Enums; use Gtk.Enums;
 with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Info_Bar; use Gtk.Info_Bar;
 with Gtk.Label; use Gtk.Label;
@@ -325,7 +327,10 @@ package body MainMenu is
          RefreshSavesList;
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page6");
-         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnload")));
+         Grab_Focus
+           (Get_Child
+              (Gtk_Box(Get_Child(Gtk_Box(Get_Object(Builder, "loadbox")), 1)),
+               1));
          Set_Cursor
            (Gtk_Tree_View(Get_Object(Builder, "treesaves")),
             Gtk_Tree_Path_New_From_String("0"),
@@ -464,15 +469,16 @@ package body MainMenu is
    -- FUNCTION
    -- Load selected file with the game data
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Button which was clicked.
    -- SOURCE
-   procedure LoadGame(Object: access Gtkada_Builder_Record'Class) is
+   procedure LoadGame(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
       -- ****
       SavesIter: Gtk_Tree_Iter;
       SavesModel: Gtk_Tree_Model;
    begin
       Get_Selected
-        (Get_Selection(Gtk_Tree_View(Get_Object(Object, "treesaves"))),
+        (Get_Selection(Gtk_Tree_View(Get_Object(Builder, "treesaves"))),
          SavesModel, SavesIter);
       if SavesIter = Null_Iter then
          return;
@@ -594,20 +600,21 @@ package body MainMenu is
    -- FUNCTION
    -- Delete selected file with game data
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Button which was clicked
    -- SOURCE
-   procedure DeleteGame(Object: access Gtkada_Builder_Record'Class) is
+   procedure DeleteGame(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
       -- ****
       SavesIter: Gtk_Tree_Iter;
       SavesModel: Gtk_Tree_Model;
    begin
       if not ShowConfirmDialog
           ("Are you sure you want delete this savegame?",
-           Gtk_Window(Get_Object(Object, "mainmenuwindow"))) then
+           Gtk_Window(Get_Object(Builder, "mainmenuwindow"))) then
          return;
       end if;
       Get_Selected
-        (Get_Selection(Gtk_Tree_View(Get_Object(Object, "treesaves"))),
+        (Get_Selection(Gtk_Tree_View(Get_Object(Builder, "treesaves"))),
          SavesModel, SavesIter);
       if SavesIter = Null_Iter then
          return;
@@ -945,6 +952,36 @@ package body MainMenu is
       Setting := False;
    end SetDifficulty;
 
+   -- ****if* MainMenu/BackToMenu
+   -- FUNCTION
+   -- Back to main menu after clicking the button
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked. Unused.
+   -- SOURCE
+   procedure BackToMenu(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
+      -- ****
+   begin
+      ShowMainMenu;
+   end BackToMenu;
+
+   procedure LoadGameTemp(Object: access Gtkada_Builder_Record'Class) is
+      pragma Unreferenced(Object);
+      -- ****
+      SavesIter: Gtk_Tree_Iter;
+      SavesModel: Gtk_Tree_Model;
+   begin
+      Get_Selected
+        (Get_Selection(Gtk_Tree_View(Get_Object(Builder, "treesaves"))),
+         SavesModel, SavesIter);
+      if SavesIter = Null_Iter then
+         return;
+      end if;
+      SaveName := To_Unbounded_String(Get_String(SavesModel, SavesIter, 3));
+      LoadGame;
+      StartGame;
+   end LoadGameTemp;
+
    procedure CreateMainMenu is
       Error: aliased GError;
       AdjValues: constant array(Positive range <>) of Gdouble :=
@@ -974,10 +1011,9 @@ package body MainMenu is
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Random_Name", RandomName'Access);
       Register_Handler(Builder, "Show_Goals", ShowGoals'Access);
-      Register_Handler(Builder, "Load_Game", LoadGame'Access);
+      Register_Handler(Builder, "Load_Game", LoadGameTemp'Access);
       Register_Handler(Builder, "New_Game", NewGame'Access);
       Register_Handler(Builder, "Show_Page", ShowPage'Access);
-      Register_Handler(Builder, "Delete_Game", DeleteGame'Access);
       Register_Handler
         (Builder, "Show_Faction_Description", ShowFactionDescription'Access);
       Register_Handler
@@ -1044,6 +1080,24 @@ package body MainMenu is
       On_Key_Press_Event
         (Gtk_Widget(Get_Object(Builder, "newgamebox")),
          NewGameKeyPressed'Access);
+      declare
+         LoadBox: constant Gtk_Vbox :=
+           Gtk_Vbox(Get_Object(Builder, "loadbox"));
+         ButtonBox: constant Gtk_Button_Box :=
+           Gtk_Button_Box_New(Orientation_Horizontal);
+         Button: Gtk_Button;
+      begin
+         Button := Gtk_Button_New_With_Mnemonic("_Delete game");
+         On_Clicked(Button, DeleteGame'Access);
+         Pack_Start(ButtonBox, Button);
+         Button := Gtk_Button_New_With_Mnemonic("_Load game");
+         On_Clicked(Button, LoadGame'Access);
+         Pack_Start(ButtonBox, Button);
+         Button := Gtk_Button_New_With_Mnemonic("_Back to main menu");
+         On_Clicked(Button, BackToMenu'Access);
+         Pack_Start(ButtonBox, Button);
+         Pack_Start(LoadBox, ButtonBox, False);
+      end;
       declare
          Label: constant Gtk_Label :=
            Gtk_Label(Get_Child(Get_Content_Area(ErrorDialog.ErrorDialog), 4));
