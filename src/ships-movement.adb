@@ -105,11 +105,13 @@ package body Ships.Movement is
       case PlayerShip.Speed is
          when DOCKED =>
             Message :=
-              To_Unbounded_String("First you must undock your ship from the base.");
+              To_Unbounded_String
+                ("First you must undock your ship from the base.");
             return 0;
          when FULL_STOP =>
             Message :=
-              To_Unbounded_String("First you must set the speed of your ship.");
+              To_Unbounded_String
+                ("First you must set the speed of your ship.");
             return 0;
          when others =>
             null;
@@ -175,7 +177,8 @@ package body Ships.Movement is
            FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
          if FuelIndex = 0 then
             AddMessage
-              ("Ship falls from the sky due to a lack of fuel.", OtherMessage, RED);
+              ("Ship falls from the sky due to a lack of fuel.", OtherMessage,
+               RED);
             Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
             return 0;
          end if;
@@ -473,13 +476,15 @@ package body Ships.Movement is
         FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
       if FuelIndex = 0 then
          AddMessage
-           ("Ship falls from the sky due to a lack of fuel.", OtherMessage, RED);
+           ("Ship falls from the sky due to a lack of fuel.", OtherMessage,
+            RED);
          Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
          return;
       end if;
       if PlayerShip.Cargo(FuelIndex).Amount <= abs (FuelNeeded) then
          AddMessage
-           ("Ship falls from the sky due to a lack of fuel.", OtherMessage, RED);
+           ("Ship falls from the sky due to a lack of fuel.", OtherMessage,
+            RED);
          Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
          return;
       end if;

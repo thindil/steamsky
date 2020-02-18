@@ -407,7 +407,8 @@ package body Ships.Crew is
             when Rest =>
                AddMessage(MemberName & " is going on a break.", OrderMessage);
             when Repair =>
-               AddMessage(MemberName & " starts repairing ship.", OrderMessage);
+               AddMessage
+                 (MemberName & " starts repairing ship.", OrderMessage);
             when Craft =>
                AddMessage(MemberName & " starts manufacturing.", OrderMessage);
                for Owner of Ship.Modules(ModuleIndex2).Owner loop
@@ -441,7 +442,8 @@ package body Ships.Crew is
                AddMessage(MemberName & " starts cleaning ship.", OrderMessage);
             when Boarding =>
                AddMessage
-                 (MemberName & " starts boarding the enemy ship.", OrderMessage);
+                 (MemberName & " starts boarding the enemy ship.",
+                  OrderMessage);
             when Defend =>
                AddMessage
                  (MemberName & " starts defending the ship.", OrderMessage);

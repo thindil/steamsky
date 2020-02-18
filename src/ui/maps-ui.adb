@@ -1125,7 +1125,8 @@ package body Maps.UI is
          MessageBox := Gtk_Info_Bar_New;
          Set_Show_Close_Button(MessageBox, True);
          Set_Message_Type(MessageBox, Message_Info);
-         Pack_Start(Gtk_Box(Get_Content_Area(MessageBox)), MessageLabel, False);
+         Pack_Start
+           (Gtk_Box(Get_Content_Area(MessageBox)), MessageLabel, False);
          On_Response(MessageBox, HideDialog'Access);
          Set_Halign(MessageBox, Align_Center);
          Set_Valign(MessageBox, Align_Center);

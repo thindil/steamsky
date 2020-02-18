@@ -615,7 +615,8 @@ package body Ships.Upgrade is
                             .MaxValue) *
                        1.5);
                   if UpgradeValue >= MaxValue then
-                     MaxUpgradeReached("You've reached the maximum upgrade for ");
+                     MaxUpgradeReached
+                       ("You've reached the maximum upgrade for ");
                      return;
                   else
                      case Modules_List
@@ -724,7 +725,8 @@ package body Ships.Upgrade is
                      MaxValue := 1;
                   end if;
                   if UpgradeValue = MaxValue then
-                     MaxUpgradeReached("You've reached the maximum upgrade for ");
+                     MaxUpgradeReached
+                       ("You've reached the maximum upgrade for ");
                      return;
                   else
                      case Modules_List
