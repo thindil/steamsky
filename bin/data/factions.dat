@@ -65,7 +65,7 @@ enemy ships.
 <!--
 - Tag "description": In game description of item. Can have any value.
 -->
-  <description>Federation of independent sky bases. This is biggest faction from all, almost all bases belongs to this faction. They favorite melee weapons are one handed swords. They unique base is Agora - place which sell random items, where you can cheaper recruit new crew members and upgrade ship. Easiest to play, recommended especially for new players.</description>
+  <description>Federation of independent sky bases. This is biggest faction of all, almost all bases belongs to this faction. Their favorite melee weapons are one handed swords. Their unique base is Agora - a place which sells random items, where you can recruit new crew members cheaper and upgrade ships. Easiest to play, recommended especially for new players.</description>
 <!--
 - Tags "foodtype": Types of items used as food by this faction members. If
 no "foodtype" tags inside faction, that faction members can't be hungry.
@@ -103,11 +103,11 @@ file.
 - Attribute "name": optional attribute. Specific name of career for this
 faction. Will be show to player instead of default name.
 -->
-  <career index="general" playerindex="1" shipindex="1">Standard career for everyone. You get average equipped small ship with crew. Good for any purpose.</career>
-  <career index="merchant" playerindex="1" shipindex="167">Career focused on trading. You get unarmed small ship with larger cargo space and more moneys. Your crew will be bit smaller that General. At beginning is better to avoid combat.</career>
-  <career index="hunter" playerindex="1" shipindex="168">Career focused on combat. You get good armed small ship but with smaller cargo space than general career's ship.</career>
-  <career index="explorer" playerindex="1" shipindex="171">Career focused on exploring. You get average equipped small ship, with smaller cargo space than general career's ship but with water collector installed on it.</career>
-  <career index="crafter" playerindex="1" shipindex="173">Career focused on crafting. You get average equipped small ship, with smaller cargo space than general career's ship but with furnace installed on it. Additionally, you will know more crafting recipes at start.</career>
+  <career index="general" playerindex="1" shipindex="1">Standard career for everyone. You get an average equipped small ship with crew. Good for any purpose.</career>
+  <career index="merchant" playerindex="1" shipindex="167">Career focused on trading. You get an unarmed small ship with larger cargo space and more money. Your crew will be a bit smaller than General. At the beginning it's better to avoid combat.</career>
+  <career index="hunter" playerindex="1" shipindex="168">Career focused on combat. You get a good armed small ship but with smaller cargo space than a General career ship.</career>
+  <career index="explorer" playerindex="1" shipindex="171">Career focused on exploring. You get an average equipped small ship, with smaller cargo space than a General career ship but with a water collector installed on it.</career>
+  <career index="crafter" playerindex="1" shipindex="173">Career focused on crafting. You get an average equipped small ship, with smaller cargo space than a General career ship but with a furnace installed on it. Additionally, you know more crafting recipes at the start.</career>
 <!-- Tags "basetype": Available base types for this faction. If you don't add
 any that tag, all bases types available in the game will be available for that
 faction.
@@ -133,7 +133,7 @@ between 51 and 70 it will be second base type.
   <relation faction="UNDEAD" reputation="-100" friendly="N" />
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="-50" friendly="N" />
-  <description>Group of independent from each other sky bases, not connected in any way with self. They favorite melee weapons are spears. They unique base is Market - place which sell random items and allow you to upgrade ship. Bases of this faction are much less common than Poleis and rarely near other independent base. Gameplay is harder than Poleis due to less sky bases but generally it is very similar.</description>
+  <description>Group of sky bases independent from each other, not connected in any way with each other. Their favorite melee weapons are spears. Their unique base is Market - a place which sells random items and allows you to upgrade your ship. Bases of this faction are much less common than Poleis, and are rarely near other Independent bases. Gameplay is harder than Poleis due to fewer sky bases, but generally very similar.</description>
   <foodtype name="Food" />
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
@@ -170,7 +170,7 @@ bases of that faction are not grouped near self.
   <relation faction="UNDEAD" reputation="-100" friendly="N" />
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="-50" friendly="N" />
-  <description>Group of independent bases which inhabitants lives from attacking other ships and stealing their cargo. They favorite melee weapons are rapiers. They unique base is Black Market - place which sells random items. Bases of this faction are much less common than Poleis and rarely near other Pirates base. Gameplay is much harder than Poleis due to less sky bases and negative reputation of Pirates with other factions.</description>
+  <description>Group of independent bases, whose inhabitants live from attacking other ships and stealing their cargo. Their favorite melee weapons are rapiers. Their unique base is Black Market - a place which sells random items. Bases of this faction are much less common than Poleis and rarely near other Pirate bases. Gameplay is much harder than Poleis due to fewer sky bases, and the negative reputation of Pirates with other factions.</description>
   <foodtype name="Food" />
   <foodtype name="RawFood" />
   <drinktype name="Drink" />
@@ -192,7 +192,7 @@ bases of that faction are not grouped near self.
   <relation faction="UNDEAD" reputation="0" friendly="Y" />
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="-100" friendly="N" />
-  <description>Small group of connected together bases which are settled by undead beings. Members of this factions attacks everything what not belongs to it. They main advantages are that they don't need food or drinks to survive, they are immune to diseases, they don't need rest but they can't self regenerate health and they take less damage in melee combat but when they attack without weapon then, they can do a much more damage to not immune to diseases factions members. They morale is always that same. They unique base are Barracks - place where you can cheaper recruit new crew members. Bases of this faction are much less common than Poleis. Gameplay is harder than Poleis due to less sky bases and negative reputation of Undead with other factions.</description>
+  <description>Small group of connected together bases which are settled by undead beings. Members of this faction attack anything which does not belongs to it. Their main advantages are that they don't need food or drinks to survive, they are immune to diseases, and they don't need rest but they can't self regenerate health and they take less damage in melee combat but when they attack without weapon then, they can do a much more damage to not immune to diseases factions members. Their morale is always the same. Their unique base is Barracks - a place where you can more cheaply recruit new crew members. Bases of this faction are much less common than Poleis. Gameplay is harder than Poleis due to fewer sky bases and the negative reputation of Undead with other factions.</description>
   <flag name="diseaseimmune" />
   <flag name="nofatigue" />
   <flag name="nomorale" />
@@ -238,7 +238,7 @@ bases of that faction are not grouped near self.
   <relation faction="UNDEAD" reputation="-100" friendly="N" />
   <relation faction="DRONES" reputation="-100" friendly="N" />
   <relation faction="INQUISITION" reputation="0" friendly="Y" />
-  <description>Group of connected together sky bases which inhabitants are devoted to destroy all infidels around the world. Bases of this faction are much less common than Poleis. They favorite melee weapons are two handed swords. They are know for they very high morale, easily go into euphoria and almost never into despair. They unique base type is Temple - place where you can raise morale of your crew by praying. Gameplay is much harder than Poleis due to less sky bases and negative reputation of Inquisition with other factions.</description>
+  <description>Group of connected together sky bases whose inhabitants are devoted to destroy all infidels around the world. Bases of this faction are much less common than Poleis. Their favorite melee weapons are two handed swords. They are know for their very high morale, they easily go into euphoria and almost never into despair. Their unique base type is Temple - a place where you can raise the morale of your crew by praying. Gameplay is much harder than Poleis due to fewer sky bases and the negative reputation of Inquisition with other factions.</description>
   <foodtype name="Food" />
   <foodtype name="RawFood" />
   <drinktype name="Drink" />

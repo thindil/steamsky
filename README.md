@@ -73,8 +73,8 @@ version of script have set all default settings for Hunter code. If you have
 
 ### Linux
 If you use the AppImage version, you don't need any additional
-libraries. Just run it as any AppImage file. More informations about AppImage
-files usage, you can find at:
+libraries. Just run it as any AppImage file. For more information about AppImage
+file usage, see:
 
 https://docs.appimage.org/user-guide/run-appimages.html
 

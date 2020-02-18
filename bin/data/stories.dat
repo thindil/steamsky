@@ -31,7 +31,7 @@ are: "add" (add this entry, default option) or "remove" (remove this entry).
   <startdata value="164" />
   <startdata value="UNDEAD" />
   <startdata value="100" />
-  <endtext>Enemy ship dissapering in huge explosion. Rest of undead fleet starts slowly falling from sky. You are victorious.</endtext>
+  <endtext>Enemy ship disappearing in huge explosion. Rest of undead fleet starts slowly falling from sky. You are victorious.</endtext>
   <forbiddenfaction value="UNDEAD" />
 <!--
 - Tag "step" contains data for step of story.
@@ -75,19 +75,19 @@ next.
    <finishdata name="chance" value="50" />
    <finishdata name="base" value="any" />
    <finishdata name="condition" value="Rhetoric" />
-   <text condition="any">During combat at one of bodies you found strange medalion. Maybe you should ask about it in nearest bases?</text>
-   <failtext>You asked few people around base but no one can help you with this medalion. Try again here or maybe in another base?</failtext>
+   <text condition="any">During combat, on one of bodies you find a strange medalion. Maybe you should ask about it in the nearest bases?</text>
+   <failtext>You asked a few people around the base, but no one can help you with this medalion. Try again here or maybe in another base?</failtext>
   </step>
   <step index="2" finish="askinbase">
    <finishdata name="item" value="164" />
    <finishdata name="chance" value="50" />
    <finishdata name="base" value="selected" />
    <finishdata name="condition" value="Rhetoric" />
-   <text condition="askinbase">One of inhibitants of base looked at medalion very closely and told you: I think I know someone other who can tell you more about this medalion. But he lives in different base. Then he show on map in which base.</text>
-   <text condition="destroyship">In wreck of destroyed ship before explosion, you found some scraps of this same metal from which your medalion is made. On one of this scraps you see name of base. You quickly note it position on map.</text>
+   <text condition="askinbase">One of the inhabitants of the base looked at the medalion very closely and told you: I think I know someone who can tell you more about this medalion. But he lives in a different base. Then he shows you which base on a map.</text>
+   <text condition="destroyship">In the wreck of a destroyed ship before the explosion, you find some scraps of the same metal from which your medalion is made. On one of these scraps you see the name of a base. You quickly note its position on your map.</text>
    <text condition="explore">After spending some time around, you finally found some clue: drifting remains of another ship, not so long ago destroyed. Inside wreck you found more similiar symbols to this which you saw on your strange medalion. Near this, you found name of base. You quickly remember name of base.</text>
    <text condition="loot">In wreck of destroyed ship, your boarding party found some strange scraps of metal, very similiar to which your medalion is made. On one of this scraps you see name of base. You quickly note it position on map.</text>
-   <failtext>You asked few people around base but no one can help you with this medalion. Maybe try again?</failtext>
+   <failtext>You asked a few people around the base, but no one can help you with this medalion. Maybe try again?</failtext>
   </step>
   <step index="3" finish="destroyship">
    <finishdata name="x" value="random" />
@@ -97,10 +97,10 @@ next.
    <finishdata name="chance" value="100" />
    <finishdata name="condition" value="Perception" />
    <text condition="askinbase">One of captains of docked ship told you, that he saw undead ship with this same symbols like on your medalion. When you show him map, he mark area where he saw that ship.</text>
-   <text condition="destroyship">After fast search of destroyed ship, you found very damaged captains log. In one of last entries, you spotted this same werid symbols which are on your medalion. Entry contains informations about encountered undead ship with it name and general location. You quickly note this information on map.</text>
+   <text condition="destroyship">After a fast search of the destroyed ship, you found a very damaged captain's log. In one of the last entries, you spot the same weird symbols which are on your medalion. An entry contains information about an encountered undead ship, with its name and general location. You quickly note this information on the map.</text>
    <text condition="explore">After spending some time around, you finally found some clue: drifting remains of another ship, not so long ago destroyed. Fast search of it resulted in find that there is another ship waiting for this one. You quickly save coordinates of meeting point on your map.</text>
-   <text condition="loot">After combat when you search destroyed ship, your boarding party found strange scrap of metal, which looks almost identical like this from which is made your medalion. Near scrap you found very damaged captains log. In one of last entries, you see informations about encountered undead ship with it name and general location. You quickly note this information on map.</text>
-   <failtext>You searched area by some time, but can't find any sign of your target. Maybe try again?</failtext>
+   <text condition="loot">After combat when you search destroyed ship, your boarding party found strange scrap of metal, which looks almost identical like this from which is made your medalion. Near scrap you found very damaged captains log. In one of the last entries, you see informatios about an encountered undead ship, with its name and general location. You quickly note this information on the map.</text>
+   <failtext>You searched the area for some time, but can't find any sign of your target. Maybe try again?</failtext>
   </step>
   <step index="4" finish="destroyship">
    <finishdata name="x" value="random" />
@@ -136,7 +136,7 @@ next.
    <text condition="destroyship">When enemy ship explodes, by the moment you saw very unnatural color in explosion. Looks like something strange was on ship. Maybe next time will be good idea to send boarding party on undead ship to check what it can be?</text>
    <text condition="explore">After spending some time around, you found freshly destroyed merchant ship. Fast search around show that it was destroyed probably by undead. In almost destroyed captain's log, you found information that some time before, they found some strange metal. Maybe this same like your medalion? Probably it is good idea to check some undead ships around, maybe one of them still have cargo from this ship.</text>
    <text condition="loot">After combat, your boarding party found on destroyed ship small scrap of strange metal. Unfortunately, it doesn't help you too much in solve mystery of medalion. Maybe when you find more that scraps on another undead ship?</text>
-   <failtext>You searched destroyed ship by some time, but unfortunately you didnt' find any clue. Looks like you must find another ship.</failtext>
+   <failtext>You searched destroyed ship for some time, but unfortunately you didn't find any clues. Looks like you must find another ship.</failtext>
   </step>
  </story>
 </stories>
