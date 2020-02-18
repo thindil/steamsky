@@ -62,8 +62,8 @@ package body Bases.Ship is
             end if;
          end loop;
          AddMessage
-           ("You bought an entire ship repair for" & Positive'Image(Cost) & " " &
-            To_String(MoneyName) & ".",
+           ("You bought an entire ship repair for" & Positive'Image(Cost) &
+            " " & To_String(MoneyName) & ".",
             TradeMessage);
       end if;
       UpdateCargo

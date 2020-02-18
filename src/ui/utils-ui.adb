@@ -84,7 +84,8 @@ package body Utils.UI is
       return False;
    end AutoHideDialog;
 
-   procedure HideDialog(Self: access Gtk_Info_Bar_Record'Class; Response_Id : Glib.Gint) is
+   procedure HideDialog
+     (Self: access Gtk_Info_Bar_Record'Class; Response_Id: Glib.Gint) is
       pragma Unreferenced(Response_Id);
    begin
       Hide(Self);
@@ -98,7 +99,9 @@ package body Utils.UI is
 
    procedure ShowDialog(Message: String) is
    begin
-      Set_Label(Gtk_Label(Get_Child(Gtk_Box(Get_Content_Area(MessageBox)), 0)), Message);
+      Set_Label
+        (Gtk_Label(Get_Child(Gtk_Box(Get_Content_Area(MessageBox)), 0)),
+         Message);
       Show_All(MessageBox);
       if Get_Object(Builder, "btnclose") /= null then
          DisableMenuShortcutsProc(Builder);

@@ -61,7 +61,8 @@ package Utils.UI is
    -- Self        - Gtk_Info_Bar to hide
    -- Response_Id - Gtk response id. Unused.
    -- SOURCE
-   procedure HideDialog(Self: access Gtk_Info_Bar_Record'Class; Response_Id : Glib.Gint);
+   procedure HideDialog
+     (Self: access Gtk_Info_Bar_Record'Class; Response_Id: Glib.Gint);
    -- ****
 
    -- ****f* Utils.UI/ShowDialog
