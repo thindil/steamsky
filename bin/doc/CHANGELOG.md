@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
 - New items: iron 10mm piercing ammo, iron 20mm piercing ammo, iron 20mm
   explosive ammo, iron 40mm piercing ammo, iron 40mm explosive ammo
 - New crafting recipe: iron 10mm piercing ammo, iron 20mm piercing ammo, iron
-  20mm explosive ammo, iron 40mm piercing ammo
+  20mm explosive ammo, iron 40mm piercing ammo, iron 40mm explosive ammo
 
 ### Changed
 - Updated mobs data
