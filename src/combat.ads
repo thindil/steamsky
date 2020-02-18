@@ -43,7 +43,7 @@ package Combat is
 
    -- ****t* Combat/GunsInfoArray
    -- FUNCTION
-   -- Data structure for guns informations: 1 - Gun index in ship modules
+   -- Data structure for gun information: 1 - Gun index in ship modules
    -- list, 2 - Gunner order, 3 - Amount of shoots from the gun, value below
    -- zero means that gun shoot once per that amount of rounds
    -- SOURCE
@@ -101,7 +101,7 @@ package Combat is
 
    -- ****v* Combat/Enemy
    -- FUNCTION
-   -- Enemy informations
+   -- Enemy information
    -- SOURCE
    Enemy: Enemy_Record;
    -- ****

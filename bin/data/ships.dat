@@ -271,7 +271,7 @@ during combat. -->
   <cargo index="2" maxamount="100" minamount="20"/>
   <cargo index="3" maxamount="200" minamount="40"/>
   <member index="19"/>
-  <description>Smallest know inquisition ship.</description>
+  <description>Smallest known inquisition ship.</description>
  </ship>
  <ship combatai="ATTACKER" index="14" maxloot="150" minloot="15" name="Small inquisition ship" owner="INQUISITION">
   <module index="1"/>
@@ -605,7 +605,7 @@ during combat. -->
   <cargo index="33" maxamount="1000" minamount="600"/>
   <cargo index="5" maxamount="800" minamount="600"/>
   <cargo index="13" maxamount="300" minamount="150"/>
-  <description>Advanced version of huge, well armored  attacking clockwork drone.</description>
+  <description>Advanced version of huge, well armored attacking clockwork drone.</description>
  </ship>
  <ship combatai="ATTACKER" index="33" maxloot="1000" minloot="750" name="Huge inquisition ship" owner="INQUISITION">
   <module index="60"/>
@@ -649,7 +649,7 @@ during combat. -->
   <member index="51"/>
   <member amount="4" index="52"/>
   <member index="73" maxamount="12" minamount="8"/>
-  <description>Advanced version of huge, well armored  inquisition flying vessel.</description>
+  <description>Advanced version of huge, well armored inquisition flying vessel.</description>
  </ship>
  <ship combatai="DISARMER" index="35" maxloot="100" minloot="10" name="Tiny pirates ship mk II" owner="PIRATES">
   <module index="64"/>
@@ -668,7 +668,7 @@ during combat. -->
   <member index="53"/>
   <member amount="2" index="54"/>
   <member index="74"/>
-  <description>Smallest known pirates ship (upgraded version). Like many pirates, they prefer to disarm enemies first.</description>
+  <description>Smallest known pirate ship (upgraded version). Like many pirates, they prefer to disarm enemies first.</description>
  </ship>
  <ship combatai="BERSERKER" index="36" maxloot="100" minloot="10" name="Tiny undead ship mk II" owner="UNDEAD">
   <module index="64"/>
@@ -811,7 +811,7 @@ during combat. -->
   <cargo index="2" maxamount="100" minamount="20"/>
   <cargo index="3" maxamount="200" minamount="40"/>
   <member index="19"/>
-  <description>Smallest know inquisition ship (upgraded version).</description>
+  <description>Smallest known inquisition ship (upgraded version).</description>
  </ship>
  <ship combatai="ATTACKER" index="46" maxloot="150" minloot="15" name="Small inquisition ship mk II" owner="INQUISITION">
   <module index="64"/>

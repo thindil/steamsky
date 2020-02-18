@@ -733,10 +733,10 @@ data file (if needed). To edit attribute name, just edit value of attribute
 `name`. To change attribute description, just edit text between `attribute`
 tags. To add new attribute, just append new line with tag `attribute` with
 it name as attribute `name` and description between tags `attribute`. -->
- <attribute name="Strength">Physical strength of character, determines damage in combat and carry capacity, used in some craftings too</attribute>
+ <attribute name="Strength">Physical strength of character, determines damage in combat and carrying capacity. Also used in some craftings.</attribute>
  <attribute name="Dexterity">Nimbleness of character, used in many crafts</attribute>
  <attribute name="Intelligence">Intellect and perception of character, used in many crafts</attribute>
- <attribute name="Condition">Endurance of character, determine how long he/she can works before they grow tired</attribute>
+ <attribute name="Condition">Endurance of character, determine how long he/she can work before they grow tired</attribute>
 <!-- Each skill starts with tag `skill`.
 - Attribute `name` is name of selected skill.
 - Attribute `attribute` is name of character attribute (must be defined
@@ -755,14 +755,14 @@ To add new skill, just append new line with tag `skill` with it name as
 attribute `name`, assigned attribute to skill as attribute `attribute`,
 assigned item type as training tool as attribute `tool` and description between
 tags `skill`. -->
- <skill attribute="Dexterity" name="Piloting" tool="CockpitSimulator">Used by pilots, determine ship speed and chance to avoid damage in ship combat</skill>
- <skill attribute="Intelligence" name="Engineering" tool="EngineersBook">Used by engineers, determine ship speed and speed of ship upgrading/repairing</skill>
- <skill attribute="Dexterity" name="Gunnery" tool="GunSimulator">Used by gunners, determine chance to hit enemy in ship combat</skill>
- <skill attribute="Intelligence" name="Rhetoric" tool="RhetoricBook">Used by traders, determine prices in bases</skill>
- <skill attribute="Intelligence" name="Perception" tool="SmallToys">Used to spot enemy ships by pilots and gunners</skill>
+ <skill attribute="Dexterity" name="Piloting" tool="CockpitSimulator">Used by pilots, determines ship speed and chance to avoid damage in ship combat</skill>
+ <skill attribute="Intelligence" name="Engineering" tool="EngineersBook">Used by engineers, determines ship speed and speed of ship upgrading/repairing</skill>
+ <skill attribute="Dexterity" name="Gunnery" tool="GunSimulator">Used by gunners, determines chance to hit enemy in ship combat</skill>
+ <skill attribute="Intelligence" name="Rhetoric" tool="RhetoricBook">Used by traders, determines prices in bases</skill>
+ <skill attribute="Intelligence" name="Perception" tool="SmallToys">Used by pilots and gunners to spot enemy ships</skill>
  <skill attribute="Intelligence" name="Alchemy" tool="AlchemyBook">Used in crafting</skill>
  <skill attribute="Dexterity" name="Cooking" tool="CookingBook">Used to cook food</skill>
- <skill attribute="Dexterity" name="Gunsmith" tool="GunsmithBook">Used to create ammo for guns and upgrade guns</skill>
+ <skill attribute="Dexterity" name="Gunsmith" tool="GunsmithBook">Used to create ammo for guns and to upgrade guns</skill>
  <skill attribute="Dexterity" name="Metalsmith" tool="MetalsmithBook">Used in crafting</skill>
  <skill attribute="Intelligence" name="Medicine" tool="MedicineBook">Used in healing</skill>
  <skill attribute="Strength" name="Farming" tool="FarmingBook">Used to grow plants</skill>
@@ -771,16 +771,16 @@ tags `skill`. -->
  <skill attribute="Strength" name="Blacksmith" tool="BlacksmithBook">Used in crafting</skill>
  <skill attribute="Strength" name="Woodworking" tool="WoodworkingBook">Used in crafting</skill>
  <skill attribute="Dexterity" name="Leatherworking" tool="LeatherworkingBook">Used in crafting</skill>
- <skill attribute="Strength" name="Swords" tool="TrainingDummy">Used to dermine chance to hit with swords in combat</skill>
+ <skill attribute="Strength" name="Swords" tool="TrainingDummy">Used to determine chance to hit with swords in combat</skill>
  <skill attribute="Dexterity" name="Dodge" tool="SmallTraps">Used to dodge enemy attacks in combat</skill>
  <skill attribute="Strength" name="Brawling" tool="TrainingDummy">Used to determine chance to hit with bare hands in combat</skill>
  <skill attribute="Dexterity" name="Printing" tool="PrintingBook">Used in making paper and books</skill>
- <skill attribute="Strength" name="Maces" tool="TrainingDummy">Used to dermine chance to hit with maces in combat</skill>
- <skill attribute="Strength" name="Daggers" tool="TrainingDummy">Used to dermine chance to hit with daggers in combat</skill>
- <skill attribute="Strength" name="Two-handed Swords" tool="TrainingDummy">Used to dermine chance to hit with two handed swords in combat</skill>
- <skill attribute="Strength" name="Two-handed Maces" tool="TrainingDummy">Used to dermine chance to hit with two handed, blunt weapon in combat</skill>
- <skill attribute="Strength" name="Rapiers" tool="TrainingDummy">Used to dermine chance to hit with rapiers in combat</skill>
- <skill attribute="Strength" name="Spears" tool="TrainingDummy">Used to dermine chance to hit with spears in combat</skill>
+ <skill attribute="Strength" name="Maces" tool="TrainingDummy">Used to determine chance to hit with maces in combat</skill>
+ <skill attribute="Strength" name="Daggers" tool="TrainingDummy">Used to determine chance to hit with daggers in combat</skill>
+ <skill attribute="Strength" name="Two-handed Swords" tool="TrainingDummy">Used to determine chance to hit with two handed swords in combat</skill>
+ <skill attribute="Strength" name="Two-handed Maces" tool="TrainingDummy">Used to determine chance to hit with two handed, blunt weapons in combat</skill>
+ <skill attribute="Strength" name="Rapiers" tool="TrainingDummy">Used to determine chance to hit with rapiers in combat</skill>
+ <skill attribute="Strength" name="Spears" tool="TrainingDummy">Used to determine chance to hit with spears in combat</skill>
 <!-- To change which attribute is used to raise character condition, edit
 attribute `value` of tag `conditionname`. Value must be existing attribute
 name. -->
