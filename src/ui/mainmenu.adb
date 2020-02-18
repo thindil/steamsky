@@ -25,7 +25,6 @@ with Ada.Containers; use Ada.Containers;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings; use Ada.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with GNAT.Traceback.Symbolic; use GNAT.Traceback.Symbolic;
 with GNAT.String_Split; use GNAT.String_Split;
 with GNAT.OS_Lib; use GNAT.OS_Lib;
 with Gtkada.Builder; use Gtkada.Builder;
@@ -35,20 +34,16 @@ with Gtk.Button; use Gtk.Button;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Gtk.Dialog; use Gtk.Dialog;
-with Gtk.Enums; use Gtk.Enums;
-with Gtk.Frame; use Gtk.Frame;
 with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Info_Bar; use Gtk.Info_Bar;
 with Gtk.Label; use Gtk.Label;
 with Gtk.List_Store; use Gtk.List_Store;
-with Gtk.Link_Button; use Gtk.Link_Button;
 with Gtk.Main;
 with Gtk.Message_Dialog; use Gtk.Message_Dialog;
 with Gtk.Overlay; use Gtk.Overlay;
 with Gtk.Scrolled_Window; use Gtk.Scrolled_Window;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
-with Gtk.Text_View; use Gtk.Text_View;
 with Gtk.Toggle_Button; use Gtk.Toggle_Button;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
@@ -59,29 +54,29 @@ with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
-with Glib.Properties; use Glib.Properties;
 with Gdk.Event;
 with Gdk.Types; use Gdk.Types;
 with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
-with Game; use Game;
-with HallOfFame; use HallOfFame;
-with Ships; use Ships;
+with BasesTypes; use BasesTypes;
 with Crew; use Crew;
 with Config; use Config;
-with Goals.UI; use Goals.UI;
-with Maps.UI; use Maps.UI;
-with Help; use Help;
-with Goals; use Goals;
+with DebugUI; use DebugUI;
+with ErrorDialog; use ErrorDialog;
+with Events; use Events;
+with Factions; use Factions;
+with Game; use Game;
 with Game.SaveLoad; use Game.SaveLoad;
+with Goals; use Goals;
+with Goals.UI; use Goals.UI;
+with HallOfFame; use HallOfFame;
+with Help; use Help;
+with Help.UI; use Help.UI;
+with Log; use Log;
+with Maps.UI; use Maps.UI;
+with Ships; use Ships;
+with Themes; use Themes;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
-with Log; use Log;
-with Help.UI; use Help.UI;
-with Factions; use Factions;
-with Events; use Events;
-with Themes; use Themes;
-with DebugUI; use DebugUI;
-with BasesTypes; use BasesTypes;
 
 package body MainMenu is
 
@@ -128,13 +123,6 @@ package body MainMenu is
    -- Type of base for new game
    -- SOURCE
    BaseTypeName: Unbounded_String;
-   -- ****
-
-   -- ****iv* MainMenu/ErrorDialog
-   -- FUNCTION
-   -- Gtk dialog used to show information about the crash of the game.
-   -- SOURCE
-   ErrorDialog: Gtk_Dialog;
    -- ****
 
    -- ****if* MainMenu/Quit
@@ -957,66 +945,6 @@ package body MainMenu is
       Setting := False;
    end SetDifficulty;
 
-   -- ****if* MainMenu/CreateErrorUI
-   -- FUNCTION
-   -- Create error reporting UI
-   -- SOURCE
-   procedure CreateErrorUI is
-      -- ****
-      TextView: constant Gtk_Text_View := Gtk_Text_View_New;
-      Scroll: constant Gtk_Scrolled_Window := Gtk_Scrolled_Window_New;
-      Frame: constant Gtk_Frame := Gtk_Frame_New("Technical information:");
-      Label: Gtk_Label;
-      LinkButton: Gtk_Link_Button;
-      ErrorBox: Gtk_Vbox;
-   begin
-      ErrorDialog :=
-        Gtk_Dialog_New
-          ("Steam Sky - error",
-           Gtk_Window(Get_Object(Builder, "mainmenuwindow")), Modal);
-      Set_Position(ErrorDialog, Win_Pos_Center_Always);
-      if not Set_Icon_From_File(ErrorDialog, "data/ui/images/icon.png") then
-         Ada.Text_IO.Put_Line("Can't set icon for the error dialog.");
-      end if;
-      Set_Default_Size(ErrorDialog, 500, -1);
-      ErrorBox := Get_Content_Area(ErrorDialog);
-      Label :=
-        Gtk_Label_New
-          ("Oops, something bad happens and the game has crashed. Game should save your progress, but better verify this yourself. Also, please, remember what you were doing before the crash and report this problem at");
-      Set_Line_Wrap(Label, True);
-      Set_Property(Label, Name_Property, "normalfont");
-      Pack_Start(ErrorBox, Label, False);
-      LinkButton :=
-        Gtk_Link_Button_New("https://github.com/thindil/steamsky/issues");
-      Set_Relief(LinkButton, Relief_None);
-      Set_Halign(LinkButton, Align_Center);
-      Set_Property(LinkButton, Name_Property, "flatbutton");
-      Pack_Start(ErrorBox, LinkButton, False);
-      Label :=
-        Gtk_Label_New
-          ("or if you prefer, on one of the game community options:");
-      Set_Line_Wrap(Label, True);
-      Set_Property(Label, Name_Property, "normalfont");
-      Pack_Start(ErrorBox, Label, False);
-      LinkButton := Gtk_Link_Button_New("https://thindil.itch.io/steam-sky");
-      Set_Relief(LinkButton, Relief_None);
-      Set_Halign(LinkButton, Align_Center);
-      Set_Property(LinkButton, Name_Property, "flatbutton");
-      Pack_Start(ErrorBox, LinkButton, False);
-      Label := Gtk_Label_New("and attach (if possible) file 'error.log'");
-      Set_Line_Wrap(Label, True);
-      Set_Property(Label, Name_Property, "normalfont");
-      Pack_Start(ErrorBox, Label, False);
-      Add(Scroll, TextView);
-      Add(Frame, Scroll);
-      Set_Property(Frame, Name_Property, "normalfont");
-      Set_Property(TextView, Name_Property, "normalfont");
-      Pack_Start(ErrorBox, Frame);
-      if Add_Button(ErrorDialog, "Close", Gtk_Response_Close) = null then
-         raise Program_Error with "Can't add Close button to error dialog";
-      end if;
-   end CreateErrorUI;
-
    procedure CreateMainMenu is
       Error: aliased GError;
       AdjValues: constant array(Positive range <>) of Gdouble :=
@@ -1040,7 +968,7 @@ package body MainMenu is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      CreateErrorUI;
+      CreateErrorUI(Gtk_Window(Get_Object(Builder, "mainmenuwindow")));
       Register_Handler(Builder, "Main_Quit", Quit'Access);
       Register_Handler(Builder, "Show_All_News", ShowAllNews'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
@@ -1118,7 +1046,7 @@ package body MainMenu is
          NewGameKeyPressed'Access);
       declare
          Label: constant Gtk_Label :=
-           Gtk_Label(Get_Child(Get_Content_Area(ErrorDialog), 4));
+           Gtk_Label(Get_Child(Get_Content_Area(ErrorDialog.ErrorDialog), 4));
          ErrorFileDirectory: Unbounded_String :=
            To_Unbounded_String(Current_Directory);
          NewDataDirectory: Unbounded_String := DataDirectory;
@@ -1160,31 +1088,6 @@ package body MainMenu is
       end if;
       ShowFactionDescription(Builder);
    end CreateMainMenu;
-
-   -- ****if* MainMenu/ShowErrorInfo
-   -- FUNCTION
-   -- Show error dialog with information about occured error
-   -- PARAMETERS
-   -- Message - Full stack message from error
-   -- SOURCE
-   procedure ShowErrorInfo(Message: Unbounded_String) is
-   -- ****
-   begin
-      Set_Text
-        (Get_Buffer
-           (Gtk_Text_View
-              (Get_Child
-                 (Gtk_Scrolled_Window
-                    (Get_Child
-                       (Gtk_Frame
-                          (Get_Child(Get_Content_Area(ErrorDialog), 5))))))),
-         To_String(Message));
-      Show_All(ErrorDialog);
-      if Run(ErrorDialog) /= Gtk_Response_Accept then
-         Destroy(ErrorDialog);
-         Gtk.Main.Main_Quit;
-      end if;
-   end ShowErrorInfo;
 
    procedure UpdateGoalButton(Message: String) is
    begin
@@ -1233,47 +1136,5 @@ package body MainMenu is
          Hide(Gtk_Widget(Get_Object(Builder, "btnhalloffame")));
       end if;
    end ShowMainMenu;
-
-   procedure SaveException
-     (An_Exception: Exception_Occurrence; PrintToTerminal: Boolean) is
-      ErrorFile: File_Type;
-      ErrorText: Unbounded_String;
-   begin
-      if Natural(PlayerShip.Crew.Length) > 0 then
-         SaveGame;
-      end if;
-      if Exists(To_String(SaveDirectory) & "error.log") then
-         Open(ErrorFile, Append_File, To_String(SaveDirectory) & "error.log");
-      else
-         Create
-           (ErrorFile, Append_File, To_String(SaveDirectory) & "error.log");
-      end if;
-      Append(ErrorText, Ada.Calendar.Formatting.Image(Clock));
-      Append(ErrorText, LF);
-      Append(ErrorText, GameVersion);
-      Append(ErrorText, LF);
-      Append(ErrorText, "Exception: " & Exception_Name(An_Exception));
-      Append(ErrorText, LF);
-      Append(ErrorText, "Message: " & Exception_Message(An_Exception));
-      Append(ErrorText, LF);
-      Append(ErrorText, "-------------------------------------------------");
-      Append(ErrorText, LF);
-      Append(ErrorText, Symbolic_Traceback_No_Hex(An_Exception));
-      Append(ErrorText, LF);
-      Append(ErrorText, "-------------------------------------------------");
-      Put_Line(ErrorFile, To_String(ErrorText));
-      Close(ErrorFile);
-      if PrintToTerminal then
-         Put_Line(To_String(ErrorText));
-      else
-         ShowErrorInfo(ErrorText);
-      end if;
-      EndLogging;
-   end SaveException;
-
-   procedure On_Exception(An_Exception: Exception_Occurrence) is
-   begin
-      SaveException(An_Exception, False);
-   end On_Exception;
 
 end MainMenu;

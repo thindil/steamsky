@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Exceptions; use Ada.Exceptions;
-
 -- ****h* Steamsky/MainMenu
 -- FUNCTION
 -- Provides code for main menu UI
@@ -46,26 +44,6 @@ package MainMenu is
       -- Show main menu window
       -- SOURCE
    procedure ShowMainMenu;
-   -- ****
-
-   -- ****f* MainMenu/SaveException
-   -- FUNCTION
-   -- Save data exception to file
-   -- PARAMETERS
-   -- An_Exception    - An exception which was occurred
-   -- PrintToTerminal - If true, print info about exception to terminal
-   -- SOURCE
-   procedure SaveException
-     (An_Exception: Exception_Occurrence; PrintToTerminal: Boolean);
-   -- ****
-
-   -- ****f* MainMenu/On_Exception
-   -- FUNCTION
-   -- Handle GUI exceptions
-   -- PARAMETERS
-   -- An_Exception - An exception which was occurred
-   -- SOURCE
-   procedure On_Exception(An_Exception: Exception_Occurrence);
    -- ****
 
 end MainMenu;

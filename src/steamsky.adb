@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -26,6 +26,7 @@ with Gtk.Main; use Gtk.Main;
 with Gtk.Settings; use Gtk.Settings;
 with Gtkada.Bindings; use Gtkada.Bindings;
 with Glib; use Glib;
+with ErrorDialog; use ErrorDialog;
 with Game; use Game;
 with Config; use Config;
 with Log; use Log;
