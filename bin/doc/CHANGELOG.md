@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 - Removing turret crashes game  (issue #55)
 - Additional grammar fixes (pull request #56)
 - Possible crash when save directory is not writeable
+- Fix misspellings and grammar errors. (pull request #58)
 
 ## [4.6] - 2019-01-26
 
