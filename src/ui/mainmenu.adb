@@ -32,6 +32,8 @@ with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Box; use Gtk.Box;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Button_Box; use Gtk.Button_Box;
+with Gtk.Cell_Area_Box; use Gtk.Cell_Area_Box;
+with Gtk.Cell_Renderer_Text; use Gtk.Cell_Renderer_Text;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Combo_Box_Text; use Gtk.Combo_Box_Text;
 with Gtk.Dialog; use Gtk.Dialog;
@@ -332,10 +334,11 @@ package body MainMenu is
               (Gtk_Box(Get_Child(Gtk_Box(Get_Object(Builder, "loadbox")), 1)),
                1));
          Set_Cursor
-           (Gtk_Tree_View(Get_Object(Builder, "treesaves")),
-            Gtk_Tree_Path_New_From_String("0"),
-            Gtk_Tree_View_Column(Get_Object(Builder, "columnplayername")),
-            False);
+           (Gtk_Tree_View
+              (Get_Child
+                 (Gtk_Scrolled_Window
+                    (Get_Child(Gtk_Box(Get_Object(Builder, "loadbox")), 0)))),
+            Gtk_Tree_Path_New_From_String("0"), null, False);
       elsif User_Data = Get_Object(Builder, "btncontribute") then
          LoadFile("CONTRIBUTING.md");
          Set_Visible_Child_Name
@@ -472,13 +475,16 @@ package body MainMenu is
    -- Self - Gtk_Button which was clicked.
    -- SOURCE
    procedure LoadGame(Self: access Gtk_Button_Record'Class) is
-      pragma Unreferenced(Self);
       -- ****
       SavesIter: Gtk_Tree_Iter;
       SavesModel: Gtk_Tree_Model;
    begin
       Get_Selected
-        (Get_Selection(Gtk_Tree_View(Get_Object(Builder, "treesaves"))),
+        (Get_Selection
+           (Gtk_Tree_View
+              (Get_Child
+                 (Gtk_Scrolled_Window
+                    (Get_Child(Gtk_Box(Get_Parent(Get_Parent(Self))), 0))))),
          SavesModel, SavesIter);
       if SavesIter = Null_Iter then
          return;
@@ -603,19 +609,21 @@ package body MainMenu is
    -- Self - Gtk_Button which was clicked
    -- SOURCE
    procedure DeleteGame(Self: access Gtk_Button_Record'Class) is
-      pragma Unreferenced(Self);
       -- ****
       SavesIter: Gtk_Tree_Iter;
       SavesModel: Gtk_Tree_Model;
+      TreeSaves: constant Gtk_Tree_View :=
+        Gtk_Tree_View
+          (Get_Child
+             (Gtk_Scrolled_Window
+                (Get_Child(Gtk_Box(Get_Parent(Get_Parent(Self))), 0))));
    begin
       if not ShowConfirmDialog
           ("Are you sure you want delete this savegame?",
            Gtk_Window(Get_Object(Builder, "mainmenuwindow"))) then
          return;
       end if;
-      Get_Selected
-        (Get_Selection(Gtk_Tree_View(Get_Object(Builder, "treesaves"))),
-         SavesModel, SavesIter);
+      Get_Selected(Get_Selection(TreeSaves), SavesModel, SavesIter);
       if SavesIter = Null_Iter then
          return;
       end if;
@@ -626,10 +634,7 @@ package body MainMenu is
          ShowPage(Get_Object(Builder, "btnback"));
       else
          Set_Cursor
-           (Gtk_Tree_View(Get_Object(Builder, "treesaves")),
-            Gtk_Tree_Path_New_From_String("0"),
-            Gtk_Tree_View_Column(Get_Object(Builder, "columnplayername")),
-            False);
+           (TreeSaves, Gtk_Tree_Path_New_From_String("0"), null, False);
       end if;
    end DeleteGame;
 
@@ -965,22 +970,31 @@ package body MainMenu is
       ShowMainMenu;
    end BackToMenu;
 
-   procedure LoadGameTemp(Object: access Gtkada_Builder_Record'Class) is
-      pragma Unreferenced(Object);
-      -- ****
+   -- ****if* MainMenu/LoadGameView
+   -- FUNCTION
+   -- Load selected save game file
+   -- PARAMETERS
+   -- Self   - Gtk_Tree_View with save game files list
+   -- Path   - Path to the selected save game file. Unused
+   -- Column - Column which was clicked. Unused
+   -- SOURCE
+   procedure LoadGameView
+     (Self: access Gtk_Tree_View_Record'Class;
+      Path: Gtk.Tree_Model.Gtk_Tree_Path;
+      Column: not null access Gtk.Tree_View_Column.Gtk_Tree_View_Column_Record'
+        Class) is
+      pragma Unreferenced(Path, Column);
       SavesIter: Gtk_Tree_Iter;
       SavesModel: Gtk_Tree_Model;
    begin
-      Get_Selected
-        (Get_Selection(Gtk_Tree_View(Get_Object(Builder, "treesaves"))),
-         SavesModel, SavesIter);
+      Get_Selected(Get_Selection(Self), SavesModel, SavesIter);
       if SavesIter = Null_Iter then
          return;
       end if;
       SaveName := To_Unbounded_String(Get_String(SavesModel, SavesIter, 3));
       LoadGame;
       StartGame;
-   end LoadGameTemp;
+   end LoadGameView;
 
    procedure CreateMainMenu is
       Error: aliased GError;
@@ -1011,7 +1025,6 @@ package body MainMenu is
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Random_Name", RandomName'Access);
       Register_Handler(Builder, "Show_Goals", ShowGoals'Access);
-      Register_Handler(Builder, "Load_Game", LoadGameTemp'Access);
       Register_Handler(Builder, "New_Game", NewGame'Access);
       Register_Handler(Builder, "Show_Page", ShowPage'Access);
       Register_Handler
@@ -1086,7 +1099,54 @@ package body MainMenu is
          ButtonBox: constant Gtk_Button_Box :=
            Gtk_Button_Box_New(Orientation_Horizontal);
          Button: Gtk_Button;
+         LoadScroll: constant Gtk_Scrolled_Window := Gtk_Scrolled_Window_New;
+         LoadView: constant Gtk_Tree_View :=
+           Gtk_Tree_View_New_With_Model
+             (+(Gtk_List_Store(Get_Object(Builder, "saveslist"))));
+         Column: Gtk_Tree_View_Column;
+         Area: Gtk_Cell_Area_Box := Gtk_Cell_Area_Box_New;
+         Renderer: Gtk_Cell_Renderer_Text;
       begin
+         Renderer := Gtk_Cell_Renderer_Text_New;
+         Pack_Start(Area, Renderer, True);
+         Add_Attribute(Area, Renderer, "text", 0);
+         Column := Gtk_Tree_View_Column_New_With_Area(Area);
+         Set_Title(Column, "Player name");
+         Set_Clickable(Column, True);
+         Set_Sort_Indicator(Column, True);
+         Set_Sort_Column_Id(Column, 0);
+         if Append_Column(LoadView, Column) /= 1 then
+            raise Program_Error
+              with "Can't add column player name to saved games list.";
+         end if;
+         Area := Gtk_Cell_Area_Box_New;
+         Pack_Start(Area, Renderer, True);
+         Add_Attribute(Area, Renderer, "text", 1);
+         Column := Gtk_Tree_View_Column_New_With_Area(Area);
+         Set_Title(Column, "Ship name");
+         Set_Clickable(Column, True);
+         Set_Sort_Indicator(Column, True);
+         Set_Sort_Column_Id(Column, 1);
+         if Append_Column(LoadView, Column) /= 2 then
+            raise Program_Error
+              with "Can't add column ship name to saved games list.";
+         end if;
+         Area := Gtk_Cell_Area_Box_New;
+         Pack_Start(Area, Renderer, True);
+         Add_Attribute(Area, Renderer, "text", 2);
+         Column := Gtk_Tree_View_Column_New_With_Area(Area);
+         Set_Title(Column, "Last saved");
+         Set_Clickable(Column, True);
+         Set_Sort_Indicator(Column, True);
+         Set_Sort_Column_Id(Column, 2);
+         if Append_Column(LoadView, Column) /= 3 then
+            raise Program_Error
+              with "Can't add column last saved to saved games list.";
+         end if;
+         Set_Enable_Search(LoadView, False);
+         On_Row_Activated(LoadView, LoadGameView'Access);
+         Add(LoadScroll, LoadView);
+         Pack_Start(LoadBox, LoadScroll);
          Button := Gtk_Button_New_With_Mnemonic("_Delete game");
          On_Clicked(Button, DeleteGame'Access);
          Pack_Start(ButtonBox, Button);
