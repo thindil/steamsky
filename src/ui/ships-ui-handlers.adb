@@ -15,6 +15,8 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Exceptions; use Ada.Exceptions;
 with Gtk.Widget; use Gtk.Widget;
@@ -289,6 +291,25 @@ package body Ships.UI.Handlers is
                   To_String(PlayerShip.Crew(Module.Owner(1)).Name));
             else
                Append(ModuleInfo, "Gunner: none");
+            end if;
+            if Module.MType = GUN then
+               Append(ModuleInfo, LF);
+               if Modules_List(Module.ProtoIndex).Speed > 0 then
+                  Append
+                    (ModuleInfo,
+                     "Max fire rate:" &
+                     Positive'Image(Modules_List(Module.ProtoIndex).Speed) &
+                     "/round");
+               else
+                  Append
+                    (ModuleInfo,
+                     "Max fire rate: 1/" &
+                     Trim
+                       (Integer'Image
+                          (abs (Modules_List(Module.ProtoIndex).Speed)),
+                        Both) &
+                     " rounds");
+               end if;
             end if;
          when TURRET =>
             if Module.GunIndex > 0 then
