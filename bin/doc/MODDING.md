@@ -350,6 +350,10 @@ Value must be an existing skill name.
   harpoon gun.
 - Optional attribute `maxowners`: How many owners or workers (for workshop's
   types of modules) the module can have. Default value is 1.
+- Optional attribute `speed`: For guns, how many times in one combat round
+  this gun shoots. Default value is 4. Values below 0 means that the gun shoot
+  shoot once in few rounds. For example, -3 mean the gun shoot once per 3
+  rounds.
 - Text between `module` tags is module description.
 
 ## Ships
