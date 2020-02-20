@@ -331,13 +331,24 @@ package body MainMenu is
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page6");
          Grab_Focus
            (Get_Child
-              (Gtk_Box(Get_Child(Gtk_Box(Get_Object(Builder, "loadbox")), 1)),
+              (Gtk_Box
+                 (Get_Child
+                    (Gtk_Box
+                       (Get_Child_By_Name
+                          (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
+                           "page6")),
+                     1)),
                1));
          Set_Cursor
            (Gtk_Tree_View
               (Get_Child
                  (Gtk_Scrolled_Window
-                    (Get_Child(Gtk_Box(Get_Object(Builder, "loadbox")), 0)))),
+                    (Get_Child
+                       (Gtk_Box
+                          (Get_Child_By_Name
+                             (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
+                              "page6")),
+                        0)))),
             Gtk_Tree_Path_New_From_String("0"), null, False);
       elsif User_Data = Get_Object(Builder, "btncontribute") then
          LoadFile("CONTRIBUTING.md");
@@ -1094,8 +1105,7 @@ package body MainMenu is
         (Gtk_Widget(Get_Object(Builder, "newgamebox")),
          NewGameKeyPressed'Access);
       declare
-         LoadBox: constant Gtk_Vbox :=
-           Gtk_Vbox(Get_Object(Builder, "loadbox"));
+         LoadBox: constant Gtk_Vbox := Gtk_Vbox_New;
          ButtonBox: constant Gtk_Button_Box :=
            Gtk_Button_Box_New(Orientation_Horizontal);
          Button: Gtk_Button;
@@ -1157,6 +1167,8 @@ package body MainMenu is
          On_Clicked(Button, BackToMenu'Access);
          Pack_Start(ButtonBox, Button);
          Pack_Start(LoadBox, ButtonBox, False);
+         Add_Named
+           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), LoadBox, "page6");
       end;
       declare
          Label: constant Gtk_Label :=
