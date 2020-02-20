@@ -18,6 +18,7 @@
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Label; use Gtk.Label;
@@ -66,6 +67,7 @@ package body Bases.ShipyardUI is
       MType: ModuleType;
       MAmount, Weight, MaxValue, Value, MaxOwners: Natural;
       ShipModuleIndex, Size: Positive;
+      Speed: Integer;
    begin
       if Installing then
          MType := Modules_List(ModuleIndex).MType;
@@ -74,6 +76,7 @@ package body Bases.ShipyardUI is
          Size := Modules_List(ModuleIndex).Size;
          Weight := Modules_List(ModuleIndex).Weight;
          MaxOwners := Modules_List(ModuleIndex).MaxOwners;
+         Speed := Modules_List(ModuleIndex).Speed;
       else
          ShipModuleIndex := Integer'Value(To_String(ModuleIndex));
          MType :=
@@ -121,6 +124,8 @@ package body Bases.ShipyardUI is
          MaxOwners :=
            Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
              .MaxOwners;
+         Speed :=
+           Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex).Speed;
       end if;
       case MType is
          when HULL =>
@@ -167,6 +172,19 @@ package body Bases.ShipyardUI is
                   MAmount := MAmount + 1;
                end if;
             end loop;
+            if MType = GUN then
+               Append(ModuleInfo, LF);
+               if Speed > 0 then
+                  Append
+                    (ModuleInfo,
+                     "Max fire rate:" & Positive'Image(Speed) & "/round");
+               else
+                  Append
+                    (ModuleInfo,
+                     "Max fire rate: 1/" &
+                     Trim(Integer'Image(abs (Speed)), Both) & " rounds");
+               end if;
+            end if;
          when BATTERING_RAM =>
             Append(ModuleInfo, LF & "Strength:" & Natural'Image(MaxValue));
          when others =>
