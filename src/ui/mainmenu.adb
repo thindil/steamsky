@@ -324,7 +324,12 @@ package body MainMenu is
          LoadFile("COPYING");
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
-         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback5")));
+         Grab_Focus
+           (Get_Child
+              (Gtk_Box
+                 (Get_Visible_Child
+                    (Gtk_Stack(Get_Object(Builder, "mainmenustack")))),
+               1));
       elsif User_Data = Get_Object(Builder, "btnloadgame") then
          RefreshSavesList;
          Set_Visible_Child_Name
@@ -354,17 +359,32 @@ package body MainMenu is
          LoadFile("CONTRIBUTING.md");
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
-         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback5")));
+         Grab_Focus
+           (Get_Child
+              (Gtk_Box
+                 (Get_Visible_Child
+                    (Gtk_Stack(Get_Object(Builder, "mainmenustack")))),
+               1));
       elsif User_Data = Get_Object(Builder, "btnmodding") then
          LoadFile("MODDING.md");
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
-         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback5")));
+         Grab_Focus
+           (Get_Child
+              (Gtk_Box
+                 (Get_Visible_Child
+                    (Gtk_Stack(Get_Object(Builder, "mainmenustack")))),
+               1));
       elsif User_Data = Get_Object(Builder, "btnreadme") then
          LoadFile("README.md");
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
-         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback5")));
+         Grab_Focus
+           (Get_Child
+              (Gtk_Box
+                 (Get_Visible_Child
+                    (Gtk_Stack(Get_Object(Builder, "mainmenustack")))),
+               1));
       end if;
    end ShowPage;
 
@@ -1104,6 +1124,17 @@ package body MainMenu is
       On_Key_Press_Event
         (Gtk_Widget(Get_Object(Builder, "newgamebox")),
          NewGameKeyPressed'Access);
+      declare
+         ShowFileBox: constant Gtk_Vbox :=
+           Gtk_Vbox(Get_Object(Builder, "showfilebox"));
+         BackButton: constant Gtk_Button :=
+           Gtk_Button_New_With_Mnemonic("_Back");
+      begin
+         On_Clicked(BackButton, BackToMenu'Access);
+         Set_Halign(BackButton, Align_End);
+         Set_Valign(BackButton, Align_End);
+         Pack_Start(ShowFileBox, BackButton, False);
+      end;
       declare
          LoadBox: constant Gtk_Vbox := Gtk_Vbox_New;
          ButtonBox: constant Gtk_Button_Box :=
