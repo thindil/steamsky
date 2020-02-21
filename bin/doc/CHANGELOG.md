@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - New crafting recipes: iron 10mm piercing ammo, iron 20mm piercing ammo, iron
   20mm explosive ammo, iron 40mm piercing ammo, iron 40mm explosive ammo, iron
   60mm piercing ammo, iron 60mm explosive ammo, iron 80mm piercing ammo
+- Fire rate for ships guns
 
 ### Changed
 - Updated mobs data
