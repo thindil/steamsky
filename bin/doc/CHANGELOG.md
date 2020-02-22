@@ -17,7 +17,8 @@ All notable changes to this project will be documented in this file.
   iron 80mm explosive ammo
 - New crafting recipes: iron 10mm piercing ammo, iron 20mm piercing ammo, iron
   20mm explosive ammo, iron 40mm piercing ammo, iron 40mm explosive ammo, iron
-  60mm piercing ammo, iron 60mm explosive ammo, iron 80mm piercing ammo
+  60mm piercing ammo, iron 60mm explosive ammo, iron 80mm piercing ammo, iron
+  80mm explosive ammo
 - Fire rate for ships guns
 
 ### Changed
