@@ -48,6 +48,7 @@ with Gtk.Overlay; use Gtk.Overlay;
 with Gtk.Scrolled_Window; use Gtk.Scrolled_Window;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
+with Gtk.Text_View; use Gtk.Text_View;
 with Gtk.Toggle_Button; use Gtk.Toggle_Button;
 with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
@@ -58,6 +59,7 @@ with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
 with Glib.Error; use Glib.Error;
 with Glib.Object; use Glib.Object;
+with Glib.Properties; use Glib.Properties;
 with Gdk.Event;
 with Gdk.Types; use Gdk.Types;
 with Gdk.Types.Keysyms; use Gdk.Types.Keysyms;
@@ -1129,7 +1131,18 @@ package body MainMenu is
            Gtk_Vbox(Get_Object(Builder, "showfilebox"));
          BackButton: constant Gtk_Button :=
            Gtk_Button_New_With_Mnemonic("_Back");
+         FileScroll: constant Gtk_Scrolled_Window := Gtk_Scrolled_Window_New;
+         FileView: constant Gtk_Text_View :=
+           Gtk_Text_View_New_With_Buffer
+             (Gtk_Text_Buffer(Get_Object(Builder, "licensebuffer")));
       begin
+         Set_Editable(FileView, False);
+         Set_Cursor_Visible(FileView, False);
+         Set_Wrap_Mode(FileView, Wrap_Word);
+         Set_Property(FileView, Gtk.Widget.Name_Property, "normalfont");
+         Add(FileScroll, FileView);
+         Set_Policy(FileScroll, Policy_Never, Policy_Automatic);
+         Pack_Start(ShowFileBox, FileScroll);
          On_Clicked(BackButton, BackToMenu'Access);
          Set_Halign(BackButton, Align_End);
          Set_Valign(BackButton, Align_End);
