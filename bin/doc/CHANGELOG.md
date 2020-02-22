@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - Renamed Heavy turrets to Large turrets
 - Updated factions data
 - Size of turrets and guns
+- Updated bases data with new items and recipes
 
 ### Fixed
 - Crash on generating recruits (issue #46)
