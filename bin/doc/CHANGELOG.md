@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [4.7] - 2019-02-23
 
 ### Added
 - Show current ship speed when option "Show numeric values" is enabled
