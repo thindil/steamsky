@@ -1127,8 +1127,7 @@ package body MainMenu is
         (Gtk_Widget(Get_Object(Builder, "newgamebox")),
          NewGameKeyPressed'Access);
       declare
-         ShowFileBox: constant Gtk_Vbox :=
-           Gtk_Vbox(Get_Object(Builder, "showfilebox"));
+         ShowFileBox: constant Gtk_Vbox := Gtk_Vbox_New;
          BackButton: constant Gtk_Button :=
            Gtk_Button_New_With_Mnemonic("_Back");
          FileScroll: constant Gtk_Scrolled_Window := Gtk_Scrolled_Window_New;
@@ -1147,6 +1146,9 @@ package body MainMenu is
          Set_Halign(BackButton, Align_End);
          Set_Valign(BackButton, Align_End);
          Pack_Start(ShowFileBox, BackButton, False);
+         Add_Named
+           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), ShowFileBox,
+            "page5");
       end;
       declare
          LoadBox: constant Gtk_Vbox := Gtk_Vbox_New;
