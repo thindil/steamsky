@@ -1625,5 +1625,10 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>An explosive 80mm gun ammunition. Do less damage but it is more accurate.</description>
  </item>
+ <item index="334" name="Iron 100mm piercing ammo" showtype="Ammunition" type="Ammo100" weight="16" price="26">
+  <data value="48"/>
+  <data value="2"/>
+  <description>A piercing 100mm gun ammunition. Do more damage but it is less accurate.</description>
+ </item>
 </items>
 
