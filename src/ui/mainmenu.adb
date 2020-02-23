@@ -1017,6 +1017,7 @@ package body MainMenu is
       Column: not null access Gtk.Tree_View_Column.Gtk_Tree_View_Column_Record'
         Class) is
       pragma Unreferenced(Path, Column);
+      -- ****
       SavesIter: Gtk_Tree_Iter;
       SavesModel: Gtk_Tree_Model;
    begin
