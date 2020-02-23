@@ -8,11 +8,11 @@
 <link rel="stylesheet" href="./robodoc.css" type="text/css" />
 <title>./src/careers.ads</title>
 <!-- Source: ./src/careers.ads -->
-<!-- Generated with ROBODoc Version 4.99.43 (Jul 26 2019) -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  8 2020) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.6 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.7 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -29,10 +29,10 @@
 <ul>
 <li>1. <a href="#robo12">Steamsky/Careers</a></li>
 <ul>
-<li>1.1. <a href="#robo78">Careers/CareerRecord</a></li>
-<li>1.2. <a href="#robo79">Careers/Careers_Container</a></li>
-<li>1.3. <a href="#robo196">Careers/Careers_List</a></li>
-<li>1.4. <a href="#robo442">Careers/LoadCareers</a></li>
+<li>1.1. <a href="#robo79">Careers/CareerRecord</a></li>
+<li>1.2. <a href="#robo80">Careers/Careers_Container</a></li>
+<li>1.3. <a href="#robo197">Careers/Careers_List</a></li>
+<li>1.4. <a href="#robo444">Careers/LoadCareers</a></li>
 </ul>
 </ul>
 <hr />
@@ -49,7 +49,7 @@
 
 <hr />
 <a name="Careers2fCareerRecord"></a>
-<a name="robo78"></a><h2>Careers/CareerRecord [ Types ]</h2>
+<a name="robo79"></a><h2>Careers/CareerRecord [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">Careers</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -58,7 +58,7 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> <strong>CareerRecord</strong> <span class="keyword">is</span> <span class="keyword">record</span>
       Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      Skills<span class="sign">:</span> <a href="./game_ads.html#robo119">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+      Skills<span class="sign">:</span> <a href="./game_ads.html#robo120">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -69,32 +69,32 @@
 
 <hr />
 <a name="Careers2fCareers5fContainer"></a>
-<a name="robo79"></a><h2>Careers/Careers_Container [ Types ]</h2>
+<a name="robo80"></a><h2>Careers/Careers_Container [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">Careers</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store all available careers
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> <strong>Careers_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span> <a href="#robo78">CareerRecord</a><span class="sign">,</span>
+<pre class="source">   <span class="keyword">package</span> <strong>Careers_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span> <a href="#robo79">CareerRecord</a><span class="sign">,</span>
       Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Careers2fCareers5fList"></a>
-<a name="robo196"></a><h2>Careers/Careers_List [ Variables ]</h2>
+<a name="robo197"></a><h2>Careers/Careers_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">Careers</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of all available careers for player
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>Careers_List</strong><span class="sign">:</span> <a href="./factions_ads.html#robo101">Careers_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
+<pre class="source">   <strong>Careers_List</strong><span class="sign">:</span> <a href="./factions_ads.html#robo102">Careers_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Careers2fLoadCareers"></a>
-<a name="robo442"></a><h2>Careers/LoadCareers [ Subprograms ]</h2>
+<a name="robo444"></a><h2>Careers/LoadCareers [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo12">Careers</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -109,7 +109,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/careers.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 26 2020 06:28:42
+<p>Generated from ./src/careers.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 23 2020 06:34:42
 </p>
 </div> <!-- footer -->
 </body>

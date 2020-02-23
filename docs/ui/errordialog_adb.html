@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
 <link rel="stylesheet" href="../robodoc.css" type="text/css" />
-<title>./src/ui/statistics-ui.adb</title>
-<!-- Source: ./src/ui/statistics-ui.adb -->
+<title>./src/ui/errordialog.adb</title>
+<!-- Source: ./src/ui/errordialog.adb -->
 <!-- Generated with ROBODoc Version 4.99.43 (Feb  8 2020) -->
 </head>
 <body>
@@ -27,27 +27,26 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo766">Statistics.UI/ShowGoals</a></li>
+<li>1. <a href="#robo534">ErrorDialog/ShowErrorInfo</a></li>
 </ul>
 <hr />
-<a name="Statistics2eUI2fShowGoals"></a>
-<a name="robo766"></a><h2>Statistics.UI/ShowGoals [ Subprograms ]</h2>
+<a name="ErrorDialog2fShowErrorInfo"></a>
+<a name="robo534"></a><h2>ErrorDialog/ShowErrorInfo [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./statistics-ui_ads.html#robo58">Statistics.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./errordialog_ads.html#robo231">ErrorDialog</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Show menu to select current goal in game
+<pre> Show error dialog with information about occured error
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ShowGoals</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span>     <span class="keyword"> pragma </span>Unreferenced<span class="sign">(</span>Object<span class="sign"><span class="sign">)</span>;</span>
+<pre class="source">   <span class="keyword">procedure</span> <strong>ShowErrorInfo</strong><span class="sign">(</span>Message<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">is</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI (unused)
+<pre> Message - Full stack message from error
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/statistics-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 23 2020 06:34:41
+<p>Generated from ./src/ui/errordialog.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 23 2020 06:34:42
 </p>
 </div> <!-- footer -->
 </body>

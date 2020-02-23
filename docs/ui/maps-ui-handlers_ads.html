@@ -8,11 +8,11 @@
 <link rel="stylesheet" href="../robodoc.css" type="text/css" />
 <title>./src/ui/maps-ui-handlers.ads</title>
 <!-- Source: ./src/ui/maps-ui-handlers.ads -->
-<!-- Generated with ROBODoc Version 4.99.43 (Jul 26 2019) -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  8 2020) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.6 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.7 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -27,49 +27,49 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo39">Steamsky/Maps.UI.Handlers</a></li>
+<li>1. <a href="#robo40">Steamsky/Maps.UI.Handlers</a></li>
 <ul>
-<li>1.1. <a href="./maps-ui-handlers_adb.html#robo301">Maps.UI.Handlers/AccelsRemoved</a></li>
-<li>1.2. <a href="#robo622">Maps.UI.Handlers/AttackOrder</a></li>
-<li>1.3. <a href="#robo623">Maps.UI.Handlers/BtnDockClicked</a></li>
-<li>1.4. <a href="#robo624">Maps.UI.Handlers/ChangeSpeed</a></li>
-<li>1.5. <a href="#robo625">Maps.UI.Handlers/CompleteMission</a></li>
-<li>1.6. <a href="#robo626">Maps.UI.Handlers/DeliverMedicines</a></li>
-<li>1.7. <a href="#robo627">Maps.UI.Handlers/DisableMenuShortcuts</a></li>
-<li>1.8. <a href="#robo628">Maps.UI.Handlers/DisableMenuShortcutsProc</a></li>
-<li>1.9. <a href="#robo629">Maps.UI.Handlers/DisableMouse</a></li>
-<li>1.10. <a href="#robo630">Maps.UI.Handlers/EnableMenuShortcuts</a></li>
-<li>1.11. <a href="#robo631">Maps.UI.Handlers/EnableMenuShortcutsProc</a></li>
-<li>1.12. <a href="#robo632">Maps.UI.Handlers/ExecuteOrder</a></li>
-<li>1.13. <a href="#robo633">Maps.UI.Handlers/GetMapSize</a></li>
-<li>1.14. <a href="#robo634">Maps.UI.Handlers/HideMapInfoWindow</a></li>
-<li>1.15. <a href="#robo635">Maps.UI.Handlers/MapKeyPressed</a></li>
-<li>1.16. <a href="#robo636">Maps.UI.Handlers/MapKeyReleased</a></li>
-<li>1.17. <a href="#robo637">Maps.UI.Handlers/MoveMap</a></li>
-<li>1.18. <a href="#robo638">Maps.UI.Handlers/MoveMapButtons</a></li>
-<li>1.19. <a href="#robo639">Maps.UI.Handlers/MoveMapInfo</a></li>
-<li>1.20. <a href="#robo640">Maps.UI.Handlers/MoveShip</a></li>
-<li>1.21. <a href="#robo641">Maps.UI.Handlers/QuitGameMenu</a></li>
-<li>1.22. <a href="#robo642">Maps.UI.Handlers/ResignFromGame</a></li>
-<li>1.23. <a href="#robo643">Maps.UI.Handlers/SetDestination</a></li>
-<li>1.24. <a href="#robo644">Maps.UI.Handlers/SetMessagesPosition</a></li>
-<li>1.25. <a href="#robo645">Maps.UI.Handlers/ShowDestinationOrders</a></li>
-<li>1.26. <a href="#robo646">Maps.UI.Handlers/ShowHelp</a></li>
-<li>1.27. <a href="#robo647">Maps.UI.Handlers/ShowInfo</a></li>
-<li>1.28. <a href="#robo648">Maps.UI.Handlers/ShowMissions</a></li>
-<li>1.29. <a href="#robo649">Maps.UI.Handlers/ShowOrders</a></li>
-<li>1.30. <a href="#robo650">Maps.UI.Handlers/ShowWaitOrders</a></li>
-<li>1.31. <a href="#robo651">Maps.UI.Handlers/StartMission</a></li>
-<li>1.32. <a href="#robo652">Maps.UI.Handlers/ToggleCloseButton</a></li>
-<li>1.33. <a href="#robo653">Maps.UI.Handlers/ToggleCloseButtonProc</a></li>
-<li>1.34. <a href="#robo654">Maps.UI.Handlers/UpdateTooltip</a></li>
-<li>1.35. <a href="#robo655">Maps.UI.Handlers/WaitOrder</a></li>
-<li>1.36. <a href="#robo656">Maps.UI.Handlers/ZoomMap</a></li>
+<li>1.1. <a href="./maps-ui-handlers_adb.html#robo302">Maps.UI.Handlers/AccelsRemoved</a></li>
+<li>1.2. <a href="#robo629">Maps.UI.Handlers/AttackOrder</a></li>
+<li>1.3. <a href="#robo630">Maps.UI.Handlers/BtnDockClicked</a></li>
+<li>1.4. <a href="#robo631">Maps.UI.Handlers/ChangeSpeed</a></li>
+<li>1.5. <a href="#robo632">Maps.UI.Handlers/CompleteMission</a></li>
+<li>1.6. <a href="#robo633">Maps.UI.Handlers/DeliverMedicines</a></li>
+<li>1.7. <a href="#robo634">Maps.UI.Handlers/DisableMenuShortcuts</a></li>
+<li>1.8. <a href="#robo635">Maps.UI.Handlers/DisableMenuShortcutsProc</a></li>
+<li>1.9. <a href="#robo636">Maps.UI.Handlers/DisableMouse</a></li>
+<li>1.10. <a href="#robo637">Maps.UI.Handlers/EnableMenuShortcuts</a></li>
+<li>1.11. <a href="#robo638">Maps.UI.Handlers/EnableMenuShortcutsProc</a></li>
+<li>1.12. <a href="#robo639">Maps.UI.Handlers/ExecuteOrder</a></li>
+<li>1.13. <a href="#robo640">Maps.UI.Handlers/GetMapSize</a></li>
+<li>1.14. <a href="#robo641">Maps.UI.Handlers/HideMapInfoWindow</a></li>
+<li>1.15. <a href="#robo642">Maps.UI.Handlers/MapKeyPressed</a></li>
+<li>1.16. <a href="#robo643">Maps.UI.Handlers/MapKeyReleased</a></li>
+<li>1.17. <a href="#robo644">Maps.UI.Handlers/MoveMap</a></li>
+<li>1.18. <a href="#robo645">Maps.UI.Handlers/MoveMapButtons</a></li>
+<li>1.19. <a href="#robo646">Maps.UI.Handlers/MoveMapInfo</a></li>
+<li>1.20. <a href="#robo647">Maps.UI.Handlers/MoveShip</a></li>
+<li>1.21. <a href="#robo648">Maps.UI.Handlers/QuitGameMenu</a></li>
+<li>1.22. <a href="#robo649">Maps.UI.Handlers/ResignFromGame</a></li>
+<li>1.23. <a href="#robo650">Maps.UI.Handlers/SetDestination</a></li>
+<li>1.24. <a href="#robo651">Maps.UI.Handlers/SetMessagesPosition</a></li>
+<li>1.25. <a href="#robo652">Maps.UI.Handlers/ShowDestinationOrders</a></li>
+<li>1.26. <a href="#robo653">Maps.UI.Handlers/ShowHelp</a></li>
+<li>1.27. <a href="#robo654">Maps.UI.Handlers/ShowInfo</a></li>
+<li>1.28. <a href="#robo655">Maps.UI.Handlers/ShowMissions</a></li>
+<li>1.29. <a href="#robo656">Maps.UI.Handlers/ShowOrders</a></li>
+<li>1.30. <a href="#robo657">Maps.UI.Handlers/ShowWaitOrders</a></li>
+<li>1.31. <a href="#robo658">Maps.UI.Handlers/StartMission</a></li>
+<li>1.32. <a href="#robo659">Maps.UI.Handlers/ToggleCloseButton</a></li>
+<li>1.33. <a href="#robo660">Maps.UI.Handlers/ToggleCloseButtonProc</a></li>
+<li>1.34. <a href="#robo661">Maps.UI.Handlers/UpdateTooltip</a></li>
+<li>1.35. <a href="#robo662">Maps.UI.Handlers/WaitOrder</a></li>
+<li>1.36. <a href="#robo663">Maps.UI.Handlers/ZoomMap</a></li>
 </ul>
 </ul>
 <hr />
 <a name="Steamsky2fMaps2eUI2eHandlers"></a>
-<a name="robo39"></a><h2>Steamsky/Maps.UI.Handlers [ Packages ]</h2>
+<a name="robo40"></a><h2>Steamsky/Maps.UI.Handlers [ Packages ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -81,9 +81,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fAttackOrder"></a>
-<a name="robo622"></a><h2>Maps.UI.Handlers/AttackOrder [ Subprograms ]</h2>
+<a name="robo629"></a><h2>Maps.UI.Handlers/AttackOrder [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Execute attack or show wait order
 </pre>
@@ -96,9 +96,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fBtnDockClicked"></a>
-<a name="robo623"></a><h2>Maps.UI.Handlers/BtnDockClicked [ Subprograms ]</h2>
+<a name="robo630"></a><h2>Maps.UI.Handlers/BtnDockClicked [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Dock/undock ship from base
 </pre>
@@ -111,9 +111,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fChangeSpeed"></a>
-<a name="robo624"></a><h2>Maps.UI.Handlers/ChangeSpeed [ Subprograms ]</h2>
+<a name="robo631"></a><h2>Maps.UI.Handlers/ChangeSpeed [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Change current ship speed
 </pre>
@@ -126,9 +126,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fCompleteMission"></a>
-<a name="robo625"></a><h2>Maps.UI.Handlers/CompleteMission [ Subprograms ]</h2>
+<a name="robo632"></a><h2>Maps.UI.Handlers/CompleteMission [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Finish mission if ship is at sky base
 </pre>
@@ -141,9 +141,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fDeliverMedicines"></a>
-<a name="robo626"></a><h2>Maps.UI.Handlers/DeliverMedicines [ Subprograms ]</h2>
+<a name="robo633"></a><h2>Maps.UI.Handlers/DeliverMedicines [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Deliver medicines to base
 </pre>
@@ -156,9 +156,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fDisableMenuShortcuts"></a>
-<a name="robo627"></a><h2>Maps.UI.Handlers/DisableMenuShortcuts [ Subprograms ]</h2>
+<a name="robo634"></a><h2>Maps.UI.Handlers/DisableMenuShortcuts [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Disable menu shortcuts keys
 </pre>
@@ -170,14 +170,14 @@
 <pre> Object - Gtkada_Builder used to create UI
 </pre>
 <p class="item_name">SEE ALSO</p>
-<pre> <a href="#robo628">DisableMenuShortcutsProc</a>
+<pre> <a href="#robo635">DisableMenuShortcutsProc</a>
 </pre>
 
 <hr />
 <a name="Maps2eUI2eHandlers2fDisableMenuShortcutsProc"></a>
-<a name="robo628"></a><h2>Maps.UI.Handlers/DisableMenuShortcutsProc [ Subprograms ]</h2>
+<a name="robo635"></a><h2>Maps.UI.Handlers/DisableMenuShortcutsProc [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Disable menu shortcuts keys
 </pre>
@@ -189,14 +189,14 @@
 <pre> Object - Gtkada_Builder used to create UI
 </pre>
 <p class="item_name">SEE ALSO</p>
-<pre> <a href="#robo627">DisableMenuShortcuts</a>
+<pre> <a href="#robo634">DisableMenuShortcuts</a>
 </pre>
 
 <hr />
 <a name="Maps2eUI2eHandlers2fDisableMouse"></a>
-<a name="robo629"></a><h2>Maps.UI.Handlers/DisableMouse [ Subprograms ]</h2>
+<a name="robo636"></a><h2>Maps.UI.Handlers/DisableMouse [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Disable mouse clicking on selected UI element
 </pre>
@@ -210,9 +210,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fEnableMenuShortcuts"></a>
-<a name="robo630"></a><h2>Maps.UI.Handlers/EnableMenuShortcuts [ Subprograms ]</h2>
+<a name="robo637"></a><h2>Maps.UI.Handlers/EnableMenuShortcuts [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Enable menu shortcuts keys
 </pre>
@@ -224,14 +224,14 @@
 <pre> Object - Gtkada_Builder used to create UI
 </pre>
 <p class="item_name">SEE ALSO</p>
-<pre> <a href="#robo631">EnableMenuShortcutsProc</a>
+<pre> <a href="#robo638">EnableMenuShortcutsProc</a>
 </pre>
 
 <hr />
 <a name="Maps2eUI2eHandlers2fEnableMenuShortcutsProc"></a>
-<a name="robo631"></a><h2>Maps.UI.Handlers/EnableMenuShortcutsProc [ Subprograms ]</h2>
+<a name="robo638"></a><h2>Maps.UI.Handlers/EnableMenuShortcutsProc [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Enable menu shortcuts keys
 </pre>
@@ -243,14 +243,14 @@
 <pre> Object - Gtkada_Builder used to create UI
 </pre>
 <p class="item_name">SEE ALSO</p>
-<pre> <a href="#robo630">EnableMenuShortcuts</a>
+<pre> <a href="#robo637">EnableMenuShortcuts</a>
 </pre>
 
 <hr />
 <a name="Maps2eUI2eHandlers2fExecuteOrder"></a>
-<a name="robo632"></a><h2>Maps.UI.Handlers/ExecuteOrder [ Subprograms ]</h2>
+<a name="robo639"></a><h2>Maps.UI.Handlers/ExecuteOrder [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set home base/ask for bases/ask for events
 </pre>
@@ -263,9 +263,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fGetMapSize"></a>
-<a name="robo633"></a><h2>Maps.UI.Handlers/GetMapSize [ Subprograms ]</h2>
+<a name="robo640"></a><h2>Maps.UI.Handlers/GetMapSize [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get size of map cell
 </pre>
@@ -278,9 +278,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fHideMapInfoWindow"></a>
-<a name="robo634"></a><h2>Maps.UI.Handlers/HideMapInfoWindow [ Subprograms ]</h2>
+<a name="robo641"></a><h2>Maps.UI.Handlers/HideMapInfoWindow [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Hide selected window
 </pre>
@@ -293,9 +293,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fMapKeyPressed"></a>
-<a name="robo635"></a><h2>Maps.UI.Handlers/MapKeyPressed [ Subprograms ]</h2>
+<a name="robo642"></a><h2>Maps.UI.Handlers/MapKeyPressed [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Move mouse cursor on map by keyboard
 </pre>
@@ -312,9 +312,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fMapKeyReleased"></a>
-<a name="robo636"></a><h2>Maps.UI.Handlers/MapKeyReleased [ Subprograms ]</h2>
+<a name="robo643"></a><h2>Maps.UI.Handlers/MapKeyReleased [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Center map on player ship
 </pre>
@@ -330,9 +330,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fMoveMap"></a>
-<a name="robo637"></a><h2>Maps.UI.Handlers/MoveMap [ Subprograms ]</h2>
+<a name="robo644"></a><h2>Maps.UI.Handlers/MoveMap [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Move map to selected position
 </pre>
@@ -345,9 +345,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fMoveMapButtons"></a>
-<a name="robo638"></a><h2>Maps.UI.Handlers/MoveMapButtons [ Subprograms ]</h2>
+<a name="robo645"></a><h2>Maps.UI.Handlers/MoveMapButtons [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Move map buttons to selected position
 </pre>
@@ -357,9 +357,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fMoveMapInfo"></a>
-<a name="robo639"></a><h2>Maps.UI.Handlers/MoveMapInfo [ Subprograms ]</h2>
+<a name="robo646"></a><h2>Maps.UI.Handlers/MoveMapInfo [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Move map info widget when mouse enters it
 </pre>
@@ -373,9 +373,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fMoveShip"></a>
-<a name="robo640"></a><h2>Maps.UI.Handlers/MoveShip [ Subprograms ]</h2>
+<a name="robo647"></a><h2>Maps.UI.Handlers/MoveShip [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Move ship in selected direction
 </pre>
@@ -388,11 +388,11 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fQuitGameMenu"></a>
-<a name="robo641"></a><h2>Maps.UI.Handlers/QuitGameMenu [ Subprograms ]</h2>
+<a name="robo648"></a><h2>Maps.UI.Handlers/QuitGameMenu [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> <a href="./mainmenu_adb.html#robo600">Quit</a> from game
+<pre> <a href="./mainmenu_adb.html#robo609">Quit</a> from game
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>QuitGameMenu</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
@@ -403,9 +403,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fResignFromGame"></a>
-<a name="robo642"></a><h2>Maps.UI.Handlers/ResignFromGame [ Subprograms ]</h2>
+<a name="robo649"></a><h2>Maps.UI.Handlers/ResignFromGame [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show confirmation for resign from game
 </pre>
@@ -418,9 +418,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fSetDestination"></a>
-<a name="robo643"></a><h2>Maps.UI.Handlers/SetDestination [ Subprograms ]</h2>
+<a name="robo650"></a><h2>Maps.UI.Handlers/SetDestination [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set ship destination or move player ship
 </pre>
@@ -433,9 +433,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fSetMessagesPosition"></a>
-<a name="robo644"></a><h2>Maps.UI.Handlers/SetMessagesPosition [ Subprograms ]</h2>
+<a name="robo651"></a><h2>Maps.UI.Handlers/SetMessagesPosition [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set new message window size setting on resize it
 </pre>
@@ -449,9 +449,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fShowDestinationOrders"></a>
-<a name="robo645"></a><h2>Maps.UI.Handlers/ShowDestinationOrders [ Subprograms ]</h2>
+<a name="robo652"></a><h2>Maps.UI.Handlers/ShowDestinationOrders [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show destination menu with options
 </pre>
@@ -468,9 +468,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fShowHelp"></a>
-<a name="robo646"></a><h2>Maps.UI.Handlers/ShowHelp [ Subprograms ]</h2>
+<a name="robo653"></a><h2>Maps.UI.Handlers/ShowHelp [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show help for selected topic
 </pre>
@@ -483,9 +483,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fShowInfo"></a>
-<a name="robo647"></a><h2>Maps.UI.Handlers/ShowInfo [ Subprograms ]</h2>
+<a name="robo654"></a><h2>Maps.UI.Handlers/ShowInfo [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show selected info (ship/crew/cargo/etc)
 </pre>
@@ -498,9 +498,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fShowMissions"></a>
-<a name="robo648"></a><h2>Maps.UI.Handlers/ShowMissions [ Subprograms ]</h2>
+<a name="robo655"></a><h2>Maps.UI.Handlers/ShowMissions [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show available missions in base
 </pre>
@@ -513,9 +513,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fShowOrders"></a>
-<a name="robo649"></a><h2>Maps.UI.Handlers/ShowOrders [ Subprograms ]</h2>
+<a name="robo656"></a><h2>Maps.UI.Handlers/ShowOrders [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show available ship orders
 </pre>
@@ -528,9 +528,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fShowWaitOrders"></a>
-<a name="robo650"></a><h2>Maps.UI.Handlers/ShowWaitOrders [ Subprograms ]</h2>
+<a name="robo657"></a><h2>Maps.UI.Handlers/ShowWaitOrders [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show available wait orders
 </pre>
@@ -543,9 +543,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fStartMission"></a>
-<a name="robo651"></a><h2>Maps.UI.Handlers/StartMission [ Subprograms ]</h2>
+<a name="robo658"></a><h2>Maps.UI.Handlers/StartMission [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Start mission if ship is in cell with it
 </pre>
@@ -558,9 +558,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fToggleCloseButton"></a>
-<a name="robo652"></a><h2>Maps.UI.Handlers/ToggleCloseButton [ Subprograms ]</h2>
+<a name="robo659"></a><h2>Maps.UI.Handlers/ToggleCloseButton [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Toggle sensitive of close button
 </pre>
@@ -572,14 +572,14 @@
 <pre> User_Data - Button to disable
 </pre>
 <p class="item_name">SEE ALSO</p>
-<pre> <a href="#robo653">ToggleCloseButtonProc</a>
+<pre> <a href="#robo660">ToggleCloseButtonProc</a>
 </pre>
 
 <hr />
 <a name="Maps2eUI2eHandlers2fToggleCloseButtonProc"></a>
-<a name="robo653"></a><h2>Maps.UI.Handlers/ToggleCloseButtonProc [ Subprograms ]</h2>
+<a name="robo660"></a><h2>Maps.UI.Handlers/ToggleCloseButtonProc [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Toggle sensitive of close button
 </pre>
@@ -590,14 +590,14 @@
 <pre> User_Data - Button to disable
 </pre>
 <p class="item_name">SEE ALSO</p>
-<pre> <a href="#robo652">ToggleCloseButton</a>
+<pre> <a href="#robo659">ToggleCloseButton</a>
 </pre>
 
 <hr />
 <a name="Maps2eUI2eHandlers2fUpdateTooltip"></a>
-<a name="robo654"></a><h2>Maps.UI.Handlers/UpdateTooltip [ Subprograms ]</h2>
+<a name="robo661"></a><h2>Maps.UI.Handlers/UpdateTooltip [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update map tooltip with information about cell on mouse movement
 </pre>
@@ -611,9 +611,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fWaitOrder"></a>
-<a name="robo655"></a><h2>Maps.UI.Handlers/WaitOrder [ Subprograms ]</h2>
+<a name="robo662"></a><h2>Maps.UI.Handlers/WaitOrder [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Execute selected wait order
 </pre>
@@ -626,9 +626,9 @@
 
 <hr />
 <a name="Maps2eUI2eHandlers2fZoomMap"></a>
-<a name="robo656"></a><h2>Maps.UI.Handlers/ZoomMap [ Subprograms ]</h2>
+<a name="robo663"></a><h2>Maps.UI.Handlers/ZoomMap [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Maps.UI.Handlers</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Resize sky map font with mouse wheel
 </pre>
@@ -644,7 +644,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/maps-ui-handlers.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 26 2020 06:28:42
+<p>Generated from ./src/ui/maps-ui-handlers.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 23 2020 06:34:41
 </p>
 </div> <!-- footer -->
 </body>

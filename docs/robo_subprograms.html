@@ -8,11 +8,11 @@
 <link rel="stylesheet" href="./robodoc.css" type="text/css" />
 <title>Subprograms</title>
 <!-- Source: ./src/ -->
-<!-- Generated with ROBODoc Version 4.99.43 (Jul 26 2019) -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  8 2020) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.6 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.7 code documentation</a>
 </div> <!-- logo -->
 <div id="extra">
 </div> <!-- extra -->
@@ -29,460 +29,465 @@
 <div id="content">
 <h1>Subprograms</h1>
 <h2><a href="#A">A</a> - <a href="#B">B</a> - <a href="#C">C</a> - <a href="#D">D</a> - <a href="#E">E</a> - <a href="#F">F</a> - <a href="#G">G</a> - <a href="#H">H</a> - <a href="#I">I</a> - <a href="#J">J</a> - <a href="#K">K</a> - <a href="#L">L</a> - <a href="#M">M</a> - <a href="#N">N</a> - <a href="#O">O</a> - <a href="#P">P</a> - <a href="#Q">Q</a> - <a href="#R">R</a> - <a href="#S">S</a> - <a href="#T">T</a> - <a href="#U">U</a> - <a href="#V">V</a> - <a href="#W">W</a> - <a href="#X">X</a> - <a href="#Y">Y</a> - <a href="#Z">Z</a> - <a href="#0">0</a> - <a href="#1">1</a> - <a href="#2">2</a> - <a href="#3">3</a> - <a href="#4">4</a> - <a href="#5">5</a> - <a href="#6">6</a> - <a href="#7">7</a> - <a href="#8">8</a> - <a href="#9">9</a></h2>
-<h2>Normal</h2><h2><a name="A"></a>A</h2><a href="./missions_ads.html#robo693" class="indexitem" >AcceptMission</a>
-<a href="./messages_ads.html#robo678" class="indexitem" >AddMessage</a>
-<a href="./bases_ads.html#robo423" class="indexitem" >AskForBases</a>
-<a href="./bases_ads.html#robo424" class="indexitem" >AskForEvents</a>
-<a href="./ui/ships-ui-handlers_ads.html#robo734" class="indexitem" >Assign</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo622" class="indexitem" >AttackOrder</a>
-<a href="./missions_ads.html#robo694" class="indexitem" >AutoFinishMissions</a>
-<h2><a name="B"></a>B</h2><a href="./ui/maps-ui-handlers_ads.html#robo623" class="indexitem" >BtnDockClicked</a>
-<a href="./trades_ads.html#robo796" class="indexitem" >BuyItems</a>
-<a href="./bases-trade_ads.html#robo408" class="indexitem" >BuyRecipe</a>
-<h2><a name="C"></a>C</h2><a href="./ui/ships-ui-handlers_ads.html#robo735" class="indexitem" >ChangeModuleName</a>
-<a href="./ui/ships-ui-handlers_ads.html#robo736" class="indexitem" >ChangeShipName</a>
-<a href="./ships-movement_ads.html#robo724" class="indexitem" >ChangeShipSpeed</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo624" class="indexitem" >ChangeSpeed</a>
-<a href="./ui/utils-ui_ads.html#robo800" class="indexitem" >CheckAmount</a>
-<a href="./ui/maps-ui_ads.html#robo657" class="indexitem" >CheckButtons</a>
-<a href="./events_ads.html#robo533" class="indexitem" >CheckForEvent</a>
-<a href="./crafts_ads.html#robo463" class="indexitem" >CheckRecipe</a>
-<a href="./goals_ads.html#robo569" class="indexitem" >ClearCurrentGoal</a>
-<a href="./stories_ads.html#robo774" class="indexitem" >ClearCurrentStory</a>
-<a href="./statistics_ads.html#robo762" class="indexitem" >ClearGameStats</a>
-<a href="./messages_ads.html#robo679" class="indexitem" >ClearMessages</a>
-<a href="./ui/utils-ui_ads.html#robo801" class="indexitem" >CloseMessages</a>
-<a href="./ui/gameoptions_ads.html#robo554" class="indexitem" >CloseOptions</a>
-<a href="./ui/utils-ui_ads.html#robo802" class="indexitem" >CloseWindow</a>
-<a href="./combat_ads.html#robo454" class="indexitem" >CombatTurn</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo625" class="indexitem" >CompleteMission</a>
-<a href="./ships_ads.html#robo751" class="indexitem" >CountCombatValue</a>
-<a href="./maps_ads.html#robo669" class="indexitem" >CountDistance</a>
-<a href="./ships-movement_ads.html#robo725" class="indexitem" >CountFuelNeeded</a>
-<a href="./bases_ads.html#robo425" class="indexitem" >CountPrice</a>
-<a href="./ships_ads.html#robo752" class="indexitem" >CountShipWeight</a>
-<a href="./ui/baseslist_ads.html#robo431" class="indexitem" >CreateBasesListUI</a>
-<a href="./ui/bases-lootui_ads.html#robo375" class="indexitem" >CreateBasesLootUI</a>
-<a href="./ui/bases-schoolui_ads.html#robo390" class="indexitem" >CreateBasesSchoolUI</a>
-<a href="./ui/bases-shipyardui_ads.html#robo398" class="indexitem" >CreateBasesShipyardUI</a>
-<a href="./ui/bases-ui_ads.html#robo416" class="indexitem" >CreateBasesUI</a>
-<a href="./ui/ships-cargo-ui_ads.html#robo704" class="indexitem" >CreateCargoUI</a>
-<a href="./ui/combat-ui_ads.html#robo443" class="indexitem" >CreateCombatUI</a>
-<a href="./ui/crafts-ui_ads.html#robo458" class="indexitem" >CreateCraftsUI</a>
-<a href="./ui/crew-ui_ads.html#robo484" class="indexitem" >CreateCrewUI</a>
-<a href="./ui/debugui_ads.html#robo506" class="indexitem" >CreateDebugUI</a>
-<a href="./ui/events-ui_ads.html#robo528" class="indexitem" >CreateEventsUI</a>
-<a href="./ui/gameoptions_ads.html#robo555" class="indexitem" >CreateGameOptions</a>
-<a href="./ui/goals-ui_ads.html#robo563" class="indexitem" >CreateGoalsMenu</a>
-<a href="./ui/help-ui_ads.html#robo575" class="indexitem" >CreateHelpUI</a>
-<a href="./ui/mainmenu_ads.html#robo593" class="indexitem" >CreateMainMenu</a>
-<a href="./ui/messages-ui_ads.html#robo671" class="indexitem" >CreateMessagesUI</a>
-<a href="./ui/missions-ui_ads.html#robo687" class="indexitem" >CreateMissionsUI</a>
-<a href="./ui/bases-recruitui_ads.html#robo381" class="indexitem" >CreateRecruitUI</a>
-<a href="./ships_ads.html#robo753" class="indexitem" >CreateShip</a>
-<a href="./ui/ships-ui_ads.html#robo743" class="indexitem" >CreateShipUI</a>
-<a href="./ui/maps-ui_ads.html#robo658" class="indexitem" >CreateSkyMap</a>
-<a href="./ui/statistics-ui_ads.html#robo757" class="indexitem" >CreateStatsUI</a>
-<a href="./ui/stories-ui_ads.html#robo769" class="indexitem" >CreateStoriesUI</a>
-<a href="./ui/trades-ui_ads.html#robo790" class="indexitem" >CreateTradeUI</a>
-<h2><a name="D"></a>D</h2><a href="./crew_ads.html#robo492" class="indexitem" >DailyPayment</a>
-<a href="./items_ads.html#robo582" class="indexitem" >DamageItem</a>
-<a href="./utils_ads.html#robo819" class="indexitem" >DaysDifference</a>
-<a href="./ships-crew_ads.html#robo717" class="indexitem" >Death</a>
-<a href="./ui/maps-ui_ads.html#robo659" class="indexitem" >DeathConfirm</a>
-<a href="./events_ads.html#robo534" class="indexitem" >DeleteEvent</a>
-<a href="./ships-crew_ads.html#robo718" class="indexitem" >DeleteMember</a>
-<a href="./missions_ads.html#robo695" class="indexitem" >DeleteMission</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo626" class="indexitem" >DeliverMedicines</a>
-<a href="./ui/ships-ui-handlers_ads.html#robo737" class="indexitem" >DisableEngine</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo627" class="indexitem" >DisableMenuShortcuts</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo628" class="indexitem" >DisableMenuShortcutsProc</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo629" class="indexitem" >DisableMouse</a>
-<a href="./ui/crew-ui-handlers_ads.html#robo473" class="indexitem" >DismissMember</a>
-<a href="./ships-movement_ads.html#robo726" class="indexitem" >DockShip</a>
-<a href="./ui/maps-ui_ads.html#robo660" class="indexitem" >DrawMap</a>
-<h2><a name="E"></a>E</h2><a href="./ui/maps-ui-handlers_ads.html#robo630" class="indexitem" >EnableMenuShortcuts</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo631" class="indexitem" >EnableMenuShortcutsProc</a>
-<a href="./game_ads.html#robo547" class="indexitem" >EndGame</a>
-<a href="./log_ads.html#robo590" class="indexitem" >EndLogging</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo632" class="indexitem" >ExecuteOrder</a>
-<h2><a name="F"></a>F</h2><a href="./bases-cargo_ads.html#robo372" class="indexitem" >FindBaseCargo</a>
-<a href="./crew_ads.html#robo493" class="indexitem" >FindCabin</a>
-<a href="./items_ads.html#robo583" class="indexitem" >FindItem</a>
-<a href="./ships-crew_ads.html#robo719" class="indexitem" >FindMember</a>
-<a href="./items_ads.html#robo584" class="indexitem" >FindProtoItem</a>
-<a href="./game_ads.html#robo548" class="indexitem" >FindSkillIndex</a>
-<a href="./crew-inventory_ads.html#robo468" class="indexitem" >FindTools</a>
-<a href="./missions_ads.html#robo696" class="indexitem" >FinishMission</a>
-<a href="./ui/maps-ui_ads.html#robo661" class="indexitem" >FinishStory</a>
-<a href="./messages_ads.html#robo680" class="indexitem" >FormatedTime</a>
-<a href="./ships-cargo_ads.html#robo713" class="indexitem" >FreeCargo</a>
-<a href="./crew-inventory_ads.html#robo469" class="indexitem" >FreeInventory</a>
-<h2><a name="G"></a>G</h2><a href="./crew_ads.html#robo494" class="indexitem" >GainExp</a>
-<a href="./bases_ads.html#robo426" class="indexitem" >GainRep</a>
-<a href="./bases_ads.html#robo427" class="indexitem" >GenerateBaseName</a>
-<a href="./bases-cargo_ads.html#robo373" class="indexitem" >GenerateCargo</a>
-<a href="./events_ads.html#robo535" class="indexitem" >GenerateEnemies</a>
-<a href="./crew_ads.html#robo495" class="indexitem" >GenerateMemberName</a>
-<a href="./missions_ads.html#robo697" class="indexitem" >GenerateMissions</a>
-<a href="./mobs_ads.html#robo700" class="indexitem" >GenerateMob</a>
-<a href="./bases_ads.html#robo428" class="indexitem" >GenerateRecruits</a>
-<a href="./utils_ads.html#robo820" class="indexitem" >GenerateRoboticName</a>
-<a href="./game-saveload_ads.html#robo544" class="indexitem" >GenerateSaveName</a>
-<a href="./ships_ads.html#robo754" class="indexitem" >GenerateShipName</a>
-<a href="./trades_ads.html#robo797" class="indexitem" >GenerateTraderCargo</a>
-<a href="./events_ads.html#robo536" class="indexitem" >GenerateTraders</a>
-<a href="./basestypes_ads.html#robo439" class="indexitem" >Get_Price</a>
-<a href="./crew_ads.html#robo496" class="indexitem" >GetAttributeLevelName</a>
-<a href="./ships_ads.html#robo755" class="indexitem" >GetCabinQuality</a>
-<a href="./ui/maps-ui_ads.html#robo662" class="indexitem" >GetCurrentCellCoords</a>
-<a href="./stories_ads.html#robo775" class="indexitem" >GetCurrentStoryText</a>
-<a href="./statistics_ads.html#robo763" class="indexitem" >GetGamePoints</a>
-<a href="./ships-cargo_ads.html#robo714" class="indexitem" >GetItemAmount</a>
-<a href="./items_ads.html#robo585" class="indexitem" >GetItemChanceToDamage</a>
-<a href="./items_ads.html#robo586" class="indexitem" >GetItemDamage</a>
-<a href="./items_ads.html#robo587" class="indexitem" >GetItemName</a>
-<a href="./ships-cargo_ads.html#robo715" class="indexitem" >GetItemsAmount</a>
-<a href="./messages_ads.html#robo681" class="indexitem" >GetLastMessageIndex</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo633" class="indexitem" >GetMapSize</a>
-<a href="./messages_ads.html#robo682" class="indexitem" >GetMessage</a>
-<a href="./utils_ads.html#robo821" class="indexitem" >GetRandom</a>
-<a href="./factions_ads.html#robo540" class="indexitem" >GetRandomFaction</a>
-<a href="./mobs_ads.html#robo701" class="indexitem" >GetRandomItem</a>
-<a href="./factions_ads.html#robo541" class="indexitem" >GetReputation</a>
-<a href="./ships-crew_ads.html#robo720" class="indexitem" >GetSkillLevel</a>
-<a href="./crew_ads.html#robo497" class="indexitem" >GetSkillLevelName</a>
-<a href="./stories_ads.html#robo776" class="indexitem" >GetStepData</a>
-<a href="./stories_ads.html#robo777" class="indexitem" >GetStoryLocation</a>
-<a href="./ui/crew-ui-handlers_ads.html#robo474" class="indexitem" >GiveCrewOrders</a>
-<a href="./ships-crew_ads.html#robo721" class="indexitem" >GiveOrders</a>
-<a href="./ui/crew-ui-handlers_ads.html#robo475" class="indexitem" >GiveOrdersAll</a>
-<a href="./goals_ads.html#robo570" class="indexitem" >GoalText</a>
-<h2><a name="H"></a>H</h2><a href="./bases-trade_ads.html#robo410" class="indexitem" >HealCost</a>
-<a href="./bases-trade_ads.html#robo411" class="indexitem" >HealWounded</a>
-<a href="./ui/maps-ui_ads.html#robo663" class="indexitem" >HideButtons</a>
-<a href="./ui/utils-ui_ads.html#robo803" class="indexitem" >HideDialog</a>
-<a href="./ui/utils-ui_ads.html#robo804" class="indexitem" >HideItemInfo</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo634" class="indexitem" >HideMapInfoWindow</a>
-<a href="./ui/statistics-ui_ads.html#robo758" class="indexitem" >HideStatistics</a>
-<a href="./ui/utils-ui_ads.html#robo805" class="indexitem" >HideWindow</a>
-<a href="./bases-trade_ads.html#robo412" class="indexitem" >HireRecruit</a>
-<h2><a name="I"></a>I</h2><a href="./basestypes_ads.html#robo440" class="indexitem" >Is_Buyable</a>
-<a href="./factions_ads.html#robo542" class="indexitem" >IsFriendly</a>
-<a href="./crew-inventory_ads.html#robo470" class="indexitem" >ItemIsUsed</a>
-<h2><a name="L"></a>L</h2><a href="./bases-saveload_ads.html#robo388" class="indexitem" >LoadBases</a>
-<a href="./basestypes_ads.html#robo441" class="indexitem" >LoadBasesTypes</a>
-<a href="./careers_ads.html#robo442" class="indexitem" >LoadCareers</a>
-<a href="./config_ads.html#robo456" class="indexitem" >LoadConfig</a>
-<a href="./factions_ads.html#robo543" class="indexitem" >LoadFactions</a>
-<a href="./game-saveload_ads.html#robo545" class="indexitem" >LoadGame</a>
-<a href="./game_ads.html#robo550" class="indexitem" >LoadGameData</a>
-<a href="./goals_ads.html#robo571" class="indexitem" >LoadGoals</a>
-<a href="./halloffame_ads.html#robo573" class="indexitem" >LoadHallOfFame</a>
-<a href="./help_ads.html#robo581" class="indexitem" >LoadHelp</a>
-<a href="./items_ads.html#robo588" class="indexitem" >LoadItems</a>
-<a href="./mobs_ads.html#robo702" class="indexitem" >LoadMobs</a>
-<a href="./ships-saveload_ads.html#robo732" class="indexitem" >LoadPlayerShip</a>
-<a href="./crafts_ads.html#robo464" class="indexitem" >LoadRecipes</a>
-<a href="./shipmodules_ads.html#robo703" class="indexitem" >LoadShipModules</a>
-<a href="./ships_ads.html#robo756" class="indexitem" >LoadShips</a>
-<a href="./stories_ads.html#robo778" class="indexitem" >LoadStories</a>
-<a href="./ui/themes_ads.html#robo786" class="indexitem" >LoadThemes</a>
-<a href="./log_ads.html#robo591" class="indexitem" >LogMessage</a>
-<h2><a name="M"></a>M</h2><a href="./crafts_ads.html#robo465" class="indexitem" >Manufacturing</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo635" class="indexitem" >MapKeyPressed</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo636" class="indexitem" >MapKeyReleased</a>
-<a href="./messages_ads.html#robo683" class="indexitem" >MessagesAmount</a>
-<a href="./ui/utils-ui_ads.html#robo806" class="indexitem" >MinutesToDate</a>
-<a href="./ui/crew-ui-handlers_ads.html#robo476" class="indexitem" >MoveItem</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo637" class="indexitem" >MoveMap</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo638" class="indexitem" >MoveMapButtons</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo639" class="indexitem" >MoveMapInfo</a>
-<a href="./ships-movement_ads.html#robo728" class="indexitem" >MoveShip</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo640" class="indexitem" >MoveShip</a>
-<h2><a name="N"></a>N</h2><a href="./game_ads.html#robo551" class="indexitem" >NewGame</a>
-<a href="./maps_ads.html#robo670" class="indexitem" >NormalizeCoord</a>
-<h2><a name="O"></a>O</h2><a href="./ui/mainmenu_ads.html#robo599" class="indexitem" >On_Exception</a>
-<h2><a name="P"></a>P</h2><a href="./bases-ship_ads.html#robo394" class="indexitem" >PayForDock</a>
-<a href="./stories_ads.html#robo779" class="indexitem" >ProgressStory</a>
-<h2><a name="Q"></a>Q</h2><a href="./ui/utils-ui_ads.html#robo807" class="indexitem" >QuitGame</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo641" class="indexitem" >QuitGameMenu</a>
-<h2><a name="R"></a>R</h2><a href="./ships-movement_ads.html#robo729" class="indexitem" >RealSpeed</a>
-<a href="./events_ads.html#robo538" class="indexitem" >RecoverBase</a>
-<a href="./ui/crew-ui_ads.html#robo485" class="indexitem" >RefreshCrewInfo</a>
-<a href="./ui/crew-ui_ads.html#robo486" class="indexitem" >RefreshInventory</a>
-<a href="./ui/utils-ui_ads.html#robo808" class="indexitem" >RemoveWidget</a>
-<a href="./bases-ship_ads.html#robo395" class="indexitem" >RepairCost</a>
-<a href="./bases-ship_ads.html#robo396" class="indexitem" >RepairShip</a>
-<a href="./ships-repairs_ads.html#robo731" class="indexitem" >RepairShip</a>
-<a href="./ui/themes_ads.html#robo787" class="indexitem" >ResetFontsSizes</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo642" class="indexitem" >ResignFromGame</a>
-<a href="./messages_ads.html#robo684" class="indexitem" >RestoreMessage</a>
-<h2><a name="S"></a>S</h2><a href="./bases-saveload_ads.html#robo389" class="indexitem" >SaveBases</a>
-<a href="./config_ads.html#robo457" class="indexitem" >SaveConfig</a>
-<a href="./ui/mainmenu_ads.html#robo605" class="indexitem" >SaveException</a>
-<a href="./game-saveload_ads.html#robo546" class="indexitem" >SaveGame</a>
-<a href="./ships-saveload_ads.html#robo733" class="indexitem" >SavePlayerShip</a>
-<a href="./ui/utils-ui_ads.html#robo809" class="indexitem" >SelectElement</a>
-<a href="./trades_ads.html#robo798" class="indexitem" >SellItems</a>
-<a href="./ui/crew-ui_ads.html#robo487" class="indexitem" >SetActiveItem</a>
-<a href="./ui/crew-ui_ads.html#robo488" class="indexitem" >SetActiveMember</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo643" class="indexitem" >SetDestination</a>
-<a href="./ui/themes_ads.html#robo788" class="indexitem" >SetFontSize</a>
-<a href="./ui/maps-ui_ads.html#robo664" class="indexitem" >SetMapMoveButtons</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo644" class="indexitem" >SetMessagesPosition</a>
-<a href="./ui/crew-ui_ads.html#robo489" class="indexitem" >SetOrdersList</a>
-<a href="./ui/crew-ui-handlers_ads.html#robo478" class="indexitem" >SetPriority</a>
-<a href="./crafts_ads.html#robo466" class="indexitem" >SetRecipe</a>
-<a href="./ui/ships-ui-handlers_ads.html#robo738" class="indexitem" >SetRepair</a>
-<a href="./items_ads.html#robo589" class="indexitem" >SetToolsList</a>
-<a href="./ui/ships-ui-handlers_ads.html#robo739" class="indexitem" >SetUpgrade</a>
-<a href="./ui/utils-ui_ads.html#robo810" class="indexitem" >SetUtilsBuilder</a>
-<a href="./ui/missions-ui_ads.html#robo689" class="indexitem" >ShowAcceptedMissions</a>
-<a href="./ui/baseslist_ads.html#robo436" class="indexitem" >ShowBasesListUI</a>
-<a href="./ui/bases-ui_ads.html#robo419" class="indexitem" >ShowBuyRecipesUI</a>
-<a href="./ui/ships-cargo-ui_ads.html#robo710" class="indexitem" >ShowCargoUI</a>
-<a href="./ui/combat-ui_ads.html#robo452" class="indexitem" >ShowCombatUI</a>
-<a href="./ui/utils-ui_ads.html#robo811" class="indexitem" >ShowConfirmDialog</a>
-<a href="./ui/crafts-ui_ads.html#robo460" class="indexitem" >ShowCraftsUI</a>
-<a href="./ui/crew-ui_ads.html#robo490" class="indexitem" >ShowCrewUI</a>
-<a href="./ui/debugui_ads.html#robo517" class="indexitem" >ShowDebugUI</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo645" class="indexitem" >ShowDestinationOrders</a>
-<a href="./ui/utils-ui_ads.html#robo812" class="indexitem" >ShowDialog</a>
-<a href="./ui/events-ui_ads.html#robo532" class="indexitem" >ShowEventsUI</a>
-<a href="./ui/gameoptions_ads.html#robo560" class="indexitem" >ShowGameOptions</a>
-<a href="./ui/goals-ui_ads.html#robo568" class="indexitem" >ShowGoalsMenu</a>
-<a href="./ui/bases-ui_ads.html#robo420" class="indexitem" >ShowHealUI</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo646" class="indexitem" >ShowHelp</a>
-<a href="./ui/help-ui_ads.html#robo579" class="indexitem" >ShowHelpUI</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo647" class="indexitem" >ShowInfo</a>
-<a href="./ui/crew-ui-handlers_ads.html#robo479" class="indexitem" >ShowInventory</a>
-<a href="./ui/utils-ui_ads.html#robo813" class="indexitem" >ShowInventoryItemInfo</a>
-<a href="./ui/crew-ui-handlers_ads.html#robo480" class="indexitem" >ShowItemInfo2</a>
-<a href="./ui/bases-lootui_ads.html#robo379" class="indexitem" >ShowLootUI</a>
-<a href="./ui/mainmenu_ads.html#robo614" class="indexitem" >ShowMainMenu</a>
-<a href="./ui/crew-ui-handlers_ads.html#robo481" class="indexitem" >ShowMemberInfo</a>
-<a href="./ui/messages-ui_ads.html#robo676" class="indexitem" >ShowMessagesUI</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo648" class="indexitem" >ShowMissions</a>
-<a href="./ui/missions-ui_ads.html#robo692" class="indexitem" >ShowMissionsUI</a>
-<a href="./ui/ships-ui-handlers_ads.html#robo740" class="indexitem" >ShowModuleInfo</a>
-<a href="./ui/ships-ui_ads.html#robo746" class="indexitem" >ShowModuleOptions</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo649" class="indexitem" >ShowOrders</a>
-<a href="./ui/crew-ui_ads.html#robo491" class="indexitem" >ShowOrdersForAll</a>
-<a href="./ui/utils-ui_ads.html#robo814" class="indexitem" >ShowPopupMenu</a>
-<a href="./ui/utils-ui_ads.html#robo815" class="indexitem" >ShowPopupMenuButton</a>
-<a href="./ui/bases-recruitui_ads.html#robo385" class="indexitem" >ShowRecruitUI</a>
-<a href="./ui/bases-ui_ads.html#robo421" class="indexitem" >ShowRepairUI</a>
-<a href="./ui/bases-schoolui_ads.html#robo391" class="indexitem" >ShowSchoolUI</a>
-<a href="./ui/ships-ui_ads.html#robo747" class="indexitem" >ShowShipInfo</a>
-<a href="./ui/ships-ui_ads.html#robo748" class="indexitem" >ShowShipUI</a>
-<a href="./ui/bases-shipyardui_ads.html#robo406" class="indexitem" >ShowShipyardUI</a>
-<a href="./ui/maps-ui_ads.html#robo665" class="indexitem" >ShowSkyMap</a>
-<a href="./ui/statistics-ui_ads.html#robo760" class="indexitem" >ShowStatsUI</a>
-<a href="./ui/stories-ui_ads.html#robo771" class="indexitem" >ShowStoriesUI</a>
-<a href="./ui/trades-ui_ads.html#robo793" class="indexitem" >ShowTradeUI</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo650" class="indexitem" >ShowWaitOrders</a>
-<a href="./ui/utils-ui_ads.html#robo816" class="indexitem" >ShowWindow</a>
-<a href="./combat_ads.html#robo455" class="indexitem" >StartCombat</a>
-<a href="./log_ads.html#robo592" class="indexitem" >StartLogging</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo651" class="indexitem" >StartMission</a>
-<a href="./stories_ads.html#robo784" class="indexitem" >StartStory</a>
-<a href="./ships-upgrade_ads.html#robo749" class="indexitem" >StartUpgrading</a>
-<a href="./ui/ships-ui-handlers_ads.html#robo741" class="indexitem" >StopUpgrading</a>
-<h2><a name="T"></a>T</h2><a href="./crew-inventory_ads.html#robo471" class="indexitem" >TakeOffItem</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo652" class="indexitem" >ToggleCloseButton</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo653" class="indexitem" >ToggleCloseButtonProc</a>
-<a href="./ui/ships-ui-handlers_ads.html#robo742" class="indexitem" >ToggleSearch</a>
-<a href="./bases-trade_ads.html#robo413" class="indexitem" >TrainCost</a>
-<a href="./bases-trade_ads.html#robo414" class="indexitem" >TrainSkill</a>
-<a href="./ui/utils-ui_ads.html#robo817" class="indexitem" >TravelInfo</a>
-<h2><a name="U"></a>U</h2><a href="./bases-cargo_ads.html#robo374" class="indexitem" >UpdateBaseCargo</a>
-<a href="./ships-cargo_ads.html#robo716" class="indexitem" >UpdateCargo</a>
-<a href="./statistics_ads.html#robo764" class="indexitem" >UpdateCraftingOrders</a>
-<a href="./crew_ads.html#robo498" class="indexitem" >UpdateCrew</a>
-<a href="./statistics_ads.html#robo765" class="indexitem" >UpdateDestroyedShips</a>
-<a href="./events_ads.html#robo539" class="indexitem" >UpdateEvents</a>
-<a href="./statistics_ads.html#robo766" class="indexitem" >UpdateFinishedGoals</a>
-<a href="./statistics_ads.html#robo767" class="indexitem" >UpdateFinishedMissions</a>
-<a href="./game_ads.html#robo552" class="indexitem" >UpdateGame</a>
-<a href="./goals_ads.html#robo572" class="indexitem" >UpdateGoal</a>
-<a href="./ui/mainmenu_ads.html#robo617" class="indexitem" >UpdateGoalButton</a>
-<a href="./ui/statistics-ui_ads.html#robo761" class="indexitem" >UpdateGoalsButton</a>
-<a href="./halloffame_ads.html#robo574" class="indexitem" >UpdateHallOfFame</a>
-<a href="./ui/maps-ui_ads.html#robo666" class="indexitem" >UpdateHeader</a>
-<a href="./crew-inventory_ads.html#robo472" class="indexitem" >UpdateInventory</a>
-<a href="./statistics_ads.html#robo768" class="indexitem" >UpdateKilledMobs</a>
-<a href="./ui/maps-ui_ads.html#robo667" class="indexitem" >UpdateMapInfo</a>
-<a href="./ui/utils-ui_ads.html#robo818" class="indexitem" >UpdateMessages</a>
-<a href="./missions_ads.html#robo698" class="indexitem" >UpdateMission</a>
-<a href="./missions_ads.html#robo699" class="indexitem" >UpdateMissions</a>
-<a href="./ships-crew_ads.html#robo722" class="indexitem" >UpdateMorale</a>
-<a href="./ui/maps-ui_ads.html#robo668" class="indexitem" >UpdateMoveButtons</a>
-<a href="./ships-crew_ads.html#robo723" class="indexitem" >UpdateOrders</a>
-<a href="./bases_ads.html#robo429" class="indexitem" >UpdatePopulation</a>
-<a href="./bases_ads.html#robo430" class="indexitem" >UpdatePrices</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo654" class="indexitem" >UpdateTooltip</a>
-<a href="./bases-ship_ads.html#robo397" class="indexitem" >UpgradeShip</a>
-<a href="./ships-upgrade_ads.html#robo750" class="indexitem" >UpgradeShip</a>
-<a href="./ui/crew-ui-handlers_ads.html#robo483" class="indexitem" >UseItem</a>
-<h2><a name="W"></a>W</h2><a href="./crew_ads.html#robo499" class="indexitem" >WaitForRest</a>
-<a href="./ships-movement_ads.html#robo730" class="indexitem" >WaitInPlace</a>
-<a href="./ui/maps-ui-handlers_ads.html#robo655" class="indexitem" >WaitOrder</a>
-<h2><a name="Z"></a>Z</h2><a href="./ui/maps-ui-handlers_ads.html#robo656" class="indexitem" >ZoomMap</a>
-<h2>Internal</h2><h2><a name="A"></a>A</h2><a href="./ui/bases-ui_adb.html#robo415" class="indexitem" >AcceptAction</a>
-<a href="./ui/missions-ui_adb.html#robo685" class="indexitem" >AcceptSelectedMission</a>
-<a href="./ui/debugui_adb.html#robo500" class="indexitem" >AddCargo</a>
-<a href="./ui/debugui_adb.html#robo501" class="indexitem" >AddEvent</a>
-<a href="./ui/debugui_adb.html#robo502" class="indexitem" >AddShip</a>
-<a href="./ui/debugui_adb.html#robo503" class="indexitem" >AddSkill</a>
-<a href="./ui/gameoptions_adb.html#robo553" class="indexitem" >ApplyTheme</a>
-<a href="./ui/utils-ui_adb.html#robo799" class="indexitem" >AutoHideDialog</a>
-<h2><a name="B"></a>B</h2><a href="./ui/missions-ui_adb.html#robo686" class="indexitem" >ButtonMission</a>
-<h2><a name="C"></a>C</h2><a href="./ui/debugui_adb.html#robo504" class="indexitem" >ChangeSkillLevel</a>
-<a href="./ui/debugui_adb.html#robo505" class="indexitem" >ChangeStatLevel</a>
-<a href="./bases-trade_adb.html#robo409" class="indexitem" >CheckMoney</a>
-<a href="./ui/goals-ui_adb.html#robo562" class="indexitem" >CloseGoals</a>
-<a href="./ui/trades-ui_adb.html#robo789" class="indexitem" >CloseTrade</a>
-<h2><a name="D"></a>D</h2><a href="./ui/debugui_adb.html#robo507" class="indexitem" >DeleteEvent</a>
-<a href="./ui/mainmenu_adb.html#robo594" class="indexitem" >DeleteGame</a>
-<a href="./ui/messages-ui_adb.html#robo672" class="indexitem" >DeleteMessages</a>
-<a href="./ui/help-ui_adb.html#robo576" class="indexitem" >DisableMouse</a>
-<a href="./ui/ships-cargo-ui_adb.html#robo705" class="indexitem" >DropItem</a>
-<h2><a name="G"></a>G</h2><a href="./ui/bases-shipyardui_adb.html#robo399" class="indexitem" >GetModuleInfo</a>
-<a href="./ui/bases-shipyardui_adb.html#robo400" class="indexitem" >GetModuleType</a>
-<a href="./events_adb.html#robo537" class="indexitem" >GetPlayerShips</a>
-<a href="./ui/combat-ui_adb.html#robo444" class="indexitem" >GiveBoardingOrders</a>
-<a href="./ui/combat-ui_adb.html#robo445" class="indexitem" >GiveCombatOrders</a>
-<a href="./ui/ships-cargo-ui_adb.html#robo706" class="indexitem" >GiveItem</a>
-<a href="./ui/goals-ui_adb.html#robo564" class="indexitem" >GoalSelected</a>
-<h2><a name="H"></a>H</h2><a href="./ships-movement_adb.html#robo727" class="indexitem" >HaveOrderRequirements</a>
-<a href="./ui/goals-ui_adb.html#robo565" class="indexitem" >HideGoals</a>
-<a href="./ui/help-ui_adb.html#robo577" class="indexitem" >HideHelpWindow</a>
-<a href="./ui/bases-recruitui_adb.html#robo382" class="indexitem" >Hire</a>
-<h2><a name="L"></a>L</h2><a href="./ui/themes_adb.html#robo785" class="indexitem" >LoadCssText</a>
-<a href="./game_adb.html#robo549" class="indexitem" >LoadData</a>
-<a href="./ui/mainmenu_adb.html#robo595" class="indexitem" >LoadFile</a>
-<a href="./ui/mainmenu_adb.html#robo596" class="indexitem" >LoadGame</a>
-<a href="./ui/bases-lootui_adb.html#robo376" class="indexitem" >LootItem</a>
-<h2><a name="M"></a>M</h2><a href="./ui/bases-shipyardui_adb.html#robo401" class="indexitem" >ManipulateModule</a>
-<a href="./ui/debugui_adb.html#robo508" class="indexitem" >MoveShip</a>
-<h2><a name="N"></a>N</h2><a href="./ui/bases-recruitui_adb.html#robo383" class="indexitem" >NegotiateHire</a>
-<a href="./ui/mainmenu_adb.html#robo597" class="indexitem" >NewGame</a>
-<a href="./ui/mainmenu_adb.html#robo598" class="indexitem" >NewGameKeyPressed</a>
-<a href="./ui/combat-ui_adb.html#robo446" class="indexitem" >NextTurn</a>
-<h2><a name="O"></a>O</h2><a href="./ui/bases-ui_adb.html#robo417" class="indexitem" >ObjectSelected</a>
-<h2><a name="Q"></a>Q</h2><a href="./ui/mainmenu_adb.html#robo600" class="indexitem" >Quit</a>
-<h2><a name="R"></a>R</h2><a href="./ui/mainmenu_adb.html#robo601" class="indexitem" >RandomDifficulty</a>
-<a href="./ui/mainmenu_adb.html#robo602" class="indexitem" >RandomDifficultyToggled</a>
-<a href="./ui/mainmenu_adb.html#robo603" class="indexitem" >RandomName</a>
-<a href="./ui/crew-ui-handlers_adb.html#robo477" class="indexitem" >ReducePriority</a>
-<a href="./ui/combat-ui_adb.html#robo447" class="indexitem" >RefreshBoardingUI</a>
-<a href="./ui/ships-cargo-ui_adb.html#robo707" class="indexitem" >RefreshCargoInfo</a>
-<a href="./ui/combat-ui_adb.html#robo448" class="indexitem" >RefreshCombatUI</a>
-<a href="./ui/missions-ui_adb.html#robo688" class="indexitem" >RefreshMissionsList</a>
-<a href="./ui/mainmenu_adb.html#robo604" class="indexitem" >RefreshSavesList</a>
-<a href="./ui/debugui_adb.html#robo509" class="indexitem" >RefreshUI</a>
-<a href="./ui/debugui_adb.html#robo510" class="indexitem" >ResetWorldUI</a>
-<a href="./ui/gameoptions_adb.html#robo556" class="indexitem" >ResizeFont</a>
-<h2><a name="S"></a>S</h2><a href="./ui/debugui_adb.html#robo511" class="indexitem" >Save_Game</a>
-<a href="./ui/baseslist_adb.html#robo432" class="indexitem" >SearchBases</a>
-<a href="./ui/ships-cargo-ui_adb.html#robo708" class="indexitem" >SearchCargo</a>
-<a href="./ui/bases-lootui_adb.html#robo377" class="indexitem" >SearchLoot</a>
-<a href="./ui/messages-ui_adb.html#robo673" class="indexitem" >SearchMessages</a>
-<a href="./ui/bases-ui_adb.html#robo418" class="indexitem" >SearchRecipes</a>
-<a href="./ui/bases-shipyardui_adb.html#robo402" class="indexitem" >SearchShipyard</a>
-<a href="./ui/trades-ui_adb.html#robo791" class="indexitem" >SearchTrade</a>
-<a href="./stories_adb.html#robo780" class="indexitem" >SelectBase</a>
-<a href="./stories_adb.html#robo781" class="indexitem" >SelectEnemy</a>
-<a href="./ui/goals-ui_adb.html#robo566" class="indexitem" >SelectGoal</a>
-<a href="./ui/goals-ui_adb.html#robo567" class="indexitem" >SelectGoalView</a>
-<a href="./stories_adb.html#robo782" class="indexitem" >SelectLocation</a>
-<a href="./stories_adb.html#robo783" class="indexitem" >SelectLoot</a>
-<a href="./ui/messages-ui_adb.html#robo674" class="indexitem" >SelectMessages</a>
-<a href="./ui/help-ui_adb.html#robo578" class="indexitem" >SelectTopic</a>
-<a href="./ui/gameoptions_adb.html#robo557" class="indexitem" >SetAccelerator</a>
-<a href="./ui/ships-cargo-ui_adb.html#robo709" class="indexitem" >SetActiveItem</a>
-<a href="./ui/mainmenu_adb.html#robo606" class="indexitem" >SetBaseType</a>
-<a href="./ui/combat-ui_adb.html#robo449" class="indexitem" >SetBoardingOrder</a>
-<a href="./ui/combat-ui_adb.html#robo450" class="indexitem" >SetBoardingParty</a>
-<a href="./ui/debugui_adb.html#robo512" class="indexitem" >SetCargoAmount</a>
-<a href="./ui/crafts-ui_adb.html#robo459" class="indexitem" >SetCrafting</a>
-<a href="./ui/gameoptions_adb.html#robo558" class="indexitem" >SetDefaultFontSize</a>
-<a href="./ui/baseslist_adb.html#robo433" class="indexitem" >SetDestinationBase</a>
-<a href="./ui/mainmenu_adb.html#robo607" class="indexitem" >SetDifficulty</a>
-<a href="./ui/events-ui_adb.html#robo529" class="indexitem" >SetEventAsDestination</a>
-<a href="./ui/gameoptions_adb.html#robo559" class="indexitem" >SetFontsSizes</a>
-<a href="./ui/debugui_adb.html#robo513" class="indexitem" >SetMemberStats</a>
-<a href="./ui/debugui_adb.html#robo514" class="indexitem" >SetModuleStats</a>
-<a href="./ui/combat-ui_adb.html#robo451" class="indexitem" >SetOrdersList</a>
-<a href="./crafts_adb.html#robo467" class="indexitem" >SetRecipeData</a>
-<a href="./ui/bases-shipyardui_adb.html#robo403" class="indexitem" >SetRemoveModulesList</a>
-<a href="./ui/stories-ui_adb.html#robo770" class="indexitem" >SetStoryAsDestination</a>
-<a href="./ui/mainmenu_adb.html#robo608" class="indexitem" >ShowAllNews</a>
-<a href="./ui/ships-ui_adb.html#robo744" class="indexitem" >ShowAssignAmmo</a>
-<a href="./ui/ships-ui_adb.html#robo745" class="indexitem" >ShowAssignMember</a>
-<a href="./ui/missions-ui_adb.html#robo690" class="indexitem" >ShowAvailableMission</a>
-<a href="./ui/baseslist_adb.html#robo434" class="indexitem" >ShowBase</a>
-<a href="./ui/mainmenu_adb.html#robo609" class="indexitem" >ShowBaseDescription</a>
-<a href="./ui/debugui_adb.html#robo515" class="indexitem" >ShowBaseInfo</a>
-<a href="./ui/baseslist_adb.html#robo435" class="indexitem" >ShowBaseInfo</a>
-<a href="./ui/debugui_adb.html#robo516" class="indexitem" >ShowBasesTypes</a>
-<a href="./ui/mainmenu_adb.html#robo610" class="indexitem" >ShowCareerDescription</a>
-<a href="./ui/mainmenu_adb.html#robo611" class="indexitem" >ShowErrorInfo</a>
-<a href="./ui/events-ui_adb.html#robo530" class="indexitem" >ShowEvent</a>
-<a href="./ui/events-ui_adb.html#robo531" class="indexitem" >ShowEventInfo</a>
-<a href="./ui/mainmenu_adb.html#robo612" class="indexitem" >ShowFactionDescription</a>
-<a href="./ui/mainmenu_adb.html#robo613" class="indexitem" >ShowGoals</a>
-<a href="./ui/statistics-ui_adb.html#robo759" class="indexitem" >ShowGoals</a>
-<a href="./ui/bases-shipyardui_adb.html#robo404" class="indexitem" >ShowInstallInfo</a>
-<a href="./ui/ships-cargo-ui_adb.html#robo711" class="indexitem" >ShowItemCargoInfo</a>
-<a href="./ui/debugui_adb.html#robo518" class="indexitem" >ShowItemEvent</a>
-<a href="./ui/bases-lootui_adb.html#robo378" class="indexitem" >ShowItemInfo</a>
-<a href="./ui/trades-ui_adb.html#robo792" class="indexitem" >ShowItemTradeInfo</a>
-<a href="./ui/messages-ui_adb.html#robo675" class="indexitem" >ShowMessages</a>
-<a href="./ui/missions-ui_adb.html#robo691" class="indexitem" >ShowMissionInfo</a>
-<a href="./ui/mainmenu_adb.html#robo615" class="indexitem" >ShowPage</a>
-<a href="./ui/crafts-ui_adb.html#robo461" class="indexitem" >ShowRecipeInfo</a>
-<a href="./ui/bases-recruitui_adb.html#robo384" class="indexitem" >ShowRecruitInfo</a>
-<a href="./ui/bases-shipyardui_adb.html#robo405" class="indexitem" >ShowRemoveInfo</a>
-<a href="./ui/crafts-ui_adb.html#robo462" class="indexitem" >ShowSetRecipe</a>
-<a href="./ui/stories-ui_adb.html#robo772" class="indexitem" >ShowStory</a>
-<a href="./ui/stories-ui_adb.html#robo773" class="indexitem" >ShowStoryInfo</a>
-<a href="./ui/bases-schoolui_adb.html#robo392" class="indexitem" >ShowTrainInfo</a>
-<a href="./ui/mainmenu_adb.html#robo616" class="indexitem" >StartGame</a>
-<a href="./ui/bases-recruitui_adb.html#robo386" class="indexitem" >StartNegotiations</a>
-<h2><a name="T"></a>T</h2><a href="./ui/gameoptions_adb.html#robo561" class="indexitem" >ToggleAnimationType</a>
-<a href="./ui/baseslist_adb.html#robo437" class="indexitem" >ToggleBaseInfo</a>
-<a href="./ui/help-ui_adb.html#robo580" class="indexitem" >ToggleTopics</a>
-<a href="./ui/trades-ui_adb.html#robo794" class="indexitem" >TradeItem</a>
-<a href="./ui/bases-schoolui_adb.html#robo393" class="indexitem" >TrainSelectedSkill</a>
-<h2><a name="U"></a>U</h2><a href="./ui/debugui_adb.html#robo519" class="indexitem" >UpdateAttribute</a>
-<a href="./ui/debugui_adb.html#robo520" class="indexitem" >UpdateBase</a>
-<a href="./ui/debugui_adb.html#robo521" class="indexitem" >UpdateCargoInfo</a>
-<a href="./ui/debugui_adb.html#robo522" class="indexitem" >UpdateCrew</a>
-<a href="./ui/mainmenu_adb.html#robo618" class="indexitem" >UpdateInfo</a>
-<a href="./ui/mainmenu_adb.html#robo619" class="indexitem" >UpdateInfoProc</a>
-<a href="./ui/debugui_adb.html#robo523" class="indexitem" >UpdateMember</a>
-<a href="./ui/combat-ui_adb.html#robo453" class="indexitem" >UpdateMessages</a>
-<a href="./ui/debugui_adb.html#robo524" class="indexitem" >UpdateModule</a>
-<a href="./ui/mainmenu_adb.html#robo620" class="indexitem" >UpdateNews</a>
-<a href="./ui/crew-ui-handlers_adb.html#robo482" class="indexitem" >UpdatePriorities</a>
-<a href="./ui/bases-recruitui_adb.html#robo387" class="indexitem" >UpdateRecruitList</a>
-<a href="./ui/debugui_adb.html#robo525" class="indexitem" >UpdateShip</a>
-<a href="./ui/debugui_adb.html#robo526" class="indexitem" >UpdateShipCargo</a>
-<a href="./ui/debugui_adb.html#robo527" class="indexitem" >UpdateSkill</a>
-<a href="./ui/mainmenu_adb.html#robo621" class="indexitem" >UpdateSummary</a>
-<h2><a name="V"></a>V</h2><a href="./ui/baseslist_adb.html#robo438" class="indexitem" >VisibleBases</a>
-<a href="./ui/ships-cargo-ui_adb.html#robo712" class="indexitem" >VisibleCargo</a>
-<a href="./ui/bases-lootui_adb.html#robo380" class="indexitem" >VisibleLoot</a>
-<a href="./ui/messages-ui_adb.html#robo677" class="indexitem" >VisibleMessages</a>
-<a href="./ui/bases-ui_adb.html#robo422" class="indexitem" >VisibleRecipes</a>
-<a href="./ui/bases-shipyardui_adb.html#robo407" class="indexitem" >VisibleShipyard</a>
-<a href="./ui/trades-ui_adb.html#robo795" class="indexitem" >VisibleTrade</a>
+<h2>Normal</h2><h2><a name="A"></a>A</h2><a href="./missions_ads.html#robo700" class="indexitem" >AcceptMission</a>
+<a href="./messages_ads.html#robo685" class="indexitem" >AddMessage</a>
+<a href="./bases_ads.html#robo425" class="indexitem" >AskForBases</a>
+<a href="./bases_ads.html#robo426" class="indexitem" >AskForEvents</a>
+<a href="./ui/ships-ui-handlers_ads.html#robo741" class="indexitem" >Assign</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo629" class="indexitem" >AttackOrder</a>
+<a href="./missions_ads.html#robo701" class="indexitem" >AutoFinishMissions</a>
+<h2><a name="B"></a>B</h2><a href="./ui/maps-ui-handlers_ads.html#robo630" class="indexitem" >BtnDockClicked</a>
+<a href="./trades_ads.html#robo803" class="indexitem" >BuyItems</a>
+<a href="./bases-trade_ads.html#robo410" class="indexitem" >BuyRecipe</a>
+<h2><a name="C"></a>C</h2><a href="./ui/ships-ui-handlers_ads.html#robo742" class="indexitem" >ChangeModuleName</a>
+<a href="./ui/ships-ui-handlers_ads.html#robo743" class="indexitem" >ChangeShipName</a>
+<a href="./ships-movement_ads.html#robo731" class="indexitem" >ChangeShipSpeed</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo631" class="indexitem" >ChangeSpeed</a>
+<a href="./ui/utils-ui_ads.html#robo807" class="indexitem" >CheckAmount</a>
+<a href="./ui/maps-ui_ads.html#robo664" class="indexitem" >CheckButtons</a>
+<a href="./events_ads.html#robo540" class="indexitem" >CheckForEvent</a>
+<a href="./crafts_ads.html#robo466" class="indexitem" >CheckRecipe</a>
+<a href="./goals_ads.html#robo576" class="indexitem" >ClearCurrentGoal</a>
+<a href="./stories_ads.html#robo781" class="indexitem" >ClearCurrentStory</a>
+<a href="./statistics_ads.html#robo769" class="indexitem" >ClearGameStats</a>
+<a href="./messages_ads.html#robo686" class="indexitem" >ClearMessages</a>
+<a href="./ui/utils-ui_ads.html#robo808" class="indexitem" >CloseMessages</a>
+<a href="./ui/gameoptions_ads.html#robo561" class="indexitem" >CloseOptions</a>
+<a href="./ui/utils-ui_ads.html#robo809" class="indexitem" >CloseWindow</a>
+<a href="./combat_ads.html#robo457" class="indexitem" >CombatTurn</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo632" class="indexitem" >CompleteMission</a>
+<a href="./ships_ads.html#robo758" class="indexitem" >CountCombatValue</a>
+<a href="./maps_ads.html#robo676" class="indexitem" >CountDistance</a>
+<a href="./ships-movement_ads.html#robo732" class="indexitem" >CountFuelNeeded</a>
+<a href="./bases_ads.html#robo427" class="indexitem" >CountPrice</a>
+<a href="./ships_ads.html#robo759" class="indexitem" >CountShipWeight</a>
+<a href="./ui/baseslist_ads.html#robo433" class="indexitem" >CreateBasesListUI</a>
+<a href="./ui/bases-lootui_ads.html#robo377" class="indexitem" >CreateBasesLootUI</a>
+<a href="./ui/bases-schoolui_ads.html#robo392" class="indexitem" >CreateBasesSchoolUI</a>
+<a href="./ui/bases-shipyardui_ads.html#robo400" class="indexitem" >CreateBasesShipyardUI</a>
+<a href="./ui/bases-ui_ads.html#robo418" class="indexitem" >CreateBasesUI</a>
+<a href="./ui/ships-cargo-ui_ads.html#robo711" class="indexitem" >CreateCargoUI</a>
+<a href="./ui/combat-ui_ads.html#robo445" class="indexitem" >CreateCombatUI</a>
+<a href="./ui/crafts-ui_ads.html#robo461" class="indexitem" >CreateCraftsUI</a>
+<a href="./ui/crew-ui_ads.html#robo487" class="indexitem" >CreateCrewUI</a>
+<a href="./ui/debugui_ads.html#robo509" class="indexitem" >CreateDebugUI</a>
+<a href="./ui/errordialog_ads.html#robo531" class="indexitem" >CreateErrorUI</a>
+<a href="./ui/events-ui_ads.html#robo535" class="indexitem" >CreateEventsUI</a>
+<a href="./ui/gameoptions_ads.html#robo562" class="indexitem" >CreateGameOptions</a>
+<a href="./ui/goals-ui_ads.html#robo570" class="indexitem" >CreateGoalsMenu</a>
+<a href="./ui/help-ui_ads.html#robo582" class="indexitem" >CreateHelpUI</a>
+<a href="./ui/mainmenu_ads.html#robo602" class="indexitem" >CreateMainMenu</a>
+<a href="./ui/messages-ui_ads.html#robo678" class="indexitem" >CreateMessagesUI</a>
+<a href="./ui/missions-ui_ads.html#robo694" class="indexitem" >CreateMissionsUI</a>
+<a href="./ui/bases-recruitui_ads.html#robo383" class="indexitem" >CreateRecruitUI</a>
+<a href="./ships_ads.html#robo760" class="indexitem" >CreateShip</a>
+<a href="./ui/ships-ui_ads.html#robo750" class="indexitem" >CreateShipUI</a>
+<a href="./ui/maps-ui_ads.html#robo665" class="indexitem" >CreateSkyMap</a>
+<a href="./ui/statistics-ui_ads.html#robo764" class="indexitem" >CreateStatsUI</a>
+<a href="./ui/stories-ui_ads.html#robo776" class="indexitem" >CreateStoriesUI</a>
+<a href="./ui/trades-ui_ads.html#robo797" class="indexitem" >CreateTradeUI</a>
+<h2><a name="D"></a>D</h2><a href="./crew_ads.html#robo495" class="indexitem" >DailyPayment</a>
+<a href="./items_ads.html#robo589" class="indexitem" >DamageItem</a>
+<a href="./utils_ads.html#robo826" class="indexitem" >DaysDifference</a>
+<a href="./ships-crew_ads.html#robo724" class="indexitem" >Death</a>
+<a href="./ui/maps-ui_ads.html#robo666" class="indexitem" >DeathConfirm</a>
+<a href="./events_ads.html#robo541" class="indexitem" >DeleteEvent</a>
+<a href="./ships-crew_ads.html#robo725" class="indexitem" >DeleteMember</a>
+<a href="./missions_ads.html#robo702" class="indexitem" >DeleteMission</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo633" class="indexitem" >DeliverMedicines</a>
+<a href="./ui/ships-ui-handlers_ads.html#robo744" class="indexitem" >DisableEngine</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo634" class="indexitem" >DisableMenuShortcuts</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo635" class="indexitem" >DisableMenuShortcutsProc</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo636" class="indexitem" >DisableMouse</a>
+<a href="./ui/crew-ui-handlers_ads.html#robo476" class="indexitem" >DismissMember</a>
+<a href="./ships-movement_ads.html#robo733" class="indexitem" >DockShip</a>
+<a href="./ui/maps-ui_ads.html#robo667" class="indexitem" >DrawMap</a>
+<h2><a name="E"></a>E</h2><a href="./ui/maps-ui-handlers_ads.html#robo637" class="indexitem" >EnableMenuShortcuts</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo638" class="indexitem" >EnableMenuShortcutsProc</a>
+<a href="./game_ads.html#robo554" class="indexitem" >EndGame</a>
+<a href="./log_ads.html#robo597" class="indexitem" >EndLogging</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo639" class="indexitem" >ExecuteOrder</a>
+<h2><a name="F"></a>F</h2><a href="./bases-cargo_ads.html#robo374" class="indexitem" >FindBaseCargo</a>
+<a href="./crew_ads.html#robo496" class="indexitem" >FindCabin</a>
+<a href="./items_ads.html#robo590" class="indexitem" >FindItem</a>
+<a href="./ships-crew_ads.html#robo726" class="indexitem" >FindMember</a>
+<a href="./items_ads.html#robo591" class="indexitem" >FindProtoItem</a>
+<a href="./game_ads.html#robo555" class="indexitem" >FindSkillIndex</a>
+<a href="./crew-inventory_ads.html#robo471" class="indexitem" >FindTools</a>
+<a href="./missions_ads.html#robo703" class="indexitem" >FinishMission</a>
+<a href="./ui/maps-ui_ads.html#robo668" class="indexitem" >FinishStory</a>
+<a href="./messages_ads.html#robo687" class="indexitem" >FormatedTime</a>
+<a href="./ships-cargo_ads.html#robo720" class="indexitem" >FreeCargo</a>
+<a href="./crew-inventory_ads.html#robo472" class="indexitem" >FreeInventory</a>
+<h2><a name="G"></a>G</h2><a href="./crew_ads.html#robo497" class="indexitem" >GainExp</a>
+<a href="./bases_ads.html#robo428" class="indexitem" >GainRep</a>
+<a href="./bases_ads.html#robo429" class="indexitem" >GenerateBaseName</a>
+<a href="./bases-cargo_ads.html#robo375" class="indexitem" >GenerateCargo</a>
+<a href="./events_ads.html#robo542" class="indexitem" >GenerateEnemies</a>
+<a href="./crew_ads.html#robo498" class="indexitem" >GenerateMemberName</a>
+<a href="./missions_ads.html#robo704" class="indexitem" >GenerateMissions</a>
+<a href="./mobs_ads.html#robo707" class="indexitem" >GenerateMob</a>
+<a href="./bases_ads.html#robo430" class="indexitem" >GenerateRecruits</a>
+<a href="./utils_ads.html#robo827" class="indexitem" >GenerateRoboticName</a>
+<a href="./game-saveload_ads.html#robo551" class="indexitem" >GenerateSaveName</a>
+<a href="./ships_ads.html#robo761" class="indexitem" >GenerateShipName</a>
+<a href="./trades_ads.html#robo804" class="indexitem" >GenerateTraderCargo</a>
+<a href="./events_ads.html#robo543" class="indexitem" >GenerateTraders</a>
+<a href="./basestypes_ads.html#robo441" class="indexitem" >Get_Price</a>
+<a href="./crew_ads.html#robo499" class="indexitem" >GetAttributeLevelName</a>
+<a href="./ships_ads.html#robo762" class="indexitem" >GetCabinQuality</a>
+<a href="./ui/maps-ui_ads.html#robo669" class="indexitem" >GetCurrentCellCoords</a>
+<a href="./stories_ads.html#robo782" class="indexitem" >GetCurrentStoryText</a>
+<a href="./statistics_ads.html#robo770" class="indexitem" >GetGamePoints</a>
+<a href="./ships-cargo_ads.html#robo721" class="indexitem" >GetItemAmount</a>
+<a href="./items_ads.html#robo592" class="indexitem" >GetItemChanceToDamage</a>
+<a href="./items_ads.html#robo593" class="indexitem" >GetItemDamage</a>
+<a href="./items_ads.html#robo594" class="indexitem" >GetItemName</a>
+<a href="./ships-cargo_ads.html#robo722" class="indexitem" >GetItemsAmount</a>
+<a href="./messages_ads.html#robo688" class="indexitem" >GetLastMessageIndex</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo640" class="indexitem" >GetMapSize</a>
+<a href="./messages_ads.html#robo689" class="indexitem" >GetMessage</a>
+<a href="./utils_ads.html#robo828" class="indexitem" >GetRandom</a>
+<a href="./factions_ads.html#robo547" class="indexitem" >GetRandomFaction</a>
+<a href="./mobs_ads.html#robo708" class="indexitem" >GetRandomItem</a>
+<a href="./factions_ads.html#robo548" class="indexitem" >GetReputation</a>
+<a href="./ships-crew_ads.html#robo727" class="indexitem" >GetSkillLevel</a>
+<a href="./crew_ads.html#robo500" class="indexitem" >GetSkillLevelName</a>
+<a href="./stories_ads.html#robo783" class="indexitem" >GetStepData</a>
+<a href="./stories_ads.html#robo784" class="indexitem" >GetStoryLocation</a>
+<a href="./ui/crew-ui-handlers_ads.html#robo477" class="indexitem" >GiveCrewOrders</a>
+<a href="./ships-crew_ads.html#robo728" class="indexitem" >GiveOrders</a>
+<a href="./ui/crew-ui-handlers_ads.html#robo478" class="indexitem" >GiveOrdersAll</a>
+<a href="./goals_ads.html#robo577" class="indexitem" >GoalText</a>
+<h2><a name="H"></a>H</h2><a href="./bases-trade_ads.html#robo412" class="indexitem" >HealCost</a>
+<a href="./bases-trade_ads.html#robo413" class="indexitem" >HealWounded</a>
+<a href="./ui/maps-ui_ads.html#robo670" class="indexitem" >HideButtons</a>
+<a href="./ui/utils-ui_ads.html#robo810" class="indexitem" >HideDialog</a>
+<a href="./ui/utils-ui_ads.html#robo811" class="indexitem" >HideItemInfo</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo641" class="indexitem" >HideMapInfoWindow</a>
+<a href="./ui/statistics-ui_ads.html#robo765" class="indexitem" >HideStatistics</a>
+<a href="./ui/utils-ui_ads.html#robo812" class="indexitem" >HideWindow</a>
+<a href="./bases-trade_ads.html#robo414" class="indexitem" >HireRecruit</a>
+<h2><a name="I"></a>I</h2><a href="./basestypes_ads.html#robo442" class="indexitem" >Is_Buyable</a>
+<a href="./factions_ads.html#robo549" class="indexitem" >IsFriendly</a>
+<a href="./crew-inventory_ads.html#robo473" class="indexitem" >ItemIsUsed</a>
+<h2><a name="L"></a>L</h2><a href="./bases-saveload_ads.html#robo390" class="indexitem" >LoadBases</a>
+<a href="./basestypes_ads.html#robo443" class="indexitem" >LoadBasesTypes</a>
+<a href="./careers_ads.html#robo444" class="indexitem" >LoadCareers</a>
+<a href="./config_ads.html#robo459" class="indexitem" >LoadConfig</a>
+<a href="./factions_ads.html#robo550" class="indexitem" >LoadFactions</a>
+<a href="./game-saveload_ads.html#robo552" class="indexitem" >LoadGame</a>
+<a href="./game_ads.html#robo557" class="indexitem" >LoadGameData</a>
+<a href="./goals_ads.html#robo578" class="indexitem" >LoadGoals</a>
+<a href="./halloffame_ads.html#robo580" class="indexitem" >LoadHallOfFame</a>
+<a href="./help_ads.html#robo588" class="indexitem" >LoadHelp</a>
+<a href="./items_ads.html#robo595" class="indexitem" >LoadItems</a>
+<a href="./mobs_ads.html#robo709" class="indexitem" >LoadMobs</a>
+<a href="./ships-saveload_ads.html#robo739" class="indexitem" >LoadPlayerShip</a>
+<a href="./crafts_ads.html#robo467" class="indexitem" >LoadRecipes</a>
+<a href="./shipmodules_ads.html#robo710" class="indexitem" >LoadShipModules</a>
+<a href="./ships_ads.html#robo763" class="indexitem" >LoadShips</a>
+<a href="./stories_ads.html#robo785" class="indexitem" >LoadStories</a>
+<a href="./ui/themes_ads.html#robo793" class="indexitem" >LoadThemes</a>
+<a href="./log_ads.html#robo598" class="indexitem" >LogMessage</a>
+<h2><a name="M"></a>M</h2><a href="./crafts_ads.html#robo468" class="indexitem" >Manufacturing</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo642" class="indexitem" >MapKeyPressed</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo643" class="indexitem" >MapKeyReleased</a>
+<a href="./messages_ads.html#robo690" class="indexitem" >MessagesAmount</a>
+<a href="./ui/utils-ui_ads.html#robo813" class="indexitem" >MinutesToDate</a>
+<a href="./ui/crew-ui-handlers_ads.html#robo479" class="indexitem" >MoveItem</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo644" class="indexitem" >MoveMap</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo645" class="indexitem" >MoveMapButtons</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo646" class="indexitem" >MoveMapInfo</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo647" class="indexitem" >MoveShip</a>
+<a href="./ships-movement_ads.html#robo735" class="indexitem" >MoveShip</a>
+<h2><a name="N"></a>N</h2><a href="./game_ads.html#robo558" class="indexitem" >NewGame</a>
+<a href="./maps_ads.html#robo677" class="indexitem" >NormalizeCoord</a>
+<h2><a name="O"></a>O</h2><a href="./ui/errordialog_ads.html#robo532" class="indexitem" >On_Exception</a>
+<h2><a name="P"></a>P</h2><a href="./bases-ship_ads.html#robo396" class="indexitem" >PayForDock</a>
+<a href="./stories_ads.html#robo786" class="indexitem" >ProgressStory</a>
+<h2><a name="Q"></a>Q</h2><a href="./ui/utils-ui_ads.html#robo814" class="indexitem" >QuitGame</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo648" class="indexitem" >QuitGameMenu</a>
+<h2><a name="R"></a>R</h2><a href="./ships-movement_ads.html#robo736" class="indexitem" >RealSpeed</a>
+<a href="./events_ads.html#robo545" class="indexitem" >RecoverBase</a>
+<a href="./ui/crew-ui_ads.html#robo488" class="indexitem" >RefreshCrewInfo</a>
+<a href="./ui/crew-ui_ads.html#robo489" class="indexitem" >RefreshInventory</a>
+<a href="./ui/utils-ui_ads.html#robo815" class="indexitem" >RemoveWidget</a>
+<a href="./bases-ship_ads.html#robo397" class="indexitem" >RepairCost</a>
+<a href="./ships-repairs_ads.html#robo738" class="indexitem" >RepairShip</a>
+<a href="./bases-ship_ads.html#robo398" class="indexitem" >RepairShip</a>
+<a href="./ui/themes_ads.html#robo794" class="indexitem" >ResetFontsSizes</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo649" class="indexitem" >ResignFromGame</a>
+<a href="./messages_ads.html#robo691" class="indexitem" >RestoreMessage</a>
+<h2><a name="S"></a>S</h2><a href="./bases-saveload_ads.html#robo391" class="indexitem" >SaveBases</a>
+<a href="./config_ads.html#robo460" class="indexitem" >SaveConfig</a>
+<a href="./ui/errordialog_ads.html#robo533" class="indexitem" >SaveException</a>
+<a href="./game-saveload_ads.html#robo553" class="indexitem" >SaveGame</a>
+<a href="./ships-saveload_ads.html#robo740" class="indexitem" >SavePlayerShip</a>
+<a href="./ui/utils-ui_ads.html#robo816" class="indexitem" >SelectElement</a>
+<a href="./trades_ads.html#robo805" class="indexitem" >SellItems</a>
+<a href="./ui/crew-ui_ads.html#robo490" class="indexitem" >SetActiveItem</a>
+<a href="./ui/crew-ui_ads.html#robo491" class="indexitem" >SetActiveMember</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo650" class="indexitem" >SetDestination</a>
+<a href="./ui/themes_ads.html#robo795" class="indexitem" >SetFontSize</a>
+<a href="./ui/maps-ui_ads.html#robo671" class="indexitem" >SetMapMoveButtons</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo651" class="indexitem" >SetMessagesPosition</a>
+<a href="./ui/crew-ui_ads.html#robo492" class="indexitem" >SetOrdersList</a>
+<a href="./ui/crew-ui-handlers_ads.html#robo481" class="indexitem" >SetPriority</a>
+<a href="./crafts_ads.html#robo469" class="indexitem" >SetRecipe</a>
+<a href="./ui/ships-ui-handlers_ads.html#robo745" class="indexitem" >SetRepair</a>
+<a href="./items_ads.html#robo596" class="indexitem" >SetToolsList</a>
+<a href="./ui/ships-ui-handlers_ads.html#robo746" class="indexitem" >SetUpgrade</a>
+<a href="./ui/utils-ui_ads.html#robo817" class="indexitem" >SetUtilsBuilder</a>
+<a href="./ui/missions-ui_ads.html#robo696" class="indexitem" >ShowAcceptedMissions</a>
+<a href="./ui/baseslist_ads.html#robo438" class="indexitem" >ShowBasesListUI</a>
+<a href="./ui/bases-ui_ads.html#robo421" class="indexitem" >ShowBuyRecipesUI</a>
+<a href="./ui/ships-cargo-ui_ads.html#robo717" class="indexitem" >ShowCargoUI</a>
+<a href="./ui/combat-ui_ads.html#robo455" class="indexitem" >ShowCombatUI</a>
+<a href="./ui/utils-ui_ads.html#robo818" class="indexitem" >ShowConfirmDialog</a>
+<a href="./ui/crafts-ui_ads.html#robo463" class="indexitem" >ShowCraftsUI</a>
+<a href="./ui/crew-ui_ads.html#robo493" class="indexitem" >ShowCrewUI</a>
+<a href="./ui/debugui_ads.html#robo520" class="indexitem" >ShowDebugUI</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo652" class="indexitem" >ShowDestinationOrders</a>
+<a href="./ui/utils-ui_ads.html#robo819" class="indexitem" >ShowDialog</a>
+<a href="./ui/events-ui_ads.html#robo539" class="indexitem" >ShowEventsUI</a>
+<a href="./ui/gameoptions_ads.html#robo567" class="indexitem" >ShowGameOptions</a>
+<a href="./ui/goals-ui_ads.html#robo575" class="indexitem" >ShowGoalsMenu</a>
+<a href="./ui/bases-ui_ads.html#robo422" class="indexitem" >ShowHealUI</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo653" class="indexitem" >ShowHelp</a>
+<a href="./ui/help-ui_ads.html#robo586" class="indexitem" >ShowHelpUI</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo654" class="indexitem" >ShowInfo</a>
+<a href="./ui/crew-ui-handlers_ads.html#robo482" class="indexitem" >ShowInventory</a>
+<a href="./ui/utils-ui_ads.html#robo820" class="indexitem" >ShowInventoryItemInfo</a>
+<a href="./ui/crew-ui-handlers_ads.html#robo483" class="indexitem" >ShowItemInfo2</a>
+<a href="./ui/bases-lootui_ads.html#robo381" class="indexitem" >ShowLootUI</a>
+<a href="./ui/mainmenu_ads.html#robo621" class="indexitem" >ShowMainMenu</a>
+<a href="./ui/crew-ui-handlers_ads.html#robo484" class="indexitem" >ShowMemberInfo</a>
+<a href="./ui/messages-ui_ads.html#robo683" class="indexitem" >ShowMessagesUI</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo655" class="indexitem" >ShowMissions</a>
+<a href="./ui/missions-ui_ads.html#robo699" class="indexitem" >ShowMissionsUI</a>
+<a href="./ui/ships-ui-handlers_ads.html#robo747" class="indexitem" >ShowModuleInfo</a>
+<a href="./ui/ships-ui_ads.html#robo753" class="indexitem" >ShowModuleOptions</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo656" class="indexitem" >ShowOrders</a>
+<a href="./ui/crew-ui_ads.html#robo494" class="indexitem" >ShowOrdersForAll</a>
+<a href="./ui/utils-ui_ads.html#robo821" class="indexitem" >ShowPopupMenu</a>
+<a href="./ui/utils-ui_ads.html#robo822" class="indexitem" >ShowPopupMenuButton</a>
+<a href="./ui/bases-recruitui_ads.html#robo387" class="indexitem" >ShowRecruitUI</a>
+<a href="./ui/bases-ui_ads.html#robo423" class="indexitem" >ShowRepairUI</a>
+<a href="./ui/bases-schoolui_ads.html#robo393" class="indexitem" >ShowSchoolUI</a>
+<a href="./ui/ships-ui_ads.html#robo754" class="indexitem" >ShowShipInfo</a>
+<a href="./ui/ships-ui_ads.html#robo755" class="indexitem" >ShowShipUI</a>
+<a href="./ui/bases-shipyardui_ads.html#robo408" class="indexitem" >ShowShipyardUI</a>
+<a href="./ui/maps-ui_ads.html#robo672" class="indexitem" >ShowSkyMap</a>
+<a href="./ui/statistics-ui_ads.html#robo767" class="indexitem" >ShowStatsUI</a>
+<a href="./ui/stories-ui_ads.html#robo778" class="indexitem" >ShowStoriesUI</a>
+<a href="./ui/trades-ui_ads.html#robo800" class="indexitem" >ShowTradeUI</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo657" class="indexitem" >ShowWaitOrders</a>
+<a href="./ui/utils-ui_ads.html#robo823" class="indexitem" >ShowWindow</a>
+<a href="./combat_ads.html#robo458" class="indexitem" >StartCombat</a>
+<a href="./log_ads.html#robo599" class="indexitem" >StartLogging</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo658" class="indexitem" >StartMission</a>
+<a href="./stories_ads.html#robo791" class="indexitem" >StartStory</a>
+<a href="./ships-upgrade_ads.html#robo756" class="indexitem" >StartUpgrading</a>
+<a href="./ui/ships-ui-handlers_ads.html#robo748" class="indexitem" >StopUpgrading</a>
+<h2><a name="T"></a>T</h2><a href="./crew-inventory_ads.html#robo474" class="indexitem" >TakeOffItem</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo659" class="indexitem" >ToggleCloseButton</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo660" class="indexitem" >ToggleCloseButtonProc</a>
+<a href="./ui/ships-ui-handlers_ads.html#robo749" class="indexitem" >ToggleSearch</a>
+<a href="./bases-trade_ads.html#robo415" class="indexitem" >TrainCost</a>
+<a href="./bases-trade_ads.html#robo416" class="indexitem" >TrainSkill</a>
+<a href="./ui/utils-ui_ads.html#robo824" class="indexitem" >TravelInfo</a>
+<h2><a name="U"></a>U</h2><a href="./bases-cargo_ads.html#robo376" class="indexitem" >UpdateBaseCargo</a>
+<a href="./ships-cargo_ads.html#robo723" class="indexitem" >UpdateCargo</a>
+<a href="./statistics_ads.html#robo771" class="indexitem" >UpdateCraftingOrders</a>
+<a href="./crew_ads.html#robo501" class="indexitem" >UpdateCrew</a>
+<a href="./statistics_ads.html#robo772" class="indexitem" >UpdateDestroyedShips</a>
+<a href="./events_ads.html#robo546" class="indexitem" >UpdateEvents</a>
+<a href="./statistics_ads.html#robo773" class="indexitem" >UpdateFinishedGoals</a>
+<a href="./statistics_ads.html#robo774" class="indexitem" >UpdateFinishedMissions</a>
+<a href="./game_ads.html#robo559" class="indexitem" >UpdateGame</a>
+<a href="./goals_ads.html#robo579" class="indexitem" >UpdateGoal</a>
+<a href="./ui/mainmenu_ads.html#robo624" class="indexitem" >UpdateGoalButton</a>
+<a href="./ui/statistics-ui_ads.html#robo768" class="indexitem" >UpdateGoalsButton</a>
+<a href="./halloffame_ads.html#robo581" class="indexitem" >UpdateHallOfFame</a>
+<a href="./ui/maps-ui_ads.html#robo673" class="indexitem" >UpdateHeader</a>
+<a href="./crew-inventory_ads.html#robo475" class="indexitem" >UpdateInventory</a>
+<a href="./statistics_ads.html#robo775" class="indexitem" >UpdateKilledMobs</a>
+<a href="./ui/maps-ui_ads.html#robo674" class="indexitem" >UpdateMapInfo</a>
+<a href="./ui/utils-ui_ads.html#robo825" class="indexitem" >UpdateMessages</a>
+<a href="./missions_ads.html#robo705" class="indexitem" >UpdateMission</a>
+<a href="./missions_ads.html#robo706" class="indexitem" >UpdateMissions</a>
+<a href="./ships-crew_ads.html#robo729" class="indexitem" >UpdateMorale</a>
+<a href="./ui/maps-ui_ads.html#robo675" class="indexitem" >UpdateMoveButtons</a>
+<a href="./ships-crew_ads.html#robo730" class="indexitem" >UpdateOrders</a>
+<a href="./bases_ads.html#robo431" class="indexitem" >UpdatePopulation</a>
+<a href="./bases_ads.html#robo432" class="indexitem" >UpdatePrices</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo661" class="indexitem" >UpdateTooltip</a>
+<a href="./ships-upgrade_ads.html#robo757" class="indexitem" >UpgradeShip</a>
+<a href="./bases-ship_ads.html#robo399" class="indexitem" >UpgradeShip</a>
+<a href="./ui/crew-ui-handlers_ads.html#robo486" class="indexitem" >UseItem</a>
+<h2><a name="W"></a>W</h2><a href="./crew_ads.html#robo502" class="indexitem" >WaitForRest</a>
+<a href="./ships-movement_ads.html#robo737" class="indexitem" >WaitInPlace</a>
+<a href="./ui/maps-ui-handlers_ads.html#robo662" class="indexitem" >WaitOrder</a>
+<h2><a name="Z"></a>Z</h2><a href="./ui/maps-ui-handlers_ads.html#robo663" class="indexitem" >ZoomMap</a>
+<h2>Internal</h2><h2><a name="A"></a>A</h2><a href="./ui/bases-ui_adb.html#robo417" class="indexitem" >AcceptAction</a>
+<a href="./ui/missions-ui_adb.html#robo692" class="indexitem" >AcceptSelectedMission</a>
+<a href="./ui/debugui_adb.html#robo503" class="indexitem" >AddCargo</a>
+<a href="./ui/debugui_adb.html#robo504" class="indexitem" >AddEvent</a>
+<a href="./ui/debugui_adb.html#robo505" class="indexitem" >AddShip</a>
+<a href="./ui/debugui_adb.html#robo506" class="indexitem" >AddSkill</a>
+<a href="./ui/gameoptions_adb.html#robo560" class="indexitem" >ApplyTheme</a>
+<a href="./ui/utils-ui_adb.html#robo806" class="indexitem" >AutoHideDialog</a>
+<h2><a name="B"></a>B</h2><a href="./ui/mainmenu_adb.html#robo600" class="indexitem" >BackToMenu</a>
+<a href="./ui/mainmenu_adb.html#robo601" class="indexitem" >BaseTypeName</a>
+<a href="./ui/missions-ui_adb.html#robo693" class="indexitem" >ButtonMission</a>
+<h2><a name="C"></a>C</h2><a href="./ui/debugui_adb.html#robo507" class="indexitem" >ChangeSkillLevel</a>
+<a href="./ui/debugui_adb.html#robo508" class="indexitem" >ChangeStatLevel</a>
+<a href="./bases-trade_adb.html#robo411" class="indexitem" >CheckMoney</a>
+<a href="./ui/goals-ui_adb.html#robo569" class="indexitem" >CloseGoals</a>
+<a href="./ui/trades-ui_adb.html#robo796" class="indexitem" >CloseTrade</a>
+<h2><a name="D"></a>D</h2><a href="./ui/debugui_adb.html#robo510" class="indexitem" >DeleteEvent</a>
+<a href="./ui/mainmenu_adb.html#robo603" class="indexitem" >DeleteGame</a>
+<a href="./ui/messages-ui_adb.html#robo679" class="indexitem" >DeleteMessages</a>
+<a href="./ui/help-ui_adb.html#robo583" class="indexitem" >DisableMouse</a>
+<a href="./ui/ships-cargo-ui_adb.html#robo712" class="indexitem" >DropItem</a>
+<h2><a name="G"></a>G</h2><a href="./ui/combat-ui_adb.html#robo446" class="indexitem" >GetGunSpeed</a>
+<a href="./ui/bases-shipyardui_adb.html#robo401" class="indexitem" >GetModuleInfo</a>
+<a href="./ui/bases-shipyardui_adb.html#robo402" class="indexitem" >GetModuleType</a>
+<a href="./events_adb.html#robo544" class="indexitem" >GetPlayerShips</a>
+<a href="./ui/combat-ui_adb.html#robo447" class="indexitem" >GiveBoardingOrders</a>
+<a href="./ui/combat-ui_adb.html#robo448" class="indexitem" >GiveCombatOrders</a>
+<a href="./ui/ships-cargo-ui_adb.html#robo713" class="indexitem" >GiveItem</a>
+<a href="./ui/goals-ui_adb.html#robo571" class="indexitem" >GoalSelected</a>
+<h2><a name="H"></a>H</h2><a href="./ships-movement_adb.html#robo734" class="indexitem" >HaveOrderRequirements</a>
+<a href="./ui/goals-ui_adb.html#robo572" class="indexitem" >HideGoals</a>
+<a href="./ui/help-ui_adb.html#robo584" class="indexitem" >HideHelpWindow</a>
+<a href="./ui/bases-recruitui_adb.html#robo384" class="indexitem" >Hire</a>
+<h2><a name="L"></a>L</h2><a href="./ui/themes_adb.html#robo792" class="indexitem" >LoadCssText</a>
+<a href="./game_adb.html#robo556" class="indexitem" >LoadData</a>
+<a href="./ui/mainmenu_adb.html#robo604" class="indexitem" >LoadFile</a>
+<a href="./ui/mainmenu_adb.html#robo605" class="indexitem" >LoadGame</a>
+<a href="./ui/mainmenu_adb.html#robo606" class="indexitem" >LoadGameView</a>
+<a href="./ui/bases-lootui_adb.html#robo378" class="indexitem" >LootItem</a>
+<h2><a name="M"></a>M</h2><a href="./ui/bases-shipyardui_adb.html#robo403" class="indexitem" >ManipulateModule</a>
+<a href="./ui/debugui_adb.html#robo511" class="indexitem" >MoveShip</a>
+<h2><a name="N"></a>N</h2><a href="./ui/bases-recruitui_adb.html#robo385" class="indexitem" >NegotiateHire</a>
+<a href="./ui/mainmenu_adb.html#robo607" class="indexitem" >NewGame</a>
+<a href="./ui/mainmenu_adb.html#robo608" class="indexitem" >NewGameKeyPressed</a>
+<a href="./ui/combat-ui_adb.html#robo449" class="indexitem" >NextTurn</a>
+<h2><a name="O"></a>O</h2><a href="./ui/bases-ui_adb.html#robo419" class="indexitem" >ObjectSelected</a>
+<h2><a name="Q"></a>Q</h2><a href="./ui/mainmenu_adb.html#robo609" class="indexitem" >Quit</a>
+<h2><a name="R"></a>R</h2><a href="./ui/mainmenu_adb.html#robo610" class="indexitem" >RandomDifficulty</a>
+<a href="./ui/mainmenu_adb.html#robo611" class="indexitem" >RandomDifficultyToggled</a>
+<a href="./ui/mainmenu_adb.html#robo612" class="indexitem" >RandomName</a>
+<a href="./ui/crew-ui-handlers_adb.html#robo480" class="indexitem" >ReducePriority</a>
+<a href="./ui/combat-ui_adb.html#robo450" class="indexitem" >RefreshBoardingUI</a>
+<a href="./ui/ships-cargo-ui_adb.html#robo714" class="indexitem" >RefreshCargoInfo</a>
+<a href="./ui/combat-ui_adb.html#robo451" class="indexitem" >RefreshCombatUI</a>
+<a href="./ui/missions-ui_adb.html#robo695" class="indexitem" >RefreshMissionsList</a>
+<a href="./ui/mainmenu_adb.html#robo613" class="indexitem" >RefreshSavesList</a>
+<a href="./ui/debugui_adb.html#robo512" class="indexitem" >RefreshUI</a>
+<a href="./ui/debugui_adb.html#robo513" class="indexitem" >ResetWorldUI</a>
+<a href="./ui/gameoptions_adb.html#robo563" class="indexitem" >ResizeFont</a>
+<h2><a name="S"></a>S</h2><a href="./ui/debugui_adb.html#robo514" class="indexitem" >Save_Game</a>
+<a href="./ui/baseslist_adb.html#robo434" class="indexitem" >SearchBases</a>
+<a href="./ui/ships-cargo-ui_adb.html#robo715" class="indexitem" >SearchCargo</a>
+<a href="./ui/bases-lootui_adb.html#robo379" class="indexitem" >SearchLoot</a>
+<a href="./ui/messages-ui_adb.html#robo680" class="indexitem" >SearchMessages</a>
+<a href="./ui/bases-ui_adb.html#robo420" class="indexitem" >SearchRecipes</a>
+<a href="./ui/bases-shipyardui_adb.html#robo404" class="indexitem" >SearchShipyard</a>
+<a href="./ui/trades-ui_adb.html#robo798" class="indexitem" >SearchTrade</a>
+<a href="./stories_adb.html#robo787" class="indexitem" >SelectBase</a>
+<a href="./stories_adb.html#robo788" class="indexitem" >SelectEnemy</a>
+<a href="./ui/goals-ui_adb.html#robo573" class="indexitem" >SelectGoal</a>
+<a href="./ui/goals-ui_adb.html#robo574" class="indexitem" >SelectGoalView</a>
+<a href="./stories_adb.html#robo789" class="indexitem" >SelectLocation</a>
+<a href="./stories_adb.html#robo790" class="indexitem" >SelectLoot</a>
+<a href="./ui/messages-ui_adb.html#robo681" class="indexitem" >SelectMessages</a>
+<a href="./ui/help-ui_adb.html#robo585" class="indexitem" >SelectTopic</a>
+<a href="./ui/gameoptions_adb.html#robo564" class="indexitem" >SetAccelerator</a>
+<a href="./ui/ships-cargo-ui_adb.html#robo716" class="indexitem" >SetActiveItem</a>
+<a href="./ui/mainmenu_adb.html#robo614" class="indexitem" >SetBaseType</a>
+<a href="./ui/combat-ui_adb.html#robo452" class="indexitem" >SetBoardingOrder</a>
+<a href="./ui/combat-ui_adb.html#robo453" class="indexitem" >SetBoardingParty</a>
+<a href="./ui/debugui_adb.html#robo515" class="indexitem" >SetCargoAmount</a>
+<a href="./ui/crafts-ui_adb.html#robo462" class="indexitem" >SetCrafting</a>
+<a href="./ui/gameoptions_adb.html#robo565" class="indexitem" >SetDefaultFontSize</a>
+<a href="./ui/baseslist_adb.html#robo435" class="indexitem" >SetDestinationBase</a>
+<a href="./ui/mainmenu_adb.html#robo615" class="indexitem" >SetDifficulty</a>
+<a href="./ui/events-ui_adb.html#robo536" class="indexitem" >SetEventAsDestination</a>
+<a href="./ui/gameoptions_adb.html#robo566" class="indexitem" >SetFontsSizes</a>
+<a href="./ui/debugui_adb.html#robo516" class="indexitem" >SetMemberStats</a>
+<a href="./ui/debugui_adb.html#robo517" class="indexitem" >SetModuleStats</a>
+<a href="./ui/combat-ui_adb.html#robo454" class="indexitem" >SetOrdersList</a>
+<a href="./crafts_adb.html#robo470" class="indexitem" >SetRecipeData</a>
+<a href="./ui/bases-shipyardui_adb.html#robo405" class="indexitem" >SetRemoveModulesList</a>
+<a href="./ui/stories-ui_adb.html#robo777" class="indexitem" >SetStoryAsDestination</a>
+<a href="./ui/mainmenu_adb.html#robo616" class="indexitem" >ShowAllNews</a>
+<a href="./ui/ships-ui_adb.html#robo751" class="indexitem" >ShowAssignAmmo</a>
+<a href="./ui/ships-ui_adb.html#robo752" class="indexitem" >ShowAssignMember</a>
+<a href="./ui/missions-ui_adb.html#robo697" class="indexitem" >ShowAvailableMission</a>
+<a href="./ui/baseslist_adb.html#robo436" class="indexitem" >ShowBase</a>
+<a href="./ui/mainmenu_adb.html#robo617" class="indexitem" >ShowBaseDescription</a>
+<a href="./ui/baseslist_adb.html#robo437" class="indexitem" >ShowBaseInfo</a>
+<a href="./ui/debugui_adb.html#robo518" class="indexitem" >ShowBaseInfo</a>
+<a href="./ui/debugui_adb.html#robo519" class="indexitem" >ShowBasesTypes</a>
+<a href="./ui/mainmenu_adb.html#robo618" class="indexitem" >ShowCareerDescription</a>
+<a href="./ui/errordialog_adb.html#robo534" class="indexitem" >ShowErrorInfo</a>
+<a href="./ui/events-ui_adb.html#robo537" class="indexitem" >ShowEvent</a>
+<a href="./ui/events-ui_adb.html#robo538" class="indexitem" >ShowEventInfo</a>
+<a href="./ui/mainmenu_adb.html#robo619" class="indexitem" >ShowFactionDescription</a>
+<a href="./ui/mainmenu_adb.html#robo620" class="indexitem" >ShowGoals</a>
+<a href="./ui/statistics-ui_adb.html#robo766" class="indexitem" >ShowGoals</a>
+<a href="./ui/bases-shipyardui_adb.html#robo406" class="indexitem" >ShowInstallInfo</a>
+<a href="./ui/ships-cargo-ui_adb.html#robo718" class="indexitem" >ShowItemCargoInfo</a>
+<a href="./ui/debugui_adb.html#robo521" class="indexitem" >ShowItemEvent</a>
+<a href="./ui/bases-lootui_adb.html#robo380" class="indexitem" >ShowItemInfo</a>
+<a href="./ui/trades-ui_adb.html#robo799" class="indexitem" >ShowItemTradeInfo</a>
+<a href="./ui/messages-ui_adb.html#robo682" class="indexitem" >ShowMessages</a>
+<a href="./ui/missions-ui_adb.html#robo698" class="indexitem" >ShowMissionInfo</a>
+<a href="./ui/mainmenu_adb.html#robo622" class="indexitem" >ShowPage</a>
+<a href="./ui/crafts-ui_adb.html#robo464" class="indexitem" >ShowRecipeInfo</a>
+<a href="./ui/bases-recruitui_adb.html#robo386" class="indexitem" >ShowRecruitInfo</a>
+<a href="./ui/bases-shipyardui_adb.html#robo407" class="indexitem" >ShowRemoveInfo</a>
+<a href="./ui/crafts-ui_adb.html#robo465" class="indexitem" >ShowSetRecipe</a>
+<a href="./ui/stories-ui_adb.html#robo779" class="indexitem" >ShowStory</a>
+<a href="./ui/stories-ui_adb.html#robo780" class="indexitem" >ShowStoryInfo</a>
+<a href="./ui/bases-schoolui_adb.html#robo394" class="indexitem" >ShowTrainInfo</a>
+<a href="./ui/mainmenu_adb.html#robo623" class="indexitem" >StartGame</a>
+<a href="./ui/bases-recruitui_adb.html#robo388" class="indexitem" >StartNegotiations</a>
+<h2><a name="T"></a>T</h2><a href="./ui/gameoptions_adb.html#robo568" class="indexitem" >ToggleAnimationType</a>
+<a href="./ui/baseslist_adb.html#robo439" class="indexitem" >ToggleBaseInfo</a>
+<a href="./ui/help-ui_adb.html#robo587" class="indexitem" >ToggleTopics</a>
+<a href="./ui/trades-ui_adb.html#robo801" class="indexitem" >TradeItem</a>
+<a href="./ui/bases-schoolui_adb.html#robo395" class="indexitem" >TrainSelectedSkill</a>
+<h2><a name="U"></a>U</h2><a href="./ui/debugui_adb.html#robo522" class="indexitem" >UpdateAttribute</a>
+<a href="./ui/debugui_adb.html#robo523" class="indexitem" >UpdateBase</a>
+<a href="./ui/debugui_adb.html#robo524" class="indexitem" >UpdateCargoInfo</a>
+<a href="./ui/debugui_adb.html#robo525" class="indexitem" >UpdateCrew</a>
+<a href="./ui/mainmenu_adb.html#robo625" class="indexitem" >UpdateInfo</a>
+<a href="./ui/mainmenu_adb.html#robo626" class="indexitem" >UpdateInfoProc</a>
+<a href="./ui/debugui_adb.html#robo526" class="indexitem" >UpdateMember</a>
+<a href="./ui/combat-ui_adb.html#robo456" class="indexitem" >UpdateMessages</a>
+<a href="./ui/debugui_adb.html#robo527" class="indexitem" >UpdateModule</a>
+<a href="./ui/mainmenu_adb.html#robo627" class="indexitem" >UpdateNews</a>
+<a href="./ui/crew-ui-handlers_adb.html#robo485" class="indexitem" >UpdatePriorities</a>
+<a href="./ui/bases-recruitui_adb.html#robo389" class="indexitem" >UpdateRecruitList</a>
+<a href="./ui/debugui_adb.html#robo528" class="indexitem" >UpdateShip</a>
+<a href="./ui/debugui_adb.html#robo529" class="indexitem" >UpdateShipCargo</a>
+<a href="./ui/debugui_adb.html#robo530" class="indexitem" >UpdateSkill</a>
+<a href="./ui/mainmenu_adb.html#robo628" class="indexitem" >UpdateSummary</a>
+<h2><a name="V"></a>V</h2><a href="./ui/baseslist_adb.html#robo440" class="indexitem" >VisibleBases</a>
+<a href="./ui/ships-cargo-ui_adb.html#robo719" class="indexitem" >VisibleCargo</a>
+<a href="./ui/bases-lootui_adb.html#robo382" class="indexitem" >VisibleLoot</a>
+<a href="./ui/messages-ui_adb.html#robo684" class="indexitem" >VisibleMessages</a>
+<a href="./ui/bases-ui_adb.html#robo424" class="indexitem" >VisibleRecipes</a>
+<a href="./ui/bases-shipyardui_adb.html#robo409" class="indexitem" >VisibleShipyard</a>
+<a href="./ui/trades-ui_adb.html#robo802" class="indexitem" >VisibleTrade</a>
 <h2><a href="#A">A</a> - <a href="#B">B</a> - <a href="#C">C</a> - <a href="#D">D</a> - <a href="#E">E</a> - <a href="#F">F</a> - <a href="#G">G</a> - <a href="#H">H</a> - <a href="#I">I</a> - <a href="#J">J</a> - <a href="#K">K</a> - <a href="#L">L</a> - <a href="#M">M</a> - <a href="#N">N</a> - <a href="#O">O</a> - <a href="#P">P</a> - <a href="#Q">Q</a> - <a href="#R">R</a> - <a href="#S">S</a> - <a href="#T">T</a> - <a href="#U">U</a> - <a href="#V">V</a> - <a href="#W">W</a> - <a href="#X">X</a> - <a href="#Y">Y</a> - <a href="#Z">Z</a> - <a href="#0">0</a> - <a href="#1">1</a> - <a href="#2">2</a> - <a href="#3">3</a> - <a href="#4">4</a> - <a href="#5">5</a> - <a href="#6">6</a> - <a href="#7">7</a> - <a href="#8">8</a> - <a href="#9">9</a></h2>
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 26 2020 06:28:42
+<p>Generated from ./src/ with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 23 2020 06:34:42
 </p>
 </div> <!-- footer -->
 </body>

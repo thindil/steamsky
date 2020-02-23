@@ -8,11 +8,11 @@
 <link rel="stylesheet" href="./robodoc.css" type="text/css" />
 <title>./src/config.ads</title>
 <!-- Source: ./src/config.ads -->
-<!-- Generated with ROBODoc Version 4.99.43 (Jul 26 2019) -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  8 2020) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.6 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.7 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -29,15 +29,15 @@
 <ul>
 <li>1. <a href="#robo15">Steamsky/Config</a></li>
 <ul>
-<li>1.1. <a href="#robo83">Config/AutoMoveBreak</a></li>
-<li>1.2. <a href="#robo84">Config/AutoSaveType</a></li>
-<li>1.3. <a href="#robo85">Config/GameSettingsRecord</a></li>
-<li>1.4. <a href="#robo86">Config/MessagesOrderType</a></li>
-<li>1.5. <a href="#robo87">Config/NewGameRecord</a></li>
-<li>1.6. <a href="#robo212">Config/GameSettings</a></li>
-<li>1.7. <a href="#robo213">Config/NewGameSettings</a></li>
-<li>1.8. <a href="#robo456">Config/LoadConfig</a></li>
-<li>1.9. <a href="#robo457">Config/SaveConfig</a></li>
+<li>1.1. <a href="#robo84">Config/AutoMoveBreak</a></li>
+<li>1.2. <a href="#robo85">Config/AutoSaveType</a></li>
+<li>1.3. <a href="#robo86">Config/GameSettingsRecord</a></li>
+<li>1.4. <a href="#robo87">Config/MessagesOrderType</a></li>
+<li>1.5. <a href="#robo88">Config/NewGameRecord</a></li>
+<li>1.6. <a href="#robo213">Config/GameSettings</a></li>
+<li>1.7. <a href="#robo214">Config/NewGameSettings</a></li>
+<li>1.8. <a href="#robo459">Config/LoadConfig</a></li>
+<li>1.9. <a href="#robo460">Config/SaveConfig</a></li>
 </ul>
 </ul>
 <hr />
@@ -54,7 +54,7 @@
 
 <hr />
 <a name="Config2fAutoMoveBreak"></a>
-<a name="robo83"></a><h2>Config/AutoMoveBreak [ Types ]</h2>
+<a name="robo84"></a><h2>Config/AutoMoveBreak [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Config</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -66,7 +66,7 @@
 
 <hr />
 <a name="Config2fAutoSaveType"></a>
-<a name="robo84"></a><h2>Config/AutoSaveType [ Types ]</h2>
+<a name="robo85"></a><h2>Config/AutoSaveType [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Config</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -78,7 +78,7 @@
 
 <hr />
 <a name="Config2fGameSettingsRecord"></a>
-<a name="robo85"></a><h2>Config/GameSettingsRecord [ Types ]</h2>
+<a name="robo86"></a><h2>Config/GameSettingsRecord [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Config</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -87,14 +87,14 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> <strong>GameSettingsRecord</strong> <span class="keyword">is</span> <span class="keyword">record</span>
       AutoRest<span class="sign">:</span> Boolean<span class="sign">;</span>
-      UndockSpeed<span class="sign">:</span> <a href="./ships_ads.html#robo161">ShipSpeed</a><span class="sign">;</span>
+      UndockSpeed<span class="sign">:</span> <a href="./ships_ads.html#robo162">ShipSpeed</a><span class="sign">;</span>
       AutoCenter<span class="sign">:</span> Boolean<span class="sign">;</span>
       AutoReturn<span class="sign">:</span> Boolean<span class="sign">;</span>
       AutoFinish<span class="sign">:</span> Boolean<span class="sign">;</span>
       LowFuel<span class="sign">:</span> Positive<span class="sign">;</span>
       LowDrinks<span class="sign">:</span> Positive<span class="sign">;</span>
       LowFood<span class="sign">:</span> Positive<span class="sign">;</span>
-      AutoMoveStop<span class="sign">:</span> <a href="#robo83">AutoMoveBreak</a><span class="sign">;</span>
+      AutoMoveStop<span class="sign">:</span> <a href="#robo84">AutoMoveBreak</a><span class="sign">;</span>
       WindowWidth<span class="sign">:</span> Positive<span class="sign">;</span>
       WindowHeight<span class="sign">:</span> Positive<span class="sign">;</span>
       AnimationsEnabled<span class="sign">:</span> Natural<span class="sign">;</span>
@@ -105,7 +105,7 @@
       MapFontSize<span class="sign">:</span> Positive<span class="sign">;</span>
       InterfaceFontSize<span class="sign">:</span> Positive<span class="sign">;</span>
       InterfaceTheme<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      MessagesOrder<span class="sign">:</span> <a href="#robo86">MessagesOrderType</a><span class="sign">;</span>
+      MessagesOrder<span class="sign">:</span> <a href="#robo87">MessagesOrderType</a><span class="sign">;</span>
       AutoAskForBases<span class="sign">:</span> Boolean<span class="sign">;</span>
       AutoAskForEvents<span class="sign">:</span> Boolean<span class="sign">;</span>
       ShowTooltips<span class="sign">:</span> Boolean<span class="sign">;</span>
@@ -113,9 +113,9 @@
       MessagesPosition<span class="sign">:</span> Natural<span class="sign">;</span>
       FullScreen<span class="sign">:</span> Boolean<span class="sign">;</span>
       AutoCloseMessagesTime<span class="sign">:</span> Positive<span class="sign">;</span>
-      AutoSave<span class="sign">:</span> <a href="#robo84">AutoSaveType</a><span class="sign">;</span>
+      AutoSave<span class="sign">:</span> <a href="#robo85">AutoSaveType</a><span class="sign">;</span>
       TopicsPosition<span class="sign">:</span> Natural<span class="sign">;</span>
-      <a href="./ui/baseslist_adb.html#robo435">ShowBaseInfo</a><span class="sign">:</span> Boolean<span class="sign">;</span>
+      <a href="./ui/baseslist_adb.html#robo437">ShowBaseInfo</a><span class="sign">:</span> Boolean<span class="sign">;</span>
       ShowCargoInfo<span class="sign">:</span> Boolean<span class="sign">;</span>
       ShowInventoryInfo<span class="sign">:</span> Boolean<span class="sign">;</span>
       ShowNumbers<span class="sign">:</span> Boolean<span class="sign">;</span>
@@ -137,8 +137,8 @@
  LowFood               - Amount of food below which warning about low
                          level is show
  AutoMoveStop          - When stop automoving of player ship
- WindowWidth           - <a href="./game_ads.html#robo26">Game</a> window default width
- WindowHeight          - <a href="./game_ads.html#robo26">Game</a> window default height
+ WindowWidth           - <a href="./game_ads.html#robo27">Game</a> window default width
+ WindowHeight          - <a href="./game_ads.html#robo27">Game</a> window default height
  AnimationsEnabled     - If 1 then UI animations are enabled, disabled
                          when 0
  AnimationType         - Type of animation used to move between views
@@ -162,7 +162,7 @@
  AutoSave              - How often game is autosaved
  TopicPosition         - Position of help topics window in pixels from
                          top of the help window
- <a href="./ui/baseslist_adb.html#robo435">ShowBaseInfo</a>          - If true, show detailed information about
+ <a href="./ui/baseslist_adb.html#robo437">ShowBaseInfo</a>          - If true, show detailed information about
                          selected base in bases list
  ShowCargoInfo         - If true, show detailed information about
                          selected item in player ship cargo
@@ -174,7 +174,7 @@
 
 <hr />
 <a name="Config2fMessagesOrderType"></a>
-<a name="robo86"></a><h2>Config/MessagesOrderType [ Types ]</h2>
+<a name="robo87"></a><h2>Config/MessagesOrderType [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Config</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -186,7 +186,7 @@
 
 <hr />
 <a name="Config2fNewGameRecord"></a>
-<a name="robo87"></a><h2>Config/NewGameRecord [ Types ]</h2>
+<a name="robo88"></a><h2>Config/NewGameRecord [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Config</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -198,7 +198,7 @@
       PlayerGender<span class="sign">:</span> Character<span class="sign">;</span>
       ShipName<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       PlayerFaction<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      <a href="./game_ads.html#robo262">PlayerCareer</a><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      <a href="./game_ads.html#robo263">PlayerCareer</a><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       StartingBase<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       EnemyDamageBonus<span class="sign">:</span> Float<span class="sign">;</span>
       PlayerDamageBonus<span class="sign">:</span> Float<span class="sign">;</span>
@@ -216,7 +216,7 @@
  PlayerGender           - Default player gender
  ShipName               - Default ship name
  PlayerFaction          - Default player faction index
- <a href="./game_ads.html#robo262">PlayerCareer</a>           - Default player career index
+ <a href="./game_ads.html#robo263">PlayerCareer</a>           - Default player career index
  StartingBase           - Default starting base type
  EnemyDamageBonus       - Default bonus for enemy ship to damage
  PlayerDamageBonus      - Default bonus for player ship to damage
@@ -235,31 +235,31 @@
 
 <hr />
 <a name="Config2fGameSettings"></a>
-<a name="robo212"></a><h2>Config/GameSettings [ Variables ]</h2>
+<a name="robo213"></a><h2>Config/GameSettings [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Config</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> General settings for the game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>GameSettings</strong><span class="sign">:</span> <a href="#robo85">GameSettingsRecord</a><span class="sign">;</span>
+<pre class="source">   <strong>GameSettings</strong><span class="sign">:</span> <a href="#robo86">GameSettingsRecord</a><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Config2fNewGameSettings"></a>
-<a name="robo213"></a><h2>Config/NewGameSettings [ Variables ]</h2>
+<a name="robo214"></a><h2>Config/NewGameSettings [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Config</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Settings for the new game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>NewGameSettings</strong><span class="sign">:</span> <a href="#robo87">NewGameRecord</a><span class="sign">;</span>
+<pre class="source">   <strong>NewGameSettings</strong><span class="sign">:</span> <a href="#robo88">NewGameRecord</a><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Config2fLoadConfig"></a>
-<a name="robo456"></a><h2>Config/LoadConfig [ Subprograms ]</h2>
+<a name="robo459"></a><h2>Config/LoadConfig [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Config</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -271,7 +271,7 @@
 
 <hr />
 <a name="Config2fSaveConfig"></a>
-<a name="robo457"></a><h2>Config/SaveConfig [ Subprograms ]</h2>
+<a name="robo460"></a><h2>Config/SaveConfig [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Config</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -283,7 +283,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/config.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 26 2020 06:28:42
+<p>Generated from ./src/config.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 23 2020 06:34:42
 </p>
 </div> <!-- footer -->
 </body>

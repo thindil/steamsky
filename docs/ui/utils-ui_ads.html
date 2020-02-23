@@ -8,11 +8,11 @@
 <link rel="stylesheet" href="../robodoc.css" type="text/css" />
 <title>./src/ui/utils-ui.ads</title>
 <!-- Source: ./src/ui/utils-ui.ads -->
-<!-- Generated with ROBODoc Version 4.99.43 (Jul 26 2019) -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  8 2020) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.6 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.7 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -27,37 +27,38 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo64">Steamsky/Utils.UI</a></li>
+<li>1. <a href="#robo65">Steamsky/Utils.UI</a></li>
 <ul>
-<li>1.1. <a href="#robo182">Utils.UI/GameStates</a></li>
-<li>1.2. <a href="./utils-ui_adb.html#robo340">Utils.UI/Builder</a></li>
-<li>1.3. <a href="#robo341">Utils.UI/PreviousGameState</a></li>
-<li>1.4. <a href="./utils-ui_adb.html#robo342">Utils.UI/Source_Id</a></li>
-<li>1.5. <a href="./utils-ui_adb.html#robo799">Utils.UI/AutoHideDialog</a></li>
-<li>1.6. <a href="#robo800">Utils.UI/CheckAmount</a></li>
-<li>1.7. <a href="#robo801">Utils.UI/CloseMessages</a></li>
-<li>1.8. <a href="#robo802">Utils.UI/CloseWindow</a></li>
-<li>1.9. <a href="#robo803">Utils.UI/HideDialog</a></li>
-<li>1.10. <a href="#robo804">Utils.UI/HideItemInfo</a></li>
-<li>1.11. <a href="#robo805">Utils.UI/HideWindow</a></li>
-<li>1.12. <a href="#robo806">Utils.UI/MinutesToDate</a></li>
-<li>1.13. <a href="#robo807">Utils.UI/QuitGame</a></li>
-<li>1.14. <a href="#robo808">Utils.UI/RemoveWidget</a></li>
-<li>1.15. <a href="#robo809">Utils.UI/SelectElement</a></li>
-<li>1.16. <a href="#robo810">Utils.UI/SetUtilsBuilder</a></li>
-<li>1.17. <a href="#robo811">Utils.UI/ShowConfirmDialog</a></li>
-<li>1.18. <a href="#robo812">Utils.UI/ShowDialog</a></li>
-<li>1.19. <a href="#robo813">Utils.UI/ShowInventoryItemInfo</a></li>
-<li>1.20. <a href="#robo814">Utils.UI/ShowPopupMenu</a></li>
-<li>1.21. <a href="#robo815">Utils.UI/ShowPopupMenuButton</a></li>
-<li>1.22. <a href="#robo816">Utils.UI/ShowWindow</a></li>
-<li>1.23. <a href="#robo817">Utils.UI/TravelInfo</a></li>
-<li>1.24. <a href="#robo818">Utils.UI/UpdateMessages</a></li>
+<li>1.1. <a href="#robo183">Utils.UI/GameStates</a></li>
+<li>1.2. <a href="./utils-ui_adb.html#robo341">Utils.UI/Builder</a></li>
+<li>1.3. <a href="#robo342">Utils.UI/MessageBox</a></li>
+<li>1.4. <a href="#robo343">Utils.UI/PreviousGameState</a></li>
+<li>1.5. <a href="./utils-ui_adb.html#robo344">Utils.UI/Source_Id</a></li>
+<li>1.6. <a href="./utils-ui_adb.html#robo806">Utils.UI/AutoHideDialog</a></li>
+<li>1.7. <a href="#robo807">Utils.UI/CheckAmount</a></li>
+<li>1.8. <a href="#robo808">Utils.UI/CloseMessages</a></li>
+<li>1.9. <a href="#robo809">Utils.UI/CloseWindow</a></li>
+<li>1.10. <a href="#robo810">Utils.UI/HideDialog</a></li>
+<li>1.11. <a href="#robo811">Utils.UI/HideItemInfo</a></li>
+<li>1.12. <a href="#robo812">Utils.UI/HideWindow</a></li>
+<li>1.13. <a href="#robo813">Utils.UI/MinutesToDate</a></li>
+<li>1.14. <a href="#robo814">Utils.UI/QuitGame</a></li>
+<li>1.15. <a href="#robo815">Utils.UI/RemoveWidget</a></li>
+<li>1.16. <a href="#robo816">Utils.UI/SelectElement</a></li>
+<li>1.17. <a href="#robo817">Utils.UI/SetUtilsBuilder</a></li>
+<li>1.18. <a href="#robo818">Utils.UI/ShowConfirmDialog</a></li>
+<li>1.19. <a href="#robo819">Utils.UI/ShowDialog</a></li>
+<li>1.20. <a href="#robo820">Utils.UI/ShowInventoryItemInfo</a></li>
+<li>1.21. <a href="#robo821">Utils.UI/ShowPopupMenu</a></li>
+<li>1.22. <a href="#robo822">Utils.UI/ShowPopupMenuButton</a></li>
+<li>1.23. <a href="#robo823">Utils.UI/ShowWindow</a></li>
+<li>1.24. <a href="#robo824">Utils.UI/TravelInfo</a></li>
+<li>1.25. <a href="#robo825">Utils.UI/UpdateMessages</a></li>
 </ul>
 </ul>
 <hr />
 <a name="Steamsky2fUtils2eUI"></a>
-<a name="robo64"></a><h2>Steamsky/Utils.UI [ Packages ]</h2>
+<a name="robo65"></a><h2>Steamsky/Utils.UI [ Packages ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -69,33 +70,45 @@
 
 <hr />
 <a name="Utils2eUI2fGameStates"></a>
-<a name="robo182"></a><h2>Utils.UI/GameStates [ Types ]</h2>
+<a name="robo183"></a><h2>Utils.UI/GameStates [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils.UI</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> <a href="../game_ads.html#robo26">Game</a> states
+<pre> <a href="../game_ads.html#robo27">Game</a> states
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> <strong>GameStates</strong> <span class="keyword">is</span> <span class="sign">(</span>SkyMap_View<span class="sign">,</span> Combat_View<span class="sign">,</span> Main_Menu<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Utils2eUI2fPreviousGameState"></a>
-<a name="robo341"></a><h2>Utils.UI/PreviousGameState [ Variables ]</h2>
+<a name="Utils2eUI2fMessageBox"></a>
+<a name="robo342"></a><h2>Utils.UI/MessageBox [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils.UI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Dialog used to show messages to the player
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>MessageBox</strong><span class="sign">:</span> Gtk_Info_Bar<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Utils2eUI2fPreviousGameState"></a>
+<a name="robo343"></a><h2>Utils.UI/PreviousGameState [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Current game state, needed for hide some windows
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>PreviousGameState</strong><span class="sign">:</span> <a href="#robo182">GameStates</a><span class="sign">;</span>
+<pre class="source">   <strong>PreviousGameState</strong><span class="sign">:</span> <a href="#robo183">GameStates</a><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Utils2eUI2fCheckAmount"></a>
-<a name="robo800"></a><h2>Utils.UI/CheckAmount [ Subprograms ]</h2>
+<a name="robo807"></a><h2>Utils.UI/CheckAmount [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Check did entered amount in text field don't drop below low level warnings
 </pre>
@@ -108,9 +121,9 @@
 
 <hr />
 <a name="Utils2eUI2fCloseMessages"></a>
-<a name="robo801"></a><h2>Utils.UI/CloseMessages [ Subprograms ]</h2>
+<a name="robo808"></a><h2>Utils.UI/CloseMessages [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Switch back to skymap or combat from info
 </pre>
@@ -123,9 +136,9 @@
 
 <hr />
 <a name="Utils2eUI2fCloseWindow"></a>
-<a name="robo802"></a><h2>Utils.UI/CloseWindow [ Subprograms ]</h2>
+<a name="robo809"></a><h2>Utils.UI/CloseWindow [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Close window on press Escape key
 </pre>
@@ -135,7 +148,7 @@
      <span class="keyword"> return </span>Boolean<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Self  - <a href="../game_ads.html#robo26">Game</a> window to close
+<pre> Self  - <a href="../game_ads.html#robo27">Game</a> window to close
  Event - Detailed info about keyboard event
 </pre>
 <p class="item_name">RESULT</p>
@@ -144,24 +157,26 @@
 
 <hr />
 <a name="Utils2eUI2fHideDialog"></a>
-<a name="robo803"></a><h2>Utils.UI/HideDialog [ Subprograms ]</h2>
+<a name="robo810"></a><h2>Utils.UI/HideDialog [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Close dialog window and stop auto close timer
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>HideDialog</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
+<pre class="source">   <span class="keyword">procedure</span> <strong>HideDialog</strong>
+     <span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Info_Bar_Record<span class="keyword">'Class</span><span class="sign">;</span> Response_Id<span class="sign">:</span> Glib.Gint<span class="sign"><span class="sign">)</span>;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
+<pre> Self        - Gtk_Info_Bar to hide
+ Response_Id - Gtk response id. Unused.
 </pre>
 
 <hr />
 <a name="Utils2eUI2fHideItemInfo"></a>
-<a name="robo804"></a><h2>Utils.UI/HideItemInfo [ Subprograms ]</h2>
+<a name="robo811"></a><h2>Utils.UI/HideItemInfo [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Hide or show detailed item info
 </pre>
@@ -174,9 +189,9 @@
 
 <hr />
 <a name="Utils2eUI2fHideWindow"></a>
-<a name="robo805"></a><h2>Utils.UI/HideWindow [ Subprograms ]</h2>
+<a name="robo812"></a><h2>Utils.UI/HideWindow [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Hide window instead of destroying it
 </pre>
@@ -192,9 +207,9 @@
 
 <hr />
 <a name="Utils2eUI2fMinutesToDate"></a>
-<a name="robo806"></a><h2>Utils.UI/MinutesToDate [ Subprograms ]</h2>
+<a name="robo813"></a><h2>Utils.UI/MinutesToDate [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Convert minutes to game date and add it to text
 </pre>
@@ -212,9 +227,9 @@
 
 <hr />
 <a name="Utils2eUI2fQuitGame"></a>
-<a name="robo807"></a><h2>Utils.UI/QuitGame [ Subprograms ]</h2>
+<a name="robo814"></a><h2>Utils.UI/QuitGame [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Save and quit from game
 </pre>
@@ -230,9 +245,9 @@
 
 <hr />
 <a name="Utils2eUI2fRemoveWidget"></a>
-<a name="robo808"></a><h2>Utils.UI/RemoveWidget [ Subprograms ]</h2>
+<a name="robo815"></a><h2>Utils.UI/RemoveWidget [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Remove selected widget
 </pre>
@@ -245,9 +260,9 @@
 
 <hr />
 <a name="Utils2eUI2fSelectElement"></a>
-<a name="robo809"></a><h2>Utils.UI/SelectElement [ Subprograms ]</h2>
+<a name="robo816"></a><h2>Utils.UI/SelectElement [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Select other element on press Return key
 </pre>
@@ -265,11 +280,11 @@
 
 <hr />
 <a name="Utils2eUI2fSetUtilsBuilder"></a>
-<a name="robo810"></a><h2>Utils.UI/SetUtilsBuilder [ Subprograms ]</h2>
+<a name="robo817"></a><h2>Utils.UI/SetUtilsBuilder [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Set Gtk <a href="./utils-ui_adb.html#robo340">Builder</a> for <a href="../utils_ads.html#robo63">Utils</a> package
+<pre> Set Gtk <a href="./maps-ui_ads.html#robo303">Builder</a> for <a href="../utils_ads.html#robo64">Utils</a> package
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>SetUtilsBuilder</strong><span class="sign">(</span>NewBuilder<span class="sign">:</span> Gtkada_Builder<span class="sign">)</span><span class="sign">;</span>
@@ -280,9 +295,9 @@
 
 <hr />
 <a name="Utils2eUI2fShowConfirmDialog"></a>
-<a name="robo811"></a><h2>Utils.UI/ShowConfirmDialog [ Subprograms ]</h2>
+<a name="robo818"></a><h2>Utils.UI/ShowConfirmDialog [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show confirmation dialog to player
 </pre>
@@ -301,9 +316,9 @@
 
 <hr />
 <a name="Utils2eUI2fShowDialog"></a>
-<a name="robo812"></a><h2>Utils.UI/ShowDialog [ Subprograms ]</h2>
+<a name="robo819"></a><h2>Utils.UI/ShowDialog [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show dialog with info
 </pre>
@@ -317,29 +332,29 @@
 
 <hr />
 <a name="Utils2eUI2fShowInventoryItemInfo"></a>
-<a name="robo813"></a><h2>Utils.UI/ShowInventoryItemInfo [ Subprograms ]</h2>
+<a name="robo820"></a><h2>Utils.UI/ShowInventoryItemInfo [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show info about selected item in ship cargo or crew member inventory
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>ShowInventoryItemInfo</strong>
-     <span class="sign">(</span>Label<span class="sign">:</span> Gtk_Label<span class="sign">;</span> <a href="./crew-ui_ads.html#robo217">ItemIndex</a><span class="sign">:</span> Positive<span class="sign">;</span> <a href="./crew-ui_ads.html#robo217">MemberIndex</a><span class="sign">:</span> Natural<span class="sign">)</span> with
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="./crew-ui_ads.html#robo217">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="../ships_ads.html#robo326">PlayerShip</a><span class="sign">.</span><a href="../crew_ads.html#robo18">Crew</a><span class="sign">.</span>Last_Index<span class="sign">;</span>
+     <span class="sign">(</span>Label<span class="sign">:</span> Gtk_Label<span class="sign">;</span> <a href="./ships-cargo-ui_adb.html#robo323">ItemIndex</a><span class="sign">:</span> Positive<span class="sign">;</span> <a href="./crew-ui_ads.html#robo218">MemberIndex</a><span class="sign">:</span> Natural<span class="sign">)</span> with
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="./crew-ui_ads.html#robo218">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="../ships_ads.html#robo327">PlayerShip</a><span class="sign">.</span><a href="../crew_ads.html#robo18">Crew</a><span class="sign">.</span>Last_Index<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Label       - Gtk_Label which text will be set
- <a href="./crew-ui_ads.html#robo217">ItemIndex</a>   - Index of item (can be inventory or ship cargo)
- <a href="./crew-ui_ads.html#robo217">MemberIndex</a> - If item is in crew member inventory, crew index of member,
+ <a href="./ships-cargo-ui_adb.html#robo323">ItemIndex</a>   - Index of item (can be inventory or ship cargo)
+ <a href="./crew-ui_ads.html#robo218">MemberIndex</a> - If item is in crew member inventory, crew index of member,
                otherwise 0
 </pre>
 
 <hr />
 <a name="Utils2eUI2fShowPopupMenu"></a>
-<a name="robo814"></a><h2>Utils.UI/ShowPopupMenu [ Subprograms ]</h2>
+<a name="robo821"></a><h2>Utils.UI/ShowPopupMenu [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show popup menu for selected widget
 </pre>
@@ -356,9 +371,9 @@
 
 <hr />
 <a name="Utils2eUI2fShowPopupMenuButton"></a>
-<a name="robo815"></a><h2>Utils.UI/ShowPopupMenuButton [ Subprograms ]</h2>
+<a name="robo822"></a><h2>Utils.UI/ShowPopupMenuButton [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show popup menu on click of right mouse button
 </pre>
@@ -377,9 +392,9 @@
 
 <hr />
 <a name="Utils2eUI2fShowWindow"></a>
-<a name="robo816"></a><h2>Utils.UI/ShowWindow [ Subprograms ]</h2>
+<a name="robo823"></a><h2>Utils.UI/ShowWindow [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show selected window
 </pre>
@@ -392,9 +407,9 @@
 
 <hr />
 <a name="Utils2eUI2fTravelInfo"></a>
-<a name="robo817"></a><h2>Utils.UI/TravelInfo [ Subprograms ]</h2>
+<a name="robo824"></a><h2>Utils.UI/TravelInfo [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Add info about travel eta and approx fuel usage
 </pre>
@@ -414,9 +429,9 @@
 
 <hr />
 <a name="Utils2eUI2fUpdateMessages"></a>
-<a name="robo818"></a><h2>Utils.UI/UpdateMessages [ Subprograms ]</h2>
+<a name="robo825"></a><h2>Utils.UI/UpdateMessages [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Utils.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update game messages and last message
 </pre>
@@ -426,7 +441,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/utils-ui.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 26 2020 06:28:42
+<p>Generated from ./src/ui/utils-ui.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 23 2020 06:34:41
 </p>
 </div> <!-- footer -->
 </body>

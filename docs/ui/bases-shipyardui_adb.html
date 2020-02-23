@@ -8,11 +8,11 @@
 <link rel="stylesheet" href="../robodoc.css" type="text/css" />
 <title>./src/ui/bases-shipyardui.adb</title>
 <!-- Source: ./src/ui/bases-shipyardui.adb -->
-<!-- Generated with ROBODoc Version 4.99.43 (Jul 26 2019) -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  8 2020) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.6 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.7 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -27,19 +27,19 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo186">Bases.ShipyardUI/ModuleIndex</a></li>
-<li>2. <a href="#robo399">Bases.ShipyardUI/GetModuleInfo</a></li>
-<li>3. <a href="#robo400">Bases.ShipyardUI/GetModuleType</a></li>
-<li>4. <a href="#robo401">Bases.ShipyardUI/ManipulateModule</a></li>
-<li>5. <a href="#robo402">Bases.ShipyardUI/SearchShipyard</a></li>
-<li>6. <a href="#robo403">Bases.ShipyardUI/SetRemoveModulesList</a></li>
-<li>7. <a href="#robo404">Bases.ShipyardUI/ShowInstallInfo</a></li>
-<li>8. <a href="#robo405">Bases.ShipyardUI/ShowRemoveInfo</a></li>
-<li>9. <a href="#robo407">Bases.ShipyardUI/VisibleShipyard</a></li>
+<li>1. <a href="#robo187">Bases.ShipyardUI/ModuleIndex</a></li>
+<li>2. <a href="#robo401">Bases.ShipyardUI/GetModuleInfo</a></li>
+<li>3. <a href="#robo402">Bases.ShipyardUI/GetModuleType</a></li>
+<li>4. <a href="#robo403">Bases.ShipyardUI/ManipulateModule</a></li>
+<li>5. <a href="#robo404">Bases.ShipyardUI/SearchShipyard</a></li>
+<li>6. <a href="#robo405">Bases.ShipyardUI/SetRemoveModulesList</a></li>
+<li>7. <a href="#robo406">Bases.ShipyardUI/ShowInstallInfo</a></li>
+<li>8. <a href="#robo407">Bases.ShipyardUI/ShowRemoveInfo</a></li>
+<li>9. <a href="#robo409">Bases.ShipyardUI/VisibleShipyard</a></li>
 </ul>
 <hr />
 <a name="Bases2eShipyardUI2fModuleIndex"></a>
-<a name="robo186"></a><h2>Bases.ShipyardUI/ModuleIndex [ Variables ]</h2>
+<a name="robo187"></a><h2>Bases.ShipyardUI/ModuleIndex [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo7">Bases.ShipyardUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">SOURCE</p>
@@ -48,7 +48,7 @@
 
 <hr />
 <a name="Bases2eShipyardUI2fGetModuleInfo"></a>
-<a name="robo399"></a><h2>Bases.ShipyardUI/GetModuleInfo [ Subprograms ]</h2>
+<a name="robo401"></a><h2>Bases.ShipyardUI/GetModuleInfo [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo7">Bases.ShipyardUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -68,24 +68,24 @@
 
 <hr />
 <a name="Bases2eShipyardUI2fGetModuleType"></a>
-<a name="robo400"></a><h2>Bases.ShipyardUI/GetModuleType [ Subprograms ]</h2>
+<a name="robo402"></a><h2>Bases.ShipyardUI/GetModuleType [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo7">Bases.ShipyardUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get type of selected module
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>GetModuleType</strong><span class="sign">(</span><a href="#robo186">ModuleIndex</a><span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">is</span>
+<pre class="source">   <span class="keyword">function</span> <strong>GetModuleType</strong><span class="sign">(</span><a href="./ships-ui_ads.html#robo325">ModuleIndex</a><span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">is</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="#robo186">ModuleIndex</a> - Index of module in prototypes list
+<pre> <a href="./ships-ui_ads.html#robo325">ModuleIndex</a> - Index of module in prototypes list
  RETURNS
  Formatted type of module
 </pre>
 
 <hr />
 <a name="Bases2eShipyardUI2fManipulateModule"></a>
-<a name="robo401"></a><h2>Bases.ShipyardUI/ManipulateModule [ Subprograms ]</h2>
+<a name="robo403"></a><h2>Bases.ShipyardUI/ManipulateModule [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo7">Bases.ShipyardUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -100,7 +100,7 @@
 
 <hr />
 <a name="Bases2eShipyardUI2fSearchShipyard"></a>
-<a name="robo402"></a><h2>Bases.ShipyardUI/SearchShipyard [ Subprograms ]</h2>
+<a name="robo404"></a><h2>Bases.ShipyardUI/SearchShipyard [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo7">Bases.ShipyardUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -115,7 +115,7 @@
 
 <hr />
 <a name="Bases2eShipyardUI2fSetRemoveModulesList"></a>
-<a name="robo403"></a><h2>Bases.ShipyardUI/SetRemoveModulesList [ Subprograms ]</h2>
+<a name="robo405"></a><h2>Bases.ShipyardUI/SetRemoveModulesList [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo7">Bases.ShipyardUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -127,7 +127,7 @@
 
 <hr />
 <a name="Bases2eShipyardUI2fShowInstallInfo"></a>
-<a name="robo404"></a><h2>Bases.ShipyardUI/ShowInstallInfo [ Subprograms ]</h2>
+<a name="robo406"></a><h2>Bases.ShipyardUI/ShowInstallInfo [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo7">Bases.ShipyardUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -142,7 +142,7 @@
 
 <hr />
 <a name="Bases2eShipyardUI2fShowRemoveInfo"></a>
-<a name="robo405"></a><h2>Bases.ShipyardUI/ShowRemoveInfo [ Subprograms ]</h2>
+<a name="robo407"></a><h2>Bases.ShipyardUI/ShowRemoveInfo [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo7">Bases.ShipyardUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -157,7 +157,7 @@
 
 <hr />
 <a name="Bases2eShipyardUI2fVisibleShipyard"></a>
-<a name="robo407"></a><h2>Bases.ShipyardUI/VisibleShipyard [ Subprograms ]</h2>
+<a name="robo409"></a><h2>Bases.ShipyardUI/VisibleShipyard [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-shipyardui_ads.html#robo7">Bases.ShipyardUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -177,7 +177,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/bases-shipyardui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 26 2020 06:28:42
+<p>Generated from ./src/ui/bases-shipyardui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 23 2020 06:34:42
 </p>
 </div> <!-- footer -->
 </body>
