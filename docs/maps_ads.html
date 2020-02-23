@@ -8,11 +8,11 @@
 <link rel="stylesheet" href="./robodoc.css" type="text/css" />
 <title>./src/maps.ads</title>
 <!-- Source: ./src/maps.ads -->
-<!-- Generated with ROBODoc Version 4.99.43 (Jul 26 2019) -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  8 2020) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.6 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.7 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -27,17 +27,17 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo37">Steamsky/Maps</a></li>
+<li>1. <a href="#robo38">Steamsky/Maps</a></li>
 <ul>
-<li>1.1. <a href="#robo133">Maps/SkyCell</a></li>
-<li>1.2. <a href="#robo314">Maps/SkyMap</a></li>
-<li>1.3. <a href="#robo669">Maps/CountDistance</a></li>
-<li>1.4. <a href="#robo670">Maps/NormalizeCoord</a></li>
+<li>1.1. <a href="#robo134">Maps/SkyCell</a></li>
+<li>1.2. <a href="#robo315">Maps/SkyMap</a></li>
+<li>1.3. <a href="#robo676">Maps/CountDistance</a></li>
+<li>1.4. <a href="#robo677">Maps/NormalizeCoord</a></li>
 </ul>
 </ul>
 <hr />
 <a name="Steamsky2fMaps"></a>
-<a name="robo37"></a><h2>Steamsky/Maps [ Packages ]</h2>
+<a name="robo38"></a><h2>Steamsky/Maps [ Packages ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -49,44 +49,44 @@
 
 <hr />
 <a name="Maps2fSkyCell"></a>
-<a name="robo133"></a><h2>Maps/SkyCell [ Types ]</h2>
+<a name="robo134"></a><h2>Maps/SkyCell [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo37">Maps</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Maps</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data structure for cells in game map
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> <strong>SkyCell</strong> <span class="keyword">is</span> <span class="keyword">record</span>
-      <a href="./ui/baseslist_adb.html#robo193">BaseIndex</a><span class="sign">:</span> Natural<span class="sign">;</span>
+      <a href="./ui/baseslist_adb.html#robo194">BaseIndex</a><span class="sign">:</span> Natural<span class="sign">;</span>
       Visited<span class="sign">:</span> Boolean<span class="sign">;</span>
-      <a href="./ui/events-ui_adb.html#robo232">EventIndex</a><span class="sign">:</span> Natural<span class="sign">;</span>
-      <a href="./ui/missions-ui_adb.html#robo318">MissionIndex</a><span class="sign">:</span> Natural<span class="sign">;</span>
+      <a href="./ui/events-ui_adb.html#robo233">EventIndex</a><span class="sign">:</span> Natural<span class="sign">;</span>
+      <a href="./ui/missions-ui_adb.html#robo319">MissionIndex</a><span class="sign">:</span> Natural<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./ui/baseslist_adb.html#robo193">BaseIndex</a>    - If sky base is in cell &gt; 0
+<pre> <a href="./ui/baseslist_adb.html#robo194">BaseIndex</a>    - If sky base is in cell &gt; 0
  Visited      - True if player was in this cell
- <a href="./ui/events-ui_adb.html#robo232">EventIndex</a>   - If event is in cell &gt; 0
- <a href="./ui/missions-ui_adb.html#robo318">MissionIndex</a> - If accepted mission is in cell &gt; 0
+ <a href="./ui/events-ui_adb.html#robo233">EventIndex</a>   - If event is in cell &gt; 0
+ <a href="./ui/missions-ui_adb.html#robo319">MissionIndex</a> - If accepted mission is in cell &gt; 0
 </pre>
 
 <hr />
 <a name="Maps2fSkyMap"></a>
-<a name="robo314"></a><h2>Maps/SkyMap [ Variables ]</h2>
+<a name="robo315"></a><h2>Maps/SkyMap [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo37">Maps</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Maps</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> <a href="./game_ads.html#robo26">Game</a> map
+<pre> <a href="./game_ads.html#robo27">Game</a> map
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>SkyMap</strong><span class="sign">:</span> array<span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 1024<span class="sign">,</span> 1 <span class="sign">.</span><span class="sign">.</span> 1024<span class="sign">)</span> of <a href="#robo133">SkyCell</a><span class="sign">;</span>
+<pre class="source">   <strong>SkyMap</strong><span class="sign">:</span> array<span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 1024<span class="sign">,</span> 1 <span class="sign">.</span><span class="sign">.</span> 1024<span class="sign">)</span> of <a href="#robo134">SkyCell</a><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Maps2fCountDistance"></a>
-<a name="robo669"></a><h2>Maps/CountDistance [ Subprograms ]</h2>
+<a name="robo676"></a><h2>Maps/CountDistance [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo37">Maps</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Maps</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Count distance (in map fields) between player ship and the destination
  point
@@ -107,9 +107,9 @@
 
 <hr />
 <a name="Maps2fNormalizeCoord"></a>
-<a name="robo670"></a><h2>Maps/NormalizeCoord [ Subprograms ]</h2>
+<a name="robo677"></a><h2>Maps/NormalizeCoord [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo37">Maps</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Maps</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Normalize map coordinates
 </pre>
@@ -128,7 +128,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/maps.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 26 2020 06:28:42
+<p>Generated from ./src/maps.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 23 2020 06:34:41
 </p>
 </div> <!-- footer -->
 </body>

@@ -8,11 +8,11 @@
 <link rel="stylesheet" href="./robodoc.css" type="text/css" />
 <title>./src/statistics.ads</title>
 <!-- Source: ./src/statistics.ads -->
-<!-- Generated with ROBODoc Version 4.99.43 (Jul 26 2019) -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  8 2020) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.6 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.7 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -27,24 +27,24 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo56">Steamsky/Statistics</a></li>
+<li>1. <a href="#robo57">Steamsky/Statistics</a></li>
 <ul>
-<li>1.1. <a href="#robo163">Statistics/GameStats_Data</a></li>
-<li>1.2. <a href="#robo164">Statistics/Statistics_Container</a></li>
-<li>1.3. <a href="#robo165">Statistics/Statistics_Data</a></li>
-<li>1.4. <a href="#robo331">Statistics/GameStats</a></li>
-<li>1.5. <a href="#robo762">Statistics/ClearGameStats</a></li>
-<li>1.6. <a href="#robo763">Statistics/GetGamePoints</a></li>
-<li>1.7. <a href="#robo764">Statistics/UpdateCraftingOrders</a></li>
-<li>1.8. <a href="#robo765">Statistics/UpdateDestroyedShips</a></li>
-<li>1.9. <a href="#robo766">Statistics/UpdateFinishedGoals</a></li>
-<li>1.10. <a href="#robo767">Statistics/UpdateFinishedMissions</a></li>
-<li>1.11. <a href="#robo768">Statistics/UpdateKilledMobs</a></li>
+<li>1.1. <a href="#robo164">Statistics/GameStats_Data</a></li>
+<li>1.2. <a href="#robo165">Statistics/Statistics_Container</a></li>
+<li>1.3. <a href="#robo166">Statistics/Statistics_Data</a></li>
+<li>1.4. <a href="#robo332">Statistics/GameStats</a></li>
+<li>1.5. <a href="#robo769">Statistics/ClearGameStats</a></li>
+<li>1.6. <a href="#robo770">Statistics/GetGamePoints</a></li>
+<li>1.7. <a href="#robo771">Statistics/UpdateCraftingOrders</a></li>
+<li>1.8. <a href="#robo772">Statistics/UpdateDestroyedShips</a></li>
+<li>1.9. <a href="#robo773">Statistics/UpdateFinishedGoals</a></li>
+<li>1.10. <a href="#robo774">Statistics/UpdateFinishedMissions</a></li>
+<li>1.11. <a href="#robo775">Statistics/UpdateKilledMobs</a></li>
 </ul>
 </ul>
 <hr />
 <a name="Steamsky2fStatistics"></a>
-<a name="robo56"></a><h2>Steamsky/Statistics [ Packages ]</h2>
+<a name="robo57"></a><h2>Steamsky/Statistics [ Packages ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -56,23 +56,23 @@
 
 <hr />
 <a name="Statistics2fGameStats5fData"></a>
-<a name="robo163"></a><h2>Statistics/GameStats_Data [ Types ]</h2>
+<a name="robo164"></a><h2>Statistics/GameStats_Data [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo56">Statistics</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo57">Statistics</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data for game statistics
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> <strong>GameStats_Data</strong> <span class="keyword">is</span> <span class="keyword">record</span>
-      DestroyedShips<span class="sign">:</span> <a href="#robo164">Statistics_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+      DestroyedShips<span class="sign">:</span> <a href="#robo165">Statistics_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
       BasesVisited<span class="sign">:</span> Positive<span class="sign">;</span>
       MapVisited<span class="sign">:</span> Positive<span class="sign">;</span>
       DistanceTraveled<span class="sign">:</span> Natural<span class="sign">;</span>
-      CraftingOrders<span class="sign">:</span> <a href="#robo164">Statistics_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
-      <a href="./missions_ads.html#robo319">AcceptedMissions</a><span class="sign">:</span> Natural<span class="sign">;</span>
-      FinishedMissions<span class="sign">:</span> <a href="#robo164">Statistics_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
-      FinishedGoals<span class="sign">:</span> <a href="#robo164">Statistics_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
-      KilledMobs<span class="sign">:</span> <a href="#robo164">Statistics_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+      CraftingOrders<span class="sign">:</span> <a href="#robo165">Statistics_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+      <a href="./missions_ads.html#robo320">AcceptedMissions</a><span class="sign">:</span> Natural<span class="sign">;</span>
+      FinishedMissions<span class="sign">:</span> <a href="#robo165">Statistics_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+      FinishedGoals<span class="sign">:</span> <a href="#robo165">Statistics_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+      KilledMobs<span class="sign">:</span> <a href="#robo165">Statistics_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
       Points<span class="sign">:</span> Natural<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
@@ -82,7 +82,7 @@
  MapVisited       - Amount of visited map fields
  DistanceTraveled - Amount of map fields travelled
  CraftingOrders   - Data for finished crafting orders
- <a href="./missions_ads.html#robo319">AcceptedMissions</a> - Amount of accepted missions
+ <a href="./missions_ads.html#robo320">AcceptedMissions</a> - Amount of accepted missions
  FinishedMissions - Data for all finished missions
  FinishedGoals    - Data for all finished goals
  KilledMobs       - Data for all mobs killed by player
@@ -91,21 +91,21 @@
 
 <hr />
 <a name="Statistics2fStatistics5fContainer"></a>
-<a name="robo164"></a><h2>Statistics/Statistics_Container [ Types ]</h2>
+<a name="robo165"></a><h2>Statistics/Statistics_Container [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo56">Statistics</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo57">Statistics</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store game statistics data
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> <strong>Statistics_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> <a href="#robo165">Statistics_Data</a><span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">package</span> <strong>Statistics_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> <a href="#robo166">Statistics_Data</a><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Statistics2fStatistics5fData"></a>
-<a name="robo165"></a><h2>Statistics/Statistics_Data [ Types ]</h2>
+<a name="robo166"></a><h2>Statistics/Statistics_Data [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo56">Statistics</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo57">Statistics</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data for finished goals, destroyed ships and killed mobs
 </pre>
@@ -122,21 +122,21 @@
 
 <hr />
 <a name="Statistics2fGameStats"></a>
-<a name="robo331"></a><h2>Statistics/GameStats [ Variables ]</h2>
+<a name="robo332"></a><h2>Statistics/GameStats [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo56">Statistics</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo57">Statistics</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> <a href="./game_ads.html#robo26">Game</a> statistics
+<pre> <a href="./game_ads.html#robo27">Game</a> statistics
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>GameStats</strong><span class="sign">:</span> <a href="#robo163">GameStats_Data</a><span class="sign">;</span>
+<pre class="source">   <strong>GameStats</strong><span class="sign">:</span> <a href="#robo164">GameStats_Data</a><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Statistics2fClearGameStats"></a>
-<a name="robo762"></a><h2>Statistics/ClearGameStats [ Subprograms ]</h2>
+<a name="robo769"></a><h2>Statistics/ClearGameStats [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo56">Statistics</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo57">Statistics</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Clear game statistics
 </pre>
@@ -147,9 +147,9 @@
 
 <hr />
 <a name="Statistics2fGetGamePoints"></a>
-<a name="robo763"></a><h2>Statistics/GetGamePoints [ Subprograms ]</h2>
+<a name="robo770"></a><h2>Statistics/GetGamePoints [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo56">Statistics</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo57">Statistics</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get amount of gained points multiplied by difficulty bonus
 </pre>
@@ -163,9 +163,9 @@
 
 <hr />
 <a name="Statistics2fUpdateCraftingOrders"></a>
-<a name="robo764"></a><h2>Statistics/UpdateCraftingOrders [ Subprograms ]</h2>
+<a name="robo771"></a><h2>Statistics/UpdateCraftingOrders [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo56">Statistics</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo57">Statistics</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Add new finished crafting order to list
 </pre>
@@ -180,9 +180,9 @@
 
 <hr />
 <a name="Statistics2fUpdateDestroyedShips"></a>
-<a name="robo765"></a><h2>Statistics/UpdateDestroyedShips [ Subprograms ]</h2>
+<a name="robo772"></a><h2>Statistics/UpdateDestroyedShips [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo56">Statistics</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo57">Statistics</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Add new destroyed ship to list
 </pre>
@@ -197,9 +197,9 @@
 
 <hr />
 <a name="Statistics2fUpdateFinishedGoals"></a>
-<a name="robo766"></a><h2>Statistics/UpdateFinishedGoals [ Subprograms ]</h2>
+<a name="robo773"></a><h2>Statistics/UpdateFinishedGoals [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo56">Statistics</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo57">Statistics</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Add new finished goal to list
 </pre>
@@ -214,9 +214,9 @@
 
 <hr />
 <a name="Statistics2fUpdateFinishedMissions"></a>
-<a name="robo767"></a><h2>Statistics/UpdateFinishedMissions [ Subprograms ]</h2>
+<a name="robo774"></a><h2>Statistics/UpdateFinishedMissions [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo56">Statistics</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo57">Statistics</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Add new finished mission to list
 </pre>
@@ -231,26 +231,26 @@
 
 <hr />
 <a name="Statistics2fUpdateKilledMobs"></a>
-<a name="robo768"></a><h2>Statistics/UpdateKilledMobs [ Subprograms ]</h2>
+<a name="robo775"></a><h2>Statistics/UpdateKilledMobs [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo56">Statistics</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo57">Statistics</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Add new killed mob to list
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>UpdateKilledMobs</strong>
-     <span class="sign">(</span>Mob<span class="sign">:</span> <a href="./crew_ads.html#robo93">Member_Data</a><span class="sign">;</span> FractionName<span class="sign">:</span> Unbounded_String<span class="sign">)</span> with
+     <span class="sign">(</span>Mob<span class="sign">:</span> <a href="./crew_ads.html#robo94">Member_Data</a><span class="sign">;</span> FractionName<span class="sign">:</span> Unbounded_String<span class="sign">)</span> with
       Pre <span class="sign">=</span><span class="sign">&gt;</span> FractionName <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_UpdateKilledMobs"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Mob         - Killed mobile data
- <a href="./combat_adb.html#robo205">FactionName</a> - Faction name to which killed mobile belongs
+ <a href="./combat_adb.html#robo206">FactionName</a> - Faction name to which killed mobile belongs
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/statistics.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 26 2020 06:28:42
+<p>Generated from ./src/statistics.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 23 2020 06:34:41
 </p>
 </div> <!-- footer -->
 </body>

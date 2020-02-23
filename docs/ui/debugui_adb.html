@@ -8,11 +8,11 @@
 <link rel="stylesheet" href="../robodoc.css" type="text/css" />
 <title>./src/ui/debugui.adb</title>
 <!-- Source: ./src/ui/debugui.adb -->
-<!-- Generated with ROBODoc Version 4.99.43 (Jul 26 2019) -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  8 2020) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.6 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.7 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -27,49 +27,36 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo227">DebugUI/Builder</a></li>
-<li>2. <a href="#robo228">DebugUI/DebugWindow</a></li>
-<li>3. <a href="#robo229">DebugUI/Setting</a></li>
-<li>4. <a href="#robo230">DebugUI/Stack</a></li>
-<li>5. <a href="#robo500">DebugUI/AddCargo</a></li>
-<li>6. <a href="#robo501">DebugUI/AddEvent</a></li>
-<li>7. <a href="#robo502">DebugUI/AddShip</a></li>
-<li>8. <a href="#robo503">DebugUI/AddSkill</a></li>
-<li>9. <a href="#robo504">DebugUI/ChangeSkillLevel</a></li>
-<li>10. <a href="#robo505">DebugUI/ChangeStatLevel</a></li>
-<li>11. <a href="#robo507">DebugUI/DeleteEvent</a></li>
-<li>12. <a href="#robo508">DebugUI/MoveShip</a></li>
-<li>13. <a href="#robo509">DebugUI/RefreshUI</a></li>
-<li>14. <a href="#robo510">DebugUI/ResetWorldUI</a></li>
-<li>15. <a href="#robo511">DebugUI/Save_Game</a></li>
-<li>16. <a href="#robo512">DebugUI/SetCargoAmount</a></li>
-<li>17. <a href="#robo513">DebugUI/SetMemberStats</a></li>
-<li>18. <a href="#robo514">DebugUI/SetModuleStats</a></li>
-<li>19. <a href="#robo515">DebugUI/ShowBaseInfo</a></li>
-<li>20. <a href="#robo516">DebugUI/ShowBasesTypes</a></li>
-<li>21. <a href="#robo518">DebugUI/ShowItemEvent</a></li>
-<li>22. <a href="#robo519">DebugUI/UpdateAttribute</a></li>
-<li>23. <a href="#robo520">DebugUI/UpdateBase</a></li>
-<li>24. <a href="#robo521">DebugUI/UpdateCargoInfo</a></li>
-<li>25. <a href="#robo522">DebugUI/UpdateCrew</a></li>
-<li>26. <a href="#robo523">DebugUI/UpdateMember</a></li>
-<li>27. <a href="#robo524">DebugUI/UpdateModule</a></li>
-<li>28. <a href="#robo525">DebugUI/UpdateShip</a></li>
-<li>29. <a href="#robo526">DebugUI/UpdateShipCargo</a></li>
-<li>30. <a href="#robo527">DebugUI/UpdateSkill</a></li>
+<li>1. <a href="#robo228">DebugUI/DebugWindow</a></li>
+<li>2. <a href="#robo229">DebugUI/Setting</a></li>
+<li>3. <a href="#robo230">DebugUI/Stack</a></li>
+<li>4. <a href="#robo503">DebugUI/AddCargo</a></li>
+<li>5. <a href="#robo504">DebugUI/AddEvent</a></li>
+<li>6. <a href="#robo505">DebugUI/AddShip</a></li>
+<li>7. <a href="#robo506">DebugUI/AddSkill</a></li>
+<li>8. <a href="#robo507">DebugUI/ChangeSkillLevel</a></li>
+<li>9. <a href="#robo508">DebugUI/ChangeStatLevel</a></li>
+<li>10. <a href="#robo510">DebugUI/DeleteEvent</a></li>
+<li>11. <a href="#robo511">DebugUI/MoveShip</a></li>
+<li>12. <a href="#robo512">DebugUI/RefreshUI</a></li>
+<li>13. <a href="#robo513">DebugUI/ResetWorldUI</a></li>
+<li>14. <a href="#robo514">DebugUI/Save_Game</a></li>
+<li>15. <a href="#robo515">DebugUI/SetCargoAmount</a></li>
+<li>16. <a href="#robo516">DebugUI/SetMemberStats</a></li>
+<li>17. <a href="#robo517">DebugUI/SetModuleStats</a></li>
+<li>18. <a href="#robo518">DebugUI/ShowBaseInfo</a></li>
+<li>19. <a href="#robo519">DebugUI/ShowBasesTypes</a></li>
+<li>20. <a href="#robo521">DebugUI/ShowItemEvent</a></li>
+<li>21. <a href="#robo522">DebugUI/UpdateAttribute</a></li>
+<li>22. <a href="#robo523">DebugUI/UpdateBase</a></li>
+<li>23. <a href="#robo524">DebugUI/UpdateCargoInfo</a></li>
+<li>24. <a href="#robo525">DebugUI/UpdateCrew</a></li>
+<li>25. <a href="#robo526">DebugUI/UpdateMember</a></li>
+<li>26. <a href="#robo527">DebugUI/UpdateModule</a></li>
+<li>27. <a href="#robo528">DebugUI/UpdateShip</a></li>
+<li>28. <a href="#robo529">DebugUI/UpdateShipCargo</a></li>
+<li>29. <a href="#robo530">DebugUI/UpdateSkill</a></li>
 </ul>
-<hr />
-<a name="DebugUI2fBuilder"></a>
-<a name="robo227"></a><h2>DebugUI/Builder [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Gtkada_Builder used for creating UI
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <strong>Builder</strong><span class="sign">:</span> Gtkada_Builder<span class="sign">;</span>
-</pre>
-
 <hr />
 <a name="DebugUI2fDebugWindow"></a>
 <a name="robo228"></a><h2>DebugUI/DebugWindow [ Variables ]</h2>
@@ -108,7 +95,7 @@
 
 <hr />
 <a name="DebugUI2fAddCargo"></a>
-<a name="robo500"></a><h2>DebugUI/AddCargo [ Subprograms ]</h2>
+<a name="robo503"></a><h2>DebugUI/AddCargo [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -123,7 +110,7 @@
 
 <hr />
 <a name="DebugUI2fAddEvent"></a>
-<a name="robo501"></a><h2>DebugUI/AddEvent [ Subprograms ]</h2>
+<a name="robo504"></a><h2>DebugUI/AddEvent [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -138,7 +125,7 @@
 
 <hr />
 <a name="DebugUI2fAddShip"></a>
-<a name="robo502"></a><h2>DebugUI/AddShip [ Subprograms ]</h2>
+<a name="robo505"></a><h2>DebugUI/AddShip [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -153,7 +140,7 @@
 
 <hr />
 <a name="DebugUI2fAddSkill"></a>
-<a name="robo503"></a><h2>DebugUI/AddSkill [ Subprograms ]</h2>
+<a name="robo506"></a><h2>DebugUI/AddSkill [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -168,7 +155,7 @@
 
 <hr />
 <a name="DebugUI2fChangeSkillLevel"></a>
-<a name="robo504"></a><h2>DebugUI/ChangeSkillLevel [ Subprograms ]</h2>
+<a name="robo507"></a><h2>DebugUI/ChangeSkillLevel [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -188,7 +175,7 @@
 
 <hr />
 <a name="DebugUI2fChangeStatLevel"></a>
-<a name="robo505"></a><h2>DebugUI/ChangeStatLevel [ Subprograms ]</h2>
+<a name="robo508"></a><h2>DebugUI/ChangeStatLevel [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -208,7 +195,7 @@
 
 <hr />
 <a name="DebugUI2fDeleteEvent"></a>
-<a name="robo507"></a><h2>DebugUI/DeleteEvent [ Subprograms ]</h2>
+<a name="robo510"></a><h2>DebugUI/DeleteEvent [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -223,7 +210,7 @@
 
 <hr />
 <a name="DebugUI2fMoveShip"></a>
-<a name="robo508"></a><h2>DebugUI/MoveShip [ Subprograms ]</h2>
+<a name="robo511"></a><h2>DebugUI/MoveShip [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -231,15 +218,14 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>MoveShip</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span>     <span class="keyword"> pragma </span>Unreferenced<span class="sign">(</span>Self<span class="sign"><span class="sign">)</span>;</span>
-</pre>
+</span></pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Self - Gtk_Button which was clicked
 </pre>
 
 <hr />
 <a name="DebugUI2fRefreshUI"></a>
-<a name="robo509"></a><h2>DebugUI/RefreshUI [ Subprograms ]</h2>
+<a name="robo512"></a><h2>DebugUI/RefreshUI [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -255,7 +241,7 @@
 
 <hr />
 <a name="DebugUI2fResetWorldUI"></a>
-<a name="robo510"></a><h2>DebugUI/ResetWorldUI [ Subprograms ]</h2>
+<a name="robo513"></a><h2>DebugUI/ResetWorldUI [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -267,7 +253,7 @@
 
 <hr />
 <a name="DebugUI2fSave5fGame"></a>
-<a name="robo511"></a><h2>DebugUI/Save_Game [ Subprograms ]</h2>
+<a name="robo514"></a><h2>DebugUI/Save_Game [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -283,7 +269,7 @@
 
 <hr />
 <a name="DebugUI2fSetCargoAmount"></a>
-<a name="robo512"></a><h2>DebugUI/SetCargoAmount [ Subprograms ]</h2>
+<a name="robo515"></a><h2>DebugUI/SetCargoAmount [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -298,7 +284,7 @@
 
 <hr />
 <a name="DebugUI2fSetMemberStats"></a>
-<a name="robo513"></a><h2>DebugUI/SetMemberStats [ Subprograms ]</h2>
+<a name="robo516"></a><h2>DebugUI/SetMemberStats [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -313,7 +299,7 @@
 
 <hr />
 <a name="DebugUI2fSetModuleStats"></a>
-<a name="robo514"></a><h2>DebugUI/SetModuleStats [ Subprograms ]</h2>
+<a name="robo517"></a><h2>DebugUI/SetModuleStats [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -328,7 +314,7 @@
 
 <hr />
 <a name="DebugUI2fShowBaseInfo"></a>
-<a name="robo515"></a><h2>DebugUI/ShowBaseInfo [ Subprograms ]</h2>
+<a name="robo518"></a><h2>DebugUI/ShowBaseInfo [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -343,7 +329,7 @@
 
 <hr />
 <a name="DebugUI2fShowBasesTypes"></a>
-<a name="robo516"></a><h2>DebugUI/ShowBasesTypes [ Subprograms ]</h2>
+<a name="robo519"></a><h2>DebugUI/ShowBasesTypes [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -358,7 +344,7 @@
 
 <hr />
 <a name="DebugUI2fShowItemEvent"></a>
-<a name="robo518"></a><h2>DebugUI/ShowItemEvent [ Subprograms ]</h2>
+<a name="robo521"></a><h2>DebugUI/ShowItemEvent [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -373,7 +359,7 @@
 
 <hr />
 <a name="DebugUI2fUpdateAttribute"></a>
-<a name="robo519"></a><h2>DebugUI/UpdateAttribute [ Subprograms ]</h2>
+<a name="robo522"></a><h2>DebugUI/UpdateAttribute [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -396,7 +382,7 @@
 
 <hr />
 <a name="DebugUI2fUpdateBase"></a>
-<a name="robo520"></a><h2>DebugUI/UpdateBase [ Subprograms ]</h2>
+<a name="robo523"></a><h2>DebugUI/UpdateBase [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -411,7 +397,7 @@
 
 <hr />
 <a name="DebugUI2fUpdateCargoInfo"></a>
-<a name="robo521"></a><h2>DebugUI/UpdateCargoInfo [ Subprograms ]</h2>
+<a name="robo524"></a><h2>DebugUI/UpdateCargoInfo [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -426,7 +412,7 @@
 
 <hr />
 <a name="DebugUI2fUpdateCrew"></a>
-<a name="robo522"></a><h2>DebugUI/UpdateCrew [ Subprograms ]</h2>
+<a name="robo525"></a><h2>DebugUI/UpdateCrew [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -441,7 +427,7 @@
 
 <hr />
 <a name="DebugUI2fUpdateMember"></a>
-<a name="robo523"></a><h2>DebugUI/UpdateMember [ Subprograms ]</h2>
+<a name="robo526"></a><h2>DebugUI/UpdateMember [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -457,7 +443,7 @@
 
 <hr />
 <a name="DebugUI2fUpdateModule"></a>
-<a name="robo524"></a><h2>DebugUI/UpdateModule [ Subprograms ]</h2>
+<a name="robo527"></a><h2>DebugUI/UpdateModule [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -472,7 +458,7 @@
 
 <hr />
 <a name="DebugUI2fUpdateShip"></a>
-<a name="robo525"></a><h2>DebugUI/UpdateShip [ Subprograms ]</h2>
+<a name="robo528"></a><h2>DebugUI/UpdateShip [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -487,7 +473,7 @@
 
 <hr />
 <a name="DebugUI2fUpdateShipCargo"></a>
-<a name="robo526"></a><h2>DebugUI/UpdateShipCargo [ Subprograms ]</h2>
+<a name="robo529"></a><h2>DebugUI/UpdateShipCargo [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -502,7 +488,7 @@
 
 <hr />
 <a name="DebugUI2fUpdateSkill"></a>
-<a name="robo527"></a><h2>DebugUI/UpdateSkill [ Subprograms ]</h2>
+<a name="robo530"></a><h2>DebugUI/UpdateSkill [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -525,7 +511,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/debugui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 26 2020 06:28:42
+<p>Generated from ./src/ui/debugui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 23 2020 06:34:42
 </p>
 </div> <!-- footer -->
 </body>

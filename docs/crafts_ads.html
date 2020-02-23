@@ -8,11 +8,11 @@
 <link rel="stylesheet" href="./robodoc.css" type="text/css" />
 <title>./src/crafts.ads</title>
 <!-- Source: ./src/crafts.ads -->
-<!-- Generated with ROBODoc Version 4.99.43 (Jul 26 2019) -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  8 2020) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.6 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.7 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -29,18 +29,18 @@
 <ul>
 <li>1. <a href="#robo16">Steamsky/Crafts</a></li>
 <ul>
-<li>1.1. <a href="#robo88">Crafts/Craft_Data</a></li>
-<li>1.2. <a href="#robo89">Crafts/Recipes_Container</a></li>
-<li>1.3. <a href="#robo215">Crafts/Known_Recipes</a></li>
-<li>1.4. <a href="#robo216">Crafts/Recipes_List</a></li>
-<li>1.5. <a href="#robo350">Crafts/Crafting_No_Materials</a></li>
-<li>1.6. <a href="#robo351">Crafts/Crafting_No_Tools</a></li>
-<li>1.7. <a href="#robo352">Crafts/Crafting_No_Workshop</a></li>
-<li>1.8. <a href="#robo463">Crafts/CheckRecipe</a></li>
-<li>1.9. <a href="#robo464">Crafts/LoadRecipes</a></li>
-<li>1.10. <a href="#robo465">Crafts/Manufacturing</a></li>
-<li>1.11. <a href="#robo466">Crafts/SetRecipe</a></li>
-<li>1.12. <a href="./crafts_adb.html#robo467">Crafts/SetRecipeData</a></li>
+<li>1.1. <a href="#robo89">Crafts/Craft_Data</a></li>
+<li>1.2. <a href="#robo90">Crafts/Recipes_Container</a></li>
+<li>1.3. <a href="#robo216">Crafts/Known_Recipes</a></li>
+<li>1.4. <a href="#robo217">Crafts/Recipes_List</a></li>
+<li>1.5. <a href="#robo352">Crafts/Crafting_No_Materials</a></li>
+<li>1.6. <a href="#robo353">Crafts/Crafting_No_Tools</a></li>
+<li>1.7. <a href="#robo354">Crafts/Crafting_No_Workshop</a></li>
+<li>1.8. <a href="#robo466">Crafts/CheckRecipe</a></li>
+<li>1.9. <a href="#robo467">Crafts/LoadRecipes</a></li>
+<li>1.10. <a href="#robo468">Crafts/Manufacturing</a></li>
+<li>1.11. <a href="#robo469">Crafts/SetRecipe</a></li>
+<li>1.12. <a href="./crafts_adb.html#robo470">Crafts/SetRecipeData</a></li>
 </ul>
 </ul>
 <hr />
@@ -57,7 +57,7 @@
 
 <hr />
 <a name="Crafts2fCraft5fData"></a>
-<a name="robo88"></a><h2>Crafts/Craft_Data [ Types ]</h2>
+<a name="robo89"></a><h2>Crafts/Craft_Data [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo16">Crafts</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -65,11 +65,11 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> <strong>Craft_Data</strong> <span class="keyword">is</span> <span class="keyword">record</span>
-      MaterialTypes<span class="sign">:</span> <a href="./game_ads.html#robo119">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
-      MaterialAmounts<span class="sign">:</span> <a href="./game_ads.html#robo116">Positive_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+      MaterialTypes<span class="sign">:</span> <a href="./game_ads.html#robo120">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+      MaterialAmounts<span class="sign">:</span> <a href="./game_ads.html#robo117">Positive_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
       ResultIndex<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       ResultAmount<span class="sign">:</span> Natural<span class="sign">;</span>
-      Workplace<span class="sign">:</span> <a href="./shipmodules_ads.html#robo148">ModuleType</a><span class="sign">;</span>
+      Workplace<span class="sign">:</span> <a href="./shipmodules_ads.html#robo149">ModuleType</a><span class="sign">;</span>
       Skill<span class="sign">:</span> Positive<span class="sign">;</span>
       Time<span class="sign">:</span> Positive<span class="sign">;</span>
       Difficulty<span class="sign">:</span> Positive<span class="sign">;</span>
@@ -90,41 +90,41 @@
 
 <hr />
 <a name="Crafts2fRecipes5fContainer"></a>
-<a name="robo89"></a><h2>Crafts/Recipes_Container [ Types ]</h2>
+<a name="robo90"></a><h2>Crafts/Recipes_Container [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo16">Crafts</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> <strong>Recipes_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span> <a href="#robo88">Craft_Data</a><span class="sign">,</span>
+<pre class="source">   <span class="keyword">package</span> <strong>Recipes_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span> <a href="#robo89">Craft_Data</a><span class="sign">,</span>
       Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Crafts2fKnown5fRecipes"></a>
-<a name="robo215"></a><h2>Crafts/Known_Recipes [ Variables ]</h2>
+<a name="robo216"></a><h2>Crafts/Known_Recipes [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo16">Crafts</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of all know by player recipes
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>Known_Recipes</strong><span class="sign">:</span> <a href="./game_ads.html#robo119">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   <strong>Known_Recipes</strong><span class="sign">:</span> <a href="./game_ads.html#robo120">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Crafts2fRecipes5fList"></a>
-<a name="robo216"></a><h2>Crafts/Recipes_List [ Variables ]</h2>
+<a name="robo217"></a><h2>Crafts/Recipes_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo16">Crafts</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of recipes available in game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>Recipes_List</strong><span class="sign">:</span> <a href="#robo89">Recipes_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
+<pre class="source">   <strong>Recipes_List</strong><span class="sign">:</span> <a href="#robo90">Recipes_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Crafts2fCrafting5fNo5fMaterials"></a>
-<a name="robo350"></a><h2>Crafts/Crafting_No_Materials [ Exceptions ]</h2>
+<a name="robo352"></a><h2>Crafts/Crafting_No_Materials [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo16">Crafts</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -136,7 +136,7 @@
 
 <hr />
 <a name="Crafts2fCrafting5fNo5fTools"></a>
-<a name="robo351"></a><h2>Crafts/Crafting_No_Tools [ Exceptions ]</h2>
+<a name="robo353"></a><h2>Crafts/Crafting_No_Tools [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo16">Crafts</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -148,7 +148,7 @@
 
 <hr />
 <a name="Crafts2fCrafting5fNo5fWorkshop"></a>
-<a name="robo352"></a><h2>Crafts/Crafting_No_Workshop [ Exceptions ]</h2>
+<a name="robo354"></a><h2>Crafts/Crafting_No_Workshop [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo16">Crafts</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -160,19 +160,19 @@
 
 <hr />
 <a name="Crafts2fCheckRecipe"></a>
-<a name="robo463"></a><h2>Crafts/CheckRecipe [ Subprograms ]</h2>
+<a name="robo466"></a><h2>Crafts/CheckRecipe [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo16">Crafts</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Check if player have all requirements for selected recipe
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>CheckRecipe</strong><span class="sign">(</span><a href="./ui/crafts-ui_adb.html#robo214">RecipeIndex</a><span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Positive with
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="./ui/crafts-ui_adb.html#robo214">RecipeIndex</a> <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">,</span>
+<pre class="source">   <span class="keyword">function</span> <strong>CheckRecipe</strong><span class="sign">(</span><a href="./ui/crafts-ui_adb.html#robo215">RecipeIndex</a><span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Positive with
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="./ui/crafts-ui_adb.html#robo215">RecipeIndex</a> <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_CheckRecipe"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./ui/crafts-ui_adb.html#robo214">RecipeIndex</a> - Index of the prototype recipe to check or if deconstruct
+<pre> <a href="./ui/crafts-ui_adb.html#robo215">RecipeIndex</a> - Index of the prototype recipe to check or if deconstruct
                existing item, "Study " + item name.
 </pre>
 <p class="item_name">RESULT</p>
@@ -181,7 +181,7 @@
 
 <hr />
 <a name="Crafts2fLoadRecipes"></a>
-<a name="robo464"></a><h2>Crafts/LoadRecipes [ Subprograms ]</h2>
+<a name="robo467"></a><h2>Crafts/LoadRecipes [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo16">Crafts</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -196,7 +196,7 @@
 
 <hr />
 <a name="Crafts2fManufacturing"></a>
-<a name="robo465"></a><h2>Crafts/Manufacturing [ Subprograms ]</h2>
+<a name="robo468"></a><h2>Crafts/Manufacturing [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo16">Crafts</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -212,7 +212,7 @@
 
 <hr />
 <a name="Crafts2fSetRecipe"></a>
-<a name="robo466"></a><h2>Crafts/SetRecipe [ Subprograms ]</h2>
+<a name="robo469"></a><h2>Crafts/SetRecipe [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo16">Crafts</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -220,22 +220,22 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>SetRecipe</strong>
-     <span class="sign">(</span>Workshop<span class="sign">,</span> Amount<span class="sign">:</span> Positive<span class="sign">;</span> <a href="./ui/crafts-ui_adb.html#robo214">RecipeIndex</a><span class="sign">:</span> Unbounded_String<span class="sign">)</span> with
+     <span class="sign">(</span>Workshop<span class="sign">,</span> Amount<span class="sign">:</span> Positive<span class="sign">;</span> <a href="./ui/crafts-ui_adb.html#robo215">RecipeIndex</a><span class="sign">:</span> Unbounded_String<span class="sign">)</span> with
       Pre <span class="sign">=</span><span class="sign">&gt;</span>
-      <span class="sign">(</span>Workshop <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo326">PlayerShip</a><span class="sign">.</span>Modules<span class="sign">.</span>Last_Index and
-       <a href="./ui/crafts-ui_adb.html#robo214">RecipeIndex</a> <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">)</span><span class="sign">,</span>
+      <span class="sign">(</span>Workshop <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo327">PlayerShip</a><span class="sign">.</span>Modules<span class="sign">.</span>Last_Index and
+       <a href="./ui/crafts-ui_adb.html#robo215">RecipeIndex</a> <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_SetRecipe"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Workshop    - Index of player ship module (workplace) to which
                selected recipe will be set
- <a href="./ui/crafts-ui_adb.html#robo214">RecipeIndex</a> - Index of the prototype recipe to check or if deconstruct
+ <a href="./ui/crafts-ui_adb.html#robo215">RecipeIndex</a> - Index of the prototype recipe to check or if deconstruct
                existing item, "Study " + item name.
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/crafts.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 26 2020 06:28:42
+<p>Generated from ./src/crafts.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 23 2020 06:34:42
 </p>
 </div> <!-- footer -->
 </body>

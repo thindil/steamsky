@@ -8,11 +8,11 @@
 <link rel="stylesheet" href="../robodoc.css" type="text/css" />
 <title>./src/ui/mainmenu.adb</title>
 <!-- Source: ./src/ui/mainmenu.adb -->
-<!-- Generated with ROBODoc Version 4.99.43 (Jul 26 2019) -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  8 2020) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.6 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.7 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -27,41 +27,43 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo296">MainMenu/AdjNames</a></li>
-<li>2. <a href="#robo297">MainMenu/AllNews</a></li>
-<li>3. <a href="#robo298">MainMenu/Builder</a></li>
-<li>4. <a href="#robo299">MainMenu/DataError</a></li>
-<li>5. <a href="#robo300">MainMenu/Setting</a></li>
-<li>6. <a href="#robo594">MainMenu/DeleteGame</a></li>
-<li>7. <a href="#robo595">MainMenu/LoadFile</a></li>
-<li>8. <a href="#robo596">MainMenu/LoadGame</a></li>
-<li>9. <a href="#robo597">MainMenu/NewGame</a></li>
-<li>10. <a href="#robo598">MainMenu/NewGameKeyPressed</a></li>
-<li>11. <a href="#robo600">MainMenu/Quit</a></li>
-<li>12. <a href="#robo601">MainMenu/RandomDifficulty</a></li>
-<li>13. <a href="#robo602">MainMenu/RandomDifficultyToggled</a></li>
-<li>14. <a href="#robo603">MainMenu/RandomName</a></li>
-<li>15. <a href="#robo604">MainMenu/RefreshSavesList</a></li>
-<li>16. <a href="#robo606">MainMenu/SetBaseType</a></li>
-<li>17. <a href="#robo607">MainMenu/SetDifficulty</a></li>
-<li>18. <a href="#robo608">MainMenu/ShowAllNews</a></li>
-<li>19. <a href="#robo609">MainMenu/ShowBaseDescription</a></li>
-<li>20. <a href="#robo610">MainMenu/ShowCareerDescription</a></li>
-<li>21. <a href="#robo611">MainMenu/ShowErrorInfo</a></li>
-<li>22. <a href="#robo612">MainMenu/ShowFactionDescription</a></li>
-<li>23. <a href="#robo613">MainMenu/ShowGoals</a></li>
-<li>24. <a href="#robo615">MainMenu/ShowPage</a></li>
-<li>25. <a href="#robo616">MainMenu/StartGame</a></li>
-<li>26. <a href="#robo618">MainMenu/UpdateInfo</a></li>
-<li>27. <a href="#robo619">MainMenu/UpdateInfoProc</a></li>
-<li>28. <a href="#robo620">MainMenu/UpdateNews</a></li>
-<li>29. <a href="#robo621">MainMenu/UpdateSummary</a></li>
+<li>1. <a href="#robo297">MainMenu/AdjNames</a></li>
+<li>2. <a href="#robo298">MainMenu/AllNews</a></li>
+<li>3. <a href="#robo299">MainMenu/Builder</a></li>
+<li>4. <a href="#robo300">MainMenu/DataError</a></li>
+<li>5. <a href="#robo301">MainMenu/Setting</a></li>
+<li>6. <a href="#robo600">MainMenu/BackToMenu</a></li>
+<li>7. <a href="#robo601">MainMenu/BaseTypeName</a></li>
+<li>8. <a href="#robo603">MainMenu/DeleteGame</a></li>
+<li>9. <a href="#robo604">MainMenu/LoadFile</a></li>
+<li>10. <a href="#robo605">MainMenu/LoadGame</a></li>
+<li>11. <a href="#robo606">MainMenu/LoadGameView</a></li>
+<li>12. <a href="#robo607">MainMenu/NewGame</a></li>
+<li>13. <a href="#robo608">MainMenu/NewGameKeyPressed</a></li>
+<li>14. <a href="#robo609">MainMenu/Quit</a></li>
+<li>15. <a href="#robo610">MainMenu/RandomDifficulty</a></li>
+<li>16. <a href="#robo611">MainMenu/RandomDifficultyToggled</a></li>
+<li>17. <a href="#robo612">MainMenu/RandomName</a></li>
+<li>18. <a href="#robo613">MainMenu/RefreshSavesList</a></li>
+<li>19. <a href="#robo614">MainMenu/SetBaseType</a></li>
+<li>20. <a href="#robo615">MainMenu/SetDifficulty</a></li>
+<li>21. <a href="#robo616">MainMenu/ShowAllNews</a></li>
+<li>22. <a href="#robo617">MainMenu/ShowBaseDescription</a></li>
+<li>23. <a href="#robo618">MainMenu/ShowCareerDescription</a></li>
+<li>24. <a href="#robo619">MainMenu/ShowFactionDescription</a></li>
+<li>25. <a href="#robo620">MainMenu/ShowGoals</a></li>
+<li>26. <a href="#robo622">MainMenu/ShowPage</a></li>
+<li>27. <a href="#robo623">MainMenu/StartGame</a></li>
+<li>28. <a href="#robo625">MainMenu/UpdateInfo</a></li>
+<li>29. <a href="#robo626">MainMenu/UpdateInfoProc</a></li>
+<li>30. <a href="#robo627">MainMenu/UpdateNews</a></li>
+<li>31. <a href="#robo628">MainMenu/UpdateSummary</a></li>
 </ul>
 <hr />
 <a name="MainMenu2fAdjNames"></a>
-<a name="robo296"></a><h2>MainMenu/AdjNames [ Variables ]</h2>
+<a name="robo297"></a><h2>MainMenu/AdjNames [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Array of Gtk_Adjustments names for the game difficulty
 </pre>
@@ -78,9 +80,9 @@
 
 <hr />
 <a name="MainMenu2fAllNews"></a>
-<a name="robo297"></a><h2>MainMenu/AllNews [ Variables ]</h2>
+<a name="robo298"></a><h2>MainMenu/AllNews [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> If true, show all news, not only from last version. Default is false
 </pre>
@@ -90,9 +92,9 @@
 
 <hr />
 <a name="MainMenu2fBuilder"></a>
-<a name="robo298"></a><h2>MainMenu/Builder [ Variables ]</h2>
+<a name="robo299"></a><h2>MainMenu/Builder [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Gtkada_Builder used for creating UI
 </pre>
@@ -102,9 +104,9 @@
 
 <hr />
 <a name="MainMenu2fDataError"></a>
-<a name="robo299"></a><h2>MainMenu/DataError [ Variables ]</h2>
+<a name="robo300"></a><h2>MainMenu/DataError [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store errors related to loading the game data
 </pre>
@@ -114,9 +116,9 @@
 
 <hr />
 <a name="MainMenu2fSetting"></a>
-<a name="robo300"></a><h2>MainMenu/Setting [ Variables ]</h2>
+<a name="robo301"></a><h2>MainMenu/Setting [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> If true, UI is in setting state. Default is false
 </pre>
@@ -125,25 +127,53 @@
 </pre>
 
 <hr />
-<a name="MainMenu2fDeleteGame"></a>
-<a name="robo594"></a><h2>MainMenu/DeleteGame [ Subprograms ]</h2>
+<a name="MainMenu2fBackToMenu"></a>
+<a name="robo600"></a><h2>MainMenu/BackToMenu [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Back to main menu after clicking the button
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>BackToMenu</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
+</span>     <span class="keyword"> pragma </span>Unreferenced<span class="sign">(</span>Self<span class="sign"><span class="sign">)</span>;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Self - Gtk_Button which was clicked. Unused.
+</pre>
+
+<hr />
+<a name="MainMenu2fBaseTypeName"></a>
+<a name="robo601"></a><h2>MainMenu/BaseTypeName [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Type of base for new game
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>BaseTypeName</strong><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="MainMenu2fDeleteGame"></a>
+<a name="robo603"></a><h2>MainMenu/DeleteGame [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Delete selected file with game data
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>DeleteGame</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
+<pre class="source">   <span class="keyword">procedure</span> <strong>DeleteGame</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
 </span></pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
+<pre> Self - Gtk_Button which was clicked
 </pre>
 
 <hr />
 <a name="MainMenu2fLoadFile"></a>
-<a name="robo595"></a><h2>MainMenu/LoadFile [ Subprograms ]</h2>
+<a name="robo604"></a><h2>MainMenu/LoadFile [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Load license, readme, contributing, etc files to UI
 </pre>
@@ -156,24 +186,46 @@
 
 <hr />
 <a name="MainMenu2fLoadGame"></a>
-<a name="robo596"></a><h2>MainMenu/LoadGame [ Subprograms ]</h2>
+<a name="robo605"></a><h2>MainMenu/LoadGame [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Load selected file with the game data
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>LoadGame</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
+<pre class="source">   <span class="keyword">procedure</span> <strong>LoadGame</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
 </span></pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
+<pre> Self - Gtk_Button which was clicked.
+</pre>
+
+<hr />
+<a name="MainMenu2fLoadGameView"></a>
+<a name="robo606"></a><h2>MainMenu/LoadGameView [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Load selected save game file
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>LoadGameView</strong>
+     <span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Tree_View_Record<span class="keyword">'Class</span><span class="sign">;</span>
+      Path<span class="sign">:</span> Gtk.Tree_Model.Gtk_Tree_Path<span class="sign">;</span>
+      Column<span class="sign">:</span> not null access Gtk.Tree_View_Column.Gtk_Tree_View_Column_Record'</span>
+        Class<span class="sign">)</span> <span class="keyword">is</span>
+      <span class="keyword">pragma</span> Unreferenced<span class="sign">(</span>Path<span class="sign">,</span> Column<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Self   - Gtk_Tree_View with save game files list
+ Path   - Path to the selected save game file. Unused
+ Column - Column which was clicked. Unused
 </pre>
 
 <hr />
 <a name="MainMenu2fNewGame"></a>
-<a name="robo597"></a><h2>MainMenu/NewGame [ Subprograms ]</h2>
+<a name="robo607"></a><h2>MainMenu/NewGame [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Start a new game
 </pre>
@@ -186,9 +238,9 @@
 
 <hr />
 <a name="MainMenu2fNewGameKeyPressed"></a>
-<a name="robo598"></a><h2>MainMenu/NewGameKeyPressed [ Subprograms ]</h2>
+<a name="robo608"></a><h2>MainMenu/NewGameKeyPressed [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Use Page Up and Page Down buttons to scroll new game UI
 </pre>
@@ -208,9 +260,9 @@
 
 <hr />
 <a name="MainMenu2fQuit"></a>
-<a name="robo600"></a><h2>MainMenu/Quit [ Subprograms ]</h2>
+<a name="robo609"></a><h2>MainMenu/Quit [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> <strong>Quit</strong> from the game
 </pre>
@@ -223,9 +275,9 @@
 
 <hr />
 <a name="MainMenu2fRandomDifficulty"></a>
-<a name="robo601"></a><h2>MainMenu/RandomDifficulty [ Subprograms ]</h2>
+<a name="robo610"></a><h2>MainMenu/RandomDifficulty [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set random difficulty levels for the game
 </pre>
@@ -238,9 +290,9 @@
 
 <hr />
 <a name="MainMenu2fRandomDifficultyToggled"></a>
-<a name="robo602"></a><h2>MainMenu/RandomDifficultyToggled [ Subprograms ]</h2>
+<a name="robo611"></a><h2>MainMenu/RandomDifficultyToggled [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show or hide info about bonus to the game points on toggle random
  difficulty
@@ -255,9 +307,9 @@
 
 <hr />
 <a name="MainMenu2fRandomName"></a>
-<a name="robo603"></a><h2>MainMenu/RandomName [ Subprograms ]</h2>
+<a name="robo612"></a><h2>MainMenu/RandomName [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Generate random player and ship names, baesd on selected faction
 </pre>
@@ -270,9 +322,9 @@
 
 <hr />
 <a name="MainMenu2fRefreshSavesList"></a>
-<a name="robo604"></a><h2>MainMenu/RefreshSavesList [ Subprograms ]</h2>
+<a name="robo613"></a><h2>MainMenu/RefreshSavesList [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Refresh list of available saved games
 </pre>
@@ -282,9 +334,9 @@
 
 <hr />
 <a name="MainMenu2fSetBaseType"></a>
-<a name="robo606"></a><h2>MainMenu/SetBaseType [ Subprograms ]</h2>
+<a name="robo614"></a><h2>MainMenu/SetBaseType [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set base type for new game based on the game settings
 </pre>
@@ -305,9 +357,9 @@
 
 <hr />
 <a name="MainMenu2fSetDifficulty"></a>
-<a name="robo607"></a><h2>MainMenu/SetDifficulty [ Subprograms ]</h2>
+<a name="robo615"></a><h2>MainMenu/SetDifficulty [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set presetted level of the game difficulty
 </pre>
@@ -320,9 +372,9 @@
 
 <hr />
 <a name="MainMenu2fShowAllNews"></a>
-<a name="robo608"></a><h2>MainMenu/ShowAllNews [ Subprograms ]</h2>
+<a name="robo616"></a><h2>MainMenu/ShowAllNews [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>ShowAllNews</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
 </span></pre>
@@ -332,9 +384,9 @@
 
 <hr />
 <a name="MainMenu2fShowBaseDescription"></a>
-<a name="robo609"></a><h2>MainMenu/ShowBaseDescription [ Subprograms ]</h2>
+<a name="robo617"></a><h2>MainMenu/ShowBaseDescription [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show selected base type description, when player select new type
 </pre>
@@ -347,9 +399,9 @@
 
 <hr />
 <a name="MainMenu2fShowCareerDescription"></a>
-<a name="robo610"></a><h2>MainMenu/ShowCareerDescription [ Subprograms ]</h2>
+<a name="robo618"></a><h2>MainMenu/ShowCareerDescription [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show selected career description
 </pre>
@@ -362,25 +414,10 @@
 </pre>
 
 <hr />
-<a name="MainMenu2fShowErrorInfo"></a>
-<a name="robo611"></a><h2>MainMenu/ShowErrorInfo [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Show error dialog with information about occured error
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ShowErrorInfo</strong><span class="sign">(</span>Message<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">is</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Message - Full stack message from error
-</pre>
-
-<hr />
 <a name="MainMenu2fShowFactionDescription"></a>
-<a name="robo612"></a><h2>MainMenu/ShowFactionDescription [ Subprograms ]</h2>
+<a name="robo619"></a><h2>MainMenu/ShowFactionDescription [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Updated faction description when player select new faction
 </pre>
@@ -394,9 +431,9 @@
 
 <hr />
 <a name="MainMenu2fShowGoals"></a>
-<a name="robo613"></a><h2>MainMenu/ShowGoals [ Subprograms ]</h2>
+<a name="robo620"></a><h2>MainMenu/ShowGoals [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>ShowGoals</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
 </span>     <span class="keyword"> pragma </span>Unreferenced<span class="sign">(</span>Object<span class="sign"><span class="sign">)</span>;</span>
@@ -407,9 +444,9 @@
 
 <hr />
 <a name="MainMenu2fShowPage"></a>
-<a name="robo615"></a><h2>MainMenu/ShowPage [ Subprograms ]</h2>
+<a name="robo622"></a><h2>MainMenu/ShowPage [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show selected page to the player
 </pre>
@@ -422,9 +459,9 @@
 
 <hr />
 <a name="MainMenu2fStartGame"></a>
-<a name="robo616"></a><h2>MainMenu/StartGame [ Subprograms ]</h2>
+<a name="robo623"></a><h2>MainMenu/StartGame [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Initialize the game data and UI
 </pre>
@@ -434,9 +471,9 @@
 
 <hr />
 <a name="MainMenu2fUpdateInfo"></a>
-<a name="robo618"></a><h2>MainMenu/UpdateInfo [ Subprograms ]</h2>
+<a name="robo625"></a><h2>MainMenu/UpdateInfo [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update new game info
 </pre>
@@ -451,14 +488,14 @@
 <pre> This function always return false
 </pre>
 <p class="item_name">SEE ALSO</p>
-<pre> <a href="#robo619">UpdateInfoProc</a>
+<pre> <a href="#robo626">UpdateInfoProc</a>
 </pre>
 
 <hr />
 <a name="MainMenu2fUpdateInfoProc"></a>
-<a name="robo619"></a><h2>MainMenu/UpdateInfoProc [ Subprograms ]</h2>
+<a name="robo626"></a><h2>MainMenu/UpdateInfoProc [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update new game info
 </pre>
@@ -469,14 +506,14 @@
 <pre> User_Data - UI element which was selected
 </pre>
 <p class="item_name">SEE ALSO</p>
-<pre> <a href="#robo618">UpdateInfo</a>
+<pre> <a href="#robo625">UpdateInfo</a>
 </pre>
 
 <hr />
 <a name="MainMenu2fUpdateNews"></a>
-<a name="robo620"></a><h2>MainMenu/UpdateNews [ Subprograms ]</h2>
+<a name="robo627"></a><h2>MainMenu/UpdateNews [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Refresh list of the game news
 </pre>
@@ -486,9 +523,9 @@
 
 <hr />
 <a name="MainMenu2fUpdateSummary"></a>
-<a name="robo621"></a><h2>MainMenu/UpdateSummary [ Subprograms ]</h2>
+<a name="robo628"></a><h2>MainMenu/UpdateSummary [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./mainmenu_ads.html#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update amount of bonus or malus to the game point from difficulty
 </pre>
@@ -501,7 +538,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/mainmenu.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 26 2020 06:28:42
+<p>Generated from ./src/ui/mainmenu.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 23 2020 06:34:41
 </p>
 </div> <!-- footer -->
 </body>

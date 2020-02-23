@@ -8,11 +8,11 @@
 <link rel="stylesheet" href="../robodoc.css" type="text/css" />
 <title>./src/ui/gameoptions.adb</title>
 <!-- Source: ./src/ui/gameoptions.adb -->
-<!-- Generated with ROBODoc Version 4.99.43 (Jul 26 2019) -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  8 2020) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.6 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.7 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -27,21 +27,21 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo120">GameOptions/Accel_Data</a></li>
-<li>2. <a href="#robo273">GameOptions/Accels</a></li>
-<li>3. <a href="#robo274">GameOptions/Setting</a></li>
-<li>4. <a href="#robo553">GameOptions/ApplyTheme</a></li>
-<li>5. <a href="#robo556">GameOptions/ResizeFont</a></li>
-<li>6. <a href="#robo557">GameOptions/SetAccelerator</a></li>
-<li>7. <a href="#robo558">GameOptions/SetDefaultFontSize</a></li>
-<li>8. <a href="#robo559">GameOptions/SetFontsSizes</a></li>
-<li>9. <a href="#robo561">GameOptions/ToggleAnimationType</a></li>
+<li>1. <a href="#robo121">GameOptions/Accel_Data</a></li>
+<li>2. <a href="#robo274">GameOptions/Accels</a></li>
+<li>3. <a href="#robo275">GameOptions/Setting</a></li>
+<li>4. <a href="#robo560">GameOptions/ApplyTheme</a></li>
+<li>5. <a href="#robo563">GameOptions/ResizeFont</a></li>
+<li>6. <a href="#robo564">GameOptions/SetAccelerator</a></li>
+<li>7. <a href="#robo565">GameOptions/SetDefaultFontSize</a></li>
+<li>8. <a href="#robo566">GameOptions/SetFontsSizes</a></li>
+<li>9. <a href="#robo568">GameOptions/ToggleAnimationType</a></li>
 </ul>
 <hr />
 <a name="GameOptions2fAccel5fData"></a>
-<a name="robo120"></a><h2>GameOptions/Accel_Data [ Types ]</h2>
+<a name="robo121"></a><h2>GameOptions/Accel_Data [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo28">GameOptions</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo29">GameOptions</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data for showing keyboard shortcuts
 </pre>
@@ -58,14 +58,14 @@
 
 <hr />
 <a name="GameOptions2fAccels"></a>
-<a name="robo273"></a><h2>GameOptions/Accels [ Variables ]</h2>
+<a name="robo274"></a><h2>GameOptions/Accels [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo28">GameOptions</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo29">GameOptions</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Array with data to show keyboard shortcuts
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>Accels</strong><span class="sign">:</span> <span class="keyword">constant</span> array<span class="sign">(</span>Positive <span class="keyword">range</span> <span class="sign">&lt;</span><span class="sign">&gt;</span><span class="sign">)</span> of <a href="#robo120">Accel_Data</a> <span class="sign">:</span><span class="sign">=</span>
+<pre class="source">   <strong>Accels</strong><span class="sign">:</span> <span class="keyword">constant</span> array<span class="sign">(</span>Positive <span class="keyword">range</span> <span class="sign">&lt;</span><span class="sign">&gt;</span><span class="sign">)</span> of <a href="#robo121">Accel_Data</a> <span class="sign">:</span><span class="sign">=</span>
      <span class="sign">(</span>1 <span class="sign">=</span><span class="sign">&gt;</span>
         <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/btnupleft"</span><span class="sign">)</span><span class="sign">,</span>
          To_Unbounded_String<span class="sign">(</span><span class="quote">"edtupleft"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
@@ -124,22 +124,22 @@
         <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/MissionsInfo"</span><span class="sign">)</span><span class="sign">,</span>
          To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmissions"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       20 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/<a href="./maps-ui-handlers_ads.html#robo637">MoveMap</a>"</span><span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/<a href="./maps-ui-handlers_ads.html#robo644">MoveMap</a>"</span><span class="sign">)</span><span class="sign">,</span>
          To_Unbounded_String<span class="sign">(</span><span class="quote">"edtmap"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       21 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/<a href="../statistics_ads.html#robo331">GameStats</a>"</span><span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/<a href="../statistics_ads.html#robo332">GameStats</a>"</span><span class="sign">)</span><span class="sign">,</span>
          To_Unbounded_String<span class="sign">(</span><span class="quote">"edtgamestats"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       22 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/<a href="../help_ads.html#robo32">Help</a>"</span><span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/<a href="../help_ads.html#robo33">Help</a>"</span><span class="sign">)</span><span class="sign">,</span>
          To_Unbounded_String<span class="sign">(</span><span class="quote">"edthelp"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       23 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/<a href="./gameoptions_ads.html#robo28">GameOptions</a>"</span><span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/<a href="./gameoptions_ads.html#robo29">GameOptions</a>"</span><span class="sign">)</span><span class="sign">,</span>
          To_Unbounded_String<span class="sign">(</span><span class="quote">"edtgameoptions"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       24 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/<a href="./utils-ui_ads.html#robo807">QuitGame</a>"</span><span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/<a href="./utils-ui_ads.html#robo814">QuitGame</a>"</span><span class="sign">)</span><span class="sign">,</span>
          To_Unbounded_String<span class="sign">(</span><span class="quote">"edtquit"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       25 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/<a href="./maps-ui-handlers_ads.html#robo642">ResignFromGame</a>"</span><span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/<a href="./maps-ui-handlers_ads.html#robo649">ResignFromGame</a>"</span><span class="sign">)</span><span class="sign">,</span>
          To_Unbounded_String<span class="sign">(</span><span class="quote">"edtresign"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       26 <span class="sign">=</span><span class="sign">&gt;</span>
         <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu"</span><span class="sign">)</span><span class="sign">,</span>
@@ -190,7 +190,7 @@
         <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/mouseclick"</span><span class="sign">)</span><span class="sign">,</span>
          To_Unbounded_String<span class="sign">(</span><span class="quote">"edtclickmouse"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       42 <span class="sign">=</span><span class="sign">&gt;</span>
-        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/<a href="../stories_ads.html#robo58">Stories</a>"</span><span class="sign">)</span><span class="sign">,</span>
+        <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/Menu/<a href="../stories_ads.html#robo59">Stories</a>"</span><span class="sign">)</span><span class="sign">,</span>
          To_Unbounded_String<span class="sign">(</span><span class="quote">"edtstories"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       43 <span class="sign">=</span><span class="sign">&gt;</span>
         <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"&lt;skymapwindow&gt;/zoomin"</span><span class="sign">)</span><span class="sign">,</span>
@@ -232,9 +232,9 @@
 
 <hr />
 <a name="GameOptions2fSetting"></a>
-<a name="robo274"></a><h2>GameOptions/Setting [ Variables ]</h2>
+<a name="robo275"></a><h2>GameOptions/Setting [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo28">GameOptions</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo29">GameOptions</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> If true, UI is in setting state
 </pre>
@@ -244,9 +244,9 @@
 
 <hr />
 <a name="GameOptions2fApplyTheme"></a>
-<a name="robo553"></a><h2>GameOptions/ApplyTheme [ Subprograms ]</h2>
+<a name="robo560"></a><h2>GameOptions/ApplyTheme [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo28">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo29">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Apply new theme to the game
 </pre>
@@ -259,9 +259,9 @@
 
 <hr />
 <a name="GameOptions2fResizeFont"></a>
-<a name="robo556"></a><h2>GameOptions/ResizeFont [ Subprograms ]</h2>
+<a name="robo563"></a><h2>GameOptions/ResizeFont [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo28">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo29">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set new size for all in-game fonts
 </pre>
@@ -274,9 +274,9 @@
 
 <hr />
 <a name="GameOptions2fSetAccelerator"></a>
-<a name="robo557"></a><h2>GameOptions/SetAccelerator [ Subprograms ]</h2>
+<a name="robo564"></a><h2>GameOptions/SetAccelerator [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo28">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo29">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set selected keyboard shortcut
 </pre>
@@ -295,9 +295,9 @@
 
 <hr />
 <a name="GameOptions2fSetDefaultFontSize"></a>
-<a name="robo558"></a><h2>GameOptions/SetDefaultFontSize [ Subprograms ]</h2>
+<a name="robo565"></a><h2>GameOptions/SetDefaultFontSize [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo28">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo29">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>SetDefaultFontSize</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
 </span>     <span class="keyword"> pragma </span>Unreferenced<span class="sign">(</span>Object<span class="sign"><span class="sign">)</span>;</span>
@@ -308,9 +308,9 @@
 
 <hr />
 <a name="GameOptions2fSetFontsSizes"></a>
-<a name="robo559"></a><h2>GameOptions/SetFontsSizes [ Subprograms ]</h2>
+<a name="robo566"></a><h2>GameOptions/SetFontsSizes [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo28">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo29">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set values for UI for sizes of the game fonts
 </pre>
@@ -320,9 +320,9 @@
 
 <hr />
 <a name="GameOptions2fToggleAnimationType"></a>
-<a name="robo561"></a><h2>GameOptions/ToggleAnimationType [ Subprograms ]</h2>
+<a name="robo568"></a><h2>GameOptions/ToggleAnimationType [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo28">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./gameoptions_ads.html#robo29">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set new type of UI animations
 </pre>
@@ -339,7 +339,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/gameoptions.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 26 2020 06:28:42
+<p>Generated from ./src/ui/gameoptions.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 23 2020 06:34:42
 </p>
 </div> <!-- footer -->
 </body>

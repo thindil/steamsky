@@ -8,11 +8,11 @@
 <link rel="stylesheet" href="../robodoc.css" type="text/css" />
 <title>./src/ui/mainmenu.ads</title>
 <!-- Source: ./src/ui/mainmenu.ads -->
-<!-- Generated with ROBODoc Version 4.99.43 (Jul 26 2019) -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  8 2020) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.6 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.7 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -27,47 +27,47 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo36">Steamsky/MainMenu</a></li>
+<li>1. <a href="#robo37">Steamsky/MainMenu</a></li>
 <ul>
-<li>1.1. <a href="./mainmenu_adb.html#robo296">MainMenu/AdjNames</a></li>
-<li>1.2. <a href="./mainmenu_adb.html#robo297">MainMenu/AllNews</a></li>
-<li>1.3. <a href="./mainmenu_adb.html#robo298">MainMenu/Builder</a></li>
-<li>1.4. <a href="./mainmenu_adb.html#robo299">MainMenu/DataError</a></li>
-<li>1.5. <a href="./mainmenu_adb.html#robo300">MainMenu/Setting</a></li>
-<li>1.6. <a href="#robo593">MainMenu/CreateMainMenu</a></li>
-<li>1.7. <a href="./mainmenu_adb.html#robo594">MainMenu/DeleteGame</a></li>
-<li>1.8. <a href="./mainmenu_adb.html#robo595">MainMenu/LoadFile</a></li>
-<li>1.9. <a href="./mainmenu_adb.html#robo596">MainMenu/LoadGame</a></li>
-<li>1.10. <a href="./mainmenu_adb.html#robo597">MainMenu/NewGame</a></li>
-<li>1.11. <a href="./mainmenu_adb.html#robo598">MainMenu/NewGameKeyPressed</a></li>
-<li>1.12. <a href="#robo599">MainMenu/On_Exception</a></li>
-<li>1.13. <a href="./mainmenu_adb.html#robo600">MainMenu/Quit</a></li>
-<li>1.14. <a href="./mainmenu_adb.html#robo601">MainMenu/RandomDifficulty</a></li>
-<li>1.15. <a href="./mainmenu_adb.html#robo602">MainMenu/RandomDifficultyToggled</a></li>
-<li>1.16. <a href="./mainmenu_adb.html#robo603">MainMenu/RandomName</a></li>
-<li>1.17. <a href="./mainmenu_adb.html#robo604">MainMenu/RefreshSavesList</a></li>
-<li>1.18. <a href="#robo605">MainMenu/SaveException</a></li>
-<li>1.19. <a href="./mainmenu_adb.html#robo606">MainMenu/SetBaseType</a></li>
-<li>1.20. <a href="./mainmenu_adb.html#robo607">MainMenu/SetDifficulty</a></li>
-<li>1.21. <a href="./mainmenu_adb.html#robo608">MainMenu/ShowAllNews</a></li>
-<li>1.22. <a href="./mainmenu_adb.html#robo609">MainMenu/ShowBaseDescription</a></li>
-<li>1.23. <a href="./mainmenu_adb.html#robo610">MainMenu/ShowCareerDescription</a></li>
-<li>1.24. <a href="./mainmenu_adb.html#robo611">MainMenu/ShowErrorInfo</a></li>
-<li>1.25. <a href="./mainmenu_adb.html#robo612">MainMenu/ShowFactionDescription</a></li>
-<li>1.26. <a href="./mainmenu_adb.html#robo613">MainMenu/ShowGoals</a></li>
-<li>1.27. <a href="#robo614">MainMenu/ShowMainMenu</a></li>
-<li>1.28. <a href="./mainmenu_adb.html#robo615">MainMenu/ShowPage</a></li>
-<li>1.29. <a href="./mainmenu_adb.html#robo616">MainMenu/StartGame</a></li>
-<li>1.30. <a href="#robo617">MainMenu/UpdateGoalButton</a></li>
-<li>1.31. <a href="./mainmenu_adb.html#robo618">MainMenu/UpdateInfo</a></li>
-<li>1.32. <a href="./mainmenu_adb.html#robo619">MainMenu/UpdateInfoProc</a></li>
-<li>1.33. <a href="./mainmenu_adb.html#robo620">MainMenu/UpdateNews</a></li>
-<li>1.34. <a href="./mainmenu_adb.html#robo621">MainMenu/UpdateSummary</a></li>
+<li>1.1. <a href="./mainmenu_adb.html#robo297">MainMenu/AdjNames</a></li>
+<li>1.2. <a href="./mainmenu_adb.html#robo298">MainMenu/AllNews</a></li>
+<li>1.3. <a href="./mainmenu_adb.html#robo299">MainMenu/Builder</a></li>
+<li>1.4. <a href="./mainmenu_adb.html#robo300">MainMenu/DataError</a></li>
+<li>1.5. <a href="./mainmenu_adb.html#robo301">MainMenu/Setting</a></li>
+<li>1.6. <a href="./mainmenu_adb.html#robo600">MainMenu/BackToMenu</a></li>
+<li>1.7. <a href="./mainmenu_adb.html#robo601">MainMenu/BaseTypeName</a></li>
+<li>1.8. <a href="#robo602">MainMenu/CreateMainMenu</a></li>
+<li>1.9. <a href="./mainmenu_adb.html#robo603">MainMenu/DeleteGame</a></li>
+<li>1.10. <a href="./mainmenu_adb.html#robo604">MainMenu/LoadFile</a></li>
+<li>1.11. <a href="./mainmenu_adb.html#robo605">MainMenu/LoadGame</a></li>
+<li>1.12. <a href="./mainmenu_adb.html#robo606">MainMenu/LoadGameView</a></li>
+<li>1.13. <a href="./mainmenu_adb.html#robo607">MainMenu/NewGame</a></li>
+<li>1.14. <a href="./mainmenu_adb.html#robo608">MainMenu/NewGameKeyPressed</a></li>
+<li>1.15. <a href="./mainmenu_adb.html#robo609">MainMenu/Quit</a></li>
+<li>1.16. <a href="./mainmenu_adb.html#robo610">MainMenu/RandomDifficulty</a></li>
+<li>1.17. <a href="./mainmenu_adb.html#robo611">MainMenu/RandomDifficultyToggled</a></li>
+<li>1.18. <a href="./mainmenu_adb.html#robo612">MainMenu/RandomName</a></li>
+<li>1.19. <a href="./mainmenu_adb.html#robo613">MainMenu/RefreshSavesList</a></li>
+<li>1.20. <a href="./mainmenu_adb.html#robo614">MainMenu/SetBaseType</a></li>
+<li>1.21. <a href="./mainmenu_adb.html#robo615">MainMenu/SetDifficulty</a></li>
+<li>1.22. <a href="./mainmenu_adb.html#robo616">MainMenu/ShowAllNews</a></li>
+<li>1.23. <a href="./mainmenu_adb.html#robo617">MainMenu/ShowBaseDescription</a></li>
+<li>1.24. <a href="./mainmenu_adb.html#robo618">MainMenu/ShowCareerDescription</a></li>
+<li>1.25. <a href="./mainmenu_adb.html#robo619">MainMenu/ShowFactionDescription</a></li>
+<li>1.26. <a href="./mainmenu_adb.html#robo620">MainMenu/ShowGoals</a></li>
+<li>1.27. <a href="#robo621">MainMenu/ShowMainMenu</a></li>
+<li>1.28. <a href="./mainmenu_adb.html#robo622">MainMenu/ShowPage</a></li>
+<li>1.29. <a href="./mainmenu_adb.html#robo623">MainMenu/StartGame</a></li>
+<li>1.30. <a href="#robo624">MainMenu/UpdateGoalButton</a></li>
+<li>1.31. <a href="./mainmenu_adb.html#robo625">MainMenu/UpdateInfo</a></li>
+<li>1.32. <a href="./mainmenu_adb.html#robo626">MainMenu/UpdateInfoProc</a></li>
+<li>1.33. <a href="./mainmenu_adb.html#robo627">MainMenu/UpdateNews</a></li>
+<li>1.34. <a href="./mainmenu_adb.html#robo628">MainMenu/UpdateSummary</a></li>
 </ul>
 </ul>
 <hr />
 <a name="Steamsky2fMainMenu"></a>
-<a name="robo36"></a><h2>Steamsky/MainMenu [ Packages ]</h2>
+<a name="robo37"></a><h2>Steamsky/MainMenu [ Packages ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -79,9 +79,9 @@
 
 <hr />
 <a name="MainMenu2fCreateMainMenu"></a>
-<a name="robo593"></a><h2>MainMenu/CreateMainMenu [ Subprograms ]</h2>
+<a name="robo602"></a><h2>MainMenu/CreateMainMenu [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Create main menu and show it
 </pre>
@@ -90,42 +90,10 @@
 </pre>
 
 <hr />
-<a name="MainMenu2fOn5fException"></a>
-<a name="robo599"></a><h2>MainMenu/On_Exception [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Handle GUI exceptions
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>On_Exception</strong><span class="sign">(</span>An_Exception<span class="sign">:</span> Exception_Occurrence<span class="sign">)</span><span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> An_Exception - An exception which was occurred
-</pre>
-
-<hr />
-<a name="MainMenu2fSaveException"></a>
-<a name="robo605"></a><h2>MainMenu/SaveException [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Save data exception to file
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>SaveException</strong>
-     <span class="sign">(</span>An_Exception<span class="sign">:</span> Exception_Occurrence<span class="sign">;</span> PrintToTerminal<span class="sign">:</span> Boolean<span class="sign">)</span><span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> An_Exception    - An exception which was occurred
- PrintToTerminal - If true, print info about exception to terminal
-</pre>
-
-<hr />
 <a name="MainMenu2fShowMainMenu"></a>
-<a name="robo614"></a><h2>MainMenu/ShowMainMenu [ Subprograms ]</h2>
+<a name="robo621"></a><h2>MainMenu/ShowMainMenu [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show main menu window
 </pre>
@@ -135,9 +103,9 @@
 
 <hr />
 <a name="MainMenu2fUpdateGoalButton"></a>
-<a name="robo617"></a><h2>MainMenu/UpdateGoalButton [ Subprograms ]</h2>
+<a name="robo624"></a><h2>MainMenu/UpdateGoalButton [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo36">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo37">MainMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update label on character goal button
 </pre>
@@ -151,7 +119,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/mainmenu.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 26 2020 06:28:42
+<p>Generated from ./src/ui/mainmenu.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 23 2020 06:34:41
 </p>
 </div> <!-- footer -->
 </body>
