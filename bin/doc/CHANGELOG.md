@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- New item: iron 100mm explosive ammo
+
 ## [4.7] - 2019-02-23
 
 ### Added
