@@ -28,6 +28,7 @@ with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.String_Split; use GNAT.String_Split;
 with GNAT.OS_Lib; use GNAT.OS_Lib;
 with Gtkada.Builder; use Gtkada.Builder;
+with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Box; use Gtk.Box;
 with Gtk.Button; use Gtk.Button;
@@ -129,6 +130,13 @@ package body MainMenu is
    -- Type of base for new game
    -- SOURCE
    BaseTypeName: Unbounded_String;
+   -- ****
+
+   -- ****iv* MainMenu/MainMenuWindow
+   -- FUNCTION
+   -- Gtk window for main menu
+   -- SOURCE
+   MainMenuWindow: Gtk_Window;
    -- ****
 
    -- ****if* MainMenu/Quit
@@ -321,16 +329,15 @@ package body MainMenu is
       elsif User_Data = Get_Object(Builder, "btnabout") then
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page4");
-         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback4")));
-      elsif User_Data = Get_Object(Builder, "btnlicense") then
-         LoadFile("COPYING");
-         Set_Visible_Child_Name
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
          Grab_Focus
            (Get_Child
               (Gtk_Box
-                 (Get_Visible_Child
-                    (Gtk_Stack(Get_Object(Builder, "mainmenustack")))),
+                 (Get_Child
+                    (Gtk_Box
+                       (Get_Child_By_Name
+                          (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
+                           "page4")),
+                     5)),
                1));
       elsif User_Data = Get_Object(Builder, "btnloadgame") then
          RefreshSavesList;
@@ -1030,6 +1037,27 @@ package body MainMenu is
       StartGame;
    end LoadGameView;
 
+   -- ****if* MainMenu/ShowLicense
+   -- FUNCTION
+   -- Show license text after clicking the button
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked. Unused.
+   -- SOURCE
+   procedure ShowLicense(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
+      -- ****
+   begin
+      LoadFile("COPYING");
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
+      Grab_Focus
+        (Get_Child
+           (Gtk_Box
+              (Get_Visible_Child
+                 (Gtk_Stack(Get_Object(Builder, "mainmenustack")))),
+            1));
+   end ShowLicense;
+
    procedure CreateMainMenu is
       Error: aliased GError;
       AdjValues: constant array(Positive range <>) of Gdouble :=
@@ -1041,6 +1069,7 @@ package body MainMenu is
          Gdouble(NewGameSettings.ReputationBonus),
          Gdouble(NewGameSettings.UpgradeCostBonus),
          Gdouble(NewGameSettings.PricesBonus));
+      Accelerators: constant Gtk_Accel_Group := Gtk_Accel_Group_New;
    begin
       LoadThemes;
       SetFontSize(ALLFONTS);
@@ -1053,7 +1082,8 @@ package body MainMenu is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      CreateErrorUI(Gtk_Window(Get_Object(Builder, "mainmenuwindow")));
+      MainMenuWindow := Gtk_Window(Get_Object(Builder, "mainmenuwindow"));
+      CreateErrorUI(MainMenuWindow);
       Register_Handler(Builder, "Main_Quit", Quit'Access);
       Register_Handler(Builder, "Show_All_News", ShowAllNews'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
@@ -1128,6 +1158,26 @@ package body MainMenu is
         (Gtk_Widget(Get_Object(Builder, "newgamebox")),
          NewGameKeyPressed'Access);
       declare
+         AboutBox: constant Gtk_Vbox :=
+           Gtk_Vbox(Get_Object(Builder, "aboutbox"));
+         ButtonBox: constant Gtk_Button_Box :=
+           Gtk_Button_Box_New(Orientation_Horizontal);
+         Button: Gtk_Button;
+      begin
+         Button := Gtk_Button_New_With_Mnemonic("_Show full license");
+         On_Clicked(Button, ShowLicense'Access);
+         Pack_Start(ButtonBox, Button);
+         Button := Gtk_Button_New_With_Mnemonic("_Back to menu");
+         Set_Halign(Button, Align_End);
+         Set_Valign(Button, Align_End);
+         On_Clicked(Button, BackToMenu'Access);
+         Add_Accelerator
+           (Button, "clicked", Accelerators, GDK_Escape, 0, Accel_Visible);
+         Pack_Start(ButtonBox, Button);
+         Set_Halign(ButtonBox, Align_End);
+         Pack_Start(AboutBox, ButtonBox, False);
+      end;
+      declare
          ShowFileBox: constant Gtk_Vbox := Gtk_Vbox_New;
          BackButton: constant Gtk_Button :=
            Gtk_Button_New_With_Mnemonic("_Back");
@@ -1144,6 +1194,8 @@ package body MainMenu is
          Set_Policy(FileScroll, Policy_Never, Policy_Automatic);
          Pack_Start(ShowFileBox, FileScroll);
          On_Clicked(BackButton, BackToMenu'Access);
+         Add_Accelerator
+           (BackButton, "clicked", Accelerators, GDK_Escape, 0, Accel_Visible);
          Set_Halign(BackButton, Align_End);
          Set_Valign(BackButton, Align_End);
          Pack_Start(ShowFileBox, BackButton, False);
@@ -1212,6 +1264,8 @@ package body MainMenu is
          Pack_Start(ButtonBox, Button);
          Button := Gtk_Button_New_With_Mnemonic("_Back to main menu");
          On_Clicked(Button, BackToMenu'Access);
+         Add_Accelerator
+           (Button, "clicked", Accelerators, GDK_Escape, 0, Accel_Visible);
          Pack_Start(ButtonBox, Button);
          Pack_Start(LoadBox, ButtonBox, False);
          Add_Named
@@ -1244,6 +1298,7 @@ package body MainMenu is
             Get_Label(Label) & " from '" & To_String(ErrorFileDirectory) &
             "' directory.");
       end;
+      Add_Accel_Group(MainMenuWindow, Accelerators);
       ShowMainMenu;
       if DataError /= Null_Unbounded_String then
          Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
