@@ -1163,7 +1163,15 @@ package body MainMenu is
          ButtonBox: constant Gtk_Button_Box :=
            Gtk_Button_Box_New(Orientation_Horizontal);
          Button: Gtk_Button;
+         Label: Gtk_Label;
       begin
+         Label :=
+           Gtk_Label_New
+             ("Steam Sky is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version." &
+              LF &
+              "Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
+         Set_Line_Wrap(Label, True);
+         Pack_Start(AboutBox, Label);
          Button := Gtk_Button_New_With_Mnemonic("_Show full license");
          On_Clicked(Button, ShowLicense'Access);
          Pack_Start(ButtonBox, Button);
