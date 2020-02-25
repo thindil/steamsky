@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New item: iron 100mm explosive ammo
+- New items: iron 100mm explosive ammo, iron 120mm piercing ammo
 - New crafting recipe: iron 100mm explosive ammo
 
 ## [4.7] - 2019-02-23
