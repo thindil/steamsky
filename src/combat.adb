@@ -159,16 +159,26 @@ package body Combat is
          if (EnemyShip.Modules(I).MType in GUN | HARPOON_GUN) and
            EnemyShip.Modules(I).Durability > 0 then
             if Modules_List(EnemyShip.Modules(I).ProtoIndex).Speed > 0 then
-               ShootingSpeed :=
-                 Natural
-                   (Float'Ceiling
-                      (Float
-                         (Modules_List(EnemyShip.Modules(I).ProtoIndex)
-                            .Speed) /
-                       2.0));
+               if ProtoShips_List(EnemyIndex).CombatAI = DISARMER then
+                  ShootingSpeed :=
+                    Natural
+                      (Float'Ceiling
+                         (Float
+                            (Modules_List(EnemyShip.Modules(I).ProtoIndex)
+                               .Speed) /
+                          2.0));
+               else
+                  ShootingSpeed :=
+                    Modules_List(EnemyShip.Modules(I).ProtoIndex).Speed;
+               end if;
             else
-               ShootingSpeed :=
-                 Modules_List(EnemyShip.Modules(I).ProtoIndex).Speed - 1;
+               if ProtoShips_List(EnemyIndex).CombatAI = DISARMER then
+                  ShootingSpeed :=
+                    Modules_List(EnemyShip.Modules(I).ProtoIndex).Speed - 1;
+               else
+                  ShootingSpeed :=
+                    Modules_List(EnemyShip.Modules(I).ProtoIndex).Speed;
+               end if;
             end if;
             EnemyGuns.Append
               (New_Item => (Modules_Container.To_Index(I), 1, ShootingSpeed));
@@ -404,10 +414,18 @@ package body Combat is
                            Gun(3) := Gun(3) + 1;
                            if Gun(3) = 0 then
                               Shoots := 1;
-                              Gun(3) :=
-                                Modules_List(Ship.Modules(Gun(1)).ProtoIndex)
-                                  .Speed -
-                                1;
+                              if Enemy.CombatAI = DISARMER then
+                                 Gun(3) :=
+                                   Modules_List
+                                     (Ship.Modules(Gun(1)).ProtoIndex)
+                                     .Speed -
+                                   1;
+                              else
+                                 Gun(3) :=
+                                   Modules_List
+                                     (Ship.Modules(Gun(1)).ProtoIndex)
+                                     .Speed;
+                              end if;
                            end if;
                         end if;
                         exit;
