@@ -364,36 +364,6 @@ package body MainMenu is
                               "page6")),
                         0)))),
             Gtk_Tree_Path_New_From_String("0"), null, False);
-      elsif User_Data = Get_Object(Builder, "btncontribute") then
-         LoadFile("CONTRIBUTING.md");
-         Set_Visible_Child_Name
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
-         Grab_Focus
-           (Get_Child
-              (Gtk_Box
-                 (Get_Visible_Child
-                    (Gtk_Stack(Get_Object(Builder, "mainmenustack")))),
-               1));
-      elsif User_Data = Get_Object(Builder, "btnmodding") then
-         LoadFile("MODDING.md");
-         Set_Visible_Child_Name
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
-         Grab_Focus
-           (Get_Child
-              (Gtk_Box
-                 (Get_Visible_Child
-                    (Gtk_Stack(Get_Object(Builder, "mainmenustack")))),
-               1));
-      elsif User_Data = Get_Object(Builder, "btnreadme") then
-         LoadFile("README.md");
-         Set_Visible_Child_Name
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
-         Grab_Focus
-           (Get_Child
-              (Gtk_Box
-                 (Get_Visible_Child
-                    (Gtk_Stack(Get_Object(Builder, "mainmenustack")))),
-               1));
       end if;
    end ShowPage;
 
@@ -1058,6 +1028,69 @@ package body MainMenu is
             1));
    end ShowLicense;
 
+   -- ****if* MainMenu/ShowContributing
+   -- FUNCTION
+   -- Show contributing guide text after clicking the button
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked. Unused.
+   -- SOURCE
+   procedure ShowContributing(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
+      -- ****
+   begin
+      LoadFile("CONTRIBUTING.md");
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
+      Grab_Focus
+        (Get_Child
+           (Gtk_Box
+              (Get_Visible_Child
+                 (Gtk_Stack(Get_Object(Builder, "mainmenustack")))),
+            1));
+   end ShowContributing;
+
+   -- ****if* MainMenu/ShowModding
+   -- FUNCTION
+   -- Show modding guide text after clicking the button
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked. Unused.
+   -- SOURCE
+   procedure ShowModding(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
+      -- ****
+   begin
+      LoadFile("MODDING.md");
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
+      Grab_Focus
+        (Get_Child
+           (Gtk_Box
+              (Get_Visible_Child
+                 (Gtk_Stack(Get_Object(Builder, "mainmenustack")))),
+            1));
+   end ShowModding;
+
+   -- ****if* MainMenu/ShowReadme
+   -- FUNCTION
+   -- Show README.md text after clicking the button
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked. Unused.
+   -- SOURCE
+   procedure ShowReadme(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
+      -- ****
+   begin
+      LoadFile("README.md");
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
+      Grab_Focus
+        (Get_Child
+           (Gtk_Box
+              (Get_Visible_Child
+                 (Gtk_Stack(Get_Object(Builder, "mainmenustack")))),
+            1));
+   end ShowReadme;
+
    procedure CreateMainMenu is
       Error: aliased GError;
       AdjValues: constant array(Positive range <>) of Gdouble :=
@@ -1160,11 +1193,22 @@ package body MainMenu is
       declare
          AboutBox: constant Gtk_Vbox :=
            Gtk_Vbox(Get_Object(Builder, "aboutbox"));
-         ButtonBox: constant Gtk_Button_Box :=
+         ButtonBox: Gtk_Button_Box :=
            Gtk_Button_Box_New(Orientation_Horizontal);
          Button: Gtk_Button;
          Label: Gtk_Label;
       begin
+         Button := Gtk_Button_New_With_Label("Get Involved");
+         On_Clicked(Button, ShowContributing'Access);
+         Pack_Start(ButtonBox, Button);
+         Button := Gtk_Button_New_With_Label("Modify game");
+         On_Clicked(Button, ShowModding'Access);
+         Pack_Start(ButtonBox, Button);
+         Button := Gtk_Button_New_With_Label("README");
+         On_Clicked(Button, ShowReadme'Access);
+         Pack_Start(ButtonBox, Button);
+         Set_Halign(ButtonBox, Align_Center);
+         Pack_Start(AboutBox, ButtonBox, False);
          Label :=
            Gtk_Label_New
              ("Steam Sky is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version." &
@@ -1172,6 +1216,7 @@ package body MainMenu is
               "Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.");
          Set_Line_Wrap(Label, True);
          Pack_Start(AboutBox, Label);
+         ButtonBox := Gtk_Button_Box_New(Orientation_Horizontal);
          Button := Gtk_Button_New_With_Mnemonic("_Show full license");
          On_Clicked(Button, ShowLicense'Access);
          Pack_Start(ButtonBox, Button);
