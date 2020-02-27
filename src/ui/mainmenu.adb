@@ -42,6 +42,7 @@ with Gtk.Enums; use Gtk.Enums;
 with Gtk.GEntry; use Gtk.GEntry;
 with Gtk.Info_Bar; use Gtk.Info_Bar;
 with Gtk.Label; use Gtk.Label;
+with Gtk.Link_Button; use Gtk.Link_Button;
 with Gtk.List_Store; use Gtk.List_Store;
 with Gtk.Main;
 with Gtk.Message_Dialog; use Gtk.Message_Dialog;
@@ -1197,7 +1198,21 @@ package body MainMenu is
            Gtk_Button_Box_New(Orientation_Horizontal);
          Button: Gtk_Button;
          Label: Gtk_Label;
+         LinkButton: Gtk_Link_Button;
       begin
+         LinkButton :=
+           Gtk_Link_Button_New_With_Label
+             ("https://thindil.itch.io/steam-sky", "Website");
+         Set_Property(LinkButton, Gtk.Widget.Name_Property, "flatbutton");
+         Set_Halign(LinkButton, Align_Center);
+         Pack_Start(AboutBox, LinkButton, False);
+         LinkButton :=
+           Gtk_Link_Button_New_With_Label
+             ("mailto:thindil@laeran.pl",
+              "(c)2016-2020 Bartek thindil Jasicki");
+         Set_Property(LinkButton, Gtk.Widget.Name_Property, "flatbutton");
+         Set_Halign(LinkButton, Align_Center);
+         Pack_Start(AboutBox, LinkButton, False);
          Button := Gtk_Button_New_With_Label("Get Involved");
          On_Clicked(Button, ShowContributing'Access);
          Pack_Start(ButtonBox, Button);
