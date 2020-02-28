@@ -1650,5 +1650,10 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Upgraded piercing 20mm gun ammunition. Do more damage but it is less accurate.</description>
  </item>
+ <item index="339" name="Steel 20mm explosive ammo" showtype="Ammunition" type="Ammo20" weight="1" price="7">
+  <data value="2"/>
+  <data value="3"/>
+  <description>Upgraded explosive 20mm gun ammunition. Do less damage but it is more accurate.</description>
+ </item>
 </items>
 
