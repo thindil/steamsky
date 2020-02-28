@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New items: iron 100mm explosive ammo, iron 120mm piercing ammo, iron 120mm
-  explosive ammo, steel 20mm piercing ammo
+  explosive ammo, steel 20mm piercing ammo, steel 20mm explosive ammo
 - New crafting recipes: iron 100mm explosive ammo, iron 120mm piercing ammo,
   iron 120mm explosive ammo, steel 20mm piercing ammo
 
