@@ -1200,6 +1200,9 @@ package body MainMenu is
          Label: Gtk_Label;
          LinkButton: Gtk_Link_Button;
       begin
+         Label := Gtk_Label_New("Roguelike in the sky with a steampunk theme");
+         Set_Line_Wrap(Label, True);
+         Pack_Start(AboutBox, Label);
          LinkButton :=
            Gtk_Link_Button_New_With_Label
              ("https://thindil.itch.io/steam-sky", "Website");
