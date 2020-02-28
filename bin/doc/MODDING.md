@@ -393,9 +393,10 @@ Value must be an existing skill name.
   Attacker - aggressive but will be run away from combat when lost all
   ammunition or weapons. Coward - try run from combat, attacks only in
   self-defense. Disarmer - same as Attacker but first aim for player ship
-  weapons before start destroying ship. Additionally, each behavior determine
-  when the enemy will start escaping from the combat, from fastest to longest:
-  Disarmer, Attacker, Berserker.
+  weapons before start destroying ship and it shoot with lower fire rate than
+  others AI's. Additionally, each behavior determine when the enemy will start
+  escaping from the combat, from fastest to longest: Disarmer, Attacker,
+  Berserker.
 - Attribute `evasion`: Bonus to evasion for ship.
 - Attributes `minevasion` and `maxevasion`: If bonus to evasion for ship should
   be random, add attribute `minevasion` for minimum value and `maxevasion` for
