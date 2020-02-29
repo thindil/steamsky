@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated bases data with new items and recipes
 - Fire rate of enemies ships: Disarmers shoot less often than others
+- Updated MODDING.md
 
 ## [4.7] - 2019-02-23
 
