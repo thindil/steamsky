@@ -326,7 +326,16 @@ package body MainMenu is
       elsif User_Data = Get_Object(Builder, "btnnews") then
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page3");
-         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnfull")));
+         Grab_Focus
+           (Get_Child
+              (Gtk_Box
+                 (Get_Child
+                    (Gtk_Box
+                       (Get_Child_By_Name
+                          (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
+                           "page3")),
+                     1)),
+               1));
       elsif User_Data = Get_Object(Builder, "btnabout") then
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page4");
@@ -404,20 +413,17 @@ package body MainMenu is
    -- ****if* MainMenu/ShowAllNews
    -- Show all the game news
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Button which was clicked.
    -- SOURCE
-   procedure ShowAllNews(Object: access Gtkada_Builder_Record'Class) is
+   procedure ShowAllNews(Self: access Gtk_Button_Record'Class) is
    -- ****
    begin
       AllNews := not AllNews;
       UpdateNews;
       if AllNews then
-         Set_Label
-           (Gtk_Button(Get_Object(Object, "btnfull")),
-            "Show only newest changes");
+         Set_Label(Self, "Show only newest changes");
       else
-         Set_Label
-           (Gtk_Button(Get_Object(Object, "btnfull")), "Show all changes");
+         Set_Label(Self, "Show all changes");
       end if;
    end ShowAllNews;
 
@@ -1119,7 +1125,6 @@ package body MainMenu is
       MainMenuWindow := Gtk_Window(Get_Object(Builder, "mainmenuwindow"));
       CreateErrorUI(MainMenuWindow);
       Register_Handler(Builder, "Main_Quit", Quit'Access);
-      Register_Handler(Builder, "Show_All_News", ShowAllNews'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Random_Name", RandomName'Access);
       Register_Handler(Builder, "Show_Goals", ShowGoals'Access);
@@ -1192,6 +1197,24 @@ package body MainMenu is
         (Gtk_Widget(Get_Object(Builder, "newgamebox")),
          NewGameKeyPressed'Access);
       declare
+         ChangelogBox: constant Gtk_Vbox :=
+           Gtk_Vbox(Get_Object(Builder, "changelogbox"));
+         ButtonBox: constant Gtk_Button_Box :=
+           Gtk_Button_Box_New(Orientation_Horizontal);
+         Button: Gtk_Button;
+      begin
+         Button := Gtk_Button_New_With_Mnemonic("_Show all changes");
+         On_Clicked(Button, ShowAllNews'Access);
+         Pack_Start(ButtonBox, Button);
+         Button := Gtk_Button_New_With_Mnemonic("_Back to menu");
+         On_Clicked(Button, BackToMenu'Access);
+         Add_Accelerator
+           (Button, "clicked", Accelerators, GDK_Escape, 0, Accel_Visible);
+         Pack_Start(ButtonBox, Button);
+         Set_Halign(ButtonBox, Align_End);
+         Pack_Start(ChangelogBox, ButtonBox, False);
+      end;
+      declare
          AboutBox: constant Gtk_Vbox := Gtk_Vbox_New;
          ButtonBox: Gtk_Button_Box :=
            Gtk_Button_Box_New(Orientation_Horizontal);
@@ -1238,8 +1261,6 @@ package body MainMenu is
          On_Clicked(Button, ShowLicense'Access);
          Pack_Start(ButtonBox, Button);
          Button := Gtk_Button_New_With_Mnemonic("_Back to menu");
-         Set_Halign(Button, Align_End);
-         Set_Valign(Button, Align_End);
          On_Clicked(Button, BackToMenu'Access);
          Add_Accelerator
            (Button, "clicked", Accelerators, GDK_Escape, 0, Accel_Visible);
