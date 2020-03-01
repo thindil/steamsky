@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
   40mm piercing ammo, steel 40mm explosive ammo
 - New crafting recipes: iron 100mm explosive ammo, iron 120mm piercing ammo,
   iron 120mm explosive ammo, steel 20mm piercing ammo, steel 20mm explosive
-  ammo, steel 40mm piercing ammo
+  ammo, steel 40mm piercing ammo, steel 40mm explosive ammo
 
 ### Changed
 - Updated bases data with new items and recipes
