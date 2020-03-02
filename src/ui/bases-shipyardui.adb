@@ -43,6 +43,7 @@ with Items; use Items;
 with Bases.Ship; use Bases.Ship;
 with Utils.UI; use Utils.UI;
 with Trades; use Trades;
+with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 
 package body Bases.ShipyardUI is
@@ -618,9 +619,6 @@ package body Bases.ShipyardUI is
    end VisibleShipyard;
 
    procedure CreateBasesShipyardUI is
-      ModulesList: constant Gtk_List_Store :=
-        Gtk_List_Store(Get_Object(Builder, "installmoduleslist"));
-      ModulesIter: Gtk_Tree_Iter;
    begin
       Register_Handler(Builder, "Show_Install_Info", ShowInstallInfo'Access);
       Register_Handler(Builder, "Manipulate_Module", ManipulateModule'Access);
@@ -632,8 +630,20 @@ package body Bases.ShipyardUI is
       On_Key_Press_Event
         (Gtk_Widget(Get_Object(Builder, "shipyardsearch")),
          SelectElement'Access, Get_Object(Builder, "btnmenu"));
+   end CreateBasesShipyardUI;
+
+   procedure ShowShipyardUI is
+      ModulesList: constant Gtk_List_Store :=
+        Gtk_List_Store(Get_Object(Builder, "installmoduleslist"));
+      ModulesIter: Gtk_Tree_Iter;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+   begin
+      SetRemoveModulesList;
+      ModulesList.Clear;
       for I in Modules_List.Iterate loop
-         if Modules_List(I).Price > 0 then
+         if Modules_List(I).Price > 0 and
+           SkyBases(BaseIndex).Reputation(1) >= Modules_List(I).Reputation then
             Append(ModulesList, ModulesIter);
             Set(ModulesList, ModulesIter, 0, To_String(Modules_List(I).Name));
             Set
@@ -655,11 +665,6 @@ package body Bases.ShipyardUI is
                To_String(Modules_List(I).RepairMaterial));
          end if;
       end loop;
-   end CreateBasesShipyardUI;
-
-   procedure ShowShipyardUI is
-   begin
-      SetRemoveModulesList;
       Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbtypes")), 0);
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "shipyard");
