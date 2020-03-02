@@ -1202,7 +1202,18 @@ package body MainMenu is
          ButtonBox: constant Gtk_Button_Box :=
            Gtk_Button_Box_New(Orientation_Horizontal);
          Button: Gtk_Button;
+         NewsScroll: constant Gtk_Scrolled_Window := Gtk_Scrolled_Window_New;
+         NewsView: constant Gtk_Text_View :=
+           Gtk_Text_View_New_With_Buffer
+             (Gtk_Text_Buffer(Get_Object(Builder, "newsbuffer")));
       begin
+         Set_Editable(NewsView, False);
+         Set_Cursor_Visible(NewsView, False);
+         Set_Wrap_Mode(NewsView, Wrap_Word);
+         Set_Property(NewsView, Gtk.Widget.Name_Property, "normalfont");
+         Add(NewsScroll, NewsView);
+         Set_Policy(NewsScroll, Policy_Never, Policy_Automatic);
+         Pack_Start(ChangelogBox, NewsScroll);
          Button := Gtk_Button_New_With_Mnemonic("_Show all changes");
          On_Clicked(Button, ShowAllNews'Access);
          Pack_Start(ButtonBox, Button);
