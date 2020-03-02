@@ -56,6 +56,7 @@ package ShipModules is
    -- Description    - Description of module
    -- MaxOwners      - How many owners module can have
    -- Speed          - How fast the gun shoots in combat
+   -- Reputation     - Minimal reputation in base needed to buy that module
    -- SOURCE
    type BaseModule_Data is record
       Name: Unbounded_String;
@@ -73,6 +74,7 @@ package ShipModules is
       Description: Unbounded_String;
       MaxOwners: Natural;
       Speed: Integer;
+      Reputation: Integer;
    end record;
    -- ****
 

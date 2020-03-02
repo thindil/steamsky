@@ -45,7 +45,8 @@ package body ShipModules is
             Value => 0, MaxValue => 0, Durability => 0,
             RepairMaterial => Null_Unbounded_String, RepairSkill => 2,
             Price => 0, InstallTime => 60, Unique => False, Size => 1,
-            Description => Null_Unbounded_String, MaxOwners => 1, Speed => 4);
+            Description => Null_Unbounded_String, MaxOwners => 1, Speed => 4,
+            Reputation => -100);
          ModuleNode := Item(NodesList, I);
          ModuleIndex :=
            To_Unbounded_String(Get_Attribute(ModuleNode, "index"));
@@ -148,6 +149,10 @@ package body ShipModules is
             if Get_Attribute(ModuleNode, "speed")'Length > 0 then
                TempRecord.Speed :=
                  Integer'Value(Get_Attribute(ModuleNode, "speed"));
+            end if;
+            if Get_Attribute(ModuleNode, "reputation")'Length > 0 then
+               TempRecord.Reputation :=
+                 Integer'Value(Get_Attribute(ModuleNode, "reputation"));
             end if;
             if Has_Child_Nodes(ModuleNode) then
                TempRecord.Description :=
