@@ -354,6 +354,8 @@ Value must be an existing skill name.
   this gun shoots. Default value is 4. Values below 0 means that the gun shoot
   shoot once in few rounds. For example, -3 mean the gun shoot once per 3
   rounds.
+- Optional attribute `reputation`: Minimal reputation in bases needed to
+  buy that module from them. Default value is -100 (available in all bases).
 - Text between `module` tags is module description.
 
 ## Ships
