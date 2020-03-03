@@ -1197,8 +1197,7 @@ package body MainMenu is
         (Gtk_Widget(Get_Object(Builder, "newgamebox")),
          NewGameKeyPressed'Access);
       declare
-         ChangelogBox: constant Gtk_Vbox :=
-           Gtk_Vbox(Get_Object(Builder, "changelogbox"));
+         ChangelogBox: constant Gtk_Vbox := Gtk_Vbox_New;
          ButtonBox: constant Gtk_Button_Box :=
            Gtk_Button_Box_New(Orientation_Horizontal);
          Button: Gtk_Button;
@@ -1224,6 +1223,9 @@ package body MainMenu is
          Pack_Start(ButtonBox, Button);
          Set_Halign(ButtonBox, Align_End);
          Pack_Start(ChangelogBox, ButtonBox, False);
+         Add_Named
+           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), ChangelogBox,
+            "page3");
       end;
       declare
          AboutBox: constant Gtk_Vbox := Gtk_Vbox_New;
