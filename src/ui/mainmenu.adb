@@ -322,7 +322,13 @@ package body MainMenu is
          end;
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page2");
-         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnback2")));
+         Grab_Focus
+           (Get_Child
+              (Gtk_Box
+                 (Get_Child_By_Name
+                    (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
+                     "page2")),
+               1));
       elsif User_Data = Get_Object(Builder, "btnnews") then
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page3");
@@ -1196,6 +1202,18 @@ package body MainMenu is
       On_Key_Press_Event
         (Gtk_Widget(Get_Object(Builder, "newgamebox")),
          NewGameKeyPressed'Access);
+      declare
+         HallOfFameBox: constant Gtk_Vbox :=
+           Gtk_Vbox(Get_Object(Builder, "halloffamebox"));
+         BackButton: constant Gtk_Button :=
+           Gtk_Button_New_With_Mnemonic("_Back to menu");
+      begin
+         On_Clicked(BackButton, BackToMenu'Access);
+         Add_Accelerator
+           (BackButton, "clicked", Accelerators, GDK_Escape, 0, Accel_Visible);
+         Set_Halign(BackButton, Align_End);
+         Pack_Start(HallOfFameBox, BackButton, False);
+      end;
       declare
          ChangelogBox: constant Gtk_Vbox := Gtk_Vbox_New;
          ButtonBox: constant Gtk_Button_Box :=
