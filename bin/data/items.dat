@@ -1680,5 +1680,10 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Upgraded piercing 80mm gun ammunition. Do more damage but it is less accurate.</description>
  </item>
+ <item index="345" name="Steel 80mm explosive ammo" showtype="Ammunition" type="Ammo80" weight="8" price="22">
+  <data value="24"/>
+  <data value="3"/>
+  <description>Upgraded explosive 80mm gun ammunition. Do less damage but it is more accurate.</description>
+ </item>
 </items>
 
