@@ -1207,7 +1207,66 @@ package body MainMenu is
            Gtk_Vbox(Get_Object(Builder, "halloffamebox"));
          BackButton: constant Gtk_Button :=
            Gtk_Button_New_With_Mnemonic("_Back to menu");
+         HoFView: constant Gtk_Tree_View :=
+           Gtk_Tree_View_New_With_Model
+             (+(Gtk_List_Store(Get_Object(Builder, "hoflist"))));
+         Column: Gtk_Tree_View_Column;
+         Area: Gtk_Cell_Area_Box := Gtk_Cell_Area_Box_New;
+         Renderer: Gtk_Cell_Renderer_Text;
       begin
+         Set_Enable_Search(HoFView, False);
+         Renderer := Gtk_Cell_Renderer_Text_New;
+         Pack_Start(Area, Renderer, True);
+         Add_Attribute(Area, Renderer, "text", 0);
+         Column := Gtk_Tree_View_Column_New_With_Area(Area);
+         Set_Title(Column, "Position");
+         Set_Clickable(Column, True);
+         Set_Sort_Indicator(Column, True);
+         Set_Sort_Column_Id(Column, 0);
+         if Append_Column(HoFView, Column) /= 1 then
+            raise Program_Error
+              with "Can't add column position to hall of fame list.";
+         end if;
+         Area := Gtk_Cell_Area_Box_New;
+         Renderer := Gtk_Cell_Renderer_Text_New;
+         Pack_Start(Area, Renderer, True);
+         Add_Attribute(Area, Renderer, "text", 1);
+         Column := Gtk_Tree_View_Column_New_With_Area(Area);
+         Set_Title(Column, "Name");
+         Set_Clickable(Column, True);
+         Set_Sort_Indicator(Column, True);
+         Set_Sort_Column_Id(Column, 1);
+         if Append_Column(HoFView, Column) /= 2 then
+            raise Program_Error
+              with "Can't add column name to hall of fame list.";
+         end if;
+         Area := Gtk_Cell_Area_Box_New;
+         Renderer := Gtk_Cell_Renderer_Text_New;
+         Pack_Start(Area, Renderer, True);
+         Add_Attribute(Area, Renderer, "text", 2);
+         Column := Gtk_Tree_View_Column_New_With_Area(Area);
+         Set_Title(Column, "Points");
+         Set_Clickable(Column, True);
+         Set_Sort_Indicator(Column, True);
+         Set_Sort_Column_Id(Column, 2);
+         if Append_Column(HoFView, Column) /= 3 then
+            raise Program_Error
+              with "Can't add column points to hall of fame list.";
+         end if;
+         Area := Gtk_Cell_Area_Box_New;
+         Renderer := Gtk_Cell_Renderer_Text_New;
+         Pack_Start(Area, Renderer, True);
+         Add_Attribute(Area, Renderer, "text", 3);
+         Column := Gtk_Tree_View_Column_New_With_Area(Area);
+         Set_Title(Column, "Died from");
+         Set_Clickable(Column, True);
+         Set_Sort_Indicator(Column, True);
+         Set_Sort_Column_Id(Column, 3);
+         if Append_Column(HoFView, Column) /= 4 then
+            raise Program_Error
+              with "Can't add column died from to hall of fame list.";
+         end if;
+         Pack_Start(HallOfFameBox, HoFView);
          On_Clicked(BackButton, BackToMenu'Access);
          Add_Accelerator
            (BackButton, "clicked", Accelerators, GDK_Escape, 0, Accel_Visible);
