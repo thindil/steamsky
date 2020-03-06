@@ -1203,8 +1203,7 @@ package body MainMenu is
         (Gtk_Widget(Get_Object(Builder, "newgamebox")),
          NewGameKeyPressed'Access);
       declare
-         HallOfFameBox: constant Gtk_Vbox :=
-           Gtk_Vbox(Get_Object(Builder, "halloffamebox"));
+         HallOfFameBox: constant Gtk_Vbox := Gtk_Vbox_New;
          BackButton: constant Gtk_Button :=
            Gtk_Button_New_With_Mnemonic("_Back to menu");
          HoFView: constant Gtk_Tree_View :=
@@ -1272,6 +1271,9 @@ package body MainMenu is
            (BackButton, "clicked", Accelerators, GDK_Escape, 0, Accel_Visible);
          Set_Halign(BackButton, Align_End);
          Pack_Start(HallOfFameBox, BackButton, False);
+         Add_Named
+           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), HallOfFameBox,
+            "page2");
       end;
       declare
          ChangelogBox: constant Gtk_Vbox := Gtk_Vbox_New;
