@@ -1072,5 +1072,9 @@ If you want add more materials to recipe, just add new tag "material" with prope
   <material amount="2" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
+ <recipe crafted="1" difficulty="25" index="324" result="346" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+  <material amount="4" type="Steel"/>
+  <material amount="2" type="Gunpowder"/>
+ </recipe>
 </recipes>
 
