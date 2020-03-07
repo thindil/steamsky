@@ -540,81 +540,84 @@ package body MainMenu is
    -- FUNCTION
    -- Start a new game
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Button which was clicked
    -- SOURCE
-   procedure NewGame(Object: access Gtkada_Builder_Record'Class) is
+   procedure NewGame(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
       -- ****
       Gender: Character;
    begin
-      if Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbgender"))) = 0 then
+      if Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbgender"))) = 0 then
          Gender := 'M';
       else
          Gender := 'F';
       end if;
       if Get_Active
-          (Gtk_Toggle_Button(Get_Object(Object, "cbtndifficulty"))) then
-         RandomDifficulty(Object);
+          (Gtk_Toggle_Button(Get_Object(Builder, "cbtndifficulty"))) then
+         RandomDifficulty(Builder);
       end if;
       NewGameSettings :=
         (PlayerName =>
            To_Unbounded_String
-             (Get_Text(Gtk_Entry(Get_Object(Object, "entrycharactername")))),
+             (Get_Text(Gtk_Entry(Get_Object(Builder, "entrycharactername")))),
          PlayerGender => Gender,
          ShipName =>
            To_Unbounded_String
-             (Get_Text(Gtk_Entry(Get_Object(Object, "entryshipname")))),
+             (Get_Text(Gtk_Entry(Get_Object(Builder, "entryshipname")))),
          PlayerFaction =>
            To_Unbounded_String
              (Get_Active_Id
-                (Gtk_Combo_Box_Text(Get_Object(Object, "cmbfaction")))),
+                (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbfaction")))),
          PlayerCareer =>
            To_Unbounded_String
              (Get_Active_Id
-                (Gtk_Combo_Box_Text(Get_Object(Object, "cmbcareer")))),
+                (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbcareer")))),
          StartingBase =>
            To_Unbounded_String
              (Get_String
-                (Gtk_List_Store(Get_Object(Object, "basesstore")),
+                (Gtk_List_Store(Get_Object(Builder, "basesstore")),
                  Get_Active_Iter
-                   (Gtk_Combo_Box(Get_Object(Object, "cmbbasetype"))),
+                   (Gtk_Combo_Box(Get_Object(Builder, "cmbbasetype"))),
                  0)),
          EnemyDamageBonus =>
            Float
-             (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjenemydamage"))) /
+             (Get_Value
+                (Gtk_Adjustment(Get_Object(Builder, "adjenemydamage"))) /
               100.0),
          PlayerDamageBonus =>
            Float
              (Get_Value
-                (Gtk_Adjustment(Get_Object(Object, "adjplayerdamage"))) /
+                (Gtk_Adjustment(Get_Object(Builder, "adjplayerdamage"))) /
               100.0),
          EnemyMeleeDamageBonus =>
            Float
-             (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjenemymelee"))) /
+             (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjenemymelee"))) /
               100.0),
          PlayerMeleeDamageBonus =>
            Float
-             (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjplayermelee"))) /
+             (Get_Value
+                (Gtk_Adjustment(Get_Object(Builder, "adjplayermelee"))) /
               100.0),
          ExperienceBonus =>
            Float
-             (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjexperience"))) /
+             (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjexperience"))) /
               100.0),
          ReputationBonus =>
            Float
-             (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjreputation"))) /
+             (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjreputation"))) /
               100.0),
          UpgradeCostBonus =>
            Float
-             (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjupdate"))) /
+             (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjupdate"))) /
               100.0),
          PricesBonus =>
            Float
-             (Get_Value(Gtk_Adjustment(Get_Object(Object, "adjprices"))) /
+             (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjprices"))) /
               100.0),
          DifficultyLevel =>
            Natural
              (Get_Active
-                (Gtk_Combo_Box_Text(Get_Object(Object, "cmbdifficulty")))));
+                (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbdifficulty")))));
       for I in BasesTypes_List.Iterate loop
          if BasesTypes_List(I).Name = NewGameSettings.StartingBase then
             NewGameSettings.StartingBase := BasesTypes_Container.Key(I);
@@ -1134,7 +1137,6 @@ package body MainMenu is
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Random_Name", RandomName'Access);
       Register_Handler(Builder, "Show_Goals", ShowGoals'Access);
-      Register_Handler(Builder, "New_Game", NewGame'Access);
       Register_Handler(Builder, "Show_Page", ShowPage'Access);
       Register_Handler
         (Builder, "Show_Faction_Description", ShowFactionDescription'Access);
@@ -1199,9 +1201,22 @@ package body MainMenu is
             (AdjValues(I) * 100.0));
       end loop;
       Setting := False;
-      On_Key_Press_Event
-        (Gtk_Widget(Get_Object(Builder, "newgamebox")),
-         NewGameKeyPressed'Access);
+      declare
+         NewGameBox: constant Gtk_Vbox :=
+           Gtk_Vbox(Get_Object(Builder, "newgamebox"));
+         ButtonBox: constant Gtk_Hbox := Gtk_Hbox_New;
+         Button: Gtk_Button;
+      begin
+         Button := Gtk_Button_New_With_Mnemonic("_Start game");
+         On_Clicked(Button, NewGame'Access);
+         Pack_Start(ButtonBox, Button, False);
+         Button := Gtk_Button_New_With_Mnemonic("_Back to menu");
+         On_Clicked(Button, BackToMenu'Access);
+         Pack_Start(ButtonBox, Button, False);
+         Set_Halign(ButtonBox, Align_Center);
+         Pack_Start(NewGameBox, ButtonBox, False);
+         On_Key_Press_Event(NewGameBox, NewGameKeyPressed'Access);
+      end;
       declare
          HallOfFameBox: constant Gtk_Vbox := Gtk_Vbox_New;
          BackButton: constant Gtk_Button :=
