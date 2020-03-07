@@ -1040,50 +1040,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">center</property>
-                    <child>
-                      <object class="GtkButton" id="bntstart">
-                        <property name="label" translatable="yes">_Start game</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Start new game</property>
-                        <property name="halign">start</property>
-                        <property name="use_underline">True</property>
-                        <signal name="clicked" handler="New_Game" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="btnback">
-                        <property name="label" translatable="yes">_Back to menu</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="tooltip_text" translatable="yes">Back to game main menu</property>
-                        <property name="use_underline">True</property>
-                        <signal name="clicked" handler="Show_Page" object="btnback" swapped="no"/>
-                        <accelerator key="Escape" signal="clicked"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -1091,9 +1048,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="title" translatable="yes">page1</property>
                 <property name="position">1</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
         </child>
