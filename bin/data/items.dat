@@ -1695,5 +1695,10 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Upgraded explosive 100mm gun ammunition. Do less damage but it is more accurate.</description>
  </item>
+ <item index="348" name="Steel 120mm piercing ammo" showtype="Ammunition" type="Ammo120" weight="30" price="52">
+  <data value="196"/>
+  <data value="2"/>
+  <description>Upgraded piercing 120mm gun ammunition. Do more damage but it is less accurate.</description>
+ </item>
 </items>
 
