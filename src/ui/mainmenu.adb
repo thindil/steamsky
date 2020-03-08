@@ -30,6 +30,7 @@ with GNAT.OS_Lib; use GNAT.OS_Lib;
 with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Adjustment; use Gtk.Adjustment;
+with Gtk.Alignment; use Gtk.Alignment;
 with Gtk.Box; use Gtk.Box;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Button_Box; use Gtk.Button_Box;
@@ -686,7 +687,8 @@ package body MainMenu is
          Hide(Gtk_Widget(Get_Object(Object, "cmbcareer")));
          Hide(Gtk_Widget(Get_Object(Object, "lblcareer")));
          Set_Label
-           (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
+           (Gtk_Label
+              (Get_Child(Gtk_Alignment(Get_Object(Builder, "newgamealign")))),
             Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbfaction"))) &
             LF & LF &
             "Faction and career will be randomly selected for you during creating new game. Not recommended for new player.");
@@ -704,10 +706,14 @@ package body MainMenu is
       Setting := False;
       Show_All(Gtk_Widget(Get_Object(Object, "cmbcareer")));
       Show_All(Gtk_Widget(Get_Object(Object, "lblcareer")));
-      Set_Label
-        (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
-         Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbfaction"))) & LF &
-         LF & To_String(Factions_List(FactionIndex).Description));
+      if Get_Child(Gtk_Alignment(Get_Object(Builder, "newgamealign"))) /=
+        null then
+         Set_Label
+           (Gtk_Label
+              (Get_Child(Gtk_Alignment(Get_Object(Builder, "newgamealign")))),
+            Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbfaction"))) &
+            LF & LF & To_String(Factions_List(FactionIndex).Description));
+      end if;
       if Factions_List(FactionIndex).Flags.Contains
           (To_Unbounded_String("nogender")) then
          Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbgender")), 0);
@@ -766,14 +772,16 @@ package body MainMenu is
       end if;
       if CareerIndex /= To_Unbounded_String("random") then
          Set_Label
-           (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
+           (Gtk_Label
+              (Get_Child(Gtk_Alignment(Get_Object(Builder, "newgamealign")))),
             Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbcareer"))) &
             LF & LF &
             To_String
               (Factions_List(FactionIndex).Careers(CareerIndex).Description));
       else
          Set_Label
-           (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
+           (Gtk_Label
+              (Get_Child(Gtk_Alignment(Get_Object(Builder, "newgamealign")))),
             Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbcareer"))) &
             LF & LF &
             "Career will be randomly selected for you during creating new game. Not recommended for new player.");
@@ -797,7 +805,8 @@ package body MainMenu is
          return;
       end if;
       Set_Label
-        (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
+        (Gtk_Label
+           (Get_Child(Gtk_Alignment(Get_Object(Builder, "newgamealign")))),
          Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbbasetype"))) & LF &
          LF &
          Get_String
@@ -849,7 +858,8 @@ package body MainMenu is
    -- ****
    begin
       Set_Label
-        (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
+        (Gtk_Label
+           (Get_Child(Gtk_Alignment(Get_Object(Builder, "newgamealign")))),
          Get_Tooltip_Text(Gtk_Widget(User_Data)));
       return False;
    end UpdateInfo;
@@ -866,7 +876,8 @@ package body MainMenu is
    -- ****
    begin
       Set_Label
-        (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
+        (Gtk_Label
+           (Get_Child(Gtk_Alignment(Get_Object(Builder, "newgamealign")))),
          Get_Tooltip_Text(Gtk_Widget(User_Data)));
    end UpdateInfoProc;
 
@@ -926,7 +937,8 @@ package body MainMenu is
       ToggleButton: constant GObject := Get_Object(Object, "cbtndifficulty");
    begin
       Set_Label
-        (Gtk_Label(Get_Object(Builder, "lblnewgameinfo")),
+        (Gtk_Label
+           (Get_Child(Gtk_Alignment(Get_Object(Builder, "newgamealign")))),
          Get_Tooltip_Text(Gtk_Widget(ToggleButton)));
       if Get_Active(Gtk_Toggle_Button(ToggleButton)) then
          Set_Text
@@ -1206,7 +1218,14 @@ package body MainMenu is
            Gtk_Vbox(Get_Object(Builder, "newgamebox"));
          ButtonBox: constant Gtk_Hbox := Gtk_Hbox_New;
          Button: Gtk_Button;
+         NewGameAlign: constant Gtk_Alignment :=
+           Gtk_Alignment(Get_Object(Builder, "newgamealign"));
+         Label: Gtk_Label;
       begin
+         Label := Gtk_Label_New;
+         Set_Line_Wrap(Label, True);
+         Set_Alignment(Label, 0.0, 0.0);
+         Add(NewGameAlign, Label);
          Button := Gtk_Button_New_With_Mnemonic("_Start game");
          On_Clicked(Button, NewGame'Access);
          Pack_Start(ButtonBox, Button, False);
