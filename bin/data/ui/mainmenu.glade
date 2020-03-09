@@ -998,15 +998,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="label_xalign">0.10000000149011612</property>
                                 <property name="shadow_type">out</property>
                                 <child>
-                                  <object class="GtkAlignment" id="newgamealign">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="left_padding">5</property>
-                                    <property name="right_padding">5</property>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                  </object>
+                                  <placeholder/>
                                 </child>
                                 <child type="label">
                                   <object class="GtkLabel">
