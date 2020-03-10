@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Fire rate of enemies ships: Disarmers shoot less often than others
 - Updated MODDING.md
 - Reputation in bases affects available modules in shipyards
+- Updated modules data
 
 ## [4.7] - 2019-02-23
 
