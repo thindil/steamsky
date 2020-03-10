@@ -31,7 +31,6 @@ with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Alignment; use Gtk.Alignment;
-with Gtk.Bin; use Gtk.Bin;
 with Gtk.Box; use Gtk.Box;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Button_Box; use Gtk.Button_Box;
@@ -97,24 +96,28 @@ package body MainMenu is
    -- SOURCE
    Builder: Gtkada_Builder;
    -- ****
+
    -- ****iv* MainMenu/AllNews
    -- FUNCTION
    -- If true, show all news, not only from last version. Default is false
    -- SOURCE
    AllNews: Boolean := False;
    -- ****
+
    -- ****iv* MainMenu/Setting
    -- FUNCTION
    -- If true, UI is in setting state. Default is false
    -- SOURCE
    Setting: Boolean := False;
    -- ****
+
    -- ****iv* MainMenu/DataError
    -- FUNCTION
    -- Used to store errors related to loading the game data
    -- SOURCE
    DataError: Unbounded_String;
    -- ****
+
    -- ****iv* MainMenu/AdjNames
    -- FUNCTION
    -- Array of Gtk_Adjustments names for the game difficulty
@@ -142,6 +145,8 @@ package body MainMenu is
    -- SOURCE
    MainMenuWindow: Gtk_Window;
    -- ****
+
+   InfoLabel: Gtk_Label;
 
    -- ****if* MainMenu/Quit
    -- FUNCTION
@@ -708,13 +713,9 @@ package body MainMenu is
       Setting := False;
       Show_All(Gtk_Widget(Get_Object(Object, "cmbcareer")));
       Show_All(Gtk_Widget(Get_Object(Object, "lblcareer")));
-      if Get_Child(Gtk_Frame(Get_Object(Builder, "newgameframe"))) /= null then
+      if InfoLabel /= null then
          Set_Label
-           (Gtk_Label
-              (Get_Child
-                 (Gtk_Bin
-                    (Get_Child
-                       (Gtk_Frame(Get_Object(Builder, "newgameframe")))))),
+           (InfoLabel,
             Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbfaction"))) &
             LF & LF & To_String(Factions_List(FactionIndex).Description));
       end if;
@@ -776,22 +777,14 @@ package body MainMenu is
       end if;
       if CareerIndex /= To_Unbounded_String("random") then
          Set_Label
-           (Gtk_Label
-              (Get_Child
-                 (Gtk_Bin
-                    (Get_Child
-                       (Gtk_Frame(Get_Object(Builder, "newgameframe")))))),
+           (InfoLabel,
             Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbcareer"))) &
             LF & LF &
             To_String
               (Factions_List(FactionIndex).Careers(CareerIndex).Description));
       else
          Set_Label
-           (Gtk_Label
-              (Get_Child
-                 (Gtk_Bin
-                    (Get_Child
-                       (Gtk_Frame(Get_Object(Builder, "newgameframe")))))),
+           (InfoLabel,
             Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbcareer"))) &
             LF & LF &
             "Career will be randomly selected for you during creating new game. Not recommended for new player.");
@@ -815,10 +808,7 @@ package body MainMenu is
          return;
       end if;
       Set_Label
-        (Gtk_Label
-           (Get_Child
-              (Gtk_Bin
-                 (Get_Child(Gtk_Frame(Get_Object(Builder, "newgameframe")))))),
+        (InfoLabel,
          Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbbasetype"))) & LF &
          LF &
          Get_String
@@ -869,12 +859,7 @@ package body MainMenu is
      (User_Data: access GObject_Record'Class) return Boolean is
    -- ****
    begin
-      Set_Label
-        (Gtk_Label
-           (Get_Child
-              (Gtk_Bin
-                 (Get_Child(Gtk_Frame(Get_Object(Builder, "newgameframe")))))),
-         Get_Tooltip_Text(Gtk_Widget(User_Data)));
+      Set_Label(InfoLabel, Get_Tooltip_Text(Gtk_Widget(User_Data)));
       return False;
    end UpdateInfo;
 
@@ -889,12 +874,7 @@ package body MainMenu is
    procedure UpdateInfoProc(User_Data: access GObject_Record'Class) is
    -- ****
    begin
-      Set_Label
-        (Gtk_Label
-           (Get_Child
-              (Gtk_Bin
-                 (Get_Child(Gtk_Frame(Get_Object(Builder, "newgameframe")))))),
-         Get_Tooltip_Text(Gtk_Widget(User_Data)));
+      Set_Label(InfoLabel, Get_Tooltip_Text(Gtk_Widget(User_Data)));
    end UpdateInfoProc;
 
    -- ****if* MainMenu/UpdateSummary
@@ -952,12 +932,7 @@ package body MainMenu is
       -- ****
       ToggleButton: constant GObject := Get_Object(Object, "cbtndifficulty");
    begin
-      Set_Label
-        (Gtk_Label
-           (Get_Child
-              (Gtk_Bin
-                 (Get_Child(Gtk_Frame(Get_Object(Builder, "newgameframe")))))),
-         Get_Tooltip_Text(Gtk_Widget(ToggleButton)));
+      Set_Label(InfoLabel, Get_Tooltip_Text(Gtk_Widget(ToggleButton)));
       if Get_Active(Gtk_Toggle_Button(ToggleButton)) then
          Set_Text
            (Gtk_Label(Get_Object(Object, "lblbonuspoints")),
@@ -1238,15 +1213,16 @@ package body MainMenu is
          Button: Gtk_Button;
          NewGameAlign: constant Gtk_Alignment :=
            Gtk_Alignment_New(0.5, 0.5, 1.0, 1.0);
-         Label: Gtk_Label;
-         NewGameFrame: constant Gtk_Frame :=
-           Gtk_Frame(Get_Object(Builder, "newgameframe"));
+         NewGameFrame: constant Gtk_Frame := Gtk_Frame_New("Info");
+         InfoScrollBar: constant Gtk_Scrolled_Window :=
+           Gtk_Scrolled_Window(Get_Object(Builder, "scrollinfo"));
       begin
-         Label := Gtk_Label_New;
-         Set_Line_Wrap(Label, True);
-         Set_Alignment(Label, 0.0, 0.0);
-         Add(NewGameAlign, Label);
+         InfoLabel := Gtk_Label_New;
+         Set_Line_Wrap(InfoLabel, True);
+         Set_Alignment(InfoLabel, 0.0, 0.0);
+         Add(NewGameAlign, InfoLabel);
          Add(NewGameFrame, NewGameAlign);
+         Add(InfoScrollBar, NewGameFrame);
          Button := Gtk_Button_New_With_Mnemonic("_Start game");
          On_Clicked(Button, NewGame'Access);
          Pack_Start(ButtonBox, Button, False);
