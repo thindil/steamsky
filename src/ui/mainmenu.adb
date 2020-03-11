@@ -694,8 +694,7 @@ package body MainMenu is
          Hide(Gtk_Widget(Get_Object(Object, "cmbcareer")));
          Hide(Gtk_Widget(Get_Object(Object, "lblcareer")));
          Set_Label
-           (Gtk_Label
-              (Get_Child(Gtk_Alignment(Get_Object(Builder, "newgamealign")))),
+           (InfoLabel,
             Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbfaction"))) &
             LF & LF &
             "Faction and career will be randomly selected for you during creating new game. Not recommended for new player.");
@@ -833,7 +832,8 @@ package body MainMenu is
       -- ****
       ScrollBar: constant Gtk_Adjustment :=
         Get_Vadjustment
-          (Gtk_Scrolled_Window(Get_Object(Builder, "scrollinfo")));
+          (Gtk_Scrolled_Window
+             (Get_Child(Gtk_Box(Get_Object(Builder, "newgamebox2")), 1)));
    begin
       if Event.Keyval = GDK_Page_Up then
          Set_Value
@@ -1215,7 +1215,9 @@ package body MainMenu is
            Gtk_Alignment_New(0.5, 0.5, 1.0, 1.0);
          NewGameFrame: constant Gtk_Frame := Gtk_Frame_New("Info");
          InfoScrollBar: constant Gtk_Scrolled_Window :=
-           Gtk_Scrolled_Window(Get_Object(Builder, "scrollinfo"));
+           Gtk_Scrolled_Window_New;
+         NewGameBox2: constant Gtk_Vbox :=
+           Gtk_Vbox(Get_Object(Builder, "newgamebox2"));
       begin
          InfoLabel := Gtk_Label_New;
          Set_Line_Wrap(InfoLabel, True);
@@ -1223,6 +1225,7 @@ package body MainMenu is
          Add(NewGameAlign, InfoLabel);
          Add(NewGameFrame, NewGameAlign);
          Add(InfoScrollBar, NewGameFrame);
+         Pack_Start(NewGameBox2, InfoScrollBar);
          Button := Gtk_Button_New_With_Mnemonic("_Start game");
          On_Clicked(Button, NewGame'Access);
          Pack_Start(ButtonBox, Button, False);
