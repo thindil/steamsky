@@ -512,7 +512,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
-                                  <object class="GtkBox">
+                                  <object class="GtkBox" id="difficultybox">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="orientation">vertical</property>
@@ -566,7 +566,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                       <object class="GtkGrid" id="difficultygrid">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <signal name="map" handler="Update_Info_Proc" object="difficultytooltip" swapped="no"/>
+                                        <property name="tooltip_text" translatable="yes">Set difficulty of new game. Each value can be between 1 and 500. Each change has an impact not only on the game's difficulty but also on amount of points gained in the game. Select a field to get more information about it.</property>
+                                        <signal name="map" handler="Update_Info_Proc" object="difficultygrid" swapped="no"/>
                                         <child>
                                           <object class="GtkLabel">
                                             <property name="visible">True</property>
@@ -926,42 +927,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkBox">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <child>
-                                          <object class="GtkLabel" id="lblbonuspoints">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="margin_top">10</property>
-                                            <property name="label" translatable="yes">Total gained points: 100%</property>
-                                            <property name="wrap">True</property>
-                                            <property name="wrap_mode">word-char</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="difficultytooltip">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="tooltip_text" translatable="yes">Set difficulty of new game. Each value can be between 1 and 500. Each change has an impact not only on the game's difficulty but also on amount of points gained in the game. Select a field to get more information about it.</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">4</property>
-                                      </packing>
+                                      <placeholder/>
                                     </child>
                                   </object>
                                 </child>
