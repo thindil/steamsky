@@ -27,6 +27,9 @@ All notable changes to this project will be documented in this file.
 - Updated modules data
 - Updated help
 
+### Fixed
+- Crash when Drone member is trying to eat
+
 ## [4.7] - 2019-02-23
 
 ### Added
