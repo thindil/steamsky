@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Updated MODDING.md
 - Reputation in bases affects available modules in shipyards
 - Updated modules data
+- Updated help
 
 ## [4.7] - 2019-02-23
 
