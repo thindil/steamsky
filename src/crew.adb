@@ -202,8 +202,12 @@ package body Crew is
          if ItemIndex > 0 then
             ConsumeValue :=
               Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Value(1);
-            if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Value(2) /=
-              0 then
+            if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Value
+                .Length >
+              1
+              and then
+                Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Value(2) /=
+                0 then
                UpdateMorale
                  (PlayerShip, I,
                   Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Value(2));
