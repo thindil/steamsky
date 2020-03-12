@@ -913,7 +913,7 @@ package body MainMenu is
          Bonus := 1;
       end if;
       Set_Text
-        (Gtk_Label(Get_Object(Object, "lblbonuspoints")),
+        (Gtk_Label(Get_Child(Gtk_Box(Get_Object(Object, "difficultybox")), 4)),
          "Total gained points:" & Integer'Image(Bonus) & "%");
       Setting := True;
       Set_Active(Gtk_Combo_Box_Text(Get_Object(Object, "cmbdifficulty")), 5);
@@ -935,7 +935,8 @@ package body MainMenu is
       Set_Label(InfoLabel, Get_Tooltip_Text(Gtk_Widget(ToggleButton)));
       if Get_Active(Gtk_Toggle_Button(ToggleButton)) then
          Set_Text
-           (Gtk_Label(Get_Object(Object, "lblbonuspoints")),
+           (Gtk_Label
+              (Get_Child(Gtk_Box(Get_Object(Object, "difficultybox")), 4)),
             "Total gained points: unknown");
       else
          UpdateSummary(Object);
@@ -1209,7 +1210,7 @@ package body MainMenu is
       declare
          NewGameBox: constant Gtk_Vbox :=
            Gtk_Vbox(Get_Object(Builder, "newgamebox"));
-         ButtonBox: constant Gtk_Hbox := Gtk_Hbox_New;
+         HBox: Gtk_Hbox;
          Button: Gtk_Button;
          NewGameAlign: constant Gtk_Alignment :=
            Gtk_Alignment_New(0.5, 0.5, 1.0, 1.0);
@@ -1218,7 +1219,12 @@ package body MainMenu is
            Gtk_Scrolled_Window_New;
          NewGameBox2: constant Gtk_Vbox :=
            Gtk_Vbox(Get_Object(Builder, "newgamebox2"));
+         Label: Gtk_Label;
       begin
+         HBox := Gtk_Hbox(Get_Object(Builder, "difficultybox"));
+         Label := Gtk_Label_New("Total gained points: 100%");
+         Set_Line_Wrap(Label, True);
+         Pack_Start(HBox, Label, False);
          InfoLabel := Gtk_Label_New;
          Set_Line_Wrap(InfoLabel, True);
          Set_Alignment(InfoLabel, 0.0, 0.0);
@@ -1226,14 +1232,15 @@ package body MainMenu is
          Add(NewGameFrame, NewGameAlign);
          Add(InfoScrollBar, NewGameFrame);
          Pack_Start(NewGameBox2, InfoScrollBar);
+         HBox := Gtk_Hbox_New;
          Button := Gtk_Button_New_With_Mnemonic("_Start game");
          On_Clicked(Button, NewGame'Access);
-         Pack_Start(ButtonBox, Button, False);
+         Pack_Start(HBox, Button, False);
          Button := Gtk_Button_New_With_Mnemonic("_Back to menu");
          On_Clicked(Button, BackToMenu'Access);
-         Pack_Start(ButtonBox, Button, False);
-         Set_Halign(ButtonBox, Align_Center);
-         Pack_Start(NewGameBox, ButtonBox, False);
+         Pack_Start(HBox, Button, False);
+         Set_Halign(HBox, Align_Center);
+         Pack_Start(NewGameBox, HBox, False);
          On_Key_Press_Event(NewGameBox, NewGameKeyPressed'Access);
       end;
       declare
