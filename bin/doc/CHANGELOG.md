@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash when Drone member is trying to eat
+
 ## [4.0.12] - 2020-02-16
 
 ### Fixed
