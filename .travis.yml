@@ -42,7 +42,7 @@ deploy:
   file:
    - steamsky-stable.$EXTENSION
   name: Continuous Integration stable build
-  body: Stable build of $TRAVIS_BRANCH ($TRAVIS_COMMIT) built by Travis CI on $(date +'%F %T %Z').
+  body: Stable build of $TRAVIS_BRANCH built by Travis CI.
   prerelease: true
   overwrite: true
   target_commitish: $TRAVIS_COMMIT
