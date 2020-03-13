@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash when Drone member is trying to eat
+- Move map buttons default look
 
 ## [4.0.12] - 2020-02-16
 
