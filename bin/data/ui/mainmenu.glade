@@ -911,20 +911,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkCheckButton" id="cbtndifficulty">
-                                        <property name="label" translatable="yes">Randomize difficulty on game start</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="tooltip_text" translatable="yes">If you select this option, all difficulty settings will be randomized during start new game. Not recommended for new players.</property>
-                                        <property name="draw_indicator">True</property>
-                                        <signal name="toggled" handler="Random_Difficulty_Toggled" swapped="no"/>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">3</property>
-                                      </packing>
+                                      <placeholder/>
                                     </child>
                                     <child>
                                       <placeholder/>
