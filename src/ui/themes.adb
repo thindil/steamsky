@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -181,10 +181,10 @@ package body Themes is
             UpgradeIcon => Wide_Character'Val(16#f6e3#),
             CleanIcon => Wide_Character'Val(16#f458#),
             ManufactureIcon => Wide_Character'Val(16#f0e3#),
-            MoveMapUpIcon => Wide_Character'Val(16#f106#),
-            MoveMapDownIcon => Wide_Character'Val(16#f107#),
-            MoveMapLeftIcon => Wide_Character'Val(16#f104#),
-            MoveMapRightIcon => Wide_Character'Val(16#f105#),
+            MoveMapUpIcon => Wide_Character'Val(16#2b9d#),
+            MoveMapDownIcon => Wide_Character'Val(16#2b9f#),
+            MoveMapLeftIcon => Wide_Character'Val(16#2b9c#),
+            MoveMapRightIcon => Wide_Character'Val(16#2b9e#),
             NoFuelIcon => Wide_Character'Val(16#f2ca#),
             NoFoodIcon => Wide_Character'Val(16#f787#),
             NoDrinksIcon => Wide_Character'Val(16#f72f#),
