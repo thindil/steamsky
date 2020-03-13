@@ -34,6 +34,7 @@ with Gtk.Alignment; use Gtk.Alignment;
 with Gtk.Box; use Gtk.Box;
 with Gtk.Button; use Gtk.Button;
 with Gtk.Button_Box; use Gtk.Button_Box;
+with Gtk.Check_Button; use Gtk.Check_Button;
 with Gtk.Cell_Area_Box; use Gtk.Cell_Area_Box;
 with Gtk.Cell_Renderer_Text; use Gtk.Cell_Renderer_Text;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
@@ -561,7 +562,9 @@ package body MainMenu is
          Gender := 'F';
       end if;
       if Get_Active
-          (Gtk_Toggle_Button(Get_Object(Builder, "cbtndifficulty"))) then
+          (Gtk_Toggle_Button
+             (Get_Child
+                (Gtk_Box(Get_Object(Builder, "difficultybox")), 3))) then
          RandomDifficulty(Builder);
       end if;
       NewGameSettings :=
@@ -912,9 +915,13 @@ package body MainMenu is
       if Bonus < 1 then
          Bonus := 1;
       end if;
-      Set_Text
-        (Gtk_Label(Get_Child(Gtk_Box(Get_Object(Object, "difficultybox")), 4)),
-         "Total gained points:" & Integer'Image(Bonus) & "%");
+      if Get_Child(Gtk_Box(Get_Object(Object, "difficultybox")), 4) /=
+        null then
+         Set_Text
+           (Gtk_Label
+              (Get_Child(Gtk_Box(Get_Object(Object, "difficultybox")), 4)),
+            "Total gained points:" & Integer'Image(Bonus) & "%");
+      end if;
       Setting := True;
       Set_Active(Gtk_Combo_Box_Text(Get_Object(Object, "cmbdifficulty")), 5);
       Setting := False;
@@ -925,21 +932,20 @@ package body MainMenu is
    -- Show or hide info about bonus to the game points on toggle random
    -- difficulty
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Check_Button which was clicked
    -- SOURCE
    procedure RandomDifficultyToggled
-     (Object: access Gtkada_Builder_Record'Class) is
-      -- ****
-      ToggleButton: constant GObject := Get_Object(Object, "cbtndifficulty");
+     (Self: access Gtk_Toggle_Button_Record'Class) is
+   -- ****
    begin
-      Set_Label(InfoLabel, Get_Tooltip_Text(Gtk_Widget(ToggleButton)));
-      if Get_Active(Gtk_Toggle_Button(ToggleButton)) then
+      Set_Label(InfoLabel, Get_Tooltip_Text(Self));
+      if Get_Active(Self) then
          Set_Text
            (Gtk_Label
-              (Get_Child(Gtk_Box(Get_Object(Object, "difficultybox")), 4)),
+              (Get_Child(Gtk_Box(Get_Object(Builder, "difficultybox")), 4)),
             "Total gained points: unknown");
       else
-         UpdateSummary(Object);
+         UpdateSummary(Builder);
       end if;
    end RandomDifficultyToggled;
 
@@ -1154,8 +1160,6 @@ package body MainMenu is
       Register_Handler(Builder, "Update_Info_Proc", UpdateInfoProc'Access);
       Register_Handler(Builder, "Random_Difficulty", RandomDifficulty'Access);
       Register_Handler(Builder, "Update_Summary", UpdateSummary'Access);
-      Register_Handler
-        (Builder, "Random_Difficulty_Toggled", RandomDifficultyToggled'Access);
       Register_Handler(Builder, "Set_Difficulty", SetDifficulty'Access);
       Do_Connect(Builder);
       SetUtilsBuilder(Builder);
@@ -1220,8 +1224,18 @@ package body MainMenu is
          NewGameBox2: constant Gtk_Vbox :=
            Gtk_Vbox(Get_Object(Builder, "newgamebox2"));
          Label: Gtk_Label;
+         RandomDifficultyButton: constant Gtk_Check_Button :=
+           Gtk_Check_Button_New_With_Label
+             ("Randomize difficulty on game start");
       begin
          HBox := Gtk_Hbox(Get_Object(Builder, "difficultybox"));
+         Set_Tooltip_Text
+           (RandomDifficultyButton,
+            "If you select this option, all difficulty settings will be randomized during start new game. Not recommended for new players.");
+         On_Toggled
+           (Gtk_Toggle_Button(RandomDifficultyButton),
+            RandomDifficultyToggled'Access);
+         Pack_Start(HBox, RandomDifficultyButton, False);
          Label := Gtk_Label_New("Total gained points: 100%");
          Set_Line_Wrap(Label, True);
          Pack_Start(HBox, Label, False);
