@@ -18,7 +18,8 @@ All notable changes to this project will be documented in this file.
   piercing ammo, steel 60mm explosive ammo, steel 80mm piercing ammo, steel
   80mm explosive ammo, steel 100mm piercing ammo, steel 100mm explosive ammo,
   steel 120mm piercing ammo, steel 120mm explosive ammo, titanium 40mm
-  piercing ammo, titanium 40mm explosive ammo, titanium 60mm piercing ammo
+  piercing ammo, titanium 40mm explosive ammo, titanium 60mm piercing ammo,
+  titanium 60mm explosive ammo
 
 ### Changed
 - Updated bases data with new items and recipes
