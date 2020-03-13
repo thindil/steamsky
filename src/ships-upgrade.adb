@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -25,8 +25,7 @@ with Config; use Config;
 package body Ships.Upgrade is
 
    procedure StartUpgrading(ModuleIndex, UpgradeType: Positive) is
-      MaxValue: Natural;
-      UpgradeProgress: Positive;
+      MaxValue, UpgradeProgress: Natural;
       UpgradeAction: ShipUpgrade;
    begin
       if PlayerShip.Modules(ModuleIndex).Durability = 0 and
