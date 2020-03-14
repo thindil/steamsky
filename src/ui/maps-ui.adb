@@ -695,26 +695,30 @@ package body Maps.UI is
                      end case;
                   end if;
                elsif SkyMap(X, Y).EventIndex > 0 then
-                  case Events_List(SkyMap(X, Y).EventIndex).EType is
-                     when EnemyShip =>
-                        MapChar := CurrentTheme.EnemyShipIcon;
-                     when AttackOnBase =>
-                        MapChar := CurrentTheme.AttackOnBaseIcon;
-                     when EnemyPatrol =>
-                        MapChar := CurrentTheme.EnemyPatrolIcon;
-                     when Disease =>
-                        MapChar := CurrentTheme.DiseaseIcon;
-                     when FullDocks =>
-                        MapChar := CurrentTheme.FullDocksIcon;
-                     when DoublePrice =>
-                        MapChar := CurrentTheme.DoublePriceIcon;
-                     when Trader =>
-                        MapChar := CurrentTheme.TraderIcon;
-                     when FriendlyShip =>
-                        MapChar := CurrentTheme.FriendlyShipIcon;
-                     when others =>
-                        null;
-                  end case;
+                  if SkyMap(X, Y).EventIndex > Events_List.Last_Index then
+                     SkyMap(X, Y).EventIndex := 0;
+                  else
+                     case Events_List(SkyMap(X, Y).EventIndex).EType is
+                        when EnemyShip =>
+                           MapChar := CurrentTheme.EnemyShipIcon;
+                        when AttackOnBase =>
+                           MapChar := CurrentTheme.AttackOnBaseIcon;
+                        when EnemyPatrol =>
+                           MapChar := CurrentTheme.EnemyPatrolIcon;
+                        when Disease =>
+                           MapChar := CurrentTheme.DiseaseIcon;
+                        when FullDocks =>
+                           MapChar := CurrentTheme.FullDocksIcon;
+                        when DoublePrice =>
+                           MapChar := CurrentTheme.DoublePriceIcon;
+                        when Trader =>
+                           MapChar := CurrentTheme.TraderIcon;
+                        when FriendlyShip =>
+                           MapChar := CurrentTheme.FriendlyShipIcon;
+                        when others =>
+                           null;
+                     end case;
+                  end if;
                   if SkyMap(X, Y).Visited then
                      case Events_List(SkyMap(X, Y).EventIndex).EType is
                         when EnemyShip =>
