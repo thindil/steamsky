@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
 - Move map buttons default look
 - Crash on upgrading when setting upgrading cost is very low
 - Probably fixed possible crash in selling items in bases
+- Crash on showing map with non existing event
 
 ## [4.7] - 2019-02-23
 
