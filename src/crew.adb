@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -853,22 +853,24 @@ package body Crew is
       PayMessage: Unbounded_String;
       MemberIndex: Positive;
       HaveMoney: Boolean := True;
+      MoneyNeeded: Natural;
    begin
       MemberIndex := 1;
       for Member of PlayerShip.Crew loop
          if Member.Payment(1) > 0 then
             if MoneyIndex2 = 0 and HaveMoney then
                AddMessage
-                 ("You don't have enough " & To_String(MoneyName) &
+                 ("You don't have any " & To_String(MoneyName) &
                   " to pay your crew members.",
                   TradeMessage, RED);
                HaveMoney := False;
             end if;
             if HaveMoney then
                if PlayerShip.Cargo(MoneyIndex2).Amount < Member.Payment(1) then
+                  MoneyNeeded := PlayerShip.Cargo(MoneyIndex2).Amount;
                   UpdateCargo
                     (Ship => PlayerShip, ProtoIndex => MoneyIndex,
-                     Amount => (0 - PlayerShip.Cargo(MoneyIndex2).Amount));
+                     Amount => (0 - MoneyNeeded));
                   AddMessage
                     ("You don't have enough " & To_String(MoneyName) &
                      " to pay your crew members.",
