@@ -233,7 +233,7 @@ package body Trades.UI is
       Hide(Gtk_Widget(Get_Object(Object, "sellbox2")));
       if CargoIndex > 0 then
          declare
-            MaxSellAmount: Natural := PlayerShip.Cargo(CargoIndex).Amount;
+            MaxSellAmount: Integer := PlayerShip.Cargo(CargoIndex).Amount;
             MaxPrice: Natural := MaxSellAmount * Price;
             AmountAdj: constant Gtk_Adjustment :=
               Gtk_Adjustment(Get_Object(Builder, "amountadj"));
@@ -265,11 +265,11 @@ package body Trades.UI is
                 ((Items_List(ProtoIndex).Weight * MaxSellAmount) - MaxPrice);
             while Weight < 0 loop
                MaxSellAmount :=
-                 Natural
+                 Integer
                    (Float'Floor
                       (Float(MaxSellAmount) *
                        (Float(MaxPrice + Weight) / Float(MaxPrice))));
-               exit when MaxSellAmount = 0;
+               exit when MaxSellAmount < 1;
                MaxPrice := MaxSellAmount * Price;
                CountPrice(MaxPrice, FindMember(Talk), False);
                Weight :=
