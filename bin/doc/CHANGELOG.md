@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - Crash when Drone member is trying to eat
 - Move map buttons default look
 - Crash on upgrading when setting upgrading cost is very low
+- Probably fixed possible crash in selling items in bases
 
 ## [4.7] - 2019-02-23
 
