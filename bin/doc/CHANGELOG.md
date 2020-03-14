@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Crash when Drone member is trying to eat
 - Move map buttons default look
 - Crash on upgrading when setting upgrading cost is very low
+- Crash on drawing map with not existing event
 
 ## [4.0.12] - 2020-02-16
 
