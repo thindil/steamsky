@@ -530,18 +530,19 @@ package body MainMenu is
    -- FUNCTION
    -- Set random difficulty levels for the game
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Button which was clicked.
    -- SOURCE
-   procedure RandomDifficulty(Object: access Gtkada_Builder_Record'Class) is
-   -- ****
+   procedure RandomDifficulty(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
+      -- ****
    begin
       Setting := True;
       for Name of AdjNames loop
          Set_Value
-           (Gtk_Adjustment(Get_Object(Object, To_String(Name))),
+           (Gtk_Adjustment(Get_Object(Builder, To_String(Name))),
             Gdouble(GetRandom(1, 500)));
       end loop;
-      Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbdifficulty")), 5);
+      Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbdifficulty")), 5);
       Setting := False;
    end RandomDifficulty;
 
@@ -565,7 +566,7 @@ package body MainMenu is
           (Gtk_Toggle_Button
              (Get_Child
                 (Gtk_Box(Get_Object(Builder, "difficultybox")), 3))) then
-         RandomDifficulty(Builder);
+         RandomDifficulty(null);
       end if;
       NewGameSettings :=
         (PlayerName =>
@@ -1158,7 +1159,6 @@ package body MainMenu is
         (Builder, "Show_Base_Description", ShowBaseDescription'Access);
       Register_Handler(Builder, "Update_Info", UpdateInfo'Access);
       Register_Handler(Builder, "Update_Info_Proc", UpdateInfoProc'Access);
-      Register_Handler(Builder, "Random_Difficulty", RandomDifficulty'Access);
       Register_Handler(Builder, "Update_Summary", UpdateSummary'Access);
       Register_Handler(Builder, "Set_Difficulty", SetDifficulty'Access);
       Do_Connect(Builder);
@@ -1229,6 +1229,10 @@ package body MainMenu is
              ("Randomize difficulty on game start");
       begin
          HBox := Gtk_Hbox(Get_Object(Builder, "difficultybox"));
+         Button := Gtk_Button_New_With_Mnemonic("_Random");
+         Set_Tooltip_Text(Button, "Select random values for all settings.");
+         On_Clicked(Button, RandomDifficulty'Access);
+         Pack_Start(HBox, Button, False);
          Set_Tooltip_Text
            (RandomDifficultyButton,
             "If you select this option, all difficulty settings will be randomized during start new game. Not recommended for new players.");
