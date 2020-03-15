@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Hide assign ammo button when no ammo is available
+- Hide move item option in inventory when crew member don't have any items
+  (issue #59)
 
 ### Fixed
 - Crash when Drone member is trying to eat
