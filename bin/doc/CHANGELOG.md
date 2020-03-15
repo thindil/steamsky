@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Hide assign ammo button when no ammo is available
+
 ### Fixed
 - Crash when Drone member is trying to eat
 - Move map buttons default look
