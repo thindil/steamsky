@@ -333,7 +333,7 @@ package Game is
    -- FUNCTION
    -- Used mostly for count percentage of damage of modules
    -- SOURCE
-   type DamageFactor is digits 2 range 0.0 .. 1.0;
+   type DamageFactor is digits 2 range 0.0 .. 1.1;
    -- ****
    -- ****e* Game/Data_Loading_Error
    -- FUNCTION
