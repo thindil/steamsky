@@ -38,6 +38,7 @@ All notable changes to this project will be documented in this file.
 - Crash on showing map with non existing event
 - Crash when player don't have enough money for pay crew members
 - Possible crash on start ship to ship combat
+- Crash when healing last crew member in bases
 
 ## [4.7] - 2019-02-23
 
