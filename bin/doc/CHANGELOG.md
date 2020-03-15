@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Updated MODDING.md
 - Updated modules data
 - Updated help
+- Hide assign ammo button when no ammo is available
 
 ### Fixed
 - Crash when Drone member is trying to eat
