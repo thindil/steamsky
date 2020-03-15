@@ -870,7 +870,7 @@ package body Crew is
                   MoneyNeeded := PlayerShip.Cargo(MoneyIndex2).Amount;
                   UpdateCargo
                     (Ship => PlayerShip, ProtoIndex => MoneyIndex,
-                     Amount => (0 - MoneyNeeded);
+                     Amount => (0 - MoneyNeeded));
                   AddMessage
                     ("You don't have enough " & To_String(MoneyName) &
                      " to pay your crew members.",
