@@ -669,8 +669,8 @@ package body Combat.UI is
                         exit;
                      end if;
                   end loop;
-               else
-                  for I in EngineerOrders'Range loop
+               elsif Integer(Guns.Length) >= (Index - 2) then
+                  for I in GunnerOrders'Range loop
                      if Get_String(CrewList, CrewIter, 1) =
                        GunnerOrders(I) then
                         Guns(Index - 2)(2) := I;
