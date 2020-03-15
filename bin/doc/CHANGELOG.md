@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Probably fixed possible crash in selling items in bases
 - Crash when player don't have enough money for pay crew members
 - Possible crash on start ship to ship combat
+- Crash when healing last crew member in bases
 
 ## [4.0.12] - 2020-02-16
 
