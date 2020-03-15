@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -121,6 +121,7 @@ package body Ships.UI is
       end loop;
       if not HaveAmmo then
          Hide(AssignAmmoCombo);
+         Hide(Gtk_Widget(Get_Object(Builder, "btnassignammo")));
          return;
       end if;
       Set_Active(AssignAmmoCombo, 0);
