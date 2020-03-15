@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [4.0.13] - 2020-03-15
 
 ### Changed
 - Hide assign ammo button when no ammo is available
