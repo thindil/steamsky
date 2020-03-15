@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -75,7 +75,7 @@ package Bases.Trade is
       --               all wounded crew members
       -- SOURCE
    procedure HealWounded(MemberIndex: Crew_Container.Extended_Index) with
-      Pre => (MemberIndex < PlayerShip.Crew.Last_Index);
+      Pre => (MemberIndex <= PlayerShip.Crew.Last_Index);
       -- ****
       -- ****f* Bases.Trade/HealCost
       -- FUNCTION
@@ -91,7 +91,7 @@ package Bases.Trade is
    procedure HealCost
      (Cost, Time: in out Natural;
       MemberIndex: Crew_Container.Extended_Index) with
-      Pre => (MemberIndex < PlayerShip.Crew.Last_Index);
+      Pre => (MemberIndex <= PlayerShip.Crew.Last_Index);
       -- ****
       -- ****f* Bases.Trade/TrainCost
       -- FUNCTION
