@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -253,6 +253,9 @@ package body Crew.UI is
          Set_Cursor
            (Gtk_Tree_View(Get_Object(Builder, "treeinventory")),
             Gtk_Tree_Path_New_From_String("0"), null, False);
+      else
+         Set_Text(Gtk_Label(Get_Object(Builder, "lbliteminfo")), "");
+         Hide(Gtk_Widget(Get_Object(Builder, "boxitemtocargo")));
       end if;
    end SetActiveItem;
 
