@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file.
 - Probably fixed possible crash in selling items in bases
 - Crash on showing map with non existing event
 - Crash when player don't have enough money for pay crew members
+- Possible crash on start ship to ship combat
 
 ## [4.7] - 2019-02-23
 
