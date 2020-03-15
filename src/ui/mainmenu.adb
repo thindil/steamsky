@@ -43,6 +43,7 @@ with Gtk.Dialog; use Gtk.Dialog;
 with Gtk.Enums; use Gtk.Enums;
 with Gtk.Frame; use Gtk.Frame;
 with Gtk.GEntry; use Gtk.GEntry;
+with Gtk.Grid; use Gtk.Grid;
 with Gtk.Info_Bar; use Gtk.Info_Bar;
 with Gtk.Label; use Gtk.Label;
 with Gtk.Link_Button; use Gtk.Link_Button;
@@ -1214,7 +1215,7 @@ package body MainMenu is
       declare
          NewGameBox: constant Gtk_Vbox :=
            Gtk_Vbox(Get_Object(Builder, "newgamebox"));
-         HBox: Gtk_Hbox;
+         HBox: Gtk_Hbox := Gtk_Hbox(Get_Object(Builder, "difficultybox"));
          Button: Gtk_Button;
          NewGameAlign: constant Gtk_Alignment :=
            Gtk_Alignment_New(0.5, 0.5, 1.0, 1.0);
@@ -1227,8 +1228,13 @@ package body MainMenu is
          RandomDifficultyButton: constant Gtk_Check_Button :=
            Gtk_Check_Button_New_With_Label
              ("Randomize difficulty on game start");
+         DifficultyGrid: constant Gtk_Grid :=
+           Gtk_Grid(Get_Object(Builder, "difficultygrid"));
       begin
-         HBox := Gtk_Hbox(Get_Object(Builder, "difficultybox"));
+         for I in 0 .. 7 loop
+            Label := Gtk_Label_New("%");
+            Attach(DifficultyGrid, Label, 2, Gint(I));
+         end loop;
          Button := Gtk_Button_New_With_Mnemonic("_Random");
          Set_Tooltip_Text(Button, "Select random values for all settings.");
          On_Clicked(Button, RandomDifficulty'Access);
