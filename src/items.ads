@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -55,6 +55,7 @@ package Items is
    -- ShowType    - Displayed type of item (can be group of items, renamed
    --               type, etc)
    -- Description - Description of item
+   -- Reputation     - Minimal reputation in base needed to buy that module
    -- SOURCE
    type Object_Data is record
       Name: Unbounded_String;
@@ -64,6 +65,7 @@ package Items is
       Value: Integer_Container.Vector;
       ShowType: Unbounded_String;
       Description: Unbounded_String;
+      Reputation: Integer;
    end record;
    -- ****
 

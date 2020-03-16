@@ -20,8 +20,9 @@ with DOM.Core; use DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
-with Log; use Log;
+with Bases; use Bases;
 with Crafts; use Crafts;
+with Log; use Log;
 
 package body BasesTypes is
 
@@ -201,9 +202,14 @@ package body BasesTypes is
    end LoadBasesTypes;
 
    function Is_Buyable
-     (BaseType, ItemIndex: Unbounded_String; CheckFlag: Boolean := True)
-      return Boolean is
+     (BaseType, ItemIndex: Unbounded_String; CheckFlag: Boolean := True;
+      BaseIndex: Natural := 0) return Boolean is
    begin
+      if BaseIndex > 0
+        and then SkyBases(BaseIndex).Reputation(1) <
+          Items_List(ItemIndex).Reputation then
+         return False;
+      end if;
       if CheckFlag
         and then
         (BasesTypes_List(BaseType).Flags.Contains

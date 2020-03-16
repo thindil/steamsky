@@ -1,4 +1,4 @@
---    Copyright 2019 Bartek thindil Jasicki
+--    Copyright 2019-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -99,12 +99,14 @@ package BasesTypes is
    -- BaseType  - Base type to check
    -- ItemIndex - Index of item prototype to check
    -- CheckFlag - Check if selected base type has blackmarket flag
+   -- BaseIndex - Index of the selected base to check. Default value
+   --             is 0
    -- RESULT
    -- True if item is buyable in that type of bases otherwise false
    -- SOURCE
    function Is_Buyable
-     (BaseType, ItemIndex: Unbounded_String; CheckFlag: Boolean := True)
-      return Boolean with
+     (BaseType, ItemIndex: Unbounded_String; CheckFlag: Boolean := True;
+      BaseIndex: Natural := 0) return Boolean with
       Pre => BasesTypes_List.Contains(BaseType) and
       Items_List.Contains(ItemIndex),
       Test_Case => ("Test_Is_Buyable", Nominal);
