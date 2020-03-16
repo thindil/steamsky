@@ -53,7 +53,7 @@ package Game is
    -- FUNCTION
    -- Current the game version
    -- SOURCE
-   GameVersion: constant String := "Version: 4.0.13";
+   GameVersion: constant String := "Version: 4.0.14";
    -- ****
    -- ****t* Game/UnboundedString_Container
    -- FUNCTION
@@ -333,7 +333,7 @@ package Game is
    -- FUNCTION
    -- Used mostly for count percentage of damage of modules
    -- SOURCE
-   type DamageFactor is digits 2 range 0.0 .. 1.1;
+   type DamageFactor is digits 2 range 0.0 .. 1.0;
    -- ****
    -- ****e* Game/Data_Loading_Error
    -- FUNCTION
