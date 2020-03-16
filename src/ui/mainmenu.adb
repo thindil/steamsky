@@ -52,6 +52,7 @@ with Gtk.Main;
 with Gtk.Message_Dialog; use Gtk.Message_Dialog;
 with Gtk.Overlay; use Gtk.Overlay;
 with Gtk.Scrolled_Window; use Gtk.Scrolled_Window;
+with Gtk.Spin_Button; use Gtk.Spin_Button;
 with Gtk.Stack; use Gtk.Stack;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
 with Gtk.Text_View; use Gtk.Text_View;
@@ -148,7 +149,12 @@ package body MainMenu is
    MainMenuWindow: Gtk_Window;
    -- ****
 
+   -- ****iv* MainMenu/InfoLabel
+   -- FUNCTION
+   -- Label with detailed information
+   -- SOURCE
    InfoLabel: Gtk_Label;
+   -- ****
 
    -- ****if* MainMenu/Quit
    -- FUNCTION
@@ -1121,6 +1127,25 @@ package body MainMenu is
             1));
    end ShowReadme;
 
+   -- ****if* MainMenu/UpdateInfoLabel
+   -- FUNCTION
+   -- Update text of InfoLabel with tooltip of the selected widget
+   -- PARAMETERS
+   -- Self  - Gtk_Widget from which tooltip will be taken
+   -- Event - Info about Gdk event which triggered this function. Unused.
+   -- RESULT
+   -- This function always return False
+   -- SOURCE
+   function UpdateInfoLabel
+     (Self: access Gtk_Widget_Record'Class; Event: Gdk.Event.Gdk_Event_Focus)
+      return Boolean is
+      pragma Unreferenced(Event);
+      -- ****
+   begin
+      Set_Label(InfoLabel, Get_Tooltip_Text(Self));
+      return False;
+   end UpdateInfoLabel;
+
    procedure CreateMainMenu is
       Error: aliased GError;
       AdjValues: constant array(Positive range <>) of Gdouble :=
@@ -1230,8 +1255,48 @@ package body MainMenu is
              ("Randomize difficulty on game start");
          DifficultyGrid: constant Gtk_Grid :=
            Gtk_Grid(Get_Object(Builder, "difficultygrid"));
+         SpinButton: Gtk_Spin_Button;
+         type SpinButton_Data is record
+            Adjustment: Unbounded_String;
+            Tooltip: Unbounded_String;
+         end record;
+         SpinButtonsArray: constant array(0 .. 7) of SpinButton_Data :=
+           ((To_Unbounded_String("adjenemydamage"),
+             To_Unbounded_String
+               ("Percentage of damage done by enemy ships in combat. Lowering it makes the  game easier but lowers the amount of score gained as well.")),
+            (To_Unbounded_String("adjplayerdamage"),
+             To_Unbounded_String
+               ("Percentage of damage done by the player's ship in combat. Raising it makes the game easier but lowers the amount of score gained as well.")),
+            (To_Unbounded_String("adjenemymelee"),
+             To_Unbounded_String
+               ("Percentage of damage done by enemies in melee combat. Lowering it makes the game easier but lowers the amount of score gained as well.")),
+            (To_Unbounded_String("adjplayermelee"),
+             To_Unbounded_String
+               ("Percentage of damage done by player's crew (and player character) in melee combat. Raising it makes the game easier but lowers the amount of score gained as well.")),
+            (To_Unbounded_String("adjexperience"),
+             To_Unbounded_String
+               ("Percentage of experience gained by player and their crew from actions. Raising it makes the game easier but lowers the amount of score gained as well.")),
+            (To_Unbounded_String("adjreputation"),
+             To_Unbounded_String
+               ("Percentage of reputation in bases gained or lost by player in sky bases due to player actions. Raising it makes the game easier but lowers the amount of score gained as well.")),
+            (To_Unbounded_String("adjupdate"),
+             To_Unbounded_String
+               ("Percentage of the standard material cost and time needed for upgrading ship modules. Lowering it makes the game easier but lowers the amount of score gained as well.")),
+            (To_Unbounded_String("adjprices"),
+             To_Unbounded_String
+               ("Percentage of the standard prices for services in bases (docking, repairing ship, recruiting new crew members, etc). Lowering it makes the game easier but lowers the amount of score gained as well.")));
       begin
          for I in 0 .. 7 loop
+            SpinButton :=
+              Gtk_Spin_Button_New
+                (Gtk_Adjustment
+                   (Get_Object
+                      (Builder, To_String(SpinButtonsArray(I).Adjustment))),
+                 0.0);
+            Set_Tooltip_Text
+              (SpinButton, To_String(SpinButtonsArray(I).Tooltip));
+            On_Focus_In_Event(SpinButton, UpdateInfoLabel'Access);
+            Attach(DifficultyGrid, SpinButton, 1, Gint(I));
             Label := Gtk_Label_New("%");
             Attach(DifficultyGrid, Label, 2, Gint(I));
          end loop;
