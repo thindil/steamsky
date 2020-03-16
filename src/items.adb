@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -48,7 +48,7 @@ package body Items is
            (Name => Null_Unbounded_String, Weight => 1,
             IType => Null_Unbounded_String, Price => 0, Value => TempValue,
             ShowType => Null_Unbounded_String,
-            Description => Null_Unbounded_String);
+            Description => Null_Unbounded_String, Reputation => -100);
          ItemNode := Item(NodesList, I);
          ItemIndex := To_Unbounded_String(Get_Attribute(ItemNode, "index"));
          if Get_Attribute(ItemNode, "action")'Length > 0 then
@@ -87,6 +87,10 @@ package body Items is
             if Get_Attribute(ItemNode, "showtype") /= "" then
                TempRecord.ShowType :=
                  To_Unbounded_String(Get_Attribute(ItemNode, "showtype"));
+            end if;
+            if Get_Attribute(ItemNode, "reputation")'Length > 0 then
+               TempRecord.Reputation :=
+                 Integer'Value(Get_Attribute(ItemNode, "reputation"));
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(ItemNode, "trade");

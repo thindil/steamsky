@@ -748,7 +748,9 @@ package body Trades.UI is
          Visible);
       for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
          if IndexesList.Find_Index(Item => I) = 0 and
-           Is_Buyable(BaseType, BaseCargo(I).ProtoIndex) then
+           Is_Buyable
+             (BaseType => BaseType, ItemIndex => BaseCargo(I).ProtoIndex,
+              BaseIndex => BaseIndex) then
             Append(ItemsList, ItemsIter);
             ProtoIndex := BaseCargo(I).ProtoIndex;
             Set
