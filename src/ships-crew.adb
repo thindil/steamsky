@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -61,6 +61,9 @@ package body Ships.Crew is
             end if;
             if SkillLevel < 1 then
                SkillLevel := 1;
+            end if;
+            if SkillLevel > 100 then
+               SkillLevel := 100;
             end if;
             if Member.Morale(1) > 90 then
                Damage := DamageFactor(Float(SkillLevel) / 100.0);
