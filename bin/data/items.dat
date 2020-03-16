@@ -1735,5 +1735,10 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>An upgraded, explosive 80mm gun ammunition, made of titanium. Do less damage but it is more accurate.</description>
  </item>
+ <item index="356" name="Titanium 100mm piercing ammo" showtype="Ammunition" type="Ammo100" weight="32" price="40">
+  <data value="192"/>
+  <data value="2"/>
+  <description>An upgraded, piercing 100mm gun ammunition, made of titanium. Do more damage but it is less accurate.</description>
+ </item>
 </items>
 
