@@ -625,66 +625,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkSpinButton" id="spinenemydamage">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="tooltip_text" translatable="yes">Percentage of damage done by enemy ships in combat. Lowering it makes the  game easier but lowers the amount of score gained as well.</property>
-                                            <property name="text" translatable="yes">100</property>
-                                            <property name="adjustment">adjenemydamage</property>
-                                            <property name="value">100</property>
-                                            <signal name="focus-in-event" handler="Update_Info" object="spinenemydamage" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="top_attach">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkSpinButton" id="spinplayerdamage">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="tooltip_text" translatable="yes">Percentage of damage done by the player's ship in combat. Raising it makes the game easier but lowers the amount of score gained as well.</property>
-                                            <property name="text" translatable="yes">100</property>
-                                            <property name="adjustment">adjplayerdamage</property>
-                                            <property name="value">100</property>
-                                            <signal name="focus-in-event" handler="Update_Info" object="spinplayerdamage" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="top_attach">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkSpinButton" id="spinenemymelee">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="tooltip_text" translatable="yes">Percentage of damage done by enemies in melee combat. Lowering it makes the game easier but lowers the amount of score gained as well.</property>
-                                            <property name="text" translatable="yes">100</property>
-                                            <property name="adjustment">adjenemymelee</property>
-                                            <property name="value">100</property>
-                                            <signal name="focus-in-event" handler="Update_Info" object="spinenemymelee" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="top_attach">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkSpinButton" id="spinplayermelee">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="tooltip_text" translatable="yes">Percentage of damage done by player's crew (and player character) in melee combat. Raising it makes the game easier but lowers the amount of score gained as well.</property>
-                                            <property name="text" translatable="yes">100</property>
-                                            <property name="adjustment">adjplayermelee</property>
-                                            <property name="value">100</property>
-                                            <signal name="focus-in-event" handler="Update_Info" object="spinplayermelee" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="top_attach">3</property>
-                                          </packing>
-                                        </child>
-                                        <child>
                                           <object class="GtkLabel">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
@@ -713,36 +653,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkSpinButton" id="spinexperience">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="tooltip_text" translatable="yes">Percentage of experience gained by player and their crew from actions. Raising it makes the game easier but lowers the amount of score gained as well.</property>
-                                            <property name="text" translatable="yes">100</property>
-                                            <property name="adjustment">adjexperience</property>
-                                            <property name="value">100</property>
-                                            <signal name="focus-in-event" handler="Update_Info" object="spinexperience" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="top_attach">4</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkSpinButton" id="spinreputation">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="tooltip_text" translatable="yes">Percentage of reputation in bases gained or lost by player in sky bases due to player actions. Raising it makes the game easier but lowers the amount of score gained as well.</property>
-                                            <property name="text" translatable="yes">100</property>
-                                            <property name="adjustment">adjreputation</property>
-                                            <property name="value">100</property>
-                                            <signal name="focus-in-event" handler="Update_Info" object="spinreputation" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="top_attach">5</property>
-                                          </packing>
-                                        </child>
-                                        <child>
                                           <object class="GtkLabel">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
@@ -752,36 +662,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           <packing>
                                             <property name="left_attach">0</property>
                                             <property name="top_attach">6</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkSpinButton" id="spinupdate">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="tooltip_text" translatable="yes">Percentage of the standard material cost and time needed for upgrading ship modules. Lowering it makes the game easier but lowers the amount of score gained as well.</property>
-                                            <property name="text" translatable="yes">100</property>
-                                            <property name="adjustment">adjupdate</property>
-                                            <property name="value">100</property>
-                                            <signal name="focus-in-event" handler="Update_Info" object="spinupdate" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="top_attach">6</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkSpinButton" id="spinprices">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="tooltip_text" translatable="yes">Percentage of the standard prices for services in bases (docking, repairing ship, recruiting new crew members, etc). Lowering it makes the game easier but lowers the amount of score gained as well.</property>
-                                            <property name="text" translatable="yes">100</property>
-                                            <property name="adjustment">adjprices</property>
-                                            <property name="value">100</property>
-                                            <signal name="focus-in-event" handler="Update_Info" object="spinprices" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="top_attach">7</property>
                                           </packing>
                                         </child>
                                         <child>
