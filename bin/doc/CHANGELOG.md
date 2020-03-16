@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash when trying to talk in bases with someone with Legendary Rhetoric
+  skill (issue #60) (again)
+
 ## [4.0.13] - 2020-03-15
 
 ### Changed
