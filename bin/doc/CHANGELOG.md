@@ -21,7 +21,7 @@ All notable changes to this project will be documented in this file.
   steel 120mm piercing ammo, steel 120mm explosive ammo, titanium 40mm
   piercing ammo, titanium 40mm explosive ammo, titanium 60mm piercing ammo,
   titanium 60mm explosive ammo, titanium 80mm piercing ammo, titanium 80mm
-  explosive ammo, titanium 100mm piercing ammo
+  explosive ammo, titanium 100mm piercing ammo, titanium 100mm explosive ammo
 - Reputation in bases affects available modules in shipyards
 
 ### Changed
