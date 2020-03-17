@@ -46,6 +46,7 @@ All notable changes to this project will be documented in this file.
 - Crash when healing last crew member in bases
 - Crash when trying to talk in bases with someone with Legendary Rhetoric
   skill (issue #60)
+- Probably fixed sudden docking after combat (issue #62)
 
 ## [4.7] - 2019-02-23
 
