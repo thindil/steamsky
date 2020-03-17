@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Crash when trying to talk in bases with someone with Legendary Rhetoric
   skill (issue #60) (again)
+- Probably fixed sudden docking after combat (issue #62)
 
 ## [4.0.13] - 2020-03-15
 
