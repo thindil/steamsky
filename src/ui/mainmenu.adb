@@ -1285,8 +1285,20 @@ package body MainMenu is
             (To_Unbounded_String("adjprices"),
              To_Unbounded_String
                ("Percentage of the standard prices for services in bases (docking, repairing ship, recruiting new crew members, etc). Lowering it makes the game easier but lowers the amount of score gained as well.")));
+         LabelsArray: constant array(0 .. 7) of Unbounded_String :=
+           (To_Unbounded_String("Enemy ship damage:"),
+            To_Unbounded_String("Player ship damage:"),
+            To_Unbounded_String("Enemy damage in melee combat:"),
+            To_Unbounded_String("Player crew damage in melee combat:"),
+            To_Unbounded_String("Experience gained:"),
+            To_Unbounded_String("Reputation gained:"),
+            To_Unbounded_String("Upgrade cost:"),
+            To_Unbounded_String("Prices in bases:"));
       begin
          for I in 0 .. 7 loop
+            Label := Gtk_Label_New(To_String(LabelsArray(I)));
+            Attach(DifficultyGrid, Label, 0, Gint(I));
+            Set_Line_Wrap(Label, True);
             SpinButton :=
               Gtk_Spin_Button_New
                 (Gtk_Adjustment
