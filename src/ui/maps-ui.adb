@@ -630,6 +630,10 @@ package body Maps.UI is
             StoryY := 0;
          end if;
       end if;
+      if PlayerShip.Speed = DOCKED and
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
+         PlayerShip.Speed := Ships.FULL_STOP;
+      end if;
       Get_Start_Iter(MapBuffer, Iter);
       for Y in StartY .. EndY loop
          for X in StartX .. EndX loop
