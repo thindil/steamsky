@@ -1146,6 +1146,18 @@ package body MainMenu is
       return False;
    end UpdateInfoLabel;
 
+   -- ****if* MainMenu/UpdateInfoLabelMap
+   -- FUNCTION
+   -- Update text of InfoLabel with tooltip of the selected widget
+   -- PARAMETERS
+   -- Self  - Gtk_Widget from which tooltip will be taken
+   -- SOURCE
+   procedure UpdateInfoLabelMap(Self: access Gtk_Widget_Record'Class) is
+   -- ****
+   begin
+      Set_Label(InfoLabel, Get_Tooltip_Text(Self));
+   end UpdateInfoLabelMap;
+
    procedure CreateMainMenu is
       Error: aliased GError;
       AdjValues: constant array(Positive range <>) of Gdouble :=
@@ -1253,8 +1265,7 @@ package body MainMenu is
          RandomDifficultyButton: constant Gtk_Check_Button :=
            Gtk_Check_Button_New_With_Label
              ("Randomize difficulty on game start");
-         DifficultyGrid: constant Gtk_Grid :=
-           Gtk_Grid(Get_Object(Builder, "difficultygrid"));
+         DifficultyGrid: constant Gtk_Grid := Gtk_Grid_New;
          SpinButton: Gtk_Spin_Button;
          type SpinButton_Data is record
             Adjustment: Unbounded_String;
@@ -1312,6 +1323,11 @@ package body MainMenu is
             Label := Gtk_Label_New("%");
             Attach(DifficultyGrid, Label, 2, Gint(I));
          end loop;
+         Set_Tooltip_Text
+           (DifficultyGrid,
+            "Set difficulty of new game. Each value can be between 1 and 500. Each change has an impact not only on the game's difficulty but also on amount of points gained in the game. Select a field to get more information about it.");
+         On_Map(DifficultyGrid, UpdateInfoLabelMap'Access);
+         Pack_Start(HBox, DifficultyGrid, False);
          Button := Gtk_Button_New_With_Mnemonic("_Random");
          Set_Tooltip_Text(Button, "Select random values for all settings.");
          On_Clicked(Button, RandomDifficulty'Access);
