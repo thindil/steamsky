@@ -517,7 +517,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     <property name="can_focus">False</property>
                                     <property name="orientation">vertical</property>
                                     <child>
-                                      <object class="GtkBox">
+                                      <object class="GtkBox" id="difficultylevelbox">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <child>
@@ -563,41 +563,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkGrid" id="difficultygrid">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="tooltip_text" translatable="yes">Set difficulty of new game. Each value can be between 1 and 500. Each change has an impact not only on the game's difficulty but also on amount of points gained in the game. Select a field to get more information about it.</property>
-                                        <signal name="map" handler="Update_Info_Proc" object="difficultygrid" swapped="no"/>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">1</property>
-                                      </packing>
+                                      <placeholder/>
                                     </child>
                                     <child>
                                       <placeholder/>
