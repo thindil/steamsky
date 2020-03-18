@@ -54,7 +54,7 @@ package body Crafts is
            (MaterialTypes => TempMaterials, MaterialAmounts => TempAmount,
             ResultIndex => Null_Unbounded_String, ResultAmount => 10000,
             Workplace => ALCHEMY_LAB, Skill => 1, Time => 15, Difficulty => 1,
-            Tool => To_Unbounded_String("None"));
+            Tool => To_Unbounded_String("None"), Reputation => -100);
          RecipeNode := Item(NodesList, I);
          RecipeIndex :=
            To_Unbounded_String(Get_Attribute(RecipeNode, "index"));
@@ -153,6 +153,10 @@ package body Crafts is
             if Get_Attribute(RecipeNode, "tool") /= "" then
                TempRecord.Tool :=
                  To_Unbounded_String(Get_Attribute(RecipeNode, "tool"));
+            end if;
+            Value := To_Unbounded_String(Get_Attribute(RecipeNode, "reputation"));
+            if Value /= Null_Unbounded_String then
+               TempRecord.Reputation := Integer'Value(To_String(Value));
             end if;
             if Action /= UPDATE then
                Recipes_Container.Include

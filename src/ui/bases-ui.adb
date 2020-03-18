@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -325,7 +325,8 @@ package body Bases.UI is
          if BasesTypes_List(BaseType).Recipes.Contains
              (Recipes_Container.Key(I)) and
            Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) =
-             Positive_Container.No_Index then
+             Positive_Container.No_Index and
+           Recipes_List(I).Reputation <= SkyBases(BaseIndex).Reputation(1) then
             Append(RecipesList, RecipesIter);
             Set
               (RecipesList, RecipesIter, 0,
