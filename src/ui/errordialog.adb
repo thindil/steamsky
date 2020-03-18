@@ -21,6 +21,7 @@ with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Directories; use Ada.Directories;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
+with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.Traceback.Symbolic; use GNAT.Traceback.Symbolic;
 with Gtk.Box; use Gtk.Box;
 with Gtk.Enums; use Gtk.Enums;
@@ -51,8 +52,11 @@ package body ErrorDialog is
    begin
       ErrorDialog := Gtk_Dialog_New("Steam Sky - error", Parent, Modal);
       Set_Position(ErrorDialog, Win_Pos_Center_Always);
-      if not Set_Icon_From_File(ErrorDialog, "data/ui/images/icon.png") then
-         Ada.Text_IO.Put_Line("Can't set icon for the error dialog.");
+      if not Set_Icon_From_File
+          (ErrorDialog,
+           To_String(DataDirectory) & Dir_Separator & "ui" & Dir_Separator &
+           "images" & Dir_Separator & "icon.png") then
+         raise Program_Error with "Can't set icon for the error dialog";
       end if;
       Set_Default_Size(ErrorDialog, 500, -1);
       ErrorBox := Get_Content_Area(ErrorDialog);
