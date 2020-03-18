@@ -664,7 +664,9 @@ package body Maps.UI.Handlers is
                if Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) =
                  UnboundedString_Container.No_Index and
                  BasesTypes_List(SkyBases(BaseIndex).BaseType).Recipes.Contains
-                   (Recipes_Container.Key(I)) then
+                   (Recipes_Container.Key(I)) and
+                 Recipes_List(I).Reputation <=
+                   SkyBases(BaseIndex).Reputation(1) then
                   Set_No_Show_All
                     (Gtk_Widget(Get_Object(Object, "btnrecipes")), False);
                   exit;

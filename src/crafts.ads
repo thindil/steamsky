@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -43,6 +43,7 @@ package Crafts is
    -- Time            - Minutes needed for finish recipe
    -- Difficulty      - How difficult is recipe to discover
    -- Tool            - Type of tool used to craft item
+   -- Reputation      - Minimal reputation in base needed to buy that recipe
    -- SOURCE
    type Craft_Data is record
       MaterialTypes: UnboundedString_Container.Vector;
@@ -54,6 +55,7 @@ package Crafts is
       Time: Positive;
       Difficulty: Positive;
       Tool: Unbounded_String;
+      Reputation: Integer;
    end record;
    -- ****
 
