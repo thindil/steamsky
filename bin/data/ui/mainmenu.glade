@@ -533,27 +533,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkComboBoxText" id="cmbdifficulty">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="tooltip_text" translatable="yes">Select game difficulty preset level.</property>
-                                            <property name="active">2</property>
-                                            <items>
-                                              <item translatable="yes">Very Easy</item>
-                                              <item translatable="yes">Easy</item>
-                                              <item translatable="yes">Normal</item>
-                                              <item translatable="yes">Hard</item>
-                                              <item translatable="yes">Very Hard</item>
-                                              <item translatable="yes">Custom</item>
-                                            </items>
-                                            <signal name="changed" handler="Set_Difficulty" swapped="no"/>
-                                            <signal name="set-focus-child" handler="Update_Info_Proc" object="cmbdifficulty" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">1</property>
-                                          </packing>
+                                          <placeholder/>
                                         </child>
                                       </object>
                                       <packing>
