@@ -1367,6 +1367,9 @@ package body Maps.UI.Handlers is
             when Trade_No_Free_Cargo =>
                ShowDialog
                  ("You can't sell medicines to the base because you don't have enough free cargo space for money.");
+            when Trade_No_Money_In_Base =>
+               ShowDialog
+                 ("You can't sell medicines to the base because the base don't have enough money to buy them.");
          end;
       end if;
       UpdateHeader;
