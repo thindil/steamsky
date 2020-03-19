@@ -156,6 +156,8 @@ package body MainMenu is
    InfoLabel: Gtk_Label;
    -- ****
 
+   DifficultyCombo: Gtk_Combo_Box_Text;
+
    -- ****if* MainMenu/Quit
    -- FUNCTION
    -- Quit from the game
@@ -549,7 +551,7 @@ package body MainMenu is
            (Gtk_Adjustment(Get_Object(Builder, To_String(Name))),
             Gdouble(GetRandom(1, 500)));
       end loop;
-      Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbdifficulty")), 5);
+      Set_Active(DifficultyCombo, 5);
       Setting := False;
    end RandomDifficulty;
 
@@ -633,10 +635,7 @@ package body MainMenu is
            Float
              (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjprices"))) /
               100.0),
-         DifficultyLevel =>
-           Natural
-             (Get_Active
-                (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbdifficulty")))));
+         DifficultyLevel => Natural(Get_Active(DifficultyCombo)));
       for I in BasesTypes_List.Iterate loop
          if BasesTypes_List(I).Name = NewGameSettings.StartingBase then
             NewGameSettings.StartingBase := BasesTypes_Container.Key(I);
@@ -930,9 +929,9 @@ package body MainMenu is
               (Get_Child(Gtk_Box(Get_Object(Object, "difficultybox")), 4)),
             "Total gained points:" & Integer'Image(Bonus) & "%");
       end if;
-      Setting := True;
-      Set_Active(Gtk_Combo_Box_Text(Get_Object(Object, "cmbdifficulty")), 5);
-      Setting := False;
+      if not Setting then
+         Set_Active(DifficultyCombo, 5);
+      end if;
    end UpdateSummary;
 
    -- ****if* MainMenu/RandomDifficultyToggled
@@ -961,18 +960,17 @@ package body MainMenu is
    -- FUNCTION
    -- Set presetted level of the game difficulty
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Combo_Box which value were changed
    -- SOURCE
-   procedure SetDifficulty(Object: access Gtkada_Builder_Record'Class) is
+   procedure SetDifficulty(Self: access Gtk_Combo_Box_Record'Class) is
       -- ****
       type DifficultyArray is array(1 .. 8) of Gdouble;
-      CurrentLevel: constant Gint :=
-        Get_Active(Gtk_Combo_Box_Text(Get_Object(Object, "cmbdifficulty")));
+      CurrentLevel: constant Gint := Get_Active(Self);
       procedure UpdateDifficulty(Values: DifficultyArray) is
       begin
          for I in AdjNames'Range loop
             Set_Value
-              (Gtk_Adjustment(Get_Object(Object, To_String(AdjNames(I)))),
+              (Gtk_Adjustment(Get_Object(Builder, To_String(AdjNames(I)))),
                Values(I));
          end loop;
       end UpdateDifficulty;
@@ -997,9 +995,7 @@ package body MainMenu is
          when others =>
             null;
       end case;
-      Set_Active
-        (Gtk_Combo_Box_Text(Get_Object(Object, "cmbdifficulty")),
-         CurrentLevel);
+      Set_Active(Self, CurrentLevel);
       Setting := False;
    end SetDifficulty;
 
@@ -1198,7 +1194,6 @@ package body MainMenu is
       Register_Handler(Builder, "Update_Info", UpdateInfo'Access);
       Register_Handler(Builder, "Update_Info_Proc", UpdateInfoProc'Access);
       Register_Handler(Builder, "Update_Summary", UpdateSummary'Access);
-      Register_Handler(Builder, "Set_Difficulty", SetDifficulty'Access);
       Do_Connect(Builder);
       SetUtilsBuilder(Builder);
       Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
@@ -1240,9 +1235,6 @@ package body MainMenu is
          end loop;
       end;
       Setting := True;
-      Set_Active
-        (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbdifficulty")),
-         Gint(NewGameSettings.DifficultyLevel));
       for I in AdjNames'Range loop
          Set_Value
            (Gtk_Adjustment(Get_Object(Builder, To_String(AdjNames(I)))),
@@ -1252,7 +1244,9 @@ package body MainMenu is
       declare
          NewGameBox: constant Gtk_Vbox :=
            Gtk_Vbox(Get_Object(Builder, "newgamebox"));
-         HBox: Gtk_Hbox := Gtk_Hbox(Get_Object(Builder, "difficultybox"));
+         DifficultyBox: constant Gtk_Vbox :=
+           Gtk_Vbox(Get_Object(Builder, "difficultybox"));
+         HBox: Gtk_Hbox := Gtk_Hbox(Get_Object(Builder, "difficultylevelbox"));
          Button: Gtk_Button;
          NewGameAlign: constant Gtk_Alignment :=
            Gtk_Alignment_New(0.5, 0.5, 1.0, 1.0);
@@ -1306,6 +1300,20 @@ package body MainMenu is
             To_Unbounded_String("Upgrade cost:"),
             To_Unbounded_String("Prices in bases:"));
       begin
+         DifficultyCombo := Gtk_Combo_Box_Text_New;
+         Remove_All(DifficultyCombo);
+         Append_Text(DifficultyCombo, "Very Easy");
+         Append_Text(DifficultyCombo, "Easy");
+         Append_Text(DifficultyCombo, "Normal");
+         Append_Text(DifficultyCombo, "Hard");
+         Append_Text(DifficultyCombo, "Very hard");
+         Append_Text(DifficultyCombo, "Custom");
+         On_Changed(DifficultyCombo, SetDifficulty'Access);
+         Set_Tooltip_Text
+           (DifficultyCombo, "Select game difficulty preset level.");
+         Set_Active(DifficultyCombo, Gint(NewGameSettings.DifficultyLevel));
+         Pack_Start(HBox, DifficultyCombo, False);
+         Setting := True;
          for I in 0 .. 7 loop
             Label := Gtk_Label_New(To_String(LabelsArray(I)));
             Attach(DifficultyGrid, Label, 0, Gint(I));
@@ -1323,25 +1331,26 @@ package body MainMenu is
             Label := Gtk_Label_New("%");
             Attach(DifficultyGrid, Label, 2, Gint(I));
          end loop;
+         Setting := False;
          Set_Tooltip_Text
            (DifficultyGrid,
             "Set difficulty of new game. Each value can be between 1 and 500. Each change has an impact not only on the game's difficulty but also on amount of points gained in the game. Select a field to get more information about it.");
          On_Map(DifficultyGrid, UpdateInfoLabelMap'Access);
-         Pack_Start(HBox, DifficultyGrid, False);
+         Pack_Start(DifficultyBox, DifficultyGrid, False);
          Button := Gtk_Button_New_With_Mnemonic("_Random");
          Set_Tooltip_Text(Button, "Select random values for all settings.");
          On_Clicked(Button, RandomDifficulty'Access);
-         Pack_Start(HBox, Button, False);
+         Pack_Start(DifficultyBox, Button, False);
          Set_Tooltip_Text
            (RandomDifficultyButton,
             "If you select this option, all difficulty settings will be randomized during start new game. Not recommended for new players.");
          On_Toggled
            (Gtk_Toggle_Button(RandomDifficultyButton),
             RandomDifficultyToggled'Access);
-         Pack_Start(HBox, RandomDifficultyButton, False);
+         Pack_Start(DifficultyBox, RandomDifficultyButton, False);
          Label := Gtk_Label_New("Total gained points: 100%");
          Set_Line_Wrap(Label, True);
-         Pack_Start(HBox, Label, False);
+         Pack_Start(DifficultyBox, Label, False);
          InfoLabel := Gtk_Label_New;
          Set_Line_Wrap(InfoLabel, True);
          Set_Alignment(InfoLabel, 0.0, 0.0);
