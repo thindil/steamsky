@@ -50,6 +50,8 @@ All notable changes to this project will be documented in this file.
   skill (issue #60)
 - Probably fixed sudden docking after combat (issue #62)
 - Setting icon for error dialog
+- Crash when trying to sell medicines to diseased base which don't have
+  enough money (issue #63)
 
 ## [4.7] - 2019-02-23
 
