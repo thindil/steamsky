@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file.
   titanium 40mm explosive ammo, titanium 60mm piercing ammo, titanium 60mm
   explosive ammo, titanium 80mm piercing ammo, titanium 80mm explosive ammo,
   titanium 100mm piercing ammo, titanium 100mm explosive ammo, titanium 120mm
-  piercing ammo
+  piercing ammo, titanium 120mm explosive ammo
 - New crafting recipes: iron 100mm explosive ammo, iron 120mm piercing ammo,
   iron 120mm explosive ammo, steel 20mm piercing ammo, steel 20mm explosive
   ammo, steel 40mm piercing ammo, steel 40mm explosive ammo, steel 60mm
