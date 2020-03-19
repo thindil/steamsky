@@ -24,8 +24,8 @@ All notable changes to this project will be documented in this file.
   titanium 60mm explosive ammo, titanium 80mm piercing ammo, titanium 80mm
   explosive ammo, titanium 100mm piercing ammo, titanium 100mm explosive ammo,
   titanium 120mm piercing ammo, titanium 120mm explosive ammo
-- Reputation in bases affects available modules in shipyards and items to
-  trade
+- Reputation in bases affects available modules in shipyards, items to
+  trade and crafting recipes to buy
 
 ### Changed
 - Updated bases data with new items and recipes
