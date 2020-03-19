@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file.
 - Crash when trying to talk in bases with someone with Legendary Rhetoric
   skill (issue #60) (again)
 - Probably fixed sudden docking after combat (issue #62)
+- Crash when trying to sell medicines to diseased base which don't have
+  enough money (issue #63)
 
 ## [4.0.13] - 2020-03-15
 
