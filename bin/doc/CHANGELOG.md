@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Updated
+- Updated help to clarify how 'Visit bases' type of goals works (issue #65)
+
 ### Fixed
 - Crash when trying to talk in bases with someone with Legendary Rhetoric
   skill (issue #60) (again)
