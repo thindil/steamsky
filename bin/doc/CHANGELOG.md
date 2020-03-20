@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file.
 - Hide assign ammo button when no ammo is available
 - Hide move item option in inventory when crew member don't have any items
   (issue #59)
+- Updated help to clarify how 'Visit bases' type of goals works (issue #65)
 
 ### Fixed
 - Crash when Drone member is trying to eat
