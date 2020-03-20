@@ -1300,6 +1300,9 @@ package body MainMenu is
             To_Unbounded_String("Upgrade cost:"),
             To_Unbounded_String("Prices in bases:"));
       begin
+         Label := Gtk_Label_New("Difficulty Level:");
+         Set_Line_Wrap(Label, True);
+         Pack_Start(HBox, Label, False);
          DifficultyCombo := Gtk_Combo_Box_Text_New;
          Remove_All(DifficultyCombo);
          Append_Text(DifficultyCombo, "Very Easy");
