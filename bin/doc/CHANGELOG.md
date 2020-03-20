@@ -23,7 +23,8 @@ All notable changes to this project will be documented in this file.
   piercing ammo, titanium 40mm explosive ammo, titanium 60mm piercing ammo,
   titanium 60mm explosive ammo, titanium 80mm piercing ammo, titanium 80mm
   explosive ammo, titanium 100mm piercing ammo, titanium 100mm explosive ammo,
-  titanium 120mm piercing ammo, titanium 120mm explosive ammo
+  titanium 120mm piercing ammo, titanium 120mm explosive ammo, orichalcum 60mm
+  piercing ammo
 - Reputation in bases affects available modules in shipyards, items to
   trade and crafting recipes to buy
 
