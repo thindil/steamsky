@@ -240,6 +240,8 @@ Value must be an existing skill name.
   from *game.dat* file, you can set this parameter to any text value.
 - Attribute `price` is price of the item. If you want that item will be not
   possible to buy or sell in bases, set it price to 0.
+- Optional attribute `reputation`: Minimal reputation in bases needed to
+  buy that item from them. Default value is -100 (available in all bases).
 - Tag `data`: optional tag. Each tag is one value. For items used as food for example, it
   is the value of hunger reduced by one portion. For items used as drinks, it's the value of
   thirst reduced by one portion. For ammunition, the first value is damage done by
