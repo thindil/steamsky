@@ -297,6 +297,8 @@ Value must be an existing skill name.
   be between 1 and 100.
 - Attribute `time`: optional attribute. How long in minutes take crafting selected
   recipe. If not set, it take 15 minutes.
+- Optional attribute `reputation`: Minimal reputation in bases needed to buy that
+  recipe from them. Default value is -100 (available in all bases).
 
 ## Ship modules
 
