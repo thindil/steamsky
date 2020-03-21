@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file.
 - Probably fixed sudden docking after combat (issue #62)
 - Crash when trying to sell medicines to diseased base which don't have
   enough money (issue #63)
+- Crash in the game statistics when player visits more than 100 bases
+  (issue #65)
 
 ## [4.0.13] - 2020-03-15
 
