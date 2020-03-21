@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -100,7 +100,7 @@ package body Statistics.UI is
          VisitedString: String(1 .. 5);
       begin
          VisitedPercent :=
-           (VisitedFactor(GameStats.BasesVisited) / 1024.0) * 100.0;
+           VisitedFactor((Float(GameStats.BasesVisited) / 1024.0) * 100.0);
          Put
            (To => VisitedString, Item => Float(VisitedPercent), Aft => 3,
             Exp => 0);
