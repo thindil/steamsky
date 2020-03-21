@@ -55,6 +55,8 @@ All notable changes to this project will be documented in this file.
 - Setting icon for error dialog
 - Crash when trying to sell medicines to diseased base which don't have
   enough money (issue #63)
+- Crash in the game statistics when player visits more than 100 bases
+  (issue #65)
 
 ## [4.7] - 2019-02-23
 
