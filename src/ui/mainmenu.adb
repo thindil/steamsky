@@ -1246,7 +1246,7 @@ package body MainMenu is
            Gtk_Vbox(Get_Object(Builder, "newgamebox"));
          DifficultyBox: constant Gtk_Vbox :=
            Gtk_Vbox(Get_Object(Builder, "difficultybox"));
-         HBox: Gtk_Hbox := Gtk_Hbox(Get_Object(Builder, "difficultylevelbox"));
+         HBox: Gtk_Hbox := Gtk_Hbox_New;
          Button: Gtk_Button;
          NewGameAlign: constant Gtk_Alignment :=
            Gtk_Alignment_New(0.5, 0.5, 1.0, 1.0);
@@ -1316,6 +1316,7 @@ package body MainMenu is
            (DifficultyCombo, "Select game difficulty preset level.");
          Set_Active(DifficultyCombo, Gint(NewGameSettings.DifficultyLevel));
          Pack_Start(HBox, DifficultyCombo, False);
+         Pack_Start(DifficultyBox, HBox, False);
          Setting := True;
          for I in 0 .. 7 loop
             Label := Gtk_Label_New(To_String(LabelsArray(I)));
