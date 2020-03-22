@@ -61,6 +61,7 @@ with Gtk.Tree_Model; use Gtk.Tree_Model;
 with Gtk.Tree_Selection; use Gtk.Tree_Selection;
 with Gtk.Tree_View; use Gtk.Tree_View;
 with Gtk.Tree_View_Column; use Gtk.Tree_View_Column;
+with Gtk.Viewport; use Gtk.Viewport;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
@@ -574,7 +575,13 @@ package body MainMenu is
       if Get_Active
           (Gtk_Toggle_Button
              (Get_Child
-                (Gtk_Box(Get_Object(Builder, "difficultybox")), 3))) then
+                (Gtk_Box
+                   (Get_Child
+                      (Gtk_Viewport
+                         (Get_Child
+                            (Gtk_Scrolled_Window
+                               (Get_Object(Builder, "difficultyscroll")))))),
+                 3))) then
          RandomDifficulty(null);
       end if;
       NewGameSettings :=
@@ -922,11 +929,19 @@ package body MainMenu is
       if Bonus < 1 then
          Bonus := 1;
       end if;
-      if Get_Child(Gtk_Box(Get_Object(Object, "difficultybox")), 4) /=
+      if Get_Child
+          (Gtk_Scrolled_Window(Get_Object(Builder, "difficultyscroll"))) /=
         null then
          Set_Text
            (Gtk_Label
-              (Get_Child(Gtk_Box(Get_Object(Object, "difficultybox")), 4)),
+              (Get_Child
+                 (Gtk_Box
+                    (Get_Child
+                       (Gtk_Viewport
+                          (Get_Child
+                             (Gtk_Scrolled_Window
+                                (Get_Object(Builder, "difficultyscroll")))))),
+                  4)),
             "Total gained points:" & Integer'Image(Bonus) & "%");
       end if;
       if not Setting then
@@ -948,8 +963,7 @@ package body MainMenu is
       Set_Label(InfoLabel, Get_Tooltip_Text(Self));
       if Get_Active(Self) then
          Set_Text
-           (Gtk_Label
-              (Get_Child(Gtk_Box(Get_Object(Builder, "difficultybox")), 4)),
+           (Gtk_Label(Get_Child(Gtk_Box(Get_Parent(Self)), 4)),
             "Total gained points: unknown");
       else
          UpdateSummary(Builder);
@@ -1244,8 +1258,7 @@ package body MainMenu is
       declare
          NewGameBox: constant Gtk_Vbox :=
            Gtk_Vbox(Get_Object(Builder, "newgamebox"));
-         DifficultyBox: constant Gtk_Vbox :=
-           Gtk_Vbox(Get_Object(Builder, "difficultybox"));
+         DifficultyBox: constant Gtk_Vbox := Gtk_Vbox_New;
          HBox: Gtk_Hbox := Gtk_Hbox_New;
          Button: Gtk_Button;
          NewGameAlign: constant Gtk_Alignment :=
@@ -1299,6 +1312,8 @@ package body MainMenu is
             To_Unbounded_String("Reputation gained:"),
             To_Unbounded_String("Upgrade cost:"),
             To_Unbounded_String("Prices in bases:"));
+         DifficultyScroll: constant Gtk_Scrolled_Window :=
+           Gtk_Scrolled_Window(Get_Object(Builder, "difficultyscroll"));
       begin
          Label := Gtk_Label_New("Difficulty Level:");
          Set_Line_Wrap(Label, True);
@@ -1355,6 +1370,7 @@ package body MainMenu is
          Label := Gtk_Label_New("Total gained points: 100%");
          Set_Line_Wrap(Label, True);
          Pack_Start(DifficultyBox, Label, False);
+         Add(DifficultyScroll, DifficultyBox);
          InfoLabel := Gtk_Label_New;
          Set_Line_Wrap(InfoLabel, True);
          Set_Alignment(InfoLabel, 0.0, 0.0);
