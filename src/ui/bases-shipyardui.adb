@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -460,12 +460,21 @@ package body Bases.ShipyardUI is
       ModulesModel: Gtk_Tree_Model;
    begin
       if User_Data = Get_Object(Builder, "btninstall") then
+         Get_Selected
+           (Gtk.Tree_View.Get_Selection
+              (Gtk_Tree_View(Get_Object(Builder, "treeinstall"))),
+            ModulesModel, ModulesIter);
+         ModuleIndex :=
+           To_Unbounded_String(Get_String(ModulesModel, ModulesIter, 1));
          Install := True;
       else
          Get_Selected
            (Gtk.Tree_View.Get_Selection
               (Gtk_Tree_View(Get_Object(Builder, "treeremove"))),
             ModulesModel, ModulesIter);
+         ModuleIndex :=
+           To_Unbounded_String
+             (Integer'Image(Natural(Get_Int(ModulesModel, ModulesIter, 1))));
          Install := False;
       end if;
       Bases.Ship.UpgradeShip(Install, ModuleIndex);
