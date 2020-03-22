@@ -1765,5 +1765,10 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>An upgraded, explosive 60mm gun ammunition, made of orichalcum. Do less damage but it is more accurate.</description>
  </item>
+ <item index="362" name="Orichalcum 80mm piercing ammo" showtype="Ammunition" type="Ammo80" weight="16" price="34">
+  <data value="192"/>
+  <data value="2"/>
+  <description>An upgraded, piercing 80mm gun ammunition, made of orichalcum. Do more damage but it is less accurate.</description>
+ </item>
 </items>
 
