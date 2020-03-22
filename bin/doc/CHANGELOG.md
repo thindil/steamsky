@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [4.8] - 2020-03-22
 
 ### Added
 - New items: iron 100mm explosive ammo, iron 120mm piercing ammo, iron 120mm
@@ -60,7 +60,7 @@ All notable changes to this project will be documented in this file.
   (issue #65)
 - Crash on trying install module after selling another (issue #66)
 
-## [4.7] - 2019-02-23
+## [4.7] - 2020-02-23
 
 ### Added
 - Show current ship speed when option "Show numeric values" is enabled
@@ -104,7 +104,7 @@ All notable changes to this project will be documented in this file.
 - Possible crash when save directory is not writeable
 - Fix misspellings and grammar errors. (pull request #58)
 
-## [4.6] - 2019-01-26
+## [4.6] - 2020-01-26
 
 ### Added
 - Ability to set random equipment for mobs
