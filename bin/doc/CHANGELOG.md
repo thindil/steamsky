@@ -58,6 +58,7 @@ All notable changes to this project will be documented in this file.
   enough money (issue #63)
 - Crash in the game statistics when player visits more than 100 bases
   (issue #65)
+- Crash on trying install module after selling another (issue #66)
 
 ## [4.7] - 2019-02-23
 
