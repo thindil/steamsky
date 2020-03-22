@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
   explosive ammo, titanium 80mm piercing ammo, titanium 80mm explosive ammo,
   titanium 100mm piercing ammo, titanium 100mm explosive ammo, titanium 120mm
   piercing ammo, titanium 120mm explosive ammo, orichalcum 60mm piercing ammo,
-  orichalcum 60mm explosive ammo, orichalcum 80mm piercing ammo
+  orichalcum 60mm explosive ammo and orichalcum 80mm piercing ammo
 - New crafting recipes: iron 100mm explosive ammo, iron 120mm piercing ammo,
   iron 120mm explosive ammo, steel 20mm piercing ammo, steel 20mm explosive
   ammo, steel 40mm piercing ammo, steel 40mm explosive ammo, steel 60mm
@@ -25,7 +25,8 @@ All notable changes to this project will be documented in this file.
   titanium 60mm explosive ammo, titanium 80mm piercing ammo, titanium 80mm
   explosive ammo, titanium 100mm piercing ammo, titanium 100mm explosive ammo,
   titanium 120mm piercing ammo, titanium 120mm explosive ammo, orichalcum 60mm
-  piercing ammo, orichalcum 60mm explosive ammo
+  piercing ammo, orichalcum 60mm explosive ammo and orichalcum 80mm piercing
+  ammo
 - Reputation in bases affects available modules in shipyards, items to
   trade and crafting recipes to buy
 
