@@ -580,7 +580,9 @@ package body MainMenu is
                       (Gtk_Viewport
                          (Get_Child
                             (Gtk_Scrolled_Window
-                               (Get_Object(Builder, "difficultyscroll")))))),
+                               (Get_Child_By_Name
+                                  (Gtk_Stack(Get_Object(Builder, "stack1")),
+                                   "page1")))))),
                  3))) then
          RandomDifficulty(null);
       end if;
@@ -929,8 +931,8 @@ package body MainMenu is
       if Bonus < 1 then
          Bonus := 1;
       end if;
-      if Get_Child
-          (Gtk_Scrolled_Window(Get_Object(Builder, "difficultyscroll"))) /=
+      if Get_Child_By_Name
+          (Gtk_Stack(Get_Object(Builder, "stack1")), "page1") /=
         null then
          Set_Text
            (Gtk_Label
@@ -940,7 +942,9 @@ package body MainMenu is
                        (Gtk_Viewport
                           (Get_Child
                              (Gtk_Scrolled_Window
-                                (Get_Object(Builder, "difficultyscroll")))))),
+                                (Get_Child_By_Name
+                                   (Gtk_Stack(Get_Object(Builder, "stack1")),
+                                    "page1")))))),
                   4)),
             "Total gained points:" & Integer'Image(Bonus) & "%");
       end if;
@@ -1313,7 +1317,7 @@ package body MainMenu is
             To_Unbounded_String("Upgrade cost:"),
             To_Unbounded_String("Prices in bases:"));
          DifficultyScroll: constant Gtk_Scrolled_Window :=
-           Gtk_Scrolled_Window(Get_Object(Builder, "difficultyscroll"));
+           Gtk_Scrolled_Window_New;
       begin
          Label := Gtk_Label_New("Difficulty Level:");
          Set_Line_Wrap(Label, True);
@@ -1371,6 +1375,9 @@ package body MainMenu is
          Set_Line_Wrap(Label, True);
          Pack_Start(DifficultyBox, Label, False);
          Add(DifficultyScroll, DifficultyBox);
+         Add_Titled
+           (Gtk_Stack(Get_Object(Builder, "stack1")), DifficultyScroll,
+            "page1", "Difficulty");
          InfoLabel := Gtk_Label_New;
          Set_Line_Wrap(InfoLabel, True);
          Set_Alignment(InfoLabel, 0.0, 0.0);
