@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - New item: orichalcum 80mm explosive ammo
+- New crafting recipe: orichalcum 80mm explosive ammo
 
 ## [4.8] - 2020-03-22
 
