@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -87,12 +87,11 @@ package body Trades.UI is
    procedure ShowItemTradeInfo(Object: access Gtkada_Builder_Record'Class) is
       -- ****
       ItemInfo, ProtoIndex: Unbounded_String;
-      Price: Positive;
       CargoIndex, BaseCargoIndex, BaseCargoIndex2: Natural := 0;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: Unbounded_String;
-      MoneyIndex2: Natural;
+      Price, MoneyIndex2: Natural;
       ItemTypes: constant array(Positive range <>) of Unbounded_String :=
         (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
    begin
@@ -232,6 +231,10 @@ package body Trades.UI is
         (Gtk_Label(Get_Object(Object, "lbltradeinfo")), To_String(ItemInfo));
       Hide(Gtk_Widget(Get_Object(Object, "sellbox")));
       Hide(Gtk_Widget(Get_Object(Object, "sellbox2")));
+      if Price = 0 then
+         CargoIndex := 0;
+         BaseCargoIndex := 0;
+      end if;
       if CargoIndex > 0 then
          declare
             MaxSellAmount: Integer := PlayerShip.Cargo(CargoIndex).Amount;
