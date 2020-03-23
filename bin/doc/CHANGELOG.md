@@ -10,6 +10,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated bases data with new items and recipes
 
+### Fixed
+- Possible crash on trading with a friendly trader (issue #67)
+
 ## [4.8] - 2020-03-22
 
 ### Added
