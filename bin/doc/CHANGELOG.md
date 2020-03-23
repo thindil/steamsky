@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- New item: orichalcum 80mm explosive ammo
+
 ## [4.8] - 2020-03-22
 
 ### Added
