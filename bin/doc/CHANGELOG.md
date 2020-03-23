@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Crash in the game statistics when player visits more than 100 bases
   (issue #65)
 - Crash on trying install module after selling another (issue #66)
+- Possible crash on trading with a friendly trader (issue #67)
 
 ## [4.0.13] - 2020-03-15
 
