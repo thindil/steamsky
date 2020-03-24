@@ -102,6 +102,19 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       </row>
     </data>
   </object>
+  <object class="GtkListStore" id="hoflist">
+    <columns>
+      <!-- column-name guint -->
+      <column type="guint"/>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+      <!-- column-name guint1 -->
+      <column type="guint"/>
+      <!-- column-name gchararray2 -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTextBuffer" id="licensebuffer"/>
   <object class="GtkWindow" id="mainmenuwindow">
     <property name="can_focus">False</property>
     <property name="window_position">center</property>
@@ -472,25 +485,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkComboBox" id="cmbbasetype">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="tooltip_text" translatable="yes">Select type of base in which you will start the ame. This may have some impact on game difficulty.</property>
-                                <property name="model">basesstore</property>
-                                <property name="active">5</property>
-                                <signal name="changed" handler="Show_Base_Description" swapped="no"/>
-                                <signal name="set-focus-child" handler="Show_Base_Description" swapped="no"/>
-                                <child>
-                                  <object class="GtkCellRendererText"/>
-                                  <attributes>
-                                    <attribute name="text">0</attribute>
-                                  </attributes>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">6</property>
-                              </packing>
+                              <placeholder/>
                             </child>
                             <child>
                               <placeholder/>
@@ -533,19 +528,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       </object>
     </child>
   </object>
-  <object class="GtkListStore" id="hoflist">
-    <columns>
-      <!-- column-name guint -->
-      <column type="guint"/>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name guint1 -->
-      <column type="guint"/>
-      <!-- column-name gchararray2 -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkTextBuffer" id="licensebuffer"/>
   <object class="GtkTextBuffer" id="newsbuffer"/>
   <object class="GtkListStore" id="saveslist">
     <columns>
