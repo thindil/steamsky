@@ -464,6 +464,9 @@ package body Bases.ShipyardUI is
            (Gtk.Tree_View.Get_Selection
               (Gtk_Tree_View(Get_Object(Builder, "treeinstall"))),
             ModulesModel, ModulesIter);
+         if ModulesIter = Null_Iter then
+            return;
+         end if;
          ModuleIndex :=
            To_Unbounded_String(Get_String(ModulesModel, ModulesIter, 1));
          Install := True;
@@ -472,6 +475,9 @@ package body Bases.ShipyardUI is
            (Gtk.Tree_View.Get_Selection
               (Gtk_Tree_View(Get_Object(Builder, "treeremove"))),
             ModulesModel, ModulesIter);
+         if ModulesIter = Null_Iter then
+            return;
+         end if;
          ModuleIndex :=
            To_Unbounded_String
              (Integer'Image(Natural(Get_Int(ModulesModel, ModulesIter, 1))));
