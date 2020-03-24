@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Possible crash on trading with a friendly trader (issue #67)
+- Crash in shipyard when no module is selected for install or remove
 
 ## [4.8] - 2020-03-22
 
