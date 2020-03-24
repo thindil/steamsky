@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
   (issue #65)
 - Crash on trying install module after selling another (issue #66)
 - Possible crash on trading with a friendly trader (issue #67)
+- Crash in shipyard when no module is selected for install or remove
 
 ## [4.0.13] - 2020-03-15
 
