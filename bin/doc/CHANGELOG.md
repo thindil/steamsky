@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New item: orichalcum 80mm explosive ammo
+- New items: orichalcum 80mm explosive ammo, orichalcum 100mm piercing ammo
 - New crafting recipe: orichalcum 80mm explosive ammo
 
 ### Changed
