@@ -246,10 +246,11 @@ package body MainMenu is
       return Boolean is
       pragma Unreferenced(Path);
       -- ****
+      PlayerGrid: constant Gtk_Grid :=
+        Gtk_Grid(Get_Object(Builder, "playergrid"));
    begin
       if Get_String(Model, Iter, 0) = To_String(BaseTypeName) then
-         Set_Active_Iter
-           (Gtk_Combo_Box(Get_Object(Builder, "cmbbasetype")), Iter);
+         Set_Active_Iter(Gtk_Combo_Box(Get_Child_At(PlayerGrid, 1, 6)), Iter);
          return True;
       end if;
       return False;
@@ -262,7 +263,9 @@ package body MainMenu is
    -- User_Data - Button pressed
    -- SOURCE
    procedure ShowPage(User_Data: access GObject_Record'Class) is
-   -- ****
+      -- ****
+      PlayerGrid: constant Gtk_Grid :=
+        Gtk_Grid(Get_Object(Builder, "playergrid"));
    begin
       if User_Data = Get_Object(Builder, "btnnewgame") then
          if Get_Text(Gtk_GEntry(Get_Object(Builder, "entrycharactername"))) =
@@ -313,7 +316,7 @@ package body MainMenu is
               (Gtk_List_Store(Get_Object(Builder, "basesstore")),
                SetBaseType'Access);
          else
-            Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbbasetype")), 0);
+            Set_Active(Gtk_Combo_Box(Get_Child_At(PlayerGrid, 1, 6)), 0);
          end if;
          CreateGoalsMenu;
          Set_Visible_Child_Name
@@ -566,6 +569,8 @@ package body MainMenu is
       pragma Unreferenced(Self);
       -- ****
       Gender: Character;
+      PlayerGrid: constant Gtk_Grid :=
+        Gtk_Grid(Get_Object(Builder, "playergrid"));
    begin
       if Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbgender"))) = 0 then
          Gender := 'M';
@@ -607,7 +612,7 @@ package body MainMenu is
              (Get_String
                 (Gtk_List_Store(Get_Object(Builder, "basesstore")),
                  Get_Active_Iter
-                   (Gtk_Combo_Box(Get_Object(Builder, "cmbbasetype"))),
+                   (Gtk_Combo_Box(Get_Child_At(PlayerGrid, 1, 6))),
                  0)),
          EnemyDamageBonus =>
            Float
@@ -705,8 +710,10 @@ package body MainMenu is
           (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbfaction"))));
       CareerComboBox: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Object(Object, "cmbcareer"));
+      PlayerGrid: constant Gtk_Grid :=
+        Gtk_Grid(Get_Object(Builder, "playergrid"));
    begin
-      if FactionIndex = Null_Unbounded_String then
+      if FactionIndex = Null_Unbounded_String or Setting then
          return;
       end if;
       if FactionIndex = To_Unbounded_String("random") then
@@ -768,7 +775,7 @@ package body MainMenu is
                  (BasesTypes_List(BaseType_Container.Key(I)).Description));
          end loop;
          Setting := True;
-         Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbbasetype")), 0);
+         Set_Active(Gtk_Combo_Box(Get_Child_At(PlayerGrid, 1, 6)), 0);
          Setting := False;
       end;
    end ShowFactionDescription;
@@ -813,22 +820,20 @@ package body MainMenu is
    -- FUNCTION
    -- Show selected base type description, when player select new type
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Combo_Box which value was changed
    -- SOURCE
-   procedure ShowBaseDescription(Object: access Gtkada_Builder_Record'Class) is
+   procedure ShowBaseDescription(Self: access Gtk_Combo_Box_Record'Class) is
       -- ****
-      BaseTypeIndex: constant Integer :=
-        Integer(Get_Active(Gtk_Combo_Box(Get_Object(Object, "cmbbasetype"))));
+      BaseTypeIndex: constant Integer := Integer(Get_Active(Self));
       BasesTypesList: constant Gtk_List_Store :=
-        Gtk_List_Store(Get_Object(Object, "basesstore"));
+        Gtk_List_Store(Get_Object(Builder, "basesstore"));
    begin
       if BaseTypeIndex = -1 or Setting then
          return;
       end if;
       Set_Label
         (InfoLabel,
-         Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbbasetype"))) & LF &
-         LF &
+         Get_Tooltip_Text(Self) & LF & LF &
          Get_String
            (BasesTypesList,
             Get_Iter_From_String(BasesTypesList, Integer'Image(BaseTypeIndex)),
@@ -1207,8 +1212,6 @@ package body MainMenu is
         (Builder, "Show_Faction_Description", ShowFactionDescription'Access);
       Register_Handler
         (Builder, "Show_Career_Description", ShowCareerDescription'Access);
-      Register_Handler
-        (Builder, "Show_Base_Description", ShowBaseDescription'Access);
       Register_Handler(Builder, "Update_Info", UpdateInfo'Access);
       Register_Handler(Builder, "Update_Info_Proc", UpdateInfoProc'Access);
       Register_Handler(Builder, "Update_Summary", UpdateSummary'Access);
@@ -1226,6 +1229,7 @@ package body MainMenu is
         (Gtk_Entry(Get_Object(Builder, "entryshipname")),
          To_String(NewGameSettings.ShipName));
       DataError := To_Unbounded_String(LoadGameData);
+      Setting := True;
       declare
          FactionComboBox: constant Gtk_Combo_Box_Text :=
            Gtk_Combo_Box_Text(Get_Object(Builder, "cmbfaction"));
@@ -1241,18 +1245,6 @@ package body MainMenu is
          Append(FactionComboBox, "random", "Random");
          Set_Active(FactionComboBox, 0);
       end;
-      declare
-         BasesList: constant Gtk_List_Store :=
-           Gtk_List_Store(Get_Object(Builder, "basesstore"));
-         BaseIter: Gtk_Tree_Iter;
-      begin
-         for BaseType of BasesTypes_List loop
-            Append(BasesList, BaseIter);
-            Set(BasesList, BaseIter, 0, To_String(BaseType.Name));
-            Set(BasesList, BaseIter, 1, To_String(BaseType.Description));
-         end loop;
-      end;
-      Setting := True;
       for I in AdjNames'Range loop
          Set_Value
            (Gtk_Adjustment(Get_Object(Builder, To_String(AdjNames(I)))),
@@ -1318,7 +1310,29 @@ package body MainMenu is
             To_Unbounded_String("Prices in bases:"));
          DifficultyScroll: constant Gtk_Scrolled_Window :=
            Gtk_Scrolled_Window_New;
+         PlayerGrid: constant Gtk_Grid :=
+           Gtk_Grid(Get_Object(Builder, "playergrid"));
+         BasesList: constant Gtk_List_Store :=
+           Gtk_List_Store(Get_Object(Builder, "basesstore"));
+         BaseIter: Gtk_Tree_Iter;
+         ComboBoxBasesTypes: constant Gtk_Combo_Box :=
+           Gtk_Combo_Box_New_With_Model(+(BasesList));
+         Renderer: constant Gtk_Cell_Renderer_Text :=
+           Gtk_Cell_Renderer_Text_New;
       begin
+         for BaseType of BasesTypes_List loop
+            Append(BasesList, BaseIter);
+            Set(BasesList, BaseIter, 0, To_String(BaseType.Name));
+            Set(BasesList, BaseIter, 1, To_String(BaseType.Description));
+         end loop;
+         Pack_Start(ComboBoxBasesTypes, Renderer, True);
+         Add_Attribute(ComboBoxBasesTypes, Renderer, "text", 0);
+         Set_Id_Column(ComboBoxBasesTypes, 1);
+         On_Changed(ComboBoxBasesTypes, ShowBaseDescription'Access);
+         Set_Tooltip_Text
+           (ComboBoxBasesTypes,
+            "Select type of base in which you will start the ame. This may have some impact on game difficulty.");
+         Attach(PlayerGrid, ComboBoxBasesTypes, 1, 6);
          Label := Gtk_Label_New("Difficulty Level:");
          Set_Line_Wrap(Label, True);
          Pack_Start(HBox, Label, False);
