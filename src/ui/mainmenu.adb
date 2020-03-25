@@ -296,7 +296,7 @@ package body MainMenu is
               .Iterate loop
                if Careers_Container.Key(I) = NewGameSettings.PlayerCareer then
                   if not Set_Active_Id
-                      (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbcareer")),
+                      (Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 5)),
                        To_String(Careers_Container.Key(I))) then
                      return;
                   end if;
@@ -606,7 +606,7 @@ package body MainMenu is
          PlayerCareer =>
            To_Unbounded_String
              (Get_Active_Id
-                (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbcareer")))),
+                (Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 5)))),
          StartingBase =>
            To_Unbounded_String
              (Get_String
@@ -705,24 +705,24 @@ package body MainMenu is
    procedure ShowFactionDescription
      (Object: access Gtkada_Builder_Record'Class) is
       -- ****
-      FactionIndex: constant Unbounded_String :=
-        To_Unbounded_String
-          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbfaction"))));
-      CareerComboBox: constant Gtk_Combo_Box_Text :=
-        Gtk_Combo_Box_Text(Get_Object(Object, "cmbcareer"));
       PlayerGrid: constant Gtk_Grid :=
         Gtk_Grid(Get_Object(Builder, "playergrid"));
+      FactionComboBox: constant Gtk_Combo_Box_Text :=
+        Gtk_Combo_Box_Text(Get_Object(Object, "cmbfaction"));
+      FactionIndex: constant Unbounded_String :=
+        To_Unbounded_String(Get_Active_Id(FactionComboBox));
+      CareerComboBox: constant Gtk_Combo_Box_Text :=
+        Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 5));
    begin
       if FactionIndex = Null_Unbounded_String or Setting then
          return;
       end if;
       if FactionIndex = To_Unbounded_String("random") then
-         Hide(Gtk_Widget(Get_Object(Object, "cmbcareer")));
+         Hide(CareerComboBox);
          Hide(Gtk_Widget(Get_Object(Object, "lblcareer")));
          Set_Label
            (InfoLabel,
-            Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbfaction"))) &
-            LF & LF &
+            Get_Tooltip_Text(FactionComboBox) & LF & LF &
             "Faction and career will be randomly selected for you during creating new game. Not recommended for new player.");
          return;
       end if;
@@ -736,13 +736,13 @@ package body MainMenu is
       Setting := True;
       Set_Active(Gtk_Combo_Box(CareerComboBox), 0);
       Setting := False;
-      Show_All(Gtk_Widget(Get_Object(Object, "cmbcareer")));
+      Show_All(CareerComboBox);
       Show_All(Gtk_Widget(Get_Object(Object, "lblcareer")));
       if InfoLabel /= null then
          Set_Label
            (InfoLabel,
-            Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbfaction"))) &
-            LF & LF & To_String(Factions_List(FactionIndex).Description));
+            Get_Tooltip_Text(FactionComboBox) & LF & LF &
+            To_String(Factions_List(FactionIndex).Description));
       end if;
       if Factions_List(FactionIndex).Flags.Contains
           (To_Unbounded_String("nogender")) then
@@ -784,17 +784,15 @@ package body MainMenu is
    -- FUNCTION
    -- Show selected career description
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Combo_Box which value was changed
    -- SOURCE
-   procedure ShowCareerDescription
-     (Object: access Gtkada_Builder_Record'Class) is
+   procedure ShowCareerDescription(Self: access Gtk_Combo_Box_Record'Class) is
       -- ****
       FactionIndex: constant Unbounded_String :=
         To_Unbounded_String
-          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbfaction"))));
+          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Builder, "cmbfaction"))));
       CareerIndex: constant Unbounded_String :=
-        To_Unbounded_String
-          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Object, "cmbcareer"))));
+        To_Unbounded_String(Get_Active_Id(Self));
    begin
       if FactionIndex = Null_Unbounded_String or
         CareerIndex = Null_Unbounded_String or Setting then
@@ -803,15 +801,13 @@ package body MainMenu is
       if CareerIndex /= To_Unbounded_String("random") then
          Set_Label
            (InfoLabel,
-            Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbcareer"))) &
-            LF & LF &
+            Get_Tooltip_Text(Self) & LF & LF &
             To_String
               (Factions_List(FactionIndex).Careers(CareerIndex).Description));
       else
          Set_Label
            (InfoLabel,
-            Get_Tooltip_Text(Gtk_Widget(Get_Object(Object, "cmbcareer"))) &
-            LF & LF &
+            Get_Tooltip_Text(Self) & LF & LF &
             "Career will be randomly selected for you during creating new game. Not recommended for new player.");
       end if;
    end ShowCareerDescription;
@@ -1210,8 +1206,6 @@ package body MainMenu is
       Register_Handler(Builder, "Show_Page", ShowPage'Access);
       Register_Handler
         (Builder, "Show_Faction_Description", ShowFactionDescription'Access);
-      Register_Handler
-        (Builder, "Show_Career_Description", ShowCareerDescription'Access);
       Register_Handler(Builder, "Update_Info", UpdateInfo'Access);
       Register_Handler(Builder, "Update_Info_Proc", UpdateInfoProc'Access);
       Register_Handler(Builder, "Update_Summary", UpdateSummary'Access);
@@ -1319,7 +1313,13 @@ package body MainMenu is
            Gtk_Combo_Box_New_With_Model(+(BasesList));
          Renderer: constant Gtk_Cell_Renderer_Text :=
            Gtk_Cell_Renderer_Text_New;
+         CareerComboBox: constant Gtk_Combo_Box_Text := Gtk_Combo_Box_Text_New;
       begin
+         On_Changed(CareerComboBox, ShowCareerDescription'Access);
+         Set_Tooltip_Text
+           (CareerComboBox,
+            "Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later.");
+         Attach(PlayerGrid, CareerComboBox, 1, 5);
          for BaseType of BasesTypes_List loop
             Append(BasesList, BaseIter);
             Set(BasesList, BaseIter, 0, To_String(BaseType.Name));
