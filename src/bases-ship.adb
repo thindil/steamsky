@@ -151,13 +151,13 @@ package body Bases.Ship is
             end if;
             PlayerShip.Modules.Delete(HullIndex);
          end if;
-         UpdateGame(Modules_List(ModuleIndex).InstallTime);
          UpdateCargo
            (Ship => PlayerShip, CargoIndex => MoneyIndex2,
             Amount => (0 - Price));
          UpdateBaseCargo(MoneyIndex, Price);
          GainExp(1, TalkingSkill, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
+         UpdateGame(Modules_List(ModuleIndex).InstallTime);
          if Modules_List(ModuleIndex).MType /= HULL then
             for I in 1 .. Modules_List(ModuleIndex).MaxOwners loop
                Owners.Append(0);
@@ -406,9 +406,6 @@ package body Bases.Ship is
                end if;
             end loop;
          end if;
-         UpdateGame
-           (Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
-              .InstallTime);
          if PlayerShip.Modules(ShipModuleIndex).MType /= CABIN then
             for Owner of PlayerShip.Modules(ShipModuleIndex).Owner loop
                if Owner > 0 then
@@ -423,6 +420,9 @@ package body Bases.Ship is
          UpdateBaseCargo(MoneyIndex, Price);
          GainExp(1, TalkingSkill, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
+         UpdateGame
+           (Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+              .InstallTime);
          AddMessage
            ("You removed " &
             To_String(PlayerShip.Modules(ShipModuleIndex).Name) &
