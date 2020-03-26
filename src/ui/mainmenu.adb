@@ -286,7 +286,7 @@ package body MainMenu is
             Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbgender")), 1);
          end if;
          if not Set_Active_Id
-             (Gtk_Combo_Box(Get_Object(Builder, "cmbfaction")),
+             (Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 4)),
               To_String(NewGameSettings.PlayerFaction)) then
             return;
          end if;
@@ -465,7 +465,10 @@ package body MainMenu is
       -- ****
       FactionIndex: constant Unbounded_String :=
         To_Unbounded_String
-          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Builder, "cmbfaction"))));
+          (Get_Active_Id
+             (Gtk_Combo_Box_Text
+                (Get_Child_At
+                   (Gtk_Grid(Get_Object(Builder, "playergrid")), 1, 4))));
    begin
       if User_Data = Get_Object(Builder, "entryshipname") then
          Set_Text
@@ -602,7 +605,7 @@ package body MainMenu is
          PlayerFaction =>
            To_Unbounded_String
              (Get_Active_Id
-                (Gtk_Combo_Box_Text(Get_Object(Builder, "cmbfaction")))),
+                (Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 4)))),
          PlayerCareer =>
            To_Unbounded_String
              (Get_Active_Id
@@ -700,29 +703,24 @@ package body MainMenu is
    -- FUNCTION
    -- Updated faction description when player select new faction
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Combo_Box which value was changed
    -- SOURCE
-   procedure ShowFactionDescription
-     (Object: access Gtkada_Builder_Record'Class) is
+   procedure ShowFactionDescription(Self: access Gtk_Combo_Box_Record'Class) is
       -- ****
-      PlayerGrid: constant Gtk_Grid :=
-        Gtk_Grid(Get_Object(Builder, "playergrid"));
-      FactionComboBox: constant Gtk_Combo_Box_Text :=
-        Gtk_Combo_Box_Text(Get_Object(Object, "cmbfaction"));
       FactionIndex: constant Unbounded_String :=
-        To_Unbounded_String(Get_Active_Id(FactionComboBox));
+        To_Unbounded_String(Get_Active_Id(Self));
       CareerComboBox: constant Gtk_Combo_Box_Text :=
-        Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 5));
+        Gtk_Combo_Box_Text(Get_Child_At(Gtk_Grid(Get_Parent(Self)), 1, 5));
    begin
       if FactionIndex = Null_Unbounded_String or Setting then
          return;
       end if;
       if FactionIndex = To_Unbounded_String("random") then
          Hide(CareerComboBox);
-         Hide(Gtk_Widget(Get_Object(Object, "lblcareer")));
+         Hide(Gtk_Widget(Get_Object(Builder, "lblcareer")));
          Set_Label
            (InfoLabel,
-            Get_Tooltip_Text(FactionComboBox) & LF & LF &
+            Get_Tooltip_Text(Self) & LF & LF &
             "Faction and career will be randomly selected for you during creating new game. Not recommended for new player.");
          return;
       end if;
@@ -737,21 +735,21 @@ package body MainMenu is
       Set_Active(Gtk_Combo_Box(CareerComboBox), 0);
       Setting := False;
       Show_All(CareerComboBox);
-      Show_All(Gtk_Widget(Get_Object(Object, "lblcareer")));
+      Show_All(Gtk_Widget(Get_Object(Builder, "lblcareer")));
       if InfoLabel /= null then
          Set_Label
            (InfoLabel,
-            Get_Tooltip_Text(FactionComboBox) & LF & LF &
+            Get_Tooltip_Text(Self) & LF & LF &
             To_String(Factions_List(FactionIndex).Description));
       end if;
       if Factions_List(FactionIndex).Flags.Contains
           (To_Unbounded_String("nogender")) then
-         Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbgender")), 0);
-         Hide(Gtk_Widget(Get_Object(Object, "cmbgender")));
-         Hide(Gtk_Widget(Get_Object(Object, "lblgender")));
+         Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbgender")), 0);
+         Hide(Gtk_Widget(Get_Object(Builder, "cmbgender")));
+         Hide(Gtk_Widget(Get_Object(Builder, "lblgender")));
       else
-         Show_All(Gtk_Widget(Get_Object(Object, "cmbgender")));
-         Show_All(Gtk_Widget(Get_Object(Object, "lblgender")));
+         Show_All(Gtk_Widget(Get_Object(Builder, "cmbgender")));
+         Show_All(Gtk_Widget(Get_Object(Builder, "lblgender")));
       end if;
       declare
          BasesList: constant Gtk_List_Store :=
@@ -775,7 +773,8 @@ package body MainMenu is
                  (BasesTypes_List(BaseType_Container.Key(I)).Description));
          end loop;
          Setting := True;
-         Set_Active(Gtk_Combo_Box(Get_Child_At(PlayerGrid, 1, 6)), 0);
+         Set_Active
+           (Gtk_Combo_Box(Get_Child_At(Gtk_Grid(Get_Parent(Self)), 1, 6)), 0);
          Setting := False;
       end;
    end ShowFactionDescription;
@@ -790,7 +789,9 @@ package body MainMenu is
       -- ****
       FactionIndex: constant Unbounded_String :=
         To_Unbounded_String
-          (Get_Active_Id(Gtk_Combo_Box(Get_Object(Builder, "cmbfaction"))));
+          (Get_Active_Id
+             (Gtk_Combo_Box_Text
+                (Get_Child_At(Gtk_Grid(Get_Parent(Self)), 1, 4))));
       CareerIndex: constant Unbounded_String :=
         To_Unbounded_String(Get_Active_Id(Self));
    begin
@@ -1185,6 +1186,7 @@ package body MainMenu is
          Gdouble(NewGameSettings.UpgradeCostBonus),
          Gdouble(NewGameSettings.PricesBonus));
       Accelerators: constant Gtk_Accel_Group := Gtk_Accel_Group_New;
+      FactionComboBox: constant Gtk_Combo_Box_Text := Gtk_Combo_Box_Text_New;
    begin
       LoadThemes;
       SetFontSize(ALLFONTS);
@@ -1204,8 +1206,6 @@ package body MainMenu is
       Register_Handler(Builder, "Random_Name", RandomName'Access);
       Register_Handler(Builder, "Show_Goals", ShowGoals'Access);
       Register_Handler(Builder, "Show_Page", ShowPage'Access);
-      Register_Handler
-        (Builder, "Show_Faction_Description", ShowFactionDescription'Access);
       Register_Handler(Builder, "Update_Info", UpdateInfo'Access);
       Register_Handler(Builder, "Update_Info_Proc", UpdateInfoProc'Access);
       Register_Handler(Builder, "Update_Summary", UpdateSummary'Access);
@@ -1224,21 +1224,6 @@ package body MainMenu is
          To_String(NewGameSettings.ShipName));
       DataError := To_Unbounded_String(LoadGameData);
       Setting := True;
-      declare
-         FactionComboBox: constant Gtk_Combo_Box_Text :=
-           Gtk_Combo_Box_Text(Get_Object(Builder, "cmbfaction"));
-      begin
-         Remove_All(FactionComboBox);
-         for I in Factions_List.Iterate loop
-            if Factions_List(I).Careers.Length > 0 then
-               Append
-                 (FactionComboBox, To_String(Factions_Container.Key(I)),
-                  To_String(Factions_List(I).Name));
-            end if;
-         end loop;
-         Append(FactionComboBox, "random", "Random");
-         Set_Active(FactionComboBox, 0);
-      end;
       for I in AdjNames'Range loop
          Set_Value
            (Gtk_Adjustment(Get_Object(Builder, To_String(AdjNames(I)))),
@@ -1304,8 +1289,6 @@ package body MainMenu is
             To_Unbounded_String("Prices in bases:"));
          DifficultyScroll: constant Gtk_Scrolled_Window :=
            Gtk_Scrolled_Window_New;
-         PlayerGrid: constant Gtk_Grid :=
-           Gtk_Grid(Get_Object(Builder, "playergrid"));
          BasesList: constant Gtk_List_Store :=
            Gtk_List_Store(Get_Object(Builder, "basesstore"));
          BaseIter: Gtk_Tree_Iter;
@@ -1313,13 +1296,31 @@ package body MainMenu is
            Gtk_Combo_Box_New_With_Model(+(BasesList));
          Renderer: constant Gtk_Cell_Renderer_Text :=
            Gtk_Cell_Renderer_Text_New;
-         CareerComboBox: constant Gtk_Combo_Box_Text := Gtk_Combo_Box_Text_New;
+         ComboBox: Gtk_Combo_Box_Text := Gtk_Combo_Box_Text_New;
+         PlayerGrid: constant Gtk_Grid :=
+           Gtk_Grid(Get_Object(Builder, "playergrid"));
       begin
-         On_Changed(CareerComboBox, ShowCareerDescription'Access);
+         Remove_All(FactionComboBox);
+         for I in Factions_List.Iterate loop
+            if Factions_List(I).Careers.Length > 0 then
+               Append
+                 (FactionComboBox, To_String(Factions_Container.Key(I)),
+                  To_String(Factions_List(I).Name));
+            end if;
+         end loop;
+         Append(FactionComboBox, "random", "Random");
+         Set_Active(FactionComboBox, 0);
+         On_Changed(FactionComboBox, ShowFactionDescription'Access);
          Set_Tooltip_Text
-           (CareerComboBox,
+           (FactionComboBox,
+            "Select your faction from a list. Factions have the biggest impact on game. They determine the amount of bases and some playing styles. More information about each faction can be found after selecting it. You can't change this later.");
+         Attach(PlayerGrid, FactionComboBox, 1, 4);
+         ComboBox := Gtk_Combo_Box_Text_New;
+         On_Changed(ComboBox, ShowCareerDescription'Access);
+         Set_Tooltip_Text
+           (ComboBox,
             "Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later.");
-         Attach(PlayerGrid, CareerComboBox, 1, 5);
+         Attach(PlayerGrid, ComboBox, 1, 5);
          for BaseType of BasesTypes_List loop
             Append(BasesList, BaseIter);
             Set(BasesList, BaseIter, 0, To_String(BaseType.Name));
@@ -1708,7 +1709,7 @@ package body MainMenu is
            ("Directory " & To_String(SaveDirectory) &
             " is not write accessible, thus save games cannot be saved.");
       end if;
-      ShowFactionDescription(Builder);
+      ShowFactionDescription(FactionComboBox);
    end CreateMainMenu;
 
    procedure UpdateGoalButton(Message: String) is
