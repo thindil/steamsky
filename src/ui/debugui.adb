@@ -1391,6 +1391,7 @@ package body DebugUI is
               with "Can't add column name to member skills view.";
          end if;
          Area := Gtk_Cell_Area_Box_New;
+         RendererSpin := Gtk_Cell_Renderer_Spin_New;
          Set_Property
            (RendererSpin, Gtk.Cell_Renderer_Spin.Adjustment_Property,
             Gtk_Adjustment_New(1.0, 1.0, 100.0, 1.0, 10.0));
