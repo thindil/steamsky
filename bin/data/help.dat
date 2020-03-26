@@ -135,7 +135,7 @@ Reputation levels, starting from lowest: Hated, Outlaw, Hostile, Unfriendly, Unk
 - Agora (purple): Available only for Poleis faction: they are always offers random goods for sale and have more recruits which are also cheaper than in other bases. Additionally, in this base you can install or remove modules from your ship. Depends on your luck, it can be good or bad place to start any trade route.
 More information about trading you may find in {b}Trading{/b} help topic and about installing new ship modules in {b}Repair/upgrade ship{/b} topic.</entry>
  <entry index="trade" title=" 5. Trading">{u}General info{/u}
-    To buy/sell items from bases you must first dock to base and having assigned crew member to talking in bases. All bases buy all items, but which items are sold, depends on base type.
+   To buy/sell items from bases you must first dock to base and having assigned crew member to talking in bases. All bases buy all items, but which items are sold, depends on base type and your reputation in that base. With higher reputation more advanced items are available at base to buy.
 Prices in bases depends on skill {TalkingSkill} of assigned to trade crew member - with higher skill you can sell items for more and buy for less. Additionally, prices depends on your reputation in base. With high reputation you earn more or pay less for goods, new recruits or services.
 From time to time, base prices of items can change a little (raise or fall). Chance for change depends on size of base and it is higher when you visit that base less often.
 Prices showed on trade screen are base prices, without bonuses or penalties from reputation and trader skill.
