@@ -419,19 +419,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkComboBoxText" id="cmbfaction">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="tooltip_text" translatable="yes">Select your faction from a list. Factions have the biggest impact on game. They determine the amount of bases and some playing styles. More information about each faction can be found after selecting it. You can't change this later.</property>
-                                <signal name="changed" handler="Show_Faction_Description" swapped="no"/>
-                                <signal name="set-focus-child" handler="Show_Faction_Description" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">4</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkComboBoxText" id="cmbgender">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -470,6 +457,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">7</property>
                               </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                             <child>
                               <placeholder/>
