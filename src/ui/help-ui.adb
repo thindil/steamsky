@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Gtk.Accel_Map; use Gtk.Accel_Map;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Cell_Area_Box; use Gtk.Cell_Area_Box;
@@ -181,6 +182,14 @@ package body Help.UI is
       HelpWindow := Gtk_Window_New;
       On_Delete_Event(HelpWindow, HideHelpWindow'Access);
       On_Key_Release_Event(HelpWindow, CloseWindow'Access);
+      if not Set_Icon_From_File
+          (HelpWindow,
+           To_String(DataDirectory) & Dir_Separator & "ui" & Dir_Separator &
+           "images" & Dir_Separator & "icon.png") then
+         raise Program_Error with "Can't set icon for the help window";
+      end if;
+      Set_Title(HelpWindow, "Steam Sky - help");
+      Set_Default_Size(HelpWindow, 800, 600);
       Set_Expanded(HelpExpander, True);
       Set_Property
         (Get_Label_Widget(HelpExpander), Gtk.Widget.Name_Property,
