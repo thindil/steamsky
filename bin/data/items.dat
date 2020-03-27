@@ -1790,5 +1790,10 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>An upgraded, piercing 120mm gun ammunition, made of orichalcum. Do more damage but it is less accurate.</description>
  </item>
+ <item index="367" name="Orichalcum 120mm explosive ammo" showtype="Ammunition" type="Ammo120" weight="60" price="102">
+  <data value="384"/>
+  <data value="3"/>
+  <description>An upgraded, explosive 120mm gun ammunition, made of orichalcum. Do less damage but it is more accurate.</description>
+ </item>
 </items>
 
