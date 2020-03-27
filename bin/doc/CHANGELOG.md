@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Crash in shipyard when no module is selected for install or remove
 - Charcollum to whatever transformation (issue #68)
 - Editing crew members stats and skills in debug menu
+- Missing icon and title for help window
 
 ## [4.8] - 2020-03-22
 
