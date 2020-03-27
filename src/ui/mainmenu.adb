@@ -490,10 +490,10 @@ package body MainMenu is
    -- ****if* MainMenu/ShowGoals
    -- Show goal selection UI
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI (unused)
+   -- Self - Gtk_Button which was clicked. Unused
    -- SOURCE
-   procedure ShowGoals(Object: access Gtkada_Builder_Record'Class) is
-      pragma Unreferenced(Object);
+   procedure ShowGoals(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
       -- ****
    begin
       ShowGoalsMenu;
@@ -1204,7 +1204,6 @@ package body MainMenu is
       Register_Handler(Builder, "Main_Quit", Quit'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
       Register_Handler(Builder, "Random_Name", RandomName'Access);
-      Register_Handler(Builder, "Show_Goals", ShowGoals'Access);
       Register_Handler(Builder, "Show_Page", ShowPage'Access);
       Register_Handler(Builder, "Update_Info", UpdateInfo'Access);
       Register_Handler(Builder, "Update_Info_Proc", UpdateInfoProc'Access);
@@ -1300,6 +1299,13 @@ package body MainMenu is
          PlayerGrid: constant Gtk_Grid :=
            Gtk_Grid(Get_Object(Builder, "playergrid"));
       begin
+         Button := Gtk_Button_New_With_Label("Random");
+         Set_Tooltip_Text
+           (Button,
+            "Select starting goal for your character. You can change it later in game.");
+         On_Clicked(Button, ShowGoals'Access);
+         On_Focus_In_Event(Button, UpdateInfoLabel'Access);
+         Attach(PlayerGrid, Button, 1, 3);
          Remove_All(FactionComboBox);
          for I in Factions_List.Iterate loop
             if Factions_List(I).Careers.Length > 0 then
@@ -1714,7 +1720,10 @@ package body MainMenu is
 
    procedure UpdateGoalButton(Message: String) is
    begin
-      Set_Label(Gtk_Button(Get_Object(Builder, "btngoal")), Message);
+      Set_Label
+        (Gtk_Button
+           (Get_Child_At(Gtk_Grid(Get_Object(Builder, "playergrid")), 1, 3)),
+         Message);
    end UpdateGoalButton;
 
    procedure ShowMainMenu is
