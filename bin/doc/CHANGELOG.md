@@ -8,8 +8,8 @@ All notable changes to this project will be documented in this file.
   orichalcum 100mm explosive ammo, orichalcum 120mm piercing ammo, orichalcum
   120mm explosive ammo
 - New crafting recipes: orichalcum 80mm explosive ammo, orichalcum 100mm
-  piercing ammo, orichalcum 100mm explosive ammo, orichalcum 120mm explosive
-  ammo
+  piercing ammo, orichalcum 100mm explosive ammo, orichalcum 120mm piercing
+  ammo, orichalcum 120mm explosive ammo
 
 ### Changed
 - Updated bases data with new items and recipes
