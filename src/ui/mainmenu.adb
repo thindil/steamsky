@@ -274,10 +274,9 @@ package body MainMenu is
               (Gtk_Entry(Get_Object(Builder, "entrycharactername")),
                To_String(NewGameSettings.PlayerName));
          end if;
-         if Get_Text(Gtk_GEntry(Get_Object(Builder, "entryshipname"))) =
-           "" then
+         if Get_Text(Gtk_GEntry(Get_Child_At(PlayerGrid, 1, 2))) = "" then
             Set_Text
-              (Gtk_Entry(Get_Object(Builder, "entryshipname")),
+              (Gtk_Entry(Get_Child_At(PlayerGrid, 1, 2)),
                To_String(NewGameSettings.ShipName));
          end if;
          if NewGameSettings.PlayerGender = 'M' then
@@ -470,7 +469,8 @@ package body MainMenu is
                 (Get_Child_At
                    (Gtk_Grid(Get_Object(Builder, "playergrid")), 1, 4))));
    begin
-      if User_Data = Get_Object(Builder, "entryshipname") then
+      if User_Data =
+        Get_Child_At(Gtk_Grid(Get_Object(Builder, "playergrid")), 1, 2) then
          Set_Text
            (Gtk_Entry(User_Data), To_String(GenerateShipName(FactionIndex)));
       else
@@ -601,7 +601,7 @@ package body MainMenu is
          PlayerGender => Gender,
          ShipName =>
            To_Unbounded_String
-             (Get_Text(Gtk_Entry(Get_Object(Builder, "entryshipname")))),
+             (Get_Text(Gtk_Entry(Get_Child_At(PlayerGrid, 1, 2)))),
          PlayerFaction =>
            To_Unbounded_String
              (Get_Active_Id
@@ -1174,6 +1174,24 @@ package body MainMenu is
       Set_Label(InfoLabel, Get_Tooltip_Text(Self));
    end UpdateInfoLabelMap;
 
+   -- ****if* MainMenu/GenerateShipName
+   -- FUNCTION
+   -- Generate random ship name, based on selected faction
+   -- PARAMETERS
+   -- Self - Gtk_GEntry which was activated
+   -- SOURCE
+   procedure GenerateShipName(Self: access Gtk_Entry_Record'Class) is
+      -- ****
+      FactionIndex: constant Unbounded_String :=
+        To_Unbounded_String
+          (Get_Active_Id
+             (Gtk_Combo_Box_Text
+                (Get_Child_At
+                   (Gtk_Grid(Get_Object(Builder, "playergrid")), 1, 4))));
+   begin
+      Set_Text(Self, To_String(GenerateShipName(FactionIndex)));
+   end GenerateShipName;
+
    procedure CreateMainMenu is
       Error: aliased GError;
       AdjValues: constant array(Positive range <>) of Gdouble :=
@@ -1218,9 +1236,6 @@ package body MainMenu is
       Set_Text
         (Gtk_Entry(Get_Object(Builder, "entrycharactername")),
          To_String(NewGameSettings.PlayerName));
-      Set_Text
-        (Gtk_Entry(Get_Object(Builder, "entryshipname")),
-         To_String(NewGameSettings.ShipName));
       DataError := To_Unbounded_String(LoadGameData);
       Setting := True;
       for I in AdjNames'Range loop
@@ -1298,7 +1313,14 @@ package body MainMenu is
          ComboBox: Gtk_Combo_Box_Text := Gtk_Combo_Box_Text_New;
          PlayerGrid: constant Gtk_Grid :=
            Gtk_Grid(Get_Object(Builder, "playergrid"));
+         TextEntry: constant Gtk_GEntry := Gtk_Entry_New;
       begin
+         Set_Text(TextEntry, To_String(NewGameSettings.ShipName));
+         Set_Tooltip_Text
+           (TextEntry, "Enter ship name or press Enter for random ship name.");
+         On_Activate(TextEntry, GenerateShipName'Access);
+         On_Focus_In_Event(TextEntry, UpdateInfoLabel'Access);
+         Attach(PlayerGrid, TextEntry, 1, 2);
          Button := Gtk_Button_New_With_Label("Random");
          Set_Tooltip_Text
            (Button,
