@@ -1370,7 +1370,7 @@ package body DebugUI is
          end if;
          Set_Policy(Scrolled, Policy_Never, Policy_Automatic);
          Add(Scrolled, View);
-         Pack_Start(MemberBox, Scrolled, False);
+         Pack_Start(MemberBox, Scrolled);
          Scrolled := Gtk_Scrolled_Window_New;
          View :=
            Gtk_Tree_View_New_With_Model
