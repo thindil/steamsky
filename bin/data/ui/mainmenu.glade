@@ -347,19 +347,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry" id="entryshipname">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip_text" translatable="yes">Enter ship name or press Enter for random ship name.</property>
-                                <signal name="activate" handler="Random_Name" object="entryshipname" swapped="no"/>
-                                <signal name="focus-in-event" handler="Update_Info" object="entryshipname" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">2</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -442,6 +429,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">7</property>
                               </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                             <child>
                               <placeholder/>
