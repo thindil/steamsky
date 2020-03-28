@@ -589,6 +589,7 @@ members in that base is twice as cheap.
   <item index="365" sellprice="58" />
   <item index="366" sellprice="100" />
   <item index="367" sellprice="100" />
+  <item index="368" sellprice="64" />
   <recipe index="4" />
   <recipe index="5" />
   <recipe index="10" />
@@ -753,6 +754,7 @@ members in that base is twice as cheap.
   <recipe index="343" />
   <recipe index="344" />
   <recipe index="345" />
+  <recipe index="346" />
   <description>Military bases provide ammunition for guns and also melee weapons. They are the most difficult place as a starting point.</description>
  </base>
  <base index="5" name="Temple" color="7f6b00">
