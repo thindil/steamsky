@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [4.0.14] - 2020-03-29
 
 ### Updated
 - Updated help to clarify how 'Visit bases' type of goals works (issue #65)
