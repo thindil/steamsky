@@ -280,9 +280,9 @@ package body MainMenu is
                To_String(NewGameSettings.ShipName));
          end if;
          if NewGameSettings.PlayerGender = 'M' then
-            Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbgender")), 0);
+            Set_Active(Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 1)), 0);
          else
-            Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbgender")), 1);
+            Set_Active(Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 1)), 1);
          end if;
          if not Set_Active_Id
              (Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 4)),
@@ -462,19 +462,17 @@ package body MainMenu is
    -- SOURCE
    procedure RandomName(User_Data: access GObject_Record'Class) is
       -- ****
+      PlayerGrid: constant Gtk_Grid :=
+        Gtk_Grid(Get_Object(Builder, "playergrid"));
       FactionIndex: constant Unbounded_String :=
         To_Unbounded_String
-          (Get_Active_Id
-             (Gtk_Combo_Box_Text
-                (Get_Child_At
-                   (Gtk_Grid(Get_Object(Builder, "playergrid")), 1, 4))));
+          (Get_Active_Id(Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 4))));
    begin
-      if User_Data =
-        Get_Child_At(Gtk_Grid(Get_Object(Builder, "playergrid")), 1, 2) then
+      if User_Data = Get_Child_At(PlayerGrid, 1, 2) then
          Set_Text
            (Gtk_Entry(User_Data), To_String(GenerateShipName(FactionIndex)));
       else
-         if Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbgender"))) =
+         if Get_Active(Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 1))) =
            0 then
             Set_Text
               (Gtk_Entry(User_Data),
@@ -575,7 +573,8 @@ package body MainMenu is
       PlayerGrid: constant Gtk_Grid :=
         Gtk_Grid(Get_Object(Builder, "playergrid"));
    begin
-      if Get_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbgender"))) = 0 then
+      if Get_Active(Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 1))) =
+        0 then
          Gender := 'M';
       else
          Gender := 'F';
@@ -711,6 +710,8 @@ package body MainMenu is
         To_Unbounded_String(Get_Active_Id(Self));
       CareerComboBox: constant Gtk_Combo_Box_Text :=
         Gtk_Combo_Box_Text(Get_Child_At(Gtk_Grid(Get_Parent(Self)), 1, 5));
+      GenderComboBox: constant Gtk_Combo_Box_Text :=
+        Gtk_Combo_Box_Text(Get_Child_At(Gtk_Grid(Get_Parent(Self)), 1, 1));
    begin
       if FactionIndex = Null_Unbounded_String or Setting then
          return;
@@ -744,11 +745,11 @@ package body MainMenu is
       end if;
       if Factions_List(FactionIndex).Flags.Contains
           (To_Unbounded_String("nogender")) then
-         Set_Active(Gtk_Combo_Box(Get_Object(Builder, "cmbgender")), 0);
-         Hide(Gtk_Widget(Get_Object(Builder, "cmbgender")));
+         Set_Active(GenderComboBox, 0);
+         Hide(GenderComboBox);
          Hide(Gtk_Widget(Get_Object(Builder, "lblgender")));
       else
-         Show_All(Gtk_Widget(Get_Object(Builder, "cmbgender")));
+         Show_All(GenderComboBox);
          Show_All(Gtk_Widget(Get_Object(Builder, "lblgender")));
       end if;
       declare
@@ -1315,6 +1316,12 @@ package body MainMenu is
            Gtk_Grid(Get_Object(Builder, "playergrid"));
          TextEntry: constant Gtk_GEntry := Gtk_Entry_New;
       begin
+         Remove_All(ComboBox);
+         Append_Text(ComboBox, "Male");
+         Append_Text(ComboBox, "Female");
+         Set_Active(ComboBox, 0);
+         Set_Tooltip_Text(ComboBox, "Select the gender of your character. ");
+         Attach(PlayerGrid, ComboBox, 1, 1);
          Set_Text(TextEntry, To_String(NewGameSettings.ShipName));
          Set_Tooltip_Text
            (TextEntry, "Enter ship name or press Enter for random ship name.");
