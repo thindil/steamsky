@@ -391,23 +391,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkComboBoxText" id="cmbgender">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="tooltip_text" translatable="yes">Select the gender of your character. </property>
-                                <property name="active">0</property>
-                                <items>
-                                  <item translatable="yes">Male</item>
-                                  <item translatable="yes">Female</item>
-                                </items>
-                                <signal name="set-focus-child" handler="Update_Info_Proc" object="cmbgender" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -429,6 +412,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">7</property>
                               </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                             <child>
                               <placeholder/>
