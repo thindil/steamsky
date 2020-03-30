@@ -268,10 +268,9 @@ package body MainMenu is
         Gtk_Grid(Get_Object(Builder, "playergrid"));
    begin
       if User_Data = Get_Object(Builder, "btnnewgame") then
-         if Get_Text(Gtk_GEntry(Get_Object(Builder, "entrycharactername"))) =
-           "" then
+         if Get_Text(Gtk_GEntry(Get_Child_At(PlayerGrid, 1, 0))) = "" then
             Set_Text
-              (Gtk_Entry(Get_Object(Builder, "entrycharactername")),
+              (Gtk_Entry(Get_Child_At(PlayerGrid, 1, 0)),
                To_String(NewGameSettings.PlayerName));
          end if;
          if Get_Text(Gtk_GEntry(Get_Child_At(PlayerGrid, 1, 2))) = "" then
@@ -320,7 +319,7 @@ package body MainMenu is
          CreateGoalsMenu;
          Set_Visible_Child_Name
            (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page1");
-         Grab_Focus(Gtk_Widget(Get_Object(Builder, "entrycharactername")));
+         Grab_Focus(Get_Child_At(PlayerGrid, 1, 0));
       elsif User_Data = Get_Object(Builder, "btnback") then
          ShowMainMenu;
       elsif User_Data = Get_Object(Builder, "btnhalloffame") then
@@ -454,13 +453,13 @@ package body MainMenu is
       end if;
    end ShowAllNews;
 
-   -- ****if* MainMenu/RandomName
+   -- ****if* MainMenu/RandomPlayerName
    -- FUNCTION
-   -- Generate random player and ship names, baesd on selected faction
+   -- Generate random player name, baesd on selected faction
    -- PARAMETERS
-   -- User_Data - Text entry in which Enter key was pressed
+   -- Self - Gtk_GEntry which was activated
    -- SOURCE
-   procedure RandomName(User_Data: access GObject_Record'Class) is
+   procedure RandomPlayerName(Self: access Gtk_Entry_Record'Class) is
       -- ****
       PlayerGrid: constant Gtk_Grid :=
         Gtk_Grid(Get_Object(Builder, "playergrid"));
@@ -468,22 +467,13 @@ package body MainMenu is
         To_Unbounded_String
           (Get_Active_Id(Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 4))));
    begin
-      if User_Data = Get_Child_At(PlayerGrid, 1, 2) then
-         Set_Text
-           (Gtk_Entry(User_Data), To_String(GenerateShipName(FactionIndex)));
+      if Get_Active(Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 1))) =
+        0 then
+         Set_Text(Self, To_String(GenerateMemberName('M', FactionIndex)));
       else
-         if Get_Active(Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 1))) =
-           0 then
-            Set_Text
-              (Gtk_Entry(User_Data),
-               To_String(GenerateMemberName('M', FactionIndex)));
-         else
-            Set_Text
-              (Gtk_Entry(User_Data),
-               To_String(GenerateMemberName('F', FactionIndex)));
-         end if;
+         Set_Text(Self, To_String(GenerateMemberName('F', FactionIndex)));
       end if;
-   end RandomName;
+   end RandomPlayerName;
 
    -- ****if* MainMenu/ShowGoals
    -- Show goal selection UI
@@ -596,7 +586,7 @@ package body MainMenu is
       NewGameSettings :=
         (PlayerName =>
            To_Unbounded_String
-             (Get_Text(Gtk_Entry(Get_Object(Builder, "entrycharactername")))),
+             (Get_Text(Gtk_Entry(Get_Child_At(PlayerGrid, 1, 0)))),
          PlayerGender => Gender,
          ShipName =>
            To_Unbounded_String
@@ -1222,7 +1212,6 @@ package body MainMenu is
       CreateErrorUI(MainMenuWindow);
       Register_Handler(Builder, "Main_Quit", Quit'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
-      Register_Handler(Builder, "Random_Name", RandomName'Access);
       Register_Handler(Builder, "Show_Page", ShowPage'Access);
       Register_Handler(Builder, "Update_Info", UpdateInfo'Access);
       Register_Handler(Builder, "Update_Info_Proc", UpdateInfoProc'Access);
@@ -1234,9 +1223,6 @@ package body MainMenu is
          Hide(Gtk_Widget(Get_Object(Builder, "btnhalloffame")));
       end if;
       UpdateNews;
-      Set_Text
-        (Gtk_Entry(Get_Object(Builder, "entrycharactername")),
-         To_String(NewGameSettings.PlayerName));
       DataError := To_Unbounded_String(LoadGameData);
       Setting := True;
       for I in AdjNames'Range loop
@@ -1314,14 +1300,22 @@ package body MainMenu is
          ComboBox: Gtk_Combo_Box_Text := Gtk_Combo_Box_Text_New;
          PlayerGrid: constant Gtk_Grid :=
            Gtk_Grid(Get_Object(Builder, "playergrid"));
-         TextEntry: constant Gtk_GEntry := Gtk_Entry_New;
+         TextEntry: Gtk_GEntry := Gtk_Entry_New;
       begin
+         Set_Text(TextEntry, To_String(NewGameSettings.PlayerName));
+         Set_Tooltip_Text
+           (TextEntry,
+            "Enter character name or press Enter key for random name.");
+         On_Activate(TextEntry, RandomPlayerName'Access);
+         On_Focus_In_Event(TextEntry, UpdateInfoLabel'Access);
+         Attach(PlayerGrid, TextEntry, 1, 0);
          Remove_All(ComboBox);
          Append_Text(ComboBox, "Male");
          Append_Text(ComboBox, "Female");
          Set_Active(ComboBox, 0);
          Set_Tooltip_Text(ComboBox, "Select the gender of your character. ");
          Attach(PlayerGrid, ComboBox, 1, 1);
+         TextEntry := Gtk_Entry_New;
          Set_Text(TextEntry, To_String(NewGameSettings.ShipName));
          Set_Tooltip_Text
            (TextEntry, "Enter ship name or press Enter for random ship name.");
