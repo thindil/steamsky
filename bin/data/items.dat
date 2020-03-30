@@ -1805,5 +1805,10 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>An upgraded, explosive 80mm gun ammunition, made of adamantium. Do less damage but it is more accurate.</description>
  </item>
+ <item index="370" name="Adamantium 100mm piercing ammo" showtype="Ammunition" type="Ammo100" weight="64" price="118">
+  <data value="768"/>
+  <data value="2"/>
+  <description>An upgraded, piercing 100mm gun ammunition, made of adamantium. Do more damage but it is less accurate.</description>
+ </item>
 </items>
 
