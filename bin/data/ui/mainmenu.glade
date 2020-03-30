@@ -334,19 +334,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry" id="entrycharactername">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip_text" translatable="yes">Enter character name or press Enter key for random name.</property>
-                                <signal name="activate" handler="Random_Name" object="entrycharactername" swapped="no"/>
-                                <signal name="focus-in-event" handler="Update_Info" object="entrycharactername" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -412,6 +399,9 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">7</property>
                               </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                             <child>
                               <placeholder/>
