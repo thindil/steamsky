@@ -16,6 +16,9 @@ crafting, etc.).
 *game.dat* file, you can set this parameter to any text value.
 - Attribute "price" is price of the item. If you want that item to be not
 buyable/sellable in bases then set the price to 0.
+- Optional attribute `reputation`: Minimal reputation in bases needed to
+buy that module from them. Default value is -100 (available in all bases).
+Text between "module" tags is module description.
 -->
  <item index="1" name="Charcollum" showtype="Fuel/Moneys" type="Fuel" weight="1" price="0">
 <!--
@@ -73,10 +76,10 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
  <item index="9" name="Andrae logs" type="Wood" weight="5" price="5">
   <description>Wooden logs used for crafting items and Charcollum.</description>
  </item>
- <item index="10" name="Illandru logs" type="Wood" weight="3" price="6">
+ <item index="10" name="Illandru logs" type="Wood" weight="3" price="6" reputation="0">
   <description>Wooden logs used for crafting items and Charcollum.</description>
  </item>
- <item index="11" name="Fine Rations" type="Food" weight="1" price="5">
+ <item index="11" name="Fine Rations" type="Food" weight="1" price="5" reputation="25">
   <data value="80"/>
   <data value="5"/>
   <description>Improved rations.</description>
@@ -110,29 +113,29 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="4"/>
   <description>Standard 40mm gun ammunition.</description>
  </item>
- <item index="21" name="Steel plates" showtype="Repair material" type="Steel" weight="5" price="8">
+ <item index="21" name="Steel plates" showtype="Repair material" type="Steel" weight="5" price="8" reputation="25">
   <description>Large heavy steel plates.</description>
  </item>
  <item index="22" name="Medical supplies" type="Medicines" weight="5" price="7">
   <description>Bandages, medicine, and antidotes. Everything needed to cure patients.</description>
  </item>
- <item index="23" name="Steel 20mm ammo" showtype="Ammunition" type="Ammo20" weight="1" price="7">
+ <item index="23" name="Steel 20mm ammo" showtype="Ammunition" type="Ammo20" weight="1" price="7" reputation="25">
   <data value="4"/>
   <description>Upgraded 20mm gun ammunition.</description>
  </item>
- <item index="24" name="Steel 10mm ammo" showtype="Ammunition" type="Ammo10" weight="1" price="5">
+ <item index="24" name="Steel 10mm ammo" showtype="Ammunition" type="Ammo10" weight="1" price="5" reputation="25">
   <data value="2"/>
   <description>Upgraded 10mm gun ammunition.</description>
  </item>
- <item index="25" name="Steel 40mm ammo" showtype="Ammunition" type="Ammo40" weight="2" price="10">
+ <item index="25" name="Steel 40mm ammo" showtype="Ammunition" type="Ammo40" weight="2" price="10" reputation="25">
   <data value="8"/>
   <description>Upgraded 40mm gun ammunition.</description>
  </item>
- <item index="26" name="Iron 60mm ammo" showtype="Ammunition" type="Ammo60" weight="4" price="12">
+ <item index="26" name="Iron 60mm ammo" showtype="Ammunition" type="Ammo60" weight="4" price="12" reputation="0">
   <data value="8"/>
   <description>Standard 60mm gun ammunition.</description>
  </item>
- <item index="27" name="Steel 60mm ammo" showtype="Ammunition" type="Ammo60" weight="4" price="14">
+ <item index="27" name="Steel 60mm ammo" showtype="Ammunition" type="Ammo60" weight="4" price="14" reputation="25">
   <data value="16"/>
   <description>Upgraded 60mm gun ammunition.</description>
  </item>
@@ -145,34 +148,34 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
  <item index="30" name="Vegetables seeds" showtype="Seeds" type="VegetableSeeds" weight="1" price="2">
   <description>Seeds used to cultivate vegetables.</description>
  </item>
- <item index="31" name="Iron 80mm ammo" showtype="Ammunition" type="Ammo80" weight="8" price="18">
+ <item index="31" name="Iron 80mm ammo" showtype="Ammunition" type="Ammo80" weight="8" price="18" reputation="0">
   <data value="16"/>
   <description>Standard 80mm gun ammunition.</description>
  </item>
- <item index="32" name="Steel 80mm ammo" showtype="Ammunition" type="Ammo80" weight="8" price="22">
+ <item index="32" name="Steel 80mm ammo" showtype="Ammunition" type="Ammo80" weight="8" price="22" reputation="25">
   <data value="32"/>
   <description>Upgraded 80mm gun ammunition.</description>
  </item>
- <item index="33" name="Iron 100mm ammo" showtype="Ammunition" type="Ammo100" weight="16" price="26">
+ <item index="33" name="Iron 100mm ammo" showtype="Ammunition" type="Ammo100" weight="16" price="26" reputation="0">
   <data value="32"/>
   <description>Standard 100mm gun ammunition.</description>
  </item>
- <item index="34" name="Steel 100mm ammo" showtype="Ammunition" type="Ammo100" weight="16" price="34">
+ <item index="34" name="Steel 100mm ammo" showtype="Ammunition" type="Ammo100" weight="16" price="34" reputation="25">
   <data value="64"/>
   <description>Upgraded 100mm gun ammunition.</description>
  </item>
- <item index="35" name="Iron 120mm ammo" showtype="Ammunition" type="Ammo120" weight="30" price="40">
+ <item index="35" name="Iron 120mm ammo" showtype="Ammunition" type="Ammo120" weight="30" price="40" reputation="0">
   <data value="64"/>
   <description>Standard 120mm gun ammunition.</description>
  </item>
- <item index="36" name="Steel 120mm ammo" showtype="Ammunition" type="Ammo120" weight="30" price="52">
+ <item index="36" name="Steel 120mm ammo" showtype="Ammunition" type="Ammo120" weight="30" price="52" reputation="25">
   <data value="128"/>
   <description>Upgraded 120mm gun ammunition.</description>
  </item>
  <item index="37" name="Andrae seeds" showtype="Seeds" type="AndraeSeeds" weight="1" price="2">
   <description>Seeds used to cultivate Andrae trees.</description>
  </item>
- <item index="38" name="Illandru seeds" showtype="Seeds" type="IllandruSeeds" weight="1" price="2">
+ <item index="38" name="Illandru seeds" showtype="Seeds" type="IllandruSeeds" weight="1" price="2" reputation="0">
   <description>Seeds used to cultivate Illandru trees.</description>
  </item>
  <item index="39" name="Small package" showtype="Special" type="MissionItem" weight="5" price="0">
@@ -190,17 +193,17 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
  <item index="43" name="Huge package" showtype="Special" type="MissionItem" weight="200" price="0">
   <description>An item required for one of your delivery missions. Deliver it to the proper sky base for a reward. Removing it from cargo automatically fails that mission.</description>
  </item>
- <item index="44" name="Beer" type="Drink" weight="1" price="3">
+ <item index="44" name="Beer" type="Drink" weight="1" price="3" reputation="0">
   <data value="40"/>
   <data value="5"/>
   <description>Standard beer, used for drinking.</description>
  </item>
- <item index="45" name="Wine" type="Drink" weight="1" price="4">
+ <item index="45" name="Wine" type="Drink" weight="1" price="4" reputation="25">
   <data value="50"/>
   <data value="10"/>
   <description>High quality wine, used for drinking.</description>
  </item>
- <item index="46" name="Lavish Rations" type="Food" weight="1" price="7">
+ <item index="46" name="Lavish Rations" type="Food" weight="1" price="7" reputation="50">
   <data value="100"/>
   <data value="10"/>
   <description>The best kind of rations.</description>
@@ -233,7 +236,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="20"/>
   <description>A simple wooden bucket.</description>
  </item>
- <item index="54" name="Barley seeds" showtype="Seeds" type="BarleySeeds" weight="1" price="2">
+ <item index="54" name="Barley seeds" showtype="Seeds" type="BarleySeeds" weight="1" price="2" reputation="0">
   <description>A Seeds used to cultivate barley.</description>
  </item>
  <item index="55" name="Barley" showtype="Grain" type="Barley" weight="1" price="3">
