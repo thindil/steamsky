@@ -1302,6 +1302,7 @@ package body MainMenu is
            Gtk_Grid(Get_Object(Builder, "playergrid"));
          TextEntry: Gtk_GEntry := Gtk_Entry_New;
       begin
+         On_Map(PlayerGrid, UpdateInfoLabelMap'Access);
          Set_Text(TextEntry, To_String(NewGameSettings.PlayerName));
          Set_Tooltip_Text
            (TextEntry,
