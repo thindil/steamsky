@@ -113,29 +113,29 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="4"/>
   <description>Standard 40mm gun ammunition.</description>
  </item>
- <item index="21" name="Steel plates" showtype="Repair material" type="Steel" weight="5" price="8" reputation="25">
+ <item index="21" name="Steel plates" showtype="Repair material" type="Steel" weight="5" price="8" reputation="0">
   <description>Large heavy steel plates.</description>
  </item>
  <item index="22" name="Medical supplies" type="Medicines" weight="5" price="7">
   <description>Bandages, medicine, and antidotes. Everything needed to cure patients.</description>
  </item>
- <item index="23" name="Steel 20mm ammo" showtype="Ammunition" type="Ammo20" weight="1" price="7" reputation="25">
+ <item index="23" name="Steel 20mm ammo" showtype="Ammunition" type="Ammo20" weight="1" price="7" reputation="0">
   <data value="4"/>
   <description>Upgraded 20mm gun ammunition.</description>
  </item>
- <item index="24" name="Steel 10mm ammo" showtype="Ammunition" type="Ammo10" weight="1" price="5" reputation="25">
+ <item index="24" name="Steel 10mm ammo" showtype="Ammunition" type="Ammo10" weight="1" price="5" reputation="0">
   <data value="2"/>
   <description>Upgraded 10mm gun ammunition.</description>
  </item>
- <item index="25" name="Steel 40mm ammo" showtype="Ammunition" type="Ammo40" weight="2" price="10" reputation="25">
+ <item index="25" name="Steel 40mm ammo" showtype="Ammunition" type="Ammo40" weight="2" price="10" reputation="0">
   <data value="8"/>
   <description>Upgraded 40mm gun ammunition.</description>
  </item>
- <item index="26" name="Iron 60mm ammo" showtype="Ammunition" type="Ammo60" weight="4" price="12" reputation="0">
+ <item index="26" name="Iron 60mm ammo" showtype="Ammunition" type="Ammo60" weight="4" price="12">
   <data value="8"/>
   <description>Standard 60mm gun ammunition.</description>
  </item>
- <item index="27" name="Steel 60mm ammo" showtype="Ammunition" type="Ammo60" weight="4" price="14" reputation="25">
+ <item index="27" name="Steel 60mm ammo" showtype="Ammunition" type="Ammo60" weight="4" price="14" reputation="0">
   <data value="16"/>
   <description>Upgraded 60mm gun ammunition.</description>
  </item>
@@ -148,27 +148,27 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
  <item index="30" name="Vegetables seeds" showtype="Seeds" type="VegetableSeeds" weight="1" price="2">
   <description>Seeds used to cultivate vegetables.</description>
  </item>
- <item index="31" name="Iron 80mm ammo" showtype="Ammunition" type="Ammo80" weight="8" price="18" reputation="0">
+ <item index="31" name="Iron 80mm ammo" showtype="Ammunition" type="Ammo80" weight="8" price="18">
   <data value="16"/>
   <description>Standard 80mm gun ammunition.</description>
  </item>
- <item index="32" name="Steel 80mm ammo" showtype="Ammunition" type="Ammo80" weight="8" price="22" reputation="25">
+ <item index="32" name="Steel 80mm ammo" showtype="Ammunition" type="Ammo80" weight="8" price="22" reputation="0">
   <data value="32"/>
   <description>Upgraded 80mm gun ammunition.</description>
  </item>
- <item index="33" name="Iron 100mm ammo" showtype="Ammunition" type="Ammo100" weight="16" price="26" reputation="0">
+ <item index="33" name="Iron 100mm ammo" showtype="Ammunition" type="Ammo100" weight="16" price="26">
   <data value="32"/>
   <description>Standard 100mm gun ammunition.</description>
  </item>
- <item index="34" name="Steel 100mm ammo" showtype="Ammunition" type="Ammo100" weight="16" price="34" reputation="25">
+ <item index="34" name="Steel 100mm ammo" showtype="Ammunition" type="Ammo100" weight="16" price="34" reputation="0">
   <data value="64"/>
   <description>Upgraded 100mm gun ammunition.</description>
  </item>
- <item index="35" name="Iron 120mm ammo" showtype="Ammunition" type="Ammo120" weight="30" price="40" reputation="0">
+ <item index="35" name="Iron 120mm ammo" showtype="Ammunition" type="Ammo120" weight="30" price="40">
   <data value="64"/>
   <description>Standard 120mm gun ammunition.</description>
  </item>
- <item index="36" name="Steel 120mm ammo" showtype="Ammunition" type="Ammo120" weight="30" price="52" reputation="25">
+ <item index="36" name="Steel 120mm ammo" showtype="Ammunition" type="Ammo120" weight="30" price="52" reputation="0">
   <data value="128"/>
   <description>Upgraded 120mm gun ammunition.</description>
  </item>
@@ -1812,6 +1812,11 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="768"/>
   <data value="2"/>
   <description>An upgraded, piercing 100mm gun ammunition, made of adamantium. Do more damage but it is less accurate.</description>
+ </item>
+ <item index="371" name="Adamantium 100mm explosive ammo" showtype="Ammunition" type="Ammo100" weight="64" price="118">
+  <data value="384"/>
+  <data value="3"/>
+  <description>An upgraded, explosive 100mm gun ammunition, made of adamantium. Do less damage but it is more accurate.</description>
  </item>
 </items>
 
