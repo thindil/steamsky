@@ -239,13 +239,13 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
  <item index="54" name="Barley seeds" showtype="Seeds" type="BarleySeeds" weight="1" price="2" reputation="0">
   <description>A Seeds used to cultivate barley.</description>
  </item>
- <item index="55" name="Barley" showtype="Grain" type="Barley" weight="1" price="3">
+ <item index="55" name="Barley" showtype="Grain" type="Barley" weight="1" price="3" reputation="0">
   <description>A standard grain used in cooking or brewery.</description>
  </item>
- <item index="56" name="Grapes" type="Grapes" weight="1" price="3">
+ <item index="56" name="Grapes" type="Grapes" weight="1" price="3" reputation="25">
   <description>A grape vine used to create wine.</description>
  </item>
- <item index="57" name="Grape Vine" type="GrapeVine" weight="20" price="0">
+ <item index="57" name="Grape Vine" type="GrapeVine" weight="20" price="0" reputation="25">
   <description>A vine plant, you can harvest grapes from it.</description>
  </item>
  <item index="58" name="Quartz sand" type="Sand" weight="5" price="2">
@@ -267,11 +267,11 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>The weakest type of harpoon with a long rope attached. Used as ammunition for harpoon guns.</description>
  </item>
- <item index="63" name="Iron harpoon" showtype="Ammunition" type="Harpoon" weight="12" price="10">
+ <item index="63" name="Iron harpoon" showtype="Ammunition" type="Harpoon" weight="12" price="10" reputation="0">
   <data value="4"/>
   <description>A harpoon made of iron with a long rope attached. Used as ammunition for harpoon guns.</description>
  </item>
- <item index="64" name="Steel harpoon" showtype="Ammunition" type="Harpoon" weight="12" price="12">
+ <item index="64" name="Steel harpoon" showtype="Ammunition" type="Harpoon" weight="12" price="12" reputation="0">
   <data value="8"/>
   <description>A harpoon made of steel with a long rope attached. Used as ammunition for harpoon guns.</description>
  </item>
@@ -332,11 +332,11 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>A simple short sword made of bronze, used in melee combat.</description>
  </item>
- <item index="75" name="Iron mold" showtype="Tool" type="Mold" weight="10" price="17">
+ <item index="75" name="Iron mold" showtype="Tool" type="Mold" weight="10" price="17" reputation="0">
   <data value="10"/>
   <description>An iron tool used in metalsmith recipes.</description>
  </item>
- <item index="76" name="Iron sword" type="Weapon" weight="2" price="17">
+ <item index="76" name="Iron sword" type="Weapon" weight="2" price="17" reputation="0">
   <data value="10"/>
   <data value="25"/>
   <data value="17"/>
@@ -344,7 +344,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>A simple sword made of iron, used in melee combat.</description>
  </item>
- <item index="77" name="Iron short sword" type="Weapon" weight="1" price="12">
+ <item index="77" name="Iron short sword" type="Weapon" weight="1" price="12" reputation="0">
   <data value="10"/>
   <data value="20"/>
   <data value="17"/>
@@ -376,36 +376,36 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>A standard type of armor, made of bronze, worn on the legs.</description>
  </item>
- <item index="82" name="Iron shield" type="Shield" weight="6" price="16">
+ <item index="82" name="Iron shield" type="Shield" weight="6" price="16" reputation="0">
   <data value="15"/>
   <data value="8"/>
   <description>A standard shield made of iron, used in melee combat.</description>
  </item>
- <item index="83" name="Iron chestplate" showtype="Armor" type="ChestArmor" weight="10" price="20">
+ <item index="83" name="Iron chestplate" showtype="Armor" type="ChestArmor" weight="10" price="20" reputation="0">
   <data value="10"/>
   <data value="15"/>
   <data value="3"/>
   <description>A standard type of armor, made of iron, worn on the torso.</description>
  </item>
- <item index="84" name="Iron helmet" showtype="Armor" type="HeadArmor" weight="2" price="14">
+ <item index="84" name="Iron helmet" showtype="Armor" type="HeadArmor" weight="2" price="14" reputation="0">
   <data value="10"/>
   <data value="7"/>
   <data value="2"/>
   <description>A standard type of armor, made of iron, worn on the head.</description>
  </item>
- <item index="85" name="Iron armsguard" showtype="Armor" type="ArmsArmor" weight="2" price="17">
+ <item index="85" name="Iron armsguard" showtype="Armor" type="ArmsArmor" weight="2" price="17" reputation="0">
   <data value="10"/>
   <data value="9"/>
   <data value="1"/>
   <description>A standard type of armor, made of iron, worn on the arms.</description>
  </item>
- <item index="86" name="Iron legsguard" showtype="Armor" type="LegsArmor" weight="2" price="19">
+ <item index="86" name="Iron legsguard" showtype="Armor" type="LegsArmor" weight="2" price="19" reputation="0">
   <data value="10"/>
   <data value="12"/>
   <data value="2"/>
   <description>A standard type of armor, made of iron, worn on the legs.</description>
  </item>
- <item index="87" name="Steel short sword" type="Weapon" weight="1" price="17">
+ <item index="87" name="Steel short sword" type="Weapon" weight="1" price="17" reputation="0">
   <data value="5"/>
   <data value="25"/>
   <data value="17"/>
@@ -413,7 +413,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>A simple short sword made of steel, used in melee combat.</description>
  </item>
- <item index="88" name="Steel sword" type="Weapon" weight="2" price="22">
+ <item index="88" name="Steel sword" type="Weapon" weight="2" price="22" reputation="0">
   <data value="5"/>
   <data value="30"/>
   <data value="17"/>
@@ -421,44 +421,44 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>A simple sword made of steel, used in melee combat.</description>
  </item>
- <item index="89" name="Steel shield" type="Shield" weight="6" price="26">
+ <item index="89" name="Steel shield" type="Shield" weight="6" price="26" reputation="0">
   <data value="5"/>
   <data value="12"/>
   <description>A standard shield made of steel, used in melee combat.</description>
  </item>
- <item index="90" name="Steel chestplate" showtype="Armor" type="ChestArmor" weight="12" price="30">
+ <item index="90" name="Steel chestplate" showtype="Armor" type="ChestArmor" weight="12" price="30" reputation="0">
   <data value="5"/>
   <data value="20"/>
   <data value="5"/>
   <description>A standard type of armor, made of steel, worn on the torso.</description>
  </item>
- <item index="91" name="Steel helmet" showtype="Armor" type="HeadArmor" weight="3" price="20">
+ <item index="91" name="Steel helmet" showtype="Armor" type="HeadArmor" weight="3" price="20" reputation="0">
   <data value="5"/>
   <data value="10"/>
   <data value="2"/>
   <description>A standard type of armor, made of steel, worn on the head.</description>
  </item>
- <item index="92" name="Steel armsguard" showtype="Armor" type="ArmsArmor" weight="3" price="22">
+ <item index="92" name="Steel armsguard" showtype="Armor" type="ArmsArmor" weight="3" price="22" reputation="0">
   <data value="5"/>
   <data value="12"/>
   <data value="2"/>
   <description>A standard type of armor, made of steel, worn on the arms.</description>
  </item>
- <item index="93" name="Steel legsguard" showtype="Armor" type="LegsArmor" weight="3" price="26">
+ <item index="93" name="Steel legsguard" showtype="Armor" type="LegsArmor" weight="3" price="26" reputation="0">
   <data value="5"/>
   <data value="16"/>
   <data value="3"/>
   <description>A standard type of armor, made of steel, worn on the legs.</description>
  </item>
- <item index="94" name="Steel mold" showtype="Tool" type="Mold" weight="10" price="22">
+ <item index="94" name="Steel mold" showtype="Tool" type="Mold" weight="10" price="22" reputation="0">
   <data value="5"/>
   <description>A steel tool used in metalsmith recipes.</description>
  </item>
- <item index="95" name="Iron gunsmith set" showtype="Tool" type="GunsmithSet" weight="10" price="17">
+ <item index="95" name="Iron gunsmith set" showtype="Tool" type="GunsmithSet" weight="10" price="17" reputation="0">
   <data value="10"/>
   <description>An iron tool used in gunsmith recipes.</description>
  </item>
- <item index="96" name="Steel gunsmith set" showtype="Tool" type="GunsmithSet" weight="10" price="22">
+ <item index="96" name="Steel gunsmith set" showtype="Tool" type="GunsmithSet" weight="10" price="22" reputation="0">
   <data value="5"/>
   <description>A steel tool used in gunsmith recipes.</description>
  </item>
@@ -466,15 +466,15 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="15"/>
   <description>A set of tools made of bronze, used to cook items.</description>
  </item>
- <item index="98" name="Iron cooking set" showtype="Tool" type="CookingSet" weight="10" price="17">
+ <item index="98" name="Iron cooking set" showtype="Tool" type="CookingSet" weight="10" price="17" reputation="0">
   <data value="10"/>
   <description>A set of tools made of iron, used to cook items.</description>
  </item>
- <item index="99" name="Steel cooking set" showtype="Tool" type="CookingSet" weight="10" price="22">
+ <item index="99" name="Steel cooking set" showtype="Tool" type="CookingSet" weight="10" price="22" reputation="0">
   <data value="5"/>
   <description>A set of tools made of steel, used to cook items.</description>
  </item>
- <item index="100" name="Iron sickle" showtype="Tool" type="Sickle" weight="1" price="12">
+ <item index="100" name="Iron sickle" showtype="Tool" type="Sickle" weight="1" price="12" reputation="0">
   <data value="10"/>
   <description>An iron tool used in cultivating plants.</description>
  </item>
