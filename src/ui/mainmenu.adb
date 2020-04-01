@@ -708,7 +708,7 @@ package body MainMenu is
       end if;
       if FactionIndex = To_Unbounded_String("random") then
          Hide(CareerComboBox);
-         Hide(Gtk_Widget(Get_Object(Builder, "lblcareer")));
+         Hide(Get_Child_At(Gtk_Grid(Get_Parent(Self)), 0, 5));
          Set_Label
            (InfoLabel,
             Get_Tooltip_Text(Self) & LF & LF &
@@ -726,7 +726,7 @@ package body MainMenu is
       Set_Active(Gtk_Combo_Box(CareerComboBox), 0);
       Setting := False;
       Show_All(CareerComboBox);
-      Show_All(Gtk_Widget(Get_Object(Builder, "lblcareer")));
+      Show_All(Get_Child_At(Gtk_Grid(Get_Parent(Self)), 0, 5));
       if InfoLabel /= null then
          Set_Label
            (InfoLabel,
@@ -737,10 +737,10 @@ package body MainMenu is
           (To_Unbounded_String("nogender")) then
          Set_Active(GenderComboBox, 0);
          Hide(GenderComboBox);
-         Hide(Gtk_Widget(Get_Object(Builder, "lblgender")));
+         Hide(Get_Child_At(Gtk_Grid(Get_Parent(Self)), 0, 1));
       else
          Show_All(GenderComboBox);
-         Show_All(Gtk_Widget(Get_Object(Builder, "lblgender")));
+         Show_All(Get_Child_At(Gtk_Grid(Get_Parent(Self)), 0, 1));
       end if;
       declare
          BasesList: constant Gtk_List_Store :=
@@ -1301,7 +1301,19 @@ package body MainMenu is
          PlayerGrid: constant Gtk_Grid :=
            Gtk_Grid(Get_Object(Builder, "playergrid"));
          TextEntry: Gtk_GEntry := Gtk_Entry_New;
+         Labels2Array: constant array(0 .. 6) of Unbounded_String :=
+           (To_Unbounded_String("Character name:"),
+            To_Unbounded_String("Character gender:"),
+            To_Unbounded_String("Ship name:"),
+            To_Unbounded_String("Character's goal:"),
+            To_Unbounded_String("Character faction:"),
+            To_Unbounded_String("Character career:"),
+            To_Unbounded_String("Starting base type:"));
       begin
+         for I in Labels2Array'Range loop
+            Label := Gtk_Label_New(To_String(Labels2Array(I)));
+            Attach(PlayerGrid, Label, 0, Gint(I));
+         end loop;
          On_Map(PlayerGrid, UpdateInfoLabelMap'Access);
          Set_Text(TextEntry, To_String(NewGameSettings.PlayerName));
          Set_Tooltip_Text
