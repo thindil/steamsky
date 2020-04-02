@@ -691,31 +691,31 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>A titanium set of tools needed to sew items.</description>
  </item>
- <item index="151" name="Orichalcum sewing kit" showtype="Tool" type="SewingKit" weight="4" price="28">
+ <item index="151" name="Orichalcum sewing kit" showtype="Tool" type="SewingKit" weight="4" price="28" reputation="50">
   <data value="2"/>
   <description>An orichalcum set of tools needed to sew items.</description>
  </item>
- <item index="152" name="Orichalcum 60mm ammo" showtype="Ammunition" type="Ammo60" weight="8" price="30">
+ <item index="152" name="Orichalcum 60mm ammo" showtype="Ammunition" type="Ammo60" weight="8" price="30" reputation="50">
   <data value="64"/>
   <description>An upgraded 60mm gun ammunition, made of orichalcum.</description>
  </item>
- <item index="153" name="Orichalcum 80mm ammo" showtype="Ammunition" type="Ammo80" weight="16" price="34">
+ <item index="153" name="Orichalcum 80mm ammo" showtype="Ammunition" type="Ammo80" weight="16" price="34" reputation="50">
   <data value="128"/>
   <description>An upgraded 80mm gun ammunition, made of orichalcum.</description>
  </item>
- <item index="154" name="Orichalcum 100mm ammo" showtype="Ammunition" type="Ammo100" weight="32" price="60">
+ <item index="154" name="Orichalcum 100mm ammo" showtype="Ammunition" type="Ammo100" weight="32" price="60" reputation="50">
   <data value="256"/>
   <description>An upgraded 100mm gun ammunition, made of orichalcum.</description>
  </item>
- <item index="155" name="Orichalcum 120mm ammo" showtype="Ammunition" type="Ammo120" weight="60" price="102">
+ <item index="155" name="Orichalcum 120mm ammo" showtype="Ammunition" type="Ammo120" weight="60" price="102" reputation="50">
   <data value="512"/>
   <description>An upgraded 120mm gun ammunition, made of orichalcum.</description>
  </item>
- <item index="156" name="Orichalcum harpoon" showtype="Ammunition" type="Harpoon" weight="20" price="27">
+ <item index="156" name="Orichalcum harpoon" showtype="Ammunition" type="Harpoon" weight="20" price="27" reputation="50">
   <data value="16"/>
   <description>A harpoon made of orichalcum with long rope. Used as ammunition for harpoon guns.</description>
  </item>
- <item index="157" name="Orichalcum short sword" type="Weapon" weight="2" price="30">
+ <item index="157" name="Orichalcum short sword" type="Weapon" weight="2" price="30" reputation="50">
   <data value="2"/>
   <data value="35"/>
   <data value="17"/>
@@ -723,7 +723,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>A simple short sword made of orichalcum, used in melee combat.</description>
  </item>
- <item index="158" name="Orichalcum sword" type="Weapon" weight="3" price="37">
+ <item index="158" name="Orichalcum sword" type="Weapon" weight="3" price="37" reputation="50">
   <data value="2"/>
   <data value="40"/>
   <data value="17"/>
@@ -731,30 +731,30 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>A simple sword made of orichalcum, used in melee combat.</description>
  </item>
- <item index="159" name="Orichalcum shield" type="Shield" weight="9" price="40">
+ <item index="159" name="Orichalcum shield" type="Shield" weight="9" price="40" reputation="50">
   <data value="2"/>
   <data value="20"/>
   <description>A standard shield made of orichalcum, used in melee combat.</description>
  </item>
- <item index="160" name="Orichalcum chestplate" showtype="Armor" type="ChestArmor" weight="18" price="45">
+ <item index="160" name="Orichalcum chestplate" showtype="Armor" type="ChestArmor" weight="18" price="45" reputation="50">
   <data value="2"/>
   <data value="30"/>
   <data value="7"/>
   <description>A standard type of armor, made of orichalcum, worn on the torso.</description>
  </item>
- <item index="161" name="Orichalcum helmet" showtype="Armor" type="HeadArmor" weight="5" price="32">
+ <item index="161" name="Orichalcum helmet" showtype="Armor" type="HeadArmor" weight="5" price="32" reputation="50">
   <data value="2"/>
   <data value="15"/>
   <data value="3"/>
   <description>A standard type of armor, made of orichalcum, worn on the head.</description>
  </item>
- <item index="162" name="Orichalcum armsguard" showtype="Armor" type="ArmsArmor" weight="4" price="35">
+ <item index="162" name="Orichalcum armsguard" showtype="Armor" type="ArmsArmor" weight="4" price="35" reputation="50">
   <data value="2"/>
   <data value="16"/>
   <data value="3"/>
   <description>A standard type of armor, made of orichalcum, worn on the arms.</description>
  </item>
- <item index="163" name="Orichalcum legsguard" showtype="Armor" type="LegsArmor" weight="5" price="38">
+ <item index="163" name="Orichalcum legsguard" showtype="Armor" type="LegsArmor" weight="5" price="38" reputation="50">
   <data value="2"/>
   <data value="24"/>
   <data value="4"/>
@@ -766,69 +766,69 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
  <item index="165" name="Strange metal scrap" showtype="Special" type="StoryItem" weight="1" price="0">
   <description>Scrap of strange shining metal. Very similiar to medalion which you found ealier.</description>
  </item>
- <item index="166" name="Adamantium ore" showtype="Ore" type="AdamantiumOre" weight="20" price="30">
+ <item index="166" name="Adamantium ore" showtype="Ore" type="AdamantiumOre" weight="20" price="30" reputation="75">
   <description>An unrefined adamanantium ore.</description>
  </item>
- <item index="167" name="Adamantium plates" showtype="Repair material" type="Adamantium" weight="18" price="44">
+ <item index="167" name="Adamantium plates" showtype="Repair material" type="Adamantium" weight="18" price="44" reputation="75">
   <description>Heavy, large, adamantium plates used to repair or upgrade ship modules.</description>
  </item>
- <item index="168" name="Adamantium mold" showtype="Tool" type="Mold" weight="30" price="72">
+ <item index="168" name="Adamantium mold" showtype="Tool" type="Mold" weight="30" price="72" reputation="75">
   <data value="1"/>
   <description>An adamantium tool used in metalsmith recipes.</description>
  </item>
- <item index="169" name="Adamantium gunsmith set" showtype="Tool" type="GunsmithSet" weight="30" price="70">
+ <item index="169" name="Adamantium gunsmith set" showtype="Tool" type="GunsmithSet" weight="30" price="70" reputation="75">
   <data value="1"/>
   <description>An adamantium tool used in gunsmith recipes.</description>
  </item>
- <item index="170" name="Adamantium cooking set" showtype="Tool" type="CookingSet" weight="30" price="68">
+ <item index="170" name="Adamantium cooking set" showtype="Tool" type="CookingSet" weight="30" price="68" reputation="75">
   <data value="1"/>
   <description>Set of tools made of adamantium, used to cook items.</description>
  </item>
- <item index="171" name="Adamantium sickle" showtype="Tool" type="Sickle" weight="2" price="50">
+ <item index="171" name="Adamantium sickle" showtype="Tool" type="Sickle" weight="2" price="50" reputation="75">
   <data value="1"/>
   <description>An adamantium tool used in cultivating plants.</description>
  </item>
- <item index="172" name="Adamantium saw" showtype="Tool" type="Saw" weight="2" price="54">
+ <item index="172" name="Adamantium saw" showtype="Tool" type="Saw" weight="2" price="54" reputation="75">
   <data value="1"/>
   <description>An adamantium tool used to cut wood.</description>
  </item>
- <item index="173" name="Adamantium bucket" showtype="Tool" type="Bucket" weight="16" price="60">
+ <item index="173" name="Adamantium bucket" showtype="Tool" type="Bucket" weight="16" price="60" reputation="75">
   <data value="1"/>
   <description>A simple bucket made of adamantium.</description>
  </item>
- <item index="174" name="Adamantium blacksmith set" showtype="Tool" type="BlacksmithSet" weight="100" price="232">
+ <item index="174" name="Adamantium blacksmith set" showtype="Tool" type="BlacksmithSet" weight="100" price="232" reputation="75">
   <data value="1"/>
   <description>An adamantium set of tools used in blacksmith recipes.</description>
  </item>
- <item index="175" name="Adamantium woodworker set" showtype="Tool" type="WoodworkerSet" weight="20" price="54">
+ <item index="175" name="Adamantium woodworker set" showtype="Tool" type="WoodworkerSet" weight="20" price="54" reputation="75">
   <data value="1"/>
   <description>An adamantium set of tools used in woodworker recipes.</description>
  </item>
- <item index="176" name="Adamantium repair tools" showtype="Tool" type="RepairTools" weight="20" price="52">
+ <item index="176" name="Adamantium repair tools" showtype="Tool" type="RepairTools" weight="20" price="52" reputation="75">
   <data value="1"/>
   <description>An adamantium set of tools needed to repair or upgrade ship modules.</description>
  </item>
- <item index="177" name="Adamantium sewing kit" showtype="Tool" type="SewingKit" weight="8" price="54">
+ <item index="177" name="Adamantium sewing kit" showtype="Tool" type="SewingKit" weight="8" price="54" reputation="75">
   <data value="1"/>
   <description>An adamantium set of tools needed to sew items.</description>
  </item>
- <item index="178" name="Adamantium 80mm ammo" showtype="Ammunition" type="Ammo80" weight="32" price="66">
+ <item index="178" name="Adamantium 80mm ammo" showtype="Ammunition" type="Ammo80" weight="32" price="66" reputation="75">
   <data value="256"/>
   <description>An upgraded 80mm gun ammunition, made of adamantium.</description>
  </item>
- <item index="179" name="Adamantium 100mm ammo" showtype="Ammunition" type="Ammo100" weight="64" price="118">
+ <item index="179" name="Adamantium 100mm ammo" showtype="Ammunition" type="Ammo100" weight="64" price="118" reputation="75">
   <data value="512"/>
   <description>An upgraded 100mm gun ammunition, made of adamantium.</description>
  </item>
- <item index="180" name="Adamantium 120mm ammo" showtype="Ammunition" type="Ammo120" weight="120" price="202">
+ <item index="180" name="Adamantium 120mm ammo" showtype="Ammunition" type="Ammo120" weight="120" price="202" reputation="75">
   <data value="1024"/>
   <description>An upgraded 120mm gun ammunition, made of adamantium.</description>
  </item>
- <item index="181" name="Adamantium harpoon" showtype="Ammunition" type="Harpoon" weight="40" price="52">
+ <item index="181" name="Adamantium harpoon" showtype="Ammunition" type="Harpoon" weight="40" price="52" reputation="75">
   <data value="20"/>
   <description>A harpoon made of adamantium with long rope. Used as ammunition for harpoon guns.</description>
  </item>
- <item index="182" name="Adamantium short sword" type="Weapon" weight="3" price="58">
+ <item index="182" name="Adamantium short sword" type="Weapon" weight="3" price="58" reputation="75">
   <data value="1"/>
   <data value="40"/>
   <data value="17"/>
@@ -836,7 +836,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>A simple short sword made of adamantium, used in melee combat.</description>
  </item>
- <item index="183" name="Adamantium sword" type="Weapon" weight="5" price="72">
+ <item index="183" name="Adamantium sword" type="Weapon" weight="5" price="72" reputation="75">
   <data value="1"/>
   <data value="45"/>
   <data value="17"/>
@@ -844,12 +844,12 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>A simple sword made of adamantium, used in melee combat.</description>
  </item>
- <item index="184" name="Adamantium shield" type="Shield" weight="15" price="78">
+ <item index="184" name="Adamantium shield" type="Shield" weight="15" price="78" reputation="75">
   <data value="1"/>
   <data value="24"/>
   <description>A standard shield made of adamantium, used in melee combat.</description>
  </item>
- <item index="185" name="Adamantium chestplate" showtype="Armor" type="ChestArmor" weight="27" price="88">
+ <item index="185" name="Adamantium chestplate" showtype="Armor" type="ChestArmor" weight="27" price="88" reputation="75">
   <data value="1"/>
   <data value="35"/>
   <data value="10"/>
@@ -859,7 +859,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="20"/>
   <description>A wooden tool used in training skills.</description>
  </item>
- <item index="187" name="Adamantium helmet" showtype="Armor" type="HeadArmor" weight="7" price="62">
+ <item index="187" name="Adamantium helmet" showtype="Armor" type="HeadArmor" weight="7" price="62" reputation="75">
   <data value="1"/>
   <data value="17"/>
   <data value="4"/>
@@ -873,7 +873,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="20"/>
   <description>A wooden tool used in training skills.</description>
  </item>
- <item index="190" name="Adamantium armsguard" showtype="Armor" type="ArmsArmor" weight="5" price="68">
+ <item index="190" name="Adamantium armsguard" showtype="Armor" type="ArmsArmor" weight="5" price="68" reputation="75">
   <data value="1"/>
   <data value="18"/>
   <data value="4"/>
@@ -887,7 +887,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="20"/>
   <description>A small wooden toy. Used to play or to train some skills.</description>
  </item>
- <item index="193" name="Adamantium legsguard" showtype="Armor" type="LegsArmor" weight="6" price="74">
+ <item index="193" name="Adamantium legsguard" showtype="Armor" type="LegsArmor" weight="6" price="74" reputation="75">
   <data value="1"/>
   <data value="28"/>
   <data value="5"/>
@@ -975,7 +975,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>A simple mace made of iron, used in melee combat.</description>
  </item>
- <item index="213" name="Steel mace" type="Weapon" weight="1" price="17">
+ <item index="213" name="Steel mace" type="Weapon" weight="1" price="17" reputation="0">
   <data value="5"/>
   <data value="37"/>
   <data value="21"/>
