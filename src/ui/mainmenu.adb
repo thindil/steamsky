@@ -247,7 +247,9 @@ package body MainMenu is
       pragma Unreferenced(Path);
       -- ****
       PlayerGrid: constant Gtk_Grid :=
-        Gtk_Grid(Get_Object(Builder, "playergrid"));
+        Gtk_Grid
+          (Get_Child_By_Name
+             (Gtk_Stack(Get_Object(Builder, "stack1")), "page0"));
    begin
       if Get_String(Model, Iter, 0) = To_String(BaseTypeName) then
          Set_Active_Iter(Gtk_Combo_Box(Get_Child_At(PlayerGrid, 1, 6)), Iter);
@@ -265,7 +267,9 @@ package body MainMenu is
    procedure ShowPage(User_Data: access GObject_Record'Class) is
       -- ****
       PlayerGrid: constant Gtk_Grid :=
-        Gtk_Grid(Get_Object(Builder, "playergrid"));
+        Gtk_Grid
+          (Get_Child_By_Name
+             (Gtk_Stack(Get_Object(Builder, "stack1")), "page0"));
    begin
       if User_Data = Get_Object(Builder, "btnnewgame") then
          if Get_Text(Gtk_GEntry(Get_Child_At(PlayerGrid, 1, 0))) = "" then
@@ -462,7 +466,9 @@ package body MainMenu is
    procedure RandomPlayerName(Self: access Gtk_Entry_Record'Class) is
       -- ****
       PlayerGrid: constant Gtk_Grid :=
-        Gtk_Grid(Get_Object(Builder, "playergrid"));
+        Gtk_Grid
+          (Get_Child_By_Name
+             (Gtk_Stack(Get_Object(Builder, "stack1")), "page0"));
       FactionIndex: constant Unbounded_String :=
         To_Unbounded_String
           (Get_Active_Id(Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 4))));
@@ -561,7 +567,9 @@ package body MainMenu is
       -- ****
       Gender: Character;
       PlayerGrid: constant Gtk_Grid :=
-        Gtk_Grid(Get_Object(Builder, "playergrid"));
+        Gtk_Grid
+          (Get_Child_By_Name
+             (Gtk_Stack(Get_Object(Builder, "stack1")), "page0"));
    begin
       if Get_Active(Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 1))) =
         0 then
@@ -1178,7 +1186,10 @@ package body MainMenu is
           (Get_Active_Id
              (Gtk_Combo_Box_Text
                 (Get_Child_At
-                   (Gtk_Grid(Get_Object(Builder, "playergrid")), 1, 4))));
+                   (Gtk_Grid
+                      (Get_Child_By_Name
+                         (Gtk_Stack(Get_Object(Builder, "stack1")), "page0")),
+                    1, 4))));
    begin
       Set_Text(Self, To_String(GenerateShipName(FactionIndex)));
    end GenerateShipName;
@@ -1298,8 +1309,7 @@ package body MainMenu is
          Renderer: constant Gtk_Cell_Renderer_Text :=
            Gtk_Cell_Renderer_Text_New;
          ComboBox: Gtk_Combo_Box_Text := Gtk_Combo_Box_Text_New;
-         PlayerGrid: constant Gtk_Grid :=
-           Gtk_Grid(Get_Object(Builder, "playergrid"));
+         PlayerGrid: constant Gtk_Grid := Gtk_Grid_New;
          TextEntry: Gtk_GEntry := Gtk_Entry_New;
          Labels2Array: constant array(0 .. 6) of Unbounded_String :=
            (To_Unbounded_String("Character name:"),
@@ -1376,6 +1386,13 @@ package body MainMenu is
            (ComboBoxBasesTypes,
             "Select type of base in which you will start the ame. This may have some impact on game difficulty.");
          Attach(PlayerGrid, ComboBoxBasesTypes, 1, 6);
+         Set_Tooltip_Text
+           (PlayerGrid,
+            "General player character settings. Select field which you want to set to see more information about.");
+         On_Map(PlayerGrid, UpdateInfoLabelMap'Access);
+         Add_Titled
+           (Gtk_Stack(Get_Object(Builder, "stack1")), PlayerGrid, "page0",
+            "Player");
          Label := Gtk_Label_New("Difficulty Level:");
          Set_Line_Wrap(Label, True);
          Pack_Start(HBox, Label, False);
@@ -1758,7 +1775,11 @@ package body MainMenu is
    begin
       Set_Label
         (Gtk_Button
-           (Get_Child_At(Gtk_Grid(Get_Object(Builder, "playergrid")), 1, 3)),
+           (Get_Child_At
+              (Gtk_Grid
+                 (Get_Child_By_Name
+                    (Gtk_Stack(Get_Object(Builder, "stack1")), "page0")),
+               1, 3)),
          Message);
    end UpdateGoalButton;
 
