@@ -54,6 +54,7 @@ with Gtk.Overlay; use Gtk.Overlay;
 with Gtk.Scrolled_Window; use Gtk.Scrolled_Window;
 with Gtk.Spin_Button; use Gtk.Spin_Button;
 with Gtk.Stack; use Gtk.Stack;
+with Gtk.Stack_Switcher; use Gtk.Stack_Switcher;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
 with Gtk.Text_View; use Gtk.Text_View;
 with Gtk.Toggle_Button; use Gtk.Toggle_Button;
@@ -157,7 +158,19 @@ package body MainMenu is
    InfoLabel: Gtk_Label;
    -- ****
 
+   -- ****iv* MainMenu/DifficultyCombo
+   -- FUNCTION
+   -- Combo box with difficulty level set
+   -- SOURCE
    DifficultyCombo: Gtk_Combo_Box_Text;
+   -- ****
+
+   -- ****iv* MainMenu/NewGameStack
+   -- FUNCTION
+   -- Gtk Stack with new game settings
+   -- SOURCE
+   NewGameStack: Gtk_Stack;
+   -- ****
 
    -- ****if* MainMenu/Quit
    -- FUNCTION
@@ -247,9 +260,7 @@ package body MainMenu is
       pragma Unreferenced(Path);
       -- ****
       PlayerGrid: constant Gtk_Grid :=
-        Gtk_Grid
-          (Get_Child_By_Name
-             (Gtk_Stack(Get_Object(Builder, "stack1")), "page0"));
+        Gtk_Grid(Get_Child_By_Name(NewGameStack, "page0"));
    begin
       if Get_String(Model, Iter, 0) = To_String(BaseTypeName) then
          Set_Active_Iter(Gtk_Combo_Box(Get_Child_At(PlayerGrid, 1, 6)), Iter);
@@ -267,9 +278,7 @@ package body MainMenu is
    procedure ShowPage(User_Data: access GObject_Record'Class) is
       -- ****
       PlayerGrid: constant Gtk_Grid :=
-        Gtk_Grid
-          (Get_Child_By_Name
-             (Gtk_Stack(Get_Object(Builder, "stack1")), "page0"));
+        Gtk_Grid(Get_Child_By_Name(NewGameStack, "page0"));
    begin
       if User_Data = Get_Object(Builder, "btnnewgame") then
          if Get_Text(Gtk_GEntry(Get_Child_At(PlayerGrid, 1, 0))) = "" then
@@ -466,9 +475,7 @@ package body MainMenu is
    procedure RandomPlayerName(Self: access Gtk_Entry_Record'Class) is
       -- ****
       PlayerGrid: constant Gtk_Grid :=
-        Gtk_Grid
-          (Get_Child_By_Name
-             (Gtk_Stack(Get_Object(Builder, "stack1")), "page0"));
+        Gtk_Grid(Get_Child_By_Name(NewGameStack, "page0"));
       FactionIndex: constant Unbounded_String :=
         To_Unbounded_String
           (Get_Active_Id(Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 4))));
@@ -567,9 +574,7 @@ package body MainMenu is
       -- ****
       Gender: Character;
       PlayerGrid: constant Gtk_Grid :=
-        Gtk_Grid
-          (Get_Child_By_Name
-             (Gtk_Stack(Get_Object(Builder, "stack1")), "page0"));
+        Gtk_Grid(Get_Child_By_Name(NewGameStack, "page0"));
    begin
       if Get_Active(Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 1))) =
         0 then
@@ -585,9 +590,7 @@ package body MainMenu is
                       (Gtk_Viewport
                          (Get_Child
                             (Gtk_Scrolled_Window
-                               (Get_Child_By_Name
-                                  (Gtk_Stack(Get_Object(Builder, "stack1")),
-                                   "page1")))))),
+                               (Get_Child_By_Name(NewGameStack, "page1")))))),
                  3))) then
          RandomDifficulty(null);
       end if;
@@ -932,9 +935,7 @@ package body MainMenu is
       if Bonus < 1 then
          Bonus := 1;
       end if;
-      if Get_Child_By_Name
-          (Gtk_Stack(Get_Object(Builder, "stack1")), "page1") /=
-        null then
+      if Get_Child_By_Name(NewGameStack, "page1") /= null then
          Set_Text
            (Gtk_Label
               (Get_Child
@@ -943,9 +944,7 @@ package body MainMenu is
                        (Gtk_Viewport
                           (Get_Child
                              (Gtk_Scrolled_Window
-                                (Get_Child_By_Name
-                                   (Gtk_Stack(Get_Object(Builder, "stack1")),
-                                    "page1")))))),
+                                (Get_Child_By_Name(NewGameStack, "page1")))))),
                   4)),
             "Total gained points:" & Integer'Image(Bonus) & "%");
       end if;
@@ -1186,10 +1185,8 @@ package body MainMenu is
           (Get_Active_Id
              (Gtk_Combo_Box_Text
                 (Get_Child_At
-                   (Gtk_Grid
-                      (Get_Child_By_Name
-                         (Gtk_Stack(Get_Object(Builder, "stack1")), "page0")),
-                    1, 4))));
+                   (Gtk_Grid(Get_Child_By_Name(NewGameStack, "page0")), 1,
+                    4))));
    begin
       Set_Text(Self, To_String(GenerateShipName(FactionIndex)));
    end GenerateShipName;
@@ -1320,6 +1317,12 @@ package body MainMenu is
             To_Unbounded_String("Character career:"),
             To_Unbounded_String("Starting base type:"));
       begin
+         NewGameStack := Gtk_Stack_New;
+         Set_Stack
+           (Gtk_Stack_Switcher(Get_Object(Builder, "newgameswitch")),
+            NewGameStack);
+         Pack_Start
+           (Gtk_Box(Get_Object(Builder, "newgamebox2")), NewGameStack, False);
          for I in Labels2Array'Range loop
             Label := Gtk_Label_New(To_String(Labels2Array(I)));
             Attach(PlayerGrid, Label, 0, Gint(I));
@@ -1390,9 +1393,7 @@ package body MainMenu is
            (PlayerGrid,
             "General player character settings. Select field which you want to set to see more information about.");
          On_Map(PlayerGrid, UpdateInfoLabelMap'Access);
-         Add_Titled
-           (Gtk_Stack(Get_Object(Builder, "stack1")), PlayerGrid, "page0",
-            "Player");
+         Add_Titled(NewGameStack, PlayerGrid, "page0", "Player");
          Label := Gtk_Label_New("Difficulty Level:");
          Set_Line_Wrap(Label, True);
          Pack_Start(HBox, Label, False);
@@ -1449,9 +1450,7 @@ package body MainMenu is
          Set_Line_Wrap(Label, True);
          Pack_Start(DifficultyBox, Label, False);
          Add(DifficultyScroll, DifficultyBox);
-         Add_Titled
-           (Gtk_Stack(Get_Object(Builder, "stack1")), DifficultyScroll,
-            "page1", "Difficulty");
+         Add_Titled(NewGameStack, DifficultyScroll, "page1", "Difficulty");
          InfoLabel := Gtk_Label_New;
          Set_Line_Wrap(InfoLabel, True);
          Set_Alignment(InfoLabel, 0.0, 0.0);
@@ -1776,10 +1775,7 @@ package body MainMenu is
       Set_Label
         (Gtk_Button
            (Get_Child_At
-              (Gtk_Grid
-                 (Get_Child_By_Name
-                    (Gtk_Stack(Get_Object(Builder, "stack1")), "page0")),
-               1, 3)),
+              (Gtk_Grid(Get_Child_By_Name(NewGameStack, "page0")), 1, 3)),
          Message);
    end UpdateGoalButton;
 
