@@ -179,17 +179,6 @@ package body Help.UI is
       if HelpWindow /= null then
          return;
       end if;
-      HelpWindow := Gtk_Window_New;
-      On_Delete_Event(HelpWindow, HideHelpWindow'Access);
-      On_Key_Release_Event(HelpWindow, CloseWindow'Access);
-      if not Set_Icon_From_File
-          (HelpWindow,
-           To_String(DataDirectory) & Dir_Separator & "ui" & Dir_Separator &
-           "images" & Dir_Separator & "icon.png") then
-         raise Program_Error with "Can't set icon for the help window";
-      end if;
-      Set_Title(HelpWindow, "Steam Sky - help");
-      Set_Default_Size(HelpWindow, 800, 600);
       Set_Expanded(HelpExpander, True);
       Set_Property
         (Get_Label_Widget(HelpExpander), Gtk.Widget.Name_Property,
@@ -213,7 +202,7 @@ package body Help.UI is
       Set_Property(TopicsView, Gtk.Widget.Name_Property, "normalfont");
       Add(HelpExpander, TopicsView);
       Add(Scroll, HelpExpander);
-      Add1(HelpPaned, Scroll);
+      Pack1(HelpPaned, Scroll, True);
       Tag := Gtk_Text_Tag_New("underline");
       Set_Property
         (Tag, Gtk.Text_Tag.Underline_Property, Pango_Underline_Single);
@@ -236,7 +225,19 @@ package body Help.UI is
       On_Button_Press_Event(HelpView, DisableMouse'Access);
       Scroll := Gtk_Scrolled_Window_New;
       Add(Scroll, HelpView);
-      Add2(HelpPaned, Scroll);
+      Pack2(HelpPaned, Scroll, True);
+      HelpWindow := Gtk_Window_New;
+      On_Delete_Event(HelpWindow, HideHelpWindow'Access);
+      On_Key_Release_Event(HelpWindow, CloseWindow'Access);
+      Set_Title(HelpWindow, "Steam Sky - help");
+      Set_Default_Size(HelpWindow, 800, 600);
+      Set_Position(HelpWindow, Win_Pos_Center);
+      if not Set_Icon_From_File
+          (HelpWindow,
+           To_String(DataDirectory) & Dir_Separator & "ui" & Dir_Separator &
+           "images" & Dir_Separator & "icon.png") then
+         raise Program_Error with "Can't set icon for the help window";
+      end if;
       Add(HelpWindow, HelpPaned);
    end CreateHelpUI;
 
