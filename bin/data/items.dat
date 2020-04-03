@@ -1713,117 +1713,117 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>An upgraded, piercing 40mm gun ammunition, made of titanium. Do more damage but it is less accurate.</description>
  </item>
- <item index="351" name="Titanium 40mm explosive ammo" showtype="Ammunition" type="Ammo40" weight="4" price="14">
+ <item index="351" name="Titanium 40mm explosive ammo" showtype="Ammunition" type="Ammo40" weight="4" price="14" reputation="25">
   <data value="12"/>
   <data value="3"/>
   <description>An upgraded, explosive 40mm gun ammunition, made of titanium. Do less damage but it is more accurate.</description>
  </item>
- <item index="352" name="Titanium 60mm piercing ammo" showtype="Ammunition" type="Ammo60" weight="8" price="22">
+ <item index="352" name="Titanium 60mm piercing ammo" showtype="Ammunition" type="Ammo60" weight="8" price="22" reputation="25">
   <data value="48"/>
   <data value="2"/>
   <description>An upgraded, piercing 60mm gun ammunition, made of titanium. Do more damage but it is less accurate.</description>
  </item>
- <item index="353" name="Titanium 60mm explosive ammo" showtype="Ammunition" type="Ammo60" weight="8" price="22">
+ <item index="353" name="Titanium 60mm explosive ammo" showtype="Ammunition" type="Ammo60" weight="8" price="22" reputation="25">
   <data value="24"/>
   <data value="3"/>
   <description>An upgraded, explosive 60mm gun ammunition, made of titanium. Do less damage but it is more accurate.</description>
  </item>
- <item index="354" name="Titanium 80mm piercing ammo" showtype="Ammunition" type="Ammo80" weight="16" price="26">
+ <item index="354" name="Titanium 80mm piercing ammo" showtype="Ammunition" type="Ammo80" weight="16" price="26" reputation="25">
   <data value="96"/>
   <data value="2"/>
   <description>An upgraded, piercing 80mm gun ammunition, made of titanium. Do more damage but it is less accurate.</description>
  </item>
- <item index="355" name="Titanium 80mm explosive ammo" showtype="Ammunition" type="Ammo80" weight="16" price="26">
+ <item index="355" name="Titanium 80mm explosive ammo" showtype="Ammunition" type="Ammo80" weight="16" price="26" reputation="25">
   <data value="48"/>
   <data value="3"/>
   <description>An upgraded, explosive 80mm gun ammunition, made of titanium. Do less damage but it is more accurate.</description>
  </item>
- <item index="356" name="Titanium 100mm piercing ammo" showtype="Ammunition" type="Ammo100" weight="32" price="40">
+ <item index="356" name="Titanium 100mm piercing ammo" showtype="Ammunition" type="Ammo100" weight="32" price="40" reputation="25">
   <data value="192"/>
   <data value="2"/>
   <description>An upgraded, piercing 100mm gun ammunition, made of titanium. Do more damage but it is less accurate.</description>
  </item>
- <item index="357" name="Titanium 100mm explosive ammo" showtype="Ammunition" type="Ammo100" weight="32" price="40">
+ <item index="357" name="Titanium 100mm explosive ammo" showtype="Ammunition" type="Ammo100" weight="32" price="40" reputation="25">
   <data value="96"/>
   <data value="3"/>
   <description>An upgraded, explosive 100mm gun ammunition, made of titanium. Do less damage but it is more accurate.</description>
  </item>
- <item index="358" name="Titanium 120mm piercing ammo" showtype="Ammunition" type="Ammo120" weight="60" price="72">
+ <item index="358" name="Titanium 120mm piercing ammo" showtype="Ammunition" type="Ammo120" weight="60" price="72" reputation="25">
   <data value="384"/>
   <data value="2"/>
   <description>An upgraded, piercing 120mm gun ammunition, made of titanium. Do more damage but it is less accurate.</description>
  </item>
- <item index="359" name="Titanium 120mm explosive ammo" showtype="Ammunition" type="Ammo120" weight="60" price="72">
+ <item index="359" name="Titanium 120mm explosive ammo" showtype="Ammunition" type="Ammo120" weight="60" price="72" reputation="25">
   <data value="192"/>
   <data value="3"/>
   <description>An upgraded, explosive 120mm gun ammunition, made of titanium. Do less damage but it is more accurate.</description>
  </item>
- <item index="360" name="Orichalcum 60mm piercing ammo" showtype="Ammunition" type="Ammo60" weight="8" price="30">
+ <item index="360" name="Orichalcum 60mm piercing ammo" showtype="Ammunition" type="Ammo60" weight="8" price="30" reputation="50">
   <data value="96"/>
   <data value="2"/>
   <description>An upgraded, piercing 60mm gun ammunition, made of orichalcum. Do more damage but it is less accurate.</description>
  </item>
- <item index="361" name="Orichalcum 60mm explosive ammo" showtype="Ammunition" type="Ammo60" weight="8" price="30">
+ <item index="361" name="Orichalcum 60mm explosive ammo" showtype="Ammunition" type="Ammo60" weight="8" price="30" reputation="50">
   <data value="48"/>
   <data value="3"/>
   <description>An upgraded, explosive 60mm gun ammunition, made of orichalcum. Do less damage but it is more accurate.</description>
  </item>
- <item index="362" name="Orichalcum 80mm piercing ammo" showtype="Ammunition" type="Ammo80" weight="16" price="34">
+ <item index="362" name="Orichalcum 80mm piercing ammo" showtype="Ammunition" type="Ammo80" weight="16" price="34" reputation="50">
   <data value="192"/>
   <data value="2"/>
   <description>An upgraded, piercing 80mm gun ammunition, made of orichalcum. Do more damage but it is less accurate.</description>
  </item>
- <item index="363" name="Orichalcum 80mm explosive ammo" showtype="Ammunition" type="Ammo80" weight="16" price="34">
+ <item index="363" name="Orichalcum 80mm explosive ammo" showtype="Ammunition" type="Ammo80" weight="16" price="34" reputation="50">
   <data value="96"/>
   <data value="3"/>
   <description>An upgraded, explosive 80mm gun ammunition, made of orichalcum. Do less damage but it is more accurate.</description>
  </item>
- <item index="364" name="Orichalcum 100mm piercing ammo" showtype="Ammunition" type="Ammo100" weight="32" price="60">
+ <item index="364" name="Orichalcum 100mm piercing ammo" showtype="Ammunition" type="Ammo100" weight="32" price="60" reputation="50">
   <data value="384"/>
   <data value="2"/>
   <description>An upgraded, piercing 100mm gun ammunition, made of orichalcum. Do more damage but it is less accurate.</description>
  </item>
- <item index="365" name="Orichalcum 100mm explosive ammo" showtype="Ammunition" type="Ammo100" weight="32" price="60">
+ <item index="365" name="Orichalcum 100mm explosive ammo" showtype="Ammunition" type="Ammo100" weight="32" price="60" reputation="50">
   <data value="192"/>
   <data value="3"/>
   <description>An upgraded, explosive 100mm gun ammunition, made of orichalcum. Do less damage but it is more accurate.</description>
  </item>
- <item index="366" name="Orichalcum 120mm piercing ammo" showtype="Ammunition" type="Ammo120" weight="60" price="102">
+ <item index="366" name="Orichalcum 120mm piercing ammo" showtype="Ammunition" type="Ammo120" weight="60" price="102" reputation="50">
   <data value="768"/>
   <data value="2"/>
   <description>An upgraded, piercing 120mm gun ammunition, made of orichalcum. Do more damage but it is less accurate.</description>
  </item>
- <item index="367" name="Orichalcum 120mm explosive ammo" showtype="Ammunition" type="Ammo120" weight="60" price="102">
+ <item index="367" name="Orichalcum 120mm explosive ammo" showtype="Ammunition" type="Ammo120" weight="60" price="102" reputation="50">
   <data value="384"/>
   <data value="3"/>
   <description>An upgraded, explosive 120mm gun ammunition, made of orichalcum. Do less damage but it is more accurate.</description>
  </item>
- <item index="368" name="Adamantium 80mm piercing ammo" showtype="Ammunition" type="Ammo80" weight="32" price="66">
+ <item index="368" name="Adamantium 80mm piercing ammo" showtype="Ammunition" type="Ammo80" weight="32" price="66" reputation="75">
   <data value="384"/>
   <data value="2"/>
   <description>An upgraded, piercing 80mm gun ammunition, made of adamantium. Do more damage but it is less accurate.</description>
  </item>
- <item index="369" name="Adamantium 80mm explosive ammo" showtype="Ammunition" type="Ammo80" weight="32" price="66">
+ <item index="369" name="Adamantium 80mm explosive ammo" showtype="Ammunition" type="Ammo80" weight="32" price="66" reputation="75">
   <data value="192"/>
   <data value="3"/>
   <description>An upgraded, explosive 80mm gun ammunition, made of adamantium. Do less damage but it is more accurate.</description>
  </item>
- <item index="370" name="Adamantium 100mm piercing ammo" showtype="Ammunition" type="Ammo100" weight="64" price="118">
+ <item index="370" name="Adamantium 100mm piercing ammo" showtype="Ammunition" type="Ammo100" weight="64" price="118" reputation="75">
   <data value="768"/>
   <data value="2"/>
   <description>An upgraded, piercing 100mm gun ammunition, made of adamantium. Do more damage but it is less accurate.</description>
  </item>
- <item index="371" name="Adamantium 100mm explosive ammo" showtype="Ammunition" type="Ammo100" weight="64" price="118">
+ <item index="371" name="Adamantium 100mm explosive ammo" showtype="Ammunition" type="Ammo100" weight="64" price="118" reputation="75">
   <data value="384"/>
   <data value="3"/>
   <description>An upgraded, explosive 100mm gun ammunition, made of adamantium. Do less damage but it is more accurate.</description>
  </item>
- <item index="372" name="Adamantium 120mm piercing ammo" showtype="Ammunition" type="Ammo120" weight="120" price="202">
+ <item index="372" name="Adamantium 120mm piercing ammo" showtype="Ammunition" type="Ammo120" weight="120" price="202" reputation="75">
   <data value="1536"/>
   <data value="2"/>
   <description>An upgraded, piercing 120mm gun ammunition, made of adamantium. Do more damage but it is less accurate.</description>
  </item>
- <item index="373" name="Adamantium 120mm explosive ammo" showtype="Ammunition" type="Ammo120" weight="120" price="202">
+ <item index="373" name="Adamantium 120mm explosive ammo" showtype="Ammunition" type="Ammo120" weight="120" price="202" reputation="75">
   <data value="768"/>
   <data value="3"/>
   <description>An upgraded, explosive 120mm gun ammunition, made of adamantium. Do less damage but it is more accurate.</description>
