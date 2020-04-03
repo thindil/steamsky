@@ -983,7 +983,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>A simple mace made of steel, used in melee combat.</description>
  </item>
- <item index="214" name="Titanium mace" type="Weapon" weight="2" price="24">
+ <item index="214" name="Titanium mace" type="Weapon" weight="2" price="24" reputation="25">
   <data value="3"/>
   <data value="45"/>
   <data value="21"/>
@@ -991,7 +991,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>A simple mace made of titanium, used in melee combat.</description>
  </item>
- <item index="215" name="Orichalcum mace" type="Weapon" weight="2" price="30">
+ <item index="215" name="Orichalcum mace" type="Weapon" weight="2" price="30" reputation="50">
   <data value="2"/>
   <data value="52"/>
   <data value="21"/>
@@ -999,7 +999,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>A simple mace made of orichalcum, used in melee combat.</description>
  </item>
- <item index="216" name="Adamantium mace" type="Weapon" weight="3" price="58">
+ <item index="216" name="Adamantium mace" type="Weapon" weight="3" price="58" reputation="75">
   <data value="1"/>
   <data value="60"/>
   <data value="21"/>
@@ -1023,7 +1023,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>A simple dagger made of iron, used in melee combat.</description>
  </item>
- <item index="219" name="Steel dagger" type="Weapon" weight="1" price="17">
+ <item index="219" name="Steel dagger" type="Weapon" weight="1" price="17" reputation="0">
   <data value="5"/>
   <data value="15"/>
   <data value="22"/>
@@ -1031,7 +1031,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>A simple dagger made of steel, used in melee combat.</description>
  </item>
- <item index="220" name="Titanium dagger" type="Weapon" weight="2" price="24">
+ <item index="220" name="Titanium dagger" type="Weapon" weight="2" price="24" reputation="25">
   <data value="3"/>
   <data value="20"/>
   <data value="22"/>
@@ -1039,7 +1039,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>A simple dagger made of titanium, used in melee combat.</description>
  </item>
- <item index="221" name="Orichalcum dagger" type="Weapon" weight="2" price="30">
+ <item index="221" name="Orichalcum dagger" type="Weapon" weight="2" price="30" reputation="50">
   <data value="2"/>
   <data value="25"/>
   <data value="22"/>
@@ -1047,7 +1047,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>A simple dagger made of orichalcum, used in melee combat.</description>
  </item>
- <item index="222" name="Adamantium dagger" type="Weapon" weight="3" price="58">
+ <item index="222" name="Adamantium dagger" type="Weapon" weight="3" price="58" reputation="75">
   <data value="1"/>
   <data value="30"/>
   <data value="22"/>
@@ -1071,7 +1071,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>A simple, twohanded greatsword made of iron, used in melee combat.</description>
  </item>
- <item index="225" name="Steel greatsword" type="Weapon" weight="4" price="32">
+ <item index="225" name="Steel greatsword" type="Weapon" weight="4" price="32" reputation="0">
   <data value="5"/>
   <data value="40"/>
   <data value="23"/>
@@ -1079,7 +1079,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>A simple, twohanded greatsword made of steel, used in melee combat.</description>
  </item>
- <item index="226" name="Titanium greatsword" type="Weapon" weight="6" price="37">
+ <item index="226" name="Titanium greatsword" type="Weapon" weight="6" price="37" reputation="25">
   <data value="3"/>
   <data value="45"/>
   <data value="23"/>
@@ -1087,7 +1087,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>A simple, twohanded greatsword made of titanium, used in melee combat.</description>
  </item>
- <item index="227" name="Orichalcum greatsword" type="Weapon" weight="6" price="42">
+ <item index="227" name="Orichalcum greatsword" type="Weapon" weight="6" price="42" reputation="50">
   <data value="2"/>
   <data value="50"/>
   <data value="23"/>
@@ -1095,7 +1095,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="1"/>
   <description>A simple, twohanded greatsword made of orichalcum, used in melee combat.</description>
  </item>
- <item index="228" name="Adamantium greatsword" type="Weapon" weight="10" price="82">
+ <item index="228" name="Adamantium greatsword" type="Weapon" weight="10" price="82" reputation="75">
   <data value="1"/>
   <data value="55"/>
   <data value="23"/>
@@ -1119,7 +1119,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>A simple warhammer made of iron, used in melee combat.</description>
  </item>
- <item index="231" name="Steel warhammer" type="Weapon" weight="2" price="22">
+ <item index="231" name="Steel warhammer" type="Weapon" weight="2" price="22" reputation="0">
   <data value="5"/>
   <data value="45"/>
   <data value="21"/>
@@ -1127,7 +1127,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>A simple warhammer made of steel, used in melee combat.</description>
  </item>
- <item index="232" name="Titanium warhamher" type="Weapon" weight="3" price="27">
+ <item index="232" name="Titanium warhamher" type="Weapon" weight="3" price="27" reputation="25">
   <data value="3"/>
   <data value="52"/>
   <data value="21"/>
@@ -1135,7 +1135,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>A simple warhammer made of titanium, used in melee combat.</description>
  </item>
- <item index="233" name="Orichalcum warhammer" type="Weapon" weight="3" price="37">
+ <item index="233" name="Orichalcum warhammer" type="Weapon" weight="3" price="37" reputation="50">
   <data value="2"/>
   <data value="60"/>
   <data value="21"/>
@@ -1143,7 +1143,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>A simple warhammer made of orichalcum, used in melee combat.</description>
  </item>
- <item index="234" name="Adamantium warhammer" type="Weapon" weight="5" price="72">
+ <item index="234" name="Adamantium warhammer" type="Weapon" weight="5" price="72" reputation="75">
   <data value="1"/>
   <data value="70"/>
   <data value="21"/>
@@ -1167,7 +1167,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>A simple, twohanded hammer made of iron, used in melee combat.</description>
  </item>
- <item index="237" name="Steel maul" type="Weapon" weight="4" price="32">
+ <item index="237" name="Steel maul" type="Weapon" weight="4" price="32" reputation="0">
   <data value="5"/>
   <data value="60"/>
   <data value="24"/>
@@ -1175,7 +1175,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>A simple, twohanded hammer made of steel, used in melee combat.</description>
  </item>
- <item index="238" name="Titanium maul" type="Weapon" weight="6" price="37">
+ <item index="238" name="Titanium maul" type="Weapon" weight="6" price="37" reputation="25">
   <data value="3"/>
   <data value="67"/>
   <data value="24"/>
@@ -1183,7 +1183,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>A simple, twohanded hammer made of titanium, used in melee combat.</description>
  </item>
- <item index="239" name="Orichalcum maul" type="Weapon" weight="6" price="42">
+ <item index="239" name="Orichalcum maul" type="Weapon" weight="6" price="42" reputation="50">
   <data value="2"/>
   <data value="75"/>
   <data value="24"/>
@@ -1191,7 +1191,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>A simple, twohanded hammer made of orichalcum, used in melee combat.</description>
  </item>
- <item index="240" name="Adamantium maul" type="Weapon" weight="10" price="82">
+ <item index="240" name="Adamantium maul" type="Weapon" weight="10" price="82" reputation="75">
   <data value="1"/>
   <data value="82"/>
   <data value="24"/>
@@ -1215,7 +1215,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>A simple rapier made of iron, used in melee combat.</description>
  </item>
- <item index="243" name="Steel rapier" type="Weapon" weight="2" price="22">
+ <item index="243" name="Steel rapier" type="Weapon" weight="2" price="22" reputation="0">
   <data value="5"/>
   <data value="22"/>
   <data value="25"/>
@@ -1223,7 +1223,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>A simple rapier made of steel, used in melee combat.</description>
  </item>
- <item index="244" name="Titanium rapier" type="Weapon" weight="3" price="27">
+ <item index="244" name="Titanium rapier" type="Weapon" weight="3" price="27" reputation="25">
   <data value="3"/>
   <data value="26"/>
   <data value="25"/>
@@ -1231,7 +1231,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>A simple rapier made of titanium, used in melee combat.</description>
  </item>
- <item index="245" name="Orichalcum rapier" type="Weapon" weight="3" price="37">
+ <item index="245" name="Orichalcum rapier" type="Weapon" weight="3" price="37" reputation="50">
   <data value="2"/>
   <data value="30"/>
   <data value="25"/>
@@ -1239,7 +1239,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>A simple rapier made of orichalcum, used in melee combat.</description>
  </item>
- <item index="246" name="Adamantium rapier" type="Weapon" weight="5" price="72">
+ <item index="246" name="Adamantium rapier" type="Weapon" weight="5" price="72" reputation="75">
   <data value="1"/>
   <data value="34"/>
   <data value="25"/>
@@ -1263,7 +1263,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>A simple spear made of iron, used in melee combat.</description>
  </item>
- <item index="249" name="Steel spear" type="Weapon" weight="4" price="32">
+ <item index="249" name="Steel spear" type="Weapon" weight="4" price="32" reputation="0">
   <data value="5"/>
   <data value="32"/>
   <data value="26"/>
@@ -1271,7 +1271,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>A simple spear made of steel, used in melee combat.</description>
  </item>
- <item index="250" name="Titanium spear" type="Weapon" weight="6" price="37">
+ <item index="250" name="Titanium spear" type="Weapon" weight="6" price="37" reputation="25">
   <data value="3"/>
   <data value="38"/>
   <data value="26"/>
