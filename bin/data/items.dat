@@ -1279,7 +1279,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>A simple spear made of titanium, used in melee combat.</description>
  </item>
- <item index="251" name="Orichalcum spear" type="Weapon" weight="6" price="42">
+ <item index="251" name="Orichalcum spear" type="Weapon" weight="6" price="42" reputation="50">
   <data value="2"/>
   <data value="42"/>
   <data value="26"/>
@@ -1287,7 +1287,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>A simple spear made of orichalcum, used in melee combat.</description>
  </item>
- <item index="252" name="Adamantium spear" type="Weapon" weight="10" price="82">
+ <item index="252" name="Adamantium spear" type="Weapon" weight="10" price="82" reputation="75">
   <data value="1"/>
   <data value="47"/>
   <data value="26"/>
@@ -1303,31 +1303,31 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="10"/>
   <description>An iron tool used in training skills.</description>
  </item>
- <item index="255" name="Steel cockpit simulator" showtype="Cockpit Simulator" type="CockpitSimulator" weight="40" price="37">
+ <item index="255" name="Steel cockpit simulator" showtype="Cockpit Simulator" type="CockpitSimulator" weight="40" price="37" reputation="0">
   <data value="5"/>
   <description>A steel tool used in training skills.</description>
  </item>
- <item index="256" name="Titanium cockpit simulator" showtype="Cockpit Simulator" type="CockpitSimulator" weight="60" price="42">
+ <item index="256" name="Titanium cockpit simulator" showtype="Cockpit Simulator" type="CockpitSimulator" weight="60" price="42" reputation="25">
   <data value="3"/>
   <description>A titanium tool used in training skills.</description>
  </item>
- <item index="257" name="Orichalcum cockpit simulator" showtype="Cockpit Simulator" type="CockpitSimulator" weight="60" price="47">
+ <item index="257" name="Orichalcum cockpit simulator" showtype="Cockpit Simulator" type="CockpitSimulator" weight="60" price="47" reputation="50">
   <data value="2"/>
   <description>An orichalcum tool used in training skills.</description>
  </item>
- <item index="258" name="Adamantium cockpit simulator" showtype="Cockpit Simulator" type="CockpitSimulator" weight="100" price="87">
+ <item index="258" name="Adamantium cockpit simulator" showtype="Cockpit Simulator" type="CockpitSimulator" weight="100" price="87" reputation="75">
   <data value="1"/>
   <description>An adamantium tool used in training skills.</description>
  </item>
- <item index="259" name="Medium book of engineering" showtype="Book of Engineering" type="EngineersBook" weight="2" price="17">
+ <item index="259" name="Medium book of engineering" showtype="Book of Engineering" type="EngineersBook" weight="2" price="17" reputation="25">
   <data value="15"/>
   <description>A medium book with information about the basics of engineering. It is used in training skills.</description>
  </item>
- <item index="260" name="Large book of engineering" showtype="Book of Engineering" type="EngineersBook" weight="2" price="22">
+ <item index="260" name="Large book of engineering" showtype="Book of Engineering" type="EngineersBook" weight="2" price="22" reputation="50">
   <data value="10"/>
   <description>A large book with information about the basics of engineering. It is used in training skills.</description>
  </item>
- <item index="261" name="Huge book of engineering" showtype="Book of Engineering" type="EngineersBook" weight="2" price="27">
+ <item index="261" name="Huge book of engineering" showtype="Book of Engineering" type="EngineersBook" weight="2" price="27" reputation="75">
   <data value="5"/>
   <description>A huge book with information about the basics of engineering. It is used in training skills.</description>
  </item>
@@ -1339,31 +1339,31 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="10"/>
   <description>Iron tool used in training skills.</description>
  </item>
- <item index="264" name="Steel gun simulator" showtype="Gun Simulator" type="GunSimulator" weight="37" price="36">
+ <item index="264" name="Steel gun simulator" showtype="Gun Simulator" type="GunSimulator" weight="37" price="36" reputation="0">
   <data value="5"/>
   <description>Steel tool used in training skills.</description>
  </item>
- <item index="265" name="Titanium gun simulator" showtype="Gun Simulator" type="GunSimulator" weight="55" price="41">
+ <item index="265" name="Titanium gun simulator" showtype="Gun Simulator" type="GunSimulator" weight="55" price="41" reputation="25">
   <data value="3"/>
   <description>A titanium tool used in training skills.</description>
  </item>
- <item index="266" name="Orichalcum gun simulator" showtype="Gun Simulator" type="GunSimulator" weight="55" price="46">
+ <item index="266" name="Orichalcum gun simulator" showtype="Gun Simulator" type="GunSimulator" weight="55" price="46" reputation="50">
   <data value="2"/>
   <description>An orichalcum tool used in training skills.</description>
  </item>
- <item index="267" name="Adamantium gun simulator" showtype="Gun Simulator" type="GunSimulator" weight="85" price="86">
+ <item index="267" name="Adamantium gun simulator" showtype="Gun Simulator" type="GunSimulator" weight="85" price="86" reputation="75">
   <data value="1"/>
   <description>An adamantium tool used in training skills.</description>
  </item>
- <item index="268" name="Medium book of rhetoric" showtype="Book of Rhetoric" type="RhetoricBook" weight="1" price="17">
+ <item index="268" name="Medium book of rhetoric" showtype="Book of Rhetoric" type="RhetoricBook" weight="1" price="17" reputation="25">
   <data value="15"/>
   <description>A medium book with information about the basics of rhetoric. It is used in training skills.</description>
  </item>
- <item index="269" name="Large book of rhetoric" showtype="Book of Rhetoric" type="RhetoricBook" weight="1" price="22">
+ <item index="269" name="Large book of rhetoric" showtype="Book of Rhetoric" type="RhetoricBook" weight="1" price="22" reputation="50">
   <data value="10"/>
   <description>A large book with information about the basics of rhetoric. It is used in training skills.</description>
  </item>
- <item index="270" name="Huge book of rhetoric" showtype="Book of Rhetoric" type="RhetoricBook" weight="1" price="27">
+ <item index="270" name="Huge book of rhetoric" showtype="Book of Rhetoric" type="RhetoricBook" weight="1" price="27" reputation="75">
   <data value="5"/>
   <description>A large book with information about the basics of rhetoric. It is used in training skills.</description>
  </item>
@@ -1375,115 +1375,115 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="10"/>
   <description>A small iron toys. Used to play or to train some skills.</description>
  </item>
- <item index="273" name="Steel small toys" showtype="Small toys" type="SmallToys" weight="2" price="25">
+ <item index="273" name="Steel small toys" showtype="Small toys" type="SmallToys" weight="2" price="25" reputation="0">
   <data value="5"/>
   <description>A small steel toys. Used to play or to train some skills.</description>
  </item>
- <item index="274" name="Titanium small toys" showtype="Small toys" type="SmallToys" weight="3" price="30">
+ <item index="274" name="Titanium small toys" showtype="Small toys" type="SmallToys" weight="3" price="30" reputation="25">
   <data value="3"/>
   <description>A small titanium toys. Used to play or to train some skills.</description>
  </item>
- <item index="275" name="Orichalcum small toys" showtype="Small toys" type="SmallToys" weight="3" price="35">
+ <item index="275" name="Orichalcum small toys" showtype="Small toys" type="SmallToys" weight="3" price="35" reputation="50">
   <data value="2"/>
   <description>A small orichalcum toys. Used to play or to train some skills.</description>
  </item>
- <item index="276" name="Adamantium small toys" showtype="Small toys" type="SmallToys" weight="3" price="60">
+ <item index="276" name="Adamantium small toys" showtype="Small toys" type="SmallToys" weight="3" price="60" reputation="75">
   <data value="1"/>
   <description>A small adamantium toys. Used to play or to train some skills.</description>
  </item>
- <item index="277" name="Medium book of alchemy" showtype="Book of Alchemy" type="AlchemyBook" weight="1" price="17">
+ <item index="277" name="Medium book of alchemy" showtype="Book of Alchemy" type="AlchemyBook" weight="1" price="17" reputation="25">
   <data value="15"/>
   <description>A medium book with information about the basics of alchemy. It is used in training skills.</description>
  </item>
- <item index="278" name="Large book of alchemy" showtype="Book of Alchemy" type="AlchemyBook" weight="1" price="22">
+ <item index="278" name="Large book of alchemy" showtype="Book of Alchemy" type="AlchemyBook" weight="1" price="22" reputation="50">
   <data value="10"/>
   <description>A large book with information about the basics of alchemy. It is used in training skills.</description>
  </item>
- <item index="279" name="Huge book of alchemy" showtype="Book of Alchemy" type="AlchemyBook" weight="1" price="27">
+ <item index="279" name="Huge book of alchemy" showtype="Book of Alchemy" type="AlchemyBook" weight="1" price="27" reputation="75">
   <data value="5"/>
   <description>A large book with information about the basics of alchemy. It is used in training skills.</description>
  </item>
- <item index="280" name="Medium book of cooking" showtype="Book of Cooking" type="CookingBook" weight="1" price="17">
+ <item index="280" name="Medium book of cooking" showtype="Book of Cooking" type="CookingBook" weight="1" price="17" reputation="25">
   <data value="15"/>
   <description>A medium book with information about the basics of cooking. It is used in training skills.</description>
  </item>
- <item index="281" name="Large book of cooking" showtype="Book of Cooking" type="CookingBook" weight="1" price="22">
+ <item index="281" name="Large book of cooking" showtype="Book of Cooking" type="CookingBook" weight="1" price="22" reputation="50">
   <data value="10"/>
   <description>A large book with information about the basics of cooking. It is used in training skills.</description>
  </item>
- <item index="282" name="Huge book of cooking" showtype="Book of Cooking" type="CookingBook" weight="1" price="27">
+ <item index="282" name="Huge book of cooking" showtype="Book of Cooking" type="CookingBook" weight="1" price="27" reputation="75">
   <data value="5"/>
   <description>A huge book with information about the basics of cooking. It is used in training skills.</description>
  </item>
- <item index="283" name="Medium book of gunsmithing" showtype="Book of Gunsmithing" type="GunsmithBook" weight="1" price="17">
+ <item index="283" name="Medium book of gunsmithing" showtype="Book of Gunsmithing" type="GunsmithBook" weight="1" price="17" reputation="25">
   <data value="15"/>
   <description>A medium book with information about the basics of gunsmithing. It is used in training skills.</description>
  </item>
- <item index="284" name="Large book of gunsmithing" showtype="Book of Gunsmithing" type="GunsmithBook" weight="1" price="22">
+ <item index="284" name="Large book of gunsmithing" showtype="Book of Gunsmithing" type="GunsmithBook" weight="1" price="22" reputation="50">
   <data value="10"/>
   <description>A large book with information about the basics of gunsmithing. It is used in training skills.</description>
  </item>
- <item index="285" name="Huge book of gunsmithing" showtype="Book of Gunsmithing" type="GunsmithBook" weight="1" price="27">
+ <item index="285" name="Huge book of gunsmithing" showtype="Book of Gunsmithing" type="GunsmithBook" weight="1" price="27" reputation="75">
   <data value="5"/>
   <description>A huge book with information about the basics of gunsmithing. It is used in training skills.</description>
  </item>
- <item index="286" name="Medium book of metalsmithing" showtype="Book of Metalsmithing" type="MetalsmithBook" weight="1" price="17">
+ <item index="286" name="Medium book of metalsmithing" showtype="Book of Metalsmithing" type="MetalsmithBook" weight="1" price="17" reputation="25">
   <data value="15"/>
   <description>A medium book with information about the basics of metalsmithing. It is used in training skills.</description>
  </item>
- <item index="287" name="Large book of metalsmithing" showtype="Book of Metalsmithing" type="MetalsmithBook" weight="1" price="22">
+ <item index="287" name="Large book of metalsmithing" showtype="Book of Metalsmithing" type="MetalsmithBook" weight="1" price="22" reputation="50">
   <data value="10"/>
   <description>A large book with information about the basics of metalsmithing. It is used in training skills.</description>
  </item>
- <item index="288" name="Huge book of metalsmithing" showtype="Book of Metalsmithing" type="MetalsmithBook" weight="1" price="27">
+ <item index="288" name="Huge book of metalsmithing" showtype="Book of Metalsmithing" type="MetalsmithBook" weight="1" price="27" reputation="75">
   <data value="5"/>
   <description>A huge book with information about the basics of metalsmithing. It is used in training skills.</description>
  </item>
- <item index="289" name="Medium book of medicine" showtype="Book of Medicine" type="MedicineBook" weight="1" price="17">
+ <item index="289" name="Medium book of medicine" showtype="Book of Medicine" type="MedicineBook" weight="1" price="17" reputation="25">
   <data value="15"/>
   <description>A medium book with information about the basics of medicine. It is used in training skills.</description>
  </item>
- <item index="290" name="Large book of medicine" showtype="Book of Medicine" type="MedicineBook" weight="1" price="22">
+ <item index="290" name="Large book of medicine" showtype="Book of Medicine" type="MedicineBook" weight="1" price="22" reputation="50">
   <data value="10"/>
   <description>A large book with information about the basics of medicine. It is used in training skills.</description>
  </item>
- <item index="291" name="Huge book of medicine" showtype="Book of Medicine" type="MedicineBook" weight="1" price="27">
+ <item index="291" name="Huge book of medicine" showtype="Book of Medicine" type="MedicineBook" weight="1" price="27" reputation="75">
   <data value="5"/>
   <description>A huge book with information about the basics of medicine. It is used in training skills.</description>
  </item>
- <item index="292" name="Medium book of farming" showtype="Book of Farming" type="FarmingBook" weight="1" price="17">
+ <item index="292" name="Medium book of farming" showtype="Book of Farming" type="FarmingBook" weight="1" price="17" reputation="25">
   <data value="15"/>
   <description>A medium book with information about the basics of farming. It is used in training skills.</description>
  </item>
- <item index="293" name="Large book of farming" showtype="Book of Farming" type="FarmingBook" weight="1" price="22">
+ <item index="293" name="Large book of farming" showtype="Book of Farming" type="FarmingBook" weight="1" price="22" reputation="50">
   <data value="10"/>
   <description>A large book with information about the basics of farming. It is used in training skills.</description>
  </item>
- <item index="294" name="Huge book of farming" showtype="Book of Farming" type="FarmingBook" weight="1" price="27">
+ <item index="294" name="Huge book of farming" showtype="Book of Farming" type="FarmingBook" weight="1" price="27" reputation="75">
   <data value="5"/>
   <description>A huge book with information about the basics of farming. It is used in training skills.</description>
  </item>
- <item index="295" name="Medium book of woodcutting" showtype="Book of Woodcutting" type="WoodcuttingBook" weight="1" price="17">
+ <item index="295" name="Medium book of woodcutting" showtype="Book of Woodcutting" type="WoodcuttingBook" weight="1" price="17" reputation="25">
   <data value="15"/>
   <description>A medium book with information about the basics of woodcutting. It is used in training skills.</description>
  </item>
- <item index="296" name="Large book of woodcutting" showtype="Book of Woodcutting" type="WoodcuttingBook" weight="1" price="22">
+ <item index="296" name="Large book of woodcutting" showtype="Book of Woodcutting" type="WoodcuttingBook" weight="1" price="22" reputation="50">
   <data value="10"/>
   <description>A large book with information about the basics of woodcutting. It is used in training skills.</description>
  </item>
- <item index="297" name="Huge book of woodcutting" showtype="Book of Woodcutting" type="WoodcuttingBook" weight="1" price="27">
+ <item index="297" name="Huge book of woodcutting" showtype="Book of Woodcutting" type="WoodcuttingBook" weight="1" price="27" reputation="75">
   <data value="5"/>
   <description>A huge book with information about the basics of woodcutting. It is used in training skills.</description>
  </item>
- <item index="298" name="Medium book of brewing" showtype="Book of Brewing" type="BrewingBook" weight="1" price="17">
+ <item index="298" name="Medium book of brewing" showtype="Book of Brewing" type="BrewingBook" weight="1" price="17" reputation="25">
   <data value="15"/>
   <description>A medium book with information about the basics of brewing. It is used in training skills.</description>
  </item>
- <item index="299" name="Large book of brewing" showtype="Book of Brewing" type="BrewingBook" weight="1" price="22">
+ <item index="299" name="Large book of brewing" showtype="Book of Brewing" type="BrewingBook" weight="1" price="22" reputation="50">
   <data value="10"/>
   <description>A large book with information about the basics of brewing. It is used in training skills.</description>
  </item>
- <item index="300" name="Huge book of brewing" showtype="Book of Brewing" type="BrewingBook" weight="1" price="27">
+ <item index="300" name="Huge book of brewing" showtype="Book of Brewing" type="BrewingBook" weight="1" price="27" reputation="75">
   <data value="5"/>
   <description>A huge book with information about the basics of brewing. It is used in training skills.</description>
  </item>
