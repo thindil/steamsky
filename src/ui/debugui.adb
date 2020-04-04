@@ -1175,16 +1175,6 @@ package body DebugUI is
             Set(ModulesList, Iter, 0, To_String(Module.Name));
          end loop;
       end;
-      DebugWindow := Gtk_Window_New;
-      Set_Title(DebugWindow, "Steam Sky - debug");
-      Set_Default_Size(DebugWindow, 800, 600);
-      if not Set_Icon_From_File
-          (DebugWindow,
-           To_String(DataDirectory) & Dir_Separator & "ui" & Dir_Separator &
-           "images" & Dir_Separator & "icon.png") then
-         raise Program_Error with "Can't set icon for the debug window";
-      end if;
-      Add(DebugWindow, WindowBox);
       Pack_Start(Switchbox, StackSwitch, False);
       Button := Gtk_Button_New_With_Mnemonic("_Refresh");
       Set_Tooltip_Text
@@ -1678,6 +1668,17 @@ package body DebugUI is
          Pack_Start(WorldBox, EventBox, False);
       end;
       Add_Titled(Stack, WorldBox, "page4", "World");
+      DebugWindow := Gtk_Window_New;
+      Set_Title(DebugWindow, "Steam Sky - debug");
+      Set_Default_Size(DebugWindow, 800, 600);
+      Set_Position(DebugWindow, Win_Pos_Center);
+      if not Set_Icon_From_File
+          (DebugWindow,
+           To_String(DataDirectory) & Dir_Separator & "ui" & Dir_Separator &
+           "images" & Dir_Separator & "icon.png") then
+         raise Program_Error with "Can't set icon for the debug window";
+      end if;
+      Add(DebugWindow, WindowBox);
    end CreateDebugUI;
 
    procedure ShowDebugUI is
