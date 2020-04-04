@@ -27,7 +27,7 @@ All notable changes to this project will be documented in this file.
 - Charcollum to whatever transformation (issue #68)
 - Editing crew members stats and skills in debug menu
 - Missing icon and title for help window
-- Size and position of help window
+- Size and position of help and debug windows
 
 ## [4.8] - 2020-03-22
 
