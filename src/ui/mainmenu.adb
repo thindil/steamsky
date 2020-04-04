@@ -851,12 +851,11 @@ package body MainMenu is
    function NewGameKeyPressed
      (Self: access Gtk_Widget_Record'Class; Event: Gdk.Event.Gdk_Event_Key)
       return Boolean is
-      pragma Unreferenced(Self);
       -- ****
       ScrollBar: constant Gtk_Adjustment :=
         Get_Vadjustment
           (Gtk_Scrolled_Window
-             (Get_Child(Gtk_Box(Get_Object(Builder, "newgamebox2")), 1)));
+             (Get_Child(Gtk_Box(Get_Child(Gtk_Box(Self), 1)), 1)));
    begin
       if Event.Keyval = GDK_Page_Up then
          Set_Value
@@ -1250,8 +1249,7 @@ package body MainMenu is
          NewGameFrame: constant Gtk_Frame := Gtk_Frame_New("Info");
          InfoScrollBar: constant Gtk_Scrolled_Window :=
            Gtk_Scrolled_Window_New;
-         NewGameBox2: constant Gtk_Vbox :=
-           Gtk_Vbox(Get_Object(Builder, "newgamebox2"));
+         NewGameBox2: constant Gtk_Hbox := Gtk_Hbox_New;
          Label: Gtk_Label;
          RandomDifficultyButton: constant Gtk_Check_Button :=
            Gtk_Check_Button_New_With_Label
@@ -1317,12 +1315,12 @@ package body MainMenu is
             To_Unbounded_String("Character career:"),
             To_Unbounded_String("Starting base type:"));
       begin
+         Pack_Start(NewGameBox, NewGameBox2);
          NewGameStack := Gtk_Stack_New;
          Set_Stack
            (Gtk_Stack_Switcher(Get_Object(Builder, "newgameswitch")),
             NewGameStack);
-         Pack_Start
-           (Gtk_Box(Get_Object(Builder, "newgamebox2")), NewGameStack, False);
+         Pack_Start(NewGameBox2, NewGameStack, False);
          for I in Labels2Array'Range loop
             Label := Gtk_Label_New(To_String(Labels2Array(I)));
             Attach(PlayerGrid, Label, 0, Gint(I));
