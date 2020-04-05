@@ -284,16 +284,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                 <property name="margin_right">5</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkStackSwitcher" id="newgameswitch">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="halign">center</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
+                  <placeholder/>
                 </child>
                 <child>
                   <placeholder/>
