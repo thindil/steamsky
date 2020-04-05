@@ -916,31 +916,31 @@ If you want add more materials to recipe, just add new tag "material" with prope
  <recipe crafted="1" index="278" result="300" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75">
   <material amount="4" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="279" result="301" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="279" result="301" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25">
   <material amount="2" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="280" result="302" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="280" result="302" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50">
   <material amount="3" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="281" result="303" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="281" result="303" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75">
   <material amount="4" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="282" result="304" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="282" result="304" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25">
   <material amount="2" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="283" result="305" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="283" result="305" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50">
   <material amount="3" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="284" result="306" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="284" result="306" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75">
   <material amount="4" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="285" result="307" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="285" result="307" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25">
   <material amount="2" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="286" result="308" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="286" result="308" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50">
   <material amount="3" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="287" result="309" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="287" result="309" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75">
   <material amount="4" type="EmptyBook"/>
  </recipe>
  <recipe crafted="1" index="288" result="310" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
@@ -949,16 +949,16 @@ If you want add more materials to recipe, just add new tag "material" with prope
  <recipe crafted="1" index="289" result="311" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="3" type="Iron"/>
  </recipe>
- <recipe crafted="1" index="290" result="312" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" index="290" result="312" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="0">
   <material amount="3" type="Steel"/>
  </recipe>
- <recipe crafted="1" index="291" result="313" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" index="291" result="313" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="25">
   <material amount="3" type="Titanium"/>
  </recipe>
- <recipe crafted="1" index="292" result="314" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" index="292" result="314" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="50">
   <material amount="3" type="Orichalcum"/>
  </recipe>
- <recipe crafted="1" index="293" result="315" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" index="293" result="315" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="75">
   <material amount="3" type="Adamantium"/>
  </recipe>
  <recipe crafted="1" index="294" result="316" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
@@ -967,25 +967,25 @@ If you want add more materials to recipe, just add new tag "material" with prope
  <recipe crafted="1" index="295" result="317" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe crafted="1" index="296" result="318" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" index="296" result="318" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="0">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe crafted="1" index="297" result="319" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" index="297" result="319" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="25">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe crafted="1" index="298" result="320" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" index="298" result="320" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="50">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe crafted="1" index="299" result="321" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" index="299" result="321" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="75">
   <material amount="1" type="Adamantium"/>
  </recipe>
- <recipe crafted="1" index="300" result="322" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="300" result="322" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25">
   <material amount="2" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="301" result="323" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="301" result="323" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50">
   <material amount="3" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="302" result="324" skill="Printing" tool="PrintingSet" workplace="Workshop">
+ <recipe crafted="1" index="302" result="324" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75">
   <material amount="4" type="EmptyBook"/>
  </recipe>
  <recipe crafted="10" index="303" result="325" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
@@ -1040,55 +1040,55 @@ If you want add more materials to recipe, just add new tag "material" with prope
   <material amount="6" type="Iron"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe crafted="5" difficulty="5" index="316" result="338" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="5" difficulty="5" index="316" result="338" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
   <material amount="1" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="5" difficulty="5" index="317" result="339" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="5" difficulty="5" index="317" result="339" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
   <material amount="1" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="2" difficulty="10" index="318" result="340" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="2" difficulty="10" index="318" result="340" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
   <material amount="1" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="2" difficulty="10" index="319" result="341" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="2" difficulty="10" index="319" result="341" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
   <material amount="1" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="15" index="320" result="342" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="15" index="320" result="342" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
   <material amount="1" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="15" index="321" result="343" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="15" index="321" result="343" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
   <material amount="1" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="20" index="322" result="344" skill="Gunsmith" time="30" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="20" index="322" result="344" skill="Gunsmith" time="30" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
   <material amount="2" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="20" index="323" result="345" skill="Gunsmith" time="30" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="20" index="323" result="345" skill="Gunsmith" time="30" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
   <material amount="2" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="25" index="324" result="346" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="25" index="324" result="346" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
   <material amount="4" type="Steel"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="25" index="325" result="347" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="25" index="325" result="347" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
   <material amount="4" type="Steel"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="30" index="326" result="348" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="30" index="326" result="348" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
   <material amount="6" type="Steel"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="30" index="327" result="349" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="1" difficulty="30" index="327" result="349" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
   <material amount="6" type="Steel"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe crafted="2" difficulty="15" index="328" result="350" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
+ <recipe crafted="2" difficulty="15" index="328" result="350" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="25">
   <material amount="1" type="Titanium"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
