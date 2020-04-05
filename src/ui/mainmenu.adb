@@ -1314,12 +1314,13 @@ package body MainMenu is
             To_Unbounded_String("Character faction:"),
             To_Unbounded_String("Character career:"),
             To_Unbounded_String("Starting base type:"));
+         NewGameSwitch: constant Gtk_Stack_Switcher := Gtk_Stack_Switcher_New;
       begin
-         Pack_Start(NewGameBox, NewGameBox2);
          NewGameStack := Gtk_Stack_New;
-         Set_Stack
-           (Gtk_Stack_Switcher(Get_Object(Builder, "newgameswitch")),
-            NewGameStack);
+         Set_Stack(NewGameSwitch, NewGameStack);
+         Set_Halign(NewGameSwitch, Align_Center);
+         Pack_Start(NewGameBox, NewGameSwitch, False);
+         Pack_Start(NewGameBox, NewGameBox2);
          Pack_Start(NewGameBox2, NewGameStack, False);
          for I in Labels2Array'Range loop
             Label := Gtk_Label_New(To_String(Labels2Array(I)));
