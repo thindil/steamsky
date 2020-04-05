@@ -637,13 +637,13 @@ If you want add more materials to recipe, just add new tag "material" with prope
  <recipe crafted="2" difficulty="10" index="191" result="213" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="0">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe crafted="2" difficulty="15" index="192" result="214" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="15" index="192" result="214" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="25">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe crafted="2" difficulty="20" index="193" result="215" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="20" index="193" result="215" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="50">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe crafted="2" difficulty="25" index="194" result="216" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="25" index="194" result="216" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE" reputation="75">
   <material amount="1" type="Adamantium"/>
  </recipe>
  <recipe crafted="2" index="195" result="217" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
@@ -652,16 +652,16 @@ If you want add more materials to recipe, just add new tag "material" with prope
  <recipe crafted="2" difficulty="5" index="196" result="218" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe crafted="2" difficulty="10" index="197" result="219" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="10" index="197" result="219" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="0">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe crafted="2" difficulty="15" index="198" result="220" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="15" index="198" result="220" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="25">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe crafted="2" difficulty="20" index="199" result="221" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="20" index="199" result="221" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="50">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe crafted="2" difficulty="25" index="200" result="222" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="2" difficulty="25" index="200" result="222" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE" reputation="75">
   <material amount="1" type="Adamantium"/>
  </recipe>
  <recipe crafted="1" index="201" result="223" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
@@ -670,16 +670,16 @@ If you want add more materials to recipe, just add new tag "material" with prope
  <recipe crafted="1" difficulty="5" index="202" result="224" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Iron"/>
  </recipe>
- <recipe crafted="1" difficulty="10" index="203" result="225" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="203" result="225" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="0">
   <material amount="2" type="Steel"/>
  </recipe>
- <recipe crafted="1" difficulty="15" index="204" result="226" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="204" result="226" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="25">
   <material amount="2" type="Titanium"/>
  </recipe>
- <recipe crafted="1" difficulty="20" index="205" result="227" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="205" result="227" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="50">
   <material amount="2" type="Orichalcum"/>
  </recipe>
- <recipe crafted="1" difficulty="25" index="206" result="228" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="206" result="228" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE" reputation="75">
   <material amount="2" type="Adamantium"/>
  </recipe>
  <recipe crafted="1" index="207" result="229" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
@@ -688,13 +688,13 @@ If you want add more materials to recipe, just add new tag "material" with prope
  <recipe crafted="1" difficulty="5" index="208" result="230" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe crafted="1" difficulty="10" index="209" result="231" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="209" result="231" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="25">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe crafted="1" difficulty="15" index="210" result="232" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="210" result="232" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="50">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe crafted="1" difficulty="20" index="211" result="233" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="211" result="233" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="75">
   <material amount="1" type="Orichalcum"/>
  </recipe>
  <recipe crafted="1" difficulty="25" index="212" result="234" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
@@ -706,16 +706,16 @@ If you want add more materials to recipe, just add new tag "material" with prope
  <recipe crafted="1" difficulty="5" index="214" result="236" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="2" type="Iron"/>
  </recipe>
- <recipe crafted="1" difficulty="10" index="215" result="237" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="215" result="237" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="0">
   <material amount="2" type="Steel"/>
  </recipe>
- <recipe crafted="1" difficulty="15" index="216" result="238" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="216" result="238" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="25">
   <material amount="2" type="Titanium"/>
  </recipe>
- <recipe crafted="1" difficulty="20" index="217" result="239" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="217" result="239" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="50">
   <material amount="2" type="Orichalcum"/>
  </recipe>
- <recipe crafted="1" difficulty="25" index="218" result="240" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="218" result="240" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE" reputation="75">
   <material amount="2" type="Adamantium"/>
  </recipe>
  <recipe crafted="1" index="219" result="241" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
@@ -724,16 +724,16 @@ If you want add more materials to recipe, just add new tag "material" with prope
  <recipe crafted="1" difficulty="5" index="220" result="242" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe crafted="1" difficulty="10" index="221" result="243" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="221" result="243" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="0">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe crafted="1" difficulty="15" index="222" result="244" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="222" result="244" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="25">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe crafted="1" difficulty="20" index="223" result="245" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="20" index="223" result="245" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="50">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe crafted="1" difficulty="25" index="224" result="246" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="25" index="224" result="246" skill="Blacksmith" time="30" tool="BlacksmithSet" workplace="FURNACE" reputation="75">
   <material amount="1" type="Adamantium"/>
  </recipe>
  <recipe crafted="1" index="225" result="247" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
@@ -744,11 +744,11 @@ If you want add more materials to recipe, just add new tag "material" with prope
   <material amount="1" type="Iron"/>
   <material amount="1" type="Wood"/>
  </recipe>
- <recipe crafted="1" difficulty="10" index="227" result="249" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="10" index="227" result="249" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="0">
   <material amount="1" type="Steel"/>
   <material amount="1" type="Wood"/>
  </recipe>
- <recipe crafted="1" difficulty="15" index="228" result="250" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+ <recipe crafted="1" difficulty="15" index="228" result="250" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="25">
   <material amount="1" type="Titanium"/>
   <material amount="1" type="Wood"/>
  </recipe>
