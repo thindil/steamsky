@@ -1239,8 +1239,7 @@ package body MainMenu is
       end loop;
       Setting := False;
       declare
-         NewGameBox: constant Gtk_Vbox :=
-           Gtk_Vbox(Get_Object(Builder, "newgamebox"));
+         NewGameBox: constant Gtk_Vbox := Gtk_Vbox_New;
          DifficultyBox: constant Gtk_Vbox := Gtk_Vbox_New;
          HBox: Gtk_Hbox := Gtk_Hbox_New;
          Button: Gtk_Button;
@@ -1467,6 +1466,9 @@ package body MainMenu is
          Set_Halign(HBox, Align_Center);
          Pack_Start(NewGameBox, HBox, False);
          On_Key_Press_Event(NewGameBox, NewGameKeyPressed'Access);
+         Add_Named
+           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), NewGameBox,
+            "page1");
       end;
       declare
          HallOfFameBox: constant Gtk_Vbox := Gtk_Vbox_New;
