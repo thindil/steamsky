@@ -144,6 +144,7 @@ Prices showed on trade screen are base prices, without bonuses or penalties from
    To buy/sell items from bases, open orders menu (key {GameKey 14}) and then select option {b}Trade{/b}, you will see trading screen. Select desired material to buy/sell, then select did you want sell or buy them. Next, enter amount of items which you want to buy or sell and press button. If you want to sell all owned items of that type, just select button {b}Sell all{/b}. To buy/sell items you must have enough free cargo space on your ship ({i}&quot;money&quot;{/i} aka {MoneyName} needs free cargo space too).
 How much base can buy items depends on how much it have money. This amount can change with time (raise or fall). Chance for change depends on size of base and it is higher when you visit that base less often. Bigger bases have more money than small.
 Same with buying items from bases - they have limited amount of items for sale. Bigger bases have more items than small. Additionally, from time to time amount of items change (going up or down). Chance for change depends on base size and raise when you visit that base less often.
+If you selling to a base an item which you are not allowed to buy due to your reputation level, you will gain a bit more reputation with that sale than normal.
 
 {u}Friendly traders{/u}
    From time to time you can meet friendly trader ship in space with which you can trade too. It is very similar to trade with bases, you need someone assigned to Talk in bases duty, etc.</entry>
