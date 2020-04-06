@@ -21,6 +21,8 @@ All notable changes to this project will be documented in this file.
 - Updated help
 - Updated debug interface
 - Updated items and crafting recipes with reputation requirements
+- Selling items which are unavailable due to reputation requirements in bases
+  gives more reputation in bases
 
 ### Fixed
 - Possible crash on trading with a friendly trader (issue #67)
