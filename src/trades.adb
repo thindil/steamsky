@@ -215,6 +215,10 @@ package body Trades is
       if BaseIndex > 0 then
          UpdateBaseCargo(MoneyIndex, (0 - Profit));
          GainRep(BaseIndex, 1);
+         if Items_List(ProtoIndex).Reputation >
+           SkyBases(BaseIndex).Reputation(1) then
+            GainRep(BaseIndex, 1);
+         end if;
       else
          TraderCargo(1).Amount := TraderCargo(1).Amount - Profit;
       end if;
