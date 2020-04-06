@@ -1443,6 +1443,7 @@ package body MainMenu is
          On_Toggled
            (Gtk_Toggle_Button(RandomDifficultyButton),
             RandomDifficultyToggled'Access);
+         Set_Line_Wrap(Gtk_Label(Get_Child(RandomDifficultyButton)), True);
          Pack_Start(DifficultyBox, RandomDifficultyButton, False);
          Label := Gtk_Label_New("Total gained points: 100%");
          Set_Line_Wrap(Label, True);
