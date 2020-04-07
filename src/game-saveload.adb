@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Exceptions; use Ada.Exceptions;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Text_IO.Text_Streams; use Ada.Text_IO.Text_Streams;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
@@ -49,6 +50,13 @@ package body Game.SaveLoad is
    -- XML Structure for save/load the game data from file
    -- SOURCE
    SaveData: Document;
+   -- ****
+
+   -- ****iv* Game.SaveLoad/SaveVersion
+   -- FUNCTION
+   -- Current version of the save game
+   -- SOURCE
+   SaveVersion: constant Positive := 5;
    -- ****
 
    procedure SaveGame(PrettyPrint: Boolean := False) is
@@ -96,6 +104,10 @@ package body Game.SaveLoad is
       SaveData := Create_Document(Save);
       MainNode := Create_Element(SaveData, "save");
       MainNode := Append_Child(SaveData, MainNode);
+      -- Write save game version
+      Set_Attribute
+        (MainNode, "version",
+         Trim(Positive'Image(SaveVersion), Ada.Strings.Left));
       -- Save game difficulty settings
       LogMessage("Saving game difficulty settings...", Everything, False);
       CategoryNode := Create_Element(SaveData, "difficulty");
@@ -436,6 +448,17 @@ package body Game.SaveLoad is
       Parse(Reader, SaveFile);
       Close(SaveFile);
       SaveData := Get_Tree(Reader);
+      -- Check save game compatybility
+      NodesList :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "save");
+      SavedNode := Item(NodesList, 0);
+      if Get_Attribute(SavedNode, "version") /= "" then
+         if Positive'Value(Get_Attribute(SavedNode, "version")) >
+           SaveVersion then
+            raise SaveGame_Invalid_Data
+              with "This save is incompatible with this version of the game";
+         end if;
+      end if;
       -- Load game difficulty settings
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "difficulty");
