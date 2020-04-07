@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
   explosive ammo
 - Version check to the saved games
 - Better info about development/stable version of the game
+- Better info about invalid saved games
 
 ### Changed
 - Updated bases data with new items and recipes
