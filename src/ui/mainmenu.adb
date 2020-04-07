@@ -1238,7 +1238,7 @@ package body MainMenu is
       Register_Handler(Builder, "Update_Summary", UpdateSummary'Access);
       Do_Connect(Builder);
       SetUtilsBuilder(Builder);
-      Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion);
+      Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion & " (development)");
       if HallOfFame_Array(1).Name = Null_Unbounded_String then
          Hide(Gtk_Widget(Get_Object(Builder, "btnhalloffame")));
       end if;
