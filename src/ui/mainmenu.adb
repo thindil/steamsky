@@ -185,6 +185,19 @@ package body MainMenu is
       Gtk.Main.Main_Quit;
    end Quit;
 
+   -- ****if* MainMenu/QuitGame
+   -- FUNCTION
+   -- Quit from the game
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked
+   -- SOURCE
+   procedure QuitGame(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
+      -- ****
+   begin
+      Gtk.Main.Main_Quit;
+   end QuitGame;
+
    -- ****if* MainMenu/RefreshSavesList
    -- FUNCTION
    -- Refresh list of available saved games
@@ -1238,6 +1251,15 @@ package body MainMenu is
             (AdjValues(I) * 100.0));
       end loop;
       Setting := False;
+      declare
+         MainMenuButtons: constant Gtk_Button_Box :=
+           Gtk_Button_Box(Get_Object(Builder, "mainmenubuttons"));
+         Button: constant Gtk_Button :=
+           Gtk_Button_New_With_Mnemonic("_Quit game");
+      begin
+         On_Clicked(Button, QuitGame'Access);
+         Pack_Start(MainMenuButtons, Button);
+      end;
       declare
          NewGameBox: constant Gtk_Vbox := Gtk_Vbox_New;
          DifficultyBox: constant Gtk_Vbox := Gtk_Vbox_New;
