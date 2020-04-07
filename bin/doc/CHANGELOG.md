@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
   adamantium 80mm explosive ammo, adamantium 100mm piercing ammo, adamantium
   100mm explosive ammo, adamantium 120mm piercing ammo and adamantium 120mm
   explosive ammo
+- Version check to the saved games
 
 ### Changed
 - Updated bases data with new items and recipes
