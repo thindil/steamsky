@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
@@ -554,6 +555,11 @@ package body MainMenu is
       SaveName := To_Unbounded_String(Get_String(SavesModel, SavesIter, 3));
       LoadGame;
       StartGame;
+   exception
+      when An_Exception : SaveGame_Invalid_Data =>
+         ShowDialog
+           ("Can't load this game. Reason: " &
+            Exception_Message(An_Exception));
    end LoadGame;
 
    -- ****if* MainMenu/RandomDifficulty
@@ -1238,7 +1244,9 @@ package body MainMenu is
       Register_Handler(Builder, "Update_Summary", UpdateSummary'Access);
       Do_Connect(Builder);
       SetUtilsBuilder(Builder);
-      Set_Label(Gtk_Label(Get_Object(Builder, "lblversion")), GameVersion & " (development)");
+      Set_Label
+        (Gtk_Label(Get_Object(Builder, "lblversion")),
+         GameVersion & " (development)");
       if HallOfFame_Array(1).Name = Null_Unbounded_String then
          Hide(Gtk_Widget(Get_Object(Builder, "btnhalloffame")));
       end if;
@@ -1817,8 +1825,7 @@ package body MainMenu is
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
       end if;
       End_Search(Files);
-      if DataError /= Null_Unbounded_String or
-        not Is_Write_Accessible_File(To_String(SaveDirectory)) then
+      if MessageBox = null then
          declare
             MessageLabel: constant Gtk_Label := Gtk_Label_New;
          begin
@@ -1840,6 +1847,8 @@ package body MainMenu is
       if DataError /= Null_Unbounded_String then
          Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
          Hide(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
+      else
+         Hide(MessageBox);
       end if;
       if not Exists(To_String(SaveDirectory) & "halloffame.dat") then
          Hide(Gtk_Widget(Get_Object(Builder, "btnhalloffame")));
