@@ -1706,32 +1706,6 @@ package body Maps.UI.Handlers is
       return False;
    end ZoomMap;
 
-   function DisableMenuShortcuts
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
-   begin
-      if AccelsRemoved then
-         return False;
-      end if;
-      Remove_Accel_Group
-        (Gtk_Window(Get_Object(Object, "skymapwindow")),
-         Gtk_Accel_Group(Get_Object(Object, "movementaccels")));
-      AccelsRemoved := True;
-      return False;
-   end DisableMenuShortcuts;
-
-   function EnableMenuShortcuts
-     (Object: access Gtkada_Builder_Record'Class) return Boolean is
-   begin
-      if not AccelsRemoved then
-         return False;
-      end if;
-      Add_Accel_Group
-        (Gtk_Window(Get_Object(Object, "skymapwindow")),
-         Gtk_Accel_Group(Get_Object(Object, "movementaccels")));
-      AccelsRemoved := False;
-      return False;
-   end EnableMenuShortcuts;
-
    procedure DisableMenuShortcutsProc
      (Object: access Gtkada_Builder_Record'Class) is
    begin
@@ -1755,6 +1729,20 @@ package body Maps.UI.Handlers is
          Gtk_Accel_Group(Get_Object(Object, "movementaccels")));
       AccelsRemoved := False;
    end EnableMenuShortcutsProc;
+
+   function DisableMenuShortcuts
+     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+   begin
+      DisableMenuShortcutsProc(Object);
+      return False;
+   end DisableMenuShortcuts;
+
+   function EnableMenuShortcuts
+     (Object: access Gtkada_Builder_Record'Class) return Boolean is
+   begin
+      EnableMenuShortcutsProc(Object);
+      return False;
+   end EnableMenuShortcuts;
 
    function ToggleCloseButton
      (User_Data: access GObject_Record'Class) return Boolean is
