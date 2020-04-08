@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Version check to the saved games
 - Better info about development/stable version of the game
 - Better info about invalid saved games
+- Better info about why crew member wasn't healed
 
 ### Changed
 - Updated bases data with new items and recipes
