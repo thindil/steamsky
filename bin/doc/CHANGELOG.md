@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Better info about development/stable version of the game
 - Better info about invalid saved games
 - Better info about why crew member wasn't healed
+- New goal: gain max reputation in 1 undead base
 
 ### Changed
 - Updated bases data with new items and recipes
