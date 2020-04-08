@@ -572,13 +572,23 @@ package body Crew is
                               end if;
                            end loop;
                         else
-                           AddMessage
-                             ("You don't have any " &
-                              To_String
-                                (Factions_List(Member.Faction).HealingTools) &
-                              " to continue healing the wounded " &
-                              To_String(Member.Name) & ".",
-                              OrderMessage, RED);
+                           if ToolIndex = 0 then
+                              AddMessage
+                                ("You don't have any " &
+                                 To_String
+                                   (Factions_List(Member.Faction)
+                                      .HealingTools) &
+                                 " to continue healing the wounded " &
+                                 To_String(Member.Name) & ".",
+                                 OrderMessage, RED);
+                           else
+                              AddMessage
+                                (To_String(PlayerShip.Crew(I).Name) &
+                                 " is not enough experienced to heal " &
+                                 To_String(Member.Name) &
+                                 " in that amount of time.",
+                                 OrderMessage, RED);
+                           end if;
                         end if;
                      end if;
                   end loop;
