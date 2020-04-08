@@ -389,19 +389,6 @@ package body MainMenu is
                            "page3")),
                      1)),
                1));
-      elsif User_Data = Get_Object(Builder, "btnabout") then
-         Set_Visible_Child_Name
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page4");
-         Grab_Focus
-           (Get_Child
-              (Gtk_Box
-                 (Get_Child
-                    (Gtk_Box
-                       (Get_Child_By_Name
-                          (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
-                           "page4")),
-                     5)),
-               1));
       elsif User_Data = Get_Object(Builder, "btnloadgame") then
          RefreshSavesList;
          Set_Visible_Child_Name
@@ -1209,6 +1196,25 @@ package body MainMenu is
       Set_Text(Self, To_String(GenerateShipName(FactionIndex)));
    end GenerateShipName;
 
+   -- ****if* MainMenu/ShowAbout
+   -- FUNCTION
+   -- Show info about the game
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked.
+   -- SOURCE
+   procedure ShowAbout(Self: access Gtk_Button_Record'Class) is
+      MainMenuStack: constant Gtk_Stack :=
+        Gtk_Stack(Get_Parent(Get_Parent(Get_Parent(Self))));
+   begin
+      Set_Visible_Child_Name(MainMenuStack, "page4");
+      Grab_Focus
+        (Get_Child
+           (Gtk_Box
+              (Get_Child
+                 (Gtk_Box(Get_Child_By_Name(MainMenuStack, "page4")), 5)),
+            1));
+   end ShowAbout;
+
    procedure CreateMainMenu is
       Error: aliased GError;
       AdjValues: constant array(Positive range <>) of Gdouble :=
@@ -1262,9 +1268,12 @@ package body MainMenu is
       declare
          MainMenuButtons: constant Gtk_Button_Box :=
            Gtk_Button_Box(Get_Object(Builder, "mainmenubuttons"));
-         Button: constant Gtk_Button :=
-           Gtk_Button_New_With_Mnemonic("_Quit game");
+         Button: Gtk_Button;
       begin
+         Button := Gtk_Button_New_With_Mnemonic("_About");
+         On_Clicked(Button, ShowAbout'Access);
+         Pack_Start(MainMenuButtons, Button);
+         Button := Gtk_Button_New_With_Mnemonic("_Quit game");
          On_Clicked(Button, QuitGame'Access);
          Pack_Start(MainMenuButtons, Button);
       end;
