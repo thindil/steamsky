@@ -15,6 +15,8 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers; use Ada.Containers;
 with GNAT.String_Split; use GNAT.String_Split;
@@ -792,10 +794,23 @@ package body Maps.UI.Handlers is
             when None | DoublePrice | BaseRecovery =>
                if BaseIndex > 0 then
                   if SkyBases(BaseIndex).Reputation(1) > -25 then
-                     Set_Label
-                       (Gtk_Button(Get_Object(Builder, "btndock")), "_Dock");
-                     Set_No_Show_All
-                       (Gtk_Widget(Get_Object(Object, "btndock")), False);
+                     declare
+                        DockingCost: Positive;
+                     begin
+                        for Module of PlayerShip.Modules loop
+                           if Module.MType = HULL then
+                              DockingCost := Module.MaxModules;
+                              exit;
+                           end if;
+                        end loop;
+                        Set_Label
+                          (Gtk_Button(Get_Object(Builder, "btndock")),
+                           "_Dock (" &
+                           Trim(Positive'Image(DockingCost), Both) & " " &
+                           To_String(MoneyName) & ")");
+                        Set_No_Show_All
+                          (Gtk_Widget(Get_Object(Object, "btndock")), False);
+                     end;
                   end if;
                   for Mission of AcceptedMissions loop
                      if HaveTrader and Mission.TargetX = PlayerShip.SkyX and
