@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -212,48 +212,12 @@ package body Ships.Movement is
       end if;
       if Docking then
          if SkyBases(BaseIndex).Population > 0 then
-            declare
-               MoneyIndex2: constant Natural :=
-                 FindItem(PlayerShip.Cargo, MoneyIndex);
-               DockingCost: Natural;
-               TraderIndex: constant Natural := FindMember(Talk);
-            begin
-               if MoneyIndex2 = 0 then
-                  return "You can't dock to this base because you don't have enough " &
-                    To_String(MoneyName) & " to pay for docking.";
-               end if;
-               for Module of PlayerShip.Modules loop
-                  if Module.MType = HULL then
-                     DockingCost := Module.MaxModules;
-                     exit;
-                  end if;
-               end loop;
-               DockingCost :=
-                 Natural(Float(DockingCost) * NewGameSettings.PricesBonus);
-               if DockingCost = 0 then
-                  DockingCost := 1;
-               end if;
-               CountPrice(DockingCost, TraderIndex);
-               if DockingCost > PlayerShip.Cargo(MoneyIndex2).Amount then
-                  return "You can't dock to this base because you don't have enough " &
-                    To_String(MoneyName) & " to pay for docking.";
-               end if;
-               UpdateCargo
-                 (Ship => PlayerShip, CargoIndex => MoneyIndex2,
-                  Amount => (0 - DockingCost));
-               AddMessage
-                 ("Ship docked to base " &
-                  To_String(SkyBases(BaseIndex).Name) & ". It costs" &
-                  Positive'Image(DockingCost) & " " & To_String(MoneyName) &
-                  ".",
-                  OrderMessage);
-               if TraderIndex > 0 then
-                  GainExp(1, TalkingSkill, TraderIndex);
-               end if;
-               if GameSettings.AutoSave = DOCK then
-                  SaveGame;
-               end if;
-            end;
+            AddMessage
+              ("Ship docked to base " & To_String(SkyBases(BaseIndex).Name),
+               OrderMessage);
+            if GameSettings.AutoSave = DOCK then
+               SaveGame;
+            end if;
             declare
                MemberIndex: Positive := 1;
             begin
@@ -298,15 +262,6 @@ package body Ships.Movement is
          UpdateGame(10);
       else
          declare
-            FuelIndex: constant Natural :=
-              FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
-         begin
-            if FuelIndex = 0 then
-               return "You can't undock from base because you don't have any fuel.";
-            end if;
-         end;
-         PlayerShip.Speed := GameSettings.UndockSpeed;
-         declare
             Speed: constant SpeedType :=
               (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
          begin
@@ -314,9 +269,51 @@ package body Ships.Movement is
                return "You can't undock because your ship is overloaded.";
             end if;
          end;
-         AddMessage
-           ("Ship undocked from base " & To_String(SkyBases(BaseIndex).Name),
-            OrderMessage);
+         declare
+            MoneyIndex2: constant Natural :=
+              FindItem(PlayerShip.Cargo, MoneyIndex);
+            DockingCost, FuelIndex: Natural;
+            TraderIndex: constant Natural := FindMember(Talk);
+         begin
+            if MoneyIndex2 = 0 then
+               return "You can't undock from this base because you don't have any " &
+                 To_String(MoneyName) & " to pay for docking.";
+            end if;
+            for Module of PlayerShip.Modules loop
+               if Module.MType = HULL then
+                  DockingCost := Module.MaxModules;
+                  exit;
+               end if;
+            end loop;
+            DockingCost :=
+              Natural(Float(DockingCost) * NewGameSettings.PricesBonus);
+            if DockingCost = 0 then
+               DockingCost := 1;
+            end if;
+            CountPrice(DockingCost, TraderIndex);
+            if DockingCost > PlayerShip.Cargo(MoneyIndex2).Amount then
+               return "You can't undock to this base because you don't have enough " &
+                 To_String(MoneyName) & " to pay for docking.";
+            end if;
+            UpdateCargo
+              (Ship => PlayerShip, CargoIndex => MoneyIndex2,
+               Amount => (0 - DockingCost));
+            if TraderIndex > 0 then
+               GainExp(1, TalkingSkill, TraderIndex);
+            end if;
+            FuelIndex :=
+              FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
+            if FuelIndex = 0 then
+               return "You can't undock from base because you don't have any fuel.";
+            end if;
+            AddMessage
+              ("Ship undocked from base " &
+               To_String(SkyBases(BaseIndex).Name) & ". You also paid" &
+               Positive'Image(DockingCost) & " " & To_String(MoneyName) &
+               " of docking fee.",
+               OrderMessage);
+         end;
+         PlayerShip.Speed := GameSettings.UndockSpeed;
          UpdateGame(5);
          if GameSettings.AutoSave = UNDOCK then
             SaveGame;
