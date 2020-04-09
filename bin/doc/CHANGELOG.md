@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Better info about why crew member wasn't healed
 - New goals: gain max reputation in 1 undead base, gain max reputation in 3
   undead bases
+- Info about docking cost before dock to a base
 
 ### Changed
 - Updated bases data with new items and recipes
