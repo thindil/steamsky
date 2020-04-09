@@ -376,19 +376,6 @@ package body MainMenu is
                     (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
                      "page2")),
                1));
-      elsif User_Data = Get_Object(Builder, "btnnews") then
-         Set_Visible_Child_Name
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page3");
-         Grab_Focus
-           (Get_Child
-              (Gtk_Box
-                 (Get_Child
-                    (Gtk_Box
-                       (Get_Child_By_Name
-                          (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
-                           "page3")),
-                     1)),
-               1));
       elsif User_Data = Get_Object(Builder, "btnloadgame") then
          RefreshSavesList;
          Set_Visible_Child_Name
@@ -1215,6 +1202,25 @@ package body MainMenu is
             1));
    end ShowAbout;
 
+   -- ****if* MainMenu/ShowNews
+   -- FUNCTION
+   -- Show the game news
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked.
+   -- SOURCE
+   procedure ShowNews(Self: access Gtk_Button_Record'Class) is
+      MainMenuStack: constant Gtk_Stack :=
+        Gtk_Stack(Get_Parent(Get_Parent(Get_Parent(Self))));
+   begin
+      Set_Visible_Child_Name(MainMenuStack, "page3");
+      Grab_Focus
+        (Get_Child
+           (Gtk_Box
+              (Get_Child
+                 (Gtk_Box(Get_Child_By_Name(MainMenuStack, "page3")), 1)),
+            1));
+   end ShowNews;
+
    procedure CreateMainMenu is
       Error: aliased GError;
       AdjValues: constant array(Positive range <>) of Gdouble :=
@@ -1270,6 +1276,9 @@ package body MainMenu is
            Gtk_Button_Box(Get_Object(Builder, "mainmenubuttons"));
          Button: Gtk_Button;
       begin
+         Button := Gtk_Button_New_With_Mnemonic("N_ews");
+         On_Clicked(Button, ShowNews'Access);
+         Pack_Start(MainMenuButtons, Button);
          Button := Gtk_Button_New_With_Mnemonic("_About");
          On_Clicked(Button, ShowAbout'Access);
          Pack_Start(MainMenuButtons, Button);
