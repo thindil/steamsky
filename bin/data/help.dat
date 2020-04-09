@@ -89,9 +89,9 @@ Thus if you find an Agricultural base near a Refinery, start travelling between 
     2. If the only weapon of enemy is battering ram and you have installed gun, try to stay outside they attack range. Go closer to enemy ship until your gun will start shooting and then set Pilot order on {i}Keep distance{/i} and Engineer on {i}Full speed{/i}. If you are faster than enemy, you can end combat even without damage to your ship.
     3. Some factions will escape if you destroy weapon on theirs ships. This is useful if you meet a lot bigger ship than your.
 </entry>
- <entry index="movement" title=" 3. Ship movement">{u}Undocking from bases{/u}
-    Your ship starts docked to base. To move it, you must first give order {b}&quot;Undock&quot;{/b} from base, by clicking on {b}&quot;Undock&quot;{/b} button. To see other orders available for ship, press {GameKey 14} key (or first {GameKey 26} key for see game menu) for open orders menu.
-Each docking operation cost some money, depending on your ship size (bigger ships have bigger docking cost) and your reputation in that base. Same is with staying longer in base - for each day you pay this same price as for docking. Undocking from bases is free. You can't undock from the base if your ship is overloaded.
+ <entry index="movement" title=" 3. Ship movement">{u}Undocking from or docking to bases{/u}
+    Your ship starts docked to a base. To move it, you must first give order {b}&quot;Undock&quot;{/b} from the base, by clicking on {b}&quot;Undock&quot;{/b} button. To see other orders available for ship, press {GameKey 14} key (or first {GameKey 26} key for see game menu) for open Orders menu.
+Each docking operation cost some money, depending on your ship size (bigger ships have bigger docking cost) and your reputation in that base. Info about docking fee on the dock button shows the base cost (only ship size) of docking. Same is with staying longer in base - for each day you pay this same price as for docking. When you will undock from bases, you will be pay the docking fee. You can't undock from the base if your ship is overloaded or until you don't pay the docking fee.
 When you undocked from base, in this same menu, you can dock again.
 
 {u}Traveling{/u}
