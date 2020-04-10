@@ -75,6 +75,7 @@ package body Utils.UI is
    function AutoHideDialog return Boolean is
    -- ****
    begin
+      Set_No_Show_All(MessageBox, True);
       Hide(MessageBox);
       Source_Id := No_Source_Id;
       if Get_Object(Builder, "btnclose") /= null then
@@ -88,6 +89,7 @@ package body Utils.UI is
      (Self: access Gtk_Info_Bar_Record'Class; Response_Id: Glib.Gint) is
       pragma Unreferenced(Response_Id);
    begin
+      Set_No_Show_All(MessageBox, True);
       Hide(Self);
       Remove(Source_Id);
       Source_Id := No_Source_Id;
@@ -99,6 +101,7 @@ package body Utils.UI is
 
    procedure ShowDialog(Message: String) is
    begin
+      Set_No_Show_All(MessageBox, False);
       Set_Label
         (Gtk_Label(Get_Child(Gtk_Box(Get_Content_Area(MessageBox)), 0)),
          Message);

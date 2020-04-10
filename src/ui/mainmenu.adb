@@ -1864,6 +1864,7 @@ package body MainMenu is
             On_Response(MessageBox, HideDialog'Access);
             Set_Halign(MessageBox, Align_Center);
             Set_Valign(MessageBox, Align_Center);
+            Set_No_Show_All(MessageBox, True);
          end;
          Add_Overlay
            (Gtk_Overlay(Get_Object(Builder, "menuoverlay")), MessageBox);
