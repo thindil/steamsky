@@ -349,33 +349,6 @@ package body MainMenu is
          Grab_Focus(Get_Child_At(PlayerGrid, 1, 0));
       elsif User_Data = Get_Object(Builder, "btnback") then
          ShowMainMenu;
-      elsif User_Data = Get_Object(Builder, "btnhalloffame") then
-         declare
-            HofList: constant Gtk_List_Store :=
-              Gtk_List_Store(Get_Object(Builder, "hoflist"));
-            Iter: Gtk_Tree_Iter;
-         begin
-            Clear(HofList);
-            for I in HallOfFame_Array'Range loop
-               exit when HallOfFame_Array(I).Name = Null_Unbounded_String;
-               Append(HofList, Iter);
-               Set(HofList, Iter, 0, Gint(I));
-               Set(HofList, Iter, 1, To_String(HallOfFame_Array(I).Name));
-               Set(HofList, Iter, 2, Gint(HallOfFame_Array(I).Points));
-               Set
-                 (HofList, Iter, 3,
-                  To_String(HallOfFame_Array(I).DeathReason));
-            end loop;
-         end;
-         Set_Visible_Child_Name
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page2");
-         Grab_Focus
-           (Get_Child
-              (Gtk_Box
-                 (Get_Child_By_Name
-                    (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
-                     "page2")),
-               1));
       elsif User_Data = Get_Object(Builder, "btnloadgame") then
          RefreshSavesList;
          Set_Visible_Child_Name
@@ -1221,6 +1194,36 @@ package body MainMenu is
             1));
    end ShowNews;
 
+   -- ****if* MainMenu/ShowHallOfFame
+   -- FUNCTION
+   -- Show the game hall of fame
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked.
+   -- SOURCE
+   procedure ShowHallOfFame(Self: access Gtk_Button_Record'Class) is
+      MainMenuStack: constant Gtk_Stack :=
+        Gtk_Stack(Get_Parent(Get_Parent(Get_Parent(Self))));
+   begin
+      declare
+         HofList: constant Gtk_List_Store :=
+           Gtk_List_Store(Get_Object(Builder, "hoflist"));
+         Iter: Gtk_Tree_Iter;
+      begin
+         Clear(HofList);
+         for I in HallOfFame_Array'Range loop
+            exit when HallOfFame_Array(I).Name = Null_Unbounded_String;
+            Append(HofList, Iter);
+            Set(HofList, Iter, 0, Gint(I));
+            Set(HofList, Iter, 1, To_String(HallOfFame_Array(I).Name));
+            Set(HofList, Iter, 2, Gint(HallOfFame_Array(I).Points));
+            Set(HofList, Iter, 3, To_String(HallOfFame_Array(I).DeathReason));
+         end loop;
+      end;
+      Set_Visible_Child_Name(MainMenuStack, "page2");
+      Grab_Focus
+        (Get_Child(Gtk_Box(Get_Child_By_Name(MainMenuStack, "page2")), 1));
+   end ShowHallOfFame;
+
    procedure CreateMainMenu is
       Error: aliased GError;
       AdjValues: constant array(Positive range <>) of Gdouble :=
@@ -1259,9 +1262,6 @@ package body MainMenu is
       Set_Label
         (Gtk_Label(Get_Object(Builder, "lblversion")),
          GameVersion & " (development)");
-      if HallOfFame_Array(1).Name = Null_Unbounded_String then
-         Hide(Gtk_Widget(Get_Object(Builder, "btnhalloffame")));
-      end if;
       UpdateNews;
       DataError := To_Unbounded_String(LoadGameData);
       Setting := True;
@@ -1276,6 +1276,12 @@ package body MainMenu is
            Gtk_Button_Box(Get_Object(Builder, "mainmenubuttons"));
          Button: Gtk_Button;
       begin
+         Button := Gtk_Button_New_With_Mnemonic("_Hall of Fame");
+         On_Clicked(Button, ShowHallOfFame'Access);
+         Pack_Start(MainMenuButtons, Button);
+         if HallOfFame_Array(1).Name = Null_Unbounded_String then
+            Hide(Button);
+         end if;
          Button := Gtk_Button_New_With_Mnemonic("N_ews");
          On_Clicked(Button, ShowNews'Access);
          Pack_Start(MainMenuButtons, Button);
@@ -1869,7 +1875,9 @@ package body MainMenu is
          Hide(MessageBox);
       end if;
       if not Exists(To_String(SaveDirectory) & "halloffame.dat") then
-         Hide(Gtk_Widget(Get_Object(Builder, "btnhalloffame")));
+         Hide
+           (Get_Child
+              (Gtk_Button_Box(Get_Object(Builder, "mainmenubuttons")), 2));
       end if;
    end ShowMainMenu;
 
