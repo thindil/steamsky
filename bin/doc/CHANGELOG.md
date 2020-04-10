@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - Updated items and crafting recipes with reputation requirements
 - Selling items which are unavailable due to reputation requirements in bases
   gives more reputation in bases
+- Docking fee is taken during undocking from the bases
 
 ### Fixed
 - Possible crash on trading with a friendly trader (issue #67)
