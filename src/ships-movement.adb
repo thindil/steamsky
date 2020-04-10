@@ -261,6 +261,7 @@ package body Ships.Movement is
          PlayerShip.Speed := DOCKED;
          UpdateGame(10);
       else
+         PlayerShip.Speed := GameSettings.UndockSpeed;
          declare
             Speed: constant SpeedType :=
               (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
@@ -269,6 +270,7 @@ package body Ships.Movement is
                return "You can't undock because your ship is overloaded.";
             end if;
          end;
+         PlayerShip.Speed := DOCKED;
          declare
             MoneyIndex2: constant Natural :=
               FindItem(PlayerShip.Cargo, MoneyIndex);
