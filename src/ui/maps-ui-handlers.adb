@@ -280,22 +280,24 @@ package body Maps.UI.Handlers is
       Hide(Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
    end MoveMap;
 
-   procedure BtnDockClicked(Object: access Gtkada_Builder_Record'Class) is
+   procedure BtnDockClicked(User_Data: access GObject_Record'Class) is
       Message: Unbounded_String := Null_Unbounded_String;
    begin
       Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
       if PlayerShip.Speed = DOCKED then
-         Message := To_Unbounded_String(DockShip(False));
-         if Length(Message) > 0 then
-            ShowDialog(To_String(Message));
-            return;
+         if User_Data = Get_Object(Builder, "btndock") then
+            Message := To_Unbounded_String(DockShip(False));
+            if Length(Message) > 0 then
+               ShowDialog(To_String(Message));
+               return;
+            end if;
          end if;
       else
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
             if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
                 .EType =
               FullDocks then
-               ShowWaitOrders(Object);
+               ShowWaitOrders(Builder);
                return;
             end if;
          end if;
@@ -304,7 +306,7 @@ package body Maps.UI.Handlers is
             ShowDialog(To_String(Message));
             return;
          end if;
-         ShowOrders(Object);
+         ShowOrders(Builder);
       end if;
       ShowSkyMap;
    end BtnDockClicked;
@@ -622,6 +624,7 @@ package body Maps.UI.Handlers is
       if PlayerShip.Speed = DOCKED then
          Set_Label(Gtk_Button(Get_Object(Builder, "btndock")), "_Undock");
          Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btndock")), False);
+         Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btnescape")), False);
          if HaveTrader and SkyBases(BaseIndex).Population > 0 then
             Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btntrade")), False);
             Set_No_Show_All
@@ -751,6 +754,7 @@ package body Maps.UI.Handlers is
             Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btnloot")), False);
          end if;
       else
+         Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btnescape")), True);
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
             Event :=
               Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)

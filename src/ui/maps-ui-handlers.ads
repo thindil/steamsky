@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -87,9 +87,9 @@ package Maps.UI.Handlers is
    -- FUNCTION
    -- Dock/undock ship from base
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- User_Data - Button which was clicked
    -- SOURCE
-   procedure BtnDockClicked(Object: access Gtkada_Builder_Record'Class);
+   procedure BtnDockClicked(User_Data: access GObject_Record'Class);
    -- ****
 
    -- ****f* Maps.UI.Handlers/ChangeSpeed

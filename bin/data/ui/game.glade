@@ -371,12 +371,27 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="use_underline">True</property>
-        <signal name="clicked" handler="Dock_Ship" swapped="no"/>
+        <signal name="clicked" handler="Dock_Ship" object="btndock" swapped="no"/>
       </object>
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
         <property name="position">5</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btnescape">
+        <property name="label" translatable="yes">Esc_ape</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="use_underline">True</property>
+        <signal name="clicked" handler="Dock_Ship" object="btnescape" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">6</property>
       </packing>
     </child>
     <child>
@@ -391,7 +406,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">6</property>
+        <property name="position">7</property>
       </packing>
     </child>
     <child>
@@ -406,7 +421,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">7</property>
+        <property name="position">8</property>
       </packing>
     </child>
     <child>
@@ -421,7 +436,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">8</property>
+        <property name="position">9</property>
       </packing>
     </child>
     <child>
@@ -436,7 +451,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">9</property>
+        <property name="position">10</property>
       </packing>
     </child>
     <child>
@@ -451,7 +466,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">10</property>
+        <property name="position">11</property>
       </packing>
     </child>
     <child>
@@ -466,7 +481,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">11</property>
+        <property name="position">12</property>
       </packing>
     </child>
     <child>
@@ -481,7 +496,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">12</property>
+        <property name="position">13</property>
       </packing>
     </child>
     <child>
@@ -496,7 +511,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">13</property>
+        <property name="position">14</property>
       </packing>
     </child>
     <child>
@@ -511,7 +526,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">14</property>
+        <property name="position">15</property>
       </packing>
     </child>
     <child>
@@ -526,7 +541,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">15</property>
+        <property name="position">16</property>
       </packing>
     </child>
     <child>
@@ -541,7 +556,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">16</property>
+        <property name="position">17</property>
       </packing>
     </child>
     <child>
@@ -556,7 +571,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">17</property>
+        <property name="position">18</property>
       </packing>
     </child>
     <child>
@@ -571,7 +586,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">18</property>
+        <property name="position">19</property>
       </packing>
     </child>
     <child>
@@ -586,7 +601,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">19</property>
+        <property name="position">20</property>
       </packing>
     </child>
     <child>
@@ -601,7 +616,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <packing>
         <property name="expand">True</property>
         <property name="fill">True</property>
-        <property name="position">20</property>
+        <property name="position">21</property>
       </packing>
     </child>
   </object>
