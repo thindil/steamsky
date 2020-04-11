@@ -27,6 +27,8 @@ with Maps; use Maps;
 with Factions; use Factions;
 with Bases; use Bases;
 with ShipModules; use ShipModules;
+with Ships.Crew; use Ships.Crew;
+with Ada.Text_IO;
 
 package body Ships is
 
@@ -968,5 +970,64 @@ package body Ships is
             return "Palace room";
       end case;
    end GetCabinQuality;
+
+   procedure DamageModule
+     (Ship: in out ShipRecord; ModuleIndex, Damage: Positive;
+      DeathReason: String) is
+      RealDamage: Natural := Damage;
+      WeaponIndex: Natural;
+      procedure RemoveGun(ModuleIndex2: Positive) is
+      begin
+         if Ship.Modules(ModuleIndex2).Owner(1) > 0 then
+            Death
+              (Ship.Modules(ModuleIndex2).Owner(1),
+               To_Unbounded_String(DeathReason), Ship);
+         end if;
+      end RemoveGun;
+   begin
+      if Damage > Ship.Modules(ModuleIndex).Durability then
+         RealDamage := Ship.Modules(ModuleIndex).Durability;
+      end if;
+      Ship.Modules(ModuleIndex).Durability :=
+        Ship.Modules(ModuleIndex).Durability - RealDamage;
+      if Ship.Modules(ModuleIndex).Durability = 0 then
+         case Modules_List(Ship.Modules(ModuleIndex).ProtoIndex).MType is
+            when HULL | ENGINE =>
+               Ada.Text_IO.Put_Line("hull");
+               if Ship = PlayerShip then
+                  Death(1, To_Unbounded_String(DeathReason), PlayerShip);
+               end if;
+            when TURRET =>
+               Ada.Text_IO.Put_Line("turret");
+               WeaponIndex := Ship.Modules(ModuleIndex).GunIndex;
+               if WeaponIndex > 0 then
+                  Ship.Modules(WeaponIndex).Durability := 0;
+                  RemoveGun(WeaponIndex);
+               end if;
+            when GUN =>
+               Ada.Text_IO.Put_Line("gun");
+               RemoveGun(ModuleIndex);
+            when CABIN =>
+               Ada.Text_IO.Put_Line("cabin");
+               for Owner of Ship.Modules(ModuleIndex).Owner loop
+                  if Owner > 0 and then Ship.Crew(Owner).Order = Rest then
+                     Death(Owner, To_Unbounded_String(DeathReason), Ship);
+                  end if;
+               end loop;
+            when others =>
+               Ada.Text_IO.Put_Line("other");
+               if Ship.Modules(ModuleIndex).Owner.Length > 0 then
+                  if Ship.Modules(ModuleIndex).Owner(1) > 0
+                    and then
+                      Ship.Crew(Ship.Modules(ModuleIndex).Owner(1)).Order /=
+                      Rest then
+                     Death
+                       (Ship.Modules(ModuleIndex).Owner(1),
+                        To_Unbounded_String(DeathReason), Ship);
+                  end if;
+               end if;
+         end case;
+      end if;
+   end DamageModule;
 
 end Ships;
