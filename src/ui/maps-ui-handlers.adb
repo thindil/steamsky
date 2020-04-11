@@ -287,10 +287,12 @@ package body Maps.UI.Handlers is
       if PlayerShip.Speed = DOCKED then
          if User_Data = Get_Object(Builder, "btndock") then
             Message := To_Unbounded_String(DockShip(False));
-            if Length(Message) > 0 then
-               ShowDialog(To_String(Message));
-               return;
-            end if;
+         else
+            Message := To_Unbounded_String(DockShip(False, True));
+         end if;
+         if Length(Message) > 0 then
+            ShowDialog(To_String(Message));
+            return;
          end if;
       else
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
