@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -43,11 +43,13 @@ package Ships.Movement is
       -- Dock/Undock ship at base
       -- PARAMETERS
       -- Docking - If true, ship docks to the base, otherwise false
+      -- Escape  - If true, the player is trying to escape from the base
+      --           without paying. Default value is False
       -- RESULT
       -- Empty string if operation was succesfull, otherwise message what goes
       -- wrong
       -- SOURCE
-   function DockShip(Docking: Boolean) return String with
+   function DockShip(Docking: Boolean; Escape: Boolean := False) return String with
       Test_Case => ("Test_DockShip", Robustness);
       -- ****
 

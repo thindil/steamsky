@@ -20,8 +20,10 @@ with Ships.Crew; use Ships.Crew;
 with Statistics; use Statistics;
 with Maps; use Maps;
 with Messages; use Messages;
+with Combat; use Combat;
 with Config; use Config;
 with Bases; use Bases;
+with Events; use Events;
 with Utils; use Utils;
 with Factions; use Factions;
 with Game.SaveLoad; use Game.SaveLoad;
@@ -201,7 +203,8 @@ package body Ships.Movement is
       return 1;
    end MoveShip;
 
-   function DockShip(Docking: Boolean) return String is
+   function DockShip
+     (Docking: Boolean; Escape: Boolean := False) return String is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Message: Unbounded_String;
@@ -271,50 +274,87 @@ package body Ships.Movement is
             end if;
          end;
          PlayerShip.Speed := DOCKED;
-         declare
-            MoneyIndex2: constant Natural :=
-              FindItem(PlayerShip.Cargo, MoneyIndex);
-            DockingCost, FuelIndex: Natural;
-            TraderIndex: constant Natural := FindMember(Talk);
-         begin
-            if MoneyIndex2 = 0 then
-               return "You can't undock from this base because you don't have any " &
-                 To_String(MoneyName) & " to pay for docking.";
-            end if;
-            for Module of PlayerShip.Modules loop
-               if Module.MType = HULL then
-                  DockingCost := Module.MaxModules;
-                  exit;
+         if not Escape then
+            declare
+               MoneyIndex2: constant Natural :=
+                 FindItem(PlayerShip.Cargo, MoneyIndex);
+               DockingCost, FuelIndex: Natural;
+               TraderIndex: constant Natural := FindMember(Talk);
+            begin
+               if MoneyIndex2 = 0 then
+                  return "You can't undock from this base because you don't have any " &
+                    To_String(MoneyName) & " to pay for docking.";
                end if;
-            end loop;
-            DockingCost :=
-              Natural(Float(DockingCost) * NewGameSettings.PricesBonus);
-            if DockingCost = 0 then
-               DockingCost := 1;
-            end if;
-            CountPrice(DockingCost, TraderIndex);
-            if DockingCost > PlayerShip.Cargo(MoneyIndex2).Amount then
-               return "You can't undock to this base because you don't have enough " &
-                 To_String(MoneyName) & " to pay for docking.";
-            end if;
-            UpdateCargo
-              (Ship => PlayerShip, CargoIndex => MoneyIndex2,
-               Amount => (0 - DockingCost));
-            if TraderIndex > 0 then
-               GainExp(1, TalkingSkill, TraderIndex);
-            end if;
-            FuelIndex :=
-              FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
-            if FuelIndex = 0 then
-               return "You can't undock from base because you don't have any fuel.";
-            end if;
-            AddMessage
-              ("Ship undocked from base " &
-               To_String(SkyBases(BaseIndex).Name) & ". You also paid" &
-               Positive'Image(DockingCost) & " " & To_String(MoneyName) &
-               " of docking fee.",
-               OrderMessage);
-         end;
+               for Module of PlayerShip.Modules loop
+                  if Module.MType = HULL then
+                     DockingCost := Module.MaxModules;
+                     exit;
+                  end if;
+               end loop;
+               DockingCost :=
+                 Natural(Float(DockingCost) * NewGameSettings.PricesBonus);
+               if DockingCost = 0 then
+                  DockingCost := 1;
+               end if;
+               CountPrice(DockingCost, TraderIndex);
+               if DockingCost > PlayerShip.Cargo(MoneyIndex2).Amount then
+                  return "You can't undock to this base because you don't have enough " &
+                    To_String(MoneyName) & " to pay for docking.";
+               end if;
+               UpdateCargo
+                 (Ship => PlayerShip, CargoIndex => MoneyIndex2,
+                  Amount => (0 - DockingCost));
+               if TraderIndex > 0 then
+                  GainExp(1, TalkingSkill, TraderIndex);
+               end if;
+               FuelIndex :=
+                 FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType);
+               if FuelIndex = 0 then
+                  return "You can't undock from base because you don't have any fuel.";
+               end if;
+               AddMessage
+                 ("Ship undocked from base " &
+                  To_String(SkyBases(BaseIndex).Name) & ". You also paid" &
+                  Positive'Image(DockingCost) & " " & To_String(MoneyName) &
+                  " of docking fee.",
+                  OrderMessage);
+            end;
+         else
+            declare
+               Roll: constant Integer := GetRandom(1, 100);
+               Index: Integer;
+               Enemies: UnboundedString_Container.Vector;
+               MessageText: Unbounded_String;
+            begin
+               MessageText := To_Unbounded_String("Ship escaped from base " &
+                  To_String(SkyBases(BaseIndex).Name) & " without paying.");
+               case Roll is
+                  when 1 .. 20 =>
+                     Index :=
+                       GetRandom
+                         (PlayerShip.Modules.First_Index,
+                          PlayerShip.Modules.Last_Index);
+                  when 21 .. 40 =>
+                     GenerateEnemies
+                       (Enemies, SkyBases(BaseIndex).Owner, False);
+                     Events_List.Append
+                       (New_Item =>
+                          (EnemyPatrol, PlayerShip.SkyX, PlayerShip.SkyY,
+                           GetRandom(30, 45),
+                           Enemies
+                             (GetRandom
+                                (Enemies.First_Index, Enemies.Last_Index))));
+                     SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
+                       Events_List.Last_Index;
+                     if StartCombat
+                         (Events_List(Events_List.Last_Index).ShipIndex) then
+                         null;
+                     end if;
+                  when others =>
+                     null;
+               end case;
+            end;
+         end if;
          PlayerShip.Speed := GameSettings.UndockSpeed;
          UpdateGame(5);
          if GameSettings.AutoSave = UNDOCK then
