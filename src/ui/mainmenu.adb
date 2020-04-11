@@ -349,31 +349,6 @@ package body MainMenu is
          Grab_Focus(Get_Child_At(PlayerGrid, 1, 0));
       elsif User_Data = Get_Object(Builder, "btnback") then
          ShowMainMenu;
-      elsif User_Data = Get_Object(Builder, "btnloadgame") then
-         RefreshSavesList;
-         Set_Visible_Child_Name
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page6");
-         Grab_Focus
-           (Get_Child
-              (Gtk_Box
-                 (Get_Child
-                    (Gtk_Box
-                       (Get_Child_By_Name
-                          (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
-                           "page6")),
-                     1)),
-               1));
-         Set_Cursor
-           (Gtk_Tree_View
-              (Get_Child
-                 (Gtk_Scrolled_Window
-                    (Get_Child
-                       (Gtk_Box
-                          (Get_Child_By_Name
-                             (Gtk_Stack(Get_Object(Builder, "mainmenustack")),
-                              "page6")),
-                        0)))),
-            Gtk_Tree_Path_New_From_String("0"), null, False);
       end if;
    end ShowPage;
 
@@ -1224,6 +1199,33 @@ package body MainMenu is
         (Get_Child(Gtk_Box(Get_Child_By_Name(MainMenuStack, "page2")), 1));
    end ShowHallOfFame;
 
+   -- ****if* MainMenu/ShowLoadGame
+   -- FUNCTION
+   -- Show list of saved games
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked.
+   -- SOURCE
+   procedure ShowLoadGame(Self: access Gtk_Button_Record'Class) is
+      MainMenuStack: constant Gtk_Stack :=
+        Gtk_Stack(Get_Parent(Get_Parent(Get_Parent(Self))));
+   begin
+      RefreshSavesList;
+      Set_Visible_Child_Name(MainMenuStack, "page6");
+      Grab_Focus
+        (Get_Child
+           (Gtk_Box
+              (Get_Child
+                 (Gtk_Box(Get_Child_By_Name(MainMenuStack, "page6")), 1)),
+            1));
+      Set_Cursor
+        (Gtk_Tree_View
+           (Get_Child
+              (Gtk_Scrolled_Window
+                 (Get_Child
+                    (Gtk_Box(Get_Child_By_Name(MainMenuStack, "page6")), 0)))),
+         Gtk_Tree_Path_New_From_String("0"), null, False);
+   end ShowLoadGame;
+
    procedure CreateMainMenu is
       Error: aliased GError;
       AdjValues: constant array(Positive range <>) of Gdouble :=
@@ -1237,6 +1239,8 @@ package body MainMenu is
          Gdouble(NewGameSettings.PricesBonus));
       Accelerators: constant Gtk_Accel_Group := Gtk_Accel_Group_New;
       FactionComboBox: constant Gtk_Combo_Box_Text := Gtk_Combo_Box_Text_New;
+      LoadButton: constant Gtk_Button :=
+        Gtk_Button_New_With_Mnemonic("_Load game");
    begin
       LoadThemes;
       SetFontSize(ALLFONTS);
@@ -1276,6 +1280,8 @@ package body MainMenu is
            Gtk_Button_Box(Get_Object(Builder, "mainmenubuttons"));
          Button: Gtk_Button;
       begin
+         On_Clicked(LoadButton, ShowLoadGame'Access);
+         Pack_Start(MainMenuButtons, LoadButton);
          Button := Gtk_Button_New_With_Mnemonic("_Hall of Fame");
          On_Clicked(Button, ShowHallOfFame'Access);
          Pack_Start(MainMenuButtons, Button);
@@ -1810,14 +1816,14 @@ package body MainMenu is
       Add_Accel_Group(MainMenuWindow, Accelerators);
       ShowMainMenu;
       if DataError /= Null_Unbounded_String then
-         Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
+         Hide(LoadButton);
          Hide(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
          ShowDialog
            ("Can't load game data files. Error: " & To_String(DataError));
          return;
       end if;
       if not Is_Write_Accessible_File(To_String(SaveDirectory)) then
-         Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
+         Hide(LoadButton);
          Hide(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
          ShowDialog
            ("Directory " & To_String(SaveDirectory) &
@@ -1837,16 +1843,18 @@ package body MainMenu is
 
    procedure ShowMainMenu is
       Files: Search_Type;
+      ButtonsBox: constant Gtk_Button_Box :=
+        Gtk_Button_Box(Get_Object(Builder, "mainmenubuttons"));
    begin
       Show_All(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page0");
       Start_Search(Files, To_String(SaveDirectory), "*.sav");
       if not More_Entries(Files) then
-         Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
+         Hide(Get_Child(ButtonsBox, 1));
          Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
       else
-         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
+         Grab_Focus(Get_Child(ButtonsBox, 1));
       end if;
       End_Search(Files);
       if MessageBox = null then
@@ -1870,15 +1878,13 @@ package body MainMenu is
            (Gtk_Overlay(Get_Object(Builder, "menuoverlay")), MessageBox);
       end if;
       if DataError /= Null_Unbounded_String then
-         Hide(Gtk_Widget(Get_Object(Builder, "btnloadgame")));
+         Hide(Get_Child(ButtonsBox, 1));
          Hide(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
       else
          Hide(MessageBox);
       end if;
       if not Exists(To_String(SaveDirectory) & "halloffame.dat") then
-         Hide
-           (Get_Child
-              (Gtk_Button_Box(Get_Object(Builder, "mainmenubuttons")), 2));
+         Hide(Get_Child(ButtonsBox, 2));
       end if;
    end ShowMainMenu;
 
