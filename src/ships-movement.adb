@@ -20,7 +20,6 @@ with Ships.Crew; use Ships.Crew;
 with Statistics; use Statistics;
 with Maps; use Maps;
 with Messages; use Messages;
-with Combat; use Combat;
 with Config; use Config;
 with Bases; use Bases;
 with Events; use Events;
@@ -322,37 +321,34 @@ package body Ships.Movement is
          else
             declare
                Roll: constant Integer := GetRandom(1, 100);
-               Index: Integer;
-               Enemies: UnboundedString_Container.Vector;
                MessageText: Unbounded_String;
+               Color: Message_Color := WHITE;
+               ModuleIndex: Positive;
             begin
-               MessageText := To_Unbounded_String("Ship escaped from base " &
-                  To_String(SkyBases(BaseIndex).Name) & " without paying.");
+               MessageText :=
+                 To_Unbounded_String
+                   ("Ship escaped from base " &
+                    To_String(SkyBases(BaseIndex).Name) & " without paying.");
                case Roll is
-                  when 1 .. 20 =>
-                     Index :=
+                  when 1 .. 40 =>
+                     ModuleIndex :=
                        GetRandom
                          (PlayerShip.Modules.First_Index,
                           PlayerShip.Modules.Last_Index);
-                  when 21 .. 40 =>
-                     GenerateEnemies
-                       (Enemies, SkyBases(BaseIndex).Owner, False);
-                     Events_List.Append
-                       (New_Item =>
-                          (EnemyPatrol, PlayerShip.SkyX, PlayerShip.SkyY,
-                           GetRandom(30, 45),
-                           Enemies
-                             (GetRandom
-                                (Enemies.First_Index, Enemies.Last_Index))));
-                     SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
-                       Events_List.Last_Index;
-                     if StartCombat
-                         (Events_List(Events_List.Last_Index).ShipIndex) then
-                         null;
-                     end if;
+                     Append
+                       (MessageText,
+                        " But your ship (" &
+                        To_String(PlayerShip.Modules(ModuleIndex).Name) &
+                        ") takes damage.");
+                     Color := RED;
+                     DamageModule
+                       (PlayerShip, ModuleIndex, GetRandom(1, 30),
+                        "escaping from the base");
                   when others =>
                      null;
                end case;
+               AddMessage(To_String(MessageText), OrderMessage, Color);
+               GainRep(BaseIndex, -(GetRandom(100, 200)));
             end;
          end if;
          PlayerShip.Speed := GameSettings.UndockSpeed;
