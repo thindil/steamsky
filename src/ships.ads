@@ -386,4 +386,23 @@ package Ships is
       Test_Case => ("Test_GetCabinQuality", Robustness);
       -- ****
 
+      -- ****f* Ships/DamageModule
+      -- FUNCTION
+      -- Damage the selected module
+      -- PARAMETERS
+      -- Ship        - Ship in which the module will be damaged
+      -- ModuleIndex - Index of the module to damage
+      -- Damage      - Amount of damage which the module will take
+      -- DeathReason - If module has owner, reason of owner's death
+      --               if module will be destroyed
+      -- TODO
+      -- Add unit test
+      -- SOURCE
+   procedure DamageModule
+     (Ship: in out ShipRecord; ModuleIndex, Damage: Positive;
+      DeathReason: String) with
+      Pre => ModuleIndex in
+        Ship.Modules.First_Index .. Ship.Modules.Last_Index;
+      -- ****
+
 end Ships;

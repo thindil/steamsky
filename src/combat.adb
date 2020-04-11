@@ -292,17 +292,11 @@ package body Combat is
          HitChance, HitLocation, CurrentAccuracyBonus: Integer;
          Damage: DamageFactor := 0.0;
          WeaponDamage: Integer;
-         DeathReason: Unbounded_String;
          EnemyNameOwner: constant Unbounded_String :=
            EnemyName & To_Unbounded_String(" (") & FactionName &
            To_Unbounded_String(")");
          procedure RemoveGun(ModuleIndex: Positive) is
          begin
-            if EnemyShip.Modules(ModuleIndex).Owner(1) > 0 then
-               Death
-                 (EnemyShip.Modules(ModuleIndex).Owner(1), DeathReason,
-                  EnemyShip);
-            end if;
             if EnemyShip = PlayerShip then
                for J in Guns.First_Index .. Guns.Last_Index loop
                   if Guns(J)(1) = ModuleIndex then
@@ -717,28 +711,13 @@ package body Combat is
                            end if;
                         end if;
                      end if;
-                     if WeaponDamage >
-                       EnemyShip.Modules(HitLocation).Durability then
-                        WeaponDamage :=
-                          EnemyShip.Modules(HitLocation).Durability;
-                     end if;
-                     EnemyShip.Modules(HitLocation).Durability :=
-                       EnemyShip.Modules(HitLocation).Durability -
-                       WeaponDamage;
-                     if EnemyShip.Modules(HitLocation).Durability = 0 then
-                        DeathReason :=
-                          To_Unbounded_String("enemy fire in ships combat");
-                        case Modules_List
-                          (EnemyShip.Modules(HitLocation).ProtoIndex)
+                     DamageModule
+                       (EnemyShip, HitLocation, WeaponDamage,
+                        "enemy fire in ship combat");
+                     if EnemyShip.Modules(HitLocation).Durability = 0 and
+                       EnemyShip = PlayerShip then
+                        case Modules_List(Ship.Modules(HitLocation).ProtoIndex)
                           .MType is
-                           when HULL | ENGINE =>
-                              EndCombat := True;
-                              if Ship /= PlayerShip then
-                                 DeathReason :=
-                                   To_Unbounded_String
-                                     ("ship explosion in ships combat");
-                                 Death(1, DeathReason, PlayerShip);
-                              end if;
                            when TURRET =>
                               WeaponIndex :=
                                 EnemyShip.Modules(HitLocation).GunIndex;
@@ -749,30 +728,8 @@ package body Combat is
                               end if;
                            when GUN =>
                               RemoveGun(HitLocation);
-                           when CABIN =>
-                              for Owner of EnemyShip.Modules(HitLocation)
-                                .Owner loop
-                                 if Owner > 0
-                                   and then EnemyShip.Crew(Owner).Order =
-                                     Rest then
-                                    Death(Owner, DeathReason, EnemyShip);
-                                 end if;
-                              end loop;
                            when others =>
-                              if EnemyShip.Modules(HitLocation).Owner.Length >
-                                0 then
-                                 if EnemyShip.Modules(HitLocation).Owner(1) > 0
-                                   and then
-                                     EnemyShip.Crew
-                                       (EnemyShip.Modules(HitLocation).Owner
-                                          (1))
-                                       .Order /=
-                                     Rest then
-                                    Death
-                                      (EnemyShip.Modules(HitLocation).Owner(1),
-                                       DeathReason, EnemyShip);
-                                 end if;
-                              end if;
+                              null;
                         end case;
                      end if;
                      if Ship = PlayerShip then
