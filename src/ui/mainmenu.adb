@@ -283,74 +283,70 @@ package body MainMenu is
       return False;
    end SetBaseType;
 
-   -- ****if* MainMenu/ShowPage
+   -- ****if* MainMenu/ShowNewGame
    -- FUNCTION
-   -- Show selected page to the player
+   -- Show the new game setting page
    -- PARAMETERS
-   -- User_Data - Button pressed
+   -- Self - Gtk_Button which was clicked.
    -- SOURCE
-   procedure ShowPage(User_Data: access GObject_Record'Class) is
+   procedure ShowNewGame(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
       -- ****
       PlayerGrid: constant Gtk_Grid :=
         Gtk_Grid(Get_Child_By_Name(NewGameStack, "page0"));
    begin
-      if User_Data = Get_Object(Builder, "btnnewgame") then
-         if Get_Text(Gtk_GEntry(Get_Child_At(PlayerGrid, 1, 0))) = "" then
-            Set_Text
-              (Gtk_Entry(Get_Child_At(PlayerGrid, 1, 0)),
-               To_String(NewGameSettings.PlayerName));
-         end if;
-         if Get_Text(Gtk_GEntry(Get_Child_At(PlayerGrid, 1, 2))) = "" then
-            Set_Text
-              (Gtk_Entry(Get_Child_At(PlayerGrid, 1, 2)),
-               To_String(NewGameSettings.ShipName));
-         end if;
-         if NewGameSettings.PlayerGender = 'M' then
-            Set_Active(Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 1)), 0);
-         else
-            Set_Active(Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 1)), 1);
-         end if;
-         if not Set_Active_Id
-             (Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 4)),
-              To_String(NewGameSettings.PlayerFaction)) then
-            return;
-         end if;
-         if Factions_Container.Contains
-             (Factions_List, NewGameSettings.PlayerFaction) then
-            for I in Factions_List(NewGameSettings.PlayerFaction).Careers
-              .Iterate loop
-               if Careers_Container.Key(I) = NewGameSettings.PlayerCareer then
-                  if not Set_Active_Id
-                      (Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 5)),
-                       To_String(Careers_Container.Key(I))) then
-                     return;
-                  end if;
-                  exit;
-               end if;
-            end loop;
-         end if;
-         if NewGameSettings.StartingBase /= "Any" then
-            for I in BasesTypes_List.Iterate loop
-               if BasesTypes_Container.Key(I) =
-                 NewGameSettings.StartingBase then
-                  BaseTypeName := BasesTypes_List(I).Name;
-                  exit;
-               end if;
-            end loop;
-            Foreach
-              (Gtk_List_Store(Get_Object(Builder, "basesstore")),
-               SetBaseType'Access);
-         else
-            Set_Active(Gtk_Combo_Box(Get_Child_At(PlayerGrid, 1, 6)), 0);
-         end if;
-         CreateGoalsMenu;
-         Set_Visible_Child_Name
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page1");
-         Grab_Focus(Get_Child_At(PlayerGrid, 1, 0));
-      elsif User_Data = Get_Object(Builder, "btnback") then
-         ShowMainMenu;
+      if Get_Text(Gtk_GEntry(Get_Child_At(PlayerGrid, 1, 0))) = "" then
+         Set_Text
+           (Gtk_Entry(Get_Child_At(PlayerGrid, 1, 0)),
+            To_String(NewGameSettings.PlayerName));
       end if;
-   end ShowPage;
+      if Get_Text(Gtk_GEntry(Get_Child_At(PlayerGrid, 1, 2))) = "" then
+         Set_Text
+           (Gtk_Entry(Get_Child_At(PlayerGrid, 1, 2)),
+            To_String(NewGameSettings.ShipName));
+      end if;
+      if NewGameSettings.PlayerGender = 'M' then
+         Set_Active(Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 1)), 0);
+      else
+         Set_Active(Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 1)), 1);
+      end if;
+      if not Set_Active_Id
+          (Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 4)),
+           To_String(NewGameSettings.PlayerFaction)) then
+         return;
+      end if;
+      if Factions_Container.Contains
+          (Factions_List, NewGameSettings.PlayerFaction) then
+         for I in Factions_List(NewGameSettings.PlayerFaction).Careers
+           .Iterate loop
+            if Careers_Container.Key(I) = NewGameSettings.PlayerCareer then
+               if not Set_Active_Id
+                   (Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 5)),
+                    To_String(Careers_Container.Key(I))) then
+                  return;
+               end if;
+               exit;
+            end if;
+         end loop;
+      end if;
+      if NewGameSettings.StartingBase /= "Any" then
+         for I in BasesTypes_List.Iterate loop
+            if BasesTypes_Container.Key(I) = NewGameSettings.StartingBase then
+               BaseTypeName := BasesTypes_List(I).Name;
+               exit;
+            end if;
+         end loop;
+         Foreach
+           (Gtk_List_Store(Get_Object(Builder, "basesstore")),
+            SetBaseType'Access);
+      else
+         Set_Active(Gtk_Combo_Box(Get_Child_At(PlayerGrid, 1, 6)), 0);
+      end if;
+      CreateGoalsMenu;
+      Set_Visible_Child_Name
+        (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page1");
+      Grab_Focus(Get_Child_At(PlayerGrid, 1, 0));
+   end ShowNewGame;
 
    -- ****if* MainMenu/UpdateNews
    -- FUNCTION
@@ -633,7 +629,7 @@ package body MainMenu is
       Delete_File(To_String(SaveName));
       RefreshSavesList;
       if N_Children(SavesModel) = 0 then
-         ShowPage(Get_Object(Builder, "btnback"));
+         ShowMainMenu;
       else
          Set_Cursor
            (TreeSaves, Gtk_Tree_Path_New_From_String("0"), null, False);
@@ -1241,6 +1237,8 @@ package body MainMenu is
       FactionComboBox: constant Gtk_Combo_Box_Text := Gtk_Combo_Box_Text_New;
       LoadButton: constant Gtk_Button :=
         Gtk_Button_New_With_Mnemonic("_Load game");
+      NewGameButton: constant Gtk_Button :=
+        Gtk_Button_New_With_Mnemonic("_New game");
    begin
       LoadThemes;
       SetFontSize(ALLFONTS);
@@ -1257,7 +1255,6 @@ package body MainMenu is
       CreateErrorUI(MainMenuWindow);
       Register_Handler(Builder, "Main_Quit", Quit'Access);
       Register_Handler(Builder, "Hide_Window", HideWindow'Access);
-      Register_Handler(Builder, "Show_Page", ShowPage'Access);
       Register_Handler(Builder, "Update_Info", UpdateInfo'Access);
       Register_Handler(Builder, "Update_Info_Proc", UpdateInfoProc'Access);
       Register_Handler(Builder, "Update_Summary", UpdateSummary'Access);
@@ -1280,6 +1277,8 @@ package body MainMenu is
            Gtk_Button_Box(Get_Object(Builder, "mainmenubuttons"));
          Button: Gtk_Button;
       begin
+         On_Clicked(NewGameButton, ShowNewGame'Access);
+         Pack_Start(MainMenuButtons, NewGameButton);
          On_Clicked(LoadButton, ShowLoadGame'Access);
          Pack_Start(MainMenuButtons, LoadButton);
          Button := Gtk_Button_New_With_Mnemonic("_Hall of Fame");
@@ -1817,14 +1816,14 @@ package body MainMenu is
       ShowMainMenu;
       if DataError /= Null_Unbounded_String then
          Hide(LoadButton);
-         Hide(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
+         Hide(NewGameButton);
          ShowDialog
            ("Can't load game data files. Error: " & To_String(DataError));
          return;
       end if;
       if not Is_Write_Accessible_File(To_String(SaveDirectory)) then
          Hide(LoadButton);
-         Hide(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
+         Hide(NewGameButton);
          ShowDialog
            ("Directory " & To_String(SaveDirectory) &
             " is not write accessible, thus save games cannot be saved.");
@@ -1852,7 +1851,7 @@ package body MainMenu is
       Start_Search(Files, To_String(SaveDirectory), "*.sav");
       if not More_Entries(Files) then
          Hide(Get_Child(ButtonsBox, 1));
-         Grab_Focus(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
+         Grab_Focus(Get_Child(ButtonsBox, 0));
       else
          Grab_Focus(Get_Child(ButtonsBox, 1));
       end if;
@@ -1879,7 +1878,7 @@ package body MainMenu is
       end if;
       if DataError /= Null_Unbounded_String then
          Hide(Get_Child(ButtonsBox, 1));
-         Hide(Gtk_Widget(Get_Object(Builder, "btnnewgame")));
+         Hide(Get_Child(ButtonsBox, 0));
       else
          Hide(MessageBox);
       end if;
