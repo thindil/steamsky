@@ -714,20 +714,27 @@ package body Combat is
                      DamageModule
                        (EnemyShip, HitLocation, WeaponDamage,
                         "enemy fire in ship combat");
-                     if EnemyShip.Modules(HitLocation).Durability = 0 and
-                       EnemyShip = PlayerShip then
-                        case Modules_List(Ship.Modules(HitLocation).ProtoIndex)
+                     if EnemyShip.Modules(HitLocation).Durability = 0 then
+                        case Modules_List
+                          (EnemyShip.Modules(HitLocation).ProtoIndex)
                           .MType is
+                           when HULL | ENGINE =>
+                              EndCombat := True;
                            when TURRET =>
-                              WeaponIndex :=
-                                EnemyShip.Modules(HitLocation).GunIndex;
-                              if WeaponIndex > 0 then
-                                 EnemyShip.Modules(WeaponIndex).Durability :=
-                                   0;
-                                 RemoveGun(WeaponIndex);
+                              if EnemyShip = PlayerShip then
+                                 WeaponIndex :=
+                                   EnemyShip.Modules(HitLocation).GunIndex;
+                                 if WeaponIndex > 0 then
+                                    EnemyShip.Modules(WeaponIndex)
+                                      .Durability :=
+                                      0;
+                                    RemoveGun(WeaponIndex);
+                                 end if;
                               end if;
                            when GUN =>
-                              RemoveGun(HitLocation);
+                              if EnemyShip = PlayerShip then
+                                 RemoveGun(HitLocation);
+                              end if;
                            when others =>
                               null;
                         end case;
