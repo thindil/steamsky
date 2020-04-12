@@ -28,7 +28,6 @@ with Factions; use Factions;
 with Bases; use Bases;
 with ShipModules; use ShipModules;
 with Ships.Crew; use Ships.Crew;
-with Ada.Text_IO;
 
 package body Ships is
 
@@ -993,29 +992,24 @@ package body Ships is
       if Ship.Modules(ModuleIndex).Durability = 0 then
          case Modules_List(Ship.Modules(ModuleIndex).ProtoIndex).MType is
             when HULL | ENGINE =>
-               Ada.Text_IO.Put_Line("hull");
                if Ship = PlayerShip then
                   Death(1, To_Unbounded_String(DeathReason), PlayerShip);
                end if;
             when TURRET =>
-               Ada.Text_IO.Put_Line("turret");
                WeaponIndex := Ship.Modules(ModuleIndex).GunIndex;
                if WeaponIndex > 0 then
                   Ship.Modules(WeaponIndex).Durability := 0;
                   RemoveGun(WeaponIndex);
                end if;
             when GUN =>
-               Ada.Text_IO.Put_Line("gun");
                RemoveGun(ModuleIndex);
             when CABIN =>
-               Ada.Text_IO.Put_Line("cabin");
                for Owner of Ship.Modules(ModuleIndex).Owner loop
                   if Owner > 0 and then Ship.Crew(Owner).Order = Rest then
                      Death(Owner, To_Unbounded_String(DeathReason), Ship);
                   end if;
                end loop;
             when others =>
-               Ada.Text_IO.Put_Line("other");
                if Ship.Modules(ModuleIndex).Owner.Length > 0 then
                   if Ship.Modules(ModuleIndex).Owner(1) > 0
                     and then
