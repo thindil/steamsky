@@ -21,7 +21,7 @@ All notable changes to this project will be documented in this file.
 - Better info about why crew member wasn't healed
 - New goals: gain max reputation in 1 undead base, gain max reputation in 3
   undead bases, gain max reputation in 5 undead bases, gain max reputation in
-  1 drones base
+  1 drones base, gain max reputation in 3 drones bases
 - Info about docking cost before dock to a base
 
 ### Changed
