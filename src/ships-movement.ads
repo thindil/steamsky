@@ -49,7 +49,8 @@ package Ships.Movement is
       -- Empty string if operation was succesfull, otherwise message what goes
       -- wrong
       -- SOURCE
-   function DockShip(Docking: Boolean; Escape: Boolean := False) return String with
+   function DockShip
+     (Docking: Boolean; Escape: Boolean := False) return String with
       Test_Case => ("Test_DockShip", Robustness);
       -- ****
 

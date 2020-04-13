@@ -343,18 +343,20 @@ package body Ships.Movement is
                      Color := RED;
                      DamageModule
                        (PlayerShip, ModuleIndex, GetRandom(1, 30),
-                        "escaping from the base");
+                        "damage during escaping from the base");
                   when others =>
                      null;
                end case;
                AddMessage(To_String(MessageText), OrderMessage, Color);
-               GainRep(BaseIndex, -(GetRandom(100, 200)));
+               GainRep(BaseIndex, -(GetRandom(50, 100)));
             end;
          end if;
-         PlayerShip.Speed := GameSettings.UndockSpeed;
-         UpdateGame(5);
-         if GameSettings.AutoSave = UNDOCK then
-            SaveGame;
+         if PlayerShip.Crew(1).Health > 0 then
+            PlayerShip.Speed := GameSettings.UndockSpeed;
+            UpdateGame(5);
+            if GameSettings.AutoSave = UNDOCK then
+               SaveGame;
+            end if;
          end if;
       end if;
       return "";
