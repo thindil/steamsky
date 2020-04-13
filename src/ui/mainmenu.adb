@@ -1273,8 +1273,10 @@ package body MainMenu is
       end loop;
       Setting := False;
       declare
+         MainMenuBox: constant Gtk_Vbox :=
+           Gtk_Vbox(Get_Object(Builder, "mainmenubox"));
          MainMenuButtons: constant Gtk_Button_Box :=
-           Gtk_Button_Box(Get_Object(Builder, "mainmenubuttons"));
+           Gtk_Button_Box_New(Orientation_Vertical);
          Button: Gtk_Button;
       begin
          On_Clicked(NewGameButton, ShowNewGame'Access);
@@ -1296,6 +1298,7 @@ package body MainMenu is
          Button := Gtk_Button_New_With_Mnemonic("_Quit game");
          On_Clicked(Button, QuitGame'Access);
          Pack_Start(MainMenuButtons, Button);
+         Pack_Start(MainMenuBox, MainMenuButtons, False);
       end;
       declare
          NewGameBox: constant Gtk_Vbox := Gtk_Vbox_New;
@@ -1843,7 +1846,8 @@ package body MainMenu is
    procedure ShowMainMenu is
       Files: Search_Type;
       ButtonsBox: constant Gtk_Button_Box :=
-        Gtk_Button_Box(Get_Object(Builder, "mainmenubuttons"));
+        Gtk_Button_Box
+          (Get_Child(Gtk_Box(Get_Object(Builder, "mainmenubox")), 2));
    begin
       Show_All(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
       Set_Visible_Child_Name
