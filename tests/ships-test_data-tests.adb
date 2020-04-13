@@ -257,6 +257,63 @@ package body Ships.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_DamageModule_1d3bc9_8bb198
+     (Ship: in out ShipRecord; ModuleIndex, Damage: Positive;
+      DeathReason: String) is
+   begin
+      begin
+         pragma Assert
+           (ModuleIndex in
+              Ship.Modules.First_Index .. Ship.Modules.Last_Index);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(ships.ads:0):Test_DamageModule test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Ships.DamageModule
+        (Ship, ModuleIndex, Damage, DeathReason);
+      begin
+         pragma Assert(True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(ships.ads:0:):Test_DamageModule test commitment violated");
+      end;
+   end Wrap_Test_DamageModule_1d3bc9_8bb198;
+--  end read only
+
+--  begin read only
+   procedure Test_DamageModule_test_damagemodule(Gnattest_T: in out Test);
+   procedure Test_DamageModule_1d3bc9_8bb198(Gnattest_T: in out Test) renames
+     Test_DamageModule_test_damagemodule;
+--  id:2.2/1d3bc9384dbdb797/DamageModule/1/0/test_damagemodule/
+   procedure Test_DamageModule_test_damagemodule(Gnattest_T: in out Test) is
+      procedure DamageModule
+        (Ship: in out ShipRecord; ModuleIndex, Damage: Positive;
+         DeathReason: String) renames
+        Wrap_Test_DamageModule_1d3bc9_8bb198;
+--  end read only
+
+      pragma Unreferenced(Gnattest_T);
+      OldDurability: constant Positive := PlayerShip.Modules(1).Durability;
+
+   begin
+
+      DamageModule(PlayerShip, 1, 10, "during tests");
+      AUnit.Assertions.Assert
+        (PlayerShip.Modules(1).Durability + 10 = OldDurability,
+         "Failed to damage player ship hull.");
+      PlayerShip.Modules(1).Durability := OldDurability;
+
+--  begin read only
+   end Test_DamageModule_test_damagemodule;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
