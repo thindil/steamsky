@@ -154,7 +154,8 @@ package body Crafts is
                TempRecord.Tool :=
                  To_Unbounded_String(Get_Attribute(RecipeNode, "tool"));
             end if;
-            Value := To_Unbounded_String(Get_Attribute(RecipeNode, "reputation"));
+            Value :=
+              To_Unbounded_String(Get_Attribute(RecipeNode, "reputation"));
             if Value /= Null_Unbounded_String then
                TempRecord.Reputation := Integer'Value(To_String(Value));
             end if;
