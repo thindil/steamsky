@@ -165,11 +165,11 @@ package body Items.Test_Data.Tests is
    begin
 
       Assert
-        (GetItemName(Item) = "Basic Rations (slightly used)",
+        (GetItemName(Item) = "Basic Ration (slightly used)",
          "Invalid item name with lowered damage info.");
-      Assert(GetItemName(Item, False) = "Basic Rations", "Invalid item name.");
+      Assert(GetItemName(Item, False) = "Basic Ration", "Invalid item name.");
       Assert
-        (GetItemName(Item, True, False) = "Basic Rations (Slightly used)",
+        (GetItemName(Item, True, False) = "Basic Ration (Slightly used)",
          "Invalid item name with damage info.");
       Item.Name := To_Unbounded_String("New name");
       Assert
