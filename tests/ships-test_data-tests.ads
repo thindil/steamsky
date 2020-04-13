@@ -25,5 +25,8 @@ package Ships.Test_Data.Tests is
    procedure Test_GetCabinQuality_33b05d_0027a0(Gnattest_T: in out Test);
    --  ships.ads:385:4:GetCabinQuality:Test_GetCabinQuality
 
+   procedure Test_DamageModule_1d3bc9_8bb198(Gnattest_T: in out Test);
+   --  ships.ads:399:4:DamageModule:Test_DamageModule
+
 end Ships.Test_Data.Tests;
 --  end read only

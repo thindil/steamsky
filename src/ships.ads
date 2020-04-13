@@ -395,14 +395,13 @@ package Ships is
       -- Damage      - Amount of damage which the module will take
       -- DeathReason - If module has owner, reason of owner's death
       --               if module will be destroyed
-      -- TODO
-      -- Add unit test
       -- SOURCE
    procedure DamageModule
      (Ship: in out ShipRecord; ModuleIndex, Damage: Positive;
       DeathReason: String) with
       Pre => ModuleIndex in
-        Ship.Modules.First_Index .. Ship.Modules.Last_Index;
+        Ship.Modules.First_Index .. Ship.Modules.Last_Index,
+      Test_Case => ("Test_DamageModule", Nominal);
       -- ****
 
 end Ships;
