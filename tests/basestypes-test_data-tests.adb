@@ -29,9 +29,9 @@ package body BasesTypes.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_Is_Buyable_e30787_0acf10
-     (BaseType, ItemIndex: Unbounded_String; CheckFlag: Boolean := True)
-      return Boolean is
+   function Wrap_Test_Is_Buyable_e4fcaf_0acf10
+     (BaseType, ItemIndex: Unbounded_String; CheckFlag: Boolean := True;
+      BaseIndex: Natural := 0) return Boolean is
    begin
       begin
          pragma Assert
@@ -45,9 +45,9 @@ package body BasesTypes.Test_Data.Tests is
                "req_sloc(basestypes.ads:0):Test_Is_Buyable test requirement violated");
       end;
       declare
-         Test_Is_Buyable_e30787_0acf10_Result: constant Boolean :=
+         Test_Is_Buyable_e4fcaf_0acf10_Result: constant Boolean :=
            GNATtest_Generated.GNATtest_Standard.BasesTypes.Is_Buyable
-             (BaseType, ItemIndex, CheckFlag);
+             (BaseType, ItemIndex, CheckFlag, BaseIndex);
       begin
          begin
             pragma Assert(True);
@@ -58,21 +58,21 @@ package body BasesTypes.Test_Data.Tests is
                  (False,
                   "ens_sloc(basestypes.ads:0:):Test_Is_Buyable test commitment violated");
          end;
-         return Test_Is_Buyable_e30787_0acf10_Result;
+         return Test_Is_Buyable_e4fcaf_0acf10_Result;
       end;
-   end Wrap_Test_Is_Buyable_e30787_0acf10;
+   end Wrap_Test_Is_Buyable_e4fcaf_0acf10;
 --  end read only
 
 --  begin read only
    procedure Test_Is_Buyable_test_is_buyable(Gnattest_T: in out Test);
-   procedure Test_Is_Buyable_e30787_0acf10(Gnattest_T: in out Test) renames
+   procedure Test_Is_Buyable_e4fcaf_0acf10(Gnattest_T: in out Test) renames
      Test_Is_Buyable_test_is_buyable;
---  id:2.2/e30787f515c5282e/Is_Buyable/1/0/test_is_buyable/
+--  id:2.2/e4fcaf8408019fdf/Is_Buyable/1/0/test_is_buyable/
    procedure Test_Is_Buyable_test_is_buyable(Gnattest_T: in out Test) is
       function Is_Buyable
-        (BaseType, ItemIndex: Unbounded_String; CheckFlag: Boolean := True)
-         return Boolean renames
-        Wrap_Test_Is_Buyable_e30787_0acf10;
+        (BaseType, ItemIndex: Unbounded_String; CheckFlag: Boolean := True;
+         BaseIndex: Natural := 0) return Boolean renames
+        Wrap_Test_Is_Buyable_e4fcaf_0acf10;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

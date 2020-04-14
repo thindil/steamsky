@@ -14,20 +14,20 @@ package Ships.Movement.Test_Data.Tests is
    procedure Test_MoveShip_143def_3bb6cb(Gnattest_T: in out Test);
    --  ships-movement.ads:36:4:MoveShip:Test_MoveShip
 
-   procedure Test_DockShip_edc3c4_875e5b(Gnattest_T: in out Test);
-   --  ships-movement.ads:50:4:DockShip:Test_DockShip
+   procedure Test_DockShip_bfbe82_875e5b(Gnattest_T: in out Test);
+   --  ships-movement.ads:52:4:DockShip:Test_DockShip
 
    procedure Test_ChangeShipSpeed_b9c437_17b968(Gnattest_T: in out Test);
-   --  ships-movement.ads:62:4:ChangeShipSpeed:Test_ChangeShipSpeed
+   --  ships-movement.ads:64:4:ChangeShipSpeed:Test_ChangeShipSpeed
 
    procedure Test_RealSpeed_60d629_f7fd56(Gnattest_T: in out Test);
-   --  ships-movement.ads:76:4:RealSpeed:Test_RealSpeed
+   --  ships-movement.ads:78:4:RealSpeed:Test_RealSpeed
 
    procedure Test_CountFuelNeeded_db602d_18e85d(Gnattest_T: in out Test);
-   --  ships-movement.ads:87:4:CountFuelNeeded:Test_CountFuelNeeded
+   --  ships-movement.ads:89:4:CountFuelNeeded:Test_CountFuelNeeded
 
    procedure Test_WaitInPlace_a6040e_d787da(Gnattest_T: in out Test);
-   --  ships-movement.ads:97:4:WaitInPlace:Test_WaitInPlace
+   --  ships-movement.ads:99:4:WaitInPlace:Test_WaitInPlace
 
 end Ships.Movement.Test_Data.Tests;
 --  end read only
