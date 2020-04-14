@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
   1 drones base, gain max reputation in 3 drones bases, gain max reputation in
   5 drones bases, gain max reputation in 1 inquisition base
 - Info about docking cost before dock to a base
+- Ability to escape from bases without paying
 
 ### Changed
 - Updated bases data with new items and recipes
