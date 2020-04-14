@@ -32,26 +32,76 @@ item order:
   PARAMETERS
   RESULT
 keywords:
-  procedure
-  function
-  return
-  is
-  type
-  record
-  pragma
-  end
-  package
-  new
+  abort
+  abs
+  abstract
+  accept
   access
+  aliased
+  all
+  and
+  array
+  at
+  begin
+  body
+  case
+  constant
+  declare
+  delay
+  delta
+  digits
+  do
+  else
+  elsif
+  end
+  entry
+  exception
+  exit
+  for
+  function
+  generic
+  goto
+  if
+  in
+  interface
+  is
+  limited
+  loop
+  mod
+  new
   not
   null
-  subtype
-  renames
-  range
+  of
+  or
+  others
   out
-  in
-  constant
+  overriding
+  package
+  pragma
   private
-  exception
+  procedure
+  protected
+  raise
+  range
+  record
+  rem
+  renames
+  requeue
+  return
+  reverse
+  select
+  separate
+  some
+  subtype
+  synchronized
+  tagged
   task
-  entry
+  terminate
+  then
+  type
+  until
+  use
+  when
+  while
+  with
+  xor
