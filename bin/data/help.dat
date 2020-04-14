@@ -91,7 +91,7 @@ Thus if you find an Agricultural base near a Refinery, start travelling between 
 </entry>
  <entry index="movement" title=" 3. Ship movement">{u}Undocking from or docking to bases{/u}
     Your ship starts docked to a base. To move it, you must first give order {b}&quot;Undock&quot;{/b} from the base, by clicking on {b}&quot;Undock&quot;{/b} button. To see other orders available for ship, press {GameKey 14} key (or first {GameKey 26} key for see game menu) for open Orders menu.
-Each docking operation cost some money, depending on your ship size (bigger ships have bigger docking cost) and your reputation in that base. Info about docking fee on the dock button shows the base cost (only ship size) of docking. Same is with staying longer in base - for each day you pay this same price as for docking. When you will undock from bases, you will be pay the docking fee. You can't undock from the base if your ship is overloaded or until you don't pay the docking fee.
+Each docking operation cost some money, depending on your ship size (bigger ships have bigger docking cost) and your reputation in that base. Info about docking fee on the dock button shows the base cost (only ship size) of docking. Same is with staying longer in base - for each day you pay this same price as for docking. When you will undock from bases, you will be pay the docking fee. You can't undock from the base if your ship is overloaded or until you don't pay the docking fee. You can try to escape from the base without paying, but this always ends with losing some reputation in that base and sometimes even with your ship damage. To escape from the base click on {b}&quot;Escape&quot;{/b} button.
 When you undocked from base, in this same menu, you can dock again.
 
 {u}Traveling{/u}
