@@ -128,11 +128,11 @@ package body Bases.Trade.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_HealWounded_ec5713_45cd90
+   procedure Wrap_Test_HealWounded_ec5713_5adbe2
      (MemberIndex: Crew_Container.Extended_Index) is
    begin
       begin
-         pragma Assert((MemberIndex < PlayerShip.Crew.Last_Index));
+         pragma Assert((MemberIndex <= PlayerShip.Crew.Last_Index));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -151,17 +151,17 @@ package body Bases.Trade.Test_Data.Tests is
               (False,
                "ens_sloc(bases-trade.ads:0:):Test_HealWounded test commitment violated");
       end;
-   end Wrap_Test_HealWounded_ec5713_45cd90;
+   end Wrap_Test_HealWounded_ec5713_5adbe2;
 --  end read only
 
 --  begin read only
    procedure Test_HealWounded_test_healwounded(Gnattest_T: in out Test);
-   procedure Test_HealWounded_ec5713_45cd90(Gnattest_T: in out Test) renames
+   procedure Test_HealWounded_ec5713_5adbe2(Gnattest_T: in out Test) renames
      Test_HealWounded_test_healwounded;
 --  id:2.2/ec5713429dea8dfb/HealWounded/1/0/test_healwounded/
    procedure Test_HealWounded_test_healwounded(Gnattest_T: in out Test) is
       procedure HealWounded(MemberIndex: Crew_Container.Extended_Index) renames
-        Wrap_Test_HealWounded_ec5713_45cd90;
+        Wrap_Test_HealWounded_ec5713_5adbe2;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -183,12 +183,12 @@ package body Bases.Trade.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_HealCost_772065_0483ed
+   procedure Wrap_Test_HealCost_772065_7f6d4c
      (Cost, Time: in out Natural;
       MemberIndex: Crew_Container.Extended_Index) is
    begin
       begin
-         pragma Assert((MemberIndex < PlayerShip.Crew.Last_Index));
+         pragma Assert((MemberIndex <= PlayerShip.Crew.Last_Index));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -207,19 +207,19 @@ package body Bases.Trade.Test_Data.Tests is
               (False,
                "ens_sloc(bases-trade.ads:0:):Test_HealCost test commitment violated");
       end;
-   end Wrap_Test_HealCost_772065_0483ed;
+   end Wrap_Test_HealCost_772065_7f6d4c;
 --  end read only
 
 --  begin read only
    procedure Test_HealCost_test_healcost(Gnattest_T: in out Test);
-   procedure Test_HealCost_772065_0483ed(Gnattest_T: in out Test) renames
+   procedure Test_HealCost_772065_7f6d4c(Gnattest_T: in out Test) renames
      Test_HealCost_test_healcost;
 --  id:2.2/77206542a3e2c8c9/HealCost/1/0/test_healcost/
    procedure Test_HealCost_test_healcost(Gnattest_T: in out Test) is
       procedure HealCost
         (Cost, Time: in out Natural;
          MemberIndex: Crew_Container.Extended_Index) renames
-        Wrap_Test_HealCost_772065_0483ed;
+        Wrap_Test_HealCost_772065_7f6d4c;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

@@ -91,26 +91,28 @@ package body Ships.Movement.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_DockShip_edc3c4_875e5b(Docking: Boolean) return String is
+   function Wrap_Test_DockShip_bfbe82_875e5b
+     (Docking: Boolean; Escape: Boolean := False) return String is
    begin
       declare
-         Test_DockShip_edc3c4_875e5b_Result: constant String :=
+         Test_DockShip_bfbe82_875e5b_Result: constant String :=
            GNATtest_Generated.GNATtest_Standard.Ships.Movement.DockShip
-             (Docking);
+             (Docking, Escape);
       begin
-         return Test_DockShip_edc3c4_875e5b_Result;
+         return Test_DockShip_bfbe82_875e5b_Result;
       end;
-   end Wrap_Test_DockShip_edc3c4_875e5b;
+   end Wrap_Test_DockShip_bfbe82_875e5b;
 --  end read only
 
 --  begin read only
    procedure Test_DockShip_test_dockship(Gnattest_T: in out Test);
-   procedure Test_DockShip_edc3c4_875e5b(Gnattest_T: in out Test) renames
+   procedure Test_DockShip_bfbe82_875e5b(Gnattest_T: in out Test) renames
      Test_DockShip_test_dockship;
---  id:2.2/edc3c4581e124418/DockShip/1/0/test_dockship/
+--  id:2.2/bfbe82e1179e6b20/DockShip/1/0/test_dockship/
    procedure Test_DockShip_test_dockship(Gnattest_T: in out Test) is
-      function DockShip(Docking: Boolean) return String renames
-        Wrap_Test_DockShip_edc3c4_875e5b;
+      function DockShip
+        (Docking: Boolean; Escape: Boolean := False) return String renames
+        Wrap_Test_DockShip_bfbe82_875e5b;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

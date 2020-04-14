@@ -16,10 +16,10 @@ package Bases.Trade.Test_Data.Tests is
    procedure Test_BuyRecipe_64b3a1_e0c4a8(Gnattest_T: in out Test);
    --  bases-trade.ads:71:4:BuyRecipe:Test_BuyRecipe
 
-   procedure Test_HealWounded_ec5713_45cd90(Gnattest_T: in out Test);
+   procedure Test_HealWounded_ec5713_5adbe2(Gnattest_T: in out Test);
    --  bases-trade.ads:83:4:HealWounded:Test_HealWounded
 
-   procedure Test_HealCost_772065_0483ed(Gnattest_T: in out Test);
+   procedure Test_HealCost_772065_7f6d4c(Gnattest_T: in out Test);
    --  bases-trade.ads:99:4:HealCost:Test_HealCost
 
    procedure Test_TrainCost_8eb46e_3a2aca(Gnattest_T: in out Test);
