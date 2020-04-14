@@ -1260,9 +1260,6 @@ package body MainMenu is
       Register_Handler(Builder, "Update_Summary", UpdateSummary'Access);
       Do_Connect(Builder);
       SetUtilsBuilder(Builder);
-      Set_Label
-        (Gtk_Label(Get_Object(Builder, "lblversion")),
-         GameVersion & " (development)");
       UpdateNews;
       DataError := To_Unbounded_String(LoadGameData);
       Setting := True;
@@ -1278,7 +1275,10 @@ package body MainMenu is
          MainMenuButtons: constant Gtk_Button_Box :=
            Gtk_Button_Box_New(Orientation_Vertical);
          Button: Gtk_Button;
+         Label: constant Gtk_Label :=
+           Gtk_Label_New(GameVersion & " (development)");
       begin
+         Pack_Start(MainMenuBox, Label, False);
          On_Clicked(NewGameButton, ShowNewGame'Access);
          Pack_Start(MainMenuButtons, NewGameButton);
          On_Clicked(LoadButton, ShowLoadGame'Access);
