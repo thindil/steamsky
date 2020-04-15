@@ -1275,9 +1275,12 @@ package body MainMenu is
          MainMenuButtons: constant Gtk_Button_Box :=
            Gtk_Button_Box_New(Orientation_Vertical);
          Button: Gtk_Button;
-         Label: constant Gtk_Label :=
-           Gtk_Label_New(GameVersion & " (development)");
+         Label: Gtk_Label;
       begin
+         Label := Gtk_Label_New;
+         Set_Markup(Label, "<span font_desc=""Rye 70"">Steam Sky</span>");
+         Pack_Start(MainMenuBox, Label, False);
+         Label := Gtk_Label_New(GameVersion & " (development)");
          Pack_Start(MainMenuBox, Label, False);
          On_Clicked(NewGameButton, ShowNewGame'Access);
          Pack_Start(MainMenuButtons, NewGameButton);
