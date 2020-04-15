@@ -44,6 +44,7 @@ package Crafts is
    -- Difficulty      - How difficult is recipe to discover
    -- Tool            - Type of tool used to craft item
    -- Reputation      - Minimal reputation in base needed to buy that recipe
+   -- ToolQuality     - Minimal quality of tool needed to craft that recipe
    -- SOURCE
    type Craft_Data is record
       MaterialTypes: UnboundedString_Container.Vector;
@@ -56,6 +57,7 @@ package Crafts is
       Difficulty: Positive;
       Tool: Unbounded_String;
       Reputation: Integer;
+      ToolQuality: Positive;
    end record;
    -- ****
 

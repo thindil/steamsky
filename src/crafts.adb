@@ -54,7 +54,8 @@ package body Crafts is
            (MaterialTypes => TempMaterials, MaterialAmounts => TempAmount,
             ResultIndex => Null_Unbounded_String, ResultAmount => 10000,
             Workplace => ALCHEMY_LAB, Skill => 1, Time => 15, Difficulty => 1,
-            Tool => To_Unbounded_String("None"), Reputation => -100);
+            Tool => To_Unbounded_String("None"), Reputation => -100,
+            ToolQuality => 100);
          RecipeNode := Item(NodesList, I);
          RecipeIndex :=
            To_Unbounded_String(Get_Attribute(RecipeNode, "index"));
@@ -159,6 +160,11 @@ package body Crafts is
             if Value /= Null_Unbounded_String then
                TempRecord.Reputation := Integer'Value(To_String(Value));
             end if;
+            Value :=
+              To_Unbounded_String(Get_Attribute(RecipeNode, "toolquality"));
+            if Value /= Null_Unbounded_String then
+               TempRecord.ToolQuality := Positive'Value(To_String(Value));
+            end if;
             if Action /= UPDATE then
                Recipes_Container.Include
                  (Recipes_List, RecipeIndex, TempRecord);
@@ -212,6 +218,7 @@ package body Crafts is
          end loop;
          Recipe.Difficulty := 1;
          Recipe.Tool := AlchemyTools;
+         Recipe.ToolQuality := 100;
          return Recipe;
       elsif Length(RecipeIndex) > 12
         and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
@@ -237,6 +244,7 @@ package body Crafts is
             end if;
          end loop;
          Recipe.Tool := AlchemyTools;
+         Recipe.ToolQuality := 100;
          return Recipe;
       end if;
       return Recipes_List(RecipeIndex);
@@ -341,7 +349,8 @@ package body Crafts is
       begin
          if Recipe.Tool /= To_Unbounded_String("None") then
             if FindItem
-                (Inventory => PlayerShip.Cargo, ItemType => Recipe.Tool) >
+                (Inventory => PlayerShip.Cargo, ItemType => Recipe.Tool,
+                 Quality => Recipe.ToolQuality) >
               0 then
                HaveTool := True;
             end if;
@@ -527,7 +536,9 @@ package body Crafts is
                      end loop;
                      if Recipe.Tool /= To_Unbounded_String("None") then
                         ToolIndex :=
-                          FindTools(CrafterIndex, Recipe.Tool, Craft);
+                          FindTools
+                            (CrafterIndex, Recipe.Tool, Craft,
+                             Recipe.ToolQuality);
                         if ToolIndex = 0 then
                            AddMessage
                              ("You don't have the tool for " &
