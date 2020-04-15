@@ -22,7 +22,8 @@ All notable changes to this project will be documented in this file.
 - New goals: gain max reputation in 1 undead base, gain max reputation in 3
   undead bases, gain max reputation in 5 undead bases, gain max reputation in
   1 drones base, gain max reputation in 3 drones bases, gain max reputation in
-  5 drones bases, gain max reputation in 1 inquisition base
+  5 drones bases, gain max reputation in 1 inquisition base, gain max
+  reputation in 3 inquisition bases
 - Info about docking cost before dock to a base
 - Ability to escape from bases without paying
 
