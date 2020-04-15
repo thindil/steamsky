@@ -223,6 +223,7 @@ Grayed name of recipe on list mean that you don't have enough material, proper t
 * Each tool have chance to be damaged during crafting. Chance on damage tool depends on tool and crafting skill.
 * Crafting skills and level of damage of workplace determine amount of manufactured items. More damaged modules causes less crafted items.
 * Each crafting module have separated crafting order. This mean, you can produce few types of items (or few times this same item) in this same time, if you have few crafting modules installed on ship and all have assigned work orders and workers.
+* Better crafting recipes may require better crafting tools.
 </entry>
 <entry index="repair" title=" 8. Repair/Upgrade ship">{u}Self repair of ship{/u}
    To start repairing ship, you must assign crew member to repair duty. If you don't have available {b}'Repair'{/b} order, it means, you don't have materials needed for repair module. You may assign more than one crew member or give order to repair for whole crew. Each additional member assigned made repair faster. Each damaged (or destroyed) module need specific material to repair and repair tools for each member assigned to repair duty. You can check which material is needed in {i}ship info{/i} screen. Ship is repaired every 15 minutes of work of assigned crew members. Speed of repairs depends on skills of assigned crew. You can check which skills are used in ship info screen.
