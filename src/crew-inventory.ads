@@ -101,13 +101,14 @@ package Crew.Inventory is
       -- ItemType    - Type of item which will be looking for
       -- Order       - Order which crew member will be doing when he/she find
       --               proper tool
+      -- ToolQuality - Minimal quality of tool to find. Default value is 100
       -- RESULT
       -- Selected crew member inventory index of the tool or 0 if tool was not
       -- found
       -- SOURCE
    function FindTools
-     (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders)
-      return Natural with
+     (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders;
+      ToolQuality: Positive := 100) return Natural with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
        ItemType /= Null_Unbounded_String),

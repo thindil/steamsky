@@ -157,6 +157,7 @@ package body Crafts.UI is
          end loop;
          Recipe.Difficulty := 1;
          Recipe.Tool := AlchemyTools;
+         Recipe.ToolQuality := 100;
       elsif Length(RecipeIndex) > 12
         and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
          Recipe.MaterialTypes.Append
@@ -183,6 +184,7 @@ package body Crafts.UI is
             end if;
          end loop;
          Recipe.Tool := AlchemyTools;
+         Recipe.ToolQuality := 100;
       else
          Recipe := Recipes_List(RecipeIndex);
          Append
@@ -268,12 +270,18 @@ package body Crafts.UI is
          Append(RecipeInfo, LF & "Tool: ");
          MAmount := 0;
          for I in Items_List.Iterate loop
-            if Items_List(I).IType = Recipe.Tool then
+            if Items_List(I).IType = Recipe.Tool
+              and then
+              (Items_List(I).Value.Length > 0
+               and then Items_List(I).Value(1) <= Recipe.ToolQuality) then
                if MAmount > 0 then
                   Append(RecipeInfo, " or ");
                end if;
                CargoIndex :=
-                 FindItem(PlayerShip.Cargo, Objects_Container.Key(I));
+                 FindItem
+                   (Inventory => PlayerShip.Cargo,
+                    ProtoIndex => Objects_Container.Key(I),
+                    Quality => Recipe.ToolQuality);
                if CargoIndex = 0 then
                   Append(RecipeInfo, "<span foreground=""red"">");
                else

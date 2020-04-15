@@ -130,8 +130,8 @@ package body Crew.Inventory is
    end ItemIsUsed;
 
    function FindTools
-     (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders)
-      return Natural is
+     (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders;
+      ToolQuality: Positive := 100) return Natural is
       ToolsIndex: Natural;
    begin
       ToolsIndex := PlayerShip.Crew(MemberIndex).Equipment(7);
@@ -146,10 +146,12 @@ package body Crew.Inventory is
       ToolsIndex :=
         FindItem
           (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
-           ItemType => ItemType);
+           ItemType => ItemType, Quality => ToolQuality);
       if ToolsIndex = 0 then
          ToolsIndex :=
-           FindItem(Inventory => PlayerShip.Cargo, ItemType => ItemType);
+           FindItem
+             (Inventory => PlayerShip.Cargo, ItemType => ItemType,
+              Quality => ToolQuality);
          if ToolsIndex > 0 then
             begin
                UpdateInventory
@@ -160,7 +162,7 @@ package body Crew.Inventory is
                ToolsIndex :=
                  FindItem
                    (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
-                    ItemType => ItemType);
+                    ItemType => ItemType, Quality => ToolQuality);
                PlayerShip.Crew(MemberIndex).Equipment(7) := ToolsIndex;
             exception
                when Crew_No_Space_Error =>

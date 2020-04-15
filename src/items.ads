@@ -242,13 +242,14 @@ package Items is
       -- ProtoIndex - Prototype index of item. Can be empty if ItemType is set
       -- ItemType   - Type of item to search. Can be empty if ProtoIndex is set
       -- Durability - Durability of item to search. Can be empty
+      -- Quality    - Quality of item to search. Can be empty
       -- RESULT
       -- Iventory index of item or 0 if item was not found
       -- SOURCE
    function FindItem
      (Inventory: Inventory_Container.Vector;
       ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
-      Durability: Natural := 101) return Natural with
+      Durability: Natural := 101; Quality: Positive := 100) return Natural with
       Test_Case => ("Test_FindItem", Robustness);
       -- ****
 
