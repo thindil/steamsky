@@ -299,6 +299,10 @@ Value must be an existing skill name.
   recipe. If not set, it take 15 minutes.
 - Optional attribute `reputation`: Minimal reputation in bases needed to buy that
   recipe from them. Default value is -100 (available in all bases).
+- Optional attribute `toolquality`: Minimal quality of tool needed to craft
+  that recipe. At this moment "quality" means chance to break for the selected
+  tool. For example, value 5 means tools with chance to break 5 or less.
+  Default value is 100 (any tool)
 
 ## Ship modules
 
