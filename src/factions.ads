@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,7 +19,6 @@ with Ada.Containers.Hashed_Maps; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Strings.Unbounded.Hash;
 with DOM.Readers; use DOM.Readers;
-with Crew; use Crew;
 with Game; use Game;
 
 -- ****h* Steamsky/Factions

@@ -87,20 +87,37 @@ package Game is
    package Integer_Container is new Vectors(Positive, Integer);
    -- ****
 
+   -- ****t* Game/Attributes_Array
+   -- FUNCTION
+   -- Data structure for attributes: 1 - Attribute level, 2 - current experience in attribute
+   -- SOURCE
+   type Attributes_Array is array(1 .. 2) of Natural;
+   -- ****
+
+   -- ****t* Game/Attributes_Container
+   -- Used to store attributes data
+   -- SOURCE
+   package Attributes_Container is new Vectors(Positive, Attributes_Array);
+   -- ****
+
    -- ****t* Game/Skill_Record
    -- FUNCTION
    -- Data for skills
    -- PARAMETERS
-   -- Name        - Name of skill
-   -- Attribute   - Attribute used with that skill
-   -- Description - Description of skill
-   -- Tool        - Item type used as tool for training that skill
+   -- Name         - Name of skill
+   -- Attribute    - Attribute used with that skill
+   -- Description  - Description of skill
+   -- Tool         - Item type used as tool for training that skill
+   -- ToolsQuality - Required tools quality for training that skill at the
+   --                selected level. First value minimal level of skill,
+   --                second minimum quality of tool
    -- SOURCE
    type Skill_Record is record
       Name: Unbounded_String;
       Attribute: Positive;
       Description: Unbounded_String;
       Tool: Unbounded_String;
+      ToolsQuality: Attributes_Container.Vector;
    end record;
    -- ****
 
