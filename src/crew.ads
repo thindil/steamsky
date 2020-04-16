@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -48,19 +48,6 @@ package Crew is
    type Crew_Orders is
      (Pilot, Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean,
       Rest, Defend, Boarding, Train);
-   -- ****
-
-   -- ****t* Crew/Attributes_Array
-   -- FUNCTION
-   -- Data structure for attributes: 1 - Attribute level, 2 - current experience in attribute
-   -- SOURCE
-   type Attributes_Array is array(1 .. 2) of Natural;
-   -- ****
-
-   -- ****t* Crew/Attributes_Container
-   -- Used to store attributes data
-   -- SOURCE
-   package Attributes_Container is new Vectors(Positive, Attributes_Array);
    -- ****
 
    -- ****t* Crew/Member_Data

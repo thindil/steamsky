@@ -164,6 +164,7 @@ package body Ships.Crew is
       MemberName: constant String := To_String(Ship.Crew(MemberIndex).Name);
       ModuleIndex2, ToolsIndex: Natural := 0;
       RequiredTool: Unbounded_String;
+      ToolQuality: Positive := 100;
    begin
       if GivenOrder = Ship.Crew(MemberIndex).Order then
          if GivenOrder = Craft or GivenOrder = Gunner then
@@ -198,6 +199,19 @@ package body Ships.Crew is
          elsif GivenOrder = Train then
             RequiredTool :=
               Skills_List(Ship.Modules(ModuleIndex).TrainedSkill).Tool;
+            Skill_Loop :
+            for Skill of PlayerShip.Crew(MemberIndex).Skills loop
+               if Skill(1) = Ship.Modules(ModuleIndex).TrainedSkill then
+                  for Quality of Skills_List
+                    (Ship.Modules(ModuleIndex).TrainedSkill)
+                    .ToolsQuality loop
+                     if Skill(2) <= Quality(1) then
+                        ToolQuality := Quality(2);
+                        exit Skill_Loop;
+                     end if;
+                  end loop;
+               end if;
+            end loop Skill_Loop;
          else
             RequiredTool := RepairTools;
          end if;
@@ -213,12 +227,14 @@ package body Ships.Crew is
             end if;
             if ToolsIndex = 0 then
                ToolsIndex :=
-                 FindItem(Inventory => Ship.Cargo, ItemType => RequiredTool);
+                 FindItem
+                   (Inventory => Ship.Cargo, ItemType => RequiredTool,
+                    Quality => ToolQuality);
                if ToolsIndex = 0 then
                   ToolsIndex :=
                     FindItem
                       (Inventory => Ship.Crew(MemberIndex).Inventory,
-                       ItemType => RequiredTool);
+                       ItemType => RequiredTool, Quality => ToolQuality);
                   if ToolsIndex > 0 then
                      Ship.Crew(MemberIndex).Equipment(7) := ToolsIndex;
                   end if;

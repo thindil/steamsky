@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -494,11 +494,12 @@ package body Game is
    procedure LoadData(Reader: Tree_Reader) is
       -- ****
       GameData: Document;
-      NodesList: Node_List;
+      NodesList, ChildNodes: Node_List;
       DeleteIndex: Natural;
       TmpSkill: Skill_Record;
       NodeName: Unbounded_String;
       DataNode: Node;
+      ToolQuality: Attributes_Container.Vector;
       function FindAttributeIndex
         (AttributeName: Unbounded_String) return Natural is
       begin
@@ -616,14 +617,37 @@ package body Game is
          elsif To_String(NodeName) = "skill" then
             TmpSkill :=
               (To_Unbounded_String(Get_Attribute(DataNode, "name")), 1,
-               To_Unbounded_String(Node_Value(First_Child(DataNode))),
-               Null_Unbounded_String);
+               Null_Unbounded_String,
+               Null_Unbounded_String, ToolQuality);
             TmpSkill.Attribute :=
               FindAttributeIndex
                 (To_Unbounded_String(Get_Attribute(DataNode, "attribute")));
             if Get_Attribute(DataNode, "tool") /= "" then
                TmpSkill.Tool :=
                  To_Unbounded_String(Get_Attribute(DataNode, "tool"));
+            end if;
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (DataNode, "toolquality");
+            if Length(ChildNodes) > 0 then
+               TmpSkill.ToolsQuality.Clear;
+            end if;
+            for J in 0 .. Length(ChildNodes) - 1 loop
+               TmpSkill.ToolsQuality.Append
+                 ((Integer'Value(Get_Attribute(Item(ChildNodes, J), "level")),
+                   Integer'Value
+                     (Get_Attribute(Item(ChildNodes, J), "quality"))));
+            end loop;
+            if TmpSkill.ToolsQuality.Length = 0 then
+               TmpSkill.ToolsQuality.Append((100, 100));
+            end if;
+            ChildNodes :=
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (DataNode, "description");
+            if Length(ChildNodes) > 0 then
+               TmpSkill.Description :=
+                 To_Unbounded_String
+                   (Node_Value(First_Child(Item(ChildNodes, 0))));
             end if;
             Skills_List.Append(New_Item => TmpSkill);
          elsif To_String(NodeName) = "conditionname" then
