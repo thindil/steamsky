@@ -755,19 +755,44 @@ To add new skill, just append new line with tag `skill` with it name as
 attribute `name`, assigned attribute to skill as attribute `attribute`,
 assigned item type as training tool as attribute `tool` and description between
 tags `skill`. -->
- <skill attribute="Dexterity" name="Piloting" tool="CockpitSimulator">Used by pilots, determines ship speed and chance to avoid damage in ship combat</skill>
- <skill attribute="Intelligence" name="Engineering" tool="EngineersBook">Used by engineers, determines ship speed and speed of ship upgrading/repairing</skill>
- <skill attribute="Dexterity" name="Gunnery" tool="GunSimulator">Used by gunners, determines chance to hit enemy in ship combat</skill>
- <skill attribute="Intelligence" name="Rhetoric" tool="RhetoricBook">Used by traders, determines prices in bases</skill>
- <skill attribute="Intelligence" name="Perception" tool="SmallToys">Used by pilots and gunners to spot enemy ships</skill>
- <skill attribute="Intelligence" name="Alchemy" tool="AlchemyBook">Used in crafting</skill>
- <skill attribute="Dexterity" name="Cooking" tool="CookingBook">Used to cook food</skill>
- <skill attribute="Dexterity" name="Gunsmith" tool="GunsmithBook">Used to create ammo for guns and to upgrade guns</skill>
- <skill attribute="Dexterity" name="Metalsmith" tool="MetalsmithBook">Used in crafting</skill>
- <skill attribute="Intelligence" name="Medicine" tool="MedicineBook">Used in healing</skill>
- <skill attribute="Strength" name="Farming" tool="FarmingBook">Used to grow plants</skill>
- <skill attribute="Strength" name="Woodcutting" tool="WoodcuttingBook">Used to cut trees</skill>
- <skill attribute="Intelligence" name="Brewery" tool="BrewingBook">Used to brew drinks</skill>
+<skill attribute="Dexterity" name="Piloting" tool="CockpitSimulator">
+   <description>Used by pilots, determines ship speed and chance to avoid damage in ship combat</description>
+</skill>
+<skill attribute="Intelligence" name="Engineering" tool="EngineersBook">
+   <description>Used by engineers, determines ship speed and speed of ship upgrading/repairing</description>
+</skill>
+<skill attribute="Dexterity" name="Gunnery" tool="GunSimulator">
+   <description>Used by gunners, determines chance to hit enemy in ship combat</description>
+</skill>
+ <skill attribute="Intelligence" name="Rhetoric" tool="RhetoricBook">
+    <description>Used by traders, determines prices in bases</description>
+ </skill>
+ <skill attribute="Intelligence" name="Perception" tool="SmallToys">
+    <description>Used by pilots and gunners to spot enemy ships</description>
+ </skill>
+ <skill attribute="Intelligence" name="Alchemy" tool="AlchemyBook">
+    <description>Used in crafting</description>
+ </skill>
+ <skill attribute="Dexterity" name="Cooking" tool="CookingBook">
+    <description>Used to cook food</description>
+ </skill>
+ <skill attribute="Dexterity" name="Gunsmith" tool="GunsmithBook">
+    <description>Used to create ammo for guns and to upgrade guns</description>
+ </skill>
+ <skill attribute="Dexterity" name="Metalsmith" tool="MetalsmithBook">
+    <description>Used in crafting</description></skill>
+ <skill attribute="Intelligence" name="Medicine" tool="MedicineBook">
+    <description>Used in healing</description>
+ </skill>
+ <skill attribute="Strength" name="Farming" tool="FarmingBook">
+    <description>Used to grow plants</description>
+ </skill>
+ <skill attribute="Strength" name="Woodcutting" tool="WoodcuttingBook">
+    <description>Used to cut trees</description>
+ </skill>
+ <skill attribute="Intelligence" name="Brewery" tool="BrewingBook">
+    <description>Used to brew drinks</description>
+ </skill>
  <skill attribute="Strength" name="Blacksmith" tool="BlacksmithBook">Used in crafting</skill>
  <skill attribute="Strength" name="Woodworking" tool="WoodworkingBook">Used in crafting</skill>
  <skill attribute="Dexterity" name="Leatherworking" tool="LeatherworkingBook">Used in crafting</skill>
