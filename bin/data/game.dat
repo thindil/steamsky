@@ -743,7 +743,6 @@ it name as attribute `name` and description between tags `attribute`. -->
 ealier in this same file).
 - Optional attribute `tool` is item type used as tool during training (must be
 defined ealier in this same file).
-- Value between `skills` tags is description of skill.
 After change skill name, you been need to made proper changes in other game
 data files (recipes, items and this same file) if needed. To change skill name,
 just edit value of `name` attribute of selected skill. To change assigned
@@ -756,6 +755,7 @@ attribute `name`, assigned attribute to skill as attribute `attribute`,
 assigned item type as training tool as attribute `tool` and description between
 tags `skill`. -->
 <skill attribute="Dexterity" name="Piloting" tool="CockpitSimulator">
+   <!-- In game description of the skill. Can have any value. -->
    <description>Used by pilots, determines ship speed and chance to avoid damage in ship combat</description>
 </skill>
 <skill attribute="Intelligence" name="Engineering" tool="EngineersBook">
@@ -793,19 +793,45 @@ tags `skill`. -->
  <skill attribute="Intelligence" name="Brewery" tool="BrewingBook">
     <description>Used to brew drinks</description>
  </skill>
- <skill attribute="Strength" name="Blacksmith" tool="BlacksmithBook">Used in crafting</skill>
- <skill attribute="Strength" name="Woodworking" tool="WoodworkingBook">Used in crafting</skill>
- <skill attribute="Dexterity" name="Leatherworking" tool="LeatherworkingBook">Used in crafting</skill>
- <skill attribute="Strength" name="Swords" tool="TrainingDummy">Used to determine chance to hit with swords in combat</skill>
- <skill attribute="Dexterity" name="Dodge" tool="SmallTraps">Used to dodge enemy attacks in combat</skill>
- <skill attribute="Strength" name="Brawling" tool="TrainingDummy">Used to determine chance to hit with bare hands in combat</skill>
- <skill attribute="Dexterity" name="Printing" tool="PrintingBook">Used in making paper and books</skill>
- <skill attribute="Strength" name="Maces" tool="TrainingDummy">Used to determine chance to hit with maces in combat</skill>
- <skill attribute="Strength" name="Daggers" tool="TrainingDummy">Used to determine chance to hit with daggers in combat</skill>
- <skill attribute="Strength" name="Two-handed Swords" tool="TrainingDummy">Used to determine chance to hit with two handed swords in combat</skill>
- <skill attribute="Strength" name="Two-handed Maces" tool="TrainingDummy">Used to determine chance to hit with two handed, blunt weapons in combat</skill>
- <skill attribute="Strength" name="Rapiers" tool="TrainingDummy">Used to determine chance to hit with rapiers in combat</skill>
- <skill attribute="Strength" name="Spears" tool="TrainingDummy">Used to determine chance to hit with spears in combat</skill>
+ <skill attribute="Strength" name="Blacksmith" tool="BlacksmithBook">
+    <description>Used in crafting</description>
+ </skill>
+ <skill attribute="Strength" name="Woodworking" tool="WoodworkingBook">
+    <description>Used in crafting</description>
+ </skill>
+ <skill attribute="Dexterity" name="Leatherworking" tool="LeatherworkingBook">
+    <description>Used in crafting</description>
+ </skill>
+ <skill attribute="Strength" name="Swords" tool="TrainingDummy">
+    <description>Used to determine chance to hit with swords in combat</description>
+ </skill>
+ <skill attribute="Dexterity" name="Dodge" tool="SmallTraps">
+    <description>Used to dodge enemy attacks in combat</description>
+ </skill>
+ <skill attribute="Strength" name="Brawling" tool="TrainingDummy">
+    <description>Used to determine chance to hit with bare hands in combat</description>
+ </skill>
+ <skill attribute="Dexterity" name="Printing" tool="PrintingBook">
+    <description>Used in making paper and books</description>
+ </skill>
+ <skill attribute="Strength" name="Maces" tool="TrainingDummy">
+    <description>Used to determine chance to hit with maces in combat</description>
+ </skill>
+ <skill attribute="Strength" name="Daggers" tool="TrainingDummy">
+    <description>Used to determine chance to hit with daggers in combat</description>
+ </skill>
+ <skill attribute="Strength" name="Two-handed Swords" tool="TrainingDummy">
+    <description>Used to determine chance to hit with two handed swords in combat</description>
+ </skill>
+ <skill attribute="Strength" name="Two-handed Maces" tool="TrainingDummy">
+    <description>Used to determine chance to hit with two handed, blunt weapons in combat</description>
+ </skill>
+ <skill attribute="Strength" name="Rapiers" tool="TrainingDummy">
+    <description>Used to determine chance to hit with rapiers in combat</description>
+ </skill>
+ <skill attribute="Strength" name="Spears" tool="TrainingDummy">
+    <description>Used to determine chance to hit with spears in combat</description>
+ </skill>
 <!-- To change which attribute is used to raise character condition, edit
 attribute `value` of tag `conditionname`. Value must be existing attribute
 name. -->
