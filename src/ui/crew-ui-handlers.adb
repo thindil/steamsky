@@ -318,6 +318,7 @@ package body Crew.UI.Handlers is
             SkillBox: constant Gtk_Container :=
               Gtk_Container(Get_Object(Object, "boxcrewskills"));
             ItemIndex, TooltipText: Unbounded_String;
+            Quality: Natural;
          begin
             Foreach(SkillBox, RemoveWidget'Access);
             for Skill of Member.Skills loop
@@ -336,14 +337,20 @@ package body Crew.UI.Handlers is
                   Attributes_List(Skills_List(Skill(1)).Attribute).Name);
                if Skills_List(Skill(1)).Tool /= Null_Unbounded_String then
                   Append(TooltipText, ". Training tool: ");
-                  ItemIndex :=
-                    FindProtoItem(ItemType => Skills_List(Skill(1)).Tool);
-                  if Items_List(ItemIndex).ShowType /=
-                    Null_Unbounded_String then
-                     Append(TooltipText, Items_List(ItemIndex).ShowType);
-                  else
-                     Append(TooltipText, Items_List(ItemIndex).IType);
-                  end if;
+                  Quality := 0;
+                  for I in Items_List.Iterate loop
+                     if Items_List(I).IType = Skills_List(Skill(1)).Tool
+                       and then
+                       (Items_List(I).Value.Length > 0
+                        and then Items_List(I).Value(1) <=
+                          GetTrainingToolQuality(MemberIndex, Skill(1))) then
+                        if Items_List(I).Value(1) > Quality then
+                           ItemIndex := Objects_Container.Key(I);
+                           Quality := Items_List(I).Value(1);
+                        end if;
+                     end if;
+                  end loop;
+                  Append(TooltipText, Items_List(ItemIndex).Name);
                end if;
                Append(TooltipText, ". ");
                Append(TooltipText, Skills_List(Skill(1)).Description);
