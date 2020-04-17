@@ -89,8 +89,17 @@ you make there will be overwritten when you update the game.
   earlier in this same file).
 - Optional attribute `tool` is item type used as tool during training (must be
   defined earlier in this same file).
-- After changing/removing the skill, you need to make the proper changes in other game
-  data files (recipes, items and this same file) if needed.
+- After changing/removing the skill, you need to make the proper changes in
+  other game data files (recipes, items and this same file) if needed.
+- Optional tag `description` is the description of the skill showed to a
+  player
+- Optional tags `toolquality` contains information on tool quality needed to
+  train the selected skill on the selected level. Attribute `level` mean
+  maximum level on which the selected tool quality is used. Attribute
+  `quality` mean minimum required tool quality (at this moment, chance of the
+  tool to break) required for that level of skill. Thus values level="50" and
+  quality="5" means if skill is at level 50 or below use tools with quality
+  5 or less
 
 ### Changing an existing skills
 - If editing *game.dat* file: just change the selected value of the skill/s.
@@ -99,7 +108,7 @@ you make there will be overwritten when you update the game.
 - To change assigned attribute to selected skill enter the new name in attribute
   `attribute`. The Name must be an existing attribute name, defined earlier in
   *game.dat* file.
-- To change skill description, just edit the text between `skill` tags.
+- To change skill description, just edit the text between `description` tags.
 - To change assigned tool, edit value of `tool` attribute of the selected skill.
   Tool must be an existing item type, defined earlier in *game.dat* file.
 
@@ -107,7 +116,7 @@ you make there will be overwritten when you update the game.
 - To add a new skill, just append a new line with tag `skill` with its name as
   attribute `name`, assigned attribute's skill as attribute `attribute`,
   assigned item type's training tool as attribute `tool` and description between
-  tags `skill`.
+  tags `description`.
 
 ### Removing an existing skill
 - In *game.dat* file: Delete the selected skill entry.
