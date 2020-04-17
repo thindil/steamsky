@@ -189,7 +189,7 @@ package body Crew is
       TiredLevel, HungerLevel, ThirstLevel: Integer := 0;
       HealthLevel: Integer := 100;
       DeathReason: Unbounded_String;
-      CabinIndex, Times, RestAmount, I, ToolIndex, ToolQuality: Natural;
+      CabinIndex, Times, RestAmount, I, ToolIndex: Natural;
       OrderTime, CurrentMinutes, HealAmount: Integer;
       Damage: DamageFactor := 0.0;
       NeedCleaning, HaveMedicalRoom: Boolean := False;
@@ -683,22 +683,10 @@ package body Crew is
                      end if;
                   end loop Modules_Loop;
                   if Skills_List(SkillIndex).Tool /= Null_Unbounded_String then
-                     ToolQuality := 100;
-                     Skill_Loop :
-                     for Skill of PlayerShip.Crew(I).Skills loop
-                        if Skill(1) = SkillIndex then
-                           for Quality of Skills_List(SkillIndex)
-                             .ToolsQuality loop
-                              if Skill(2) <= Quality(1) then
-                                 ToolQuality := Quality(2);
-                                 exit Skill_Loop;
-                              end if;
-                           end loop;
-                        end if;
-                     end loop Skill_Loop;
                      ToolIndex :=
                        FindTools
-                         (I, Skills_List(SkillIndex).Tool, Train, ToolQuality);
+                         (I, Skills_List(SkillIndex).Tool, Train,
+                          GetTrainingToolQuality(I, SkillIndex));
                      if ToolIndex > 0 then
                         for J in 1 .. Times loop
                            GainExp(GetRandom(1, 5), SkillIndex, I);
@@ -950,5 +938,23 @@ package body Crew is
          MemberIndex := MemberIndex + 1;
       end loop;
    end DailyPayment;
+
+   function GetTrainingToolQuality
+     (MemberIndex, SkillIndex: Positive) return Positive is
+      ToolQuality: Positive := 100;
+   begin
+      Skill_Loop :
+      for Skill of PlayerShip.Crew(MemberIndex).Skills loop
+         if Skill(1) = SkillIndex then
+            for Quality of Skills_List(SkillIndex).ToolsQuality loop
+               if Skill(2) <= Quality(1) then
+                  ToolQuality := Quality(2);
+                  exit Skill_Loop;
+               end if;
+            end loop;
+         end if;
+      end loop Skill_Loop;
+      return ToolQuality;
+   end GetTrainingToolQuality;
 
 end Crew;

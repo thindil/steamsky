@@ -199,19 +199,9 @@ package body Ships.Crew is
          elsif GivenOrder = Train then
             RequiredTool :=
               Skills_List(Ship.Modules(ModuleIndex).TrainedSkill).Tool;
-            Skill_Loop :
-            for Skill of PlayerShip.Crew(MemberIndex).Skills loop
-               if Skill(1) = Ship.Modules(ModuleIndex).TrainedSkill then
-                  for Quality of Skills_List
-                    (Ship.Modules(ModuleIndex).TrainedSkill)
-                    .ToolsQuality loop
-                     if Skill(2) <= Quality(1) then
-                        ToolQuality := Quality(2);
-                        exit Skill_Loop;
-                     end if;
-                  end loop;
-               end if;
-            end loop Skill_Loop;
+            ToolQuality :=
+              GetTrainingToolQuality
+                (MemberIndex, Ship.Modules(ModuleIndex).TrainedSkill);
          else
             RequiredTool := RepairTools;
          end if;

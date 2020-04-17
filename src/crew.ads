@@ -281,4 +281,20 @@ package Crew is
       Test_Case => ("Test_DailyPayment", Robustness);
       -- ****
 
+      -- ****f* Crew/GetTrainingToolQuality
+      -- FUNCTION
+      -- Get minumum required quality for training tool for the selected skill
+      -- for the selected crew member
+      -- PARAMETERS
+      -- MemberIndex - Index of crew member which skills will be queried
+      -- SkillIndex  - Index of skill of which tool will be queried
+      -- RESULT
+      -- Minimum required quality of training tool or 100 if not set for this
+      -- skill
+      -- SOURCE
+   function GetTrainingToolQuality
+     (MemberIndex, SkillIndex: Positive) return Positive with
+      Pre => SkillIndex <= Skills_List.Last_Index;
+      -- ****
+
 end Crew;
