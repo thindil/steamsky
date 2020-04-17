@@ -294,7 +294,8 @@ package Crew is
       -- SOURCE
    function GetTrainingToolQuality
      (MemberIndex, SkillIndex: Positive) return Positive with
-      Pre => SkillIndex <= Skills_List.Last_Index;
+      Pre => SkillIndex <= Skills_List.Last_Index,
+      Test_Case => ("Test_GetTrainingToolQuality", Nominal);
       -- ****
 
 end Crew;
