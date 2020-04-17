@@ -118,7 +118,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
   <object class="GtkWindow" id="mainmenuwindow">
     <property name="can_focus">False</property>
     <property name="window_position">center</property>
-    <property name="default_width">300</property>
+    <property name="default_width">600</property>
+    <property name="default_height">400</property>
     <property name="icon">images/icon.png</property>
     <property name="decorated">False</property>
     <property name="deletable">False</property>
@@ -130,18 +131,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkStack" id="mainmenustack">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_left">5</property>
-            <property name="margin_right">5</property>
-            <property name="margin_top">5</property>
-            <property name="margin_bottom">5</property>
-            <property name="transition_type">crossfade</property>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
+          <placeholder/>
         </child>
       </object>
     </child>
