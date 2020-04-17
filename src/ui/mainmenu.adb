@@ -173,6 +173,13 @@ package body MainMenu is
    NewGameStack: Gtk_Stack;
    -- ****
 
+   -- ****iv* MainMenu/MainMenuStack
+   -- FUNCTION
+   -- Gtk Stack with whole main menu UI
+   -- SOURCE
+   MainMenuStack: Gtk_Stack;
+   -- ****
+
    -- ****if* MainMenu/Quit
    -- FUNCTION
    -- Quit from the game
@@ -343,8 +350,7 @@ package body MainMenu is
          Set_Active(Gtk_Combo_Box(Get_Child_At(PlayerGrid, 1, 6)), 0);
       end if;
       CreateGoalsMenu;
-      Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page1");
+      Set_Visible_Child_Name(MainMenuStack, "page1");
       Grab_Focus(Get_Child_At(PlayerGrid, 1, 0));
    end ShowNewGame;
 
@@ -1004,14 +1010,8 @@ package body MainMenu is
       -- ****
    begin
       LoadFile("COPYING");
-      Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
-      Grab_Focus
-        (Get_Child
-           (Gtk_Box
-              (Get_Visible_Child
-                 (Gtk_Stack(Get_Object(Builder, "mainmenustack")))),
-            1));
+      Set_Visible_Child_Name(MainMenuStack, "page5");
+      Grab_Focus(Get_Child(Gtk_Box(Get_Visible_Child(MainMenuStack)), 1));
    end ShowLicense;
 
    -- ****if* MainMenu/ShowContributing
@@ -1025,14 +1025,8 @@ package body MainMenu is
       -- ****
    begin
       LoadFile("CONTRIBUTING.md");
-      Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
-      Grab_Focus
-        (Get_Child
-           (Gtk_Box
-              (Get_Visible_Child
-                 (Gtk_Stack(Get_Object(Builder, "mainmenustack")))),
-            1));
+      Set_Visible_Child_Name(MainMenuStack, "page5");
+      Grab_Focus(Get_Child(Gtk_Box(Get_Visible_Child(MainMenuStack)), 1));
    end ShowContributing;
 
    -- ****if* MainMenu/ShowModding
@@ -1046,14 +1040,8 @@ package body MainMenu is
       -- ****
    begin
       LoadFile("MODDING.md");
-      Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
-      Grab_Focus
-        (Get_Child
-           (Gtk_Box
-              (Get_Visible_Child
-                 (Gtk_Stack(Get_Object(Builder, "mainmenustack")))),
-            1));
+      Set_Visible_Child_Name(MainMenuStack, "page5");
+      Grab_Focus(Get_Child(Gtk_Box(Get_Visible_Child(MainMenuStack)), 1));
    end ShowModding;
 
    -- ****if* MainMenu/ShowReadme
@@ -1067,14 +1055,8 @@ package body MainMenu is
       -- ****
    begin
       LoadFile("README.md");
-      Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page5");
-      Grab_Focus
-        (Get_Child
-           (Gtk_Box
-              (Get_Visible_Child
-                 (Gtk_Stack(Get_Object(Builder, "mainmenustack")))),
-            1));
+      Set_Visible_Child_Name(MainMenuStack, "page5");
+      Grab_Focus(Get_Child(Gtk_Box(Get_Visible_Child(MainMenuStack)), 1));
    end ShowReadme;
 
    -- ****if* MainMenu/UpdateInfoLabel
@@ -1134,8 +1116,8 @@ package body MainMenu is
    -- Self - Gtk_Button which was clicked.
    -- SOURCE
    procedure ShowAbout(Self: access Gtk_Button_Record'Class) is
-      MainMenuStack: constant Gtk_Stack :=
-        Gtk_Stack(Get_Parent(Get_Parent(Get_Parent(Self))));
+      pragma Unreferenced(Self);
+      -- ****
    begin
       Set_Visible_Child_Name(MainMenuStack, "page4");
       Grab_Focus
@@ -1153,8 +1135,8 @@ package body MainMenu is
    -- Self - Gtk_Button which was clicked.
    -- SOURCE
    procedure ShowNews(Self: access Gtk_Button_Record'Class) is
-      MainMenuStack: constant Gtk_Stack :=
-        Gtk_Stack(Get_Parent(Get_Parent(Get_Parent(Self))));
+      pragma Unreferenced(Self);
+      -- ****
    begin
       Set_Visible_Child_Name(MainMenuStack, "page3");
       Grab_Focus
@@ -1172,8 +1154,8 @@ package body MainMenu is
    -- Self - Gtk_Button which was clicked.
    -- SOURCE
    procedure ShowHallOfFame(Self: access Gtk_Button_Record'Class) is
-      MainMenuStack: constant Gtk_Stack :=
-        Gtk_Stack(Get_Parent(Get_Parent(Get_Parent(Self))));
+      pragma Unreferenced(Self);
+      -- ****
    begin
       declare
          HofList: constant Gtk_List_Store :=
@@ -1202,8 +1184,8 @@ package body MainMenu is
    -- Self - Gtk_Button which was clicked.
    -- SOURCE
    procedure ShowLoadGame(Self: access Gtk_Button_Record'Class) is
-      MainMenuStack: constant Gtk_Stack :=
-        Gtk_Stack(Get_Parent(Get_Parent(Get_Parent(Self))));
+      pragma Unreferenced(Self);
+      -- ****
    begin
       RefreshSavesList;
       Set_Visible_Child_Name(MainMenuStack, "page6");
@@ -1263,6 +1245,13 @@ package body MainMenu is
       UpdateNews;
       DataError := To_Unbounded_String(LoadGameData);
       Setting := True;
+      MainMenuStack := Gtk_Stack_New;
+      Set_Margin_Bottom(MainMenuStack, 5);
+      Set_Margin_Top(MainMenuStack, 5);
+      Set_Margin_Left(MainMenuStack, 5);
+      Set_Margin_Right(MainMenuStack, 5);
+      Add_Overlay
+        (Gtk_Overlay(Get_Object(Builder, "menuoverlay")), MainMenuStack);
       for I in AdjNames'Range loop
          Set_Value
            (Gtk_Adjustment(Get_Object(Builder, To_String(AdjNames(I)))),
@@ -1301,9 +1290,7 @@ package body MainMenu is
          On_Clicked(Button, QuitGame'Access);
          Pack_Start(MainMenuButtons, Button);
          Pack_Start(MainMenuBox, MainMenuButtons, False);
-         Add_Named
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), MainMenuBox,
-            "page0");
+         Add_Named(MainMenuStack, MainMenuBox, "page0");
       end;
       declare
          NewGameBox: constant Gtk_Vbox := Gtk_Vbox_New;
@@ -1534,9 +1521,7 @@ package body MainMenu is
          Set_Halign(HBox, Align_Center);
          Pack_Start(NewGameBox, HBox, False);
          On_Key_Press_Event(NewGameBox, NewGameKeyPressed'Access);
-         Add_Named
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), NewGameBox,
-            "page1");
+         Add_Named(MainMenuStack, NewGameBox, "page1");
       end;
       declare
          HallOfFameBox: constant Gtk_Vbox := Gtk_Vbox_New;
@@ -1607,9 +1592,7 @@ package body MainMenu is
            (BackButton, "clicked", Accelerators, GDK_Escape, 0, Accel_Visible);
          Set_Halign(BackButton, Align_End);
          Pack_Start(HallOfFameBox, BackButton, False);
-         Add_Named
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), HallOfFameBox,
-            "page2");
+         Add_Named(MainMenuStack, HallOfFameBox, "page2");
       end;
       declare
          ChangelogBox: constant Gtk_Vbox := Gtk_Vbox_New;
@@ -1638,9 +1621,7 @@ package body MainMenu is
          Pack_Start(ButtonBox, Button);
          Set_Halign(ButtonBox, Align_End);
          Pack_Start(ChangelogBox, ButtonBox, False);
-         Add_Named
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), ChangelogBox,
-            "page3");
+         Add_Named(MainMenuStack, ChangelogBox, "page3");
       end;
       declare
          AboutBox: constant Gtk_Vbox := Gtk_Vbox_New;
@@ -1695,9 +1676,7 @@ package body MainMenu is
          Pack_Start(ButtonBox, Button);
          Set_Halign(ButtonBox, Align_End);
          Pack_Start(AboutBox, ButtonBox, False);
-         Add_Named
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), AboutBox,
-            "page4");
+         Add_Named(MainMenuStack, AboutBox, "page4");
       end;
       declare
          ShowFileBox: constant Gtk_Vbox := Gtk_Vbox_New;
@@ -1721,9 +1700,7 @@ package body MainMenu is
          Set_Halign(BackButton, Align_End);
          Set_Valign(BackButton, Align_End);
          Pack_Start(ShowFileBox, BackButton, False);
-         Add_Named
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), ShowFileBox,
-            "page5");
+         Add_Named(MainMenuStack, ShowFileBox, "page5");
       end;
       declare
          LoadBox: constant Gtk_Vbox := Gtk_Vbox_New;
@@ -1790,8 +1767,7 @@ package body MainMenu is
            (Button, "clicked", Accelerators, GDK_Escape, 0, Accel_Visible);
          Pack_Start(ButtonBox, Button);
          Pack_Start(LoadBox, ButtonBox, False);
-         Add_Named
-           (Gtk_Stack(Get_Object(Builder, "mainmenustack")), LoadBox, "page6");
+         Add_Named(MainMenuStack, LoadBox, "page6");
       end;
       declare
          Label: constant Gtk_Label :=
@@ -1852,15 +1828,10 @@ package body MainMenu is
       Files: Search_Type;
       ButtonsBox: constant Gtk_Button_Box :=
         Gtk_Button_Box
-          (Get_Child
-             (Gtk_Box
-                (Get_Child_By_Name
-                   (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page0")),
-              2));
+          (Get_Child(Gtk_Box(Get_Child_By_Name(MainMenuStack, "page0")), 2));
    begin
       Show_All(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
-      Set_Visible_Child_Name
-        (Gtk_Stack(Get_Object(Builder, "mainmenustack")), "page0");
+      Set_Visible_Child_Name(MainMenuStack, "page0");
       Start_Search(Files, To_String(SaveDirectory), "*.sav");
       if not More_Entries(Files) then
          Hide(Get_Child(ButtonsBox, 1));
