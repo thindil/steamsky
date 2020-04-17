@@ -418,6 +418,64 @@ package body Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_GetTrainingToolQuality_32b7f3_c6feab
+     (MemberIndex, SkillIndex: Positive) return Positive is
+   begin
+      begin
+         pragma Assert(SkillIndex <= Skills_List.Last_Index);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(crew.ads:0):Test_GetTrainingToolQuality test requirement violated");
+      end;
+      declare
+         Test_GetTrainingToolQuality_32b7f3_c6feab_Result: constant Positive :=
+           GNATtest_Generated.GNATtest_Standard.Crew.GetTrainingToolQuality
+             (MemberIndex, SkillIndex);
+      begin
+         begin
+            pragma Assert(True);
+            null;
+         exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "ens_sloc(crew.ads:0:):Test_GetTrainingToolQuality test commitment violated");
+         end;
+         return Test_GetTrainingToolQuality_32b7f3_c6feab_Result;
+      end;
+   end Wrap_Test_GetTrainingToolQuality_32b7f3_c6feab;
+--  end read only
+
+--  begin read only
+   procedure Test_GetTrainingToolQuality_test_gettrainingtoolquality
+     (Gnattest_T: in out Test);
+   procedure Test_GetTrainingToolQuality_32b7f3_c6feab
+     (Gnattest_T: in out Test) renames
+     Test_GetTrainingToolQuality_test_gettrainingtoolquality;
+--  id:2.2/32b7f32221fae8a9/GetTrainingToolQuality/1/0/test_gettrainingtoolquality/
+   procedure Test_GetTrainingToolQuality_test_gettrainingtoolquality
+     (Gnattest_T: in out Test) is
+      function GetTrainingToolQuality
+        (MemberIndex, SkillIndex: Positive) return Positive renames
+        Wrap_Test_GetTrainingToolQuality_32b7f3_c6feab;
+--  end read only
+
+      pragma Unreferenced(Gnattest_T);
+
+   begin
+
+      AUnit.Assertions.Assert
+        (GetTrainingToolQuality(1, 1) = 100,
+         "Failed to get name of training tool.");
+
+--  begin read only
+   end Test_GetTrainingToolQuality_test_gettrainingtoolquality;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
