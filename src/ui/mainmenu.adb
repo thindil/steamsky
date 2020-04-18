@@ -180,6 +180,13 @@ package body MainMenu is
    MainMenuStack: Gtk_Stack;
    -- ****
 
+   -- ****iv* MainMenu/MenuOverlay
+   -- FUNCTION
+   -- Gtk Overlay with whole main menu UI
+   -- SOURCE
+   MenuOverlay: Gtk_Overlay;
+   -- ****
+
    -- ****if* MainMenu/Quit
    -- FUNCTION
    -- Quit from the game
@@ -1250,8 +1257,9 @@ package body MainMenu is
       Set_Margin_Top(MainMenuStack, 5);
       Set_Margin_Left(MainMenuStack, 5);
       Set_Margin_Right(MainMenuStack, 5);
-      Add_Overlay
-        (Gtk_Overlay(Get_Object(Builder, "menuoverlay")), MainMenuStack);
+      MenuOverlay := Gtk_Overlay_New;
+      Add_Overlay(MenuOverlay, MainMenuStack);
+      Add(MainMenuWindow, MenuOverlay);
       for I in AdjNames'Range loop
          Set_Value
            (Gtk_Adjustment(Get_Object(Builder, To_String(AdjNames(I)))),
@@ -1857,8 +1865,7 @@ package body MainMenu is
             Set_Valign(MessageBox, Align_Center);
             Set_No_Show_All(MessageBox, True);
          end;
-         Add_Overlay
-           (Gtk_Overlay(Get_Object(Builder, "menuoverlay")), MessageBox);
+         Add_Overlay(Gtk_Overlay(Get_Parent(MainMenuStack)), MessageBox);
       end if;
       if DataError /= Null_Unbounded_String then
          Hide(Get_Child(ButtonsBox, 1));
