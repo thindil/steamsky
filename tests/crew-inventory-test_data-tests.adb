@@ -260,9 +260,9 @@ package body Crew.Inventory.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_FindTools_05b505_61150c
-     (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders)
-      return Natural is
+   function Wrap_Test_FindTools_9ef8ba_61150c
+     (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders;
+      ToolQuality: Positive := 100) return Natural is
    begin
       begin
          pragma Assert
@@ -276,9 +276,9 @@ package body Crew.Inventory.Test_Data.Tests is
                "req_sloc(crew-inventory.ads:0):Test_FindTools test requirement violated");
       end;
       declare
-         Test_FindTools_05b505_61150c_Result: constant Natural :=
+         Test_FindTools_9ef8ba_61150c_Result: constant Natural :=
            GNATtest_Generated.GNATtest_Standard.Crew.Inventory.FindTools
-             (MemberIndex, ItemType, Order);
+             (MemberIndex, ItemType, Order, ToolQuality);
       begin
          begin
             pragma Assert(True);
@@ -289,21 +289,21 @@ package body Crew.Inventory.Test_Data.Tests is
                  (False,
                   "ens_sloc(crew-inventory.ads:0:):Test_FindTools test commitment violated");
          end;
-         return Test_FindTools_05b505_61150c_Result;
+         return Test_FindTools_9ef8ba_61150c_Result;
       end;
-   end Wrap_Test_FindTools_05b505_61150c;
+   end Wrap_Test_FindTools_9ef8ba_61150c;
 --  end read only
 
 --  begin read only
    procedure Test_FindTools_test_findtools(Gnattest_T: in out Test);
-   procedure Test_FindTools_05b505_61150c(Gnattest_T: in out Test) renames
+   procedure Test_FindTools_9ef8ba_61150c(Gnattest_T: in out Test) renames
      Test_FindTools_test_findtools;
---  id:2.2/05b505dfeefda597/FindTools/1/0/test_findtools/
+--  id:2.2/9ef8baa51d571ac0/FindTools/1/0/test_findtools/
    procedure Test_FindTools_test_findtools(Gnattest_T: in out Test) is
       function FindTools
-        (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders)
-         return Natural renames
-        Wrap_Test_FindTools_05b505_61150c;
+        (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders;
+         ToolQuality: Positive := 100) return Natural renames
+        Wrap_Test_FindTools_9ef8ba_61150c;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

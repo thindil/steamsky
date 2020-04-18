@@ -22,11 +22,11 @@ package Items.Test_Data.Tests is
    procedure Test_DamageItem_f848d1_f75741(Gnattest_T: in out Test);
    --  items.ads:230:4:DamageItem:Test_DamageItem
 
-   procedure Test_FindItem_40535b_d3c7d4(Gnattest_T: in out Test);
-   --  items.ads:248:4:FindItem:Test_FindItem
+   procedure Test_FindItem_5f6068_d3c7d4(Gnattest_T: in out Test);
+   --  items.ads:249:4:FindItem:Test_FindItem
 
    procedure Test_GetItemChanceToDamage_71801d_da4763(Gnattest_T: in out Test);
-   --  items.ads:270:4:GetItemChanceToDamage:Test_GetItemChanceToDamage
+   --  items.ads:271:4:GetItemChanceToDamage:Test_GetItemChanceToDamage
 
 end Items.Test_Data.Tests;
 --  end read only

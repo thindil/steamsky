@@ -18,16 +18,16 @@ package Ships.Movement.Test_Data.Tests is
    --  ships-movement.ads:52:4:DockShip:Test_DockShip
 
    procedure Test_ChangeShipSpeed_b9c437_17b968(Gnattest_T: in out Test);
-   --  ships-movement.ads:64:4:ChangeShipSpeed:Test_ChangeShipSpeed
+   --  ships-movement.ads:65:4:ChangeShipSpeed:Test_ChangeShipSpeed
 
    procedure Test_RealSpeed_60d629_f7fd56(Gnattest_T: in out Test);
-   --  ships-movement.ads:78:4:RealSpeed:Test_RealSpeed
+   --  ships-movement.ads:79:4:RealSpeed:Test_RealSpeed
 
    procedure Test_CountFuelNeeded_db602d_18e85d(Gnattest_T: in out Test);
-   --  ships-movement.ads:89:4:CountFuelNeeded:Test_CountFuelNeeded
+   --  ships-movement.ads:90:4:CountFuelNeeded:Test_CountFuelNeeded
 
    procedure Test_WaitInPlace_a6040e_d787da(Gnattest_T: in out Test);
-   --  ships-movement.ads:99:4:WaitInPlace:Test_WaitInPlace
+   --  ships-movement.ads:100:4:WaitInPlace:Test_WaitInPlace
 
 end Ships.Movement.Test_Data.Tests;
 --  end read only

@@ -11,13 +11,13 @@ package Crafts.Test_Data.Tests is
    null record;
 
    procedure Test_Manufacturing_dd583a_cf804c(Gnattest_T: in out Test);
-   --  crafts.ads:118:4:Manufacturing:Test_Manufacturing
+   --  crafts.ads:120:4:Manufacturing:Test_Manufacturing
 
    procedure Test_CheckRecipe_6b22c5_37e1c4(Gnattest_T: in out Test);
-   --  crafts.ads:131:4:CheckRecipe:Test_CheckRecipe
+   --  crafts.ads:133:4:CheckRecipe:Test_CheckRecipe
 
    procedure Test_SetRecipe_d9013b_dcc889(Gnattest_T: in out Test);
-   --  crafts.ads:145:4:SetRecipe:Test_SetRecipe
+   --  crafts.ads:147:4:SetRecipe:Test_SetRecipe
 
 end Crafts.Test_Data.Tests;
 --  end read only

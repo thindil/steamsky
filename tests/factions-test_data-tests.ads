@@ -11,13 +11,13 @@ package Factions.Test_Data.Tests is
    null record;
 
    procedure Test_GetReputation_f138bb_fd71d1(Gnattest_T: in out Test);
-   --  factions.ads:188:4:GetReputation:Test_GetReputation
+   --  factions.ads:187:4:GetReputation:Test_GetReputation
 
    procedure Test_IsFriendly_868bec_b689c9(Gnattest_T: in out Test);
-   --  factions.ads:205:4:IsFriendly:Test_IsFriendly
+   --  factions.ads:204:4:IsFriendly:Test_IsFriendly
 
    procedure Test_GetRandomFaction_47dd81_103989(Gnattest_T: in out Test);
-   --  factions.ads:219:4:GetRandomFaction:Test_GetRandomFaction
+   --  factions.ads:218:4:GetRandomFaction:Test_GetRandomFaction
 
 end Factions.Test_Data.Tests;
 --  end read only

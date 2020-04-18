@@ -234,32 +234,33 @@ package body Items.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_FindItem_40535b_d3c7d4
+   function Wrap_Test_FindItem_5f6068_d3c7d4
      (Inventory: Inventory_Container.Vector;
       ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
-      Durability: Natural := 101) return Natural is
+      Durability: Natural := 101; Quality: Positive := 100) return Natural is
    begin
       declare
-         Test_FindItem_40535b_d3c7d4_Result: constant Natural :=
+         Test_FindItem_5f6068_d3c7d4_Result: constant Natural :=
            GNATtest_Generated.GNATtest_Standard.Items.FindItem
-             (Inventory, ProtoIndex, ItemType, Durability);
+             (Inventory, ProtoIndex, ItemType, Durability, Quality);
       begin
-         return Test_FindItem_40535b_d3c7d4_Result;
+         return Test_FindItem_5f6068_d3c7d4_Result;
       end;
-   end Wrap_Test_FindItem_40535b_d3c7d4;
+   end Wrap_Test_FindItem_5f6068_d3c7d4;
 --  end read only
 
 --  begin read only
    procedure Test_FindItem_test_finditem(Gnattest_T: in out Test);
-   procedure Test_FindItem_40535b_d3c7d4(Gnattest_T: in out Test) renames
+   procedure Test_FindItem_5f6068_d3c7d4(Gnattest_T: in out Test) renames
      Test_FindItem_test_finditem;
---  id:2.2/40535b42aced5966/FindItem/1/0/test_finditem/
+--  id:2.2/5f60688911337e8b/FindItem/1/0/test_finditem/
    procedure Test_FindItem_test_finditem(Gnattest_T: in out Test) is
       function FindItem
         (Inventory: Inventory_Container.Vector;
          ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
-         Durability: Natural := 101) return Natural renames
-        Wrap_Test_FindItem_40535b_d3c7d4;
+         Durability: Natural := 101; Quality: Positive := 100)
+         return Natural renames
+        Wrap_Test_FindItem_5f6068_d3c7d4;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
