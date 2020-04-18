@@ -469,7 +469,7 @@ package body Crew.Test_Data.Tests is
 
       AUnit.Assertions.Assert
         (GetTrainingToolQuality(1, 1) = 100,
-         "Failed to get name of training tool.");
+         "Failed to get minimun quality of training tool.");
 
 --  begin read only
    end Test_GetTrainingToolQuality_test_gettrainingtoolquality;
