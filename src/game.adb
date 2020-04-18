@@ -617,8 +617,7 @@ package body Game is
          elsif To_String(NodeName) = "skill" then
             TmpSkill :=
               (To_Unbounded_String(Get_Attribute(DataNode, "name")), 1,
-               Null_Unbounded_String,
-               Null_Unbounded_String, ToolQuality);
+               Null_Unbounded_String, Null_Unbounded_String, ToolQuality);
             TmpSkill.Attribute :=
               FindAttributeIndex
                 (To_Unbounded_String(Get_Attribute(DataNode, "attribute")));
