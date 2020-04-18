@@ -127,13 +127,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <placeholder/>
     </child>
     <child>
-      <object class="GtkOverlay" id="menuoverlay">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <child>
-          <placeholder/>
-        </child>
-      </object>
+      <placeholder/>
     </child>
   </object>
   <object class="GtkTextBuffer" id="newsbuffer"/>
