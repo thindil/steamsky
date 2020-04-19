@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [4.9] - 2020-04-19
 
 ### Added
 - New items: orichalcum 80mm explosive ammo, orichalcum 100mm piercing ammo,
