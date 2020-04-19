@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.8 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.9 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -42,14 +42,14 @@
 <li>1.11. <a href="#robo191">Bases/BaseSyllablesPre</a></li>
 <li>1.12. <a href="#robo192">Bases/BaseSyllablesStart</a></li>
 <li>1.13. <a href="#robo193">Bases/SkyBases</a></li>
-<li>1.14. <a href="#robo427">Bases/AskForBases</a></li>
-<li>1.15. <a href="#robo428">Bases/AskForEvents</a></li>
-<li>1.16. <a href="#robo429">Bases/CountPrice</a></li>
-<li>1.17. <a href="#robo430">Bases/GainRep</a></li>
-<li>1.18. <a href="#robo431">Bases/GenerateBaseName</a></li>
-<li>1.19. <a href="#robo432">Bases/GenerateRecruits</a></li>
-<li>1.20. <a href="#robo433">Bases/UpdatePopulation</a></li>
-<li>1.21. <a href="#robo434">Bases/UpdatePrices</a></li>
+<li>1.14. <a href="#robo432">Bases/AskForBases</a></li>
+<li>1.15. <a href="#robo433">Bases/AskForEvents</a></li>
+<li>1.16. <a href="#robo434">Bases/CountPrice</a></li>
+<li>1.17. <a href="#robo435">Bases/GainRep</a></li>
+<li>1.18. <a href="#robo436">Bases/GenerateBaseName</a></li>
+<li>1.19. <a href="#robo437">Bases/GenerateRecruits</a></li>
+<li>1.20. <a href="#robo438">Bases/UpdatePopulation</a></li>
+<li>1.21. <a href="#robo439">Bases/UpdatePrices</a></li>
 </ul>
 </ul>
 <hr />
@@ -196,9 +196,9 @@
 <pre class="source">   <span class="keyword">type</span> <strong>Recruit_Data</strong> <span class="keyword">is</span> <span class="keyword">record</span>
       Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Gender<span class="sign">:</span> Character<span class="sign">;</span>
-      Skills<span class="sign">:</span> <a href="./crew_ads.html#robo96">Skills_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+      Skills<span class="sign">:</span> <a href="./crew_ads.html#robo94">Skills_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
       Price<span class="sign">:</span> Positive<span class="sign">;</span>
-      Attributes<span class="sign">:</span> <a href="./crew_ads.html#robo92">Attributes_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+      Attributes<span class="sign">:</span> <a href="./game_ads.html#robo109">Attributes_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
       Inventory<span class="sign">:</span> <a href="./game_ads.html#robo120">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
       Equipment<span class="sign">:</span> <a href="./game_ads.html#robo115">Natural_Array</a><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 7<span class="sign">)</span><span class="sign">;</span>
       Payment<span class="sign">:</span> Positive<span class="sign">;</span>
@@ -231,7 +231,7 @@
 <pre> Data structure for reputation, 1 = level, 2 = points to next level
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> <strong>Reputation_Array</strong> <span class="keyword">is</span> array<span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 2<span class="sign">)</span> of Integer<span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> <strong>Reputation_Array</strong> <span class="keyword">is</span> <span class="keyword">array</span><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 2<span class="sign">)</span> <span class="keyword">of</span> Integer<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -291,38 +291,38 @@
 <pre> List of sky bases
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>SkyBases</strong><span class="sign">:</span> array<span class="sign">(</span><a href="#robo71">BasesRange</a><span class="sign">)</span> of <a href="#robo69">BaseRecord</a><span class="sign">;</span>
+<pre class="source">   <strong>SkyBases</strong><span class="sign">:</span> <span class="keyword">array</span><span class="sign">(</span><a href="#robo71">BasesRange</a><span class="sign">)</span> <span class="keyword">of</span> <a href="#robo69">BaseRecord</a><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Bases2fAskForBases"></a>
-<a name="robo427"></a><h2>Bases/AskForBases [ Subprograms ]</h2>
+<a name="robo432"></a><h2>Bases/AskForBases [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Ask in base for direction for other bases
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>AskForBases</strong> with
+<pre class="source">   <span class="keyword">procedure</span> <strong>AskForBases</strong> <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_AskForBases"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Bases2fAskForEvents"></a>
-<a name="robo428"></a><h2>Bases/AskForEvents [ Subprograms ]</h2>
+<a name="robo433"></a><h2>Bases/AskForEvents [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Ask in base for direction for random events
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>AskForEvents</strong> with
+<pre class="source">   <span class="keyword">procedure</span> <strong>AskForEvents</strong> <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_AskForEvents"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Bases2fCountPrice"></a>
-<a name="robo429"></a><h2>Bases/CountPrice [ Subprograms ]</h2>
+<a name="robo434"></a><h2>Bases/CountPrice [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -331,8 +331,8 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>CountPrice</strong>
      <span class="sign">(</span>Price<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Natural<span class="sign">;</span> TraderIndex<span class="sign">:</span> <a href="./ships_ads.html#robo151">Crew_Container</a><span class="sign">.</span>Extended_Index<span class="sign">;</span>
-      Reduce<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span> with
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> TraderIndex <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo329">PlayerShip</a><span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">.</span>Last_Index<span class="sign">,</span>
+      Reduce<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span> <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> TraderIndex <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo334">PlayerShip</a><span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">.</span>Last_Index<span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_CountPrice"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -348,14 +348,14 @@
 
 <hr />
 <a name="Bases2fGainRep"></a>
-<a name="robo430"></a><h2>Bases/GainRep [ Subprograms ]</h2>
+<a name="robo435"></a><h2>Bases/GainRep [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Gain reputation in selected base
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>GainRep</strong><span class="sign">(</span><a href="./ui/baseslist_adb.html#robo194">BaseIndex</a><span class="sign">:</span> <a href="#robo71">BasesRange</a><span class="sign">;</span> Points<span class="sign">:</span> Integer<span class="sign">)</span> with
+<pre class="source">   <span class="keyword">procedure</span> <strong>GainRep</strong><span class="sign">(</span><a href="./ui/baseslist_adb.html#robo194">BaseIndex</a><span class="sign">:</span> <a href="#robo71">BasesRange</a><span class="sign">;</span> Points<span class="sign">:</span> Integer<span class="sign">)</span> <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_GainRep"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -365,7 +365,7 @@
 
 <hr />
 <a name="Bases2fGenerateBaseName"></a>
-<a name="robo431"></a><h2>Bases/GenerateBaseName [ Subprograms ]</h2>
+<a name="robo436"></a><h2>Bases/GenerateBaseName [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -373,8 +373,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> <strong>GenerateBaseName</strong>
-     <span class="sign">(</span>FactionIndex<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Unbounded_String with
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="./factions_ads.html#robo104">Factions_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="./factions_ads.html#robo237">Factions_List</a><span class="sign">,</span> FactionIndex<span class="sign">)</span><span class="sign">,</span>
+     <span class="sign">(</span>FactionIndex<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Unbounded_String <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="./factions_ads.html#robo102">Factions_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="./factions_ads.html#robo237">Factions_List</a><span class="sign">,</span> FactionIndex<span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_GenerateBaseName"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -386,46 +386,46 @@
 
 <hr />
 <a name="Bases2fGenerateRecruits"></a>
-<a name="robo432"></a><h2>Bases/GenerateRecruits [ Subprograms ]</h2>
+<a name="robo437"></a><h2>Bases/GenerateRecruits [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Generate if needed new recruits in base
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>GenerateRecruits</strong> with
+<pre class="source">   <span class="keyword">procedure</span> <strong>GenerateRecruits</strong> <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_GenerateRecruits"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Bases2fUpdatePopulation"></a>
-<a name="robo433"></a><h2>Bases/UpdatePopulation [ Subprograms ]</h2>
+<a name="robo438"></a><h2>Bases/UpdatePopulation [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update base population if needed
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>UpdatePopulation</strong> with
+<pre class="source">   <span class="keyword">procedure</span> <strong>UpdatePopulation</strong> <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_UpdatePopulation"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Bases2fUpdatePrices"></a>
-<a name="robo434"></a><h2>Bases/UpdatePrices [ Subprograms ]</h2>
+<a name="robo439"></a><h2>Bases/UpdatePrices [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">Bases</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Random changes of items prices in base
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>UpdatePrices</strong> with
+<pre class="source">   <span class="keyword">procedure</span> <strong>UpdatePrices</strong> <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_UpdatePrices"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/bases.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Tue Mar 24 2020 06:40:03
+<p>Generated from ./src/bases.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 19 2020 06:23:08
 </p>
 </div> <!-- footer -->
 </body>

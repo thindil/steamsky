@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.8 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.9 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -29,9 +29,9 @@
 <ul>
 <li>1. <a href="#robo64">Steamsky/Utils</a></li>
 <ul>
-<li>1.1. <a href="#robo834">Utils/DaysDifference</a></li>
-<li>1.2. <a href="#robo835">Utils/GenerateRoboticName</a></li>
-<li>1.3. <a href="#robo836">Utils/GetRandom</a></li>
+<li>1.1. <a href="#robo844">Utils/DaysDifference</a></li>
+<li>1.2. <a href="#robo845">Utils/GenerateRoboticName</a></li>
+<li>1.3. <a href="#robo846">Utils/GetRandom</a></li>
 </ul>
 </ul>
 <hr />
@@ -48,14 +48,14 @@
 
 <hr />
 <a name="Utils2fDaysDifference"></a>
-<a name="robo834"></a><h2>Utils/DaysDifference [ Subprograms ]</h2>
+<a name="robo844"></a><h2>Utils/DaysDifference [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Count days difference between selected date and current game date
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>DaysDifference</strong><span class="sign">(</span>DateToCompare<span class="sign">:</span> <a href="./game_ads.html#robo113">Date_Record</a><span class="sign">)</span> <span class="keyword">return</span> Natural with
+<pre class="source">   <span class="keyword">function</span> <strong>DaysDifference</strong><span class="sign">(</span>DateToCompare<span class="sign">:</span> <a href="./game_ads.html#robo113">Date_Record</a><span class="sign">)</span> <span class="keyword">return</span> Natural <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_DaysDifference"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -67,7 +67,7 @@
 
 <hr />
 <a name="Utils2fGenerateRoboticName"></a>
-<a name="robo835"></a><h2>Utils/GenerateRoboticName [ Subprograms ]</h2>
+<a name="robo845"></a><h2>Utils/GenerateRoboticName [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -82,14 +82,14 @@
 
 <hr />
 <a name="Utils2fGetRandom"></a>
-<a name="robo836"></a><h2>Utils/GetRandom [ Subprograms ]</h2>
+<a name="robo846"></a><h2>Utils/GetRandom [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">Utils</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Return random number from Min to Max range
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>GetRandom</strong><span class="sign">(</span>Min<span class="sign">,</span> Max<span class="sign">:</span> Integer<span class="sign">)</span> <span class="keyword">return</span> Integer with
+<pre class="source">   <span class="keyword">function</span> <strong>GetRandom</strong><span class="sign">(</span>Min<span class="sign">,</span> Max<span class="sign">:</span> Integer<span class="sign">)</span> <span class="keyword">return</span> Integer <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> Min <span class="sign">&lt;</span><span class="sign">=</span> Max<span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_GetRandom"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
@@ -103,7 +103,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/utils.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Tue Mar 24 2020 06:40:03
+<p>Generated from ./src/utils.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 19 2020 06:23:08
 </p>
 </div> <!-- footer -->
 </body>
