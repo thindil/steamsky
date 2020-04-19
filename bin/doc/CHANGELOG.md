@@ -24,7 +24,7 @@ All notable changes to this project will be documented in this file.
   1 drones base, gain max reputation in 3 drones bases, gain max reputation in
   5 drones bases, gain max reputation in 1 inquisition base, gain max
   reputation in 3 inquisition bases, gain max reputation in 5 inquisition
-  bases, visit 1 undead base, visit 3 undead bases
+  bases, visit 1 undead base, visit 3 undead bases and visit 5 undead bases
 - Info about docking cost before dock to a base
 - Ability to escape from bases without paying
 - Ability to set tools quality for crafting recipes
