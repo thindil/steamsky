@@ -187,19 +187,6 @@ package body MainMenu is
    MenuOverlay: Gtk_Overlay;
    -- ****
 
-   -- ****if* MainMenu/Quit
-   -- FUNCTION
-   -- Quit from the game
-   -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
-   -- SOURCE
-   procedure Quit(Object: access Gtkada_Builder_Record'Class) is
-   -- ****
-   begin
-      Unref(Object);
-      Gtk.Main.Main_Quit;
-   end Quit;
-
    -- ****if* MainMenu/QuitGame
    -- FUNCTION
    -- Quit from the game
@@ -453,7 +440,7 @@ package body MainMenu is
    -- ****
    begin
       GenerateTraders;
-      Hide(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
+      Hide(MainMenuWindow);
       CreateHelpUI;
       CreateGoalsMenu;
       if DebugMode = Menu or DebugMode = Everything then
@@ -630,8 +617,7 @@ package body MainMenu is
                 (Get_Child(Gtk_Box(Get_Parent(Get_Parent(Self))), 0))));
    begin
       if not ShowConfirmDialog
-          ("Are you sure you want delete this savegame?",
-           Gtk_Window(Get_Object(Builder, "mainmenuwindow"))) then
+          ("Are you sure you want delete this savegame?", MainMenuWindow) then
          return;
       end if;
       Get_Selected(Get_Selection(TreeSaves), SavesModel, SavesIter);
@@ -816,38 +802,6 @@ package body MainMenu is
       end if;
       return False;
    end NewGameKeyPressed;
-
-   -- ****if* MainMenu/UpdateInfo
-   -- FUNCTION
-   -- Update new game info
-   -- PARAMETERS
-   -- User_Data - UI element which was selected
-   -- RESULT
-   -- This function always return false
-   -- SEE ALSO
-   -- UpdateInfoProc
-   -- SOURCE
-   function UpdateInfo
-     (User_Data: access GObject_Record'Class) return Boolean is
-   -- ****
-   begin
-      Set_Label(InfoLabel, Get_Tooltip_Text(Gtk_Widget(User_Data)));
-      return False;
-   end UpdateInfo;
-
-   -- ****if* MainMenu/UpdateInfoProc
-   -- FUNCTION
-   -- Update new game info
-   -- PARAMETERS
-   -- User_Data - UI element which was selected
-   -- SEE ALSO
-   -- UpdateInfo
-   -- SOURCE
-   procedure UpdateInfoProc(User_Data: access GObject_Record'Class) is
-   -- ****
-   begin
-      Set_Label(InfoLabel, Get_Tooltip_Text(Gtk_Widget(User_Data)));
-   end UpdateInfoProc;
 
    -- ****if* MainMenu/UpdateSummary
    -- FUNCTION
@@ -1240,12 +1194,8 @@ package body MainMenu is
          Put_Line("Error : " & Get_Message(Error));
          return;
       end if;
-      MainMenuWindow := Gtk_Window(Get_Object(Builder, "mainmenuwindow"));
+      MainMenuWindow := Gtk_Window_New;
       CreateErrorUI(MainMenuWindow);
-      Register_Handler(Builder, "Main_Quit", Quit'Access);
-      Register_Handler(Builder, "Hide_Window", HideWindow'Access);
-      Register_Handler(Builder, "Update_Info", UpdateInfo'Access);
-      Register_Handler(Builder, "Update_Info_Proc", UpdateInfoProc'Access);
       Register_Handler(Builder, "Update_Summary", UpdateSummary'Access);
       Do_Connect(Builder);
       SetUtilsBuilder(Builder);
@@ -1805,6 +1755,15 @@ package body MainMenu is
             "' directory.");
       end;
       Add_Accel_Group(MainMenuWindow, Accelerators);
+      Set_Title(MainMenuWindow, "Steam Sky - main menu");
+      Set_Default_Size(MainMenuWindow, 600, 400);
+      Set_Position(MainMenuWindow, Win_Pos_Center);
+      if not Set_Icon_From_File
+          (MainMenuWindow,
+           To_String(DataDirectory) & Dir_Separator & "ui" & Dir_Separator &
+           "images" & Dir_Separator & "icon.png") then
+         raise Program_Error with "Can't set icon for the main menu window";
+      end if;
       ShowMainMenu;
       if DataError /= Null_Unbounded_String then
          Hide(LoadButton);
@@ -1838,7 +1797,7 @@ package body MainMenu is
         Gtk_Button_Box
           (Get_Child(Gtk_Box(Get_Child_By_Name(MainMenuStack, "page0")), 2));
    begin
-      Show_All(Gtk_Widget(Get_Object(Builder, "mainmenuwindow")));
+      Show_All(MainMenuWindow);
       Set_Visible_Child_Name(MainMenuStack, "page0");
       Start_Search(Files, To_String(SaveDirectory), "*.sav");
       if not More_Entries(Files) then
