@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - Info about docking cost before dock to a base
 - Ability to escape from bases without paying
 - Ability to set tools quality for crafting recipes
+- Ability to set training tools quality for skills
 
 ### Changed
 - Updated bases data with new items and recipes
