@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.8 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.9 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -42,20 +42,20 @@
 <li>1.11. <a href="#robo177">Stories/StepTexts_Container</a></li>
 <li>1.12. <a href="#robo178">Stories/Stories_Container</a></li>
 <li>1.13. <a href="#robo179">Stories/Story_Data</a></li>
-<li>1.14. <a href="#robo336">Stories/CurrentStory</a></li>
-<li>1.15. <a href="#robo337">Stories/FinishedStories</a></li>
-<li>1.16. <a href="#robo338">Stories/Stories_List</a></li>
-<li>1.17. <a href="#robo789">Stories/ClearCurrentStory</a></li>
-<li>1.18. <a href="#robo790">Stories/GetCurrentStoryText</a></li>
-<li>1.19. <a href="#robo791">Stories/GetStepData</a></li>
-<li>1.20. <a href="#robo792">Stories/GetStoryLocation</a></li>
-<li>1.21. <a href="#robo793">Stories/LoadStories</a></li>
-<li>1.22. <a href="#robo794">Stories/ProgressStory</a></li>
-<li>1.23. <a href="./stories_adb.html#robo795">Stories/SelectBase</a></li>
-<li>1.24. <a href="./stories_adb.html#robo796">Stories/SelectEnemy</a></li>
-<li>1.25. <a href="./stories_adb.html#robo797">Stories/SelectLocation</a></li>
-<li>1.26. <a href="./stories_adb.html#robo798">Stories/SelectLoot</a></li>
-<li>1.27. <a href="#robo799">Stories/StartStory</a></li>
+<li>1.14. <a href="#robo341">Stories/CurrentStory</a></li>
+<li>1.15. <a href="#robo342">Stories/FinishedStories</a></li>
+<li>1.16. <a href="#robo343">Stories/Stories_List</a></li>
+<li>1.17. <a href="#robo799">Stories/ClearCurrentStory</a></li>
+<li>1.18. <a href="#robo800">Stories/GetCurrentStoryText</a></li>
+<li>1.19. <a href="#robo801">Stories/GetStepData</a></li>
+<li>1.20. <a href="#robo802">Stories/GetStoryLocation</a></li>
+<li>1.21. <a href="#robo803">Stories/LoadStories</a></li>
+<li>1.22. <a href="#robo804">Stories/ProgressStory</a></li>
+<li>1.23. <a href="./stories_adb.html#robo805">Stories/SelectBase</a></li>
+<li>1.24. <a href="./stories_adb.html#robo806">Stories/SelectEnemy</a></li>
+<li>1.25. <a href="./stories_adb.html#robo807">Stories/SelectLocation</a></li>
+<li>1.26. <a href="./stories_adb.html#robo808">Stories/SelectLoot</a></li>
+<li>1.27. <a href="#robo809">Stories/StartStory</a></li>
 </ul>
 </ul>
 <hr />
@@ -310,7 +310,7 @@
 
 <hr />
 <a name="Stories2fCurrentStory"></a>
-<a name="robo336"></a><h2>Stories/CurrentStory [ Variables ]</h2>
+<a name="robo341"></a><h2>Stories/CurrentStory [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo59">Stories</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -322,7 +322,7 @@
 
 <hr />
 <a name="Stories2fFinishedStories"></a>
-<a name="robo337"></a><h2>Stories/FinishedStories [ Variables ]</h2>
+<a name="robo342"></a><h2>Stories/FinishedStories [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo59">Stories</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -334,7 +334,7 @@
 
 <hr />
 <a name="Stories2fStories5fList"></a>
-<a name="robo338"></a><h2>Stories/Stories_List [ Variables ]</h2>
+<a name="robo343"></a><h2>Stories/Stories_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo59">Stories</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -346,27 +346,27 @@
 
 <hr />
 <a name="Stories2fClearCurrentStory"></a>
-<a name="robo789"></a><h2>Stories/ClearCurrentStory [ Subprograms ]</h2>
+<a name="robo799"></a><h2>Stories/ClearCurrentStory [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo59">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Resets current story
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ClearCurrentStory</strong> with
+<pre class="source">   <span class="keyword">procedure</span> <strong>ClearCurrentStory</strong> <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_ClearCurrentStory"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Stories2fGetCurrentStoryText"></a>
-<a name="robo790"></a><h2>Stories/GetCurrentStoryText [ Subprograms ]</h2>
+<a name="robo800"></a><h2>Stories/GetCurrentStoryText [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo59">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get text of current step in story
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>GetCurrentStoryText</strong> <span class="keyword">return</span> Unbounded_String with
+<pre class="source">   <span class="keyword">function</span> <strong>GetCurrentStoryText</strong> <span class="keyword">return</span> Unbounded_String <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Tets_GetCurrentStoryText"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">RESULT</p>
@@ -375,7 +375,7 @@
 
 <hr />
 <a name="Stories2fGetStepData"></a>
-<a name="robo791"></a><h2>Stories/GetStepData [ Subprograms ]</h2>
+<a name="robo801"></a><h2>Stories/GetStepData [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo59">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -384,7 +384,7 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> <strong>GetStepData</strong>
      <span class="sign">(</span>FinishData<span class="sign">:</span> <a href="#robo173">StepData_Container</a><span class="sign">.</span>Vector<span class="sign">;</span> Name<span class="sign">:</span> String<span class="sign">)</span>
-      <span class="keyword">return</span> Unbounded_String with
+      <span class="keyword">return</span> Unbounded_String <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> Name <span class="sign">/</span><span class="sign">=</span> <span class="quote">""</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_GetStepData"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
@@ -398,15 +398,15 @@
 
 <hr />
 <a name="Stories2fGetStoryLocation"></a>
-<a name="robo792"></a><h2>Stories/GetStoryLocation [ Subprograms ]</h2>
+<a name="robo802"></a><h2>Stories/GetStoryLocation [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo59">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get target location of current story
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>GetStoryLocation</strong><span class="sign">(</span>StoryX<span class="sign">,</span> StoryY<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Positive<span class="sign">)</span> with
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> StoryX <span class="sign">&lt;</span> 1025 and StoryY <span class="sign">&lt;</span> 1025<span class="sign">,</span>
+<pre class="source">   <span class="keyword">procedure</span> <strong>GetStoryLocation</strong><span class="sign">(</span>StoryX<span class="sign">,</span> StoryY<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Positive<span class="sign">)</span> <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> StoryX <span class="sign">&lt;</span> 1025 <span class="keyword">and</span> StoryY <span class="sign">&lt;</span> 1025<span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_GetStoryLocation"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -419,7 +419,7 @@
 
 <hr />
 <a name="Stories2fLoadStories"></a>
-<a name="robo793"></a><h2>Stories/LoadStories [ Subprograms ]</h2>
+<a name="robo803"></a><h2>Stories/LoadStories [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo59">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -434,14 +434,14 @@
 
 <hr />
 <a name="Stories2fProgressStory"></a>
-<a name="robo794"></a><h2>Stories/ProgressStory [ Subprograms ]</h2>
+<a name="robo804"></a><h2>Stories/ProgressStory [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo59">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Progress current story one step
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>ProgressStory</strong><span class="sign">(</span>NextStep<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span> <span class="keyword">return</span> Boolean with
+<pre class="source">   <span class="keyword">function</span> <strong>ProgressStory</strong><span class="sign">(</span>NextStep<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span> <span class="keyword">return</span> Boolean <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_ProgressStory"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -454,7 +454,7 @@
 
 <hr />
 <a name="Stories2fStartStory"></a>
-<a name="robo799"></a><h2>Stories/StartStory [ Subprograms ]</h2>
+<a name="robo809"></a><h2>Stories/StartStory [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo59">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -462,7 +462,7 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>StartStory</strong>
-     <span class="sign">(</span><a href="./combat_adb.html#robo206">FactionName</a><span class="sign">:</span> Unbounded_String<span class="sign">;</span> Condition<span class="sign">:</span> <a href="#robo170">StartConditionType</a><span class="sign">)</span> with
+     <span class="sign">(</span><a href="./combat_adb.html#robo206">FactionName</a><span class="sign">:</span> Unbounded_String<span class="sign">;</span> Condition<span class="sign">:</span> <a href="#robo170">StartConditionType</a><span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="./combat_adb.html#robo206">FactionName</a> <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_StartStory"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
@@ -473,7 +473,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/stories.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Tue Mar 24 2020 06:40:03
+<p>Generated from ./src/stories.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 19 2020 06:23:08
 </p>
 </div> <!-- footer -->
 </body>

@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.8 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.9 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -42,18 +42,19 @@
 <li>1.11. <a href="#robo161">Ships/ShipRecord</a></li>
 <li>1.12. <a href="#robo162">Ships/ShipSpeed</a></li>
 <li>1.13. <a href="#robo163">Ships/ShipUpgrade</a></li>
-<li>1.14. <a href="#robo329">Ships/PlayerShip</a></li>
-<li>1.15. <a href="#robo330">Ships/ProtoShips_List</a></li>
-<li>1.16. <a href="#robo331">Ships/ShipSyllablesEnd</a></li>
-<li>1.17. <a href="#robo332">Ships/ShipSyllablesMiddle</a></li>
-<li>1.18. <a href="#robo333">Ships/ShipSyllablesStart</a></li>
-<li>1.19. <a href="#robo365">Ships/Ships_Invalid_Data</a></li>
-<li>1.20. <a href="#robo766">Ships/CountCombatValue</a></li>
-<li>1.21. <a href="#robo767">Ships/CountShipWeight</a></li>
-<li>1.22. <a href="#robo768">Ships/CreateShip</a></li>
-<li>1.23. <a href="#robo769">Ships/GenerateShipName</a></li>
-<li>1.24. <a href="#robo770">Ships/GetCabinQuality</a></li>
-<li>1.25. <a href="#robo771">Ships/LoadShips</a></li>
+<li>1.14. <a href="#robo334">Ships/PlayerShip</a></li>
+<li>1.15. <a href="#robo335">Ships/ProtoShips_List</a></li>
+<li>1.16. <a href="#robo336">Ships/ShipSyllablesEnd</a></li>
+<li>1.17. <a href="#robo337">Ships/ShipSyllablesMiddle</a></li>
+<li>1.18. <a href="#robo338">Ships/ShipSyllablesStart</a></li>
+<li>1.19. <a href="#robo370">Ships/Ships_Invalid_Data</a></li>
+<li>1.20. <a href="#robo775">Ships/CountCombatValue</a></li>
+<li>1.21. <a href="#robo776">Ships/CountShipWeight</a></li>
+<li>1.22. <a href="#robo777">Ships/CreateShip</a></li>
+<li>1.23. <a href="#robo778">Ships/DamageModule</a></li>
+<li>1.24. <a href="#robo779">Ships/GenerateShipName</a></li>
+<li>1.25. <a href="#robo780">Ships/GetCabinQuality</a></li>
+<li>1.26. <a href="#robo781">Ships/LoadShips</a></li>
 </ul>
 </ul>
 <hr />
@@ -77,7 +78,7 @@
 <pre> Used to store crew data in ships
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> <strong>Crew_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> <a href="./crew_ads.html#robo94">Member_Data</a><span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">package</span> <strong>Crew_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> <a href="./crew_ads.html#robo92">Member_Data</a><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
@@ -89,7 +90,7 @@
 <pre> Used to store ship modules data
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> <strong>Data_Array</strong> <span class="keyword">is</span> array<span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 3<span class="sign">)</span> of Integer<span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> <strong>Data_Array</strong> <span class="keyword">is</span> <span class="keyword">array</span><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 3<span class="sign">)</span> <span class="keyword">of</span> Integer<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -111,39 +112,39 @@
       Owner<span class="sign">:</span> <a href="./game_ads.html#robo116">Natural_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
       UpgradeProgress<span class="sign">:</span> Integer<span class="sign">;</span>
       UpgradeAction<span class="sign">:</span> <a href="#robo163">ShipUpgrade</a><span class="sign">;</span>
-      case MType <span class="keyword">is</span>
-         when ENGINE <span class="sign">=</span><span class="sign">&gt;</span>
+      <span class="keyword">case</span> MType <span class="keyword">is</span>
+         <span class="keyword">when</span> ENGINE <span class="sign">=</span><span class="sign">&gt;</span>
             FuelUsage<span class="sign">:</span> Positive<span class="sign">;</span>
             Power<span class="sign">:</span> Positive<span class="sign">;</span>
             Disabled<span class="sign">:</span> Boolean<span class="sign">;</span>
-         when CABIN <span class="sign">=</span><span class="sign">&gt;</span>
+         <span class="keyword">when</span> CABIN <span class="sign">=</span><span class="sign">&gt;</span>
             Cleanliness<span class="sign">:</span> Natural<span class="sign">;</span>
             Quality<span class="sign">:</span> Natural<span class="sign">;</span>
-         when TURRET <span class="sign">=</span><span class="sign">&gt;</span>
+         <span class="keyword">when</span> TURRET <span class="sign">=</span><span class="sign">&gt;</span>
             GunIndex<span class="sign">:</span> Natural<span class="sign">;</span>
-         when GUN <span class="sign">=</span><span class="sign">&gt;</span>
+         <span class="keyword">when</span> GUN <span class="sign">=</span><span class="sign">&gt;</span>
             Damage<span class="sign">:</span> Positive<span class="sign">;</span>
             AmmoIndex<span class="sign">:</span> Natural<span class="sign">;</span>
-         when HULL <span class="sign">=</span><span class="sign">&gt;</span>
+         <span class="keyword">when</span> HULL <span class="sign">=</span><span class="sign">&gt;</span>
             InstalledModules<span class="sign">:</span> Natural<span class="sign">;</span>
             MaxModules<span class="sign">:</span> Positive<span class="sign">;</span>
-         when WORKSHOP <span class="sign">=</span><span class="sign">&gt;</span>
+         <span class="keyword">when</span> WORKSHOP <span class="sign">=</span><span class="sign">&gt;</span>
             CraftingIndex<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
             CraftingTime<span class="sign">:</span> Natural<span class="sign">;</span>
             CraftingAmount<span class="sign">:</span> Natural<span class="sign">;</span>
-         when MEDICAL_ROOM <span class="sign">|</span> COCKPIT <span class="sign">|</span> ARMOR <span class="sign">|</span> CARGO_ROOM <span class="sign">=</span><span class="sign">&gt;</span>
+         <span class="keyword">when</span> MEDICAL_ROOM <span class="sign">|</span> COCKPIT <span class="sign">|</span> ARMOR <span class="sign">|</span> CARGO_ROOM <span class="sign">=</span><span class="sign">&gt;</span>
             <span class="keyword">null</span><span class="sign">;</span>
-         when TRAINING_ROOM <span class="sign">=</span><span class="sign">&gt;</span>
+         <span class="keyword">when</span> TRAINING_ROOM <span class="sign">=</span><span class="sign">&gt;</span>
             TrainedSkill<span class="sign">:</span> Natural<span class="sign">;</span>
-         when BATTERING_RAM <span class="sign">=</span><span class="sign">&gt;</span>
+         <span class="keyword">when</span> BATTERING_RAM <span class="sign">=</span><span class="sign">&gt;</span>
             Damage2<span class="sign">:</span> Positive<span class="sign">;</span>
             CoolingDown<span class="sign">:</span> Boolean<span class="sign">;</span>
-         when HARPOON_GUN <span class="sign">=</span><span class="sign">&gt;</span>
+         <span class="keyword">when</span> HARPOON_GUN <span class="sign">=</span><span class="sign">&gt;</span>
             Duration<span class="sign">:</span> Positive<span class="sign">;</span>
             HarpoonIndex<span class="sign">:</span> Natural<span class="sign">;</span>
-         when ANY <span class="sign">=</span><span class="sign">&gt;</span>
+         <span class="keyword">when</span> ANY <span class="sign">=</span><span class="sign">&gt;</span>
             Data<span class="sign">:</span> <a href="#robo152">Data_Array</a><span class="sign">;</span>
-      <span class="keyword">end</span> case<span class="sign">;</span>
+      <span class="keyword">end</span> <span class="keyword">case</span><span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -372,7 +373,7 @@
 
 <hr />
 <a name="Ships2fPlayerShip"></a>
-<a name="robo329"></a><h2>Ships/PlayerShip [ Variables ]</h2>
+<a name="robo334"></a><h2>Ships/PlayerShip [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo47">Ships</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -384,7 +385,7 @@
 
 <hr />
 <a name="Ships2fProtoShips5fList"></a>
-<a name="robo330"></a><h2>Ships/ProtoShips_List [ Variables ]</h2>
+<a name="robo335"></a><h2>Ships/ProtoShips_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo47">Ships</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -396,7 +397,7 @@
 
 <hr />
 <a name="Ships2fShipSyllablesEnd"></a>
-<a name="robo331"></a><h2>Ships/ShipSyllablesEnd [ Variables ]</h2>
+<a name="robo336"></a><h2>Ships/ShipSyllablesEnd [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo47">Ships</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -408,7 +409,7 @@
 
 <hr />
 <a name="Ships2fShipSyllablesMiddle"></a>
-<a name="robo332"></a><h2>Ships/ShipSyllablesMiddle [ Variables ]</h2>
+<a name="robo337"></a><h2>Ships/ShipSyllablesMiddle [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo47">Ships</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -420,7 +421,7 @@
 
 <hr />
 <a name="Ships2fShipSyllablesStart"></a>
-<a name="robo333"></a><h2>Ships/ShipSyllablesStart [ Variables ]</h2>
+<a name="robo338"></a><h2>Ships/ShipSyllablesStart [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo47">Ships</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -432,7 +433,7 @@
 
 <hr />
 <a name="Ships2fShips5fInvalid5fData"></a>
-<a name="robo365"></a><h2>Ships/Ships_Invalid_Data [ Exceptions ]</h2>
+<a name="robo370"></a><h2>Ships/Ships_Invalid_Data [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo47">Ships</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -444,14 +445,14 @@
 
 <hr />
 <a name="Ships2fCountCombatValue"></a>
-<a name="robo766"></a><h2>Ships/CountCombatValue [ Subprograms ]</h2>
+<a name="robo775"></a><h2>Ships/CountCombatValue [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo47">Ships</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Count combat value of player ship
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>CountCombatValue</strong> <span class="keyword">return</span> Natural with
+<pre class="source">   <span class="keyword">function</span> <strong>CountCombatValue</strong> <span class="keyword">return</span> Natural <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_CountCombatValue"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">RESULT</p>
@@ -460,14 +461,14 @@
 
 <hr />
 <a name="Ships2fCountShipWeight"></a>
-<a name="robo767"></a><h2>Ships/CountShipWeight [ Subprograms ]</h2>
+<a name="robo776"></a><h2>Ships/CountShipWeight [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo47">Ships</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Count weight of ship (with modules and cargo)
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>CountShipWeight</strong><span class="sign">(</span>Ship<span class="sign">:</span> <a href="#robo161">ShipRecord</a><span class="sign">)</span> <span class="keyword">return</span> Positive with
+<pre class="source">   <span class="keyword">function</span> <strong>CountShipWeight</strong><span class="sign">(</span>Ship<span class="sign">:</span> <a href="#robo161">ShipRecord</a><span class="sign">)</span> <span class="keyword">return</span> Positive <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_CountShipWeight"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -479,7 +480,7 @@
 
 <hr />
 <a name="Ships2fCreateShip"></a>
-<a name="robo768"></a><h2>Ships/CreateShip [ Subprograms ]</h2>
+<a name="robo777"></a><h2>Ships/CreateShip [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo47">Ships</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -488,8 +489,8 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> <strong>CreateShip</strong>
      <span class="sign">(</span>ProtoIndex<span class="sign">,</span> Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span> X<span class="sign">,</span> Y<span class="sign">:</span> Integer<span class="sign">;</span> Speed<span class="sign">:</span> <a href="#robo162">ShipSpeed</a><span class="sign">;</span>
-      RandomUpgrades<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span> <span class="keyword">return</span> <a href="#robo161">ShipRecord</a> with
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><a href="#robo159">ProtoShips_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="#robo330">ProtoShips_List</a><span class="sign">,</span> ProtoIndex<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      RandomUpgrades<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span> <span class="keyword">return</span> <a href="#robo161">ShipRecord</a> <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><a href="#robo159">ProtoShips_Container</a><span class="sign">.</span>Contains<span class="sign">(</span><a href="#robo335">ProtoShips_List</a><span class="sign">,</span> ProtoIndex<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_CreateShip"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -507,8 +508,32 @@
 </pre>
 
 <hr />
+<a name="Ships2fDamageModule"></a>
+<a name="robo778"></a><h2>Ships/DamageModule [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo47">Ships</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Damage the selected module
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>DamageModule</strong>
+     <span class="sign">(</span>Ship<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> <a href="#robo161">ShipRecord</a><span class="sign">;</span> <a href="./ui/ships-ui_ads.html#robo332">ModuleIndex</a><span class="sign">,</span> Damage<span class="sign">:</span> Positive<span class="sign">;</span>
+      DeathReason<span class="sign">:</span> String<span class="sign">)</span> <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="./ui/ships-ui_ads.html#robo332">ModuleIndex</a> <span class="keyword">in</span>
+        Ship<span class="sign">.</span>Modules<span class="sign">.</span>First_Index <span class="sign">.</span><span class="sign">.</span> Ship<span class="sign">.</span>Modules<span class="sign">.</span>Last_Index<span class="sign">,</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_DamageModule"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Ship        - Ship in which the module will be damaged
+ <a href="./ui/ships-ui_ads.html#robo332">ModuleIndex</a> - Index of the module to damage
+ Damage      - Amount of damage which the module will take
+ DeathReason - If module has owner, reason of owner's death
+               if module will be destroyed
+</pre>
+
+<hr />
 <a name="Ships2fGenerateShipName"></a>
-<a name="robo769"></a><h2>Ships/GenerateShipName [ Subprograms ]</h2>
+<a name="robo779"></a><h2>Ships/GenerateShipName [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo47">Ships</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -516,7 +541,7 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> <strong>GenerateShipName</strong>
-     <span class="sign">(</span>Owner<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Unbounded_String with
+     <span class="sign">(</span>Owner<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Unbounded_String <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> Owner <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_GenerateShipName"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
@@ -529,14 +554,14 @@
 
 <hr />
 <a name="Ships2fGetCabinQuality"></a>
-<a name="robo770"></a><h2>Ships/GetCabinQuality [ Subprograms ]</h2>
+<a name="robo780"></a><h2>Ships/GetCabinQuality [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo47">Ships</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get description of quality of selected cabin in player ship
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>GetCabinQuality</strong><span class="sign">(</span>Quality<span class="sign">:</span> Natural<span class="sign">)</span> <span class="keyword">return</span> String with
+<pre class="source">   <span class="keyword">function</span> <strong>GetCabinQuality</strong><span class="sign">(</span>Quality<span class="sign">:</span> Natural<span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_GetCabinQuality"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -548,7 +573,7 @@
 
 <hr />
 <a name="Ships2fLoadShips"></a>
-<a name="robo771"></a><h2>Ships/LoadShips [ Subprograms ]</h2>
+<a name="robo781"></a><h2>Ships/LoadShips [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo47">Ships</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -563,7 +588,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ships.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Tue Mar 24 2020 06:40:03
+<p>Generated from ./src/ships.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 19 2020 06:23:08
 </p>
 </div> <!-- footer -->
 </body>

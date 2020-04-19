@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.8 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 4.9 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,16 +30,16 @@
 <li>1. <a href="#robo198">Combat.UI/EngineerOrders</a></li>
 <li>2. <a href="#robo199">Combat.UI/GunnerOrders</a></li>
 <li>3. <a href="#robo200">Combat.UI/PilotOrders</a></li>
-<li>4. <a href="#robo448">Combat.UI/GetGunSpeed</a></li>
-<li>5. <a href="#robo449">Combat.UI/GiveBoardingOrders</a></li>
-<li>6. <a href="#robo450">Combat.UI/GiveCombatOrders</a></li>
-<li>7. <a href="#robo451">Combat.UI/NextTurn</a></li>
-<li>8. <a href="#robo452">Combat.UI/RefreshBoardingUI</a></li>
-<li>9. <a href="#robo453">Combat.UI/RefreshCombatUI</a></li>
-<li>10. <a href="#robo454">Combat.UI/SetBoardingOrder</a></li>
-<li>11. <a href="#robo455">Combat.UI/SetBoardingParty</a></li>
-<li>12. <a href="#robo456">Combat.UI/SetOrdersList</a></li>
-<li>13. <a href="#robo458">Combat.UI/UpdateMessages</a></li>
+<li>4. <a href="#robo453">Combat.UI/GetGunSpeed</a></li>
+<li>5. <a href="#robo454">Combat.UI/GiveBoardingOrders</a></li>
+<li>6. <a href="#robo455">Combat.UI/GiveCombatOrders</a></li>
+<li>7. <a href="#robo456">Combat.UI/NextTurn</a></li>
+<li>8. <a href="#robo457">Combat.UI/RefreshBoardingUI</a></li>
+<li>9. <a href="#robo458">Combat.UI/RefreshCombatUI</a></li>
+<li>10. <a href="#robo459">Combat.UI/SetBoardingOrder</a></li>
+<li>11. <a href="#robo460">Combat.UI/SetBoardingParty</a></li>
+<li>12. <a href="#robo461">Combat.UI/SetOrdersList</a></li>
+<li>13. <a href="#robo463">Combat.UI/UpdateMessages</a></li>
 </ul>
 <hr />
 <a name="Combat2eUI2fEngineerOrders"></a>
@@ -50,7 +50,7 @@
 <pre> Array of text for each combat order for engineer
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>EngineerOrders</strong><span class="sign">:</span> <span class="keyword">constant</span> array<span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 4<span class="sign">)</span> of Unbounded_String <span class="sign">:</span><span class="sign">=</span>
+<pre class="source">   <strong>EngineerOrders</strong><span class="sign">:</span> <span class="keyword">constant</span> <span class="keyword">array</span><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 4<span class="sign">)</span> <span class="keyword">of</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span>
      <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"All stop"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"Quarter speed"</span><span class="sign">)</span><span class="sign">,</span>
       To_Unbounded_String<span class="sign">(</span><span class="quote">"Half speed"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"Full speed"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
@@ -64,7 +64,7 @@
 <pre> Array of text for each combat order for gunners
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>GunnerOrders</strong><span class="sign">:</span> <span class="keyword">constant</span> array<span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 6<span class="sign">)</span> of Unbounded_String <span class="sign">:</span><span class="sign">=</span>
+<pre class="source">   <strong>GunnerOrders</strong><span class="sign">:</span> <span class="keyword">constant</span> <span class="keyword">array</span><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 6<span class="sign">)</span> <span class="keyword">of</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span>
      <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"Don't shoot"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"Precise fire"</span><span class="sign">)</span><span class="sign">,</span>
       To_Unbounded_String<span class="sign">(</span><span class="quote">"Fire at will"</span><span class="sign">)</span><span class="sign">,</span>
       To_Unbounded_String<span class="sign">(</span><span class="quote">"Aim for their engine"</span><span class="sign">)</span><span class="sign">,</span>
@@ -81,14 +81,14 @@
 <pre> Array of text for each combat order for pilot
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>PilotOrders</strong><span class="sign">:</span> <span class="keyword">constant</span> array<span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 4<span class="sign">)</span> of Unbounded_String <span class="sign">:</span><span class="sign">=</span>
+<pre class="source">   <strong>PilotOrders</strong><span class="sign">:</span> <span class="keyword">constant</span> <span class="keyword">array</span><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 4<span class="sign">)</span> <span class="keyword">of</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span>
      <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"Go closer"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"Keep distance"</span><span class="sign">)</span><span class="sign">,</span>
       To_Unbounded_String<span class="sign">(</span><span class="quote">"Evade"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"Escape"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Combat2eUI2fGetGunSpeed"></a>
-<a name="robo448"></a><h2>Combat.UI/GetGunSpeed [ Subprograms ]</h2>
+<a name="robo453"></a><h2>Combat.UI/GetGunSpeed [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo14">Combat.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -107,7 +107,7 @@
 
 <hr />
 <a name="Combat2eUI2fGiveBoardingOrders"></a>
-<a name="robo449"></a><h2>Combat.UI/GiveBoardingOrders [ Subprograms ]</h2>
+<a name="robo454"></a><h2>Combat.UI/GiveBoardingOrders [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo14">Combat.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">SOURCE</p>
@@ -118,7 +118,7 @@
 
 <hr />
 <a name="Combat2eUI2fGiveCombatOrders"></a>
-<a name="robo450"></a><h2>Combat.UI/GiveCombatOrders [ Subprograms ]</h2>
+<a name="robo455"></a><h2>Combat.UI/GiveCombatOrders [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo14">Combat.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">SOURCE</p>
@@ -129,7 +129,7 @@
 
 <hr />
 <a name="Combat2eUI2fNextTurn"></a>
-<a name="robo451"></a><h2>Combat.UI/NextTurn [ Subprograms ]</h2>
+<a name="robo456"></a><h2>Combat.UI/NextTurn [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo14">Combat.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">SOURCE</p>
@@ -138,7 +138,7 @@
 
 <hr />
 <a name="Combat2eUI2fRefreshBoardingUI"></a>
-<a name="robo452"></a><h2>Combat.UI/RefreshBoardingUI [ Subprograms ]</h2>
+<a name="robo457"></a><h2>Combat.UI/RefreshBoardingUI [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo14">Combat.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">SOURCE</p>
@@ -147,7 +147,7 @@
 
 <hr />
 <a name="Combat2eUI2fRefreshCombatUI"></a>
-<a name="robo453"></a><h2>Combat.UI/RefreshCombatUI [ Subprograms ]</h2>
+<a name="robo458"></a><h2>Combat.UI/RefreshCombatUI [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo14">Combat.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -159,11 +159,11 @@
 
 <hr />
 <a name="Combat2eUI2fSetBoardingOrder"></a>
-<a name="robo454"></a><h2>Combat.UI/SetBoardingOrder [ Subprograms ]</h2>
+<a name="robo459"></a><h2>Combat.UI/SetBoardingOrder [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo14">Combat.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> <a href="./ships-ui-handlers_ads.html#robo749">Assign</a>/remove selected crew member to boarding party
+<pre> <a href="./ships-ui-handlers_ads.html#robo758">Assign</a>/remove selected crew member to boarding party
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>SetBoardingOrder</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Toggle_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
@@ -174,7 +174,7 @@
 
 <hr />
 <a name="Combat2eUI2fSetBoardingParty"></a>
-<a name="robo455"></a><h2>Combat.UI/SetBoardingParty [ Subprograms ]</h2>
+<a name="robo460"></a><h2>Combat.UI/SetBoardingParty [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo14">Combat.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -190,7 +190,7 @@
 
 <hr />
 <a name="Combat2eUI2fSetOrdersList"></a>
-<a name="robo456"></a><h2>Combat.UI/SetOrdersList [ Subprograms ]</h2>
+<a name="robo461"></a><h2>Combat.UI/SetOrdersList [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo14">Combat.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">SOURCE</p>
@@ -199,7 +199,7 @@
 
 <hr />
 <a name="Combat2eUI2fUpdateMessages"></a>
-<a name="robo458"></a><h2>Combat.UI/UpdateMessages [ Subprograms ]</h2>
+<a name="robo463"></a><h2>Combat.UI/UpdateMessages [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo14">Combat.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -211,7 +211,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/combat-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Tue Mar 24 2020 06:40:03
+<p>Generated from ./src/ui/combat-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 19 2020 06:23:08
 </p>
 </div> <!-- footer -->
 </body>
