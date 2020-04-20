@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -18,7 +18,6 @@
 with Maps; use Maps;
 with Utils; use Utils;
 with Trades; use Trades;
-with Items; use Items;
 with BasesTypes; use BasesTypes;
 
 package body Bases.Cargo is
@@ -27,11 +26,11 @@ package body Bases.Cargo is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Chance: Positive;
-      Population: Natural := SkyBases(BaseIndex).Population;
+      Population: constant Natural :=
+        (if SkyBases(BaseIndex).Population > 0 then
+           SkyBases(BaseIndex).Population
+         else 1);
    begin
-      if Population = 0 then
-         Population := 1;
-      end if;
       if SkyBases(BaseIndex).Population < 150 then
          Chance := 5;
       elsif SkyBases(BaseIndex).Population < 300 then
@@ -73,9 +72,9 @@ package body Bases.Cargo is
                Amount: Positive;
                ItemIndex: Natural;
             begin
-               if SkyBases(BaseIndex).Population < 150 then
+               if Population < 150 then
                   Amount := GetRandom(1, 10);
-               elsif SkyBases(BaseIndex).Population < 300 then
+               elsif Population < 300 then
                   Amount := GetRandom(1, 20);
                else
                   Amount := GetRandom(1, 30);
@@ -138,16 +137,14 @@ package body Bases.Cargo is
 
    procedure UpdateBaseCargo
      (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
-      Durability: Natural := 100; CargoIndex: Natural := 0) is
+      Durability: Durability_Range := 100; CargoIndex: Natural := 0) is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      ItemIndex: Natural;
+      ItemIndex: constant Natural :=
+        (if ProtoIndex /= Null_Unbounded_String then
+           FindBaseCargo(ProtoIndex, Durability)
+         else CargoIndex);
    begin
-      if ProtoIndex /= Null_Unbounded_String then
-         ItemIndex := FindBaseCargo(ProtoIndex, Durability);
-      else
-         ItemIndex := CargoIndex;
-      end if;
       if Amount > 0 then
          if ItemIndex = 0 then
             SkyBases(BaseIndex).Cargo.Append
@@ -174,14 +171,14 @@ package body Bases.Cargo is
    end UpdateBaseCargo;
 
    function FindBaseCargo
-     (ProtoIndex: Unbounded_String; Durability: Natural := 101)
-      return Natural is
+     (ProtoIndex: Unbounded_String;
+      Durability: Durability_Range := Durability_Range'Last) return Natural is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       function FindCargo(Cargo: BaseCargo_Container.Vector) return Natural is
       begin
          for I in Cargo.Iterate loop
-            if Durability < 101 then
+            if Durability < Durability_Range'Last then
                if Cargo(I).ProtoIndex = ProtoIndex and
                  Cargo(I).Durability = Durability then
                   return BaseCargo_Container.To_Index(I);

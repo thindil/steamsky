@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -14,6 +14,8 @@
 --
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
+
+with Items; use Items;
 
 -- ****h* Steamsky/Bases.Cargo
 -- FUNCTION
@@ -42,7 +44,7 @@ package Bases.Cargo is
       -- SOURCE
    procedure UpdateBaseCargo
      (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
-      Durability: Natural := 100; CargoIndex: Natural := 0) with
+      Durability: Durability_Range := 100; CargoIndex: Natural := 0) with
       Test_Case => ("Test_UpdateBaseCargo", Robustness);
       -- ****
 
@@ -56,7 +58,8 @@ package Bases.Cargo is
       -- Index of item in sky base cargo or 0 if item not found
       -- SOURCE
    function FindBaseCargo
-     (ProtoIndex: Unbounded_String; Durability: Natural := 101)
+     (ProtoIndex: Unbounded_String;
+      Durability: Durability_Range := Durability_Range'Last)
       return Natural with
       Test_Case => ("Test_FindBaseCargo", Robustness);
       -- ****
