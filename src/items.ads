@@ -77,6 +77,13 @@ package Items is
       Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
+   -- ****t* Items/Durability
+   -- FUNCTION
+   -- Used to mark items durability
+   -- SOURCE
+   subtype Durability_Range is Natural range 0 .. 101;
+   -- ****
+
    -- ****t* Items/InventoryData
    -- FUNCTION
    -- Data structure for item in inventory
@@ -91,7 +98,7 @@ package Items is
       ProtoIndex: Unbounded_String;
       Amount: Positive;
       Name: Unbounded_String;
-      Durability: Natural;
+      Durability: Durability_Range;
       Price: Natural;
    end record;
    -- ****
@@ -193,7 +200,8 @@ package Items is
       -- Description of item damage level
       -- SOURCE
    function GetItemDamage
-     (ItemDurability: Natural; ToLower: Boolean := False) return String with
+     (ItemDurability: Durability_Range; ToLower: Boolean := False)
+      return String with
       Test_Case => ("Test_GetItemDamage", Robustness);
       -- ****
 
@@ -249,7 +257,8 @@ package Items is
    function FindItem
      (Inventory: Inventory_Container.Vector;
       ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
-      Durability: Natural := 101; Quality: Positive := 100) return Natural with
+      Durability: Durability_Range := Durability_Range'Last;
+      Quality: Positive := 100) return Natural with
       Test_Case => ("Test_FindItem", Robustness);
       -- ****
 

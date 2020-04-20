@@ -177,7 +177,8 @@ package body Items is
    end FindProtoItem;
 
    function GetItemDamage
-     (ItemDurability: Natural; ToLower: Boolean := False) return String is
+     (ItemDurability: Durability_Range; ToLower: Boolean := False)
+      return String is
       DamagePercent: Float;
       DamageText: Unbounded_String;
    begin
@@ -286,7 +287,8 @@ package body Items is
    function FindItem
      (Inventory: Inventory_Container.Vector;
       ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
-      Durability: Natural := 101; Quality: Positive := 100) return Natural is
+      Durability: Durability_Range := Durability_Range'Last;
+      Quality: Positive := 100) return Natural is
    begin
       if ProtoIndex /= Null_Unbounded_String then
          for I in Inventory.Iterate loop
@@ -296,7 +298,7 @@ package body Items is
                 and then Items_List(Inventory(I).ProtoIndex).Value(1) <=
                   Quality) or
                Items_List(Inventory(I).ProtoIndex).Value.Length = 0) then
-               if Durability < 101
+               if Durability < Durability_Range'Last
                  and then Inventory(I).Durability = Durability then
                   return Inventory_Container.To_Index(I);
                else
@@ -312,7 +314,7 @@ package body Items is
                 and then Items_List(Inventory(I).ProtoIndex).Value(1) <=
                   Quality) or
                Items_List(Inventory(I).ProtoIndex).Value.Length = 0) then
-               if Durability < 101
+               if Durability < Durability_Range'Last
                  and then Inventory(I).Durability = Durability then
                   return Inventory_Container.To_Index(I);
                else
