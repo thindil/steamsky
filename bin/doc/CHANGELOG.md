@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- New goal: visit 10 undead bases
+
 ## [4.9] - 2020-04-19
 
 ### Added
