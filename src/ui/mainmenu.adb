@@ -187,6 +187,13 @@ package body MainMenu is
    MenuOverlay: Gtk_Overlay;
    -- ****
 
+   -- ****iv* MainMenu/NewsView
+   -- FUNCTION
+   -- Gtk_Text_View with the last game changes
+   -- SOURCE
+   NewsView: Gtk_Text_View;
+   -- ****
+
    -- ****if* MainMenu/QuitGame
    -- FUNCTION
    -- Quit from the game
@@ -358,6 +365,9 @@ package body MainMenu is
       NewsText: Unbounded_String := Null_Unbounded_String;
       FileText: Unbounded_String;
    begin
+      if NewsView = null then
+         return;
+      end if;
       if not Exists(To_String(DocDirectory) & "CHANGELOG.md") then
          NewsText :=
            To_Unbounded_String
@@ -376,9 +386,7 @@ package body MainMenu is
          end loop;
          Close(ChangesFile);
       end if;
-      Set_Text
-        (Gtk_Text_Buffer(Get_Object(Builder, "newsbuffer")),
-         To_String(NewsText));
+      Set_Text(Get_Buffer(NewsView), To_String(NewsText));
    end UpdateNews;
 
    -- ****if* MainMenu/ShowAllNews
@@ -1199,7 +1207,6 @@ package body MainMenu is
       Register_Handler(Builder, "Update_Summary", UpdateSummary'Access);
       Do_Connect(Builder);
       SetUtilsBuilder(Builder);
-      UpdateNews;
       DataError := To_Unbounded_String(LoadGameData);
       Setting := True;
       MainMenuStack := Gtk_Stack_New;
@@ -1558,10 +1565,8 @@ package body MainMenu is
            Gtk_Button_Box_New(Orientation_Horizontal);
          Button: Gtk_Button;
          NewsScroll: constant Gtk_Scrolled_Window := Gtk_Scrolled_Window_New;
-         NewsView: constant Gtk_Text_View :=
-           Gtk_Text_View_New_With_Buffer
-             (Gtk_Text_Buffer(Get_Object(Builder, "newsbuffer")));
       begin
+         NewsView := Gtk_Text_View_New_With_Buffer(Gtk_Text_Buffer_New);
          Set_Editable(NewsView, False);
          Set_Cursor_Visible(NewsView, False);
          Set_Wrap_Mode(NewsView, Wrap_Word);
@@ -1569,6 +1574,7 @@ package body MainMenu is
          Add(NewsScroll, NewsView);
          Set_Policy(NewsScroll, Policy_Never, Policy_Automatic);
          Pack_Start(ChangelogBox, NewsScroll);
+         UpdateNews;
          Button := Gtk_Button_New_With_Mnemonic("_Show all changes");
          On_Clicked(Button, ShowAllNews'Access);
          Pack_Start(ButtonBox, Button);
