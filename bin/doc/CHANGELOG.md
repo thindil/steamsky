@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New goal: visit 10 undead bases
+- New goals: visit 10 undead bases, visit 1 drones base
 
 ## [4.9] - 2020-04-19
 
