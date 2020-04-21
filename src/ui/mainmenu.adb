@@ -194,6 +194,13 @@ package body MainMenu is
    NewsView: Gtk_Text_View;
    -- ****
 
+   -- ****iv* MainMenu/LicenseView
+   -- FUNCTION
+   -- Gtk_Text_View with the various files content
+   -- SOURCE
+   FileView: Gtk_Text_View;
+   -- ****
+
    -- ****if* MainMenu/QuitGame
    -- FUNCTION
    -- Quit from the game
@@ -261,9 +268,7 @@ package body MainMenu is
          end loop;
          Close(LicenseFile);
       end if;
-      Set_Text
-        (Gtk_Text_Buffer(Get_Object(Builder, "licensebuffer")),
-         To_String(LicenseText));
+      Set_Text(Get_Buffer(FileView), To_String(LicenseText));
    end LoadFile;
 
    -- ****if* MainMenu/SetBaseType
@@ -1647,10 +1652,8 @@ package body MainMenu is
          BackButton: constant Gtk_Button :=
            Gtk_Button_New_With_Mnemonic("_Back");
          FileScroll: constant Gtk_Scrolled_Window := Gtk_Scrolled_Window_New;
-         FileView: constant Gtk_Text_View :=
-           Gtk_Text_View_New_With_Buffer
-             (Gtk_Text_Buffer(Get_Object(Builder, "licensebuffer")));
       begin
+         FileView := Gtk_Text_View_New_With_Buffer(Gtk_Text_Buffer_New);
          Set_Editable(FileView, False);
          Set_Cursor_Visible(FileView, False);
          Set_Wrap_Mode(FileView, Wrap_Word);
