@@ -114,7 +114,6 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkTextBuffer" id="licensebuffer"/>
   <object class="GtkListStore" id="saveslist">
     <columns>
       <!-- column-name gchararray1 -->
