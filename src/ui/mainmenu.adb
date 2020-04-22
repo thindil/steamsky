@@ -350,7 +350,7 @@ package body MainMenu is
             end if;
          end loop;
          Foreach
-           (Gtk_List_Store(Get_Object(Builder, "basesstore")),
+           (-(Get_Model(Gtk_Combo_Box(Get_Child_At(PlayerGrid, 1, 6)))),
             SetBaseType'Access);
       else
          Set_Active(Gtk_Combo_Box(Get_Child_At(PlayerGrid, 1, 6)), 0);
@@ -562,8 +562,8 @@ package body MainMenu is
                 (Gtk_Combo_Box_Text(Get_Child_At(PlayerGrid, 1, 5)))),
          StartingBase =>
            To_Unbounded_String
-             (Get_String
-                (Gtk_List_Store(Get_Object(Builder, "basesstore")),
+             (Gtk.List_Store.Get_String
+                (-(Get_Model(Gtk_Combo_Box(Get_Child_At(PlayerGrid, 1, 6)))),
                  Get_Active_Iter
                    (Gtk_Combo_Box(Get_Child_At(PlayerGrid, 1, 6))),
                  0)),
@@ -703,8 +703,9 @@ package body MainMenu is
          Show_All(Get_Child_At(Gtk_Grid(Get_Parent(Self)), 0, 1));
       end if;
       declare
-         BasesList: constant Gtk_List_Store :=
-           Gtk_List_Store(Get_Object(Builder, "basesstore"));
+         BaseComboBox: constant Gtk_Combo_Box :=
+           Gtk_Combo_Box(Get_Child_At(Gtk_Grid(Get_Parent(Self)), 1, 6));
+         BasesList: constant Gtk_List_Store := -(Get_Model(BaseComboBox));
          BaseIter: Gtk_Tree_Iter;
       begin
          BasesList.Clear;
@@ -773,8 +774,7 @@ package body MainMenu is
    procedure ShowBaseDescription(Self: access Gtk_Combo_Box_Record'Class) is
       -- ****
       BaseTypeIndex: constant Integer := Integer(Get_Active(Self));
-      BasesTypesList: constant Gtk_List_Store :=
-        Gtk_List_Store(Get_Object(Builder, "basesstore"));
+      BasesTypesList: constant Gtk_List_Store := -(Get_Model(Self));
    begin
       if BaseTypeIndex = -1 or Setting then
          return;
@@ -1320,7 +1320,7 @@ package body MainMenu is
          DifficultyScroll: constant Gtk_Scrolled_Window :=
            Gtk_Scrolled_Window_New;
          BasesList: constant Gtk_List_Store :=
-           Gtk_List_Store(Get_Object(Builder, "basesstore"));
+           Gtk_List_Store_Newv((GType_String, GType_String));
          BaseIter: Gtk_Tree_Iter;
          ComboBoxBasesTypes: constant Gtk_Combo_Box :=
            Gtk_Combo_Box_New_With_Model(+(BasesList));
