@@ -214,5 +214,6 @@ attribute "amount" of points for finish it.
  <goal amount="5" index="189" multiplier="4" target="UNDEAD" type="VISIT"/>
  <goal amount="10" index="190" multiplier="4" target="UNDEAD" type="VISIT"/>
  <goal amount="1" index="191" multiplier="4" target="DRONES" type="VISIT"/>
+ <goal amount="3" index="192" multiplier="4" target="DRONES" type="VISIT"/>
 </goals>
 
