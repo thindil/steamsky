@@ -348,7 +348,7 @@ package body Ships.Movement is
                      null;
                end case;
                AddMessage(To_String(MessageText), OrderMessage, Color);
-               GainRep(BaseIndex, -(GetRandom(50, 100)));
+               GainRep(BaseIndex, -(GetRandom(10, 30)));
             end;
          end if;
          if PlayerShip.Crew(1).Health > 0 then
