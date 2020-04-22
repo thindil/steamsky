@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New goals: visit 10 undead bases, visit 1 drones base, visit 3 drones bases
 
+### Changed
+- Reduced amount of lost reputation for escaping from bases
+
 ### Fixed
 - Reputation requirement for recipes for steel, titanium, orichalcum and
   adamantium warhammers
