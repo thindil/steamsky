@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file.
 ### Added
 - New goals: visit 10 undead bases, visit 1 drones base
 
+### Fixed
+- Reputation requirement for recipes for steel, titanium, orichalcum and
+  adamantium warhammers
+
 ## [4.9] - 2020-04-19
 
 ### Added
