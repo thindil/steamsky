@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- New goals: visit 10 undead bases, visit 1 drones base
+- New goals: visit 10 undead bases, visit 1 drones base, visit 3 drones bases
 
 ### Fixed
 - Reputation requirement for recipes for steel, titanium, orichalcum and
