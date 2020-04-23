@@ -66,7 +66,7 @@ package body Bases.Ship is
             TradeMessage);
       end if;
       UpdateCargo
-        (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => (0 - Cost));
+        (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => -(Cost));
       UpdateBaseCargo(MoneyIndex, Cost);
       GainExp(1, TalkingSkill, TraderIndex);
       GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
@@ -151,8 +151,7 @@ package body Bases.Ship is
             PlayerShip.Modules.Delete(HullIndex);
          end if;
          UpdateCargo
-           (Ship => PlayerShip, CargoIndex => MoneyIndex2,
-            Amount => (0 - Price));
+           (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => -(Price));
          UpdateBaseCargo(MoneyIndex, Price);
          GainExp(1, TalkingSkill, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
@@ -353,7 +352,7 @@ package body Bases.Ship is
                  Float(Damage));
          end;
          CountPrice(Price, TraderIndex, False);
-         if FreeCargo((0 - Price)) < 0 then
+         if FreeCargo(-(Price)) < 0 then
             raise Trade_No_Free_Cargo;
          end if;
          if Price > SkyBases(BaseIndex).Cargo(1).Amount then
@@ -479,7 +478,7 @@ package body Bases.Ship is
       end if;
       UpdateCargo
         (Ship => PlayerShip, CargoIndex => MoneyIndex2,
-         Amount => (0 - DockingCost));
+         Amount => -(DockingCost));
       UpdateBaseCargo(MoneyIndex, DockingCost);
       AddMessage
         ("You pay" & Positive'Image(DockingCost) & " " & To_String(MoneyName) &
