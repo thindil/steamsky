@@ -18,7 +18,6 @@
 with Ada.Numerics.Elementary_Functions; use Ada.Numerics.Elementary_Functions;
 with Maps; use Maps;
 with Messages; use Messages;
-with Items; use Items;
 with Ships.Crew; use Ships.Crew;
 with Events; use Events;
 with Utils; use Utils;
