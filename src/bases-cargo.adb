@@ -137,7 +137,7 @@ package body Bases.Cargo is
 
    procedure UpdateBaseCargo
      (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
-      Durability: Durability_Range := 100; CargoIndex: Natural := 0) is
+      Durability: Items_Durability := 100; CargoIndex: Natural := 0) is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       ItemIndex: constant Natural :=
@@ -172,13 +172,13 @@ package body Bases.Cargo is
 
    function FindBaseCargo
      (ProtoIndex: Unbounded_String;
-      Durability: Durability_Range := Durability_Range'Last) return Natural is
+      Durability: Items_Durability := Items_Durability'Last) return Natural is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       function FindCargo(Cargo: BaseCargo_Container.Vector) return Natural is
       begin
          for I in Cargo.Iterate loop
-            if Durability < Durability_Range'Last then
+            if Durability < Items_Durability'Last then
                if Cargo(I).ProtoIndex = ProtoIndex and
                  Cargo(I).Durability = Durability then
                   return BaseCargo_Container.To_Index(I);

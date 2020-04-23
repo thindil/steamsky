@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,9 +19,10 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
 with Game; use Game;
 with Crew; use Crew;
+with Factions; use Factions;
+with Items; use Items;
 with Missions; use Missions;
 with Ships; use Ships;
-with Factions; use Factions;
 
 -- ****h* Steamsky/Bases
 -- FUNCTION
@@ -88,7 +89,7 @@ package Bases is
    type Base_Cargo is record
       ProtoIndex: Unbounded_String;
       Amount: Natural;
-      Durability: Positive;
+      Durability: Items_Durability;
       Price: Natural;
    end record;
    -- ****

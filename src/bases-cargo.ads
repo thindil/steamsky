@@ -15,8 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Items; use Items;
-
 -- ****h* Steamsky/Bases.Cargo
 -- FUNCTION
 -- Provide code for manipulate cargo of sky bases
@@ -44,7 +42,7 @@ package Bases.Cargo is
       -- SOURCE
    procedure UpdateBaseCargo
      (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
-      Durability: Durability_Range := 100; CargoIndex: Natural := 0) with
+      Durability: Items_Durability := 100; CargoIndex: Natural := 0) with
       Test_Case => ("Test_UpdateBaseCargo", Robustness);
       -- ****
 
@@ -59,7 +57,7 @@ package Bases.Cargo is
       -- SOURCE
    function FindBaseCargo
      (ProtoIndex: Unbounded_String;
-      Durability: Durability_Range := Durability_Range'Last)
+      Durability: Items_Durability := Items_Durability'Last)
       return Natural with
       Test_Case => ("Test_FindBaseCargo", Robustness);
       -- ****
