@@ -84,6 +84,13 @@ package Items is
    subtype Items_Durability is Natural range 0 .. 101;
    -- ****
 
+   -- ****v* Items/Default_Item_Durability
+   -- FUNCTION
+   -- Default value for items durability
+   -- SOURCE
+   Default_Item_Durability: constant Items_Durability := 100;
+   -- ****
+
    -- ****t* Items/InventoryData
    -- FUNCTION
    -- Data structure for item in inventory
