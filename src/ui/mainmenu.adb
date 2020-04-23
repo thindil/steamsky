@@ -201,6 +201,13 @@ package body MainMenu is
    FileView: Gtk_Text_View;
    -- ****
 
+   -- ****iv* MainMenu/LoadView
+   -- FUNCTION
+   -- Gtk_Tree_View with the saved games list
+   -- SOURCE
+   LoadView: Gtk_Tree_View;
+   -- ****
+
    -- ****if* MainMenu/QuitGame
    -- FUNCTION
    -- Quit from the game
@@ -220,8 +227,7 @@ package body MainMenu is
    -- SOURCE
    procedure RefreshSavesList is
       -- ****
-      SavesList: constant Gtk_List_Store :=
-        Gtk_List_Store(Get_Object(Builder, "saveslist"));
+      SavesList: constant Gtk_List_Store := -(Get_Model(LoadView));
       Iter: Gtk_Tree_Iter;
       Files: Search_Type;
       FoundFile: Directory_Entry_Type;
@@ -1675,13 +1681,14 @@ package body MainMenu is
            Gtk_Button_Box_New(Orientation_Horizontal);
          Button: Gtk_Button;
          LoadScroll: constant Gtk_Scrolled_Window := Gtk_Scrolled_Window_New;
-         LoadView: constant Gtk_Tree_View :=
-           Gtk_Tree_View_New_With_Model
-             (+(Gtk_List_Store(Get_Object(Builder, "saveslist"))));
          Column: Gtk_Tree_View_Column;
          Area: Gtk_Cell_Area_Box := Gtk_Cell_Area_Box_New;
          Renderer: Gtk_Cell_Renderer_Text;
       begin
+         LoadView :=
+           Gtk_Tree_View_New_With_Model
+             (+(Gtk_List_Store_Newv
+                 ((GType_String, GType_String, GType_String, GType_String))));
          Renderer := Gtk_Cell_Renderer_Text_New;
          Pack_Start(Area, Renderer, True);
          Add_Attribute(Area, Renderer, "text", 0);
