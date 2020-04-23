@@ -42,7 +42,8 @@ package Bases.Cargo is
       -- SOURCE
    procedure UpdateBaseCargo
      (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
-      Durability: Items_Durability := 100; CargoIndex: Natural := 0) with
+      Durability: Items_Durability := Default_Item_Durability;
+      CargoIndex: Natural := 0) with
       Test_Case => ("Test_UpdateBaseCargo", Robustness);
       -- ****
 
