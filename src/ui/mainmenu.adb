@@ -1136,25 +1136,23 @@ package body MainMenu is
    procedure ShowHallOfFame(Self: access Gtk_Button_Record'Class) is
       pragma Unreferenced(Self);
       -- ****
+      HofBox: constant Gtk_Box :=
+        Gtk_Box(Get_Child_By_Name(MainMenuStack, "page2"));
+      HofList: constant Gtk_List_Store :=
+        -(Get_Model(Gtk_Tree_View(Get_Child(HofBox, 0))));
+      Iter: Gtk_Tree_Iter;
    begin
-      declare
-         HofList: constant Gtk_List_Store :=
-           Gtk_List_Store(Get_Object(Builder, "hoflist"));
-         Iter: Gtk_Tree_Iter;
-      begin
-         Clear(HofList);
-         for I in HallOfFame_Array'Range loop
-            exit when HallOfFame_Array(I).Name = Null_Unbounded_String;
-            Append(HofList, Iter);
-            Set(HofList, Iter, 0, Gint(I));
-            Set(HofList, Iter, 1, To_String(HallOfFame_Array(I).Name));
-            Set(HofList, Iter, 2, Gint(HallOfFame_Array(I).Points));
-            Set(HofList, Iter, 3, To_String(HallOfFame_Array(I).DeathReason));
-         end loop;
-      end;
+      Clear(HofList);
+      for I in HallOfFame_Array'Range loop
+         exit when HallOfFame_Array(I).Name = Null_Unbounded_String;
+         Append(HofList, Iter);
+         Set(HofList, Iter, 0, Gint(I));
+         Set(HofList, Iter, 1, To_String(HallOfFame_Array(I).Name));
+         Set(HofList, Iter, 2, Gint(HallOfFame_Array(I).Points));
+         Set(HofList, Iter, 3, To_String(HallOfFame_Array(I).DeathReason));
+      end loop;
       Set_Visible_Child_Name(MainMenuStack, "page2");
-      Grab_Focus
-        (Get_Child(Gtk_Box(Get_Child_By_Name(MainMenuStack, "page2")), 1));
+      Grab_Focus(Get_Child(HofBox, 1));
    end ShowHallOfFame;
 
    -- ****if* MainMenu/ShowLoadGame
@@ -1505,7 +1503,8 @@ package body MainMenu is
            Gtk_Button_New_With_Mnemonic("_Back to menu");
          HoFView: constant Gtk_Tree_View :=
            Gtk_Tree_View_New_With_Model
-             (+(Gtk_List_Store(Get_Object(Builder, "hoflist"))));
+             (+(Gtk_List_Store_Newv
+                 ((GType_Uint, GType_String, GType_Uint, GType_String))));
          Column: Gtk_Tree_View_Column;
          Area: Gtk_Cell_Area_Box := Gtk_Cell_Area_Box_New;
          Renderer: Gtk_Cell_Renderer_Text;
