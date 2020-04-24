@@ -1828,5 +1828,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>An upgraded, explosive 120mm gun ammunition, made of adamantium. Do less damage but it is more accurate.</description>
  </item>
+ <item index="374" name="Bronze printing set" showtype="Printing set" type="PrintingSet" weight="38" price="27">
+  <data value="15"/>
+  <description>Bronze set of tools used in crafting paper and books.</description>
+ </item>
 </items>
 
