@@ -1190,5 +1190,8 @@ If you want add more materials to recipe, just add new tag "material" with prope
   <material amount="6" type="Adamantium"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
+ <recipe crafted="1" index="352" result="374" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
+  <material amount="4" type="Bronze"/>
+ </recipe>
 </recipes>
 
