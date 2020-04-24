@@ -88,16 +88,4 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <property name="page_increment">10</property>
     <signal name="value-changed" handler="Update_Summary" swapped="no"/>
   </object>
-  <object class="GtkListStore" id="hoflist">
-    <columns>
-      <!-- column-name guint -->
-      <column type="guint"/>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name guint1 -->
-      <column type="guint"/>
-      <!-- column-name gchararray2 -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
 </interface>
