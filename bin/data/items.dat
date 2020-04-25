@@ -1832,5 +1832,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="15"/>
   <description>Bronze set of tools used in crafting paper and books.</description>
  </item>
+ <item index="375" name="Iron printing set" showtype="Printing set" type="PrintingSet" weight="38" price="42">
+  <data value="10"/>
+  <description>Iron set of tools used in crafting paper and books.</description>
+ </item>
 </items>
 
