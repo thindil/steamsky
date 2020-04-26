@@ -1242,7 +1242,7 @@ package body MainMenu is
          Label := Gtk_Label_New;
          Set_Markup(Label, "<span font_desc=""Rye 70"">Steam Sky</span>");
          Pack_Start(MainMenuBox, Label, False);
-         Label := Gtk_Label_New(GameVersion & " (development)");
+         Label := Gtk_Label_New(GameVersion);
          Pack_Start(MainMenuBox, Label, False);
          On_Clicked(NewGameButton, ShowNewGame'Access);
          Pack_Start(MainMenuButtons, NewGameButton);
