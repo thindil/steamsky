@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 - New goals: visit 10 undead bases, visit 1 drones base, visit 3 drones bases,
   visit 5 drones bases, visit 10 drones bases, visit 1 inquisition base, vitis
   3 inquisition bases
-- New items: bronze printing press, iron printing press
+- New items: bronze printing press, iron printing press, steel printing press
 - New crafting recipes: bronze printing press, iron printing press
 
 ### Changed
