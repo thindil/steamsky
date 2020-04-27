@@ -1840,5 +1840,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="5"/>
   <description>Steel set of tools used in crafting paper and books.</description>
  </item>
+ <item index="377" name="Titanium printing set" showtype="Printing set" type="PrintingSet" weight="70" price="52" reputation="25">
+  <data value="3"/>
+  <description>Titanium set of tools used in crafting paper and books.</description>
+ </item>
 </items>
 
