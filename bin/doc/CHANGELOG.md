@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
 - New items: bronze printing press, iron printing press, steel printing press,
   titanium printing press
 - New crafting recipes: bronze printing press, iron printing press, steel
-  printing press
+  printing press, titanium printing press
 
 ### Changed
 - Reduced amount of lost reputation for escaping from bases
