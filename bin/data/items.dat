@@ -1844,5 +1844,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="3"/>
   <description>Titanium set of tools used in crafting paper and books.</description>
  </item>
+ <item index="378" name="Orichalcum printing set" showtype="Printing set" type="PrintingSet" weight="70" price="57" reputation="50">
+  <data value="2"/>
+  <description>Orichalcum set of tools used in crafting paper and books.</description>
+ </item>
 </items>
 
