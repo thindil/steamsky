@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
   visit 5 drones bases, visit 10 drones bases, visit 1 inquisition base, vitis
   3 inquisition bases, visit 5 inquisition bases, visit 10 inquisition bases
 - New items: bronze printing press, iron printing press, steel printing press,
-  titanium printing press
+  titanium printing press, orichalcum printing press
 - New crafting recipes: bronze printing press, iron printing press, steel
   printing press, titanium printing press
 
