@@ -220,5 +220,6 @@ attribute "amount" of points for finish it.
  <goal amount="1" index="195" multiplier="4" target="INQUISITION" type="VISIT"/>
  <goal amount="3" index="196" multiplier="4" target="INQUISITION" type="VISIT"/>
  <goal amount="5" index="197" multiplier="4" target="INQUISITION" type="VISIT"/>
+ <goal amount="10" index="198" multiplier="4" target="INQUISITION" type="VISIT"/>
 </goals>
 
