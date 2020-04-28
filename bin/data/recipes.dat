@@ -1199,8 +1199,11 @@ If you want add more materials to recipe, just add new tag "material" with prope
  <recipe crafted="1" index="354" result="376" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="0">
   <material amount="4" type="Steel"/>
  </recipe>
- <recipe crafted="1" index="355" result="377" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="0">
+ <recipe crafted="1" index="355" result="377" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="25">
   <material amount="4" type="Titanium"/>
+ </recipe>
+ <recipe crafted="1" index="356" result="378" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="50">
+  <material amount="4" type="Orichalcum"/>
  </recipe>
 </recipes>
 
