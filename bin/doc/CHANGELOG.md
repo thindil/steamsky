@@ -12,7 +12,8 @@ All notable changes to this project will be documented in this file.
   titanium printing press, orichalcum printing press and adamantium printing
   press
 - New crafting recipes: bronze printing press, iron printing press, steel
-  printing press, titanium printing press, orichalcum printing press
+  printing press, titanium printing press, orichalcum printing press and
+  adamantium printing press
 
 ### Changed
 - Reduced amount of lost reputation for escaping from bases
