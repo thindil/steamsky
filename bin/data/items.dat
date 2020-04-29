@@ -1848,5 +1848,9 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <data value="2"/>
   <description>Orichalcum set of tools used in crafting paper and books.</description>
  </item>
+ <item index="379" name="Adamantium printing set" showtype="Printing set" type="PrintingSet" weight="120" price="105" reputation="75">
+  <data value="1"/>
+  <description>Adamantium set of tools used in crafting paper and books.</description>
+ </item>
 </items>
 
