@@ -28,7 +28,6 @@ with Ada.Strings; use Ada.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.String_Split; use GNAT.String_Split;
 with GNAT.OS_Lib; use GNAT.OS_Lib;
-with Gtkada.Builder; use Gtkada.Builder;
 with Gtk.Accel_Group; use Gtk.Accel_Group;
 with Gtk.Adjustment; use Gtk.Adjustment;
 with Gtk.Alignment; use Gtk.Alignment;
@@ -67,8 +66,6 @@ with Gtk.Viewport; use Gtk.Viewport;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Window; use Gtk.Window;
 with Glib; use Glib;
-with Glib.Error; use Glib.Error;
-with Glib.Object; use Glib.Object;
 with Glib.Properties; use Glib.Properties;
 with Gdk.Event;
 with Gdk.Types; use Gdk.Types;
@@ -96,13 +93,6 @@ with Utils.UI; use Utils.UI;
 
 package body MainMenu is
 
-   -- ****iv* MainMenu/Builder
-   -- FUNCTION
-   -- Gtkada_Builder used for creating UI
-   -- SOURCE
-   Builder: Gtkada_Builder;
-   -- ****
-
    -- ****iv* MainMenu/AllNews
    -- FUNCTION
    -- If true, show all news, not only from last version. Default is false
@@ -122,20 +112,6 @@ package body MainMenu is
    -- Used to store errors related to loading the game data
    -- SOURCE
    DataError: Unbounded_String;
-   -- ****
-
-   -- ****iv* MainMenu/AdjNames
-   -- FUNCTION
-   -- Array of Gtk_Adjustments names for the game difficulty
-   -- SOURCE
-   AdjNames: constant array(Positive range <>) of Unbounded_String :=
-     (To_Unbounded_String("adjenemydamage"),
-      To_Unbounded_String("adjplayerdamage"),
-      To_Unbounded_String("adjenemymelee"),
-      To_Unbounded_String("adjplayermelee"),
-      To_Unbounded_String("adjexperience"),
-      To_Unbounded_String("adjreputation"), To_Unbounded_String("adjupdate"),
-      To_Unbounded_String("adjprices"));
    -- ****
 
    -- ****if* MainMenu/BaseTypeName
@@ -206,6 +182,13 @@ package body MainMenu is
    -- Gtk_Tree_View with the saved games list
    -- SOURCE
    LoadView: Gtk_Tree_View;
+   -- ****
+
+   -- ****iv* MainMenu/DifficultyGrid
+   -- FUNCTION
+   -- Gtk_Grid with setting the game difficulty UI
+   -- SOURCE
+   DifficultyGrid: Gtk_Grid;
    -- ****
 
    -- ****if* MainMenu/QuitGame
@@ -510,9 +493,10 @@ package body MainMenu is
       -- ****
    begin
       Setting := True;
-      for Name of AdjNames loop
+      for I in 0 .. 7 loop
          Set_Value
-           (Gtk_Adjustment(Get_Object(Builder, To_String(Name))),
+           (Get_Adjustment
+              (Gtk_Spin_Button(Get_Child_At(DifficultyGrid, 1, Gint(I)))),
             Gdouble(GetRandom(1, 500)));
       end loop;
       Set_Active(DifficultyCombo, 5);
@@ -576,37 +560,50 @@ package body MainMenu is
          EnemyDamageBonus =>
            Float
              (Get_Value
-                (Gtk_Adjustment(Get_Object(Builder, "adjenemydamage"))) /
+                (Get_Adjustment
+                   (Gtk_Spin_Button(Get_Child_At(DifficultyGrid, 1, 0)))) /
               100.0),
          PlayerDamageBonus =>
            Float
              (Get_Value
-                (Gtk_Adjustment(Get_Object(Builder, "adjplayerdamage"))) /
+                (Get_Adjustment
+                   (Gtk_Spin_Button(Get_Child_At(DifficultyGrid, 1, 1)))) /
               100.0),
          EnemyMeleeDamageBonus =>
            Float
-             (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjenemymelee"))) /
+             (Get_Value
+                (Get_Adjustment
+                   (Gtk_Spin_Button(Get_Child_At(DifficultyGrid, 1, 2)))) /
               100.0),
          PlayerMeleeDamageBonus =>
            Float
              (Get_Value
-                (Gtk_Adjustment(Get_Object(Builder, "adjplayermelee"))) /
+                (Get_Adjustment
+                   (Gtk_Spin_Button(Get_Child_At(DifficultyGrid, 1, 3)))) /
               100.0),
          ExperienceBonus =>
            Float
-             (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjexperience"))) /
+             (Get_Value
+                (Get_Adjustment
+                   (Gtk_Spin_Button(Get_Child_At(DifficultyGrid, 1, 4)))) /
               100.0),
          ReputationBonus =>
            Float
-             (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjreputation"))) /
+             (Get_Value
+                (Get_Adjustment
+                   (Gtk_Spin_Button(Get_Child_At(DifficultyGrid, 1, 5)))) /
               100.0),
          UpgradeCostBonus =>
            Float
-             (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjupdate"))) /
+             (Get_Value
+                (Get_Adjustment
+                   (Gtk_Spin_Button(Get_Child_At(DifficultyGrid, 1, 6)))) /
               100.0),
          PricesBonus =>
            Float
-             (Get_Value(Gtk_Adjustment(Get_Object(Builder, "adjprices"))) /
+             (Get_Value
+                (Get_Adjustment
+                   (Gtk_Spin_Button(Get_Child_At(DifficultyGrid, 1, 7)))) /
               100.0),
          DifficultyLevel => Natural(Get_Active(DifficultyCombo)));
       for I in BasesTypes_List.Iterate loop
@@ -826,48 +823,36 @@ package body MainMenu is
    -- FUNCTION
    -- Update amount of bonus or malus to the game point from difficulty
    -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
+   -- Self - Gtk_Adjustment which value was changed
    -- SOURCE
-   procedure UpdateSummary(Object: access Gtkada_Builder_Record'Class) is
+   procedure UpdateSummary(Self: access Gtk_Adjustment_Record'Class) is
+      pragma Unreferenced(Self);
       -- ****
-      MalusNames: constant array(Positive range <>) of Unbounded_String :=
-        (To_Unbounded_String("adjplayerdamage"),
-         To_Unbounded_String("adjplayermelee"),
-         To_Unbounded_String("adjexperience"),
-         To_Unbounded_String("adjreputation"));
       Bonus, Value: Integer := 0;
    begin
-      for Name of AdjNames loop
+      for I in 0 .. 7 loop
          Value :=
            Natural
-             (Get_Value(Gtk_Adjustment(Get_Object(Object, To_String(Name)))));
-         for I in MalusNames'Range loop
-            if Name = MalusNames(I) then
-               if Value < 100 then
-                  Value := 100 + ((100 - Value) * 4);
-               elsif Value > 100 then
-                  Value := 100 - Value;
-               end if;
-               exit;
+             (Get_Value
+                (Get_Adjustment
+                   (Gtk_Spin_Button
+                      (Get_Child_At(DifficultyGrid, 1, Gint(I))))));
+         if I in 1 | 3 | 4 | 5 then
+            if Value < 100 then
+               Value := 100 + ((100 - Value) * 4);
+            elsif Value > 100 then
+               Value := 100 - Value;
             end if;
-         end loop;
+         end if;
          Bonus := Bonus + Value;
       end loop;
-      Bonus := Bonus / AdjNames'Length;
+      Bonus := Bonus / 8;
       if Bonus < 1 then
          Bonus := 1;
       end if;
       if Get_Child_By_Name(NewGameStack, "page1") /= null then
          Set_Text
-           (Gtk_Label
-              (Get_Child
-                 (Gtk_Box
-                    (Get_Child
-                       (Gtk_Viewport
-                          (Get_Child
-                             (Gtk_Scrolled_Window
-                                (Get_Child_By_Name(NewGameStack, "page1")))))),
-                  4)),
+           (Gtk_Label(Get_Child(Gtk_Box(Get_Parent(DifficultyGrid)), 4)),
             "Total gained points:" & Integer'Image(Bonus) & "%");
       end if;
       if not Setting then
@@ -892,7 +877,7 @@ package body MainMenu is
            (Gtk_Label(Get_Child(Gtk_Box(Get_Parent(Self)), 4)),
             "Total gained points: unknown");
       else
-         UpdateSummary(Builder);
+         UpdateSummary(null);
       end if;
    end RandomDifficultyToggled;
 
@@ -908,10 +893,11 @@ package body MainMenu is
       CurrentLevel: constant Gint := Get_Active(Self);
       procedure UpdateDifficulty(Values: DifficultyArray) is
       begin
-         for I in AdjNames'Range loop
+         for I in 0 .. 7 loop
             Set_Value
-              (Gtk_Adjustment(Get_Object(Builder, To_String(AdjNames(I)))),
-               Values(I));
+              (Get_Adjustment
+                 (Gtk_Spin_Button(Get_Child_At(DifficultyGrid, 1, Gint(I)))),
+               Values(I + 1));
          end loop;
       end UpdateDifficulty;
    begin
@@ -1183,8 +1169,7 @@ package body MainMenu is
    end ShowLoadGame;
 
    procedure CreateMainMenu is
-      Error: aliased GError;
-      AdjValues: constant array(Positive range <>) of Gdouble :=
+      AdjValues: constant array(0 .. 7) of Gdouble :=
         (Gdouble(NewGameSettings.EnemyDamageBonus),
          Gdouble(NewGameSettings.PlayerDamageBonus),
          Gdouble(NewGameSettings.EnemyMeleeDamageBonus),
@@ -1202,20 +1187,8 @@ package body MainMenu is
    begin
       LoadThemes;
       SetFontSize(ALLFONTS);
-      Gtk_New(Builder);
-      if Add_From_File
-          (Builder,
-           To_String(DataDirectory) & "ui" & Dir_Separator & "mainmenu.glade",
-           Error'Access) =
-        Guint(0) then
-         Put_Line("Error : " & Get_Message(Error));
-         return;
-      end if;
       MainMenuWindow := Gtk_Window_New;
       CreateErrorUI(MainMenuWindow);
-      Register_Handler(Builder, "Update_Summary", UpdateSummary'Access);
-      Do_Connect(Builder);
-      SetUtilsBuilder(Builder);
       DataError := To_Unbounded_String(LoadGameData);
       Setting := True;
       MainMenuStack := Gtk_Stack_New;
@@ -1226,11 +1199,6 @@ package body MainMenu is
       MenuOverlay := Gtk_Overlay_New;
       Add_Overlay(MenuOverlay, MainMenuStack);
       Add(MainMenuWindow, MenuOverlay);
-      for I in AdjNames'Range loop
-         Set_Value
-           (Gtk_Adjustment(Get_Object(Builder, To_String(AdjNames(I)))),
-            (AdjValues(I) * 100.0));
-      end loop;
       Setting := False;
       declare
          MainMenuBox: constant Gtk_Vbox := Gtk_Vbox_New;
@@ -1281,37 +1249,24 @@ package body MainMenu is
          RandomDifficultyButton: constant Gtk_Check_Button :=
            Gtk_Check_Button_New_With_Label
              ("Randomize difficulty on game start");
-         DifficultyGrid: constant Gtk_Grid := Gtk_Grid_New;
          SpinButton: Gtk_Spin_Button;
-         type SpinButton_Data is record
-            Adjustment: Unbounded_String;
-            Tooltip: Unbounded_String;
-         end record;
-         SpinButtonsArray: constant array(0 .. 7) of SpinButton_Data :=
-           ((To_Unbounded_String("adjenemydamage"),
-             To_Unbounded_String
-               ("Percentage of damage done by enemy ships in combat. Lowering it makes the  game easier but lowers the amount of score gained as well.")),
-            (To_Unbounded_String("adjplayerdamage"),
-             To_Unbounded_String
-               ("Percentage of damage done by the player's ship in combat. Raising it makes the game easier but lowers the amount of score gained as well.")),
-            (To_Unbounded_String("adjenemymelee"),
-             To_Unbounded_String
-               ("Percentage of damage done by enemies in melee combat. Lowering it makes the game easier but lowers the amount of score gained as well.")),
-            (To_Unbounded_String("adjplayermelee"),
-             To_Unbounded_String
-               ("Percentage of damage done by player's crew (and player character) in melee combat. Raising it makes the game easier but lowers the amount of score gained as well.")),
-            (To_Unbounded_String("adjexperience"),
-             To_Unbounded_String
-               ("Percentage of experience gained by player and their crew from actions. Raising it makes the game easier but lowers the amount of score gained as well.")),
-            (To_Unbounded_String("adjreputation"),
-             To_Unbounded_String
-               ("Percentage of reputation in bases gained or lost by player in sky bases due to player actions. Raising it makes the game easier but lowers the amount of score gained as well.")),
-            (To_Unbounded_String("adjupdate"),
-             To_Unbounded_String
-               ("Percentage of the standard material cost and time needed for upgrading ship modules. Lowering it makes the game easier but lowers the amount of score gained as well.")),
-            (To_Unbounded_String("adjprices"),
-             To_Unbounded_String
-               ("Percentage of the standard prices for services in bases (docking, repairing ship, recruiting new crew members, etc). Lowering it makes the game easier but lowers the amount of score gained as well.")));
+         SpinButtonsArray: constant array(0 .. 7) of Unbounded_String :=
+           (To_Unbounded_String
+              ("Percentage of damage done by enemy ships in combat. Lowering it makes the  game easier but lowers the amount of score gained as well."),
+            To_Unbounded_String
+              ("Percentage of damage done by the player's ship in combat. Raising it makes the game easier but lowers the amount of score gained as well."),
+            To_Unbounded_String
+              ("Percentage of damage done by enemies in melee combat. Lowering it makes the game easier but lowers the amount of score gained as well."),
+            To_Unbounded_String
+              ("Percentage of damage done by player's crew (and player character) in melee combat. Raising it makes the game easier but lowers the amount of score gained as well."),
+            To_Unbounded_String
+              ("Percentage of experience gained by player and their crew from actions. Raising it makes the game easier but lowers the amount of score gained as well."),
+            To_Unbounded_String
+              ("Percentage of reputation in bases gained or lost by player in sky bases due to player actions. Raising it makes the game easier but lowers the amount of score gained as well."),
+            To_Unbounded_String
+              ("Percentage of the standard material cost and time needed for upgrading ship modules. Lowering it makes the game easier but lowers the amount of score gained as well."),
+            To_Unbounded_String
+              ("Percentage of the standard prices for services in bases (docking, repairing ship, recruiting new crew members, etc). Lowering it makes the game easier but lowers the amount of score gained as well."));
          LabelsArray: constant array(0 .. 7) of Unbounded_String :=
            (To_Unbounded_String("Enemy ship damage:"),
             To_Unbounded_String("Player ship damage:"),
@@ -1438,18 +1393,18 @@ package body MainMenu is
          Pack_Start(HBox, DifficultyCombo, False);
          Pack_Start(DifficultyBox, HBox, False);
          Setting := True;
+         DifficultyGrid := Gtk_Grid_New;
          for I in 0 .. 7 loop
             Label := Gtk_Label_New(To_String(LabelsArray(I)));
             Attach(DifficultyGrid, Label, 0, Gint(I));
             Set_Line_Wrap(Label, True);
             SpinButton :=
               Gtk_Spin_Button_New
-                (Gtk_Adjustment
-                   (Get_Object
-                      (Builder, To_String(SpinButtonsArray(I).Adjustment))),
+                (Gtk_Adjustment_New
+                   ((AdjValues(I) * 100.0), 1.0, 500.0, 1.0, 10.0),
                  0.0);
-            Set_Tooltip_Text
-              (SpinButton, To_String(SpinButtonsArray(I).Tooltip));
+            On_Value_Changed(Get_Adjustment(SpinButton), UpdateSummary'Access);
+            Set_Tooltip_Text(SpinButton, To_String(SpinButtonsArray(I)));
             On_Focus_In_Event(SpinButton, UpdateInfoLabel'Access);
             Attach(DifficultyGrid, SpinButton, 1, Gint(I));
             Label := Gtk_Label_New("%");
