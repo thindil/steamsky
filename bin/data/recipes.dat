@@ -790,13 +790,13 @@ If you want add more materials to recipe, just add new tag "material" with prope
   <material amount="5" type="Adamantium"/>
   <material amount="1" type="Wood"/>
  </recipe>
- <recipe crafted="1" index="237" result="259" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25">
+ <recipe crafted="1" index="237" result="259" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25" toolquality="3">
   <material amount="2" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="238" result="260" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50">
+ <recipe crafted="1" index="238" result="260" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50" toolquality="2">
   <material amount="3" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="239" result="261" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75">
+ <recipe crafted="1" index="239" result="261" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75" toolquality="1">
   <material amount="4" type="EmptyBook"/>
  </recipe>
  <recipe crafted="1" index="240" result="262" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
@@ -807,29 +807,29 @@ If you want add more materials to recipe, just add new tag "material" with prope
   <material amount="4" type="Iron"/>
   <material amount="1" type="Wood"/>
  </recipe>
- <recipe crafted="1" index="242" result="264" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="0">
+ <recipe crafted="1" index="242" result="264" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="0" toolquality="5">
   <material amount="4" type="Steel"/>
   <material amount="1" type="Wood"/>
  </recipe>
- <recipe crafted="1" index="243" result="265" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="25">
+ <recipe crafted="1" index="243" result="265" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="25" toolquality="3">
   <material amount="4" type="Titanium"/>
   <material amount="1" type="Wood"/>
  </recipe>
- <recipe crafted="1" index="244" result="266" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="50">
+ <recipe crafted="1" index="244" result="266" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="50" toolquality="2">
   <material amount="4" type="Orichalcum"/>
   <material amount="1" type="Wood"/>
  </recipe>
- <recipe crafted="1" index="245" result="267" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="75">
+ <recipe crafted="1" index="245" result="267" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="75" toolquality="1">
   <material amount="4" type="Adamantium"/>
   <material amount="1" type="Wood"/>
  </recipe>
- <recipe crafted="1" index="246" result="268" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25">
+ <recipe crafted="1" index="246" result="268" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25" toolquality="3">
   <material amount="2" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="247" result="269" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50">
+ <recipe crafted="1" index="247" result="269" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50" toolquality="2">
   <material amount="3" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="248" result="270" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75">
+ <recipe crafted="1" index="248" result="270" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75" toolquality="1">
   <material amount="4" type="EmptyBook"/>
  </recipe>
  <recipe crafted="1" index="249" result="271" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
@@ -838,7 +838,7 @@ If you want add more materials to recipe, just add new tag "material" with prope
  <recipe crafted="1" index="250" result="272" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe crafted="1" index="251" result="273" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="0">
+ <recipe crafted="1" index="251" result="273" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="0" toolquality="5">
   <material amount="1" type="Steel"/>
  </recipe>
  <recipe crafted="1" index="252" result="274" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="25">
