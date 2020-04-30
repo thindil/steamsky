@@ -82,7 +82,7 @@ package body Bases.Trade is
          Inventory.Append
            (New_Item =>
               (ProtoIndex => Item, Amount => 1, Name => Null_Unbounded_String,
-               Durability => 100, Price => 0));
+               Durability => Default_Item_Durability, Price => 0));
       end loop;
       if Factions_List(SkyBases(BaseIndex).Owner).Flags.Contains
           (To_Unbounded_String("nomorale")) then
@@ -105,7 +105,7 @@ package body Bases.Trade is
             Loyalty => Morale, HomeBase => Recruit.HomeBase,
             Faction => Recruit.Faction));
       UpdateCargo
-        (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => (0 - Price));
+        (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => -(Price));
       GainExp(1, TalkingSkill, TraderIndex);
       GainRep(BaseIndex, 1);
       AddMessage
@@ -156,7 +156,7 @@ package body Bases.Trade is
       CountPrice(Cost, TraderIndex);
       MoneyIndex2 := CheckMoney(Cost, RecipeName);
       UpdateCargo
-        (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => (0 - Cost));
+        (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => -(Cost));
       UpdateBaseCargo(MoneyIndex, Cost);
       Known_Recipes.Append(New_Item => RecipeIndex);
       AddMessage
@@ -205,7 +205,7 @@ package body Bases.Trade is
             TradeMessage);
       end if;
       UpdateCargo
-        (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => (0 - Cost));
+        (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => -(Cost));
       UpdateBaseCargo(MoneyIndex, Cost);
       GainExp(1, TalkingSkill, TraderIndex);
       GainRep(BaseIndex, 1);
@@ -265,16 +265,16 @@ package body Bases.Trade is
    begin
       for Skill of PlayerShip.Crew(MemberIndex).Skills loop
          if Skill(1) = SkillIndex then
-            if Skill(2) < 100 then
-               Cost :=
-                 Natural
-                   (Float((Skill(2) + 1) * 100) * NewGameSettings.PricesBonus);
-               if Cost = 0 then
-                  Cost := 1;
-               end if;
-               exit;
+            if Skill(2) = 100 then
+               return 0;
             end if;
-            return 0;
+            Cost :=
+              Natural
+                (Float((Skill(2) + 1) * 100) * NewGameSettings.PricesBonus);
+            if Cost = 0 then
+               Cost := 1;
+            end if;
+            exit;
          end if;
       end loop;
       CountPrice(Cost, FindMember(Talk));
@@ -309,7 +309,7 @@ package body Bases.Trade is
       end if;
       GainExp(GainedExp, SkillIndex, MemberIndex);
       UpdateCargo
-        (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => (0 - Cost));
+        (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => -(Cost));
       UpdateBaseCargo(MoneyIndex, Cost);
       TraderIndex := FindMember(Talk);
       if TraderIndex > 0 then
