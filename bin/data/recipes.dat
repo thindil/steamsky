@@ -841,112 +841,112 @@ If you want add more materials to recipe, just add new tag "material" with prope
  <recipe crafted="1" index="251" result="273" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="0" toolquality="5">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe crafted="1" index="252" result="274" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="25">
+ <recipe crafted="1" index="252" result="274" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="25" toolquality="3">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe crafted="1" index="253" result="275" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="50">
+ <recipe crafted="1" index="253" result="275" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="50" toolquality="2">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe crafted="1" index="254" result="276" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="75">
+ <recipe crafted="1" index="254" result="276" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="75" toolquality="1">
   <material amount="1" type="Adamantium"/>
  </recipe>
- <recipe crafted="1" index="255" result="277" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25">
+ <recipe crafted="1" index="255" result="277" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25" toolquality="3">
   <material amount="2" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="256" result="278" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50">
+ <recipe crafted="1" index="256" result="278" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50" toolquality="2">
   <material amount="3" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="257" result="279" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75">
+ <recipe crafted="1" index="257" result="279" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75" toolquality="1">
   <material amount="4" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="258" result="280" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25">
+ <recipe crafted="1" index="258" result="280" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25" toolquality="3">
   <material amount="2" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="259" result="281" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50">
+ <recipe crafted="1" index="259" result="281" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50" toolquality="2">
   <material amount="3" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="260" result="282" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75">
+ <recipe crafted="1" index="260" result="282" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75" toolquality="1">
   <material amount="4" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="261" result="283" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25">
+ <recipe crafted="1" index="261" result="283" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25" toolquality="3">
   <material amount="2" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="262" result="284" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50">
+ <recipe crafted="1" index="262" result="284" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50" toolquality="2">
   <material amount="3" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="263" result="285" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75">
+ <recipe crafted="1" index="263" result="285" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75" toolquality="1">
   <material amount="4" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="264" result="286" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25">
+ <recipe crafted="1" index="264" result="286" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25" toolquality="3">
   <material amount="2" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="265" result="287" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50">
+ <recipe crafted="1" index="265" result="287" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50" toolquality="2">
   <material amount="3" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="266" result="288" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75">
+ <recipe crafted="1" index="266" result="288" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75" toolquality="1">
   <material amount="4" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="267" result="289" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25">
+ <recipe crafted="1" index="267" result="289" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25" toolquality="3">
   <material amount="2" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="268" result="290" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50">
+ <recipe crafted="1" index="268" result="290" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50" toolquality="2">
   <material amount="3" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="269" result="291" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75">
+ <recipe crafted="1" index="269" result="291" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75" toolquality="1">
   <material amount="4" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="270" result="292" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25">
+ <recipe crafted="1" index="270" result="292" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25" toolquality="3">
   <material amount="2" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="271" result="293" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50">
+ <recipe crafted="1" index="271" result="293" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50" toolquality="2">
   <material amount="3" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="272" result="294" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75">
+ <recipe crafted="1" index="272" result="294" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75" toolquality="1">
   <material amount="4" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="273" result="295" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25">
+ <recipe crafted="1" index="273" result="295" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25" toolquality="3">
   <material amount="2" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="274" result="296" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50">
+ <recipe crafted="1" index="274" result="296" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50" toolquality="2">
   <material amount="3" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="275" result="297" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75">
+ <recipe crafted="1" index="275" result="297" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75" toolquality="1">
   <material amount="4" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="276" result="298" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25">
+ <recipe crafted="1" index="276" result="298" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25" toolquality="3">
   <material amount="2" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="277" result="299" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50">
+ <recipe crafted="1" index="277" result="299" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50" toolquality="2">
   <material amount="3" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="278" result="300" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75">
+ <recipe crafted="1" index="278" result="300" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75" toolquality="1">
   <material amount="4" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="279" result="301" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25">
+ <recipe crafted="1" index="279" result="301" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25" toolquality="3">
   <material amount="2" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="280" result="302" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50">
+ <recipe crafted="1" index="280" result="302" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50" toolquality="2">
   <material amount="3" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="281" result="303" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75">
+ <recipe crafted="1" index="281" result="303" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75" toolquality="1">
   <material amount="4" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="282" result="304" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25">
+ <recipe crafted="1" index="282" result="304" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25" toolquality="3">
   <material amount="2" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="283" result="305" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50">
+ <recipe crafted="1" index="283" result="305" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50" toolquality="2">
   <material amount="3" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="284" result="306" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75">
+ <recipe crafted="1" index="284" result="306" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75" toolquality="1">
   <material amount="4" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="285" result="307" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25">
+ <recipe crafted="1" index="285" result="307" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25" toolquality="3">
   <material amount="2" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="286" result="308" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50">
+ <recipe crafted="1" index="286" result="308" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50" toolquality="2">
   <material amount="3" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="287" result="309" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75">
+ <recipe crafted="1" index="287" result="309" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75" toolquality="1">
   <material amount="4" type="EmptyBook"/>
  </recipe>
  <recipe crafted="1" index="288" result="310" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
@@ -955,16 +955,16 @@ If you want add more materials to recipe, just add new tag "material" with prope
  <recipe crafted="1" index="289" result="311" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="3" type="Iron"/>
  </recipe>
- <recipe crafted="1" index="290" result="312" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="0">
+ <recipe crafted="1" index="290" result="312" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="0" toolquality="5">
   <material amount="3" type="Steel"/>
  </recipe>
- <recipe crafted="1" index="291" result="313" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="25">
+ <recipe crafted="1" index="291" result="313" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="25" toolquality="3">
   <material amount="3" type="Titanium"/>
  </recipe>
- <recipe crafted="1" index="292" result="314" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="50">
+ <recipe crafted="1" index="292" result="314" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="50" toolquality="2">
   <material amount="3" type="Orichalcum"/>
  </recipe>
- <recipe crafted="1" index="293" result="315" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="75">
+ <recipe crafted="1" index="293" result="315" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="75" toolquality="1">
   <material amount="3" type="Adamantium"/>
  </recipe>
  <recipe crafted="1" index="294" result="316" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
@@ -973,19 +973,19 @@ If you want add more materials to recipe, just add new tag "material" with prope
  <recipe crafted="1" index="295" result="317" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="1" type="Iron"/>
  </recipe>
- <recipe crafted="1" index="296" result="318" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="0">
+ <recipe crafted="1" index="296" result="318" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="0" toolquality="5">
   <material amount="1" type="Steel"/>
  </recipe>
- <recipe crafted="1" index="297" result="319" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="25">
+ <recipe crafted="1" index="297" result="319" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="25" toolquality="3">
   <material amount="1" type="Titanium"/>
  </recipe>
- <recipe crafted="1" index="298" result="320" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="50">
+ <recipe crafted="1" index="298" result="320" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="50" toolquality="2">
   <material amount="1" type="Orichalcum"/>
  </recipe>
- <recipe crafted="1" index="299" result="321" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="75">
+ <recipe crafted="1" index="299" result="321" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="75" toolquality="1">
   <material amount="1" type="Adamantium"/>
  </recipe>
- <recipe crafted="1" index="300" result="322" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25">
+ <recipe crafted="1" index="300" result="322" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25" toolquality="3">
   <material amount="2" type="EmptyBook"/>
  </recipe>
  <recipe crafted="1" index="301" result="323" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50">
