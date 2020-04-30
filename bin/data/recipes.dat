@@ -988,10 +988,10 @@ If you want add more materials to recipe, just add new tag "material" with prope
  <recipe crafted="1" index="300" result="322" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="25" toolquality="3">
   <material amount="2" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="301" result="323" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50">
+ <recipe crafted="1" index="301" result="323" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="50" toolquality="2">
   <material amount="3" type="EmptyBook"/>
  </recipe>
- <recipe crafted="1" index="302" result="324" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75">
+ <recipe crafted="1" index="302" result="324" skill="Printing" tool="PrintingSet" workplace="Workshop" reputation="75" toolquality="1">
   <material amount="4" type="EmptyBook"/>
  </recipe>
  <recipe crafted="10" index="303" result="325" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB">
@@ -1046,143 +1046,143 @@ If you want add more materials to recipe, just add new tag "material" with prope
   <material amount="6" type="Iron"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe crafted="5" difficulty="5" index="316" result="338" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
+ <recipe crafted="5" difficulty="5" index="316" result="338" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0" toolquality="5">
   <material amount="1" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="5" difficulty="5" index="317" result="339" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
+ <recipe crafted="5" difficulty="5" index="317" result="339" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0" toolquality="5">
   <material amount="1" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="2" difficulty="10" index="318" result="340" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
+ <recipe crafted="2" difficulty="10" index="318" result="340" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0" toolquality="5">
   <material amount="1" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="2" difficulty="10" index="319" result="341" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
+ <recipe crafted="2" difficulty="10" index="319" result="341" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0" toolquality="5">
   <material amount="1" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="15" index="320" result="342" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
+ <recipe crafted="1" difficulty="15" index="320" result="342" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0" toolquality="5">
   <material amount="1" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="15" index="321" result="343" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
+ <recipe crafted="1" difficulty="15" index="321" result="343" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0" toolquality="5">
   <material amount="1" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="20" index="322" result="344" skill="Gunsmith" time="30" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
+ <recipe crafted="1" difficulty="20" index="322" result="344" skill="Gunsmith" time="30" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0" toolquality="5">
   <material amount="2" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="20" index="323" result="345" skill="Gunsmith" time="30" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
+ <recipe crafted="1" difficulty="20" index="323" result="345" skill="Gunsmith" time="30" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0" toolquality="5">
   <material amount="2" type="Steel"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="25" index="324" result="346" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
+ <recipe crafted="1" difficulty="25" index="324" result="346" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0" toolquality="5">
   <material amount="4" type="Steel"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="25" index="325" result="347" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
+ <recipe crafted="1" difficulty="25" index="325" result="347" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0" toolquality="5">
   <material amount="4" type="Steel"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="30" index="326" result="348" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
+ <recipe crafted="1" difficulty="30" index="326" result="348" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0" toolquality="5">
   <material amount="6" type="Steel"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="30" index="327" result="349" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0">
+ <recipe crafted="1" difficulty="30" index="327" result="349" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="0" toolquality="5">
   <material amount="6" type="Steel"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe crafted="2" difficulty="15" index="328" result="350" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="25">
+ <recipe crafted="2" difficulty="15" index="328" result="350" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="25" toolquality="3">
   <material amount="1" type="Titanium"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="2" difficulty="15" index="329" result="351" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="25">
+ <recipe crafted="2" difficulty="15" index="329" result="351" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="25" toolquality="3">
   <material amount="1" type="Titanium"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="20" index="330" result="352" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="25">
+ <recipe crafted="1" difficulty="20" index="330" result="352" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="25" toolquality="3">
   <material amount="1" type="Titanium"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="20" index="331" result="353" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="25">
+ <recipe crafted="1" difficulty="20" index="331" result="353" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="25" toolquality="3">
   <material amount="1" type="Titanium"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="25" index="332" result="354" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="25">
+ <recipe crafted="1" difficulty="25" index="332" result="354" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="25" toolquality="3">
   <material amount="2" type="Titanium"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="25" index="333" result="355" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="25">
+ <recipe crafted="1" difficulty="25" index="333" result="355" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="25" toolquality="3">
   <material amount="2" type="Titanium"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="30" index="334" result="356" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="25">
+ <recipe crafted="1" difficulty="30" index="334" result="356" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="25" toolquality="3">
   <material amount="4" type="Titanium"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="30" index="335" result="357" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="25">
+ <recipe crafted="1" difficulty="30" index="335" result="357" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="25" toolquality="3">
   <material amount="4" type="Titanium"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="35" index="336" result="358" skill="Gunsmith" time="75" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="25">
+ <recipe crafted="1" difficulty="35" index="336" result="358" skill="Gunsmith" time="75" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="25" toolquality="3">
   <material amount="6" type="Titanium"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="35" index="337" result="359" skill="Gunsmith" time="75" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="25">
+ <recipe crafted="1" difficulty="35" index="337" result="359" skill="Gunsmith" time="75" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="25" toolquality="3">
   <material amount="6" type="Titanium"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="25" index="338" result="360" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="50">
+ <recipe crafted="1" difficulty="25" index="338" result="360" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="50" toolquality="2">
   <material amount="1" type="Orichalcum"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="25" index="339" result="361" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="50">
+ <recipe crafted="1" difficulty="25" index="339" result="361" skill="Gunsmith" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="50" toolquality="2">
   <material amount="1" type="Orichalcum"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="30" index="340" result="362" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="50">
+ <recipe crafted="1" difficulty="30" index="340" result="362" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="50" toolquality="2">
   <material amount="2" type="Orichalcum"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="30" index="341" result="363" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="50">
+ <recipe crafted="1" difficulty="30" index="341" result="363" skill="Gunsmith" time="45" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="50" toolquality="2">
   <material amount="2" type="Orichalcum"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="35" index="342" result="364" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="50">
+ <recipe crafted="1" difficulty="35" index="342" result="364" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="50" toolquality="2">
   <material amount="4" type="Orichalcum"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="35" index="343" result="365" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="50">
+ <recipe crafted="1" difficulty="35" index="343" result="365" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="50" toolquality="2">
   <material amount="4" type="Orichalcum"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="40" index="344" result="366" skill="Gunsmith" time="75" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="50">
+ <recipe crafted="1" difficulty="40" index="344" result="366" skill="Gunsmith" time="75" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="50" toolquality="2">
   <material amount="6" type="Orichalcum"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="40" index="345" result="367" skill="Gunsmith" time="75" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="50">
+ <recipe crafted="1" difficulty="40" index="345" result="367" skill="Gunsmith" time="75" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="50" toolquality="2">
   <material amount="6" type="Orichalcum"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="35" index="346" result="368" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="75">
+ <recipe crafted="1" difficulty="35" index="346" result="368" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="75" toolquality="1">
   <material amount="2" type="Adamantium"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="35" index="347" result="369" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="75">
+ <recipe crafted="1" difficulty="35" index="347" result="369" skill="Gunsmith" time="60" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="75" toolquality="1">
   <material amount="2" type="Adamantium"/>
   <material amount="1" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="40" index="348" result="370" skill="Gunsmith" time="75" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="75">
+ <recipe crafted="1" difficulty="40" index="348" result="370" skill="Gunsmith" time="75" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="75" toolquality="1">
   <material amount="4" type="Adamantium"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="40" index="349" result="371" skill="Gunsmith" time="75" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="75">
+ <recipe crafted="1" difficulty="40" index="349" result="371" skill="Gunsmith" time="75" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="75" toolquality="1">
   <material amount="4" type="Adamantium"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="45" index="350" result="372" skill="Gunsmith" time="90" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="75">
+ <recipe crafted="1" difficulty="45" index="350" result="372" skill="Gunsmith" time="90" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="75" toolquality="1">
   <material amount="6" type="Adamantium"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
