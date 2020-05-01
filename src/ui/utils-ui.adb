@@ -78,7 +78,7 @@ package body Utils.UI is
       Set_No_Show_All(MessageBox, True);
       Hide(MessageBox);
       Source_Id := No_Source_Id;
-      if Get_Object(Builder, "btnclose") /= null then
+      if Builder /= null then
          EnableMenuShortcutsProc(Builder);
          Set_Sensitive(Gtk_Button(Get_Object(Builder, "btnclose")), True);
       end if;
@@ -93,7 +93,7 @@ package body Utils.UI is
       Hide(Self);
       Remove(Source_Id);
       Source_Id := No_Source_Id;
-      if Get_Object(Builder, "btnclose") /= null then
+      if Builder /= null then
          EnableMenuShortcutsProc(Builder);
          Set_Sensitive(Gtk_Button(Get_Object(Builder, "btnclose")), True);
       end if;
@@ -106,7 +106,7 @@ package body Utils.UI is
         (Gtk_Label(Get_Child(Gtk_Box(Get_Content_Area(MessageBox)), 0)),
          Message);
       Show_All(MessageBox);
-      if Get_Object(Builder, "btnclose") /= null then
+      if Builder /= null then
          DisableMenuShortcutsProc(Builder);
          Set_Sensitive(Gtk_Button(Get_Object(Builder, "btnclose")), False);
       end if;
