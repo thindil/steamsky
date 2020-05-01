@@ -776,6 +776,10 @@ tags `description`. -->
 </skill>
 <skill attribute="Intelligence" name="Engineering" tool="EngineersBook">
    <description>Used by engineers, determines ship speed and speed of ship upgrading/repairing</description>
+   <toolquality level="25" quality="20" />
+   <toolquality level="50" quality="15" />
+   <toolquality level="75" quality="10" />
+   <toolquality level="100" quality="5" />
 </skill>
 <skill attribute="Dexterity" name="Gunnery" tool="GunSimulator">
    <description>Used by gunners, determines chance to hit enemy in ship combat</description>
@@ -788,7 +792,11 @@ tags `description`. -->
    <toolquality level="100" quality="1" />
 </skill>
  <skill attribute="Intelligence" name="Rhetoric" tool="RhetoricBook">
-    <description>Used by traders, determines prices in bases</description>
+   <description>Used by traders, determines prices in bases</description>
+   <toolquality level="25" quality="20" />
+   <toolquality level="50" quality="15" />
+   <toolquality level="75" quality="10" />
+   <toolquality level="100" quality="5" />
  </skill>
  <skill attribute="Intelligence" name="Perception" tool="SmallToys">
    <description>Used by pilots and gunners to spot enemy ships</description>
@@ -801,36 +809,80 @@ tags `description`. -->
    <toolquality level="100" quality="1" />
  </skill>
  <skill attribute="Intelligence" name="Alchemy" tool="AlchemyBook">
-    <description>Used in crafting</description>
+   <description>Used in crafting</description>
+   <toolquality level="25" quality="20" />
+   <toolquality level="50" quality="15" />
+   <toolquality level="75" quality="10" />
+   <toolquality level="100" quality="5" />
  </skill>
  <skill attribute="Dexterity" name="Cooking" tool="CookingBook">
-    <description>Used to cook food</description>
+   <description>Used to cook food</description>
+   <toolquality level="25" quality="20" />
+   <toolquality level="50" quality="15" />
+   <toolquality level="75" quality="10" />
+   <toolquality level="100" quality="5" />
  </skill>
  <skill attribute="Dexterity" name="Gunsmith" tool="GunsmithBook">
-    <description>Used to create ammo for guns and to upgrade guns</description>
+   <description>Used to create ammo for guns and to upgrade guns</description>
+   <toolquality level="25" quality="20" />
+   <toolquality level="50" quality="15" />
+   <toolquality level="75" quality="10" />
+   <toolquality level="100" quality="5" />
  </skill>
  <skill attribute="Dexterity" name="Metalsmith" tool="MetalsmithBook">
-    <description>Used in crafting</description></skill>
+   <description>Used in crafting</description></skill>
+   <toolquality level="25" quality="20" />
+   <toolquality level="50" quality="15" />
+   <toolquality level="75" quality="10" />
+   <toolquality level="100" quality="5" />
  <skill attribute="Intelligence" name="Medicine" tool="MedicineBook">
-    <description>Used in healing</description>
+   <description>Used in healing</description>
+   <toolquality level="25" quality="20" />
+   <toolquality level="50" quality="15" />
+   <toolquality level="75" quality="10" />
+   <toolquality level="100" quality="5" />
  </skill>
  <skill attribute="Strength" name="Farming" tool="FarmingBook">
-    <description>Used to grow plants</description>
+   <description>Used to grow plants</description>
+   <toolquality level="25" quality="20" />
+   <toolquality level="50" quality="15" />
+   <toolquality level="75" quality="10" />
+   <toolquality level="100" quality="5" />
  </skill>
  <skill attribute="Strength" name="Woodcutting" tool="WoodcuttingBook">
-    <description>Used to cut trees</description>
+   <description>Used to cut trees</description>
+   <toolquality level="25" quality="20" />
+   <toolquality level="50" quality="15" />
+   <toolquality level="75" quality="10" />
+   <toolquality level="100" quality="5" />
  </skill>
  <skill attribute="Intelligence" name="Brewery" tool="BrewingBook">
-    <description>Used to brew drinks</description>
+   <description>Used to brew drinks</description>
+   <toolquality level="25" quality="20" />
+   <toolquality level="50" quality="15" />
+   <toolquality level="75" quality="10" />
+   <toolquality level="100" quality="5" />
  </skill>
  <skill attribute="Strength" name="Blacksmith" tool="BlacksmithBook">
-    <description>Used in crafting</description>
+   <description>Used in crafting</description>
+   <toolquality level="25" quality="20" />
+   <toolquality level="50" quality="15" />
+   <toolquality level="75" quality="10" />
+   <toolquality level="100" quality="5" />
  </skill>
  <skill attribute="Strength" name="Woodworking" tool="WoodworkingBook">
-    <description>Used in crafting</description>
+   <description>Used in crafting</description>
+   <toolquality level="25" quality="20" />
+   <toolquality level="50" quality="15" />
+   <toolquality level="75" quality="10" />
+   <toolquality level="100" quality="5" />
  </skill>
  <skill attribute="Dexterity" name="Leatherworking" tool="LeatherworkingBook">
-    <description>Used in crafting</description>
+   <description>Used in crafting</description>
+   <toolquality level="25" quality="20" />
+   <toolquality level="50" quality="15" />
+   <toolquality level="75" quality="10" />
+   <toolquality level="100" quality="5" />
  </skill>
  <skill attribute="Strength" name="Swords" tool="TrainingDummy">
    <description>Used to determine chance to hit with swords in combat</description>
@@ -863,7 +915,11 @@ tags `description`. -->
    <toolquality level="100" quality="1" />
  </skill>
  <skill attribute="Dexterity" name="Printing" tool="PrintingBook">
-    <description>Used in making paper and books</description>
+   <description>Used in making paper and books</description>
+   <toolquality level="25" quality="20" />
+   <toolquality level="50" quality="15" />
+   <toolquality level="75" quality="10" />
+   <toolquality level="100" quality="5" />
  </skill>
  <skill attribute="Strength" name="Maces" tool="TrainingDummy">
    <description>Used to determine chance to hit with maces in combat</description>
