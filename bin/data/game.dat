@@ -743,32 +743,62 @@ it name as attribute `name` and description between tags `attribute`. -->
 ealier in this same file).
 - Optional attribute `tool` is item type used as tool during training (must be
 defined ealier in this same file).
+- Optional tag `description` is the description of the skill showed to a
+player
+- Optional tags `toolquality` contains information on tool quality needed to
+train the selected skill on the selected level. Attribute `level` mean
+maximum level on which the selected tool quality is used. Attribute
+`quality` mean minimum required tool quality (at this moment, chance of the
+tool to break) required for that level of skill. Thus values level="50" and
+quality="5" means if skill is at level 50 or below use tools with quality
+5 or less
 After change skill name, you been need to made proper changes in other game
 data files (recipes, items and this same file) if needed. To change skill name,
 just edit value of `name` attribute of selected skill. To change assigned
 attribute to selected skill enter new name in attribute `attribute`. Name must
 be existing attribute name, defined ealier in this same file. To change skill
-description, just edit text between `skill` tags. To change assigned tool,
-edit value of `tool` attribute of selected skill.
+description, just edit text between `description` tags. To change assigned
+tool, edit value of `tool` attribute of selected skill.
 To add new skill, just append new line with tag `skill` with it name as
 attribute `name`, assigned attribute to skill as attribute `attribute`,
 assigned item type as training tool as attribute `tool` and description between
-tags `skill`. -->
+tags `description`. -->
 <skill attribute="Dexterity" name="Piloting" tool="CockpitSimulator">
    <!-- In game description of the skill. Can have any value. -->
    <description>Used by pilots, determines ship speed and chance to avoid damage in ship combat</description>
+   <toolquality level="10" quality="20" />
+   <toolquality level="15" quality="15" />
+   <toolquality level="20" quality="10" />
+   <toolquality level="25" quality="5" />
+   <toolquality level="50" quality="3" />
+   <toolquality level="75" quality="2" />
+   <toolquality level="100" quality="1" />
 </skill>
 <skill attribute="Intelligence" name="Engineering" tool="EngineersBook">
    <description>Used by engineers, determines ship speed and speed of ship upgrading/repairing</description>
 </skill>
 <skill attribute="Dexterity" name="Gunnery" tool="GunSimulator">
    <description>Used by gunners, determines chance to hit enemy in ship combat</description>
+   <toolquality level="10" quality="20" />
+   <toolquality level="15" quality="15" />
+   <toolquality level="20" quality="10" />
+   <toolquality level="25" quality="5" />
+   <toolquality level="50" quality="3" />
+   <toolquality level="75" quality="2" />
+   <toolquality level="100" quality="1" />
 </skill>
  <skill attribute="Intelligence" name="Rhetoric" tool="RhetoricBook">
     <description>Used by traders, determines prices in bases</description>
  </skill>
  <skill attribute="Intelligence" name="Perception" tool="SmallToys">
-    <description>Used by pilots and gunners to spot enemy ships</description>
+   <description>Used by pilots and gunners to spot enemy ships</description>
+   <toolquality level="10" quality="20" />
+   <toolquality level="15" quality="15" />
+   <toolquality level="20" quality="10" />
+   <toolquality level="25" quality="5" />
+   <toolquality level="50" quality="3" />
+   <toolquality level="75" quality="2" />
+   <toolquality level="100" quality="1" />
  </skill>
  <skill attribute="Intelligence" name="Alchemy" tool="AlchemyBook">
     <description>Used in crafting</description>
@@ -803,34 +833,97 @@ tags `skill`. -->
     <description>Used in crafting</description>
  </skill>
  <skill attribute="Strength" name="Swords" tool="TrainingDummy">
-    <description>Used to determine chance to hit with swords in combat</description>
+   <description>Used to determine chance to hit with swords in combat</description>
+   <toolquality level="10" quality="20" />
+   <toolquality level="15" quality="15" />
+   <toolquality level="20" quality="10" />
+   <toolquality level="25" quality="5" />
+   <toolquality level="50" quality="3" />
+   <toolquality level="75" quality="2" />
+   <toolquality level="100" quality="1" />
  </skill>
  <skill attribute="Dexterity" name="Dodge" tool="SmallTraps">
-    <description>Used to dodge enemy attacks in combat</description>
+   <description>Used to dodge enemy attacks in combat</description>
+   <toolquality level="10" quality="20" />
+   <toolquality level="15" quality="15" />
+   <toolquality level="20" quality="10" />
+   <toolquality level="25" quality="5" />
+   <toolquality level="50" quality="3" />
+   <toolquality level="75" quality="2" />
+   <toolquality level="100" quality="1" />
  </skill>
  <skill attribute="Strength" name="Brawling" tool="TrainingDummy">
-    <description>Used to determine chance to hit with bare hands in combat</description>
+   <description>Used to determine chance to hit with bare hands in combat</description>
+   <toolquality level="10" quality="20" />
+   <toolquality level="15" quality="15" />
+   <toolquality level="20" quality="10" />
+   <toolquality level="25" quality="5" />
+   <toolquality level="50" quality="3" />
+   <toolquality level="75" quality="2" />
+   <toolquality level="100" quality="1" />
  </skill>
  <skill attribute="Dexterity" name="Printing" tool="PrintingBook">
     <description>Used in making paper and books</description>
  </skill>
  <skill attribute="Strength" name="Maces" tool="TrainingDummy">
-    <description>Used to determine chance to hit with maces in combat</description>
+   <description>Used to determine chance to hit with maces in combat</description>
+   <toolquality level="10" quality="20" />
+   <toolquality level="15" quality="15" />
+   <toolquality level="20" quality="10" />
+   <toolquality level="25" quality="5" />
+   <toolquality level="50" quality="3" />
+   <toolquality level="75" quality="2" />
+   <toolquality level="100" quality="1" />
  </skill>
  <skill attribute="Strength" name="Daggers" tool="TrainingDummy">
-    <description>Used to determine chance to hit with daggers in combat</description>
+   <description>Used to determine chance to hit with daggers in combat</description>
+   <toolquality level="10" quality="20" />
+   <toolquality level="15" quality="15" />
+   <toolquality level="20" quality="10" />
+   <toolquality level="25" quality="5" />
+   <toolquality level="50" quality="3" />
+   <toolquality level="75" quality="2" />
+   <toolquality level="100" quality="1" />
  </skill>
  <skill attribute="Strength" name="Two-handed Swords" tool="TrainingDummy">
-    <description>Used to determine chance to hit with two handed swords in combat</description>
+   <description>Used to determine chance to hit with two handed swords in combat</description>
+   <toolquality level="10" quality="20" />
+   <toolquality level="15" quality="15" />
+   <toolquality level="20" quality="10" />
+   <toolquality level="25" quality="5" />
+   <toolquality level="50" quality="3" />
+   <toolquality level="75" quality="2" />
+   <toolquality level="100" quality="1" />
  </skill>
  <skill attribute="Strength" name="Two-handed Maces" tool="TrainingDummy">
-    <description>Used to determine chance to hit with two handed, blunt weapons in combat</description>
+   <description>Used to determine chance to hit with two handed, blunt weapons in combat</description>
+   <toolquality level="10" quality="20" />
+   <toolquality level="15" quality="15" />
+   <toolquality level="20" quality="10" />
+   <toolquality level="25" quality="5" />
+   <toolquality level="50" quality="3" />
+   <toolquality level="75" quality="2" />
+   <toolquality level="100" quality="1" />
  </skill>
  <skill attribute="Strength" name="Rapiers" tool="TrainingDummy">
-    <description>Used to determine chance to hit with rapiers in combat</description>
+   <description>Used to determine chance to hit with rapiers in combat</description>
+   <toolquality level="10" quality="20" />
+   <toolquality level="15" quality="15" />
+   <toolquality level="20" quality="10" />
+   <toolquality level="25" quality="5" />
+   <toolquality level="50" quality="3" />
+   <toolquality level="75" quality="2" />
+   <toolquality level="100" quality="1" />
  </skill>
  <skill attribute="Strength" name="Spears" tool="TrainingDummy">
-    <description>Used to determine chance to hit with spears in combat</description>
+   <description>Used to determine chance to hit with spears in combat</description>
+   <toolquality level="10" quality="20" />
+   <toolquality level="15" quality="15" />
+   <toolquality level="20" quality="10" />
+   <toolquality level="25" quality="5" />
+   <toolquality level="50" quality="3" />
+   <toolquality level="75" quality="2" />
+   <toolquality level="100" quality="1" />
  </skill>
 <!-- To change which attribute is used to raise character condition, edit
 attribute `value` of tag `conditionname`. Value must be existing attribute
