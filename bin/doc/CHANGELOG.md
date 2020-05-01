@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Reduced amount of lost reputation for escaping from bases
 - Updated bases data with new items and recipes
+- Updated crafting recipes with tool quality requirement
 
 ### Fixed
 - Reputation requirement for recipes for steel, titanium, orichalcum and
