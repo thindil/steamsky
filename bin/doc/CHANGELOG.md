@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 - New goals: visit 10 undead bases, visit 1 drones base, visit 3 drones bases,
   visit 5 drones bases, visit 10 drones bases, visit 1 inquisition base, vitis
   3 inquisition bases, visit 5 inquisition bases, visit 10 inquisition bases,
-  destroy 200 poleis ships, destroy 250 poleis ships
+  destroy 200 poleis ships, destroy 250 poleis ships, destroy 500 poleis ships
 - New items: bronze printing press, iron printing press, steel printing press,
   titanium printing press, orichalcum printing press and adamantium printing
   press
