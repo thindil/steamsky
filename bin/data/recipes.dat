@@ -1186,7 +1186,7 @@ If you want add more materials to recipe, just add new tag "material" with prope
   <material amount="6" type="Adamantium"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
- <recipe crafted="1" difficulty="45" index="351" result="373" skill="Gunsmith" time="90" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="75">
+ <recipe crafted="1" difficulty="45" index="351" result="373" skill="Gunsmith" time="90" tool="GunsmithSet" workplace="ALCHEMY_LAB" reputation="75" toolquality="1">
   <material amount="6" type="Adamantium"/>
   <material amount="2" type="Gunpowder"/>
  </recipe>
@@ -1196,16 +1196,16 @@ If you want add more materials to recipe, just add new tag "material" with prope
  <recipe crafted="1" index="353" result="375" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE">
   <material amount="4" type="Iron"/>
  </recipe>
- <recipe crafted="1" index="354" result="376" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="0">
+ <recipe crafted="1" index="354" result="376" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="0" toolquality="5">
   <material amount="4" type="Steel"/>
  </recipe>
- <recipe crafted="1" index="355" result="377" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="25">
+ <recipe crafted="1" index="355" result="377" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="25" toolquality="3">
   <material amount="4" type="Titanium"/>
  </recipe>
- <recipe crafted="1" index="356" result="378" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="50">
+ <recipe crafted="1" index="356" result="378" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="50" toolquality="2">
   <material amount="4" type="Orichalcum"/>
  </recipe>
- <recipe crafted="1" index="357" result="379" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="50">
+ <recipe crafted="1" index="357" result="379" skill="Blacksmith" tool="BlacksmithSet" workplace="FURNACE" reputation="75" toolquality="1">
   <material amount="4" type="Adamantium"/>
  </recipe>
 </recipes>
