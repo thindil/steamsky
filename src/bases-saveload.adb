@@ -261,7 +261,7 @@ package body Bases.SaveLoad is
                   Attributes: Attributes_Container.Vector;
                   Index, Level: Natural;
                   Inventory: UnboundedString_Container.Vector;
-                  Equipment: Natural_Array(1 .. 7);
+                  Equipment: Equipment_Array;
                   RecruitNode: Node;
                begin
                   Skills.Clear;

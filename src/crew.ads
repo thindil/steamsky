@@ -50,6 +50,14 @@ package Crew is
       Rest, Defend, Boarding, Train);
    -- ****
 
+   -- ****t* Crew/Equipment_Array
+   -- FUNCTION
+   -- Data structure for currently equipped items for crew members. 1 - weapon,
+   -- 2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs, 7 - tool
+   -- SOURCE
+   type Equipment_Array is array(1 .. 7) of Natural;
+   -- ****
+
    -- ****t* Crew/Member_Data
    -- FUNCTION
    -- Data structure for ship crew member
@@ -95,7 +103,7 @@ package Crew is
       Orders: Natural_Array(1 .. 12);
       Attributes: Attributes_Container.Vector;
       Inventory: Inventory_Container.Vector;
-      Equipment: Natural_Array(1 .. 7);
+      Equipment: Equipment_Array;
       Payment: Attributes_Array;
       ContractLength: Integer;
       Morale: Attributes_Array;
