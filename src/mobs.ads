@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -72,7 +72,7 @@ package Mobs is
       Order: Crew_Orders;
       Priorities: Natural_Array(1 .. 12);
       Inventory: MobInventory_Container.Vector;
-      Equipment: Natural_Array(1 .. 7);
+      Equipment: Equipment_Array;
    end record;
    -- ****
 

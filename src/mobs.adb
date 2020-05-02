@@ -34,7 +34,7 @@ package body Mobs is
       TempInventory: MobInventory_Container.Vector;
       TempAttributes: Attributes_Container.Vector;
       TempPriorities: constant Natural_Array(1 .. 12) := (others => 0);
-      TempEquipment: constant Natural_Array(1 .. 7) := (others => 0);
+      TempEquipment: constant Equipment_Array := (others => 0);
       OrdersNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("Piloting"), To_Unbounded_String("Engineering"),
          To_Unbounded_String("Operating guns"),

@@ -158,7 +158,7 @@ package body Bases is
       SkillIndex, MaxSkillAmount: Integer;
       Attributes: Attributes_Container.Vector;
       Inventory, TempTools: UnboundedString_Container.Vector;
-      Equipment: Natural_Array(1 .. 7);
+      Equipment: Equipment_Array;
       MaxSkillLevel: Integer;
       RecruitFaction: Unbounded_String;
       procedure AddInventory
