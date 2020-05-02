@@ -40,6 +40,7 @@ with MainMenu; use MainMenu;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
 with Maps.UI.Handlers; use Maps.UI.Handlers;
+with Maps.UI.OrdersMenu; use Maps.UI.OrdersMenu;
 with Combat.UI; use Combat.UI;
 with GameOptions; use GameOptions;
 with Statistics.UI; use Statistics.UI;

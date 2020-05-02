@@ -73,6 +73,7 @@ with Statistics; use Statistics;
 with Statistics.UI; use Statistics.UI;
 with MainMenu; use MainMenu;
 with Maps.UI.Handlers; use Maps.UI.Handlers;
+with Maps.UI.OrdersMenu; use Maps.UI.OrdersMenu;
 with Missions; use Missions;
 with Missions.UI; use Missions.UI;
 with BasesList; use BasesList;

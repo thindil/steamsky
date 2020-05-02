@@ -110,15 +110,6 @@ package Maps.UI.Handlers is
    procedure MoveShip(User_Data: access GObject_Record'Class);
    -- ****
 
-   -- ****f* Maps.UI.Handlers/ShowOrders
-   -- FUNCTION
-   -- Show available ship orders
-   -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
-   -- SOURCE
-   procedure ShowOrders(Object: access Gtkada_Builder_Record'Class);
-   -- ****
-
    -- ****f* Maps.UI.Handlers/WaitOrder
    -- FUNCTION
    -- Execute selected wait order
