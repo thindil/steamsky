@@ -36,13 +36,6 @@ package Items is
    Items_Types: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****t* Items/Object_Buyable
-   -- FUNCTION
-   -- Did item is buyable in bases
-   -- SOURCE
-   type Object_Buyable is array(1 .. 5) of Boolean;
-   -- ****
-
    -- ****t* Items/Object_Data
    -- FUNCTION
    -- Data structure for objects prototypes
