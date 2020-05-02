@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Reputation requirement for recipes for steel, titanium, orichalcum and
   adamantium warhammers
+- Added missing fonts
 
 ## [4.9] - 2020-04-19
 
