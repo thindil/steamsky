@@ -31,6 +31,13 @@ with Ships; use Ships;
 package Bases is
 -- ****
 
+   -- ****t* Bases/BasesRange
+   -- FUNCTION
+   -- Amount of sky bases
+   -- SOURCE
+   subtype BasesRange is Positive range 1 .. 1024;
+   -- ****
+
    -- ****t* Bases/Recruit_Data
    -- FUNCTION
    -- Data structure for recruits
@@ -58,7 +65,7 @@ package Bases is
       Inventory: UnboundedString_Container.Vector;
       Equipment: Equipment_Array;
       Payment: Positive;
-      HomeBase: Positive;
+      HomeBase: BasesRange;
       Faction: Unbounded_String;
    end record;
    -- ****
@@ -149,13 +156,6 @@ package Bases is
       Cargo: BaseCargo_Container.Vector;
       Size: Bases_Size;
    end record;
-   -- ****
-
-   -- ****t* Bases/BasesRange
-   -- FUNCTION
-   -- Amount of sky bases
-   -- SOURCE
-   subtype BasesRange is Positive range 1 .. 1024;
    -- ****
 
    -- ****v* Bases/SkyBases
