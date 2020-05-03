@@ -453,7 +453,6 @@ package body Bases is
       MinX, MinY, MaxX, MaxY, ItemIndex: Integer;
       Enemies: UnboundedString_Container.Vector;
       Attempts, TraderIndex: Natural;
-      PlayerShips: UnboundedString_Container.Vector;
       NewItemIndex, ShipIndex: Unbounded_String;
    begin
       TraderIndex := FindMember(Talk);
@@ -505,11 +504,6 @@ package body Bases is
       NormalizeCoord(MinY, False);
       MaxY := PlayerShip.SkyY + 100;
       NormalizeCoord(MaxY, False);
-      for Faction of Factions_List loop
-         for Career of Faction.Careers loop
-            PlayerShips.Append(New_Item => Career.ShipIndex);
-         end loop;
-      end loop;
       GenerateEnemies(Enemies);
       for I in 1 .. EventsAmount loop
          Event := Events_Types'Val(GetRandom(1, 5));
