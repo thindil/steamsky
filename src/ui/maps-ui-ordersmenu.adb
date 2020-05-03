@@ -18,11 +18,14 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.String_Split; use GNAT.String_Split;
-with Gtk.Button; use Gtk.Button;
+with Gtk.Button_Box; use Gtk.Button_Box;
 with Gtk.Container; use Gtk.Container;
+with Gtk.Enums; use Gtk.Enums;
 with Gtk.Widget; use Gtk.Widget;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
+with Combat; use Combat;
+with Combat.UI; use Combat.UI;
 with Crafts; use Crafts;
 with Crew; use Crew;
 with Events; use Events;
@@ -34,11 +37,19 @@ with Maps.UI; use Maps.UI;
 with Missions; use Missions;
 with Ships; use Ships;
 with Ships.Crew; use Ships.Crew;
+with Ships.Movement; use Ships.Movement;
 with Stories; use Stories;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 
 package body Maps.UI.OrdersMenu is
+
+   -- ****iv* Maps.UI.OrdersMenu/OrdersBox
+   -- FUNCTION
+   -- Orders menu
+   -- SOURCE
+   OrdersBox: Gtk_Button_Box;
+   -- ****
 
    procedure ShowOrders(Object: access Gtkada_Builder_Record'Class) is
       HaveTrader: Boolean := False;
@@ -454,5 +465,79 @@ package body Maps.UI.OrdersMenu is
            ("Here are no available ship orders at this moment. Ship orders available mostly when you are at base or at event on map.");
       end if;
    end ShowOrders;
+
+   procedure ExecuteStory(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
+      Step: Step_Data;
+      Message: Unbounded_String;
+   begin
+      Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
+      if CurrentStory.CurrentStep = 0 then
+         Step := Stories_List(CurrentStory.Index).StartingStep;
+      elsif CurrentStory.CurrentStep > 0 then
+         Step :=
+           Stories_List(CurrentStory.Index).Steps(CurrentStory.CurrentStep);
+      else
+         Step := Stories_List(CurrentStory.Index).FinalStep;
+      end if;
+      if PlayerShip.Speed /= DOCKED and Step.FinishCondition = ASKINBASE then
+         Message := To_Unbounded_String(DockShip(True));
+         if Message /= Null_Unbounded_String then
+            ShowDialog(To_String(Message));
+            return;
+         end if;
+      end if;
+      if ProgressStory then
+         declare
+            Tokens: Slice_Set;
+         begin
+            Create(Tokens, To_String(CurrentStory.Data), ";");
+            case Step.FinishCondition is
+               when DESTROYSHIP =>
+                  if StartCombat
+                      (To_Unbounded_String(Slice(Tokens, 3)), False) then
+                     ShowCombatUI;
+                     return;
+                  end if;
+               when others =>
+                  null;
+            end case;
+            if CurrentStory.CurrentStep > -2 then
+               if CurrentStory.CurrentStep > 0 then
+                  Step :=
+                    Stories_List(CurrentStory.Index).Steps
+                      (CurrentStory.CurrentStep);
+               else
+                  Step := Stories_List(CurrentStory.Index).FinalStep;
+               end if;
+               for Text of Step.Texts loop
+                  if CurrentStory.FinishedStep = Text.Condition then
+                     ShowDialog(To_String(Text.Text));
+                     CurrentStory.ShowText := False;
+                     exit;
+                  end if;
+               end loop;
+            else
+               FinishStory;
+            end if;
+         end;
+      else
+         ShowDialog(To_String(Step.FailText));
+         CurrentStory.ShowText := False;
+      end if;
+      UpdateHeader;
+      UpdateMessages;
+      UpdateMoveButtons;
+      DrawMap;
+   end ExecuteStory;
+
+   procedure CreateOrdersMenu is
+      Button: Gtk_Button;
+   begin
+      OrdersBox := Gtk_Button_Box_New(Orientation_Vertical);
+      Button := Gtk_Button_New_With_Label("Story");
+      On_Clicked(Button, ExecuteStory'Access);
+      Pack_Start(OrdersBox, Button, False);
+   end CreateOrdersMenu;
 
 end Maps.UI.OrdersMenu;
