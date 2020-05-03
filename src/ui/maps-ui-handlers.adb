@@ -18,7 +18,6 @@
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers; use Ada.Containers;
-with GNAT.String_Split; use GNAT.String_Split;
 with Gtk.Window; use Gtk.Window;
 with Gtk.Combo_Box; use Gtk.Combo_Box;
 with Gtk.Text_Buffer; use Gtk.Text_Buffer;
@@ -868,66 +867,7 @@ package body Maps.UI.Handlers is
       elsif User_Data = Get_Object(Builder, "btnaskbases") then
          AskForBases;
       elsif User_Data = Get_Object(Builder, "btnstory") then
-         declare
-            Step: Step_Data;
-            Message: Unbounded_String;
-         begin
-            if CurrentStory.CurrentStep = 0 then
-               Step := Stories_List(CurrentStory.Index).StartingStep;
-            elsif CurrentStory.CurrentStep > 0 then
-               Step :=
-                 Stories_List(CurrentStory.Index).Steps
-                   (CurrentStory.CurrentStep);
-            else
-               Step := Stories_List(CurrentStory.Index).FinalStep;
-            end if;
-            if PlayerShip.Speed /= DOCKED and
-              Step.FinishCondition = ASKINBASE then
-               Message := To_Unbounded_String(DockShip(True));
-               if Message /= Null_Unbounded_String then
-                  ShowDialog(To_String(Message));
-                  return;
-               end if;
-            end if;
-            if ProgressStory then
-               declare
-                  Tokens: Slice_Set;
-               begin
-                  Create(Tokens, To_String(CurrentStory.Data), ";");
-                  case Step.FinishCondition is
-                     when DESTROYSHIP =>
-                        if StartCombat
-                            (To_Unbounded_String(Slice(Tokens, 3)), False) then
-                           ShowCombatUI;
-                           return;
-                        end if;
-                     when others =>
-                        null;
-                  end case;
-                  if CurrentStory.CurrentStep > -2 then
-                     if CurrentStory.CurrentStep > 0 then
-                        Step :=
-                          Stories_List(CurrentStory.Index).Steps
-                            (CurrentStory.CurrentStep);
-                     else
-                        Step := Stories_List(CurrentStory.Index).FinalStep;
-                     end if;
-                     for Text of Step.Texts loop
-                        if CurrentStory.FinishedStep = Text.Condition then
-                           ShowDialog(To_String(Text.Text));
-                           CurrentStory.ShowText := False;
-                           exit;
-                        end if;
-                     end loop;
-                  else
-                     FinishStory;
-                  end if;
-               end;
-            else
-               ShowDialog(To_String(Step.FailText));
-               CurrentStory.ShowText := False;
-            end if;
-         end;
+         ExecuteStory(null);
       elsif User_Data = Get_Object(Builder, "btnpray") then
          for I in PlayerShip.Crew.Iterate loop
             UpdateMorale(PlayerShip, Crew_Container.To_Index(I), 10);

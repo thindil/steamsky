@@ -13,6 +13,8 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Gtk.Button; use Gtk.Button;
+
 -- ****h* Maps.UI.OrdersMenu/OrdersMenu
 -- FUNCTION
 -- Provide code for manipulate orders menu
@@ -27,6 +29,22 @@ package Maps.UI.OrdersMenu is
    -- Object - Gtkada_Builder used to create UI
    -- SOURCE
    procedure ShowOrders(Object: access Gtkada_Builder_Record'Class);
+   -- ****
+
+   -- ****if* Maps.UI.OrdersMenu/ExecuteStory
+   -- FUNCTION
+   -- Execute proper action which depends on current story progress
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked. Unused
+   -- SOURCE
+   procedure ExecuteStory(Self: access Gtk_Button_Record'Class);
+   -- ****
+
+   -- ****f* Maps.UI.OrdersMenu/CreateOrdersMenu
+   -- FUNCTION
+   -- Create orders menu UI
+   -- SOURCE
+   procedure CreateOrdersMenu;
    -- ****
 
 end Maps.UI.OrdersMenu;
