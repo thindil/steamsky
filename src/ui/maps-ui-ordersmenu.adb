@@ -19,9 +19,9 @@ with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.String_Split; use GNAT.String_Split;
 with Gtk.Button_Box; use Gtk.Button_Box;
-with Gtk.Container; use Gtk.Container;
 with Gtk.Enums; use Gtk.Enums;
 with Gtk.Widget; use Gtk.Widget;
+with Gtk.Window; use Gtk.Window;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
 with Combat; use Combat;
@@ -34,8 +34,10 @@ with Game; use Game;
 with Items; use Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
+with Messages; use Messages;
 with Missions; use Missions;
 with Ships; use Ships;
+with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
 with Stories; use Stories;
@@ -59,18 +61,16 @@ package body Maps.UI.OrdersMenu is
       Event: Events_Types := None;
       ItemIndex: Natural;
    begin
-      if Is_Visible(Gtk_Widget(Get_Object(Object, "btnboxorders"))) then
-         Hide(Gtk_Widget(Get_Object(Object, "btnboxorders")));
+      if Is_Visible(OrdersBox) then
+         Hide(OrdersBox);
          return;
       end if;
       UpdateMapInfo(True);
-      Foreach
-        (Gtk_Container(Get_Object(Object, "btnboxorders")),
-         HideButtons'Access);
+      Foreach(OrdersBox, HideButtons'Access);
       if FindMember(Talk) > 0 then
          HaveTrader := True;
       end if;
-      Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btncloseorders")), False);
+      Set_No_Show_All(Get_Child(OrdersBox, 21), False);
       if CurrentStory.Index /= Null_Unbounded_String then
          declare
             Step: Step_Data;
@@ -261,8 +261,7 @@ package body Maps.UI.OrdersMenu is
                end if;
             end if;
             if PlayerShip.HomeBase /= BaseIndex then
-               Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btnsethome")), False);
+               Set_No_Show_All(Get_Child(OrdersBox, 20), False);
             end if;
          end if;
          if SkyBases(BaseIndex).Population = 0 then
@@ -451,15 +450,13 @@ package body Maps.UI.OrdersMenu is
          end case;
       end if;
       ButtonsVisible := False;
-      Foreach
-        (Gtk_Container(Get_Object(Object, "btnboxorders")),
-         CheckButtons'Access);
+      Foreach(OrdersBox, CheckButtons'Access);
       if ButtonsVisible then
          Hide(Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
          Hide(Gtk_Widget(Get_Object(Builder, "btnboxwait")));
          Hide(Gtk_Widget(Get_Object(Builder, "btnboxdestination")));
-         Show_All(Gtk_Widget(Get_Object(Object, "btnboxorders")));
-         Grab_Focus(Gtk_Widget(Get_Object(Object, "btncloseorders")));
+         Show_All(OrdersBox);
+         Grab_Focus(Get_Child(OrdersBox, 21));
       else
          ShowDialog
            ("Here are no available ship orders at this moment. Ship orders available mostly when you are at base or at event on map.");
@@ -471,7 +468,7 @@ package body Maps.UI.OrdersMenu is
       Step: Step_Data;
       Message: Unbounded_String;
    begin
-      Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
+      Hide(OrdersBox);
       if CurrentStory.CurrentStep = 0 then
          Step := Stories_List(CurrentStory.Index).StartingStep;
       elsif CurrentStory.CurrentStep > 0 then
@@ -531,13 +528,75 @@ package body Maps.UI.OrdersMenu is
       DrawMap;
    end ExecuteStory;
 
+   procedure HideOrders(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
+   begin
+      Hide(OrdersBox);
+   end HideOrders;
+
+   -- ****if* Maps.UI.OrdersMenu/SetAsHome
+   -- FUNCTION
+   -- Set the selected base as a home base for the player
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked. Unused
+   -- SOURCE
+   procedure SetAsHome(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
+      -- ****
+      TraderIndex: constant Natural := FindMember(Talk);
+      Price: Positive := 1000;
+      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
+   begin
+      CountPrice(Price, TraderIndex);
+      if ShowConfirmDialog
+          ("Are you sure want to change your home base (it cost" &
+           Positive'Image(Price) & " " & To_String(MoneyName) & ")?",
+           Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
+         if MoneyIndex2 = 0 then
+            ShowDialog
+              ("You don't have any " & To_String(MoneyName) &
+               " for change ship home base.");
+            return;
+         end if;
+         CountPrice(Price, TraderIndex);
+         if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
+            ShowDialog
+              ("You don't have enough " & To_String(MoneyName) &
+               " for change ship home base.");
+            return;
+         end if;
+         PlayerShip.HomeBase :=
+           SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+         UpdateCargo
+           (Ship => PlayerShip, CargoIndex => MoneyIndex2,
+            Amount => (0 - Price));
+         AddMessage
+           ("You changed your ship home base to: " &
+            To_String(SkyBases(PlayerShip.HomeBase).Name),
+            OtherMessage);
+         GainExp(1, TalkingSkill, TraderIndex);
+         UpdateGame(10);
+      end if;
+      UpdateHeader;
+      UpdateMessages;
+      UpdateMoveButtons;
+      DrawMap;
+   end SetAsHome;
+
    procedure CreateOrdersMenu is
       Button: Gtk_Button;
    begin
-      OrdersBox := Gtk_Button_Box_New(Orientation_Vertical);
-      Button := Gtk_Button_New_With_Label("Story");
-      On_Clicked(Button, ExecuteStory'Access);
-      Pack_Start(OrdersBox, Button, False);
+      OrdersBox := Gtk_Button_Box(Get_Object(Builder, "btnboxorders"));
+      --OrdersBox := Gtk_Button_Box_New(Orientation_Vertical);
+      --Button := Gtk_Button_New_With_Label("Story");
+      --On_Clicked(Button, ExecuteStory'Access);
+      --Pack_Start(OrdersBox, Button, False);
+      Button := Gtk_Button_New_With_Mnemonic("Set as _home");
+      On_Clicked(Button, SetAsHome'Access);
+      Pack_Start(OrdersBox, Button);
+      Button := Gtk_Button_New_With_Mnemonic("_Close");
+      On_Clicked(Button, HideOrders'Access);
+      Pack_Start(OrdersBox, Button);
    end CreateOrdersMenu;
 
 end Maps.UI.OrdersMenu;
