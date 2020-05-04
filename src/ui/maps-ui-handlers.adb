@@ -857,11 +857,8 @@ package body Maps.UI.Handlers is
    end CompleteMission;
 
    procedure ExecuteOrder(User_Data: access GObject_Record'Class) is
-      TraderIndex: constant Natural := FindMember(Talk);
-      Price: Positive := 1000;
-      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
    begin
-      Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
+      HideOrders(null);
       if User_Data = Get_Object(Builder, "btnaskevents") then
          AskForEvents;
       elsif User_Data = Get_Object(Builder, "btnaskbases") then
@@ -876,37 +873,6 @@ package body Maps.UI.Handlers is
            ("You and your crew were praying for some time. Now you all feel a bit better.",
             OrderMessage);
          UpdateGame(30);
-      else
-         CountPrice(Price, TraderIndex);
-         if ShowConfirmDialog
-             ("Are you sure want to change your home base (it cost" &
-              Positive'Image(Price) & " " & To_String(MoneyName) & ")?",
-              Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
-            if MoneyIndex2 = 0 then
-               ShowDialog
-                 ("You don't have any " & To_String(MoneyName) &
-                  " for change ship home base.");
-               return;
-            end if;
-            CountPrice(Price, TraderIndex);
-            if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
-               ShowDialog
-                 ("You don't have enough " & To_String(MoneyName) &
-                  " for change ship home base.");
-               return;
-            end if;
-            PlayerShip.HomeBase :=
-              SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-            UpdateCargo
-              (Ship => PlayerShip, CargoIndex => MoneyIndex2,
-               Amount => (0 - Price));
-            AddMessage
-              ("You changed your ship home base to: " &
-               To_String(SkyBases(PlayerShip.HomeBase).Name),
-               OtherMessage);
-            GainExp(1, TalkingSkill, TraderIndex);
-            UpdateGame(10);
-         end if;
       end if;
       UpdateHeader;
       UpdateMessages;

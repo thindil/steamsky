@@ -40,6 +40,13 @@ package Maps.UI.OrdersMenu is
    procedure ExecuteStory(Self: access Gtk_Button_Record'Class);
    -- ****
 
+   -- ****f* Maps.UI.OrdersMenu/HideOrders
+   -- FUNCTION
+   -- Hide orders menu
+   -- SOURCE
+   procedure HideOrders(Self: access Gtk_Button_Record'Class);
+   -- ****
+
    -- ****f* Maps.UI.OrdersMenu/CreateOrdersMenu
    -- FUNCTION
    -- Create orders menu UI

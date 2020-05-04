@@ -826,7 +826,7 @@ package body Maps.UI is
 
    procedure CheckButtons(Widget: not null access Gtk_Widget_Record'Class) is
    begin
-      if Widget = Gtk_Widget(Get_Object(Builder, "btncloseorders")) then
+      if Widget = Get_Child(Gtk_Box(Get_Parent(Widget)), 21) then
          return;
       end if;
       if not Get_No_Show_All(Widget) and not ButtonsVisible then
@@ -1109,6 +1109,7 @@ package body Maps.UI is
       CreateCargoUI;
       CreateTradeUI;
       CreateStoriesUI;
+      CreateOrdersMenu;
       SetUtilsBuilder(Builder);
       Add_Overlay
         (Gtk_Overlay(Get_Object(Builder, "mapoverlay")),
