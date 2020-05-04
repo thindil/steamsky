@@ -1311,7 +1311,7 @@ package body DebugUI is
                  Slice(Labels(I), 2, Length(Labels(I))));
             SpinButton :=
               Gtk_Spin_Button_New
-                (Gtk_Adjustment_New(1.0, 1.0, 100.0, 1.0, 10.0), 0.0);
+                (Gtk_Adjustment_New(1.0, 0.0, 100.0, 1.0, 10.0), 0.0);
             Set_Tooltip_Text
               (SpinButton,
                "Level of " & To_String(LowerLabel) &
