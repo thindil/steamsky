@@ -15,14 +15,14 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
--- ****h* Steamsky/Bases.Cargo
+-- ****h* Bases/Cargo
 -- FUNCTION
 -- Provide code for manipulate cargo of sky bases
 -- SOURCE
 package Bases.Cargo is
 -- ****
 
-   -- ****f* Bases.Cargo/GenerateCargo
+   -- ****f* Cargo/GenerateCargo
    -- FUNCTION
    -- Generate base cargo
    -- SOURCE
@@ -30,7 +30,7 @@ package Bases.Cargo is
       Test_Case => ("Test_GenerateCargo", Robustness);
       -- ****
 
-   -- ****f* Bases.Cargo/UpdateBaseCargo
+   -- ****f* Cargo/UpdateBaseCargo
    -- FUNCTION
    -- Update cargo in base
    -- PARAMETERS
@@ -47,7 +47,7 @@ package Bases.Cargo is
       Test_Case => ("Test_UpdateBaseCargo", Robustness);
       -- ****
 
-      -- ****f* Bases.Cargo/FindBaseCargo
+      -- ****f* Cargo/FindBaseCargo
       -- FUNCTION
       -- Find index of item in base cargo
       -- PARAMETERS
