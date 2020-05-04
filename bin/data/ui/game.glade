@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 
+<!-- Generated with glade 3.22.2 
 
 Copyright (C) 2018-2019 Bartek thindil Jasicki
 
@@ -590,34 +590,10 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       </packing>
     </child>
     <child>
-      <object class="GtkButton" id="btnsethome">
-        <property name="label" translatable="yes">Set as _home</property>
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="use_underline">True</property>
-        <signal name="clicked" handler="Execute_Order" object="btnsethome" swapped="no"/>
-      </object>
-      <packing>
-        <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">20</property>
-      </packing>
+      <placeholder/>
     </child>
     <child>
-      <object class="GtkButton" id="btncloseorders">
-        <property name="label" translatable="yes">_Close</property>
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="use_underline">True</property>
-        <signal name="clicked" handler="Hide_Map_Info" object="btnboxorders" swapped="no"/>
-      </object>
-      <packing>
-        <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">21</property>
-      </packing>
+      <placeholder/>
     </child>
   </object>
   <object class="GtkListStore" id="cargolist">
