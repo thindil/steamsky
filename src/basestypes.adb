@@ -103,7 +103,7 @@ package body BasesTypes is
          else
             Action := ADD;
          end if;
-         if (Action = UPDATE or Action = REMOVE) then
+         if Action in UPDATE | REMOVE then
             if not BasesTypes_Container.Contains
                 (BasesTypes_List, BaseIndex) then
                raise Data_Loading_Error
