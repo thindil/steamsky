@@ -144,10 +144,6 @@ package body Maps.UI is
          end if;
       end UpdateLabel;
    begin
-      if PlayerShip.Crew(1).Health = 0 then
-         DeathConfirm;
-         return;
-      end if;
       Set_Text(Gtk_Label(Get_Object(Builder, "lbltime")), FormatedTime);
       Set_Tooltip_Text
         (Gtk_Widget(Get_Object(Builder, "lbltime")), "Game time.");
@@ -490,6 +486,9 @@ package body Maps.UI is
          UpdateLabel
            ("lblclean", Encode("" & CurrentTheme.CleanIcon),
             "Ship needs no cleaning.");
+      end if;
+      if PlayerShip.Crew(1).Health = 0 then
+         DeathConfirm;
       end if;
    end UpdateHeader;
 
