@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -17,14 +17,14 @@
 
 with DOM.Core; use DOM.Core;
 
--- ****h* Steamsky/Bases.SaveLoad
+-- ****h* Bases/BSaveLoad
 -- FUNCTION
 -- Provide code to save and load sky bases data from file
 -- SOURCE
 package Bases.SaveLoad is
 -- ****
 
-   -- ****f* Bases.SaveLoad/SaveBases
+   -- ****f* BSaveLoad/SaveBases
    -- FUNCTION
    -- Save bases from current game in file
    -- PARAMETERS
@@ -34,7 +34,7 @@ package Bases.SaveLoad is
    procedure SaveBases(SaveData: Document; MainNode: DOM.Core.Element);
    -- ****
 
-   -- ****f* Bases.SaveLoad/LoadBases
+   -- ****f* BSaveLoad/LoadBases
    -- FUNCTION
    -- Load bases from file
    -- PARAMETERS
