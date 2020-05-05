@@ -748,6 +748,9 @@ package body Crew is
                end if;
             end if;
             if HealthLevel = 0 then
+               if DeathReason = Null_Unbounded_String then
+                  DeathReason := To_Unbounded_String("debugging");
+               end if;
                Death(I, DeathReason, PlayerShip);
                exit when I = 1;
             end if;
