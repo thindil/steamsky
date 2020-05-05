@@ -91,7 +91,8 @@ package body Items.Test_Data.Tests is
 
 --  begin read only
    function Wrap_Test_GetItemDamage_dedcfa_d584da
-     (ItemDurability: Natural; ToLower: Boolean := False) return String is
+     (ItemDurability: Items_Durability; ToLower: Boolean := False)
+      return String is
    begin
       declare
          Test_GetItemDamage_dedcfa_d584da_Result: constant String :=
@@ -110,7 +111,7 @@ package body Items.Test_Data.Tests is
 --  id:2.2/dedcfaf3e24b7100/GetItemDamage/1/0/test_getitemdamage/
    procedure Test_GetItemDamage_test_getitemdamage(Gnattest_T: in out Test) is
       function GetItemDamage
-        (ItemDurability: Natural; ToLower: Boolean := False)
+        (ItemDurability: Items_Durability; ToLower: Boolean := False)
          return String renames
         Wrap_Test_GetItemDamage_dedcfa_d584da;
 --  end read only
@@ -237,7 +238,8 @@ package body Items.Test_Data.Tests is
    function Wrap_Test_FindItem_5f6068_d3c7d4
      (Inventory: Inventory_Container.Vector;
       ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
-      Durability: Natural := 101; Quality: Positive := 100) return Natural is
+      Durability: Items_Durability := Items_Durability'Last;
+      Quality: Positive := 100) return Natural is
    begin
       declare
          Test_FindItem_5f6068_d3c7d4_Result: constant Natural :=
@@ -258,8 +260,8 @@ package body Items.Test_Data.Tests is
       function FindItem
         (Inventory: Inventory_Container.Vector;
          ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
-         Durability: Natural := 101; Quality: Positive := 100)
-         return Natural renames
+         Durability: Items_Durability := Items_Durability'Last;
+         Quality: Positive := 100) return Natural renames
         Wrap_Test_FindItem_5f6068_d3c7d4;
 --  end read only
 

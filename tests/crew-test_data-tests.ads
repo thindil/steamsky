@@ -11,32 +11,32 @@ package Crew.Test_Data.Tests is
    null record;
 
    procedure Test_GainExp_685058_9e4143(Gnattest_T: in out Test);
-   --  crew.ads:193:4:GainExp:Test_GainExp
+   --  crew.ads:201:4:GainExp:Test_GainExp
 
    procedure Test_GenerateMemberName_b4591b_2ce78d(Gnattest_T: in out Test);
-   --  crew.ads:207:4:GenerateMemberName:Test_GenerateMemberName
+   --  crew.ads:215:4:GenerateMemberName:Test_GenerateMemberName
 
    procedure Test_FindCabin_c60907_006804(Gnattest_T: in out Test);
-   --  crew.ads:225:4:FindCabin:Test_FindCabin
+   --  crew.ads:233:4:FindCabin:Test_FindCabin
 
    procedure Test_UpdateCrew_123b55_011eae(Gnattest_T: in out Test);
-   --  crew.ads:237:4:UpdateCrew:Test_UpdateCrew
+   --  crew.ads:245:4:UpdateCrew:Test_UpdateCrew
 
    procedure Test_WaitForRest_237f93_b046aa(Gnattest_T: in out Test);
-   --  crew.ads:246:4:WaitForRest:Test_WaitForRest
+   --  crew.ads:254:4:WaitForRest:Test_WaitForRest
 
    procedure Test_GetSkillLevelName_b5615e_88354f(Gnattest_T: in out Test);
-   --  crew.ads:258:4:GetSkillLevelName:Test_GetSkillLevelName
+   --  crew.ads:266:4:GetSkillLevelName:Test_GetSkillLevelName
 
    procedure Test_GetAttributeLevelName_ac08df_7fd836(Gnattest_T: in out Test);
-   --  crew.ads:271:4:GetAttributeLevelName:Test_GetAttributeLevelName
+   --  crew.ads:279:4:GetAttributeLevelName:Test_GetAttributeLevelName
 
    procedure Test_DailyPayment_62db86_0bfd06(Gnattest_T: in out Test);
-   --  crew.ads:280:4:DailyPayment:Test_DailyPayment
+   --  crew.ads:288:4:DailyPayment:Test_DailyPayment
 
    procedure Test_GetTrainingToolQuality_32b7f3_c6feab
      (Gnattest_T: in out Test);
-   --  crew.ads:295:4:GetTrainingToolQuality:Test_GetTrainingToolQuality
+   --  crew.ads:303:4:GetTrainingToolQuality:Test_GetTrainingToolQuality
 
 end Crew.Test_Data.Tests;
 --  end read only
