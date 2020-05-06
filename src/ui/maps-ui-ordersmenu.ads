@@ -54,4 +54,15 @@ package Maps.UI.OrdersMenu is
    procedure CreateOrdersMenu;
    -- ****
 
+   -- ****f* Maps.UI.OrdersMenu/HideInfo
+   -- FUNCTION
+   -- Hide if needed the selected info from the view
+   -- PARAMETERS
+   -- StageName - Name of the game stage which state will be check
+   -- RESULT
+   -- True if the selected info was hidden, otherwise False
+   -- SOURCE
+   function HideInfo(StageName: String) return Boolean;
+   -- ****
+
 end Maps.UI.OrdersMenu;

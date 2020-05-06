@@ -20,9 +20,11 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.String_Split; use GNAT.String_Split;
 with Gtk.Button_Box; use Gtk.Button_Box;
 with Gtk.Enums; use Gtk.Enums;
+with Gtk.Stack; use Gtk.Stack;
 with Gtk.Widget; use Gtk.Widget;
 with Gtk.Window; use Gtk.Window;
 with Bases; use Bases;
+with Bases.LootUI; use Bases.LootUI;
 with BasesTypes; use BasesTypes;
 with Combat; use Combat;
 with Combat.UI; use Combat.UI;
@@ -583,6 +585,22 @@ package body Maps.UI.OrdersMenu is
       DrawMap;
    end SetAsHome;
 
+   -- ****if* Maps.UI.OrdersMenu/BtnLootClicked
+   -- FUNCTION
+   -- Show or hide looting UI
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked
+   -- SOURCE
+   procedure BtnLootClicked(Self: access Gtk_Button_Record'Class) is
+      -- ****
+   begin
+      if HideInfo("loot") then
+         return;
+      end if;
+      HideOrders(Self);
+      ShowLootUI;
+   end BtnLootClicked;
+
    procedure CreateOrdersMenu is
       Button: Gtk_Button;
    begin
@@ -591,6 +609,9 @@ package body Maps.UI.OrdersMenu is
       --Button := Gtk_Button_New_With_Label("Story");
       --On_Clicked(Button, ExecuteStory'Access);
       --Pack_Start(OrdersBox, Button, False);
+      Button := Gtk_Button_New_With_Mnemonic("_Loot");
+      On_Clicked(Button, BtnLootClicked'Access);
+      Pack_Start(OrdersBox, Button);
       Button := Gtk_Button_New_With_Mnemonic("Set as _home");
       On_Clicked(Button, SetAsHome'Access);
       Pack_Start(OrdersBox, Button);
@@ -598,5 +619,23 @@ package body Maps.UI.OrdersMenu is
       On_Clicked(Button, HideOrders'Access);
       Pack_Start(OrdersBox, Button);
    end CreateOrdersMenu;
+
+   function HideInfo(StageName: String) return Boolean is
+   begin
+      if Get_Visible_Child_Name(Gtk_Stack(Get_Object(Builder, "gamestack"))) =
+        StageName then
+         if PreviousGameState = Combat_View then
+            Set_Visible_Child_Name
+              (Gtk_Stack(Get_Object(Builder, "gamestack")), "combat");
+         else
+            Show_All(Gtk_Widget(Get_Object(Builder, "menuwait")));
+            Show_All(Gtk_Widget(Get_Object(Builder, "menuorders")));
+            Set_Visible_Child_Name
+              (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
+         end if;
+         return True;
+      end if;
+      return False;
+   end HideInfo;
 
 end Maps.UI.OrdersMenu;
