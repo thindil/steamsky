@@ -575,19 +575,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       </packing>
     </child>
     <child>
-      <object class="GtkButton" id="btnloot">
-        <property name="label" translatable="yes">_Loot</property>
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="use_underline">True</property>
-        <signal name="clicked" handler="Show_Info" object="btnloot" swapped="no"/>
-      </object>
-      <packing>
-        <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">19</property>
-      </packing>
+      <placeholder/>
     </child>
     <child>
       <placeholder/>
