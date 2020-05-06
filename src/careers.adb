@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -48,7 +48,7 @@ package body Careers is
          else
             Action := ADD;
          end if;
-         if (Action = UPDATE or Action = REMOVE) then
+         if Action in UPDATE | REMOVE then
             if not Careers_Container.Contains(Careers_List, CareerIndex) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
