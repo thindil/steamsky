@@ -60,7 +60,6 @@ with Bases; use Bases;
 with Bases.UI; use Bases.UI;
 with Bases.SchoolUI; use Bases.SchoolUI;
 with Bases.ShipyardUI; use Bases.ShipyardUI;
-with Bases.LootUI; use Bases.LootUI;
 with Bases.RecruitUI; use Bases.RecruitUI;
 with Missions; use Missions;
 with Missions.UI; use Missions.UI;
@@ -630,24 +629,6 @@ package body Maps.UI.Handlers is
    procedure ShowInfo(User_Data: access GObject_Record'Class) is
       VisibleChildName: constant String :=
         Get_Visible_Child_Name(Gtk_Stack(Get_Object(Builder, "gamestack")));
-      function HideInfo(StageName: String) return Boolean is
-      begin
-         if Get_Visible_Child_Name
-             (Gtk_Stack(Get_Object(Builder, "gamestack"))) =
-           StageName then
-            if PreviousGameState = Combat_View then
-               Set_Visible_Child_Name
-                 (Gtk_Stack(Get_Object(Builder, "gamestack")), "combat");
-            else
-               Show_All(Gtk_Widget(Get_Object(Builder, "menuwait")));
-               Show_All(Gtk_Widget(Get_Object(Builder, "menuorders")));
-               Set_Visible_Child_Name
-                 (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
-            end if;
-            return True;
-         end if;
-         return False;
-      end HideInfo;
    begin
       if User_Data = Get_Object(Builder, "menumissions") then
          if AcceptedMissions.Length = 0 then
@@ -745,12 +726,6 @@ package body Maps.UI.Handlers is
          end if;
          Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
          ShowShipyardUI;
-      elsif User_Data = Get_Object(Builder, "btnloot") then
-         if HideInfo("loot") then
-            return;
-         end if;
-         Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
-         ShowLootUI;
       elsif User_Data = Get_Object(Builder, "menucrafting") then
          if HideInfo("crafts") then
             return;
