@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,42 +15,42 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
--- ****h* Steamsky/Bases.Ship
+-- ****h* Bases/Ship
 -- FUNCTION
 -- Provides code to manipulate player ship in sky bases
 -- SOURCE
 package Bases.Ship is
 -- ****
 
-   -- ****e* Bases.Ship/BasesShip_Nothing_To_Repair
+   -- ****e* Ship/BasesShip_Nothing_To_Repair
    -- FUNCTION
    -- Raised when there is nothing to repair
    -- SOURCE
    BasesShip_Nothing_To_Repair: exception;
    -- ****
 
-   -- ****e* Bases.Ship/BasesShip_Unique_Module
+   -- ****e* Ship/BasesShip_Unique_Module
    -- FUNCTION
    -- Raised when player try install another same unique module
    -- SOURCE
    BasesShip_Unique_Module: exception;
    -- ****
 
-   -- ****e* Bases.Ship/BasesShip_Installation_Error
+   -- ****e* Ship/BasesShip_Installation_Error
    -- FUNCTION
    -- Raised when problems with installing ship module occurs
    -- SOURCE
    BasesShip_Installation_Error: exception;
    -- ****
 
-   -- ****e* Bases.Ship/BasesShip_Removing_Error
+   -- ****e* Ship/BasesShip_Removing_Error
    -- FUNCTION
    -- Raised when problems with removing ship module occurs
    -- SOURCE
    BasesShip_Removing_Error: exception;
    -- ****
 
-   -- ****f* Bases.Ship/RepairShip
+   -- ****f* Ship/RepairShip
    -- FUNCTION
    -- Repairs player ship in bases
    -- PARAMETERS
@@ -62,12 +62,12 @@ package Bases.Ship is
       Test_Case => ("Test_RepairShip", Nominal);
       -- ****
 
--- ****f* Bases.Ship/UpgradeShip
--- FUNCTION
--- Install or remove modules on player ship
--- PARAMETERS
--- Install     - If True, perform module installation on player ship. On False,
-      --               remove module
+      -- ****f* Ship/UpgradeShip
+      -- FUNCTION
+      -- Install or remove modules on player ship
+      -- PARAMETERS
+      -- Install     - If True, perform module installation on player ship. On
+      --               False, remove module
       -- ModuleIndex - Index of prototype module to install or remove
       -- SOURCE
    procedure UpgradeShip(Install: Boolean; ModuleIndex: Unbounded_String) with
@@ -75,7 +75,7 @@ package Bases.Ship is
       Test_Case => ("Test_UpdgradeShip", Nominal);
       -- ****
 
-      -- ****f* Bases.Ship/PayForDock
+      -- ****f* Ship/PayForDock
       -- FUNCTION
       -- Pay daily fee for docking
       -- SOURCE
@@ -83,7 +83,7 @@ package Bases.Ship is
       Test_Case => ("Test_PayForDock", Robustness);
       -- ****
 
-      -- ****f* Bases.Ship/RepairCost
+      -- ****f* Ship/RepairCost
       -- FUNCTION
       -- Count cost and time of repairs of player ship
       -- PARAMETERS
