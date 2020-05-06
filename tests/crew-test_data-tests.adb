@@ -208,7 +208,13 @@ package body Crew.Test_Data.Tests is
    begin
 
       UpdateCrew(1, 1);
-      Assert(True, "This test can only crash.");
+      PlayerShip.Crew(1).Health := 0;
+      UpdateCrew(1, 1);
+      NewGameSettings.PlayerFaction := To_Unbounded_String("POLEIS");
+      NewGameSettings.PlayerCareer := To_Unbounded_String("general");
+      NewGameSettings.StartingBase := To_Unbounded_String("1");
+      NewGame;
+      Assert(True, "This tests can only crash.");
 
 --  begin read only
    end Test_UpdateCrew_test_updatecrew;
