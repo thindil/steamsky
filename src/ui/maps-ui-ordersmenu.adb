@@ -391,25 +391,20 @@ package body Maps.UI.OrdersMenu is
                               null;
                            when Destroy =>
                               Set_Label
-                                (Gtk_Button
-                                   (Get_Object(Object, "btncurrentmission")),
+                                (Gtk_Button(Get_Child(OrdersBox, 18)),
                                  "_Search for " &
                                  To_String
                                    (ProtoShips_List(Mission.ShipIndex).Name));
                            when Patrol =>
                               Set_Label
-                                (Gtk_Button
-                                   (Get_Object(Object, "btncurrentmission")),
+                                (Gtk_Button(Get_Child(OrdersBox, 18)),
                                  "_Patrol area");
                            when Explore =>
                               Set_Label
-                                (Gtk_Button
-                                   (Get_Object(Object, "btncurrentmission")),
+                                (Gtk_Button(Get_Child(OrdersBox, 18)),
                                  "_Explore area");
                         end case;
-                        Set_No_Show_All
-                          (Gtk_Widget(Get_Object(Object, "btncurrentmission")),
-                           False);
+                        Set_No_Show_All(Get_Child(OrdersBox, 18), False);
                      end if;
                   end loop;
                end if;
@@ -592,7 +587,7 @@ package body Maps.UI.OrdersMenu is
    -- Self - Gtk_Button which was clicked
    -- SOURCE
    procedure BtnLootClicked(Self: access Gtk_Button_Record'Class) is
-      -- ****
+   -- ****
    begin
       if HideInfo("loot") then
          return;
@@ -600,6 +595,64 @@ package body Maps.UI.OrdersMenu is
       HideOrders(Self);
       ShowLootUI;
    end BtnLootClicked;
+
+   -- ****if* Maps.UI.OrdersMenu/StartMission
+   -- FUNCTION
+   -- Start the current mission
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked. Unused.
+   -- SOURCE
+   procedure StartMission(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
+      -- ****
+      StartsCombat: Boolean := False;
+   begin
+      Hide(OrdersBox);
+      for Mission of AcceptedMissions loop
+         if Mission.TargetX = PlayerShip.SkyX and
+           Mission.TargetY = PlayerShip.SkyY and not Mission.Finished then
+            case Mission.MType is
+               when Deliver | Passenger =>
+                  null;
+               when Destroy =>
+                  UpdateGame(GetRandom(15, 45));
+                  StartsCombat := CheckForEvent;
+                  if not StartsCombat then
+                     StartsCombat :=
+                       StartCombat
+                         (AcceptedMissions
+                            (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
+                               .MissionIndex)
+                            .ShipIndex,
+                          False);
+                  end if;
+               when Patrol =>
+                  UpdateGame(GetRandom(45, 75));
+                  StartsCombat := CheckForEvent;
+                  if not StartsCombat then
+                     UpdateMission
+                       (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
+                  end if;
+               when Explore =>
+                  UpdateGame(GetRandom(30, 60));
+                  StartsCombat := CheckForEvent;
+                  if not StartsCombat then
+                     UpdateMission
+                       (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
+                  end if;
+            end case;
+            exit;
+         end if;
+      end loop;
+      if StartsCombat then
+         ShowCombatUI;
+         return;
+      end if;
+      UpdateHeader;
+      UpdateMessages;
+      UpdateMoveButtons;
+      DrawMap;
+   end StartMission;
 
    procedure CreateOrdersMenu is
       Button: Gtk_Button;
@@ -609,6 +662,9 @@ package body Maps.UI.OrdersMenu is
       --Button := Gtk_Button_New_With_Label("Story");
       --On_Clicked(Button, ExecuteStory'Access);
       --Pack_Start(OrdersBox, Button, False);
+      Button := Gtk_Button_New_With_Mnemonic("_Patrol area");
+      On_Clicked(Button, StartMission'Access);
+      Pack_Start(OrdersBox, Button);
       Button := Gtk_Button_New_With_Mnemonic("_Loot");
       On_Clicked(Button, BtnLootClicked'Access);
       Pack_Start(OrdersBox, Button);

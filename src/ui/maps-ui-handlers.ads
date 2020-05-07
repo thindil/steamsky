@@ -164,15 +164,6 @@ package Maps.UI.Handlers is
    procedure ShowMissions(Object: access Gtkada_Builder_Record'Class);
    -- ****
 
-   -- ****f* Maps.UI.Handlers/StartMission
-   -- FUNCTION
-   -- Start mission if ship is in cell with it
-   -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
-   -- SOURCE
-   procedure StartMission(Object: access Gtkada_Builder_Record'Class);
-   -- ****
-
    -- ****f* Maps.UI.Handlers/CompleteMission
    -- FUNCTION
    -- Finish mission if ship is at sky base

@@ -1162,7 +1162,6 @@ package body Maps.UI is
       Register_Handler(Builder, "Show_Info", ShowInfo'Access);
       Register_Handler(Builder, "Resign_From_Game", ResignFromGame'Access);
       Register_Handler(Builder, "Show_Missions", ShowMissions'Access);
-      Register_Handler(Builder, "Start_Mission", StartMission'Access);
       Register_Handler(Builder, "Complete_Mission", CompleteMission'Access);
       Register_Handler(Builder, "Execute_Order", ExecuteOrder'Access);
       Register_Handler(Builder, "Show_Wait_Orders", ShowWaitOrders'Access);
