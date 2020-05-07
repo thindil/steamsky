@@ -1431,7 +1431,6 @@ package body Maps.UI is
       Set_Text(Gtk_Text_Buffer(Get_Object(Builder, "txtmap")), "X" & LF & "X");
       Show_All(Gtk_Widget(Get_Object(Builder, "skymapwindow")));
       UpdateMoveButtons;
-      UpdateHeader;
       Hide(Gtk_Widget(Get_Object(Builder, "btnclose")));
       Hide(Gtk_Widget(Get_Object(Builder, "moremovemapbox")));
       Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
@@ -1442,6 +1441,10 @@ package body Maps.UI is
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "skymap");
       Show_All(Gtk_Widget(Get_Object(Builder, "btnmenu")));
       UpdateMapInfo;
+      for I in ButtonsNames'Range loop
+         Hide(Gtk_Widget(Get_Object(Builder, To_String(ButtonsNames(I)))));
+      end loop;
+      UpdateHeader;
       if CurrentStory.Index /= Null_Unbounded_String and
         CurrentStory.ShowText then
          if CurrentStory.CurrentStep > -2 then
@@ -1454,9 +1457,6 @@ package body Maps.UI is
          end if;
          CurrentStory.ShowText := False;
       end if;
-      for I in ButtonsNames'Range loop
-         Hide(Gtk_Widget(Get_Object(Builder, To_String(ButtonsNames(I)))));
-      end loop;
       Show_All(Gtk_Widget(Get_Object(Builder, "menuwait")));
       Show_All(Gtk_Widget(Get_Object(Builder, "menuorders")));
       if GameSettings.ShowLastMessages then
