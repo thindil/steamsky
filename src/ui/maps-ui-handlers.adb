@@ -771,56 +771,6 @@ package body Maps.UI.Handlers is
       ShowMissionsUI;
    end ShowMissions;
 
-   procedure StartMission(Object: access Gtkada_Builder_Record'Class) is
-      StartsCombat: Boolean := False;
-   begin
-      Hide(Gtk_Widget(Get_Object(Object, "btnboxorders")));
-      for Mission of AcceptedMissions loop
-         if Mission.TargetX = PlayerShip.SkyX and
-           Mission.TargetY = PlayerShip.SkyY and not Mission.Finished then
-            case Mission.MType is
-               when Deliver | Passenger =>
-                  null;
-               when Destroy =>
-                  UpdateGame(GetRandom(15, 45));
-                  StartsCombat := CheckForEvent;
-                  if not StartsCombat then
-                     StartsCombat :=
-                       StartCombat
-                         (AcceptedMissions
-                            (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
-                               .MissionIndex)
-                            .ShipIndex,
-                          False);
-                  end if;
-               when Patrol =>
-                  UpdateGame(GetRandom(45, 75));
-                  StartsCombat := CheckForEvent;
-                  if not StartsCombat then
-                     UpdateMission
-                       (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
-                  end if;
-               when Explore =>
-                  UpdateGame(GetRandom(30, 60));
-                  StartsCombat := CheckForEvent;
-                  if not StartsCombat then
-                     UpdateMission
-                       (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
-                  end if;
-            end case;
-            exit;
-         end if;
-      end loop;
-      if StartsCombat then
-         ShowCombatUI;
-         return;
-      end if;
-      UpdateHeader;
-      UpdateMessages;
-      UpdateMoveButtons;
-      DrawMap;
-   end StartMission;
-
    procedure CompleteMission(Object: access Gtkada_Builder_Record'Class) is
    begin
       Hide(Gtk_Widget(Get_Object(Object, "btnboxorders")));
