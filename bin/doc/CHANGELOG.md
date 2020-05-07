@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Setting crew members health in debug menu
 - Crash when player was killed in debug menu
 - Game header info on player death
+- Don't show everything on player death
 
 ## [4.9] - 2020-04-19
 
