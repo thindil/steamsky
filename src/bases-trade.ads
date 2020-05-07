@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
--- ****h* Steamsky/Bases.Trade
+-- ****h* Bases/BTrade
 -- FUNCTION
 -- Provide code for hiring recruits, buying recipes, heal and train crew
 -- members in bases.
@@ -23,28 +23,28 @@
 package Bases.Trade is
 -- ****
 
-   -- ****e* Bases.Trade/Trade_Already_Known
+   -- ****e* BTrade/Trade_Already_Known
    -- FUNCTION
    -- Raised when player known selected recipe
    -- SOURCE
    Trade_Already_Known: exception;
    -- ****
 
-   -- ****e* Bases.Trade/Trade_Cant_Heal
+   -- ****e* BTrade/Trade_Cant_Heal
    -- FUNCTION
    -- Raised when no crew members are wounded
    -- SOURCE
    Trade_Cant_Heal: exception;
    -- ****
 
-   -- ****e* Bases.Trade/Trade_Cant_Train
+   -- ****e* BTrade/Trade_Cant_Train
    -- FUNCTION
    -- Raised when skill is maxed and can't be trained
    -- SOURCE
    Trade_Cant_Train: exception;
    -- ****
 
-   -- ****f* Bases.Trade/HireRecruit
+   -- ****f* BTrade/HireRecruit
    -- FUNCTION
    -- Hire selected recruit from bases and add him/her to player ship crew
    -- PARAMETERS
@@ -62,7 +62,7 @@ package Bases.Trade is
       Test_Case => ("Test_HireRecruit", Robustness);
       -- ****
 
-      -- ****f* Bases.Trade/BuyRecipe
+      -- ****f* BTrade/BuyRecipe
       -- FUNCTION
       -- Buy new crafting recipe
       -- PARAMETERS
@@ -73,7 +73,7 @@ package Bases.Trade is
       Test_Case => ("Test_BuyRecipe", Nominal);
       -- ****
 
-      -- ****f* Bases.Trade/HealWounded
+      -- ****f* BTrade/HealWounded
       -- FUNCTION
       -- Heals wounded crew members in bases
       -- PARAMETERS
@@ -85,7 +85,7 @@ package Bases.Trade is
       Test_Case => ("Test_HealWounded", Nominal);
       -- ****
 
-      -- ****f* Bases.Trade/HealCost
+      -- ****f* BTrade/HealCost
       -- FUNCTION
       -- Count cost of healing action
       -- PARAMETERS
@@ -103,7 +103,7 @@ package Bases.Trade is
       Test_Case => ("Test_HealCost", Nominal);
       -- ****
 
-      -- ****f* Bases.Trade/TrainCost
+      -- ****f* BTrade/TrainCost
       -- FUNCTION
       -- Count cost of training action
       -- PARAMETERS
@@ -120,7 +120,7 @@ package Bases.Trade is
       Test_Case => ("Test_TrainCost", Nominal);
       -- ****
 
-      -- ****f* Bases.Trade/TrainSkill
+      -- ****f* BTrade/TrainSkill
       -- FUNCTION
       -- Train selected skill
       -- PARAMETERS
