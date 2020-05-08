@@ -38,6 +38,7 @@ with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Missions; use Missions;
+with Missions.UI; use Missions.UI;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
@@ -258,8 +259,7 @@ package body Maps.UI.OrdersMenu is
                   end if;
                end loop;
                if MissionsLimit > 0 then
-                  Set_No_Show_All
-                    (Gtk_Widget(Get_Object(Object, "btnmissions")), False);
+                  Set_No_Show_All(Get_Child(OrdersBox, 17), False);
                end if;
             end if;
             if PlayerShip.HomeBase /= BaseIndex then
@@ -654,6 +654,21 @@ package body Maps.UI.OrdersMenu is
       DrawMap;
    end StartMission;
 
+   -- ****if* Maps.UI.OrdersMenu/ShowMissions
+   -- FUNCTION
+   -- Show available missions in the base
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked. Unused.
+   -- SOURCE
+   procedure ShowMissions(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
+      -- ****
+   begin
+      Hide(OrdersBox);
+      Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
+      ShowMissionsUI;
+   end ShowMissions;
+
    procedure CreateOrdersMenu is
       Button: Gtk_Button;
    begin
@@ -662,6 +677,9 @@ package body Maps.UI.OrdersMenu is
       --Button := Gtk_Button_New_With_Label("Story");
       --On_Clicked(Button, ExecuteStory'Access);
       --Pack_Start(OrdersBox, Button, False);
+      Button := Gtk_Button_New_With_Mnemonic("_Missions");
+      On_Clicked(Button, ShowMissions'Access);
+      Pack_Start(OrdersBox, Button);
       Button := Gtk_Button_New_With_Mnemonic("_Patrol area");
       On_Clicked(Button, StartMission'Access);
       Pack_Start(OrdersBox, Button);

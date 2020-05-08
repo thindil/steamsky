@@ -764,13 +764,6 @@ package body Maps.UI.Handlers is
       end if;
    end ResignFromGame;
 
-   procedure ShowMissions(Object: access Gtkada_Builder_Record'Class) is
-   begin
-      Hide(Gtk_Widget(Get_Object(Object, "btnboxorders")));
-      Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
-      ShowMissionsUI;
-   end ShowMissions;
-
    procedure CompleteMission(Object: access Gtkada_Builder_Record'Class) is
    begin
       Hide(Gtk_Widget(Get_Object(Object, "btnboxorders")));
