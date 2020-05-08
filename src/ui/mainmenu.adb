@@ -1299,6 +1299,7 @@ package body MainMenu is
          NewGameSwitch: constant Gtk_Stack_Switcher := Gtk_Stack_Switcher_New;
       begin
          NewGameStack := Gtk_Stack_New;
+         DifficultyGrid := Gtk_Grid_New;
          Set_Stack(NewGameSwitch, NewGameStack);
          Set_Halign(NewGameSwitch, Align_Center);
          Pack_Start(NewGameBox, NewGameSwitch, False);
@@ -1386,14 +1387,12 @@ package body MainMenu is
          Append_Text(DifficultyCombo, "Hard");
          Append_Text(DifficultyCombo, "Very hard");
          Append_Text(DifficultyCombo, "Custom");
-         On_Changed(DifficultyCombo, SetDifficulty'Access);
          Set_Tooltip_Text
            (DifficultyCombo, "Select game difficulty preset level.");
-         Set_Active(DifficultyCombo, Gint(NewGameSettings.DifficultyLevel));
+         On_Changed(DifficultyCombo, SetDifficulty'Access);
          Pack_Start(HBox, DifficultyCombo, False);
          Pack_Start(DifficultyBox, HBox, False);
          Setting := True;
-         DifficultyGrid := Gtk_Grid_New;
          for I in 0 .. 7 loop
             Label := Gtk_Label_New(To_String(LabelsArray(I)));
             Attach(DifficultyGrid, Label, 0, Gint(I));
@@ -1411,6 +1410,7 @@ package body MainMenu is
             Attach(DifficultyGrid, Label, 2, Gint(I));
          end loop;
          Setting := False;
+         Set_Active(DifficultyCombo, Gint(NewGameSettings.DifficultyLevel));
          Set_Tooltip_Text
            (DifficultyGrid,
             "Set difficulty of new game. Each value can be between 1 and 500. Each change has an impact not only on the game's difficulty but also on amount of points gained in the game. Select a field to get more information about it.");
