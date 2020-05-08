@@ -155,15 +155,6 @@ package Maps.UI.Handlers is
    procedure ResignFromGame(Object: access Gtkada_Builder_Record'Class);
    -- ****
 
-   -- ****f* Maps.UI.Handlers/ShowMissions
-   -- FUNCTION
-   -- Show available missions in base
-   -- PARAMETERS
-   -- Object - Gtkada_Builder used to create UI
-   -- SOURCE
-   procedure ShowMissions(Object: access Gtkada_Builder_Record'Class);
-   -- ****
-
    -- ****f* Maps.UI.Handlers/CompleteMission
    -- FUNCTION
    -- Finish mission if ship is at sky base
