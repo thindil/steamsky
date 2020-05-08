@@ -64,7 +64,7 @@ package body Crafts is
          else
             Action := ADD;
          end if;
-         if (Action = UPDATE or Action = REMOVE) then
+         if Action in UPDATE | REMOVE then
             if not Recipes_Container.Contains(Recipes_List, RecipeIndex) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
