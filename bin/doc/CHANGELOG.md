@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - Crash when player was killed in debug menu
 - Game header info on player death
 - Don't show everything on player death
+- Crash on start the game
 
 ## [4.9] - 2020-04-19
 
