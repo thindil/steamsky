@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -17,14 +17,14 @@
 
 with Ships; use Ships;
 
--- ****h* Steamsky/Crew.Inventory
+-- ****h* Crew/Inventory
 -- FUNCTION
 -- Provide code for manipulate player ship crew members inventory
 -- SOURCE
 package Crew.Inventory is
 -- ****
 
-   -- ****f* Crew.Inventory/UpdateInventory
+   -- ****f* Inventory/UpdateInventory
    -- FUNCTION
    -- Update member inventory
    -- PARAMETERS
@@ -48,7 +48,7 @@ package Crew.Inventory is
       Test_Case => ("Test_UpdateInventory", Nominal);
       -- ****
 
-      -- ****f* Crew.Inventory/FreeInventory
+      -- ****f* Inventory/FreeInventory
       -- FUNCTION
       -- Return available space in crew member inventory after adding or
       -- extracting Amount
@@ -64,7 +64,7 @@ package Crew.Inventory is
       Test_Case => ("Test_FreeInventory", Nominal);
       -- ****
 
-      -- ****f* Crew.Inventory/TakeOffItem
+      -- ****f* Inventory/TakeOffItem
       -- FUNCTION
       -- Remove selected item from character equipment
       -- PARAMETERS
@@ -79,7 +79,7 @@ package Crew.Inventory is
       Test_Case => ("Test_TakeOffItem", Nominal);
       -- ****
 
-      -- ****f* Crew.Inventory/ItemIsUsed
+      -- ****f* Inventory/ItemIsUsed
       -- FUNCTION
       -- Check if selected crew member use this item
       -- PARAMETERS
@@ -93,7 +93,7 @@ package Crew.Inventory is
       Test_Case => ("Test_ItemIsUsed", Nominal);
       -- ****
 
-      -- ****f* Crew.Inventory/FindTools
+      -- ****f* Inventory/FindTools
       -- FUNCTION
       -- Search for specified tools in character and ship cargo
       -- PARAMETERS
