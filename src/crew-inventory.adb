@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -24,38 +24,32 @@ package body Crew.Inventory is
    procedure UpdateInventory
      (MemberIndex: Positive; Amount: Integer;
       ProtoIndex: Unbounded_String := Null_Unbounded_String;
-      Durability, InventoryIndex, Price: Natural := 0) is
+      Durability: Items_Durability := 0;
+      InventoryIndex, Price: Natural := 0) is
       ItemIndex: Natural := 0;
    begin
       if InventoryIndex = 0 then
-         if Durability > 0 then
-            ItemIndex :=
+         ItemIndex :=
+           (if Durability > 0 then
               FindItem
                 (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
-                 ProtoIndex => ProtoIndex, Durability => Durability);
-         else
-            ItemIndex :=
-              FindItem(PlayerShip.Crew(MemberIndex).Inventory, ProtoIndex);
-         end if;
+                 ProtoIndex => ProtoIndex, Durability => Durability)
+            else FindItem(PlayerShip.Crew(MemberIndex).Inventory, ProtoIndex));
       else
          ItemIndex := InventoryIndex;
       end if;
       if Amount > 0 then
          declare
-            Weight: Integer;
-         begin
-            if ItemIndex > 0 then
-               Weight :=
-                 0 -
+            Weight: constant Integer :=
+              (if ItemIndex > 0 then
                  Items_List
-                     (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
-                        .ProtoIndex)
-                     .Weight *
-                   Amount;
-            else
-               Weight := 0 - Items_List(ProtoIndex).Weight * Amount;
-            end if;
-            if FreeInventory(MemberIndex, Weight) < 0 then
+                   (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
+                      .ProtoIndex)
+                   .Weight *
+                 Amount
+               else Items_List(ProtoIndex).Weight * Amount);
+         begin
+            if FreeInventory(MemberIndex, -(Weight)) < 0 then
                raise Crew_No_Space_Error
                  with To_String(PlayerShip.Crew(MemberIndex).Name) &
                  " doesn't have any free space in their inventory.";
@@ -74,11 +68,10 @@ package body Crew.Inventory is
                Price => Price));
       else
          declare
-            NewAmount: Natural;
-         begin
-            NewAmount :=
+            NewAmount: constant Natural :=
               PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount +
               Amount;
+         begin
             if NewAmount = 0 then
                PlayerShip.Crew(MemberIndex).Inventory.Delete
                  (Index => ItemIndex);
@@ -132,9 +125,8 @@ package body Crew.Inventory is
    function FindTools
      (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders;
       ToolQuality: Positive := 100) return Natural is
-      ToolsIndex: Natural;
+      ToolsIndex: Natural := PlayerShip.Crew(MemberIndex).Equipment(7);
    begin
-      ToolsIndex := PlayerShip.Crew(MemberIndex).Equipment(7);
       if ToolsIndex > 0 then
          if Items_List
              (PlayerShip.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex)
