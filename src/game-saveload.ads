@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,28 +15,28 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
--- ****h* Steamsky/Game.SaveLoad
+-- ****h* Game/GSaveLoad
 -- FUNCTION
 -- Provide code to save and load the game data from file
 -- SOURCE
 package Game.SaveLoad is
 -- ****
 
-   -- ****v* Game.SaveLoad/SaveName
+   -- ****v* GSaveLoad/SaveName
    -- FUNCTION
    -- Full path with file name for current savegame
    -- SOURCE
    SaveName: Unbounded_String;
    -- ****
 
-   -- ****e* Game.SaveLoad/SaveGame_Invalid_Data
+   -- ****e* GSaveLoad/SaveGame_Invalid_Data
    -- FUNCTION
    -- Raised when invalid data found in savegame
    -- SOURCE
    SaveGame_Invalid_Data: exception;
    -- ****
 
-   -- ****f* Game.SaveLoad/SaveGame
+   -- ****f* GSaveLoad/SaveGame
    -- FUNCTION
    -- Save game to file
    -- PARAMETERS
@@ -46,14 +46,14 @@ package Game.SaveLoad is
    procedure SaveGame(PrettyPrint: Boolean := False);
    -- ****
 
-   -- ****f* Game.SaveLoad/LoadGame
+   -- ****f* GSaveLoad/LoadGame
    -- FUNCTION
    -- Load game from file
    -- SOURCE
    procedure LoadGame;
    -- ****
 
-   -- ****f* Game.SaveLoad/GenerateSaveName
+   -- ****f* GSaveLoad/GenerateSaveName
    -- FUNCTION
    -- Generate unique name for save game file
    -- PARAMETERS
