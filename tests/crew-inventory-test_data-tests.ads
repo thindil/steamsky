@@ -11,20 +11,20 @@ package Crew.Inventory.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_UpdateInventory_e20eca_ea0095(Gnattest_T: in out Test);
+   procedure Test_UpdateInventory_5fa756_ea0095(Gnattest_T: in out Test);
    --  crew-inventory.ads:41:4:UpdateInventory:Test_UpdateInventory
 
    procedure Test_FreeInventory_df8fe5_59014f(Gnattest_T: in out Test);
-   --  crew-inventory.ads:61:4:FreeInventory:Test_FreeInventory
+   --  crew-inventory.ads:62:4:FreeInventory:Test_FreeInventory
 
    procedure Test_TakeOffItem_a8b09e_c7fb64(Gnattest_T: in out Test);
-   --  crew-inventory.ads:75:4:TakeOffItem:Test_TakeOffItem
+   --  crew-inventory.ads:76:4:TakeOffItem:Test_TakeOffItem
 
    procedure Test_ItemIsUsed_9a8ce5_fa2743(Gnattest_T: in out Test);
-   --  crew-inventory.ads:89:4:ItemIsUsed:Test_ItemIsUsed
+   --  crew-inventory.ads:90:4:ItemIsUsed:Test_ItemIsUsed
 
    procedure Test_FindTools_9ef8ba_61150c(Gnattest_T: in out Test);
-   --  crew-inventory.ads:109:4:FindTools:Test_FindTools
+   --  crew-inventory.ads:110:4:FindTools:Test_FindTools
 
 end Crew.Inventory.Test_Data.Tests;
 --  end read only
