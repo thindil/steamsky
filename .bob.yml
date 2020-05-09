@@ -70,3 +70,8 @@ version: 2.0
       - gnatpp -P steamsky.gpr
       - gnatpp -P tests/prettytests.gpr
    description: Pretty print Steam sky source code
+- command:
+   name: prettytests
+   execute:
+      - gnatpp -P tests/prettytests.gpr
+   description: Pretty print unit tests source code
