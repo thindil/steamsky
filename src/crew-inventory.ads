@@ -41,7 +41,8 @@ package Crew.Inventory is
    procedure UpdateInventory
      (MemberIndex: Positive; Amount: Integer;
       ProtoIndex: Unbounded_String := Null_Unbounded_String;
-      Durability, InventoryIndex, Price: Natural := 0) with
+      Durability: Items_Durability := 0;
+      InventoryIndex, Price: Natural := 0) with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
        InventoryIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index),
