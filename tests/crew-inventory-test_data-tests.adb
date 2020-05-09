@@ -29,10 +29,11 @@ package body Crew.Inventory.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_UpdateInventory_e20eca_ea0095
+   procedure Wrap_Test_UpdateInventory_5fa756_ea0095
      (MemberIndex: Positive; Amount: Integer;
       ProtoIndex: Unbounded_String := Null_Unbounded_String;
-      Durability, InventoryIndex, Price: Natural := 0) is
+      Durability: Items_Durability := 0;
+      InventoryIndex, Price: Natural := 0) is
    begin
       begin
          pragma Assert
@@ -57,23 +58,24 @@ package body Crew.Inventory.Test_Data.Tests is
               (False,
                "ens_sloc(crew-inventory.ads:0:):Test_UpdateInventory test commitment violated");
       end;
-   end Wrap_Test_UpdateInventory_e20eca_ea0095;
+   end Wrap_Test_UpdateInventory_5fa756_ea0095;
 --  end read only
 
 --  begin read only
    procedure Test_UpdateInventory_test_updateinventory
      (Gnattest_T: in out Test);
-   procedure Test_UpdateInventory_e20eca_ea0095
+   procedure Test_UpdateInventory_5fa756_ea0095
      (Gnattest_T: in out Test) renames
      Test_UpdateInventory_test_updateinventory;
---  id:2.2/e20eca86c3534ae1/UpdateInventory/1/0/test_updateinventory/
+--  id:2.2/5fa7563a0327adb0/UpdateInventory/1/0/test_updateinventory/
    procedure Test_UpdateInventory_test_updateinventory
      (Gnattest_T: in out Test) is
       procedure UpdateInventory
         (MemberIndex: Positive; Amount: Integer;
          ProtoIndex: Unbounded_String := Null_Unbounded_String;
-         Durability, InventoryIndex, Price: Natural := 0) renames
-        Wrap_Test_UpdateInventory_e20eca_ea0095;
+         Durability: Items_Durability := 0;
+         InventoryIndex, Price: Natural := 0) renames
+        Wrap_Test_UpdateInventory_5fa756_ea0095;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -90,6 +92,19 @@ package body Crew.Inventory.Test_Data.Tests is
       Assert
         (Positive(PlayerShip.Crew(1).Inventory.Length) = Amount,
          "Failed to remove item from crew member inventory.");
+      begin
+         UpdateInventory(1, 10_000, To_Unbounded_String("1"));
+         Assert
+           (False,
+            "Failed to not add too much items to the crew member inventory.");
+      exception
+         when Crew_No_Space_Error =>
+            null;
+         when others =>
+            Assert
+              (False,
+               "Exception when trying to add more items than crew member can take.");
+      end;
 
 --  begin read only
    end Test_UpdateInventory_test_updateinventory;
