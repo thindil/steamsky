@@ -25,6 +25,7 @@ with Gtk.Widget; use Gtk.Widget;
 with Gtk.Window; use Gtk.Window;
 with Bases; use Bases;
 with Bases.LootUI; use Bases.LootUI;
+with Bases.UI; use Bases.UI;
 with BasesTypes; use BasesTypes;
 with Combat; use Combat;
 with Combat.UI; use Combat.UI;
@@ -190,8 +191,7 @@ package body Maps.UI.OrdersMenu is
                    (Recipes_Container.Key(I)) and
                  Recipes_List(I).Reputation <=
                    SkyBases(BaseIndex).Reputation(1) then
-                  Set_No_Show_All
-                    (Gtk_Widget(Get_Object(Object, "btnrecipes")), False);
+                  Set_No_Show_All(Get_Child(OrdersBox, 16), False);
                   exit;
                end if;
             end loop;
@@ -654,6 +654,28 @@ package body Maps.UI.OrdersMenu is
       DrawMap;
    end StartMission;
 
+   -- ****if* Maps.UI.OrdersMenu/HideUI
+   -- FUNCTION
+   -- Hide UI before show a new screen
+   -- SOURCE
+   procedure HideUI is
+      -- ****
+      VisibleChildName: constant String :=
+        Get_Visible_Child_Name(Gtk_Stack(Get_Object(Builder, "gamestack")));
+   begin
+      Hide(OrdersBox);
+      Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
+      Hide(Gtk_Widget(Get_Object(Builder, "shipmovementbox")));
+      Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
+      if VisibleChildName = "combat" then
+         PreviousGameState := Combat_View;
+      elsif VisibleChildName = "skymap" then
+         PreviousGameState := SkyMap_View;
+         Hide(Gtk_Widget(Get_Object(Builder, "menuwait")));
+         Hide(Gtk_Widget(Get_Object(Builder, "btnboxdestination")));
+      end if;
+   end HideUI;
+
    -- ****if* Maps.UI.OrdersMenu/ShowMissions
    -- FUNCTION
    -- Show available missions in the base
@@ -664,10 +686,23 @@ package body Maps.UI.OrdersMenu is
       pragma Unreferenced(Self);
       -- ****
    begin
-      Hide(OrdersBox);
-      Show_All(Gtk_Widget(Get_Object(Builder, "btnclose")));
+      HideUI;
       ShowMissionsUI;
    end ShowMissions;
+
+   -- ****if* Maps.UI.OrdersMenu/ShowRecipes
+   -- FUNCTION
+   -- Show screen to buy recipes from the base
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked. Unused.
+   -- SOURCE
+   procedure ShowRecipes(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
+      -- ****
+   begin
+      HideUI;
+      ShowBuyRecipesUI;
+   end ShowRecipes;
 
    procedure CreateOrdersMenu is
       Button: Gtk_Button;
@@ -677,6 +712,9 @@ package body Maps.UI.OrdersMenu is
       --Button := Gtk_Button_New_With_Label("Story");
       --On_Clicked(Button, ExecuteStory'Access);
       --Pack_Start(OrdersBox, Button, False);
+      Button := Gtk_Button_New_With_Mnemonic("Bu_y recipes");
+      On_Clicked(Button, ShowRecipes'Access);
+      Pack_Start(OrdersBox, Button);
       Button := Gtk_Button_New_With_Mnemonic("_Missions");
       On_Clicked(Button, ShowMissions'Access);
       Pack_Start(OrdersBox, Button);

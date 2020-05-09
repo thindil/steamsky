@@ -705,9 +705,6 @@ package body Maps.UI.Handlers is
          end if;
          Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
          ShowRecruitUI;
-      elsif User_Data = Get_Object(Builder, "btnrecipes") then
-         Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
-         ShowBuyRecipesUI;
       elsif User_Data = Get_Object(Builder, "btnrepair") then
          Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
          ShowRepairUI;
