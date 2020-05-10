@@ -59,7 +59,6 @@ with Config; use Config;
 with Bases; use Bases;
 with Bases.UI; use Bases.UI;
 with Bases.SchoolUI; use Bases.SchoolUI;
-with Bases.ShipyardUI; use Bases.ShipyardUI;
 with Bases.RecruitUI; use Bases.RecruitUI;
 with Missions; use Missions;
 with Missions.UI; use Missions.UI;
@@ -717,12 +716,6 @@ package body Maps.UI.Handlers is
          end if;
          Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
          ShowSchoolUI;
-      elsif User_Data = Get_Object(Builder, "btnshipyard") then
-         if HideInfo("shipyard") then
-            return;
-         end if;
-         Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
-         ShowShipyardUI;
       elsif User_Data = Get_Object(Builder, "menucrafting") then
          if HideInfo("crafts") then
             return;
