@@ -108,7 +108,7 @@ package Crew is
       ContractLength: Integer;
       Morale: Attributes_Array;
       Loyalty: Natural;
-      HomeBase: Positive;
+      HomeBase: BasesRange;
       Faction: Unbounded_String;
    end record;
    -- ****

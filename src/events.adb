@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,18 +15,19 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Bases; use Bases;
+with BasesTypes; use BasesTypes;
+with Combat; use Combat;
+with Crew; use Crew;
+with Factions; use Factions;
+with Items; use Items;
+with Maps; use Maps;
+with Messages; use Messages;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
-with Maps; use Maps;
-with Combat; use Combat;
-with Messages; use Messages;
-with Crew; use Crew;
-with Items; use Items;
 with Utils; use Utils;
-with Factions; use Factions;
-with BasesTypes; use BasesTypes;
 
 package body Events is
 

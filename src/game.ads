@@ -398,6 +398,13 @@ package Game is
    type DamageFactor is digits 2 range 0.0 .. 1.0;
    -- ****
 
+   -- ****t* Game/BasesRange
+   -- FUNCTION
+   -- Amount of sky bases
+   -- SOURCE
+   subtype BasesRange is Positive range 1 .. 1024;
+   -- ****
+
    -- ****e* Game/Data_Loading_Error
    -- FUNCTION
    -- Raised when error occurs during loading any game data

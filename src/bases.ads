@@ -31,13 +31,6 @@ with Ships; use Ships;
 package Bases is
 -- ****
 
-   -- ****t* Bases/BasesRange
-   -- FUNCTION
-   -- Amount of sky bases
-   -- SOURCE
-   subtype BasesRange is Positive range 1 .. 1024;
-   -- ****
-
    -- ****t* Bases/Recruit_Data
    -- FUNCTION
    -- Data structure for recruits
