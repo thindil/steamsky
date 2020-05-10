@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,14 +15,14 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
--- ****h* Steamsky/Ships.Cargo
+-- ****h* Ships/SCargo
 -- FUNCTION
 -- Provides code to manipulate ships cargos
 -- SOURCE
 package Ships.Cargo is
 -- ****
 
-   -- ****f* Ships.Cargo/UpdateCargo
+   -- ****f* SCargo/UpdateCargo
    -- FUNCTION
    -- Update selected item in ship cargo
    -- PARAMETERS
@@ -45,7 +45,7 @@ package Ships.Cargo is
       Test_Case => ("Test_UpdateCargo", Nominal);
       -- ****
 
-      -- ****f* Ships.Cargo/FreeCargo
+      -- ****f* SCargo/FreeCargo
       -- FUNCTION
       -- Check how much is free space in cargo of selected ship
       -- PARAMETERS
@@ -62,7 +62,7 @@ package Ships.Cargo is
       Test_Case => ("Test_FreeCargo", Robustness);
       -- ****
 
-      -- ****f* Ships.Cargo/GetItemAmount
+      -- ****f* SCargo/GetItemAmount
       -- FUNCTION
       -- Check how much selected items is in player ship cargo
       -- PARAMETERS
@@ -75,7 +75,7 @@ package Ships.Cargo is
       Test_Case => ("Test_GetItemAmount", Nominal);
       -- ****
 
-      -- ****f* Ships.Cargo/GetItemsAmount
+      -- ****f* SCargo/GetItemsAmount
       -- FUNCTION
       -- Check amount of selected consumables on player ship
       -- PARAMETERS
