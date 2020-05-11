@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,14 +15,14 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
--- ****h* Steamsky/Ships.Crew
+-- ****h* Ships/SCrew
 -- FUNCTION
 -- Provides code for manipulate ships crews
 -- SOURCE
 package Ships.Crew is
 -- ****
 
-   -- ****f* Ships.Crew/GetSkillLevel
+   -- ****f* SCrew/GetSkillLevel
    -- FUNCTION
    -- Get level of skill of selected crew member
    -- PARAMETERS
@@ -37,7 +37,7 @@ package Ships.Crew is
       Test_Case => ("Test_GetSkillLevel", Nominal);
       -- ****
 
-      -- ****f* Ships.Crew/Death
+      -- ****f* SCrew/Death
       -- FUNCTION
       -- Handle crew member death
       -- PARAMETERS
@@ -58,7 +58,7 @@ package Ships.Crew is
       Test_Case => ("Test_Death", Nominal);
       -- ****
 
-      -- ****f* Ships.Crew/DeleteMember
+      -- ****f* SCrew/DeleteMember
       -- FUNCTION
       -- Delete selected member from crew list
       -- PARAMETERS
@@ -72,7 +72,7 @@ package Ships.Crew is
       Test_Case => ("Test_DeleteMember", Nominal);
       -- ****
 
-   -- ****f* Ships.Crew/FindMember
+   -- ****f* SCrew/FindMember
    -- FUNCTION
    -- Find index of first crew member with selected order
    -- PARAMETERS
@@ -87,7 +87,7 @@ package Ships.Crew is
       Test_Case => ("Test_FindMember", Robustness);
       -- ****
 
-      -- ****f* Ships.Crew/GiveOrders
+      -- ****f* SCrew/GiveOrders
       -- FUNCTION
       -- Change order for selected crew member
       -- PARAMETERS
@@ -110,7 +110,7 @@ package Ships.Crew is
       Test_Case => ("Test_GiveOrders", Nominal);
       -- ****
 
-      -- ****f* Ships.Crew/UpdateOrders
+      -- ****f* SCrew/UpdateOrders
       -- FUNCTION
       -- Update crew orders based on their orders priorities
       -- PARAMETERS
@@ -124,7 +124,7 @@ package Ships.Crew is
       Test_Case => ("Test_UpdateOrders", Robustness);
       -- ****
 
-      -- ****f* Ships.Crew/UpdateMorale
+      -- ****f* SCrew/UpdateMorale
       -- FUNCTION
       -- Update morale of selected crew member by value
       -- PARAMETERS
