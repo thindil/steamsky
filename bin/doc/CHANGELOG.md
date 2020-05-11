@@ -11,7 +11,8 @@ All notable changes to this project will be documented in this file.
   ships, destroy 1000 poleis ships, destroy 1500 poleis ships, destroy 2000
   poleis ships, destroy 2500 poleis ships, destroy 200 independent ships,
   destroy 250 independent ships, destroy 500 independent ships, destroy 1000
-  independent ships, destroy 1500 independent ships
+  independent ships, destroy 1500 independent ships, destroy 2000 independent
+  ships
 - New items: bronze printing press, iron printing press, steel printing press,
   titanium printing press, orichalcum printing press and adamantium printing
   press
