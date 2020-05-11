@@ -170,15 +170,13 @@ package body Maps.UI.OrdersMenu is
             end loop;
             for Module of PlayerShip.Modules loop
                if Module.Durability < Module.MaxDurability then
-                  Set_No_Show_All
-                    (Gtk_Widget(Get_Object(Object, "btnrepair")), False);
+                  Set_No_Show_All(Get_Child(OrdersBox, 14), False);
                   exit;
                end if;
             end loop;
             if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
                 (To_Unbounded_String("shipyard")) then
-               Set_No_Show_All
-                 (Get_Child(OrdersBox, 15), False);
+               Set_No_Show_All(Get_Child(OrdersBox, 15), False);
             end if;
             if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
                 (To_Unbounded_String("temple")) then
@@ -722,6 +720,20 @@ package body Maps.UI.OrdersMenu is
       ShowShipyardUI;
    end ShowShipyard;
 
+   -- ****if* Maps.UI.OrdersMenu/ShowRepair
+   -- FUNCTION
+   -- Show repair ship screen
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked. Unused.
+   -- SOURCE
+   procedure ShowRepair(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
+      -- ****
+   begin
+      HideUI;
+      ShowRepairUI;
+   end ShowRepair;
+
    procedure CreateOrdersMenu is
       Button: Gtk_Button;
    begin
@@ -730,6 +742,9 @@ package body Maps.UI.OrdersMenu is
       --Button := Gtk_Button_New_With_Label("Story");
       --On_Clicked(Button, ExecuteStory'Access);
       --Pack_Start(OrdersBox, Button, False);
+      Button := Gtk_Button_New_With_Mnemonic("Re_pair ship");
+      On_Clicked(Button, ShowRepair'Access);
+      Pack_Start(OrdersBox, Button);
       Button := Gtk_Button_New_With_Mnemonic("Sh_ipyard");
       On_Clicked(Button, ShowShipyard'Access);
       Pack_Start(OrdersBox, Button);
