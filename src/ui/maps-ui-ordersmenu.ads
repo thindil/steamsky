@@ -15,14 +15,14 @@
 
 with Gtk.Button; use Gtk.Button;
 
--- ****h* Maps.UI.OrdersMenu/OrdersMenu
+-- ****h* Steamsky/Maps.UI.OrdersMenu
 -- FUNCTION
 -- Provide code for manipulate orders menu
 -- SOURCE
 package Maps.UI.OrdersMenu is
 -- ****
 
-   -- ****f* OrdersMenu/ShowOrders
+   -- ****f* Maps.UI.OrdersMenu/ShowOrders
    -- FUNCTION
    -- Show available ship orders
    -- PARAMETERS
