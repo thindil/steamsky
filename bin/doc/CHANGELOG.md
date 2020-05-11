@@ -35,6 +35,7 @@ All notable changes to this project will be documented in this file.
 - Game header info on player death
 - Don't show everything on player death
 - Crash on start the game
+- Showing orders menu after docking
 
 ## [4.9] - 2020-04-19
 
