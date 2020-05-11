@@ -303,9 +303,11 @@ package body Maps.UI.Handlers is
             ShowDialog(To_String(Message));
             return;
          end if;
-         ShowOrders(Builder);
       end if;
       ShowSkyMap;
+      if PlayerShip.Speed = DOCKED then
+         ShowOrders(Builder);
+      end if;
    end BtnDockClicked;
 
    procedure ChangeSpeed(Object: access Gtkada_Builder_Record'Class) is
@@ -704,9 +706,6 @@ package body Maps.UI.Handlers is
          end if;
          Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
          ShowRecruitUI;
-      elsif User_Data = Get_Object(Builder, "btnrepair") then
-         Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
-         ShowRepairUI;
       elsif User_Data = Get_Object(Builder, "btnheal") then
          Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
          ShowHealUI;
