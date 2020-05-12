@@ -15,14 +15,14 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
--- ****h* Steamsky/Ships.Movement
+-- ****h* Ships/SMovement
 -- FUNCTION
 -- Provides code related to ships movement
 -- SOURCE
 package Ships.Movement is
 -- ****
 
-   -- ****f* Ships.Movement/MoveShip
+   -- ****f* SMovement/MoveShip
    -- FUNCTION
    -- Move player ship
    -- PARAMETERS
@@ -38,7 +38,7 @@ package Ships.Movement is
       Test_Case => ("Test_MoveShip", Robustness);
       -- ****
 
-      -- ****f* Ships.Movement/DockShip
+      -- ****f* SMovement/DockShip
       -- FUNCTION
       -- Dock/Undock ship at base
       -- PARAMETERS
@@ -54,7 +54,7 @@ package Ships.Movement is
       Test_Case => ("Test_DockShip", Robustness);
       -- ****
 
-      -- ****f* Ships.Movement/ChangeShipSpeed
+      -- ****f* SMovement/ChangeShipSpeed
       -- FUNCTION
       -- Change speed of ship
       -- PARAMETERS
@@ -66,7 +66,7 @@ package Ships.Movement is
       Test_Case => ("Test_ChangeShipSpeed", Robustness);
       -- ****
 
-      -- ****f* Ships.Movement/RealSpeed
+      -- ****f* SMovement/RealSpeed
       -- FUNCTION
       -- Count real ship speed in meters per minute
       -- PARAMETERS
@@ -81,7 +81,7 @@ package Ships.Movement is
       Test_Case => ("Test_RealSpeed", Robustness);
       -- ****
 
-      -- ****f* Ships.Movement/CountFuelNeeded
+      -- ****f* SMovement/CountFuelNeeded
       -- FUNCTION
       -- Count amount of fuel needed by player ship to travel
       -- RESULT
@@ -91,7 +91,7 @@ package Ships.Movement is
       Test_Case => ("Test_CountFuelNeeded", Robustness);
       -- ****
 
-      -- ****f* Ships.Movement/WaitInPlace
+      -- ****f* SMovement/WaitInPlace
       -- FUNCTION
       -- Use fuel when ship wait in place
       -- PARAMETERS
