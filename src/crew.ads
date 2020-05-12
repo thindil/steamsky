@@ -58,6 +58,14 @@ package Crew is
    type Equipment_Array is array(1 .. 7) of Natural;
    -- ****
 
+   -- ****t* Crew/Skill_Range
+   -- FUNCTION
+   -- Range used for skills but also for health, tiredness, hunger, thirst and
+   -- loyalty
+   -- SOURCE
+   subtype Skill_Range is Natural range 0 .. 100;
+   -- ****
+
    -- ****t* Crew/Member_Data
    -- FUNCTION
    -- Data structure for ship crew member
@@ -92,11 +100,11 @@ package Crew is
    type Member_Data is record
       Name: Unbounded_String;
       Gender: Character;
-      Health: Natural;
-      Tired: Natural;
+      Health: Skill_Range;
+      Tired: Skill_Range;
       Skills: Skills_Container.Vector;
-      Hunger: Natural;
-      Thirst: Natural;
+      Hunger: Skill_Range;
+      Thirst: Skill_Range;
       Order: Crew_Orders;
       PreviousOrder: Crew_Orders;
       OrderTime: Integer;
@@ -107,7 +115,7 @@ package Crew is
       Payment: Attributes_Array;
       ContractLength: Integer;
       Morale: Attributes_Array;
-      Loyalty: Natural;
+      Loyalty: Skill_Range;
       HomeBase: BasesRange;
       Faction: Unbounded_String;
    end record;
@@ -263,8 +271,7 @@ package Crew is
       -- RESULT
       -- Name (as words) of skill level
       -- SOURCE
-   function GetSkillLevelName(SkillLevel: Positive) return String with
-      Pre => (SkillLevel <= 100),
+   function GetSkillLevelName(SkillLevel: Skill_Range) return String with
       Test_Case => ("Test_GetSkillLevelName", Nominal);
       -- ****
 
