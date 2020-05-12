@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Updated bases data with new items and recipes
 - Updated crafting recipes and skills training with tool quality requirement
 - Updated help
+- Updated interface
 
 ### Fixed
 - Reputation requirement for recipes for steel, titanium, orichalcum and
