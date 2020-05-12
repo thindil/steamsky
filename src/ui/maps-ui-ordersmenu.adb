@@ -163,8 +163,7 @@ package body Maps.UI.OrdersMenu is
             end if;
             for Member of PlayerShip.Crew loop
                if Member.Health < 100 then
-                  Set_No_Show_All
-                    (Gtk_Widget(Get_Object(Object, "btnheal")), False);
+                  Set_No_Show_All(Get_Child(OrdersBox, 13), False);
                   exit;
                end if;
             end loop;
@@ -734,6 +733,20 @@ package body Maps.UI.OrdersMenu is
       ShowRepairUI;
    end ShowRepair;
 
+   -- ****if* Maps.UI.OrdersMenu/ShowHospital
+   -- FUNCTION
+   -- Show heal wounded crew member screen
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked. Unused.
+   -- SOURCE
+   procedure ShowHospital(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
+      -- ****
+   begin
+      HideUI;
+      ShowHealUI;
+   end ShowHospital;
+
    procedure CreateOrdersMenu is
       Button: Gtk_Button;
    begin
@@ -742,6 +755,9 @@ package body Maps.UI.OrdersMenu is
       --Button := Gtk_Button_New_With_Label("Story");
       --On_Clicked(Button, ExecuteStory'Access);
       --Pack_Start(OrdersBox, Button, False);
+      Button := Gtk_Button_New_With_Mnemonic("Heal _wounded");
+      On_Clicked(Button, ShowHospital'Access);
+      Pack_Start(OrdersBox, Button);
       Button := Gtk_Button_New_With_Mnemonic("Re_pair ship");
       On_Clicked(Button, ShowRepair'Access);
       Pack_Start(OrdersBox, Button);
