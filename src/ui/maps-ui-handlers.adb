@@ -57,7 +57,6 @@ with Events.UI; use Events.UI;
 with Items; use Items;
 with Config; use Config;
 with Bases; use Bases;
-with Bases.UI; use Bases.UI;
 with Bases.SchoolUI; use Bases.SchoolUI;
 with Bases.RecruitUI; use Bases.RecruitUI;
 with Missions; use Missions;
@@ -706,9 +705,6 @@ package body Maps.UI.Handlers is
          end if;
          Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
          ShowRecruitUI;
-      elsif User_Data = Get_Object(Builder, "btnheal") then
-         Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
-         ShowHealUI;
       elsif User_Data = Get_Object(Builder, "btnschool") then
          if HideInfo("school") then
             return;
