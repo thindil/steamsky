@@ -179,8 +179,7 @@ package body Maps.UI.OrdersMenu is
             end if;
             if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
                 (To_Unbounded_String("temple")) then
-               Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btnpray")), False);
+               Set_No_Show_All(Get_Child(OrdersBox, 12), False);
             end if;
             for I in Recipes_List.Iterate loop
                if Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) =
@@ -747,6 +746,30 @@ package body Maps.UI.OrdersMenu is
       ShowHealUI;
    end ShowHospital;
 
+   -- ****if* Maps.UI.OrdersMenu/ShowChurch
+   -- FUNCTION
+   -- Pray in the selected bases
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked. Unused.
+   -- SOURCE
+   procedure ShowChurch(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
+      -- ****
+   begin
+      HideOrders(null);
+      for I in PlayerShip.Crew.Iterate loop
+         UpdateMorale(PlayerShip, Crew_Container.To_Index(I), 10);
+      end loop;
+      AddMessage
+        ("You and your crew were praying for some time. Now you all feel a bit better.",
+         OrderMessage);
+      UpdateGame(30);
+      UpdateHeader;
+      UpdateMessages;
+      UpdateMoveButtons;
+      DrawMap;
+   end ShowChurch;
+
    procedure CreateOrdersMenu is
       Button: Gtk_Button;
    begin
@@ -755,6 +778,9 @@ package body Maps.UI.OrdersMenu is
       --Button := Gtk_Button_New_With_Label("Story");
       --On_Clicked(Button, ExecuteStory'Access);
       --Pack_Start(OrdersBox, Button, False);
+      Button := Gtk_Button_New_With_Mnemonic("Pray");
+      On_Clicked(Button, ShowChurch'Access);
+      Pack_Start(OrdersBox, Button);
       Button := Gtk_Button_New_With_Mnemonic("Heal _wounded");
       On_Clicked(Button, ShowHospital'Access);
       Pack_Start(OrdersBox, Button);

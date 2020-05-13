@@ -768,14 +768,6 @@ package body Maps.UI.Handlers is
          AskForBases;
       elsif User_Data = Get_Object(Builder, "btnstory") then
          ExecuteStory(null);
-      elsif User_Data = Get_Object(Builder, "btnpray") then
-         for I in PlayerShip.Crew.Iterate loop
-            UpdateMorale(PlayerShip, Crew_Container.To_Index(I), 10);
-         end loop;
-         AddMessage
-           ("You and your crew were praying for some time. Now you all feel a bit better.",
-            OrderMessage);
-         UpdateGame(30);
       end if;
       UpdateHeader;
       UpdateMessages;
