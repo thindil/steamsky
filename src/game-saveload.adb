@@ -97,7 +97,8 @@ package body Game.SaveLoad is
          (To_Unbounded_String("reputationbonus"),
           NewGameSettings.ReputationBonus),
          (To_Unbounded_String("upgradecostbonus"),
-          NewGameSettings.UpgradeCostBonus));
+          NewGameSettings.UpgradeCostBonus),
+         (To_Unbounded_String("pricesbonus"), NewGameSettings.PricesBonus));
    begin
       LogMessage
         ("Start saving game in file " & To_String(SaveName) & ".", Everything);
@@ -479,6 +480,10 @@ package body Game.SaveLoad is
            Float'Value(Get_Attribute(SavedNode, "reputationbonus"));
          NewGameSettings.UpgradeCostBonus :=
            Float'Value(Get_Attribute(SavedNode, "upgradecostbonus"));
+         if Get_Attribute(SavedNode, "pricesbonus") /= "" then
+            NewGameSettings.PricesBonus :=
+              Float'Value(Get_Attribute(SavedNode, "pricesbonus"));
+         end if;
          LogMessage("done.", Everything, True, False);
       end if;
       -- Load game date
