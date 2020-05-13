@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file.
 - Don't show everything on player death
 - Crash on start the game
 - Showing orders menu after docking
+- Saving current configuration for bases prices bonus
 
 ## [4.9] - 2020-04-19
 
