@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,14 +15,14 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
--- ****h* Steamsky/Ships.Repairs
+-- ****h* Ships/SRepairs
 -- FUNCTION
 -- Provided code for repair ships
 -- SOURCE
 package Ships.Repairs is
 -- ****
 
-   -- ****f* Ships.Repairs/RepairShip
+   -- ****f* SRepairs/RepairShip
    -- FUNCTION
    -- Repair ship modules
    -- PARAMETERS
