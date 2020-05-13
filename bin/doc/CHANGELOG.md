@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file.
   poleis ships, destroy 2500 poleis ships, destroy 200 independent ships,
   destroy 250 independent ships, destroy 500 independent ships, destroy 1000
   independent ships, destroy 1500 independent ships, destroy 2000 independent
-  ships, destroy 2500 independent ships
+  ships, destroy 2500 independent ships, kill 800 poleis in melee combat
 - New items: bronze printing press, iron printing press, steel printing press,
   titanium printing press, orichalcum printing press and adamantium printing
   press
