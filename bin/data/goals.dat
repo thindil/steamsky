@@ -236,5 +236,6 @@ attribute "amount" of points for finish it.
  <goal amount="2000" index="211" multiplier="2" target="INDEPENDENT" type="DESTROY"/>
  <goal amount="2500" index="212" multiplier="2" target="INDEPENDENT" type="DESTROY"/>
  <goal amount="800" index="213" multiplier="2" target="POLEIS" type="KILL"/>
+ <goal amount="1000" index="214" multiplier="2" target="POLEIS" type="KILL"/>
 </goals>
 
