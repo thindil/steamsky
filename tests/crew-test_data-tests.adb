@@ -248,11 +248,11 @@ package body Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_GetSkillLevelName_b5615e_88354f
-     (SkillLevel: Positive) return String is
+   function Wrap_Test_GetSkillLevelName_b5615e_35c4c0
+     (SkillLevel: Skill_Range) return String is
    begin
       begin
-         pragma Assert((SkillLevel <= 100));
+         pragma Assert(True);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -261,7 +261,7 @@ package body Crew.Test_Data.Tests is
                "req_sloc(crew.ads:0):Test_GetSkillLevelName test requirement violated");
       end;
       declare
-         Test_GetSkillLevelName_b5615e_88354f_Result: constant String :=
+         Test_GetSkillLevelName_b5615e_35c4c0_Result: constant String :=
            GNATtest_Generated.GNATtest_Standard.Crew.GetSkillLevelName
              (SkillLevel);
       begin
@@ -274,22 +274,22 @@ package body Crew.Test_Data.Tests is
                  (False,
                   "ens_sloc(crew.ads:0:):Test_GetSkillLevelName test commitment violated");
          end;
-         return Test_GetSkillLevelName_b5615e_88354f_Result;
+         return Test_GetSkillLevelName_b5615e_35c4c0_Result;
       end;
-   end Wrap_Test_GetSkillLevelName_b5615e_88354f;
+   end Wrap_Test_GetSkillLevelName_b5615e_35c4c0;
 --  end read only
 
 --  begin read only
    procedure Test_GetSkillLevelName_test_getskilllevelname
      (Gnattest_T: in out Test);
-   procedure Test_GetSkillLevelName_b5615e_88354f
+   procedure Test_GetSkillLevelName_b5615e_35c4c0
      (Gnattest_T: in out Test) renames
      Test_GetSkillLevelName_test_getskilllevelname;
 --  id:2.2/b5615ec8a22d7d74/GetSkillLevelName/1/0/test_getskilllevelname/
    procedure Test_GetSkillLevelName_test_getskilllevelname
      (Gnattest_T: in out Test) is
-      function GetSkillLevelName(SkillLevel: Positive) return String renames
-        Wrap_Test_GetSkillLevelName_b5615e_88354f;
+      function GetSkillLevelName(SkillLevel: Skill_Range) return String renames
+        Wrap_Test_GetSkillLevelName_b5615e_35c4c0;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
