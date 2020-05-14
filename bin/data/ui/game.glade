@@ -455,19 +455,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
       </packing>
     </child>
     <child>
-      <object class="GtkButton" id="btnaskbases">
-        <property name="label" translatable="yes">Ask for _bases</property>
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="use_underline">True</property>
-        <signal name="clicked" handler="Execute_Order" object="btnaskbases" swapped="no"/>
-      </object>
-      <packing>
-        <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">11</property>
-      </packing>
+      <placeholder/>
     </child>
     <child>
       <placeholder/>
