@@ -74,11 +74,7 @@ package body Events is
                   Roll2 := GetRandom(1, 100);
                   case PlayerShip.Speed is
                      when QUARTER_SPEED =>
-                        if Roll2 < 21 then
-                           Roll2 := 1;
-                        else
-                           Roll2 := Roll2 - 20;
-                        end if;
+                        Roll2 := (if Roll2 < 21 then 1 else Roll2 - 20);
                      when FULL_SPEED =>
                         Roll2 := Roll2 + 20;
                      when others =>
@@ -90,12 +86,11 @@ package body Events is
                      AddMessage
                        ("One of your engines is taking damage.", OtherMessage,
                         RED);
-                     for I in
-                       PlayerShip.Modules.First_Index ..
-                         PlayerShip.Modules.Last_Index loop
+                     for I in PlayerShip.Modules.Iterate loop
                         if PlayerShip.Modules(I).MType = ENGINE
                           and then not PlayerShip.Modules(I).Disabled then
-                           Engines.Append(New_Item => I);
+                           Engines.Append
+                             (New_Item => Modules_Container.To_Index(I));
                         end if;
                      end loop;
                      declare
@@ -349,9 +344,7 @@ package body Events is
       while CurrentIndex <= Events_List.Last_Index loop
          NewTime := Events_List(CurrentIndex).Time - Minutes;
          if NewTime < 1 then
-            if
-              (Events_List(CurrentIndex).EType = Disease or
-               Events_List(CurrentIndex).EType = AttackOnBase) and
+            if Events_List(CurrentIndex).EType in Disease | AttackOnBase and
               GetRandom(1, 100) < 10 then
                BaseIndex :=
                  SkyMap

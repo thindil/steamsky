@@ -47,8 +47,8 @@ package Events is
    -- Data      - Various data for event (for example index of enemy ship)
    -- SOURCE
    type EventData(EType: Events_Types := None) is record
-      SkyX: Integer;
-      SkyY: Integer;
+      SkyX: BasesRange;
+      SkyY: BasesRange;
       Time: Integer;
       case EType is
          when DoublePrice =>
