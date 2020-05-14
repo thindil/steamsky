@@ -158,8 +158,7 @@ package body Maps.UI.OrdersMenu is
                  (Gtk_Widget(Get_Object(Object, "btnaskevents")), False);
             end if;
             if not SkyBases(BaseIndex).AskedForBases then
-               Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btnaskbases")), False);
+               Set_No_Show_All(Get_Child(OrdersBox, 11), False);
             end if;
             for Member of PlayerShip.Crew loop
                if Member.Health < 100 then
@@ -770,6 +769,24 @@ package body Maps.UI.OrdersMenu is
       DrawMap;
    end ShowChurch;
 
+   -- ****if* Maps.UI.OrdersMenu/AskForBases
+   -- FUNCTION
+   -- Ask for known bases in the selected base
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked. Unused.
+   -- SOURCE
+   procedure AskForBases(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
+      -- ****
+   begin
+      HideOrders(null);
+      AskForBases;
+      UpdateHeader;
+      UpdateMessages;
+      UpdateMoveButtons;
+      DrawMap;
+   end AskForBases;
+
    procedure CreateOrdersMenu is
       Button: Gtk_Button;
    begin
@@ -778,6 +795,9 @@ package body Maps.UI.OrdersMenu is
       --Button := Gtk_Button_New_With_Label("Story");
       --On_Clicked(Button, ExecuteStory'Access);
       --Pack_Start(OrdersBox, Button, False);
+      Button := Gtk_Button_New_With_Mnemonic("Ask for _bases");
+      On_Clicked(Button, AskForBases'Access);
+      Pack_Start(OrdersBox, Button);
       Button := Gtk_Button_New_With_Mnemonic("Pray");
       On_Clicked(Button, ShowChurch'Access);
       Pack_Start(OrdersBox, Button);

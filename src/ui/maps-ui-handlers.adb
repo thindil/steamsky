@@ -764,8 +764,6 @@ package body Maps.UI.Handlers is
       HideOrders(null);
       if User_Data = Get_Object(Builder, "btnaskevents") then
          AskForEvents;
-      elsif User_Data = Get_Object(Builder, "btnaskbases") then
-         AskForBases;
       elsif User_Data = Get_Object(Builder, "btnstory") then
          ExecuteStory(null);
       end if;
