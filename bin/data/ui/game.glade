@@ -2363,6 +2363,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 </child>
                                 <child>
                                   <object class="GtkTreeViewColumn" id="columnnames">
+                                    <property name="resizable">True</property>
                                     <property name="title" translatable="yes">Name</property>
                                     <property name="expand">True</property>
                                     <property name="clickable">True</property>
@@ -2378,6 +2379,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 </child>
                                 <child>
                                   <object class="GtkTreeViewColumn">
+                                    <property name="resizable">True</property>
                                     <property name="title" translatable="yes">Distance</property>
                                     <property name="clickable">True</property>
                                     <property name="sort_indicator">True</property>
@@ -2525,6 +2527,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 </child>
                                 <child>
                                   <object class="GtkTreeViewColumn" id="columnmission1">
+                                    <property name="resizable">True</property>
                                     <property name="title" translatable="yes">Name</property>
                                     <property name="expand">True</property>
                                     <property name="clickable">True</property>
@@ -2540,6 +2543,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 </child>
                                 <child>
                                   <object class="GtkTreeViewColumn">
+                                    <property name="resizable">True</property>
                                     <property name="title" translatable="yes">Distance</property>
                                     <property name="clickable">True</property>
                                     <property name="sort_indicator">True</property>
@@ -2710,6 +2714,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 </child>
                                 <child>
                                   <object class="GtkTreeViewColumn" id="columnmission">
+                                    <property name="resizable">True</property>
                                     <property name="title" translatable="yes">Name</property>
                                     <property name="expand">True</property>
                                     <property name="clickable">True</property>
@@ -2725,6 +2730,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                 </child>
                                 <child>
                                   <object class="GtkTreeViewColumn">
+                                    <property name="resizable">True</property>
                                     <property name="title" translatable="yes">Distance</property>
                                     <property name="clickable">True</property>
                                     <property name="sort_indicator">True</property>
@@ -3015,6 +3021,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     </child>
                                     <child>
                                       <object class="GtkTreeViewColumn" id="columnnames1">
+                                        <property name="resizable">True</property>
                                         <property name="title" translatable="yes">Name</property>
                                         <property name="expand">True</property>
                                         <property name="clickable">True</property>
@@ -3030,6 +3037,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     </child>
                                     <child>
                                       <object class="GtkTreeViewColumn">
+                                        <property name="resizable">True</property>
                                         <property name="title" translatable="yes">Distance</property>
                                         <property name="clickable">True</property>
                                         <property name="sort_indicator">True</property>
@@ -3044,6 +3052,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     </child>
                                     <child>
                                       <object class="GtkTreeViewColumn">
+                                        <property name="resizable">True</property>
                                         <property name="title" translatable="yes">Population</property>
                                         <property name="clickable">True</property>
                                         <property name="sort_indicator">True</property>
@@ -3058,6 +3067,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     </child>
                                     <child>
                                       <object class="GtkTreeViewColumn">
+                                        <property name="resizable">True</property>
                                         <property name="title" translatable="yes">Size</property>
                                         <property name="clickable">True</property>
                                         <property name="sort_indicator">True</property>
@@ -3072,6 +3082,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     </child>
                                     <child>
                                       <object class="GtkTreeViewColumn">
+                                        <property name="resizable">True</property>
                                         <property name="title" translatable="yes">Owner</property>
                                         <property name="clickable">True</property>
                                         <property name="sort_indicator">True</property>
@@ -3086,6 +3097,7 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
                                     </child>
                                     <child>
                                       <object class="GtkTreeViewColumn">
+                                        <property name="resizable">True</property>
                                         <property name="title" translatable="yes">Type</property>
                                         <property name="clickable">True</property>
                                         <property name="sort_indicator">True</property>
