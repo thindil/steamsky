@@ -45,6 +45,13 @@ package body Factions is
       Action, SubAction: DataAction;
       TmpBaseTypeChance: Positive;
       TmpBasesTypes: BaseType_Container.Map;
+      function GetAction(CurrentNode: Node) return DataAction is
+      begin
+         return
+           (if Get_Attribute(CurrentNode, "action")'Length > 0 then
+              DataAction'Value(Get_Attribute(CurrentNode, "action"))
+            else ADD);
+      end GetAction;
       procedure AddChildNode
         (Data: in out UnboundedString_Container.Vector; Name: String;
          Index: Natural; CheckItemType: Boolean := True) is
@@ -56,12 +63,7 @@ package body Factions is
          for J in 0 .. Length(ChildNodes) - 1 loop
             ChildNode := Item(ChildNodes, J);
             Value := To_Unbounded_String(Get_Attribute(ChildNode, "name"));
-            if Get_Attribute(ChildNode, "action")'Length > 0 then
-               SubAction :=
-                 DataAction'Value(Get_Attribute(ChildNode, "action"));
-            else
-               SubAction := ADD;
-            end if;
+            SubAction := GetAction(ChildNode);
             if CheckItemType then
                ItemIndex := FindProtoItem(ItemType => Value);
                if ItemIndex = Null_Unbounded_String then
@@ -103,12 +105,8 @@ package body Factions is
          FactionNode := Item(NodesList, I);
          FactionIndex :=
            To_Unbounded_String(Get_Attribute(FactionNode, "index"));
-         if Get_Attribute(FactionNode, "action")'Length > 0 then
-            Action := DataAction'Value(Get_Attribute(FactionNode, "action"));
-         else
-            Action := ADD;
-         end if;
-         if (Action = UPDATE or Action = REMOVE) then
+         Action := GetAction(FactionNode);
+         if Action in UPDATE | REMOVE then
             if not Factions_Container.Contains
                 (Factions_List, FactionIndex) then
                raise Data_Loading_Error
@@ -260,12 +258,7 @@ package body Factions is
                ChildNode := Item(ChildNodes, J);
                CareerIndex :=
                  To_Unbounded_String(Get_Attribute(ChildNode, "index"));
-               if Get_Attribute(ChildNode, "action")'Length > 0 then
-                  SubAction :=
-                    DataAction'Value(Get_Attribute(ChildNode, "action"));
-               else
-                  SubAction := ADD;
-               end if;
+               SubAction := GetAction(ChildNode);
                if Get_Attribute(ChildNode, "shipindex") /= "" then
                   TmpCareer.ShipIndex :=
                     To_Unbounded_String(Get_Attribute(ChildNode, "shipindex"));
@@ -306,12 +299,7 @@ package body Factions is
                ChildNode := Item(ChildNodes, J);
                CareerIndex :=
                  To_Unbounded_String(Get_Attribute(ChildNode, "index"));
-               if Get_Attribute(ChildNode, "action")'Length > 0 then
-                  SubAction :=
-                    DataAction'Value(Get_Attribute(ChildNode, "action"));
-               else
-                  SubAction := ADD;
-               end if;
+               SubAction := GetAction(ChildNode);
                if Get_Attribute(ChildNode, "chance") /= "" then
                   TmpBaseTypeChance :=
                     Positive'Value(Get_Attribute(ChildNode, "chance"));
@@ -364,18 +352,18 @@ package body Factions is
    function GetReputation
      (SourceFaction, TargetFaction: Unbounded_String) return Integer is
    begin
-      if Factions_List(SourceFaction).Relations(TargetFaction).Reputation(2) =
-        0 then
-         return Factions_List(SourceFaction).Relations(TargetFaction)
-             .Reputation
-             (1);
-      else
-         return GetRandom
+      return
+        (if
+           Factions_List(SourceFaction).Relations(TargetFaction).Reputation
+             (2) =
+           0
+         then
+           Factions_List(SourceFaction).Relations(TargetFaction).Reputation(1)
+         else GetRandom
              (Factions_List(SourceFaction).Relations(TargetFaction).Reputation
                 (1),
               Factions_List(SourceFaction).Relations(TargetFaction).Reputation
-                (2));
-      end if;
+                (2)));
    end GetReputation;
 
    function IsFriendly
