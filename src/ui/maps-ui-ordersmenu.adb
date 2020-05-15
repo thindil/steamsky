@@ -154,8 +154,7 @@ package body Maps.UI.OrdersMenu is
                  (Gtk_Widget(Get_Object(Object, "btnrecruit")), False);
             end if;
             if DaysDifference(SkyBases(BaseIndex).AskedForEvents) > 6 then
-               Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btnaskevents")), False);
+               Set_No_Show_All(Get_Child(OrdersBox, 10), False);
             end if;
             if not SkyBases(BaseIndex).AskedForBases then
                Set_No_Show_All(Get_Child(OrdersBox, 11), False);
@@ -787,6 +786,24 @@ package body Maps.UI.OrdersMenu is
       DrawMap;
    end AskForBases;
 
+   -- ****if* Maps.UI.OrdersMenu/AskForEvents
+   -- FUNCTION
+   -- Ask for known events in the selected base
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked. Unused.
+   -- SOURCE
+   procedure AskForEvents(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
+      -- ****
+   begin
+      HideOrders(null);
+      AskForEvents;
+      UpdateHeader;
+      UpdateMessages;
+      UpdateMoveButtons;
+      DrawMap;
+   end AskForEvents;
+
    procedure CreateOrdersMenu is
       Button: Gtk_Button;
    begin
@@ -795,6 +812,9 @@ package body Maps.UI.OrdersMenu is
       --Button := Gtk_Button_New_With_Label("Story");
       --On_Clicked(Button, ExecuteStory'Access);
       --Pack_Start(OrdersBox, Button, False);
+      Button := Gtk_Button_New_With_Mnemonic("Ask for _events");
+      On_Clicked(Button, AskForEvents'Access);
+      Pack_Start(OrdersBox, Button);
       Button := Gtk_Button_New_With_Mnemonic("Ask for _bases");
       On_Clicked(Button, AskForBases'Access);
       Pack_Start(OrdersBox, Button);

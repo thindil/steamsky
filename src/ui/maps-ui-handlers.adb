@@ -762,9 +762,7 @@ package body Maps.UI.Handlers is
    procedure ExecuteOrder(User_Data: access GObject_Record'Class) is
    begin
       HideOrders(null);
-      if User_Data = Get_Object(Builder, "btnaskevents") then
-         AskForEvents;
-      elsif User_Data = Get_Object(Builder, "btnstory") then
+      if User_Data = Get_Object(Builder, "btnstory") then
          ExecuteStory(null);
       end if;
       UpdateHeader;
