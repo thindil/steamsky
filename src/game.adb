@@ -212,8 +212,10 @@ package body Game is
                      Factions_List(SkyBases(FactionBases(I)).Owner).Flags
                        .Contains
                        (To_Unbounded_String("loner"))) then
-                     PosX := GetRandom(1, 1024);
-                     PosY := GetRandom(1, 1024);
+                     PosX :=
+                       GetRandom(BasesRange'First + 5, BasesRange'Last - 5);
+                     PosY :=
+                       GetRandom(BasesRange'First + 5, BasesRange'Last - 5);
                   else
                      PosX :=
                        GetRandom
@@ -239,8 +241,10 @@ package body Game is
                      NormalizeCoord(PosY);
                      Attempts := Attempts + 1;
                      if Attempts = 251 then
-                        PosX := GetRandom(1, 1024);
-                        PosY := GetRandom(1, 1024);
+                        PosX :=
+                          GetRandom(BasesRange'First + 5, BasesRange'Last - 5);
+                        PosY :=
+                          GetRandom(BasesRange'First + 5, BasesRange'Last - 5);
                         Attempts := 1;
                      end if;
                   end if;
