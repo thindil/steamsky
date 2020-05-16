@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -15,21 +15,21 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
--- ****h* Steamsky/Ships.Upgrade
+-- ****h* Ships/SUpgrade
 -- FUNCTION
 -- Provided code for upgrade player ship modules
 -- SOURCE
 package Ships.Upgrade is
 -- ****
 
-   -- ****e* Ships.Upgrade/Ship_Upgrade_Error
+   -- ****e* SUpgrade/Ship_Upgrade_Error
    -- FUNCTION
    -- Raised when player can't start upgrading module
    -- SOURCE
    Ship_Upgrade_Error: exception;
    -- ****
 
-   -- ****f* Ships.Upgrade/StartUpgrading
+   -- ****f* SUpgrade/StartUpgrading
    -- FUNCTION
    -- Set upgrading order
    -- PARAMETERS
@@ -42,7 +42,7 @@ package Ships.Upgrade is
       Test_Case => ("Test_StartUpgrading", Nominal);
       -- ****
 
-      -- ****f* Ships.Upgrade/UpgradeShip
+      -- ****f* SUpgrade/UpgradeShip
       -- FUNCTION
       -- Upgrade selected module on ship
       -- PARAMETERS
