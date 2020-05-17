@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.9 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.0 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -27,34 +27,34 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo28">Steamsky/Game.SaveLoad</a></li>
+<li>1. <a href="#robo5">Game/GSaveLoad</a></li>
 <ul>
-<li>1.1. <a href="./game-saveload_adb.html#robo238">Game.SaveLoad/SaveData</a></li>
-<li>1.2. <a href="#robo239">Game.SaveLoad/SaveName</a></li>
-<li>1.3. <a href="./game-saveload_adb.html#robo240">Game.SaveLoad/SaveVersion</a></li>
-<li>1.4. <a href="#robo364">Game.SaveLoad/SaveGame_Invalid_Data</a></li>
-<li>1.5. <a href="#robo559">Game.SaveLoad/GenerateSaveName</a></li>
-<li>1.6. <a href="#robo560">Game.SaveLoad/LoadGame</a></li>
-<li>1.7. <a href="#robo561">Game.SaveLoad/SaveGame</a></li>
+<li>1.1. <a href="./game-saveload_adb.html#robo281">GSaveLoad/SaveData</a></li>
+<li>1.2. <a href="#robo282">GSaveLoad/SaveName</a></li>
+<li>1.3. <a href="./game-saveload_adb.html#robo283">GSaveLoad/SaveVersion</a></li>
+<li>1.4. <a href="#robo368">GSaveLoad/SaveGame_Invalid_Data</a></li>
+<li>1.5. <a href="#robo583">GSaveLoad/GenerateSaveName</a></li>
+<li>1.6. <a href="#robo584">GSaveLoad/LoadGame</a></li>
+<li>1.7. <a href="#robo585">GSaveLoad/SaveGame</a></li>
 </ul>
 </ul>
 <hr />
-<a name="Steamsky2fGame2eSaveLoad"></a>
-<a name="robo28"></a><h2>Steamsky/Game.SaveLoad [ Packages ]</h2>
+<a name="Game2fGSaveLoad"></a>
+<a name="robo5"></a><h2>Game/GSaveLoad [ Packages ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./game_ads.html#robo34">Game</a> ] [ <a href="./robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Provide code to save and load the game data from file
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source"><span class="keyword">package</span> <strong>Game.SaveLoad</strong> <span class="keyword">is</span>
+<pre class="source"><span class="keyword">package</span> <a href="./game_ads.html#robo34">Game</a><span class="sign">.</span>SaveLoad <span class="keyword">is</span>
 </pre>
 
 <hr />
-<a name="Game2eSaveLoad2fSaveName"></a>
-<a name="robo239"></a><h2>Game.SaveLoad/SaveName [ Variables ]</h2>
+<a name="GSaveLoad2fSaveName"></a>
+<a name="robo282"></a><h2>GSaveLoad/SaveName [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo28">Game.SaveLoad</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo5">GSaveLoad</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Full path with file name for current savegame
 </pre>
@@ -63,10 +63,10 @@
 </pre>
 
 <hr />
-<a name="Game2eSaveLoad2fSaveGame5fInvalid5fData"></a>
-<a name="robo364"></a><h2>Game.SaveLoad/SaveGame_Invalid_Data [ Exceptions ]</h2>
+<a name="GSaveLoad2fSaveGame5fInvalid5fData"></a>
+<a name="robo368"></a><h2>GSaveLoad/SaveGame_Invalid_Data [ Exceptions ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo28">Game.SaveLoad</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo5">GSaveLoad</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Raised when invalid data found in savegame
 </pre>
@@ -75,10 +75,10 @@
 </pre>
 
 <hr />
-<a name="Game2eSaveLoad2fGenerateSaveName"></a>
-<a name="robo559"></a><h2>Game.SaveLoad/GenerateSaveName [ Subprograms ]</h2>
+<a name="GSaveLoad2fGenerateSaveName"></a>
+<a name="robo583"></a><h2>GSaveLoad/GenerateSaveName [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo28">Game.SaveLoad</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo5">GSaveLoad</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Generate unique name for save game file
 </pre>
@@ -91,10 +91,10 @@
 </pre>
 
 <hr />
-<a name="Game2eSaveLoad2fLoadGame"></a>
-<a name="robo560"></a><h2>Game.SaveLoad/LoadGame [ Subprograms ]</h2>
+<a name="GSaveLoad2fLoadGame"></a>
+<a name="robo584"></a><h2>GSaveLoad/LoadGame [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo28">Game.SaveLoad</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo5">GSaveLoad</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Load game from file
 </pre>
@@ -103,10 +103,10 @@
 </pre>
 
 <hr />
-<a name="Game2eSaveLoad2fSaveGame"></a>
-<a name="robo561"></a><h2>Game.SaveLoad/SaveGame [ Subprograms ]</h2>
+<a name="GSaveLoad2fSaveGame"></a>
+<a name="robo585"></a><h2>GSaveLoad/SaveGame [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo28">Game.SaveLoad</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo5">GSaveLoad</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Save game to file
 </pre>
@@ -120,7 +120,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/game-saveload.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 19 2020 06:23:08
+<p>Generated from ./src/game-saveload.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 17 2020 06:27:28
 </p>
 </div> <!-- footer -->
 </body>
