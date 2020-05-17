@@ -58,7 +58,6 @@ with Items; use Items;
 with Config; use Config;
 with Bases; use Bases;
 with Bases.SchoolUI; use Bases.SchoolUI;
-with Bases.RecruitUI; use Bases.RecruitUI;
 with Missions; use Missions;
 with Missions.UI; use Missions.UI;
 with Crafts; use Crafts;
@@ -699,12 +698,6 @@ package body Maps.UI.Handlers is
                  .ShipIndex);
          end if;
          ShowTradeUI;
-      elsif User_Data = Get_Object(Builder, "btnrecruit") then
-         if HideInfo("recruit") then
-            return;
-         end if;
-         Hide(Gtk_Widget(Get_Object(Builder, "btnboxorders")));
-         ShowRecruitUI;
       elsif User_Data = Get_Object(Builder, "btnschool") then
          if HideInfo("school") then
             return;
