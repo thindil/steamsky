@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 4.9 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.0 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -27,37 +27,47 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo18">Steamsky/Crew</a></li>
+<li>1. <a href="#robo26">Steamsky/Crew</a></li>
 <ul>
-<li>1.1. <a href="#robo91">Crew/Crew_Orders</a></li>
-<li>1.2. <a href="#robo92">Crew/Member_Data</a></li>
-<li>1.3. <a href="#robo93">Crew/Skill_Array</a></li>
-<li>1.4. <a href="#robo94">Crew/Skills_Container</a></li>
-<li>1.5. <a href="#robo219">Crew/FemaleSyllablesEnd</a></li>
-<li>1.6. <a href="#robo220">Crew/FemaleSyllablesMiddle</a></li>
-<li>1.7. <a href="#robo221">Crew/FemaleSyllablesStart</a></li>
-<li>1.8. <a href="#robo222">Crew/FemaleVocals</a></li>
-<li>1.9. <a href="#robo223">Crew/MaleConsonants</a></li>
-<li>1.10. <a href="#robo224">Crew/MaleSyllablesEnd</a></li>
-<li>1.11. <a href="#robo225">Crew/MaleSyllablesMiddle</a></li>
-<li>1.12. <a href="#robo226">Crew/MaleSyllablesStart</a></li>
-<li>1.13. <a href="#robo227">Crew/MaleVocals</a></li>
-<li>1.14. <a href="#robo362">Crew/Crew_No_Space_Error</a></li>
-<li>1.15. <a href="#robo363">Crew/Crew_Order_Error</a></li>
-<li>1.16. <a href="#robo502">Crew/DailyPayment</a></li>
-<li>1.17. <a href="#robo503">Crew/FindCabin</a></li>
-<li>1.18. <a href="#robo504">Crew/GainExp</a></li>
-<li>1.19. <a href="#robo505">Crew/GenerateMemberName</a></li>
-<li>1.20. <a href="#robo506">Crew/GetAttributeLevelName</a></li>
-<li>1.21. <a href="#robo507">Crew/GetSkillLevelName</a></li>
-<li>1.22. <a href="#robo508">Crew/GetTrainingToolQuality</a></li>
-<li>1.23. <a href="#robo509">Crew/UpdateCrew</a></li>
-<li>1.24. <a href="#robo510">Crew/WaitForRest</a></li>
+<li>1.1. <a href="./crew-inventory_ads.html#robo4">Crew/Inventory</a></li>
+<ul>
+<li>1.1.1. <a href="./crew-inventory_ads.html#robo595">Inventory/FindTools</a></li>
+<li>1.1.2. <a href="./crew-inventory_ads.html#robo596">Inventory/FreeInventory</a></li>
+<li>1.1.3. <a href="./crew-inventory_ads.html#robo597">Inventory/ItemIsUsed</a></li>
+<li>1.1.4. <a href="./crew-inventory_ads.html#robo598">Inventory/TakeOffItem</a></li>
+<li>1.1.5. <a href="./crew-inventory_ads.html#robo599">Inventory/UpdateInventory</a></li>
+</ul>
+<li>1.2. <a href="#robo91">Crew/Crew_Orders</a></li>
+<li>1.3. <a href="#robo92">Crew/Equipment_Array</a></li>
+<li>1.4. <a href="#robo93">Crew/Member_Data</a></li>
+<li>1.5. <a href="#robo94">Crew/Skill_Array</a></li>
+<li>1.6. <a href="#robo95">Crew/Skill_Range</a></li>
+<li>1.7. <a href="#robo96">Crew/Skills_Container</a></li>
+<li>1.8. <a href="#robo222">Crew/FemaleSyllablesEnd</a></li>
+<li>1.9. <a href="#robo223">Crew/FemaleSyllablesMiddle</a></li>
+<li>1.10. <a href="#robo224">Crew/FemaleSyllablesStart</a></li>
+<li>1.11. <a href="#robo225">Crew/FemaleVocals</a></li>
+<li>1.12. <a href="#robo226">Crew/MaleConsonants</a></li>
+<li>1.13. <a href="#robo227">Crew/MaleSyllablesEnd</a></li>
+<li>1.14. <a href="#robo228">Crew/MaleSyllablesMiddle</a></li>
+<li>1.15. <a href="#robo229">Crew/MaleSyllablesStart</a></li>
+<li>1.16. <a href="#robo230">Crew/MaleVocals</a></li>
+<li>1.17. <a href="#robo365">Crew/Crew_No_Space_Error</a></li>
+<li>1.18. <a href="#robo366">Crew/Crew_Order_Error</a></li>
+<li>1.19. <a href="#robo500">Crew/DailyPayment</a></li>
+<li>1.20. <a href="#robo501">Crew/FindCabin</a></li>
+<li>1.21. <a href="#robo502">Crew/GainExp</a></li>
+<li>1.22. <a href="#robo503">Crew/GenerateMemberName</a></li>
+<li>1.23. <a href="#robo504">Crew/GetAttributeLevelName</a></li>
+<li>1.24. <a href="#robo505">Crew/GetSkillLevelName</a></li>
+<li>1.25. <a href="#robo506">Crew/GetTrainingToolQuality</a></li>
+<li>1.26. <a href="#robo507">Crew/UpdateCrew</a></li>
+<li>1.27. <a href="#robo508">Crew/WaitForRest</a></li>
 </ul>
 </ul>
 <hr />
 <a name="Steamsky2fCrew"></a>
-<a name="robo18"></a><h2>Steamsky/Crew [ Packages ]</h2>
+<a name="robo26"></a><h2>Steamsky/Crew [ Packages ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -71,7 +81,7 @@
 <a name="Crew2fCrew5fOrders"></a>
 <a name="robo91"></a><h2>Crew/Crew_Orders [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Available orders for ships crews
 </pre>
@@ -82,10 +92,23 @@
 </pre>
 
 <hr />
-<a name="Crew2fMember5fData"></a>
-<a name="robo92"></a><h2>Crew/Member_Data [ Types ]</h2>
+<a name="Crew2fEquipment5fArray"></a>
+<a name="robo92"></a><h2>Crew/Equipment_Array [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Data structure for currently equipped items for crew members. 1 - weapon,
+ 2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs, 7 - tool
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> <strong>Equipment_Array</strong> <span class="keyword">is</span> <span class="keyword">array</span><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 7<span class="sign">)</span> <span class="keyword">of</span> Natural<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Crew2fMember5fData"></a>
+<a name="robo93"></a><h2>Crew/Member_Data [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data structure for ship crew member
 </pre>
@@ -93,23 +116,23 @@
 <pre class="source">   <span class="keyword">type</span> <strong>Member_Data</strong> <span class="keyword">is</span> <span class="keyword">record</span>
       Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Gender<span class="sign">:</span> Character<span class="sign">;</span>
-      Health<span class="sign">:</span> Natural<span class="sign">;</span>
-      Tired<span class="sign">:</span> Natural<span class="sign">;</span>
-      Skills<span class="sign">:</span> <a href="#robo94">Skills_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
-      Hunger<span class="sign">:</span> Natural<span class="sign">;</span>
-      Thirst<span class="sign">:</span> Natural<span class="sign">;</span>
+      Health<span class="sign">:</span> <a href="#robo95">Skill_Range</a><span class="sign">;</span>
+      Tired<span class="sign">:</span> <a href="#robo95">Skill_Range</a><span class="sign">;</span>
+      Skills<span class="sign">:</span> <a href="#robo96">Skills_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+      Hunger<span class="sign">:</span> <a href="#robo95">Skill_Range</a><span class="sign">;</span>
+      Thirst<span class="sign">:</span> <a href="#robo95">Skill_Range</a><span class="sign">;</span>
       Order<span class="sign">:</span> <a href="#robo91">Crew_Orders</a><span class="sign">;</span>
       PreviousOrder<span class="sign">:</span> <a href="#robo91">Crew_Orders</a><span class="sign">;</span>
       OrderTime<span class="sign">:</span> Integer<span class="sign">;</span>
-      Orders<span class="sign">:</span> <a href="./game_ads.html#robo115">Natural_Array</a><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 12<span class="sign">)</span><span class="sign">;</span>
-      Attributes<span class="sign">:</span> <a href="./game_ads.html#robo109">Attributes_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
-      Inventory<span class="sign">:</span> <a href="./items_ads.html#robo128">Inventory_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
-      Equipment<span class="sign">:</span> <a href="./game_ads.html#robo115">Natural_Array</a><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 7<span class="sign">)</span><span class="sign">;</span>
-      Payment<span class="sign">:</span> <a href="./game_ads.html#robo108">Attributes_Array</a><span class="sign">;</span>
+      Orders<span class="sign">:</span> <a href="./game_ads.html#robo118">Natural_Array</a><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 12<span class="sign">)</span><span class="sign">;</span>
+      Attributes<span class="sign">:</span> <a href="./game_ads.html#robo111">Attributes_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+      <a href="./crew-inventory_ads.html#robo4">Inventory</a><span class="sign">:</span> <a href="./items_ads.html#robo131">Inventory_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+      Equipment<span class="sign">:</span> <a href="#robo92">Equipment_Array</a><span class="sign">;</span>
+      Payment<span class="sign">:</span> <a href="./game_ads.html#robo110">Attributes_Array</a><span class="sign">;</span>
       ContractLength<span class="sign">:</span> Integer<span class="sign">;</span>
-      Morale<span class="sign">:</span> <a href="./game_ads.html#robo108">Attributes_Array</a><span class="sign">;</span>
-      Loyalty<span class="sign">:</span> Natural<span class="sign">;</span>
-      HomeBase<span class="sign">:</span> Positive<span class="sign">;</span>
+      Morale<span class="sign">:</span> <a href="./game_ads.html#robo110">Attributes_Array</a><span class="sign">;</span>
+      Loyalty<span class="sign">:</span> <a href="#robo95">Skill_Range</a><span class="sign">;</span>
+      HomeBase<span class="sign">:</span> <a href="./game_ads.html#robo113">BasesRange</a><span class="sign">;</span>
       Faction<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
@@ -127,8 +150,8 @@
  OrderTime      - Minutes to next check for order result
  Orders         - Priority of orders of member
  Attributes     - Levels and experience in attributes of member
- Inventory      - Owned items by member
- Equipment      - <a href="./items_ads.html#robo35">Items</a> indexes from inventory used by character:
+ <a href="./crew-inventory_ads.html#robo4">Inventory</a>      - Owned items by member
+ Equipment      - <a href="./items_ads.html#robo41">Items</a> indexes from inventory used by character:
                   1 - weapon, 2 - shield, 3 - helmet, 4 - torso,
                   5 - arms, 6 - legs, 7 - tool
  Payment        - How much money member takes as payment.
@@ -144,9 +167,9 @@
 
 <hr />
 <a name="Crew2fSkill5fArray"></a>
-<a name="robo93"></a><h2>Crew/Skill_Array [ Types ]</h2>
+<a name="robo94"></a><h2>Crew/Skill_Array [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data structure for skills: 1 - Skill index, 2 - skill level, 3 - current experience in skill
 </pre>
@@ -155,130 +178,143 @@
 </pre>
 
 <hr />
-<a name="Crew2fSkills5fContainer"></a>
-<a name="robo94"></a><h2>Crew/Skills_Container [ Types ]</h2>
+<a name="Crew2fSkill5fRange"></a>
+<a name="robo95"></a><h2>Crew/Skill_Range [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Range used for skills but also for health, tiredness, hunger, thirst and
+ loyalty
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">subtype</span> <strong>Skill_Range</strong> <span class="keyword">is</span> Natural <span class="keyword">range</span> 0 <span class="sign">.</span><span class="sign">.</span> 100<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Crew2fSkills5fContainer"></a>
+<a name="robo96"></a><h2>Crew/Skills_Container [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store skills data
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> <strong>Skills_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> <a href="#robo93">Skill_Array</a><span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">package</span> <strong>Skills_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> <a href="#robo94">Skill_Array</a><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Crew2fFemaleSyllablesEnd"></a>
-<a name="robo219"></a><h2>Crew/FemaleSyllablesEnd [ Variables ]</h2>
+<a name="robo222"></a><h2>Crew/FemaleSyllablesEnd [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of females last syllables for generating crew members names
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>FemaleSyllablesEnd</strong><span class="sign">:</span> <a href="./game_ads.html#robo120">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   <strong>FemaleSyllablesEnd</strong><span class="sign">:</span> <a href="./game_ads.html#robo123">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Crew2fFemaleSyllablesMiddle"></a>
-<a name="robo220"></a><h2>Crew/FemaleSyllablesMiddle [ Variables ]</h2>
+<a name="robo223"></a><h2>Crew/FemaleSyllablesMiddle [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of females middle syllables for generating crew members names
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>FemaleSyllablesMiddle</strong><span class="sign">:</span> <a href="./game_ads.html#robo120">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   <strong>FemaleSyllablesMiddle</strong><span class="sign">:</span> <a href="./game_ads.html#robo123">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Crew2fFemaleSyllablesStart"></a>
-<a name="robo221"></a><h2>Crew/FemaleSyllablesStart [ Variables ]</h2>
+<a name="robo224"></a><h2>Crew/FemaleSyllablesStart [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of females first syllables for generating crew members names
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>FemaleSyllablesStart</strong><span class="sign">:</span> <a href="./game_ads.html#robo120">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   <strong>FemaleSyllablesStart</strong><span class="sign">:</span> <a href="./game_ads.html#robo123">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Crew2fFemaleVocals"></a>
-<a name="robo222"></a><h2>Crew/FemaleVocals [ Variables ]</h2>
+<a name="robo225"></a><h2>Crew/FemaleVocals [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of females vocals for generating crew members names
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>FemaleVocals</strong><span class="sign">:</span> <a href="./game_ads.html#robo120">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   <strong>FemaleVocals</strong><span class="sign">:</span> <a href="./game_ads.html#robo123">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Crew2fMaleConsonants"></a>
-<a name="robo223"></a><h2>Crew/MaleConsonants [ Variables ]</h2>
+<a name="robo226"></a><h2>Crew/MaleConsonants [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of males consonants for generating crew members names
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>MaleConsonants</strong><span class="sign">:</span> <a href="./game_ads.html#robo120">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   <strong>MaleConsonants</strong><span class="sign">:</span> <a href="./game_ads.html#robo123">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Crew2fMaleSyllablesEnd"></a>
-<a name="robo224"></a><h2>Crew/MaleSyllablesEnd [ Variables ]</h2>
+<a name="robo227"></a><h2>Crew/MaleSyllablesEnd [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of males last syllables for generating crew members names
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>MaleSyllablesEnd</strong><span class="sign">:</span> <a href="./game_ads.html#robo120">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   <strong>MaleSyllablesEnd</strong><span class="sign">:</span> <a href="./game_ads.html#robo123">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Crew2fMaleSyllablesMiddle"></a>
-<a name="robo225"></a><h2>Crew/MaleSyllablesMiddle [ Variables ]</h2>
+<a name="robo228"></a><h2>Crew/MaleSyllablesMiddle [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of males middle syllables for generating crew members names
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>MaleSyllablesMiddle</strong><span class="sign">:</span> <a href="./game_ads.html#robo120">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   <strong>MaleSyllablesMiddle</strong><span class="sign">:</span> <a href="./game_ads.html#robo123">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Crew2fMaleSyllablesStart"></a>
-<a name="robo226"></a><h2>Crew/MaleSyllablesStart [ Variables ]</h2>
+<a name="robo229"></a><h2>Crew/MaleSyllablesStart [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of males first syllables for generating crew members names
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>MaleSyllablesStart</strong><span class="sign">:</span> <a href="./game_ads.html#robo120">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   <strong>MaleSyllablesStart</strong><span class="sign">:</span> <a href="./game_ads.html#robo123">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Crew2fMaleVocals"></a>
-<a name="robo227"></a><h2>Crew/MaleVocals [ Variables ]</h2>
+<a name="robo230"></a><h2>Crew/MaleVocals [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of males vocals for generating crew members names
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>MaleVocals</strong><span class="sign">:</span> <a href="./game_ads.html#robo120">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   <strong>MaleVocals</strong><span class="sign">:</span> <a href="./game_ads.html#robo123">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Crew2fCrew5fNo5fSpace5fError"></a>
-<a name="robo362"></a><h2>Crew/Crew_No_Space_Error [ Exceptions ]</h2>
+<a name="robo365"></a><h2>Crew/Crew_No_Space_Error [ Exceptions ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Raised when no space for new item in crew member inventory
 </pre>
@@ -288,9 +324,9 @@
 
 <hr />
 <a name="Crew2fCrew5fOrder5fError"></a>
-<a name="robo363"></a><h2>Crew/Crew_Order_Error [ Exceptions ]</h2>
+<a name="robo366"></a><h2>Crew/Crew_Order_Error [ Exceptions ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Raised when new order can't be set for selected crew member
 </pre>
@@ -300,9 +336,9 @@
 
 <hr />
 <a name="Crew2fDailyPayment"></a>
-<a name="robo502"></a><h2>Crew/DailyPayment [ Subprograms ]</h2>
+<a name="robo500"></a><h2>Crew/DailyPayment [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Daily payment and upgrade contracts length for player ship crew members
 </pre>
@@ -313,18 +349,18 @@
 
 <hr />
 <a name="Crew2fFindCabin"></a>
-<a name="robo503"></a><h2>Crew/FindCabin [ Subprograms ]</h2>
+<a name="robo501"></a><h2>Crew/FindCabin [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Find index of cabin which belongs to selected crew member
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>FindCabin</strong><span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo218">MemberIndex</a><span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">return</span> Natural <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">function</span> <strong>FindCabin</strong><span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo221">MemberIndex</a><span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">return</span> Natural <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_FindCabin"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./ui/crew-ui_ads.html#robo218">MemberIndex</a>: <a href="#robo18">Crew</a> index of crew member which cabin is looking for
+<pre> <a href="./ui/crew-ui_ads.html#robo221">MemberIndex</a>: <a href="#robo26">Crew</a> index of crew member which cabin is looking for
 </pre>
 <p class="item_name">RESULT</p>
 <pre> Player ship module index of owned cabin or 0 if crew member don't
@@ -333,28 +369,28 @@
 
 <hr />
 <a name="Crew2fGainExp"></a>
-<a name="robo504"></a><h2>Crew/GainExp [ Subprograms ]</h2>
+<a name="robo502"></a><h2>Crew/GainExp [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Gain experience in selected skill.
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>GainExp</strong><span class="sign">(</span>Amount<span class="sign">:</span> Natural<span class="sign">;</span> SkillNumber<span class="sign">,</span> <a href="./ui/bases-schoolui_adb.html#robo186">CrewIndex</a><span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">procedure</span> <strong>GainExp</strong><span class="sign">(</span>Amount<span class="sign">:</span> Natural<span class="sign">;</span> SkillNumber<span class="sign">,</span> <a href="./ui/bases-schoolui_adb.html#robo189">CrewIndex</a><span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> SkillNumber <span class="sign">&lt;</span><span class="sign">=</span> <a href="./game_ads.html#robo268">Skills_List</a><span class="sign">.</span>Last_Index<span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_GainExp"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Amount      - Amount of gained experience
  SkillNumber - Index of skill in skills list
- <a href="./ui/bases-schoolui_adb.html#robo186">CrewIndex</a>   - <a href="#robo18">Crew</a> index of member
+ <a href="./ui/bases-schoolui_adb.html#robo189">CrewIndex</a>   - <a href="#robo26">Crew</a> index of member
 </pre>
 
 <hr />
 <a name="Crew2fGenerateMemberName"></a>
-<a name="robo505"></a><h2>Crew/GenerateMemberName [ Subprograms ]</h2>
+<a name="robo503"></a><h2>Crew/GenerateMemberName [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Generate random name for crew member
 </pre>
@@ -377,9 +413,9 @@
 
 <hr />
 <a name="Crew2fGetAttributeLevelName"></a>
-<a name="robo506"></a><h2>Crew/GetAttributeLevelName [ Subprograms ]</h2>
+<a name="robo504"></a><h2>Crew/GetAttributeLevelName [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get member attribute level name
 </pre>
@@ -397,15 +433,14 @@
 
 <hr />
 <a name="Crew2fGetSkillLevelName"></a>
-<a name="robo507"></a><h2>Crew/GetSkillLevelName [ Subprograms ]</h2>
+<a name="robo505"></a><h2>Crew/GetSkillLevelName [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get member skill level name
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>GetSkillLevelName</strong><span class="sign">(</span>SkillLevel<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>SkillLevel <span class="sign">&lt;</span><span class="sign">=</span> 100<span class="sign">)</span><span class="sign">,</span>
+<pre class="source">   <span class="keyword">function</span> <strong>GetSkillLevelName</strong><span class="sign">(</span>SkillLevel<span class="sign">:</span> <a href="#robo95">Skill_Range</a><span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_GetSkillLevelName"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -417,21 +452,21 @@
 
 <hr />
 <a name="Crew2fGetTrainingToolQuality"></a>
-<a name="robo508"></a><h2>Crew/GetTrainingToolQuality [ Subprograms ]</h2>
+<a name="robo506"></a><h2>Crew/GetTrainingToolQuality [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get minumum required quality for training tool for the selected skill
  for the selected crew member
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> <strong>GetTrainingToolQuality</strong>
-     <span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo218">MemberIndex</a><span class="sign">,</span> SkillIndex<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">return</span> Positive <span class="keyword">with</span>
+     <span class="sign">(</span><a href="./ui/crew-ui_ads.html#robo221">MemberIndex</a><span class="sign">,</span> SkillIndex<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">return</span> Positive <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> SkillIndex <span class="sign">&lt;</span><span class="sign">=</span> <a href="./game_ads.html#robo268">Skills_List</a><span class="sign">.</span>Last_Index<span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_GetTrainingToolQuality"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./ui/crew-ui_ads.html#robo218">MemberIndex</a> - Index of crew member which skills will be queried
+<pre> <a href="./ui/crew-ui_ads.html#robo221">MemberIndex</a> - Index of crew member which skills will be queried
  SkillIndex  - Index of skill of which tool will be queried
 </pre>
 <p class="item_name">RESULT</p>
@@ -441,9 +476,9 @@
 
 <hr />
 <a name="Crew2fUpdateCrew"></a>
-<a name="robo509"></a><h2>Crew/UpdateCrew [ Subprograms ]</h2>
+<a name="robo507"></a><h2>Crew/UpdateCrew [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update player ship crew
 </pre>
@@ -460,9 +495,9 @@
 
 <hr />
 <a name="Crew2fWaitForRest"></a>
-<a name="robo510"></a><h2>Crew/WaitForRest [ Subprograms ]</h2>
+<a name="robo508"></a><h2>Crew/WaitForRest [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo26">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Wait until whole crew is rested
 </pre>
@@ -473,7 +508,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/crew.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 19 2020 06:23:08
+<p>Generated from ./src/crew.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 17 2020 06:27:28
 </p>
 </div> <!-- footer -->
 </body>
