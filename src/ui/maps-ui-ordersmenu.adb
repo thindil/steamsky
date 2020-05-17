@@ -25,6 +25,7 @@ with Gtk.Widget; use Gtk.Widget;
 with Gtk.Window; use Gtk.Window;
 with Bases; use Bases;
 with Bases.LootUI; use Bases.LootUI;
+with Bases.RecruitUI; use Bases.RecruitUI;
 with Bases.ShipyardUI; use Bases.ShipyardUI;
 with Bases.UI; use Bases.UI;
 with BasesTypes; use BasesTypes;
@@ -150,8 +151,7 @@ package body Maps.UI.OrdersMenu is
             Set_No_Show_All
               (Gtk_Widget(Get_Object(Object, "btnschool")), False);
             if SkyBases(BaseIndex).Recruits.Length > 0 then
-               Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btnrecruit")), False);
+               Set_No_Show_All(Get_Child(OrdersBox, 9), False);
             end if;
             if DaysDifference(SkyBases(BaseIndex).AskedForEvents) > 6 then
                Set_No_Show_All(Get_Child(OrdersBox, 10), False);
@@ -681,6 +681,9 @@ package body Maps.UI.OrdersMenu is
       pragma Unreferenced(Self);
       -- ****
    begin
+      if HideInfo("availablemissions") then
+         return;
+      end if;
       HideUI;
       ShowMissionsUI;
    end ShowMissions;
@@ -695,6 +698,9 @@ package body Maps.UI.OrdersMenu is
       pragma Unreferenced(Self);
       -- ****
    begin
+      if HideInfo("base") then
+         return;
+      end if;
       HideUI;
       ShowBuyRecipesUI;
    end ShowRecipes;
@@ -804,14 +810,30 @@ package body Maps.UI.OrdersMenu is
       DrawMap;
    end AskForEvents;
 
+   -- ****if* Maps.UI.OrdersMenu/ShowRecruit
+   -- FUNCTION
+   -- Show recruiting screen
+   -- PARAMETERS
+   -- Self - Gtk_Button which was clicked. Unused.
+   -- SOURCE
+   procedure ShowRecruit(Self: access Gtk_Button_Record'Class) is
+      pragma Unreferenced(Self);
+      -- ****
+   begin
+      if HideInfo("recruit") then
+         return;
+      end if;
+      HideUI;
+      ShowRecruitUI;
+   end ShowRecruit;
+
    procedure CreateOrdersMenu is
       Button: Gtk_Button;
    begin
       OrdersBox := Gtk_Button_Box(Get_Object(Builder, "btnboxorders"));
-      --OrdersBox := Gtk_Button_Box_New(Orientation_Vertical);
-      --Button := Gtk_Button_New_With_Label("Story");
-      --On_Clicked(Button, ExecuteStory'Access);
-      --Pack_Start(OrdersBox, Button, False);
+      Button := Gtk_Button_New_With_Mnemonic("_Recruit");
+      On_Clicked(Button, ShowRecruit'Access);
+      Pack_Start(OrdersBox, Button);
       Button := Gtk_Button_New_With_Mnemonic("Ask for _events");
       On_Clicked(Button, AskForEvents'Access);
       Pack_Start(OrdersBox, Button);
