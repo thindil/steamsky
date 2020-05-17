@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [5.0] - 2020-05-17
 
 ### Added
 - New goals: visit 10 undead bases, visit 1 drones base, visit 3 drones bases,
