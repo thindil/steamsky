@@ -39,10 +39,8 @@ version: 2.0
 - command:
    name: docs
    execute:
-      - others/generatedocs.py
+      - others/generatedocs.tcl
    description: Generate code documentation
-   flags:
-      - unixonly
 - command:
    name: gprof
    execute:
