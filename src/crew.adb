@@ -235,12 +235,19 @@ package body Crew is
       procedure UpdateMember(Member: in out Member_Data) is
          BackToWork: Boolean := True;
          ConsumeResult: Natural := 0;
+         procedure NormalizeStat(Stat: in out Integer; MaxValue: Positive := 100) is
+         begin
+            if Stat > MaxValue then
+               Stat := MaxValue;
+            elsif Stat < 0 then
+               Stat := 0;
+            end if;
+         end NormalizeStat;
       begin
          if Factions_List(Member.Faction).Flags.Contains
              (To_Unbounded_String("nofatigue")) then
             TiredLevel := 0;
          end if;
-         Member.Tired := TiredLevel;
          if TiredLevel = 0 and Member.Order = Rest and
            Member.PreviousOrder /= Rest then
             if Member.PreviousOrder not in Repair | Clean then
@@ -329,6 +336,8 @@ package body Crew is
                end if;
             end;
          end if;
+         NormalizeStat(TiredLevel, 150);
+         Member.Tired := TiredLevel;
          if HungerLevel > 80 then
             for FoodType of Factions_List(Member.Faction).FoodTypes loop
                ConsumeResult := Consume(FoodType);
@@ -346,6 +355,7 @@ package body Crew is
                UpdateMorale(PlayerShip, I, GetRandom(-10, -5));
             end if;
          end if;
+         NormalizeStat(HungerLevel);
          Member.Hunger := HungerLevel;
          if ThirstLevel > 40 then
             for DrinksType of Factions_List(Member.Faction).DrinksTypes loop
@@ -364,7 +374,9 @@ package body Crew is
                UpdateMorale(PlayerShip, I, GetRandom(-20, -10));
             end if;
          end if;
+         NormalizeStat(ThirstLevel);
          Member.Thirst := ThirstLevel;
+         NormalizeStat(HealthLevel);
          Member.Health := HealthLevel;
          if Member.Order not in Repair | Craft | Upgrading then
             Member.OrderTime := OrderTime;

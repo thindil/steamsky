@@ -101,7 +101,7 @@ package Crew is
       Name: Unbounded_String;
       Gender: Character;
       Health: Skill_Range;
-      Tired: Skill_Range;
+      Tired: Natural range 0 .. 150;
       Skills: Skills_Container.Vector;
       Hunger: Skill_Range;
       Thirst: Skill_Range;
