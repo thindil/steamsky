@@ -2,7 +2,7 @@ language: c
 
 branches:
    only:
-      - master
+      - 5.0
 
 services:
    - docker
@@ -48,7 +48,7 @@ deploy:
   target_commitish: $TRAVIS_COMMIT
   tag_name: travis-dev-build
   on:
-   branch: master
+   branch: 5.0
 
 notifications:
   email: false
