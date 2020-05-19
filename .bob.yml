@@ -16,7 +16,7 @@ version: 2.0
    name: release
    execute:
       - gprclean -P steamsky.gpr
-      - others/build.sh
+      - others/build.tcl
       - gprclean -P steamsky.gpr
    description: Build Steam Sky in release mode
    flags:
