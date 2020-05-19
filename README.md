@@ -9,12 +9,13 @@ available for Linux and Windows 64 bit platforms.
 
 ## Game versions
 There are currently 2 versions of the game:
-- 4.0.x: "stable" version of game. This version will receive bug fixes but
-  no new features. Source code for this version is in the *4.0* branch.
-- 4.x: "development" version of game, future version 5.0. This is where
+- 5.0.x: "stable" version of game. This version will receive bug fixes but
+  no new features. Source code for this version is in the *5.0* branch.
+  **This** version.
+- 5.x: "development" version of game, future version 6.0. This is where
   game feature updates happen. Due to new features, save compatibility
   will typically break between releases. Use this version at your own risk.
-  Source code for this version is in the *master* branch. **This** version.
+  Source code for this version is in the *master* branch.
 
 ## Build game from sources
 
@@ -125,17 +126,17 @@ of the game, you can also use all of this starting parameters.
 ### Testing versions
 
 Here are available testing versions of the game. You can find them
-in [Releases](https://github.com/thindil/steamsky/releases/tag/travis-dev-build).
+in [Releases](https://github.com/thindil/steamsky/releases/tag/travis-stable-build).
 To use them, first you must download normal release. Then, for Linux: inside
 directory where the game is, type `./steamsky-x86_64.AppImage --appimage-extract`
 to extract whole game to directory *squashfs-root*. And then move files
 from the archive to the proper location. To run that version, enter
-*squashfs-root* directory and type in console `./AppRun`. For Windows: 
+*squashfs-root* directory and type in console `./AppRun`. For Windows:
 unzip files (replace existing) to the proper location where the game is installed.
 
-* steamsky-dev-Windows-64.zip contains Windows 64-bit version of the game.
+* steamsky-stable-Windows-64.zip contains Windows 64-bit version of the game.
 
-* steamsky-dev-Linux-64.tar.gz contains Linux 64-bit version of the game.
+* steamsky-stable-Linux-64.tar.gz contains Linux 64-bit version of the game.
 
 ## Modding Support
 For detailed information about modifying various game elements or debugging
