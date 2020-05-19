@@ -20,20 +20,27 @@ with Ada.Directories; use Ada.Directories;
 with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Environment_Variables;
+with Interfaces.C;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Gtk.Main; use Gtk.Main;
-with Gtk.Settings; use Gtk.Settings;
-with Gtkada.Bindings; use Gtkada.Bindings;
-with Glib; use Glib;
-with ErrorDialog; use ErrorDialog;
+with CArgv;
+with Tcl; use Tcl;
+with Tcl.Ada;
+with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+--with ErrorDialog; use ErrorDialog;
 with Game; use Game;
 with Config; use Config;
 with Log; use Log;
 with HallOfFame; use HallOfFame;
-with MainMenu; use MainMenu;
+--with MainMenu; use MainMenu;
 
 procedure SteamSky is
+
+   use type Interfaces.C.int;
+
+   Argc: CArgv.CNatural;
+   Argv: CArgv.Chars_Ptr_Ptr;
+   Interp: Tcl.Tcl_Interp;
 
    function UpdatePath
      (Path: in out Unbounded_String; PathName: String) return Boolean is
@@ -55,12 +62,6 @@ procedure SteamSky is
    end UpdatePath;
 
 begin
-   if Dir_Separator = '/'
-     and then not Ada.Environment_Variables.Exists("RUNFROMSCRIPT") then
-      Put_Line
-        ("The game can be run only via the 'steamsky.sh' script. Please don't run the binary directly.");
-      return;
-   end if;
    Set_Directory(Dir_Name(Command_Name));
    -- Command line arguments
    for I in 1 .. Argument_Count loop
@@ -122,17 +123,54 @@ begin
    LoadConfig;
    LoadHallOfFame;
 
-   --  Initializes GtkAda
-   Init;
-   Set_On_Exception(On_Exception'Access);
-   Set_Long_Property
-     (Get_Default, "gtk-enable-animations",
-      Glong(GameSettings.AnimationsEnabled), "");
-   CreateMainMenu;
-   Main;
+   -- Start Tk
+
+   --  Get command-line arguments and put them into C-style "argv"
+   --------------------------------------------------------------
+   CArgv.Create(Argc, Argv);
+
+   --  Tcl needs to know the path name of the executable
+   --  otherwise Tcl.Tcl_Init below will fail.
+   ----------------------------------------------------
+   Tcl.Tcl_FindExecutable(Argv.all);
+
+   --  Create one Tcl interpreter
+   -----------------------------
+   Interp := Tcl.Tcl_CreateInterp;
+
+   --  Initialize Tcl
+   -----------------
+   if Tcl.Tcl_Init(Interp) = Tcl.TCL_ERROR then
+      Ada.Text_IO.Put_Line
+        ("Steam Sky: Tcl.Tcl_Init failed: " &
+         Tcl.Ada.Tcl_GetStringResult(Interp));
+      return;
+   end if;
+
+   --  Initialize Tk
+   ----------------
+   if Tcl.Tk.Tk_Init(Interp) = Tcl.TCL_ERROR then
+      Ada.Text_IO.Put_Line
+        ("Steam Sky: Tcl.Tk.Tk_Init failed: " &
+         Tcl.Ada.Tcl_GetStringResult(Interp));
+      return;
+   end if;
+
+   --  Set the Tk context so that we may use shortcut Tk
+   --  calls that require reference to the interpreter.
+   ----------------------------------------------------
+   Set_Context(Interp);
+
+   -- Load required Tcl packages
+   Tooltip_Init(Interp);
+
+   --  Loop inside Tk, waiting for commands to execute.
+   --  When there are no windows left, Tcl.Tk.Tk_MainLoop returns and we exit.
+   --------------------------------------------------------------------------
+   Tcl.Tk.Tk_MainLoop;
 
    EndLogging;
-exception
-   when An_Exception : others =>
-      SaveException(An_Exception, True);
+--exception
+--   when An_Exception : others =>
+      --SaveException(An_Exception, True);
 end SteamSky;
