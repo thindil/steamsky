@@ -79,6 +79,8 @@ package body MainMenu is
       Start_Search(Files, To_String(SaveDirectory), "*.sav");
       if not More_Entries(Files) then
          Tcl.Tk.Ada.Pack.Pack_Forget(Button);
+         Button.Name := New_String(".mainmenu.newgame");
+         Focus(Button);
       else
          Tcl.Tk.Ada.Pack.Pack(Button, "-after .mainmenu.newgame");
          Focus(Button);
