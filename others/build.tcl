@@ -7,9 +7,10 @@ if {[file exists steamsky.gpr] == 0} {
    return
 }
 
+exec gprclean -P steamsky.gpr >@stdout
+exec gprbuild -p -P steamsky.gpr -XMode=release >@stdout
+puts -nonewline {Copying files and directories ... }
 if {$tcl_platform(platform) == "unix"} {
-   exec gprbuild -p steamsky.gpr -XMode=release >@stdout
-   puts -nonewline {Copying files and directories ... }
    file mkdir usr/bin usr/share/metainfo
    file copy share/fonts usr/share/
    file copy bin/steamsky usr/bin
@@ -18,5 +19,10 @@ if {$tcl_platform(platform) == "unix"} {
    file copy bin/doc usr/share/
    file copy README.md usr/share/doc
    file copy others/steamsky.appdata.xml usr/share/metainfo
-   puts {done}
+} else {
+   file mkdir release
+   file copy bin [file join release bin]
+   file copy README.md [file join release bin doc]
 }
+puts {done}
+exec gprclean -P steamsky.gpr >@stdout
