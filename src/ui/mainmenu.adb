@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Directories; use Ada.Directories;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -22,9 +23,11 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Image.Photo; use Tcl.Tk.Ada.Image.Photo;
 with Tcl.Tk.Ada.Pack;
+with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
@@ -53,6 +56,8 @@ package body MainMenu is
    procedure ShowMainMenu is
       MainWindow: constant Tk_Toplevel := Get_Main_Window(Get_Context);
       X, Y: Integer;
+      Files: Search_Type;
+      Button: Ttk_Button;
    begin
       X := (Positive'Value(Winfo_Get(MainWindow, "vrootwidth")) - 600) / 2;
       if X < 0 then
@@ -69,6 +74,22 @@ package body MainMenu is
          Trim(Positive'Image(Y), Left));
       Tcl_Eval(MainMenuFrame.Interp, "pack forget [pack slaves .]");
       Tcl.Tk.Ada.Pack.Pack(MainMenuFrame, "-fill both -expand true");
+      Button.Interp := MainMenuFrame.Interp;
+      Button.Name := New_String(".mainmenu.loadgame");
+      Start_Search(Files, To_String(SaveDirectory), "*.sav");
+      if not More_Entries(Files) then
+         Tcl.Tk.Ada.Pack.Pack_Forget(Button);
+      else
+         Tcl.Tk.Ada.Pack.Pack(Button, "-after .mainmenu.newgame");
+         Focus(Button);
+      end if;
+      End_Search(Files);
+      Button.Name := New_String(".mainmenu.halloffame");
+      if not Exists(To_String(SaveDirectory) & "halloffame.dat") then
+         Tcl.Tk.Ada.Pack.Pack_Forget(Button);
+      else
+         Tcl.Tk.Ada.Pack.Pack(Button, "-before .mainmenu.news");
+      end if;
    end ShowMainMenu;
 
 end MainMenu;
