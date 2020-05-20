@@ -15,9 +15,7 @@ version: 2.0
 - command:
    name: release
    execute:
-      - gprclean -P steamsky.gpr
       - others/build.tcl
-      - gprclean -P steamsky.gpr
    description: Build Steam Sky in release mode
    flags:
       - unixonly
@@ -51,7 +49,7 @@ version: 2.0
 - command:
    name: windows
    execute:
-      - wineconsole others/build.cmd
+      - wineconsole tclsh others/build.tcl
    description: Build Steam sky release for Windows on Linux
    flags:
       - unixonly
