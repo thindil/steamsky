@@ -67,6 +67,7 @@ package body MainMenu is
         (MainWindow, "geometry",
          "600x400+" & Trim(Positive'Image(X), Left) & "+" &
          Trim(Positive'Image(Y), Left));
+      Tcl_Eval(MainMenuFrame.Interp, "pack forget [pack slaves .]");
       Tcl.Tk.Ada.Pack.Pack(MainMenuFrame, "-fill both -expand true");
    end ShowMainMenu;
 
