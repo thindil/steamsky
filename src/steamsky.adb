@@ -32,7 +32,7 @@ with Game; use Game;
 with Config; use Config;
 with Log; use Log;
 with HallOfFame; use HallOfFame;
---with MainMenu; use MainMenu;
+with MainMenu; use MainMenu;
 
 procedure SteamSky is
 
@@ -163,6 +163,9 @@ begin
 
    -- Load required Tcl packages
    Tooltip_Init(Interp);
+
+   -- Create and show the main game menu
+   CreateMainMenu;
 
    --  Loop inside Tk, waiting for commands to execute.
    --  When there are no windows left, Tcl.Tk.Tk_MainLoop returns and we exit.
