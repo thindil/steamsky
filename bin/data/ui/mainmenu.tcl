@@ -46,3 +46,14 @@ grid [ttk::button .aboutmenu.back -text {Back to main menu} -underline 0 -comman
    pack forget .aboutmenu
    pack .mainmenu -fill both -expand true
 }] -row 6 -column 2 -sticky e
+
+# Show file content
+ttk::frame .showfilemenu
+grid [text .showfilemenu.text -wrap word] -sticky nesw
+grid [ttk::scrollbar .showfilemenu.scroll] -column 1 -row 0
+grid [ttk::button .showfilemenu.back -text {Back} -command {
+   bind . <Alt-b> {}
+   bind . <Escape> {}
+   pack forget .showfilemenu
+   pack .mainmenu -fill both -expand true
+}] -row 1 -columnspan 2 -sticky e
