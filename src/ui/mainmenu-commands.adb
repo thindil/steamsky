@@ -13,10 +13,12 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
+with GNAT.OS_Lib; use GNAT.OS_Lib;
 with CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada;
+with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 
 package body MainMenu.Commands is
@@ -33,8 +35,26 @@ package body MainMenu.Commands is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(ClientData, Interp, Argc);
+      OsName: constant String := Tcl_GetVar(Get_Context, "tcl_platform(os)");
+      Command: Unbounded_String;
+      ProcessId: Process_Id;
+      SteamSky_Execute_Error: exception;
    begin
+      if OsName = "Windows" then
+         Command := To_Unbounded_String(Locate_Exec_On_Path("start").all);
+      elsif OsName = "Linux" then
+         Command := To_Unbounded_String(Locate_Exec_On_Path("xdg-open").all);
+      elsif OsName = "Darwin" then
+         Command := To_Unbounded_String(Locate_Exec_On_Path("open").all);
+      end if;
+      ProcessId :=
+        Non_Blocking_Spawn
+          (To_String(Command),
+           Argument_String_To_List(CArgv.Arg(Argv, 1)).all);
+      if ProcessId = Invalid_Pid then
+         raise SteamSky_Execute_Error with "Can't open link";
+      end if;
       return TCL_OK;
    end Open_Link_Command;
 
