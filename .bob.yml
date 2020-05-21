@@ -56,7 +56,7 @@ version: 2.0
 - command:
    name: release
    execute:
-      - others/build.cmd
+      - tclsh others/build.tcl
    description: Build Steam sky in release mode
    flags:
       - windowsonly
