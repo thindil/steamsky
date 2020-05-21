@@ -50,7 +50,7 @@ grid [ttk::button .aboutmenu.back -text {Back to main menu} -underline 0 -comman
 # Show file content
 ttk::frame .showfilemenu
 grid [text .showfilemenu.text -wrap word] -sticky nesw
-grid [ttk::scrollbar .showfilemenu.scroll] -column 1 -row 0
+grid [ttk::scrollbar .showfilemenu.scroll -orient vertical -command [list .showfilemenu.text yview]] -column 1 -row 0
 grid [ttk::button .showfilemenu.back -text {Back} -command {
    bind . <Alt-b> {}
    bind . <Escape> {}
