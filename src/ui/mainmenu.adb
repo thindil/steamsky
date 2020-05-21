@@ -32,6 +32,7 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Game; use Game;
+with MainMenu.Commands; use MainMenu.Commands;
 
 package body MainMenu is
 
@@ -46,6 +47,7 @@ package body MainMenu is
           ("logo", "-file " & UI_Directory & "[file join images icon.png]");
       pragma Unreferenced(Icon);
    begin
+      AddCommands;
       Wm_Set(MainWindow, "iconphoto", "-default logo");
       Tcl_EvalFile(Get_Context, UI_Directory & "mainmenu.tcl");
       MainMenuFrame.Interp := Get_Context;
