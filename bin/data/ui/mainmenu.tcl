@@ -12,7 +12,11 @@ pack [ttk::label .mainmenu.version -text {Version 5.1 development}]
 pack [ttk::button .mainmenu.newgame -text {New game} -underline 0]
 ttk::button .mainmenu.loadgame -text {Load game} -underline 0
 ttk::button .mainmenu.halloffame -text {Hall of Fame} -underline 0
-pack [ttk::button .mainmenu.news -text {News} -underline 1]
+pack [ttk::button .mainmenu.news -text {News} -underline 1 -command {
+   pack forget .mainmenu
+   pack .newsmenu -fill both -expand true
+   ShowNews false
+}]
 pack [ttk::button .mainmenu.about -text {About} -underline 0 -command {
    bind . <Alt-s> {InvokeButton .aboutmenu.showlicense}
    bind . <Alt-b> {InvokeButton .aboutmenu.back}
@@ -73,3 +77,12 @@ pack [ttk::button .showfilemenu.back -text {Back} -underline 0 -command {
 }] -side bottom -anchor e
 pack [ttk::scrollbar .showfilemenu.scroll -orient vertical -command [list .showfilemenu.text yview]] -side right -fill y
 pack [text .showfilemenu.text -wrap char -yscrollcommand {.showfilemenu.scroll set}] -side top -fill both -expand true
+
+# News menu
+ttk::frame .newsmenu
+grid [text .newsmenu.text -wrap word] -sticky nesw -columnspan 2
+grid [ttk::scrollbar .newsmenu.scroll -orient vertical -command [list .newsmenu.text yview]] -column 2 -row 0
+grid [ttk::button .newsmenu.showall -text {Show all changes} -underline 0] -row 1 -column 0 -sticky e
+grid [ttk::button .newsmenu.back -text {Back to menu} -underline 0] -row 1 -column 1 -sticky e
+grid columnconfigure .newsmenu 0 -weight 1
+grid rowconfigure .newsmenu 0 -weight 1
