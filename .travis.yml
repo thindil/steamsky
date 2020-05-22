@@ -23,9 +23,9 @@ matrix:
         install:
          - export "PATH=/c/GNAT/bin:/c/GtkAda/bin:$PATH";
          - export "GPR_PROJECT_PATH=/c/GtkAda/lib/gnat";
-         - wget "https://www.dropbox.com/s/2kk2hb6fvpy9a58/gnat.7z?dl=0" -O gnat.7z;
+         - wget "https://www.dropbox.com/s/nwxl8so7mukbnmp/gnat.7z?dl=0" -O gnat.7z;
          - 7z x gnat.7z -oc:/;
-         - wget "https://www.dropbox.com/s/jd0s4gkycrxy029/gtkada.7z?dl=0" -O gtkada.7z;
+         - wget "https://www.dropbox.com/s/wnjswjwh64w33vd/gtkada.7z?dl=0" -O gtkada.7z;
          - 7z x gtkada.7z -oc:/;
         script:
          - gprbuild -P steamsky.gpr -XMode=release
