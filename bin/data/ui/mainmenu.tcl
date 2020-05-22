@@ -11,7 +11,12 @@ pack [ttk::label .mainmenu.logo -text {Steam Sky} -font {Rye 70}]
 pack [ttk::label .mainmenu.version -text {Version 5.1 development}]
 pack [ttk::button .mainmenu.newgame -text {New game} -underline 0]
 ttk::button .mainmenu.loadgame -text {Load game} -underline 0
-ttk::button .mainmenu.halloffame -text {Hall of Fame} -underline 0
+ttk::button .mainmenu.halloffame -text {Hall of Fame} -underline 0 -command {
+   bind . <Alt-b> {InvokeButton .hofmenu.back}
+   bind . <Escape> {InvokeButton .hofmenu.back}
+   pack forget .mainmenu
+   pack .hofmenu -fill both -expand true
+}
 pack [ttk::button .mainmenu.news -text {News} -underline 1 -command {
    bind . <Alt-s> {InvokeButton .newsmenu.showall}
    bind . <Alt-b> {InvokeButton .newsmenu.back}
@@ -95,3 +100,24 @@ grid [ttk::button .newsmenu.back -text {Back to menu} -underline 0 -command {
 }] -row 1 -column 1 -sticky e
 grid columnconfigure .newsmenu 0 -weight 1
 grid rowconfigure .newsmenu 0 -weight 1
+
+# Hall of Fame menu
+ttk::frame .hofmenu
+grid [ttk::treeview .hofmenu.view -yscrollcommand {.hofmenu.yscroll set} -xscrollcommand {.hofmenu.xscroll set} -show headings -columns [list position name points diedfrom]] -sticky nesw
+.hofmenu.view heading position -text {Position}
+.hofmenu.view column position -width 100
+.hofmenu.view heading name -text {Name}
+.hofmenu.view column name -width 150
+.hofmenu.view heading points -text {Points}
+.hofmenu.view column points -width 100
+.hofmenu.view heading diedfrom -text {Died from}
+grid [ttk::scrollbar .hofmenu.yscroll -orient vertical -command [list .hofmenu.view yview]] -column 1 -row 0 -sticky ns
+grid [ttk::scrollbar .hofmenu.xscroll -orient horizontal -command [list .hofmenu.view xview]] -column 0 -row 1 -columnspan 2 -sticky we
+grid [ttk::button .hofmenu.back -text {Back to menu} -command {
+   bind . <Alt-b> {}
+   bind . <Escape> {}
+   pack forget .hofmenu
+   pack .mainmenu -fill both -expand true
+}] -row 2 -column 0 -columnspan 2 -sticky e
+grid columnconfigure .hofmenu 0 -weight 1
+grid rowconfigure .hofmenu 0 -weight 1
