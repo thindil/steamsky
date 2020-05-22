@@ -28,6 +28,7 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Game; use Game;
 
 package body MainMenu.Commands is
@@ -157,11 +158,20 @@ package body MainMenu.Commands is
       TextView: Tk_Text;
       ChangesFile: File_Type;
       FileText: Unbounded_String;
+      AllNewsButton: Ttk_Button;
    begin
+      AllNewsButton.Interp := Interp;
+      AllNewsButton.Name := New_String(".newsmenu.showall");
       if CArgv.Arg(Argv, 1) = "false" then
          AllNews := False;
+         configure
+           (AllNewsButton,
+            "-text {Show all changes} -command {ShowNews true}");
       else
          AllNews := True;
+         configure
+           (AllNewsButton,
+            "-text {Show only newest changes} -command {ShowNews false}");
       end if;
       TextView.Interp := Interp;
       TextView.Name := New_String(".newsmenu.text");
@@ -185,8 +195,6 @@ package body MainMenu.Commands is
          Close(ChangesFile);
       end if;
       configure(TextView, "-state disabled");
-      Bind_To_Main_Window(Interp, "<Alt-b>", "{InvokeButton .newsmenu.back}");
-      Bind_To_Main_Window(Interp, "<Escape>", "{InvokeButton .newsmenu.back}");
       return TCL_OK;
    end Show_News_Command;
 
