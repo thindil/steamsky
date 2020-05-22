@@ -126,6 +126,70 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Show_File_Command;
 
+   -- ****iv* MCommands/AllNews
+   -- FUNCTION
+   -- If true, show all news, not only from last version. Default is false
+   -- SOURCE
+   AllNews: Boolean := False;
+   -- ****
+
+   -- ****if* MCommands/Show_News_Command
+   -- FUNCTION
+   -- Show changes in the game, all or just recent
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Show_News_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_News_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      TextView: Tk_Text;
+      ChangesFile: File_Type;
+      FileText: Unbounded_String;
+   begin
+      if CArgv.Arg(Argv, 1) = "false" then
+         AllNews := False;
+      else
+         AllNews := True;
+      end if;
+      TextView.Interp := Interp;
+      TextView.Name := New_String(".newsmenu.text");
+      configure(TextView, "-state normal");
+      Delete(TextView, "1.0", "end");
+      if not Exists(To_String(DocDirectory) & "CHANGELOG.md") then
+         Insert
+           (TextView, "end",
+            "{Can't find changelog file. Did 'CHANGELOG.md' file is in '" &
+            To_String(DocDirectory) & "' directory?}");
+      else
+         Open(ChangesFile, In_File, To_String(DocDirectory) & "CHANGELOG.md");
+         Set_Line(ChangesFile, 6);
+         while not End_Of_File(ChangesFile) loop
+            FileText := To_Unbounded_String(Get_Line(ChangesFile));
+            if Length(FileText) > 1 and not AllNews then
+               exit when Slice(FileText, 1, 3) = "## ";
+            end if;
+            Insert(TextView, "end", "{" & To_String(FileText) & LF & "}");
+         end loop;
+         Close(ChangesFile);
+      end if;
+      configure(TextView, "-state disabled");
+      Bind_To_Main_Window(Interp, "<Alt-b>", "{InvokeButton .newsmenu.back}");
+      Bind_To_Main_Window(Interp, "<Escape>", "{InvokeButton .newsmenu.back}");
+      return TCL_OK;
+   end Show_News_Command;
+
    procedure AddCommands is
       procedure AddCommand
         (Name: String; AdaCommand: not null CreateCommands.Tcl_CmdProc) is
@@ -142,6 +206,7 @@ package body MainMenu.Commands is
    begin
       AddCommand("OpenLink", Open_Link_Command'Access);
       AddCommand("ShowFile", Show_File_Command'Access);
+      AddCommand("ShowNews", Show_News_Command'Access);
    end AddCommands;
 
 end MainMenu.Commands;
