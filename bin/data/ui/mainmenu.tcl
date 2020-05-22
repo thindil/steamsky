@@ -16,6 +16,7 @@ ttk::button .mainmenu.halloffame -text {Hall of Fame} -underline 0 -command {
    bind . <Escape> {InvokeButton .hofmenu.back}
    pack forget .mainmenu
    pack .hofmenu -fill both -expand true
+   ShowHallOfFame
 }
 pack [ttk::button .mainmenu.news -text {News} -underline 1 -command {
    bind . <Alt-s> {InvokeButton .newsmenu.showall}
@@ -103,7 +104,7 @@ grid rowconfigure .newsmenu 0 -weight 1
 
 # Hall of Fame menu
 ttk::frame .hofmenu
-grid [ttk::treeview .hofmenu.view -yscrollcommand {.hofmenu.yscroll set} -xscrollcommand {.hofmenu.xscroll set} -show headings -columns [list position name points diedfrom]] -sticky nesw
+grid [ttk::treeview .hofmenu.view -yscrollcommand {.hofmenu.yscroll set} -xscrollcommand {.hofmenu.xscroll set} -show headings -columns [list position name points diedfrom] -selectmode none] -sticky nesw
 .hofmenu.view heading position -text {Position}
 .hofmenu.view column position -width 100
 .hofmenu.view heading name -text {Name}
