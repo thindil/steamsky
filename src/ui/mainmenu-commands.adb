@@ -29,7 +29,9 @@ with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Game; use Game;
+with HallOfFame; use HallOfFame;
 
 package body MainMenu.Commands is
 
@@ -198,6 +200,44 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Show_News_Command;
 
+   -- ****if* MCommands/Show_Hof_Command
+   -- FUNCTION
+   -- Show the Hall of Fame
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Show_Hall_Of_Fame_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Hall_Of_Fame_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      HofView: Ttk_Tree_View;
+   begin
+      HofView.Interp := Interp;
+      HofView.Name := New_String(".hofmenu.view");
+      Delete(HofView, "[list " & Children(HofView, "{}") & "]");
+      for I in HallOfFame_Array'Range loop
+         exit when HallOfFame_Array(I).Name = Null_Unbounded_String;
+         Insert
+           (HofView,
+            "{} end -values [list " & Positive'Image(I) & " " &
+            To_String(HallOfFame_Array(I).Name) & " " &
+            Natural'Image(HallOfFame_Array(I).Points) & " " &
+            To_String(HallOfFame_Array(I).DeathReason) & "]");
+      end loop;
+      return TCL_OK;
+   end Show_Hall_Of_Fame_Command;
+
    procedure AddCommands is
       procedure AddCommand
         (Name: String; AdaCommand: not null CreateCommands.Tcl_CmdProc) is
@@ -215,6 +255,7 @@ package body MainMenu.Commands is
       AddCommand("OpenLink", Open_Link_Command'Access);
       AddCommand("ShowFile", Show_File_Command'Access);
       AddCommand("ShowNews", Show_News_Command'Access);
+      AddCommand("ShowHallOfFame", Show_Hall_Of_Fame_Command'Access);
    end AddCommands;
 
 end MainMenu.Commands;
