@@ -13,8 +13,18 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+-- ****h* MainMenu/MCommands
+-- FUNCTION
+-- Provide code of Tcl commands related to MainMenu
+-- SOURCE
 package MainMenu.Commands is
+-- ****
 
+   -- ****f* MCommands/AddCommands
+   -- FUNCTION
+   -- Add Tcl commands related to main menu to the game
+   -- SOURCE
    procedure AddCommands;
+   -- ****
 
 end MainMenu.Commands;

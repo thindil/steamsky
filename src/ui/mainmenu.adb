@@ -36,7 +36,12 @@ with MainMenu.Commands; use MainMenu.Commands;
 
 package body MainMenu is
 
+   -- ****iv* MainMenu/MainMenuFrame
+   -- FUNCTION
+   -- Ttk Frame with content of main menu
+   -- SOURCE
    MainMenuFrame: Ttk_Frame;
+   -- ****
 
    procedure CreateMainMenu is
       UI_Directory: constant String :=
