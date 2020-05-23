@@ -10,6 +10,12 @@ ttk::frame .mainmenu
 pack [ttk::label .mainmenu.logo -text {Steam Sky} -font {Rye 70}]
 pack [ttk::label .mainmenu.version -text {Version 5.1 development}]
 pack [ttk::button .mainmenu.newgame -text {New game} -underline 0 -command {
+   set newtab player
+   bind . <Alt-s> {InvokeButton .newgamemenu.buttonsbox2.start}
+   bind . <Alt-b> {InvokeButton .newgamemenu.buttonsbox2.back}
+   bind . <Alt-p> {InvokeButton .newgamemenu.buttonsbox.player}
+   bind . <Alt-d> {InvokeButton .newgamemenu.buttonsbox.difficulty}
+   bind . <Escape> {InvokeButton .newgamemenu.buttonsbox2.back}
    pack forget .mainmenu
    pack .newgamemenu -fill both -expand true
 }]
@@ -160,7 +166,6 @@ grid columnconfigure .loadmenu 0 -weight 1
 grid rowconfigure .loadmenu 0 -weight 1
 
 # New game setting menu
-set newtab player
 ttk::frame .newgamemenu
 grid [ttk::frame .newgamemenu.buttonsbox] -sticky we -columnspan 2
 grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state selected -style Toolbutton -value player -variable newtab -underline 0] -sticky e
@@ -184,4 +189,12 @@ grid [ttk::labelframe .newgamemenu.info -text Info] -row 1 -column 1 -sticky nwe
 grid [ttk::label .newgamemenu.info.text -wraplength [winfo reqwidth .newgamemenu.info]] -sticky nwes
 grid [ttk::frame .newgamemenu.buttonsbox2] -row 2 -sticky we -columnspan 2
 grid [ttk::button .newgamemenu.buttonsbox2.start -text {Start game} -underline 0] -sticky e
-grid [ttk::button .newgamemenu.buttonsbox2.back -text {Back to menu} -underline 0] -column 1 -row 0 -sticky w
+grid [ttk::button .newgamemenu.buttonsbox2.back -text {Back to menu} -underline 0 -command {
+   bind . <Alt-s> {}
+   bind . <Alt-b> {}
+   bind . <Alt-p> {}
+   bind . <Alt-d> {}
+   bind . <Escape> {}
+   pack forget .newgamemenu
+   pack .mainmenu -fill both -expand true
+}] -column 1 -row 0 -sticky w
