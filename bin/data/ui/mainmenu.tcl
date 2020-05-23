@@ -162,18 +162,26 @@ grid rowconfigure .loadmenu 0 -weight 1
 # New game setting menu
 set newtab player
 ttk::frame .newgamemenu
-grid [ttk::frame .newgamemenu.buttonsbox] -sticky we
+grid [ttk::frame .newgamemenu.buttonsbox] -sticky we -columnspan 2
 grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state selected -style Toolbutton -value player -variable newtab] -sticky e
 grid [ttk::radiobutton .newgamemenu.buttonsbox.difficulty -text Difficulty -style Toolbutton -value difficulty -variable newtab] -column 1 -row 0 -sticky w
 grid [ttk::frame .newgamemenu.playersetting] -sticky nwes -row 1
 grid [ttk::label .newgamemenu.playersetting.labelplayername -text {Character name:}]
-grid [ttk::entry .newgamemenu.playersetting.playername] -column 1
+grid [ttk::entry .newgamemenu.playersetting.playername] -row 0 -column 1
 grid [ttk::label .newgamemenu.playersetting.labelgender -text {Character gender:}] -row 1
+grid [ttk::combobox .newgamemenu.playersetting.gender] -row 1 -column 1
 grid [ttk::label .newgamemenu.playersetting.labelshipname -text {Ship name:}] -row 2
+grid [ttk::entry .newgamemenu.playersetting.shipname] -row 2 -column 1
 grid [ttk::label .newgamemenu.playersetting.labelgoal -text {Character goal:}] -row 3
+grid [ttk::button .newgamemenu.playersetting.goal -text {Random}] -row 3 -column 1
 grid [ttk::label .newgamemenu.playersetting.labelfaction -text {Character faction:}] -row 4
+grid [ttk::combobox .newgamemenu.playersetting.faction] -row 4 -column 1
 grid [ttk::label .newgamemenu.playersetting.labelcareer -text {Character career:}] -row 5
+grid [ttk::combobox .newgamemenu.playersetting.career] -row 5 -column 1
 grid [ttk::label .newgamemenu.playersetting.labelbase -text {Starting base type:}] -row 6
-grid [ttk::frame .newgamemenu.buttonsbox2] -row 2 -sticky we
+grid [ttk::combobox .newgamemenu.playersetting.base] -row 6 -column 1
+grid [ttk::labelframe .newgamemenu.info -text Info] -row 1 -column 1 -sticky nwes
+pack [ttk::label .newgamemenu.info.text -wraplength [winfo reqwidth .newgamemenu.info]]
+grid [ttk::frame .newgamemenu.buttonsbox2] -row 2 -sticky we -columnspan 2
 grid [ttk::button .newgamemenu.buttonsbox2.start -text {Start game}] -sticky e
 grid [ttk::button .newgamemenu.buttonsbox2.back -text {Back to menu}] -column 1 -row 0 -sticky w
