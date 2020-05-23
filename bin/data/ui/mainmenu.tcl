@@ -9,7 +9,10 @@ proc InvokeButton {name} {
 ttk::frame .mainmenu
 pack [ttk::label .mainmenu.logo -text {Steam Sky} -font {Rye 70}]
 pack [ttk::label .mainmenu.version -text {Version 5.1 development}]
-pack [ttk::button .mainmenu.newgame -text {New game} -underline 0]
+pack [ttk::button .mainmenu.newgame -text {New game} -underline 0 -command {
+   pack forget .mainmenu
+   pack .newgamemenu -fill both -expand true
+}]
 ttk::button .mainmenu.loadgame -text {Load game} -underline 0 -command {
    bind . <Alt-d> {InvokeButton .loadmenu.delete}
    bind . <Alt-l> {InvokeButton .loadmenu.load}
@@ -155,3 +158,22 @@ grid [ttk::button .loadmenu.back -text {Back to main menu} -underline 0 -command
 }] -row 2 -column 2 -sticky e
 grid columnconfigure .loadmenu 0 -weight 1
 grid rowconfigure .loadmenu 0 -weight 1
+
+# New game setting menu
+set newtab player
+ttk::frame .newgamemenu
+grid [ttk::frame .newgamemenu.buttonsbox] -sticky we
+grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state selected -style Toolbutton -value player -variable newtab] -sticky e
+grid [ttk::radiobutton .newgamemenu.buttonsbox.difficulty -text Difficulty -style Toolbutton -value difficulty -variable newtab] -column 1 -row 0 -sticky w
+grid [ttk::frame .newgamemenu.playersetting] -sticky nwes -row 1
+grid [ttk::label .newgamemenu.playersetting.labelplayername -text {Character name:}]
+grid [ttk::entry .newgamemenu.playersetting.playername] -column 1
+grid [ttk::label .newgamemenu.playersetting.labelgender -text {Character gender:}] -row 1
+grid [ttk::label .newgamemenu.playersetting.labelshipname -text {Ship name:}] -row 2
+grid [ttk::label .newgamemenu.playersetting.labelgoal -text {Character goal:}] -row 3
+grid [ttk::label .newgamemenu.playersetting.labelfaction -text {Character faction:}] -row 4
+grid [ttk::label .newgamemenu.playersetting.labelcareer -text {Character career:}] -row 5
+grid [ttk::label .newgamemenu.playersetting.labelbase -text {Starting base type:}] -row 6
+grid [ttk::frame .newgamemenu.buttonsbox2] -row 2 -sticky we
+grid [ttk::button .newgamemenu.buttonsbox2.start -text {Start game}] -sticky e
+grid [ttk::button .newgamemenu.buttonsbox2.back -text {Back to menu}] -column 1 -row 0 -sticky w
