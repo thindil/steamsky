@@ -21,6 +21,7 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Image.Photo; use Tcl.Tk.Ada.Image.Photo;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
@@ -43,6 +44,13 @@ package body MainMenu is
    MainMenuFrame: Ttk_Frame;
    -- ****
 
+   -- ****iv* MainMenu/DataError
+   -- FUNCTION
+   -- Stores error message from loading the game data
+   -- SOURCE
+   DataError: Unbounded_String;
+   -- ****
+
    procedure CreateMainMenu is
       UI_Directory: constant String :=
         To_String(DataDirectory) & "ui" & Dir_Separator;
@@ -54,6 +62,7 @@ package body MainMenu is
    begin
       AddCommands;
       Wm_Set(MainWindow, "iconphoto", "-default logo");
+      DataError := To_Unbounded_String(LoadGameData);
       Tcl_EvalFile(Get_Context, UI_Directory & "mainmenu.tcl");
       MainMenuFrame.Interp := Get_Context;
       MainMenuFrame.Name := New_String(".mainmenu");
@@ -65,6 +74,7 @@ package body MainMenu is
       X, Y: Integer;
       Files: Search_Type;
       Button: Ttk_Button;
+      Dummy: Unbounded_String;
    begin
       X := (Positive'Value(Winfo_Get(MainWindow, "vrootwidth")) - 600) / 2;
       if X < 0 then
@@ -98,6 +108,18 @@ package body MainMenu is
          Tcl.Tk.Ada.Pack.Pack_Forget(Button);
       else
          Tcl.Tk.Ada.Pack.Pack(Button, "-before .mainmenu.news");
+      end if;
+      if DataError /= Null_Unbounded_String then
+         Button.Name := New_String(".mainmenu.newgame");
+         Tcl.Tk.Ada.Pack.Pack_Forget(Button);
+         Button.Name := New_String(".mainmenu.loadgame");
+         Tcl.Tk.Ada.Pack.Pack_Forget(Button);
+         Lower(MainWindow);
+         Dummy :=
+           To_Unbounded_String
+             (MessageBox
+                ("-message {Can't load game data files. Error: " &
+                 To_String(DataError) & "} -icon error -type ok"));
       end if;
    end ShowMainMenu;
 
