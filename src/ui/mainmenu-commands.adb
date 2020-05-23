@@ -28,6 +28,7 @@ with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
@@ -267,6 +268,7 @@ package body MainMenu.Commands is
       Files: Search_Type;
       FoundFile: Directory_Entry_Type;
       Tokens: Slice_Set;
+      Selected: Boolean := False;
    begin
       LoadView.Interp := Interp;
       LoadView.Name := New_String(".loadmenu.view");
@@ -277,15 +279,66 @@ package body MainMenu.Commands is
          Create(Tokens, Simple_Name(FoundFile), "_");
          Insert
            (LoadView,
-            "{} end -id {" & Full_Name(FoundFile) & "} -values [list " &
+            "{} end -id {" & Simple_Name(FoundFile) & "} -values [list " &
             Slice(Tokens, 1) & " " & Slice(Tokens, 2) & " {" &
             Ada.Calendar.Formatting.Image
               (Modification_Time(FoundFile), False, UTC_Time_Offset) &
             "}]");
+         if not Selected then
+            Selection_Set(LoadView, "{" & Simple_Name(FoundFile) & "}");
+            Selected := True;
+         end if;
       end loop;
       End_Search(Files);
       return TCL_OK;
    end Show_Load_Game_Command;
+
+   -- ****if* MCommands/Delete_Game_Command
+   -- FUNCTION
+   -- Delete the selected save file
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Delete_Game_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Delete_Game_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      LoadView: Ttk_Tree_View;
+      ItemIndex, Items: Unbounded_String;
+   begin
+      if MessageBox
+          ("-message {Are you sure you want delete this savegame?} -icon question -type yesno") /=
+        "yes" then
+         return TCL_OK;
+      end if;
+      LoadView.Interp := Interp;
+      LoadView.Name := New_String(".loadmenu.view");
+      ItemIndex := To_Unbounded_String(Selection(LoadView));
+      Delete_File(To_String(SaveDirectory & ItemIndex));
+      Delete(LoadView, To_String(ItemIndex));
+      Items := To_Unbounded_String(Children(LoadView, "{}"));
+      if Items = Null_Unbounded_String then
+         ShowMainMenu;
+      else
+         ItemIndex := Unbounded_Slice(Items, 1, Index(Items, " "));
+         if ItemIndex = Null_Unbounded_String then
+            ItemIndex := Items;
+         end if;
+         Selection_Set(LoadView, To_String(ItemIndex));
+      end if;
+      return TCL_OK;
+   end Delete_Game_Command;
 
    procedure AddCommands is
       procedure AddCommand
@@ -306,6 +359,7 @@ package body MainMenu.Commands is
       AddCommand("ShowNews", Show_News_Command'Access);
       AddCommand("ShowHallOfFame", Show_Hall_Of_Fame_Command'Access);
       AddCommand("ShowLoadGame", Show_Load_Game_Command'Access);
+      AddCommand("DeleteGame", Delete_Game_Command'Access);
    end AddCommands;
 
 end MainMenu.Commands;
