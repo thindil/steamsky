@@ -13,6 +13,9 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Calendar; use Ada.Calendar;
+with Ada.Calendar.Formatting;
+with Ada.Calendar.Time_Zones; use Ada.Calendar.Time_Zones;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Directories; use Ada.Directories;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -20,6 +23,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.OS_Lib; use GNAT.OS_Lib;
+with GNAT.String_Split; use GNAT.String_Split;
 with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
@@ -200,7 +204,7 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Show_News_Command;
 
-   -- ****if* MCommands/Show_Hof_Command
+   -- ****if* MCommands/Show_Hall_Of_Fame_Command
    -- FUNCTION
    -- Show the Hall of Fame
    -- PARAMETERS
@@ -238,6 +242,51 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Show_Hall_Of_Fame_Command;
 
+   -- ****if* MCommands/Show_Load_Game_Command
+   -- FUNCTION
+   -- Show available saved games
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Show_Load_Game_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Load_Game_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      LoadView: Ttk_Tree_View;
+      Files: Search_Type;
+      FoundFile: Directory_Entry_Type;
+      Tokens: Slice_Set;
+   begin
+      LoadView.Interp := Interp;
+      LoadView.Name := New_String(".loadmenu.view");
+      Delete(LoadView, "[list " & Children(LoadView, "{}") & "]");
+      Start_Search(Files, To_String(SaveDirectory), "*.sav");
+      while More_Entries(Files) loop
+         Get_Next_Entry(Files, FoundFile);
+         Create(Tokens, Simple_Name(FoundFile), "_");
+         Insert
+           (LoadView,
+            "{} end -id {" & Full_Name(FoundFile) & "} -values [list " &
+            Slice(Tokens, 1) & " " & Slice(Tokens, 2) & " {" &
+            Ada.Calendar.Formatting.Image
+              (Modification_Time(FoundFile), False, UTC_Time_Offset) &
+            "}]");
+      end loop;
+      End_Search(Files);
+      return TCL_OK;
+   end Show_Load_Game_Command;
+
    procedure AddCommands is
       procedure AddCommand
         (Name: String; AdaCommand: not null CreateCommands.Tcl_CmdProc) is
@@ -256,6 +305,7 @@ package body MainMenu.Commands is
       AddCommand("ShowFile", Show_File_Command'Access);
       AddCommand("ShowNews", Show_News_Command'Access);
       AddCommand("ShowHallOfFame", Show_Hall_Of_Fame_Command'Access);
+      AddCommand("ShowLoadGame", Show_Load_Game_Command'Access);
    end AddCommands;
 
 end MainMenu.Commands;

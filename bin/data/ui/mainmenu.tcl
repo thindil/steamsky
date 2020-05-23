@@ -10,7 +10,16 @@ ttk::frame .mainmenu
 pack [ttk::label .mainmenu.logo -text {Steam Sky} -font {Rye 70}]
 pack [ttk::label .mainmenu.version -text {Version 5.1 development}]
 pack [ttk::button .mainmenu.newgame -text {New game} -underline 0]
-ttk::button .mainmenu.loadgame -text {Load game} -underline 0
+ttk::button .mainmenu.loadgame -text {Load game} -underline 0 -command {
+   bind . <Alt-d> {InvokeButton .loadmenu.delete}
+   bind . <Alt-l> {InvokeButton .loadmenu.load}
+   bind . <Alt-b> {InvokeButton .loadmenu.back}
+   bind . <Escape> {InvokeButton .loadmenu.back}
+   pack forget .mainmenu
+   pack .loadmenu -fill both -expand true
+   focus .loadmenu.load
+   ShowLoadGame
+}
 ttk::button .mainmenu.halloffame -text {Hall of Fame} -underline 0 -command {
    bind . <Alt-b> {InvokeButton .hofmenu.back}
    bind . <Escape> {InvokeButton .hofmenu.back}
@@ -122,3 +131,27 @@ grid [ttk::button .hofmenu.back -text {Back to menu} -command {
 }] -row 2 -column 0 -columnspan 2 -sticky e
 grid columnconfigure .hofmenu 0 -weight 1
 grid rowconfigure .hofmenu 0 -weight 1
+
+# Load game menu
+ttk::frame .loadmenu
+grid [ttk::treeview .loadmenu.view -yscrollcommand {.loadmenu.yscroll set} -xscrollcommand {.loadmenu.xscroll set} -show headings -columns [list playername shipname lastsaved]] -sticky nesw -columnspan 3
+.loadmenu.view heading playername -text {Player name}
+.loadmenu.view column playername -width 150
+.loadmenu.view heading shipname -text {Ship name}
+.loadmenu.view column shipname -width 150
+.loadmenu.view heading lastsaved -text {Last saved}
+bind .loadmenu.view <<TreeviewSelect>> {InvokeButton .loadmenu.load}
+grid [ttk::scrollbar .loadmenu.yscroll -orient vertical -command [list .loadmenu.view yview]] -column 3 -row 0 -sticky ns
+grid [ttk::scrollbar .loadmenu.xscroll -orient horizontal -command [list .loadmenu.view xview]] -column 0 -row 1 -columnspan 3 -sticky we
+grid [ttk::button .loadmenu.delete -text {Delete game}] -row 2 -column 0 -sticky e
+grid [ttk::button .loadmenu.load -text {Load game}] -row 2 -column 1 -sticky e
+grid [ttk::button .loadmenu.back -text {Back to main menu} -command {
+   bind . <Alt-b> {}
+   bind . <Alt-l> {}
+   bind . <Alt-d> {}
+   bind . <Escape> {}
+   pack forget .loadmenu
+   pack .mainmenu -fill both -expand true
+}] -row 2 -column 2 -sticky e
+grid columnconfigure .loadmenu 0 -weight 1
+grid rowconfigure .loadmenu 0 -weight 1
