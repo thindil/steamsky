@@ -18,6 +18,7 @@ with Ada.Calendar.Formatting;
 with Ada.Calendar.Time_Zones; use Ada.Calendar.Time_Zones;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Directories; use Ada.Directories;
+with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 with Interfaces.C; use Interfaces.C;
@@ -36,6 +37,7 @@ use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Game; use Game;
+with Game.SaveLoad; use Game.SaveLoad;
 with HallOfFame; use HallOfFame;
 
 package body MainMenu.Commands is
@@ -340,6 +342,51 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Delete_Game_Command;
 
+   procedure StartGame is
+   begin
+      Ada.Text_IO.Put_Line("Started");
+   end StartGame;
+
+   -- ****if* MCommands/Load_Game_Command
+   -- FUNCTION
+   -- Load the selected save file and start the game
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Load_Game_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Load_Game_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      LoadView: Ttk_Tree_View;
+   begin
+      LoadView.Interp := Interp;
+      LoadView.Name := New_String(".loadmenu.view");
+      SaveName := SaveDirectory & Selection(LoadView);
+      LoadGame;
+      StartGame;
+      return TCL_OK;
+   exception
+      when An_Exception : SaveGame_Invalid_Data =>
+         if MessageBox
+             ("-message {Can't load this game. Reason: " &
+              Exception_Message(An_Exception) & "} -icon error -type ok") =
+           "ok" then
+            return TCL_OK;
+         end if;
+         return TCL_OK;
+   end Load_Game_Command;
+
    procedure AddCommands is
       procedure AddCommand
         (Name: String; AdaCommand: not null CreateCommands.Tcl_CmdProc) is
@@ -360,6 +407,7 @@ package body MainMenu.Commands is
       AddCommand("ShowHallOfFame", Show_Hall_Of_Fame_Command'Access);
       AddCommand("ShowLoadGame", Show_Load_Game_Command'Access);
       AddCommand("DeleteGame", Delete_Game_Command'Access);
+      AddCommand("LoadGame", Load_Game_Command'Access);
    end AddCommands;
 
 end MainMenu.Commands;
