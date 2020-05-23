@@ -163,8 +163,8 @@ grid rowconfigure .loadmenu 0 -weight 1
 set newtab player
 ttk::frame .newgamemenu
 grid [ttk::frame .newgamemenu.buttonsbox] -sticky we -columnspan 2
-grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state selected -style Toolbutton -value player -variable newtab] -sticky e
-grid [ttk::radiobutton .newgamemenu.buttonsbox.difficulty -text Difficulty -style Toolbutton -value difficulty -variable newtab] -column 1 -row 0 -sticky w
+grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state selected -style Toolbutton -value player -variable newtab -underline 0] -sticky e
+grid [ttk::radiobutton .newgamemenu.buttonsbox.difficulty -text Difficulty -style Toolbutton -value difficulty -variable newtab -underline 0] -column 1 -row 0 -sticky w
 grid [ttk::frame .newgamemenu.playersetting] -sticky nwes -row 1
 grid [ttk::label .newgamemenu.playersetting.labelplayername -text {Character name:}]
 grid [ttk::entry .newgamemenu.playersetting.playername] -row 0 -column 1
@@ -181,7 +181,7 @@ grid [ttk::combobox .newgamemenu.playersetting.career] -row 5 -column 1
 grid [ttk::label .newgamemenu.playersetting.labelbase -text {Starting base type:}] -row 6
 grid [ttk::combobox .newgamemenu.playersetting.base] -row 6 -column 1
 grid [ttk::labelframe .newgamemenu.info -text Info] -row 1 -column 1 -sticky nwes
-pack [ttk::label .newgamemenu.info.text -wraplength [winfo reqwidth .newgamemenu.info]]
+grid [ttk::label .newgamemenu.info.text -wraplength [winfo reqwidth .newgamemenu.info]] -sticky nwes
 grid [ttk::frame .newgamemenu.buttonsbox2] -row 2 -sticky we -columnspan 2
-grid [ttk::button .newgamemenu.buttonsbox2.start -text {Start game}] -sticky e
-grid [ttk::button .newgamemenu.buttonsbox2.back -text {Back to menu}] -column 1 -row 0 -sticky w
+grid [ttk::button .newgamemenu.buttonsbox2.start -text {Start game} -underline 0] -sticky e
+grid [ttk::button .newgamemenu.buttonsbox2.back -text {Back to menu} -underline 0] -column 1 -row 0 -sticky w
