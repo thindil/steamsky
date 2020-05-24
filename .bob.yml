@@ -3,10 +3,8 @@ version: 2.0
    name: tests
    execute:
       - gprbuild -P tests/driver/test_driver.gpr
-      - others/tests.sh $1
+      - tclsh others/tests.tcl $1
    description: Build and run Steam Sky unit tests X times (required argument how many times)
-   flags:
-      - unixonly
 - command:
    name: debug
    execute:
@@ -15,10 +13,8 @@ version: 2.0
 - command:
    name: release
    execute:
-      - others/build.tcl
-   description: Build Steam Sky in release mode
-   flags:
-      - unixonly
+      - tclsh others/build.tcl
+   description: Build Steam sky in release mode
 - command:
    name: analyze
    execute:
@@ -37,7 +33,7 @@ version: 2.0
 - command:
    name: docs
    execute:
-      - others/generatedocs.tcl
+      - tclsh others/generatedocs.tcl
    description: Generate code documentation
 - command:
    name: gprof
@@ -53,13 +49,6 @@ version: 2.0
    description: Build Steam sky release for Windows on Linux
    flags:
       - unixonly
-- command:
-   name: release
-   execute:
-      - tclsh others/build.tcl
-   description: Build Steam sky in release mode
-   flags:
-      - windowsonly
 - command:
    name: pretty
    execute:
