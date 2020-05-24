@@ -170,10 +170,12 @@ grid rowconfigure .loadmenu 0 -weight 1
 ttk::frame .newgamemenu
 grid [ttk::frame .newgamemenu.buttonsbox] -columnspan 2
 grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state selected -style Toolbutton -value player -variable newtab -underline 0 -command {
+   grid forget .newgamemenu.difficultysetting
    grid .newgamemenu.playersetting -sticky nwes -row 1
 }] -sticky e
 grid [ttk::radiobutton .newgamemenu.buttonsbox.difficulty -text Difficulty -style Toolbutton -value difficulty -variable newtab -underline 0 -command {
    grid forget .newgamemenu.playersetting
+   grid .newgamemenu.difficultysetting -sticky nwes -row 1
 }] -column 1 -row 0 -sticky w
 ttk::frame .newgamemenu.playersetting
 grid [ttk::label .newgamemenu.playersetting.labelplayername -text {Character name:}]
@@ -191,8 +193,34 @@ grid [ttk::label .newgamemenu.playersetting.labelcareer -text {Character career:
 grid [ttk::combobox .newgamemenu.playersetting.career -state readonly] -row 5 -column 1
 grid [ttk::label .newgamemenu.playersetting.labelbase -text {Starting base type:}] -row 6
 grid [ttk::combobox .newgamemenu.playersetting.base -state readonly] -row 6 -column 1
+ttk::frame .newgamemenu.difficultysetting
+grid [ttk::label .newgamemenu.difficultysetting.difficultylabel -text {Difficulty level:}]
+grid [ttk::combobox .newgamemenu.difficultysetting.difficultylevel -state readonly -values [list {Very Easy} Easy Normal Hard {Very Hard}]] -column 1 -row 0
+.newgamemenu.difficultysetting.difficultylevel set Normal
+grid [ttk::label .newgamemenu.difficultysetting.enemydamagelabel -text {Enemy ship damage:}] -row 1
+grid [ttk::spinbox .newgamemenu.difficultysetting.enemydamage -from 1 -to 500 -increment 1.0] -column 1 -row 1
+.newgamemenu.difficultysetting.enemydamage set 100
+grid [ttk::label .newgamemenu.difficultysetting.playerdamagelabel -text {Player ship damage:}] -row 2
+grid [ttk::spinbox .newgamemenu.difficultysetting.playerdamage -from 1 -to 500 -increment 1.0] -column 1 -row 2
+.newgamemenu.difficultysetting.playerdamage set 100
+grid [ttk::label .newgamemenu.difficultysetting.enemymeleedamagelabel -text {Enemy damage in melee combat:} -wraplength 150] -row 3
+grid [ttk::spinbox .newgamemenu.difficultysetting.enemymeleedamage -from 1 -to 500 -increment 1.0] -column 1 -row 3
+.newgamemenu.difficultysetting.enemymeleedamage set 100
+grid [ttk::label .newgamemenu.difficultysetting.playermeleedamagelabel -text {Player crew damage in melee combat:} -wraplength 150] -row 4
+grid [ttk::spinbox .newgamemenu.difficultysetting.playermeleedamage -from 1 -to 500 -increment 1.0] -column 1 -row 4
+.newgamemenu.difficultysetting.playermeleedamage set 100
+grid [ttk::label .newgamemenu.difficultysetting.experiencelabel -text {Experience gained:}] -row 5
+grid [ttk::spinbox .newgamemenu.difficultysetting.experience -from 1 -to 500 -increment 1.0] -column 1 -row 5
+.newgamemenu.difficultysetting.experience set 100
+grid [ttk::label .newgamemenu.difficultysetting.reputationlabel -text {Reputation gained:}] -row 6
+grid [ttk::spinbox .newgamemenu.difficultysetting.reputation -from 1 -to 500 -increment 1.0] -column 1 -row 6
+.newgamemenu.difficultysetting.reputation set 100
+grid [ttk::label .newgamemenu.difficultysetting.upgradelabel -text {Upgrade cost:}] -row 7
+grid [ttk::spinbox .newgamemenu.difficultysetting.upgrade -from 1 -to 500 -increment 1.0] -column 1 -row 7
+.newgamemenu.difficultysetting.upgrade set 100
 grid [ttk::labelframe .newgamemenu.info -text Info] -row 1 -column 1 -sticky nwes
-grid [ttk::label .newgamemenu.info.text -wraplength [winfo reqwidth .newgamemenu.info]] -sticky nwes
+grid [ttk::label .newgamemenu.info.text -wraplength 200] -sticky nwes
+.newgamemenu.info.text configure -text {General player character settings. Select field which you want to set to see more information about.}
 grid [ttk::frame .newgamemenu.buttonsbox2] -row 2 -columnspan 2
 grid [ttk::button .newgamemenu.buttonsbox2.start -text {Start game} -underline 0] -sticky e
 grid [ttk::button .newgamemenu.buttonsbox2.back -text {Back to menu} -underline 0 -command {
@@ -204,5 +232,4 @@ grid [ttk::button .newgamemenu.buttonsbox2.back -text {Back to menu} -underline 
    pack forget .newgamemenu
    pack .mainmenu -fill both -expand true
 }] -column 1 -row 0 -sticky w
-grid columnconfigure .newgamemenu 1 -weight 1
-grid rowconfigure .newgamemenu 1 -weight 1
+grid rowconfigure .newgamemenu 1 -weight 3
