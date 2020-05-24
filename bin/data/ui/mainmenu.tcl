@@ -10,7 +10,7 @@ ttk::frame .mainmenu
 pack [ttk::label .mainmenu.logo -text {Steam Sky} -font {Rye 70}]
 pack [ttk::label .mainmenu.version -text {Version 5.1 development}]
 pack [ttk::button .mainmenu.newgame -text {New game} -underline 0 -command {
-   set newtab player
+   set newtab difficulty
    bind . <Alt-s> {InvokeButton .newgamemenu.buttonsbox2.start}
    bind . <Alt-b> {InvokeButton .newgamemenu.buttonsbox2.back}
    bind . <Alt-p> {InvokeButton .newgamemenu.buttonsbox.player}
@@ -18,6 +18,7 @@ pack [ttk::button .mainmenu.newgame -text {New game} -underline 0 -command {
    bind . <Escape> {InvokeButton .newgamemenu.buttonsbox2.back}
    pack forget .mainmenu
    pack .newgamemenu -fill both -expand true
+   .newgamemenu.buttonsbox.player invoke
 }]
 ttk::button .mainmenu.loadgame -text {Load game} -underline 0 -command {
    bind . <Alt-d> {InvokeButton .loadmenu.delete}
@@ -167,27 +168,32 @@ grid rowconfigure .loadmenu 0 -weight 1
 
 # New game setting menu
 ttk::frame .newgamemenu
-grid [ttk::frame .newgamemenu.buttonsbox] -sticky we -columnspan 2
-grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state selected -style Toolbutton -value player -variable newtab -underline 0] -sticky e
-grid [ttk::radiobutton .newgamemenu.buttonsbox.difficulty -text Difficulty -style Toolbutton -value difficulty -variable newtab -underline 0] -column 1 -row 0 -sticky w
-grid [ttk::frame .newgamemenu.playersetting] -sticky nwes -row 1
+grid [ttk::frame .newgamemenu.buttonsbox] -columnspan 2
+grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state selected -style Toolbutton -value player -variable newtab -underline 0 -command {
+   grid .newgamemenu.playersetting -sticky nwes -row 1
+}] -sticky e
+grid [ttk::radiobutton .newgamemenu.buttonsbox.difficulty -text Difficulty -style Toolbutton -value difficulty -variable newtab -underline 0 -command {
+   grid forget .newgamemenu.playersetting
+}] -column 1 -row 0 -sticky w
+ttk::frame .newgamemenu.playersetting
 grid [ttk::label .newgamemenu.playersetting.labelplayername -text {Character name:}]
 grid [ttk::entry .newgamemenu.playersetting.playername] -row 0 -column 1
 grid [ttk::label .newgamemenu.playersetting.labelgender -text {Character gender:}] -row 1
-grid [ttk::combobox .newgamemenu.playersetting.gender] -row 1 -column 1
+grid [ttk::combobox .newgamemenu.playersetting.gender -state readonly -values [list Male Female]] -row 1 -column 1
+.newgamemenu.playersetting.gender set Male
 grid [ttk::label .newgamemenu.playersetting.labelshipname -text {Ship name:}] -row 2
 grid [ttk::entry .newgamemenu.playersetting.shipname] -row 2 -column 1
 grid [ttk::label .newgamemenu.playersetting.labelgoal -text {Character goal:}] -row 3
 grid [ttk::button .newgamemenu.playersetting.goal -text {Random}] -row 3 -column 1
 grid [ttk::label .newgamemenu.playersetting.labelfaction -text {Character faction:}] -row 4
-grid [ttk::combobox .newgamemenu.playersetting.faction] -row 4 -column 1
+grid [ttk::combobox .newgamemenu.playersetting.faction -state readonly] -row 4 -column 1
 grid [ttk::label .newgamemenu.playersetting.labelcareer -text {Character career:}] -row 5
-grid [ttk::combobox .newgamemenu.playersetting.career] -row 5 -column 1
+grid [ttk::combobox .newgamemenu.playersetting.career -state readonly] -row 5 -column 1
 grid [ttk::label .newgamemenu.playersetting.labelbase -text {Starting base type:}] -row 6
-grid [ttk::combobox .newgamemenu.playersetting.base] -row 6 -column 1
+grid [ttk::combobox .newgamemenu.playersetting.base -state readonly] -row 6 -column 1
 grid [ttk::labelframe .newgamemenu.info -text Info] -row 1 -column 1 -sticky nwes
 grid [ttk::label .newgamemenu.info.text -wraplength [winfo reqwidth .newgamemenu.info]] -sticky nwes
-grid [ttk::frame .newgamemenu.buttonsbox2] -row 2 -sticky we -columnspan 2
+grid [ttk::frame .newgamemenu.buttonsbox2] -row 2 -columnspan 2
 grid [ttk::button .newgamemenu.buttonsbox2.start -text {Start game} -underline 0] -sticky e
 grid [ttk::button .newgamemenu.buttonsbox2.back -text {Back to menu} -underline 0 -command {
    bind . <Alt-s> {}
@@ -198,3 +204,5 @@ grid [ttk::button .newgamemenu.buttonsbox2.back -text {Back to menu} -underline 
    pack forget .newgamemenu
    pack .mainmenu -fill both -expand true
 }] -column 1 -row 0 -sticky w
+grid columnconfigure .newgamemenu 1 -weight 1
+grid rowconfigure .newgamemenu 1 -weight 1
