@@ -182,7 +182,6 @@ grid [ttk::label .newgamemenu.playersetting.labelplayername -text {Character nam
 grid [ttk::entry .newgamemenu.playersetting.playername -width 15] -row 0 -column 1
 grid [ttk::label .newgamemenu.playersetting.labelgender -text {Character gender:}] -row 1
 grid [ttk::combobox .newgamemenu.playersetting.gender -state readonly -values [list Male Female] -width 14] -row 1 -column 1
-.newgamemenu.playersetting.gender set Male
 grid [ttk::label .newgamemenu.playersetting.labelshipname -text {Ship name:}] -row 2
 grid [ttk::entry .newgamemenu.playersetting.shipname -width 15] -row 2 -column 1
 grid [ttk::label .newgamemenu.playersetting.labelgoal -text {Character goal:}] -row 3
