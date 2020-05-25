@@ -172,14 +172,10 @@ grid [ttk::frame .newgamemenu.buttonsbox] -columnspan 2
 grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state selected -style Toolbutton -value player -variable newtab -underline 0 -command {
    grid forget .newgamemenu.difficultysetting
    grid .newgamemenu.playersetting -sticky nwes -row 1
-   update
-   .newgamemenu.info.text configure -wraplength [winfo width .newgamemenu.info]
 }] -sticky e
 grid [ttk::radiobutton .newgamemenu.buttonsbox.difficulty -text Difficulty -style Toolbutton -value difficulty -variable newtab -underline 0 -command {
    grid forget .newgamemenu.playersetting
    grid .newgamemenu.difficultysetting -sticky nwes -row 1
-   update
-   .newgamemenu.info.text configure -wraplength [winfo width .newgamemenu.info]
 }] -column 1 -row 0 -sticky w
 ttk::frame .newgamemenu.playersetting
 grid [ttk::label .newgamemenu.playersetting.labelplayername -text {Character name:}]
@@ -226,8 +222,9 @@ grid [ttk::label .newgamemenu.difficultysetting.randomizelabel -text {Randomize 
 grid [ttk::checkbutton .newgamemenu.difficultysetting.randomize] -row 9 -column 1
 grid [ttk::label .newgamemenu.difficultysetting.totalpoints -text {Total gained points: 100%}] -row 10 -columnspan 2
 grid [ttk::labelframe .newgamemenu.info -text Info] -row 1 -column 1 -sticky nwes
-grid [ttk::label .newgamemenu.info.text] -sticky nwes
-.newgamemenu.info.text configure -text {General player character settings. Select field which you want to set to see more information about.}
+pack [text .newgamemenu.info.text -wrap word] -expand true -fill both
+.newgamemenu.info.text insert end {General player character settings. Select field which you want to set to see more information about.}
+.newgamemenu.info.text configure -state disabled
 grid [ttk::frame .newgamemenu.buttonsbox2] -row 2 -columnspan 2
 grid [ttk::button .newgamemenu.buttonsbox2.start -text {Start game} -underline 0] -sticky e
 grid [ttk::button .newgamemenu.buttonsbox2.back -text {Back to menu} -underline 0 -command {
