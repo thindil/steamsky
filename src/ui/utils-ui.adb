@@ -37,13 +37,28 @@ with Config; use Config;
 
 package body Utils.UI is
 
+   -- ****iv* UI/Timer_Token
+   -- FUNCTION
+   -- Identifier for the timer for close message dialog
+   -- SOURCE
    Timer_Token: Tcl_TimerToken;
+   -- ****
 
+   -- ****if* UI/Close_Dialog_Command
+   -- FUNCTION
+   -- Close the selected dialog
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
    function Close_Dialog_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
+      -- ****
 
    function Close_Dialog_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -63,8 +78,15 @@ package body Utils.UI is
       return TCL_OK;
    end Close_Dialog_Command;
 
+   -- ****if* UI/CloseMessage
+   -- FUNCTION
+   -- Auto close the message dialog
+   -- PARAMETERS
+   -- data - Custom data sent to the procedure. Unused
+   -- SOURCE
    procedure CloseMessage(data: ClientData) with
       Convention => C;
+      -- ****
 
    procedure CloseMessage(data: ClientData) is
       pragma Unreferenced(data);
@@ -123,8 +145,16 @@ package body Utils.UI is
 
    package CreateCommands is new Tcl.Ada.Generic_Command(Integer);
 
+   -- ****if* UI/AddCommand
+   -- FUNCTION
+   -- Add the selected command to Tcl interpreter
+   -- PARAMETERS
+   -- Name       - The name of the command which will be used in Tcl
+   -- AdaCommand - Ada function which will be invoked
+   -- SOURCE
    procedure AddCommand
      (Name: String; AdaCommand: not null CreateCommands.Tcl_CmdProc) is
+     -- ****
       Command: Tcl.Tcl_Command;
       Aziptk_Add_Command_Error: exception;
    begin
