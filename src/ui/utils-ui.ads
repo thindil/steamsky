@@ -13,21 +13,27 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
--- ****h* Utils.UI/Utils
+-- ****h* Utils/UI
 -- FUNCTION
 -- Provide various code for GUI
 -- SOURCE
 package Utils.UI is
 -- ****
 
-   -- ****f* Utils.UI/ShowMessage
+   -- ****f* UI/ShowMessage
    -- FUNCTION
    -- Show the selected message to a player
    -- PARAMETERS
    -- Text - Text of message to show
-   -- Icon - Tk message icon name: error, info, question or warning
    -- SOURCE
-   procedure ShowMessage(Text, Icon: String);
+   procedure ShowMessage(Text: String);
+   -- ****
+
+   -- ****f* UI/AddCommands
+   -- FUNCTION
+   -- Add various, UI related Tcl commands
+   -- SOURCE
+   procedure AddCommands;
    -- ****
 
 end Utils.UI;

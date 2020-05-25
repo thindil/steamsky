@@ -32,7 +32,7 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Game; use Game;
-with MainMenu.Commands; use MainMenu.Commands;
+with MainMenu.Commands;
 with Utils.UI; use Utils.UI;
 
 package body MainMenu is
@@ -60,7 +60,7 @@ package body MainMenu is
           ("logo", "-file " & UI_Directory & "[file join images icon.png]");
       pragma Unreferenced(Icon);
    begin
-      AddCommands;
+      MainMenu.Commands.AddCommands;
       Wm_Set(MainWindow, "iconphoto", "-default logo");
       DataError := To_Unbounded_String(LoadGameData);
       Tcl_EvalFile(Get_Context, UI_Directory & "mainmenu.tcl");
@@ -115,7 +115,7 @@ package body MainMenu is
          Tcl.Tk.Ada.Pack.Pack_Forget(Button);
          Lower(MainWindow);
          ShowMessage("Can't load game data files. Error: " &
-                 To_String(DataError), "error");
+                 To_String(DataError));
       end if;
    end ShowMainMenu;
 
