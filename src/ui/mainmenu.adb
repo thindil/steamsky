@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Containers; use Ada.Containers;
 with Ada.Directories; use Ada.Directories;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
@@ -28,9 +29,14 @@ with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
+with Config; use Config;
+with Factions; use Factions;
 with Game; use Game;
 with MainMenu.Commands;
 with Utils.UI; use Utils.UI;
@@ -59,6 +65,9 @@ package body MainMenu is
         Create
           ("logo", "-file " & UI_Directory & "[file join images icon.png]");
       pragma Unreferenced(Icon);
+      TextEntry: Ttk_Entry;
+      ComboBox: Ttk_ComboBox;
+      Values: Unbounded_String;
    begin
       MainMenu.Commands.AddCommands;
       Utils.UI.AddCommands;
@@ -67,6 +76,31 @@ package body MainMenu is
       Tcl_EvalFile(Get_Context, UI_Directory & "mainmenu.tcl");
       MainMenuFrame.Interp := Get_Context;
       MainMenuFrame.Name := New_String(".mainmenu");
+      TextEntry.Interp := Get_Context;
+      TextEntry.Name := New_String(".newgamemenu.playersetting.playername");
+      Delete(TextEntry, "0", "end");
+      Insert(TextEntry, "0", To_String(NewGameSettings.PlayerName));
+      ComboBox.Interp := Get_Context;
+      ComboBox.Name := New_String(".newgamemenu.playersetting.gender");
+      if NewGameSettings.PlayerGender = 'M' then
+         Set(ComboBox, "Male");
+      else
+         Set(ComboBox, "Female");
+      end if;
+      TextEntry.Name := New_String(".newgamemenu.playersetting.shipname");
+      Delete(TextEntry, "0", "end");
+      Insert(TextEntry, "0", To_String(NewGameSettings.ShipName));
+      ComboBox.Name := New_String(".newgamemenu.playersetting.faction");
+      for I in Factions_List.Iterate loop
+         if Factions_List(I).Careers.Length > 0 then
+            Append(Values, " {" & Factions_List(I).Name & "}");
+         end if;
+      end loop;
+      Append(Values, " Random");
+      configure(ComboBox, "-values [list" & To_String(Values) & "]");
+      Set
+        (ComboBox,
+         To_String(Factions_List(NewGameSettings.PlayerFaction).Name));
       ShowMainMenu;
    end CreateMainMenu;
 
@@ -114,8 +148,8 @@ package body MainMenu is
          Tcl.Tk.Ada.Pack.Pack_Forget(Button);
          Button.Name := New_String(".mainmenu.loadgame");
          Tcl.Tk.Ada.Pack.Pack_Forget(Button);
-         ShowMessage("Can't load game data files. Error: " &
-                 To_String(DataError));
+         ShowMessage
+           ("Can't load game data files. Error: " & To_String(DataError));
       end if;
    end ShowMainMenu;
 
