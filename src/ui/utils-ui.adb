@@ -22,7 +22,8 @@ with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy; use Tcl.Tk.Ada.Busy;
-with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
+with Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
@@ -67,16 +68,8 @@ package body Utils.UI is
 
    procedure CloseMessage(data: ClientData) is
       pragma Unreferenced(data);
-      Dialog: Tk_Toplevel;
-      MainWindow: constant Tk_Toplevel := Get_Main_Window(Get_Context);
    begin
-      Dialog.Interp := Get_Context;
-      Dialog.Name := New_String(".message");
-      Destroy(Dialog);
-      if Winfo_Get(MainWindow, "exists") = "1"
-        and then Status(MainWindow) = "1" then
-         Forget(MainWindow);
-      end if;
+      Tcl_Eval(Get_Context, "CloseDialog .message");
    end CloseMessage;
 
    procedure ShowMessage(Text: String) is
@@ -84,12 +77,15 @@ package body Utils.UI is
         Create(".message", "-class Dialog");
       MainWindow: constant Tk_Toplevel := Get_Main_Window(Get_Context);
       X, Y: Integer;
+      MessageFrame: constant Ttk_Frame := Create(".message.frame");
       MessageLabel: constant Ttk_Label :=
-        Create(".message.text", "-text {" & Text & "} -wraplength 300");
-      Width: constant Positive :=
-        Positive'Value(Winfo_Get(MessageLabel, "reqwidth"));
-      Height: constant Positive :=
-        Positive'Value(Winfo_Get(MessageLabel, "reqheight"));
+        Create
+          (Widget_Image(MessageFrame) & ".text",
+           "-text {" & Text & "} -wraplength 300");
+      MessageButton: constant Ttk_Button :=
+        Create
+          (Widget_Image(MessageFrame) & ".button",
+           "-text X -command {CloseDialog .message} -style Toolbutton");
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
       if Timer_Token /= null then
@@ -100,30 +96,29 @@ package body Utils.UI is
       if Tcl_GetVar(Get_Context, "tcl_platform(os)") = "Linux" then
          Wm_Set(MessageDialog, "attributes", "-type dialog");
       end if;
-      X :=
-        (Positive'Value(Winfo_Get(MessageDialog, "vrootwidth")) - Width) / 2;
+      Tcl.Tk.Ada.Grid.Grid(MessageLabel, "-sticky we");
+      Tcl.Tk.Ada.Grid.Grid(MessageButton, "-row 0 -column 1");
+      Tcl.Tk.Ada.Pack.Pack(MessageFrame, "-expand true -fill both");
+      X := (Positive'Value(Winfo_Get(MessageDialog, "vrootwidth")) - 450) / 2;
       if X < 0 then
          X := 0;
       end if;
-      Y :=
-        (Positive'Value(Winfo_Get(MessageDialog, "vrootheight")) - Height) / 2;
+      Y := (Positive'Value(Winfo_Get(MessageDialog, "vrootheight")) - 200) / 2;
       if Y < 0 then
          Y := 0;
       end if;
       Wm_Set
         (MessageDialog, "geometry",
-         Trim(Positive'Image(Width), Left) & "x" &
-         Trim(Positive'Image(Height), Left) & "+" &
-         Trim(Positive'Image(X), Left) & "+" & Trim(Positive'Image(Y), Left));
+         "400x200" & "+" & Trim(Positive'Image(X), Left) & "+" &
+         Trim(Positive'Image(Y), Left));
+      Focus(MessageButton);
       Bind
         (MessageDialog, "<Destroy>",
          "{CloseDialog " & Value(MessageDialog.Name) & "}");
-      if GameSettings.AutoCloseMessagesTime > 0 then
-         Timer_Token :=
-           Tcl_CreateTimerHandler
-             (int(GameSettings.AutoCloseMessagesTime) * 1_000,
-              CloseMessage'Access, Null_ClientData);
-      end if;
+      Timer_Token :=
+        Tcl_CreateTimerHandler
+          (int(GameSettings.AutoCloseMessagesTime) * 1_000,
+           CloseMessage'Access, Null_ClientData);
    end ShowMessage;
 
    package CreateCommands is new Tcl.Ada.Generic_Command(Integer);
