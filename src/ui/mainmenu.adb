@@ -61,6 +61,7 @@ package body MainMenu is
       pragma Unreferenced(Icon);
    begin
       MainMenu.Commands.AddCommands;
+      Utils.UI.AddCommands;
       Wm_Set(MainWindow, "iconphoto", "-default logo");
       DataError := To_Unbounded_String(LoadGameData);
       Tcl_EvalFile(Get_Context, UI_Directory & "mainmenu.tcl");
@@ -113,7 +114,6 @@ package body MainMenu is
          Tcl.Tk.Ada.Pack.Pack_Forget(Button);
          Button.Name := New_String(".mainmenu.loadgame");
          Tcl.Tk.Ada.Pack.Pack_Forget(Button);
-         Lower(MainWindow);
          ShowMessage("Can't load game data files. Error: " &
                  To_String(DataError));
       end if;
