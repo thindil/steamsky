@@ -1,3 +1,5 @@
+package require tooltip
+
 proc InvokeButton {name} {
    if {[winfo ismapped $name] == "1"} {
       focus $name
@@ -169,7 +171,8 @@ grid rowconfigure .loadmenu 0 -weight 1
 # New game setting menu
 ttk::frame .newgamemenu
 set windowid {}
-grid [ttk::frame .newgamemenu.buttonsbox] -columnspan 2
+set tooltips [list "General player character settings. Select field which you want to set to see more information about." "Enter character name or press Enter key for random name." "Select the gender of your character." "Enter ship name or press Enter for random ship name." "Select starting goal for your character.\nYou can change it later in game." "Select your faction from a list. Factions have the biggest impact on game.\nThey determine the amount of bases and some playing styles.\nMore information about each faction can be found after selecting it.\nYou can't change this later." "Select your career from a list. Careers have some impact on gameplay\n(each have bonuses to gaining experience in some fields plus\nthey determine your starting ship and crew). More info about each\ncareer can be found after selecting it. You can't change career later." "Select type of base in which you will start the game.\nThis may have some impact on game difficulty."]
+grid [ttk::frame .newgamemenu.buttonsbox] -columnspan 3
 grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state selected -style Toolbutton -value player -variable newtab -underline 0 -command {
    .newgamemenu.canvas delete $windowid
    set windowid [.newgamemenu.canvas create window 180 150 -window .newgamemenu.canvas.player]
@@ -185,18 +188,25 @@ grid [ttk::scrollbar .newgamemenu.scrollbar -orient vertical -command [list .new
 ttk::frame .newgamemenu.canvas.player
 grid [ttk::label .newgamemenu.canvas.player.labelplayername -text {Character name:}]
 grid [ttk::entry .newgamemenu.canvas.player.playername -width 15] -row 0 -column 1
+tooltip::tooltip .newgamemenu.canvas.player.playername [lindex $tooltips 1]
 grid [ttk::label .newgamemenu.canvas.player.labelgender -text {Character gender:}] -row 1
 grid [ttk::combobox .newgamemenu.canvas.player.gender -state readonly -values [list Male Female] -width 14] -row 1 -column 1
+tooltip::tooltip .newgamemenu.canvas.player.gender [lindex $tooltips 2]
 grid [ttk::label .newgamemenu.canvas.player.labelshipname -text {Ship name:}] -row 2
 grid [ttk::entry .newgamemenu.canvas.player.shipname -width 15] -row 2 -column 1
+tooltip::tooltip .newgamemenu.canvas.player.shipname [lindex $tooltips 3]
 grid [ttk::label .newgamemenu.canvas.player.labelgoal -text {Character goal:}] -row 3
 grid [ttk::button .newgamemenu.canvas.player.goal -text {Random}] -row 3 -column 1
+tooltip::tooltip .newgamemenu.canvas.player.goal [lindex $tooltips 4]
 grid [ttk::label .newgamemenu.canvas.player.labelfaction -text {Character faction:}] -row 4
 grid [ttk::combobox .newgamemenu.canvas.player.faction -state readonly -width 14] -row 4 -column 1
+tooltip::tooltip .newgamemenu.canvas.player.faction [lindex $tooltips 5]
 grid [ttk::label .newgamemenu.canvas.player.labelcareer -text {Character career:}] -row 5
 grid [ttk::combobox .newgamemenu.canvas.player.career -state readonly -width 14] -row 5 -column 1
+tooltip::tooltip .newgamemenu.canvas.player.career [lindex $tooltips 6]
 grid [ttk::label .newgamemenu.canvas.player.labelbase -text {Starting base type:}] -row 6
 grid [ttk::combobox .newgamemenu.canvas.player.base -state readonly -width 14] -row 6 -column 1
+tooltip::tooltip .newgamemenu.canvas.player.base [lindex $tooltips 7]
 ttk::frame .newgamemenu.canvas.difficulty
 grid [ttk::label .newgamemenu.canvas.difficulty.difficultylabel -text {Difficulty level:}]
 grid [ttk::combobox .newgamemenu.canvas.difficulty.difficultylevel -state readonly -values [list {Very Easy} Easy Normal Hard {Very Hard}] -width 7] -column 1 -row 0
@@ -231,7 +241,7 @@ pack [ttk::scrollbar .newgamemenu.info.scroll -orient vertical -command [list .n
 pack [text .newgamemenu.info.text -wrap word -yscrollcommand [list .newgamemenu.info.scroll set]] -expand true -fill both -side top
 .newgamemenu.info.text insert end {General player character settings. Select field which you want to set to see more information about.}
 .newgamemenu.info.text configure -state disabled
-grid [ttk::frame .newgamemenu.buttonsbox2] -row 2 -columnspan 2
+grid [ttk::frame .newgamemenu.buttonsbox2] -row 2 -columnspan 3
 grid [ttk::button .newgamemenu.buttonsbox2.start -text {Start game} -underline 0] -sticky e
 grid [ttk::button .newgamemenu.buttonsbox2.back -text {Back to menu} -underline 0 -command {
    bind . <Alt-s> {}
