@@ -77,20 +77,20 @@ package body MainMenu is
       MainMenuFrame.Interp := Get_Context;
       MainMenuFrame.Name := New_String(".mainmenu");
       TextEntry.Interp := Get_Context;
-      TextEntry.Name := New_String(".newgamemenu.playersetting.playername");
+      TextEntry.Name := New_String(".newgamemenu.canvas.player.playername");
       Delete(TextEntry, "0", "end");
       Insert(TextEntry, "0", To_String(NewGameSettings.PlayerName));
       ComboBox.Interp := Get_Context;
-      ComboBox.Name := New_String(".newgamemenu.playersetting.gender");
+      ComboBox.Name := New_String(".newgamemenu.canvas.player.gender");
       if NewGameSettings.PlayerGender = 'M' then
          Set(ComboBox, "Male");
       else
          Set(ComboBox, "Female");
       end if;
-      TextEntry.Name := New_String(".newgamemenu.playersetting.shipname");
+      TextEntry.Name := New_String(".newgamemenu.canvas.player.shipname");
       Delete(TextEntry, "0", "end");
       Insert(TextEntry, "0", To_String(NewGameSettings.ShipName));
-      ComboBox.Name := New_String(".newgamemenu.playersetting.faction");
+      ComboBox.Name := New_String(".newgamemenu.canvas.player.faction");
       for I in Factions_List.Iterate loop
          if Factions_List(I).Careers.Length > 0 then
             Append(Values, " {" & Factions_List(I).Name & "}");
