@@ -168,59 +168,61 @@ grid rowconfigure .loadmenu 0 -weight 1
 
 # New game setting menu
 ttk::frame .newgamemenu
+set windowid {}
 grid [ttk::frame .newgamemenu.buttonsbox] -columnspan 2
 grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state selected -style Toolbutton -value player -variable newtab -underline 0 -command {
-   grid forget .newgamemenu.difficultysetting
-   grid .newgamemenu.playersetting -sticky nwes -row 1
+   .newgamemenu.canvas delete $windowid
+   set windowid [.newgamemenu.canvas create window 180 150 -window .newgamemenu.canvas.player]
 }] -sticky e
 grid [ttk::radiobutton .newgamemenu.buttonsbox.difficulty -text Difficulty -style Toolbutton -value difficulty -variable newtab -underline 0 -command {
-   grid forget .newgamemenu.playersetting
-   grid .newgamemenu.difficultysetting -sticky nwes -row 1
+   .newgamemenu.canvas delete $windowid
+   set windowid [.newgamemenu.canvas create window 180 230 -window .newgamemenu.canvas.difficulty]
 }] -column 1 -row 0 -sticky w
-ttk::frame .newgamemenu.playersetting
-grid [ttk::label .newgamemenu.playersetting.labelplayername -text {Character name:}]
-grid [ttk::entry .newgamemenu.playersetting.playername -width 15] -row 0 -column 1
-grid [ttk::label .newgamemenu.playersetting.labelgender -text {Character gender:}] -row 1
-grid [ttk::combobox .newgamemenu.playersetting.gender -state readonly -values [list Male Female] -width 14] -row 1 -column 1
-grid [ttk::label .newgamemenu.playersetting.labelshipname -text {Ship name:}] -row 2
-grid [ttk::entry .newgamemenu.playersetting.shipname -width 15] -row 2 -column 1
-grid [ttk::label .newgamemenu.playersetting.labelgoal -text {Character goal:}] -row 3
-grid [ttk::button .newgamemenu.playersetting.goal -text {Random}] -row 3 -column 1
-grid [ttk::label .newgamemenu.playersetting.labelfaction -text {Character faction:}] -row 4
-grid [ttk::combobox .newgamemenu.playersetting.faction -state readonly -width 14] -row 4 -column 1
-grid [ttk::label .newgamemenu.playersetting.labelcareer -text {Character career:}] -row 5
-grid [ttk::combobox .newgamemenu.playersetting.career -state readonly -width 14] -row 5 -column 1
-grid [ttk::label .newgamemenu.playersetting.labelbase -text {Starting base type:}] -row 6
-grid [ttk::combobox .newgamemenu.playersetting.base -state readonly -width 14] -row 6 -column 1
-ttk::frame .newgamemenu.difficultysetting
-grid [ttk::label .newgamemenu.difficultysetting.difficultylabel -text {Difficulty level:}]
-grid [ttk::combobox .newgamemenu.difficultysetting.difficultylevel -state readonly -values [list {Very Easy} Easy Normal Hard {Very Hard}] -width 7] -column 1 -row 0
-.newgamemenu.difficultysetting.difficultylevel set Normal
-grid [ttk::label .newgamemenu.difficultysetting.enemydamagelabel -text {Enemy ship damage:}] -row 1
-grid [ttk::spinbox .newgamemenu.difficultysetting.enemydamage -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 1
-.newgamemenu.difficultysetting.enemydamage set 100
-grid [ttk::label .newgamemenu.difficultysetting.playerdamagelabel -text {Player ship damage:}] -row 2
-grid [ttk::spinbox .newgamemenu.difficultysetting.playerdamage -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 2
-.newgamemenu.difficultysetting.playerdamage set 100
-grid [ttk::label .newgamemenu.difficultysetting.enemymeleedamagelabel -text {Enemy damage in melee combat:} -wraplength 150] -row 3
-grid [ttk::spinbox .newgamemenu.difficultysetting.enemymeleedamage -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 3
-.newgamemenu.difficultysetting.enemymeleedamage set 100
-grid [ttk::label .newgamemenu.difficultysetting.playermeleedamagelabel -text {Player crew damage in melee combat:} -wraplength 150] -row 4
-grid [ttk::spinbox .newgamemenu.difficultysetting.playermeleedamage -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 4
-.newgamemenu.difficultysetting.playermeleedamage set 100
-grid [ttk::label .newgamemenu.difficultysetting.experiencelabel -text {Experience gained:}] -row 5
-grid [ttk::spinbox .newgamemenu.difficultysetting.experience -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 5
-.newgamemenu.difficultysetting.experience set 100
-grid [ttk::label .newgamemenu.difficultysetting.reputationlabel -text {Reputation gained:}] -row 6
-grid [ttk::spinbox .newgamemenu.difficultysetting.reputation -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 6
-.newgamemenu.difficultysetting.reputation set 100
-grid [ttk::label .newgamemenu.difficultysetting.upgradelabel -text {Upgrade cost:}] -row 7
-grid [ttk::spinbox .newgamemenu.difficultysetting.upgrade -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 7
-.newgamemenu.difficultysetting.upgrade set 100
-grid [ttk::button .newgamemenu.difficultysetting.random -text Random] -row 8 -columnspan 2 -sticky we
-grid [ttk::label .newgamemenu.difficultysetting.randomizelabel -text {Randomize difficulty on game start} -wraplength 150] -row 9
-grid [ttk::checkbutton .newgamemenu.difficultysetting.randomize] -row 9 -column 1
-grid [ttk::label .newgamemenu.difficultysetting.totalpoints -text {Total gained points: 100%}] -row 10 -columnspan 2
+grid [canvas .newgamemenu.canvas] -sticky nwes -row 1
+ttk::frame .newgamemenu.canvas.player
+grid [ttk::label .newgamemenu.canvas.player.labelplayername -text {Character name:}]
+grid [ttk::entry .newgamemenu.canvas.player.playername -width 15] -row 0 -column 1
+grid [ttk::label .newgamemenu.canvas.player.labelgender -text {Character gender:}] -row 1
+grid [ttk::combobox .newgamemenu.canvas.player.gender -state readonly -values [list Male Female] -width 14] -row 1 -column 1
+grid [ttk::label .newgamemenu.canvas.player.labelshipname -text {Ship name:}] -row 2
+grid [ttk::entry .newgamemenu.canvas.player.shipname -width 15] -row 2 -column 1
+grid [ttk::label .newgamemenu.canvas.player.labelgoal -text {Character goal:}] -row 3
+grid [ttk::button .newgamemenu.canvas.player.goal -text {Random}] -row 3 -column 1
+grid [ttk::label .newgamemenu.canvas.player.labelfaction -text {Character faction:}] -row 4
+grid [ttk::combobox .newgamemenu.canvas.player.faction -state readonly -width 14] -row 4 -column 1
+grid [ttk::label .newgamemenu.canvas.player.labelcareer -text {Character career:}] -row 5
+grid [ttk::combobox .newgamemenu.canvas.player.career -state readonly -width 14] -row 5 -column 1
+grid [ttk::label .newgamemenu.canvas.player.labelbase -text {Starting base type:}] -row 6
+grid [ttk::combobox .newgamemenu.canvas.player.base -state readonly -width 14] -row 6 -column 1
+ttk::frame .newgamemenu.canvas.difficulty
+grid [ttk::label .newgamemenu.canvas.difficulty.difficultylabel -text {Difficulty level:}]
+grid [ttk::combobox .newgamemenu.canvas.difficulty.difficultylevel -state readonly -values [list {Very Easy} Easy Normal Hard {Very Hard}] -width 7] -column 1 -row 0
+.newgamemenu.canvas.difficulty.difficultylevel set Normal
+grid [ttk::label .newgamemenu.canvas.difficulty.enemydamagelabel -text {Enemy ship damage:}] -row 1
+grid [ttk::spinbox .newgamemenu.canvas.difficulty.enemydamage -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 1
+.newgamemenu.canvas.difficulty.enemydamage set 100
+grid [ttk::label .newgamemenu.canvas.difficulty.playerdamagelabel -text {Player ship damage:}] -row 2
+grid [ttk::spinbox .newgamemenu.canvas.difficulty.playerdamage -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 2
+.newgamemenu.canvas.difficulty.playerdamage set 100
+grid [ttk::label .newgamemenu.canvas.difficulty.enemymeleedamagelabel -text {Enemy damage in melee combat:} -wraplength 150] -row 3
+grid [ttk::spinbox .newgamemenu.canvas.difficulty.enemymeleedamage -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 3
+.newgamemenu.canvas.difficulty.enemymeleedamage set 100
+grid [ttk::label .newgamemenu.canvas.difficulty.playermeleedamagelabel -text {Player crew damage in melee combat:} -wraplength 150] -row 4
+grid [ttk::spinbox .newgamemenu.canvas.difficulty.playermeleedamage -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 4
+.newgamemenu.canvas.difficulty.playermeleedamage set 100
+grid [ttk::label .newgamemenu.canvas.difficulty.experiencelabel -text {Experience gained:}] -row 5
+grid [ttk::spinbox .newgamemenu.canvas.difficulty.experience -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 5
+.newgamemenu.canvas.difficulty.experience set 100
+grid [ttk::label .newgamemenu.canvas.difficulty.reputationlabel -text {Reputation gained:}] -row 6
+grid [ttk::spinbox .newgamemenu.canvas.difficulty.reputation -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 6
+.newgamemenu.canvas.difficulty.reputation set 100
+grid [ttk::label .newgamemenu.canvas.difficulty.upgradelabel -text {Upgrade cost:}] -row 7
+grid [ttk::spinbox .newgamemenu.canvas.difficulty.upgrade -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 7
+.newgamemenu.canvas.difficulty.upgrade set 100
+grid [ttk::button .newgamemenu.canvas.difficulty.random -text Random] -row 8 -columnspan 2 -sticky we
+grid [ttk::label .newgamemenu.canvas.difficulty.randomizelabel -text {Randomize difficulty on game start} -wraplength 150] -row 9
+grid [ttk::checkbutton .newgamemenu.canvas.difficulty.randomize] -row 9 -column 1
+grid [ttk::label .newgamemenu.canvas.difficulty.totalpoints -text {Total gained points: 100%}] -row 10 -columnspan 2
 grid [ttk::labelframe .newgamemenu.info -text Info] -row 1 -column 1 -sticky nwes
 pack [ttk::scrollbar .newgamemenu.info.scroll -orient vertical -command [list .newgamemenu.info.text yview]] -side right -fill y
 pack [text .newgamemenu.info.text -wrap word -yscrollcommand [list .newgamemenu.info.scroll set]] -expand true -fill both -side top
