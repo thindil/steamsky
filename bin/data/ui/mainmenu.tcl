@@ -249,13 +249,17 @@ grid [ttk::label .newgamemenu.canvas.difficulty.upgradelabel -text {Upgrade cost
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.upgrade -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 7
 .newgamemenu.canvas.difficulty.upgrade set 100
 tooltip::tooltip .newgamemenu.canvas.difficulty.upgrade [lindex $difficultytooltips 8]
-grid [ttk::button .newgamemenu.canvas.difficulty.random -text Random] -row 8 -columnspan 2 -sticky we
+grid [ttk::label .newgamemenu.canvas.difficulty.priceslabel -text {Prices in bases:}] -row 8
+grid [ttk::spinbox .newgamemenu.canvas.difficulty.prices -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 8
+.newgamemenu.canvas.difficulty.prices set 100
+tooltip::tooltip .newgamemenu.canvas.difficulty.prices [lindex $difficultytooltips 9]
+grid [ttk::button .newgamemenu.canvas.difficulty.random -text Random] -row 9 -columnspan 2 -sticky we
 tooltip::tooltip .newgamemenu.canvas.difficulty.random [lindex $difficultytooltips 10]
-grid [ttk::label .newgamemenu.canvas.difficulty.randomizelabel -text {Randomize difficulty on game start} -wraplength 150] -row 9
+grid [ttk::label .newgamemenu.canvas.difficulty.randomizelabel -text {Randomize difficulty on game start} -wraplength 150] -row 10
 tooltip::tooltip .newgamemenu.canvas.difficulty.randomizelabel [lindex $difficultytooltips 11]
-grid [ttk::checkbutton .newgamemenu.canvas.difficulty.randomize] -row 9 -column 1
+grid [ttk::checkbutton .newgamemenu.canvas.difficulty.randomize] -row 10 -column 1
 tooltip::tooltip .newgamemenu.canvas.difficulty.randomize [lindex $difficultytooltips 11]
-grid [ttk::label .newgamemenu.canvas.difficulty.totalpoints -text {Total gained points: 100%}] -row 10 -columnspan 2
+grid [ttk::label .newgamemenu.canvas.difficulty.totalpoints -text {Total gained points: 100%}] -row 11 -columnspan 2
 grid [ttk::labelframe .newgamemenu.info -text Info] -row 1 -column 2 -sticky nwes
 pack [ttk::scrollbar .newgamemenu.info.scroll -orient vertical -command [list .newgamemenu.info.text yview]] -side right -fill y
 pack [text .newgamemenu.info.text -wrap word -yscrollcommand [list .newgamemenu.info.scroll set]] -expand true -fill both -side top
