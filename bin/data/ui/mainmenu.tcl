@@ -173,12 +173,15 @@ grid [ttk::frame .newgamemenu.buttonsbox] -columnspan 2
 grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state selected -style Toolbutton -value player -variable newtab -underline 0 -command {
    .newgamemenu.canvas delete $windowid
    set windowid [.newgamemenu.canvas create window 180 150 -window .newgamemenu.canvas.player]
+   .newgamemenu.canvas configure -width [winfo reqwidth .newgamemenu.canvas.player] -height [winfo reqheight .newgamemenu.canvas.player] -scrollregion [.newgamemenu.canvas bbox all]
 }] -sticky e
 grid [ttk::radiobutton .newgamemenu.buttonsbox.difficulty -text Difficulty -style Toolbutton -value difficulty -variable newtab -underline 0 -command {
    .newgamemenu.canvas delete $windowid
    set windowid [.newgamemenu.canvas create window 180 230 -window .newgamemenu.canvas.difficulty]
+   .newgamemenu.canvas configure -width [winfo reqwidth .newgamemenu.canvas.difficulty] -height [winfo reqheight .newgamemenu.canvas.difficulty] -scrollregion [.newgamemenu.canvas bbox all]
 }] -column 1 -row 0 -sticky w
-grid [canvas .newgamemenu.canvas] -sticky nwes -row 1
+grid [canvas .newgamemenu.canvas -yscrollcommand [list .newgamemenu.scrollbar set]] -sticky nwes -row 1
+grid [ttk::scrollbar .newgamemenu.scrollbar -orient vertical -command [list .newgamemenu.canvas yview]] -sticky ns -row 1 -column 1
 ttk::frame .newgamemenu.canvas.player
 grid [ttk::label .newgamemenu.canvas.player.labelplayername -text {Character name:}]
 grid [ttk::entry .newgamemenu.canvas.player.playername -width 15] -row 0 -column 1
@@ -223,7 +226,7 @@ grid [ttk::button .newgamemenu.canvas.difficulty.random -text Random] -row 8 -co
 grid [ttk::label .newgamemenu.canvas.difficulty.randomizelabel -text {Randomize difficulty on game start} -wraplength 150] -row 9
 grid [ttk::checkbutton .newgamemenu.canvas.difficulty.randomize] -row 9 -column 1
 grid [ttk::label .newgamemenu.canvas.difficulty.totalpoints -text {Total gained points: 100%}] -row 10 -columnspan 2
-grid [ttk::labelframe .newgamemenu.info -text Info] -row 1 -column 1 -sticky nwes
+grid [ttk::labelframe .newgamemenu.info -text Info] -row 1 -column 2 -sticky nwes
 pack [ttk::scrollbar .newgamemenu.info.scroll -orient vertical -command [list .newgamemenu.info.text yview]] -side right -fill y
 pack [text .newgamemenu.info.text -wrap word -yscrollcommand [list .newgamemenu.info.scroll set]] -expand true -fill both -side top
 .newgamemenu.info.text insert end {General player character settings. Select field which you want to set to see more information about.}
