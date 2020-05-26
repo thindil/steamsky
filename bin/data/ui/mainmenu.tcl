@@ -222,7 +222,8 @@ grid [ttk::label .newgamemenu.difficultysetting.randomizelabel -text {Randomize 
 grid [ttk::checkbutton .newgamemenu.difficultysetting.randomize] -row 9 -column 1
 grid [ttk::label .newgamemenu.difficultysetting.totalpoints -text {Total gained points: 100%}] -row 10 -columnspan 2
 grid [ttk::labelframe .newgamemenu.info -text Info] -row 1 -column 1 -sticky nwes
-pack [text .newgamemenu.info.text -wrap word] -expand true -fill both
+pack [ttk::scrollbar .newgamemenu.info.scroll -orient vertical -command [list .newgamemenu.info.text yview]] -side right -fill y
+pack [text .newgamemenu.info.text -wrap word -yscrollcommand [list .newgamemenu.info.scroll set]] -expand true -fill both -side top
 .newgamemenu.info.text insert end {General player character settings. Select field which you want to set to see more information about.}
 .newgamemenu.info.text configure -state disabled
 grid [ttk::frame .newgamemenu.buttonsbox2] -row 2 -columnspan 2
