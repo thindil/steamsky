@@ -172,6 +172,7 @@ grid rowconfigure .loadmenu 0 -weight 1
 ttk::frame .newgamemenu
 set windowid {}
 set playertooltips [list "General player character settings. Select field which you want to set to see more information about." "Enter character name or press Enter key for random name." "Select the gender of your character." "Enter ship name or press Enter for random ship name." "Select starting goal for your character.\nYou can change it later in game." "Select your faction from a list. Factions have the biggest impact on game.\nThey determine the amount of bases and some playing styles.\nMore information about each faction can be found after selecting it.\nYou can't change this later." "Select your career from a list. Careers have some impact on gameplay\n(each have bonuses to gaining experience in some fields plus\nthey determine your starting ship and crew). More info about each\ncareer can be found after selecting it. You can't change career later." "Select type of base in which you will start the game.\nThis may have some impact on game difficulty."]
+set difficultytooltips [list "Set difficulty of new game. Each value can be between 1 and 500. Each change has an impact not only on the game's difficulty but also on amount of points gained in the game. Select a field to get more information about it." "Select game difficulty preset level." "Percentage of damage done by enemy ships in combat. Lowering it makes the  game easier but lowers the amount of score gained as well." "Percentage of damage done by the player's ship in combat. Raising it makes the game easier but lowers the amount of score gained as well." "Percentage of damage done by enemies in melee combat. Lowering it makes the game easier but lowers the amount of score gained as well." "Percentage of damage done by player's crew (and player character) in melee combat. Raising it makes the game easier but lowers the amount of score gained as well." "Percentage of experience gained by player and their crew from actions. Raising it makes the game easier but lowers the amount of score gained as well." "Percentage of reputation in bases gained or lost by player in sky bases due to player actions. Raising it makes the game easier but lowers the amount of score gained as well." "Percentage of the standard material cost and time needed for upgrading ship modules. Lowering it makes the game easier but lowers the amount of score gained as well." "Percentage of the standard prices for services in bases (docking, repairing ship, recruiting new crew members, etc). Lowering it makes the game easier but lowers the amount of score gained as well." "Select random values for all settings." "If you select this option, all difficulty settings will be randomized during start new game. Not recommended for new players."]
 grid [ttk::frame .newgamemenu.buttonsbox] -columnspan 3
 grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state selected -style Toolbutton -value player -variable newtab -underline 0 -command {
    .newgamemenu.info.text configure -state normal
@@ -183,6 +184,10 @@ grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state select
    .newgamemenu.canvas configure -width [winfo reqwidth .newgamemenu.canvas.player] -height [winfo reqheight .newgamemenu.canvas.player] -scrollregion [.newgamemenu.canvas bbox all]
 }] -sticky e
 grid [ttk::radiobutton .newgamemenu.buttonsbox.difficulty -text Difficulty -style Toolbutton -value difficulty -variable newtab -underline 0 -command {
+   .newgamemenu.info.text configure -state normal
+   .newgamemenu.info.text delete 1.0 end
+   .newgamemenu.info.text insert end [lindex $difficultytooltips 0]
+   .newgamemenu.info.text configure -state disabled
    .newgamemenu.canvas delete $windowid
    set windowid [.newgamemenu.canvas create window [expr [winfo reqwidth .newgamemenu.canvas.difficulty] / 2] [expr [winfo reqheight .newgamemenu.canvas.difficulty] / 2] -window .newgamemenu.canvas.difficulty]
    .newgamemenu.canvas configure -width [winfo reqwidth .newgamemenu.canvas.difficulty] -height [winfo reqheight .newgamemenu.canvas.difficulty] -scrollregion [.newgamemenu.canvas bbox all]
@@ -215,30 +220,41 @@ ttk::frame .newgamemenu.canvas.difficulty
 grid [ttk::label .newgamemenu.canvas.difficulty.difficultylabel -text {Difficulty level:}]
 grid [ttk::combobox .newgamemenu.canvas.difficulty.difficultylevel -state readonly -values [list {Very Easy} Easy Normal Hard {Very Hard}] -width 7] -column 1 -row 0
 .newgamemenu.canvas.difficulty.difficultylevel set Normal
+tooltip::tooltip .newgamemenu.canvas.difficulty.difficultylevel [lindex $difficultytooltips 1]
 grid [ttk::label .newgamemenu.canvas.difficulty.enemydamagelabel -text {Enemy ship damage:}] -row 1
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.enemydamage -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 1
 .newgamemenu.canvas.difficulty.enemydamage set 100
+tooltip::tooltip .newgamemenu.canvas.difficulty.enemydamage [lindex $difficultytooltips 2]
 grid [ttk::label .newgamemenu.canvas.difficulty.playerdamagelabel -text {Player ship damage:}] -row 2
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.playerdamage -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 2
 .newgamemenu.canvas.difficulty.playerdamage set 100
+tooltip::tooltip .newgamemenu.canvas.difficulty.playerdamage [lindex $difficultytooltips 3]
 grid [ttk::label .newgamemenu.canvas.difficulty.enemymeleedamagelabel -text {Enemy damage in melee combat:} -wraplength 150] -row 3
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.enemymeleedamage -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 3
 .newgamemenu.canvas.difficulty.enemymeleedamage set 100
+tooltip::tooltip .newgamemenu.canvas.difficulty.enemymeleedamage [lindex $difficultytooltips 4]
 grid [ttk::label .newgamemenu.canvas.difficulty.playermeleedamagelabel -text {Player crew damage in melee combat:} -wraplength 150] -row 4
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.playermeleedamage -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 4
 .newgamemenu.canvas.difficulty.playermeleedamage set 100
+tooltip::tooltip .newgamemenu.canvas.difficulty.playermeleedamage [lindex $difficultytooltips 5]
 grid [ttk::label .newgamemenu.canvas.difficulty.experiencelabel -text {Experience gained:}] -row 5
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.experience -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 5
 .newgamemenu.canvas.difficulty.experience set 100
+tooltip::tooltip .newgamemenu.canvas.difficulty.experience [lindex $difficultytooltips 6]
 grid [ttk::label .newgamemenu.canvas.difficulty.reputationlabel -text {Reputation gained:}] -row 6
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.reputation -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 6
 .newgamemenu.canvas.difficulty.reputation set 100
+tooltip::tooltip .newgamemenu.canvas.difficulty.reputation [lindex $difficultytooltips 7]
 grid [ttk::label .newgamemenu.canvas.difficulty.upgradelabel -text {Upgrade cost:}] -row 7
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.upgrade -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 7
 .newgamemenu.canvas.difficulty.upgrade set 100
+tooltip::tooltip .newgamemenu.canvas.difficulty.upgrade [lindex $difficultytooltips 8]
 grid [ttk::button .newgamemenu.canvas.difficulty.random -text Random] -row 8 -columnspan 2 -sticky we
+tooltip::tooltip .newgamemenu.canvas.difficulty.random [lindex $difficultytooltips 10]
 grid [ttk::label .newgamemenu.canvas.difficulty.randomizelabel -text {Randomize difficulty on game start} -wraplength 150] -row 9
+tooltip::tooltip .newgamemenu.canvas.difficulty.randomizelabel [lindex $difficultytooltips 11]
 grid [ttk::checkbutton .newgamemenu.canvas.difficulty.randomize] -row 9 -column 1
+tooltip::tooltip .newgamemenu.canvas.difficulty.randomize [lindex $difficultytooltips 11]
 grid [ttk::label .newgamemenu.canvas.difficulty.totalpoints -text {Total gained points: 100%}] -row 10 -columnspan 2
 grid [ttk::labelframe .newgamemenu.info -text Info] -row 1 -column 2 -sticky nwes
 pack [ttk::scrollbar .newgamemenu.info.scroll -orient vertical -command [list .newgamemenu.info.text yview]] -side right -fill y
