@@ -179,12 +179,12 @@ grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state select
    .newgamemenu.info.text insert end [lindex $playertooltips 0]
    .newgamemenu.info.text configure -state disabled
    .newgamemenu.canvas delete $windowid
-   set windowid [.newgamemenu.canvas create window 180 150 -window .newgamemenu.canvas.player]
+   set windowid [.newgamemenu.canvas create window [expr [winfo reqwidth .newgamemenu.canvas.player] / 2] [expr [winfo reqheight .newgamemenu.canvas.player] / 2] -window .newgamemenu.canvas.player]
    .newgamemenu.canvas configure -width [winfo reqwidth .newgamemenu.canvas.player] -height [winfo reqheight .newgamemenu.canvas.player] -scrollregion [.newgamemenu.canvas bbox all]
 }] -sticky e
 grid [ttk::radiobutton .newgamemenu.buttonsbox.difficulty -text Difficulty -style Toolbutton -value difficulty -variable newtab -underline 0 -command {
    .newgamemenu.canvas delete $windowid
-   set windowid [.newgamemenu.canvas create window 180 230 -window .newgamemenu.canvas.difficulty]
+   set windowid [.newgamemenu.canvas create window [expr [winfo reqwidth .newgamemenu.canvas.difficulty] / 2] [expr [winfo reqheight .newgamemenu.canvas.difficulty] / 2] -window .newgamemenu.canvas.difficulty]
    .newgamemenu.canvas configure -width [winfo reqwidth .newgamemenu.canvas.difficulty] -height [winfo reqheight .newgamemenu.canvas.difficulty] -scrollregion [.newgamemenu.canvas bbox all]
 }] -column 1 -row 0 -sticky w
 grid [canvas .newgamemenu.canvas -yscrollcommand [list .newgamemenu.scrollbar set]] -sticky nwes -row 1
