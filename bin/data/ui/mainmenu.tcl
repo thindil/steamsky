@@ -192,9 +192,9 @@ proc SetPoints {} {
       if {$value != ""} {
          if {$i == 1 || $i == 3 || $i == 4 || $i == 5} {
             if {$value < 100} {
-               set $value [expr 100 + ((100 - $value) * 4)]
-            } else {
-               set $value [expr 100 - $value]
+               set value [expr 100 + ((100 - $value) * 4)]
+            } elseif {$value > 100} {
+               set value [expr 100 - $value]
             }
          }
          set totalpoints [expr $totalpoints + $value]
