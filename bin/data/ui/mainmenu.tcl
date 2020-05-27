@@ -293,7 +293,7 @@ bind .newgamemenu.canvas.difficulty.difficultylevel <<ComboboxSelected>> {
          .newgamemenu.canvas.difficulty.upgrade set 100
          .newgamemenu.canvas.difficulty.prices set 100
       }
-      "Very Easy" {
+      "Hard" {
          .newgamemenu.canvas.difficulty.enemydamage set 250
          .newgamemenu.canvas.difficulty.playerdamage set 50
          .newgamemenu.canvas.difficulty.enemymeleedamage set 250
@@ -303,7 +303,7 @@ bind .newgamemenu.canvas.difficulty.difficultylevel <<ComboboxSelected>> {
          .newgamemenu.canvas.difficulty.upgrade set 250
          .newgamemenu.canvas.difficulty.prices set 250
       }
-      "Very Easy" {
+      "Very Hard" {
          .newgamemenu.canvas.difficulty.enemydamage set 450
          .newgamemenu.canvas.difficulty.playerdamage set 10
          .newgamemenu.canvas.difficulty.enemymeleedamage set 450
