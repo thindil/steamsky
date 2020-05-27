@@ -314,6 +314,7 @@ bind .newgamemenu.canvas.difficulty.difficultylevel <<ComboboxSelected>> {
          .newgamemenu.canvas.difficulty.prices set 450
       }
    }
+   SetPoints
 }
 .newgamemenu.canvas.difficulty.difficultylevel set Normal
 tooltip::tooltip .newgamemenu.canvas.difficulty.difficultylevel [lindex $difficultytooltips 1]
