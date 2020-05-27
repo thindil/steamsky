@@ -240,44 +240,55 @@ grid [ttk::label .newgamemenu.canvas.difficulty.difficultylabel -text {Difficult
 grid [ttk::combobox .newgamemenu.canvas.difficulty.difficultylevel -state readonly -values [list {Very Easy} Easy Normal Hard {Very Hard}] -width 7] -column 1 -row 0
 .newgamemenu.canvas.difficulty.difficultylevel set Normal
 tooltip::tooltip .newgamemenu.canvas.difficulty.difficultylevel [lindex $difficultytooltips 1]
+bind .newgamemenu.canvas.difficulty.difficultylevel <FocusIn> {SetInfo difficulty 1}
 grid [ttk::label .newgamemenu.canvas.difficulty.enemydamagelabel -text {Enemy ship damage:}] -row 1
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.enemydamage -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 1
 .newgamemenu.canvas.difficulty.enemydamage set 100
 tooltip::tooltip .newgamemenu.canvas.difficulty.enemydamage [lindex $difficultytooltips 2]
+bind .newgamemenu.canvas.difficulty.enemydamage <FocusIn> {SetInfo difficulty 2}
 grid [ttk::label .newgamemenu.canvas.difficulty.playerdamagelabel -text {Player ship damage:}] -row 2
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.playerdamage -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 2
 .newgamemenu.canvas.difficulty.playerdamage set 100
 tooltip::tooltip .newgamemenu.canvas.difficulty.playerdamage [lindex $difficultytooltips 3]
+bind .newgamemenu.canvas.difficulty.playerdamage <FocusIn> {SetInfo difficulty 3}
 grid [ttk::label .newgamemenu.canvas.difficulty.enemymeleedamagelabel -text {Enemy damage in melee combat:} -wraplength 150] -row 3
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.enemymeleedamage -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 3
 .newgamemenu.canvas.difficulty.enemymeleedamage set 100
 tooltip::tooltip .newgamemenu.canvas.difficulty.enemymeleedamage [lindex $difficultytooltips 4]
+bind .newgamemenu.canvas.difficulty.enemymeleedamage <FocusIn> {SetInfo difficulty 4}
 grid [ttk::label .newgamemenu.canvas.difficulty.playermeleedamagelabel -text {Player crew damage in melee combat:} -wraplength 150] -row 4
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.playermeleedamage -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 4
 .newgamemenu.canvas.difficulty.playermeleedamage set 100
 tooltip::tooltip .newgamemenu.canvas.difficulty.playermeleedamage [lindex $difficultytooltips 5]
+bind .newgamemenu.canvas.difficulty.playermeleedamage <FocusIn> {SetInfo difficulty 5}
 grid [ttk::label .newgamemenu.canvas.difficulty.experiencelabel -text {Experience gained:}] -row 5
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.experience -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 5
 .newgamemenu.canvas.difficulty.experience set 100
 tooltip::tooltip .newgamemenu.canvas.difficulty.experience [lindex $difficultytooltips 6]
+bind .newgamemenu.canvas.difficulty.experience <FocusIn> {SetInfo difficulty 6}
 grid [ttk::label .newgamemenu.canvas.difficulty.reputationlabel -text {Reputation gained:}] -row 6
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.reputation -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 6
 .newgamemenu.canvas.difficulty.reputation set 100
 tooltip::tooltip .newgamemenu.canvas.difficulty.reputation [lindex $difficultytooltips 7]
+bind .newgamemenu.canvas.difficulty.reputation <FocusIn> {SetInfo difficulty 7}
 grid [ttk::label .newgamemenu.canvas.difficulty.upgradelabel -text {Upgrade cost:}] -row 7
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.upgrade -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 7
 .newgamemenu.canvas.difficulty.upgrade set 100
 tooltip::tooltip .newgamemenu.canvas.difficulty.upgrade [lindex $difficultytooltips 8]
+bind .newgamemenu.canvas.difficulty.upgrade <FocusIn> {SetInfo difficulty 8}
 grid [ttk::label .newgamemenu.canvas.difficulty.priceslabel -text {Prices in bases:}] -row 8
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.prices -from 1 -to 500 -increment 1.0 -width 5] -column 1 -row 8
 .newgamemenu.canvas.difficulty.prices set 100
 tooltip::tooltip .newgamemenu.canvas.difficulty.prices [lindex $difficultytooltips 9]
+bind .newgamemenu.canvas.difficulty.prices <FocusIn> {SetInfo difficulty 9}
 grid [ttk::button .newgamemenu.canvas.difficulty.random -text Random] -row 9 -columnspan 2 -sticky we
 tooltip::tooltip .newgamemenu.canvas.difficulty.random [lindex $difficultytooltips 10]
+bind .newgamemenu.canvas.difficulty.random <FocusIn> {SetInfo difficulty 10}
 grid [ttk::label .newgamemenu.canvas.difficulty.randomizelabel -text {Randomize difficulty on game start} -wraplength 150] -row 10
 tooltip::tooltip .newgamemenu.canvas.difficulty.randomizelabel [lindex $difficultytooltips 11]
 grid [ttk::checkbutton .newgamemenu.canvas.difficulty.randomize] -row 10 -column 1
 tooltip::tooltip .newgamemenu.canvas.difficulty.randomize [lindex $difficultytooltips 11]
+bind .newgamemenu.canvas.difficulty.randomize <FocusIn> {SetInfo difficulty 11}
 grid [ttk::label .newgamemenu.canvas.difficulty.totalpoints -text {Total gained points: 100%}] -row 11 -columnspan 2
 grid [ttk::labelframe .newgamemenu.info -text Info] -row 1 -column 2 -sticky nwes
 pack [ttk::scrollbar .newgamemenu.info.scroll -orient vertical -command [list .newgamemenu.info.text yview]] -side right -fill y
