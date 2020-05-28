@@ -256,6 +256,7 @@ grid [ttk::label .newgamemenu.canvas.player.labelfaction -text {Character factio
 grid [ttk::combobox .newgamemenu.canvas.player.faction -state readonly -width 14] -row 4 -column 1
 tooltip::tooltip .newgamemenu.canvas.player.faction [lindex $playertooltips 5]
 bind .newgamemenu.canvas.player.faction <FocusIn> {SetInfo player 5}
+bind .newgamemenu.canvas.player.faction <<ComboboxSelected>> SetFaction
 grid [ttk::label .newgamemenu.canvas.player.labelcareer -text {Character career:}] -row 5
 grid [ttk::combobox .newgamemenu.canvas.player.career -state readonly -width 14] -row 5 -column 1
 tooltip::tooltip .newgamemenu.canvas.player.career [lindex $playertooltips 6]
