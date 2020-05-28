@@ -210,6 +210,7 @@ proc SetPoints {} {
       set totalpoints 1
    }
    .newgamemenu.canvas.difficulty.totalpoints configure -text "Total gained points: $totalpoints%"
+   .newgamemenu.canvas.difficulty.difficultylevel set Custom
    return true
 }
 ttk::frame .newgamemenu
@@ -265,8 +266,9 @@ tooltip::tooltip .newgamemenu.canvas.player.base [lindex $playertooltips 7]
 bind .newgamemenu.canvas.player.base <FocusIn> {SetInfo player 7}
 ttk::frame .newgamemenu.canvas.difficulty
 grid [ttk::label .newgamemenu.canvas.difficulty.difficultylabel -text {Difficulty level:}]
-grid [ttk::combobox .newgamemenu.canvas.difficulty.difficultylevel -state readonly -values [list {Very Easy} Easy Normal Hard {Very Hard}] -width 7] -column 1 -row 0
+grid [ttk::combobox .newgamemenu.canvas.difficulty.difficultylevel -state readonly -values [list {Very Easy} Easy Normal Hard {Very Hard} Custom] -width 7] -column 1 -row 0
 bind .newgamemenu.canvas.difficulty.difficultylevel <<ComboboxSelected>> {
+   set level [.newgamemenu.canvas.difficulty.difficultylevel get]
    switch [.newgamemenu.canvas.difficulty.difficultylevel get] {
       "Very Easy" {
          .newgamemenu.canvas.difficulty.enemydamage set 10
@@ -320,6 +322,7 @@ bind .newgamemenu.canvas.difficulty.difficultylevel <<ComboboxSelected>> {
       }
    }
    SetPoints
+   .newgamemenu.canvas.difficulty.difficultylevel set $level
 }
 .newgamemenu.canvas.difficulty.difficultylevel set Normal
 tooltip::tooltip .newgamemenu.canvas.difficulty.difficultylevel [lindex $difficultytooltips 1]
@@ -356,7 +359,17 @@ grid [ttk::label .newgamemenu.canvas.difficulty.priceslabel -text {Prices in bas
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.prices -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 8
 tooltip::tooltip .newgamemenu.canvas.difficulty.prices [lindex $difficultytooltips 9]
 bind .newgamemenu.canvas.difficulty.prices <FocusIn> {SetInfo difficulty 9}
-grid [ttk::button .newgamemenu.canvas.difficulty.random -text Random] -row 9 -columnspan 2 -sticky we
+grid [ttk::button .newgamemenu.canvas.difficulty.random -text Random -command {
+   .newgamemenu.canvas.difficulty.enemydamage set [expr { int(499 * rand()) + 1 }]
+   .newgamemenu.canvas.difficulty.playerdamage set [expr { int(499 * rand()) + 1 }]
+   .newgamemenu.canvas.difficulty.enemymeleedamage set [expr { int(499 * rand()) + 1 }]
+   .newgamemenu.canvas.difficulty.playermeleedamage set [expr { int(499 * rand()) + 1 }]
+   .newgamemenu.canvas.difficulty.experience set [expr { int(499 * rand()) + 1 }]
+   .newgamemenu.canvas.difficulty.reputation set [expr { int(499 * rand()) + 1 }]
+   .newgamemenu.canvas.difficulty.upgrade set [expr { int(499 * rand()) + 1 }]
+   .newgamemenu.canvas.difficulty.prices set [expr { int(499 * rand()) + 1 }]
+   SetPoints
+}] -row 9 -columnspan 2 -sticky we
 tooltip::tooltip .newgamemenu.canvas.difficulty.random [lindex $difficultytooltips 10]
 bind .newgamemenu.canvas.difficulty.random <FocusIn> {SetInfo difficulty 10}
 grid [ttk::label .newgamemenu.canvas.difficulty.randomizelabel -text {Randomize difficulty on game start} -wraplength 150] -row 10
