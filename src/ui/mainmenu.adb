@@ -35,6 +35,7 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
+with Careers; use Careers;
 with Config; use Config;
 with Factions; use Factions;
 with Game; use Game;
@@ -102,6 +103,10 @@ package body MainMenu is
         (ComboBox,
          To_String(Factions_List(NewGameSettings.PlayerFaction).Name));
       Tcl_Eval(Get_Context, "SetFaction");
+      ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
+      Set
+        (ComboBox,
+         To_String(Careers_List(NewGameSettings.PlayerCareer).Name));
       ShowMainMenu;
    end CreateMainMenu;
 
