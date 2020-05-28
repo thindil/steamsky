@@ -30,12 +30,17 @@ with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
+with Tcl.Tk.Ada.Grid; use Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
+with Factions; use Factions;
 with Game; use Game;
 with Game.SaveLoad; use Game.SaveLoad;
 with HallOfFame; use HallOfFame;
@@ -387,6 +392,66 @@ package body MainMenu.Commands is
          return TCL_OK;
    end Load_Game_Command;
 
+   -- ****if* MCommands/Set_Faction_Command
+   -- FUNCTION
+   -- Set faction destription and available bases and careers
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Set_Faction_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Faction_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      FactionName: Unbounded_String;
+      ComboBox: Ttk_ComboBox;
+      Label: Ttk_Label;
+      procedure UpdateInfo(NewText: String) is
+         InfoText: Tk_Text;
+      begin
+         InfoText.Interp := Interp;
+         InfoText.Name := New_String(".newgamemenu.info.text");
+         configure(InfoText, "-state normal");
+         Delete(InfoText, "1.0", "end");
+         Insert(InfoText, "end", NewText);
+         configure(InfoText, "-state disabled");
+      end UpdateInfo;
+   begin
+      ComboBox.Interp := Interp;
+      ComboBox.Name := New_String(".newgamemenu.canvas.player.faction");
+      Label.Interp := Interp;
+      FactionName := To_Unbounded_String(Get(ComboBox));
+      if FactionName = To_Unbounded_String("Random") then
+         Label.Name := New_String(".newgamemenu.canvas.player.labelcareer");
+         Grid_Remove(Label);
+         ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
+         Grid_Remove(ComboBox);
+         Label.Name := New_String(".newgamemenu.canvas.player.labelbase");
+         Grid_Remove(Label);
+         ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
+         Grid_Remove(ComboBox);
+         UpdateInfo
+           ("Faction and career will be randomly selected for you during creating new game. Not recommended for new player.");
+         return TCL_OK;
+      end if;
+      for Faction of Factions_List loop
+         if Faction.Name = FactionName then
+            exit;
+         end if;
+      end loop;
+      return TCL_OK;
+   end Set_Faction_Command;
+
    procedure AddCommands is
       procedure AddCommand
         (Name: String; AdaCommand: not null CreateCommands.Tcl_CmdProc) is
@@ -408,6 +473,7 @@ package body MainMenu.Commands is
       AddCommand("ShowLoadGame", Show_Load_Game_Command'Access);
       AddCommand("DeleteGame", Delete_Game_Command'Access);
       AddCommand("LoadGame", Load_Game_Command'Access);
+      AddCommand("SetFaction", Set_Faction_Command'Access);
    end AddCommands;
 
 end MainMenu.Commands;
