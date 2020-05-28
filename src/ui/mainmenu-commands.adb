@@ -423,6 +423,7 @@ package body MainMenu.Commands is
          InfoText.Name := New_String(".newgamemenu.info.text");
          configure(InfoText, "-state normal");
          Delete(InfoText, "1.0", "end");
+         Insert(InfoText, "end", "{" & LF & LF & "}");
          Insert(InfoText, "end", NewText);
          configure(InfoText, "-state disabled");
       end UpdateInfo;
@@ -441,11 +442,21 @@ package body MainMenu.Commands is
          ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
          Grid_Remove(ComboBox);
          UpdateInfo
-           ("Faction and career will be randomly selected for you during creating new game. Not recommended for new player.");
+           ("{Faction and career will be randomly selected for you during creating new game. Not recommended for new player.}");
          return TCL_OK;
+      else
+         Label.Name := New_String(".newgamemenu.canvas.player.labelcareer");
+         Tcl.Tk.Ada.Grid.Grid(Label);
+         ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
+         Tcl.Tk.Ada.Grid.Grid(ComboBox);
+         Label.Name := New_String(".newgamemenu.canvas.player.labelbase");
+         Tcl.Tk.Ada.Grid.Grid(Label);
+         ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
+         Tcl.Tk.Ada.Grid.Grid(ComboBox);
       end if;
       for Faction of Factions_List loop
          if Faction.Name = FactionName then
+            UpdateInfo("{" & To_String(Faction.Description) & "}");
             exit;
          end if;
       end loop;
