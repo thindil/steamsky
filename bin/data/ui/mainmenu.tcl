@@ -189,16 +189,21 @@ proc SetPoints {} {
    set totalpoints 0
    for {set i 0} {$i < 8} {incr i} {
       set value [regsub -all {[^0-9]} [lindex $values $i] {}]
-      if {$value != ""} {
-         if {$i == 1 || $i == 3 || $i == 4 || $i == 5} {
-            if {$value < 100} {
-               set value [expr 100 + ((100 - $value) * 4)]
-            } elseif {$value > 100} {
-               set value [expr 100 - $value]
-            }
-         }
-         set totalpoints [expr $totalpoints + $value]
+      if {$value == ""} {
+         set value 1
+      } elseif {$value < 1} {
+         set value 1
+      } elseif {$value > 500} {
+         set value 500
       }
+      if {$i == 1 || $i == 3 || $i == 4 || $i == 5} {
+         if {$value < 100} {
+            set value [expr 100 + ((100 - $value) * 4)]
+         } elseif {$value > 100} {
+            set value [expr 100 - $value]
+         }
+      }
+      set totalpoints [expr $totalpoints + $value]
    }
    set totalpoints [expr $totalpoints  / 8]
    if {$totalpoints < 1} {
