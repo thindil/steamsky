@@ -101,6 +101,7 @@ package body MainMenu is
       Set
         (ComboBox,
          To_String(Factions_List(NewGameSettings.PlayerFaction).Name));
+      Tcl_Eval(Get_Context, "SetFaction");
       ShowMainMenu;
    end CreateMainMenu;
 
