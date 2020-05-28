@@ -40,6 +40,7 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
+with BasesTypes; use BasesTypes;
 with Factions; use Factions;
 with Game; use Game;
 with Game.SaveLoad; use Game.SaveLoad;
@@ -444,9 +445,10 @@ package body MainMenu.Commands is
          Label.Name := New_String(".newgamemenu.canvas.player.labelbase");
          Grid_Remove(Label);
          ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
+         Set(ComboBox, "Any");
          Grid_Remove(ComboBox);
          UpdateInfo
-           ("{Faction and career will be randomly selected for you during creating new game. Not recommended for new player.}");
+           ("{Faction, career and base type will be randomly selected for you during creating new game. Not recommended for new player.}");
          return TCL_OK;
       else
          Label.Name := New_String(".newgamemenu.canvas.player.labelcareer");
@@ -484,6 +486,15 @@ package body MainMenu.Commands is
             ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
             configure(ComboBox, "-values [list " & To_String(Values) & "]");
             Set(ComboBox, "Random");
+            Values := To_Unbounded_String(" Any");
+            for I in Faction.BasesTypes.Iterate loop
+               Append
+                 (Values,
+                  " " & BasesTypes_List(BaseType_Container.Key(I)).Name);
+            end loop;
+            ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
+            configure(ComboBox, "-values [list " & To_String(Values) & "]");
+            Set(ComboBox, "Any");
             UpdateInfo("{" & To_String(Faction.Description) & "}");
             exit;
          end if;
