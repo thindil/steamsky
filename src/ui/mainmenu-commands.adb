@@ -413,7 +413,7 @@ package body MainMenu.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      FactionName: Unbounded_String;
+      FactionName, Values: Unbounded_String;
       ComboBox: Ttk_ComboBox;
       Label: Ttk_Label;
       procedure UpdateInfo(NewText: String) is
@@ -423,7 +423,10 @@ package body MainMenu.Commands is
          InfoText.Name := New_String(".newgamemenu.info.text");
          configure(InfoText, "-state normal");
          Delete(InfoText, "1.0", "end");
-         Insert(InfoText, "end", "{" & LF & LF & "}");
+         Insert
+           (InfoText, "end",
+            "{Select your faction from a list. Factions have the biggest impact on game. They determine the amount of bases and some playing styles. More information about each faction can be found after selecting it. You can't change this later." &
+            LF & LF & "}");
          Insert(InfoText, "end", NewText);
          configure(InfoText, "-state disabled");
       end UpdateInfo;
@@ -436,6 +439,7 @@ package body MainMenu.Commands is
          Label.Name := New_String(".newgamemenu.canvas.player.labelcareer");
          Grid_Remove(Label);
          ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
+         Set(ComboBox, "Random");
          Grid_Remove(ComboBox);
          Label.Name := New_String(".newgamemenu.canvas.player.labelbase");
          Grid_Remove(Label);
@@ -456,6 +460,30 @@ package body MainMenu.Commands is
       end if;
       for Faction of Factions_List loop
          if Faction.Name = FactionName then
+            if Faction.Flags.Contains(To_Unbounded_String("nogender")) then
+               Label.Name :=
+                 New_String(".newgamemenu.canvas.player.labelgender");
+               Grid_Remove(Label);
+               ComboBox.Name :=
+                 New_String(".newgamemenu.canvas.player.gender");
+               Set(ComboBox, "Male");
+               Grid_Remove(ComboBox);
+            else
+               Label.Name :=
+                 New_String(".newgamemenu.canvas.player.labelgender");
+               Tcl.Tk.Ada.Grid.Grid(Label);
+               ComboBox.Name :=
+                 New_String(".newgamemenu.canvas.player.gender");
+               Tcl.Tk.Ada.Grid.Grid(ComboBox);
+            end if;
+            Values := Null_Unbounded_String;
+            for I in Faction.Careers.Iterate loop
+               Append(Values, " " & Faction.Careers(I).Name);
+            end loop;
+            Append(Values, " Random");
+            ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
+            configure(ComboBox, "-values [list " & To_String(Values) & "]");
+            Set(ComboBox, "Random");
             UpdateInfo("{" & To_String(Faction.Description) & "}");
             exit;
          end if;
