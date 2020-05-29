@@ -562,6 +562,57 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Set_Career_Command;
 
+   -- ****if* MCommands/Set_Base_Command
+   -- FUNCTION
+   -- Set starting base description
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Set_Base_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Base_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      BaseName: Unbounded_String;
+      ComboBox: Ttk_ComboBox;
+      InfoText: Tk_Text;
+   begin
+      ComboBox.Interp := Interp;
+      ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
+      BaseName := To_Unbounded_String(Get(ComboBox));
+      InfoText.Interp := Interp;
+      InfoText.Name := New_String(".newgamemenu.info.text");
+      configure(InfoText, "-state normal");
+      Delete(InfoText, "1.0", "end");
+      Insert
+        (InfoText, "end",
+         "{Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later." &
+         LF & LF & "}");
+      for Base of BasesTypes_List loop
+         if Base.Name = BaseName then
+            Insert(InfoText, "end", "{" & To_String(Base.Description) & "}");
+            exit;
+         end if;
+      end loop;
+      if BaseName = "Any" then
+         Insert
+           (InfoText, "end",
+            "{Start the game in randomly selected base type.}");
+      end if;
+      configure(InfoText, "-state disabled");
+      return TCL_OK;
+   end Set_Base_Command;
+
    procedure AddCommands is
       procedure AddCommand
         (Name: String; AdaCommand: not null CreateCommands.Tcl_CmdProc) is
@@ -585,6 +636,7 @@ package body MainMenu.Commands is
       AddCommand("LoadGame", Load_Game_Command'Access);
       AddCommand("SetFaction", Set_Faction_Command'Access);
       AddCommand("SetCareer", Set_Career_Command'Access);
+      AddCommand("SetBase", Set_Base_Command'Access);
    end AddCommands;
 
 end MainMenu.Commands;
