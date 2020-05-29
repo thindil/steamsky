@@ -37,11 +37,11 @@ with Config; use Config;
 
 package body Utils.UI is
 
-   -- ****iv* UI/Timer_Token
+   -- ****iv* UI/TimerId
    -- FUNCTION
-   -- Identifier for the timer for close message dialog
+   -- Id of timer for auto close command
    -- SOURCE
-   Timer_Token: Tcl_TimerToken;
+   TimerId: Unbounded_String := Null_Unbounded_String;
    -- ****
 
    -- ****if* UI/Close_Dialog_Command
@@ -78,22 +78,6 @@ package body Utils.UI is
       return TCL_OK;
    end Close_Dialog_Command;
 
-   -- ****if* UI/CloseMessage
-   -- FUNCTION
-   -- Auto close the message dialog
-   -- PARAMETERS
-   -- data - Custom data sent to the procedure. Unused
-   -- SOURCE
-   procedure CloseMessage(data: ClientData) with
-      Convention => C;
-      -- ****
-
-   procedure CloseMessage(data: ClientData) is
-      pragma Unreferenced(data);
-   begin
-      Tcl_Eval(Get_Context, "CloseDialog .message");
-   end CloseMessage;
-
    procedure ShowMessage(Text: String) is
       MessageDialog: constant Tk_Toplevel :=
         Create(".message", "-class Dialog");
@@ -110,8 +94,9 @@ package body Utils.UI is
            "-text X -command {CloseDialog .message} -style Toolbutton");
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
-      if Timer_Token /= null then
-         Tcl_DeleteTimerHandler(Timer_Token);
+      if TimerId /= Null_Unbounded_String then
+         Cancel(To_String(TimerId));
+         TimerId := Null_Unbounded_String;
       end if;
       Wm_Set(MessageDialog, "title", "{Steam Sky - Message}");
       Wm_Set(MessageDialog, "transient", ".");
@@ -137,10 +122,11 @@ package body Utils.UI is
       Bind
         (MessageDialog, "<Destroy>",
          "{CloseDialog " & Value(MessageDialog.Name) & "}");
-      Timer_Token :=
-        Tcl_CreateTimerHandler
-          (int(GameSettings.AutoCloseMessagesTime) * 1_000,
-           CloseMessage'Access, Null_ClientData);
+      TimerId :=
+        To_Unbounded_String
+          (After
+             (GameSettings.AutoCloseMessagesTime * 1_000,
+              "{CloseDialog .message}"));
    end ShowMessage;
 
    package CreateCommands is new Tcl.Ada.Generic_Command(Integer);
