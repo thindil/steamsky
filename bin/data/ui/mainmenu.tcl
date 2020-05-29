@@ -265,7 +265,8 @@ bind .newgamemenu.canvas.player.career <<ComboboxSelected>> SetCareer
 grid [ttk::label .newgamemenu.canvas.player.labelbase -text {Starting base type:}] -row 6
 grid [ttk::combobox .newgamemenu.canvas.player.base -state readonly -width 14] -row 6 -column 1
 tooltip::tooltip .newgamemenu.canvas.player.base [lindex $playertooltips 7]
-bind .newgamemenu.canvas.player.base <FocusIn> {SetInfo player 7}
+bind .newgamemenu.canvas.player.base <FocusIn> {SetBase}
+bind .newgamemenu.canvas.player.base <<ComboboxSelected>> SetBase
 ttk::frame .newgamemenu.canvas.difficulty
 grid [ttk::label .newgamemenu.canvas.difficulty.difficultylabel -text {Difficulty level:}]
 grid [ttk::combobox .newgamemenu.canvas.difficulty.difficultylevel -state readonly -values [list {Very Easy} Easy Normal Hard {Very Hard} Custom] -width 7] -column 1 -row 0
