@@ -106,7 +106,7 @@ package body Utils.UI is
       Tcl.Tk.Ada.Grid.Grid(MessageLabel, "-sticky we");
       Tcl.Tk.Ada.Grid.Grid(MessageButton, "-row 0 -column 1");
       Tcl.Tk.Ada.Pack.Pack(MessageFrame, "-expand true -fill both");
-      X := (Positive'Value(Winfo_Get(MessageDialog, "vrootwidth")) - 450) / 2;
+      X := (Positive'Value(Winfo_Get(MessageDialog, "vrootwidth")) - 400) / 2;
       if X < 0 then
          X := 0;
       end if;
