@@ -502,6 +502,66 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Set_Faction_Command;
 
+   -- ****if* MCommands/Set_Career_Command
+   -- FUNCTION
+   -- Set career description
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Set_Career_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Career_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      FactionName, CareerName: Unbounded_String;
+      ComboBox: Ttk_ComboBox;
+      InfoText: Tk_Text;
+   begin
+      ComboBox.Interp := Interp;
+      ComboBox.Name := New_String(".newgamemenu.canvas.player.faction");
+      FactionName := To_Unbounded_String(Get(ComboBox));
+      ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
+      CareerName := To_Unbounded_String(Get(ComboBox));
+      InfoText.Interp := Interp;
+      InfoText.Name := New_String(".newgamemenu.info.text");
+      configure(InfoText, "-state normal");
+      Delete(InfoText, "1.0", "end");
+      Insert
+        (InfoText, "end",
+         "{Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later." &
+         LF & LF & "}");
+      for Faction of Factions_List loop
+         if Faction.Name = FactionName then
+            for Career of Faction.Careers loop
+               if Career.Name = CareerName then
+                  Insert
+                    (InfoText, "end",
+                     "{" & To_String(Career.Description) & "}");
+                  exit;
+               end if;
+            end loop;
+            exit;
+         end if;
+      end loop;
+      if CareerName = "Random" then
+         Insert
+           (InfoText, "end",
+            "{Career will be randomly selected for you during creating new game. Not recommended for new player.}");
+      end if;
+      configure(InfoText, "-state disabled");
+      return TCL_OK;
+   end Set_Career_Command;
+
    procedure AddCommands is
       procedure AddCommand
         (Name: String; AdaCommand: not null CreateCommands.Tcl_CmdProc) is
@@ -524,6 +584,7 @@ package body MainMenu.Commands is
       AddCommand("DeleteGame", Delete_Game_Command'Access);
       AddCommand("LoadGame", Load_Game_Command'Access);
       AddCommand("SetFaction", Set_Faction_Command'Access);
+      AddCommand("SetCareer", Set_Career_Command'Access);
    end AddCommands;
 
 end MainMenu.Commands;
