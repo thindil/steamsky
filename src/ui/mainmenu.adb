@@ -40,6 +40,7 @@ with Careers; use Careers;
 with Config; use Config;
 with Factions; use Factions;
 with Game; use Game;
+with Goals.UI;
 with MainMenu.Commands;
 with Utils.UI; use Utils.UI;
 
@@ -73,6 +74,7 @@ package body MainMenu is
    begin
       MainMenu.Commands.AddCommands;
       Utils.UI.AddCommands;
+      Goals.UI.AddCommands;
       Wm_Set(MainWindow, "iconphoto", "-default logo");
       Tcl_EvalFile(Get_Context, UI_Directory & "mainmenu.tcl");
       MainMenuFrame.Interp := Get_Context;
