@@ -36,15 +36,18 @@ with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with BasesTypes; use BasesTypes;
+with Crew; use Crew;
 with Factions; use Factions;
 with Game; use Game;
 with Game.SaveLoad; use Game.SaveLoad;
 with HallOfFame; use HallOfFame;
+with Ships; use Ships;
 
 package body MainMenu.Commands is
 
@@ -613,6 +616,59 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Set_Base_Command;
 
+   -- ****if* MCommands/Random_Name_Command
+   -- FUNCTION
+   -- Generate random player or ship name
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Random_Name_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Random_Name_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      ComboBox: Ttk_ComboBox;
+      FactionName, FactionIndex: Unbounded_String;
+      Gender: Character;
+      NameEntry: Ttk_Entry;
+   begin
+      ComboBox.Interp := Interp;
+      ComboBox.Name := New_String(".newgamemenu.canvas.player.faction");
+      NameEntry.Interp := Interp;
+      NameEntry.Name :=
+        New_String
+          (".newgamemenu.canvas.player." & CArgv.Arg(Argv, 1) & "name");
+      FactionName := To_Unbounded_String(Get(ComboBox));
+      for I in Factions_List.Iterate loop
+         if Factions_List(I).Name = FactionName then
+            FactionIndex := Factions_Container.Key(I);
+            exit;
+         end if;
+      end loop;
+      if CArgv.Arg(Argv, 1) = "player" then
+         ComboBox.Name := New_String(".newgamemenu.canvas.player.gender");
+         Gender := Get(ComboBox)(1);
+         Delete(NameEntry, "0", "end");
+         Insert
+           (NameEntry, "end",
+            To_String(GenerateMemberName(Gender, FactionIndex)));
+         return TCL_OK;
+      end if;
+      Delete(NameEntry, "0", "end");
+      Insert(NameEntry, "end", To_String(GenerateShipName(FactionIndex)));
+      return TCL_OK;
+   end Random_Name_Command;
+
    procedure AddCommands is
       procedure AddCommand
         (Name: String; AdaCommand: not null CreateCommands.Tcl_CmdProc) is
@@ -637,6 +693,7 @@ package body MainMenu.Commands is
       AddCommand("SetFaction", Set_Faction_Command'Access);
       AddCommand("SetCareer", Set_Career_Command'Access);
       AddCommand("SetBase", Set_Base_Command'Access);
+      AddCommand("RandomName", Random_Name_Command'Access);
    end AddCommands;
 
 end MainMenu.Commands;

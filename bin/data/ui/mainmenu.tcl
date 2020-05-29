@@ -239,6 +239,7 @@ ttk::frame .newgamemenu.canvas.player
 grid [ttk::label .newgamemenu.canvas.player.labelplayername -text {Character name:}]
 grid [ttk::entry .newgamemenu.canvas.player.playername -width 15] -row 0 -column 1
 tooltip::tooltip .newgamemenu.canvas.player.playername [lindex $playertooltips 1]
+bind .newgamemenu.canvas.player.playername <Return> {RandomName player}
 bind .newgamemenu.canvas.player.playername <FocusIn> {SetInfo player 1}
 grid [ttk::label .newgamemenu.canvas.player.labelgender -text {Character gender:}] -row 1
 grid [ttk::combobox .newgamemenu.canvas.player.gender -state readonly -values [list Male Female] -width 14] -row 1 -column 1
@@ -248,6 +249,7 @@ grid [ttk::label .newgamemenu.canvas.player.labelshipname -text {Ship name:}] -r
 grid [ttk::entry .newgamemenu.canvas.player.shipname -width 15] -row 2 -column 1
 tooltip::tooltip .newgamemenu.canvas.player.shipname [lindex $playertooltips 3]
 bind .newgamemenu.canvas.player.shipname <FocusIn> {SetInfo player 3}
+bind .newgamemenu.canvas.player.shipname <Return> {RandomName ship}
 grid [ttk::label .newgamemenu.canvas.player.labelgoal -text {Character goal:}] -row 3
 grid [ttk::button .newgamemenu.canvas.player.goal -text {Random}] -row 3 -column 1
 tooltip::tooltip .newgamemenu.canvas.player.goal [lindex $playertooltips 4]
