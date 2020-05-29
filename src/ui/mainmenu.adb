@@ -74,10 +74,14 @@ package body MainMenu is
       MainMenu.Commands.AddCommands;
       Utils.UI.AddCommands;
       Wm_Set(MainWindow, "iconphoto", "-default logo");
-      DataError := To_Unbounded_String(LoadGameData);
       Tcl_EvalFile(Get_Context, UI_Directory & "mainmenu.tcl");
       MainMenuFrame.Interp := Get_Context;
       MainMenuFrame.Name := New_String(".mainmenu");
+      DataError := To_Unbounded_String(LoadGameData);
+      if DataError /= Null_Unbounded_String then
+         ShowMainMenu;
+         return;
+      end if;
       TextEntry.Interp := Get_Context;
       TextEntry.Name := New_String(".newgamemenu.canvas.player.playername");
       Delete(TextEntry, "0", "end");
