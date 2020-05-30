@@ -19,6 +19,8 @@ with Ada.Calendar.Time_Zones; use Ada.Calendar.Time_Zones;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Directories; use Ada.Directories;
 with Ada.Exceptions; use Ada.Exceptions;
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 with Interfaces.C; use Interfaces.C;
@@ -33,6 +35,7 @@ with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Grid; use Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
@@ -43,6 +46,8 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
+with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with BasesTypes; use BasesTypes;
 with Config; use Config;
 with Crew; use Crew;
@@ -357,8 +362,32 @@ package body MainMenu.Commands is
    end Delete_Game_Command;
 
    procedure StartGame is
+      MainWindow: constant Tk_Toplevel := Get_Main_Window(Get_Context);
+      X, Y: Integer;
    begin
+      X :=
+        (Positive'Value(Winfo_Get(MainWindow, "vrootwidth")) -
+         GameSettings.WindowWidth) /
+        2;
+      if X < 0 then
+         X := 0;
+      end if;
+      Y :=
+        (Positive'Value(Winfo_Get(MainWindow, "vrootheight")) -
+         GameSettings.WindowHeight) /
+        2;
+      if Y < 0 then
+         Y := 0;
+      end if;
+      Wm_Set(MainWindow, "title", "{Steam Sky - Main Menu}");
+      Wm_Set
+        (MainWindow, "geometry",
+         Trim(Positive'Image(GameSettings.WindowWidth), Left) & "x" &
+         Trim(Positive'Image(GameSettings.WindowHeight), Left) & "+" &
+         Trim(Positive'Image(X), Left) & "+" & Trim(Positive'Image(Y), Left));
       GenerateTraders;
+      --CreateHelpUI;
+      --CreateSkyMap;
    end StartGame;
 
    -- ****if* MCommands/Load_Game_Command
@@ -698,7 +727,7 @@ package body MainMenu.Commands is
       ComboBox: Ttk_ComboBox;
       GoalButton: Ttk_Button;
       TextEntry: Ttk_Entry;
-      SpinBox: Ttk_Spinbox;
+      SpinBox: Ttk_SpinBox;
    begin
       ComboBox.Interp := Interp;
       ComboBox.Name := New_String(".newgamemenu.canvas.player.gender");
@@ -726,7 +755,8 @@ package body MainMenu.Commands is
             NewGameSettings.PlayerFaction := Factions_Container.Key(I);
             ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
             for J in Factions_List(I).Careers.Iterate loop
-               if Factions_List(I).Careers(J).Name = To_Unbounded_String(Get(ComboBox)) then
+               if Factions_List(I).Careers(J).Name =
+                 To_Unbounded_String(Get(ComboBox)) then
                   NewGameSettings.PlayerCareer := Careers_Container.Key(J);
                   exit;
                end if;
@@ -741,11 +771,32 @@ package body MainMenu.Commands is
             exit;
          end if;
       end loop;
+      ComboBox.Name :=
+        New_String(".newgamemenu.canvas.difficulty.difficultylevel");
+      NewGameSettings.DifficultyLevel := Natural'Value(Current(ComboBox));
       SpinBox.Interp := Interp;
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.enemydamage");
       NewGameSettings.EnemyDamageBonus := Float'Value(Get(SpinBox)) / 100.0;
-      SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.playerdamage");
+      SpinBox.Name :=
+        New_String(".newgamemenu.canvas.difficulty.playerdamage");
       NewGameSettings.PlayerDamageBonus := Float'Value(Get(SpinBox)) / 100.0;
+      SpinBox.Name :=
+        New_String(".newgamemenu.canvas.difficulty.enemymeleedamage");
+      NewGameSettings.EnemyMeleeDamageBonus :=
+        Float'Value(Get(SpinBox)) / 100.0;
+      SpinBox.Name :=
+        New_String(".newgamemenu.canvas.difficulty.playermeleedamage");
+      NewGameSettings.PlayerMeleeDamageBonus :=
+        Float'Value(Get(SpinBox)) / 100.0;
+      SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.experience");
+      NewGameSettings.ExperienceBonus := Float'Value(Get(SpinBox)) / 100.0;
+      SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.reputation");
+      NewGameSettings.ReputationBonus := Float'Value(Get(SpinBox)) / 100.0;
+      SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.upgrade");
+      NewGameSettings.UpgradeCostBonus := Float'Value(Get(SpinBox)) / 100.0;
+      SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.prices");
+      NewGameSettings.PricesBonus := Float'Value(Get(SpinBox)) / 100.0;
+      NewGame;
       StartGame;
       return TCL_OK;
    end New_Game_Command;
