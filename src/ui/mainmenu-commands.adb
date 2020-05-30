@@ -39,15 +39,21 @@ with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with BasesTypes; use BasesTypes;
+with Config; use Config;
 with Crew; use Crew;
+with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
 with Game.SaveLoad; use Game.SaveLoad;
+with Goals; use Goals;
 with HallOfFame; use HallOfFame;
 with Ships; use Ships;
+with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 
 package body MainMenu.Commands is
@@ -352,7 +358,7 @@ package body MainMenu.Commands is
 
    procedure StartGame is
    begin
-      Ada.Text_IO.Put_Line("Started");
+      GenerateTraders;
    end StartGame;
 
    -- ****if* MCommands/Load_Game_Command
@@ -668,6 +674,82 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Random_Name_Command;
 
+   -- ****if* MCommands/New_Game_Command
+   -- FUNCTION
+   -- Set all parameters and start a new game
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function New_Game_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function New_Game_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      ComboBox: Ttk_ComboBox;
+      GoalButton: Ttk_Button;
+      TextEntry: Ttk_Entry;
+      SpinBox: Ttk_Spinbox;
+   begin
+      ComboBox.Interp := Interp;
+      ComboBox.Name := New_String(".newgamemenu.canvas.player.gender");
+      if Get(ComboBox) = "Male" then
+         NewGameSettings.PlayerGender := 'M';
+      else
+         NewGameSettings.PlayerGender := 'F';
+      end if;
+      GoalButton.Interp := Interp;
+      GoalButton.Name := New_String(".newgamemenu.canvas.player.goal");
+      if cget(GoalButton, "-text") = "Random" then
+         ClearCurrentGoal;
+         CurrentGoal :=
+           Goals_List
+             (GetRandom(Goals_List.First_Index, Goals_List.Last_Index));
+      end if;
+      TextEntry.Interp := Interp;
+      TextEntry.Name := New_String(".newgamemenu.canvas.player.playername");
+      NewGameSettings.PlayerName := To_Unbounded_String(Get(TextEntry));
+      TextEntry.Name := New_String(".newgamemenu.canvas.player.shipname");
+      NewGameSettings.ShipName := To_Unbounded_String(Get(TextEntry));
+      ComboBox.Name := New_String(".newgamemenu.canvas.player.faction");
+      for I in Factions_List.Iterate loop
+         if Factions_List(I).Name = To_Unbounded_String(Get(ComboBox)) then
+            NewGameSettings.PlayerFaction := Factions_Container.Key(I);
+            ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
+            for J in Factions_List(I).Careers.Iterate loop
+               if Factions_List(I).Careers(J).Name = To_Unbounded_String(Get(ComboBox)) then
+                  NewGameSettings.PlayerCareer := Careers_Container.Key(J);
+                  exit;
+               end if;
+            end loop;
+            exit;
+         end if;
+      end loop;
+      ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
+      for I in BasesTypes_List.Iterate loop
+         if BasesTypes_List(I).Name = To_Unbounded_String(Get(ComboBox)) then
+            NewGameSettings.StartingBase := BasesTypes_Container.Key(I);
+            exit;
+         end if;
+      end loop;
+      SpinBox.Interp := Interp;
+      SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.enemydamage");
+      NewGameSettings.EnemyDamageBonus := Float'Value(Get(SpinBox)) / 100.0;
+      SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.playerdamage");
+      NewGameSettings.PlayerDamageBonus := Float'Value(Get(SpinBox)) / 100.0;
+      StartGame;
+      return TCL_OK;
+   end New_Game_Command;
+
    procedure AddCommands is
    begin
       AddCommand("OpenLink", Open_Link_Command'Access);
@@ -681,6 +763,7 @@ package body MainMenu.Commands is
       AddCommand("SetCareer", Set_Career_Command'Access);
       AddCommand("SetBase", Set_Base_Command'Access);
       AddCommand("RandomName", Random_Name_Command'Access);
+      AddCommand("NewGame", New_Game_Command'Access);
    end AddCommands;
 
 end MainMenu.Commands;

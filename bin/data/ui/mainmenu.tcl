@@ -388,7 +388,15 @@ grid [ttk::labelframe .newgamemenu.info -text Info] -row 1 -column 2 -sticky nwe
 pack [ttk::scrollbar .newgamemenu.info.scroll -orient vertical -command [list .newgamemenu.info.text yview]] -side right -fill y
 pack [text .newgamemenu.info.text -wrap word -yscrollcommand [list .newgamemenu.info.scroll set]] -expand true -fill both -side top
 grid [ttk::frame .newgamemenu.buttonsbox2] -row 2 -columnspan 3
-grid [ttk::button .newgamemenu.buttonsbox2.start -text {Start game} -underline 0] -sticky e
+grid [ttk::button .newgamemenu.buttonsbox2.start -text {Start game} -underline 0 -command {
+   bind . <Alt-s> {}
+   bind . <Alt-b> {}
+   bind . <Alt-p> {}
+   bind . <Alt-d> {}
+   bind . <Escape> {}
+   pack forget .newgamemenu
+   NewGame
+}] -sticky e
 grid [ttk::button .newgamemenu.buttonsbox2.back -text {Back to menu} -underline 0 -command {
    bind . <Alt-s> {}
    bind . <Alt-b> {}
