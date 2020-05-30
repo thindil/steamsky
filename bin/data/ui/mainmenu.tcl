@@ -251,7 +251,7 @@ tooltip::tooltip .newgamemenu.canvas.player.shipname [lindex $playertooltips 3]
 bind .newgamemenu.canvas.player.shipname <FocusIn> {SetInfo player 3}
 bind .newgamemenu.canvas.player.shipname <Return> {RandomName ship}
 grid [ttk::label .newgamemenu.canvas.player.labelgoal -text {Character goal:}] -row 3
-grid [ttk::button .newgamemenu.canvas.player.goal -text {Random}] -row 3 -column 1
+grid [ttk::button .newgamemenu.canvas.player.goal -text {Random} -command {ShowGoals .newgamemenu.canvas.player.goal}] -row 3 -column 1
 tooltip::tooltip .newgamemenu.canvas.player.goal [lindex $playertooltips 4]
 bind .newgamemenu.canvas.player.goal <FocusIn> {SetInfo player 4}
 grid [ttk::label .newgamemenu.canvas.player.labelfaction -text {Character faction:}] -row 4

@@ -134,7 +134,7 @@ package body MainMenu is
       if Y < 0 then
          Y := 0;
       end if;
-      Wm_Set(MainWindow, "title", "{Steam Sky - main menu}");
+      Wm_Set(MainWindow, "title", "{Steam Sky - Main Menu}");
       Wm_Set
         (MainWindow, "geometry",
          "600x400+" & Trim(Positive'Image(X), Left) & "+" &
