@@ -27,7 +27,7 @@ with Tcl; use Tcl;
 with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
---with ErrorDialog; use ErrorDialog;
+with ErrorDialog; use ErrorDialog;
 with Game; use Game;
 with Config; use Config;
 with Log; use Log;
@@ -173,7 +173,7 @@ begin
    Tcl.Tk.Tk_MainLoop;
 
    EndLogging;
---exception
---   when An_Exception : others =>
-      --SaveException(An_Exception, True);
+exception
+   when An_Exception : others =>
+      SaveException(An_Exception);
 end SteamSky;
