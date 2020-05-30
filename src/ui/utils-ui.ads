@@ -13,14 +13,23 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
--- ****h* Utils/UI
+with Tcl.Ada;
+
+-- ****h* Utils/UUI
 -- FUNCTION
 -- Provide various code for GUI
 -- SOURCE
 package Utils.UI is
 -- ****
 
-   -- ****f* UI/ShowMessage
+   -- ****t* UUI/CreateCommands
+   -- FUNCTION
+   -- Used to add new Tcl commands to interpreter
+   -- SOURCE
+   package CreateCommands is new Tcl.Ada.Generic_Command(Integer);
+   -- ****
+
+   -- ****f* UUI/ShowMessage
    -- FUNCTION
    -- Show the selected message to a player
    -- PARAMETERS
@@ -29,7 +38,18 @@ package Utils.UI is
    procedure ShowMessage(Text: String);
    -- ****
 
-   -- ****f* UI/AddCommands
+   -- ****f* UUI/AddCommand
+   -- FUNCTION
+   -- Add the selected command to Tcl interpreter
+   -- PARAMETERS
+   -- Name       - The name of the command which will be used in Tcl
+   -- AdaCommand - Ada function which will be invoked
+   -- SOURCE
+   procedure AddCommand
+     (Name: String; AdaCommand: not null CreateCommands.Tcl_CmdProc);
+     -- ****
+
+   -- ****f* UUI/AddCommands
    -- FUNCTION
    -- Add various, UI related Tcl commands
    -- SOURCE

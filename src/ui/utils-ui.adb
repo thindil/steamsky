@@ -129,26 +129,16 @@ package body Utils.UI is
               "{CloseDialog .message}"));
    end ShowMessage;
 
-   package CreateCommands is new Tcl.Ada.Generic_Command(Integer);
-
-   -- ****if* UI/AddCommand
-   -- FUNCTION
-   -- Add the selected command to Tcl interpreter
-   -- PARAMETERS
-   -- Name       - The name of the command which will be used in Tcl
-   -- AdaCommand - Ada function which will be invoked
-   -- SOURCE
    procedure AddCommand
      (Name: String; AdaCommand: not null CreateCommands.Tcl_CmdProc) is
-     -- ****
       Command: Tcl.Tcl_Command;
-      Aziptk_Add_Command_Error: exception;
+      SteamSky_Add_Command_Error: exception;
    begin
       Command :=
         CreateCommands.Tcl_CreateCommand
           (Get_Context, Name, AdaCommand, 0, null);
       if Command = null then
-         raise Aziptk_Add_Command_Error with "Can't add command " & Name;
+         raise SteamSky_Add_Command_Error with "Can't add command " & Name;
       end if;
    end AddCommand;
 

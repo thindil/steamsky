@@ -48,10 +48,9 @@ with Game; use Game;
 with Game.SaveLoad; use Game.SaveLoad;
 with HallOfFame; use HallOfFame;
 with Ships; use Ships;
+with Utils.UI; use Utils.UI;
 
 package body MainMenu.Commands is
-
-   package CreateCommands is new Tcl.Ada.Generic_Command(Integer);
 
    -- ****if* MCommands/Open_Link_Command
    -- FUNCTION
@@ -670,18 +669,6 @@ package body MainMenu.Commands is
    end Random_Name_Command;
 
    procedure AddCommands is
-      procedure AddCommand
-        (Name: String; AdaCommand: not null CreateCommands.Tcl_CmdProc) is
-         Command: Tcl.Tcl_Command;
-         SteamSky_Add_Command_Error: exception;
-      begin
-         Command :=
-           CreateCommands.Tcl_CreateCommand
-             (Get_Context, Name, AdaCommand, 0, null);
-         if Command = null then
-            raise SteamSky_Add_Command_Error with "Can't add command " & Name;
-         end if;
-      end AddCommand;
    begin
       AddCommand("OpenLink", Open_Link_Command'Access);
       AddCommand("ShowFile", Show_File_Command'Access);
