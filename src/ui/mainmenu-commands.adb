@@ -54,6 +54,7 @@ with Game; use Game;
 with Game.SaveLoad; use Game.SaveLoad;
 with Goals; use Goals;
 with HallOfFame; use HallOfFame;
+with Maps.UI; use Maps.UI;
 with Ships; use Ships;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
@@ -367,8 +368,7 @@ package body MainMenu.Commands is
          Trim(Positive'Image(GameSettings.WindowHeight), Left) & "+" &
          Trim(Positive'Image(X), Left) & "+" & Trim(Positive'Image(Y), Left));
       GenerateTraders;
-      --CreateHelpUI;
-      --CreateSkyMap;
+      CreateGameUI;
    end StartGame;
 
    -- ****if* MCommands/Load_Game_Command
