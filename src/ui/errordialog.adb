@@ -31,7 +31,9 @@ with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Game; use Game;
 with Game.SaveLoad; use Game.SaveLoad;
 with Log; use Log;
+with MainMenu.Commands; use MainMenu.Commands;
 with Ships; use Ships;
+with Utils.UI; use Utils.UI;
 
 package body ErrorDialog is
 
@@ -86,6 +88,7 @@ package body ErrorDialog is
       Tcl_EvalFile
         (Get_Context,
          To_String(DataDirectory) & "ui" & Dir_Separator & "errordialog.tcl");
+      AddCommand("OpenLink", Open_Link_Command'Access);
       Text.Interp := Interp;
       Text.Name := New_String(".technical.text");
       Insert(Text, "end", "{" & To_String(ErrorText) & "}");
