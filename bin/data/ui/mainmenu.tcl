@@ -156,7 +156,14 @@ bind .loadmenu.view <<TreeviewSelect>> {InvokeButton .loadmenu.load}
 grid [ttk::scrollbar .loadmenu.yscroll -orient vertical -command [list .loadmenu.view yview]] -column 3 -row 0 -sticky ns
 grid [ttk::scrollbar .loadmenu.xscroll -orient horizontal -command [list .loadmenu.view xview]] -column 0 -row 1 -columnspan 3 -sticky we
 grid [ttk::button .loadmenu.delete -text {Delete game} -command DeleteGame -underline 0] -row 2 -column 0 -sticky e
-grid [ttk::button .loadmenu.load -text {Load game} -underline 0 -command LoadGame] -row 2 -column 1 -sticky e
+grid [ttk::button .loadmenu.load -text {Load game} -underline 0 -command {
+   bind . <Alt-b> {}
+   bind . <Alt-l> {}
+   bind . <Alt-d> {}
+   bind . <Escape> {}
+   pack forget .loadmenu
+   LoadGame
+}] -row 2 -column 1 -sticky e
 grid [ttk::button .loadmenu.back -text {Back to main menu} -underline 0 -command {
    bind . <Alt-b> {}
    bind . <Alt-l> {}
