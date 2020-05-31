@@ -42,9 +42,23 @@ ttk::frame .header
 grid [ttk::menubutton .header.menubutton -text {Menu} -menu .gamemenu] -sticky w
 grid [ttk::button .header.closebutton -text {Close}] -row 0 -column 1 -sticky w
 grid [ttk::label .header.time -text {1600-03-01}] -row 0 -column 2 -sticky we
+grid columnconfigure .header .header.time -weight 1
 grid [ttk::label .header.nofuel] -row 0 -column 3 -sticky e
 grid [ttk::label .header.nofood] -row 0 -column 4 -sticky e
 grid [ttk::label .header.nodrink] -row 0 -column 5 -sticky e
 grid [ttk::label .header.overloaded] -row 0 -column 6 -sticky e
 grid [ttk::button .header.pilot -text {[P]} -style Toolbutton] -row 0 -column 7 -sticky e
+grid [ttk::button .header.engineer -text {[E]} -style Toolbutton] -row 0 -column 8 -sticky e
+grid [ttk::button .header.gunner -text {[G]} -style Toolbutton] -row 0 -column 9 -sticky e
+grid [ttk::button .header.talk -text {[T]} -style Toolbutton] -row 0 -column 10 -sticky e
+grid [ttk::button .header.repairs -text {[R]} -style Toolbutton] -row 0 -column 11 -sticky e
+grid [ttk::button .header.upgrade -text {[U]} -style Toolbutton] -row 0 -column 12 -sticky e
+grid [ttk::button .header.clean -text {[C]} -style Toolbutton] -row 0 -column 13 -sticky e
+grid [ttk::button .header.crafting -text {[M]} -style Toolbutton] -row 0 -column 14 -sticky e
 grid .header -sticky we
+ttk::panedwindow .paned
+.paned add [text .paned.map]
+.paned add [ttk::frame .paned.controls]
+grid .paned -sticky nwes
+grid rowconfigure . .paned -weight 1
+grid columnconfigure . .paned -weight 1
