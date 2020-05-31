@@ -13,6 +13,10 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Interfaces.C; use Interfaces.C;
+with CArgv;
+with Tcl; use Tcl;
+
 -- ****h* MainMenu/MCommands
 -- FUNCTION
 -- Provide code of Tcl commands related to MainMenu
@@ -20,10 +24,26 @@
 package MainMenu.Commands is
 -- ****
 
-   -- ****f* MCommands/AddCommands
+   -- ****if* MCommands/Open_Link_Command
    -- FUNCTION
-   -- Add Tcl commands related to main menu to the game
+   -- Open the selected link in the proper program
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
    -- SOURCE
+   function Open_Link_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+      -- ****f* MCommands/AddCommands
+      -- FUNCTION
+      -- Add Tcl commands related to main menu to the game
+      -- SOURCE
    procedure AddCommands;
    -- ****
 
