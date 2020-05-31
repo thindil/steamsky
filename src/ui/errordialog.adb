@@ -20,11 +20,14 @@ with Ada.Directories; use Ada.Directories;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 with Interfaces.C;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.Traceback.Symbolic; use GNAT.Traceback.Symbolic;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Game; use Game;
 with Game.SaveLoad; use Game.SaveLoad;
 with Log; use Log;
@@ -37,8 +40,10 @@ package body ErrorDialog is
 
       ErrorFile: File_Type;
       ErrorText: Unbounded_String;
-      Interp: Tcl.Tcl_Interp;
+      Interp: Tcl.Tcl_Interp := Get_Context;
+      Text: Tk_Text;
    begin
+      Tcl_Eval(Interp, "destroy .");
       if Natural(PlayerShip.Crew.Length) > 0 then
          SaveGame;
       end if;
@@ -81,6 +86,11 @@ package body ErrorDialog is
       Tcl_EvalFile
         (Get_Context,
          To_String(DataDirectory) & "ui" & Dir_Separator & "errordialog.tcl");
+      Text.Interp := Interp;
+      Text.Name := New_String(".technical.text");
+      Insert(Text, "end", "{" & To_String(ErrorText) & "}");
+      configure(Text, "-state disabled");
+      Tcl.Tk.Tk_MainLoop;
    end SaveException;
 
 end ErrorDialog;
