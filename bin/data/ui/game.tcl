@@ -1,3 +1,4 @@
+# Game menu
 menu .gamemenu -title {Steam Sky - menu}
 .gamemenu add command -label {Ship information}
 .gamemenu add command -label {Ship cargo}
@@ -15,6 +16,7 @@ menu .gamemenu -title {Steam Sky - menu}
 .gamemenu add command -label {Game options}
 .gamemenu add command -label {Quit from game}
 .gamemenu add command -label {Resign from game}
+# Orders menu
 menu .gamemenu.orders -title {Steam Sky - orders}
 .gamemenu.orders add command -label {Story}
 .gamemenu.orders add command -label {Complete mission}
@@ -38,10 +40,11 @@ menu .gamemenu.orders -title {Steam Sky - orders}
 .gamemenu.orders add command -label {Loot} -underline 0
 .gamemenu.orders add command -label {Set as home} -underline 7
 .gamemenu.orders add command -label {Close} -underline 0
+# Game header
 ttk::frame .header
 grid [ttk::menubutton .header.menubutton -text {Menu} -menu .gamemenu] -sticky w
 grid [ttk::button .header.closebutton -text {Close}] -row 0 -column 1 -sticky w
-grid [ttk::label .header.time -text {1600-03-01}] -row 0 -column 2 -sticky we
+grid [ttk::label .header.time -text {1600-03-01}] -row 0 -column 2
 grid columnconfigure .header .header.time -weight 1
 grid [ttk::label .header.nofuel] -row 0 -column 3 -sticky e
 grid [ttk::label .header.nofood] -row 0 -column 4 -sticky e
@@ -57,8 +60,48 @@ grid [ttk::button .header.clean -text {[C]} -style Toolbutton] -row 0 -column 13
 grid [ttk::button .header.crafting -text {[M]} -style Toolbutton] -row 0 -column 14 -sticky e
 grid .header -sticky we
 ttk::panedwindow .paned
-.paned add [text .paned.map]
+# Game map
+.paned add [ttk::frame .paned.mapframe]
+grid [text .paned.mapframe.map] -sticky nwes
+set mframe [ttk::frame .paned.mapframe.buttons]
+grid [ttk::button $mframe.show -text "[format %c 0x2b9d]"] -columnspan 5 -sticky we
+grid [ttk::button $mframe.left -text "[format %c 0x2b9c]"] -rowspan 3 -row 1 -column 0 -sticky ns
+grid [ttk::button $mframe.nw -text {NW}] -row 1 -column 1
+grid [ttk::button $mframe.n -text {N}] -column 2 -row 1
+grid [ttk::button $mframe.ne -text {NE}] -column 3 -row 1
+grid [ttk::button $mframe.right -text "[format %c 0x2b9e]"] -rowspan 3 -row 1 -column 4 -sticky ns
+grid [ttk::button $mframe.w -text {W}] -row 2 -column 1
+grid [ttk::button $mframe.wait -text {...}] -column 2 -row 2
+grid [ttk::button $mframe.e -text {E}] -column 3 -row 2
+grid [ttk::button $mframe.sw -text {SW}] -row 3 -column 1
+grid [ttk::button $mframe.s -text {S}] -column 2 -row 3
+grid [ttk::button $mframe.se -text {SE}] -column 3 -row 3
+grid [ttk::button $mframe.hide -text "[format %c 0x2b9f]"] -columnspan 5 -row 4 -sticky we
+grid $mframe -row 0 -column 0 -sticky se
+grid [ttk::frame .paned.mapframe.info] -column 0 -row 0 -sticky ne
+grid [ttk::label .paned.mapframe.info.info] -sticky nwes
+grid rowconfigure .paned.mapframe 0 -weight 1
+grid columnconfigure .paned.mapframe 0 -weight 1
+# Last messages
 .paned add [ttk::frame .paned.controls]
+grid [ttk::labelframe .paned.controls.messages] -sticky w
+grid [text .paned.controls.messages.view -wrap word -yscrollcommand [list .paned.controls.messages.scroll set]] -sticky nwes
+grid [ttk::scrollbar .paned.controls.messages.scroll -orient vertical -command [list .paned.controls.messages.view yview]] -sticky ns -column 1 -row 0
+# Movement buttons
+set bframe [ttk::frame .paned.controls.buttons]
+grid $bframe -row 0 -column 1 -sticky nw
+grid [ttk::combobox $bframe.speed -state readonly -values [list {Full stop} {Quarted speed} {Half speed} {Full speed}]]
+grid [ttk::button $bframe.moveto -text {Move to}] -row 0 -column 1 -columnspan 2
+grid [ttk::button $bframe.nw -text {NW}] -row 1
+grid [ttk::button $bframe.n -text {N}] -column 1 -row 1
+grid [ttk::button $bframe.ne -text {NE}] -column 2 -row 1
+grid [ttk::button $bframe.w -text {W}] -row 2
+grid [ttk::button $bframe.wait -text {Wait}] -column 1 -row 2
+grid [ttk::button $bframe.e -text {E}] -column 2 -row 2
+grid [ttk::button $bframe.sw -text {SW}] -row 3
+grid [ttk::button $bframe.s -text {S}] -column 1 -row 3
+grid [ttk::button $bframe.se -text {SE}] -column 2 -row 3
+grid columnconfigure .paned.controls .paned.controls.messages -weight 1
 grid .paned -sticky nwes
 grid rowconfigure . .paned -weight 1
 grid columnconfigure . .paned -weight 1
