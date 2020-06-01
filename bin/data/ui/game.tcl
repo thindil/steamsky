@@ -3,7 +3,7 @@ menu .gamemenu -title {Steam Sky - menu}
 .gamemenu add command -label {Ship information}
 .gamemenu add command -label {Ship cargo}
 .gamemenu add command -label {Crew information}
-.gamemenu add command -label {Ship orders}
+.gamemenu add command -label {Ship orders} -command {tk_popup .orders [expr [winfo width .paned.mapframe] / 3] [expr [winfo height .paned.mapframe] / 3]}
 .gamemenu add command -label {Crafting}
 .gamemenu add command -label {Last messages}
 .gamemenu add command -label {List of known bases}
@@ -17,7 +17,7 @@ menu .gamemenu -title {Steam Sky - menu}
 .gamemenu add command -label {Quit from game}
 .gamemenu add command -label {Resign from game}
 # Orders menu
-menu .orders -title {Steam Sky - orders}
+menu .orders -title {Steam Sky - orders} -tearoff false
 .orders add command -label {Story}
 .orders add command -label {Complete mission}
 .orders add command -label {Attack} -underline 0
@@ -39,6 +39,7 @@ menu .orders -title {Steam Sky - orders}
 .orders add command -label {Patrol area} -underline 0
 .orders add command -label {Loot} -underline 0
 .orders add command -label {Set as home} -underline 7
+.orders add command -label {Close} -underline 0
 # Game header
 ttk::frame .header
 grid [ttk::menubutton .header.menubutton -text {Menu} -menu .gamemenu] -sticky w
