@@ -13,12 +13,24 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+
 -- ****h* Maps/MUI
 -- FUNCTION
 -- Provide code for showing and interacting with maps
 -- SOURCE
 package Maps.UI is
 -- ****
+
+   MenuAccelerators: constant array(1 .. 16) of Unbounded_String :=
+     (To_Unbounded_String("s"), To_Unbounded_String("a"),
+      To_Unbounded_String("c"), To_Unbounded_String("o"),
+      To_Unbounded_String("r"), To_Unbounded_String("m"),
+      To_Unbounded_String("b"), To_Unbounded_String("n"),
+      To_Unbounded_String("i"), To_Unbounded_String("t"),
+      To_Unbounded_String("w"), To_Unbounded_String("g"),
+      To_Unbounded_String("F1"), To_Unbounded_String("p"),
+      To_Unbounded_String("q"), To_Unbounded_String("x"));
 
    -- ****f* MUI/CreateGameUI
    -- FUNCTION
