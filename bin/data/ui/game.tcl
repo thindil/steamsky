@@ -64,19 +64,19 @@ ttk::panedwindow .paned
 .paned add [ttk::frame .paned.mapframe]
 grid [text .paned.mapframe.map] -sticky nwes
 set mframe [ttk::frame .paned.mapframe.buttons]
-grid [ttk::button $mframe.show -text "[format %c 0x2b9d]"] -columnspan 5 -sticky we
-grid [ttk::button $mframe.left -text "[format %c 0x2b9c]"] -rowspan 3 -row 1 -column 0 -sticky ns
-grid [ttk::button $mframe.nw -text {NW}] -row 1 -column 1
-grid [ttk::button $mframe.n -text {N}] -column 2 -row 1
-grid [ttk::button $mframe.ne -text {NE}] -column 3 -row 1
-grid [ttk::button $mframe.right -text "[format %c 0x2b9e]"] -rowspan 3 -row 1 -column 4 -sticky ns
-grid [ttk::button $mframe.w -text {W}] -row 2 -column 1
-grid [ttk::button $mframe.wait -text {...}] -column 2 -row 2
-grid [ttk::button $mframe.e -text {E}] -column 3 -row 2
-grid [ttk::button $mframe.sw -text {SW}] -row 3 -column 1
-grid [ttk::button $mframe.s -text {S}] -column 2 -row 3
-grid [ttk::button $mframe.se -text {SE}] -column 3 -row 3
-grid [ttk::button $mframe.hide -text "[format %c 0x2b9f]"] -columnspan 5 -row 4 -sticky we
+grid [ttk::button $mframe.show -text "[format %c 0x2b9d]" -style Toolbutton] -columnspan 5 -sticky we
+grid [ttk::button $mframe.left -text "[format %c 0x2b9c]" -style Toolbutton] -rowspan 3 -row 1 -column 0 -sticky ns
+grid [ttk::button $mframe.nw -text {NW} -style Toolbutton] -row 1 -column 1
+grid [ttk::button $mframe.n -text {N} -style Toolbutton] -column 2 -row 1
+grid [ttk::button $mframe.ne -text {NE} -style Toolbutton] -column 3 -row 1
+grid [ttk::button $mframe.right -text "[format %c 0x2b9e]" -style Toolbutton] -rowspan 3 -row 1 -column 4 -sticky ns
+grid [ttk::button $mframe.w -text {W} -style Toolbutton] -row 2 -column 1
+grid [ttk::button $mframe.wait -text {...} -style Toolbutton] -column 2 -row 2
+grid [ttk::button $mframe.e -text {E} -style Toolbutton] -column 3 -row 2
+grid [ttk::button $mframe.sw -text {SW} -style Toolbutton] -row 3 -column 1
+grid [ttk::button $mframe.s -text {S} -style Toolbutton] -column 2 -row 3
+grid [ttk::button $mframe.se -text {SE} -style Toolbutton] -column 3 -row 3
+grid [ttk::button $mframe.hide -text "[format %c 0x2b9f]" -style Toolbutton] -columnspan 5 -row 4 -sticky we
 grid $mframe -row 0 -column 0 -sticky se
 grid [ttk::frame .paned.mapframe.info] -column 0 -row 0 -sticky ne
 grid [ttk::label .paned.mapframe.info.info] -sticky nwes
