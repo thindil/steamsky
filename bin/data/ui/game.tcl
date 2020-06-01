@@ -62,7 +62,7 @@ grid .header -sticky we
 ttk::panedwindow .paned
 # Game map
 .paned add [ttk::frame .paned.mapframe]
-grid [text .paned.mapframe.map] -sticky nwes
+grid [text .paned.mapframe.map -bg black -fg white] -sticky nwes
 set mframe [ttk::frame .paned.mapframe.buttons]
 grid [ttk::button $mframe.show -text "[format %c 0x2b9d]" -style Toolbutton] -columnspan 5 -sticky we
 grid [ttk::button $mframe.left -text "[format %c 0x2b9c]" -style Toolbutton] -rowspan 3 -row 1 -column 0 -sticky ns
