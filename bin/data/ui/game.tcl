@@ -1,21 +1,5 @@
 # Game menu
 menu .gamemenu -title {Steam Sky - menu}
-.gamemenu add command -label {Ship information}
-.gamemenu add command -label {Ship cargo}
-.gamemenu add command -label {Crew information}
-.gamemenu add command -label {Ship orders} -command {tk_popup .orders [expr [winfo width .paned.mapframe] / 3] [expr [winfo height .paned.mapframe] / 3]}
-.gamemenu add command -label {Crafting}
-.gamemenu add command -label {Last messages}
-.gamemenu add command -label {List of known bases}
-.gamemenu add command -label {List of known events}
-.gamemenu add command -label {Accepted missions}
-.gamemenu add command -label {Stories}
-.gamemenu add command -label {Wait orders}
-.gamemenu add command -label {Game statistics}
-.gamemenu add command -label {Help}
-.gamemenu add command -label {Game options}
-.gamemenu add command -label {Quit from game}
-.gamemenu add command -label {Resign from game}
 # Orders menu
 menu .orders -title {Steam Sky - orders} -tearoff false
 .orders add command -label {Story}
@@ -43,21 +27,21 @@ menu .orders -title {Steam Sky - orders} -tearoff false
 # Game header
 ttk::frame .header
 grid [ttk::menubutton .header.menubutton -text {Menu} -menu .gamemenu] -sticky w
-grid [ttk::button .header.closebutton -text {Close}] -row 0 -column 1 -sticky w
+ttk::button .header.closebutton -text {Close}
 grid [ttk::label .header.time -text {1600-03-01}] -row 0 -column 2
 grid columnconfigure .header .header.time -weight 1
-grid [ttk::label .header.nofuel] -row 0 -column 3 -sticky e
-grid [ttk::label .header.nofood] -row 0 -column 4 -sticky e
-grid [ttk::label .header.nodrink] -row 0 -column 5 -sticky e
-grid [ttk::label .header.overloaded] -row 0 -column 6 -sticky e
-grid [ttk::button .header.pilot -text {[P]} -style Toolbutton] -row 0 -column 7 -sticky e
-grid [ttk::button .header.engineer -text {[E]} -style Toolbutton] -row 0 -column 8 -sticky e
-grid [ttk::button .header.gunner -text {[G]} -style Toolbutton] -row 0 -column 9 -sticky e
-grid [ttk::button .header.talk -text {[T]} -style Toolbutton] -row 0 -column 10 -sticky e
-grid [ttk::button .header.repairs -text {[R]} -style Toolbutton] -row 0 -column 11 -sticky e
-grid [ttk::button .header.upgrade -text {[U]} -style Toolbutton] -row 0 -column 12 -sticky e
-grid [ttk::button .header.clean -text {[C]} -style Toolbutton] -row 0 -column 13 -sticky e
-grid [ttk::button .header.crafting -text {[M]} -style Toolbutton] -row 0 -column 14 -sticky e
+grid [ttk::label .header.nofuel -text "[format %c 0xf2ca]"] -row 0 -column 3 -sticky e
+grid [ttk::label .header.nofood -text "[format %c 0xf787]"] -row 0 -column 4 -sticky e
+grid [ttk::label .header.nodrink -text "[format %c 0xf72f]"] -row 0 -column 5 -sticky e
+grid [ttk::label .header.overloaded -text "[format %c 0xf55b]"] -row 0 -column 6 -sticky e
+grid [ttk::button .header.pilot -text "[format %c 0xf655]" -style Toolbutton] -row 0 -column 7 -sticky e
+grid [ttk::button .header.engineer -text "[format %c 0xf013]" -style Toolbutton] -row 0 -column 8 -sticky e
+grid [ttk::button .header.gunner -text "[format %c 0xf4fb]" -style Toolbutton] -row 0 -column 9 -sticky e
+grid [ttk::button .header.talk -text "[format %c 0xf651]" -style Toolbutton] -row 0 -column 10 -sticky e
+grid [ttk::button .header.repairs -text "[format %c 0xf54a]" -style Toolbutton] -row 0 -column 11 -sticky e
+grid [ttk::button .header.upgrade -text "[format %c 0xf6e3]" -style Toolbutton] -row 0 -column 12 -sticky e
+grid [ttk::button .header.clean -text "[format %c 0xf458]" -style Toolbutton] -row 0 -column 13 -sticky e
+grid [ttk::button .header.crafting -text "[format %c 0xf0e3]" -style Toolbutton] -row 0 -column 14 -sticky e
 grid .header -sticky we
 ttk::panedwindow .paned
 # Game map
@@ -99,8 +83,8 @@ grid [ttk::scrollbar .paned.controls.messages.scroll -orient vertical -command [
 # Movement buttons
 set bframe [ttk::frame .paned.controls.buttons]
 grid $bframe -row 0 -column 1 -sticky nw
-grid [ttk::combobox $bframe.speed -state readonly -values [list {Full stop} {Quarted speed} {Half speed} {Full speed}]]
-grid [ttk::button $bframe.moveto -text {Move to}] -row 0 -column 1 -columnspan 2
+grid [ttk::combobox $bframe.speed -state readonly -values [list {Full stop} {Quarted speed} {Half speed} {Full speed}] -width 10] -columnspan 2 -sticky we
+grid [ttk::button $bframe.moveto -text {Move to}] -row 0 -column 2
 grid [ttk::button $bframe.nw -text {NW}] -row 1
 grid [ttk::button $bframe.n -text {N}] -column 1 -row 1
 grid [ttk::button $bframe.ne -text {NE}] -column 2 -row 1
