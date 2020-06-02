@@ -14,12 +14,15 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers; use Ada.Containers;
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.String_Split; use GNAT.String_Split;
 with Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with CArgv;
 with Tcl; use Tcl;
+with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
@@ -27,6 +30,7 @@ with BasesTypes; use BasesTypes;
 with Crafts; use Crafts;
 with Crew; use Crew;
 with Events; use Events;
+with Factions; use Factions;
 with Game; use Game;
 with Items; use Items;
 with Maps; use Maps;
@@ -69,7 +73,7 @@ package body OrdersMenu is
       OrdersMenu: Tk_Menu;
    begin
       OrdersMenu.Interp := Interp;
-      OrdersMenu.Name := New_String(".ordersmenu");
+      OrdersMenu.Name := New_String(".orders");
       if Winfo_Get(OrdersMenu, "ismapped") = "1" then
          if Invoke(OrdersMenu, "end") /= "" then
             return TCL_ERROR;
@@ -98,10 +102,13 @@ package body OrdersMenu is
                   if BaseIndex > 0 then
                      if CurrentStory.Data = Null_Unbounded_String or
                        CurrentStory.Data = SkyBases(BaseIndex).Name then
-                       Add(OrdersMenu, "command", "-label {Ask for " &
+                        Add
+                          (OrdersMenu, "command",
+                           "-label {Ask for " &
                            To_String
                              (Items_List(GetStepData(Step.FinishData, "item"))
-                                .Name) & "} -underline 4");
+                                .Name) &
+                           "} -underline 4");
                      end if;
                   end if;
                when DESTROYSHIP =>
@@ -111,11 +118,14 @@ package body OrdersMenu is
                      Create(Tokens, To_String(CurrentStory.Data), ";");
                      if PlayerShip.SkyX = Positive'Value(Slice(Tokens, 1)) and
                        PlayerShip.SkyY = Positive'Value(Slice(Tokens, 2)) then
-                           Add(OrdersMenu, "command", "-label {Search for " &
+                        Add
+                          (OrdersMenu, "command",
+                           "-label {Search for " &
                            To_String
                              (ProtoShips_List
                                 (To_Unbounded_String(Slice(Tokens, 3)))
-                                .Name) & "} -underline 0");
+                                .Name) &
+                           "} -underline 0");
                      end if;
                   end;
                when EXPLORE =>
@@ -125,7 +135,9 @@ package body OrdersMenu is
                      Create(Tokens, To_String(CurrentStory.Data), ";");
                      if PlayerShip.SkyX = Positive'Value(Slice(Tokens, 1)) and
                        PlayerShip.SkyY = Positive'Value(Slice(Tokens, 2)) then
-                       Add(OrdersMenu, "command", "-label {Search area} -underline 0");
+                        Add
+                          (OrdersMenu, "command",
+                           "-label {Search area} -underline 0");
                      end if;
                   end;
                when ANY | LOOT =>
@@ -142,10 +154,14 @@ package body OrdersMenu is
                Add(OrdersMenu, "command", "-label {Recruit} -underline 0");
             end if;
             if DaysDifference(SkyBases(BaseIndex).AskedForEvents) > 6 then
-               Add(OrdersMenu, "command", "-label {Ask for events} -underline 8");
+               Add
+                 (OrdersMenu, "command",
+                  "-label {Ask for events} -underline 8");
             end if;
             if not SkyBases(BaseIndex).AskedForBases then
-               Add(OrdersMenu, "command", "-label {Ask for bases} -underline 8");
+               Add
+                 (OrdersMenu, "command",
+                  "-label {Ask for bases} -underline 8");
             end if;
             if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
                 (To_Unbounded_String("temple")) then
@@ -153,19 +169,23 @@ package body OrdersMenu is
             end if;
             for Member of PlayerShip.Crew loop
                if Member.Health < 100 then
-                  Add(OrdersMenu, "command", "-label {Heal wounded} -underline 5");
+                  Add
+                    (OrdersMenu, "command",
+                     "-label {Heal wounded} -underline 5");
                   exit;
                end if;
             end loop;
             for Module of PlayerShip.Modules loop
                if Module.Durability < Module.MaxDurability then
-                  Add(OrdersMenu, "command", "-label {Repair ship} -underline 2");
+                  Add
+                    (OrdersMenu, "command",
+                     "-label {Repair ship} -underline 2");
                   exit;
                end if;
             end loop;
             if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
                 (To_Unbounded_String("shipyard")) then
-                Add(OrdersMenu, "command", "-label {Shipyard} -underline 2");
+               Add(OrdersMenu, "command", "-label {Shipyard} -underline 2");
             end if;
             for I in Recipes_List.Iterate loop
                if Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) =
@@ -174,7 +194,9 @@ package body OrdersMenu is
                    (Recipes_Container.Key(I)) and
                  Recipes_List(I).Reputation <=
                    SkyBases(BaseIndex).Reputation(1) then
-                   Add(OrdersMenu, "command", "-label {Buy recipes} -underline 2");
+                  Add
+                    (OrdersMenu, "command",
+                     "-label {Buy recipes} -underline 2");
                   exit;
                end if;
             end loop;
@@ -197,25 +219,37 @@ package body OrdersMenu is
                      Mission.TargetY = PlayerShip.SkyY) then
                      case Mission.MType is
                         when Deliver =>
-                           Insert(OrdersMenu, "0", "command", "-label {Complete delivery of " &
-                              To_String(Items_List(Mission.ItemIndex).Name) & "} -underline 0");
+                           Insert
+                             (OrdersMenu, "0", "command",
+                              "-label {Complete delivery of " &
+                              To_String(Items_List(Mission.ItemIndex).Name) &
+                              "} -underline 0");
                         when Destroy =>
                            if Mission.Finished then
-                                 Insert(OrdersMenu, "0", "command", "-label {Complete destroy " &
+                              Insert
+                                (OrdersMenu, "0", "command",
+                                 "-label {Complete destroy " &
                                  To_String
-                                   (ProtoShips_List(Mission.ShipIndex).Name) & "} -underline 0");
+                                   (ProtoShips_List(Mission.ShipIndex).Name) &
+                                 "} -underline 0");
                            end if;
                         when Patrol =>
                            if Mission.Finished then
-                                 Insert(OrdersMenu, "0", "command", "-label {Complete Patrol area mission} -underline 0");
+                              Insert
+                                (OrdersMenu, "0", "command",
+                                 "-label {Complete Patrol area mission} -underline 0");
                            end if;
                         when Explore =>
                            if Mission.Finished then
-                                 Insert(OrdersMenu, "0", "command", "-label {Complete Explore area mission} -underline 0");
+                              Insert
+                                (OrdersMenu, "0", "command",
+                                 "-label {Complete Explore area mission} -underline 0");
                            end if;
                         when Passenger =>
                            if Mission.Finished then
-                                 Insert(OrdersMenu, "0", "command", "-label {Complete Transport passenger mission} -underline 0");
+                              Insert
+                                (OrdersMenu, "0", "command",
+                                 "-label {Complete Transport passenger mission} -underline 0");
                            end if;
                      end case;
                   end if;
@@ -235,30 +269,20 @@ package body OrdersMenu is
             Add(OrdersMenu, "command", "-label {Loot} -underline 0");
          end if;
       else
-         Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btnescape")), True);
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
             Event :=
               Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
                 .EType;
-            Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btnstory")), True);
          end if;
          case Event is
             when EnemyShip | EnemyPatrol =>
-               Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btnattack")), False);
-               Set_Label
-                 (Gtk_Button(Get_Object(Object, "btnattack")), "_Attack");
+               Add(OrdersMenu, "command", "-label {Attack} -underline 0");
             when FullDocks =>
-               Set_Label
-                 (Gtk_Button(Get_Object(Builder, "btndock")),
-                  "_Wait (full docks)");
-               Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btndock")), False);
+               Add
+                 (OrdersMenu, "command",
+                  "-label {Wait (full docks} -underline 0");
             when AttackOnBase =>
-               Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btnattack")), False);
-               Set_Label
-                 (Gtk_Button(Get_Object(Object, "btnattack")), "_Defend");
+               Add(OrdersMenu, "command", "-label {Defend} -underline 0");
             when Disease =>
                if HaveTrader then
                   ItemIndex :=
@@ -268,12 +292,12 @@ package body OrdersMenu is
                          Factions_List(SkyBases(BaseIndex).Owner)
                            .HealingTools);
                   if ItemIndex > 0 then
-                     Set_No_Show_All
-                       (Gtk_Widget(Get_Object(Object, "btnfreemedicines")),
-                        False);
-                     Set_No_Show_All
-                       (Gtk_Widget(Get_Object(Object, "btnpricedmedicines")),
-                        False);
+                     Add
+                       (OrdersMenu, "command",
+                        "-label {Deliver medicines for free} -underline 0");
+                     Add
+                       (OrdersMenu, "command",
+                        "-label {Deliver medicines for price} -underline 8");
                   end if;
                end if;
             when None | DoublePrice | BaseRecovery =>
@@ -288,13 +312,11 @@ package body OrdersMenu is
                               exit;
                            end if;
                         end loop;
-                        Set_Label
-                          (Gtk_Button(Get_Object(Builder, "btndock")),
-                           "_Dock (" &
-                           Trim(Positive'Image(DockingCost), Both) & " " &
-                           To_String(MoneyName) & ")");
-                        Set_No_Show_All
-                          (Gtk_Widget(Get_Object(Object, "btndock")), False);
+                        Add
+                          (OrdersMenu, "command",
+                           "-label {Dock (" &
+                           Trim(Positive'Image(DockingCost), Left) & " " &
+                           To_String(MoneyName) & ")} -underline 0");
                      end;
                   end if;
                   for Mission of AcceptedMissions loop
@@ -303,47 +325,41 @@ package body OrdersMenu is
                        Mission.Finished then
                         case Mission.MType is
                            when Deliver =>
-                              Set_Label
-                                (Gtk_Button
-                                   (Get_Object(Object, "btnfinishmission")),
-                                 "_Complete delivery of " &
+                              Add
+                                (OrdersMenu, "command",
+                                 "-label {Complete delivery of " &
                                  To_String
-                                   (Items_List(Mission.ItemIndex).Name));
+                                   (Items_List(Mission.ItemIndex).Name) &
+                                 "} -underline 0");
                            when Destroy =>
                               if Mission.Finished then
-                                 Set_Label
-                                   (Gtk_Button
-                                      (Get_Object(Object, "btnfinishmission")),
-                                    "_Complete destroy " &
+                                 Add
+                                   (OrdersMenu, "command",
+                                    "-label {Complete destroy " &
                                     To_String
                                       (ProtoShips_List(Mission.ShipIndex)
-                                         .Name));
+                                         .Name) &
+                                    "} -underline 0");
                               end if;
                            when Patrol =>
                               if Mission.Finished then
-                                 Set_Label
-                                   (Gtk_Button
-                                      (Get_Object(Object, "btnfinishmission")),
-                                    "_Complete Patrol area mission");
+                                 Add
+                                   (OrdersMenu, "command",
+                                    "-label {Complete Patrol area mission} -underline 0");
                               end if;
                            when Explore =>
                               if Mission.Finished then
-                                 Set_Label
-                                   (Gtk_Button
-                                      (Get_Object(Object, "btnfinishmission")),
-                                    "_Complete Explore area mission");
+                                 Add
+                                   (OrdersMenu, "command",
+                                    "-label {Complete Explore area mission} -underline 0");
                               end if;
                            when Passenger =>
                               if Mission.Finished then
-                                 Set_Label
-                                   (Gtk_Button
-                                      (Get_Object(Object, "btnfinishmission")),
-                                    "_Complete Transport passenger mission");
+                                 Add
+                                   (OrdersMenu, "command",
+                                    "-label {Complete Transport passenger mission} -underline 0");
                               end if;
                         end case;
-                        Set_No_Show_All
-                          (Gtk_Widget(Get_Object(Object, "btnfinishmission")),
-                           False);
                      end if;
                   end loop;
                else
@@ -355,37 +371,35 @@ package body OrdersMenu is
                            when Deliver | Passenger =>
                               null;
                            when Destroy =>
-                              Set_Label
-                                (Gtk_Button(Get_Child(OrdersBox, 18)),
-                                 "_Search for " &
+                              Add
+                                (OrdersMenu, "command",
+                                 "-label {Search for " &
                                  To_String
-                                   (ProtoShips_List(Mission.ShipIndex).Name));
+                                   (ProtoShips_List(Mission.ShipIndex).Name) &
+                                 "} -underline 0");
                            when Patrol =>
-                              Set_Label
-                                (Gtk_Button(Get_Child(OrdersBox, 18)),
-                                 "_Patrol area");
+                              Add
+                                (OrdersMenu, "command",
+                                 "-label {Patrol area} -underline 0");
                            when Explore =>
-                              Set_Label
-                                (Gtk_Button(Get_Child(OrdersBox, 18)),
-                                 "_Explore area");
+                              Add
+                                (OrdersMenu, "command",
+                                 "-label {Explore area} -underline 0");
                         end case;
-                        Set_No_Show_All(Get_Child(OrdersBox, 18), False);
                      end if;
                   end loop;
                end if;
             when Trader =>
                if HaveTrader then
-                  Set_No_Show_All
-                    (Gtk_Widget(Get_Object(Object, "btntrade")), False);
-                  Set_No_Show_All
-                    (Gtk_Widget(Get_Object(Object, "btnaskevents")), False);
-                  Set_No_Show_All
-                    (Gtk_Widget(Get_Object(Object, "btnaskbases")), False);
+                  Add(OrdersMenu, "command", "-label {Trade} -underline 0");
+                  Add
+                    (OrdersMenu, "command",
+                     "-label {Ask for events} -underline 8");
+                  Add
+                    (OrdersMenu, "command",
+                     "-label {Ask for bases} -underline 8");
                end if;
-               Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btnattack")), False);
-               Set_Label
-                 (Gtk_Button(Get_Object(Object, "btnattack")), "Attack");
+               Add(OrdersMenu, "command", "-label {Attack} -underline 0");
             when FriendlyShip =>
                if HaveTrader then
                   if Index
@@ -397,23 +411,26 @@ package body OrdersMenu is
                          .Name,
                        To_String(TradersName)) >
                     0 then
-                     Set_No_Show_All
-                       (Gtk_Widget(Get_Object(Object, "btntrade")), False);
-                     Set_No_Show_All
-                       (Gtk_Widget(Get_Object(Object, "btnaskbases")), False);
+                     Add(OrdersMenu, "command", "-label {Trade} -underline 0");
+                     Add
+                       (OrdersMenu, "command",
+                        "-label {Ask for bases} -underline 8");
                   end if;
-                  Set_No_Show_All
-                    (Gtk_Widget(Get_Object(Object, "btnaskevents")), False);
+                  Add
+                    (OrdersMenu, "command",
+                     "-label {Ask for events} -underline 8");
                end if;
-               Set_No_Show_All
-                 (Gtk_Widget(Get_Object(Object, "btnattack")), False);
-               Set_Label
-                 (Gtk_Button(Get_Object(Object, "btnattack")), "Attack");
+               Add(OrdersMenu, "command", "-label {Attack} -underline 0");
          end case;
       end if;
-      if not ButtonsVisible then
-         ShowDialog
+      Add(OrdersMenu, "command", "-label {Close} -underline 0");
+      if Index(OrdersMenu, "0") = Index(OrdersMenu, "end") then
+         ShowMessage
            ("Here are no available ship orders at this moment. Ship orders available mostly when you are at base or at event on map.");
+      else
+         Tcl_Eval
+           (Interp,
+            "tk_popup .orders [expr [winfo width .paned.mapframe] / 3] [expr [winfo height .paned.mapframe] / 3]");
       end if;
       return TCL_OK;
    end Show_Orders_Command;

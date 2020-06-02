@@ -2,28 +2,6 @@
 menu .gamemenu -title {Steam Sky - menu}
 # Orders menu
 menu .orders -title {Steam Sky - orders} -tearoff false
-.orders add command -label {Story}
-.orders add command -label {Complete mission}
-.orders add command -label {Attack} -underline 0
-.orders add command -label {Deliver medicines for free} -underline 0
-.orders add command -label {Deliver medicines for price} -underline 8
-.orders add command -label {Undock} -underline 0
-.orders add command -label {Escape} -underline 3
-.orders add command -label {Trade} -underline 0
-.orders add command -label {School} -underline 0
-.orders add command -label {Recruit} -underline 0
-.orders add command -label {Ask for events} -underline 8
-.orders add command -label {Ask for bases} -underline 8
-.orders add command -label {Pray}
-.orders add command -label {Heal wounded} -underline 5
-.orders add command -label {Repair ship} -underline 2
-.orders add command -label {Shipyard} -underline 2
-.orders add command -label {Buy recipes} -underline 2
-.orders add command -label {Missions} -underline 0
-.orders add command -label {Patrol area} -underline 0
-.orders add command -label {Loot} -underline 0
-.orders add command -label {Set as home} -underline 7
-.orders add command -label {Close} -underline 0
 # Game header
 ttk::frame .header
 grid [ttk::menubutton .header.menubutton -text {Menu} -menu .gamemenu] -sticky w
