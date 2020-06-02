@@ -22,6 +22,10 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package Maps.UI is
 -- ****
 
+   -- ****v* MUI/MenuAccelerators
+   -- FUNCTION
+   -- Array with the game menu default accelerators
+   -- SOURCE
    MenuAccelerators: constant array(1 .. 16) of Unbounded_String :=
      (To_Unbounded_String("s"), To_Unbounded_String("a"),
       To_Unbounded_String("c"), To_Unbounded_String("o"),
@@ -31,6 +35,7 @@ package Maps.UI is
       To_Unbounded_String("w"), To_Unbounded_String("g"),
       To_Unbounded_String("F1"), To_Unbounded_String("p"),
       To_Unbounded_String("q"), To_Unbounded_String("x"));
+   -- ****
 
    -- ****f* MUI/CreateGameUI
    -- FUNCTION
