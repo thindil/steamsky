@@ -1,5 +1,3 @@
-package require tooltip
-
 proc InvokeButton {name} {
    if {[winfo ismapped $name] == "1"} {
       focus $name
