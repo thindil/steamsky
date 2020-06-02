@@ -22,6 +22,7 @@ with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Game; use Game;
+with OrdersMenu;
 with Ships; use Ships;
 
 package body Maps.UI is
@@ -69,6 +70,7 @@ package body Maps.UI is
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "game.tcl");
+         OrdersMenu.AddCommands;
       end if;
       CreateGameMenu;
       for I in MenuAccelerators'Range loop
