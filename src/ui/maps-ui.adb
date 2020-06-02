@@ -45,9 +45,7 @@ package body Maps.UI is
       Add(GameMenu, "command", "-label {Ship information}");
       Add(GameMenu, "command", "-label {Ship cargo}");
       Add(GameMenu, "command", "-label {Crew information}");
-      Add
-        (GameMenu, "command",
-         "-label {Ship orders} -command {tk_popup .orders [expr [winfo width .paned.mapframe] / 3] [expr [winfo height .paned.mapframe] / 3]}");
+      Add(GameMenu, "command", "-label {Ship orders} -command {ShowOrders}");
       Add(GameMenu, "command", "-label {Crafting}");
       Add(GameMenu, "command", "-label {Last messages}");
       Add(GameMenu, "command", "-label {List of known bases}");
