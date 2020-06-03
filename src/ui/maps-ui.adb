@@ -422,6 +422,7 @@ package body Maps.UI is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
          PlayerShip.Speed := Ships.FULL_STOP;
       end if;
+      configure(MapView, "-state normal");
       for Y in StartY .. EndY loop
          for X in StartX .. EndX loop
             if X = PlayerShip.SkyX and Y = PlayerShip.SkyY then
@@ -518,7 +519,7 @@ package body Maps.UI is
                              .Color);
                      end if;
                   else
-                     Append(MapTag, " unvisited");
+                     MapTag := To_Unbounded_String("unvisited");
                   end if;
                end if;
             end if;
@@ -526,13 +527,8 @@ package body Maps.UI is
               (MapView, "end",
                Encode("" & MapChar) & " [list " & To_String(MapTag) & "]");
          end loop;
---         if Y < EndY then
---            Insert(MapBuffer, Iter, "" & LF);
---         end if;
       end loop;
---      if TextWindow /= null then
---         Set_Cursor(TextWindow, Gdk_Cursor_New(Cross));
---      end if;
+      configure(MapView, "-state disable");
    end DrawMap;
 
    procedure CreateGameUI is
