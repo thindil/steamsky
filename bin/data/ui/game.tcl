@@ -35,6 +35,8 @@ grid [text .paned.mapframe.map -bg black -fg white -font {-family {Hack NF} -siz
 .paned.mapframe.map tag configure red2 -foreground #a40000
 .paned.mapframe.map tag configure red3 -foreground #732727
 .paned.mapframe.map tag configure green2 -foreground #73d216
+.paned.mapframe.map tag configure gray -foreground #1f2223
+.paned.mapframe.map tag configure black -foreground black
 set mframe [ttk::frame .paned.mapframe.buttons]
 grid [ttk::button $mframe.show -text "[format %c 0x2b9d]" -style Toolbutton] -columnspan 5 -sticky we
 grid [ttk::button $mframe.left -text "[format %c 0x2b9c]" -style Toolbutton] -rowspan 3 -row 1 -column 0 -sticky ns
