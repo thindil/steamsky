@@ -7,19 +7,20 @@ ttk::frame .header
 grid [ttk::menubutton .header.menubutton -text {Menu} -menu .gamemenu] -sticky w
 ttk::button .header.closebutton -text {Close}
 grid [ttk::label .header.time -text {1600-03-01}] -row 0 -column 2
+tooltip::tooltip .header.time {The game time}
 grid columnconfigure .header .header.time -weight 1
-grid [ttk::label .header.nofuel -text "[format %c 0xf2ca]"] -row 0 -column 3 -sticky e
-grid [ttk::label .header.nofood -text "[format %c 0xf787]"] -row 0 -column 4 -sticky e
-grid [ttk::label .header.nodrink -text "[format %c 0xf72f]"] -row 0 -column 5 -sticky e
-grid [ttk::label .header.overloaded -text "[format %c 0xf55b]"] -row 0 -column 6 -sticky e
-grid [ttk::button .header.pilot -text "[format %c 0xf655]" -style Toolbutton] -row 0 -column 7 -sticky e
-grid [ttk::button .header.engineer -text "[format %c 0xf013]" -style Toolbutton] -row 0 -column 8 -sticky e
-grid [ttk::button .header.gunner -text "[format %c 0xf4fb]" -style Toolbutton] -row 0 -column 9 -sticky e
-grid [ttk::button .header.talk -text "[format %c 0xf651]" -style Toolbutton] -row 0 -column 10 -sticky e
-grid [ttk::button .header.repairs -text "[format %c 0xf54a]" -style Toolbutton] -row 0 -column 11 -sticky e
-grid [ttk::button .header.upgrade -text "[format %c 0xf6e3]" -style Toolbutton] -row 0 -column 12 -sticky e
-grid [ttk::button .header.clean -text "[format %c 0xf458]" -style Toolbutton] -row 0 -column 13 -sticky e
-grid [ttk::button .header.crafting -text "[format %c 0xf0e3]" -style Toolbutton] -row 0 -column 14 -sticky e
+grid [ttk::label .header.nofuel -text "[format %c 0xf2c9]" -font {-family "Font Awesome 5 Free Solid" -size 14}] -row 0 -column 3 -sticky e
+grid [ttk::label .header.nofood -text "[format %c 0xf787]" -font {-family "Font Awesome 5 Free Solid" -size 14}] -row 0 -column 4 -sticky e
+grid [ttk::label .header.nodrink -text "[format %c 0xf72f]" -font {-family "Font Awesome 5 Free Solid" -size 14}] -row 0 -column 5 -sticky e
+grid [ttk::label .header.overloaded -text "[format %c 0xf55b]" -font {-family "Font Awesome 5 Free Solid" -size 14}] -row 0 -column 6 -sticky e
+grid [ttk::button .header.pilot -text "[format %c 0xf655]" -style Header.Toolbutton] -row 0 -column 7 -sticky e
+grid [ttk::button .header.engineer -text "[format %c 0xf013]" -style Header.Toolbutton] -row 0 -column 8 -sticky e
+grid [ttk::button .header.gunner -text "[format %c 0xf4fb]" -style Header.Toolbutton] -row 0 -column 9 -sticky e
+grid [ttk::button .header.talk -text "[format %c 0xf651]" -style Header.Toolbutton] -row 0 -column 10 -sticky e
+grid [ttk::button .header.repairs -text "[format %c 0xf54a]" -style Header.Toolbutton] -row 0 -column 11 -sticky e
+grid [ttk::button .header.upgrade -text "[format %c 0xf6e3]" -style Header.Toolbutton] -row 0 -column 12 -sticky e
+grid [ttk::button .header.clean -text "[format %c 0xf458]" -style Header.Toolbutton] -row 0 -column 13 -sticky e
+grid [ttk::button .header.crafting -text "[format %c 0xf0e3]" -style Header.Toolbutton] -row 0 -column 14 -sticky e
 grid .header -sticky we
 ttk::panedwindow .paned
 # Game map
