@@ -13,6 +13,8 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.UTF_Encoding.Wide_Strings;
+use Ada.Strings.UTF_Encoding.Wide_Strings;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Tcl.Ada; use Tcl.Ada;
@@ -20,6 +22,7 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
+with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
@@ -38,6 +41,7 @@ with OrdersMenu;
 with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Movement; use Ships.Movement;
+with Stories; use Stories;
 
 package body Maps.UI is
 
@@ -353,6 +357,250 @@ package body Maps.UI is
       end if;
    end UpdateHeader;
 
+   -- ****iv* MUI/CenterX
+   -- FUNCTION
+   -- X coordinate of the center point of the map
+   -- SOURCE
+   CenterX: Positive;
+   -- ****
+
+   -- ****iv* MUI/CenterY
+   -- FUNCTION
+   -- Y coordinate of the center point of the map
+   -- SOURCE
+   CenterY: Positive;
+   -- ****
+
+   -- ****if* MUI/DrawMap
+   -- FUNCTION
+   -- Draw map on the screen
+   -- SOURCE
+   procedure DrawMap is
+      -- ****
+      MapView: Tk_Text;
+      MapChar: Wide_Character;
+      StartX, StartY, EndX, EndY: Integer;
+      MapHeight, MapWidth: Positive;
+      MapTag: Unbounded_String;
+      StoryX, StoryY: Integer := 0;
+   begin
+      MapView.Interp := Get_Context;
+      MapView.Name := New_String(".paned.mapframe.map");
+      MapHeight := Positive'Value(cget(Mapview, "-height"));
+      MapWidth := Positive'Value(cget(Mapview, "-width"));
+      StartY := CenterY - (MapHeight / 2);
+      StartX := CenterX - (MapWidth / 2);
+      EndY := CenterY + (MapHeight / 2);
+      EndX := CenterX + (MapWidth / 2);
+      if StartY < 1 then
+         StartY := 1;
+         EndY := MapHeight;
+      end if;
+      if StartX < 1 then
+         StartX := 1;
+         EndX := MapWidth;
+      end if;
+      if EndY > 1024 then
+         EndY := 1024;
+         StartY := 1024 - MapHeight;
+      end if;
+      if EndX > 1024 then
+         EndX := 1024;
+         StartX := 1024 - MapWidth;
+      end if;
+      if CurrentStory.Index /= Null_Unbounded_String then
+         GetStoryLocation(StoryX, StoryY);
+         if StoryX = PlayerShip.SkyX and StoryY = PlayerShip.SkyY then
+            StoryX := 0;
+            StoryY := 0;
+         end if;
+      end if;
+      if PlayerShip.Speed = DOCKED and
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
+         PlayerShip.Speed := Ships.FULL_STOP;
+      end if;
+      for Y in StartY .. EndY loop
+         for X in StartX .. EndX loop
+            if X = PlayerShip.SkyX and Y = PlayerShip.SkyY then
+               MapChar := Wide_Character'Val(16#f135#);
+            else
+               MapChar := Wide_Character'Val(16#f0c8#);
+               if SkyMap(X, Y).Visited then
+                  MapTag := To_Unbounded_String("black");
+               else
+                  MapTag := To_Unbounded_String("unvisited gray");
+               end if;
+--               if X = PlayerShip.DestinationX and
+--                 Y = PlayerShip.DestinationY then
+--                  MapChar := CurrentTheme.TargetIcon;
+--                  if SkyMap(X, Y).Visited then
+--                     MapColor := WhiteColor;
+--                  else
+--                     MapColor := WhiteGrayColor;
+--                  end if;
+--               elsif X = StoryX and Y = StoryY then
+--                  MapChar := CurrentTheme.StoryIcon;
+--                  MapColor := GreenColor;
+--               elsif SkyMap(X, Y).MissionIndex > 0 then
+--                  case AcceptedMissions(SkyMap(X, Y).MissionIndex).MType is
+--                     when Deliver =>
+--                        MapChar := CurrentTheme.DeliverIcon;
+--                     when Destroy =>
+--                        MapChar := CurrentTheme.DestroyIcon;
+--                     when Patrol =>
+--                        MapChar := CurrentTheme.PatrolIcon;
+--                     when Explore =>
+--                        MapChar := CurrentTheme.ExploreIcon;
+--                     when Passenger =>
+--                        MapChar := CurrentTheme.PassengerIcon;
+--                  end case;
+--                  if SkyMap(X, Y).Visited then
+--                     case AcceptedMissions(SkyMap(X, Y).MissionIndex).MType is
+--                        when Deliver =>
+--                           MapColor := YellowColor;
+--                        when Destroy =>
+--                           MapColor := RedColor;
+--                        when Patrol =>
+--                           MapColor := LimeColor;
+--                        when Explore =>
+--                           MapColor := GreenColor;
+--                        when Passenger =>
+--                           MapColor := CyanColor;
+--                     end case;
+--                  else
+--                     case AcceptedMissions(SkyMap(X, Y).MissionIndex).MType is
+--                        when Deliver =>
+--                           MapColor := YellowGrayColor;
+--                        when Destroy =>
+--                           MapColor := RedGrayColor;
+--                        when Patrol =>
+--                           MapColor := LimeGrayColor;
+--                        when Explore =>
+--                           MapColor := GreenGrayColor;
+--                        when Passenger =>
+--                           MapColor := CyanGrayColor;
+--                     end case;
+--                  end if;
+--               elsif SkyMap(X, Y).EventIndex > 0 then
+--                  if SkyMap(X, Y).EventIndex > Events_List.Last_Index then
+--                     SkyMap(X, Y).EventIndex := 0;
+--                  else
+--                     case Events_List(SkyMap(X, Y).EventIndex).EType is
+--                        when EnemyShip =>
+--                           MapChar := CurrentTheme.EnemyShipIcon;
+--                        when AttackOnBase =>
+--                           MapChar := CurrentTheme.AttackOnBaseIcon;
+--                        when EnemyPatrol =>
+--                           MapChar := CurrentTheme.EnemyPatrolIcon;
+--                        when Disease =>
+--                           MapChar := CurrentTheme.DiseaseIcon;
+--                        when FullDocks =>
+--                           MapChar := CurrentTheme.FullDocksIcon;
+--                        when DoublePrice =>
+--                           MapChar := CurrentTheme.DoublePriceIcon;
+--                        when Trader =>
+--                           MapChar := CurrentTheme.TraderIcon;
+--                        when FriendlyShip =>
+--                           MapChar := CurrentTheme.FriendlyShipIcon;
+--                        when others =>
+--                           null;
+--                     end case;
+--                  end if;
+--                  if SkyMap(X, Y).Visited then
+--                     case Events_List(SkyMap(X, Y).EventIndex).EType is
+--                        when EnemyShip =>
+--                           MapColor := RedColor;
+--                        when AttackOnBase =>
+--                           MapColor := Red2Color;
+--                        when EnemyPatrol =>
+--                           MapColor := Red3Color;
+--                        when Disease =>
+--                           MapColor := YellowColor;
+--                        when FullDocks =>
+--                           MapColor := CyanColor;
+--                        when DoublePrice =>
+--                           MapColor := LimeColor;
+--                        when Trader =>
+--                           MapColor := GreenColor;
+--                        when FriendlyShip =>
+--                           MapColor := Green2Color;
+--                        when others =>
+--                           null;
+--                     end case;
+--                  else
+--                     case Events_List(SkyMap(X, Y).EventIndex).EType is
+--                        when EnemyShip =>
+--                           MapColor := RedGrayColor;
+--                        when AttackOnBase =>
+--                           MapColor := Red2GrayColor;
+--                        when EnemyPatrol =>
+--                           MapColor := Red3GrayColor;
+--                        when Disease =>
+--                           MapColor := YellowGrayColor;
+--                        when FullDocks =>
+--                           MapColor := CyanGrayColor;
+--                        when DoublePrice =>
+--                           MapColor := LimeGrayColor;
+--                        when Trader =>
+--                           MapColor := GreenGrayColor;
+--                        when FriendlyShip =>
+--                           MapColor := Green2GrayColor;
+--                        when others =>
+--                           null;
+--                     end case;
+--                  end if;
+--               elsif SkyMap(X, Y).BaseIndex > 0 then
+--                  if SkyBases(SkyMap(X, Y).BaseIndex).Known then
+--                     MapChar := CurrentTheme.NotVisitedBaseIcon;
+--                     if SkyBases(SkyMap(X, Y).BaseIndex).Visited.Year > 0 then
+--                        MapChar :=
+--                          Factions_List(SkyBases(SkyMap(X, Y).BaseIndex).Owner)
+--                            .BaseIcon;
+--                        MapColor :=
+--                          Lookup
+--                            (Tags,
+--                             To_String
+--                               (SkyBases(SkyMap(X, Y).BaseIndex).BaseType));
+--                        if MapColor = null then
+--                           Gtk_New
+--                             (MapColor,
+--                              To_String
+--                                (SkyBases(SkyMap(X, Y).BaseIndex).BaseType));
+--                           Parse
+--                             (Color,
+--                              "#" &
+--                              BasesTypes_List
+--                                (SkyBases(SkyMap(X, Y).BaseIndex).BaseType)
+--                                .Color,
+--                              Success);
+--                           if Success then
+--                              Set_Property
+--                                (GObject(MapColor), Foreground_Rgba_Property,
+--                                 Color);
+--                              Set_Property
+--                                (GObject(MapColor), Background_Rgba_Property,
+--                                 Black_RGBA);
+--                           end if;
+--                           Add(Tags, MapColor);
+--                        end if;
+--                     else
+--                        MapColor := WhiteGrayColor;
+--                     end if;
+--                  end if;
+--               end if;
+            end if;
+            Insert(MapView, "end", Encode("" & MapChar) & " [list " & To_String(MapTag) & "]");
+--            Insert_With_Tags(MapBuffer, Iter, Encode("" & MapChar), MapColor);
+         end loop;
+--         if Y < EndY then
+--            Insert(MapBuffer, Iter, "" & LF);
+--         end if;
+      end loop;
+--      if TextWindow /= null then
+--         Set_Cursor(TextWindow, Gdk_Cursor_New(Cross));
+--      end if;
+   end DrawMap;
+
    procedure CreateGameUI is
    begin
       GameMenu.Interp := Get_Context;
@@ -373,6 +621,9 @@ package body Maps.UI is
             "{.gamemenu invoke" & Positive'Image(I) & "}");
       end loop;
       UpdateHeader;
+      CenterX := PlayerShip.SkyX;
+      CenterY := PlayerShip.SkyY;
+      DrawMap;
    end CreateGameUI;
 
 end Maps.UI;
