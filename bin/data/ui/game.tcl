@@ -59,8 +59,8 @@ grid columnconfigure .paned.mapframe 0 -weight 1
 # Last messages
 .paned add [ttk::frame .paned.controls]
 grid [ttk::labelframe .paned.controls.messages] -sticky w
-grid [text .paned.controls.messages.view -wrap word -yscrollcommand [list .paned.controls.messages.scroll set]] -sticky nwes
-grid [ttk::scrollbar .paned.controls.messages.scroll -orient vertical -command [list .paned.controls.messages.view yview]] -sticky ns -column 1 -row 0
+pack [ttk::scrollbar .paned.controls.messages.scroll -orient vertical -command [list .paned.controls.messages.view yview]] -side right -fill y
+pack [text .paned.controls.messages.view -wrap word -yscrollcommand [list .paned.controls.messages.scroll set]] -side top -fill both
 # Movement buttons
 set bframe [ttk::frame .paned.controls.buttons]
 grid $bframe -row 0 -column 1 -sticky nw
