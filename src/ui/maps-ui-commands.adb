@@ -1,0 +1,73 @@
+-- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+--
+-- This program is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+--
+-- This program is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU General Public License for more details.
+--
+-- You should have received a copy of the GNU General Public License
+-- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+with Interfaces.C;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
+with CArgv;
+with Tcl; use Tcl;
+with Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Utils.UI; use Utils.UI;
+
+package body Maps.UI.Commands is
+
+   ButtonNames: constant array(1 .. 13) of Unbounded_String :=
+     (To_Unbounded_String("show"), To_Unbounded_String("left"),
+      To_Unbounded_String("nw"), To_Unbounded_String("n"),
+      To_Unbounded_String("ne"), To_Unbounded_String("right"),
+      To_Unbounded_String("w"), To_Unbounded_String("wait"),
+      To_Unbounded_String("e"), To_Unbounded_String("sw"),
+      To_Unbounded_String("s"), To_Unbounded_String("se"),
+      To_Unbounded_String("hide"));
+
+   -- ****if* MapCommands/Hide_Map_Buttons_Command
+   -- FUNCTION
+   -- Hide map movement buttons
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Hide_Map_Buttons_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Hide_Map_Buttons_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      Button: Ttk_Button;
+   begin
+      Button.Interp := Interp;
+      for I in 2 .. 13 loop
+         Button.Name := New_String(".paned.mapframe.buttons." & To_String(ButtonNames(I)));
+         Tcl.Tk.Ada.Grid.Grid_Remove(Button);
+      end loop;
+      Button.Name := New_String(".paned.mapframe.buttons.show");
+      Tcl.Tk.Ada.Grid.Grid(Button);
+      return TCL_OK;
+   end Hide_Map_Buttons_Command;
+
+   procedure AddCommands is
+   begin
+      AddCommand("HideMapButtons", Hide_Map_Buttons_Command'Access);
+   end AddCommands;
+
+end Maps.UI.Commands;

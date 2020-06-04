@@ -50,7 +50,7 @@ grid [ttk::button $mframe.e -text {E} -style Toolbutton] -column 3 -row 2
 grid [ttk::button $mframe.sw -text {SW} -style Toolbutton] -row 3 -column 1
 grid [ttk::button $mframe.s -text {S} -style Toolbutton] -column 2 -row 3
 grid [ttk::button $mframe.se -text {SE} -style Toolbutton] -column 3 -row 3
-grid [ttk::button $mframe.hide -text "[format %c 0x2b9f]" -style Toolbutton] -columnspan 5 -row 4 -sticky we
+grid [ttk::button $mframe.hide -text "[format %c 0x2b9f]" -style Toolbutton -command HideMapButtons] -columnspan 5 -row 4 -sticky we
 grid $mframe -row 0 -column 0 -sticky se
 grid [ttk::frame .paned.mapframe.info] -column 0 -row 0 -sticky ne
 grid [ttk::label .paned.mapframe.info.info] -sticky nwes

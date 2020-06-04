@@ -39,6 +39,7 @@ with Crew; use Crew;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
+with Maps.UI.Commands;
 with Messages; use Messages;
 with Missions; use Missions;
 with ShipModules; use ShipModules;
@@ -537,6 +538,8 @@ package body Maps.UI is
 
    procedure CreateGameUI is
       Paned: Ttk_PanedWindow;
+      Button: Ttk_Button;
+      SteamSky_Map_Error: exception;
    begin
       GameMenu.Interp := Get_Context;
       GameMenu.Name := New_String(".gamemenu");
@@ -545,6 +548,7 @@ package body Maps.UI is
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "game.tcl");
          OrdersMenu.AddCommands;
+         Maps.UI.Commands.AddCommands;
       end if;
       CreateGameMenu;
       for I in MenuAccelerators'Range loop
@@ -575,9 +579,13 @@ package body Maps.UI is
       configure
         (MapView,
          "-height [expr [winfo height " & Widget_Image(MapView) &
-         "] / [font metrics {" & cget(MapView, "-font") &
-         "} -ascent] - 2]");
+         "] / [font metrics {" & cget(MapView, "-font") & "} -ascent] - 2]");
       DrawMap;
+      Button.Interp := Get_Context;
+      Button.Name := New_String(".paned.mapframe.buttons.hide");
+      if Invoke(Button) /= "" then
+         raise SteamSky_Map_Error with "Can't hide map buttons";
+      end if;
    end CreateGameUI;
 
 end Maps.UI;
