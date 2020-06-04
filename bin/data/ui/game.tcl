@@ -79,3 +79,4 @@ grid columnconfigure .paned.controls .paned.controls.messages -weight 1
 grid .paned -sticky nwes
 grid rowconfigure . .paned -weight 1
 grid columnconfigure . .paned -weight 1
+update

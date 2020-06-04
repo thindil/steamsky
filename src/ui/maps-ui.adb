@@ -29,6 +29,7 @@ use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
@@ -536,6 +537,7 @@ package body Maps.UI is
    end DrawMap;
 
    procedure CreateGameUI is
+      Paned: Ttk_PanedWindow;
    begin
       GameMenu.Interp := Get_Context;
       GameMenu.Name := New_String(".gamemenu");
@@ -564,6 +566,9 @@ package body Maps.UI is
            (MapView, To_String(BasesTypes_Container.Key(I)),
             "-foreground #" & BasesTypes_List(I).Color);
       end loop;
+      Paned.Interp := Get_Context;
+      Paned.Name := New_String(".paned");
+      SashPos(Paned, "0", Natural'Image(GameSettings.MessagesPosition));
       DrawMap;
    end CreateGameUI;
 
