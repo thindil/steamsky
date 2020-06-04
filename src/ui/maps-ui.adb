@@ -375,21 +375,25 @@ package body Maps.UI is
    CenterY: Positive;
    -- ****
 
+   -- ****iv* Maps.UI/MapView
+   -- FUNCTION
+   -- Text widget with the sky map
+   -- SOURCE
+   MapView: Tk_Text;
+   -- ****
+
    -- ****if* MUI/DrawMap
    -- FUNCTION
    -- Draw map on the screen
    -- SOURCE
    procedure DrawMap is
       -- ****
-      MapView: Tk_Text;
       MapChar: Wide_Character;
       StartX, StartY, EndX, EndY: Integer;
       MapHeight, MapWidth: Positive;
       MapTag: Unbounded_String;
       StoryX, StoryY: Integer := 0;
    begin
-      MapView.Interp := Get_Context;
-      MapView.Name := New_String(".paned.mapframe.map");
       configure(MapView, "-state normal");
       Delete(MapView, "1.0", "end");
       -- FIXME: better count of width and height
@@ -513,14 +517,6 @@ package body Maps.UI is
                         MapChar :=
                           Factions_List(SkyBases(SkyMap(X, Y).BaseIndex).Owner)
                             .BaseIcon;
-                        Tag_Configure
-                          (MapView,
-                           To_String
-                             (SkyBases(SkyMap(X, Y).BaseIndex).BaseType),
-                           "-foreground #" &
-                           BasesTypes_List
-                             (SkyBases(SkyMap(X, Y).BaseIndex).BaseType)
-                             .Color);
                         MapTag := SkyBases(SkyMap(X, Y).BaseIndex).BaseType;
                      end if;
                   else
@@ -561,6 +557,13 @@ package body Maps.UI is
       UpdateHeader;
       CenterX := PlayerShip.SkyX;
       CenterY := PlayerShip.SkyY;
+      MapView.Interp := Get_Context;
+      MapView.Name := New_String(".paned.mapframe.map");
+      for I in BasesTypes_List.Iterate loop
+         Tag_Configure
+           (MapView, To_String(BasesTypes_Container.Key(I)),
+            "-foreground #" & BasesTypes_List(I).Color);
+      end loop;
       DrawMap;
    end CreateGameUI;
 
