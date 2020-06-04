@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings.UTF_Encoding.Wide_Strings;
 use Ada.Strings.UTF_Encoding.Wide_Strings;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
@@ -389,6 +390,9 @@ package body Maps.UI is
    begin
       MapView.Interp := Get_Context;
       MapView.Name := New_String(".paned.mapframe.map");
+      configure(MapView, "-state normal");
+      Delete(MapView, "1.0", "end");
+      -- FIXME: better count of width and height
       MapHeight := Positive'Value(cget(MapView, "-height"));
       MapWidth := Positive'Value(cget(MapView, "-width"));
       StartY := CenterY - (MapHeight / 2);
@@ -422,9 +426,9 @@ package body Maps.UI is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
          PlayerShip.Speed := Ships.FULL_STOP;
       end if;
-      configure(MapView, "-state normal");
       for Y in StartY .. EndY loop
          for X in StartX .. EndX loop
+            MapTag := Null_Unbounded_String;
             if X = PlayerShip.SkyX and Y = PlayerShip.SkyY then
                MapChar := Wide_Character'Val(16#f135#);
             else
@@ -503,8 +507,8 @@ package body Maps.UI is
                      Append(MapTag, " unvisited");
                   end if;
                elsif SkyMap(X, Y).BaseIndex > 0 then
+                  MapChar := Wide_Character'Val(16#229b#);
                   if SkyBases(SkyMap(X, Y).BaseIndex).Known then
-                     MapChar := Wide_Character'Val(16#229b#);
                      if SkyBases(SkyMap(X, Y).BaseIndex).Visited.Year > 0 then
                         MapChar :=
                           Factions_List(SkyBases(SkyMap(X, Y).BaseIndex).Owner)
@@ -513,10 +517,11 @@ package body Maps.UI is
                           (MapView,
                            To_String
                              (SkyBases(SkyMap(X, Y).BaseIndex).BaseType),
-                           "-foreground " &
+                           "-foreground #" &
                            BasesTypes_List
                              (SkyBases(SkyMap(X, Y).BaseIndex).BaseType)
                              .Color);
+                        MapTag := SkyBases(SkyMap(X, Y).BaseIndex).BaseType;
                      end if;
                   else
                      MapTag := To_Unbounded_String("unvisited");
@@ -527,6 +532,9 @@ package body Maps.UI is
               (MapView, "end",
                Encode("" & MapChar) & " [list " & To_String(MapTag) & "]");
          end loop;
+         if Y < EndY then
+            Insert(MapView, "end", "{" & LF & "}");
+         end if;
       end loop;
       configure(MapView, "-state disable");
    end DrawMap;
