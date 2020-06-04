@@ -397,7 +397,6 @@ package body Maps.UI is
    begin
       configure(MapView, "-state normal");
       Delete(MapView, "1.0", "end");
-      -- FIXME: better count of width and height
       MapHeight := Positive'Value(cget(MapView, "-height"));
       MapWidth := Positive'Value(cget(MapView, "-width"));
       StartY := CenterY - (MapHeight / 2);
@@ -572,7 +571,12 @@ package body Maps.UI is
       configure
         (MapView,
          "-width [expr [winfo width " & Widget_Image(MapView) &
-         "] / [font measure {" & cget(MapView, "-font") & "} m] - 1]");
+         "] / [font measure {" & cget(MapView, "-font") & "} m] - 2]");
+      configure
+        (MapView,
+         "-height [expr [winfo height " & Widget_Image(MapView) &
+         "] / [font metrics {" & cget(MapView, "-font") &
+         "} -ascent] - 2]");
       DrawMap;
    end CreateGameUI;
 
