@@ -569,6 +569,10 @@ package body Maps.UI is
       Paned.Interp := Get_Context;
       Paned.Name := New_String(".paned");
       SashPos(Paned, "0", Natural'Image(GameSettings.MessagesPosition));
+      configure
+        (MapView,
+         "-width [expr [winfo width " & Widget_Image(MapView) &
+         "] / [font measure {" & cget(MapView, "-font") & "} m] - 1]");
       DrawMap;
    end CreateGameUI;
 
