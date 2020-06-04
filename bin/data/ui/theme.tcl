@@ -13,8 +13,8 @@ namespace eval ttk::theme::steamsky {
       -disabledbg     "#4d4d4d"
       -disabledfg     "#7f8c8d"
 
-      -selectbg       "#1a130c"
-      -selectfg       "#ffffff"
+      -selectbg       "#800000"
+      -selectfg       "#eee8aa"
 
       -window         "#1a130c"
       -focuscolor     "#ffdf00"
@@ -69,8 +69,8 @@ namespace eval ttk::theme::steamsky {
       ttk::style map TPanedwindow -background [list hover $colors(-checklight)]
       ttk::style map TCombobox -selectbackground [list \
          !focus         $colors(-window) \
-         {readonly hover} $colors(-checklight) \
-         {readonly focus} $colors(-focuscolor) \
+         {readonly hover} $colors(-bg) \
+         {readonly focus} $colors(-selectbg) \
          ]
 
       ttk::style map TCombobox -selectforeground [list \
