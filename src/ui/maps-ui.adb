@@ -551,6 +551,7 @@ package body Maps.UI is
          OrdersMenu.AddCommands;
          Maps.UI.Commands.AddCommands;
          Bind(MapView, "<Configure>", "DrawMap");
+         Bind(MapView, "<Motion>", "UpdateMapInfo");
       end if;
       CreateGameMenu;
       for I in MenuAccelerators'Range loop
