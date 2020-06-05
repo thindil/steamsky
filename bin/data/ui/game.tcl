@@ -25,18 +25,19 @@ grid .header -sticky we
 ttk::panedwindow .paned
 # Game map
 .paned add [ttk::frame .paned.mapframe]
-grid [text .paned.mapframe.map -bg black -fg white -font MapFont -cursor cross] -sticky nwes
-.paned.mapframe.map tag configure unvisited -background #1f2223
-.paned.mapframe.map tag configure yellow -foreground yellow
-.paned.mapframe.map tag configure green -foreground #4e9a06
-.paned.mapframe.map tag configure red -foreground red
-.paned.mapframe.map tag configure cyan -foreground cyan
-.paned.mapframe.map tag configure lime -foreground lime
-.paned.mapframe.map tag configure red2 -foreground #a40000
-.paned.mapframe.map tag configure red3 -foreground #732727
-.paned.mapframe.map tag configure green2 -foreground #73d216
-.paned.mapframe.map tag configure gray -foreground #1f2223
-.paned.mapframe.map tag configure black -foreground black
+set mapview [text .paned.mapframe.map -bg black -fg white -font MapFont -cursor cross]
+grid $mapview -sticky nwes
+$mapview tag configure unvisited -background #1f2223
+$mapview tag configure yellow -foreground yellow
+$mapview tag configure green -foreground #4e9a06
+$mapview tag configure red -foreground red
+$mapview tag configure cyan -foreground cyan
+$mapview tag configure lime -foreground lime
+$mapview tag configure red2 -foreground #a40000
+$mapview tag configure red3 -foreground #732727
+$mapview tag configure green2 -foreground #73d216
+$mapview tag configure gray -foreground #1f2223
+$mapview tag configure black -foreground black
 set mframe [ttk::frame .paned.mapframe.buttons]
 grid [ttk::button $mframe.show -text "[format %c 0x2b9d]" -style Toolbutton -command ShowMapButtons] -columnspan 5 -sticky we
 grid [ttk::button $mframe.left -text "[format %c 0x2b9c]" -style Toolbutton -command {MoveMapButtons left}] -rowspan 3 -row 1 -column 0 -sticky ns
