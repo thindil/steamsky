@@ -24,6 +24,7 @@ with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Utils.UI; use Utils.UI;
+with ada.text_io;
 
 package body Maps.UI.Commands is
 
@@ -210,11 +211,18 @@ package body Maps.UI.Commands is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(ClientData, Argc);
       MapView: Tk_Text;
+      MapIndex: Unbounded_String;
    begin
       MapView.Interp := Interp;
       MapView.Name := New_String(".paned.mapframe.map");
+      MapIndex :=
+        To_Unbounded_String
+          (Index
+             (MapView, "@" & CArgv.Arg(Argv, 1) & "," & CArgv.Arg(Argv, 2)));
+        Ada.Text_IO.Put_Line(Slice(MapIndex, 1, Index(MapIndex, ".") - 1));
+      UpdateMapInfo;
       return TCL_OK;
    end Update_Map_Info_Command;
 
