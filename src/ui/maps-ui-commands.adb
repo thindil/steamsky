@@ -190,12 +190,41 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Draw_Map_Command;
 
+   -- ****if* MapCommands/Update_Map_Info_Command
+   -- FUNCTION
+   -- Update map cell info
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Update_Map_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Update_Map_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      MapView: Tk_Text;
+   begin
+      MapView.Interp := Interp;
+      MapView.Name := New_String(".paned.mapframe.map");
+      return TCL_OK;
+   end Update_Map_Info_Command;
+
    procedure AddCommands is
    begin
       AddCommand("HideMapButtons", Hide_Map_Buttons_Command'Access);
       AddCommand("ShowMapButtons", Show_Map_Buttons_Command'Access);
       AddCommand("MoveMapButtons", Move_Map_Buttons_Command'Access);
       AddCommand("DrawMap", Draw_Map_Command'Access);
+      AddCommand("UpdateMapInfo", Update_Map_Info_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;
