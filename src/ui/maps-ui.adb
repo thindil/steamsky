@@ -544,6 +544,10 @@ package body Maps.UI is
       GameMenu.Interp := Get_Context;
       GameMenu.Name := New_String(".gamemenu");
       if Winfo_Get(GameMenu, "exists") = "0" then
+         Tcl_Eval
+           (Get_Context,
+            "font create MapFont -family {Hack NF} -size " &
+            Integer'Image(-(GameSettings.MapFontSize)));
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "game.tcl");
