@@ -13,12 +13,15 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with CArgv;
 with Tcl; use Tcl;
 with Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Utils.UI; use Utils.UI;
 
 package body Maps.UI.Commands is
@@ -88,16 +91,25 @@ package body Maps.UI.Commands is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       Button: Ttk_Button;
+      ButtonsBox: Ttk_Frame;
    begin
       Button.Interp := Interp;
+      ButtonsBox.Interp := Interp;
+      ButtonsBox.Name := New_String(".paned.mapframe.buttons");
       for I in 2 .. 11 loop
          Button.Name :=
-           New_String(".paned.mapframe.buttons." & To_String(ButtonNames(I)));
+           New_String
+             (Widget_Image(ButtonsBox) & "." & To_String(ButtonNames(I)));
          Tcl.Tk.Ada.Grid.Grid(Button);
       end loop;
-      Button.Name := New_String(".paned.mapframe.buttons.show");
+      Button.Name := New_String(Widget_Image(ButtonsBox) & ".show");
       Tcl.Tk.Ada.Grid.Grid_Remove(Button);
-      -- TODO: showing left and right button
+      if Index(Tcl.Tk.Ada.Grid.Grid_Info(ButtonsBox), "-sticky se") = 0 then
+         Button.Name := New_String(Widget_Image(ButtonsBox) & ".left");
+      else
+         Button.Name := New_String(Widget_Image(ButtonsBox) & ".right");
+      end if;
+      Tcl.Tk.Ada.Grid.Grid(Button);
       return TCL_OK;
    end Show_Map_Buttons_Command;
 
