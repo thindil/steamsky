@@ -24,20 +24,20 @@ with Utils.UI; use Utils.UI;
 package body Maps.UI.Commands is
 
    ButtonNames: constant array(1 .. 13) of Unbounded_String :=
-     (To_Unbounded_String("show"), To_Unbounded_String("left"),
-      To_Unbounded_String("nw"), To_Unbounded_String("n"),
-      To_Unbounded_String("ne"), To_Unbounded_String("right"),
+     (To_Unbounded_String("show"), To_Unbounded_String("nw"),
+      To_Unbounded_String("n"), To_Unbounded_String("ne"),
       To_Unbounded_String("w"), To_Unbounded_String("wait"),
       To_Unbounded_String("e"), To_Unbounded_String("sw"),
       To_Unbounded_String("s"), To_Unbounded_String("se"),
-      To_Unbounded_String("hide"));
+      To_Unbounded_String("hide"), To_Unbounded_String("left"),
+      To_Unbounded_String("right"));
 
    -- ****if* MapCommands/Hide_Map_Buttons_Command
    -- FUNCTION
    -- Hide map movement buttons
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
    -- SOURCE
@@ -57,7 +57,8 @@ package body Maps.UI.Commands is
    begin
       Button.Interp := Interp;
       for I in 2 .. 13 loop
-         Button.Name := New_String(".paned.mapframe.buttons." & To_String(ButtonNames(I)));
+         Button.Name :=
+           New_String(".paned.mapframe.buttons." & To_String(ButtonNames(I)));
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
       end loop;
       Button.Name := New_String(".paned.mapframe.buttons.show");
@@ -65,9 +66,45 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Hide_Map_Buttons_Command;
 
+   -- ****if* MapCommands/Show_Map_Buttons_Command
+   -- FUNCTION
+   -- Show map movement buttons
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Show_Map_Buttons_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Map_Buttons_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      Button: Ttk_Button;
+   begin
+      Button.Interp := Interp;
+      for I in 2 .. 11 loop
+         Button.Name :=
+           New_String(".paned.mapframe.buttons." & To_String(ButtonNames(I)));
+         Tcl.Tk.Ada.Grid.Grid(Button);
+      end loop;
+      Button.Name := New_String(".paned.mapframe.buttons.show");
+      Tcl.Tk.Ada.Grid.Grid_Remove(Button);
+      -- TODO: showing left and right button
+      return TCL_OK;
+   end Show_Map_Buttons_Command;
+
    procedure AddCommands is
    begin
       AddCommand("HideMapButtons", Hide_Map_Buttons_Command'Access);
+      AddCommand("ShowMapButtons", Show_Map_Buttons_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;
