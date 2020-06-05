@@ -25,7 +25,7 @@ grid .header -sticky we
 ttk::panedwindow .paned
 # Game map
 .paned add [ttk::frame .paned.mapframe]
-grid [text .paned.mapframe.map -bg black -fg white -font {-family {Hack NF} -size 16} -cursor cross] -sticky nwes
+grid [text .paned.mapframe.map -bg black -fg white -font MapFont -cursor cross] -sticky nwes
 .paned.mapframe.map tag configure unvisited -background #1f2223
 .paned.mapframe.map tag configure yellow -foreground yellow
 .paned.mapframe.map tag configure green -foreground #4e9a06
