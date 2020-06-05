@@ -39,11 +39,11 @@ grid [text .paned.mapframe.map -bg black -fg white -font {-family {Hack NF} -siz
 .paned.mapframe.map tag configure black -foreground black
 set mframe [ttk::frame .paned.mapframe.buttons]
 grid [ttk::button $mframe.show -text "[format %c 0x2b9d]" -style Toolbutton -command ShowMapButtons] -columnspan 5 -sticky we
-grid [ttk::button $mframe.left -text "[format %c 0x2b9c]" -style Toolbutton] -rowspan 3 -row 1 -column 0 -sticky ns
+grid [ttk::button $mframe.left -text "[format %c 0x2b9c]" -style Toolbutton -command {MoveMapButtons left}] -rowspan 3 -row 1 -column 0 -sticky ns
 grid [ttk::button $mframe.nw -text {NW} -style Toolbutton] -row 1 -column 1
 grid [ttk::button $mframe.n -text {N} -style Toolbutton] -column 2 -row 1
 grid [ttk::button $mframe.ne -text {NE} -style Toolbutton] -column 3 -row 1
-grid [ttk::button $mframe.right -text "[format %c 0x2b9e]" -style Toolbutton] -rowspan 3 -row 1 -column 4 -sticky ns
+grid [ttk::button $mframe.right -text "[format %c 0x2b9e]" -style Toolbutton -command {MoveMapButtons right}] -rowspan 3 -row 1 -column 4 -sticky ns
 grid [ttk::button $mframe.w -text {W} -style Toolbutton] -row 2 -column 1
 grid [ttk::button $mframe.wait -text {...} -style Toolbutton] -column 2 -row 2
 grid [ttk::button $mframe.e -text {E} -style Toolbutton] -column 3 -row 2
