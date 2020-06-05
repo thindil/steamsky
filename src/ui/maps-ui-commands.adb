@@ -104,19 +104,61 @@ package body Maps.UI.Commands is
       end loop;
       Button.Name := New_String(Widget_Image(ButtonsBox) & ".show");
       Tcl.Tk.Ada.Grid.Grid_Remove(Button);
-      if Index(Tcl.Tk.Ada.Grid.Grid_Info(ButtonsBox), "-sticky se") = 0 then
-         Button.Name := New_String(Widget_Image(ButtonsBox) & ".left");
-      else
+      if Index(Tcl.Tk.Ada.Grid.Grid_Info(ButtonsBox), "-sticky es") = 0 then
          Button.Name := New_String(Widget_Image(ButtonsBox) & ".right");
+      else
+         Button.Name := New_String(Widget_Image(ButtonsBox) & ".left");
       end if;
       Tcl.Tk.Ada.Grid.Grid(Button);
       return TCL_OK;
    end Show_Map_Buttons_Command;
 
+   -- ****if* MapCommands/Move_Map_Buttons_Command
+   -- FUNCTION
+   -- Move map movement buttons left of right
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Move_Map_Buttons_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Move_Map_Buttons_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      Button: Ttk_Button;
+      ButtonsBox: Ttk_Frame;
+   begin
+      ButtonsBox.Interp := Interp;
+      ButtonsBox.Name := New_String(".paned.mapframe.buttons");
+      Button.Interp := Interp;
+      Button.Name :=
+        New_String(Widget_Image(ButtonsBox) & "." & CArgv.Arg(Argv, 1));
+      Tcl.Tk.Ada.Grid.Grid_Remove(Button);
+      if CArgv.Arg(Argv, 1) = "left" then
+         Button.Name := New_String(Widget_Image(ButtonsBox) & ".right");
+         Tcl.Tk.Ada.Grid.Grid_Configure(ButtonsBox, "-sticky sw");
+      else
+         Button.Name := New_String(Widget_Image(ButtonsBox) & ".left");
+         Tcl.Tk.Ada.Grid.Grid_Configure(ButtonsBox, "-sticky se");
+      end if;
+      Tcl.Tk.Ada.Grid.Grid(Button);
+      return TCL_OK;
+   end Move_Map_Buttons_Command;
+
    procedure AddCommands is
    begin
       AddCommand("HideMapButtons", Hide_Map_Buttons_Command'Access);
       AddCommand("ShowMapButtons", Show_Map_Buttons_Command'Access);
+      AddCommand("MoveMapButtons", Move_Map_Buttons_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;
