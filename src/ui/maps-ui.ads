@@ -44,4 +44,13 @@ package Maps.UI is
    procedure CreateGameUI;
    -- ****
 
+private
+
+   -- ****f* MUI/DrawMap
+   -- FUNCTION
+   -- Draw map on the screen
+   -- SOURCE
+   procedure DrawMap;
+   -- ****
+
 end Maps.UI;

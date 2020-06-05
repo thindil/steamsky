@@ -20,6 +20,7 @@ with CArgv;
 with Tcl; use Tcl;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Utils.UI; use Utils.UI;
@@ -154,11 +155,47 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Move_Map_Buttons_Command;
 
+   -- ****if* MapCommands/Draw_Map_Command
+   -- FUNCTION
+   -- Draw the sky map
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Draw_Map_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Draw_Map_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      MapView: Tk_Text;
+   begin
+      MapView.Interp := Interp;
+      MapView.Name := New_String(".paned.mapframe.map");
+      configure
+        (MapView,
+         "-width [expr [winfo width $mapview] / [font measure MapFont { }] - 2]");
+      configure
+        (MapView,
+         "-height [expr [winfo height $mapview] / [font metrics MapFont -ascent] - 2]");
+      DrawMap;
+      return TCL_OK;
+   end Draw_Map_Command;
+
    procedure AddCommands is
    begin
       AddCommand("HideMapButtons", Hide_Map_Buttons_Command'Access);
       AddCommand("ShowMapButtons", Show_Map_Buttons_Command'Access);
       AddCommand("MoveMapButtons", Move_Map_Buttons_Command'Access);
+      AddCommand("DrawMap", Draw_Map_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;

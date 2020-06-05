@@ -384,12 +384,7 @@ package body Maps.UI is
    MapView: Tk_Text;
    -- ****
 
-   -- ****if* MUI/DrawMap
-   -- FUNCTION
-   -- Draw map on the screen
-   -- SOURCE
    procedure DrawMap is
-      -- ****
       MapChar: Wide_Character;
       StartX, StartY, EndX, EndY: Integer;
       MapHeight, MapWidth: Positive;
@@ -543,16 +538,19 @@ package body Maps.UI is
    begin
       GameMenu.Interp := Get_Context;
       GameMenu.Name := New_String(".gamemenu");
+      MapView.Interp := Get_Context;
+      MapView.Name := New_String(".paned.mapframe.map");
       if Winfo_Get(GameMenu, "exists") = "0" then
          Tcl_Eval
            (Get_Context,
             "font create MapFont -family {Hack NF} -size " &
-            Integer'Image(-(GameSettings.MapFontSize)));
+            Positive'Image(GameSettings.MapFontSize));
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "game.tcl");
          OrdersMenu.AddCommands;
          Maps.UI.Commands.AddCommands;
+         Bind(MapView, "<Configure>", "DrawMap");
       end if;
       CreateGameMenu;
       for I in MenuAccelerators'Range loop
@@ -566,8 +564,6 @@ package body Maps.UI is
       UpdateHeader;
       CenterX := PlayerShip.SkyX;
       CenterY := PlayerShip.SkyY;
-      MapView.Interp := Get_Context;
-      MapView.Name := New_String(".paned.mapframe.map");
       for I in BasesTypes_List.Iterate loop
          Tag_Configure
            (MapView, To_String(BasesTypes_Container.Key(I)),
@@ -576,14 +572,6 @@ package body Maps.UI is
       Paned.Interp := Get_Context;
       Paned.Name := New_String(".paned");
       SashPos(Paned, "0", Natural'Image(GameSettings.MessagesPosition));
-      configure
-        (MapView,
-         "-width [expr [winfo width " & Widget_Image(MapView) &
-         "] / [font measure {" & cget(MapView, "-font") & "} m] - 2]");
-      configure
-        (MapView,
-         "-height [expr [winfo height " & Widget_Image(MapView) &
-         "] / [font metrics {" & cget(MapView, "-font") & "} -ascent] - 2]");
       DrawMap;
       Button.Interp := Get_Context;
       Button.Name := New_String(".paned.mapframe.buttons.hide");
