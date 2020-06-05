@@ -14,6 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ships; use Ships;
 
 -- ****h* Maps/MUI
 -- FUNCTION
@@ -51,6 +52,16 @@ private
    -- Draw map on the screen
    -- SOURCE
    procedure DrawMap;
+   -- ****
+
+   -- ****f* MUI/UpdateMapInfo
+   -- FUNCTION
+   -- Update information about map cell
+   -- PARAMETERS
+   -- X - X coordinate of the map cell
+   -- Y - Y coordinate of the map cell
+   -- SOURCE
+   procedure UpdateMapInfo(X: Positive := PlayerShip.SkyX; Y: Positive := PlayerShip.SkyY);
    -- ****
 
 end Maps.UI;

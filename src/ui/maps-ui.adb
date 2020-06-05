@@ -44,7 +44,6 @@ with Messages; use Messages;
 with Missions; use Missions;
 with ShipModules; use ShipModules;
 with OrdersMenu;
-with Ships; use Ships;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Movement; use Ships.Movement;
 with Stories; use Stories;
@@ -531,6 +530,12 @@ package body Maps.UI is
       configure(MapView, "-state disable");
    end DrawMap;
 
+   procedure UpdateMapInfo
+     (X: Positive := PlayerShip.SkyX; Y: Positive := PlayerShip.SkyY) is
+   begin
+      null;
+   end UpdateMapInfo;
+
    procedure CreateGameUI is
       Paned: Ttk_PanedWindow;
       Button: Ttk_Button;
@@ -551,7 +556,7 @@ package body Maps.UI is
          OrdersMenu.AddCommands;
          Maps.UI.Commands.AddCommands;
          Bind(MapView, "<Configure>", "DrawMap");
-         Bind(MapView, "<Motion>", "UpdateMapInfo");
+         Bind(MapView, "<Motion>", "{UpdateMapInfo %x %y}");
       end if;
       CreateGameMenu;
       for I in MenuAccelerators'Range loop
@@ -574,6 +579,7 @@ package body Maps.UI is
       Paned.Name := New_String(".paned");
       SashPos(Paned, "0", Natural'Image(GameSettings.MessagesPosition));
       DrawMap;
+      UpdateMapInfo;
       Button.Interp := Get_Context;
       Button.Name := New_String(".paned.mapframe.buttons.hide");
       if Invoke(Button) /= "" then
