@@ -25,7 +25,7 @@ grid .header -sticky we
 ttk::panedwindow .paned
 # Game map
 .paned add [ttk::frame .paned.mapframe]
-set mapview [text .paned.mapframe.map -bg black -fg white -font MapFont -cursor cross]
+set mapview [text .paned.mapframe.map -bg black -fg white -font MapFont -cursor cross -bd 0]
 grid $mapview -sticky nwes
 $mapview tag configure unvisited -background #1f2223
 $mapview tag configure yellow -foreground yellow
@@ -54,12 +54,15 @@ grid [ttk::button $mframe.se -text {SE} -style Toolbutton] -column 3 -row 3
 grid [ttk::button $mframe.hide -text "[format %c 0x2b9f]" -style Toolbutton -command HideMapButtons] -columnspan 5 -row 4 -sticky we
 grid $mframe -row 0 -column 0 -sticky se
 grid [ttk::frame .paned.mapframe.info] -column 0 -row 0 -sticky ne
-grid [ttk::label .paned.mapframe.info.info] -sticky nwes
+set infoview [text .paned.mapframe.info.info -width 10 -height 10 -bg black -fg white -bd 0]
+$infoview tag configure green -foreground #4e9a06
+$infoview tag configure red -foreground red
+grid $infoview -sticky nwes
 grid rowconfigure .paned.mapframe 0 -weight 1
 grid columnconfigure .paned.mapframe 0 -weight 1
 # Last messages
 .paned add [ttk::frame .paned.controls]
-grid [ttk::labelframe .paned.controls.messages] -sticky w
+grid [ttk::frame .paned.controls.messages] -sticky w
 pack [ttk::scrollbar .paned.controls.messages.scroll -orient vertical -command [list .paned.controls.messages.view yview]] -side right -fill y
 pack [text .paned.controls.messages.view -wrap word -yscrollcommand [list .paned.controls.messages.scroll set]] -side top -fill both
 # Movement buttons
