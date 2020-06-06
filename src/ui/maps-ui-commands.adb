@@ -182,10 +182,10 @@ package body Maps.UI.Commands is
       MapView.Name := New_String(".paned.mapframe.map");
       configure
         (MapView,
-         "-width [expr [winfo width $mapview] / [font measure MapFont { }] - 2]");
+         "-width [expr [winfo width $mapview] / [font measure MapFont { }] - 1]");
       configure
         (MapView,
-         "-height [expr [winfo height $mapview] / [font metrics MapFont -ascent] - 2]");
+         "-height [expr [winfo height $mapview] / [font metrics MapFont -linespace] - 1]");
       DrawMap;
       return TCL_OK;
    end Draw_Map_Command;
