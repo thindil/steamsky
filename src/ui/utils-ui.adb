@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
@@ -34,6 +35,10 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Config; use Config;
+with Crew; use Crew;
+with Items; use Items;
+with Ships; use Ships;
+with Ships.Movement; use Ships.Movement;
 
 package body Utils.UI is
 
@@ -147,4 +152,138 @@ package body Utils.UI is
       AddCommand("CloseDialog", Close_Dialog_Command'Access);
    end AddCommands;
 
+   procedure MinutesToDate
+     (Minutes: Natural; InfoText: in out Unbounded_String) is
+      TravelTime: Date_Record := (others => 0);
+      MinutesDiff: Integer := Minutes;
+   begin
+      while MinutesDiff > 0 loop
+         if MinutesDiff >= 518400 then
+            TravelTime.Year := TravelTime.Year + 1;
+            MinutesDiff := MinutesDiff - 518400;
+         elsif MinutesDiff >= 43200 then
+            TravelTime.Month := TravelTime.Month + 1;
+            MinutesDiff := MinutesDiff - 43200;
+         elsif MinutesDiff >= 1440 then
+            TravelTime.Day := TravelTime.Day + 1;
+            MinutesDiff := MinutesDiff - 1440;
+         elsif MinutesDiff >= 60 then
+            TravelTime.Hour := TravelTime.Hour + 1;
+            MinutesDiff := MinutesDiff - 60;
+         else
+            TravelTime.Minutes := MinutesDiff;
+            MinutesDiff := 0;
+         end if;
+      end loop;
+      if TravelTime.Year > 0 then
+         Append(InfoText, Positive'Image(TravelTime.Year) & "y");
+      end if;
+      if TravelTime.Month > 0 then
+         Append(InfoText, Positive'Image(TravelTime.Month) & "m");
+      end if;
+      if TravelTime.Day > 0 then
+         Append(InfoText, Positive'Image(TravelTime.Day) & "d");
+      end if;
+      if TravelTime.Hour > 0 then
+         Append(InfoText, Positive'Image(TravelTime.Hour) & "h");
+      end if;
+      if TravelTime.Minutes > 0 then
+         Append(InfoText, Positive'Image(TravelTime.Minutes) & "mins");
+      end if;
+   end MinutesToDate;
+
+   procedure TravelInfo
+     (InfoText: in out Unbounded_String; Distance: Positive;
+      ShowFuelName: Boolean := False) is
+      type SpeedType is digits 2;
+      Speed: constant SpeedType :=
+        (SpeedType(RealSpeed(PlayerShip, True)) / 1000.0);
+      MinutesDiff: Integer;
+      Rests, CabinIndex, RestTime: Natural := 0;
+      Damage: DamageFactor := 0.0;
+      Tired, CabinBonus, TempTime: Natural;
+   begin
+      if Speed = 0.0 then
+         Append(InfoText, LF & "ETA: Never");
+         return;
+      end if;
+      MinutesDiff := Integer(100.0 / Speed);
+      case PlayerShip.Speed is
+         when QUARTER_SPEED =>
+            if MinutesDiff < 60 then
+               MinutesDiff := 60;
+            end if;
+         when HALF_SPEED =>
+            if MinutesDiff < 30 then
+               MinutesDiff := 30;
+            end if;
+         when FULL_SPEED =>
+            if MinutesDiff < 15 then
+               MinutesDiff := 15;
+            end if;
+         when others =>
+            null;
+      end case;
+      Append(InfoText, LF & "ETA:");
+      MinutesDiff := MinutesDiff * Distance;
+      for I in PlayerShip.Crew.Iterate loop
+         if PlayerShip.Crew(I).Order = Pilot or
+           PlayerShip.Crew(I).Order = Engineer then
+            Tired := (MinutesDiff / 15) + PlayerShip.Crew(I).Tired;
+            if
+              (Tired /
+               (80 + PlayerShip.Crew(I).Attributes(ConditionIndex)(1))) >
+              Rests then
+               Rests :=
+                 (Tired /
+                  (80 + PlayerShip.Crew(I).Attributes(ConditionIndex)(1)));
+            end if;
+            if Rests > 0 then
+               CabinIndex := FindCabin(Crew_Container.To_Index(I));
+               if CabinIndex > 0 then
+                  Damage :=
+                    1.0 -
+                    DamageFactor
+                      (Float(PlayerShip.Modules(CabinIndex).Durability) /
+                       Float(PlayerShip.Modules(CabinIndex).MaxDurability));
+                  CabinBonus :=
+                    PlayerShip.Modules(CabinIndex).Cleanliness -
+                    Natural
+                      (Float(PlayerShip.Modules(CabinIndex).Cleanliness) *
+                       Float(Damage));
+                  if CabinBonus = 0 then
+                     CabinBonus := 1;
+                  end if;
+                  TempTime :=
+                    ((80 + PlayerShip.Crew(I).Attributes(ConditionIndex)(1)) /
+                     CabinBonus) *
+                    15;
+                  if TempTime = 0 then
+                     TempTime := 15;
+                  end if;
+               else
+                  TempTime :=
+                    (80 + PlayerShip.Crew(I).Attributes(ConditionIndex)(1)) *
+                    15;
+               end if;
+               TempTime := TempTime + 15;
+               if TempTime > RestTime then
+                  RestTime := TempTime;
+               end if;
+            end if;
+         end if;
+      end loop;
+      MinutesDiff := MinutesDiff + (Rests * RestTime);
+      MinutesToDate(MinutesDiff, InfoText);
+      Append
+        (InfoText,
+         LF & "Approx fuel usage:" &
+         Natural'Image
+           (abs (Distance * CountFuelNeeded) + (Rests * (RestTime / 10))) &
+         " ");
+      if ShowFuelName then
+         Append
+           (InfoText, Items_List(FindProtoItem(ItemType => FuelType)).Name);
+      end if;
+   end TravelInfo;
 end Utils.UI;

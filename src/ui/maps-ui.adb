@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings.UTF_Encoding.Wide_Strings;
 use Ada.Strings.UTF_Encoding.Wide_Strings;
@@ -39,6 +40,7 @@ with Crew; use Crew;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
+with Items; use Items;
 with Maps.UI.Commands;
 with Messages; use Messages;
 with Missions; use Missions;
@@ -47,6 +49,7 @@ with OrdersMenu;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Movement; use Ships.Movement;
 with Stories; use Stories;
+with Utils.UI; use Utils.UI;
 
 package body Maps.UI is
 
@@ -385,7 +388,7 @@ package body Maps.UI is
 
    procedure DrawMap is
       MapChar: Wide_Character;
-      StartX, StartY, EndX, EndY: Integer;
+      EndX, EndY: Integer;
       MapHeight, MapWidth: Positive;
       MapTag: Unbounded_String;
       StoryX, StoryY: Integer := 0;
@@ -532,8 +535,205 @@ package body Maps.UI is
 
    procedure UpdateMapInfo
      (X: Positive := PlayerShip.SkyX; Y: Positive := PlayerShip.SkyY) is
+      MapInfoText: Unbounded_String;
    begin
-      null;
+      Append
+        (MapInfoText, "X:" & Positive'Image(X) & " Y:" & Positive'Image(Y));
+      if PlayerShip.SkyX /= X or PlayerShip.SkyY /= Y then
+         declare
+            Distance: constant Positive := CountDistance(X, Y);
+         begin
+            Append(MapInfoText, LF & "Distance:" & Positive'Image(Distance));
+            TravelInfo(MapInfoText, Distance);
+         end;
+      end if;
+      if SkyMap(X, Y).BaseIndex > 0 then
+         declare
+            BaseIndex: constant Positive := SkyMap(X, Y).BaseIndex;
+         begin
+            if SkyBases(BaseIndex).Known then
+               Append(MapInfoText, LF);
+               Append(MapInfoText, "Base info:");
+               Append(MapInfoText, LF);
+               Append
+                 (MapInfoText,
+                  To_Unbounded_String("Name: ") & SkyBases(BaseIndex).Name);
+            end if;
+            if SkyBases(BaseIndex).Visited.Year > 0 then
+               Append(MapInfoText, LF);
+               Append
+                 (MapInfoText,
+                  "Type: " &
+                  To_String
+                    (BasesTypes_List(SkyBases(BaseIndex).BaseType).Name));
+               if SkyBases(BaseIndex).Population > 0 then
+                  Append(MapInfoText, LF);
+               end if;
+               if SkyBases(BaseIndex).Population > 0 and
+                 SkyBases(BaseIndex).Population < 150 then
+                  Append(MapInfoText, "Population: small");
+               elsif SkyBases(BaseIndex).Population > 149 and
+                 SkyBases(BaseIndex).Population < 300 then
+                  Append(MapInfoText, "Population: medium");
+               elsif SkyBases(BaseIndex).Population > 299 then
+                  Append(MapInfoText, "Population: large");
+               end if;
+               Append
+                 (MapInfoText,
+                  LF & "Size: " &
+                  To_Lower(Bases_Size'Image(SkyBases(BaseIndex).Size)) & LF);
+               if SkyBases(BaseIndex).Population > 0 then
+                  Append
+                    (MapInfoText,
+                     "Owner: " &
+                     To_String(Factions_List(SkyBases(BaseIndex).Owner).Name));
+               else
+                  Append(MapInfoText, "Base is abandoned");
+               end if;
+               if SkyBases(BaseIndex).Population > 0 then
+                  Append(MapInfoText, LF);
+                  case SkyBases(BaseIndex).Reputation(1) is
+                     when -100 .. -75 =>
+                        Append(MapInfoText, "You are hated here");
+                     when -74 .. -50 =>
+                        Append(MapInfoText, "You are outlawed here");
+                     when -49 .. -25 =>
+                        Append(MapInfoText, "You are disliked here");
+                     when -24 .. -1 =>
+                        Append(MapInfoText, "They are unfriendly to you");
+                     when 0 =>
+                        Append(MapInfoText, "You are unknown here");
+                     when 1 .. 25 =>
+                        Append(MapInfoText, "You are know here as visitor");
+                     when 26 .. 50 =>
+                        Append(MapInfoText, "You are know here as trader");
+                     when 51 .. 75 =>
+                        Append(MapInfoText, "You are know here as friend");
+                     when 76 .. 100 =>
+                        Append(MapInfoText, "You are well known here");
+                     when others =>
+                        null;
+                  end case;
+               end if;
+               if BaseIndex = PlayerShip.HomeBase then
+                  Append(MapInfoText, LF);
+                  Append(MapInfoText, "It is your home base");
+               end if;
+            end if;
+         end;
+      end if;
+      if SkyMap(X, Y).EventIndex > 0 then
+         declare
+            EventIndex: constant Positive := SkyMap(X, Y).EventIndex;
+         begin
+            Append(MapInfoText, LF);
+            if Events_List(EventIndex).EType /= BaseRecovery and
+              SkyMap(X, Y).BaseIndex > 0 then
+               Append(MapInfoText, LF);
+            end if;
+            if
+              (Events_List(EventIndex).EType = DoublePrice or
+               Events_List(EventIndex).EType = FriendlyShip) then
+               Append(MapInfoText, "<span foreground=""green"">");
+            else
+               Append(MapInfoText, "<span foreground=""red"">");
+            end if;
+            case Events_List(EventIndex).EType is
+               when EnemyShip | Trader | FriendlyShip =>
+                  Append
+                    (MapInfoText,
+                     ProtoShips_List(Events_List(EventIndex).ShipIndex).Name);
+               when FullDocks =>
+                  Append(MapInfoText, "Full docks in base");
+               when AttackOnBase =>
+                  Append(MapInfoText, "Base is under attack");
+               when Disease =>
+                  Append(MapInfoText, "Disease in base");
+               when EnemyPatrol =>
+                  Append(MapInfoText, "Enemy patrol");
+               when DoublePrice =>
+                  Append
+                    (MapInfoText,
+                     "Double price for " &
+                     To_String
+                       (Items_List(Events_List(EventIndex).ItemIndex).Name));
+               when None | BaseRecovery =>
+                  null;
+            end case;
+            Append(MapInfoText, "</span>");
+         end;
+      end if;
+      if SkyMap(X, Y).MissionIndex > 0 then
+         declare
+            MissionIndex: constant Positive := SkyMap(X, Y).MissionIndex;
+         begin
+            Append(MapInfoText, LF);
+            if SkyMap(X, Y).BaseIndex > 0 or SkyMap(X, Y).EventIndex > 0 then
+               Append(MapInfoText, LF);
+            end if;
+            case AcceptedMissions(MissionIndex).MType is
+               when Deliver =>
+                  Append
+                    (MapInfoText,
+                     "Deliver " &
+                     To_String
+                       (Items_List(AcceptedMissions(MissionIndex).ItemIndex)
+                          .Name));
+               when Destroy =>
+                  Append
+                    (MapInfoText,
+                     "Destroy " &
+                     To_String
+                       (ProtoShips_List
+                          (AcceptedMissions(MissionIndex).ShipIndex)
+                          .Name));
+               when Patrol =>
+                  Append(MapInfoText, "Patrol area");
+               when Explore =>
+                  Append(MapInfoText, "Explore area");
+               when Passenger =>
+                  Append(MapInfoText, "Transport passenger");
+            end case;
+         end;
+      end if;
+      if CurrentStory.Index /= Null_Unbounded_String then
+         declare
+            StoryX, StoryY: Integer := 0;
+            FinishCondition: StepConditionType;
+         begin
+            GetStoryLocation(StoryX, StoryY);
+            if StoryX = PlayerShip.SkyX and StoryY = PlayerShip.SkyY then
+               StoryX := 0;
+               StoryY := 0;
+            end if;
+            if X = StoryX and Y = StoryY then
+               if CurrentStory.CurrentStep = 0 then
+                  FinishCondition :=
+                    Stories_List(CurrentStory.Index).StartingStep
+                      .FinishCondition;
+               elsif CurrentStory.CurrentStep > 0 then
+                  FinishCondition :=
+                    Stories_List(CurrentStory.Index).Steps
+                      (CurrentStory.CurrentStep)
+                      .FinishCondition;
+               else
+                  FinishCondition :=
+                    Stories_List(CurrentStory.Index).FinalStep.FinishCondition;
+               end if;
+               if FinishCondition = ASKINBASE or
+                 FinishCondition = DESTROYSHIP or
+                 FinishCondition = EXPLORE then
+                  Append(MapInfoText, LF & "Story leads you here");
+               end if;
+            end if;
+         end;
+      end if;
+      if X = PlayerShip.SkyX and Y = PlayerShip.SkyY then
+         Append(MapInfoText, LF & "You are here");
+      end if;
+--      Set_Label
+--        (Gtk_Label(Get_Object(Builder, "lblmaptooltip")),
+--         To_String(MapInfoText));
    end UpdateMapInfo;
 
    procedure CreateGameUI is
