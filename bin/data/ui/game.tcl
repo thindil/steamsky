@@ -54,6 +54,7 @@ grid [ttk::button $mframe.se -text {SE} -style Toolbutton] -column 3 -row 3
 grid [ttk::button $mframe.hide -text "[format %c 0x2b9f]" -style Toolbutton -command HideMapButtons] -columnspan 5 -row 4 -sticky we
 grid $mframe -row 0 -column 0 -sticky se
 grid [ttk::frame .paned.mapframe.info] -column 0 -row 0 -sticky ne
+bind .paned.mapframe.info <Enter> MoveMapInfo
 set infoview [text .paned.mapframe.info.info -width 22 -height 10 -bg black -fg white -bd 0]
 $infoview tag configure green -foreground #4e9a06
 $infoview tag configure red -foreground red

@@ -222,7 +222,8 @@ package body Maps.UI.Commands is
           (Index
              (MapView, "@" & CArgv.Arg(Argv, 1) & "," & CArgv.Arg(Argv, 2)));
       MapY :=
-        StartY + Positive'Value(Slice(MapIndex, 1, Index(MapIndex, ".") - 1)) - 1;
+        StartY + Positive'Value(Slice(MapIndex, 1, Index(MapIndex, ".") - 1)) -
+        1;
       MapX :=
         StartX +
         Positive'Value
@@ -231,6 +232,39 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Update_Map_Info_Command;
 
+   -- ****if* MapCommands/Move_Map_Info_Command
+   -- FUNCTION
+   -- Move map info frame when mouse enter it
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Move_Map_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Move_Map_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      MapInfoFrame: Ttk_Frame;
+   begin
+      MapInfoFrame.Interp := Interp;
+      MapInfoFrame.Name := New_String(".paned.mapframe.info");
+      if Index(Tcl.Tk.Ada.Grid.Grid_Info(MapInfoFrame), "-sticky ne") = 0 then
+         Tcl.Tk.Ada.Grid.Grid_Configure(MapInfoFrame, "-sticky ne");
+      else
+         Tcl.Tk.Ada.Grid.Grid_Configure(MapInfoFrame, "-sticky nw");
+      end if;
+      return TCL_OK;
+   end Move_Map_Info_Command;
+
    procedure AddCommands is
    begin
       AddCommand("HideMapButtons", Hide_Map_Buttons_Command'Access);
@@ -238,6 +272,7 @@ package body Maps.UI.Commands is
       AddCommand("MoveMapButtons", Move_Map_Buttons_Command'Access);
       AddCommand("DrawMap", Draw_Map_Command'Access);
       AddCommand("UpdateMapInfo", Update_Map_Info_Command'Access);
+      AddCommand("MoveMapInfo", Move_Map_Info_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;
