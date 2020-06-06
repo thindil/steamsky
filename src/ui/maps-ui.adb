@@ -778,7 +778,6 @@ package body Maps.UI is
       Paned.Interp := Get_Context;
       Paned.Name := New_String(".paned");
       SashPos(Paned, "0", Natural'Image(GameSettings.MessagesPosition));
-      DrawMap;
       UpdateMapInfo;
       Button.Interp := Get_Context;
       Button.Name := New_String(".paned.mapframe.buttons.hide");
