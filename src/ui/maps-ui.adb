@@ -536,7 +536,12 @@ package body Maps.UI is
    procedure UpdateMapInfo
      (X: Positive := PlayerShip.SkyX; Y: Positive := PlayerShip.SkyY) is
       MapInfoText: Unbounded_String;
+      MapInfo: Tk_Text;
    begin
+      MapInfo.Interp := Get_Context;
+      MapInfo.Name := New_String(".paned.mapframe.info.info");
+      configure(MapInfo, "-state normal");
+      Delete(MapInfo, "1.0", "end");
       Append
         (MapInfoText, "X:" & Positive'Image(X) & " Y:" & Positive'Image(Y));
       if PlayerShip.SkyX /= X or PlayerShip.SkyY /= Y then
@@ -631,13 +636,7 @@ package body Maps.UI is
               SkyMap(X, Y).BaseIndex > 0 then
                Append(MapInfoText, LF);
             end if;
-            if
-              (Events_List(EventIndex).EType = DoublePrice or
-               Events_List(EventIndex).EType = FriendlyShip) then
-               Append(MapInfoText, "<span foreground=""green"">");
-            else
-               Append(MapInfoText, "<span foreground=""red"">");
-            end if;
+            Append(MapInfoText, "} [list {}] {");
             case Events_List(EventIndex).EType is
                when EnemyShip | Trader | FriendlyShip =>
                   Append
@@ -660,7 +659,13 @@ package body Maps.UI is
                when None | BaseRecovery =>
                   null;
             end case;
-            Append(MapInfoText, "</span>");
+            if
+              (Events_List(EventIndex).EType = DoublePrice or
+               Events_List(EventIndex).EType = FriendlyShip) then
+               Append(MapInfoText, "} [list green] {");
+            else
+               Append(MapInfoText, "} [list red] {");
+            end if;
          end;
       end if;
       if SkyMap(X, Y).MissionIndex > 0 then
@@ -731,9 +736,8 @@ package body Maps.UI is
       if X = PlayerShip.SkyX and Y = PlayerShip.SkyY then
          Append(MapInfoText, LF & "You are here");
       end if;
---      Set_Label
---        (Gtk_Label(Get_Object(Builder, "lblmaptooltip")),
---         To_String(MapInfoText));
+      Insert(MapInfo, "end", "{" & To_String(MapInfoText) & "}");
+      configure(MapInfo, "-state disable");
    end UpdateMapInfo;
 
    procedure CreateGameUI is
