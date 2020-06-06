@@ -47,6 +47,13 @@ package Maps.UI is
 
 private
 
+   -- ****v* Maps.UI/StartX
+   -- FUNCTION
+   -- Top left map coordinate
+   -- SOURCE
+   StartX, StartY: Integer;
+   -- ****
+
    -- ****f* MUI/DrawMap
    -- FUNCTION
    -- Draw map on the screen
@@ -61,7 +68,8 @@ private
    -- X - X coordinate of the map cell
    -- Y - Y coordinate of the map cell
    -- SOURCE
-   procedure UpdateMapInfo(X: Positive := PlayerShip.SkyX; Y: Positive := PlayerShip.SkyY);
+   procedure UpdateMapInfo
+     (X: Positive := PlayerShip.SkyX; Y: Positive := PlayerShip.SkyY);
    -- ****
 
 end Maps.UI;

@@ -56,4 +56,19 @@ package Utils.UI is
    procedure AddCommands;
    -- ****
 
+   -- ****f* UUI/TravelInfo
+   -- FUNCTION
+   -- Add info about travel eta and approx fuel usage
+   -- PARAMETERS
+   -- InfoText     - Text to which info about travel will be added
+   -- Distance     - Distance in map fields to destination point
+   -- ShowFuelName - If true, add fuel name to info. Default is false
+   -- RESULT
+   -- Parameter InfoText
+   -- SOURCE
+   procedure TravelInfo
+     (InfoText: in out Unbounded_String; Distance: Positive;
+      ShowFuelName: Boolean := False);
+   -- ****
+
 end Utils.UI;
