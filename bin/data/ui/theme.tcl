@@ -65,6 +65,7 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure Headerred.Toolbutton -font {-family "Font Awesome 5 Free Solid" -size 14} -foreground red
       ttk::style configure Headergreen.Toolbutton -font {-family "Font Awesome 5 Free Solid" -size 14} -foreground green
       ttk::style configure Headerred.TLabel -foreground red
+      ttk::style configure Headergreen.TLabel -foreground green
 
       ttk::style map TPanedwindow -background [list hover $colors(-checklight)]
       ttk::style map TCombobox -selectbackground [list \
