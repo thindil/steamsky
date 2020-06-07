@@ -54,6 +54,13 @@ private
    StartX, StartY: Integer;
    -- ****
 
+   -- ****iv* MUI/CenterX
+   -- FUNCTION
+   -- Coordinates of the center point of the map
+   -- SOURCE
+   CenterX, CenterY: Positive;
+   -- ****
+
    -- ****f* MUI/DrawMap
    -- FUNCTION
    -- Draw map on the screen
