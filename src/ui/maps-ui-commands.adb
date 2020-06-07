@@ -25,8 +25,9 @@ with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Utils.UI; use Utils.UI;
+with Messages; use Messages;
 with OrdersMenu; use OrdersMenu;
+with Utils.UI; use Utils.UI;
 
 package body Maps.UI.Commands is
 
@@ -309,7 +310,9 @@ package body Maps.UI.Commands is
       DestinationMenu.Interp := Interp;
       DestinationMenu.Name := New_String(".destination");
       Delete(DestinationMenu, "0", "end");
-      Add(DestinationMenu, "command", "-label {Set destination}");
+      Add
+        (DestinationMenu, "command",
+         "-label {Set destination} -command SetDestination");
       if PlayerShip.Speed /= DOCKED then
          Add(DestinationMenu, "command", "-label {Set destination and move}");
          Add(DestinationMenu, "command", "-label {Move to}");
@@ -322,6 +325,36 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Show_Destination_Menu_Command;
 
+   -- ****if* MapCommands/Set_Destination_Command
+   -- FUNCTION
+   -- Set current map cell as destination for the player's ship
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Set_Destination_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Destination_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+   begin
+      PlayerShip.DestinationX := MapX;
+      PlayerShip.DestinationY := MapY;
+      AddMessage
+        ("You set the travel destination for your ship.", OrderMessage);
+      DrawMap;
+      return TCL_OK;
+   end Set_Destination_Command;
+
    procedure AddCommands is
    begin
       AddCommand("HideMapButtons", Hide_Map_Buttons_Command'Access);
@@ -331,6 +364,7 @@ package body Maps.UI.Commands is
       AddCommand("UpdateMapInfo", Update_Map_Info_Command'Access);
       AddCommand("MoveMapInfo", Move_Map_Info_Command'Access);
       AddCommand("ShowDestinationMenu", Show_Destination_Menu_Command'Access);
+      AddCommand("SetDestination", Set_Destination_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;
