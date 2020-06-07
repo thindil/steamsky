@@ -182,7 +182,7 @@ package body Maps.UI.Commands is
       MapView.Name := New_String(".paned.mapframe.map");
       configure
         (MapView,
-         "-width [expr [winfo width $mapview] / [font measure MapFont { }] - 1]");
+         "-width [expr [winfo width $mapview] / [font measure MapFont { }] - 2]");
       configure
         (MapView,
          "-height [expr [winfo height $mapview] / [font metrics MapFont -linespace] - 1]");
