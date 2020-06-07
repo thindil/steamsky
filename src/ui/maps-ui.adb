@@ -365,20 +365,6 @@ package body Maps.UI is
       end if;
    end UpdateHeader;
 
-   -- ****iv* MUI/CenterX
-   -- FUNCTION
-   -- X coordinate of the center point of the map
-   -- SOURCE
-   CenterX: Positive;
-   -- ****
-
-   -- ****iv* MUI/CenterY
-   -- FUNCTION
-   -- Y coordinate of the center point of the map
-   -- SOURCE
-   CenterY: Positive;
-   -- ****
-
    -- ****iv* Maps.UI/MapView
    -- FUNCTION
    -- Text widget with the sky map

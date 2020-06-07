@@ -43,16 +43,16 @@ $mapview tag configure black -foreground black
 set mframe [ttk::frame .paned.mapframe.buttons]
 grid [ttk::button $mframe.show -text "[format %c 0x2b9d]" -style Toolbutton -command ShowMapButtons] -columnspan 5 -sticky we
 grid [ttk::button $mframe.left -text "[format %c 0x2b9c]" -style Toolbutton -command {MoveMapButtons left}] -rowspan 3 -row 1 -column 0 -sticky ns
-grid [ttk::button $mframe.nw -text {NW} -style Toolbutton] -row 1 -column 1
-grid [ttk::button $mframe.n -text {N} -style Toolbutton] -column 2 -row 1
-grid [ttk::button $mframe.ne -text {NE} -style Toolbutton] -column 3 -row 1
+grid [ttk::button $mframe.nw -text {NW} -style Toolbutton -command {MoveMap nw}] -row 1 -column 1
+grid [ttk::button $mframe.n -text {N} -style Toolbutton -command {MoveMap n}] -column 2 -row 1
+grid [ttk::button $mframe.ne -text {NE} -style Toolbutton -command {MoveMap ne}] -column 3 -row 1
 grid [ttk::button $mframe.right -text "[format %c 0x2b9e]" -style Toolbutton -command {MoveMapButtons right}] -rowspan 3 -row 1 -column 4 -sticky ns
-grid [ttk::button $mframe.w -text {W} -style Toolbutton] -row 2 -column 1
+grid [ttk::button $mframe.w -text {W} -style Toolbutton -command {MoveMap w}] -row 2 -column 1
 grid [ttk::button $mframe.wait -text {...} -style Toolbutton] -column 2 -row 2
-grid [ttk::button $mframe.e -text {E} -style Toolbutton] -column 3 -row 2
-grid [ttk::button $mframe.sw -text {SW} -style Toolbutton] -row 3 -column 1
-grid [ttk::button $mframe.s -text {S} -style Toolbutton] -column 2 -row 3
-grid [ttk::button $mframe.se -text {SE} -style Toolbutton] -column 3 -row 3
+grid [ttk::button $mframe.e -text {E} -style Toolbutton -command {MoveMap e}] -column 3 -row 2
+grid [ttk::button $mframe.sw -text {SW} -style Toolbutton -command {MoveMap sw}] -row 3 -column 1
+grid [ttk::button $mframe.s -text {S} -style Toolbutton -command {MoveMap s}] -column 2 -row 3
+grid [ttk::button $mframe.se -text {SE} -style Toolbutton -command {MoveMap se}] -column 3 -row 3
 grid [ttk::button $mframe.hide -text "[format %c 0x2b9f]" -style Toolbutton -command HideMapButtons] -columnspan 5 -row 4 -sticky we
 grid $mframe -row 0 -column 0 -sticky se
 grid [ttk::frame .paned.mapframe.info] -column 0 -row 0 -sticky ne

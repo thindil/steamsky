@@ -25,6 +25,7 @@ with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Bases; use Bases;
 with Messages; use Messages;
 with OrdersMenu; use OrdersMenu;
 with Utils.UI; use Utils.UI;
@@ -355,6 +356,115 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Set_Destination_Command;
 
+   -- ****if* MapCommands/Move_Map_Command
+   -- FUNCTION
+   -- Move map in the selected direction
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Move_Map_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Move_Map_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      MapView: Tk_Text;
+      MapHeight, MapWidth: Positive;
+   begin
+      MapView.Interp := Interp;
+      MapView.Name := New_String(".paned.mapframe.map");
+      MapHeight := Positive'Value(cget(MapView, "-height"));
+      MapWidth := Positive'Value(cget(MapView, "-width"));
+      if CArgv.Arg(Argv, 1) = "centeronship" then
+         CenterX := PlayerShip.SkyX;
+         CenterY := PlayerShip.SkyY;
+      elsif CArgv.Arg(Argv, 1) = "movemapto" then
+         null;
+      elsif CArgv.Arg(Argv, 1) = "n" then
+         if CenterY - (MapHeight / 3) < 1 then
+            CenterY := MapHeight / 3;
+         else
+            CenterY := CenterY - (MapHeight / 3);
+         end if;
+      elsif CArgv.Arg(Argv, 1) = "s" then
+         if CenterY + (MapHeight / 3) > 1024 then
+            CenterY := 1024 - (MapHeight / 3);
+         else
+            CenterY := CenterY + (MapHeight / 3);
+         end if;
+      elsif CArgv.Arg(Argv, 1) = "w" then
+         if CenterX - (MapWidth / 3) < 1 then
+            CenterX := MapWidth / 3;
+         else
+            CenterX := CenterX - (MapWidth / 3);
+         end if;
+      elsif CArgv.Arg(Argv, 1) = "e" then
+         if CenterX + (MapWidth / 3) > 1024 then
+            CenterX := 1024 - (MapWidth / 3);
+         else
+            CenterX := CenterX + (MapWidth / 3);
+         end if;
+      elsif CArgv.Arg(Argv, 1) = "nw" then
+         if CenterY - (MapHeight / 3) < 1 then
+            CenterY := MapHeight / 3;
+         else
+            CenterY := CenterY - (MapHeight / 3);
+         end if;
+         if CenterX - (MapWidth / 3) < 1 then
+            CenterX := MapWidth / 3;
+         else
+            CenterX := CenterX - (MapWidth / 3);
+         end if;
+      elsif CArgv.Arg(Argv, 1) = "ne" then
+         if CenterY - (MapHeight / 3) < 1 then
+            CenterY := MapHeight / 3;
+         else
+            CenterY := CenterY - (MapHeight / 3);
+         end if;
+         if CenterX + (MapWidth / 3) > 1024 then
+            CenterX := 1024 - (MapWidth / 3);
+         else
+            CenterX := CenterX + (MapWidth / 3);
+         end if;
+      elsif CArgv.Arg(Argv, 1) = "sw" then
+         if CenterY + (MapHeight / 3) > 1024 then
+            CenterY := 1024 - (MapHeight / 3);
+         else
+            CenterY := CenterY + (MapHeight / 3);
+         end if;
+         if CenterX - (MapWidth / 3) < 1 then
+            CenterX := MapWidth / 3;
+         else
+            CenterX := CenterX - (MapWidth / 3);
+         end if;
+      elsif CArgv.Arg(Argv, 1) = "se" then
+         if CenterY + (MapHeight / 3) > 1024 then
+            CenterY := 1024 - (MapHeight / 3);
+         else
+            CenterY := CenterY + (MapHeight / 3);
+         end if;
+         if CenterX + (MapWidth / 3) > 1024 then
+            CenterX := 1024 - (MapWidth / 3);
+         else
+            CenterX := CenterX + (MapWidth / 3);
+         end if;
+      elsif CArgv.Arg(Argv, 1) = "centeronhome" then
+         CenterX := SkyBases(PlayerShip.HomeBase).SkyX;
+         CenterY := SkyBases(PlayerShip.HomeBase).SkyY;
+      end if;
+      DrawMap;
+      return TCL_OK;
+   end Move_Map_Command;
+
    procedure AddCommands is
    begin
       AddCommand("HideMapButtons", Hide_Map_Buttons_Command'Access);
@@ -365,6 +475,7 @@ package body Maps.UI.Commands is
       AddCommand("MoveMapInfo", Move_Map_Info_Command'Access);
       AddCommand("ShowDestinationMenu", Show_Destination_Menu_Command'Access);
       AddCommand("SetDestination", Set_Destination_Command'Access);
+      AddCommand("MoveMap", Move_Map_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;
