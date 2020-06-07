@@ -18,10 +18,7 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.String_Split; use GNAT.String_Split;
-with Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with CArgv;
-with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
@@ -42,22 +39,6 @@ with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 
 package body OrdersMenu is
-
-   -- ****if* OrdersMenu/Show_Orders_Command
-   -- FUNCTION
-   -- Add available options and show orders menu to the player
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
-   -- SOURCE
-   function Show_Orders_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
-      Convention => C;
-      -- ****
 
    function Show_Orders_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;

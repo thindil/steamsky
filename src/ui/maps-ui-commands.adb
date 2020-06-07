@@ -18,12 +18,15 @@ with Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with CArgv;
 with Tcl; use Tcl;
+with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Utils.UI; use Utils.UI;
+with OrdersMenu; use OrdersMenu;
 
 package body Maps.UI.Commands is
 
@@ -190,6 +193,20 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Draw_Map_Command;
 
+   -- ****iv* Maps.UI.Commands/MapX
+   -- FUNCTION
+   -- Current map cell X coordinate (where mouse is hovering)
+   -- SOURCE
+   MapX: Positive;
+   -- ****
+
+   -- ****iv* Maps.UI.Commands/MapX
+   -- FUNCTION
+   -- Current map cell Y coordinate (where mouse is hovering)
+   -- SOURCE
+   MapY: Positive;
+   -- ****
+
    -- ****if* MapCommands/Update_Map_Info_Command
    -- FUNCTION
    -- Update map cell info
@@ -213,7 +230,6 @@ package body Maps.UI.Commands is
       pragma Unreferenced(ClientData, Argc);
       MapView: Tk_Text;
       MapIndex: Unbounded_String;
-      MapX, MapY: Positive;
    begin
       MapView.Interp := Interp;
       MapView.Name := New_String(".paned.mapframe.map");
@@ -265,6 +281,47 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Move_Map_Info_Command;
 
+   -- ****if* MapCommands/Show_Destination_Menu_Command
+   -- FUNCTION
+   -- Create and show destination menu
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Show_Destination_Menu_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Destination_Menu_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      DestinationMenu: Tk_Menu;
+   begin
+      if PlayerShip.SkyX = MapX and PlayerShip.SkyY = MapY then
+         return Show_Orders_Command(ClientData, Interp, Argc, Argv);
+      end if;
+      DestinationMenu.Interp := Interp;
+      DestinationMenu.Name := New_String(".destination");
+      Delete(DestinationMenu, "0", "end");
+      Add(DestinationMenu, "command", "-label {Set destination}");
+      if PlayerShip.Speed /= DOCKED then
+         Add(DestinationMenu, "command", "-label {Set destination and move}");
+         Add(DestinationMenu, "command", "-label {Move to}");
+      end if;
+      Add(DestinationMenu, "command", "-label {Close}");
+      Tcl_Eval
+        (Interp,
+         "tk_popup .destination " & CArgv.Arg(Argv, 1) & " " &
+         CArgv.Arg(Argv, 2));
+      return TCL_OK;
+   end Show_Destination_Menu_Command;
+
    procedure AddCommands is
    begin
       AddCommand("HideMapButtons", Hide_Map_Buttons_Command'Access);
@@ -273,6 +330,7 @@ package body Maps.UI.Commands is
       AddCommand("DrawMap", Draw_Map_Command'Access);
       AddCommand("UpdateMapInfo", Update_Map_Info_Command'Access);
       AddCommand("MoveMapInfo", Move_Map_Info_Command'Access);
+      AddCommand("ShowDestinationMenu", Show_Destination_Menu_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;

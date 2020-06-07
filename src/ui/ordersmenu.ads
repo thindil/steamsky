@@ -13,11 +13,31 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Interfaces.C;
+with CArgv;
+with Tcl; use Tcl;
+
 -- ****h* Steamsky/OrdersMenu
 -- FUNCTION
 -- Provides code for create and show orders menu
 -- SOURCE
 package OrdersMenu is
+
+   -- ****f* OrdersMenu/Show_Orders_Command
+   -- FUNCTION
+   -- Add available options and show orders menu to the player
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Show_Orders_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
 
    -- ****f* OrdersMenu/AddCommands
    -- FUNCTION
