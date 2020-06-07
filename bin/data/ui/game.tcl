@@ -1,7 +1,9 @@
 # Game menu
 menu .gamemenu -title {Steam Sky - menu}
 # Orders menu
-menu .orders -title {Steam Sky - orders} -tearoff false
+menu .orders -tearoff false
+# Destination menu
+menu .destination -tearoff false
 # Game header
 ttk::frame .header
 grid [ttk::menubutton .header.menubutton -text {Menu} -menu .gamemenu] -sticky w

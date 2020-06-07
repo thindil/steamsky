@@ -769,6 +769,7 @@ package body Maps.UI is
          Maps.UI.Commands.AddCommands;
          Bind(MapView, "<Configure>", "DrawMap");
          Bind(MapView, "<Motion>", "{UpdateMapInfo %x %y}");
+         Bind(MapView, "<1>", "{ShowDestinationMenu %x %y}");
       end if;
       CreateGameMenu;
       for I in MenuAccelerators'Range loop
