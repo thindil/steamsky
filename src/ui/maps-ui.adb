@@ -535,13 +535,13 @@ package body Maps.UI is
 
    procedure UpdateMapInfo
      (X: Positive := PlayerShip.SkyX; Y: Positive := PlayerShip.SkyY) is
-      MapInfoText: Unbounded_String;
-      MapInfo: Tk_Text;
+      MapInfoText, EventInfoText: Unbounded_String;
+      MapInfo, EventInfo: Ttk_Label;
    begin
       MapInfo.Interp := Get_Context;
       MapInfo.Name := New_String(".paned.mapframe.info.info");
-      configure(MapInfo, "-state normal");
-      Delete(MapInfo, "1.0", "end");
+      EventInfo.Interp := Get_Context;
+      EventInfo.Name := New_String(".paned.mapframe.info.eventinfo");
       Append
         (MapInfoText, "X:" & Positive'Image(X) & " Y:" & Positive'Image(Y));
       if PlayerShip.SkyX /= X or PlayerShip.SkyY /= Y then
@@ -631,28 +631,26 @@ package body Maps.UI is
          declare
             EventIndex: constant Positive := SkyMap(X, Y).EventIndex;
          begin
-            Append(MapInfoText, LF);
             if Events_List(EventIndex).EType /= BaseRecovery and
               SkyMap(X, Y).BaseIndex > 0 then
-               Append(MapInfoText, LF);
+               Append(EventInfoText, LF);
             end if;
-            Append(MapInfoText, "} [list {}] {");
             case Events_List(EventIndex).EType is
                when EnemyShip | Trader | FriendlyShip =>
                   Append
-                    (MapInfoText,
+                    (EventInfoText,
                      ProtoShips_List(Events_List(EventIndex).ShipIndex).Name);
                when FullDocks =>
-                  Append(MapInfoText, "Full docks in base");
+                  Append(EventInfoText, "Full docks in base");
                when AttackOnBase =>
-                  Append(MapInfoText, "Base is under attack");
+                  Append(EventInfoText, "Base is under attack");
                when Disease =>
-                  Append(MapInfoText, "Disease in base");
+                  Append(EventInfoText, "Disease in base");
                when EnemyPatrol =>
-                  Append(MapInfoText, "Enemy patrol");
+                  Append(EventInfoText, "Enemy patrol");
                when DoublePrice =>
                   Append
-                    (MapInfoText,
+                    (EventInfoText,
                      "Double price for " &
                      To_String
                        (Items_List(Events_List(EventIndex).ItemIndex).Name));
@@ -662,9 +660,15 @@ package body Maps.UI is
             if
               (Events_List(EventIndex).EType = DoublePrice or
                Events_List(EventIndex).EType = FriendlyShip) then
-               Append(MapInfoText, "} [list green] {");
+               configure
+                 (EventInfo,
+                  "-text {" & To_String(EventInfoText) &
+                  "} -style Headergreen.TLabel");
             else
-               Append(MapInfoText, "} [list red] {");
+               configure
+                 (EventInfo,
+                  "-text {" & To_String(EventInfoText) &
+                  "} -style Headerred.TLabel");
             end if;
          end;
       end if;
@@ -736,8 +740,12 @@ package body Maps.UI is
       if X = PlayerShip.SkyX and Y = PlayerShip.SkyY then
          Append(MapInfoText, LF & "You are here");
       end if;
-      Insert(MapInfo, "end", "{" & To_String(MapInfoText) & "}");
-      configure(MapInfo, "-state disable");
+      configure(MapInfo, "-text {" & To_String(MapInfoText) & "}");
+      if EventInfoText /= Null_Unbounded_String then
+         Tcl.Tk.Ada.Grid.Grid(EventInfo, "-sticky nwes");
+      else
+         Tcl.Tk.Ada.Grid.Grid_Remove(EventInfo);
+      end if;
    end UpdateMapInfo;
 
    procedure CreateGameUI is
