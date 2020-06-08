@@ -31,9 +31,11 @@ with Factions; use Factions;
 with Game; use Game;
 with Items; use Items;
 with Maps; use Maps;
+with Maps.UI; use Maps.UI;
 with Missions; use Missions;
 with Ships; use Ships;
 with Ships.Crew; use Ships.Crew;
+with Ships.Movement; use Ships.Movement;
 with Stories; use Stories;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
@@ -127,7 +129,9 @@ package body OrdersMenu is
          end;
       end if;
       if PlayerShip.Speed = DOCKED then
-         Add(OrdersMenu, "command", "-label {Undock} -underline 0 -command {Docking}");
+         Add
+           (OrdersMenu, "command",
+            "-label {Undock} -underline 0 -command {Docking}");
          if HaveTrader and SkyBases(BaseIndex).Population > 0 then
             Add(OrdersMenu, "command", "-label {Trade} -underline 0");
             Add(OrdersMenu, "command", "-label {School} -underline 0");
@@ -297,7 +301,8 @@ package body OrdersMenu is
                           (OrdersMenu, "command",
                            "-label {Dock (" &
                            Trim(Positive'Image(DockingCost), Left) & " " &
-                           To_String(MoneyName) & ")} -underline 0 -command {Docking}");
+                           To_String(MoneyName) &
+                           ")} -underline 0 -command {Docking}");
                      end;
                   end if;
                   for Mission of AcceptedMissions loop
@@ -439,7 +444,7 @@ package body OrdersMenu is
       Message: Unbounded_String;
    begin
       if PlayerShip.Speed = DOCKED then
-         if User_Data = Get_Object(Builder, "btndock") then
+         if Argc = 0 then
             Message := To_Unbounded_String(DockShip(False));
          else
             Message := To_Unbounded_String(DockShip(False, True));
@@ -453,6 +458,7 @@ package body OrdersMenu is
             if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
                 .EType =
               FullDocks then
+              -- TODO Show wait orders
                --ShowWaitOrders(Builder);
                return TCL_OK;
             end if;
@@ -465,7 +471,7 @@ package body OrdersMenu is
       end if;
       ShowSkyMap;
       if PlayerShip.Speed = DOCKED then
-         Show_Orders_Command(ClientData, Interp, Argc, Argv);
+         return Show_Orders_Command(ClientData, Interp, Argc, Argv);
       end if;
       return TCL_OK;
    end Docking_Command;
