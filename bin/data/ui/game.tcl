@@ -74,7 +74,7 @@ grid [ttk::button $mframe.wait -text {...} -style Toolbutton -command {
    grid [ttk::button .movemapdialog.frame.moveto -text {Move map to selected location}] -row 2 -columnspan 2 -sticky we
    set width [winfo reqwidth .movemapdialog.frame.moveto]
    grid [ttk::button .movemapdialog.frame.centeronship -text {Center map on ship} -command {MoveMap centeronship}] -row 3 -columnspan 2 -sticky we
-   grid [ttk::button .movemapdialog.frame.centeronhome -text {Center map on home base}] -row 4 -columnspan 2 -sticky we
+   grid [ttk::button .movemapdialog.frame.centeronhome -text {Center map on home base} -command {MoveMap centeronhome}] -row 4 -columnspan 2 -sticky we
    grid [ttk::button .movemapdialog.frame.close -text {Close} -command {CloseDialog .movemapdialog}] -row 5 -columnspan 2 -sticky we
    set height [expr [winfo reqheight .movemapdialog.frame.close] * 6]
    wm geometry .movemapdialog [winfo reqwidth .movemapdialog.frame.moveto]x[expr [winfo reqheight .movemapdialog.frame.close] * 6]+[expr ([winfo vrootwidth .movemapdialog] - $width) / 2]+[expr ([winfo vrootheight .movemapdialog] - $height) / 2]
