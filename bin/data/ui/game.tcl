@@ -71,7 +71,7 @@ grid [ttk::button $mframe.wait -text {...} -style Toolbutton -command {
    grid [ttk::label .movemapdialog.frame.ylabel -text Y:] -row 1
    grid [ttk::spinbox .movemapdialog.frame.y -from 1.0 -to 1024.0 -increment 1.0 -validate key -validatecommand {ValidateCoord %S %s} -width 5] -row 1 -column 1
    .movemapdialog.frame.y set 1
-   grid [ttk::button .movemapdialog.frame.moveto -text {Move map to selected location}] -row 2 -columnspan 2 -sticky we
+   grid [ttk::button .movemapdialog.frame.moveto -text {Move map to selected location} -command {MoveMap movemapto}] -row 2 -columnspan 2 -sticky we
    set width [winfo reqwidth .movemapdialog.frame.moveto]
    grid [ttk::button .movemapdialog.frame.centeronship -text {Center map on ship} -command {MoveMap centeronship}] -row 3 -columnspan 2 -sticky we
    grid [ttk::button .movemapdialog.frame.centeronhome -text {Center map on home base} -command {MoveMap centeronhome}] -row 4 -columnspan 2 -sticky we

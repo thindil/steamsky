@@ -25,6 +25,8 @@ with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Bases; use Bases;
 with Messages; use Messages;
 with OrdersMenu; use OrdersMenu;
@@ -379,6 +381,7 @@ package body Maps.UI.Commands is
       pragma Unreferenced(ClientData, Argc);
       MapView: Tk_Text;
       MapHeight, MapWidth: Positive;
+      SpinBox: Ttk_SpinBox;
    begin
       MapView.Interp := Interp;
       MapView.Name := New_String(".paned.mapframe.map");
@@ -388,7 +391,11 @@ package body Maps.UI.Commands is
          CenterX := PlayerShip.SkyX;
          CenterY := PlayerShip.SkyY;
       elsif CArgv.Arg(Argv, 1) = "movemapto" then
-         null;
+         SpinBox.Interp := Interp;
+         SpinBox.Name := New_String(".movemapdialog.frame.x");
+         CenterX := Positive'Value(Get(SpinBox));
+         SpinBox.Name := New_String(".movemapdialog.frame.y");
+         CenterY := Positive'Value(Get(SpinBox));
       elsif CArgv.Arg(Argv, 1) = "n" then
          if CenterY - (MapHeight / 3) < 1 then
             CenterY := MapHeight / 3;
