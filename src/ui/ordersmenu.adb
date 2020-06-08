@@ -127,7 +127,7 @@ package body OrdersMenu is
          end;
       end if;
       if PlayerShip.Speed = DOCKED then
-         Add(OrdersMenu, "command", "-label {Undock} -underline 0");
+         Add(OrdersMenu, "command", "-label {Undock} -underline 0 -command {Docking}");
          if HaveTrader and SkyBases(BaseIndex).Population > 0 then
             Add(OrdersMenu, "command", "-label {Trade} -underline 0");
             Add(OrdersMenu, "command", "-label {School} -underline 0");
@@ -297,7 +297,7 @@ package body OrdersMenu is
                           (OrdersMenu, "command",
                            "-label {Dock (" &
                            Trim(Positive'Image(DockingCost), Left) & " " &
-                           To_String(MoneyName) & ")} -underline 0");
+                           To_String(MoneyName) & ")} -underline 0 -command {Docking}");
                      end;
                   end if;
                   for Mission of AcceptedMissions loop
@@ -416,9 +416,64 @@ package body OrdersMenu is
       return TCL_OK;
    end Show_Orders_Command;
 
+   -- ****f* OrdersMenu/Docking_Command
+   -- FUNCTION
+   -- Dock or undock from the sky base
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Docking_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Docking_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      Message: Unbounded_String;
+   begin
+      if PlayerShip.Speed = DOCKED then
+         if User_Data = Get_Object(Builder, "btndock") then
+            Message := To_Unbounded_String(DockShip(False));
+         else
+            Message := To_Unbounded_String(DockShip(False, True));
+         end if;
+         if Length(Message) > 0 then
+            ShowMessage(To_String(Message));
+            return TCL_OK;
+         end if;
+      else
+         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
+            if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                .EType =
+              FullDocks then
+               --ShowWaitOrders(Builder);
+               return TCL_OK;
+            end if;
+         end if;
+         Message := To_Unbounded_String(DockShip(True));
+         if Length(Message) > 0 then
+            ShowMessage(To_String(Message));
+            return TCL_OK;
+         end if;
+      end if;
+      ShowSkyMap;
+      if PlayerShip.Speed = DOCKED then
+         Show_Orders_Command(ClientData, Interp, Argc, Argv);
+      end if;
+      return TCL_OK;
+   end Docking_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowOrders", Show_Orders_Command'Access);
+      AddCommand("Docking", Docking_Command'Access);
    end AddCommands;
 
 end OrdersMenu;
