@@ -40,6 +40,14 @@ $mapview tag configure red3 -foreground #732727
 $mapview tag configure green2 -foreground #73d216
 $mapview tag configure gray -foreground #1f2223
 $mapview tag configure black -foreground black
+# Move map dialog
+proc ValidateCoord {value currentvalue} {
+   set newvalue [regsub -all {[^0-9]} $value {}]
+   if {$newvalue == "" || [expr $currentvalue + $newvalue] > 1024} {
+      return false
+   }
+   return true
+}
 # Move map buttons
 set mframe [ttk::frame .paned.mapframe.buttons]
 grid [ttk::button $mframe.show -text "[format %c 0x2b9d]" -style Toolbutton -command ShowMapButtons] -columnspan 5 -sticky we
@@ -49,7 +57,28 @@ grid [ttk::button $mframe.n -text {N} -style Toolbutton -command {MoveMap n}] -c
 grid [ttk::button $mframe.ne -text {NE} -style Toolbutton -command {MoveMap ne}] -column 3 -row 1
 grid [ttk::button $mframe.right -text "[format %c 0x2b9e]" -style Toolbutton -command {MoveMapButtons right}] -rowspan 3 -row 1 -column 4 -sticky ns
 grid [ttk::button $mframe.w -text {W} -style Toolbutton -command {MoveMap w}] -row 2 -column 1
-grid [ttk::button $mframe.wait -text {...} -style Toolbutton] -column 2 -row 2
+grid [ttk::button $mframe.wait -text {...} -style Toolbutton -command {
+   toplevel .movemapdialog -class Dialog
+   wm title .movemapdialog {Steam Sky - move map}
+   wm transient .movemapdialog .
+   if {$::tcl_platform(os) == "Linux"} {
+      wm attributes .movemapdialog -type dialog
+   }
+   pack [ttk::frame .movemapdialog.frame] -expand true -fill both
+   grid [ttk::label .movemapdialog.frame.xlabel -text X:]
+   grid [ttk::spinbox .movemapdialog.frame.x -from 1.0 -to 1024.0 -increment 1.0 -validate key -validatecommand {ValidateCoord %S %s} -width 5] -row 0 -column 1
+   .movemapdialog.frame.x set 1
+   grid [ttk::label .movemapdialog.frame.ylabel -text Y:] -row 1
+   grid [ttk::spinbox .movemapdialog.frame.y -from 1.0 -to 1024.0 -increment 1.0 -validate key -validatecommand {ValidateCoord %S %s} -width 5] -row 1 -column 1
+   .movemapdialog.frame.y set 1
+   grid [ttk::button .movemapdialog.frame.moveto -text {Move map to selected location}] -row 2 -columnspan 2 -sticky we
+   set width [winfo reqwidth .movemapdialog.frame.moveto]
+   grid [ttk::button .movemapdialog.frame.centeronship -text {Center map on ship}] -row 3 -columnspan 2 -sticky we
+   grid [ttk::button .movemapdialog.frame.centeronhome -text {Center map on home base}] -row 4 -columnspan 2 -sticky we
+   grid [ttk::button .movemapdialog.frame.close -text {Close} -command {CloseDialog .movemapdialog}] -row 5 -columnspan 2 -sticky we
+   set height [expr [winfo reqheight .movemapdialog.frame.close] * 6]
+   wm geometry .movemapdialog [winfo reqwidth .movemapdialog.frame.moveto]x[expr [winfo reqheight .movemapdialog.frame.close] * 6]+[expr ([winfo vrootwidth .movemapdialog] - $width) / 2]+[expr ([winfo vrootheight .movemapdialog] - $height) / 2]
+}] -column 2 -row 2
 grid [ttk::button $mframe.e -text {E} -style Toolbutton -command {MoveMap e}] -column 3 -row 2
 grid [ttk::button $mframe.sw -text {SW} -style Toolbutton -command {MoveMap sw}] -row 3 -column 1
 grid [ttk::button $mframe.s -text {S} -style Toolbutton -command {MoveMap s}] -column 2 -row 3
@@ -62,27 +91,6 @@ grid [ttk::label .paned.mapframe.info.info] -sticky nwes
 ttk::label .paned.mapframe.info.eventinfo
 grid rowconfigure .paned.mapframe 0 -weight 1
 grid columnconfigure .paned.mapframe 0 -weight 1
-# Move map dialog
-proc ValidateCoord {value currentvalue} {
-   set newvalue [regsub -all {[^0-9]} $value {}]
-   if {$newvalue == "" || [expr $currentvalue + $newvalue] > 1024} {
-      return false
-   }
-   return true
-}
-
-toplevel .movemapdialog
-pack [ttk::frame .movemapdialog.frame] -expand true -fill both
-grid [ttk::label .movemapdialog.frame.xlabel -text X:]
-grid [ttk::spinbox .movemapdialog.frame.x -from 1.0 -to 1024.0 -increment 1.0 -validate key -validatecommand {ValidateCoord %S %s}] -row 0 -column 1
-.movemapdialog.frame.x set 1
-grid [ttk::label .movemapdialog.frame.ylabel -text Y:] -row 1
-grid [ttk::spinbox .movemapdialog.frame.y -from 1.0 -to 1024.0 -increment 1.0 -validate key -validatecommand {ValidateCoord %S %s}] -row 1 -column 1
-.movemapdialog.frame.y set 1
-grid [ttk::button .movemapdialog.frame.moveto -text {Move map to selected location}] -row 2 -columnspan 2 -sticky we
-grid [ttk::button .movemapdialog.frame.centeronship -text {Center map on ship}] -row 3 -columnspan 2 -sticky we
-grid [ttk::button .movemapdialog.frame.centeronhome -text {Center map on home base}] -row 4 -columnspan 2 -sticky we
-grid [ttk::button .movemapdialog.frame.close -text {Close}] -row 5 -columnspan 2 -sticky we
 # Last messages
 .paned add [ttk::frame .paned.controls]
 grid [ttk::frame .paned.controls.messages] -sticky w
