@@ -472,6 +472,40 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Move_Map_Command;
 
+   -- ****if* MapCommands/Zoom_Map_Command
+   -- FUNCTION
+   -- Zoom the sky map
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Zoom_Map_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Zoom_Map_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      FontSize: Positive;
+   begin
+      Tcl_Eval(Interp, "font configure MapFont -size");
+      FontSize := Positive'Value(Tcl_GetResult(Interp));
+      if CArgv.Arg(Argv, 1) = "raise" then
+         FontSize := FontSize + 1;
+      else
+         FontSize := FontSize - 1;
+      end if;
+      Tcl_Eval
+        (Interp, "font configure MapFont -size" & Positive'Image(FontSize));
+      return Draw_Map_Command(ClientData, Interp, Argc, Argv);
+   end Zoom_Map_Command;
+
    procedure AddCommands is
    begin
       AddCommand("HideMapButtons", Hide_Map_Buttons_Command'Access);
@@ -483,6 +517,7 @@ package body Maps.UI.Commands is
       AddCommand("ShowDestinationMenu", Show_Destination_Menu_Command'Access);
       AddCommand("SetDestination", Set_Destination_Command'Access);
       AddCommand("MoveMap", Move_Map_Command'Access);
+      AddCommand("ZoomMap", Zoom_Map_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;

@@ -783,6 +783,8 @@ package body Maps.UI is
       if Invoke(Button) /= "" then
          raise SteamSky_Map_Error with "Can't hide map buttons";
       end if;
+      Bind_To_Main_Window(Get_Context, "<plus>", "{ZoomMap raise}");
+      Bind_To_Main_Window(Get_Context, "<minus>", "{ZoomMap lower}");
    end CreateGameUI;
 
 end Maps.UI;
