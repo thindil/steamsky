@@ -787,4 +787,10 @@ package body Maps.UI is
       Bind_To_Main_Window(Get_Context, "<minus>", "{ZoomMap lower}");
    end CreateGameUI;
 
+   procedure ShowSkyMap is
+   begin
+      UpdateHeader;
+      DrawMap;
+   end ShowSkyMap;
+
 end Maps.UI;

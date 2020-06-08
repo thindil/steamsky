@@ -45,6 +45,13 @@ package Maps.UI is
    procedure CreateGameUI;
    -- ****
 
+   -- ****f* MUI/ShowSkyMap
+   -- FUNCTION
+   -- Show sky map - draw map, update header, etc
+   -- SOURCE
+   procedure ShowSkyMap;
+   -- ****
+
 private
 
    -- ****v* Maps.UI/StartX
