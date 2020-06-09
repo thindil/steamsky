@@ -32,10 +32,13 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Crew; use Crew;
+with Maps.UI; use Maps.UI;
 with Ships; use Ships;
 with Utils.UI; use Utils.UI;
 
 package body WaitMenu is
+
+   SteamSky_Wait_Error: exception;
 
    function Show_Wait_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -51,7 +54,6 @@ package body WaitMenu is
       NeedHealing, NeedRest: Boolean := False;
       Width, Height: Positive;
       X, Y: Integer;
-      SteamSky_Wait_Error: exception;
    begin
       MessageDialog.Interp := Get_Context;
       MessageDialog.Name := New_String(".wait");
@@ -154,9 +156,96 @@ package body WaitMenu is
       return TCL_OK;
    end Show_Wait_Command;
 
+   -- ****f* WaitMenu/Wait_Command
+   -- FUNCTION
+   -- Wait the selected amount of time
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Wait_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Wait_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      TimeNeeded: Natural := 0;
+      CloseButton: Ttk_Button;
+   begin
+--      Hide(Gtk_Widget(Get_Object(Builder, "btnboxwait")));
+--      if User_Data = Get_Object(Builder, "btnwait1min") then
+--         UpdateGame(1);
+--         WaitInPlace(1);
+--      elsif User_Data = Get_Object(Builder, "btnwait5min") then
+--         UpdateGame(5);
+--         WaitInPlace(5);
+--      elsif User_Data = Get_Object(Builder, "btnwait10min") then
+--         UpdateGame(10);
+--         WaitInPlace(10);
+--      elsif User_Data = Get_Object(Builder, "btnwait15min") then
+--         UpdateGame(15);
+--         WaitInPlace(15);
+--      elsif User_Data = Get_Object(Builder, "btnwait30min") then
+--         UpdateGame(30);
+--         WaitInPlace(30);
+--      elsif User_Data = Get_Object(Builder, "btnwait1hour") then
+--         UpdateGame(60);
+--         WaitInPlace(60);
+--      elsif User_Data = Get_Object(Builder, "btnwaitrest") then
+--         WaitForRest;
+--      elsif User_Data = Get_Object(Builder, "btnwaitheal") then
+--         for I in PlayerShip.Crew.Iterate loop
+--            if PlayerShip.Crew(I).Health < 100 and
+--              PlayerShip.Crew(I).Health > 0 and
+--              PlayerShip.Crew(I).Order = Rest then
+--               Modules_Loop :
+--               for Module of PlayerShip.Modules loop
+--                  if Module.MType = CABIN then
+--                     for Owner of Module.Owner loop
+--                        if Owner = Crew_Container.To_Index(I) then
+--                           if TimeNeeded <
+--                             (100 - PlayerShip.Crew(I).Health) * 15 then
+--                              TimeNeeded :=
+--                                (100 - PlayerShip.Crew(I).Health) * 15;
+--                           end if;
+--                           exit Modules_Loop;
+--                        end if;
+--                     end loop;
+--                  end if;
+--               end loop Modules_Loop;
+--            end if;
+--         end loop;
+--         if TimeNeeded > 0 then
+--            UpdateGame(TimeNeeded);
+--            WaitInPlace(TimeNeeded);
+--         else
+--            return TCL_OK;
+--         end if;
+--      elsif User_Data = Get_Object(Builder, "waitxadj") then
+--         UpdateGame(Positive(Get_Value(Gtk_Adjustment(User_Data))));
+--         WaitInPlace(Positive(Get_Value(Gtk_Adjustment(User_Data))));
+--      end if;
+      UpdateHeader;
+      DrawMap;
+      CloseButton.Interp := Interp;
+      CloseButton.Name := New_String(".wait.frame.close");
+      if Invoke(CloseButton) /= "" then
+         raise SteamSky_Wait_Error with "Can't hide wait menu";
+      end if;
+      return TCL_OK;
+   end Wait_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowWait", Show_Wait_Command'Access);
+      AddCommand("Wait", Wait_Command'Access);
    end AddCommands;
 
 end WaitMenu;
