@@ -45,7 +45,9 @@ package body WaitMenu is
       WaitFrame: constant Ttk_Frame := Create(".wait.frame");
       Button: Ttk_Button;
       AmountBox: constant Ttk_SpinBox :=
-        Create(".wait.frame.amount", "-from 1.0 -to 1440.0 -width 6");
+        Create
+          (".wait.frame.amount",
+           "-from 1.0 -to 1440.0 -width 6 -validate key -validatecommand {ValidateSpinbox %S %s 1440}");
       AmountLabel: constant Ttk_Label :=
         Create(".wait.frame.mins", "-text minutes.");
       NeedHealing, NeedRest: Boolean := False;
