@@ -100,12 +100,7 @@ package body Maps.UI is
       null;
    end DeathConfirm;
 
-   -- ****if* MUI/UpdateHeader
-   -- FUNCTION
-   -- Update the game information on the UI header (time, crew, etc)
-   -- SOURCE
    procedure UpdateHeader is
-      -- ****
       HaveWorker, HaveGunner: Boolean := True;
       NeedCleaning, NeedRepairs, NeedWorker, HavePilot, HaveEngineer,
       HaveTrader, HaveUpgrader, HaveCleaner, HaveRepairman: Boolean := False;

@@ -38,6 +38,20 @@ package Maps.UI is
       To_Unbounded_String("q"), To_Unbounded_String("x"));
    -- ****
 
+   -- ****f* MUI/UpdateHeader
+   -- FUNCTION
+   -- Update the game information on the UI header (time, crew, etc)
+   -- SOURCE
+   procedure UpdateHeader;
+   -- ****
+
+   -- ****f* MUI/DrawMap
+   -- FUNCTION
+   -- Draw map on the screen
+   -- SOURCE
+   procedure DrawMap;
+   -- ****
+
    -- ****f* MUI/CreateGameUI
    -- FUNCTION
    -- Create the game UI and show sky map to the player
@@ -66,13 +80,6 @@ private
    -- Coordinates of the center point of the map
    -- SOURCE
    CenterX, CenterY: Positive;
-   -- ****
-
-   -- ****f* MUI/DrawMap
-   -- FUNCTION
-   -- Draw map on the screen
-   -- SOURCE
-   procedure DrawMap;
    -- ****
 
    -- ****f* MUI/UpdateMapInfo
