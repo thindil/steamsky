@@ -50,6 +50,7 @@ with Ships.Cargo; use Ships.Cargo;
 with Ships.Movement; use Ships.Movement;
 with Stories; use Stories;
 with Utils.UI; use Utils.UI;
+with WaitMenu;
 
 package body Maps.UI is
 
@@ -753,6 +754,7 @@ package body Maps.UI is
             To_String(DataDirectory) & "ui" & Dir_Separator & "game.tcl");
          OrdersMenu.AddCommands;
          Maps.UI.Commands.AddCommands;
+         WaitMenu.AddCommands;
          Bind(MapView, "<Configure>", "DrawMap");
          Bind(MapView, "<Motion>", "{UpdateMapInfo %x %y}");
          Bind(MapView, "<1>", "{ShowDestinationMenu %x %y}");
@@ -785,6 +787,7 @@ package body Maps.UI is
       end if;
       Bind_To_Main_Window(Get_Context, "<plus>", "{ZoomMap raise}");
       Bind_To_Main_Window(Get_Context, "<minus>", "{ZoomMap lower}");
+      Bind_To_Main_Window(Get_Context, "<w>", "{ShowWait}");
    end CreateGameUI;
 
    procedure ShowSkyMap is
