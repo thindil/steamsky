@@ -80,7 +80,7 @@ package body Maps.UI is
       Menu.Add(GameMenu, "command", "-label {List of known events}");
       Menu.Add(GameMenu, "command", "-label {Accepted missions}");
       Menu.Add(GameMenu, "command", "-label {Stories}");
-      Menu.Add(GameMenu, "command", "-label {Wait orders}");
+      Menu.Add(GameMenu, "command", "-label {Wait orders} -command {ShowWait}");
       Menu.Add(GameMenu, "command", "-label {Game statistics}");
       Menu.Add(GameMenu, "command", "-label {Help}");
       Menu.Add(GameMenu, "command", "-label {Game options}");
@@ -787,7 +787,6 @@ package body Maps.UI is
       end if;
       Bind_To_Main_Window(Get_Context, "<plus>", "{ZoomMap raise}");
       Bind_To_Main_Window(Get_Context, "<minus>", "{ZoomMap lower}");
-      Bind_To_Main_Window(Get_Context, "<w>", "{ShowWait}");
    end CreateGameUI;
 
    procedure ShowSkyMap is
