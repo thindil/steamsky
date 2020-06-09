@@ -39,6 +39,7 @@ with Ships.Movement; use Ships.Movement;
 with Stories; use Stories;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
+with WaitMenu; use WaitMenu;
 
 package body OrdersMenu is
 
@@ -132,6 +133,9 @@ package body OrdersMenu is
          Add
            (OrdersMenu, "command",
             "-label {Undock} -underline 0 -command {Docking}");
+         Add
+           (OrdersMenu, "command",
+            "-label {Escape} -underline 3 -command {Docking escape}");
          if HaveTrader and SkyBases(BaseIndex).Population > 0 then
             Add(OrdersMenu, "command", "-label {Trade} -underline 0");
             Add(OrdersMenu, "command", "-label {School} -underline 0");
@@ -458,9 +462,7 @@ package body OrdersMenu is
             if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
                 .EType =
               FullDocks then
-              -- TODO Show wait orders
-               --ShowWaitOrders(Builder);
-               return TCL_OK;
+               return Show_Wait_Command(ClientData, Interp, Argc, Argv);
             end if;
          end if;
          Message := To_Unbounded_String(DockShip(True));
