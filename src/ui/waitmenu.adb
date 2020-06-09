@@ -15,7 +15,9 @@
 
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Tcl.Ada; use Tcl.Ada;
+with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
@@ -40,20 +42,29 @@ package body WaitMenu is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      MessageDialog: constant Tk_Toplevel := Create(".wait", "-class Dialog");
+      MessageDialog: Tk_Toplevel;
       MainWindow: constant Tk_Toplevel := Get_Main_Window(Interp);
-      WaitFrame: constant Ttk_Frame := Create(".wait.frame");
+      WaitFrame: Ttk_Frame;
       Button: Ttk_Button;
-      AmountBox: constant Ttk_SpinBox :=
-        Create
-          (".wait.frame.amount",
-           "-from 1.0 -to 1440.0 -width 6 -validate key -validatecommand {ValidateSpinbox %S %s 1440}");
-      AmountLabel: constant Ttk_Label :=
-        Create(".wait.frame.mins", "-text minutes.");
+      AmountBox: Ttk_SpinBox;
+      AmountLabel: Ttk_Label;
       NeedHealing, NeedRest: Boolean := False;
       Width, Height: Positive;
       X, Y: Integer;
+      SteamSky_Wait_Error: exception;
    begin
+      MessageDialog.Interp := Get_Context;
+      MessageDialog.Name := New_String(".wait");
+      if Winfo_Get(MessageDialog, "exists") = "1" then
+         Button.Interp := Get_Context;
+         Button.Name := New_String(".wait.frame.close");
+         if Invoke(Button) /= "" then
+            raise SteamSky_Wait_Error with "Can't hide wait menu";
+         end if;
+         return TCL_OK;
+      end if;
+      MessageDialog := Create(".wait", "-class Dialog");
+      WaitFrame := Create(".wait.frame");
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
       Wm_Set(MessageDialog, "title", "{Steam Sky - Message}");
       Wm_Set(MessageDialog, "transient", ".");
@@ -75,8 +86,13 @@ package body WaitMenu is
       Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3");
       Button := Create(".wait.frame.wait", "-text Wait");
       Tcl.Tk.Ada.Grid.Grid(Button);
+      AmountBox :=
+        Create
+          (".wait.frame.amount",
+           "-from 1.0 -to 1440.0 -width 6 -validate key -validatecommand {ValidateSpinbox %S %s 1440}");
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-row 6 -column 1");
       Set(AmountBox, "1");
+      AmountLabel := Create(".wait.frame.mins", "-text minutes.");
       Tcl.Tk.Ada.Grid.Grid(AmountLabel, "-row 6 -column 2");
       Width :=
         Positive'Value(Winfo_Get(Button, "reqwidth")) +
