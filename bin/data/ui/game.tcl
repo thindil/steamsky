@@ -41,9 +41,9 @@ $mapview tag configure green2 -foreground #73d216
 $mapview tag configure gray -foreground #1f2223
 $mapview tag configure black -foreground black
 # Move map dialog
-proc ValidateCoord {value currentvalue} {
+proc ValidateSpinbox {value currentvalue max} {
    set newvalue [regsub -all {[^0-9]} $value {}]
-   if {$newvalue == "" || [expr $currentvalue + $newvalue] > 1024} {
+   if {$newvalue == "" || [expr $currentvalue + $newvalue] > $max} {
       return false
    }
    return true
@@ -66,10 +66,10 @@ grid [ttk::button $mframe.wait -text {...} -style Toolbutton -command {
    }
    pack [ttk::frame .movemapdialog.frame] -expand true -fill both
    grid [ttk::label .movemapdialog.frame.xlabel -text X:]
-   grid [ttk::spinbox .movemapdialog.frame.x -from 1.0 -to 1024.0 -increment 1.0 -validate key -validatecommand {ValidateCoord %S %s} -width 5] -row 0 -column 1
+   grid [ttk::spinbox .movemapdialog.frame.x -from 1.0 -to 1024.0 -increment 1.0 -validate key -validatecommand {ValidateSpinbox %S %s 1024} -width 5] -row 0 -column 1
    .movemapdialog.frame.x set 1
    grid [ttk::label .movemapdialog.frame.ylabel -text Y:] -row 1
-   grid [ttk::spinbox .movemapdialog.frame.y -from 1.0 -to 1024.0 -increment 1.0 -validate key -validatecommand {ValidateCoord %S %s} -width 5] -row 1 -column 1
+   grid [ttk::spinbox .movemapdialog.frame.y -from 1.0 -to 1024.0 -increment 1.0 -validate key -validatecommand {ValidateSpinbox %S %s 1024} -width 5] -row 1 -column 1
    .movemapdialog.frame.y set 1
    grid [ttk::button .movemapdialog.frame.moveto -text {Move map to selected location} -command {MoveMap movemapto}] -row 2 -columnspan 2 -sticky we
    set width [winfo reqwidth .movemapdialog.frame.moveto]
