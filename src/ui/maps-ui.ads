@@ -93,6 +93,11 @@ private
      (X: Positive := PlayerShip.SkyX; Y: Positive := PlayerShip.SkyY);
    -- ****
 
+   -- ****f* MUI/UpdateMoveButtons
+   -- FUNCTION
+   -- Updated the player ship movement buttons
+   -- SOURCE
    procedure UpdateMoveButtons;
+   -- ****
 
 end Maps.UI;
