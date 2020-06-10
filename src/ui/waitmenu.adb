@@ -32,8 +32,10 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Crew; use Crew;
+with Game; use Game;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
+with Ships.Movement; use Ships.Movement;
 with Utils.UI; use Utils.UI;
 
 package body WaitMenu is
@@ -74,19 +76,30 @@ package body WaitMenu is
          Wm_Set(MessageDialog, "attributes", "-type dialog");
       end if;
       Tcl.Tk.Ada.Pack.Pack(WaitFrame, "-expand true -fill both");
-      Button := Create(".wait.frame.wait1", "-text {Wait 1 minute}");
+      Button :=
+        Create(".wait.frame.wait1", "-text {Wait 1 minute} -command {Wait 1}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3");
-      Button := Create(".wait.frame.wait5", "-text {Wait 5 minutes}");
+      Button :=
+        Create
+          (".wait.frame.wait5", "-text {Wait 5 minutes} -command {Wait 5}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3");
-      Button := Create(".wait.frame.wait10", "-text {Wait 10 minutes}");
+      Button :=
+        Create
+          (".wait.frame.wait10", "-text {Wait 10 minutes} -command {Wait 10}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3");
-      Button := Create(".wait.frame.wait15", "-text {Wait 15 minutes}");
+      Button :=
+        Create
+          (".wait.frame.wait15", "-text {Wait 15 minutes} -command {Wait 15}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3");
-      Button := Create(".wait.frame.wait30", "-text {Wait 30 minutes}");
+      Button :=
+        Create
+          (".wait.frame.wait30", "-text {Wait 30 minutes} -command {Wait 30}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3");
-      Button := Create(".wait.frame.wait1h", "-text {Wait 1 hour}");
+      Button :=
+        Create(".wait.frame.wait1h", "-text {Wait 1 hour} -command {Wait 60}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3");
-      Button := Create(".wait.frame.wait", "-text Wait");
+      Button :=
+        Create(".wait.frame.wait", "-text Wait  -command {Wait amount}");
       Tcl.Tk.Ada.Grid.Grid(Button);
       AmountBox :=
         Create
@@ -124,13 +137,17 @@ package body WaitMenu is
       end loop;
       if NeedRest then
          Button :=
-           Create(".wait.frame.rest", "-text {Wait until crew is rested}");
+           Create
+             (".wait.frame.rest",
+              "-text {Wait until crew is rested} -command {Wait rest}");
          Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3");
          Height := Height + Positive'Value(Winfo_Get(AmountBox, "reqheight"));
       end if;
       if NeedHealing then
          Button :=
-           Create(".wait.frame.heal", "-text {Wait until crew is healed}");
+           Create
+             (".wait.frame.heal",
+              "-text {Wait until crew is healed} -command {Wait heal}");
          Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3");
          Height := Height + Positive'Value(Winfo_Get(AmountBox, "reqheight"));
       end if;
@@ -176,62 +193,65 @@ package body WaitMenu is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
       TimeNeeded: Natural := 0;
       CloseButton: Ttk_Button;
+      AmountBox: Ttk_SpinBox;
    begin
---      Hide(Gtk_Widget(Get_Object(Builder, "btnboxwait")));
---      if User_Data = Get_Object(Builder, "btnwait1min") then
---         UpdateGame(1);
---         WaitInPlace(1);
---      elsif User_Data = Get_Object(Builder, "btnwait5min") then
---         UpdateGame(5);
---         WaitInPlace(5);
---      elsif User_Data = Get_Object(Builder, "btnwait10min") then
---         UpdateGame(10);
---         WaitInPlace(10);
---      elsif User_Data = Get_Object(Builder, "btnwait15min") then
---         UpdateGame(15);
---         WaitInPlace(15);
---      elsif User_Data = Get_Object(Builder, "btnwait30min") then
---         UpdateGame(30);
---         WaitInPlace(30);
---      elsif User_Data = Get_Object(Builder, "btnwait1hour") then
---         UpdateGame(60);
---         WaitInPlace(60);
---      elsif User_Data = Get_Object(Builder, "btnwaitrest") then
---         WaitForRest;
---      elsif User_Data = Get_Object(Builder, "btnwaitheal") then
---         for I in PlayerShip.Crew.Iterate loop
---            if PlayerShip.Crew(I).Health < 100 and
---              PlayerShip.Crew(I).Health > 0 and
---              PlayerShip.Crew(I).Order = Rest then
---               Modules_Loop :
---               for Module of PlayerShip.Modules loop
---                  if Module.MType = CABIN then
---                     for Owner of Module.Owner loop
---                        if Owner = Crew_Container.To_Index(I) then
---                           if TimeNeeded <
---                             (100 - PlayerShip.Crew(I).Health) * 15 then
---                              TimeNeeded :=
---                                (100 - PlayerShip.Crew(I).Health) * 15;
---                           end if;
---                           exit Modules_Loop;
---                        end if;
---                     end loop;
---                  end if;
---               end loop Modules_Loop;
---            end if;
---         end loop;
---         if TimeNeeded > 0 then
---            UpdateGame(TimeNeeded);
---            WaitInPlace(TimeNeeded);
---         else
---            return TCL_OK;
---         end if;
---      elsif User_Data = Get_Object(Builder, "waitxadj") then
---         UpdateGame(Positive(Get_Value(Gtk_Adjustment(User_Data))));
---         WaitInPlace(Positive(Get_Value(Gtk_Adjustment(User_Data))));
---      end if;
+      if CArgv.Arg(Argv, 1) = "1" then
+         UpdateGame(1);
+         WaitInPlace(1);
+      elsif CArgv.Arg(Argv, 1) = "5" then
+         UpdateGame(5);
+         WaitInPlace(5);
+      elsif CArgv.Arg(Argv, 1) = "10" then
+         UpdateGame(10);
+         WaitInPlace(10);
+      elsif CArgv.Arg(Argv, 1) = "15" then
+         UpdateGame(15);
+         WaitInPlace(15);
+      elsif CArgv.Arg(Argv, 1) = "30" then
+         UpdateGame(30);
+         WaitInPlace(30);
+      elsif CArgv.Arg(Argv, 1) = "60" then
+         UpdateGame(60);
+         WaitInPlace(60);
+      elsif CArgv.Arg(Argv, 1) = "rest" then
+         WaitForRest;
+      elsif CArgv.Arg(Argv, 1) = "heal" then
+         for I in PlayerShip.Crew.Iterate loop
+            if PlayerShip.Crew(I).Health < 100 and
+              PlayerShip.Crew(I).Health > 0 and
+              PlayerShip.Crew(I).Order = Rest then
+               Modules_Loop :
+               for Module of PlayerShip.Modules loop
+                  if Module.MType = CABIN then
+                     for Owner of Module.Owner loop
+                        if Owner = Crew_Container.To_Index(I) then
+                           if TimeNeeded <
+                             (100 - PlayerShip.Crew(I).Health) * 15 then
+                              TimeNeeded :=
+                                (100 - PlayerShip.Crew(I).Health) * 15;
+                           end if;
+                           exit Modules_Loop;
+                        end if;
+                     end loop;
+                  end if;
+               end loop Modules_Loop;
+            end if;
+         end loop;
+         if TimeNeeded > 0 then
+            UpdateGame(TimeNeeded);
+            WaitInPlace(TimeNeeded);
+         else
+            return TCL_OK;
+         end if;
+      elsif CArgv.Arg(Argv, 1) = "amount" then
+         AmountBox.Interp := Interp;
+         AmountBox.Name := New_String(".wait.frame.amount");
+         UpdateGame(Positive'Value(Get(AmountBox)));
+         WaitInPlace(Positive'Value(Get(AmountBox)));
+      end if;
       UpdateHeader;
       DrawMap;
       CloseButton.Interp := Interp;
