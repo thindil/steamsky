@@ -28,9 +28,12 @@ with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
@@ -80,7 +83,8 @@ package body Maps.UI is
       Menu.Add(GameMenu, "command", "-label {List of known events}");
       Menu.Add(GameMenu, "command", "-label {Accepted missions}");
       Menu.Add(GameMenu, "command", "-label {Stories}");
-      Menu.Add(GameMenu, "command", "-label {Wait orders} -command {ShowWait}");
+      Menu.Add
+        (GameMenu, "command", "-label {Wait orders} -command {ShowWait}");
       Menu.Add(GameMenu, "command", "-label {Game statistics}");
       Menu.Add(GameMenu, "command", "-label {Help}");
       Menu.Add(GameMenu, "command", "-label {Game options}");
@@ -730,6 +734,69 @@ package body Maps.UI is
       end if;
    end UpdateMapInfo;
 
+   procedure UpdateMoveButtons is
+      MoveButtonsNames: constant array(1 .. 8) of Unbounded_String :=
+        (To_Unbounded_String("nw"), To_Unbounded_String("n"),
+         To_Unbounded_String("ne"), To_Unbounded_String("w"),
+         To_Unbounded_String("e"), To_Unbounded_String("sw"),
+         To_Unbounded_String("s"), To_Unbounded_String("se"));
+      MoveButtonsTooltips: constant array(1 .. 8) of Unbounded_String :=
+        (To_Unbounded_String("Move ship north and west"),
+         To_Unbounded_String("Move ship north"),
+         To_Unbounded_String("Move ship north and east"),
+         To_Unbounded_String("Move ship west"),
+         To_Unbounded_String("Move ship east"),
+         To_Unbounded_String("Move ship south and west"),
+         To_Unbounded_String("Move ship south"),
+         To_Unbounded_String("Move ship south and east"));
+      Button: Ttk_Button;
+      Speedbox: Ttk_ComboBox;
+   begin
+      Button.Interp := Get_Context;
+      Speedbox.Interp := Get_Context;
+      Speedbox.Name := New_String(".paned.controls.buttons.speed");
+      if PlayerShip.Speed = DOCKED then
+         Tcl.Tk.Ada.Grid.Grid_Remove(Speedbox);
+         Button.Name := New_String(".paned.controls.buttons.moveto");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Button);
+         Button.Name := New_String(".paned.controls.buttons.wait");
+         configure(Button, "-text Wait");
+         Add(Button, "Wait 1 minute.");
+         for ButtonName of MoveButtonsNames loop
+            Button.Name :=
+              New_String(".paned.controls.buttons." & To_String(ButtonName));
+            State(Button, "disabled");
+            Add
+              (Button,
+               "You must give order 'Undock' from Ship Orders first to move ship.");
+         end loop;
+      else
+         Current(Speedbox, Natural'Image(ShipSpeed'Pos(PlayerShip.Speed) - 1));
+         Tcl.Tk.Ada.Grid.Grid(Speedbox);
+         if PlayerShip.DestinationX > 0 and PlayerShip.DestinationY > 0 then
+            Button.Name := New_String(".paned.controls.buttons.moveto");
+            Tcl.Tk.Ada.Grid.Grid(Button);
+            Button.Name := New_String(".paned.controls.buttons.wait");
+            configure(Button, "-text Move");
+            Add(Button, "Move ship one map field toward destination.");
+            Tcl.Tk.Ada.Grid.Grid(Button);
+         else
+            Button.Name := New_String(".paned.controls.buttons.moveto");
+            Tcl.Tk.Ada.Grid.Grid_Remove(Button);
+            Button.Name := New_String(".paned.controls.buttons.wait");
+            configure(Button, "-text Wait");
+            Add(Button, "Wait 1 minute.");
+         end if;
+         for I in MoveButtonsNames'Range loop
+            Button.Name :=
+              New_String
+                (".paned.controls.buttons." & To_String(MoveButtonsNames(I)));
+            State(Button, "!disabled");
+            Add(Button, To_String(MoveButtonsTooltips(I)));
+         end loop;
+      end if;
+   end UpdateMoveButtons;
+
    procedure CreateGameUI is
       Paned: Ttk_PanedWindow;
       Button: Ttk_Button;
@@ -783,6 +850,7 @@ package body Maps.UI is
       Bind_To_Main_Window(Get_Context, "<plus>", "{ZoomMap raise}");
       Bind_To_Main_Window(Get_Context, "<minus>", "{ZoomMap lower}");
       UpdateMessages;
+      UpdateMoveButtons;
    end CreateGameUI;
 
    procedure ShowSkyMap is
@@ -790,6 +858,7 @@ package body Maps.UI is
       UpdateHeader;
       DrawMap;
       UpdateMessages;
+      UpdateMoveButtons;
    end ShowSkyMap;
 
 end Maps.UI;
