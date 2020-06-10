@@ -26,6 +26,7 @@ with Tcl.Tk.Ada.Busy; use Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
@@ -37,6 +38,7 @@ with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Config; use Config;
 with Crew; use Crew;
 with Items; use Items;
+with Messages; use Messages;
 with Ships; use Ships;
 with Ships.Movement; use Ships.Movement;
 
@@ -286,4 +288,56 @@ package body Utils.UI is
            (InfoText, Items_List(FindProtoItem(ItemType => FuelType)).Name);
       end if;
    end TravelInfo;
+
+   procedure UpdateMessages is
+      LoopStart: Integer := 0 - MessagesAmount;
+      Message: Message_Data;
+      TagNames: constant array(1 .. 5) of Unbounded_String :=
+        (To_Unbounded_String("yellow"), To_Unbounded_String("green"),
+         To_Unbounded_String("red"), To_Unbounded_String("blue"),
+         To_Unbounded_String("cyan"));
+      MessagesView: Tk_Text;
+      procedure ShowMessage is
+      begin
+         if Message.Color = WHITE then
+            Insert
+              (MessagesView, "end", "{" & To_String(Message.Message) & "}");
+         else
+            Insert
+              (MessagesView, "end",
+               "{" & To_String(Message.Message) & "} [list " &
+               To_String(TagNames(Message_Color'Pos(Message.Color))) & "]");
+         end if;
+      end ShowMessage;
+   begin
+      MessagesView.Interp := Get_Context;
+      MessagesView.Name := New_String(".paned.controls.messages.view");
+      Tcl.Tk.Ada.Widgets.configure(MessagesView, "-state normal");
+      Delete(MessagesView, "1.0", "end");
+      if LoopStart = 0 then
+         return;
+      end if;
+      if LoopStart < -10 then
+         LoopStart := -10;
+      end if;
+      if GameSettings.MessagesOrder = OLDER_FIRST then
+         for I in LoopStart .. -1 loop
+            Message := GetMessage(I + 1);
+            ShowMessage;
+            if I < -1 then
+               Insert(MessagesView, "end", "{" & LF & "}");
+            end if;
+         end loop;
+      else
+         for I in reverse LoopStart .. -1 loop
+            Message := GetMessage(I + 1);
+            ShowMessage;
+            if I > LoopStart then
+               Insert(MessagesView, "end", "{" & LF & "}");
+            end if;
+         end loop;
+      end if;
+      Tcl.Tk.Ada.Widgets.configure(MessagesView, "-state disable");
+   end UpdateMessages;
+
 end Utils.UI;

@@ -71,4 +71,11 @@ package Utils.UI is
       ShowFuelName: Boolean := False);
    -- ****
 
+   -- ****f* UUI/UpdateMessages
+   -- FUNCTION
+   -- Update game messages
+   -- SOURCE
+   procedure UpdateMessages;
+   -- ****
+
 end Utils.UI;
