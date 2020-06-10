@@ -19,6 +19,7 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
+with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
@@ -27,9 +28,19 @@ with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
+with Config; use Config;
+with Crew; use Crew;
+with Events; use Events;
+with Factions; use Factions;
+with Game; use Game;
 with Messages; use Messages;
+with Missions; use Missions;
 with OrdersMenu; use OrdersMenu;
+with Ships.Cargo; use Ships.Cargo;
+with Ships.Crew; use Ships.Crew;
+with Ships.Movement; use Ships.Movement;
 with Utils.UI; use Utils.UI;
 
 package body Maps.UI.Commands is
@@ -507,6 +518,238 @@ package body Maps.UI.Commands is
       return Draw_Map_Command(ClientData, Interp, Argc, Argv);
    end Zoom_Map_Command;
 
+   -- ****if* MapCommands/Move_Command
+   -- FUNCTION
+   -- Move the player ship in the selected location and check what happens
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Move_Ship_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Move_Ship_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      Message: Unbounded_String;
+      Result: Natural;
+      StartsCombat: Boolean := False;
+      NewX, NewY: Integer := 0;
+   begin
+      if CArgv.Arg(Argv, 1) = "n" then -- Move up
+         Result := MoveShip(0, -1, Message);
+      elsif CArgv.Arg(Argv, 1) = "s" then -- Move down
+         Result := MoveShip(0, 1, Message);
+      elsif CArgv.Arg(Argv, 1) = "e" then -- Move right
+         Result := MoveShip(1, 0, Message);
+      elsif CArgv.Arg(Argv, 1) = "w" then -- Move left
+         Result := MoveShip(-1, 0, Message);
+      elsif CArgv.Arg(Argv, 1) = "sw" then -- Move down/left
+         Result := MoveShip(-1, 1, Message);
+      elsif CArgv.Arg(Argv, 1) = "se" then -- Move down/right
+         Result := MoveShip(1, 1, Message);
+      elsif CArgv.Arg(Argv, 1) = "nw" then -- Move up/left
+         Result := MoveShip(-1, -1, Message);
+      elsif CArgv.Arg(Argv, 1) = "ne" then -- Move up/right
+         Result := MoveShip(1, -1, Message);
+      elsif CArgv.Arg(Argv, 1) = "waitormove" then -- Move to destination or wait 1 game minute
+         if PlayerShip.DestinationX = 0 and PlayerShip.DestinationY = 0 then
+            Result := 1;
+            UpdateGame(1);
+            WaitInPlace(1);
+         else
+            if PlayerShip.DestinationX > PlayerShip.SkyX then
+               NewX := 1;
+            elsif PlayerShip.DestinationX < PlayerShip.SkyX then
+               NewX := -1;
+            end if;
+            if PlayerShip.DestinationY > PlayerShip.SkyY then
+               NewY := 1;
+            elsif PlayerShip.DestinationY < PlayerShip.SkyY then
+               NewY := -1;
+            end if;
+            Result := MoveShip(NewX, NewY, Message);
+            if PlayerShip.DestinationX = PlayerShip.SkyX and
+              PlayerShip.DestinationY = PlayerShip.SkyY then
+               AddMessage
+                 ("You reached your travel destination.", OrderMessage);
+               PlayerShip.DestinationX := 0;
+               PlayerShip.DestinationY := 0;
+               if GameSettings.AutoFinish then
+                  Message := To_Unbounded_String(AutoFinishMissions);
+               end if;
+               Result := 4;
+            end if;
+         end if;
+      elsif CArgv.Arg(Argv, 1) = "moveto" then -- Move to destination
+         loop
+            NewX := 0;
+            NewY := 0;
+            if PlayerShip.DestinationX > PlayerShip.SkyX then
+               NewX := 1;
+            elsif PlayerShip.DestinationX < PlayerShip.SkyX then
+               NewX := -1;
+            end if;
+            if PlayerShip.DestinationY > PlayerShip.SkyY then
+               NewY := 1;
+            elsif PlayerShip.DestinationY < PlayerShip.SkyY then
+               NewY := -1;
+            end if;
+            Result := MoveShip(NewX, NewY, Message);
+            exit when Result = 0;
+            StartsCombat := CheckForEvent;
+            if StartsCombat then
+               Result := 4;
+               exit;
+            end if;
+            if Result = 8 then
+               WaitForRest;
+               if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+                   (To_Unbounded_String("sentientships"))
+                 and then
+                 (FindMember(Pilot) = 0 or FindMember(Engineer) = 0) then
+                  WaitForRest;
+               end if;
+               Result := 1;
+               StartsCombat := CheckForEvent;
+               if StartsCombat then
+                  Result := 4;
+                  exit;
+               end if;
+            end if;
+            if GameSettings.AutoMoveStop /= NEVER and
+              SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
+               declare
+                  EventIndex: constant Positive :=
+                    SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
+               begin
+                  case GameSettings.AutoMoveStop is
+                     when ANY =>
+                        if Events_List(EventIndex).EType = EnemyShip or
+                          Events_List(EventIndex).EType = Trader or
+                          Events_List(EventIndex).EType = FriendlyShip or
+                          Events_List(EventIndex).EType = EnemyPatrol then
+                           Result := 0;
+                           exit;
+                        end if;
+                     when FRIENDLY =>
+                        if Events_List(EventIndex).EType = Trader or
+                          Events_List(EventIndex).EType = FriendlyShip then
+                           Result := 0;
+                           exit;
+                        end if;
+                     when Config.ENEMY =>
+                        if Events_List(EventIndex).EType = EnemyShip or
+                          Events_List(EventIndex).EType = EnemyPatrol then
+                           Result := 0;
+                           exit;
+                        end if;
+                     when NEVER =>
+                        null;
+                  end case;
+               end;
+            end if;
+            declare
+               MessageDialog: Ttk_Frame;
+            begin
+               MessageDialog.Interp := Interp;
+               MessageDialog.Name := New_String(".message");
+               if Winfo_Get(MessageDialog, "exists") = "0" then
+                  if GetItemAmount(FuelType) <= GameSettings.LowFuel then
+                     ShowMessage("Your fuel level is dangerously low.");
+                     Result := 4;
+                     exit;
+                  elsif GetItemsAmount("Food") <= GameSettings.LowFood then
+                     ShowMessage("Your food level is dangerously low.");
+                     Result := 4;
+                     exit;
+                  elsif GetItemsAmount("Drinks") <= GameSettings.LowDrinks then
+                     ShowMessage("Your drinks level is dangerously low.");
+                     Result := 4;
+                     exit;
+                  end if;
+               end if;
+            end;
+            if PlayerShip.DestinationX = PlayerShip.SkyX and
+              PlayerShip.DestinationY = PlayerShip.SkyY then
+               AddMessage
+                 ("You reached your travel destination.", OrderMessage);
+               PlayerShip.DestinationX := 0;
+               PlayerShip.DestinationY := 0;
+               if GameSettings.AutoFinish then
+                  Message := To_Unbounded_String(AutoFinishMissions);
+               end if;
+               Result := 4;
+               exit;
+            end if;
+            exit when Result = 6 or Result = 7;
+         end loop;
+      end if;
+      case Result is
+         when 1 => -- Ship moved, check for events
+            StartsCombat := CheckForEvent;
+            if not StartsCombat and GameSettings.AutoFinish then
+               Message := To_Unbounded_String(AutoFinishMissions);
+            end if;
+         when 6 => -- Ship moved, but pilot needs rest, confirm
+            if MessageBox
+               ("-message {You don't have pilot on duty. Did you want to wait until your pilot rest?} -icon question -type yesno") =
+                  "yes" then
+               WaitForRest;
+               StartsCombat := CheckForEvent;
+               if not StartsCombat and GameSettings.AutoFinish then
+                  Message := To_Unbounded_String(AutoFinishMissions);
+               end if;
+            end if;
+         when 7 => -- Ship moved, but engineer needs rest, confirm
+            if ShowConfirmDialog
+                ("You don't have engineer on duty. Did you want to wait until your engineer rest?",
+                 Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
+               WaitForRest;
+               StartsCombat := CheckForEvent;
+               if not StartsCombat and GameSettings.AutoFinish then
+                  Message := To_Unbounded_String(AutoFinishMissions);
+               end if;
+            end if;
+         when 8 => -- Ship moved, but crew needs rest, autorest
+            StartsCombat := CheckForEvent;
+            if not StartsCombat then
+               WaitForRest;
+               if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+                   (To_Unbounded_String("sentientships"))
+                 and then
+                 (FindMember(Pilot) = 0 or FindMember(Engineer) = 0) then
+                  WaitForRest;
+               end if;
+               StartsCombat := CheckForEvent;
+            end if;
+            if not StartsCombat and GameSettings.AutoFinish then
+               Message := To_Unbounded_String(AutoFinishMissions);
+            end if;
+         when others =>
+            null;
+      end case;
+      if Message /= Null_Unbounded_String then
+         ShowMessage(To_String(Message));
+      end if;
+      CenterX := PlayerShip.SkyX;
+      CenterY := PlayerShip.SkyY;
+      if StartsCombat then
+         null;
+         -- TODO: combat ui
+      else
+         ShowSkyMap;
+      end if;
+      return TCL_OK;
+   end Move_Ship_Command;
+
    procedure AddCommands is
    begin
       AddCommand("HideMapButtons", Hide_Map_Buttons_Command'Access);
@@ -519,6 +762,7 @@ package body Maps.UI.Commands is
       AddCommand("SetDestination", Set_Destination_Command'Access);
       AddCommand("MoveMap", Move_Map_Command'Access);
       AddCommand("ZoomMap", Zoom_Map_Command'Access);
+      AddCommand("MoveShip", Move_Ship_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;

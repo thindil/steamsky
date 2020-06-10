@@ -107,16 +107,16 @@ pack $messagesview -side top -fill both
 set bframe [ttk::frame .paned.controls.buttons]
 grid $bframe -row 0 -column 1 -sticky nw
 grid [ttk::combobox $bframe.speed -state readonly -values [list {Full stop} {Quarted speed} {Half speed} {Full speed}] -width 10] -columnspan 2 -sticky we
-grid [ttk::button $bframe.moveto -text {Move to}] -row 0 -column 2
-grid [ttk::button $bframe.nw -text {NW}] -row 1
-grid [ttk::button $bframe.n -text {N}] -column 1 -row 1
-grid [ttk::button $bframe.ne -text {NE}] -column 2 -row 1
-grid [ttk::button $bframe.w -text {W}] -row 2
-grid [ttk::button $bframe.wait -text {Wait}] -column 1 -row 2
-grid [ttk::button $bframe.e -text {E}] -column 2 -row 2
-grid [ttk::button $bframe.sw -text {SW}] -row 3
-grid [ttk::button $bframe.s -text {S}] -column 1 -row 3
-grid [ttk::button $bframe.se -text {SE}] -column 2 -row 3
+grid [ttk::button $bframe.moveto -text {Move to} -command {MoveShip moveto}] -row 0 -column 2
+grid [ttk::button $bframe.nw -text {NW} -command {MoveShip nw}] -row 1
+grid [ttk::button $bframe.n -text {N} -command {MoveShip n}] -column 1 -row 1
+grid [ttk::button $bframe.ne -text {NE} -command {MoveShip ne}] -column 2 -row 1
+grid [ttk::button $bframe.w -text {W} -command {MoveShip w}] -row 2
+grid [ttk::button $bframe.wait -text {Wait} -command {MoveShip waitormove}] -column 1 -row 2
+grid [ttk::button $bframe.e -text {E} -command {MoveShip e}] -column 2 -row 2
+grid [ttk::button $bframe.sw -text {SW} -command {MoveShip sw}] -row 3
+grid [ttk::button $bframe.s -text {S} -command {MoveShip s}] -column 1 -row 3
+grid [ttk::button $bframe.se -text {SE} -command {MoveShip se}] -column 2 -row 3
 grid columnconfigure .paned.controls .paned.controls.messages -weight 1
 grid .paned -sticky nwes
 grid rowconfigure . .paned -weight 1
