@@ -95,7 +95,14 @@ grid columnconfigure .paned.mapframe 0 -weight 1
 .paned add [ttk::frame .paned.controls]
 grid [ttk::frame .paned.controls.messages] -sticky w
 pack [ttk::scrollbar .paned.controls.messages.scroll -orient vertical -command [list .paned.controls.messages.view yview]] -side right -fill y
-pack [text .paned.controls.messages.view -wrap word -yscrollcommand [list .paned.controls.messages.scroll set]] -side top -fill both
+set messagesview [text .paned.controls.messages.view -wrap word -yscrollcommand [list .paned.controls.messages.scroll set]]
+$messagesview tag configure yellow -foreground yellow
+$messagesview tag configure green -foreground #4e9a06
+$messagesview tag configure red -foreground red
+$messagesview tag configure cyan -foreground cyan
+$messagesview tag configure blue -foreground #3465a4
+$messagesview tag configure gray -foreground {dim gray}
+pack $messagesview -side top -fill both
 # Movement buttons
 set bframe [ttk::frame .paned.controls.buttons]
 grid $bframe -row 0 -column 1 -sticky nw
