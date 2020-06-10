@@ -538,6 +538,7 @@ package body Maps.UI.Commands is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
       Message: Unbounded_String;
       Result: Natural;
       StartsCombat: Boolean := False;
@@ -559,7 +560,8 @@ package body Maps.UI.Commands is
          Result := MoveShip(-1, -1, Message);
       elsif CArgv.Arg(Argv, 1) = "ne" then -- Move up/right
          Result := MoveShip(1, -1, Message);
-      elsif CArgv.Arg(Argv, 1) = "waitormove" then -- Move to destination or wait 1 game minute
+      elsif CArgv.Arg(Argv, 1) =
+        "waitormove" then -- Move to destination or wait 1 game minute
          if PlayerShip.DestinationX = 0 and PlayerShip.DestinationY = 0 then
             Result := 1;
             UpdateGame(1);
@@ -700,8 +702,8 @@ package body Maps.UI.Commands is
             end if;
          when 6 => -- Ship moved, but pilot needs rest, confirm
             if MessageBox
-               ("-message {You don't have pilot on duty. Did you want to wait until your pilot rest?} -icon question -type yesno") =
-                  "yes" then
+                ("-message {You don't have pilot on duty. Did you want to wait until your pilot rest?} -icon question -type yesno") =
+              "yes" then
                WaitForRest;
                StartsCombat := CheckForEvent;
                if not StartsCombat and GameSettings.AutoFinish then
@@ -709,9 +711,9 @@ package body Maps.UI.Commands is
                end if;
             end if;
          when 7 => -- Ship moved, but engineer needs rest, confirm
-            if ShowConfirmDialog
-                ("You don't have engineer on duty. Did you want to wait until your engineer rest?",
-                 Gtk_Window(Get_Object(Builder, "skymapwindow"))) then
+            if MessageBox
+                ("-message {You don't have engineer on duty. Did you want to wait until your engineer rest?} -icon question -type yesno") =
+              "yes" then
                WaitForRest;
                StartsCombat := CheckForEvent;
                if not StartsCombat and GameSettings.AutoFinish then
