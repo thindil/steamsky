@@ -355,6 +355,7 @@ package body Maps.UI.Commands is
       AddMessage
         ("You set the travel destination for your ship.", OrderMessage);
       DrawMap;
+      UpdateMoveButtons;
       return TCL_OK;
    end Set_Destination_Command;
 

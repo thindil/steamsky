@@ -93,4 +93,6 @@ private
      (X: Positive := PlayerShip.SkyX; Y: Positive := PlayerShip.SkyY);
    -- ****
 
+   procedure UpdateMoveButtons;
+
 end Maps.UI;
