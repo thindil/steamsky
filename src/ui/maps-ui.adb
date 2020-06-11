@@ -21,6 +21,7 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
@@ -44,6 +45,7 @@ with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
 with Items; use Items;
+with MainMenu; use MainMenu;
 with Maps.UI.Commands;
 with Messages; use Messages;
 with Missions; use Missions;
@@ -51,6 +53,7 @@ with ShipModules; use ShipModules;
 with OrdersMenu;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Movement; use Ships.Movement;
+with Statistics.UI; use Statistics.UI;
 with Stories; use Stories;
 with Utils.UI; use Utils.UI;
 with WaitMenu;
@@ -95,13 +98,26 @@ package body Maps.UI is
    -- ****if* MUI/DeathConfirm
    -- FUNCTION
    -- Show stats or go to main menu on player character death
-   -- TODO
-   -- Implement it
    -- SOURCE
    procedure DeathConfirm is
       -- ****
+      Button: Ttk_Button;
    begin
-      null;
+      if MessageBox
+          ("-message {You are dead. Would you like to see your game statistics?} -icon question -type yesno") =
+        "yes" then
+         Button.Interp := Get_Context;
+         Button.Name := New_String(".header.menubutton");
+         Tcl.Tk.Ada.Grid.Grid(Button);
+         Button.Name := New_String(".header.close");
+         Tcl.Tk.Ada.Grid.Grid(Button);
+         Delete(GameMenu, "3", "4");
+         Delete(GameMenu, "6", "14");
+         ShowStatistics;
+      else
+         EndGame(False);
+         ShowMainMenu;
+      end if;
    end DeathConfirm;
 
    procedure UpdateHeader is
