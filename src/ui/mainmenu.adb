@@ -187,7 +187,7 @@ package body MainMenu is
         (MainWindow, "geometry",
          "600x400+" & Trim(Positive'Image(X), Left) & "+" &
          Trim(Positive'Image(Y), Left));
-      Tcl_Eval(MainMenuFrame.Interp, "pack forget [pack slaves .]");
+      Tcl_Eval(MainMenuFrame.Interp, "pack forget .header .paned");
       Tcl.Tk.Ada.Pack.Pack(MainMenuFrame, "-fill both -expand true");
       Button.Interp := MainMenuFrame.Interp;
       Button.Name := New_String(".mainmenu.loadgame");
