@@ -23,7 +23,7 @@ grid [ttk::button .header.repairs -text "[format %c 0xf54a]" -style Header.Toolb
 grid [ttk::button .header.upgrade -text "[format %c 0xf6e3]" -style Header.Toolbutton] -row 0 -column 12 -sticky e
 grid [ttk::button .header.clean -text "[format %c 0xf458]" -style Header.Toolbutton] -row 0 -column 13 -sticky e
 grid [ttk::button .header.crafting -text "[format %c 0xf0e3]" -style Header.Toolbutton] -row 0 -column 14 -sticky e
-grid .header -sticky we
+pack .header -fill x
 ttk::panedwindow .paned
 # Game map
 .paned add [ttk::frame .paned.mapframe]
@@ -118,7 +118,5 @@ grid [ttk::button $bframe.sw -text {SW} -command {MoveShip sw}] -row 3
 grid [ttk::button $bframe.s -text {S} -command {MoveShip s}] -column 1 -row 3
 grid [ttk::button $bframe.se -text {SE} -command {MoveShip se}] -column 2 -row 3
 grid columnconfigure .paned.controls .paned.controls.messages -weight 1
-grid .paned -sticky nwes
-grid rowconfigure . .paned -weight 1
-grid columnconfigure . .paned -weight 1
+pack .paned -expand true -fill both
 update
