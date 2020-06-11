@@ -782,6 +782,32 @@ package body MainMenu.Commands is
       return TCL_OK;
    end New_Game_Command;
 
+   -- ****if* MCommands/Show_Main_Menu_Command
+   -- FUNCTION
+   -- Clear the main game window and show main menu
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Show_Main_Menu_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Main_Menu_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+   begin
+      ShowMainMenu;
+      return TCL_OK;
+   end Show_Main_Menu_Command;
+
    procedure AddCommands is
    begin
       AddCommand("OpenLink", Open_Link_Command'Access);
@@ -796,6 +822,7 @@ package body MainMenu.Commands is
       AddCommand("SetBase", Set_Base_Command'Access);
       AddCommand("RandomName", Random_Name_Command'Access);
       AddCommand("NewGame", New_Game_Command'Access);
+      AddCommand("ShowMainMenu", Show_Main_Menu_Command'Access);
    end AddCommands;
 
 end MainMenu.Commands;
