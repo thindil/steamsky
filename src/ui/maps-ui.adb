@@ -15,6 +15,7 @@
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.UTF_Encoding.Wide_Strings;
 use Ada.Strings.UTF_Encoding.Wide_Strings;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
@@ -23,6 +24,7 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
@@ -818,6 +820,7 @@ package body Maps.UI is
       Paned: Ttk_PanedWindow;
       Button: Ttk_Button;
       SteamSky_Map_Error: exception;
+      Header: Ttk_Frame;
    begin
       GameMenu.Interp := Get_Context;
       GameMenu.Name := New_String(".gamemenu");
@@ -847,6 +850,14 @@ package body Maps.UI is
            (Get_Context, "<" & To_String(MenuAccelerators(I)) & ">",
             "{.gamemenu invoke" & Positive'Image(I) & "}");
       end loop;
+      if Index
+          (Tcl.Tk.Ada.Pack.Pack_Slaves(Get_Main_Window(Get_Context)),
+           ".header") =
+        0 then
+         Header.Interp := Get_Context;
+         Header.Name := New_String(".header");
+         Tcl.Tk.Ada.Pack.Pack(Header);
+      end if;
       UpdateHeader;
       CenterX := PlayerShip.SkyX;
       CenterY := PlayerShip.SkyY;
@@ -858,6 +869,12 @@ package body Maps.UI is
       Paned.Interp := Get_Context;
       Paned.Name := New_String(".paned");
       SashPos(Paned, "0", Natural'Image(GameSettings.MessagesPosition));
+      if Index
+          (Tcl.Tk.Ada.Pack.Pack_Slaves(Get_Main_Window(Get_Context)),
+           ".paned") =
+        0 then
+         Tcl.Tk.Ada.Pack.Pack(Paned);
+      end if;
       UpdateMapInfo;
       Button.Interp := Get_Context;
       Button.Name := New_String(".paned.mapframe.buttons.hide");
