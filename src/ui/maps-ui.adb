@@ -109,7 +109,7 @@ package body Maps.UI is
          Button.Interp := Get_Context;
          Button.Name := New_String(".header.menubutton");
          Tcl.Tk.Ada.Grid.Grid(Button);
-         Button.Name := New_String(".header.close");
+         Button.Name := New_String(".header.closebutton");
          configure(Button, "-command ShowMainMenu");
          Tcl.Tk.Ada.Grid.Grid(Button);
          Delete(GameMenu, "3", "4");
