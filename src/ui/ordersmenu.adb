@@ -448,7 +448,7 @@ package body OrdersMenu is
       Message: Unbounded_String;
    begin
       if PlayerShip.Speed = DOCKED then
-         if Argc = 0 then
+         if Argc = 1 then
             Message := To_Unbounded_String(DockShip(False));
          else
             Message := To_Unbounded_String(DockShip(False, True));
