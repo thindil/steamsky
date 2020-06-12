@@ -886,8 +886,27 @@ package body Maps.UI is
       UpdateMoveButtons;
    end CreateGameUI;
 
-   procedure ShowSkyMap is
+   procedure ShowSkyMap(Clear: Boolean := False) is
+      Paned: Ttk_PanedWindow;
+      SubWindows: Unbounded_String;
+      SubWindow: Ttk_Frame;
    begin
+      if Clear then
+         Paned.Interp := Get_Context;
+         Paned.Name := New_String(".paned");
+         SubWindow.Interp := Get_Context;
+         SubWindows := To_Unbounded_String(Panes(Paned));
+         if Index(SubWindows, " ") = 0 then
+            SubWindow.Name := New_String(To_String(SubWindows));
+         else
+            SubWindow.Name :=
+              New_String(Slice(SubWindows, 1, Index(SubWindows, " ")));
+         end if;
+         Forget(Paned, SubWindow);
+         SubWindow.Name := New_String(".paned.mapframe");
+         Insert(Paned, "0", SubWindow);
+         SashPos(Paned, "0", Natural'Image(GameSettings.MessagesPosition));
+      end if;
       UpdateHeader;
       DrawMap;
       UpdateMessages;
