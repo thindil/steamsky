@@ -396,6 +396,9 @@ package body MainMenu.Commands is
    begin
       LoadView.Interp := Interp;
       LoadView.Name := New_String(".loadmenu.view");
+      if Selection(LoadView) = "" then
+         return TCL_OK;
+      end if;
       SaveName := SaveDirectory & Selection(LoadView);
       LoadGame;
       StartGame;
