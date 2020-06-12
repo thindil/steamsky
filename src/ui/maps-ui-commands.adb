@@ -817,6 +817,35 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Resign_Game_Command;
 
+   -- ****if* MapCommands/Show_Stats_Command
+   -- FUNCTION
+   -- Show the player's game statistics
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Show_Stats_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Stats_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      CloseButton: Ttk_Button;
+   begin
+      CloseButton.Interp := Interp;
+      CloseButton.Name := New_String(".header.closebutton");
+      Tcl.Tk.Ada.Grid.Grid(CloseButton);
+      return TCL_OK;
+   end Show_Stats_Command;
+
    procedure AddCommands is
    begin
       AddCommand("HideMapButtons", Hide_Map_Buttons_Command'Access);
@@ -832,6 +861,7 @@ package body Maps.UI.Commands is
       AddCommand("MoveShip", Move_Ship_Command'Access);
       AddCommand("QuitGame", Quit_Game_Command'Access);
       AddCommand("ResignGame", Resign_Game_Command'Access);
+      AddCommand("ShowStats", Show_Stats_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;
