@@ -882,6 +882,8 @@ package body Maps.UI is
       end if;
       Bind_To_Main_Window(Get_Context, "<plus>", "{ZoomMap raise}");
       Bind_To_Main_Window(Get_Context, "<minus>", "{ZoomMap lower}");
+      Bind_To_Main_Window
+        (Get_Context, "<Escape>", "{InvokeButton .header.closebutton}");
       UpdateMessages;
       UpdateMoveButtons;
    end CreateGameUI;
