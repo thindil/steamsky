@@ -822,7 +822,7 @@ package body Maps.UI.Commands is
    -- Show the player's game statistics
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
    -- SOURCE
@@ -842,9 +842,39 @@ package body Maps.UI.Commands is
    begin
       CloseButton.Interp := Interp;
       CloseButton.Name := New_String(".header.closebutton");
-      Tcl.Tk.Ada.Grid.Grid(CloseButton);
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       return TCL_OK;
    end Show_Stats_Command;
+
+   -- ****if* MapCommands/Show_Sky_Map_Command
+   -- FUNCTION
+   -- Show sky map
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Show_Sky_Map_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Sky_Map_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      CloseButton: Ttk_Button;
+   begin
+      CloseButton.Interp := Interp;
+      CloseButton.Name := New_String(".header.closebutton");
+      Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
+      ShowSkyMap(True);
+      return TCL_OK;
+   end Show_Sky_Map_Command;
 
    procedure AddCommands is
    begin
@@ -862,6 +892,7 @@ package body Maps.UI.Commands is
       AddCommand("QuitGame", Quit_Game_Command'Access);
       AddCommand("ResignGame", Resign_Game_Command'Access);
       AddCommand("ShowStats", Show_Stats_Command'Access);
+      AddCommand("ShowSkyMap", Show_Sky_Map_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;

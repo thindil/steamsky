@@ -62,8 +62,11 @@ package Maps.UI is
    -- ****f* MUI/ShowSkyMap
    -- FUNCTION
    -- Show sky map - draw map, update header, etc
+   -- PARAMETERS
+   -- Clear - If true (when back from other screen), remove old subwindow and
+   -- add map
    -- SOURCE
-   procedure ShowSkyMap;
+   procedure ShowSkyMap(Clear: Boolean := False);
    -- ****
 
 private
