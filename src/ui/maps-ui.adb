@@ -90,12 +90,15 @@ package body Maps.UI is
       Menu.Add(GameMenu, "command", "-label {Stories}");
       Menu.Add
         (GameMenu, "command", "-label {Wait orders} -command {ShowWait}");
-      Menu.Add(GameMenu, "command", "-label {Game statistics}");
+      Menu.Add
+        (GameMenu, "command", "-label {Game statistics} -command {ShowStats}");
       Menu.Add(GameMenu, "command", "-label {Help}");
       Menu.Add(GameMenu, "command", "-label {Game options}");
       Menu.Add
         (GameMenu, "command", "-label {Quit from game} -command {QuitGame}");
-      Menu.Add(GameMenu, "command", "-label {Resign from game} -command {ResignGame}");
+      Menu.Add
+        (GameMenu, "command",
+         "-label {Resign from game} -command {ResignGame}");
    end CreateGameMenu;
 
    procedure DeathConfirm is
