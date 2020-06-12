@@ -82,6 +82,13 @@ private
    CenterX, CenterY: Positive;
    -- ****
 
+   -- ****f* MUI/DeathConfirm
+   -- FUNCTION
+   -- Show stats or go to main menu on player character death
+   -- SOURCE
+   procedure DeathConfirm;
+   -- ****
+
    -- ****f* MUI/UpdateMapInfo
    -- FUNCTION
    -- Update information about map cell
