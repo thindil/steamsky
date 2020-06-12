@@ -7,7 +7,7 @@ menu .destination -tearoff false
 # Game header
 ttk::frame .header
 grid [ttk::menubutton .header.menubutton -text {Menu} -menu .gamemenu] -sticky w
-ttk::button .header.closebutton -text {Close}
+ttk::button .header.closebutton -text {Close [Escape]} -command {ShowSkyMap}
 grid [ttk::label .header.time -text {1600-03-01}] -row 0 -column 2
 tooltip::tooltip .header.time {The game time}
 grid columnconfigure .header .header.time -weight 1
