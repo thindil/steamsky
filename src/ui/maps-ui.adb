@@ -95,15 +95,10 @@ package body Maps.UI is
       Menu.Add(GameMenu, "command", "-label {Game options}");
       Menu.Add
         (GameMenu, "command", "-label {Quit from game} -command {QuitGame}");
-      Menu.Add(GameMenu, "command", "-label {Resign from game}");
+      Menu.Add(GameMenu, "command", "-label {Resign from game} -command {ResignGame}");
    end CreateGameMenu;
 
-   -- ****if* MUI/DeathConfirm
-   -- FUNCTION
-   -- Show stats or go to main menu on player character death
-   -- SOURCE
    procedure DeathConfirm is
-      -- ****
       Button: Ttk_Button;
    begin
       if MessageBox

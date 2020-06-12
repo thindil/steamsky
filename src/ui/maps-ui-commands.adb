@@ -785,6 +785,38 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Quit_Game_Command;
 
+   -- ****if* MapCommands/Resign_Game_Command
+   -- FUNCTION
+   -- Resing from the game - if player resigned, kill he/she character and
+   -- follow as for death of the player's character
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Resign_Game_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Resign_Game_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+   begin
+      if MessageBox
+          ("-message {Are you sure want to resign from game?} -icon question -type yesno") =
+        "yes" then
+         Death(1, To_Unbounded_String("resignation"), PlayerShip);
+         DeathConfirm;
+      end if;
+      return TCL_OK;
+   end Resign_Game_Command;
+
    procedure AddCommands is
    begin
       AddCommand("HideMapButtons", Hide_Map_Buttons_Command'Access);
@@ -799,6 +831,7 @@ package body Maps.UI.Commands is
       AddCommand("ZoomMap", Zoom_Map_Command'Access);
       AddCommand("MoveShip", Move_Ship_Command'Access);
       AddCommand("QuitGame", Quit_Game_Command'Access);
+      AddCommand("ResignGame", Resign_Game_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;
