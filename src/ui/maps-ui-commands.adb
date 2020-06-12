@@ -35,6 +35,7 @@ with Crew; use Crew;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
+with MainMenu; use MainMenu;
 with Messages; use Messages;
 with Missions; use Missions;
 with OrdersMenu; use OrdersMenu;
@@ -752,6 +753,38 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Move_Ship_Command;
 
+   -- ****if* MapCommands/Quit_Game_Command
+   -- FUNCTION
+   -- Ask player if he/she wants to quit from the game and if yes, save it and
+   -- show main menu
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Quit_Game_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Quit_Game_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+   begin
+      if MessageBox
+          ("-message {Are you sure want to quit?} -icon question -type yesno") =
+        "yes" then
+         EndGame(True);
+         ShowMainMenu;
+      end if;
+      return TCL_OK;
+   end Quit_Game_Command;
+
    procedure AddCommands is
    begin
       AddCommand("HideMapButtons", Hide_Map_Buttons_Command'Access);
@@ -765,6 +798,7 @@ package body Maps.UI.Commands is
       AddCommand("MoveMap", Move_Map_Command'Access);
       AddCommand("ZoomMap", Zoom_Map_Command'Access);
       AddCommand("MoveShip", Move_Ship_Command'Access);
+      AddCommand("QuitGame", Quit_Game_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;
