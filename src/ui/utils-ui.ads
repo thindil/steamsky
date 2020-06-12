@@ -56,6 +56,19 @@ package Utils.UI is
    procedure AddCommands;
    -- ****
 
+   -- ****f* UUI/MinutesToDate
+   -- FUNCTION
+   -- Convert minutes to game date and add it to text
+   -- PARAMETERS
+   -- Minutes  - Amount of minutes to convert
+   -- InfoText - Text to which time info will be added
+   -- RESULT
+   -- Parameter InfoText
+   -- SOURCE
+   procedure MinutesToDate
+     (Minutes: Natural; InfoText: in out Unbounded_String);
+   -- ****
+
    -- ****f* UUI/TravelInfo
    -- FUNCTION
    -- Add info about travel eta and approx fuel usage
