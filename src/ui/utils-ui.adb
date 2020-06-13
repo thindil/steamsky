@@ -33,6 +33,7 @@ use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Config; use Config;
@@ -339,5 +340,26 @@ package body Utils.UI is
       end if;
       Tcl.Tk.Ada.Widgets.configure(MessagesView, "-state disable");
    end UpdateMessages;
+
+   procedure ShowScreen(NewScreenName: String) is
+      Paned: Ttk_PanedWindow;
+      SubWindow: Ttk_Frame;
+      SubWindows: Unbounded_String;
+   begin
+      Paned.Interp := Get_Context;
+      Paned.Name := New_String(".paned");
+      SubWindow.Interp := Get_Context;
+      SubWindows := To_Unbounded_String(Panes(Paned));
+      if Index(SubWindows, " ") = 0 then
+         SubWindow.Name := New_String(To_String(SubWindows));
+      else
+         SubWindow.Name :=
+           New_String(Slice(SubWindows, 1, Index(SubWindows, " ")));
+      end if;
+      Forget(Paned, SubWindow);
+      SubWindow.Name := New_String(".paned." & NewScreenName);
+      Insert(Paned, "0", SubWindow);
+      SashPos(Paned, "0", Natural'Image(GameSettings.MessagesPosition));
+   end ShowScreen;
 
 end Utils.UI;
