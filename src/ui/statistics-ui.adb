@@ -23,6 +23,7 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Game; use Game;
+with Maps.UI; use Maps.UI;
 with Utils.UI; use Utils.UI;
 
 package body Statistics.UI is
@@ -39,6 +40,9 @@ package body Statistics.UI is
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "stats.tcl");
+      elsif Winfo_Get(Label, "ismapped") = "1" then
+         ShowSkyMap(True);
+         return;
       end if;
       StatsText :=
         To_Unbounded_String("Points:" & Natural'Image(GetGamePoints));
