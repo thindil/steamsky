@@ -20,7 +20,10 @@ with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
@@ -33,6 +36,9 @@ package body Statistics.UI is
       StatsText: Unbounded_String;
       ProtoIndex: Positive;
       Label: Ttk_Label;
+      Paned: Ttk_PanedWindow;
+      StatsCanvas: Tk_Canvas;
+      StatsFrame: Ttk_Frame;
    begin
       Label.Interp := Get_Context;
       Label.Name := New_String(".paned.statsframe.canvas.stats.left.stats");
@@ -94,6 +100,22 @@ package body Statistics.UI is
         (Label,
          "-text {Crafting orders finished:" & Natural'Image(TotalFinished) &
          "}");
+      Paned.Interp := Get_Context;
+      Paned.Name := New_String(".paned");
+      StatsCanvas.Interp := Get_Context;
+      StatsCanvas.Name := New_String(".paned.statsframe.canvas");
+      StatsFrame.Interp := Get_Context;
+      StatsFrame.Name := New_String(Widget_Image(StatsCanvas) & ".stats");
+      configure
+        (StatsCanvas,
+         "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
+         cget(Paned, "-width"));
+      Tcl_Eval(Get_Context, "update");
+      Canvas_Create
+        (StatsCanvas, "window",
+         "[expr " & Winfo_Get(StatsFrame, "reqwidth") & " / 2] [expr " &
+         Winfo_Get(StatsFrame, "reqheight") & " / 2] -window " &
+         Widget_Image(StatsFrame));
       ShowScreen("statsframe");
    end ShowStatistics;
 
