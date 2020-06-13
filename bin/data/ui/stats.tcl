@@ -28,7 +28,4 @@ grid [ttk::label $statsframe.right.killed]
 grid [ttk::treeview $statsframe.right.killedview -show headings -columns [list name amount] -selectmode none]
 $statsframe.right.killedview heading name -text {Name}
 $statsframe.right.killedview heading amount -text {Amount}
-$statscanvas create window [expr [winfo reqwidth $statsframe] / 2] [expr [winfo reqheight $statsframe] / 2] -window $statsframe
 grid columnconfigure .paned.statsframe 0 -weight 1
-# Move line below to Ada (need to get position of paned sash)
-$statscanvas configure -width [winfo reqwidth $statsframe] -height [winfo reqheight $statsframe] -scrollregion [$statscanvas bbox all]
