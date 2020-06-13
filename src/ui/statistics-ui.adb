@@ -42,10 +42,17 @@ package body Statistics.UI is
    begin
       Label.Interp := Get_Context;
       Label.Name := New_String(".paned.statsframe.canvas.stats.left.stats");
+      Paned.Interp := Get_Context;
+      Paned.Name := New_String(".paned");
+      StatsFrame.Interp := Get_Context;
+      StatsFrame.Name := New_String(".paned.statsframe");
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "stats.tcl");
+         Bind
+           (StatsFrame, "<Configure>",
+            "{.paned.statsframe.canvas configure -width %w -height [expr %h - 20]; update}");
       elsif Winfo_Get(Label, "ismapped") = "1" then
          ShowSkyMap(True);
          return;
@@ -100,11 +107,8 @@ package body Statistics.UI is
         (Label,
          "-text {Crafting orders finished:" & Natural'Image(TotalFinished) &
          "}");
-      Paned.Interp := Get_Context;
-      Paned.Name := New_String(".paned");
       StatsCanvas.Interp := Get_Context;
       StatsCanvas.Name := New_String(".paned.statsframe.canvas");
-      StatsFrame.Interp := Get_Context;
       StatsFrame.Name := New_String(Widget_Image(StatsCanvas) & ".stats");
       configure
         (StatsCanvas,

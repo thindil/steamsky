@@ -358,7 +358,7 @@ package body Utils.UI is
       end if;
       Forget(Paned, SubWindow);
       SubWindow.Name := New_String(".paned." & NewScreenName);
-      Insert(Paned, "0", SubWindow);
+      Insert(Paned, "0", SubWindow, "-weight 1");
       SashPos(Paned, "0", Natural'Image(GameSettings.MessagesPosition));
    end ShowScreen;
 
