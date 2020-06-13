@@ -116,6 +116,9 @@ package body Statistics.UI is
          "[expr " & Winfo_Get(StatsFrame, "reqwidth") & " / 2] [expr " &
          Winfo_Get(StatsFrame, "reqheight") & " / 2] -window " &
          Widget_Image(StatsFrame));
+      Tcl_Eval(Get_Context, "update");
+      configure
+        (StatsCanvas, "-scrollregion [list " & BBox(StatsCanvas, "all") & "]");
       ShowScreen("statsframe");
    end ShowStatistics;
 
