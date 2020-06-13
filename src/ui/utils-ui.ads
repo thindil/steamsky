@@ -91,4 +91,13 @@ package Utils.UI is
    procedure UpdateMessages;
    -- ****
 
+   -- ****f* UUI/ShowScreen
+   -- FUNCTION
+   -- Remove an old screen from the window and add a new to it
+   -- PARAMETERS
+   -- NewScreenName - Part of th name of the new Ttk_Frame to add
+   -- SOURCE
+   procedure ShowScreen(NewScreenName: String);
+   -- ****
+
 end Utils.UI;

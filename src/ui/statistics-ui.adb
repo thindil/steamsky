@@ -20,11 +20,8 @@ with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Config; use Config;
 with Game; use Game;
 with Utils.UI; use Utils.UI;
 
@@ -35,12 +32,9 @@ package body Statistics.UI is
       StatsText: Unbounded_String;
       ProtoIndex: Positive;
       Label: Ttk_Label;
-      Paned: Ttk_PanedWindow;
-      SubWindows: Unbounded_String;
-      SubWindow: Ttk_Frame;
    begin
       Label.Interp := Get_Context;
-      Label.Name := New_String(".paned.statsframe.left.crafts");
+      Label.Name := New_String(".paned.statsframe.canvas.stats.left.stats");
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -86,30 +80,17 @@ package body Statistics.UI is
         (StatsText,
          LF & "Distance traveled:" &
          Natural'Image(GameStats.DistanceTraveled));
-      Label.Name := New_String(".paned.statsframe.left.stats");
       configure(Label, "-text {" & To_String(StatsText) & "}");
       TotalFinished := 0;
       for CraftingOrder of GameStats.CraftingOrders loop
          TotalFinished := TotalFinished + CraftingOrder.Amount;
       end loop;
+      Label.Name := New_String(".paned.statsframe.canvas.stats.left.crafts");
       configure
         (Label,
          "-text {Crafting orders finished:" & Natural'Image(TotalFinished) &
          "}");
-      Paned.Interp := Get_Context;
-      Paned.Name := New_String(".paned");
-      SubWindow.Interp := Get_Context;
-      SubWindows := To_Unbounded_String(Panes(Paned));
-      if Index(SubWindows, " ") = 0 then
-         SubWindow.Name := New_String(To_String(SubWindows));
-      else
-         SubWindow.Name :=
-           New_String(Slice(SubWindows, 1, Index(SubWindows, " ")));
-      end if;
-      Forget(Paned, SubWindow);
-      SubWindow.Name := New_String(".paned.statsframe");
-      Insert(Paned, "0", SubWindow);
-      SashPos(Paned, "0", Natural'Image(GameSettings.MessagesPosition));
+      ShowScreen("statsframe");
    end ShowStatistics;
 
 end Statistics.UI;
