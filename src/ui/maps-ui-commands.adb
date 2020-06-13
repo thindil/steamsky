@@ -42,6 +42,7 @@ with OrdersMenu; use OrdersMenu;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
+with Statistics.UI; use Statistics.UI;
 with Utils.UI; use Utils.UI;
 
 package body Maps.UI.Commands is
@@ -843,6 +844,7 @@ package body Maps.UI.Commands is
       CloseButton.Interp := Interp;
       CloseButton.Name := New_String(".header.closebutton");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      ShowStatistics;
       return TCL_OK;
    end Show_Stats_Command;
 
