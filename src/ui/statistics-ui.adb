@@ -133,6 +133,41 @@ package body Statistics.UI is
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(TreeView);
       end if;
+      TotalFinished := 0;
+      for FinishedMission of GameStats.FinishedMissions loop
+         TotalFinished := TotalFinished + FinishedMission.Amount;
+      end loop;
+      Label.Name := New_String(Widget_Image(StatsFrame) & ".left.missions");
+      declare
+         MissionsPercent: Natural := 0;
+      begin
+         if GameStats.AcceptedMissions > 0 then
+            MissionsPercent :=
+              Natural
+                ((Float(TotalFinished) / Float(GameStats.AcceptedMissions)) *
+                 100.0);
+         end if;
+         configure
+           (Label,
+            "-text {Missions completed:" & Natural'Image(TotalFinished) &
+            " (" &
+            To_String
+              (Trim
+                 (To_Unbounded_String(Natural'Image(MissionsPercent)),
+                  Ada.Strings.Left)) &
+            "%)" & "}");
+      end;
+      TreeView.Interp := Get_Context;
+      TreeView.Name :=
+        New_String(Widget_Image(StatsFrame) & ".left.missionsview");
+      if Children(TreeView, "{}") /= "{}" then
+         Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
+      end if;
+      if TotalFinished > 0 then
+         Tcl.Tk.Ada.Grid.Grid(TreeView);
+      else
+         Tcl.Tk.Ada.Grid.Grid_Remove(TreeView);
+      end if;
       configure
         (StatsCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
