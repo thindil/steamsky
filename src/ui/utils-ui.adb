@@ -150,9 +150,41 @@ package body Utils.UI is
       end if;
    end AddCommand;
 
+   -- ****if* UUI/Resize_Canvas_Command
+   -- PARAMETERS
+   -- Resize the selected canvas
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Resize_Canvas_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Resize_Canvas_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      Canvas: Ttk_Frame;
+   begin
+      Canvas.Interp := Interp;
+      Canvas.Name := New_String(CArgv.Arg(Argv, 1));
+      Widgets.configure
+        (Canvas,
+         "-width " & CArgv.Arg(Argv, 2) & " -height [expr " &
+         CArgv.Arg(Argv, 3) & " - 20]");
+      return TCL_OK;
+   end Resize_Canvas_Command;
+
    procedure AddCommands is
    begin
       AddCommand("CloseDialog", Close_Dialog_Command'Access);
+      AddCommand("ResizeCanvas", Resize_Canvas_Command'Access);
    end AddCommands;
 
    procedure MinutesToDate

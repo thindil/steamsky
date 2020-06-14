@@ -50,9 +50,7 @@ package body Statistics.UI is
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "stats.tcl");
-         Bind
-           (StatsFrame, "<Configure>",
-            "{.paned.statsframe.canvas configure -width %w -height [expr %h - 20]; update}");
+         Bind(StatsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(Label, "ismapped") = "1" then
          ShowSkyMap(True);
          return;
