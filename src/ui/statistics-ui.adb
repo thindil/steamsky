@@ -31,6 +31,7 @@ with Game; use Game;
 with Crafts; use Crafts;
 with Items; use Items;
 with Maps.UI; use Maps.UI;
+with Missions; use Missions;
 with Utils.UI; use Utils.UI;
 
 package body Statistics.UI is
@@ -124,10 +125,10 @@ package body Statistics.UI is
          for Order of GameStats.CraftingOrders loop
             Insert
               (TreeView,
-               "{} end -values [list " &
+               "{} end -values [list {" &
                To_String
                  (Items_List(Recipes_List(Order.Index).ResultIndex).Name) &
-               " " & Positive'Image(Order.Amount) & "]");
+               "} {" & Positive'Image(Order.Amount) & "}]");
          end loop;
          Tcl.Tk.Ada.Grid.Grid(TreeView);
       else
@@ -164,6 +165,36 @@ package body Statistics.UI is
          Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
       end if;
       if TotalFinished > 0 then
+         for FinishedMission of GameStats.FinishedMissions loop
+            case Missions_Types'Val
+              (Integer'Value(To_String(FinishedMission.Index))) is
+               when Deliver =>
+                  Insert
+                    (TreeView,
+                     "{} end -values [list {Delivered items} {" &
+                     Positive'Image(FinishedMission.Amount) & "}]");
+               when Patrol =>
+                  Insert
+                    (TreeView,
+                     "{} end -values [list {Patroled areas} {" &
+                     Positive'Image(FinishedMission.Amount) & "}]");
+               when Destroy =>
+                  Insert
+                    (TreeView,
+                     "{} end -values [list {Destroyed ships} {" &
+                     Positive'Image(FinishedMission.Amount) & "}]");
+               when Explore =>
+                  Insert
+                    (TreeView,
+                     "{} end -values [list {Explored areas} {" &
+                     Positive'Image(FinishedMission.Amount) & "}]");
+               when Passenger =>
+                  Insert
+                    (TreeView,
+                     "{} end -values [list {Passengers transported} {" &
+                     Positive'Image(FinishedMission.Amount) & "}]");
+            end case;
+         end loop;
          Tcl.Tk.Ada.Grid.Grid(TreeView);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(TreeView);
