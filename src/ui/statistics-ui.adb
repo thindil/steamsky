@@ -27,8 +27,9 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Game; use Game;
 with Crafts; use Crafts;
+with Game; use Game;
+with Goals; use Goals;
 with Items; use Items;
 with Maps.UI; use Maps.UI;
 with Missions; use Missions;
@@ -199,6 +200,8 @@ package body Statistics.UI is
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(TreeView);
       end if;
+      Label.Name := New_String(Widget_Image(StatsFrame) & ".left.goal");
+      configure(Label, "-text {" & GoalText(0) & "}");
       configure
         (StatsCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
