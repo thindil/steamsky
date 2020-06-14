@@ -19,13 +19,17 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Game; use Game;
+with Crafts; use Crafts;
+with Items; use Items;
 with Maps.UI; use Maps.UI;
 with Utils.UI; use Utils.UI;
 
@@ -39,13 +43,17 @@ package body Statistics.UI is
       Paned: Ttk_PanedWindow;
       StatsCanvas: Tk_Canvas;
       StatsFrame: Ttk_Frame;
+      TreeView: Ttk_Tree_View;
    begin
-      Label.Interp := Get_Context;
-      Label.Name := New_String(".paned.statsframe.canvas.stats.left.stats");
       Paned.Interp := Get_Context;
       Paned.Name := New_String(".paned");
       StatsFrame.Interp := Get_Context;
-      StatsFrame.Name := New_String(".paned.statsframe");
+      StatsFrame.Name := New_String(Widget_Image(Paned) & ".statsframe");
+      StatsCanvas.Interp := Get_Context;
+      StatsCanvas.Name := New_String(Widget_Image(StatsFrame) & ".canvas");
+      Label.Interp := Get_Context;
+      Label.Name :=
+        New_String(Widget_Image(StatsCanvas) & ".stats.left.stats");
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -96,18 +104,35 @@ package body Statistics.UI is
          LF & "Distance traveled:" &
          Natural'Image(GameStats.DistanceTraveled));
       configure(Label, "-text {" & To_String(StatsText) & "}");
+      StatsFrame.Name := New_String(Widget_Image(StatsCanvas) & ".stats");
       TotalFinished := 0;
       for CraftingOrder of GameStats.CraftingOrders loop
          TotalFinished := TotalFinished + CraftingOrder.Amount;
       end loop;
-      Label.Name := New_String(".paned.statsframe.canvas.stats.left.crafts");
+      Label.Name := New_String(Widget_Image(StatsFrame) & ".left.crafts");
       configure
         (Label,
          "-text {Crafting orders finished:" & Natural'Image(TotalFinished) &
          "}");
-      StatsCanvas.Interp := Get_Context;
-      StatsCanvas.Name := New_String(".paned.statsframe.canvas");
-      StatsFrame.Name := New_String(Widget_Image(StatsCanvas) & ".stats");
+      TreeView.Interp := Get_Context;
+      TreeView.Name :=
+        New_String(Widget_Image(StatsFrame) & ".left.craftsview");
+      if Children(TreeView, "{}") /= "{}" then
+         Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
+      end if;
+      if TotalFinished > 0 then
+         for Order of GameStats.CraftingOrders loop
+            Insert
+              (TreeView,
+               "{} end -values [list " &
+               To_String
+                 (Items_List(Recipes_List(Order.Index).ResultIndex).Name) &
+               " " & Positive'Image(Order.Amount) & "]");
+         end loop;
+         Tcl.Tk.Ada.Grid.Grid(TreeView);
+      else
+         Tcl.Tk.Ada.Grid.Grid_Remove(TreeView);
+      end if;
       configure
         (StatsCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
