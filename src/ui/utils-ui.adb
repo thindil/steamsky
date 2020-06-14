@@ -45,14 +45,14 @@ with Ships.Movement; use Ships.Movement;
 
 package body Utils.UI is
 
-   -- ****iv* UI/TimerId
+   -- ****iv* UUI/TimerId
    -- FUNCTION
    -- Id of timer for auto close command
    -- SOURCE
    TimerId: Unbounded_String := Null_Unbounded_String;
    -- ****
 
-   -- ****if* UI/Close_Dialog_Command
+   -- ****if* UUI/Close_Dialog_Command
    -- FUNCTION
    -- Close the selected dialog
    -- PARAMETERS
