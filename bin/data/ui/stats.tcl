@@ -14,7 +14,7 @@ grid [ttk::label $statsframe.left.missions]
 grid [ttk::treeview $statsframe.left.missionsview -show headings -columns [list name amount] -selectmode none]
 $statsframe.left.missionsview heading name -text {Name}
 $statsframe.left.missionsview heading amount -text {Amount}
-grid [ttk::button $statsframe.left.goal -text {Goals}]
+grid [ttk::button $statsframe.left.goal -text {Goals} -command {ShowGoals $statsframe.left.goal}]
 grid [ttk::label $statsframe.left.goals]
 grid [ttk::treeview $statsframe.left.goalsview -show headings -columns [list name amount] -selectmode none]
 $statsframe.left.goalsview heading name -text {Name}
