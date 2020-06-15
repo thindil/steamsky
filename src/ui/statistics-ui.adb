@@ -202,6 +202,36 @@ package body Statistics.UI is
       end if;
       Label.Name := New_String(Widget_Image(StatsFrame) & ".left.goal");
       configure(Label, "-text {" & GoalText(0) & "}");
+      TotalFinished := 0;
+      for FinishedGoal of GameStats.FinishedGoals loop
+         TotalFinished := TotalFinished + FinishedGoal.Amount;
+      end loop;
+      Label.Name := New_String(Widget_Image(StatsFrame) & ".left.goals");
+      configure
+        (Label, "-text {Finished goals:" & Natural'Image(TotalFinished) & "}");
+      TreeView.Interp := Get_Context;
+      TreeView.Name :=
+        New_String(Widget_Image(StatsFrame) & ".left.goalsview");
+      if Children(TreeView, "{}") /= "{}" then
+         Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
+      end if;
+      if TotalFinished > 0 then
+         for Goal of GameStats.FinishedGoals loop
+            for J in Goals_List.Iterate loop
+               if Goal.Index = Goals_List(J).Index then
+                  ProtoIndex := Goals_Container.To_Index(J);
+                  exit;
+               end if;
+            end loop;
+            Insert
+              (TreeView,
+               "{} end -values [list {" & GoalText(ProtoIndex) & "} {" &
+               Positive'Image(Goal.Amount) & "}]");
+         end loop;
+         Tcl.Tk.Ada.Grid.Grid(TreeView);
+      else
+         Tcl.Tk.Ada.Grid.Grid_Remove(TreeView);
+      end if;
       configure
         (StatsCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
