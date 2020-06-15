@@ -520,6 +520,8 @@ package body Maps.UI is
                           Factions_List(SkyBases(SkyMap(X, Y).BaseIndex).Owner)
                             .BaseIcon;
                         MapTag := SkyBases(SkyMap(X, Y).BaseIndex).BaseType;
+                     else
+                        MapTag := To_Unbounded_String("unvisited");
                      end if;
                   else
                      MapTag := To_Unbounded_String("unvisited gray");
