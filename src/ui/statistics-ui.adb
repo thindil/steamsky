@@ -33,6 +33,7 @@ with Goals; use Goals;
 with Items; use Items;
 with Maps.UI; use Maps.UI;
 with Missions; use Missions;
+with Ships; use Ships;
 with Utils.UI; use Utils.UI;
 
 package body Statistics.UI is
@@ -159,7 +160,6 @@ package body Statistics.UI is
                   Ada.Strings.Left)) &
             "%)" & "}");
       end;
-      TreeView.Interp := Get_Context;
       TreeView.Name :=
         New_String(Widget_Image(StatsFrame) & ".left.missionsview");
       if Children(TreeView, "{}") /= "{}" then
@@ -209,7 +209,6 @@ package body Statistics.UI is
       Label.Name := New_String(Widget_Image(StatsFrame) & ".left.goals");
       configure
         (Label, "-text {Finished goals:" & Natural'Image(TotalFinished) & "}");
-      TreeView.Interp := Get_Context;
       TreeView.Name :=
         New_String(Widget_Image(StatsFrame) & ".left.goalsview");
       if Children(TreeView, "{}") /= "{}" then
@@ -232,6 +231,34 @@ package body Statistics.UI is
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(TreeView);
       end if;
+      TreeView.Name :=
+        New_String(Widget_Image(StatsFrame) & ".right.destroyedview");
+      if GameStats.DestroyedShips.Length > 0 then
+         if Children(TreeView, "{}") /= "{}" then
+            Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
+         end if;
+         for DestroyedShip of GameStats.DestroyedShips loop
+            for J in ProtoShips_List.Iterate loop
+               if ProtoShips_Container.Key(J) = DestroyedShip.Index then
+                  Insert
+                    (TreeView,
+                     "{} end -values [list {" &
+                     To_String(ProtoShips_List(J).Name) & "} {" &
+                     Positive'Image(DestroyedShip.Amount) & "}]");
+                  exit;
+               end if;
+            end loop;
+            TotalDestroyed := TotalDestroyed + DestroyedShip.Amount;
+         end loop;
+         Tcl.Tk.Ada.Grid.Grid(TreeView);
+      else
+         Tcl.Tk.Ada.Grid.Grid_Remove(TreeView);
+      end if;
+      Label.Name := New_String(Widget_Image(StatsFrame) & ".right.destroyed");
+      configure
+        (Label,
+         "-text {Destroyed ships (Total:" & Natural'Image(TotalDestroyed) &
+         ")}");
       configure
         (StatsCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
