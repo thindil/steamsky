@@ -259,6 +259,29 @@ package body Statistics.UI is
         (Label,
          "-text {Destroyed ships (Total:" & Natural'Image(TotalDestroyed) &
          ")}");
+      TreeView.Name :=
+        New_String(Widget_Image(StatsFrame) & ".right.killedview");
+      TotalDestroyed := 0;
+      if GameStats.KilledMobs.Length > 0 then
+         if Children(TreeView, "{}") /= "{}" then
+            Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
+         end if;
+         for KilledMob of GameStats.KilledMobs loop
+            Insert
+              (TreeView,
+               "{} end -values [list {" & To_String(KilledMob.Index) & "} {" &
+               Positive'Image(KilledMob.Amount) & "}]");
+            TotalDestroyed := TotalDestroyed + KilledMob.Amount;
+         end loop;
+         Tcl.Tk.Ada.Grid.Grid(TreeView);
+      else
+         Tcl.Tk.Ada.Grid.Grid_Remove(TreeView);
+      end if;
+      Label.Name := New_String(Widget_Image(StatsFrame) & ".right.killed");
+      configure
+        (Label,
+         "-text {Killed enemies (Total:" & Natural'Image(TotalDestroyed) &
+         ")}");
       configure
         (StatsCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
