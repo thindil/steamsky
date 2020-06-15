@@ -145,7 +145,7 @@ package body OrdersMenu is
             if DaysDifference(SkyBases(BaseIndex).AskedForEvents) > 6 then
                Add
                  (OrdersMenu, "command",
-                  "-label {Ask for events} -underline 8");
+                  "-label {Ask for events} -underline 8 -command {AskForEvents}");
             end if;
             if not SkyBases(BaseIndex).AskedForBases then
                Add
@@ -505,11 +505,39 @@ package body OrdersMenu is
       return TCL_OK;
    end Ask_For_Bases_Command;
 
+   -- ****f* OrdersMenu/Ask_For_Events_Command
+   -- FUNCTION
+   -- Ask for events in the currently visited base
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Ask_For_Events_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Ask_For_Events_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+   begin
+      AskForEvents;
+      ShowSkyMap;
+      return TCL_OK;
+   end Ask_For_Events_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowOrders", Show_Orders_Command'Access);
       AddCommand("Docking", Docking_Command'Access);
       AddCommand("AskForBases", Ask_For_Bases_Command'Access);
+      AddCommand("AskForEvents", Ask_For_Events_Command'Access);
    end AddCommands;
 
 end OrdersMenu;
