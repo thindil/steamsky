@@ -522,7 +522,7 @@ package body Maps.UI is
                         MapTag := SkyBases(SkyMap(X, Y).BaseIndex).BaseType;
                      end if;
                   else
-                     MapTag := To_Unbounded_String("unvisited");
+                     MapTag := To_Unbounded_String("unvisited gray");
                   end if;
                end if;
             end if;
