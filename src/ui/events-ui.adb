@@ -31,6 +31,7 @@ with Bases; use Bases;
 with Items; use Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
+with Messages; use Messages;
 with Ships; use Ships;
 with Utils.UI; use Utils.UI;
 
@@ -137,6 +138,47 @@ package body Events.UI is
       return TCL_OK;
    end Show_Event_Command;
 
+   -- ****if* EUI/Set_Event_Command
+   -- FUNCTION
+   -- Set event as the player's ship destination
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Set_Event_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Event_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      EventsView: Ttk_Tree_View;
+      EventIndex: Positive;
+   begin
+      EventsView.Interp := Interp;
+      EventsView.Name :=
+        New_String(".paned.eventsframe.canvas.events.eventsview");
+      EventIndex := Positive'Value(Selection(EventsView));
+      if Events_List(EventIndex).SkyX = PlayerShip.SkyX and
+        Events_List(EventIndex).SkyY = PlayerShip.SkyY then
+         ShowMessage("You are at this event now.");
+         return TCL_OK;
+      end if;
+      PlayerShip.DestinationX := Events_List(EventIndex).SkyX;
+      PlayerShip.DestinationY := Events_List(EventIndex).SkyY;
+      AddMessage
+        ("You set the travel destination for your ship.", OrderMessage);
+      ShowSkyMap(True);
+      return TCL_OK;
+   end Set_Event_Command;
+
    procedure ShowEventsList is
       Label: Ttk_Label;
       Paned: Ttk_PanedWindow;
@@ -160,6 +202,7 @@ package body Events.UI is
          Bind(EventsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
          AddCommand("ShowEventInfo", Show_Event_Info_Command'Access);
          AddCommand("ShowEvent", Show_Event_Command'Access);
+         AddCommand("SetEvent", Set_Event_Command'Access);
       elsif Winfo_Get(Label, "ismapped") = "1" then
          ShowSkyMap(True);
          return;
