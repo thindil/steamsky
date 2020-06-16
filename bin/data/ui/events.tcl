@@ -12,4 +12,4 @@ grid [ttk::frame $eventsframe.info] -column 1 -row 0
 grid [ttk::labelframe $eventsframe.info.info -text {Event Info:}]
 grid [ttk::label $eventsframe.info.info.label]
 grid [ttk::button $eventsframe.info.show -text {Show event on map} -command {ShowEvent}]
-grid [ttk::button $eventsframe.info.set -text {Set event as destination for ship}]
+grid [ttk::button $eventsframe.info.set -text {Set event as destination for ship} -command {SetEvent}]
