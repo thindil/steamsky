@@ -167,6 +167,7 @@ package body Events.UI is
       EventsView.Interp := Get_Context;
       EventsView.Name :=
         New_String(Widget_Image(EventsCanvas) & ".events.eventsview");
+      Delete(EventsView, "[list " & Children(EventsView, "{}") & "]");
       for I in Events_List.First_Index .. Events_List.Last_Index loop
          case Events_List(I).EType is
             when EnemyShip =>
