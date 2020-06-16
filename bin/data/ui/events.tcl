@@ -7,6 +7,7 @@ set eventsframe [ttk::frame $eventscanvas.events]
 grid [ttk::treeview $eventsframe.eventsview -show headings -columns [list name distance]]
 $eventsframe.eventsview heading name -text {Name}
 $eventsframe.eventsview heading distance -text {Distance}
+bind $eventsframe.eventsview <<TreeviewSelect>> ShowEventInfo
 grid [ttk::frame $eventsframe.info] -column 1 -row 0
 grid [ttk::labelframe $eventsframe.info.info -text {Event Info:}]
 grid [ttk::label $eventsframe.info.info.label]
