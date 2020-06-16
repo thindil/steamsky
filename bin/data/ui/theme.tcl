@@ -80,7 +80,7 @@ namespace eval ttk::theme::steamsky {
          {readonly focus} $colors(-selectfg) \
          ]
 
-      ttk::style configure Treeview -background #2f3336
+      ttk::style configure Treeview -background $colors(-bg)
       ttk::style configure Treeview.Item -padding {2 0 0 0}
       ttk::style map Treeview \
          -background [list selected $colors(-selectbg)] \
