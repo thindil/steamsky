@@ -38,6 +38,13 @@ package Maps.UI is
       To_Unbounded_String("q"), To_Unbounded_String("x"));
    -- ****
 
+   -- ****iv* MUI/CenterX
+   -- FUNCTION
+   -- Coordinates of the center point of the map
+   -- SOURCE
+   CenterX, CenterY: Positive;
+   -- ****
+
    -- ****f* MUI/UpdateHeader
    -- FUNCTION
    -- Update the game information on the UI header (time, crew, etc)
@@ -76,13 +83,6 @@ private
    -- Top left map coordinate
    -- SOURCE
    StartX, StartY: Integer;
-   -- ****
-
-   -- ****iv* MUI/CenterX
-   -- FUNCTION
-   -- Coordinates of the center point of the map
-   -- SOURCE
-   CenterX, CenterY: Positive;
    -- ****
 
    -- ****f* MUI/DeathConfirm
