@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Containers; use Ada.Containers;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
@@ -902,6 +903,11 @@ package body Maps.UI.Commands is
       pragma Unreferenced(ClientData, Argc, Argv);
       CloseButton: Ttk_Button;
    begin
+      if Events_List.Length = 0 then
+         ShowMessage
+           ("You dont know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.");
+         return TCL_OK;
+      end if;
       CloseButton.Interp := Interp;
       CloseButton.Name := New_String(".header.closebutton");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
