@@ -13,8 +13,11 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with CArgv;
+with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
@@ -24,11 +27,81 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Bases; use Bases;
+with Items; use Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
+with Ships; use Ships;
 with Utils.UI; use Utils.UI;
 
 package body Events.UI is
+
+   -- ****if* EUI/Show_Event_Info_Command
+   -- FUNCTION
+   -- Show information about the selected event
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Show_Event_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Event_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      EventsView: Ttk_Tree_View;
+      EventIndex: Positive;
+      EventInfo: Unbounded_String;
+      BaseIndex: Integer;
+      Label: Ttk_Label;
+   begin
+      EventsView.Interp := Interp;
+      EventsView.Name :=
+        New_String(".paned.eventsframe.canvas.events.eventsview");
+      EventIndex := Positive'Value(Selection(EventsView));
+      BaseIndex :=
+        SkyMap(Events_List(EventIndex).SkyX, Events_List(EventIndex).SkyY)
+          .BaseIndex;
+      EventInfo :=
+        To_Unbounded_String
+          ("X:" & Positive'Image(Events_List(EventIndex).SkyX) & " Y:" &
+           Positive'Image(Events_List(EventIndex).SkyY));
+      case Events_List(EventIndex).EType is
+         when EnemyShip | EnemyPatrol | Trader | FriendlyShip =>
+            Append
+              (EventInfo,
+               LF & "Ship type: " &
+               To_String
+                 (ProtoShips_List(Events_List(EventIndex).ShipIndex).Name));
+         when FullDocks | AttackOnBase | Disease =>
+            Append
+              (EventInfo,
+               LF & "Base name: " & To_String(SkyBases(BaseIndex).Name));
+         when DoublePrice =>
+            Append
+              (EventInfo,
+               LF & "Base name: " & To_String(SkyBases(BaseIndex).Name));
+            Append
+              (EventInfo,
+               LF & "Item: " &
+               To_String(Items_List(Events_List(EventIndex).ItemIndex).Name));
+         when None | BaseRecovery =>
+            null;
+      end case;
+      Label.Interp := Get_Context;
+      Label.Name :=
+        New_String(".paned.eventsframe.canvas.events.info.info.label");
+      configure(Label, "-text {" & To_String(EventInfo) & "}");
+      return TCL_OK;
+   end Show_Event_Info_Command;
 
    procedure ShowEventsList is
       Label: Ttk_Label;
@@ -51,6 +124,7 @@ package body Events.UI is
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "events.tcl");
          Bind(EventsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
+         AddCommand("ShowEventInfo", Show_Event_Info_Command'Access);
       elsif Winfo_Get(Label, "ismapped") = "1" then
          ShowSkyMap(True);
          return;
@@ -128,6 +202,7 @@ package body Events.UI is
                null;
          end case;
       end loop;
+      Selection_Set(EventsView, "[list 1]");
       configure
         (EventsCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
