@@ -85,7 +85,9 @@ package body Maps.UI is
       Menu.Add(GameMenu, "command", "-label {Crafting}");
       Menu.Add(GameMenu, "command", "-label {Last messages}");
       Menu.Add(GameMenu, "command", "-label {List of known bases}");
-      Menu.Add(GameMenu, "command", "-label {List of known events}");
+      Menu.Add
+        (GameMenu, "command",
+         "-label {List of known events} -command {ShowEvents}");
       Menu.Add(GameMenu, "command", "-label {Accepted missions}");
       Menu.Add(GameMenu, "command", "-label {Stories}");
       Menu.Add

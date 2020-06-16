@@ -33,6 +33,7 @@ with Bases; use Bases;
 with Config; use Config;
 with Crew; use Crew;
 with Events; use Events;
+with Events.UI; use Events.UI;
 with Factions; use Factions;
 with Game; use Game;
 with MainMenu; use MainMenu;
@@ -878,6 +879,36 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Show_Sky_Map_Command;
 
+   -- ****if* MapCommands/Show_Events_Command
+   -- FUNCTION
+   -- Show the list of known events
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Show_Events_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Events_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      CloseButton: Ttk_Button;
+   begin
+      CloseButton.Interp := Interp;
+      CloseButton.Name := New_String(".header.closebutton");
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      ShowEventsList;
+      return TCL_OK;
+   end Show_Events_Command;
+
    procedure AddCommands is
    begin
       AddCommand("HideMapButtons", Hide_Map_Buttons_Command'Access);
@@ -895,6 +926,7 @@ package body Maps.UI.Commands is
       AddCommand("ResignGame", Resign_Game_Command'Access);
       AddCommand("ShowStats", Show_Stats_Command'Access);
       AddCommand("ShowSkyMap", Show_Sky_Map_Command'Access);
+      AddCommand("ShowEvents", Show_Events_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;
