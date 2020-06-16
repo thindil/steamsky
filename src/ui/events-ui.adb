@@ -43,7 +43,7 @@ package body Events.UI is
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command. Unused
    -- SOURCE
    function Show_Event_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -103,6 +103,40 @@ package body Events.UI is
       return TCL_OK;
    end Show_Event_Info_Command;
 
+   -- ****if* EUI/Show_Event_Command
+   -- FUNCTION
+   -- Show event on map
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Show_Event_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Event_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      EventsView: Ttk_Tree_View;
+      EventIndex: Positive;
+   begin
+      EventsView.Interp := Interp;
+      EventsView.Name :=
+        New_String(".paned.eventsframe.canvas.events.eventsview");
+      EventIndex := Positive'Value(Selection(EventsView));
+      CenterX := Events_List(EventIndex).SkyX;
+      CenterY := Events_List(EventIndex).SkyY;
+      ShowSkyMap(True);
+      return TCL_OK;
+   end Show_Event_Command;
+
    procedure ShowEventsList is
       Label: Ttk_Label;
       Paned: Ttk_PanedWindow;
@@ -125,6 +159,7 @@ package body Events.UI is
             To_String(DataDirectory) & "ui" & Dir_Separator & "events.tcl");
          Bind(EventsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
          AddCommand("ShowEventInfo", Show_Event_Info_Command'Access);
+         AddCommand("ShowEvent", Show_Event_Command'Access);
       elsif Winfo_Get(Label, "ismapped") = "1" then
          ShowSkyMap(True);
          return;
