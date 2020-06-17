@@ -31,6 +31,7 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
+with Combat.UI; use Combat.UI;
 with Config; use Config;
 with Crew; use Crew;
 with Events; use Events;
@@ -748,8 +749,7 @@ package body Maps.UI.Commands is
       CenterX := PlayerShip.SkyX;
       CenterY := PlayerShip.SkyY;
       if StartsCombat then
-         null;
-         -- TODO: combat ui
+         ShowCombatUI;
       else
          ShowSkyMap;
       end if;
