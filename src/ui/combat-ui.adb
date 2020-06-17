@@ -13,6 +13,8 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.String_Split; use GNAT.String_Split;
@@ -27,6 +29,8 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Crew; use Crew;
+with Ships.Crew; use Ships.Crew;
 with Utils.UI; use Utils.UI;
 
 package body Combat.UI is
@@ -41,8 +45,15 @@ package body Combat.UI is
       Frame, Item: Ttk_Frame;
       Rows: Positive;
       Label: Ttk_Label;
-      CrewList: Unbounded_String;
+      CrewList: Unbounded_String := To_Unbounded_String("Nobody");
       ComboBox: Ttk_ComboBox;
+      PilotOrders: constant String :=
+        "{Go closer} {Keep distance} {Evade} {Escape}";
+      EngineerOrders: constant String :=
+        "{All stop} {Quarter speed} {Half speed} {Full speed}";
+      GunnerOrders: constant String :=
+        "{Don't shoot} {Precise fire} {Fire at will} {Aim for their engine} {Aim for their weapon} {Aim for their hull}";
+      GunIndex: Unbounded_String;
    begin
       Frame.Interp := Get_Context;
       Item.Interp := Get_Context;
@@ -60,7 +71,7 @@ package body Combat.UI is
          end loop;
       end loop;
       for Member of PlayerShip.Crew loop
-         Append(CrewList, " " & Member.Name);
+         Append(CrewList, " {" & Member.Name & "}");
       end loop;
       Label := Create(Widget_Image(Frame) & ".pilotlabel", "-text {Pilot:}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-row 1");
@@ -68,7 +79,55 @@ package body Combat.UI is
         Create
           (Widget_Image(Frame) & ".pilotcrew",
            "-values [list" & To_String(CrewList) & "]");
+      Current(ComboBox, Natural'Image(FindMember(Pilot)));
       Tcl.Tk.Ada.Grid.Grid(ComboBox, "-row 1 -column 1");
+      ComboBox :=
+        Create
+          (Widget_Image(Frame) & ".pilotorders",
+           "-values [list " & PilotOrders & "]");
+      Tcl.Tk.Ada.Grid.Grid(ComboBox, "-row 1 -column 2");
+      Label :=
+        Create(Widget_Image(Frame) & ".engineerlabel", "-text {Engineer:}");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-row 2");
+      ComboBox :=
+        Create
+          (Widget_Image(Frame) & ".engineercrew",
+           "-values [list" & To_String(CrewList) & "]");
+      Current(ComboBox, Natural'Image(FindMember(Engineer)));
+      Tcl.Tk.Ada.Grid.Grid(ComboBox, "-row 2 -column 1");
+      ComboBox :=
+        Create
+          (Widget_Image(Frame) & ".engineerorders",
+           "-values [list " & EngineerOrders & "]");
+      Tcl.Tk.Ada.Grid.Grid(ComboBox, "-row 2 -column 2");
+      for I in Guns.Iterate loop
+         GunIndex :=
+           To_Unbounded_String
+             (Trim(Positive'Image(Guns_Container.To_Index(I)), Left));
+         Label :=
+           Create
+             (Widget_Image(Frame) & ".gunlabel" & To_String(GunIndex),
+              "-text {Engineer:}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Label, "-row" & Positive'Image(Guns_Container.To_Index(I) + 2));
+         ComboBox :=
+           Create
+             (Widget_Image(Frame) & ".guncrew" & To_String(GunIndex),
+              "-values [list" & To_String(CrewList) & "]");
+         --Current(ComboBox, Natural'Image(FindMember(Engineer)));
+         Tcl.Tk.Ada.Grid.Grid
+           (ComboBox,
+            "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
+            " -column 1");
+         ComboBox :=
+           Create
+             (Widget_Image(Frame) & ".gunorders" & To_String(GunIndex),
+              "-values [list " & GunnerOrders & "]");
+         Tcl.Tk.Ada.Grid.Grid
+           (ComboBox,
+            "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
+            " -column 2");
+      end loop;
    end UpdateCombatUI;
 
    procedure ShowCombatUI is
