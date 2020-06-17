@@ -74,13 +74,13 @@ package body Combat.UI is
       ComboBox.Name := New_String(Widget_Image(Frame) & ".pilotcrew");
       configure(ComboBox, "-values [list" & To_String(CrewList) & "]");
       Current(ComboBox, Natural'Image(FindMember(Pilot)));
-      --ComboBox.Name := New_String(
-      --    Widget_Image(Frame) & ".pilotorders");
+      ComboBox.Name := New_String(Widget_Image(Frame) & ".pilotorders");
+      Current(ComboBox, Natural'Image(PilotOrder - 1));
       ComboBox.Name := New_String(Widget_Image(Frame) & ".engineercrew");
       configure(ComboBox, "-values [list" & To_String(CrewList) & "]");
       Current(ComboBox, Natural'Image(FindMember(Engineer)));
-      --ComboBox.Name := New_String(
-      --    Widget_Image(Frame) & ".engineerorders");
+      ComboBox.Name := New_String(Widget_Image(Frame) & ".engineerorders");
+      Current(ComboBox, Natural'Image(EngineerOrder - 1));
       for I in Guns.Iterate loop
          GunIndex :=
            To_Unbounded_String
