@@ -47,10 +47,6 @@ package body Combat.UI is
       Label: Ttk_Label;
       CrewList: Unbounded_String := To_Unbounded_String("Nobody");
       ComboBox: Ttk_ComboBox;
-      PilotOrders: constant String :=
-        "{Go closer} {Keep distance} {Evade} {Escape}";
-      EngineerOrders: constant String :=
-        "{All stop} {Quarter speed} {Half speed} {Full speed}";
       GunnerOrders: constant String :=
         "{Don't shoot} {Precise fire} {Fire at will} {Aim for their engine} {Aim for their weapon} {Aim for their hull}";
       GunIndex: Unbounded_String;
@@ -60,7 +56,7 @@ package body Combat.UI is
       Frame.Name := New_String(".paned.combatframe.canvas.combat.left");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Positive'Value(Slice(Tokens, 2));
-      for I in 1 .. Rows loop
+      for I in 3 .. Rows loop
          Create
            (Tokens,
             Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
@@ -73,33 +69,18 @@ package body Combat.UI is
       for Member of PlayerShip.Crew loop
          Append(CrewList, " {" & Member.Name & "}");
       end loop;
-      Label := Create(Widget_Image(Frame) & ".pilotlabel", "-text {Pilot:}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-row 1");
-      ComboBox :=
-        Create
-          (Widget_Image(Frame) & ".pilotcrew",
-           "-values [list" & To_String(CrewList) & "]");
+      ComboBox.Interp := Get_Context;
+      ComboBox.Name := New_String(Widget_Image(Frame) & ".pilotcrew");
+      configure(ComboBox, "-values [list" & To_String(CrewList) & "]");
       Current(ComboBox, Natural'Image(FindMember(Pilot)));
-      Tcl.Tk.Ada.Grid.Grid(ComboBox, "-row 1 -column 1");
-      ComboBox :=
-        Create
-          (Widget_Image(Frame) & ".pilotorders",
-           "-values [list " & PilotOrders & "]");
-      Tcl.Tk.Ada.Grid.Grid(ComboBox, "-row 1 -column 2");
-      Label :=
-        Create(Widget_Image(Frame) & ".engineerlabel", "-text {Engineer:}");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-row 2");
-      ComboBox :=
-        Create
-          (Widget_Image(Frame) & ".engineercrew",
-           "-values [list" & To_String(CrewList) & "]");
+      --ComboBox.Name := New_String(
+      --    Widget_Image(Frame) & ".pilotorders");
+      ComboBox.Name := New_String(Widget_Image(Frame) & ".engineercrew");
+      configure(ComboBox, "-values [list" & To_String(CrewList) & "]");
       Current(ComboBox, Natural'Image(FindMember(Engineer)));
-      Tcl.Tk.Ada.Grid.Grid(ComboBox, "-row 2 -column 1");
-      ComboBox :=
-        Create
-          (Widget_Image(Frame) & ".engineerorders",
-           "-values [list " & EngineerOrders & "]");
-      Tcl.Tk.Ada.Grid.Grid(ComboBox, "-row 2 -column 2");
+      --ComboBox.Name := New_String(
+      --    Widget_Image(Frame) & ".engineerorders");
       for I in Guns.Iterate loop
          GunIndex :=
            To_Unbounded_String
