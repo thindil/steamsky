@@ -30,6 +30,9 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Crew; use Crew;
+with Events; use Events;
+with Maps; use Maps;
+with Messages; use Messages;
 with Ships.Crew; use Ships.Crew;
 with Utils.UI; use Utils.UI;
 
@@ -111,28 +114,64 @@ package body Combat.UI is
       end loop;
    end UpdateCombatUI;
 
-   procedure ShowCombatUI is
+   procedure ShowCombatUI(NewCombat: Boolean := True) is
       Label: Ttk_Label;
       Paned: Ttk_PanedWindow;
       CombatCanvas: Tk_Canvas;
       CombatFrame: Ttk_Frame;
+      CombatStarted: Boolean;
    begin
-      Paned.Interp := Get_Context;
-      Paned.Name := New_String(".paned");
-      CombatFrame.Interp := Get_Context;
-      CombatFrame.Name := New_String(Widget_Image(Paned) & ".combatframe");
-      CombatCanvas.Interp := Get_Context;
-      CombatCanvas.Name := New_String(Widget_Image(CombatFrame) & ".canvas");
-      Label.Interp := Get_Context;
-      Label.Name :=
-        New_String(Widget_Image(CombatCanvas) & ".combat.info.info.label");
-      if Winfo_Get(Label, "exists") = "0" then
-         Tcl_EvalFile
-           (Get_Context,
-            To_String(DataDirectory) & "ui" & Dir_Separator & "combat.tcl");
-         Bind(CombatFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-         PilotOrder := 2;
-         EngineerOrder := 3;
+      if NewCombat then
+         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0
+           and then EnemyName /=
+             ProtoShips_List
+               (Events_List
+                  (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                  .ShipIndex)
+               .Name then
+            CombatStarted :=
+              StartCombat
+                (Events_List
+                   (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                   .ShipIndex,
+                 False);
+            if not CombatStarted then
+               return;
+            end if;
+         end if;
+         Paned.Interp := Get_Context;
+         Paned.Name := New_String(".paned");
+         CombatFrame.Interp := Get_Context;
+         CombatFrame.Name := New_String(Widget_Image(Paned) & ".combatframe");
+         CombatCanvas.Interp := Get_Context;
+         CombatCanvas.Name :=
+           New_String(Widget_Image(CombatFrame) & ".canvas");
+         Label.Interp := Get_Context;
+         Label.Name :=
+           New_String
+             (Widget_Image(CombatCanvas) & ".combat.right.enemy.description");
+         if Winfo_Get(Label, "exists") = "0" then
+            Tcl_EvalFile
+              (Get_Context,
+               To_String(DataDirectory) & "ui" & Dir_Separator & "combat.tcl");
+            Bind(CombatFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
+            PilotOrder := 2;
+            EngineerOrder := 3;
+         end if;
+         configure(Label, "-text {" & To_String(Enemy.Ship.Description) & "}");
+         for Member of PlayerShip.Crew loop
+            if Member.Order = Rest
+              and then
+              (Member.PreviousOrder = Pilot or
+               Member.PreviousOrder = Engineer or
+               Member.PreviousOrder = Gunner) then
+               Member.Order := Member.PreviousOrder;
+               Member.OrderTime := 15;
+               AddMessage
+                 (To_String(Member.Name) & " back to work for combat.",
+                  OrderMessage);
+            end if;
+         end loop;
       end if;
       UpdateCombatUI;
       configure
