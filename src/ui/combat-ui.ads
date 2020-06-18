@@ -23,8 +23,10 @@ package Combat.UI is
    -- ****f* CUI/ShowCombatUI
    -- FUNCTION
    -- Show combat UI to the player
+   -- PARAMETERS
+   -- NewCombat - If true, start the new combat. Default value is true
    -- SOURCE
-   procedure ShowCombatUI;
+   procedure ShowCombatUI(NewCombat: Boolean := True);
    -- ****
 
 end Combat.UI;
