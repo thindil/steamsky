@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
@@ -31,8 +32,10 @@ with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Crew; use Crew;
 with Events; use Events;
+with Items; use Items;
 with Maps; use Maps;
 with Messages; use Messages;
+with ShipModules; use ShipModules;
 with Ships.Crew; use Ships.Crew;
 with Utils.UI; use Utils.UI;
 
@@ -53,6 +56,8 @@ package body Combat.UI is
       GunnerOrders: constant String :=
         "{Don't shoot} {Precise fire} {Fire at will} {Aim for their engine} {Aim for their weapon} {Aim for their hull}";
       GunIndex: Unbounded_String;
+      HaveAmmo: Boolean;
+      AmmoAmount, AmmoIndex: Natural := 0;
    begin
       Frame.Interp := Get_Context;
       Item.Interp := Get_Context;
@@ -84,6 +89,43 @@ package body Combat.UI is
          end loop;
       end loop;
       for I in Guns.Iterate loop
+         HaveAmmo := False;
+         declare
+            AmmoIndex: Natural;
+         begin
+            if PlayerShip.Modules(Guns(I)(1)).MType = GUN then
+               AmmoIndex := PlayerShip.Modules(Guns(I)(1)).AmmoIndex;
+            else
+               AmmoIndex := PlayerShip.Modules(Guns(I)(1)).HarpoonIndex;
+            end if;
+            if
+              (AmmoIndex in
+                 PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index)
+              and then
+                Items_List(PlayerShip.Cargo(AmmoIndex).ProtoIndex).IType =
+                Items_Types
+                  (Modules_List(PlayerShip.Modules(Guns(I)(1)).ProtoIndex)
+                     .Value) then
+               AmmoAmount := PlayerShip.Cargo(AmmoIndex).Amount;
+               HaveAmmo := True;
+            end if;
+         end;
+         if not HaveAmmo then
+            AmmoAmount := 0;
+            for J in Items_List.Iterate loop
+               if Items_List(J).IType =
+                 Items_Types
+                   (Modules_List(PlayerShip.Modules(Guns(I)(1)).ProtoIndex)
+                      .Value) then
+                  AmmoIndex :=
+                    FindItem(PlayerShip.Cargo, Objects_Container.Key(J));
+                  if AmmoIndex > 0 then
+                     AmmoAmount :=
+                       AmmoAmount + PlayerShip.Cargo(AmmoIndex).Amount;
+                  end if;
+               end if;
+            end loop;
+         end if;
          GunIndex :=
            To_Unbounded_String
              (Trim(Positive'Image(Guns_Container.To_Index(I)), Left));
@@ -91,7 +133,7 @@ package body Combat.UI is
            Create
              (Widget_Image(Frame) & ".gunlabel" & To_String(GunIndex),
               "-text {" & To_String(PlayerShip.Modules(Guns(I)(1)).Name) &
-              ":}");
+              ":" & LF & "(Ammo:" & Natural'Image(AmmoAmount) & ")}");
          Tcl.Tk.Ada.Grid.Grid
            (Label, "-row" & Positive'Image(Guns_Container.To_Index(I) + 2));
          ComboBox :=
