@@ -140,6 +140,18 @@ package body Combat.UI is
            Create
              (Widget_Image(Frame) & ".guncrew" & To_String(GunIndex),
               "-values [list " & To_String(CrewList) & "]");
+         if PlayerShip.Modules(Guns(I)(1)).Owner(1) /= 0 then
+            if PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner(1)).Order =
+              Gunner then
+               Current
+                 (ComboBox,
+                  Positive'Image(PlayerShip.Modules(Guns(I)(1)).Owner(1)));
+            else
+               Current(ComboBox, "0");
+            end if;
+         else
+            Current(ComboBox, "0");
+         end if;
          Tcl.Tk.Ada.Grid.Grid
            (ComboBox,
             "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
