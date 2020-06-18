@@ -24,12 +24,14 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Config; use Config;
 with Crew; use Crew;
 with Events; use Events;
 with Items; use Items;
@@ -80,6 +82,80 @@ package body Combat.UI is
       end if;
       return To_String(Firerate);
    end GetGunSpeed;
+
+   -- ****if* Combat.UI/UpdateMessages
+   -- FUNCTION
+   -- Update in-game messages in combat
+   -- SOURCE
+   procedure UpdateMessages is
+      -- ****
+      LoopStart: Integer := 0 - MessagesAmount;
+      Message: Message_Data;
+      CurrentTurnTime: Unbounded_String := To_Unbounded_String(FormatedTime);
+      MessagesView: Tk_Text;
+      procedure ShowMessage is
+         TagNames: constant array(1 .. 5) of Unbounded_String :=
+           (To_Unbounded_String("yellow"), To_Unbounded_String("green"),
+            To_Unbounded_String("red"), To_Unbounded_String("blue"),
+            To_Unbounded_String("cyan"));
+      begin
+         if Unbounded_Slice(Message.Message, 1, Length(CurrentTurnTime)) =
+           CurrentTurnTime then
+            if Message.Color = WHITE then
+               Insert
+                 (MessagesView, "end", "{" & To_String(Message.Message) & "}");
+            else
+               Insert
+                 (MessagesView, "end",
+                  "{" & To_String(Message.Message) & "} [list " &
+                  To_String(TagNames(Message_Color'Pos(Message.Color))) & "]");
+            end if;
+         else
+            Insert
+              (MessagesView, "end",
+               "{" & To_String(Message.Message) & "} [list gray]");
+         end if;
+      end ShowMessage;
+   begin
+      MessagesView.Interp := Get_Context;
+      MessagesView.Name := New_String(".paned.controls.messages.view");
+      Tcl.Tk.Ada.Widgets.configure(MessagesView, "-state normal");
+      Delete(MessagesView, "1.0", "end");
+      if LoopStart = 0 then
+         Tcl.Tk.Ada.Widgets.configure(MessagesView, "-state disable");
+         return;
+      end if;
+      if LoopStart < -10 then
+         LoopStart := -10;
+      end if;
+      Message := GetMessage(GetLastMessageIndex);
+      if Unbounded_Slice(Message.Message, 1, Length(CurrentTurnTime)) /=
+        CurrentTurnTime then
+         CurrentTurnTime :=
+           Unbounded_Slice(Message.Message, 1, Length(CurrentTurnTime));
+      end if;
+      if GameSettings.MessagesOrder = OLDER_FIRST then
+         for I in LoopStart .. -1 loop
+            Message := GetMessage(I + 1);
+            if (GetLastMessageIndex + I + 1) >= MessagesStarts then
+               ShowMessage;
+               if I < -1 then
+                  Insert(MessagesView, "end", "{" & LF & "}");
+               end if;
+            end if;
+         end loop;
+      else
+         for I in reverse LoopStart .. -1 loop
+            Message := GetMessage(I + 1);
+            exit when (GetLastMessageIndex + I + 1) < MessagesStarts;
+            ShowMessage;
+            if I > LoopStart then
+               Insert(MessagesView, "end", "{" & LF & "}");
+            end if;
+         end loop;
+      end if;
+      Tcl.Tk.Ada.Widgets.configure(MessagesView, "-state disable");
+   end UpdateMessages;
 
    -- ****if* CUI/UpdateCombatUI
    -- FUNCTION
@@ -218,6 +294,7 @@ package body Combat.UI is
             "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
             " -column 2");
       end loop;
+      UpdateMessages;
    end UpdateCombatUI;
 
    procedure ShowCombatUI(NewCombat: Boolean := True) is
