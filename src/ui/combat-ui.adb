@@ -41,6 +41,46 @@ with Utils.UI; use Utils.UI;
 
 package body Combat.UI is
 
+   -- ****if* CUI/GetGunSpeed
+   -- FUNCTION
+   -- Get information about fire rate of selected gun with selected order
+   -- PARAMETERS
+   -- Position - Number of gun to check
+   -- Index    - Index of the gunner's order
+   -- RESULT
+   -- String with info about gun fire rate
+   -- SOURCE
+   function GetGunSpeed(Position: Natural; Index: Positive) return String is
+      -- ****
+      GunSpeed: Integer;
+      Firerate: Unbounded_String;
+   begin
+      GunSpeed :=
+        Modules_List(PlayerShip.Modules(Guns(Position)(1)).ProtoIndex).Speed;
+      case Index is
+         when 1 =>
+            GunSpeed := 0;
+         when 3 =>
+            null;
+         when others =>
+            if GunSpeed > 0 then
+               GunSpeed := Integer(Float'Ceiling(Float(GunSpeed) / 2.0));
+            else
+               GunSpeed := GunSpeed - 1;
+            end if;
+      end case;
+      if GunSpeed > 0 then
+         Firerate :=
+           To_Unbounded_String
+             ("(" & Trim(Integer'Image(GunSpeed), Both) & "/round)");
+      elsif GunSpeed < 0 then
+         Firerate :=
+           To_Unbounded_String
+             ("(1/" & Trim(Integer'Image(GunSpeed), Both) & " rounds)");
+      end if;
+      return To_String(Firerate);
+   end GetGunSpeed;
+
    -- ****if* CUI/UpdateCombatUI
    -- FUNCTION
    -- Update information about combat: remove old UI and create new elements
@@ -53,9 +93,14 @@ package body Combat.UI is
       Label: Ttk_Label;
       CrewList: Unbounded_String := To_Unbounded_String("Nobody");
       ComboBox: Ttk_ComboBox;
-      GunnerOrders: constant String :=
-        "{Don't shoot} {Precise fire} {Fire at will} {Aim for their engine} {Aim for their weapon} {Aim for their hull}";
-      GunIndex: Unbounded_String;
+      GunnersOrders: constant array(1 .. 6) of Unbounded_String :=
+        (To_Unbounded_String("{Don't shoot"),
+         To_Unbounded_String("{Precise fire "),
+         To_Unbounded_String("{Fire at will "),
+         To_Unbounded_String("{Aim for their engine "),
+         To_Unbounded_String("{Aim for their weapon "),
+         To_Unbounded_String("{Aim for their hull "));
+      GunIndex, GunnerOrders: Unbounded_String;
       HaveAmmo: Boolean;
       AmmoAmount, AmmoIndex: Natural := 0;
    begin
@@ -156,10 +201,17 @@ package body Combat.UI is
            (ComboBox,
             "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
             " -column 1");
+         GunnerOrders := Null_Unbounded_String;
+         for J in GunnersOrders'Range loop
+            Append
+              (GunnerOrders,
+               " " & GunnersOrders(J) &
+               GetGunSpeed(Guns_Container.To_Index(I), J) & "}");
+         end loop;
          ComboBox :=
            Create
              (Widget_Image(Frame) & ".gunorders" & To_String(GunIndex),
-              "-values [list " & GunnerOrders & "]");
+              "-values [list" & To_String(GunnerOrders) & "]");
          Current(ComboBox, Natural'Image(Guns(I)(2) - 1));
          Tcl.Tk.Ada.Grid.Grid
            (ComboBox,
