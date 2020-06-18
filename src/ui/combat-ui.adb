@@ -53,10 +53,24 @@ package body Combat.UI is
    begin
       Frame.Interp := Get_Context;
       Item.Interp := Get_Context;
-      Frame.Name := New_String(".paned.combatframe.canvas.combat.left");
+      Frame.Name := New_String(".paned.combatframe.canvas.combat.left.crew");
+      for Member of PlayerShip.Crew loop
+         Append(CrewList, " {" & Member.Name & "}");
+      end loop;
+      ComboBox.Interp := Get_Context;
+      ComboBox.Name := New_String(Widget_Image(Frame) & ".pilotcrew");
+      configure(ComboBox, "-values [list " & To_String(CrewList) & "]");
+      Current(ComboBox, Natural'Image(FindMember(Pilot)));
+      ComboBox.Name := New_String(Widget_Image(Frame) & ".pilotorder");
+      Current(ComboBox, Integer'Image(PilotOrder - 1));
+      ComboBox.Name := New_String(Widget_Image(Frame) & ".engineercrew");
+      configure(ComboBox, "-values [list " & To_String(CrewList) & "]");
+      Current(ComboBox, Natural'Image(FindMember(Engineer)));
+      ComboBox.Name := New_String(Widget_Image(Frame) & ".engineerorder");
+      Current(ComboBox, Natural'Image(EngineerOrder - 1));
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Positive'Value(Slice(Tokens, 2));
-      for I in 3 .. Rows loop
+      for I in 3 .. (Rows - 1) loop
          Create
            (Tokens,
             Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
@@ -66,21 +80,6 @@ package body Combat.UI is
             Tcl.Tk.Ada.Grid.Grid_Remove(Item);
          end loop;
       end loop;
-      for Member of PlayerShip.Crew loop
-         Append(CrewList, " {" & Member.Name & "}");
-      end loop;
-      Tcl.Tk.Ada.Grid.Grid(Label, "-row 1");
-      ComboBox.Interp := Get_Context;
-      ComboBox.Name := New_String(Widget_Image(Frame) & ".pilotcrew");
-      configure(ComboBox, "-values [list" & To_String(CrewList) & "]");
-      Current(ComboBox, Natural'Image(FindMember(Pilot)));
-      ComboBox.Name := New_String(Widget_Image(Frame) & ".pilotorders");
-      Current(ComboBox, Natural'Image(PilotOrder - 1));
-      ComboBox.Name := New_String(Widget_Image(Frame) & ".engineercrew");
-      configure(ComboBox, "-values [list" & To_String(CrewList) & "]");
-      Current(ComboBox, Natural'Image(FindMember(Engineer)));
-      ComboBox.Name := New_String(Widget_Image(Frame) & ".engineerorders");
-      Current(ComboBox, Natural'Image(EngineerOrder - 1));
       for I in Guns.Iterate loop
          GunIndex :=
            To_Unbounded_String
@@ -88,14 +87,14 @@ package body Combat.UI is
          Label :=
            Create
              (Widget_Image(Frame) & ".gunlabel" & To_String(GunIndex),
-              "-text {Engineer:}");
+              "-text {" & To_String(PlayerShip.Modules(Guns(I)(1)).Name) &
+              ":}");
          Tcl.Tk.Ada.Grid.Grid
            (Label, "-row" & Positive'Image(Guns_Container.To_Index(I) + 2));
          ComboBox :=
            Create
              (Widget_Image(Frame) & ".guncrew" & To_String(GunIndex),
-              "-values [list" & To_String(CrewList) & "]");
-         --Current(ComboBox, Natural'Image(FindMember(Engineer)));
+              "-values [list " & To_String(CrewList) & "]");
          Tcl.Tk.Ada.Grid.Grid
            (ComboBox,
             "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
@@ -104,6 +103,7 @@ package body Combat.UI is
            Create
              (Widget_Image(Frame) & ".gunorders" & To_String(GunIndex),
               "-values [list " & GunnerOrders & "]");
+         Current(ComboBox, Natural'Image(Guns(I)(2) - 1));
          Tcl.Tk.Ada.Grid.Grid
            (ComboBox,
             "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
@@ -131,6 +131,8 @@ package body Combat.UI is
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "combat.tcl");
          Bind(CombatFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
+         PilotOrder := 2;
+         EngineerOrder := 3;
       end if;
       UpdateCombatUI;
       configure
