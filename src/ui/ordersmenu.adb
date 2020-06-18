@@ -24,6 +24,7 @@ with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
+with Combat.UI; use Combat.UI;
 with Crafts; use Crafts;
 with Crew; use Crew;
 with Events; use Events;
@@ -265,13 +266,13 @@ package body OrdersMenu is
          end if;
          case Event is
             when EnemyShip | EnemyPatrol =>
-               Add(OrdersMenu, "command", "-label {Attack} -underline 0");
+               Add(OrdersMenu, "command", "-label {Attack} -underline 0 -command Attack");
             when FullDocks =>
                Add
                  (OrdersMenu, "command",
                   "-label {Wait (full docks} -underline 0");
             when AttackOnBase =>
-               Add(OrdersMenu, "command", "-label {Defend} -underline 0");
+               Add(OrdersMenu, "command", "-label {Defend} -underline 0 -command Attack");
             when Disease =>
                if HaveTrader then
                   ItemIndex :=
@@ -389,7 +390,7 @@ package body OrdersMenu is
                     (OrdersMenu, "command",
                      "-label {Ask for bases} -underline 8");
                end if;
-               Add(OrdersMenu, "command", "-label {Attack} -underline 0");
+               Add(OrdersMenu, "command", "-label {Attack} -underline 0 -command Attack");
             when FriendlyShip =>
                if HaveTrader then
                   if Index
@@ -410,7 +411,7 @@ package body OrdersMenu is
                     (OrdersMenu, "command",
                      "-label {Ask for events} -underline 8");
                end if;
-               Add(OrdersMenu, "command", "-label {Attack} -underline 0");
+               Add(OrdersMenu, "command", "-label {Attack} -underline 0 -command Attack");
          end case;
       end if;
       Add(OrdersMenu, "command", "-label {Close} -underline 0");
@@ -532,12 +533,39 @@ package body OrdersMenu is
       return TCL_OK;
    end Ask_For_Events_Command;
 
+   -- ****f* OrdersMenu/Attack_Command
+   -- FUNCTION
+   -- Start the combat
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Attack_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Attack_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+   begin
+      ShowCombatUI;
+      return TCL_OK;
+   end Attack_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowOrders", Show_Orders_Command'Access);
       AddCommand("Docking", Docking_Command'Access);
       AddCommand("AskForBases", Ask_For_Bases_Command'Access);
       AddCommand("AskForEvents", Ask_For_Events_Command'Access);
+      AddCommand("Attack", Attack_Command'Access);
    end AddCommands;
 
 end OrdersMenu;
