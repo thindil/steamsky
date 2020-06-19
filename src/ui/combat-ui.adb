@@ -32,6 +32,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Bases; use Bases;
 with Config; use Config;
 with Crew; use Crew;
 with Events; use Events;
@@ -40,6 +41,7 @@ with Maps; use Maps;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
 with Ships.Crew; use Ships.Crew;
+with Ships.Movement; use Ships.Movement;
 with Utils.UI; use Utils.UI;
 
 package body Combat.UI is
@@ -175,7 +177,7 @@ package body Combat.UI is
          To_Unbounded_String("{Aim for their engine "),
          To_Unbounded_String("{Aim for their weapon "),
          To_Unbounded_String("{Aim for their hull "));
-      GunIndex, GunnerOrders: Unbounded_String;
+      GunIndex, GunnerOrders, EnemyInfo: Unbounded_String;
       HaveAmmo: Boolean;
       AmmoAmount, AmmoIndex, Row, Rows: Natural := 0;
       ProgressBar: Ttk_ProgressBar;
@@ -388,6 +390,103 @@ package body Combat.UI is
             Row := Row + 1;
          end if;
       end loop;
+      Append(EnemyInfo, "Name: ");
+      Append(EnemyInfo, EnemyName);
+      Append(EnemyInfo, LF);
+      Append(EnemyInfo, "Type: ");
+      Append(EnemyInfo, Enemy.Ship.Name);
+      Append(EnemyInfo, LF);
+      Append(EnemyInfo, "Home: ");
+      Append(EnemyInfo, SkyBases(Enemy.Ship.HomeBase).Name);
+      Append(EnemyInfo, LF);
+      Append(EnemyInfo, "Distance: ");
+      if Enemy.Distance >= 15000 then
+         Append(EnemyInfo, "Escaped");
+      elsif Enemy.Distance < 15000 and Enemy.Distance >= 10000 then
+         Append(EnemyInfo, "Long");
+      elsif Enemy.Distance < 10000 and Enemy.Distance >= 5000 then
+         Append(EnemyInfo, "Medium");
+      elsif Enemy.Distance < 5000 and Enemy.Distance >= 1000 then
+         Append(EnemyInfo, "Short");
+      else
+         Append(EnemyInfo, "Close");
+      end if;
+      Append(EnemyInfo, LF);
+      Append(EnemyInfo, "Status: ");
+      if Enemy.Distance < 15000 then
+         if Enemy.Ship.Modules(1).Durability = 0 then
+            Append(EnemyInfo, "Destroyed");
+         else
+            declare
+               EnemyStatus: Unbounded_String := To_Unbounded_String("Ok");
+            begin
+               for Module of Enemy.Ship.Modules loop
+                  if Module.Durability < Module.MaxDurability then
+                     EnemyStatus := To_Unbounded_String("Damaged");
+                     exit;
+                  end if;
+               end loop;
+               Append(EnemyInfo, EnemyStatus);
+            end;
+            for Module of Enemy.Ship.Modules loop
+               if Module.Durability > 0 then
+                  case Modules_List(Module.ProtoIndex).MType is
+                     when ARMOR =>
+                        Append(EnemyInfo, " (armored)");
+                     when GUN =>
+                        Append(EnemyInfo, " (gun)");
+                     when BATTERING_RAM =>
+                        Append(EnemyInfo, " (battering ram)");
+                     when HARPOON_GUN =>
+                        Append(EnemyInfo, " (harpoon gun)");
+                     when others =>
+                        null;
+                  end case;
+               end if;
+            end loop;
+         end if;
+      else
+         Append(EnemyInfo, "Unknown");
+      end if;
+      Append(EnemyInfo, LF);
+      Append(EnemyInfo, "Speed: ");
+      if Enemy.Distance < 15000 then
+         case Enemy.Ship.Speed is
+            when Ships.FULL_STOP =>
+               Append(EnemyInfo, "Stopped");
+            when QUARTER_SPEED =>
+               Append(EnemyInfo, "Slow");
+            when HALF_SPEED =>
+               Append(EnemyInfo, "Medium");
+            when FULL_SPEED =>
+               Append(EnemyInfo, "Fast");
+            when others =>
+               null;
+         end case;
+         if Enemy.Ship.Speed /= Ships.FULL_STOP then
+            declare
+               SpeedDiff: constant Integer :=
+                 RealSpeed(Enemy.Ship) - RealSpeed(PlayerShip);
+            begin
+               if SpeedDiff > 250 then
+                  Append(EnemyInfo, " (much faster)");
+               elsif SpeedDiff > 0 then
+                  Append(EnemyInfo, " (faster)");
+               elsif SpeedDiff = 0 then
+                  Append(EnemyInfo, " (equal)");
+               elsif SpeedDiff > -250 then
+                  Append(EnemyInfo, " (slower)");
+               else
+                  Append(EnemyInfo, " (much slower)");
+               end if;
+            end;
+         end if;
+      else
+         Append(EnemyInfo, "Unknown");
+      end if;
+      Label.Name :=
+        New_String(".paned.combatframe.canvas.combat.right.enemy.description");
+      configure(Label, "-text {" & To_String(EnemyInfo) & "}");
       UpdateMessages;
    end UpdateCombatUI;
 
