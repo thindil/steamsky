@@ -20,5 +20,6 @@ grid [ttk::frame $combatframe.right] -row 0 -column 1
 grid [ttk::labelframe $combatframe.right.enemy -text {Enemy info:}]
 grid [ttk::label $combatframe.right.enemy.info]
 grid [ttk::label $combatframe.right.enemy.description]
+grid [ttk::frame $combatframe.right.enemy.damage]
 grid [ttk::labelframe $combatframe.right.boarding -text {Boarding party:}]
 grid [ttk::button $combatframe.next -text {Next turn [Space]}] -columnspan 2 -sticky we
