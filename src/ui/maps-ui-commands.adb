@@ -258,11 +258,11 @@ package body Maps.UI.Commands is
           (Index
              (MapView, "@" & CArgv.Arg(Argv, 1) & "," & CArgv.Arg(Argv, 2)));
       MapY :=
-        StartY + Positive'Value(Slice(MapIndex, 1, Index(MapIndex, ".") - 1)) -
+        StartY + Integer'Value(Slice(MapIndex, 1, Index(MapIndex, ".") - 1)) -
         1;
       MapX :=
         StartX +
-        Positive'Value
+        Integer'Value
           (Slice(MapIndex, Index(MapIndex, ".") + 1, Length(MapIndex)));
       UpdateMapInfo(MapX, MapY);
       return TCL_OK;
