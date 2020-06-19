@@ -392,6 +392,12 @@ package body Utils.UI is
       SubWindow.Name := New_String(".paned." & NewScreenName);
       Insert(Paned, "0", SubWindow, "-weight 1");
       SashPos(Paned, "0", Natural'Image(GameSettings.MessagesPosition));
+      Paned.Name := New_String(".paned.controls.buttons");
+      if NewScreenName = "mapframe" then
+         Tcl.Tk.Ada.Grid.Grid(Paned);
+      else
+         Tcl.Tk.Ada.Grid.Grid_Remove(Paned);
+      end if;
    end ShowScreen;
 
 end Utils.UI;
