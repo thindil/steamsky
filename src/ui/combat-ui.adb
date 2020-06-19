@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
@@ -485,8 +486,67 @@ package body Combat.UI is
          Append(EnemyInfo, "Unknown");
       end if;
       Label.Name :=
-        New_String(".paned.combatframe.canvas.combat.right.enemy.description");
+        New_String(".paned.combatframe.canvas.combat.right.enemy.info");
       configure(Label, "-text {" & To_String(EnemyInfo) & "}");
+      declare
+         SpaceIndex: Natural;
+         ModuleName: Unbounded_String;
+      begin
+         Frame.Name :=
+           New_String(".paned.combatframe.canvas.combat.right.enemy.damage");
+         Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
+         Rows := Natural'Value(Slice(Tokens, 2));
+         for I in 0 .. (Rows - 1) loop
+            Create
+              (Tokens,
+               Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
+               " ");
+            for J in 1 .. Slice_Count(Tokens) loop
+               Item.Name := New_String(Slice(Tokens, J));
+               Tcl.Tk.Ada.Grid.Grid_Remove(Item);
+            end loop;
+         end loop;
+         Row := 0;
+         for I in Enemy.Ship.Modules.Iterate loop
+            if Enemy.Distance > 1000 then
+               ModuleName :=
+                 To_Unbounded_String
+                   (ModuleType'Image
+                      (Modules_List(Enemy.Ship.Modules(I).ProtoIndex).MType));
+               Replace_Slice
+                 (ModuleName, 2, Length(ModuleName),
+                  To_Lower(Slice(ModuleName, 2, Length(ModuleName))));
+               SpaceIndex := Index(ModuleName, "_");
+               while SpaceIndex > 0 loop
+                  Replace_Element(ModuleName, SpaceIndex, ' ');
+                  SpaceIndex := Index(ModuleName, "_");
+               end loop;
+            else
+               ModuleName :=
+                 Modules_List(Enemy.Ship.Modules(I).ProtoIndex).Name;
+            end if;
+            if Enemy.Ship.Modules(I).Durability = 0 then
+               Append(ModuleName, "(destroyed)");
+            end if;
+            Label :=
+              Create
+                (Widget_Image(Frame) & ".lbl" & Trim(Natural'Image(Row), Left),
+                 "-text {" & To_String(ModuleName) & "}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Label, "-row" & Natural'Image(Row) & " -column 0");
+            DamagePercent :=
+              ((Float(Enemy.Ship.Modules(I).Durability) /
+                Float(Enemy.Ship.Modules(I).MaxDurability)) *
+               100.0);
+            ProgressBar :=
+              Create
+                (Widget_Image(Frame) & ".dmg" & Trim(Natural'Image(Row), Left),
+                 "-orient horizontal -value " & Float'Image(DamagePercent));
+            Tcl.Tk.Ada.Grid.Grid
+              (ProgressBar, "-row" & Natural'Image(Row) & " -column 1");
+            Row := Row + 1;
+         end loop;
+      end;
       UpdateMessages;
    end UpdateCombatUI;
 
