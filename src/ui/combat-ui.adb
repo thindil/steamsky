@@ -30,6 +30,7 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Config; use Config;
 with Crew; use Crew;
@@ -165,7 +166,6 @@ package body Combat.UI is
       -- ****
       Tokens: Slice_Set;
       Frame, Item: Ttk_Frame;
-      Rows: Positive;
       Label: Ttk_Label;
       ComboBox: Ttk_ComboBox;
       GunnersOrders: constant array(1 .. 6) of Unbounded_String :=
@@ -177,7 +177,9 @@ package body Combat.UI is
          To_Unbounded_String("{Aim for their hull "));
       GunIndex, GunnerOrders: Unbounded_String;
       HaveAmmo: Boolean;
-      AmmoAmount, AmmoIndex: Natural := 0;
+      AmmoAmount, AmmoIndex, Row, Rows: Natural := 0;
+      ProgressBar: Ttk_ProgressBar;
+      DamagePercent: Float;
       function GetCrewList(Position: Natural) return String is
          SkillIndex, SkillValue: Natural := 0;
          SkillString: Unbounded_String;
@@ -351,6 +353,40 @@ package body Combat.UI is
            (ComboBox,
             "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
             " -column 2");
+      end loop;
+      Frame.Name := New_String(".paned.combatframe.canvas.combat.left.damage");
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
+      Rows := Natural'Value(Slice(Tokens, 2));
+      for I in 0 .. (Rows - 1) loop
+         Create
+           (Tokens,
+            Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
+            " ");
+         for J in 1 .. Slice_Count(Tokens) loop
+            Item.Name := New_String(Slice(Tokens, J));
+            Tcl.Tk.Ada.Grid.Grid_Remove(Item);
+         end loop;
+      end loop;
+      for Module of PlayerShip.Modules loop
+         if Module.Durability < Module.MaxDurability then
+            Label :=
+              Create
+                (Widget_Image(Frame) & ".lbl" & Trim(Natural'Image(Row), Left),
+                 "-text {" & To_String(Module.Name) & "}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Label, "-row" & Natural'Image(Row) & " -column 0");
+            DamagePercent :=
+              100.0 -
+              ((Float(Module.Durability) / Float(Module.MaxDurability)) *
+               100.0);
+            ProgressBar :=
+              Create
+                (Widget_Image(Frame) & ".dmg" & Trim(Natural'Image(Row), Left),
+                 "-orient horizontal -value " & Float'Image(DamagePercent));
+            Tcl.Tk.Ada.Grid.Grid
+              (ProgressBar, "-row" & Natural'Image(Row) & " -column 1");
+            Row := Row + 1;
+         end if;
       end loop;
       UpdateMessages;
    end UpdateCombatUI;
