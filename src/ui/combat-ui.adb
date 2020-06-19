@@ -83,7 +83,7 @@ package body Combat.UI is
       return To_String(Firerate);
    end GetGunSpeed;
 
-   -- ****if* Combat.UI/UpdateMessages
+   -- ****if* CUI/UpdateMessages
    -- FUNCTION
    -- Update in-game messages in combat
    -- SOURCE
@@ -167,7 +167,6 @@ package body Combat.UI is
       Frame, Item: Ttk_Frame;
       Rows: Positive;
       Label: Ttk_Label;
-      CrewList: Unbounded_String := To_Unbounded_String("Nobody");
       ComboBox: Ttk_ComboBox;
       GunnersOrders: constant array(1 .. 6) of Unbounded_String :=
         (To_Unbounded_String("{Don't shoot"),
@@ -179,21 +178,80 @@ package body Combat.UI is
       GunIndex, GunnerOrders: Unbounded_String;
       HaveAmmo: Boolean;
       AmmoAmount, AmmoIndex: Natural := 0;
+      function GetCrewList(Position: Natural) return String is
+         SkillIndex, SkillValue: Natural := 0;
+         SkillString: Unbounded_String;
+         CrewList: Unbounded_String := To_Unbounded_String("Nobody");
+      begin
+         for I in
+           PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
+            case Position is
+               when 0 =>
+                  if GetSkillLevel(PlayerShip.Crew(I), PilotingSkill) >
+                    SkillValue then
+                     SkillIndex := I;
+                     SkillValue :=
+                       GetSkillLevel(PlayerShip.Crew(I), PilotingSkill);
+                  end if;
+               when 1 =>
+                  if GetSkillLevel(PlayerShip.Crew(I), EngineeringSkill) >
+                    SkillValue then
+                     SkillIndex := I;
+                     SkillValue :=
+                       GetSkillLevel(PlayerShip.Crew(I), EngineeringSkill);
+                  end if;
+               when others =>
+                  if GetSkillLevel(PlayerShip.Crew(I), GunnerySkill) >
+                    SkillValue then
+                     SkillIndex := I;
+                     SkillValue :=
+                       GetSkillLevel(PlayerShip.Crew(I), GunnerySkill);
+                  end if;
+            end case;
+         end loop;
+         for I in
+           PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
+            if PlayerShip.Crew(I).Skills.Length > 0 then
+               SkillString := Null_Unbounded_String;
+               case Position is
+                  when 0 =>
+                     if GetSkillLevel(PlayerShip.Crew(I), PilotingSkill) >
+                       0 then
+                        SkillString := To_Unbounded_String(" +");
+                     end if;
+                  when 1 =>
+                     if GetSkillLevel(PlayerShip.Crew(I), EngineeringSkill) >
+                       0 then
+                        SkillString := To_Unbounded_String(" +");
+                     end if;
+                  when others =>
+                     if GetSkillLevel(PlayerShip.Crew(I), GunnerySkill) >
+                       0 then
+                        SkillString := To_Unbounded_String(" +");
+                     end if;
+               end case;
+               if I = SkillIndex then
+                  SkillString := SkillString & To_Unbounded_String("+");
+               end if;
+               Append
+                 (CrewList,
+                  " {" & PlayerShip.Crew(I).Name & SkillString & "}");
+            end if;
+         end loop;
+         return To_String(CrewList);
+      end GetCrewList;
    begin
       Frame.Interp := Get_Context;
       Item.Interp := Get_Context;
       Frame.Name := New_String(".paned.combatframe.canvas.combat.left.crew");
-      for Member of PlayerShip.Crew loop
-         Append(CrewList, " {" & Member.Name & "}");
-      end loop;
       ComboBox.Interp := Get_Context;
       ComboBox.Name := New_String(Widget_Image(Frame) & ".pilotcrew");
-      configure(ComboBox, "-values [list " & To_String(CrewList) & "]");
+      configure(ComboBox, "-values [list " & GetCrewList(0) & "]");
       Current(ComboBox, Natural'Image(FindMember(Pilot)));
       ComboBox.Name := New_String(Widget_Image(Frame) & ".pilotorder");
       Current(ComboBox, Integer'Image(PilotOrder - 1));
       ComboBox.Name := New_String(Widget_Image(Frame) & ".engineercrew");
-      configure(ComboBox, "-values [list " & To_String(CrewList) & "]");
+      configure(ComboBox, "-values [list " & GetCrewList(1) & "]");
       Current(ComboBox, Natural'Image(FindMember(Engineer)));
       ComboBox.Name := New_String(Widget_Image(Frame) & ".engineerorder");
       Current(ComboBox, Natural'Image(EngineerOrder - 1));
@@ -260,7 +318,7 @@ package body Combat.UI is
          ComboBox :=
            Create
              (Widget_Image(Frame) & ".guncrew" & To_String(GunIndex),
-              "-values [list " & To_String(CrewList) & "]");
+              "-values [list " & GetCrewList(2) & "]");
          if PlayerShip.Modules(Guns(I)(1)).Owner(1) /= 0 then
             if PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner(1)).Order =
               Gunner then
