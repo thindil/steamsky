@@ -38,7 +38,7 @@ project steamsky is
                     "-gnateE");
             when "release" =>
                 for Default_Switches ("ada") use ("-O2",
-                    "-gnatn2", "-ffunction-sections",
+                    "-ffunction-sections",
                     "-fdata-sections");
             when "analyze" =>
                 for Default_Switches ("ada") use ("-pg",
