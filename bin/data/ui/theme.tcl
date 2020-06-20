@@ -58,7 +58,7 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure TButton -padding {8 4 8 4} -width -10 -anchor center -relief raised
       ttk::style configure TMenubutton -padding {8 4 4 4}
       ttk::style configure Toolbutton -padding {6 2} -anchor center
-      ttk::style configure TCheckbutton -padding 4
+      ttk::style configure TCheckbutton -padding 4 -indicatorcolor $colors(-bg)
       ttk::style configure TRadiobutton -padding 4
       ttk::style configure TSeparator -background $colors(-bg)
       ttk::style configure Header.Toolbutton -font {-family "Font Awesome 5 Free Solid" -size 14}
@@ -69,6 +69,7 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure TProgressbar -background red
 
       ttk::style map TPanedwindow -background [list hover $colors(-checklight)]
+
       ttk::style map TCombobox -selectbackground [list \
          !focus         $colors(-window) \
          {readonly hover} $colors(-bg) \
@@ -86,6 +87,9 @@ namespace eval ttk::theme::steamsky {
       ttk::style map Treeview \
          -background [list selected $colors(-selectbg)] \
          -foreground [list selected $colors(-selectfg)]
+
+      ttk::style map TCheckbutton -indicatorcolor \
+         [list selected $colors(-selectfg)]
 
       tk_setPalette background [ttk::style lookup . -background] \
          foreground [ttk::style lookup . -foreground] \
