@@ -20,6 +20,8 @@ with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.String_Split; use GNAT.String_Split;
+with CArgv;
+with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
@@ -568,30 +570,75 @@ package body Combat.UI is
          declare
             CheckButton: Ttk_CheckButton;
          begin
-            Row := 0;
+            Row := 1;
             for Member of PlayerShip.Crew loop
                CheckButton :=
                  Create
                    (Widget_Image(Frame) & ".board" &
-                    Trim(Natural'Image(Row), Left),
+                    Trim(Positive'Image(Row), Left),
                     "-text {" & To_String(Member.Name) & "} -variable board" &
-                    Trim(Natural'Image(Row), Left));
+                    Trim(Positive'Image(Row), Left) &
+                    " -command {SetBoarding" & Positive'Image(Row) & "}");
                if Member.Order = Boarding then
                   Tcl_SetVar
-                    (Frame.Interp, "board" & Trim(Natural'Image(Row), Left),
+                    (Frame.Interp, "board" & Trim(Positive'Image(Row), Left),
                      "1");
                else
                   Tcl_SetVar
-                    (Frame.Interp, "board" & Trim(Natural'Image(Row), Left),
+                    (Frame.Interp, "board" & Trim(Positive'Image(Row), Left),
                      "0");
                end if;
-               Tcl.Tk.Ada.Grid.Grid(CheckButton, "-row" & Natural'Image(Row));
+               Tcl.Tk.Ada.Grid.Grid(CheckButton, "-row" & Positive'Image(Row));
                Row := Row + 1;
             end loop;
          end;
       end if;
       UpdateMessages;
    end UpdateCombatUI;
+
+   -- ****if* CUI/Set_Boarding_Command
+   -- FUNCTION
+   -- Set boarding order for the selected crew member
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Set_Boarding_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Boarding_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      OrderIndex: Natural := 0;
+   begin
+      for I in PlayerShip.Crew.Iterate loop
+         if PlayerShip.Crew(I).Order = Boarding then
+            OrderIndex := OrderIndex + 1;
+         end if;
+         if Crew_Container.To_Index(I) = MemberIndex then
+            if PlayerShip.Crew(I).Order /= Boarding then
+               GiveOrders(PlayerShip, Crew_Container.To_Index(I), Boarding, 0);
+               BoardingOrders.Append(New_Item => 0);
+            else
+               GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
+               BoardingOrders.Delete(Index => OrderIndex);
+               OrderIndex := OrderIndex - 1;
+            end if;
+            exit;
+         end if;
+      end loop;
+      UpdateCombatUI;
+      return TCL_OK;
+   end Set_Boarding_Command;
 
    procedure ShowCombatUI(NewCombat: Boolean := True) is
       Label: Ttk_Label;
@@ -636,6 +683,7 @@ package body Combat.UI is
             Bind(CombatFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
             PilotOrder := 2;
             EngineerOrder := 3;
+            AddCommand("SetBoarding", Set_Boarding_Command'Access);
          end if;
          configure(Label, "-text {" & To_String(Enemy.Ship.Description) & "}");
          for Member of PlayerShip.Crew loop
