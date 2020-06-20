@@ -257,9 +257,20 @@ package body Maps.UI.Commands is
         To_Unbounded_String
           (Index
              (MapView, "@" & CArgv.Arg(Argv, 1) & "," & CArgv.Arg(Argv, 2)));
+      if StartY + Integer'Value(Slice(MapIndex, 1, Index(MapIndex, ".") - 1)) -
+        1 <
+        1 then
+         return TCL_OK;
+      end if;
       MapY :=
         StartY + Integer'Value(Slice(MapIndex, 1, Index(MapIndex, ".") - 1)) -
         1;
+      if StartX +
+        Integer'Value
+          (Slice(MapIndex, Index(MapIndex, ".") + 1, Length(MapIndex))) <
+        1 then
+         return TCL_OK;
+      end if;
       MapX :=
         StartX +
         Integer'Value
