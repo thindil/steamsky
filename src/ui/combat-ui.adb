@@ -355,9 +355,12 @@ package body Combat.UI is
          end loop;
          ComboBox :=
            Create
-             (Widget_Image(Frame) & ".gunorders" & To_String(GunIndex),
+             (Widget_Image(Frame) & ".gunorder" & To_String(GunIndex),
               "-values [list" & To_String(GunnerOrders) & "]");
          Current(ComboBox, Natural'Image(Guns(I)(2) - 1));
+         Bind
+           (ComboBox, "<<ComboboxSelected>>",
+            "{SetCombatOrder " & To_String(GunIndex) & "}");
          Tcl.Tk.Ada.Grid.Grid
            (ComboBox,
             "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
@@ -691,7 +694,7 @@ package body Combat.UI is
 --         Set_Visible_Child_Name(CombatStack, "shipcombat");
 --      end if;
 --      if Get_Visible_Child_Name(CombatStack) = "shipcombat" then
-         UpdateCombatUI;
+      UpdateCombatUI;
 --      else
 --         RefreshBoardingUI;
 --      end if;
@@ -723,6 +726,37 @@ package body Combat.UI is
       ShowCombatUI(False);
       return TCL_OK;
    end Show_Combat_UI_Command;
+
+   -- ****if* CUI/Set_Combat_Order_Command
+   -- FUNCTION
+   -- Set combat order for the selected crew member
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Set_Combat_Order_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Combat_Order_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      ComboBox: Ttk_ComboBox;
+   begin
+      ComboBox.Interp := Interp;
+      if CArgv.Arg(Argv, 1) = "pilot" then
+         ComboBox.Name :=
+           New_String(".paned.combatframe.canvas.combat.left.crew.pilotorder");
+      end if;
+      return TCL_OK;
+   end Set_Combat_Order_Command;
 
    procedure ShowCombatUI(NewCombat: Boolean := True) is
       Label: Ttk_Label;
@@ -772,6 +806,7 @@ package body Combat.UI is
             AddCommand("SetBoarding", Set_Boarding_Command'Access);
             AddCommand("NextTurn", Next_Turn_Command'Access);
             AddCommand("ShowCombatUI", Show_Combat_UI_Command'Access);
+            AddCommand("SetCombatOrder", Set_Combat_Order_Command'Access);
          else
             Button.Name := New_String(".paned.combatframe.canvas.combat.next");
             Tcl.Tk.Ada.Grid.Grid(Button);
