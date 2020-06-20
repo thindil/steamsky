@@ -42,6 +42,7 @@ with Bases; use Bases;
 with Config; use Config;
 with Crew; use Crew;
 with Events; use Events;
+with Factions; use Factions;
 with Items; use Items;
 with Maps; use Maps;
 with Messages; use Messages;
@@ -749,12 +750,63 @@ package body Combat.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       ComboBox: Ttk_ComboBox;
+      GunIndex: Positive;
    begin
       ComboBox.Interp := Interp;
       if CArgv.Arg(Argv, 1) = "pilot" then
          ComboBox.Name :=
            New_String(".paned.combatframe.canvas.combat.left.crew.pilotorder");
+         PilotOrder := Positive'Value(Current(ComboBox)) + 1;
+         if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+             (To_Unbounded_String("sentientships")) then
+            AddMessage
+              ("Order for " &
+               To_String(PlayerShip.Crew(FindMember(Pilot)).Name) &
+               " was set on: " & Get(ComboBox),
+               CombatMessage);
+         else
+            AddMessage
+              ("Order for ship was set on: " & Get(ComboBox), CombatMessage);
+         end if;
+      elsif CArgv.Arg(Argv, 1) = "engineer" then
+         ComboBox.Name :=
+           New_String
+             (".paned.combatframe.canvas.combat.left.crew.engineerorder");
+         EngineerOrder := Positive'Value(Current(ComboBox)) + 1;
+         if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+             (To_Unbounded_String("sentientships")) then
+            AddMessage
+              ("Order for " &
+               To_String(PlayerShip.Crew(FindMember(Engineer)).Name) &
+               " was set on: " & Get(ComboBox),
+               CombatMessage);
+         else
+            AddMessage
+              ("Order for ship was set on: " & Get(ComboBox), CombatMessage);
+         end if;
+      else
+         ComboBox.Name :=
+           New_String
+             (".paned.combatframe.canvas.combat.left.crew.gunorder" &
+              CArgv.Arg(Argv, 1));
+         GunIndex := Positive'Value(CArgv.Arg(Argv, 1));
+         Guns(GunIndex)(2) := Positive'Value(Current(ComboBox)) + 1;
+         if Current(ComboBox) = "0" then
+            Guns(GunIndex)(3) := 0;
+         else
+            Guns(GunIndex)(3) :=
+              Modules_List(PlayerShip.Modules(Guns(GunIndex)(1)).ProtoIndex)
+                .Speed;
+         end if;
+         AddMessage
+           ("Order for " &
+            To_String
+              (PlayerShip.Crew(PlayerShip.Modules(Guns(GunIndex)(1)).Owner(1))
+                 .Name) &
+            " was set on: " & Get(ComboBox),
+            CombatMessage);
       end if;
+      UpdateMessages;
       return TCL_OK;
    end Set_Combat_Order_Command;
 
