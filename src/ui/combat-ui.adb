@@ -28,6 +28,7 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 use Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -644,13 +645,94 @@ package body Combat.UI is
       return TCL_OK;
    end Set_Boarding_Command;
 
+   -- ****if* CUI/Next_Turn_Command
+   -- FUNCTION
+   -- Execute combat orders and go to next turn
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Next_Turn_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Next_Turn_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      Button: Ttk_Button;
+   begin
+      CombatTurn;
+      if EndCombat then
+         UpdateCombatUI;
+         Button.Interp := Interp;
+         Button.Name := New_String(".paned.combatframe.canvas.combat.next");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Button);
+         Button.Name := New_String(".header.closebutton");
+         configure(Button, "-command {ShowSkyMap}");
+         Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
+--         if Get_Visible_Child_Name(CombatStack) = "boarding" then
+--            Set_Visible_Child_Name(CombatStack, "shipcombat");
+--         end if;
+         return TCL_OK;
+      end if;
+--      if PlayerShip.Crew(1).Order = Boarding and
+--        Get_Visible_Child_Name(CombatStack) = "shipcombat" then
+--         Set_Visible_Child_Name(CombatStack, "boarding");
+--      end if;
+--      if PlayerShip.Crew(1).Order /= Boarding and
+--        Get_Visible_Child_Name(CombatStack) = "boarding" then
+--         Set_Visible_Child_Name(CombatStack, "shipcombat");
+--      end if;
+--      if Get_Visible_Child_Name(CombatStack) = "shipcombat" then
+         UpdateCombatUI;
+--      else
+--         RefreshBoardingUI;
+--      end if;
+      return TCL_OK;
+   end Next_Turn_Command;
+
+   -- ****if* CUI/Show_Combat_UI_Command
+   -- FUNCTION
+   -- Show combat UI
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Show_Combat_UI_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Combat_UI_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+   begin
+      ShowCombatUI(False);
+      return TCL_OK;
+   end Show_Combat_UI_Command;
+
    procedure ShowCombatUI(NewCombat: Boolean := True) is
       Label: Ttk_Label;
       Paned: Ttk_PanedWindow;
       CombatCanvas: Tk_Canvas;
       CombatFrame: Ttk_Frame;
       CombatStarted: Boolean;
+      Button: Ttk_Button;
    begin
+      Button.Interp := Get_Context;
       if NewCombat then
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0
            and then EnemyName /=
@@ -688,7 +770,14 @@ package body Combat.UI is
             PilotOrder := 2;
             EngineerOrder := 3;
             AddCommand("SetBoarding", Set_Boarding_Command'Access);
+            AddCommand("NextTurn", Next_Turn_Command'Access);
+            AddCommand("ShowCombatUI", Show_Combat_UI_Command'Access);
+         else
+            Button.Name := New_String(".paned.combatframe.canvas.combat.next");
+            Tcl.Tk.Ada.Grid.Grid(Button);
          end if;
+         Button.Name := New_String(".header.closebutton");
+         configure(Button, "-command ShowCombatUI");
          configure(Label, "-text {" & To_String(Enemy.Ship.Description) & "}");
          for Member of PlayerShip.Crew loop
             if Member.Order = Rest
