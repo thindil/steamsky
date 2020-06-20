@@ -272,8 +272,9 @@ package body Combat.UI is
             Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
             " ");
          for J in 1 .. Slice_Count(Tokens) loop
+            Item.Interp := Get_Context;
             Item.Name := New_String(Slice(Tokens, J));
-            Tcl.Tk.Ada.Grid.Grid_Remove(Item);
+            Destroy(Item);
          end loop;
       end loop;
       for I in Guns.Iterate loop
@@ -370,8 +371,9 @@ package body Combat.UI is
             Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
             " ");
          for J in 1 .. Slice_Count(Tokens) loop
+            Item.Interp := Get_Context;
             Item.Name := New_String(Slice(Tokens, J));
-            Tcl.Tk.Ada.Grid.Grid_Remove(Item);
+            Destroy(Item);
          end loop;
       end loop;
       for Module of PlayerShip.Modules loop
@@ -506,8 +508,9 @@ package body Combat.UI is
                Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
                " ");
             for J in 1 .. Slice_Count(Tokens) loop
+               Item.Interp := Get_Context;
                Item.Name := New_String(Slice(Tokens, J));
-               Tcl.Tk.Ada.Grid.Grid_Remove(Item);
+               Destroy(Item);
             end loop;
          end loop;
          Row := 0;
@@ -563,8 +566,9 @@ package body Combat.UI is
                Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
                " ");
             for J in 1 .. Slice_Count(Tokens) loop
+               Item.Interp := Get_Context;
                Item.Name := New_String(Slice(Tokens, J));
-               Tcl.Tk.Ada.Grid.Grid_Remove(Item);
+               Destroy(Item);
             end loop;
          end loop;
          declare
