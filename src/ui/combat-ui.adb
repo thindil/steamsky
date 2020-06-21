@@ -667,6 +667,7 @@ package body Combat.UI is
          "[expr " & Winfo_Get(CombatFrame, "reqwidth") & " / 2] [expr " &
          Winfo_Get(CombatFrame, "reqheight") & " / 2] -window " &
          Widget_Image(CombatFrame));
+      Add_Tag(CombatCanvas, "child", "all");
       Tcl_Eval(Get_Context, "update");
       configure
         (CombatCanvas,
@@ -722,13 +723,13 @@ package body Combat.UI is
       if PlayerShip.Crew(1).Order = Boarding and
         Winfo_Get(Frame, "ismapped") = "1" then
          Tcl.Tk.Ada.Widgets.Canvas.Delete
-           (CombatCanvas, ".paned.combatframe.canvas.combat");
+           (CombatCanvas, "child");
          ShowCombatFrame(".boarding");
       end if;
       if PlayerShip.Crew(1).Order /= Boarding and
         Winfo_Get(Frame, "ismapped") = "0" then
          Tcl.Tk.Ada.Widgets.Canvas.Delete
-           (CombatCanvas, ".paned.combatframe.canvas.boarding");
+           (CombatCanvas, "child");
          ShowCombatFrame(".combat");
       end if;
       if Winfo_Get(Frame, "ismapped") = "1" then
