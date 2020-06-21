@@ -684,6 +684,8 @@ package body Combat.UI is
       Frame, Item: Ttk_Frame;
       Tokens: Slice_Set;
       Rows: Natural := 0;
+      OrderName: Unbounded_String;
+      ProgressBar: Ttk_ProgressBar;
    begin
       Frame.Interp := Get_Context;
       Frame.Name :=
@@ -705,12 +707,36 @@ package body Combat.UI is
          Append(OrdersList, "Attack " & Enemy.Ship.Crew(I).Name);
          Label :=
            Create
-             (Widget_Image(Frame) & ".name",
+             (Widget_Image(Frame) & ".name" &
+              Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
               "-text {" & To_String(Enemy.Ship.Crew(I).Name) & "}");
          Tcl.Tk.Ada.Grid.Grid
-           (Label, "-row" & Natural'Image(Crew_Container.To_Index(I)));
+           (Label, "-row" & Positive'Image(Crew_Container.To_Index(I)));
+         ProgressBar :=
+           Create
+             (Widget_Image(Frame) & ".health" &
+              Trim(Natural'Image(Crew_Container.To_Index(I)), Left),
+              "-orient horizontal -value " &
+              Natural'Image(Enemy.Ship.Crew(I).Health));
+         Tcl.Tk.Ada.Grid.Grid
+           (ProgressBar,
+            "-column 1 -row" & Positive'Image(Crew_Container.To_Index(I)));
+         OrderName :=
+           To_Unbounded_String(Crew_Orders'Image(Enemy.Ship.Crew(I).Order));
+         Replace_Slice
+           (OrderName, 2, Length(OrderName),
+            To_Lower(Slice(OrderName, 2, Length(OrderName))));
+         Label :=
+           Create
+             (Widget_Image(Frame) & ".order" &
+              Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
+              "-text {" & To_String(OrderName) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Label,
+            "-column 2 -row" & Positive'Image(Crew_Container.To_Index(I)));
       end loop;
       Append(OrdersList, "Back to the ship");
+      UpdateMessages;
    end UpdateBoardingUI;
 
    -- ****if* CUI/Next_Turn_Command
