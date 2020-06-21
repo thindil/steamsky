@@ -561,46 +561,46 @@ package body Combat.UI is
       end;
 --      if (HarpoonDuration > 0 or Enemy.HarpoonDuration > 0) and
 --        ProtoShips_List(EnemyShipIndex).Crew.Length > 0 then
-         Frame.Name :=
-           New_String(".paned.combatframe.canvas.combat.right.boarding");
-         Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
-         Rows := Natural'Value(Slice(Tokens, 2));
-         for I in 0 .. (Rows - 1) loop
-            Create
-              (Tokens,
-               Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
-               " ");
-            for J in 1 .. Slice_Count(Tokens) loop
-               Item.Interp := Get_Context;
-               Item.Name := New_String(Slice(Tokens, J));
-               Destroy(Item);
-            end loop;
+      Frame.Name :=
+        New_String(".paned.combatframe.canvas.combat.right.boarding");
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
+      Rows := Natural'Value(Slice(Tokens, 2));
+      for I in 0 .. (Rows - 1) loop
+         Create
+           (Tokens,
+            Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
+            " ");
+         for J in 1 .. Slice_Count(Tokens) loop
+            Item.Interp := Get_Context;
+            Item.Name := New_String(Slice(Tokens, J));
+            Destroy(Item);
          end loop;
-         declare
-            CheckButton: Ttk_CheckButton;
-         begin
-            Row := 1;
-            for Member of PlayerShip.Crew loop
-               CheckButton :=
-                 Create
-                   (Widget_Image(Frame) & ".board" &
-                    Trim(Positive'Image(Row), Left),
-                    "-text {" & To_String(Member.Name) & "} -variable board" &
-                    Trim(Positive'Image(Row), Left) &
-                    " -command {SetBoarding" & Positive'Image(Row) & "}");
-               if Member.Order = Boarding then
-                  Tcl_SetVar
-                    (Frame.Interp, "board" & Trim(Positive'Image(Row), Left),
-                     "1");
-               else
-                  Tcl_SetVar
-                    (Frame.Interp, "board" & Trim(Positive'Image(Row), Left),
-                     "0");
-               end if;
-               Tcl.Tk.Ada.Grid.Grid(CheckButton, "-row" & Positive'Image(Row));
-               Row := Row + 1;
-            end loop;
-         end;
+      end loop;
+      declare
+         CheckButton: Ttk_CheckButton;
+      begin
+         Row := 1;
+         for Member of PlayerShip.Crew loop
+            CheckButton :=
+              Create
+                (Widget_Image(Frame) & ".board" &
+                 Trim(Positive'Image(Row), Left),
+                 "-text {" & To_String(Member.Name) & "} -variable board" &
+                 Trim(Positive'Image(Row), Left) & " -command {SetBoarding" &
+                 Positive'Image(Row) & "}");
+            if Member.Order = Boarding then
+               Tcl_SetVar
+                 (Frame.Interp, "board" & Trim(Positive'Image(Row), Left),
+                  "1");
+            else
+               Tcl_SetVar
+                 (Frame.Interp, "board" & Trim(Positive'Image(Row), Left),
+                  "0");
+            end if;
+            Tcl.Tk.Ada.Grid.Grid(CheckButton, "-row" & Positive'Image(Row));
+            Row := Row + 1;
+         end loop;
+      end;
 --      end if;
       UpdateMessages;
    end UpdateCombatUI;
@@ -674,6 +674,45 @@ package body Combat.UI is
          "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
    end ShowCombatFrame;
 
+   -- ****if* CUI/UpdateBoardingUI
+   -- FUNCTION
+   -- Update information about boarding party: remove old UI and create new elements
+   -- SOURCE
+   procedure UpdateBoardingUI is
+      OrdersList: Unbounded_String;
+      Label: Ttk_Label;
+      Frame, Item: Ttk_Frame;
+      Tokens: Slice_Set;
+      Rows: Natural := 0;
+   begin
+      Frame.Interp := Get_Context;
+      Frame.Name :=
+        New_String(".paned.combatframe.canvas.boarding.right.enemy");
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
+      Rows := Natural'Value(Slice(Tokens, 2));
+      for I in 1 .. (Rows - 1) loop
+         Create
+           (Tokens,
+            Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
+            " ");
+         for J in 1 .. Slice_Count(Tokens) loop
+            Item.Interp := Get_Context;
+            Item.Name := New_String(Slice(Tokens, J));
+            Destroy(Item);
+         end loop;
+      end loop;
+      for I in Enemy.Ship.Crew.Iterate loop
+         Append(OrdersList, "Attack " & Enemy.Ship.Crew(I).Name);
+         Label :=
+           Create
+             (Widget_Image(Frame) & ".name",
+              "-text {" & To_String(Enemy.Ship.Crew(I).Name) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Label, "-row" & Natural'Image(Crew_Container.To_Index(I)));
+      end loop;
+      Append(OrdersList, "Back to the ship");
+   end UpdateBoardingUI;
+
    -- ****if* CUI/Next_Turn_Command
    -- FUNCTION
    -- Execute combat orders and go to next turn
@@ -722,20 +761,18 @@ package body Combat.UI is
       end if;
       if PlayerShip.Crew(1).Order = Boarding and
         Winfo_Get(Frame, "ismapped") = "1" then
-         Tcl.Tk.Ada.Widgets.Canvas.Delete
-           (CombatCanvas, "child");
+         Tcl.Tk.Ada.Widgets.Canvas.Delete(CombatCanvas, "child");
          ShowCombatFrame(".boarding");
       end if;
       if PlayerShip.Crew(1).Order /= Boarding and
         Winfo_Get(Frame, "ismapped") = "0" then
-         Tcl.Tk.Ada.Widgets.Canvas.Delete
-           (CombatCanvas, "child");
+         Tcl.Tk.Ada.Widgets.Canvas.Delete(CombatCanvas, "child");
          ShowCombatFrame(".combat");
       end if;
       if Winfo_Get(Frame, "ismapped") = "1" then
          UpdateCombatUI;
---      else
---         RefreshBoardingUI;
+      else
+         UpdateBoardingUI;
       end if;
       return TCL_OK;
    end Next_Turn_Command;
