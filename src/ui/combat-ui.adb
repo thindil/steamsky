@@ -559,8 +559,8 @@ package body Combat.UI is
             Row := Row + 1;
          end loop;
       end;
-      if (HarpoonDuration > 0 or Enemy.HarpoonDuration > 0) and
-        ProtoShips_List(EnemyShipIndex).Crew.Length > 0 then
+--      if (HarpoonDuration > 0 or Enemy.HarpoonDuration > 0) and
+--        ProtoShips_List(EnemyShipIndex).Crew.Length > 0 then
          Frame.Name :=
            New_String(".paned.combatframe.canvas.combat.right.boarding");
          Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
@@ -601,7 +601,7 @@ package body Combat.UI is
                Row := Row + 1;
             end loop;
          end;
-      end if;
+--      end if;
       UpdateMessages;
    end UpdateCombatUI;
 
@@ -649,6 +649,30 @@ package body Combat.UI is
       return TCL_OK;
    end Set_Boarding_Command;
 
+   -- ****if* Combat.UI/ShowCombatFrame
+   -- FUNCTION
+   -- Show ship to ship combat UI or boarding UI
+   -- SOURCE
+   procedure ShowCombatFrame(FrameName: String) is
+      -- ****
+      CombatCanvas: Tk_Canvas;
+      CombatFrame: Ttk_Frame;
+   begin
+      CombatCanvas.Interp := Get_Context;
+      CombatCanvas.Name := New_String(".paned.combatframe.canvas");
+      CombatFrame.Interp := Get_Context;
+      CombatFrame.Name := New_String(Widget_Image(CombatCanvas) & FrameName);
+      Canvas_Create
+        (CombatCanvas, "window",
+         "[expr " & Winfo_Get(CombatFrame, "reqwidth") & " / 2] [expr " &
+         Winfo_Get(CombatFrame, "reqheight") & " / 2] -window " &
+         Widget_Image(CombatFrame));
+      Tcl_Eval(Get_Context, "update");
+      configure
+        (CombatCanvas,
+         "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
+   end ShowCombatFrame;
+
    -- ****if* CUI/Next_Turn_Command
    -- FUNCTION
    -- Execute combat orders and go to next turn
@@ -671,34 +695,47 @@ package body Combat.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       Button: Ttk_Button;
+      Frame: Ttk_Frame;
+      CombatCanvas: Tk_Canvas;
    begin
       CombatTurn;
+      CombatCanvas.Interp := Interp;
+      CombatCanvas.Name := New_String(".paned.combatframe.canvas");
+      Frame.Interp := Interp;
+      Frame.Name := New_String(Widget_Image(CombatCanvas) & ".combat");
       if EndCombat then
          UpdateCombatUI;
          Button.Interp := Interp;
-         Button.Name := New_String(".paned.combatframe.canvas.combat.next");
+         Button.Name := New_String(Widget_Image(Frame) & ".next");
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
          Button.Name := New_String(".header.closebutton");
          configure(Button, "-command {ShowSkyMap}");
          Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
---         if Get_Visible_Child_Name(CombatStack) = "boarding" then
---            Set_Visible_Child_Name(CombatStack, "shipcombat");
---         end if;
+         Frame.Name := New_String(Widget_Image(CombatCanvas) & ".boarding");
+         if Winfo_Get(Frame, "ismapped") = "1" then
+            Tcl.Tk.Ada.Widgets.Canvas.Delete
+              (CombatCanvas, ".paned.combatframe.canvas.boarding");
+            ShowCombatFrame(".combat");
+         end if;
          return TCL_OK;
       end if;
---      if PlayerShip.Crew(1).Order = Boarding and
---        Get_Visible_Child_Name(CombatStack) = "shipcombat" then
---         Set_Visible_Child_Name(CombatStack, "boarding");
---      end if;
---      if PlayerShip.Crew(1).Order /= Boarding and
---        Get_Visible_Child_Name(CombatStack) = "boarding" then
---         Set_Visible_Child_Name(CombatStack, "shipcombat");
---      end if;
---      if Get_Visible_Child_Name(CombatStack) = "shipcombat" then
-      UpdateCombatUI;
+      if PlayerShip.Crew(1).Order = Boarding and
+        Winfo_Get(Frame, "ismapped") = "1" then
+         Tcl.Tk.Ada.Widgets.Canvas.Delete
+           (CombatCanvas, ".paned.combatframe.canvas.combat");
+         ShowCombatFrame(".boarding");
+      end if;
+      if PlayerShip.Crew(1).Order /= Boarding and
+        Winfo_Get(Frame, "ismapped") = "0" then
+         Tcl.Tk.Ada.Widgets.Canvas.Delete
+           (CombatCanvas, ".paned.combatframe.canvas.boarding");
+         ShowCombatFrame(".combat");
+      end if;
+      if Winfo_Get(Frame, "ismapped") = "1" then
+         UpdateCombatUI;
 --      else
 --         RefreshBoardingUI;
---      end if;
+      end if;
       return TCL_OK;
    end Next_Turn_Command;
 
@@ -886,16 +923,7 @@ package body Combat.UI is
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
          cget(Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
-      CombatFrame.Name := New_String(Widget_Image(CombatCanvas) & ".combat");
-      Canvas_Create
-        (CombatCanvas, "window",
-         "[expr " & Winfo_Get(CombatFrame, "reqwidth") & " / 2] [expr " &
-         Winfo_Get(CombatFrame, "reqheight") & " / 2] -window " &
-         Widget_Image(CombatFrame));
-      Tcl_Eval(Get_Context, "update");
-      configure
-        (CombatCanvas,
-         "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
+      ShowCombatFrame(".combat");
       ShowScreen("combatframe");
    end ShowCombatUI;
 
