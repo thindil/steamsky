@@ -34,12 +34,12 @@ set boardingframe [ttk::frame $combatcanvas.boarding]
 grid [ttk::frame $boardingframe.left]
 grid [ttk::frame $boardingframe.left.crew]
 grid [ttk::label $boardingframe.left.crew.name -text {Name}] -row 0 -column 1
-grid [ttk::label $boardingframe.left.crew.health -text {Health}]
-grid [ttk::label $boardingframe.left.crew.order -text {Order}] -row 0 -column 2
-grid [ttk::frame $boardingframe.right]
+grid [ttk::label $boardingframe.left.crew.health -text {Health}] -row 0 -column 2
+grid [ttk::label $boardingframe.left.crew.order -text {Order}] -row 0 -column 3
+grid [ttk::frame $boardingframe.right] -row 0 -column 1
 grid [ttk::frame $boardingframe.right.enemy]
 grid [ttk::label $boardingframe.right.enemy.name -text {Name}] -row 0 -column 1
-grid [ttk::label $boardingframe.right.enemy.health -text {Health}]
-grid [ttk::label $boardingframe.right.enemy.order -text {Order}] -row 0 -column 2
+grid [ttk::label $boardingframe.right.enemy.health -text {Health}] -row 0 -column 2
+grid [ttk::label $boardingframe.right.enemy.order -text {Order}] -row 0 -column 3
 grid [ttk::button $boardingframe.next -text {Next turn [Space]} -command NextTurn] -columnspan 2 -sticky we
 bind . <space> {InvokeButton $boardingframe.next}
