@@ -38,6 +38,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with Config; use Config;
 with Crew; use Crew;
@@ -679,12 +680,11 @@ package body Combat.UI is
    -- Update information about boarding party: remove old UI and create new elements
    -- SOURCE
    procedure UpdateBoardingUI is
-      OrdersList: Unbounded_String;
+      OrdersList, OrderName, Tooltip: Unbounded_String;
       Label: Ttk_Label;
       Frame, Item: Ttk_Frame;
       Tokens: Slice_Set;
       Rows: Natural := 0;
-      OrderName: Unbounded_String;
       ProgressBar: Ttk_ProgressBar;
    begin
       Frame.Interp := Get_Context;
@@ -705,11 +705,20 @@ package body Combat.UI is
       end loop;
       for I in Enemy.Ship.Crew.Iterate loop
          Append(OrdersList, "Attack " & Enemy.Ship.Crew(I).Name);
+         Tooltip := To_Unbounded_String("Uses: ");
+         for Item of Enemy.Ship.Crew(I).Equipment loop
+            if Item /= 0 then
+               Append
+                 (Tooltip,
+                  LF & GetItemName(Enemy.Ship.Crew(I).Inventory(Item)));
+            end if;
+         end loop;
          Label :=
            Create
              (Widget_Image(Frame) & ".name" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
               "-text {" & To_String(Enemy.Ship.Crew(I).Name) & "}");
+         Add(Label, To_String(Tooltip));
          Tcl.Tk.Ada.Grid.Grid
            (Label, "-row" & Positive'Image(Crew_Container.To_Index(I)));
          ProgressBar :=
@@ -718,6 +727,7 @@ package body Combat.UI is
               Trim(Natural'Image(Crew_Container.To_Index(I)), Left),
               "-orient horizontal -value " &
               Natural'Image(Enemy.Ship.Crew(I).Health));
+         Add(ProgressBar, To_String(Tooltip));
          Tcl.Tk.Ada.Grid.Grid
            (ProgressBar,
             "-column 1 -row" & Positive'Image(Crew_Container.To_Index(I)));
@@ -731,6 +741,7 @@ package body Combat.UI is
              (Widget_Image(Frame) & ".order" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
               "-text {" & To_String(OrderName) & "}");
+         Add(Label, To_String(Tooltip));
          Tcl.Tk.Ada.Grid.Grid
            (Label,
             "-column 2 -row" & Positive'Image(Crew_Container.To_Index(I)));
