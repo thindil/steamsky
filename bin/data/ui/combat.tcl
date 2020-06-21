@@ -3,6 +3,8 @@ set combatcanvas [canvas .paned.combatframe.canvas -yscrollcommand [list .paned.
 grid $combatcanvas -sticky nwes
 grid [ttk::scrollbar .paned.combatframe.scrollx -orient horizontal -command [list $combatcanvas xview]] -row 1 -column 0 -columnspan 2 -sticky we
 grid [ttk::scrollbar .paned.combatframe.scrolly -orient vertical -command [list $combatcanvas yview]] -row 0 -column 1 -sticky ns
+
+# Ship to ship combat
 set combatframe [ttk::frame $combatcanvas.combat]
 grid [ttk::frame $combatframe.left]
 grid [ttk::frame $combatframe.left.crew]
@@ -26,3 +28,18 @@ grid [ttk::frame $combatframe.right.enemy.damage]
 grid [ttk::labelframe $combatframe.right.boarding -text {Boarding party:}]
 grid [ttk::button $combatframe.next -text {Next turn [Space]} -command NextTurn] -columnspan 2 -sticky we
 bind . <space> {InvokeButton $combatframe.next}
+
+# Boarding combat
+set boardingframe [ttk::frame $combatcanvas.boarding]
+grid [ttk::frame $boardingframe.left]
+grid [ttk::frame $boardingframe.left.crew]
+grid [ttk::label $boardingframe.left.crew.name -text {Name}] -row 0 -column 1
+grid [ttk::label $boardingframe.left.crew.health -text {Health}]
+grid [ttk::label $boardingframe.left.crew.order -text {Order}] -row 0 -column 2
+grid [ttk::frame $boardingframe.right]
+grid [ttk::frame $boardingframe.right.enemy]
+grid [ttk::label $boardingframe.right.enemy.name -text {Name}] -row 0 -column 1
+grid [ttk::label $boardingframe.right.enemy.health -text {Health}]
+grid [ttk::label $boardingframe.right.enemy.order -text {Order}] -row 0 -column 2
+grid [ttk::button $boardingframe.next -text {Next turn [Space]} -command NextTurn] -columnspan 2 -sticky we
+bind . <space> {InvokeButton $boardingframe.next}
