@@ -93,6 +93,11 @@ package body Maps.UI is
       Menu.Add
         (GameMenu, "command",
          "-label {Resign from game} -command {ResignGame}");
+      for I in MenuAccelerators'Range loop
+         Entry_Configure
+           (GameMenu, Positive'Image(I),
+            "-accelerator {" & To_String(MenuAccelerators(I)) & "}");
+      end loop;
    end CreateGameMenu;
 
    procedure DeathConfirm is
@@ -838,9 +843,6 @@ package body Maps.UI is
       end if;
       CreateGameMenu;
       for I in MenuAccelerators'Range loop
-         Entry_Configure
-           (GameMenu, Positive'Image(I),
-            "-accelerator {" & To_String(MenuAccelerators(I)) & "}");
          Bind_To_Main_Window
            (Get_Context, "<" & To_String(MenuAccelerators(I)) & ">",
             "{.gamemenu invoke" & Positive'Image(I) & "}");
