@@ -14,6 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Ships; use Ships;
 
 -- ****h* Maps/MUI
@@ -43,6 +44,20 @@ package Maps.UI is
    -- Coordinates of the center point of the map
    -- SOURCE
    CenterX, CenterY: Positive;
+   -- ****
+
+   -- ****iv* MUI/GameMenu
+   -- FUNCTION
+   -- The main game menu
+   -- SOURCE
+   GameMenu: Tk_Menu;
+   -- ****
+
+   -- ****f* MUI/CreateGameMenu
+   -- FUNCTION
+   -- Create the main game menu. Clear old elements and add all default
+   -- SOURCE
+   procedure CreateGameMenu;
    -- ****
 
    -- ****f* MUI/UpdateHeader
