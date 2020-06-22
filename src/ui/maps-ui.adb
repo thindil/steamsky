@@ -26,7 +26,6 @@ with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
@@ -61,13 +60,6 @@ with Utils.UI; use Utils.UI;
 with WaitMenu;
 
 package body Maps.UI is
-
-   -- ****iv* MUI/GameMenu
-   -- FUNCTION
-   -- The main game menu
-   -- SOURCE
-   GameMenu: Tk_Menu;
-   -- ****
 
    -- ****if* MUI/CreateGameMenu
    -- FUNCTION

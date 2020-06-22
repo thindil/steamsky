@@ -27,6 +27,7 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
@@ -46,6 +47,7 @@ with Events; use Events;
 with Factions; use Factions;
 with Items; use Items;
 with Maps; use Maps;
+with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
 with Ships.Crew; use Ships.Crew;
@@ -859,6 +861,7 @@ package body Combat.UI is
               (CombatCanvas, ".paned.combatframe.canvas.boarding");
             ShowCombatFrame(".combat");
          end if;
+         CreateGameMenu;
          return TCL_OK;
       end if;
       if PlayerShip.Crew(1).Order = Boarding and
@@ -1095,6 +1098,9 @@ package body Combat.UI is
                   OrderMessage);
             end if;
          end loop;
+         Delete(GameMenu, "4", "5");
+         Delete(GameMenu, "5", "10");
+         Delete(GameMenu, "6");
       end if;
       UpdateCombatUI;
       configure
