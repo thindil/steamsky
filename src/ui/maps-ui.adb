@@ -45,6 +45,7 @@ with Crew; use Crew;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
+with Help.UI; use Help.UI;
 with Items; use Items;
 with MainMenu; use MainMenu;
 with Maps.UI.Commands;
@@ -73,7 +74,7 @@ package body Maps.UI is
       Menu.Add(GameMenu, "command", "-label {Ship cargo}");
       Menu.Add(GameMenu, "command", "-label {Crew information}");
       Menu.Add
-        (GameMenu, "command", "-label {Ship orders} -command {ShowOrders}");
+        (GameMenu, "command", "-label {Ship orders} -command ShowOrders");
       Menu.Add(GameMenu, "command", "-label {Crafting}");
       Menu.Add(GameMenu, "command", "-label {Last messages}");
       Menu.Add(GameMenu, "command", "-label {List of known bases}");
@@ -82,14 +83,13 @@ package body Maps.UI is
          "-label {List of known events} -command {ShowEvents}");
       Menu.Add(GameMenu, "command", "-label {Accepted missions}");
       Menu.Add(GameMenu, "command", "-label {Stories}");
+      Menu.Add(GameMenu, "command", "-label {Wait orders} -command ShowWait");
       Menu.Add
-        (GameMenu, "command", "-label {Wait orders} -command {ShowWait}");
-      Menu.Add
-        (GameMenu, "command", "-label {Game statistics} -command {ShowStats}");
-      Menu.Add(GameMenu, "command", "-label {Help}");
+        (GameMenu, "command", "-label {Game statistics} -command ShowStats");
+      Menu.Add(GameMenu, "command", "-label {Help} -command ShowHelp");
       Menu.Add(GameMenu, "command", "-label {Game options}");
       Menu.Add
-        (GameMenu, "command", "-label {Quit from game} -command {QuitGame}");
+        (GameMenu, "command", "-label {Quit from game} -command QuitGame");
       Menu.Add
         (GameMenu, "command",
          "-label {Resign from game} -command {ResignGame}");
@@ -837,6 +837,7 @@ package body Maps.UI is
          OrdersMenu.AddCommands;
          Maps.UI.Commands.AddCommands;
          WaitMenu.AddCommands;
+         Help.UI.AddCommands;
          Bind(MapView, "<Configure>", "DrawMap");
          Bind(MapView, "<Motion>", "{UpdateMapInfo %x %y}");
          Bind(MapView, "<1>", "{ShowDestinationMenu %x %y}");
