@@ -686,6 +686,8 @@ package body Combat.UI is
       Tokens: Slice_Set;
       Rows: Natural := 0;
       ProgressBar: Ttk_ProgressBar;
+      ComboBox: Ttk_ComboBox;
+      OrderIndex: Positive := 1;
    begin
       Frame.Interp := Get_Context;
       Frame.Name :=
@@ -704,7 +706,7 @@ package body Combat.UI is
          end loop;
       end loop;
       for I in Enemy.Ship.Crew.Iterate loop
-         Append(OrdersList, "Attack " & Enemy.Ship.Crew(I).Name);
+         Append(OrdersList, "{Attack " & Enemy.Ship.Crew(I).Name & "} ");
          Tooltip := To_Unbounded_String("Uses: ");
          for Item of Enemy.Ship.Crew(I).Equipment loop
             if Item /= 0 then
@@ -746,7 +748,66 @@ package body Combat.UI is
            (Label,
             "-column 2 -row" & Positive'Image(Crew_Container.To_Index(I)));
       end loop;
-      Append(OrdersList, "Back to the ship");
+      Append(OrdersList, " {Back to the ship}");
+      Frame.Name := New_String(".paned.combatframe.canvas.boarding.left.crew");
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
+      Rows := Natural'Value(Slice(Tokens, 2));
+      for I in 1 .. (Rows - 1) loop
+         Create
+           (Tokens,
+            Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
+            " ");
+         for J in 1 .. Slice_Count(Tokens) loop
+            Item.Interp := Get_Context;
+            Item.Name := New_String(Slice(Tokens, J));
+            Destroy(Item);
+         end loop;
+      end loop;
+      for I in PlayerShip.Crew.Iterate loop
+         if PlayerShip.Crew(I).Order /= Boarding then
+            goto End_Of_Loop;
+         end if;
+         Tooltip := To_Unbounded_String("Uses: ");
+         for Item of PlayerShip.Crew(I).Equipment loop
+            if Item /= 0 then
+               Append
+                 (Tooltip,
+                  LF & GetItemName(PlayerShip.Crew(I).Inventory(Item)));
+            end if;
+         end loop;
+         Label :=
+           Create
+             (Widget_Image(Frame) & ".name" &
+              Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
+              "-text {" & To_String(PlayerShip.Crew(I).Name) & "}");
+         Add(Label, To_String(Tooltip));
+         Tcl.Tk.Ada.Grid.Grid
+           (Label, "-row" & Positive'Image(Crew_Container.To_Index(I)));
+         ProgressBar :=
+           Create
+             (Widget_Image(Frame) & ".health" &
+              Trim(Natural'Image(Crew_Container.To_Index(I)), Left),
+              "-orient horizontal -value " &
+              Natural'Image(PlayerShip.Crew(I).Health));
+         Add(ProgressBar, To_String(Tooltip));
+         Tcl.Tk.Ada.Grid.Grid
+           (ProgressBar,
+            "-column 1 -row" & Positive'Image(Crew_Container.To_Index(I)));
+         ComboBox :=
+           Create
+             (Widget_Image(Frame) & ".order" &
+              Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
+              "-values [list " & To_String(OrdersList) & "] -state readonly");
+         Current
+           (ComboBox,
+            Natural'Image(BoardingOrders(Crew_Container.To_Index(I))));
+         Add(ComboBox, To_String(Tooltip));
+         Tcl.Tk.Ada.Grid.Grid
+           (ComboBox,
+            "-column 2 -row" & Positive'Image(Crew_Container.To_Index(I)));
+         OrderIndex := OrderIndex + 1;
+         <<End_Of_Loop>>
+      end loop;
       UpdateMessages;
    end UpdateBoardingUI;
 
