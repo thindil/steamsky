@@ -801,6 +801,10 @@ package body Combat.UI is
          Current
            (ComboBox,
             Natural'Image(BoardingOrders(Crew_Container.To_Index(I))));
+         Bind
+           (ComboBox, "<<ComboboxSelected>>",
+            "{SetBoardingOrder" & Positive'Image(Crew_Container.To_Index(I)) &
+            Positive'Image(OrderIndex) & "}");
          Add(ComboBox, To_String(Tooltip));
          Tcl.Tk.Ada.Grid.Grid
            (ComboBox,
@@ -983,6 +987,44 @@ package body Combat.UI is
       return TCL_OK;
    end Set_Combat_Order_Command;
 
+   -- ****if* CUI/Set_Boarding_Order_Command
+   -- FUNCTION
+   -- Set boarding order for the selected player's ship crew member
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Set_Boarding_Order_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Boarding_Order_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      Combobox: Ttk_ComboBox;
+   begin
+      Combobox.Interp := Interp;
+      Combobox.Name :=
+        New_String
+          (".paned.combatframe.canvas.boarding.left.crew.order" &
+           CArgv.Arg(Argv, 1));
+      if Natural'Value(Current(Combobox)) + 1 >
+        Natural(Enemy.Ship.Crew.Length) then
+         BoardingOrders(Positive'Value(CArgv.Arg(Argv, 2))) := -1;
+      else
+         BoardingOrders(Positive'Value(CArgv.Arg(Argv, 2))) :=
+           Natural'Value(Current(Combobox)) + 1;
+      end if;
+      return TCL_OK;
+   end Set_Boarding_Order_Command;
+
    procedure ShowCombatUI(NewCombat: Boolean := True) is
       Label: Ttk_Label;
       Paned: Ttk_PanedWindow;
@@ -1032,6 +1074,7 @@ package body Combat.UI is
             AddCommand("NextTurn", Next_Turn_Command'Access);
             AddCommand("ShowCombatUI", Show_Combat_UI_Command'Access);
             AddCommand("SetCombatOrder", Set_Combat_Order_Command'Access);
+            AddCommand("SetBoardingOrder", Set_Boarding_Order_Command'Access);
          else
             Button.Name := New_String(".paned.combatframe.canvas.combat.next");
             Tcl.Tk.Ada.Grid.Grid(Button);
