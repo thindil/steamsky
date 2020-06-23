@@ -18,11 +18,12 @@ with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Cargv;
+with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
+with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Config; use Config;
@@ -54,10 +55,10 @@ package body Help.UI is
       pragma Unreferenced(ClientData, Argc, Argv);
       HelpWindow: Tk_Toplevel;
       X, Y: Integer;
+      Paned: Ttk_PanedWindow;
    begin
       Tcl_EvalFile
-         (Interp,
-         To_String(DataDirectory) & "ui" & Dir_Separator & "help.tcl");
+        (Interp, To_String(DataDirectory) & "ui" & Dir_Separator & "help.tcl");
       HelpWindow.Interp := Interp;
       HelpWindow.Name := New_String(".help");
       X :=
@@ -79,13 +80,50 @@ package body Help.UI is
          Trim(Positive'Image(GameSettings.WindowWidth), Left) & "x" &
          Trim(Positive'Image(GameSettings.WindowHeight), Left) & "+" &
          Trim(Positive'Image(X), Left) & "+" & Trim(Positive'Image(Y), Left));
-      Bind(HelpWindow, "<Escape>", "{destroy .help}");
+      Tcl_Eval(Interp, "update");
+      Paned.Interp := Interp;
+      Paned.Name := New_String(".help.paned");
+      SashPos(Paned, "0", Natural'Image(GameSettings.TopicsPosition));
       return TCL_OK;
    end Show_Help_Command;
+
+   -- ****f* HUI/Close_Help_Command
+   -- FUNCTION
+   -- Destroy help window and save sash position to the game configuration
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Close_Help_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Close_Help_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      HelpWindow: Tk_Toplevel;
+      Paned: Ttk_PanedWindow;
+   begin
+      Paned.Interp := Interp;
+      Paned.Name := New_String(".help.paned");
+      GameSettings.TopicsPosition := Natural'Value(SashPos(Paned, "0"));
+      HelpWindow.Interp := Interp;
+      HelpWindow.Name := New_String(".help");
+      Destroy(HelpWindow);
+      return TCL_OK;
+   end Close_Help_Command;
 
    procedure AddCommands is
    begin
       AddCommand("ShowHelp", Show_Help_Command'Access);
+      AddCommand("CloseHelp", Close_Help_Command'Access);
    end AddCommands;
 
 end Help.UI;
