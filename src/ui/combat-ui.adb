@@ -843,6 +843,7 @@ package body Combat.UI is
       CombatCanvas: Tk_Canvas;
    begin
       CombatTurn;
+      UpdateHeader;
       CombatCanvas.Interp := Interp;
       CombatCanvas.Name := New_String(".paned.combatframe.canvas");
       Frame.Interp := Interp;
