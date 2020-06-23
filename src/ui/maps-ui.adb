@@ -87,13 +87,12 @@ package body Maps.UI is
       Menu.Add(GameMenu, "command", "-label {Wait orders} -command ShowWait");
       Menu.Add
         (GameMenu, "command", "-label {Game statistics} -command ShowStats");
-      Menu.Add(GameMenu, "command", "-label {Help} -command ShowHelp");
+      Menu.Add(GameMenu, "command", "-label {Help} -command {ShowHelp 1}");
       Menu.Add(GameMenu, "command", "-label {Game options}");
       Menu.Add
         (GameMenu, "command", "-label {Quit from game} -command QuitGame");
       Menu.Add
-        (GameMenu, "command",
-         "-label {Resign from game} -command {ResignGame}");
+        (GameMenu, "command", "-label {Resign from game} -command ResignGame");
       for I in MenuAccelerators'Range loop
          Entry_Configure
            (GameMenu, Positive'Image(I),
