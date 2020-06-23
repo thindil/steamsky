@@ -29,6 +29,7 @@ with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with Combat.UI; use Combat.UI;
@@ -788,11 +789,15 @@ package body Maps.UI.Commands is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(ClientData, Argc, Argv);
+      Paned: Ttk_PanedWindow;
    begin
       if MessageBox
           ("-message {Are you sure want to quit?} -icon question -type yesno") =
         "yes" then
+         Paned.Interp := Interp;
+         Paned.Name := New_String(".paned");
+         GameSettings.MessagesPosition := Natural'Value(SashPos(Paned, "0"));
          EndGame(True);
          ShowMainMenu;
       end if;

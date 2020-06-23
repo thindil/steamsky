@@ -102,6 +102,7 @@ package body Maps.UI is
 
    procedure DeathConfirm is
       Button: Ttk_Button;
+      Paned: Ttk_PanedWindow;
    begin
       if MessageBox
           ("-message {You are dead. Would you like to see your game statistics?} -icon question -type yesno") =
@@ -116,6 +117,9 @@ package body Maps.UI is
          Delete(GameMenu, "6", "14");
          ShowStatistics;
       else
+         Paned.Interp := Get_Context;
+         Paned.Name := New_String(".paned");
+         GameSettings.MessagesPosition := Natural'Value(SashPos(Paned, "0"));
          EndGame(False);
          ShowMainMenu;
       end if;
