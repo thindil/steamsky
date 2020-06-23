@@ -120,9 +120,13 @@ package body MainMenu is
       Set
         (ComboBox, To_String(Careers_List(NewGameSettings.PlayerCareer).Name));
       ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
-      Set
-        (ComboBox,
-         To_String(BasesTypes_List(NewGameSettings.StartingBase).Name));
+      if NewGameSettings.StartingBase /= To_Unbounded_String("Any") then
+         Set
+           (ComboBox,
+            To_String(BasesTypes_List(NewGameSettings.StartingBase).Name));
+      else
+         Set(ComboBox, "Any");
+      end if;
       ComboBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.difficultylevel");
       Current(ComboBox, Natural'Image(NewGameSettings.DifficultyLevel));
