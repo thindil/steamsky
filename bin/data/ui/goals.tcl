@@ -1,6 +1,6 @@
 toplevel .goalsdialog -class Dialog
 wm title .goalsdialog {Steam Sky - Select Goal}
-wm transient .
+wm transient .goalsdialog .
 if {$tcl_platform(os) == "Linux"} {
    wm attributes .goalsdialog -type dialog
 }
