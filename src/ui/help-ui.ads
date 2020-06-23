@@ -13,8 +13,18 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+-- ****h* Help/HUI
+-- FUNCTION
+-- Provide code to show the game help to the player
+-- SOURCE
 package Help.UI is
+-- ****
 
+   -- ****f* Help.UI/AddCommands
+   -- FUNCTION
+   -- Add Tcl commands related to the help UI
+   -- SOURCE
    procedure AddCommands;
+   -- ****
 
 end Help.UI;

@@ -1,5 +1,9 @@
-toplevel .help
+toplevel .help -class Dialog
 wm title .help {Steam Sky - Help}
+wm transient .help .
+if {$tcl_platform(os) == "Linux"} {
+   wm attributes .help -type dialog
+}
 grid [ttk::panedwindow .help.paned]
 .help.paned add [ttk::treeview .help.paned.topics -show tree]
 .help.paned add [ttk::frame .help.paned.content]
@@ -10,4 +14,4 @@ $helpview tag configure bold -font {-family Roboto -size 14 -weight bold}
 $helpview tag configure underline -font {-family Roboto -size 14 -underline true}
 $helpview tag configure italic -font {-family Roboto -size 14 -slant italic}
 pack $helpview -side top -fill both
-bind .help <Escape> {destroy .help}
+bind .help <Escape> {CloseHelp}
