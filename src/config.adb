@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -53,8 +53,8 @@ package body Config is
          InterfaceTheme => To_Unbounded_String("default"),
          MessagesOrder => OLDER_FIRST, AutoAskForBases => False,
          AutoAskForEvents => False, ShowTooltips => True,
-         ShowLastMessages => True, MessagesPosition => 0, FullScreen => False,
-         AutoCloseMessagesTime => 6, AutoSave => NONE, TopicsPosition => 0,
+         ShowLastMessages => True, MessagesPosition => 400, FullScreen => False,
+         AutoCloseMessagesTime => 6, AutoSave => NONE, TopicsPosition => 200,
          ShowBaseInfo => True, ShowCargoInfo => True,
          ShowInventoryInfo => True, ShowNumbers => False);
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
