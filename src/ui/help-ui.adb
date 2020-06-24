@@ -28,7 +28,9 @@ with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
+with BasesTypes; use BasesTypes;
 with Config; use Config;
+with Factions; use Factions;
 with Game; use Game;
 with Items; use Items;
 with Utils.UI; use Utils.UI;
@@ -58,7 +60,6 @@ package body Help.UI is
       pragma Unreferenced(ClientData, Argc, Argv);
       NewText, TagText: Unbounded_String;
       StartIndex, EndIndex, OldIndex, TopicIndex: Natural;
-      Found: Boolean;
       type Variables_Data is record
          Name: Unbounded_String;
          Value: Unbounded_String;
@@ -95,6 +96,36 @@ package body Help.UI is
          11 =>
            (Name => To_Unbounded_String("UnarmedSkill"),
             Value => Skills_List(UnarmedSkill).Name));
+--      AccelNames: constant array(Positive range <>) of Unbounded_String :=
+--        (To_Unbounded_String("<skymapwindow>/btnupleft"),
+--         To_Unbounded_String("<skymapwindow>/btnup"),
+--         To_Unbounded_String("<skymapwindow>/btnupright"),
+--         To_Unbounded_String("<skymapwindow>/btnleft"),
+--         To_Unbounded_String("<skymapwindow>/btnmovewait"),
+--         To_Unbounded_String("<skymapwindow>/btnright"),
+--         To_Unbounded_String("<skymapwindow>/btnbottomleft"),
+--         To_Unbounded_String("<skymapwindow>/btnbottom"),
+--         To_Unbounded_String("<skymapwindow>/btnbottomright"),
+--         To_Unbounded_String("<skymapwindow>/btnmoveto"),
+--         To_Unbounded_String("<skymapwindow>/Menu/ShipInfo"),
+--         To_Unbounded_String("<skymapwindow>/Menu/ShipCargoInfo"),
+--         To_Unbounded_String("<skymapwindow>/Menu/CrewInfo"),
+--         To_Unbounded_String("<skymapwindow>/Menu/ShipOrders"),
+--         To_Unbounded_String("<skymapwindow>/Menu/CraftInfo"),
+--         To_Unbounded_String("<skymapwindow>/Menu/MessagesInfo"),
+--         To_Unbounded_String("<skymapwindow>/Menu/BasesInfo"),
+--         To_Unbounded_String("<skymapwindow>/Menu/EventsInfo"),
+--         To_Unbounded_String("<skymapwindow>/Menu/MissionsInfo"),
+--         To_Unbounded_String("<skymapwindow>/Menu/MoveMap"),
+--         To_Unbounded_String("<skymapwindow>/Menu/GameStats"),
+--         To_Unbounded_String("<skymapwindow>/Menu/Help"),
+--         To_Unbounded_String("<skymapwindow>/Menu/GameOptions"),
+--         To_Unbounded_String("<skymapwindow>/Menu/QuitGame"),
+--         To_Unbounded_String("<skymapwindow>/Menu/ResignFromGame"),
+--         To_Unbounded_String("<skymapwindow>/Menu"),
+--         To_Unbounded_String("<skymapwindow>/Menu/WaitOrders"),
+--         To_Unbounded_String("<skymapwindow>/zoomin"),
+--         To_Unbounded_String("<skymapwindow>/zoomout"));
       type FontTag is record
          Tag: String(1 .. 1);
          TextTag: Unbounded_String;
@@ -120,9 +151,11 @@ package body Help.UI is
       HelpView: Tk_Text;
    begin
       TopicsView.Interp := Interp;
-      TopicsView.Name := New_String(".help.paned.topics");
+      TopicsView.Name := New_String(".help.paned.topics.view");
       HelpView.Interp := Interp;
       HelpView.Name := New_String(".help.paned.content.view");
+      configure(HelpView, "-state normal");
+      Delete(HelpView, "1.0", "end");
       SelectedIndex := Positive'Value(Selection(TopicsView));
       TopicIndex := 1;
       for Help of Help_List loop
@@ -152,8 +185,7 @@ package body Help.UI is
             if TagText = Variables(I).Name then
                Insert
                  (HelpView, "end",
-                  "{" & To_String(Variables(I).Value) &
-                  "} [list specialtext]");
+                  "{" & To_String(Variables(I).Value) & "} [list special]");
                exit;
             end if;
          end loop;
@@ -171,59 +203,61 @@ package body Help.UI is
 --               exit;
 --            end if;
 --         end loop;
---         for I in FontTags'Range loop
---            if TagText = To_Unbounded_String(FontTags(I).Tag) then
---               StartIndex := Index(NewText, "{", EndIndex) - 1;
---               Insert_With_Tags
---                 (HelpBuffer, Iter, Slice(NewText, EndIndex + 2, StartIndex),
---                  FontTags(I).TextTag);
---               EndIndex := Index(NewText, "}", StartIndex) - 1;
---               exit;
---            end if;
---         end loop;
---         for I in FlagsTags'Range loop
---            if TagText = FlagsTags(I) then
---               FactionsWithFlag := Null_Unbounded_String;
---               for Faction of Factions_List loop
---                  if Faction.Flags.Contains(TagText) then
---                     if FactionsWithFlag /= Null_Unbounded_String then
---                        Append(FactionsWithFlag, " and ");
---                     end if;
---                     Append(FactionsWithFlag, Faction.Name);
---                  end if;
---               end loop;
---               while Ada.Strings.Unbounded.Count(FactionsWithFlag, " and ") >
---                 1 loop
---                  Replace_Slice
---                    (FactionsWithFlag, Index(FactionsWithFlag, " and "),
---                     Index(FactionsWithFlag, " and ") + 4, ", ");
---               end loop;
---               Insert(HelpBuffer, Iter, To_String(FactionsWithFlag));
---               exit;
---            end if;
---         end loop;
---         for BaseFlag of BasesFlags loop
---            if TagText /= BaseFlag then
---               goto Bases_Flags_Loop_End;
---            end if;
---            BasesWithFlag := Null_Unbounded_String;
---            for BaseType of BasesTypes_List loop
---               if BaseType.Flags.Contains(TagText) then
---                  if BasesWithFlag /= Null_Unbounded_String then
---                     Append(BasesWithFlag, " and ");
---                  end if;
---                  Append(BasesWithFlag, BaseType.Name);
---               end if;
---            end loop;
---            while Ada.Strings.Unbounded.Count(BasesWithFlag, " and ") > 1 loop
---               Replace_Slice
---                 (BasesWithFlag, Index(BasesWithFlag, " and "),
---                  Index(BasesWithFlag, " and ") + 4, ", ");
---            end loop;
---            Insert(HelpBuffer, Iter, To_String(BasesWithFlag));
---            exit;
---            <<Bases_Flags_Loop_End>>
---         end loop;
+         for I in FontTags'Range loop
+            if TagText = To_Unbounded_String(FontTags(I).Tag) then
+               StartIndex := Index(NewText, "{", EndIndex) - 1;
+               Insert
+                 (HelpView, "end",
+                  "{" & Slice(NewText, EndIndex + 2, StartIndex) & "} [list " &
+                  To_String(FontTags(I).TextTag) & "]");
+               EndIndex := Index(NewText, "}", StartIndex) - 1;
+               exit;
+            end if;
+         end loop;
+         for I in FlagsTags'Range loop
+            if TagText = FlagsTags(I) then
+               FactionsWithFlag := Null_Unbounded_String;
+               for Faction of Factions_List loop
+                  if Faction.Flags.Contains(TagText) then
+                     if FactionsWithFlag /= Null_Unbounded_String then
+                        Append(FactionsWithFlag, " and ");
+                     end if;
+                     Append(FactionsWithFlag, Faction.Name);
+                  end if;
+               end loop;
+               while Ada.Strings.Unbounded.Count(FactionsWithFlag, " and ") >
+                 1 loop
+                  Replace_Slice
+                    (FactionsWithFlag, Index(FactionsWithFlag, " and "),
+                     Index(FactionsWithFlag, " and ") + 4, ", ");
+               end loop;
+               Insert
+                 (HelpView, "end", "{" & To_String(FactionsWithFlag) & "}");
+               exit;
+            end if;
+         end loop;
+         for BaseFlag of BasesFlags loop
+            if TagText /= BaseFlag then
+               goto Bases_Flags_Loop_End;
+            end if;
+            BasesWithFlag := Null_Unbounded_String;
+            for BaseType of BasesTypes_List loop
+               if BaseType.Flags.Contains(TagText) then
+                  if BasesWithFlag /= Null_Unbounded_String then
+                     Append(BasesWithFlag, " and ");
+                  end if;
+                  Append(BasesWithFlag, BaseType.Name);
+               end if;
+            end loop;
+            while Ada.Strings.Unbounded.Count(BasesWithFlag, " and ") > 1 loop
+               Replace_Slice
+                 (BasesWithFlag, Index(BasesWithFlag, " and "),
+                  Index(BasesWithFlag, " and ") + 4, ", ");
+            end loop;
+            Insert(HelpView, "end", "{" & To_String(BasesWithFlag) & "}");
+            exit;
+            <<Bases_Flags_Loop_End>>
+         end loop;
          OldIndex := EndIndex + 2;
       end loop;
       configure(HelpView, "-state disabled");
@@ -285,7 +319,7 @@ package body Help.UI is
       Paned.Name := New_String(".help.paned");
       SashPos(Paned, "0", Natural'Image(GameSettings.TopicsPosition));
       TopicsView.Interp := Interp;
-      TopicsView.Name := New_String(".help.paned.topics");
+      TopicsView.Name := New_String(".help.paned.topics.view");
       for I in Help_List.Iterate loop
          Insert
            (TopicsView,
