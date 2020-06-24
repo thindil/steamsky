@@ -884,10 +884,20 @@ package body Maps.UI is
       if Invoke(Button) /= "" then
          raise SteamSky_Map_Error with "Can't hide map buttons";
       end if;
-      Bind_To_Main_Window(Get_Context, "<plus>", "{ZoomMap raise}");
-      Bind_To_Main_Window(Get_Context, "<minus>", "{ZoomMap lower}");
       Bind_To_Main_Window
         (Get_Context, "<Escape>", "{InvokeButton .header.closebutton}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(1)) & ">",
+         "{tk_popup " & Widget_Image(GameMenu) & " %X %Y}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(2)) & ">",
+         "{.paned.mapframe.buttons.wait invoke}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(3)) & ">",
+         "{ZoomMap raise}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(4)) & ">",
+         "{ZoomMap lower}");
       UpdateMessages;
       UpdateMoveButtons;
    end CreateGameUI;
