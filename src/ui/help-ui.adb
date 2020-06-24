@@ -97,30 +97,17 @@ package body Help.UI is
          11 =>
            (Name => To_Unbounded_String("UnarmedSkill"),
             Value => Skills_List(UnarmedSkill).Name));
-      AccelNames: constant array(Positive range <>) of Unbounded_String :=
-        (
---        (To_Unbounded_String("<skymapwindow>/btnupleft"),
---         To_Unbounded_String("<skymapwindow>/btnup"),
---         To_Unbounded_String("<skymapwindow>/btnupright"),
---         To_Unbounded_String("<skymapwindow>/btnleft"),
---         To_Unbounded_String("<skymapwindow>/btnmovewait"),
---         To_Unbounded_String("<skymapwindow>/btnright"),
---         To_Unbounded_String("<skymapwindow>/btnbottomleft"),
---         To_Unbounded_String("<skymapwindow>/btnbottom"),
---         To_Unbounded_String("<skymapwindow>/btnbottomright"),
---         To_Unbounded_String("<skymapwindow>/btnmoveto"),
-      To_Unbounded_String("0"), To_Unbounded_String("0"),
-         To_Unbounded_String("0"), To_Unbounded_String("0"),
-         To_Unbounded_String("0"), To_Unbounded_String("0"),
-         To_Unbounded_String("0"), To_Unbounded_String("0"),
-         To_Unbounded_String("0"), To_Unbounded_String("0"),
-         MenuAccelerators(1), MenuAccelerators(2), MenuAccelerators(3),
-         MenuAccelerators(4), MenuAccelerators(5), MenuAccelerators(6),
-         MenuAccelerators(7), MenuAccelerators(8), MenuAccelerators(9),
-         MapAccelerators(2), MenuAccelerators(12), MenuAccelerators(13),
-         MenuAccelerators(14), MenuAccelerators(15), MenuAccelerators(16),
-         MapAccelerators(1), MenuAccelerators(16), MapAccelerators(3),
-         MapAccelerators(4));
+      AccelNames: constant array(1 .. 29) of Unbounded_String :=
+        (MapAccelerators(5), MapAccelerators(6), MapAccelerators(7),
+         MapAccelerators(8), MapAccelerators(9), MapAccelerators(10),
+         MapAccelerators(11), MapAccelerators(12), MapAccelerators(13),
+         MapAccelerators(14), MenuAccelerators(1), MenuAccelerators(2),
+         MenuAccelerators(3), MenuAccelerators(4), MenuAccelerators(5),
+         MenuAccelerators(6), MenuAccelerators(7), MenuAccelerators(8),
+         MenuAccelerators(9), MapAccelerators(2), MenuAccelerators(12),
+         MenuAccelerators(13), MenuAccelerators(14), MenuAccelerators(15),
+         MenuAccelerators(16), MapAccelerators(1), MenuAccelerators(16),
+         MapAccelerators(3), MapAccelerators(4));
       type FontTag is record
          Tag: String(1 .. 1);
          TextTag: Unbounded_String;
