@@ -39,6 +39,13 @@ package Maps.UI is
       To_Unbounded_String("q"), To_Unbounded_String("x"));
    -- ****
 
+   -- ****v* Maps.UI/MapAccelerators
+   -- FUNCTION
+   -- Array with default map keyboard accelerators
+   -- SOURCE
+   MapAccelerators: constant array(Positive range <>) of Unbounded_String := (To_Unbounded_String("m"), To_Unbounded_String("v"), To_Unbounded_String("plus"), To_Unbounded_String("minus"));
+   -- ****
+
    -- ****iv* MUI/CenterX
    -- FUNCTION
    -- Coordinates of the center point of the map
