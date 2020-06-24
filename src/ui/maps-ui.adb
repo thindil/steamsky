@@ -898,6 +898,36 @@ package body Maps.UI is
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(4)) & ">",
          "{ZoomMap lower}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(5)) & ">",
+         "{InvokeButton $bframe.nw}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(6)) & ">",
+         "{InvokeButton $bframe.n}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(7)) & ">",
+         "{InvokeButton $bframe.ne}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(8)) & ">",
+         "{InvokeButton $bframe.w}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(9)) & ">",
+         "{InvokeButton $bframe.wait}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(10)) & ">",
+         "{InvokeButton $bframe.e}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(11)) & ">",
+         "{InvokeButton $bframe.sw}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(12)) & ">",
+         "{InvokeButton $bframe.s}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(13)) & ">",
+         "{InvokeButton $bframe.se}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(14)) & ">",
+         "{InvokeButton $bframe.moveto}");
       UpdateMessages;
       UpdateMoveButtons;
    end CreateGameUI;
