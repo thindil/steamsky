@@ -117,17 +117,10 @@ package body Help.UI is
          MenuAccelerators(1), MenuAccelerators(2), MenuAccelerators(3),
          MenuAccelerators(4), MenuAccelerators(5), MenuAccelerators(6),
          MenuAccelerators(7), MenuAccelerators(8), MenuAccelerators(9),
-         To_Unbounded_String("0"),
---         To_Unbounded_String("<skymapwindow>/Menu/MoveMap"),
-         MenuAccelerators(12), MenuAccelerators(13),
+         MapAccelerators(2), MenuAccelerators(12), MenuAccelerators(13),
          MenuAccelerators(14), MenuAccelerators(15), MenuAccelerators(16),
-         To_Unbounded_String("0"),
---         To_Unbounded_String("<skymapwindow>/Menu"),
-         MenuAccelerators(16),
-         To_Unbounded_String("0"), To_Unbounded_String("0")
---         To_Unbounded_String("<skymapwindow>/zoomin"),
---         To_Unbounded_String("<skymapwindow>/zoomout"));
-         );
+         MapAccelerators(1), MenuAccelerators(16), MapAccelerators(3),
+         MapAccelerators(4));
       type FontTag is record
          Tag: String(1 .. 1);
          TextTag: Unbounded_String;
