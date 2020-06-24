@@ -33,6 +33,7 @@ with Config; use Config;
 with Factions; use Factions;
 with Game; use Game;
 with Items; use Items;
+with Maps.UI; use Maps.UI;
 with Utils.UI; use Utils.UI;
 
 package body Help.UI is
@@ -96,7 +97,8 @@ package body Help.UI is
          11 =>
            (Name => To_Unbounded_String("UnarmedSkill"),
             Value => Skills_List(UnarmedSkill).Name));
---      AccelNames: constant array(Positive range <>) of Unbounded_String :=
+      AccelNames: constant array(Positive range <>) of Unbounded_String :=
+        (
 --        (To_Unbounded_String("<skymapwindow>/btnupleft"),
 --         To_Unbounded_String("<skymapwindow>/btnup"),
 --         To_Unbounded_String("<skymapwindow>/btnupright"),
@@ -107,25 +109,25 @@ package body Help.UI is
 --         To_Unbounded_String("<skymapwindow>/btnbottom"),
 --         To_Unbounded_String("<skymapwindow>/btnbottomright"),
 --         To_Unbounded_String("<skymapwindow>/btnmoveto"),
---         To_Unbounded_String("<skymapwindow>/Menu/ShipInfo"),
---         To_Unbounded_String("<skymapwindow>/Menu/ShipCargoInfo"),
---         To_Unbounded_String("<skymapwindow>/Menu/CrewInfo"),
---         To_Unbounded_String("<skymapwindow>/Menu/ShipOrders"),
---         To_Unbounded_String("<skymapwindow>/Menu/CraftInfo"),
---         To_Unbounded_String("<skymapwindow>/Menu/MessagesInfo"),
---         To_Unbounded_String("<skymapwindow>/Menu/BasesInfo"),
---         To_Unbounded_String("<skymapwindow>/Menu/EventsInfo"),
---         To_Unbounded_String("<skymapwindow>/Menu/MissionsInfo"),
+      To_Unbounded_String("0"), To_Unbounded_String("0"),
+         To_Unbounded_String("0"), To_Unbounded_String("0"),
+         To_Unbounded_String("0"), To_Unbounded_String("0"),
+         To_Unbounded_String("0"), To_Unbounded_String("0"),
+         To_Unbounded_String("0"), To_Unbounded_String("0"),
+         MenuAccelerators(1), MenuAccelerators(2), MenuAccelerators(3),
+         MenuAccelerators(4), MenuAccelerators(5), MenuAccelerators(6),
+         MenuAccelerators(7), MenuAccelerators(8), MenuAccelerators(9),
+         To_Unbounded_String("0"),
 --         To_Unbounded_String("<skymapwindow>/Menu/MoveMap"),
---         To_Unbounded_String("<skymapwindow>/Menu/GameStats"),
---         To_Unbounded_String("<skymapwindow>/Menu/Help"),
---         To_Unbounded_String("<skymapwindow>/Menu/GameOptions"),
---         To_Unbounded_String("<skymapwindow>/Menu/QuitGame"),
---         To_Unbounded_String("<skymapwindow>/Menu/ResignFromGame"),
+         MenuAccelerators(12), MenuAccelerators(13),
+         MenuAccelerators(14), MenuAccelerators(15), MenuAccelerators(16),
+         To_Unbounded_String("0"),
 --         To_Unbounded_String("<skymapwindow>/Menu"),
---         To_Unbounded_String("<skymapwindow>/Menu/WaitOrders"),
+         MenuAccelerators(16),
+         To_Unbounded_String("0"), To_Unbounded_String("0")
 --         To_Unbounded_String("<skymapwindow>/zoomin"),
 --         To_Unbounded_String("<skymapwindow>/zoomout"));
+         );
       type FontTag is record
          Tag: String(1 .. 1);
          TextTag: Unbounded_String;
@@ -189,20 +191,16 @@ package body Help.UI is
                exit;
             end if;
          end loop;
---         -- TODO: Keyboard shortcuts
---         for I in AccelNames'Range loop
---            if TagText =
---              To_Unbounded_String("GameKey") &
---                To_Unbounded_String(Positive'Image(I)) then
---               Lookup_Entry(To_String(AccelNames(I)), Key, Found);
---               Insert_With_Tags
---                 (HelpBuffer, Iter,
---                  "'" & Accelerator_Get_Label(Key.Accel_Key, Key.Accel_Mods) &
---                  "'",
---                  SpecialText);
---               exit;
---            end if;
---         end loop;
+         for I in AccelNames'Range loop
+            if TagText =
+              To_Unbounded_String("GameKey") &
+                To_Unbounded_String(Positive'Image(I)) then
+               Insert
+                 (HelpView, "end",
+                  "{'" & To_String(AccelNames(I)) & "'} [list special]");
+               exit;
+            end if;
+         end loop;
          for I in FontTags'Range loop
             if TagText = To_Unbounded_String(FontTags(I).Tag) then
                StartIndex := Index(NewText, "{", EndIndex) - 1;
