@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -20,14 +21,20 @@ with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Bases; use Bases;
+with Config; use Config;
+with Maps; use Maps;
 with Maps.UI; use Maps.UI;
+with ShipModules; use ShipModules;
 with Utils.UI; use Utils.UI;
 
 package body Ships.UI is
@@ -53,11 +60,15 @@ package body Ships.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      Label: Ttk_Label;
+      Label, UpgradeLabel: Ttk_Label;
       Paned: Ttk_PanedWindow;
       ShipInfoCanvas: Tk_Canvas;
       ShipInfoFrame: Ttk_Frame;
       NameEntry: Ttk_Entry;
+      ShipInfo, UpgradeInfo: Unbounded_String;
+      MaxUpgrade: Integer;
+      UpgradePercent: Float;
+      UpgradeProgress: Ttk_ProgressBar;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -84,6 +95,155 @@ package body Ships.UI is
       NameEntry.Name := New_String(Widget_Image(ShipInfoFrame) & ".left.name");
       Delete(NameEntry, "0", "end");
       Insert(NameEntry, "0", To_String(PlayerShip.Name));
+      ShipInfo :=
+        To_Unbounded_String
+          ("Home: " & To_String(SkyBases(PlayerShip.HomeBase).Name));
+      UpgradeLabel.Interp := Interp;
+      UpgradeLabel.Name :=
+        New_String(Widget_Image(ShipInfoFrame) & ".left.upgradelabel");
+      UpgradeProgress.Interp := Interp;
+      UpgradeProgress.Name :=
+        New_String(Widget_Image(ShipInfoFrame) & ".left.upgrade");
+      if PlayerShip.UpgradeModule = 0 then
+         Tcl.Tk.Ada.Grid.Grid_Remove(UpgradeLabel);
+         Tcl.Tk.Ada.Grid.Grid_Remove(UpgradeProgress);
+      else
+         UpgradeInfo := To_Unbounded_String("Upgrading: ");
+         Append
+           (UpgradeInfo,
+            To_String(PlayerShip.Modules(PlayerShip.UpgradeModule).Name) &
+            " ");
+         case PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeAction is
+            when DURABILITY =>
+               Append(UpgradeInfo, "(durability)");
+               MaxUpgrade :=
+                 Modules_List
+                   (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
+                   .Durability;
+            when MAX_VALUE =>
+               case Modules_List
+                 (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
+                 .MType is
+                  when ENGINE =>
+                     Append(UpgradeInfo, "(power)");
+                     MaxUpgrade :=
+                       Modules_List
+                         (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                            .ProtoIndex)
+                         .MaxValue /
+                       20;
+                  when CABIN =>
+                     Append(UpgradeInfo, "(quality)");
+                     MaxUpgrade :=
+                       Modules_List
+                         (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                            .ProtoIndex)
+                         .MaxValue;
+                  when GUN | BATTERING_RAM =>
+                     Append(UpgradeInfo, "(damage)");
+                     MaxUpgrade :=
+                       Modules_List
+                         (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                            .ProtoIndex)
+                         .MaxValue *
+                       2;
+                  when HULL =>
+                     Append(UpgradeInfo, "(enlarge)");
+                     MaxUpgrade :=
+                       Modules_List
+                         (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                            .ProtoIndex)
+                         .MaxValue *
+                       40;
+                  when HARPOON_GUN =>
+                     Append(UpgradeInfo, "(strength)");
+                     MaxUpgrade :=
+                       Modules_List
+                         (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                            .ProtoIndex)
+                         .MaxValue *
+                       10;
+                  when others =>
+                     null;
+               end case;
+            when VALUE =>
+               case Modules_List
+                 (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
+                 .MType is
+                  when ENGINE =>
+                     Append(UpgradeInfo, "(fuel usage)");
+                     MaxUpgrade :=
+                       Modules_List
+                         (PlayerShip.Modules(PlayerShip.UpgradeModule)
+                            .ProtoIndex)
+                         .Value *
+                       20;
+                  when others =>
+                     null;
+               end case;
+            when others =>
+               null;
+         end case;
+         MaxUpgrade :=
+           Integer(Float(MaxUpgrade) * NewGameSettings.UpgradeCostBonus);
+         if MaxUpgrade = 0 then
+            MaxUpgrade := 1;
+         end if;
+         UpgradePercent :=
+           100.0 -
+           ((Float
+               (PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeProgress) /
+             Float(MaxUpgrade)) *
+            100.0);
+         configure(UpgradeProgress, "-value" & Float'Image(UpgradePercent));
+         if UpgradePercent < 0.11 then
+            Append(UpgradeInfo, " (started)");
+         elsif UpgradePercent < 0.31 then
+            Append(UpgradeInfo, " (designing)");
+         elsif UpgradePercent < 0.51 then
+            Append(UpgradeInfo, " (base upgrades)");
+         elsif UpgradePercent < 0.80 then
+            Append(UpgradeInfo, " (advanced upgrades)");
+         else
+            Append(UpgradeInfo, " (final upgrades)");
+         end if;
+         configure(UpgradeLabel, "-text {" & To_String(UpgradeInfo) & "}");
+         Tcl.Tk.Ada.Grid.Grid(UpgradeLabel, "-column 0 -row 1");
+         Tcl.Tk.Ada.Grid.Grid(UpgradeProgress, "-column 1 -row 1");
+      end if;
+      Append(ShipInfo, LF & "Repair first: ");
+      if PlayerShip.RepairModule = 0 then
+         Append(ShipInfo, "Any module");
+      else
+         Append
+           (ShipInfo,
+            To_String(PlayerShip.Modules(PlayerShip.RepairModule).Name));
+      end if;
+      Append(ShipInfo, LF & "Destination: ");
+      if PlayerShip.DestinationX = 0 and PlayerShip.DestinationY = 0 then
+         Append(ShipInfo, "None");
+      else
+         if SkyMap(PlayerShip.DestinationX, PlayerShip.DestinationY)
+             .BaseIndex >
+           0 then
+            Append
+              (ShipInfo,
+               To_String
+                 (SkyBases
+                    (SkyMap(PlayerShip.DestinationX, PlayerShip.DestinationY)
+                       .BaseIndex)
+                    .Name));
+         else
+            Append
+              (ShipInfo,
+               "X:" & Positive'Image(PlayerShip.DestinationX) & " Y:" &
+               Positive'Image(PlayerShip.DestinationY));
+         end if;
+      end if;
+      Append
+        (ShipInfo,
+         LF & "Weight:" & Integer'Image(CountShipWeight(PlayerShip)) & "kg");
+      configure(Label, "-text {" & To_String(ShipInfo) & "}");
       configure
         (ShipInfoCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
