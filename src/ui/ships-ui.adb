@@ -22,6 +22,7 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -56,6 +57,7 @@ package body Ships.UI is
       Paned: Ttk_PanedWindow;
       ShipInfoCanvas: Tk_Canvas;
       ShipInfoFrame: Ttk_Frame;
+      NameEntry: Ttk_Entry;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -77,6 +79,10 @@ package body Ships.UI is
          return TCL_OK;
       end if;
       ShipInfoFrame.Name := New_String(Widget_Image(ShipInfoCanvas) & ".shipinfo");
+      NameEntry.Interp := Get_Context;
+      NameEntry.Name := New_String(Widget_Image(ShipInfoFrame) & ".left.name");
+      Delete(NameEntry, "0", "end");
+      Insert(NameEntry, "0", To_String(PlayerShip.Name));
       configure
         (ShipInfoCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
