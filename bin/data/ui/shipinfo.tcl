@@ -25,7 +25,9 @@ grid [ttk::label $shipinfoframe.right.crew.morale -text {Morale}] -column 6 -row
 grid [ttk::labelframe $shipinfoframe.right.module -text {Module Info:}]
 ttk::label $shipinfoframe.right.module.damagelbl -text {Damage:}
 ttk::progressbar $shipinfoframe.right.module.damage -orient horizontal -maximum 1.0
-grid [ttk::label $shipinfoframe.right.module.info] -row 1
+set moduleinfo [ttk::treeview $shipinfoframe.right.module.info -show {} -columns [list name value] -selectmode none]
+$moduleinfo tag configure Red -foreground red
+grid $moduleinfo -row 1
 ttk::label $shipinfoframe.right.module.cleanlbl -text {Clean:}
 ttk::progressbar $shipinfoframe.right.module.clean -orient horizontal -maximum 1.0
 ttk::label $shipinfoframe.right.module.qualitylbl -text {Quality:}
