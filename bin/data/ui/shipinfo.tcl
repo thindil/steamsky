@@ -7,6 +7,7 @@ set shipinfoframe [ttk::frame $shipinfocanvas.shipinfo]
 grid [ttk::frame $shipinfoframe.left] -sticky nwes
 grid [ttk::label $shipinfoframe.left.namelbl -text {Name:}]
 grid [ttk::entry $shipinfoframe.left.name] -column 1 -row 0
+bind $shipinfoframe.left.name <Enter> SetShipName
 ttk::label $shipinfoframe.left.upgradelabel
 ttk::progressbar $shipinfoframe.left.upgrade -orient horizontal
 grid [ttk::label $shipinfoframe.left.info] -row 2 -columnspan 2

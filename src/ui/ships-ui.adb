@@ -37,7 +37,7 @@ package body Ships.UI is
    -- Show information about the player's ship
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
    -- SOURCE
@@ -78,8 +78,9 @@ package body Ships.UI is
          ShowSkyMap(True);
          return TCL_OK;
       end if;
-      ShipInfoFrame.Name := New_String(Widget_Image(ShipInfoCanvas) & ".shipinfo");
-      NameEntry.Interp := Get_Context;
+      ShipInfoFrame.Name :=
+        New_String(Widget_Image(ShipInfoCanvas) & ".shipinfo");
+      NameEntry.Interp := Interp;
       NameEntry.Name := New_String(Widget_Image(ShipInfoFrame) & ".left.name");
       Delete(NameEntry, "0", "end");
       Insert(NameEntry, "0", To_String(PlayerShip.Name));
@@ -101,9 +102,40 @@ package body Ships.UI is
       return TCL_OK;
    end Show_Ship_Info_Command;
 
+   -- ****f* SUI2/Set_Ship_Name_Command
+   -- FUNCTION
+   -- Change name of the player's ship
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Set_Ship_Name_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Ship_Name_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      NameEntry: Ttk_Entry;
+   begin
+      NameEntry.Interp := Interp;
+      NameEntry.Name :=
+        New_String(".paned.shipinfoframe.canvas.shipinfo.left.name");
+      PlayerShip.Name := To_Unbounded_String(Get(NameEntry));
+      return TCL_OK;
+   end Set_Ship_Name_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowShipInfo", Show_Ship_Info_Command'Access);
+      AddCommand("SetShipName", Set_Ship_Name_Command'Access);
    end AddCommands;
 
 end Ships.UI;
