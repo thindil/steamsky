@@ -56,6 +56,7 @@ with ShipModules; use ShipModules;
 with OrdersMenu;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Movement; use Ships.Movement;
+with Ships.UI; use Ships.UI;
 with Statistics.UI; use Statistics.UI;
 with Stories; use Stories;
 with Utils.UI; use Utils.UI;
@@ -71,7 +72,9 @@ package body Maps.UI is
       -- ****
    begin
       Delete(GameMenu, "0", "end");
-      Menu.Add(GameMenu, "command", "-label {Ship information}");
+      Menu.Add
+        (GameMenu, "command",
+         "-label {Ship information} -command ShowShipInfo");
       Menu.Add(GameMenu, "command", "-label {Ship cargo}");
       Menu.Add(GameMenu, "command", "-label {Crew information}");
       Menu.Add
@@ -842,6 +845,7 @@ package body Maps.UI is
          Maps.UI.Commands.AddCommands;
          WaitMenu.AddCommands;
          Help.UI.AddCommands;
+         Ships.UI.AddCommands;
          Bind(MapView, "<Configure>", "DrawMap");
          Bind(MapView, "<Motion>", "{UpdateMapInfo %x %y}");
          Bind(MapView, "<1>", "{ShowDestinationMenu %x %y}");
