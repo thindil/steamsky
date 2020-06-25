@@ -3,3 +3,5 @@ bin/data/saves/*
 bin/gmon.out
 obj/*
 tests/driver/*
+run.sh
+test.tcl
