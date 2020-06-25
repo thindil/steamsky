@@ -325,45 +325,49 @@ package body Ships.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      ModuleInfo: Unbounded_String;
       Module: ModuleData;
       MaxValue, ModuleIndex: Positive;
       HaveAmmo: Boolean;
       Mamount, MaxUpgrade: Natural := 0;
       DamagePercent, UpgradePercent: Float;
-      ModulesView: Ttk_Tree_View;
+      TreeView: Ttk_Tree_View;
       ProgressBar: Ttk_ProgressBar;
       Label: Ttk_Label;
+      ModuleInfo, Tag: Unbounded_String;
       procedure AddOwnersInfo(OwnersName: String) is
          HaveOwner: Boolean := False;
+         OwnerLabel, OwnerInfo: Unbounded_String;
       begin
-         Append(ModuleInfo, OwnersName);
+         Append(OwnerLabel, OwnersName);
          if Module.Owner.Length > 1 then
-            Append(ModuleInfo, "s");
+            Append(OwnerLabel, "s");
          end if;
          Append
-           (ModuleInfo,
+           (OwnerLabel,
             " (max" & Count_Type'Image(Module.Owner.Length) & "): ");
          for I in Module.Owner.First_Index .. Module.Owner.Last_Index loop
             if Module.Owner(I) > 0 then
                if HaveOwner then
-                  Append(ModuleInfo, ", ");
+                  Append(OwnerInfo, ", ");
                end if;
                HaveOwner := True;
                Append
-                 (ModuleInfo,
-                  To_String(PlayerShip.Crew(Module.Owner(I)).Name));
+                 (OwnerInfo, To_String(PlayerShip.Crew(Module.Owner(I)).Name));
             end if;
          end loop;
          if not HaveOwner then
-            Append(ModuleInfo, "none");
+            Append(OwnerInfo, "none");
          end if;
+         Insert
+           (TreeView,
+            "{} end -values [list {" & To_String(OwnerLabel) & "} {" &
+            To_String(OwnerInfo) & "}]");
       end AddOwnersInfo;
    begin
-      ModulesView.Interp := Interp;
-      ModulesView.Name :=
+      TreeView.Interp := Interp;
+      TreeView.Name :=
         New_String(".paned.shipinfoframe.canvas.shipinfo.left.modules");
-      ModuleIndex := Positive'Value(Selection(ModulesView));
+      ModuleIndex := Positive'Value(Selection(TreeView));
       Module := PlayerShip.Modules(ModuleIndex);
       Label.Interp := Interp;
       Label.Name :=
@@ -394,27 +398,32 @@ package body Ships.UI is
               (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
          end if;
       end if;
---      ModuleInfo :=
---        To_Unbounded_String("Weight:" & Integer'Image(Module.Weight) & " kg");
---      Append(ModuleInfo, LF & "Repair/Upgrade material: ");
---      for Item of Items_List loop
---         if Item.IType = Modules_List(Module.ProtoIndex).RepairMaterial then
---            if Mamount > 0 then
---               Append(ModuleInfo, " or ");
---            end if;
---            if FindItem
---                (Inventory => PlayerShip.Cargo, ItemType => Item.IType) =
---              0 then
---               Append
---                 (ModuleInfo,
---                  "<span foreground=""red"">" & To_String(Item.Name) &
---                  "</span>");
---            else
---               Append(ModuleInfo, To_String(Item.Name));
---            end if;
---            Mamount := Mamount + 1;
---         end if;
---      end loop;
+      TreeView.Name :=
+        New_String(".paned.shipinfoframe.canvas.shipinfo.right.module.info");
+      Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
+      Insert
+        (TreeView,
+         "{} end -values [list {Weight:} {" & Integer'Image(Module.Weight) &
+         " kg}]");
+      for Item of Items_List loop
+         if Item.IType = Modules_List(Module.ProtoIndex).RepairMaterial then
+            if Mamount > 0 then
+               Append(ModuleInfo, " or ");
+            end if;
+            Append(ModuleInfo, To_String(Item.Name));
+            if FindItem
+                (Inventory => PlayerShip.Cargo, ItemType => Item.IType) =
+              0 and
+              Tag = Null_Unbounded_String then
+               Tag := To_Unbounded_String(" -tags [list Red]");
+            end if;
+            Mamount := Mamount + 1;
+         end if;
+      end loop;
+      Insert
+        (TreeView,
+         "{} end -values [list {Repair/Upgrade material:} {" &
+         To_String(ModuleInfo) & "}]" & To_String(Tag));
 --      Append
 --        (ModuleInfo,
 --         LF & "Repair/Upgrade skill: " &
