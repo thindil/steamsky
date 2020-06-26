@@ -24,6 +24,7 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
@@ -330,44 +331,40 @@ package body Ships.UI is
       HaveAmmo: Boolean;
       Mamount, MaxUpgrade: Natural := 0;
       DamagePercent, UpgradePercent: Float;
-      TreeView: Ttk_Tree_View;
+      ModulesView: Ttk_Tree_View;
       ProgressBar: Ttk_ProgressBar;
       Label: Ttk_Label;
-      ModuleInfo, Tag: Unbounded_String;
+      ModuleText: Tk_Text;
       procedure AddOwnersInfo(OwnersName: String) is
          HaveOwner: Boolean := False;
-         OwnerLabel, OwnerInfo: Unbounded_String;
       begin
-         Append(OwnerLabel, OwnersName);
+         Insert(ModuleText, "end", "{" & LF & OwnersName & "}");
          if Module.Owner.Length > 1 then
-            Append(OwnerLabel, "s");
+            Insert(ModuleText, "end", "s");
          end if;
-         Append
-           (OwnerLabel,
-            " (max" & Count_Type'Image(Module.Owner.Length) & "): ");
+         Insert
+           (ModuleText, "end",
+            "{ (max" & Count_Type'Image(Module.Owner.Length) & "): }");
          for I in Module.Owner.First_Index .. Module.Owner.Last_Index loop
             if Module.Owner(I) > 0 then
                if HaveOwner then
-                  Append(OwnerInfo, ", ");
+                  Insert(ModuleText, "end", "{, }");
                end if;
                HaveOwner := True;
-               Append
-                 (OwnerInfo, To_String(PlayerShip.Crew(Module.Owner(I)).Name));
+               Insert
+                 (ModuleText, "end",
+                  To_String(PlayerShip.Crew(Module.Owner(I)).Name));
             end if;
          end loop;
          if not HaveOwner then
-            Append(OwnerInfo, "none");
+            Insert(ModuleText, "end", "{none}");
          end if;
-         Insert
-           (TreeView,
-            "{} end -values [list {" & To_String(OwnerLabel) & "} {" &
-            To_String(OwnerInfo) & "}]");
       end AddOwnersInfo;
    begin
-      TreeView.Interp := Interp;
-      TreeView.Name :=
+      ModulesView.Interp := Interp;
+      ModulesView.Name :=
         New_String(".paned.shipinfoframe.canvas.shipinfo.left.modules");
-      ModuleIndex := Positive'Value(Selection(TreeView));
+      ModuleIndex := Positive'Value(Selection(ModulesView));
       Module := PlayerShip.Modules(ModuleIndex);
       Label.Interp := Interp;
       Label.Name :=
@@ -377,6 +374,7 @@ package body Ships.UI is
       ProgressBar.Name :=
         New_String(".paned.shipinfoframe.canvas.shipinfo.right.module.damage");
       if Module.Durability < Module.MaxDurability then
+         Tcl.Tk.Ada.Grid.Grid(Label);
          DamagePercent :=
            (Float(Module.Durability) / Float(Module.MaxDurability));
          if DamagePercent < 1.0 and DamagePercent > 0.79 then
@@ -397,122 +395,157 @@ package body Ships.UI is
             configure
               (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
          end if;
+         Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-column 1 -row 0");
       end if;
-      TreeView.Name :=
+      Label.Name :=
+        New_String
+          (".paned.shipinfoframe.canvas.shipinfo.right.module.cleanlbl");
+      Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+      ProgressBar.Name :=
+        New_String(".paned.shipinfoframe.canvas.shipinfo.right.module.clean");
+      Tcl.Tk.Ada.Grid.Grid_Remove(ProgressBar);
+      Label.Name :=
+        New_String
+          (".paned.shipinfoframe.canvas.shipinfo.right.module.qualitylbl");
+      Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+      ProgressBar.Name :=
+        New_String(".paned.shipinfoframe.canvas.shipinfo.right.module.quality");
+      Tcl.Tk.Ada.Grid.Grid_Remove(ProgressBar);
+      ModuleText.Interp := Interp;
+      ModuleText.Name :=
         New_String(".paned.shipinfoframe.canvas.shipinfo.right.module.info");
-      Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
+      configure(ModuleText, "-state normal");
+      Delete(ModuleText, "1.0", "end");
       Insert
-        (TreeView,
-         "{} end -values [list {Weight:} {" & Integer'Image(Module.Weight) &
-         " kg}]");
+        (ModuleText, "end",
+         "{Weight: " & Integer'Image(Module.Weight) & " kg" & LF &
+         "Repair/Upgrade material: }");
       for Item of Items_List loop
          if Item.IType = Modules_List(Module.ProtoIndex).RepairMaterial then
             if Mamount > 0 then
-               Append(ModuleInfo, " or ");
+               Insert(ModuleText, "end", "{ or }");
             end if;
-            Append(ModuleInfo, To_String(Item.Name));
             if FindItem
                 (Inventory => PlayerShip.Cargo, ItemType => Item.IType) =
-              0 and
-              Tag = Null_Unbounded_String then
-               Tag := To_Unbounded_String(" -tags [list Red]");
+              0 then
+               Insert
+                 (ModuleText, "end",
+                  "{" & To_String(Item.Name) & "} [list red]");
+            else
+               Insert(ModuleText, "end", "{" & To_String(Item.Name) & "}");
             end if;
             Mamount := Mamount + 1;
          end if;
       end loop;
       Insert
-        (TreeView,
-         "{} end -values [list {Repair/Upgrade material:} {" &
-         To_String(ModuleInfo) & "}]" & To_String(Tag));
---      Append
---        (ModuleInfo,
---         LF & "Repair/Upgrade skill: " &
---         To_String
---           (Skills_List(Modules_List(Module.ProtoIndex).RepairSkill).Name) &
---         "/" &
---         To_String
---           (Attributes_List
---              (Skills_List(Modules_List(Module.ProtoIndex).RepairSkill)
---                 .Attribute)
---              .Name));
---      Set_Markup
---        (Gtk_Label(Get_Object(Object, "lblmoduleinfo")),
---         To_String(ModuleInfo));
---      ModuleInfo := Null_Unbounded_String;
---      Hide(Gtk_Widget(CleanBar));
---      Hide(Gtk_Widget(QualityBar));
---      case Module.MType is
---         when ENGINE =>
---            Append(ModuleInfo, "Max power:" & Integer'Image(Module.Power));
---            MaxValue :=
---              Positive(Float(Modules_List(Module.ProtoIndex).MaxValue) * 1.5);
---            if Module.Power = MaxValue then
---               Append(ModuleInfo, " (max upgrade)");
---            end if;
---            if Module.Disabled then
---               Append(ModuleInfo, " (disabled)");
---            end if;
---            Append
---              (ModuleInfo,
---               LF & "Fuel usage:" & Integer'Image(Module.FuelUsage));
---            MaxValue :=
---              Positive(Float(Modules_List(Module.ProtoIndex).Value) / 2.0);
---            if Module.FuelUsage = MaxValue then
---               Append(ModuleInfo, " (max upgrade)");
---            end if;
---         when CARGO_ROOM =>
---            Append
---              (ModuleInfo,
---               "Max cargo:" &
---               Integer'Image(Modules_List(Module.ProtoIndex).MaxValue) &
---               " kg");
---         when HULL =>
---            Show_All(Gtk_Widget(CleanBar));
---            DamagePercent :=
---              Gdouble(Module.InstalledModules) / Gdouble(Module.MaxModules);
---            Set_Fraction(Gtk_Progress_Bar(CleanBar), DamagePercent);
---            Set_Text
---              (Gtk_Progress_Bar(CleanBar),
---               "Modules installed:" & Integer'Image(Module.InstalledModules) &
---               " /" & Integer'Image(Module.MaxModules));
---            MaxValue :=
---              Positive(Float(Modules_List(Module.ProtoIndex).MaxValue) * 1.5);
---            if Module.MaxModules = MaxValue then
---               Set_Text
---                 (Gtk_Progress_Bar(CleanBar),
---                  Get_Text(Gtk_Progress_Bar(CleanBar)) & " (max upgrade)");
---            end if;
---         when CABIN =>
---            AddOwnersInfo("Owner");
---            Show_All(Gtk_Widget(QualityBar));
---            Set_Fraction
---              (Gtk_Progress_Bar(QualityBar), Gdouble(Module.Quality) / 100.0);
---            Set_Text
---              (Gtk_Progress_Bar(QualityBar), GetCabinQuality(Module.Quality));
---            MaxValue :=
---              Positive(Float(Modules_List(Module.ProtoIndex).MaxValue) * 1.5);
---            if Module.Quality = MaxValue then
---               Set_Text
---                 (Gtk_Progress_Bar(QualityBar),
---                  Get_Text(Gtk_Progress_Bar(QualityBar)) & " (max upgrade)");
---            end if;
---            if Module.Cleanliness /= Module.Quality then
---               Show_All(Gtk_Widget(CleanBar));
---               DamagePercent :=
---                 1.0 - (Gdouble(Module.Cleanliness) / Gdouble(Module.Quality));
---               if DamagePercent > 0.0 and DamagePercent < 0.2 then
---                  Set_Text(Gtk_Progress_Bar(CleanBar), "Bit dusty");
---               elsif DamagePercent > 0.19 and DamagePercent < 0.5 then
---                  Set_Text(Gtk_Progress_Bar(CleanBar), "Dusty");
---               elsif DamagePercent > 0.49 and DamagePercent < 0.8 then
---                  Set_Text(Gtk_Progress_Bar(CleanBar), "Dirty");
---               elsif DamagePercent > 0.79 and DamagePercent < 1.0 then
---                  Set_Text(Gtk_Progress_Bar(CleanBar), "Very dirty");
---               else
---                  Set_Text(Gtk_Progress_Bar(CleanBar), "Ruined");
---               end if;
---               Set_Fraction(Gtk_Progress_Bar(CleanBar), DamagePercent);
---            end if;
+        (ModuleText, "end",
+         "{" & LF & "Repair/Upgrade skill: " &
+         To_String
+           (Skills_List(Modules_List(Module.ProtoIndex).RepairSkill).Name) &
+         "/" &
+         To_String
+           (Attributes_List
+              (Skills_List(Modules_List(Module.ProtoIndex).RepairSkill)
+                 .Attribute)
+              .Name) &
+         "}");
+      case Module.MType is
+         when ENGINE =>
+            Insert
+              (ModuleText, "end",
+               "{" & LF & "Max power:" & Integer'Image(Module.Power) & "}");
+            MaxValue :=
+              Positive(Float(Modules_List(Module.ProtoIndex).MaxValue) * 1.5);
+            if Module.Power = MaxValue then
+               Insert(ModuleText, "end", " (max upgrade)");
+            end if;
+            if Module.Disabled then
+               Insert(ModuleText, "end", " (disabled)");
+            end if;
+            Insert
+              (ModuleText, "end",
+               "{" & LF & "Fuel usage:" & Integer'Image(Module.FuelUsage) &
+               "}");
+            MaxValue :=
+              Positive(Float(Modules_List(Module.ProtoIndex).Value) / 2.0);
+            if Module.FuelUsage = MaxValue then
+               Insert(ModuleText, "end", " (max upgrade)");
+            end if;
+         when CARGO_ROOM =>
+            Insert
+              (ModuleText, "end",
+               "{" & LF & "Max cargo:" &
+               Integer'Image(Modules_List(Module.ProtoIndex).MaxValue) &
+               " kg}");
+         when HULL =>
+            ProgressBar.Name :=
+              New_String
+                (".paned.shipinfoframe.canvas.shipinfo.right.module.clean");
+            Label.Name :=
+              New_String
+                (".paned.shipinfoframe.canvas.shipinfo.right.module.cleanlbl");
+            DamagePercent :=
+              Float(Module.InstalledModules) / Float(Module.MaxModules);
+            configure(ProgressBar, "-value" & Float'Image(DamagePercent));
+            configure
+              (Label,
+               "-text {Modules installed:" &
+               Integer'Image(Module.InstalledModules) & " /" &
+               Integer'Image(Module.MaxModules) & "}");
+            MaxValue :=
+              Positive(Float(Modules_List(Module.ProtoIndex).MaxValue) * 1.5);
+            if Module.MaxModules = MaxValue then
+               configure
+                 (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
+            end if;
+            Tcl.Tk.Ada.Grid.Grid(Label, "-row 1");
+            Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 1 -column 1");
+         when CABIN =>
+            AddOwnersInfo("Owner");
+            ProgressBar.Name :=
+              New_String
+                (".paned.shipinfoframe.canvas.shipinfo.right.module.clean");
+            Label.Name :=
+              New_String
+                (".paned.shipinfoframe.canvas.shipinfo.right.module.cleanlbl");
+            if Module.Cleanliness /= Module.Quality then
+               DamagePercent :=
+                 1.0 - (Float(Module.Cleanliness) / Float(Module.Quality));
+               if DamagePercent > 0.0 and DamagePercent < 0.2 then
+                  configure(Label, "-text {Bit dusty}");
+               elsif DamagePercent > 0.19 and DamagePercent < 0.5 then
+                  configure(Label, "-text {Dusty}");
+               elsif DamagePercent > 0.49 and DamagePercent < 0.8 then
+                  configure(Label, "-text {Dirty}");
+               elsif DamagePercent > 0.79 and DamagePercent < 1.0 then
+                  configure(Label, "-text {Very dirty}");
+               else
+                  configure(Label, "-text {Ruined}");
+               end if;
+               configure(ProgressBar, "-value" & Float'Image(DamagePercent));
+               Tcl.Tk.Ada.Grid.Grid(Label, "-row 1");
+               Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 1 -column 1");
+            end if;
+            ProgressBar.Name :=
+              New_String
+                (".paned.shipinfoframe.canvas.shipinfo.right.module.quality");
+            Label.Name :=
+              New_String
+                (".paned.shipinfoframe.canvas.shipinfo.right.module.qualitylbl");
+            configure
+              (ProgressBar,
+               "-value" & Float'Image(Float(Module.Quality) / 100.0));
+            configure
+              (Label,
+               "-text {Quality: (" & GetCabinQuality(Module.Quality) & ")}");
+            MaxValue :=
+              Positive(Float(Modules_List(Module.ProtoIndex).MaxValue) * 1.5);
+            if Module.Quality = MaxValue then
+               configure
+                 (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
+            end if;
+            Tcl.Tk.Ada.Grid.Grid(Label, "-row 2");
+            Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 2 -column 1");
 --         when GUN | HARPOON_GUN =>
 --            Append(ModuleInfo, "Strength:");
 --            if Modules_List(Module.ProtoIndex).MType = GUN then
@@ -663,9 +696,9 @@ package body Ships.UI is
 --         when BATTERING_RAM =>
 --            Append(ModuleInfo, "Strength:");
 --            Append(ModuleInfo, Positive'Image(Module.Damage2));
---         when others =>
---            null;
---      end case;
+         when others =>
+            null;
+      end case;
 --      if Modules_List(Module.ProtoIndex).Size > 0 then
 --         if ModuleInfo /= Null_Unbounded_String then
 --            Append(ModuleInfo, LF);
@@ -751,6 +784,7 @@ package body Ships.UI is
 --      else
 --         Hide(Gtk_Widget(UpgradeBar));
 --      end if;
+      configure(ModuleText, "-state disabled");
 --      ShowModuleOptions;
       return TCL_OK;
    end Show_Module_Info_Command;
