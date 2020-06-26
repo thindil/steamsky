@@ -338,6 +338,7 @@ package body Ships.UI is
       ProgressBar: Ttk_ProgressBar;
       Label: Ttk_Label;
       ModuleText: Tk_Text;
+      ModuleInfo: Unbounded_String;
       procedure AddOwnersInfo(OwnersName: String) is
          HaveOwner: Boolean := False;
       begin
@@ -414,6 +415,14 @@ package body Ships.UI is
       ProgressBar.Name :=
         New_String
           (".paned.shipinfoframe.canvas.shipinfo.right.module.quality");
+      Tcl.Tk.Ada.Grid.Grid_Remove(ProgressBar);
+      Label.Name :=
+        New_String
+          (".paned.shipinfoframe.canvas.shipinfo.right.module.upgradelbl");
+      Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+      ProgressBar.Name :=
+        New_String
+          (".paned.shipinfoframe.canvas.shipinfo.right.module.upgrade");
       Tcl.Tk.Ada.Grid.Grid_Remove(ProgressBar);
       ModuleText.Interp := Interp;
       ModuleText.Name :=
@@ -727,74 +736,76 @@ package body Ships.UI is
             "{" & LF & LF &
             To_String(Modules_List(Module.ProtoIndex).Description) & "}");
       end if;
---      Set_Markup
---        (Gtk_Label(Get_Object(Object, "lblmoduleinfo2")),
---         To_String(ModuleInfo));
---      if Module.UpgradeAction /= NONE then
---         ModuleInfo := To_Unbounded_String("Upgrading: ");
---         case Module.UpgradeAction is
---            when DURABILITY =>
---               Append(ModuleInfo, "durability");
---               MaxUpgrade := Modules_List(Module.ProtoIndex).Durability;
---            when MAX_VALUE =>
---               case Modules_List(Module.ProtoIndex).MType is
---                  when ENGINE =>
---                     Append(ModuleInfo, "power");
---                     MaxUpgrade :=
---                       Modules_List(Module.ProtoIndex).MaxValue / 20;
---                  when CABIN =>
---                     Append(ModuleInfo, "quality");
---                     MaxUpgrade := Modules_List(Module.ProtoIndex).MaxValue;
---                  when GUN | BATTERING_RAM =>
---                     Append(ModuleInfo, "damage");
---                     MaxUpgrade :=
---                       Modules_List(Module.ProtoIndex).MaxValue * 2;
---                  when HULL =>
---                     Append(ModuleInfo, "enlarge");
---                     MaxUpgrade :=
---                       Modules_List(Module.ProtoIndex).MaxValue * 40;
---                  when HARPOON_GUN =>
---                     Append(ModuleInfo, "strength");
---                     MaxUpgrade :=
---                       Modules_List(Module.ProtoIndex).MaxValue * 10;
---                  when others =>
---                     null;
---               end case;
---            when VALUE =>
---               case Modules_List(Module.ProtoIndex).MType is
---                  when ENGINE =>
---                     Append(ModuleInfo, "fuel usage");
---                     MaxUpgrade := Modules_List(Module.ProtoIndex).Value * 20;
---                  when others =>
---                     null;
---               end case;
---            when others =>
---               null;
---         end case;
---         MaxUpgrade :=
---           Integer(Float(MaxUpgrade) * NewGameSettings.UpgradeCostBonus);
---         if MaxUpgrade = 0 then
---            MaxUpgrade := 1;
---         end if;
---         UpgradePercent :=
---           1.0 - (Gdouble(Module.UpgradeProgress) / Gdouble(MaxUpgrade));
---         Set_Fraction(Gtk_Progress_Bar(UpgradeBar), UpgradePercent);
---         if UpgradePercent < 0.11 then
---            Append(ModuleInfo, " (started)");
---         elsif UpgradePercent < 0.31 then
---            Append(ModuleInfo, " (designing)");
---         elsif UpgradePercent < 0.51 then
---            Append(ModuleInfo, " (base upgrades)");
---         elsif UpgradePercent < 0.80 then
---            Append(ModuleInfo, " (advanced upgrades)");
---         else
---            Append(ModuleInfo, " (final upgrades)");
---         end if;
---         Set_Text(Gtk_Progress_Bar(UpgradeBar), To_String(ModuleInfo));
---         Show_All(Gtk_Widget(UpgradeBar));
---      else
---         Hide(Gtk_Widget(UpgradeBar));
---      end if;
+      if Module.UpgradeAction /= NONE then
+         ModuleInfo := To_Unbounded_String("Upgrading: ");
+         case Module.UpgradeAction is
+            when DURABILITY =>
+               Append(ModuleInfo, "durability");
+               MaxUpgrade := Modules_List(Module.ProtoIndex).Durability;
+            when MAX_VALUE =>
+               case Modules_List(Module.ProtoIndex).MType is
+                  when ENGINE =>
+                     Append(ModuleInfo, "power");
+                     MaxUpgrade :=
+                       Modules_List(Module.ProtoIndex).MaxValue / 20;
+                  when CABIN =>
+                     Append(ModuleInfo, "quality");
+                     MaxUpgrade := Modules_List(Module.ProtoIndex).MaxValue;
+                  when GUN | BATTERING_RAM =>
+                     Append(ModuleInfo, "damage");
+                     MaxUpgrade :=
+                       Modules_List(Module.ProtoIndex).MaxValue * 2;
+                  when HULL =>
+                     Append(ModuleInfo, "enlarge");
+                     MaxUpgrade :=
+                       Modules_List(Module.ProtoIndex).MaxValue * 40;
+                  when HARPOON_GUN =>
+                     Append(ModuleInfo, "strength");
+                     MaxUpgrade :=
+                       Modules_List(Module.ProtoIndex).MaxValue * 10;
+                  when others =>
+                     null;
+               end case;
+            when VALUE =>
+               case Modules_List(Module.ProtoIndex).MType is
+                  when ENGINE =>
+                     Append(ModuleInfo, "fuel usage");
+                     MaxUpgrade := Modules_List(Module.ProtoIndex).Value * 20;
+                  when others =>
+                     null;
+               end case;
+            when others =>
+               null;
+         end case;
+         MaxUpgrade :=
+           Integer(Float(MaxUpgrade) * NewGameSettings.UpgradeCostBonus);
+         if MaxUpgrade = 0 then
+            MaxUpgrade := 1;
+         end if;
+         ProgressBar.Name :=
+           New_String
+             (".paned.shipinfoframe.canvas.shipinfo.right.module.upgrade");
+         UpgradePercent :=
+           1.0 - (Float(Module.UpgradeProgress) / Float(MaxUpgrade));
+         configure(ProgressBar, "-value" & Float'Image(UpgradePercent));
+         if UpgradePercent < 0.11 then
+            Append(ModuleInfo, " (started)");
+         elsif UpgradePercent < 0.31 then
+            Append(ModuleInfo, " (designing)");
+         elsif UpgradePercent < 0.51 then
+            Append(ModuleInfo, " (base upgrades)");
+         elsif UpgradePercent < 0.80 then
+            Append(ModuleInfo, " (advanced upgrades)");
+         else
+            Append(ModuleInfo, " (final upgrades)");
+         end if;
+         Label.Name :=
+           New_String
+             (".paned.shipinfoframe.canvas.shipinfo.right.module.upgradelbl");
+         configure(Label, "-text {" & To_String(ModuleInfo) & "}");
+         Tcl.Tk.Ada.Grid.Grid(Label, "-row 3");
+         Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 3 -column 1");
+      end if;
       configure(ModuleText, "-state disabled");
 --      ShowModuleOptions;
       return TCL_OK;
