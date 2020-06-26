@@ -36,6 +36,7 @@ with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with Config; use Config;
+with Crafts; use Crafts;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with ShipModules; use ShipModules;
@@ -637,59 +638,62 @@ package body Ships.UI is
                      " rounds}");
                end if;
             end if;
---         when TURRET =>
---            if Module.GunIndex > 0 then
---               Append
---                 (ModuleInfo,
---                  "Weapon: " &
---                  To_String(PlayerShip.Modules(Module.GunIndex).Name));
---            else
---               Append(ModuleInfo, "Weapon: none");
---            end if;
---         when WORKSHOP =>
---            AddOwnersInfo("Worker");
---            Append(ModuleInfo, LF);
---            if Module.CraftingIndex /= Null_Unbounded_String then
---               if Length(Module.CraftingIndex) > 6
---                 and then Slice(Module.CraftingIndex, 1, 5) = "Study" then
---                  Append
---                    (ModuleInfo,
---                     "Studying " &
---                     To_String
---                       (Items_List
---                          (Unbounded_Slice
---                             (Module.CraftingIndex, 7,
---                              Length(Module.CraftingIndex)))
---                          .Name));
---               elsif Length(Module.CraftingIndex) > 12
---                 and then Slice(Module.CraftingIndex, 1, 11) =
---                   "Deconstruct" then
---                  Append
---                    (ModuleInfo,
---                     "Deconstructing " &
---                     To_String
---                       (Items_List
---                          (Unbounded_Slice
---                             (Module.CraftingIndex, 13,
---                              Length(Module.CraftingIndex)))
---                          .Name));
---               else
---                  Append
---                    (ModuleInfo,
---                     "Manufacturing:" & Positive'Image(Module.CraftingAmount) &
---                     "x " &
---                     To_String
---                       (Items_List
---                          (Recipes_List(Module.CraftingIndex).ResultIndex)
---                          .Name));
---               end if;
---               Append
---                 (ModuleInfo,
---                  LF & "Time to complete current:" &
---                  Positive'Image(Module.CraftingTime) & " mins");
---            else
---               Append(ModuleInfo, "Manufacturing: nothing");
---            end if;
+         when TURRET =>
+            if Module.GunIndex > 0 then
+               Insert
+                 (ModuleText, "end",
+                  "{" & LF & "Weapon: " &
+                  To_String(PlayerShip.Modules(Module.GunIndex).Name) & "}");
+            else
+               Insert(ModuleText, "end", "{Weapon: none}");
+            end if;
+         when WORKSHOP =>
+            AddOwnersInfo("Worker");
+            Insert(ModuleText, "end", "{" & LF & "}");
+            if Module.CraftingIndex /= Null_Unbounded_String then
+               if Length(Module.CraftingIndex) > 6
+                 and then Slice(Module.CraftingIndex, 1, 5) = "Study" then
+                  Insert
+                    (ModuleText, "end",
+                     "{Studying " &
+                     To_String
+                       (Items_List
+                          (Unbounded_Slice
+                             (Module.CraftingIndex, 7,
+                              Length(Module.CraftingIndex)))
+                          .Name) &
+                     "}");
+               elsif Length(Module.CraftingIndex) > 12
+                 and then Slice(Module.CraftingIndex, 1, 11) =
+                   "Deconstruct" then
+                  Insert
+                    (ModuleText, "end",
+                     "{Deconstructing " &
+                     To_String
+                       (Items_List
+                          (Unbounded_Slice
+                             (Module.CraftingIndex, 13,
+                              Length(Module.CraftingIndex)))
+                          .Name) &
+                     "}");
+               else
+                  Insert
+                    (ModuleText, "end",
+                     "{Manufacturing:" &
+                     Positive'Image(Module.CraftingAmount) & "x " &
+                     To_String
+                       (Items_List
+                          (Recipes_List(Module.CraftingIndex).ResultIndex)
+                          .Name) &
+                     "}");
+               end if;
+               Insert
+                 (ModuleText, "end",
+                  "{" & LF & "Time to complete current:" &
+                  Positive'Image(Module.CraftingTime) & " mins}");
+            else
+               Insert(ModuleText, "end", "{Manufacturing: nothing}");
+            end if;
 --         when MEDICAL_ROOM =>
 --            AddOwnersInfo("Medic");
 --         when TRAINING_ROOM =>
