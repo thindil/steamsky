@@ -714,23 +714,19 @@ package body Ships.UI is
          when others =>
             null;
       end case;
---      if Modules_List(Module.ProtoIndex).Size > 0 then
---         if ModuleInfo /= Null_Unbounded_String then
---            Append(ModuleInfo, LF);
---         end if;
---         Append
---           (ModuleInfo,
---            "Size:" & Natural'Image(Modules_List(Module.ProtoIndex).Size));
---      end if;
---      if Modules_List(Module.ProtoIndex).Description /=
---        Null_Unbounded_String then
---         if ModuleInfo /= Null_Unbounded_String then
---            Append(ModuleInfo, LF);
---         end if;
---         Append
---           (ModuleInfo,
---            LF & To_String(Modules_List(Module.ProtoIndex).Description));
---      end if;
+      if Modules_List(Module.ProtoIndex).Size > 0 then
+         Insert
+           (ModuleText, "end",
+            "{" & LF & "Size:" &
+            Natural'Image(Modules_List(Module.ProtoIndex).Size) & "}");
+      end if;
+      if Modules_List(Module.ProtoIndex).Description /=
+        Null_Unbounded_String then
+         Insert
+           (ModuleText, "end",
+            "{" & LF & LF &
+            To_String(Modules_List(Module.ProtoIndex).Description) & "}");
+      end if;
 --      Set_Markup
 --        (Gtk_Label(Get_Object(Object, "lblmoduleinfo2")),
 --         To_String(ModuleInfo));
