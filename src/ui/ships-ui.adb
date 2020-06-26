@@ -13,6 +13,8 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
@@ -409,7 +411,8 @@ package body Ships.UI is
           (".paned.shipinfoframe.canvas.shipinfo.right.module.qualitylbl");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       ProgressBar.Name :=
-        New_String(".paned.shipinfoframe.canvas.shipinfo.right.module.quality");
+        New_String
+          (".paned.shipinfoframe.canvas.shipinfo.right.module.quality");
       Tcl.Tk.Ada.Grid.Grid_Remove(ProgressBar);
       ModuleText.Interp := Interp;
       ModuleText.Name :=
@@ -546,87 +549,94 @@ package body Ships.UI is
             end if;
             Tcl.Tk.Ada.Grid.Grid(Label, "-row 2");
             Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 2 -column 1");
---         when GUN | HARPOON_GUN =>
---            Append(ModuleInfo, "Strength:");
---            if Modules_List(Module.ProtoIndex).MType = GUN then
---               Append(ModuleInfo, Positive'Image(Module.Damage));
---            else
---               Append(ModuleInfo, Positive'Image(Module.Duration));
---            end if;
---            Append(ModuleInfo, LF & "Ammunition: ");
---            HaveAmmo := False;
---            declare
---               AmmoIndex: Natural;
---            begin
---               if Module.MType = GUN then
---                  AmmoIndex := Module.AmmoIndex;
---               else
---                  AmmoIndex := Module.HarpoonIndex;
---               end if;
---               if
---                 (AmmoIndex >= PlayerShip.Cargo.First_Index and
---                  AmmoIndex <= PlayerShip.Cargo.Last_Index)
---                 and then
---                   Items_List(PlayerShip.Cargo(AmmoIndex).ProtoIndex).IType =
---                   Items_Types(Modules_List(Module.ProtoIndex).Value) then
---                  Append
---                    (ModuleInfo,
---                     To_String
---                       (Items_List(PlayerShip.Cargo(AmmoIndex).ProtoIndex)
---                          .Name) &
---                     " (assigned)");
---                  HaveAmmo := True;
---               end if;
---            end;
---            if not HaveAmmo then
---               Mamount := 0;
---               for I in Items_List.Iterate loop
---                  if Items_List(I).IType =
---                    Items_Types(Modules_List(Module.ProtoIndex).Value) then
---                     if Mamount > 0 then
---                        Append(ModuleInfo, " or ");
---                     end if;
---                     if FindItem(PlayerShip.Cargo, Objects_Container.Key(I)) >
---                       0 then
---                        Append(ModuleInfo, To_String(Items_List(I).Name));
---                     else
---                        Append
---                          (ModuleInfo,
---                           "<span foreground=""red"">" &
---                           To_String(Items_List(I).Name) & "</span>");
---                     end if;
---                     Mamount := Mamount + 1;
---                  end if;
---               end loop;
---            end if;
---            Append(ModuleInfo, LF);
---            if Module.Owner(1) > 0 then
---               Append
---                 (ModuleInfo,
---                  "Gunner: " &
---                  To_String(PlayerShip.Crew(Module.Owner(1)).Name));
---            else
---               Append(ModuleInfo, "Gunner: none");
---            end if;
---            if Module.MType = GUN then
---               Append(ModuleInfo, LF);
---               if Modules_List(Module.ProtoIndex).Speed > 0 then
---                  Append
---                    (ModuleInfo,
---                     "Max fire rate:" &
---                     Positive'Image(Modules_List(Module.ProtoIndex).Speed) &
---                     "/round");
---               else
---                  Append
---                    (ModuleInfo,
---                     "Max fire rate: 1/" &
---                     Trim
---                       (Integer'Image
---                          (abs (Modules_List(Module.ProtoIndex).Speed)),
---                        Both) &
---                     " rounds");
---               end if;
---            end if;
+         when GUN | HARPOON_GUN =>
+            Insert(ModuleText, "end", "{" & LF & "Strength:}");
+            if Modules_List(Module.ProtoIndex).MType = GUN then
+               Insert
+                 (ModuleText, "end",
+                  "{" & Positive'Image(Module.Damage) & "}");
+            else
+               Insert
+                 (ModuleText, "end",
+                  "{" & Positive'Image(Module.Duration) & "}");
+            end if;
+            Insert(ModuleText, "end", "{" & LF & "Ammunition: }");
+            HaveAmmo := False;
+            declare
+               AmmoIndex: Natural;
+            begin
+               if Module.MType = GUN then
+                  AmmoIndex := Module.AmmoIndex;
+               else
+                  AmmoIndex := Module.HarpoonIndex;
+               end if;
+               if
+                 (AmmoIndex >= PlayerShip.Cargo.First_Index and
+                  AmmoIndex <= PlayerShip.Cargo.Last_Index)
+                 and then
+                   Items_List(PlayerShip.Cargo(AmmoIndex).ProtoIndex).IType =
+                   Items_Types(Modules_List(Module.ProtoIndex).Value) then
+                  Insert
+                    (ModuleText, "end",
+                     "{" &
+                     To_String
+                       (Items_List(PlayerShip.Cargo(AmmoIndex).ProtoIndex)
+                          .Name) &
+                     " (assigned)}");
+                  HaveAmmo := True;
+               end if;
+            end;
+            if not HaveAmmo then
+               Mamount := 0;
+               for I in Items_List.Iterate loop
+                  if Items_List(I).IType =
+                    Items_Types(Modules_List(Module.ProtoIndex).Value) then
+                     if Mamount > 0 then
+                        Insert(ModuleText, "end", "{ or }");
+                     end if;
+                     if FindItem(PlayerShip.Cargo, Objects_Container.Key(I)) >
+                       0 then
+                        Insert
+                          (ModuleText, "end",
+                           "{" & To_String(Items_List(I).Name) & "}");
+                     else
+                        Insert
+                          (ModuleText, "end",
+                           "{" & To_String(Items_List(I).Name) &
+                           "} [list red]");
+                     end if;
+                     Mamount := Mamount + 1;
+                  end if;
+               end loop;
+            end if;
+            Insert(ModuleText, "end", "{" & LF & "}");
+            if Module.Owner(1) > 0 then
+               Insert
+                 (ModuleText, "end",
+                  "{Gunner: " &
+                  To_String(PlayerShip.Crew(Module.Owner(1)).Name) & "}");
+            else
+               Insert(ModuleText, "end", "Gunner: none");
+            end if;
+            if Module.MType = GUN then
+               Insert(ModuleText, "end", "{" & LF & "}");
+               if Modules_List(Module.ProtoIndex).Speed > 0 then
+                  Insert
+                    (ModuleText, "end",
+                     "{Max fire rate:" &
+                     Positive'Image(Modules_List(Module.ProtoIndex).Speed) &
+                     "/round}");
+               else
+                  Insert
+                    (ModuleText, "end",
+                     "{Max fire rate: 1/" &
+                     Trim
+                       (Integer'Image
+                          (abs (Modules_List(Module.ProtoIndex).Speed)),
+                        Left) &
+                     " rounds}");
+               end if;
+            end if;
 --         when TURRET =>
 --            if Module.GunIndex > 0 then
 --               Append
