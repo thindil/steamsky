@@ -308,6 +308,305 @@ package body Ships.UI is
       return TCL_OK;
    end Set_Ship_Name_Command;
 
+   -- ****if* SUI2/ModuleIndex
+   -- FUNCTION
+   -- Index of the currently selected module
+   -- SOURCE
+   ModuleIndex: Positive;
+   -- ****
+
+   -- ****if* SUI2/ShowModuleOptions
+   -- FUNCTION
+   -- Show available options for the selected module
+   -- SOURCE
+   procedure ShowModuleOptions is
+      -- ****
+      ButtonsFrame, Button: Ttk_Frame;
+      MaxValue: Positive;
+--      IsPassenger: Boolean := False;
+--      procedure ShowAssignSkill is
+--         SkillText, ProtoIndex: Unbounded_String;
+--         AssignSkillCombo: constant Gtk_Combo_Box_Text :=
+--           Gtk_Combo_Box_Text(Get_Object(Builder, "cmbassignskill"));
+--      begin
+--         if SkillsListSet then
+--            return;
+--         end if;
+--         for I in Skills_List.First_Index .. Skills_List.Last_Index loop
+--            SkillText := Skills_List(I).Name;
+--            if Skills_List(I).Tool /= Null_Unbounded_String then
+--               Append(SkillText, " Tool: ");
+--               ProtoIndex := FindProtoItem(ItemType => Skills_List(I).Tool);
+--               if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
+--                  Append(SkillText, Items_List(ProtoIndex).ShowType);
+--               else
+--                  Append(SkillText, Items_List(ProtoIndex).IType);
+--               end if;
+--            end if;
+--            Append(AssignSkillCombo, Positive'Image(I), To_String(SkillText));
+--         end loop;
+--         Set_Active(AssignSkillCombo, 0);
+--         SkillsListSet := True;
+--      end ShowAssignSkill;
+   begin
+      ButtonsFrame.Interp := Get_Context;
+      ButtonsFrame.Name :=
+        New_String(".paned.shipinfoframe.canvas.shipinfo.right.options");
+      if Tcl.Tk.Ada.Grid.Grid_Slaves(ButtonsFrame) /= "" then
+         Tcl_Eval
+           (Get_Context,
+            "grid remove [grid slaves " & Widget_Image(ButtonsFrame) & "]");
+      end if;
+      MaxValue :=
+        Natural
+          (Float
+             (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                .Durability) *
+           1.5);
+      Button.Interp := Get_Context;
+      Button.Name := New_String(Widget_Image(ButtonsFrame) & ".durability");
+      if PlayerShip.Modules(ModuleIndex).MaxDurability < MaxValue then
+         Tcl.Tk.Ada.Grid.Grid(Button);
+      end if;
+--      case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
+--         when ENGINE =>
+--            MaxValue :=
+--              Natural
+--                (Float
+--                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+--                      .MaxValue) *
+--                 1.5);
+--            if PlayerShip.Modules(ModuleIndex).Power < MaxValue then
+--               Set_Label
+--                 (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+--                  "Upgrade e_ngine power");
+--               Set_Tooltip_Text
+--                 (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+--                  "Start upgrading engine power");
+--               Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
+--            else
+--               Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
+--            end if;
+--            MaxValue :=
+--              Natural
+--                (Float
+--                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+--                      .Value) /
+--                 2.0);
+--            if PlayerShip.Modules(ModuleIndex).FuelUsage > MaxValue then
+--               Set_Label
+--                 (Gtk_Button(Get_Object(Builder, "btnupgrade2")),
+--                  "Reduce _fuel usage");
+--               Set_Tooltip_Text
+--                 (Gtk_Button(Get_Object(Builder, "btnupgrade2")),
+--                  "Start working on reduce fuel usage of this engine");
+--               Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade2")));
+--            else
+--               Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade2")));
+--            end if;
+--            Show_All(Gtk_Widget(Get_Object(Builder, "btndisableengine")));
+--            if not PlayerShip.Modules(ModuleIndex).Disabled then
+--               Set_Label
+--                 (Gtk_Button
+--                    (Gtk_Widget(Get_Object(Builder, "btndisableengine"))),
+--                  "Disable _engine");
+--               Set_Tooltip_Text
+--                 (Gtk_Button(Get_Object(Builder, "btndisableengine")),
+--                  "Turn off engine so it stop using fuel");
+--            else
+--               Set_Label
+--                 (Gtk_Button
+--                    (Gtk_Widget(Get_Object(Builder, "btndisableengine"))),
+--                  "Enable _engine");
+--               Set_Tooltip_Text
+--                 (Gtk_Button(Get_Object(Builder, "btndisableengine")),
+--                  "Turn on engine so ship will be fly faster");
+--            end if;
+--         when CABIN =>
+--            MaxValue :=
+--              Natural
+--                (Float
+--                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+--                      .MaxValue) *
+--                 1.5);
+--            if PlayerShip.Modules(ModuleIndex).Quality < MaxValue then
+--               Set_Label
+--                 (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+--                  "Upgrade _quality");
+--               Set_Tooltip_Text
+--                 (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+--                  "Start upgrading cabin quality");
+--               Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
+--            else
+--               Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
+--            end if;
+--            Missions_Loop :
+--            for Mission of AcceptedMissions loop
+--               if Mission.MType = Passenger then
+--                  for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
+--                     if Mission.Data = Owner then
+--                        IsPassenger := True;
+--                        exit Missions_Loop;
+--                     end if;
+--                  end loop;
+--               end if;
+--            end loop Missions_Loop;
+--            if not IsPassenger then
+--               Set_Label
+--                 (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
+--                  "Assign as _owner");
+--               Set_Tooltip_Text
+--                 (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
+--                  "Assign selected crew member as owner of module");
+--               Show_All(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
+--            end if;
+--         when GUN | HARPOON_GUN =>
+--            declare
+--               CurrentValue: Positive;
+--            begin
+--               if PlayerShip.Modules(ModuleIndex).MType = GUN then
+--                  CurrentValue := PlayerShip.Modules(ModuleIndex).Damage;
+--               else
+--                  CurrentValue := PlayerShip.Modules(ModuleIndex).Duration;
+--               end if;
+--               MaxValue :=
+--                 Natural
+--                   (Float
+--                      (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+--                         .MaxValue) *
+--                    1.5);
+--               if CurrentValue < MaxValue then
+--                  if PlayerShip.Modules(ModuleIndex).MType = GUN then
+--                     Set_Label
+--                       (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+--                        "Upgrade da_mage");
+--                     Set_Tooltip_Text
+--                       (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+--                        "Start upgrading damage of gun");
+--                  else
+--                     Set_Label
+--                       (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+--                        "Upgrade str_ength");
+--                     Set_Tooltip_Text
+--                       (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+--                        "Start upgrading strength of gun");
+--                  end if;
+--                  Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
+--               else
+--                  Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
+--               end if;
+--            end;
+--            Set_Label
+--              (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
+--               "Assign as _gunner");
+--            Set_Tooltip_Text
+--              (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
+--               "Assign selected crew member as gunner");
+--            Show_All(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
+--            Show_All(Gtk_Widget(Get_Object(Builder, "boxassignammo")));
+--         when BATTERING_RAM =>
+--            MaxValue :=
+--              Natural
+--                (Float
+--                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+--                      .MaxValue) *
+--                 1.5);
+--            if PlayerShip.Modules(ModuleIndex).Damage2 < MaxValue then
+--               Set_Label
+--                 (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+--                  "Upgrade d_amage");
+--               Set_Tooltip_Text
+--                 (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+--                  "Start upgrading damage of battering ram");
+--               Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
+--            else
+--               Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
+--            end if;
+--         when HULL =>
+--            MaxValue :=
+--              Natural
+--                (Float
+--                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+--                      .MaxValue) *
+--                 1.5);
+--            if PlayerShip.Modules(ModuleIndex).MaxModules < MaxValue then
+--               Set_Label
+--                 (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+--                  "Enlarge _hull");
+--               Set_Tooltip_Text
+--                 (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
+--                  "Start enlarging hull so it can have more modules installed");
+--               Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
+--            else
+--               Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
+--            end if;
+--         when ALCHEMY_LAB .. GREENHOUSE =>
+--            if PlayerShip.Modules(ModuleIndex).CraftingIndex /=
+--              Null_Unbounded_String then
+--               Set_Label
+--                 (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
+--                  "Assign as _worker");
+--               Set_Tooltip_Text
+--                 (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
+--                  "Assign selected crew member as worker");
+--               Show_All(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
+--            end if;
+--         when MEDICAL_ROOM =>
+--            for Member of PlayerShip.Crew loop
+--               if Member.Health < 100 and
+--                 FindItem
+--                     (Inventory => PlayerShip.Cargo,
+--                      ItemType =>
+--                        Factions_List(PlayerShip.Crew(1).Faction)
+--                          .HealingTools) >
+--                   0 then
+--                  Set_Label
+--                    (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
+--                     "Assign as _medic");
+--                  Set_Tooltip_Text
+--                    (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
+--                     "Assign selected crew member as medic");
+--                  Show_All(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
+--                  exit;
+--               end if;
+--            end loop;
+--         when TRAINING_ROOM =>
+--            Show_All(Gtk_Widget(Get_Object(Builder, "boxassignskill")));
+--         when others =>
+--            null;
+--      end case;
+--      if PlayerShip.Modules(ModuleIndex).UpgradeAction = NONE or
+--        PlayerShip.UpgradeModule = ModuleIndex then
+--         Hide(Gtk_Widget(Get_Object(Builder, "btncontinue")));
+--      else
+--         Show_All(Gtk_Widget(Get_Object(Builder, "btncontinue")));
+--      end if;
+--      if PlayerShip.UpgradeModule = 0 then
+--         Hide(Gtk_Widget(Get_Object(Builder, "btnstop")));
+--      else
+--         Show_All(Gtk_Widget(Get_Object(Builder, "btnstop")));
+--      end if;
+--      if PlayerShip.RepairModule = ModuleIndex then
+--         Hide(Gtk_Widget(Get_Object(Builder, "btnrepairfirst")));
+--      else
+--         Show_All(Gtk_Widget(Get_Object(Builder, "btnrepairfirst")));
+--      end if;
+--      if PlayerShip.RepairModule = 0 then
+--         Hide(Gtk_Widget(Get_Object(Builder, "btnremovepriority")));
+--      else
+--         Show_All(Gtk_Widget(Get_Object(Builder, "btnremovepriority")));
+--      end if;
+--      if Is_Visible(Gtk_Widget(Get_Object(Builder, "boxassigncrew"))) then
+--         ShowAssignMember;
+--      end if;
+--      if Is_Visible(Gtk_Widget(Get_Object(Builder, "boxassignammo"))) then
+--         ShowAssignAmmo;
+--      end if;
+--      if Is_Visible(Gtk_Widget(Get_Object(Builder, "boxassignskill"))) then
+--         ShowAssignSkill;
+--      end if;
+   end ShowModuleOptions;
+
    -- ****f* SUI2/Show_Module_Info_Command
    -- FUNCTION
    -- Show information about the selected module and set option for it
@@ -330,7 +629,7 @@ package body Ships.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       Module: ModuleData;
-      MaxValue, ModuleIndex: Positive;
+      MaxValue: Positive;
       HaveAmmo: Boolean;
       Mamount, MaxUpgrade: Natural := 0;
       DamagePercent, UpgradePercent: Float;
@@ -807,7 +1106,7 @@ package body Ships.UI is
          Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 3 -column 1");
       end if;
       configure(ModuleText, "-state disabled");
---      ShowModuleOptions;
+      ShowModuleOptions;
       return TCL_OK;
    end Show_Module_Info_Command;
 
