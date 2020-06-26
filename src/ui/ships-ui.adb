@@ -694,22 +694,23 @@ package body Ships.UI is
             else
                Insert(ModuleText, "end", "{Manufacturing: nothing}");
             end if;
---         when MEDICAL_ROOM =>
---            AddOwnersInfo("Medic");
---         when TRAINING_ROOM =>
---            if Module.TrainedSkill > 0 then
---               Append
---                 (ModuleInfo,
---                  "Set for training " &
---                  To_String(Skills_List(Module.TrainedSkill).Name) & ".");
---            else
---               Append(ModuleInfo, "Must be set for training.");
---            end if;
---            Append(ModuleInfo, LF);
---            AddOwnersInfo("Trainee");
---         when BATTERING_RAM =>
---            Append(ModuleInfo, "Strength:");
---            Append(ModuleInfo, Positive'Image(Module.Damage2));
+         when MEDICAL_ROOM =>
+            AddOwnersInfo("Medic");
+         when TRAINING_ROOM =>
+            if Module.TrainedSkill > 0 then
+               Insert
+                 (ModuleText, "end",
+                  "{Set for training " &
+                  To_String(Skills_List(Module.TrainedSkill).Name) & ".}");
+            else
+               Insert(ModuleText, "end", "{Must be set for training.}");
+            end if;
+            Insert(ModuleText, "end", "{" & LF & "}");
+            AddOwnersInfo("Trainee");
+         when BATTERING_RAM =>
+            Insert
+              (ModuleText, "end",
+               "Strength:" & Positive'Image(Module.Damage2) & "}");
          when others =>
             null;
       end case;
