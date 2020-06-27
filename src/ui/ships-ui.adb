@@ -19,6 +19,7 @@ with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with GNAT.String_Split; use GNAT.String_Split;
 with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
@@ -28,17 +29,21 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with Config; use Config;
 with Crafts; use Crafts;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
+with Missions; use Missions;
 with ShipModules; use ShipModules;
 with Utils.UI; use Utils.UI;
 
@@ -323,7 +328,10 @@ package body Ships.UI is
       -- ****
       ButtonsFrame, Button: Ttk_Frame;
       MaxValue: Positive;
---      IsPassenger: Boolean := False;
+      Tokens: Slice_Set;
+      IsPassenger: Boolean := False;
+      ComboBox: Ttk_ComboBox;
+      ComboOptions: Unbounded_String;
 --      procedure ShowAssignSkill is
 --         SkillText, ProtoIndex: Unbounded_String;
 --         AssignSkillCombo: constant Gtk_Combo_Box_Text :=
@@ -348,118 +356,131 @@ package body Ships.UI is
 --         Set_Active(AssignSkillCombo, 0);
 --         SkillsListSet := True;
 --      end ShowAssignSkill;
+      procedure ShowAssignMember is
+         Assigned: Boolean;
+      begin
+         for I in
+           PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
+            Assigned := False;
+            for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
+               if Owner = I then
+                  Assigned := True;
+                  exit;
+               end if;
+            end loop;
+            if not Assigned and PlayerShip.Crew(I).Skills.Length > 0 and
+              PlayerShip.Crew(I).ContractLength /= 0 then
+               case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                 .MType is
+                  when MEDICAL_ROOM =>
+                     if PlayerShip.Crew(I).Health = 100 then
+                        Append(ComboOptions, " " & PlayerShip.Crew(I).Name);
+                     end if;
+                  when others =>
+                     Append(ComboOptions, " " & PlayerShip.Crew(I).Name);
+               end case;
+            end if;
+         end loop;
+         configure(ComboBox, "-values [list" & To_String(ComboOptions) & "]");
+         Current(ComboBox, "0");
+      end ShowAssignMember;
    begin
       ButtonsFrame.Interp := Get_Context;
       ButtonsFrame.Name :=
         New_String(".paned.shipinfoframe.canvas.shipinfo.right.options");
-      if Tcl.Tk.Ada.Grid.Grid_Slaves(ButtonsFrame) /= "" then
-         Tcl_Eval
-           (Get_Context,
-            "grid remove [grid slaves " & Widget_Image(ButtonsFrame) & "]");
-      end if;
+      Button.Interp := Get_Context;
+      ComboBox.Interp := Get_Context;
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Slaves(ButtonsFrame), " ");
+      for I in 1 .. Slice_Count(Tokens) loop
+         if Slice(Tokens, I) /= "" then
+            Button.Name := New_String(Slice(Tokens, I));
+            Tcl.Tk.Ada.Grid.Grid_Remove(Button);
+         end if;
+      end loop;
       MaxValue :=
         Natural
           (Float
              (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                 .Durability) *
            1.5);
-      Button.Interp := Get_Context;
       Button.Name := New_String(Widget_Image(ButtonsFrame) & ".durability");
       if PlayerShip.Modules(ModuleIndex).MaxDurability < MaxValue then
          Tcl.Tk.Ada.Grid.Grid(Button);
       end if;
---      case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
---         when ENGINE =>
---            MaxValue :=
---              Natural
---                (Float
---                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
---                      .MaxValue) *
---                 1.5);
---            if PlayerShip.Modules(ModuleIndex).Power < MaxValue then
---               Set_Label
---                 (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
---                  "Upgrade e_ngine power");
---               Set_Tooltip_Text
---                 (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
---                  "Start upgrading engine power");
---               Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
---            else
---               Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
---            end if;
---            MaxValue :=
---              Natural
---                (Float
---                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
---                      .Value) /
---                 2.0);
---            if PlayerShip.Modules(ModuleIndex).FuelUsage > MaxValue then
---               Set_Label
---                 (Gtk_Button(Get_Object(Builder, "btnupgrade2")),
---                  "Reduce _fuel usage");
---               Set_Tooltip_Text
---                 (Gtk_Button(Get_Object(Builder, "btnupgrade2")),
---                  "Start working on reduce fuel usage of this engine");
---               Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade2")));
---            else
---               Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade2")));
---            end if;
---            Show_All(Gtk_Widget(Get_Object(Builder, "btndisableengine")));
---            if not PlayerShip.Modules(ModuleIndex).Disabled then
---               Set_Label
---                 (Gtk_Button
---                    (Gtk_Widget(Get_Object(Builder, "btndisableengine"))),
---                  "Disable _engine");
---               Set_Tooltip_Text
---                 (Gtk_Button(Get_Object(Builder, "btndisableengine")),
---                  "Turn off engine so it stop using fuel");
---            else
---               Set_Label
---                 (Gtk_Button
---                    (Gtk_Widget(Get_Object(Builder, "btndisableengine"))),
---                  "Enable _engine");
---               Set_Tooltip_Text
---                 (Gtk_Button(Get_Object(Builder, "btndisableengine")),
---                  "Turn on engine so ship will be fly faster");
---            end if;
---         when CABIN =>
---            MaxValue :=
---              Natural
---                (Float
---                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
---                      .MaxValue) *
---                 1.5);
---            if PlayerShip.Modules(ModuleIndex).Quality < MaxValue then
---               Set_Label
---                 (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
---                  "Upgrade _quality");
---               Set_Tooltip_Text
---                 (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
---                  "Start upgrading cabin quality");
---               Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
---            else
---               Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
---            end if;
---            Missions_Loop :
---            for Mission of AcceptedMissions loop
---               if Mission.MType = Passenger then
---                  for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
---                     if Mission.Data = Owner then
---                        IsPassenger := True;
---                        exit Missions_Loop;
---                     end if;
---                  end loop;
---               end if;
---            end loop Missions_Loop;
---            if not IsPassenger then
---               Set_Label
---                 (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
---                  "Assign as _owner");
---               Set_Tooltip_Text
---                 (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
---                  "Assign selected crew member as owner of module");
---               Show_All(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
---            end if;
+      case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
+         when ENGINE =>
+            MaxValue :=
+              Natural
+                (Float
+                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                      .MaxValue) *
+                 1.5);
+            if PlayerShip.Modules(ModuleIndex).Power < MaxValue then
+               Button.Name :=
+                 New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
+               configure(Button, "-text {Upgrade engine power}");
+               Add(Button, "Start upgrading engine power");
+               Tcl.Tk.Ada.Grid.Grid(Button);
+            end if;
+            MaxValue :=
+              Natural
+                (Float
+                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                      .Value) /
+                 2.0);
+            if PlayerShip.Modules(ModuleIndex).FuelUsage > MaxValue then
+               Button.Name :=
+                 New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
+               configure(Button, "-text {Reduce fuel usage}");
+               Add
+                 (Button, "Start working on reduce fuel usage of this engine");
+               Tcl.Tk.Ada.Grid.Grid(Button);
+            end if;
+            Button.Name := New_String(Widget_Image(ButtonsFrame) & ".disable");
+            Tcl.Tk.Ada.Grid.Grid(Button);
+            if not PlayerShip.Modules(ModuleIndex).Disabled then
+               configure(Button, "-text {Disable engine}");
+               Add(Button, "Turn off engine so it stop using fuel");
+            else
+               configure(Button, "-text {Enable engine}");
+               Add(Button, "Turn on engine so ship will be fly faster");
+            end if;
+         when CABIN =>
+            MaxValue :=
+              Natural
+                (Float
+                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                      .MaxValue) *
+                 1.5);
+            if PlayerShip.Modules(ModuleIndex).Quality < MaxValue then
+               Button.Name :=
+                 New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
+               configure(Button, "-text {Upgrade quality}");
+               Add(Button, "Start upgrading cabin quality");
+               Tcl.Tk.Ada.Grid.Grid(Button);
+            end if;
+            Missions_Loop :
+            for Mission of AcceptedMissions loop
+               if Mission.MType = Passenger then
+                  for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
+                     if Mission.Data = Owner then
+                        IsPassenger := True;
+                        exit Missions_Loop;
+                     end if;
+                  end loop;
+               end if;
+            end loop Missions_Loop;
+            if not IsPassenger then
+               Button.Name :=
+                 New_String(Widget_Image(ButtonsFrame) & ".assigncrew");
+               configure(Button, "-text {Assing as owner}");
+               Add(Button, "Assign selected crew member as owner of module");
+               Tcl.Tk.Ada.Grid.Grid(Button);
+               ComboBox.Name :=
+                 New_String(Widget_Image(ButtonsFrame) & ".crewcombo");
+               ShowAssignMember;
+               Tcl.Tk.Ada.Grid.Grid(ComboBox);
+            end if;
 --         when GUN | HARPOON_GUN =>
 --            declare
 --               CurrentValue: Positive;
@@ -572,9 +593,9 @@ package body Ships.UI is
 --            end loop;
 --         when TRAINING_ROOM =>
 --            Show_All(Gtk_Widget(Get_Object(Builder, "boxassignskill")));
---         when others =>
---            null;
---      end case;
+         when others =>
+            null;
+      end case;
 --      if PlayerShip.Modules(ModuleIndex).UpgradeAction = NONE or
 --        PlayerShip.UpgradeModule = ModuleIndex then
 --         Hide(Gtk_Widget(Get_Object(Builder, "btncontinue")));
