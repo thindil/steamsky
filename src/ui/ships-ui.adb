@@ -333,30 +333,28 @@ package body Ships.UI is
       IsPassenger: Boolean := False;
       ComboBox: Ttk_ComboBox;
       ComboOptions: Unbounded_String;
---      procedure ShowAssignSkill is
---         SkillText, ProtoIndex: Unbounded_String;
---         AssignSkillCombo: constant Gtk_Combo_Box_Text :=
---           Gtk_Combo_Box_Text(Get_Object(Builder, "cmbassignskill"));
---      begin
---         if SkillsListSet then
---            return;
---         end if;
---         for I in Skills_List.First_Index .. Skills_List.Last_Index loop
---            SkillText := Skills_List(I).Name;
---            if Skills_List(I).Tool /= Null_Unbounded_String then
---               Append(SkillText, " Tool: ");
---               ProtoIndex := FindProtoItem(ItemType => Skills_List(I).Tool);
---               if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
---                  Append(SkillText, Items_List(ProtoIndex).ShowType);
---               else
---                  Append(SkillText, Items_List(ProtoIndex).IType);
---               end if;
---            end if;
---            Append(AssignSkillCombo, Positive'Image(I), To_String(SkillText));
---         end loop;
---         Set_Active(AssignSkillCombo, 0);
---         SkillsListSet := True;
---      end ShowAssignSkill;
+      procedure ShowAssignSkill is
+         SkillText, ProtoIndex: Unbounded_String;
+      begin
+         for I in Skills_List.First_Index .. Skills_List.Last_Index loop
+            Append(SkillText, " {" & Skills_List(I).Name);
+            if Skills_List(I).Tool /= Null_Unbounded_String then
+               Append(SkillText, " Tool: ");
+               ProtoIndex := FindProtoItem(ItemType => Skills_List(I).Tool);
+               if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
+                  Append(SkillText, Items_List(ProtoIndex).ShowType);
+               else
+                  Append(SkillText, Items_List(ProtoIndex).IType);
+               end if;
+            end if;
+            Append(SkillText, "}");
+         end loop;
+         ComboBox.Name :=
+           New_String(Widget_Image(ButtonsFrame) & ".crewcombo");
+         configure(ComboBox, "-values [list" & To_String(SkillText) & "]");
+         Current(ComboBox, "0");
+         Tcl.Tk.Ada.Grid.Grid(ComboBox);
+      end ShowAssignSkill;
       procedure ShowAssignMember is
          Assigned: Boolean;
       begin
@@ -583,41 +581,28 @@ package body Ships.UI is
                   exit;
                end if;
             end loop;
---         when TRAINING_ROOM =>
---            Show_All(Gtk_Widget(Get_Object(Builder, "boxassignskill")));
+         when TRAINING_ROOM =>
+            ShowAssignSkill;
          when others =>
             null;
       end case;
---      if PlayerShip.Modules(ModuleIndex).UpgradeAction = NONE or
---        PlayerShip.UpgradeModule = ModuleIndex then
---         Hide(Gtk_Widget(Get_Object(Builder, "btncontinue")));
---      else
---         Show_All(Gtk_Widget(Get_Object(Builder, "btncontinue")));
---      end if;
---      if PlayerShip.UpgradeModule = 0 then
---         Hide(Gtk_Widget(Get_Object(Builder, "btnstop")));
---      else
---         Show_All(Gtk_Widget(Get_Object(Builder, "btnstop")));
---      end if;
---      if PlayerShip.RepairModule = ModuleIndex then
---         Hide(Gtk_Widget(Get_Object(Builder, "btnrepairfirst")));
---      else
---         Show_All(Gtk_Widget(Get_Object(Builder, "btnrepairfirst")));
---      end if;
---      if PlayerShip.RepairModule = 0 then
---         Hide(Gtk_Widget(Get_Object(Builder, "btnremovepriority")));
---      else
---         Show_All(Gtk_Widget(Get_Object(Builder, "btnremovepriority")));
---      end if;
---      if Is_Visible(Gtk_Widget(Get_Object(Builder, "boxassigncrew"))) then
---         ShowAssignMember;
---      end if;
---      if Is_Visible(Gtk_Widget(Get_Object(Builder, "boxassignammo"))) then
---         ShowAssignAmmo;
---      end if;
---      if Is_Visible(Gtk_Widget(Get_Object(Builder, "boxassignskill"))) then
---         ShowAssignSkill;
---      end if;
+      if PlayerShip.Modules(ModuleIndex).UpgradeAction /= NONE and
+        PlayerShip.UpgradeModule /= ModuleIndex then
+         Button.Name := New_String(Widget_Image(ButtonsFrame) & ".continue");
+         Tcl.Tk.Ada.Grid.Grid(Button);
+      end if;
+      if PlayerShip.UpgradeModule /= 0 then
+         Button.Name := New_String(Widget_Image(ButtonsFrame) & ".stop");
+         Tcl.Tk.Ada.Grid.Grid(Button);
+      end if;
+      if PlayerShip.RepairModule /= ModuleIndex then
+         Button.Name := New_String(Widget_Image(ButtonsFrame) & ".repair");
+         Tcl.Tk.Ada.Grid.Grid(Button);
+      end if;
+      if PlayerShip.RepairModule /= 0 then
+         Button.Name := New_String(Widget_Image(ButtonsFrame) & ".remove");
+         Tcl.Tk.Ada.Grid.Grid(Button);
+      end if;
    end ShowModuleOptions;
 
    -- ****f* SUI2/Show_Module_Info_Command
