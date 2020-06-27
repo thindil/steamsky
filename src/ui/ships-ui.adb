@@ -16,7 +16,7 @@
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
-with Interfaces.C;
+with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.String_Split; use GNAT.String_Split;
@@ -44,8 +44,11 @@ with Crafts; use Crafts;
 with Factions; use Factions;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
+with Messages; use Messages;
 with Missions; use Missions;
 with ShipModules; use ShipModules;
+with Ships.Crew; use Ships.Crew;
+with Ships.Upgrade; use Ships.Upgrade;
 with Utils.UI; use Utils.UI;
 
 package body Ships.UI is
@@ -70,7 +73,7 @@ package body Ships.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(ClientData, Argv);
       Label, UpgradeLabel: Ttk_Label;
       Paned: Ttk_PanedWindow;
       ShipInfoCanvas: Tk_Canvas;
@@ -97,7 +100,7 @@ package body Ships.UI is
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "shipinfo.tcl");
          Bind(ShipInfoFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(Label, "ismapped") = "1" then
+      elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 0 then
          ShowSkyMap(True);
          return TCL_OK;
       end if;
@@ -1108,11 +1111,157 @@ package body Ships.UI is
       return TCL_OK;
    end Show_Module_Info_Command;
 
+   -- ****f* SUI2/Set_Upgrade_Command
+   -- FUNCTION
+   -- Set the selected upgrade for the selected module
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Set_Upgrade_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Upgrade_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+   begin
+      StartUpgrading(ModuleIndex, Positive'Value(CArgv.Arg(Argv, 1)));
+      UpdateOrders(PlayerShip);
+      UpdateMessages;
+      return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
+   end Set_Upgrade_Command;
+
+   -- ****f* SUI2/Assign_Module_Command
+   -- FUNCTION
+   -- Assing member, ammo or skill to module
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Assign_Module_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Assign_Module_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      AssignIndex: Positive;
+      ComboBox: Ttk_ComboBox;
+      Assigned: Boolean;
+   begin
+      ComboBox.Interp := Interp;
+      if CArgv.Arg(Argv, 1) = "crew" then
+         ComboBox.Name :=
+           New_String
+             (".paned.shipinfoframe.canvas.shipinfo.right.options.crewcombo");
+         for I in PlayerShip.Crew.Iterate loop
+            if PlayerShip.Crew(I).Name =
+              To_Unbounded_String(Get(ComboBox)) then
+               AssignIndex := Crew_Container.To_Index(I);
+               exit;
+            end if;
+         end loop;
+         case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
+            when CABIN =>
+               Modules_Loop :
+               for Module of PlayerShip.Modules loop
+                  if Module.MType = CABIN then
+                     for Owner of Module.Owner loop
+                        if Owner = AssignIndex then
+                           Owner := 0;
+                           exit Modules_Loop;
+                        end if;
+                     end loop;
+                  end if;
+               end loop Modules_Loop;
+               Assigned := False;
+               for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
+                  if Owner = 0 then
+                     Owner := AssignIndex;
+                     Assigned := True;
+                     exit;
+                  end if;
+               end loop;
+               if not Assigned then
+                  PlayerShip.Modules(ModuleIndex).Owner(1) := AssignIndex;
+               end if;
+               AddMessage
+                 ("You assigned " &
+                  To_String(PlayerShip.Modules(ModuleIndex).Name) & " to " &
+                  To_String(PlayerShip.Crew(AssignIndex).Name) & ".",
+                  OrderMessage);
+            when GUN | HARPOON_GUN =>
+               GiveOrders(PlayerShip, AssignIndex, Gunner, ModuleIndex);
+            when ALCHEMY_LAB .. GREENHOUSE =>
+               GiveOrders(PlayerShip, AssignIndex, Craft, ModuleIndex);
+            when MEDICAL_ROOM =>
+               GiveOrders(PlayerShip, AssignIndex, Heal, ModuleIndex);
+            when others =>
+               null;
+         end case;
+         UpdateHeader;
+      elsif CArgv.Arg(Argv, 1) = "ammo" then
+         ComboBox.Name :=
+           New_String
+             (".paned.shipinfoframe.canvas.shipinfo.right.options.ammocombo");
+         for I in PlayerShip.Cargo.Iterate loop
+            if PlayerShip.Cargo(I).Name =
+              To_Unbounded_String(Get(ComboBox)) then
+               AssignIndex := Inventory_Container.To_Index(I);
+               exit;
+            end if;
+         end loop;
+         if PlayerShip.Modules(ModuleIndex).MType = GUN then
+            PlayerShip.Modules(ModuleIndex).AmmoIndex := AssignIndex;
+         else
+            PlayerShip.Modules(ModuleIndex).HarpoonIndex := AssignIndex;
+         end if;
+         AddMessage
+           ("You assigned " &
+            To_String
+              (Items_List(PlayerShip.Cargo(AssignIndex).ProtoIndex).Name) &
+            " to " & To_String(PlayerShip.Modules(ModuleIndex).Name) & ".",
+            OrderMessage);
+      elsif CArgv.Arg(Argv, 1) = "skill" then
+         ComboBox.Name :=
+           New_String
+             (".paned.shipinfoframe.canvas.shipinfo.right.options.skillcombo");
+         for I in Skills_List.Iterate loop
+            if Skills_List(I).Name = To_Unbounded_String(Get(ComboBox)) then
+               AssignIndex := SkillsData_Container.To_Index(I);
+               exit;
+            end if;
+         end loop;
+         PlayerShip.Modules(ModuleIndex).TrainedSkill := AssignIndex;
+         AddMessage
+           ("You prepared " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
+            " for training " & To_String(Skills_List(AssignIndex).Name) & ".",
+            OrderMessage);
+      end if;
+      UpdateMessages;
+      return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
+   end Assign_Module_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowShipInfo", Show_Ship_Info_Command'Access);
       AddCommand("SetShipName", Set_Ship_Name_Command'Access);
       AddCommand("ShowModuleInfo", Show_Module_Info_Command'Access);
+      AddCommand("SetUpgrade", Set_Upgrade_Command'Access);
+      AddCommand("AssignModule", Assign_Module_Command'Access);
    end AddCommands;
 
 end Ships.UI;
