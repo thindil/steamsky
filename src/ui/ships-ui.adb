@@ -532,24 +532,22 @@ package body Ships.UI is
                Add(Button, "Start upgrading damage of battering ram");
                Tcl.Tk.Ada.Grid.Grid(Button);
             end if;
---         when HULL =>
---            MaxValue :=
---              Natural
---                (Float
---                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
---                      .MaxValue) *
---                 1.5);
---            if PlayerShip.Modules(ModuleIndex).MaxModules < MaxValue then
---               Set_Label
---                 (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
---                  "Enlarge _hull");
---               Set_Tooltip_Text
---                 (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
---                  "Start enlarging hull so it can have more modules installed");
---               Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
---            else
---               Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
---            end if;
+         when HULL =>
+            MaxValue :=
+              Natural
+                (Float
+                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                      .MaxValue) *
+                 1.5);
+            if PlayerShip.Modules(ModuleIndex).MaxModules < MaxValue then
+               Button.Name :=
+                 New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
+               configure(Button, "-text {Enlarge hull}");
+               Add
+                 (Button,
+                  "Start enlarging hull so it can have more modules installed");
+               Tcl.Tk.Ada.Grid.Grid(Button);
+            end if;
 --         when ALCHEMY_LAB .. GREENHOUSE =>
 --            if PlayerShip.Modules(ModuleIndex).CraftingIndex /=
 --              Null_Unbounded_String then
