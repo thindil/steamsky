@@ -41,6 +41,7 @@ with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with Config; use Config;
 with Crafts; use Crafts;
+with Factions; use Factions;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Missions; use Missions;
@@ -548,36 +549,40 @@ package body Ships.UI is
                   "Start enlarging hull so it can have more modules installed");
                Tcl.Tk.Ada.Grid.Grid(Button);
             end if;
---         when ALCHEMY_LAB .. GREENHOUSE =>
---            if PlayerShip.Modules(ModuleIndex).CraftingIndex /=
---              Null_Unbounded_String then
---               Set_Label
---                 (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
---                  "Assign as _worker");
---               Set_Tooltip_Text
---                 (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
---                  "Assign selected crew member as worker");
---               Show_All(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
---            end if;
---         when MEDICAL_ROOM =>
---            for Member of PlayerShip.Crew loop
---               if Member.Health < 100 and
---                 FindItem
---                     (Inventory => PlayerShip.Cargo,
---                      ItemType =>
---                        Factions_List(PlayerShip.Crew(1).Faction)
---                          .HealingTools) >
---                   0 then
---                  Set_Label
---                    (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
---                     "Assign as _medic");
---                  Set_Tooltip_Text
---                    (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
---                     "Assign selected crew member as medic");
---                  Show_All(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
---                  exit;
---               end if;
---            end loop;
+         when ALCHEMY_LAB .. GREENHOUSE =>
+            if PlayerShip.Modules(ModuleIndex).CraftingIndex /=
+              Null_Unbounded_String then
+               Button.Name :=
+                 New_String(Widget_Image(ButtonsFrame) & ".assigncrew");
+               configure(Button, "-text {Assign as worker}");
+               Add(Button, "Assign selected crew member as worker");
+               Tcl.Tk.Ada.Grid.Grid(Button);
+               ComboBox.Name :=
+                 New_String(Widget_Image(ButtonsFrame) & ".crewcombo");
+               ShowAssignMember;
+               Tcl.Tk.Ada.Grid.Grid(ComboBox);
+            end if;
+         when MEDICAL_ROOM =>
+            for Member of PlayerShip.Crew loop
+               if Member.Health < 100 and
+                 FindItem
+                     (Inventory => PlayerShip.Cargo,
+                      ItemType =>
+                        Factions_List(PlayerShip.Crew(1).Faction)
+                          .HealingTools) >
+                   0 then
+                  Button.Name :=
+                    New_String(Widget_Image(ButtonsFrame) & ".assigncrew");
+                  configure(Button, "-text {Assign as medic}");
+                  Add(Button, "Assign selected crew member as medic");
+                  Tcl.Tk.Ada.Grid.Grid(Button);
+                  ComboBox.Name :=
+                    New_String(Widget_Image(ButtonsFrame) & ".crewcombo");
+                  ShowAssignMember;
+                  Tcl.Tk.Ada.Grid.Grid(ComboBox);
+                  exit;
+               end if;
+            end loop;
 --         when TRAINING_ROOM =>
 --            Show_All(Gtk_Widget(Get_Object(Builder, "boxassignskill")));
          when others =>
