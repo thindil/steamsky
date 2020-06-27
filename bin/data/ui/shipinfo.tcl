@@ -43,14 +43,17 @@ $moduleinfo tag configure red -foreground red
 grid $moduleinfo -row 4 -columnspan 2
 # Buttons with ship's module actions
 grid [ttk::labelframe $shipinfoframe.right.options -text {Module Options:}]
-ttk::button $shipinfoframe.right.options.durability -text {Upgrade durability}
-ttk::button $shipinfoframe.right.options.durability1 -text {Upgrade1}
-ttk::button $shipinfoframe.right.options.durability2 -text {Upgrade2}
-ttk::button $shipinfoframe.right.options.assigncrew -text {Assign crew}
-ttk::button $shipinfoframe.right.options.assignammo -text {Assign as ammo}
-ttk::button $shipinfoframe.right.options.train -text {Train}
-ttk::button $shipinfoframe.right.options.disable -text {Disable engine}
-ttk::button $shipinfoframe.right.options.continue -text {Continue upgrading}
-ttk::button $shipinfoframe.right.options.stop -text {Stop upgrading}
-ttk::button $shipinfoframe.right.options.repair -text {Repair as first}
-ttk::button $shipinfoframe.right.options.remove -text {Remove repair priority}
+grid [ttk::button $shipinfoframe.right.options.durability -text {Upgrade durability}] -columnspan 2
+grid [ttk::button $shipinfoframe.right.options.upgrade1 -text {Upgrade1}] -columnspan 2
+grid [ttk::button $shipinfoframe.right.options.upgrade2 -text {Upgrade2}] -columnspan 2
+grid [ttk::button $shipinfoframe.right.options.assigncrew -text {Assign crew}]
+grid [ttk::combobox $shipinfoframe.right.options.crewcombo -state readonly] -column 1 -row 3
+grid [ttk::button $shipinfoframe.right.options.assignammo -text {Assign as ammo}]
+grid [ttk::combobox $shipinfoframe.right.options.ammocombo -state readonly] -column 1 -row 4
+grid [ttk::button $shipinfoframe.right.options.train -text {Train}]
+grid [ttk::combobox $shipinfoframe.right.options.traincombo -state readonly] -column 1 -row 5
+grid [ttk::button $shipinfoframe.right.options.disable -text {Disable engine}] -columnspan 2
+grid [ttk::button $shipinfoframe.right.options.continue -text {Continue upgrading}] -columnspan 2
+grid [ttk::button $shipinfoframe.right.options.stop -text {Stop upgrading}] -columnspan 2
+grid [ttk::button $shipinfoframe.right.options.repair -text {Repair as first}] -columnspan 2
+grid [ttk::button $shipinfoframe.right.options.remove -text {Remove repair priority}] -columnspan 2
