@@ -518,24 +518,20 @@ package body Ships.UI is
               New_String(Widget_Image(ButtonsFrame) & ".crewcombo");
             ShowAssignMember;
             Tcl.Tk.Ada.Grid.Grid(ComboBox);
---         when BATTERING_RAM =>
---            MaxValue :=
---              Natural
---                (Float
---                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
---                      .MaxValue) *
---                 1.5);
---            if PlayerShip.Modules(ModuleIndex).Damage2 < MaxValue then
---               Set_Label
---                 (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
---                  "Upgrade d_amage");
---               Set_Tooltip_Text
---                 (Gtk_Button(Get_Object(Builder, "btnupgrade1")),
---                  "Start upgrading damage of battering ram");
---               Show_All(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
---            else
---               Hide(Gtk_Widget(Get_Object(Builder, "btnupgrade1")));
---            end if;
+         when BATTERING_RAM =>
+            MaxValue :=
+              Natural
+                (Float
+                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                      .MaxValue) *
+                 1.5);
+            if PlayerShip.Modules(ModuleIndex).Damage2 < MaxValue then
+               Button.Name :=
+                 New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
+               configure(Button, "-text {Upgrade damage}");
+               Add(Button, "Start upgrading damage of battering ram");
+               Tcl.Tk.Ada.Grid.Grid(Button);
+            end if;
 --         when HULL =>
 --            MaxValue :=
 --              Natural
