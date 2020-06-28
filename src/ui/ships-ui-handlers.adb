@@ -594,6 +594,7 @@ package body Ships.UI.Handlers is
             when others =>
                null;
          end case;
+         UpdateHeader;
       elsif User_Data = Get_Object(Builder, "btnassignammo") then
          AssignIndex :=
            Positive'Value
