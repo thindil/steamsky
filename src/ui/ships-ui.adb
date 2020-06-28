@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
@@ -79,7 +80,7 @@ package body Ships.UI is
       Label, UpgradeLabel: Ttk_Label;
       Paned: Ttk_PanedWindow;
       ShipInfoCanvas: Tk_Canvas;
-      ShipInfoFrame: Ttk_Frame;
+      ShipInfoFrame, Item: Ttk_Frame;
       NameEntry: Ttk_Entry;
       ShipInfo, UpgradeInfo: Unbounded_String;
       MaxUpgrade: Integer;
@@ -87,6 +88,8 @@ package body Ships.UI is
       UpgradeProgress: Ttk_ProgressBar;
       ModulesView: Ttk_Tree_View;
       CloseButton: Ttk_Button;
+      Tokens: Slice_Set;
+      Rows, Row: Natural := 0;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -278,6 +281,79 @@ package body Ships.UI is
             " -text {" & To_String(PlayerShip.Modules(I).Name) & "}");
       end loop;
       Selection_Set(ModulesView, "[list 1]");
+      ShipInfoFrame.Name :=
+        New_String(Widget_Image(ShipInfoCanvas) & ".shipinfo.right.crew");
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(ShipInfoFrame), " ");
+      Rows := Natural'Value(Slice(Tokens, 2));
+      for I in 1 .. (Rows - 1) loop
+         Create
+           (Tokens,
+            Tcl.Tk.Ada.Grid.Grid_Slaves
+              (ShipInfoFrame, "-row" & Positive'Image(I)),
+            " ");
+         for J in 1 .. Slice_Count(Tokens) loop
+            Item.Interp := Get_Context;
+            Item.Name := New_String(Slice(Tokens, J));
+            Destroy(Item);
+         end loop;
+      end loop;
+      Row := 1;
+      for Member of PlayerShip.Crew loop
+         Label :=
+           Create
+             (Widget_Image(ShipInfoFrame) & ".name" &
+              Trim(Natural'Image(Row), Left),
+              "-text {" & To_String(Member.Name) & "}");
+         Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row));
+         Label :=
+           Create
+             (Widget_Image(ShipInfoFrame) & ".order" &
+              Trim(Natural'Image(Row), Left),
+              "-text {" & To_Lower(Crew_Orders'Image(Member.Order)) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Label, "-row" & Natural'Image(Row) & " -column 1");
+         UpgradeProgress :=
+           Create
+             (Widget_Image(ShipInfoFrame) & ".health" &
+              Trim(Natural'Image(Row), Left),
+              "-value {" & Natural'Image(Member.Health) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 2");
+         UpgradeProgress :=
+           Create
+             (Widget_Image(ShipInfoFrame) & ".fatigue" &
+              Trim(Natural'Image(Row), Left),
+              "-value {" &
+              Integer'Image
+                (Member.Tired - Member.Attributes(ConditionIndex)(1)) &
+              "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 3");
+         UpgradeProgress :=
+           Create
+             (Widget_Image(ShipInfoFrame) & ".thirst" &
+              Trim(Natural'Image(Row), Left),
+              "-value {" & Natural'Image(Member.Thirst) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 4");
+         UpgradeProgress :=
+           Create
+             (Widget_Image(ShipInfoFrame) & ".hunger" &
+              Trim(Natural'Image(Row), Left),
+              "-value {" & Natural'Image(Member.Hunger) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 5");
+         UpgradeProgress :=
+           Create
+             (Widget_Image(ShipInfoFrame) & ".morale" &
+              Trim(Natural'Image(Row), Left),
+              "-value {" & Natural'Image(Member.Morale(1)) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 6");
+         Row := Row + 1;
+      end loop;
+      ShipInfoFrame.Name :=
+        New_String(Widget_Image(ShipInfoCanvas) & ".shipinfo");
       configure
         (ShipInfoCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
