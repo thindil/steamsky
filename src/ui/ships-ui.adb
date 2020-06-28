@@ -101,7 +101,7 @@ package body Ships.UI is
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "shipinfo.tcl");
          Bind(ShipInfoFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 0 then
+      elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp 1}");
          ShowSkyMap(True);
          return TCL_OK;
