@@ -1300,6 +1300,129 @@ package body Ships.UI is
       return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
    end Assign_Module_Command;
 
+   -- ****f* SUI2/Disable_Engine_Command
+   -- FUNCTION
+   -- Enable or disable selected engine
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Disable_Engine_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Disable_Engine_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+      CanDisable: Boolean := False;
+   begin
+      if not PlayerShip.Modules(ModuleIndex).Disabled then
+         for I in PlayerShip.Modules.Iterate loop
+            if PlayerShip.Modules(I).MType = ENGINE
+              and then
+              (not PlayerShip.Modules(I).Disabled and
+               Modules_Container.To_Index(I) /= ModuleIndex) then
+               CanDisable := True;
+               exit;
+            end if;
+         end loop;
+         if not CanDisable then
+            ShowMessage
+              ("You can't disable this engine because it is your last working engine.");
+            return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
+         end if;
+         PlayerShip.Modules(ModuleIndex).Disabled := True;
+         AddMessage
+           ("You disabled " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
+            ".",
+            OrderMessage);
+      else
+         PlayerShip.Modules(ModuleIndex).Disabled := False;
+         AddMessage
+           ("You enabled " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
+            ".",
+            OrderMessage);
+      end if;
+      UpdateMessages;
+      return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
+   end Disable_Engine_Command;
+
+   -- ****f* SUI2/Stop_Upgrading_Command
+   -- FUNCTION
+   -- Stop the current ship upgrade
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Stop_Upgrading_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Stop_Upgrading_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+   begin
+      PlayerShip.UpgradeModule := 0;
+      for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
+         if PlayerShip.Crew(I).Order = Upgrading then
+            GiveOrders(PlayerShip, I, Rest);
+            exit;
+         end if;
+      end loop;
+      AddMessage("You stopped current upgrade.", OrderMessage);
+      UpdateMessages;
+      return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
+   end Stop_Upgrading_Command;
+
+   -- ****f* SUI2/Set_Repair_Command
+   -- FUNCTION
+   -- Set or remove the repair priority from the selected module
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Set_Repair_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Repair_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+   begin
+      if CArgv.Arg(Argv, 1) = "assign" then
+         PlayerShip.RepairModule := ModuleIndex;
+         AddMessage
+           ("You assigned " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
+            " as repair priority.",
+            OrderMessage);
+      else
+         PlayerShip.RepairModule := 0;
+         AddMessage("You removed repair priority.", OrderMessage);
+      end if;
+      UpdateMessages;
+      return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
+   end Set_Repair_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowShipInfo", Show_Ship_Info_Command'Access);
@@ -1307,6 +1430,9 @@ package body Ships.UI is
       AddCommand("ShowModuleInfo", Show_Module_Info_Command'Access);
       AddCommand("SetUpgrade", Set_Upgrade_Command'Access);
       AddCommand("AssignModule", Assign_Module_Command'Access);
+      AddCommand("DisableEngine", Disable_Engine_Command'Access);
+      AddCommand("StopUpgrading", Stop_Upgrading_Command'Access);
+      AddCommand("SetRepair", Set_Repair_Command'Access);
    end AddCommands;
 
 end Ships.UI;

@@ -52,8 +52,8 @@ grid [ttk::button $shipinfoframe.right.options.assignammo -text {Assign as ammo}
 grid [ttk::combobox $shipinfoframe.right.options.ammocombo -state readonly] -column 1 -row 4
 grid [ttk::button $shipinfoframe.right.options.train -text {Train} -command {AssignModule skill}]
 grid [ttk::combobox $shipinfoframe.right.options.traincombo -state readonly] -column 1 -row 5
-grid [ttk::button $shipinfoframe.right.options.disable -text {Disable engine}] -columnspan 2
+grid [ttk::button $shipinfoframe.right.options.disable -text {Disable engine} -command DisableEngine] -columnspan 2
 grid [ttk::button $shipinfoframe.right.options.continue -text {Continue upgrading} -command {SetUpgrade 4}] -columnspan 2
-grid [ttk::button $shipinfoframe.right.options.stop -text {Stop upgrading}] -columnspan 2
-grid [ttk::button $shipinfoframe.right.options.repair -text {Repair as first}] -columnspan 2
-grid [ttk::button $shipinfoframe.right.options.remove -text {Remove repair priority}] -columnspan 2
+grid [ttk::button $shipinfoframe.right.options.stop -text {Stop upgrading} -command {StopUpgrading}] -columnspan 2
+grid [ttk::button $shipinfoframe.right.options.repair -text {Repair as first} -command {SetRepair assign}] -columnspan 2
+grid [ttk::button $shipinfoframe.right.options.remove -text {Remove repair priority} -command {SetRepair remove}] -columnspan 2
