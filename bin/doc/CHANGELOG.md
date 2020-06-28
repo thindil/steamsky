@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Update header crew information when assigned crew to new module in ship info
+  screen
+
 ## [5.0.1] - 2020-05-20
 
 ### Changed
