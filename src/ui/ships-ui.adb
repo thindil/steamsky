@@ -356,7 +356,6 @@ package body Ships.UI is
            New_String(Widget_Image(ButtonsFrame) & ".crewcombo");
          configure(ComboBox, "-values [list" & To_String(SkillText) & "]");
          Current(ComboBox, "0");
-         Tcl.Tk.Ada.Grid.Grid(ComboBox);
       end ShowAssignSkill;
       procedure ShowAssignMember is
          Assigned: Boolean;
@@ -386,6 +385,40 @@ package body Ships.UI is
          configure(ComboBox, "-values [list" & To_String(ComboOptions) & "]");
          Current(ComboBox, "0");
       end ShowAssignMember;
+      procedure ShowAssignAmmo is
+         AmmoIndex: Natural;
+      begin
+         if PlayerShip.Modules(ModuleIndex).MType = GUN then
+            AmmoIndex := PlayerShip.Modules(ModuleIndex).AmmoIndex;
+         else
+            AmmoIndex := PlayerShip.Modules(ModuleIndex).HarpoonIndex;
+         end if;
+         ComboOptions := Null_Unbounded_String;
+         for I in
+           PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
+            if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
+              Items_Types
+                (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                   .Value) and
+              I /= AmmoIndex then
+               Append
+                 (ComboOptions,
+                  " {" &
+                  To_String(Items_List(PlayerShip.Cargo(I).ProtoIndex).Name) &
+                  "}");
+            end if;
+         end loop;
+         if ComboOptions = Null_Unbounded_String then
+            return;
+         end if;
+         Button.Name := New_String(Widget_Image(ButtonsFrame) & ".assignammo");
+         configure(Button, "-text {Assign as ammo}");
+         Add(Button, "Assign selected ammo to gun");
+         Tcl.Tk.Ada.Grid.Grid(Button);
+         configure(ComboBox, "-values [list" & To_String(ComboOptions) & "]");
+         Current(ComboBox, "0");
+         Tcl.Tk.Ada.Grid.Grid(ComboBox);
+      end ShowAssignAmmo;
    begin
       ButtonsFrame.Interp := Get_Context;
       ButtonsFrame.Name :=
@@ -520,6 +553,9 @@ package body Ships.UI is
               New_String(Widget_Image(ButtonsFrame) & ".crewcombo");
             ShowAssignMember;
             Tcl.Tk.Ada.Grid.Grid(ComboBox);
+            ComboBox.Name :=
+              New_String(Widget_Image(ButtonsFrame) & ".ammocombo");
+            ShowAssignAmmo;
          when BATTERING_RAM =>
             MaxValue :=
               Natural
@@ -1218,7 +1254,7 @@ package body Ships.UI is
            New_String
              (".paned.shipinfoframe.canvas.shipinfo.right.options.ammocombo");
          for I in PlayerShip.Cargo.Iterate loop
-            if PlayerShip.Cargo(I).Name =
+            if Items_List(PlayerShip.Cargo(I).ProtoIndex).Name =
               To_Unbounded_String(Get(ComboBox)) then
                AssignIndex := Inventory_Container.To_Index(I);
                exit;
