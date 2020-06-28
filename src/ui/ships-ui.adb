@@ -27,6 +27,7 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -101,9 +102,11 @@ package body Ships.UI is
             To_String(DataDirectory) & "ui" & Dir_Separator & "shipinfo.tcl");
          Bind(ShipInfoFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 0 then
+         Entry_Configure(GameMenu, "Help", "-command {ShowHelp 1}");
          ShowSkyMap(True);
          return TCL_OK;
       end if;
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp 8}");
       ShipInfoFrame.Name :=
         New_String(Widget_Image(ShipInfoCanvas) & ".shipinfo");
       NameEntry.Interp := Interp;
