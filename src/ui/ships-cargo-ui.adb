@@ -28,6 +28,7 @@ with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Factions; use Factions;
 with Maps; use Maps;
@@ -63,6 +64,7 @@ package body Ships.Cargo.UI is
       CargoCanvas: Tk_Canvas;
       CargoFrame: Ttk_Frame;
       CloseButton: Ttk_Button;
+      ItemsView: Ttk_Tree_View;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -87,6 +89,19 @@ package body Ships.Cargo.UI is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+      -- Fill UI with data
+      CargoFrame.Name := New_String(Widget_Image(CargoCanvas) & ".cargo");
+      ItemsView.Interp := Interp;
+      ItemsView.Name := New_String(Widget_Image(CargoFrame) & ".cargo");
+      Delete(ItemsView, "[list " & Children(ItemsView, "{}") & "]");
+      for I in PlayerShip.Cargo.Iterate loop
+         Insert
+           (ItemsView,
+            "{} end -id" & Positive'Image(Inventory_Container.To_Index(I)) &
+            " -values [list {" & To_String(PlayerShip.Cargo(I).Name) & "}]");
+      end loop;
+      Selection_Set(ItemsView, "[list 1]");
+      -- End of fill UI with data
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       CargoFrame.Name := New_String(Widget_Image(CargoCanvas) & ".cargo");
       configure
