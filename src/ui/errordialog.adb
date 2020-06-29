@@ -65,7 +65,7 @@ package body ErrorDialog is
       Append(ErrorText, LF);
       Append(ErrorText, "-------------------------------------------------");
       Append(ErrorText, LF);
-      Append(ErrorText, Symbolic_Traceback_No_Hex(An_Exception));
+      Append(ErrorText, Symbolic_Traceback(An_Exception));
       Append(ErrorText, LF);
       Append(ErrorText, "-------------------------------------------------");
       Put_Line(ErrorFile, To_String(ErrorText));
