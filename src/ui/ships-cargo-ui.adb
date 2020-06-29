@@ -86,7 +86,7 @@ package body Ships.Cargo.UI is
          ShowSkyMap(True);
          return TCL_OK;
       end if;
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp repair}");
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       CargoFrame.Name := New_String(Widget_Image(CargoCanvas) & ".cargo");
       configure
