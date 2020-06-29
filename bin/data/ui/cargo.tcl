@@ -10,13 +10,14 @@ grid [ttk::label $cargoframe.type.label -text {Type:}]
 grid [ttk::combobox $cargoframe.type.combo -state readonly] -row 0 -column 1
 # Cargo list
 grid [ttk::frame $cargoframe.cargo] -sticky nwes
-set cargoview [ttk::treeview $cargoframe.cargo.view -columns [list name durability type amount weight] -show headings]
+set cargoview [ttk::treeview $cargoframe.cargo.view -columns [list name durability type amount weight] -show headings -yscrollcommand [list $cargoframe.cargo.scrolly set]]
 $cargoview heading name -text {Name}
 $cargoview heading durability -text {Durability}
 $cargoview heading type -text {Type}
 $cargoview heading amount -text {Amount}
 $cargoview heading weight -text {Weight (in kg)}
 grid $cargoview -sticky nwes
+grid [ttk::scrollbar $cargoframe.cargo.scrolly -orient vertical -command [list $cargoview yview]] -row 0 -column 1 -sticky ns
 # Item info
 set itemframe [ttk::frame $cargoframe.item]
 grid [ttk::labelframe $itemframe.info -text {Item Info:}]
