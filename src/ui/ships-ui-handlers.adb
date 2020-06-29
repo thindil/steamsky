@@ -555,6 +555,7 @@ package body Ships.UI.Handlers is
 
    procedure Assign(User_Data: access GObject_Record'Class) is
       AssignIndex: Positive;
+      Assigned: Boolean;
    begin
       if User_Data = Get_Object(Builder, "btnassigncrew") then
          AssignIndex :=
@@ -577,9 +578,13 @@ package body Ships.UI.Handlers is
                for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
                   if Owner = 0 then
                      Owner := AssignIndex;
+                     Assigned := True;
                      exit;
                   end if;
                end loop;
+               if not Assigned then
+                  PlayerShip.Modules(ModuleIndex).Owner(1) := AssignIndex;
+               end if;
                AddMessage
                  ("You assigned " &
                   To_String(PlayerShip.Modules(ModuleIndex).Name) & " to " &
